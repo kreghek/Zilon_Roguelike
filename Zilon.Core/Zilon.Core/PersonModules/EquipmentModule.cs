@@ -29,12 +29,12 @@ namespace Zilon.Core.PersonModules
                 throw new ArgumentException($"Для экипировки указан слот {slot}, не подходящий для данного типа предмета {equipment}.");
             }
 
-            if (!EquipmentCarrierHelper.CheckDualCompability(this, equipment, slot, slotIndex))
+            if (!EquipmentCarrierHelper.CheckDualCompability(this, equipment, slotIndex))
             {
                 throw new InvalidOperationException($"Попытка экипировать предмет {equipment}, несовместимый с текущий экипировкой.");
             }
 
-            if (!EquipmentCarrierHelper.CheckShieldCompability(this, equipment, slot, slotIndex))
+            if (!EquipmentCarrierHelper.CheckShieldCompability(this, equipment, slotIndex))
             {
                 throw new InvalidOperationException("Попытка экипировать два щита.");
             }
@@ -111,6 +111,12 @@ namespace Zilon.Core.PersonModules
         /// </summary>
         public abstract PersonSlotSubScheme[] Slots { get; protected set; }
 
+        /// <inheritdoc/>
+        public string Key { get => nameof(IEquipmentModule); }
+
+        /// <inheritdoc/>
+        public bool IsActive { get; set; }
+
         /// <summary>
         /// Выстреливает, когда экипировка изменяется.
         /// </summary>
@@ -169,7 +175,7 @@ namespace Zilon.Core.PersonModules
         }
     }
 
-    public interface IEquipmentModule: IEnumerable<Equipment>
+    public interface IEquipmentModule: IPersonModule
     {
         /// <summary>
         /// Текущие слоты экипировки.

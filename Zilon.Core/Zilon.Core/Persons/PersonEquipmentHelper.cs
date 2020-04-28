@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Zilon.Core.PersonModules;
+
 namespace Zilon.Core.Persons
 {
     /// <summary>
@@ -16,7 +18,12 @@ namespace Zilon.Core.Persons
         /// </exception>
         public static void UnequipProp(this IPerson person, int slotIndex)
         {
-            var equipmentCarrier = person.EquipmentCarrier;
+            if (person is null)
+            {
+                throw new ArgumentNullException(nameof(person));
+            }
+
+            var equipmentCarrier = person.GetModule<IEquipmentModule>();
 
             var currentEquipment = equipmentCarrier[slotIndex];
 

@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -203,8 +204,8 @@ namespace Zilon.Core.Tactics
             var actors = ActorManager.Items.ToArray();
             foreach (var actor in actors)
             {
-                var equipmentCarrier = actor.Person.EquipmentCarrier;
-                if (equipmentCarrier == null)
+                var equipmentCarrier = actor.Person.GetModuleSafe<IEquipmentModule>();
+                if (equipmentCarrier is null)
                 {
                     continue;
                 }
@@ -243,7 +244,7 @@ namespace Zilon.Core.Tactics
             var container = (IPropContainer)sender;
             if (!container.Content.CalcActualItems().Any())
             {
-                var staticObject = StaticObjectManager.Items.Single(x=>ReferenceEquals(x.GetModuleSafe<IPropContainer>(), container));
+                var staticObject = StaticObjectManager.Items.Single(x => ReferenceEquals(x.GetModuleSafe<IPropContainer>(), container));
                 StaticObjectManager.Remove(staticObject);
             }
         }
@@ -308,7 +309,7 @@ namespace Zilon.Core.Tactics
 
         private void ReleaseNodes(IActor actor, IMap map)
         {
-            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, actor.Node,  map);
+            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, actor.Node, map);
 
             foreach (var node in actorNodes)
             {

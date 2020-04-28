@@ -12,6 +12,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -51,7 +52,7 @@ namespace Zilon.Core.Tests.Commands
                 .Returns(new[] { simpleAct, cooldownAct, cooldownResolvedAct });
             var actCarrier = actCarrierMock.Object;
 
-            var equipmentCarrierMock = new Mock<IEquipmentCarrier>();
+            var equipmentCarrierMock = new Mock<IEquipmentModule>();
             equipmentCarrierMock.SetupGet(x => x.Slots).Returns(new[] { new PersonSlotSubScheme {
                 Types = EquipmentSlotTypes.Hand
             } });
@@ -59,7 +60,7 @@ namespace Zilon.Core.Tests.Commands
 
             var personMock = new Mock<IPerson>();
             personMock.SetupGet(x => x.TacticalActCarrier).Returns(actCarrier);
-            personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
+            personMock.SetupGet(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentCarrier);
             personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
             var person = personMock.Object;
 

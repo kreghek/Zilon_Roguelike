@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -46,17 +47,17 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private IEnumerable<ITacticalAct> GetUsedActs()
         {
-            if (Actor.Person.EquipmentCarrier == null)
+            if (Actor.Person.GetModuleSafe<IEquipmentModule>() == null)
             {
                 yield return Actor.Person.TacticalActCarrier.Acts.First();
             }
             else
             {
                 var usedEquipmentActs = false;
-                var slots = Actor.Person.EquipmentCarrier.Slots;
+                var slots = Actor.Person.GetModule<IEquipmentModule>().Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
-                    var slotEquipment = Actor.Person.EquipmentCarrier[i];
+                    var slotEquipment = Actor.Person.GetModule<IEquipmentModule>()[i];
                     if (slotEquipment == null)
                     {
                         continue;

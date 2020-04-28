@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Components;
 using Zilon.Core.Diseases;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -166,7 +167,7 @@ namespace Zilon.Core.Tactics
 
         private void ReduceTargetEquipmentDurability(IActor targetActor)
         {
-            if (EquipmentDurableService is null || targetActor.Person.EquipmentCarrier is null)
+            if (EquipmentDurableService is null || targetActor.Person.GetModuleSafe<IEquipmentModule>() is null)
             {
                 return;
             }
@@ -520,13 +521,13 @@ namespace Zilon.Core.Tactics
 
         private Equipment GetDamagedEquipment(IActor targetActor)
         {
-            if (targetActor.Person.EquipmentCarrier == null)
+            if (targetActor.Person.GetModuleSafe<IEquipmentModule>() is null)
             {
                 throw new ArgumentException("Передан персонаж, который не может носить экипировку.");
             }
 
             var armorEquipments = new List<Equipment>();
-            foreach (var currentEquipment in targetActor.Person.EquipmentCarrier)
+            foreach (var currentEquipment in targetActor.Person.GetModule<IEquipmentModule>())
             {
                 if (currentEquipment == null)
                 {

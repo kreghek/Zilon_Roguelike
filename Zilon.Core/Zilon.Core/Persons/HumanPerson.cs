@@ -34,9 +34,6 @@ namespace Zilon.Core.Persons
         public string Name { get; }
 
         /// <inheritdoc/>
-        public override IEquipmentCarrier EquipmentCarrier { get; }
-
-        /// <inheritdoc/>
         public override ITacticalActCarrier TacticalActCarrier { get; }
 
         /// <inheritdoc/>
@@ -83,8 +80,10 @@ namespace Zilon.Core.Persons
             Effects.Removed += Effects_CollectionChanged;
             Effects.Changed += Effects_CollectionChanged;
 
-            EquipmentCarrier = new EquipmentCarrier(Scheme.Slots);
-            EquipmentCarrier.EquipmentChanged += EquipmentCarrier_EquipmentChanged;
+            var equipmentModule = new EquipmentModule(Scheme.Slots);
+            equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
+
+            AddModule(equipmentModule);
 
             TacticalActCarrier = new TacticalActCarrier();
 
@@ -96,7 +95,7 @@ namespace Zilon.Core.Persons
             CalcCombatStats();
 
             var perks = GetPerksSafe();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
+            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
 
             Survival = new HumanSurvivalData(scheme, survivalRandomSource);
             Survival.StatChanged += Survival_StatCrossKeyValue;
@@ -214,8 +213,10 @@ namespace Zilon.Core.Persons
         /// </summary>
         private void RecalculatePersonArmor()
         {
+            var equipmentModule = this.GetModule<IEquipmentModule>();
+
             var equipmentArmors = new List<PersonArmorItem>();
-            foreach (var equipment in EquipmentCarrier)
+            foreach (var equipment in equipmentModule)
             {
                 if (equipment == null)
                 {
@@ -375,14 +376,16 @@ namespace Zilon.Core.Persons
             bonusDict[targetStatType] = value;
         }
 
-        private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
+        private void EquipmentModule_EquipmentChanged(object sender, EventArgs e)
         {
+            var equipmentModule = this.GetModule<IEquipmentModule>();
+
             ClearCalculatedStats();
 
             CalcCombatStats();
 
             var perks = GetPerksSafe();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
+            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
 
             CalcSurvivalStats();
         }
@@ -511,9 +514,11 @@ namespace Zilon.Core.Persons
 
         private void FillSurvivalBonusesFromEquipments([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
-            for (var i = 0; i < EquipmentCarrier.Count(); i++)
+            var equipmentModule = this.GetModule<IEquipmentModule>();
+
+            for (var i = 0; i < equipmentModule.Count(); i++)
             {
-                var equipment = EquipmentCarrier[i];
+                var equipment = equipmentModule[i];
                 if (equipment == null)
                 {
                     continue;
@@ -538,11 +543,11 @@ namespace Zilon.Core.Persons
 
                             var requirementsCompleted = true;
 
-                            for (var slotIndex = 0; slotIndex < EquipmentCarrier.Count(); slotIndex++)
+                            for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
                             {
-                                if ((EquipmentCarrier.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0)
+                                if ((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0)
                                 {
-                                    if (EquipmentCarrier[slotIndex] != null)
+                                    if (equipmentModule[slotIndex] != null)
                                     {
                                         requirementsCompleted = false;
                                         break;
@@ -666,7 +671,9 @@ namespace Zilon.Core.Persons
             CalcCombatStats();
 
             var perks = GetPerksSafe();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
+
+            var equipmentModule = this.GetModule<IEquipmentModule>();
+            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
 
             CalcSurvivalStats();
         }
@@ -697,7 +704,9 @@ namespace Zilon.Core.Persons
             }
 
             var perks = GetPerksSafe();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
+
+            var equipmentModule = this.GetModule<IEquipmentModule>();
+            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
 
             CalcSurvivalStats();
         }
@@ -878,30 +887,47 @@ namespace Zilon.Core.Persons
 
     public abstract class PersonBase : IPerson
     {
-
         private readonly IDictionary<string, IPersonModule> _modules;
 
+        /// <inheritdoc/>
         public abstract int Id { get; set; }
+
+        /// <inheritdoc/>
         public abstract PhysicalSize PhysicalSize { get; }
-        public abstract IEquipmentCarrier EquipmentCarrier { get; }
+
+        /// <inheritdoc/>
         public abstract ITacticalActCarrier TacticalActCarrier { get; }
+
+        /// <inheritdoc/>
         public abstract IEvolutionData EvolutionData { get; }
+
+        /// <inheritdoc/>
         public abstract ICombatStats CombatStats { get; }
+
+        /// <inheritdoc/>
         public abstract IPropStore Inventory { get; }
+
+        /// <inheritdoc/>
         public abstract bool HasInventory { get; }
+
+        /// <inheritdoc/>
         public abstract ISurvivalData Survival { get; }
+
+        /// <inheritdoc/>
         public abstract EffectCollection Effects { get; }
+
+        /// <inheritdoc/>
         public abstract IDiseaseData DiseaseData { get; }
 
         protected PersonBase()
         {
-
+            _modules = new Dictionary<string, IPersonModule>();
         }
 
         /// <inheritdoc/>
-        public TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IPersonModule
+        public TPersonModule GetModule<TPersonModule>(string key) where TPersonModule : IPersonModule
         {
-            return (TStaticObjectModule)_modules[key];
+            return (TPersonModule)_modules[key];
         }
 
         /// <inheritdoc/>
@@ -911,7 +937,7 @@ namespace Zilon.Core.Persons
         }
 
         /// <inheritdoc/>
-        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IPersonModule
+        public void AddModule<TPersonModule>(TPersonModule sectorObjectModule) where TPersonModule : IPersonModule
         {
             _modules.Add(sectorObjectModule.Key, sectorObjectModule);
         }

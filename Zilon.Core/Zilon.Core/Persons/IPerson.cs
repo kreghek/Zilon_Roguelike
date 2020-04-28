@@ -16,11 +16,6 @@ namespace Zilon.Core.Persons
         PhysicalSize PhysicalSize { get; }
 
         /// <summary>
-        /// Носитель экипировки.
-        /// </summary>
-        IEquipmentCarrier EquipmentCarrier { get; }
-
-        /// <summary>
         /// Носитель тактических действий.
         /// </summary>
         ITacticalActCarrier TacticalActCarrier { get; }

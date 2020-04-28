@@ -11,6 +11,16 @@ namespace Zilon.Core.Persons
     {
         public static bool CheckSlotCompability(Equipment equipment, PersonSlotSubScheme slot)
         {
+            if (equipment is null)
+            {
+                throw new System.ArgumentNullException(nameof(equipment));
+            }
+
+            if (slot is null)
+            {
+                throw new System.ArgumentNullException(nameof(slot));
+            }
+
             var invalidSlot = (slot.Types & equipment.Scheme.Equip.SlotTypes[0]) == 0;
             if (invalidSlot)
             {
@@ -20,9 +30,19 @@ namespace Zilon.Core.Persons
             return true;
         }
 
-        public static bool CheckDualCompability(IEquipmentCarrier equipmentCarrier, Equipment equipment, PersonSlotSubScheme slot, int slotIndex)
+        public static bool CheckDualCompability(IEquipmentModule equipmentModule, Equipment equipment, int slotIndex)
         {
-            var equipmentTags = equipment.Scheme.Tags ?? new string[0];
+            if (equipmentModule is null)
+            {
+                throw new System.ArgumentNullException(nameof(equipmentModule));
+            }
+
+            if (equipment is null)
+            {
+                throw new System.ArgumentNullException(nameof(equipment));
+            }
+
+            var equipmentTags = equipment.Scheme.Tags ?? System.Array.Empty<string>();
             var hasRangedTag = equipmentTags.Any(x => x == PropTags.Equipment.Ranged);
             var hasWeaponTag = equipmentTags.Any(x => x == PropTags.Equipment.Weapon);
             if (hasRangedTag && hasWeaponTag)
@@ -30,11 +50,11 @@ namespace Zilon.Core.Persons
                 // Проверяем наличие любого экипированного оружия.
                 // Если находим, то выбрасываем исключение.
                 // Учитываем, что предмет в целевом слоте заменяется.
-                var targetSlotEquipment = equipmentCarrier[slotIndex];
-                var currentEquipments = equipmentCarrier.Where(x => x != null);
+                var targetSlotEquipment = equipmentModule[slotIndex];
+                var currentEquipments = equipmentModule.Where(x => x != null);
                 var currentWeapons = from currentEquipment in currentEquipments
                                      where currentEquipment != targetSlotEquipment
-                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
+                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? System.Array.Empty<string>()
                                      where currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
                                      select currentEquipment;
 
@@ -51,11 +71,11 @@ namespace Zilon.Core.Persons
                 // проверяем наличие стрелкового оружия.
                 // Если находим, то выбрасываем исключение.
                 // Учитываем, что предмет в целевом слоте заменяется.
-                var targetSlotEquipment = equipmentCarrier[slotIndex];
-                var currentEquipments = equipmentCarrier.Where(x => x != null);
+                var targetSlotEquipment = equipmentModule[slotIndex];
+                var currentEquipments = equipmentModule.Where(x => x != null);
                 var currentWeapons = from currentEquipment in currentEquipments
                                      where currentEquipment != targetSlotEquipment
-                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
+                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? System.Array.Empty<string>()
                                      let currentEqupmentHasWeapon = currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
                                      let currentEqupmentHasRanged = currentEqupmentTags.Any(x => x == PropTags.Equipment.Ranged)
                                      where currentEqupmentHasWeapon && currentEqupmentHasRanged
@@ -72,110 +92,18 @@ namespace Zilon.Core.Persons
             return true;
         }
 
-        public static bool CheckShieldCompability(IEquipmentCarrier equipmentCarrier, Equipment equipment, PersonSlotSubScheme slot, int slotIndex)
+        public static bool CheckShieldCompability(IEquipmentModule equipmentCarrier, Equipment equipment, int slotIndex)
         {
-            var equipmentTags = equipment.Scheme.Tags ?? new string[0];
-
-            var hasShieldTag = equipmentTags.Any(x => x == PropTags.Equipment.Shield);
-            if (hasShieldTag)
+            if (equipmentCarrier is null)
             {
-                // Проверяем наличие других щитов.
-                // Если в другой руке щит уже экипирован, то выбрасываем исключение.
-                // Учитываем, что предмет в целевом слоте заменяется.
-                var targetSlotEquipment = equipmentCarrier[slotIndex];
-                var currentEquipments = equipmentCarrier.Where(x => x != null);
-                var currentSheilds = from currentEquipment in currentEquipments
-                                     where currentEquipment != targetSlotEquipment
-                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
-                                     where currentEqupmentTags.Any(x => x == PropTags.Equipment.Shield)
-                                     select currentEquipment;
-
-                var hasShields = currentSheilds.Any();
-                if (hasShields)
-                {
-                    return false;
-                }
+                throw new System.ArgumentNullException(nameof(equipmentCarrier));
             }
 
-            return true;
-        }
-
-        public static bool CanBeEquiped(IEquipmentCarrier equipmentCarrier, int slotIndex, Equipment equipment)
-        {
-            var slot = equipmentCarrier.Slots[slotIndex];
-
-            if (!CheckSlotCompability(equipment, slot))
+            if (equipment is null)
             {
-                return false;
+                throw new System.ArgumentNullException(nameof(equipment));
             }
 
-            if (!CheckDualCompability(equipmentCarrier, equipment, slot, slotIndex))
-            {
-                return false;
-            }
-
-            if (!CheckShieldCompability(equipmentCarrier, equipment, slot, slotIndex))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public static bool CheckDualCompability(IEquipmentModule equipmentCarrier, Equipment equipment, PersonSlotSubScheme slot, int slotIndex)
-        {
-            var equipmentTags = equipment.Scheme.Tags ?? System.Array.Empty<string>();
-            var hasRangedTag = equipmentTags.Any(x => x == PropTags.Equipment.Ranged);
-            var hasWeaponTag = equipmentTags.Any(x => x == PropTags.Equipment.Weapon);
-            if (hasRangedTag && hasWeaponTag)
-            {
-                // Проверяем наличие любого экипированного оружия.
-                // Если находим, то выбрасываем исключение.
-                // Учитываем, что предмет в целевом слоте заменяется.
-                var targetSlotEquipment = equipmentCarrier[slotIndex];
-                var currentEquipments = equipmentCarrier.Where(x => x != null);
-                var currentWeapons = from currentEquipment in currentEquipments
-                                     where currentEquipment != targetSlotEquipment
-                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
-                                     where currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
-                                     select currentEquipment;
-
-                var hasWeapon = currentWeapons.Any();
-
-                if (hasWeapon)
-                {
-                    return false;
-                }
-            }
-
-            if (hasWeaponTag)
-            {
-                // проверяем наличие стрелкового оружия.
-                // Если находим, то выбрасываем исключение.
-                // Учитываем, что предмет в целевом слоте заменяется.
-                var targetSlotEquipment = equipmentCarrier[slotIndex];
-                var currentEquipments = equipmentCarrier.Where(x => x != null);
-                var currentWeapons = from currentEquipment in currentEquipments
-                                     where currentEquipment != targetSlotEquipment
-                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
-                                     let currentEqupmentHasWeapon = currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
-                                     let currentEqupmentHasRanged = currentEqupmentTags.Any(x => x == PropTags.Equipment.Ranged)
-                                     where currentEqupmentHasWeapon && currentEqupmentHasRanged
-                                     select currentEquipment;
-
-                var hasWeapon = currentWeapons.Any();
-
-                if (hasWeapon)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public static bool CheckShieldCompability(IEquipmentModule equipmentCarrier, Equipment equipment, PersonSlotSubScheme slot, int slotIndex)
-        {
             var equipmentTags = equipment.Scheme.Tags ?? System.Array.Empty<string>();
 
             var hasShieldTag = equipmentTags.Any(x => x == PropTags.Equipment.Shield);
@@ -188,7 +116,7 @@ namespace Zilon.Core.Persons
                 var currentEquipments = equipmentCarrier.Where(x => x != null);
                 var currentSheilds = from currentEquipment in currentEquipments
                                      where currentEquipment != targetSlotEquipment
-                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? new string[0]
+                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? System.Array.Empty<string>()
                                      where currentEqupmentTags.Any(x => x == PropTags.Equipment.Shield)
                                      select currentEquipment;
 
@@ -204,6 +132,16 @@ namespace Zilon.Core.Persons
 
         public static bool CanBeEquiped(IEquipmentModule equipmentCarrier, int slotIndex, Equipment equipment)
         {
+            if (equipmentCarrier is null)
+            {
+                throw new System.ArgumentNullException(nameof(equipmentCarrier));
+            }
+
+            if (equipment is null)
+            {
+                throw new System.ArgumentNullException(nameof(equipment));
+            }
+
             var slot = equipmentCarrier.Slots[slotIndex];
 
             if (!CheckSlotCompability(equipment, slot))
@@ -211,12 +149,12 @@ namespace Zilon.Core.Persons
                 return false;
             }
 
-            if (!CheckDualCompability(equipmentCarrier, equipment, slot, slotIndex))
+            if (!CheckDualCompability(equipmentCarrier, equipment, slotIndex))
             {
                 return false;
             }
 
-            if (!CheckShieldCompability(equipmentCarrier, equipment, slot, slotIndex))
+            if (!CheckShieldCompability(equipmentCarrier, equipment, slotIndex))
             {
                 return false;
             }

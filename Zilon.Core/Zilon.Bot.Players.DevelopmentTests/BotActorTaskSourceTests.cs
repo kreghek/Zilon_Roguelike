@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 using Zilon.Bot.Sdk;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.ScoreResultGenerating;
@@ -54,7 +55,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             }
 
             Console.WriteLine("Start Equipments:");
-            var equipments = humanPerson.EquipmentCarrier.ToArray();
+            var equipments = humanPerson.GetModule<IEquipmentModule>().ToArray();
             foreach (var equipment in equipments)
             {
                 if (equipment is null)

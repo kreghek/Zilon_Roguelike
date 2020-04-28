@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Zilon.Core.CommonServices.Dices;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -120,11 +121,11 @@ namespace Zilon.Core.Persons
             var usedEquipment = dropedProps.OfType<Equipment>().FirstOrDefault();
             if (usedEquipment != null)
             {
-
-                var canBeEquiped = CanBeEquiped(person.EquipmentCarrier, slotIndex, usedEquipment);
+                var equipmentModule = person.GetModule<IEquipmentModule>();
+                var canBeEquiped = CanBeEquiped(equipmentModule, slotIndex, usedEquipment);
                 if (canBeEquiped)
                 {
-                    AddEquipment(person.EquipmentCarrier, slotIndex, usedEquipment);
+                    AddEquipment(equipmentModule, slotIndex, usedEquipment);
                     var unusedMainWeaponDrops = dropedProps.Where(x => x != usedEquipment).ToArray();
                     foreach (var prop in unusedMainWeaponDrops)
                     {
@@ -149,11 +150,11 @@ namespace Zilon.Core.Persons
         }
 
         private static bool CanBeEquiped(
-            IEquipmentCarrier equipmentCarrier,
+            IEquipmentModule equipmentModule,
             int slotIndex,
             Equipment equipment)
         {
-            return EquipmentCarrierHelper.CanBeEquiped(equipmentCarrier, slotIndex, equipment);
+            return EquipmentCarrierHelper.CanBeEquiped(equipmentModule, slotIndex, equipment);
         }
 
         private IDropTableScheme GetHeads()
@@ -181,9 +182,9 @@ namespace Zilon.Core.Persons
             return _schemeService.GetScheme<IDropTableScheme>(START_PROP_DROP_SID);
         }
 
-        private void AddEquipment(IEquipmentCarrier equipmentCarrier, int slotIndex, Equipment equipment)
+        private void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
         {
-            equipmentCarrier[slotIndex] = equipment;
+            equipmentModule[slotIndex] = equipment;
         }
 
         private void AddPropToInventory(IPropStore inventory, IProp prop)

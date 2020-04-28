@@ -15,7 +15,6 @@ namespace Zilon.Core.Persons
     {
         public override int Id { get; set; }
         public int Hp { get; }
-        public override IEquipmentCarrier EquipmentCarrier => null;
 
         public override ITacticalActCarrier TacticalActCarrier { get; }
 

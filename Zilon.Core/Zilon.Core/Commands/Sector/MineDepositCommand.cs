@@ -3,7 +3,7 @@ using System.Linq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Common;
-using Zilon.Core.Persons;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
@@ -34,7 +34,12 @@ namespace Zilon.Core.Commands.Sector
                 return false;
             }
 
-            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;
+            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.GetModuleSafe<IEquipmentModule>();
+            if (equipmentCarrier is null)
+            {
+                return false;
+            }
+
             var requiredTags = targetDeposit.GetToolTags();
             if (requiredTags.Any())
             {
@@ -60,7 +65,7 @@ namespace Zilon.Core.Commands.Sector
             var targetStaticObject = (PlayerState.SelectedViewModel as IContainerViewModel).StaticObject;
             var targetDeposit = targetStaticObject.GetModule<IPropDepositModule>();
 
-            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;
+            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>();
             var requiredTags = targetDeposit.GetToolTags();
 
             if (requiredTags.Any())
@@ -84,7 +89,7 @@ namespace Zilon.Core.Commands.Sector
             }
         }
 
-        private static Equipment GetEquipedTool(IEquipmentCarrier equipmentCarrier, string[] requiredToolTags)
+        private static Equipment GetEquipedTool(IEquipmentModule equipmentModule, string[] requiredToolTags)
         {
             if (!requiredToolTags.Any())
             {
@@ -92,7 +97,7 @@ namespace Zilon.Core.Commands.Sector
                 throw new ArgumentException("Требуется не пустой набор тегов.", nameof(requiredToolTags));
             }
 
-            foreach (var equipment in equipmentCarrier)
+            foreach (var equipment in equipmentModule)
             {
                 if (equipment is null)
                 {

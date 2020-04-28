@@ -1,6 +1,10 @@
-﻿namespace Zilon.Core.PersonModules
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Props;
+
+namespace Zilon.Core.PersonModules
 {
-    public interface IPersonModule
+    public interface IPersonModule : IEnumerable<Equipment>
     {
         /// <summary>
         /// Уникальный ключ модуля.
