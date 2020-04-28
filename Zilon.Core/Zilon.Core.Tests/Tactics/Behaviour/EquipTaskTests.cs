@@ -145,11 +145,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             actorMock.SetupGet(x => x.Person).Returns(person);
 
             var equipmentsInit = new Equipment[] { null, testedEquipmentProp };
-            var equipmentCarrierMock = new Mock<EquipmentModuleBase>(new object[] { equipmentsInit })
+            var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[] { equipmentsInit })
                 .As<IEquipmentModule>();
-            equipmentCarrierMock.CallBase = true;
-            var equipmentCarrier = equipmentCarrierMock.Object;
-            personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
+            equipmentModuleMock.CallBase = true;
+            var equipmentModule = equipmentModuleMock.Object;
+            personMock.SetupGet(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
 
             var inventoryMock = new Mock<IPropStore>();
             var inventory = inventoryMock.Object;
@@ -167,8 +167,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ASSERT
-            equipmentCarrier[0].Should().BeSameAs(testedEquipmentProp);
-            equipmentCarrier[1].Should().BeNull();
+            equipmentModule[0].Should().BeSameAs(testedEquipmentProp);
+            equipmentModule[1].Should().BeNull();
             inventoryMock.Verify(x => x.Add(It.IsAny<IProp>()), Times.Never);
             inventoryMock.Verify(x => x.Remove(It.IsAny<IProp>()), Times.Never);
         }
@@ -185,8 +185,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             {
                 Equip = new TestPropEquipSubScheme()
             };
-            var testedEquipmentProp = new Equipment(propScheme, new ITacticalActScheme[0], name: "tested");
-            var equipedEquipmentProp = new Equipment(propScheme, new ITacticalActScheme[0], name: "equiped");
+            var testedEquipmentProp = new Equipment(propScheme, System.Array.Empty<ITacticalActScheme>(), name: "tested");
+            var equipedEquipmentProp = new Equipment(propScheme, System.Array.Empty<ITacticalActScheme>(), name: "equiped");
 
             var actorMock = new Mock<IActor>();
             var actor = actorMock.Object;
@@ -196,11 +196,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             actorMock.SetupGet(x => x.Person).Returns(person);
 
             var equipmentsInit = new Equipment[] { equipedEquipmentProp, testedEquipmentProp };
-            var equipmentCarrierMock = new Mock<EquipmentCarrierBase>(new object[] { equipmentsInit })
-               .As<IEquipmentCarrier>();
-            equipmentCarrierMock.CallBase = true;
-            var equipmentCarrier = equipmentCarrierMock.Object;
-            personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
+            var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[] { equipmentsInit })
+               .As<IEquipmentModule>();
+            equipmentModuleMock.CallBase = true;
+            var equipmentModule = equipmentModuleMock.Object;
+            personMock.SetupGet(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
 
             var inventoryMock = new Mock<IPropStore>();
             var inventory = inventoryMock.Object;
@@ -218,8 +218,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             // ASSERT
-            equipmentCarrier[0].Should().BeSameAs(testedEquipmentProp);
-            equipmentCarrier[1].Should().BeSameAs(equipedEquipmentProp);
+            equipmentModule[0].Should().BeSameAs(testedEquipmentProp);
+            equipmentModule[1].Should().BeSameAs(equipedEquipmentProp);
             inventoryMock.Verify(x => x.Add(It.IsAny<IProp>()), Times.Never);
             inventoryMock.Verify(x => x.Remove(It.IsAny<IProp>()), Times.Never);
         }

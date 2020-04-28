@@ -14,6 +14,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
@@ -98,17 +99,17 @@ namespace Zilon.Core.Specs.Steps
 
         private static IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
         {
-            if (actor.Person.EquipmentCarrier == null)
+            if (actor.Person.GetModuleSafe<IEquipmentModule>() is null)
             {
                 yield return actor.Person.TacticalActCarrier.Acts.First();
             }
             else
             {
                 var usedEquipmentActs = false;
-                var slots = actor.Person.EquipmentCarrier.Slots;
+                var slots = actor.Person.GetModule<IEquipmentModule>().Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
-                    var slotEquipment = actor.Person.EquipmentCarrier[i];
+                    var slotEquipment = actor.Person.GetModule<IEquipmentModule>()[i];
                     if (slotEquipment == null)
                     {
                         continue;

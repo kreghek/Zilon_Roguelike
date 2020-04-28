@@ -1,10 +1,12 @@
 ﻿using System;
+
 using FluentAssertions;
 
 using NUnit.Framework;
+
 using Zilon.Core.Common;
 using Zilon.Core.Components;
-using Zilon.Core.Persons;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
@@ -12,8 +14,9 @@ using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
 namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
-    public class EquipmentCarrierTests
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
+    public class EquipmentModuleTests
     {
         /// <summary>
         /// Тест проверяет, что при установке экипировки выстреливает событие на изменение экипировки.
@@ -44,19 +47,14 @@ namespace Zilon.Core.Tests.Persons
 
             const int changedSlot = 0;
 
-            var carrier = new EquipmentCarrier(slotSchemes);
-
+            var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
-            using (var monitor = carrier.Monitor())
-            {
-                carrier[changedSlot] = equipment;
+            using var monitor = carrier.Monitor();
+            carrier[changedSlot] = equipment;
 
-
-
-                // ASSERT
-                monitor.Should().Raise(nameof(carrier.EquipmentChanged));
-            }
+            // ASSERT
+            monitor.Should().Raise(nameof(carrier.EquipmentChanged));
         }
 
         /// <summary>
@@ -101,8 +99,7 @@ namespace Zilon.Core.Tests.Persons
 
             const int changedSlot = 0;
 
-            var carrier = new EquipmentCarrier(slotSchemes);
-
+            var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
             carrier[changedSlot] = pistol1;
@@ -110,8 +107,6 @@ namespace Zilon.Core.Tests.Persons
             {
                 carrier[changedSlot] = pistol2;
             };
-
-
 
             // ASSERT
             act.Should().NotThrow();
@@ -158,8 +153,7 @@ namespace Zilon.Core.Tests.Persons
             const int swordSlot1 = 0;
             const int swordSlot2 = 1;
 
-            var carrier = new EquipmentCarrier(slotSchemes);
-
+            var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
             Action act = () =>
@@ -167,7 +161,6 @@ namespace Zilon.Core.Tests.Persons
                 carrier[swordSlot1] = swordEquipment1;
                 carrier[swordSlot2] = swordEquipment2;
             };
-
 
             // ASSERT
             act.Should().NotThrow<Exception>();
@@ -220,8 +213,7 @@ namespace Zilon.Core.Tests.Persons
             const int pistolSlot1 = 0;
             const int pistolSlot2 = 1;
 
-            var carrier = new EquipmentCarrier(slotSchemes);
-
+            var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
             Action act = () =>
@@ -229,7 +221,6 @@ namespace Zilon.Core.Tests.Persons
                 carrier[pistolSlot1] = pistolEquipment1;
                 carrier[pistolSlot2] = pistolEquipment2;
             };
-
 
             // ASSERT
             act.Should().Throw<Exception>();
@@ -280,8 +271,7 @@ namespace Zilon.Core.Tests.Persons
             const int shieldSlot1 = 0;
             const int shieldSlot2 = 1;
 
-            var carrier = new EquipmentCarrier(slotSchemes);
-
+            var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
             Action act = () =>
@@ -289,7 +279,6 @@ namespace Zilon.Core.Tests.Persons
                 carrier[shieldSlot1] = shieldEquipment1;
                 carrier[shieldSlot2] = shieldEquipment2;
             };
-
 
             // ASSERT
             act.Should().Throw<Exception>();
@@ -347,7 +336,7 @@ namespace Zilon.Core.Tests.Persons
             const int swordSlot1 = 0;
             const int swordSlot2 = 1;
 
-            var carrier = new EquipmentCarrier(slotSchemes);
+            var carrier = new EquipmentModule(slotSchemes);
 
 
             // ACT
@@ -414,7 +403,7 @@ namespace Zilon.Core.Tests.Persons
             const int swordSlot1 = 0;
             const int swordSlot2 = 1;
 
-            var carrier = new EquipmentCarrier(slotSchemes);
+            var carrier = new EquipmentModule(slotSchemes);
 
 
             // ACT
@@ -482,7 +471,7 @@ namespace Zilon.Core.Tests.Persons
             const int swordSlot1 = 1;
             const int swordSlot2 = 0;
 
-            var carrier = new EquipmentCarrier(slotSchemes);
+            var carrier = new EquipmentModule(slotSchemes);
 
 
             // ACT
@@ -517,14 +506,14 @@ namespace Zilon.Core.Tests.Persons
                 var scheme1 = GetSchemeBySid(propSid1);
                 if (scheme1 != null)
                 {
-                    equipment1 = new Equipment(scheme1, new ITacticalActScheme[0]);
+                    equipment1 = new Equipment(scheme1, Array.Empty<ITacticalActScheme>());
                 }
 
                 if (propSid1 == propSid2)
                 {
                     if (scheme1 != null)
                     {
-                        equipment2 = new Equipment(scheme1, new ITacticalActScheme[0]);
+                        equipment2 = new Equipment(scheme1, Array.Empty<ITacticalActScheme>());
                     }
                 }
                 else
@@ -533,7 +522,7 @@ namespace Zilon.Core.Tests.Persons
 
                     if (scheme2 != null)
                     {
-                        equipment2 = new Equipment(scheme2, new ITacticalActScheme[0]);
+                        equipment2 = new Equipment(scheme2, Array.Empty<ITacticalActScheme>());
                     }
                 }
 
@@ -549,7 +538,7 @@ namespace Zilon.Core.Tests.Persons
                 var slotIndex1 = i == 0 ? 0 : 1;
                 var slotIndex2 = i == 0 ? 1 : 0;
 
-                var carrier = new EquipmentCarrier(slotSchemes);
+                var carrier = new EquipmentModule(slotSchemes);
 
 
                 // ACT
@@ -572,7 +561,8 @@ namespace Zilon.Core.Tests.Persons
             }
         }
 
-        private IPropScheme GetSchemeBySid(string sid) {
+        private IPropScheme GetSchemeBySid(string sid)
+        {
             if (sid == null)
             {
                 return null;
@@ -583,11 +573,11 @@ namespace Zilon.Core.Tests.Persons
                 case EquipmentCarrierTestsCaseSource.Sword:
                 case EquipmentCarrierTestsCaseSource.Axe:
                     return new TestPropScheme
+                    {
+                        Tags = new[] { PropTags.Equipment.Weapon },
+                        Equip = new TestPropEquipSubScheme
                         {
-                            Tags = new[] { PropTags.Equipment.Weapon },
-                            Equip = new TestPropEquipSubScheme
-                            {
-                                SlotTypes = new[] {
+                            SlotTypes = new[] {
                                     EquipmentSlotTypes.Hand
                             }
                         }

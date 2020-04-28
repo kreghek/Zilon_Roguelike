@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.ProgressStoring;
 using Zilon.Core.Props;
@@ -116,7 +117,7 @@ namespace Zilon.Core.Tests.ProgressStoring
             // Назначаем экипировку
             var helm = propFactory.CreateEquipment(propSchemes["helm"]);
             helm.Durable.Value = helm.Durable.Range.Max / 2;
-            person.EquipmentCarrier[0] = helm;
+            person.GetModule<IEquipmentModule>()[0] = helm;
 
             // Инвентарь
             var equipment1 = propFactory.CreateEquipment(propSchemes["helm"]);
