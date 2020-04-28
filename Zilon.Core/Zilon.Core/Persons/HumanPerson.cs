@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.LogicCalculations;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons.Auxiliary;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
@@ -23,6 +24,8 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class HumanPerson : IPerson
     {
+        private readonly IDictionary<string, IPersonModule> _modules;
+
         private readonly ITacticalActScheme _defaultActScheme;
         private readonly ISurvivalRandomSource _survivalRandomSource;
 
@@ -874,5 +877,23 @@ namespace Zilon.Core.Persons
             return $"{Name}";
         }
 
+
+        /// <inheritdoc/>
+        public TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IPersonModule
+        {
+            return (TStaticObjectModule)_modules[key];
+        }
+
+        /// <inheritdoc/>
+        public bool HasModule(string key)
+        {
+            return _modules.ContainsKey(key);
+        }
+
+        /// <inheritdoc/>
+        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IPersonModule
+        {
+            _modules.Add(sectorObjectModule.Key, sectorObjectModule);
+        }
     }
 }

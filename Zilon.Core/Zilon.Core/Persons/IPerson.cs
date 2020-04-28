@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Props;
+﻿using Zilon.Core.PersonModules;
+using Zilon.Core.Props;
 
 namespace Zilon.Core.Persons
 {
@@ -59,5 +60,25 @@ namespace Zilon.Core.Persons
         /// Модуль заболеваний персонажа.
         /// </summary>
         IDiseaseData DiseaseData { get; }
+
+        /// <summary>
+        /// Получение модуля статического объекта.
+        /// </summary>
+        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
+        /// <returns>Возвращает объект модуля.</returns>
+        TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IPersonModule;
+
+        /// <summary>
+        /// Добавление модуля статического объекта.
+        /// </summary>
+        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
+        /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
+        void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IPersonModule;
+
+        /// <summary>
+        /// Проверка наличия модуля статического объекта.
+        /// </summary>
+        /// <returns>Возвращает true, если модуль указанного типа есть у объекта. Иначе, false.</returns>
+        bool HasModule(string key);
     }
 }
