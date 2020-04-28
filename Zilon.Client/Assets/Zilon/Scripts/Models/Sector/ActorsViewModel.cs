@@ -39,7 +39,7 @@ public class ActorsViewModel : MonoBehaviour
             var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
 
             var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
-            actorViewModel.GraphicRoot = actorGraphic;
+            actorViewModel.SetGraphicRoot(actorGraphic);
             actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
             var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();

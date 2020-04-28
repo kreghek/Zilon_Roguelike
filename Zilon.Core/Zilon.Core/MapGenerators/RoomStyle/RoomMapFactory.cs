@@ -68,7 +68,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var regionIdCounter = 1;
             foreach (var room in rooms)
             {
-                var passableRoomNodes = room.Nodes.Where(x => !x.IsObstacle);
+                var passableRoomNodes = room.Nodes;
                 var region = new MapRegion(regionIdCounter, passableRoomNodes.Cast<IGraphNode>().ToArray());
                 regionIdCounter++;
                 map.Regions.Add(region);

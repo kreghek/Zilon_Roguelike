@@ -9,10 +9,11 @@ using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
-using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
+using Zilon.Core.StaticObjectModules;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -61,19 +62,19 @@ namespace Zilon.Core.Tactics
 
         public ILocationScheme Scheme { get; set; }
         public IActorManager ActorManager { get; }
-        public IPropContainerManager PropContainerManager { get; }
+        public IStaticObjectManager StaticObjectManager { get; }
         public IEnumerable<IDisease> Diseases { get => _diseases; }
 
         [ExcludeFromCodeCoverage]
         public Sector(ISectorMap map,
             IActorManager actorManager,
-            IPropContainerManager propContainerManager,
+            IStaticObjectManager staticObjectManager,
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
             ActorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
-            PropContainerManager = propContainerManager ?? throw new ArgumentNullException(nameof(propContainerManager));
+            StaticObjectManager = staticObjectManager ?? throw new ArgumentNullException(nameof(staticObjectManager));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _equipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
@@ -82,8 +83,8 @@ namespace Zilon.Core.Tactics
 
             ActorManager.Added += ActorManager_Added;
             ActorManager.Removed += ActorManager_Remove;
-            PropContainerManager.Added += PropContainerManager_Added;
-            PropContainerManager.Removed += PropContainerManager_Remove;
+            StaticObjectManager.Added += StaticObjectManager_Added;
+            StaticObjectManager.Removed += StaticObjectManager_Remove;
 
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
 
@@ -221,7 +222,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+        private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
         {
             foreach (var container in e.Items)
             {
@@ -230,9 +231,9 @@ namespace Zilon.Core.Tactics
                     Map.HoldNode(container.Node, container);
                 }
 
-                if (container is ILootContainer)
+                if (container.GetModuleSafe<IPropContainer>() is ILootContainer lootContainer)
                 {
-                    container.ItemsRemoved += LootContainer_ItemsRemoved;
+                    lootContainer.ItemsRemoved += LootContainer_ItemsRemoved;
                 }
             }
         }
@@ -242,11 +243,12 @@ namespace Zilon.Core.Tactics
             var container = (IPropContainer)sender;
             if (!container.Content.CalcActualItems().Any())
             {
-                PropContainerManager.Remove(container);
+                var staticObject = StaticObjectManager.Items.Single(x=>ReferenceEquals(x.GetModuleSafe<IPropContainer>(), container));
+                StaticObjectManager.Remove(staticObject);
             }
         }
 
-        private void PropContainerManager_Remove(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+        private void StaticObjectManager_Remove(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
         {
             foreach (var container in e.Items)
             {
@@ -255,9 +257,9 @@ namespace Zilon.Core.Tactics
                     Map.ReleaseNode(container.Node, container);
                 }
 
-                if (container is ILootContainer)
+                if (container.GetModule<IPropContainer>() is ILootContainer lootContainer)
                 {
-                    container.ItemsRemoved -= LootContainer_ItemsRemoved;
+                    lootContainer.ItemsRemoved -= LootContainer_ItemsRemoved;
                 }
             }
         }
@@ -266,11 +268,64 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in e.Items)
             {
-                Map.HoldNode(actor.Node, actor);
+                HoldNodes(actor.Node, actor, Map);
 
                 if (actor.Person.Survival != null)
                 {
                     actor.Person.Survival.Dead += ActorState_Dead;
+                }
+
+                actor.Moved += Actor_Moved;
+                UpdateFowData(actor);
+            }
+        }
+
+        private void Actor_Moved(object sender, EventArgs e)
+        {
+            var actor = (IActor)sender;
+            UpdateFowData(actor);
+        }
+
+        private void UpdateFowData(IActor actor)
+        {
+            if (actor.SectorFowData is HumanSectorFowData)
+            {
+                const int DISTANCE_OF_SIGN = 5;
+                var fowContext = new FowContext(Map, StaticObjectManager);
+                FowHelper.UpdateFowData(actor.SectorFowData, fowContext, actor.Node, DISTANCE_OF_SIGN);
+            }
+        }
+
+        private void HoldNodes(IGraphNode nextNode, IActor actor, IMap map)
+        {
+            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, nextNode, map);
+
+            foreach (var node in actorNodes)
+            {
+                map.HoldNode(node, actor);
+            }
+        }
+
+        private void ReleaseNodes(IActor actor, IMap map)
+        {
+            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, actor.Node,  map);
+
+            foreach (var node in actorNodes)
+            {
+                map.ReleaseNode(node, actor);
+            }
+        }
+
+        private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSize physicalSize, IGraphNode baseNode, IMap map)
+        {
+            yield return baseNode;
+
+            if (physicalSize == PhysicalSize.Size7)
+            {
+                var neighbors = map.GetNext(baseNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
                 }
             }
         }
@@ -280,12 +335,14 @@ namespace Zilon.Core.Tactics
             // Когда актёры удалены из сектора, мы перестаём мониторить события на них.
             foreach (var actor in e.Items)
             {
-                Map.ReleaseNode(actor.Node, actor);
+                ReleaseNodes(actor, Map);
 
                 if (actor.Person.Survival != null)
                 {
                     actor.Person.Survival.Dead -= ActorState_Dead;
                 }
+
+                actor.Moved -= Actor_Moved;
             }
         }
 
@@ -304,6 +361,11 @@ namespace Zilon.Core.Tactics
 
         private void ProcessMonsterDeath(IActor actor)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
             if (!(actor.Person is MonsterPerson monsterPerson))
             {
                 return;
@@ -313,11 +375,14 @@ namespace Zilon.Core.Tactics
 
             var dropSchemes = GetMonsterDropTables(monsterScheme);
 
-            var loot = new DropTableLoot(actor.Node, dropSchemes, _dropResolver);
+            var loot = new DropTableLoot(dropSchemes, _dropResolver);
+
+            var staticObject = new StaticObject(actor.Node, loot.Purpose, default);
+            staticObject.AddModule<IPropContainer>(loot);
 
             if (loot.Content.CalcActualItems().Any())
             {
-                PropContainerManager.Add(loot);
+                StaticObjectManager.Add(staticObject);
             }
 
             if (ScoreManager != null)

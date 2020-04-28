@@ -41,7 +41,7 @@ public class SectorMapViewModel : MonoBehaviour
             var mapNodeVm = mapNodeObj.GetComponent<MapNodeVM>();
 
             var hexNode = (HexNode)node;
-            var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
+            var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetCoords);
             var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1] / 2);
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;

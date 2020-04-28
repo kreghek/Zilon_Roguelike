@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
 
 using Moq;
@@ -18,7 +18,8 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class AttackTaskTests
     {
         private AttackTask _attackTask;
@@ -32,7 +33,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public async Task AttackTask_NoWall_NotThrowsInvalidOperationException()
         {
             // Подготовка. Два актёра через клетку. Радиус действия 1-2, достаёт.
-            _testMap = await SquareMapFactory.CreateAsync(3);
+            _testMap = await SquareMapFactory.CreateAsync(3).ConfigureAwait(false);
 
             var tacticalActMock = new Mock<ITacticalAct>();
             tacticalActMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme
@@ -51,7 +52,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
-            var actorNode = _testMap.Nodes.OfType<HexNode>().SelectBy(0, 0);
+            var actorNode = _testMap.Nodes.SelectByHexCoords(0, 0);
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             actorMock.SetupGet(x => x.Person).Returns(person);
             actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
@@ -60,7 +61,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
 
             var targetMock = new Mock<IActor>();
-            var targetNode = _testMap.Nodes.OfType<HexNode>().SelectBy(2, 0);
+            var targetNode = _testMap.Nodes.SelectByHexCoords(2, 0);
             targetMock.Setup(x => x.CanBeDamaged()).Returns(true);
             targetMock.SetupGet(x => x.Node).Returns(targetNode);
             var target = targetMock.Object;

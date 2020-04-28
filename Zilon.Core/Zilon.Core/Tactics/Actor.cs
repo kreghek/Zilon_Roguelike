@@ -10,6 +10,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics
@@ -23,6 +24,9 @@ namespace Zilon.Core.Tactics
 
         /// <inheritdoc/>
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+
+        /// <inheritdoc/>
+        public event EventHandler<MineDepositEventArgs> DepositMined;
 
         /// <inheritdoc/>
         public event EventHandler<UsedActEventArgs> UsedAct;
@@ -46,6 +50,7 @@ namespace Zilon.Core.Tactics
 
         public IPlayer Owner { get; }
         public ISectorFowData SectorFowData { get; }
+        public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
 
         [ExcludeFromCodeCoverage]
         public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
@@ -90,9 +95,19 @@ namespace Zilon.Core.Tactics
             Moved?.Invoke(this, new EventArgs());
         }
 
-        public void OpenContainer(IPropContainer container, IOpenContainerMethod method)
+        public void OpenContainer(IStaticObject container, IOpenContainerMethod method)
         {
-            var openResult = method?.TryOpen(container);
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            var openResult = method?.TryOpen(container.GetModule<IPropContainer>());
 
             DoOpenContainer(container, openResult);
         }
@@ -233,7 +248,7 @@ namespace Zilon.Core.Tactics
 
 
         [ExcludeFromCodeCoverage]
-        private void DoOpenContainer(IPropContainer container, IOpenContainerResult openResult)
+        private void DoOpenContainer(IStaticObject container, IOpenContainerResult openResult)
         {
             var e = new OpenContainerEventArgs(container, openResult);
             OpenedContainer?.Invoke(this, e);
@@ -429,6 +444,29 @@ namespace Zilon.Core.Tactics
                 default:
                     throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
             }
+        }
+
+        public void MineDeposit(IStaticObject deposit, IMineDepositMethod method)
+        {
+            if (deposit is null)
+            {
+                throw new ArgumentNullException(nameof(deposit));
+            }
+
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            var openResult = method?.TryMine(deposit.GetModule<IPropDepositModule>());
+
+            DoMineDeposit(deposit, openResult);
+        }
+
+        private void DoMineDeposit(IStaticObject deposit, IMineDepositResult openResult)
+        {
+            var e = new MineDepositEventArgs(deposit, openResult);
+            DepositMined?.Invoke(this, e);
         }
     }
 }

@@ -13,15 +13,11 @@ namespace Zilon.Core.Tactics.Spatial
     {
         private readonly ISectorMap _map;
 
-        public ActorPathFindingContext(IActor actor, ISectorMap map) : this(actor, map, targetNode: null)
-        {
-        }
-
         public ActorPathFindingContext(IActor actor, ISectorMap map, IGraphNode targetNode)
         {
-            Actor = actor;
-            _map = map;
-            TargetNode = targetNode;
+            Actor = actor ?? throw new ArgumentNullException(nameof(actor));
+            _map = map ?? throw new ArgumentNullException(nameof(map));
+            TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
         }
 
         public IActor Actor { get; }
@@ -50,20 +46,10 @@ namespace Zilon.Core.Tactics.Spatial
 
             foreach (var testedNeighbor in neighbors)
             {
-                if (TargetNode == null)
+                var isNotAvailable = !IsNodeAvailableForActor(map, testedNeighbor);
+                if (isNotAvailable)
                 {
-                    if (!map.IsPositionAvailableFor(testedNeighbor, Actor))
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    var isNotAvailable = !IsNodeAvailableForActor(map, testedNeighbor);
-                    if (isNotAvailable)
-                    {
-                        continue;
-                    }
+                    continue;
                 }
 
                 yield return testedNeighbor;

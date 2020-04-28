@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
@@ -15,13 +15,12 @@ using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
-using Zilon.Core.Graphs;
-using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -34,7 +33,8 @@ using Zilon.Core.World;
 public class SectorVM : MonoBehaviour
 {
     private readonly List<MapNodeVM> _nodeViewModels;
-    private readonly List<ContainerVm> _containerViewModels;
+    private readonly List<StaticObjectViewModel> _staticObjectViewModels;
+    private IStaticObjectManager _staticObjectManager;
 
     private bool _interuptCommands;
 
@@ -51,12 +51,6 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public MonoActorGraphic MonoGraphicPrefab;
 
-    [NotNull] public ContainerVm ChestPrefab;
-
-    [NotNull] public ContainerVm LootPrefab;
-
-    [NotNull] public ContainerVm TrashPrefab;
-
     [NotNull] public HitSfx HitSfx;
 
     [NotNull] public SceneLoader SceneLoader;
@@ -72,7 +66,7 @@ public class SectorVM : MonoBehaviour
     [NotNull] public SleepShadowManager SleepShadowManager;
 
     [NotNull] public PlayerPersonInitiator PlayerPersonInitiator;
-    private IPropContainerManager _propContainerManager;
+
     [NotNull] [Inject] private readonly DiContainer _container;
 
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
@@ -117,6 +111,9 @@ public class SectorVM : MonoBehaviour
     [Inject]
     private readonly IPlayerEventLogService _playerEventLogService;
 
+    [Inject]
+    private readonly StaticObjectViewModelSelector _staticObjectViewModelSelector;
+
     [NotNull]
     [Inject(Id = "move-command")]
     private readonly ICommand _moveCommand;
@@ -130,13 +127,8 @@ public class SectorVM : MonoBehaviour
     private readonly ICommand _openContainerCommand;
 
     [NotNull]
-    [Inject(Id = "show-trader-modal-command")]
-    private readonly ICommand _showTraderModalCommand;
-
-    [NotNull]
-    [Inject(Id = "show-dialog-modal-command")]
-    private readonly ICommand _showDialogCommand;
-
+    [Inject(Id = "mine-deposit-command")]
+    private readonly ICommand _mineDepositCommand;
     public List<ActorViewModel> ActorViewModels { get; }
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
@@ -145,7 +137,7 @@ public class SectorVM : MonoBehaviour
     {
         _nodeViewModels = new List<MapNodeVM>();
         ActorViewModels = new List<ActorViewModel>();
-        _containerViewModels = new List<ContainerVm>();
+        _staticObjectViewModels = new List<StaticObjectViewModel>();
     }
 
     // ReSharper restore NotNullMemberIsNotInitialized
@@ -203,10 +195,9 @@ public class SectorVM : MonoBehaviour
         AddPlayerActorEventHandlers(playerActorViewModel);
 
         CreateMonsterViewModels(nodeViewModels);
-        CreateContainerViewModels(nodeViewModels);
-        CreateTraderViewModels(nodeViewModels);
+        CreateStaticObjectViewModels(nodeViewModels);
 
-        FowManager.InitViewModels(nodeViewModels, ActorViewModels, _containerViewModels);
+        FowManager.InitViewModels(nodeViewModels, ActorViewModels, _staticObjectViewModels);
 
         _gameLoop.Updated += GameLoop_Updated;
 
@@ -223,6 +214,7 @@ public class SectorVM : MonoBehaviour
         actor.UsedAct += ActorOnUsedAct;
         actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
         actor.UsedProp += Actor_UsedProp;
+        actor.DepositMined += Actor_DepositMined;
     }
 
     private void GameLoop_Updated(object sender, EventArgs e)
@@ -230,11 +222,11 @@ public class SectorVM : MonoBehaviour
         _inventoryState.SelectedProp = null;
     }
 
-    private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+    private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
     {
-        foreach (var container in e.Items)
+        foreach (var staticObject in e.Items)
         {
-            CreateContainerViewModel(_nodeViewModels, container);
+            CreateStaticObjectViewModel(_nodeViewModels, staticObject);
         }
     }
 
@@ -258,10 +250,10 @@ public class SectorVM : MonoBehaviour
 
         sectorNode.Sector.ScoreManager = _scoreManager;
 
-        _propContainerManager = sectorNode.Sector.PropContainerManager;
+        _staticObjectManager = sectorNode.Sector.StaticObjectManager;
 
-        _propContainerManager.Added += PropContainerManager_Added;
-        _propContainerManager.Removed += PropContainerManager_Removed;
+        _staticObjectManager.Added += StaticObjectManager_Added;
+        _staticObjectManager.Removed += StaticObjectManager_Removed;
 
         _playerState.TaskSource = _humanActorTaskSource;
 
@@ -273,20 +265,20 @@ public class SectorVM : MonoBehaviour
         _sectorManager.CurrentSector.HumanGroupExit += Sector_HumanGroupExit;
     }
 
-    private void PropContainerManager_Removed(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+    private void StaticObjectManager_Removed(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
     {
         foreach (var container in e.Items)
         {
-            var containerViewModel = _containerViewModels.Single(x => x.Container == container);
-            _containerViewModels.Remove(containerViewModel);
+            var containerViewModel = _staticObjectViewModels.Single(x => x.Container == container);
+            _staticObjectViewModels.Remove(containerViewModel);
             Destroy(containerViewModel.gameObject);
         }
     }
 
     public void OnDestroy()
     {
-        _propContainerManager.Added -= PropContainerManager_Added;
-        _propContainerManager.Removed -= PropContainerManager_Removed;
+        _staticObjectManager.Added -= StaticObjectManager_Added;
+        _staticObjectManager.Removed -= StaticObjectManager_Removed;
 
         _gameLoop.Updated -= GameLoop_Updated;
     }
@@ -303,7 +295,7 @@ public class SectorVM : MonoBehaviour
             var mapNodeVm = mapNodeObj.GetComponent<MapNodeVM>();
 
             var hexNode = (HexNode)node;
-            var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetX, hexNode.OffsetY);
+            var nodeWorldPositionParts = HexHelper.ConvertToWorld(hexNode.OffsetCoords);
             var worldPosition = new Vector3(nodeWorldPositionParts[0], nodeWorldPositionParts[1] / 2);
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
@@ -342,7 +334,7 @@ public class SectorVM : MonoBehaviour
             var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
 
             var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
-            actorViewModel.GraphicRoot = actorGraphic;
+            actorViewModel.SetGraphicRoot(actorGraphic);
             actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
             var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
@@ -385,120 +377,67 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void CreateContainerViewModels(IEnumerable<MapNodeVM> nodeViewModels)
+    private void CreateStaticObjectViewModels(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        foreach (var container in _propContainerManager.Items)
+        foreach (var staticObject in _staticObjectManager.Items)
         {
-            CreateContainerViewModel(nodeViewModels, container);
+            CreateStaticObjectViewModel(nodeViewModels, staticObject);
         }
     }
 
-    private void CreateTraderViewModels(IEnumerable<MapNodeVM> nodeViewModels)
+    private void CreateStaticObjectViewModel(IEnumerable<MapNodeVM> nodeViewModels, IStaticObject staticObject)
     {
-        var citizens = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is CitizenPerson).ToArray();
-        foreach (var trader in citizens)
+        var staticObjectPrefab = GetStaticObjectPrefab(staticObject);
+
+        if (staticObjectPrefab is null)
         {
-            CreateTraderViewModel(nodeViewModels, trader);
-        }
-    }
-
-    private void CreateContainerViewModel(IEnumerable<MapNodeVM> nodeViewModels, IPropContainer container)
-    {
-        var containerPrefab = GetContainerPrefab(container);
-
-        var containerViewModel = Instantiate(containerPrefab, transform);
-
-        var containerNodeVm = nodeViewModels.Single(x => x.Node == container.Node);
-        var containerPosition = containerNodeVm.transform.position + new Vector3(0, 0, -1);
-        containerViewModel.transform.position = containerPosition;
-        containerViewModel.Container = container;
-        containerViewModel.Selected += Container_Selected;
-        containerViewModel.MouseEnter += ContainerViewModel_MouseEnter;
-
-        _containerViewModels.Add(containerViewModel);
-    }
-
-    private void CreateTraderViewModel(IEnumerable<MapNodeVM> nodeViewModels, IActor actor)
-    {
-        var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
-        var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
-
-        var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
-        actorViewModel.GraphicRoot = actorGraphic;
-        actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
-
-        var graphicController = actorViewModel.gameObject.AddComponent<MonsterSingleActorGraphicController>();
-        graphicController.Actor = actor;
-        graphicController.Graphic = actorGraphic;
-
-        var actorNodeVm = nodeViewModels.Single(x => x.Node == actor.Node);
-        var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
-        actorViewModel.transform.position = actorPosition;
-        actorViewModel.Actor = actor;
-
-        actorViewModel.Selected += TraderViewModel_Selected;
-
-        ActorViewModels.Add(actorViewModel);
-    }
-
-    private void TraderViewModel_Selected(object sender, EventArgs e)
-    {
-        var traderViewModel = sender as ActorViewModel;
-
-        _playerState.SelectedViewModel = traderViewModel;
-
-        if (traderViewModel.Actor.Person is CitizenPerson citizen)
-        {
-            switch (citizen.CitizenType)
-            {
-                case CitizenType.Unintresting:
-                    // Этот тип жителей не интерактивен.
-                    break;
-
-                case CitizenType.Trader:
-                    if (_showTraderModalCommand.CanExecute())
-                    {
-                        _clientCommandExecutor.Push(_showTraderModalCommand);
-                    }
-                    break;
-
-                case CitizenType.QuestGiver:
-                    if (_showDialogCommand.CanExecute())
-                    {
-                        _clientCommandExecutor.Push(_showDialogCommand);
-                    }
-                    break;
-            }
-
-
-        }
-    }
-
-    private ContainerVm GetContainerPrefab(IPropContainer container)
-    {
-        if (container is ILootContainer)
-        {
-            return LootPrefab;
+            throw new InvalidOperationException($"Не удаётся выбрать модель представления для объекта {staticObject.Purpose}");
         }
 
-        if (container.Purpose == PropContainerPurpose.Treasures)
-        {
-            return ChestPrefab;
-        }
+        var staticObjectViewModel = Instantiate(staticObjectPrefab, transform);
 
-        return TrashPrefab;
+        var nodeViewModelUnderStaticObject = nodeViewModels.Single(x => x.Node == staticObject.Node);
+        var containerPosition = nodeViewModelUnderStaticObject.transform.position + new Vector3(0, 0, -1);
+        staticObjectViewModel.WorldPosition = containerPosition;
+        staticObjectViewModel.StaticObject = staticObject;
+        staticObjectViewModel.Selected += Container_Selected;
+        staticObjectViewModel.MouseEnter += ContainerViewModel_MouseEnter;
+
+        _staticObjectViewModels.Add(staticObjectViewModel);
+    }
+
+    private StaticObjectViewModel GetStaticObjectPrefab(IStaticObject staticObject)
+    {
+        var prefab = _staticObjectViewModelSelector.SelectViewModel(staticObject);
+        return prefab;
     }
 
     private void Container_Selected(object sender, EventArgs e)
     {
-        var containerViewModel = sender as ContainerVm;
+        var containerViewModel = sender as StaticObjectViewModel;
 
         _playerState.HoverViewModel = containerViewModel;
         _playerState.SelectedViewModel = containerViewModel;
 
-        if (containerViewModel != null)
+        if (containerViewModel == null)
+        {
+            return;
+        }
+
+        if (containerViewModel.Container.HasModule<IPropContainer>() &&
+            containerViewModel.Container.GetModule<IPropContainer>().IsActive &&
+            _openContainerCommand.CanExecute())
         {
             _clientCommandExecutor.Push(_openContainerCommand);
+        }
+        else if (containerViewModel.Container.HasModule<IPropDepositModule>() &&
+            _mineDepositCommand.CanExecute())
+        {
+            _clientCommandExecutor.Push(_mineDepositCommand);
+        }
+        else if (_attackCommand.CanExecute())
+        {
+            _clientCommandExecutor.Push(_attackCommand);
         }
     }
 
@@ -518,14 +457,21 @@ public class SectorVM : MonoBehaviour
             Debug.Log($"Не удалось открыть контейнер {e.Container}.");
         }
 
-        var props = e.Container.Content.CalcActualItems();
+        var propContainer = e.Container.GetModule<IPropContainer>();
+        ShowFoundPropsModalOrNotFound(actor, propContainer);
+    }
+
+    private void ShowFoundPropsModalOrNotFound(IActor actor, IPropContainer propContainer)
+    {
+        var props = propContainer.Content.CalcActualItems();
         if (props.Any())
         {
             var containerPopupObj = _container.InstantiatePrefab(ContainerPopupPrefab, WindowCanvas.transform);
 
             var containerPopup = containerPopupObj.GetComponent<ContainerPopup>();
 
-            var transferMachine = new PropTransferMachine(actor.Person.Inventory, e.Container.Content);
+            var transferMachine = new PropTransferMachine(actor.Person.Inventory,
+                propContainer.Content);
             containerPopup.Init(transferMachine);
         }
         else
@@ -688,7 +634,7 @@ public class SectorVM : MonoBehaviour
 
     private void ActorOnUsedAct(object sender, UsedActEventArgs e)
     {
-        var actor = GetActor(sender);
+        var actor = GetActorFromEventSender(sender);
 
         var actorHexNode = actor.Node as HexNode;
         var targetHexNode = e.Target.Node as HexNode;
@@ -713,6 +659,22 @@ public class SectorVM : MonoBehaviour
         }
     }
 
+    private void Actor_DepositMined(object sender, MineDepositEventArgs e)
+    {
+        var actor = GetActorFromEventSender(sender);
+
+        var depositViewModel = _staticObjectViewModels.Single(x => x.StaticObject == e.Deposit);
+        var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
+        actorViewModel.GraphicRoot.ProcessMine(depositViewModel.transform.position);
+
+        var propContainer = e.Deposit.GetModule<IPropContainer>();
+
+        if (e.Result is SuccessMineDepositResult)
+        {
+            ShowFoundPropsModalOrNotFound(actor, propContainer);
+        }
+    }
+
     private static void ProcessHeal(ActorViewModel actorViewModel)
     {
         actorViewModel.GraphicRoot.ProcessHit(actorViewModel.transform.position);
@@ -720,16 +682,18 @@ public class SectorVM : MonoBehaviour
 
     private void ProcessDamage(IAttackTarget target, ITacticalAct tacticalAct, IActor actor, ActorViewModel actorViewModel)
     {
-        var targetViewModel = ActorViewModels.SingleOrDefault(x => x.Actor == target);
-        if (targetViewModel is null)
+        var targetActorViewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Item, target));
+        var targetStaticObjectViewModel = _staticObjectViewModels.SingleOrDefault(x => ReferenceEquals(x.Item, target));
+        var canBeHitViewModel = (ICanBeHitSectorObject)targetActorViewModel ?? targetStaticObjectViewModel;
+        if (canBeHitViewModel is null)
         {
             return;
         }
 
-        actorViewModel.GraphicRoot.ProcessHit(targetViewModel.transform.position);
+        actorViewModel.GraphicRoot.ProcessHit(canBeHitViewModel.Position);
 
         var sfx = Instantiate(HitSfx, transform);
-        targetViewModel.AddHitEffect(sfx);
+        canBeHitViewModel.AddHitEffect(sfx);
 
         // Проверяем, стрелковое оружие или удар ближнего боя
         if (tacticalAct.Stats.Range?.Max > 1)
@@ -741,7 +705,7 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private static IActor GetActor(object sender)
+    private static IActor GetActorFromEventSender(object sender)
     {
         if (sender is IActor actor)
         {
@@ -754,11 +718,14 @@ public class SectorVM : MonoBehaviour
     private void CreateBullet(IActor actor, IAttackTarget target)
     {
         var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
-        var targetViewModel = ActorViewModels.Single(x => x.Actor == target);
+
+        var targetActorViewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Item, target));
+        var targetStaticObjectViewModel = _staticObjectViewModels.SingleOrDefault(x => ReferenceEquals(x.Item, target));
+        var canBeHitViewModel = (ICanBeHitSectorObject)targetActorViewModel ?? targetStaticObjectViewModel;
 
         var bulletTracer = Instantiate(GunShootTracer, transform);
         bulletTracer.FromPosition = actorViewModel.transform.position;
-        bulletTracer.TargetPosition = targetViewModel.transform.position;
+        bulletTracer.TargetPosition = canBeHitViewModel.Position;
     }
 
     private void MapNodeVm_OnSelect(object sender, EventArgs e)

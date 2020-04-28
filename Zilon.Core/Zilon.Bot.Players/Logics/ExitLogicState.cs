@@ -16,6 +16,11 @@ namespace Zilon.Bot.Players.Logics
 
         public ExitLogicState(ISectorManager sectorManager)
         {
+            if (sectorManager is null)
+            {
+                throw new System.ArgumentNullException(nameof(sectorManager));
+            }
+
             _sector = sectorManager.CurrentSector;
             _map = sectorManager.CurrentSector.Map;
         }
@@ -60,7 +65,8 @@ namespace Zilon.Bot.Players.Logics
 
         private MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode)
         {
-            Debug.Assert((targetExitNode as HexNode)?.IsObstacle != true,
+            var targetNodeIsBlockedByObstacles = GetObstableInNode(_sector, targetExitNode);
+            Debug.Assert(targetNodeIsBlockedByObstacles,
                 "Узел с выходом не должен быть препятствием.");
 
             if (!_map.IsPositionAvailableFor(targetExitNode, actor))
@@ -71,6 +77,13 @@ namespace Zilon.Bot.Players.Logics
             var moveTask = new MoveTask(actor, targetExitNode, _map);
 
             return moveTask;
+        }
+
+        private static bool GetObstableInNode(ISector sector, IGraphNode node)
+        {
+            var staticObstaclesInTargetNode = sector.StaticObjectManager.Items.Where(x => x.Node == node && x.IsMapBlock);
+            var targetNodeIsBlockedByObstacles = staticObstaclesInTargetNode.Any();
+            return targetNodeIsBlockedByObstacles;
         }
 
         protected override void ResetData()

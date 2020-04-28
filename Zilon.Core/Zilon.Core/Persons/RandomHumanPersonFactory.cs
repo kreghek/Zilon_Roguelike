@@ -94,6 +94,10 @@ namespace Zilon.Core.Persons
             AddResource(inventory, "packed-food", 1);
             AddResource(inventory, "water-bottle", 1);
             AddResource(inventory, "med-kit", 1);
+            AddEquipment(inventory, "pick-axe");
+            AddEquipment(inventory, "shovel");
+            AddEquipment(inventory, "shotgun");
+            AddResource(inventory, "bullet-45", 100);
         }
 
         private void AddEquipment(Inventory inventory, string sid)

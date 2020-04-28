@@ -60,10 +60,11 @@ namespace Zilon.Core.Tests.Commands
             var personMock = new Mock<IPerson>();
             personMock.SetupGet(x => x.TacticalActCarrier).Returns(actCarrier);
             personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
+            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
-            var actorNode = testMap.Nodes.OfType<HexNode>().SelectBy(0, 0);
+            var actorNode = testMap.Nodes.SelectByHexCoords(0, 0);
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             actorMock.SetupGet(x => x.Person).Returns(person);
             var actor = actorMock.Object;

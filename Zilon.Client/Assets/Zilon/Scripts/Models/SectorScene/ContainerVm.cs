@@ -1,73 +1,46 @@
 ﻿using System;
 
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-using Zilon.Core.Client;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Spatial;
 
-public class ContainerVm : MonoBehaviour, IContainerViewModel
+public class ContainerVm : StaticObjectViewModel
 {
+    private IPropContainer _propContainer;
+
     public SpriteRenderer SpriteRenderer;
     public Sprite ClosedSprite;
     public Sprite OpenedSprite;
 
-
-    public event EventHandler Selected;
-    public event EventHandler MouseEnter;
-
-    public IPropContainer Container { get; set; }
-
-    public void Start()
+    public override IStaticObject StaticObject
     {
-        SpriteRenderer.sprite = ClosedSprite;
-        Container.Opened += Container_Opened;
+        get => base.StaticObject;
+        set
+        {
+            base.StaticObject = value;
+            _propContainer = value.GetModule<IPropContainer>();
+            if (_propContainer is null)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+    }
 
-        var hexNode = (HexNode)Container.Node;
-        //TODO -0.26 вынести в отдельную константу или вообще сервис.
-        //https://answers.unity.com/questions/598492/how-do-you-set-an-order-for-2d-colliders-that-over.html
-        // Статья, в которой подтверждается, что коллайдеры, расположенные на одной z-координате,
-        // срабатывают в произвольном порядке.
-        // Поэтому сундуки рендерятся ближе к камере и поднимают свой коллайдер.
-        transform.position = new Vector3(transform.position.x, transform.position.y, hexNode.OffsetY - 0.26f);
+    public override void Start()
+    {
+        base.Start();
+
+        var isOpened = Container.GetModule<IPropContainer>().IsOpened;
+        SpriteRenderer.sprite = isOpened ? OpenedSprite : ClosedSprite;
+
+        _propContainer.Opened += Container_Opened;
     }
 
     private void OnDestroy()
     {
-        Container.Opened -= Container_Opened;
+        _propContainer.Opened -= Container_Opened;
     }
-
-    public void OnMouseDown()
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-
-        DoSelected();
-    }
-
-    public void OnMouseEnter()
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-
-        DoMouseEnter();
-    }
-
-    private void DoSelected()
-    {
-        Selected?.Invoke(this, new EventArgs());
-    }
-
-    private void DoMouseEnter()
-    {
-        MouseEnter?.Invoke(this, new EventArgs());
-    }
-
 
     private void Container_Opened(object sender, EventArgs e)
     {

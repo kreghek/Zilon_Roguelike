@@ -73,8 +73,6 @@ public class PlayerPersonActivator : MonoBehaviour
         var fowData = new HumanSectorFowData();
         var actor = new Actor(_humanPlayer.MainPerson, _humanPlayer, startNode, perkResolver, fowData);
 
-        FowHelper.UpdateFowData(actor.SectorFowData, SectorViewModel.Sector.Map, startNode, 5);
-
         actorManager.Add(actor);
 
         var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, TargetObject);
@@ -85,7 +83,7 @@ public class PlayerPersonActivator : MonoBehaviour
 
         var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
         actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
-        actorViewModel.GraphicRoot = actorGraphic;
+        actorViewModel.SetGraphicRoot(actorGraphic);
 
         var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
         graphicController.Actor = actor;

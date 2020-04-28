@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Graphs;
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
 {
@@ -11,6 +12,8 @@ namespace Zilon.Core.Tactics
         /// Текущий узел карты, в котором находится цель.
         /// </summary>
         IGraphNode Node { get; }
+
+        PhysicalSize PhysicalSize { get; }
 
         /// <summary>
         /// Принятие урона.

@@ -11,6 +11,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Graphs;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 
 //TODO Сделать отдельные крипты для каждой кнопки, которые будут содежать обработчики.
@@ -115,11 +116,12 @@ public class SectorUiHandler : MonoBehaviour
         return true;
     }
 
-    private IPropContainer GetContainerInNode(IGraphNode targetnNode)
+    private IStaticObject GetContainerInNode(IGraphNode targetnNode)
     {
-        var propContainerManager = _sectorManager.CurrentSector.PropContainerManager;
-        var containerInNode = propContainerManager.Items.FirstOrDefault(x => x.Node == targetnNode);
-        return containerInNode;
+        var staticObjectManager = _sectorManager.CurrentSector.StaticObjectManager;
+        var containerStaticObjectInNode = staticObjectManager.Items
+            .FirstOrDefault(x => x.Node == targetnNode && x.HasModule<IPropContainer>());
+        return containerStaticObjectInNode;
     }
 
     private void HandleHotKeys()
@@ -232,7 +234,7 @@ public class SectorUiHandler : MonoBehaviour
         }
     }
 
-    private static ContainerVm GetLootViewModel(IPropContainer lootInNode)
+    private static ContainerVm GetLootViewModel(IStaticObject lootInNode)
     {
         var viewModels = FindObjectsOfType<ContainerVm>();
         foreach (var viewModel in viewModels)

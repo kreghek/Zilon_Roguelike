@@ -13,6 +13,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
@@ -30,11 +31,11 @@ namespace Zilon.Core.Specs.Steps
         public void GivenЕстьСундукIdВЯчейкеСоСлучайнымЛутом(int chestId, int chestPosX, int chestPosY, Table table)
         {
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
             var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
+            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
 
             var nodeCoords = new OffsetCoords(chestPosX, chestPosY);
-            var node = sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>().SelectBy(nodeCoords.X, nodeCoords.Y);
+            var node = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
 
             var dropProps = new List<IProp>();
             foreach (var tableRow in table.Rows)
@@ -52,19 +53,21 @@ namespace Zilon.Core.Specs.Steps
                 .Returns(dropProps.ToArray());
             var dropResolver = dropResolverMock.Object;
 
-            var chest = new DropTablePropChest(node, new DropTableScheme[0], dropResolver, chestId);
+            var chest = new DropTablePropChest(System.Array.Empty<DropTableScheme>(), dropResolver);
+            var staticObject = new StaticObject(node, chest.Purpose, chestId);
+            staticObject.AddModule<IPropContainer>(chest);
 
-            containerManager.Add(chest);
+            staticObjectManager.Add(staticObject);
         }
 
         [Then(@"В выбранном сундуке лут")]
         public void ThenВВыбранномСундукеЛут(Table table)
         {
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
-            var selectedChest = (playerState.HoverViewModel as IContainerViewModel).Container;
+            var selectedChest = (playerState.HoverViewModel as IContainerViewModel).StaticObject;
 
             // lootProps будет изменяться
-            var lootProps = selectedChest.Content.CalcActualItems().ToList();
+            var lootProps = selectedChest.GetModule<IPropContainer>().Content.CalcActualItems().ToList();
 
             foreach (var tableRow in table.Rows)
             {

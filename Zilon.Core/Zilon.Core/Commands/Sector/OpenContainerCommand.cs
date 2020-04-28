@@ -32,7 +32,7 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
-            var container = targetContainerViewModel.Container;
+            var container = targetContainerViewModel.StaticObject;
             var requiredDistance = 1;
 
             var targetNode = container.Node;
@@ -60,20 +60,20 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевой контейнер не выбран.");
             }
 
-            var container = targetContainerViewModel.Container;
-            if (container == null)
+            var staticObject = targetContainerViewModel.StaticObject;
+            if (staticObject == null)
             {
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
             }
 
-            var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, container));
+            var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, staticObject));
             PlayerState.TaskSource.Intent(intetion);
         }
 
-        private OpenContainerTask CreateTask(IActor actor, IPropContainer container)
+        private OpenContainerTask CreateTask(IActor actor, IStaticObject staticObject)
         {
             var openMethod = new HandOpenContainerMethod();
-            return new OpenContainerTask(actor, container, openMethod, SectorManager.CurrentSector.Map);
+            return new OpenContainerTask(actor, staticObject, openMethod, SectorManager.CurrentSector.Map);
         }
 
         private IContainerViewModel GetSelectedNodeViewModel()

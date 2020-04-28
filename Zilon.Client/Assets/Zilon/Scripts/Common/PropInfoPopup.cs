@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Models;
@@ -158,72 +159,127 @@ public class PropInfoPopup : MonoBehaviour
         var currentLanguage = _uiSettingService.CurrentLanguage;
         var descriptionLines = new List<string>();
 
-        if (propScheme.Equip.ActSids != null)
-        {
-            foreach (var sid in propScheme.Equip.ActSids)
-            {
-                var act = _schemeService.GetScheme<ITacticalActScheme>(sid);
-                var actName = LocalizationHelper.GetValue(currentLanguage, act.Name);
-                var efficient = GetEfficientString(act);
-                if (act.Stats.Effect == TacticalActEffectType.Damage)
-                {
-                    var actImpact = act.Stats.Offence.Impact;
-                    var actImpactLangKey = actImpact.ToString().ToLowerInvariant();
-                    var impactDisplayName = StaticPhrases.GetValue($"impact-{actImpactLangKey}", currentLanguage);
-
-                    var apRankDisplayName = StaticPhrases.GetValue("ap-rank", currentLanguage);
-
-                    descriptionLines.Add($"{actName}: {impactDisplayName} {efficient} ({act.Stats.Offence.ApRank} {apRankDisplayName})");
-                }
-                else if (act.Stats.Effect == TacticalActEffectType.Heal)
-                {
-                    var healDisplayName = StaticPhrases.GetValue("efficient-heal", currentLanguage);
-                    descriptionLines.Add($"{actName}: {healDisplayName} {efficient}");
-                }
-            }
-        }
-
-        if (propScheme.Equip.Armors != null)
-        {
-            var protectsDisplayName = StaticPhrases.GetValue("armor-protects", currentLanguage);
-            var armorRankDisplayName = StaticPhrases.GetValue("armor-rank", currentLanguage);
-            foreach (var armor in propScheme.Equip.Armors)
-            {
-                var armorImpact = armor.Impact;
-                var armorImpactLangKey = armorImpact.ToString().ToLowerInvariant();
-                var impactDisplayName = StaticPhrases.GetValue($"impact-{armorImpactLangKey}", currentLanguage);
-
-                var armorAbsorbtionLevel = armor.AbsorbtionLevel;
-                var armorAbsorbtionLevelKey = armorAbsorbtionLevel.ToString().ToLowerInvariant();
-                var armorAbsDisplayName = StaticPhrases.GetValue($"rule-{armorAbsorbtionLevelKey}", currentLanguage);
-
-                descriptionLines.Add($"{protectsDisplayName}: {impactDisplayName} ({armor.ArmorRank} {armorRankDisplayName}): {armorAbsDisplayName}");
-            }
-        }
-
-        if (propScheme.Equip.Rules != null)
-        {
-            foreach (var rule in propScheme.Equip.Rules)
-            {
-                var sign = GetDirectionString(rule.Direction);
-                var bonusString = GetBonusString(rule.Direction);
-
-                var ruleType = rule.Type;
-                var ruleKey = ruleType.ToString().ToLowerInvariant();
-                var ruleDisplayName = StaticPhrases.GetValue($"rule-{ruleKey}", currentLanguage);
-
-                var ruleLevel = rule.Level;
-                var ruleLevelKey = ruleLevel.ToString().ToLowerInvariant();
-                var ruleLevelDisplayName = StaticPhrases.GetValue($"rule-{ruleLevelKey}", currentLanguage);
-
-                descriptionLines.Add($"{bonusString}: {ruleDisplayName}: {sign}{ruleLevelDisplayName}");
-            }
-        }
+        WriteActs(propScheme, descriptionLines);
+        WriteArmors(propScheme, descriptionLines);
+        WriteEquipmentRules(propScheme, descriptionLines);
 
         var durableDisplayName = StaticPhrases.GetValue($"prop-durable", currentLanguage);
         descriptionLines.Add($"{durableDisplayName}: {equipment.Durable.Value}/{equipment.Durable.Range.Max}");
 
         StatText.text = string.Join("\n", descriptionLines);
+    }
+
+    private void WriteEquipmentRules(IPropScheme propScheme, List<string> descriptionLines)
+    {
+        if (propScheme.Equip.Rules == null)
+        {
+            return;
+        }
+
+        foreach (var rule in propScheme.Equip.Rules)
+        {
+            WriteEquipmentRule(descriptionLines, rule);
+        }
+    }
+
+    private void WriteEquipmentRule(List<string> descriptionLines, PersonRule rule)
+    {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        var sign = GetDirectionString(rule.Direction);
+        var bonusString = GetBonusString(rule.Direction);
+
+        var ruleType = rule.Type;
+        var ruleKey = ruleType.ToString().ToLowerInvariant();
+        var ruleDisplayName = StaticPhrases.GetValue($"rule-{ruleKey}", currentLanguage);
+
+        var ruleLevel = rule.Level;
+        var ruleLevelKey = ruleLevel.ToString().ToLowerInvariant();
+        var ruleLevelDisplayName = StaticPhrases.GetValue($"rule-{ruleLevelKey}", currentLanguage);
+
+        descriptionLines.Add($"{bonusString}: {ruleDisplayName}: {sign}{ruleLevelDisplayName}");
+    }
+
+    private void WriteArmors(IPropScheme propScheme, List<string> descriptionLines)
+    {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        if (propScheme.Equip.Armors == null)
+        {
+            return;
+        }
+
+        var protectsDisplayName = StaticPhrases.GetValue("armor-protects", currentLanguage);
+        var armorRankDisplayName = StaticPhrases.GetValue("armor-rank", currentLanguage);
+        foreach (var armor in propScheme.Equip.Armors)
+        {
+            WriteArmor(descriptionLines, protectsDisplayName, armorRankDisplayName, armor);
+        }
+    }
+
+    private void WriteArmor(List<string> descriptionLines, string protectsDisplayName, string armorRankDisplayName, IPropArmorItemSubScheme armor)
+    {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        var armorImpact = armor.Impact;
+        var armorImpactLangKey = armorImpact.ToString().ToLowerInvariant();
+        var impactDisplayName = StaticPhrases.GetValue($"impact-{armorImpactLangKey}", currentLanguage);
+
+        var armorAbsorbtionLevel = armor.AbsorbtionLevel;
+        var armorAbsorbtionLevelKey = armorAbsorbtionLevel.ToString().ToLowerInvariant();
+        var armorAbsDisplayName = StaticPhrases.GetValue($"rule-{armorAbsorbtionLevelKey}", currentLanguage);
+
+        descriptionLines.Add($"{protectsDisplayName}: {impactDisplayName} ({armor.ArmorRank} {armorRankDisplayName}): {armorAbsDisplayName}");
+    }
+
+    private void WriteActs(IPropScheme propScheme, List<string> descriptionLines)
+    {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        if (propScheme.Equip.ActSids == null)
+        {
+            return;
+        }
+
+        foreach (var sid in propScheme.Equip.ActSids)
+        {
+            var act = _schemeService.GetScheme<ITacticalActScheme>(sid);
+            var actName = LocalizationHelper.GetValue(currentLanguage, act.Name);
+            var efficient = GetEfficientString(act);
+            switch (act.Stats.Effect)
+            {
+                case TacticalActEffectType.Damage:
+                    WriteDamageAct(descriptionLines, act, actName, efficient);
+                    break;
+                case TacticalActEffectType.Heal:
+                    WriteHealAct(descriptionLines, actName, efficient);
+                    break;
+                case TacticalActEffectType.Undefined:
+                default:
+                    throw new InvalidOperationException($"Неизвестный тип воздействия {act.Stats.Effect}");
+            }
+        }
+    }
+
+    private void WriteHealAct(List<string> descriptionLines, string actName, string efficient)
+    {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        var healDisplayName = StaticPhrases.GetValue("efficient-heal", currentLanguage);
+        descriptionLines.Add($"{actName}: {healDisplayName} {efficient}");
+    }
+
+    private void WriteDamageAct(List<string> descriptionLines, ITacticalActScheme act, string actName, string efficient)
+    {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        var actImpact = act.Stats.Offence.Impact;
+        var actImpactLangKey = actImpact.ToString().ToLowerInvariant();
+        var impactDisplayName = StaticPhrases.GetValue($"impact-{actImpactLangKey}", currentLanguage);
+
+        var apRankDisplayName = StaticPhrases.GetValue("ap-rank", currentLanguage);
+
+        descriptionLines.Add($"{actName}: {impactDisplayName} {efficient} ({act.Stats.Offence.ApRank} {apRankDisplayName})");
     }
 
     private static string GetEfficientString(ITacticalActScheme act)
