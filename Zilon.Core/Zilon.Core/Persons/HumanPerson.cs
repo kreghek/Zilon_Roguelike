@@ -22,55 +22,53 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Персонаж, находящийся под управлением игрока.
     /// </summary>
-    public class HumanPerson : IPerson
+    public class HumanPerson : PersonBase
     {
-        private readonly IDictionary<string, IPersonModule> _modules;
-
         private readonly ITacticalActScheme _defaultActScheme;
         private readonly ISurvivalRandomSource _survivalRandomSource;
 
         /// <inheritdoc/>
-        public int Id { get; set; }
+        public override int Id { get; set; }
 
         /// <inheritdoc/>
         public string Name { get; }
 
         /// <inheritdoc/>
-        public IEquipmentCarrier EquipmentCarrier { get; }
+        public override IEquipmentCarrier EquipmentCarrier { get; }
 
         /// <inheritdoc/>
-        public ITacticalActCarrier TacticalActCarrier { get; }
+        public override ITacticalActCarrier TacticalActCarrier { get; }
 
         /// <inheritdoc/>
-        public IEvolutionData EvolutionData { get; }
+        public override IEvolutionData EvolutionData { get; }
 
         /// <inheritdoc/>
         public IPersonScheme Scheme { get; }
 
         /// <inheritdoc/>
-        public ICombatStats CombatStats { get; }
+        public override ICombatStats CombatStats { get; }
 
         /// <inheritdoc/>
-        public IPropStore Inventory { get; }
+        public override IPropStore Inventory { get; }
 
         /// <inheritdoc/>
-        public ISurvivalData Survival { get; }
+        public override ISurvivalData Survival { get; }
 
         /// <inheritdoc/>
-        public EffectCollection Effects { get; }
+        public override EffectCollection Effects { get; }
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
-        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
+        public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
 
-        public bool HasInventory { get => true; }
+        public override bool HasInventory { get => true; }
 
-        public IDiseaseData DiseaseData { get; }
+        public override IDiseaseData DiseaseData { get; }
 
         public HumanPerson([NotNull] IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultActScheme,
             [NotNull] IEvolutionData evolutionData,
-            [NotNull] ISurvivalRandomSource survivalRandomSource)
+            [NotNull] ISurvivalRandomSource survivalRandomSource) : base()
         {
             _defaultActScheme = defaultActScheme ?? throw new ArgumentNullException(nameof(defaultActScheme));
 
@@ -876,7 +874,29 @@ namespace Zilon.Core.Persons
         {
             return $"{Name}";
         }
+    }
 
+    public abstract class PersonBase : IPerson
+    {
+
+        private readonly IDictionary<string, IPersonModule> _modules;
+
+        public abstract int Id { get; set; }
+        public abstract PhysicalSize PhysicalSize { get; }
+        public abstract IEquipmentCarrier EquipmentCarrier { get; }
+        public abstract ITacticalActCarrier TacticalActCarrier { get; }
+        public abstract IEvolutionData EvolutionData { get; }
+        public abstract ICombatStats CombatStats { get; }
+        public abstract IPropStore Inventory { get; }
+        public abstract bool HasInventory { get; }
+        public abstract ISurvivalData Survival { get; }
+        public abstract EffectCollection Effects { get; }
+        public abstract IDiseaseData DiseaseData { get; }
+
+        protected PersonBase()
+        {
+
+        }
 
         /// <inheritdoc/>
         public TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IPersonModule

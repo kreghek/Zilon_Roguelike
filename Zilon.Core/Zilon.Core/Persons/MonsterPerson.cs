@@ -11,31 +11,31 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Персонаж для монстров в секторе.
     /// </summary>
-    public class MonsterPerson : IPerson
+    public class MonsterPerson : PersonBase
     {
-        public int Id { get; set; }
+        public override int Id { get; set; }
         public int Hp { get; }
-        public IEquipmentCarrier EquipmentCarrier => null;
+        public override IEquipmentCarrier EquipmentCarrier => null;
 
-        public ITacticalActCarrier TacticalActCarrier { get; }
+        public override ITacticalActCarrier TacticalActCarrier { get; }
 
-        public IEvolutionData EvolutionData => throw new NotSupportedException("Для монстров не поддерживается развитие");
+        public override IEvolutionData EvolutionData => throw new NotSupportedException("Для монстров не поддерживается развитие");
 
-        public ICombatStats CombatStats { get; }
+        public override ICombatStats CombatStats { get; }
 
-        public IPropStore Inventory => throw new NotSupportedException("Для монстров не поддерживается инвентарь.");
+        public override IPropStore Inventory => throw new NotSupportedException("Для монстров не поддерживается инвентарь.");
 
-        public ISurvivalData Survival { get; }
+        public override ISurvivalData Survival { get; }
 
-        public EffectCollection Effects { get; }
+        public override EffectCollection Effects { get; }
 
         public IMonsterScheme Scheme { get; }
 
-        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
-        public bool HasInventory { get => false; }
-        public IDiseaseData DiseaseData { get; }
+        public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
+        public override bool HasInventory { get => false; }
+        public override IDiseaseData DiseaseData { get; }
 
-        public MonsterPerson([NotNull] IMonsterScheme scheme)
+        public MonsterPerson([NotNull] IMonsterScheme scheme) : base()
         {
 
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
@@ -55,8 +55,8 @@ namespace Zilon.Core.Persons
             CombatStats = new CombatStats
             {
                 DefenceStats = new PersonDefenceStats(
-                    defenses ?? new PersonDefenceItem[0],
-                    new PersonArmorItem[0])
+                    defenses ?? Array.Empty<PersonDefenceItem>(),
+                    Array.Empty<PersonArmorItem>())
             };
 
             Survival = new MonsterSurvivalData(scheme);
