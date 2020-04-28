@@ -359,6 +359,17 @@ jobs:
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj /t:Build /p:Configuration=Release
       - run: chmod u+x /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe
       - run: mono --debug /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_create_globe/dotnetbenchmark-reports"
+  build_versioner:
+    working_directory: /versioner-builds
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
+    steps:
+      - checkout
+      - run: dotnet publish Zilon.Core/Versioner/Versioner.csproj -c Release -f netcoreapp3.1 -o ../../bin
+      - persist_to_workspace:
+          root: bin
+          paths:
+            - ./*
 orbs:
   sonarcloud: ksmc/sonarcloud-dotnet@0.0.9
 workflows:
@@ -437,6 +448,13 @@ workflows:
 #          requires:
 #            - build
 #            - test_45
+      - build_versioner:
+          requires:
+            - build_Win_x64
+          filters:
+            branches:
+              only:
+                - /auto-release.*/
   nightly:
     triggers:
       - schedule:

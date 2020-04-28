@@ -3,7 +3,7 @@ using System.IO;
 
 using Zilon.CommonUtilities;
 
-namespace VersionReader
+namespace Versioner
 {
     class Program
     {
@@ -16,9 +16,13 @@ namespace VersionReader
             }
 
             var versionLines = File.ReadAllLines(pathToVersionFile);
-            int buildNumber = GetNewBuildNumber(versionLines);
+            var buildNumber = GetNewBuildNumber(versionLines);
 
-            Console.Out.WriteLine($"{versionLines[0]}.{versionLines[1]}.{versionLines[2]}-alpha.{buildNumber}");
+            versionLines[3] = buildNumber.ToString();
+
+            Console.Out.WriteLine($"{versionLines[0]}.{versionLines[1]}.{versionLines[2]}-alpha.{versionLines[3]}");
+
+            File.WriteAllLines(pathToVersionFile, versionLines);
         }
 
         private static int GetNewBuildNumber(string[] versionLines)
