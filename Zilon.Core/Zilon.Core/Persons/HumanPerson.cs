@@ -34,9 +34,6 @@ namespace Zilon.Core.Persons
         public string Name { get; }
 
         /// <inheritdoc/>
-        public override ITacticalActCarrier TacticalActCarrier { get; }
-
-        /// <inheritdoc/>
         public override IEvolutionData EvolutionData { get; }
 
         /// <inheritdoc/>
@@ -80,7 +77,8 @@ namespace Zilon.Core.Persons
 
             AddModule(equipmentModule);
 
-            TacticalActCarrier = new TacticalActCarrier();
+            var combatActModule = new CombatActModule();
+            AddModule(combatActModule);
 
             EvolutionData.PerkLeveledUp += EvolutionData_PerkLeveledUp;
 
@@ -89,7 +87,7 @@ namespace Zilon.Core.Persons
             CalcCombatStats();
 
             var perks = GetPerksSafe();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
+            combatActModule.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
 
             Survival = new HumanSurvivalData(scheme, survivalRandomSource);
             Survival.StatChanged += Survival_StatCrossKeyValue;
@@ -379,7 +377,7 @@ namespace Zilon.Core.Persons
             CalcCombatStats();
 
             var perks = GetPerksSafe();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
+            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
 
             CalcSurvivalStats();
         }
@@ -667,7 +665,7 @@ namespace Zilon.Core.Persons
             var perks = GetPerksSafe();
 
             var equipmentModule = this.GetModule<IEquipmentModule>();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
+            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
 
             CalcSurvivalStats();
         }
@@ -700,7 +698,7 @@ namespace Zilon.Core.Persons
             var perks = GetPerksSafe();
 
             var equipmentModule = this.GetModule<IEquipmentModule>();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
+            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
 
             CalcSurvivalStats();
         }
@@ -888,9 +886,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public abstract PhysicalSize PhysicalSize { get; }
-
-        /// <inheritdoc/>
-        public abstract ITacticalActCarrier TacticalActCarrier { get; }
 
         /// <inheritdoc/>
         public abstract IEvolutionData EvolutionData { get; }

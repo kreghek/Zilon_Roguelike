@@ -2,7 +2,7 @@
 using System.Linq;
 
 using JetBrains.Annotations;
-
+using Zilon.Core.PersonModules;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -17,9 +17,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public int Hp { get; }
-
-        /// <inheritdoc/>
-        public override ITacticalActCarrier TacticalActCarrier { get; }
 
         /// <inheritdoc/>
         public override IEvolutionData EvolutionData => throw new NotSupportedException("Для монстров не поддерживается развитие");
@@ -48,12 +45,14 @@ namespace Zilon.Core.Persons
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
 
             Hp = scheme.Hp;
-            TacticalActCarrier = new TacticalActCarrier
+            var combaActModule = new CombatActModule
             {
                 Acts = new ITacticalAct[] {
                     new MonsterTacticalAct(scheme.PrimaryAct)
                 }
             };
+
+            AddModule(combaActModule);
 
             var defenses = scheme.Defense?.Defenses?
                 .Select(x => new PersonDefenceItem(x.Type, x.Level))
