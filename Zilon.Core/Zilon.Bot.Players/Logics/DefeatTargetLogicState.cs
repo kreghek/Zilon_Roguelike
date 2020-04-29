@@ -76,14 +76,14 @@ namespace Zilon.Bot.Players.Logics
 
         private AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target)
         {
-            if (actor.Person.TacticalActCarrier == null)
+            if (actor.Person.GetModuleSafe<ICombatActModule>() is null)
             {
                 throw new NotSupportedException();
             }
 
             var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
 
-            var act = SelectActHelper.SelectBestAct(actor.Person.TacticalActCarrier.Acts, inventory);
+            var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().Acts, inventory);
 
             var isInDistance = act.CheckDistance(actor.Node, target.Node, _map);
             var targetIsOnLine = _map.TargetIsOnLine(actor.Node, target.Node);

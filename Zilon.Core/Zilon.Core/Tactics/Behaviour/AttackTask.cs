@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Попытка атаковать цель, которой нельзя нанести урон.");
             }
 
-            if (Actor.Person.TacticalActCarrier == null)
+            if (Actor.Person.GetModuleSafe<ICombatActModule>() is null)
             {
                 throw new NotImplementedException("Не неализована возможность атаковать без навыков.");
             }
@@ -49,7 +49,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (Actor.Person.GetModuleSafe<IEquipmentModule>() == null)
             {
-                yield return Actor.Person.TacticalActCarrier.Acts.First();
+                yield return Actor.Person.GetModule<ICombatActModule>().Acts.First();
             }
             else
             {
@@ -68,7 +68,7 @@ namespace Zilon.Core.Tactics.Behaviour
                         continue;
                     }
 
-                    var equipmentActs = from act in Actor.Person.TacticalActCarrier.Acts
+                    var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().Acts
                                         where act.Equipment == slotEquipment
                                         select act;
 
@@ -84,7 +84,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (!usedEquipmentActs)
                 {
-                    yield return Actor.Person.TacticalActCarrier.Acts.First();
+                    yield return Actor.Person.GetModule<ICombatActModule>().Acts.First();
                 }
             }
         }

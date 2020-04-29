@@ -137,12 +137,12 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                if (actor.Person?.TacticalActCarrier?.Acts is null)
+                if (actor.Person?.GetModuleSafe<ICombatActModule>()?.Acts is null)
                 {
                     continue;
                 }
 
-                foreach (var act in actor.Person.TacticalActCarrier.Acts)
+                foreach (var act in actor.Person.GetModule<ICombatActModule>().Acts)
                 {
                     act.UpdateCooldown();
                 }

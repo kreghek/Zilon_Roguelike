@@ -73,7 +73,7 @@ namespace Zilon.Core.Tests.Persons
             person.GetModule<IEquipmentModule>()[expectedSlotIndex] = equipment;
 
             // ARRANGE
-            person.TacticalActCarrier.Acts[0].Stats.Should().Be(tacticalActScheme.Stats);
+            person.GetModule<ICombatActModule>().Acts[0].Stats.Should().Be(tacticalActScheme.Stats);
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace Zilon.Core.Tests.Persons
             person.GetModule<IEquipmentModule>()[0] = equipment;
 
             // ASSERT
-            var testedAct = person.TacticalActCarrier.Acts[0];
+            var testedAct = person.GetModule<ICombatActModule>().Acts[0];
             testedAct.Efficient.Modifiers.ResultBuff.Should().Be(10);
         }
 
