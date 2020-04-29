@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -17,7 +18,7 @@ using Zilon.Core.Tests.Common.Schemes;
 namespace Zilon.Core.Tests.Tactics
 {
     [TestFixture]
-    
+    [Parallelizable(ParallelScope.All)]
     public class ActorActUsageHandlerTests
     {
         /// <summary>
@@ -58,7 +59,7 @@ namespace Zilon.Core.Tests.Tactics
             // ASSERT
             perkResolverMock.Verify(x => x.ApplyProgress(
                 It.Is<IJobProgress>(progress => CheckDefeateProgress(progress, monster)),
-                It.IsAny<IEvolutionData>()
+                It.IsAny<IEvolutionModule>()
                 ), Times.Once);
         }
 

@@ -105,7 +105,7 @@ namespace Zilon.Core.Tests.ProgressStoring
 
             var inventory = new InventoryModule();
 
-            var evolutionData = new EvolutionData(schemeService);
+            var evolutionData = new EvolutionModule(schemeService);
 
             var person = new HumanPerson(personSchemes["human-person"],
                                          tacticalActSchemes["default"],

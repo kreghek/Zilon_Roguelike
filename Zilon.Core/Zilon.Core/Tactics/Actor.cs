@@ -151,7 +151,7 @@ namespace Zilon.Core.Tactics
                 if (_perkResolver != null)
                 {
                     var consumeProgress = new ConsumeProviantJobProgress();
-                    _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
+                    _perkResolver.ApplyProgress(consumeProgress, Person.GetModule<IEvolutionModule>());
                 }
             }
 
@@ -229,13 +229,13 @@ namespace Zilon.Core.Tactics
         {
             Person.Survival?.DecreaseStat(SurvivalStatType.Health, value);
 
-            if (_perkResolver != null && Person.EvolutionData != null)
+            if (_perkResolver != null && Person.GetModuleSafe<IEvolutionModule>() != null)
             {
                 var takeDamageProgress = new TakeDamageJobProgress(value);
-                _perkResolver.ApplyProgress(takeDamageProgress, Person.EvolutionData);
+                _perkResolver.ApplyProgress(takeDamageProgress, Person.GetModule<IEvolutionModule>());
 
                 var takeHitProgress = new TakeHitJobProgress();
-                _perkResolver.ApplyProgress(takeHitProgress, Person.EvolutionData);
+                _perkResolver.ApplyProgress(takeHitProgress, Person.GetModule<IEvolutionModule>());
             }
 
             DoDamageTaken(value);

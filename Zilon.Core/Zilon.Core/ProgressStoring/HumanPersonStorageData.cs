@@ -36,7 +36,7 @@ namespace Zilon.Core.ProgressStoring
 
                 Inventory = humanPerson.GetModule<IInventoryModule>().CalcActualItems().Select(CreatePropStorageData).ToArray(),
 
-                Perks = humanPerson.EvolutionData.Perks.Select(CreatePerkStorageData).ToArray()
+                Perks = humanPerson.GetModule<IEvolutionModule>().Perks.Select(CreatePerkStorageData).ToArray()
             };
 
             return storageData;
@@ -117,7 +117,7 @@ namespace Zilon.Core.ProgressStoring
 
             var inventory = new InventoryModule();
 
-            var evolutionData = new EvolutionData(schemeService);
+            var evolutionData = new EvolutionModule(schemeService);
 
             RestoreEvolutionData(schemeService, storedPerson, evolutionData);
 
@@ -185,7 +185,7 @@ namespace Zilon.Core.ProgressStoring
 
         private static void RestoreEvolutionData(ISchemeService schemeService,
             HumanPersonStorageData storedPerson,
-            EvolutionData evolutionData)
+            EvolutionModule evolutionData)
         {
             var perksFromSave = new List<IPerk>();
             foreach (var storedPerk in storedPerson.Perks)

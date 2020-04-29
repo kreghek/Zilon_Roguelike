@@ -72,18 +72,11 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var monster = CreateMonster();
 
-            // ReSharper disable once ConvertToLocalFunction
-            Action<MonsterPerson> requestPropertyAct = m =>
-            {
-                // ReSharper disable once UnusedVariable
-                var tmp = m.EvolutionData;
-            };
-
             //ACT
-            var act = ActUnsupportedMonsterComponent(monster, requestPropertyAct);
+            var module = monster.GetModuleSafe<IEvolutionModule>();
 
             // ASSERT
-            UnsupportedMonsterComponent(act);
+            module.Should().BeNull();
         }
 
         /// <summary>
@@ -114,22 +107,6 @@ namespace Zilon.Core.Tests.Persons
 
             var monster = new MonsterPerson(monsterScheme);
             return monster;
-        }
-
-        private Action ActUnsupportedMonsterComponent(MonsterPerson monster, Action<MonsterPerson> requestPropertyAct)
-        {
-            // ReSharper disable once ConvertToLocalFunction
-            Action act = () =>
-            {
-                requestPropertyAct(monster);
-            };
-
-            return act;
-        }
-
-        private void UnsupportedMonsterComponent(Action act)
-        {
-            act.Should().Throw<NotSupportedException>();
         }
     }
 }

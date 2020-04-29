@@ -279,7 +279,7 @@ namespace Zilon.Core.Specs.Contexts
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var survivalRandomSource = ServiceProvider.GetRequiredService<ISurvivalRandomSource>();
 
-            var evolutionData = new EvolutionData(schemeService);
+            var evolutionData = new EvolutionModule(schemeService);
 
             var inventory = new InventoryModule();
 

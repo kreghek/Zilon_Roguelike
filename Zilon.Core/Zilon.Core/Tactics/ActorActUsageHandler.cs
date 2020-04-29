@@ -440,10 +440,10 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var evolutionData = actor.Person.EvolutionData;
+            var evolutionData = actor.Person.GetModuleSafe<IEvolutionModule>();
 
             //TODO Такую же проверку добавить в CountActorDefeat (учёт убиства актёра).
-            if (evolutionData == null)
+            if (evolutionData is null)
             {
                 return;
             }
@@ -558,7 +558,7 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var evolutionData = actor.Person.EvolutionData;
+            var evolutionData = actor.Person.GetModule<IEvolutionModule>();
 
             var defeatProgress = new DefeatActorJobProgress(targetActor);
 

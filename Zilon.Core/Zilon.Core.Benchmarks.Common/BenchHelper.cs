@@ -58,7 +58,7 @@ namespace Zilon.Core.Benchmark
 
             var inventory = new InventoryModule();
 
-            var evolutionData = new EvolutionData(schemeService);
+            var evolutionData = new EvolutionModule(schemeService);
 
             var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 

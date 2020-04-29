@@ -47,7 +47,7 @@ namespace Zilon.Core.Persons
 
             var inventory = new InventoryModule();
 
-            var evolutionData = new EvolutionData(_schemeService);
+            var evolutionData = new EvolutionModule(_schemeService);
 
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
@@ -60,7 +60,7 @@ namespace Zilon.Core.Persons
             return person;
         }
 
-        private void RollTraitPerks(IEvolutionData evolutionData)
+        private void RollTraitPerks(IEvolutionModule evolutionData)
         {
             if (evolutionData is null)
             {

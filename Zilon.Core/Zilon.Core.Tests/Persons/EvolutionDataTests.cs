@@ -4,7 +4,7 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.Persons;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Persons
@@ -26,14 +26,14 @@ namespace Zilon.Core.Tests.Persons
                         Levels = new[]{
                             new PerkLevelSubScheme{
                                 MaxValue = 2,
-                                Jobs = new IJobSubScheme[0]
+                                Jobs = System.Array.Empty<IJobSubScheme>()
                             }
                         }
                     }
                 });
             var schemeService = schemeServiceMock.Object;
 
-            var evolutionData = new EvolutionData(schemeService);
+            var evolutionData = new EvolutionModule(schemeService);
 
             var perk = evolutionData.Perks[0];
 

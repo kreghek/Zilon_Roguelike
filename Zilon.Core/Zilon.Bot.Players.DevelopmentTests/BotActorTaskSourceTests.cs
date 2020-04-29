@@ -48,7 +48,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
         private static void PrintPersonBacklog(HumanPerson humanPerson)
         {
             Console.WriteLine("Build In Traits:");
-            var buildinTraits = humanPerson.EvolutionData.Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
+            var buildinTraits = humanPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
             foreach (var buildInTrait in buildinTraits)
             {
                 Console.WriteLine(buildInTrait.Scheme.Name.En);
