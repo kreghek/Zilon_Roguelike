@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -82,7 +81,7 @@ namespace Zilon.Bot.Players.Logics
                 throw new NotSupportedException();
             }
 
-            var inventory = actor.Person.HasInventory ? actor.Person.Inventory : null;
+            var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
 
             var act = SelectActHelper.SelectBestAct(actor.Person.TacticalActCarrier.Acts, inventory);
 

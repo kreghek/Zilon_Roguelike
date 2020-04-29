@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -16,6 +17,21 @@ namespace Zilon.Bot.Players.Triggers
 
         public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
+            if (actor is null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
+            if (currentState is null)
+            {
+                throw new System.ArgumentNullException(nameof(currentState));
+            }
+
+            if (strategyData is null)
+            {
+                throw new System.ArgumentNullException(nameof(strategyData));
+            }
+
             var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             var hpStatCoeff = (float)hpStat.Value / (hpStat.Range.Max - hpStat.Range.Min);
             var isLowHp = hpStatCoeff <= 0.5f;
@@ -26,7 +42,7 @@ namespace Zilon.Bot.Players.Triggers
 
             //
 
-            var props = actor.Person.Inventory.CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
             var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 ConsumeCommonRuleType.Health);

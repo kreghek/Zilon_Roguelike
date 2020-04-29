@@ -3,7 +3,6 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
-using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -13,23 +12,34 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class MonsterPerson : PersonBase
     {
+        /// <inheritdoc/>
         public override int Id { get; set; }
+
+        /// <inheritdoc/>
         public int Hp { get; }
 
+        /// <inheritdoc/>
         public override ITacticalActCarrier TacticalActCarrier { get; }
 
+        /// <inheritdoc/>
         public override IEvolutionData EvolutionData => throw new NotSupportedException("Для монстров не поддерживается развитие");
 
+        /// <inheritdoc/>
         public override ICombatStats CombatStats { get; }
 
+        /// <inheritdoc/>
         public override ISurvivalData Survival { get; }
 
+        /// <inheritdoc/>
         public override EffectCollection Effects { get; }
 
+        /// <inheritdoc/>
         public IMonsterScheme Scheme { get; }
 
+        /// <inheritdoc/>
         public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
-        public override bool HasInventory { get => false; }
+
+        /// <inheritdoc/>
         public override IDiseaseData DiseaseData { get; }
 
         public MonsterPerson([NotNull] IMonsterScheme scheme) : base()
@@ -63,6 +73,7 @@ namespace Zilon.Core.Persons
             DiseaseData = new DiseaseData();
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{Scheme?.Name?.En}";

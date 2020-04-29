@@ -6,6 +6,7 @@ using Moq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
@@ -43,7 +44,7 @@ namespace Zilon.Core.Specs.Contexts
             var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
             var actor = GetActiveActor();
 
-            var selectedProp = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            var selectedProp = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
 
             var viewModel = new TestPropItemViewModel()
             {

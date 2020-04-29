@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -165,7 +166,7 @@ namespace Zilon.Core.Benchmarks.Move
             var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
             var survivalRandomSource = _serviceProvider.GetRequiredService<ISurvivalRandomSource>();
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             var evolutionData = new EvolutionData(schemeService);
 

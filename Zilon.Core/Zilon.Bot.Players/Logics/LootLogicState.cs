@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
@@ -92,7 +93,7 @@ namespace Zilon.Bot.Players.Logics
 
         private static IActorTask TakeAllFromContainerTask(IActor actor, IStaticObject container)
         {
-            var inventoryTransfer = new PropTransfer(actor.Person.Inventory,
+            var inventoryTransfer = new PropTransfer(actor.Person.GetModule<IInventoryModule>(),
                                 container.GetModule<IPropContainer>().Content.CalcActualItems(),
                                 System.Array.Empty<IProp>());
 

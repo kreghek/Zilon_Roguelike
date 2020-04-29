@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using Zilon.Bot.Players.Triggers;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -48,7 +49,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var props = actor.Person.Inventory.CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
             var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 resourceType);

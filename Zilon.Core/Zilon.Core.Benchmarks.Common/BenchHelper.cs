@@ -2,6 +2,7 @@
 
 using Zilon.Core.Client;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -55,7 +56,7 @@ namespace Zilon.Core.Benchmark
                 throw new System.ArgumentNullException(nameof(startNode));
             }
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             var evolutionData = new EvolutionData(schemeService);
 

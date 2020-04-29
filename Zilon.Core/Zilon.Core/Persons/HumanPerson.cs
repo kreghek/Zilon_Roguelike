@@ -55,8 +55,6 @@ namespace Zilon.Core.Persons
 
         public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
 
-        public override bool HasInventory { get => true; }
-
         public override IDiseaseData DiseaseData { get; }
 
         public HumanPerson([NotNull] IPersonScheme scheme,
@@ -899,9 +897,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public abstract ICombatStats CombatStats { get; }
-
-        /// <inheritdoc/>
-        public abstract bool HasInventory { get; }
 
         /// <inheritdoc/>
         public abstract ISurvivalData Survival { get; }

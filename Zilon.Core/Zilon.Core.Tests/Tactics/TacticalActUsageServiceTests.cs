@@ -14,6 +14,7 @@ using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
@@ -72,7 +73,7 @@ namespace Zilon.Core.Tests.Tactics
                 PropResourceCount = 1
             };
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
             var bulletScheme = new TestPropScheme
             {
                 Sid = "bullet-7-62",
@@ -82,7 +83,7 @@ namespace Zilon.Core.Tests.Tactics
                 }
             };
             inventory.Add(new Resource(bulletScheme, 10));
-            personMock.Setup(x => x.Inventory).Returns(inventory);
+            personMock.Setup(x => x.GetModule<IInventoryModule>(It.IsAny<string>())).Returns(inventory);
 
             var actMock = new Mock<ITacticalAct>();
             actMock.SetupGet(x => x.Stats).Returns(actStatsSubScheme);
