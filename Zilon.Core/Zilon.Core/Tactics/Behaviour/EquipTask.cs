@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -61,10 +62,10 @@ namespace Zilon.Core.Tactics.Behaviour
                 // при (0) ничего не делаем
                 if (currentEquipment != null)
                 {
-                    Actor.Person.Inventory.Add(currentEquipment);
+                    Actor.Person.GetModule<IInventoryModule>().Add(currentEquipment);
                 }
 
-                Actor.Person.Inventory.Remove(_equipment);
+                Actor.Person.GetModule<IInventoryModule>().Remove(_equipment);
                 equipmentCarrier[_slotIndex] = _equipment;
             }
             else

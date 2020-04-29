@@ -31,14 +31,6 @@ namespace Zilon.Core.Persons
         ICombatStats CombatStats { get; }
 
         /// <summary>
-        /// Инвентарь персонажа.
-        /// </summary>
-        /// <remarks>
-        /// Для монстров равен null.
-        /// </remarks>
-        IPropStore Inventory { get; }
-
-        /// <summary>
         /// Признак того, что персонаж может иметь инвентарь.
         /// Для монстров - false.
         /// </summary>

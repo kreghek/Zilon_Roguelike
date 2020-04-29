@@ -45,7 +45,7 @@ namespace Zilon.Core.Persons
         {
             var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             var evolutionData = new EvolutionData(_schemeService);
 
@@ -71,7 +71,7 @@ namespace Zilon.Core.Persons
             evolutionData.AddBuildInPerks(rolledTraits);
         }
 
-        private void RollStartEquipment(Inventory inventory, HumanPerson person)
+        private void RollStartEquipment(IInventoryModule inventory, HumanPerson person)
         {
             var headDropScheme = GetHeads();
             FillSlot(person, headDropScheme, HEAD_SLOT_INDEX);
@@ -101,7 +101,7 @@ namespace Zilon.Core.Persons
             AddResource(inventory, "bullet-45", 100);
         }
 
-        private void AddEquipment(Inventory inventory, string sid)
+        private void AddEquipment(IInventoryModule inventory, string sid)
         {
             var scheme = _schemeService.GetScheme<IPropScheme>(sid);
             var prop = _propFactory.CreateEquipment(scheme);
@@ -116,7 +116,7 @@ namespace Zilon.Core.Persons
             // Остальные дропнутые предметы складываем просто в инвентарь.
             // Если текущий предмет невозможно экипировать, то его тоже помещаем в инвентарь.
 
-            var inventory = person.Inventory;
+            var inventory = person.GetModule<IInventoryModule>();
             var dropedProps = _dropResolver.Resolve(new[] { dropScheme });
             var usedEquipment = dropedProps.OfType<Equipment>().FirstOrDefault();
             if (usedEquipment != null)
@@ -192,7 +192,7 @@ namespace Zilon.Core.Persons
             inventory.Add(prop);
         }
 
-        private void AddResource(Inventory inventory, string resourceSid, int count)
+        private void AddResource(IInventoryModule inventory, string resourceSid, int count)
         {
             try
             {

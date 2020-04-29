@@ -87,6 +87,8 @@ namespace Zilon.Core.PersonModules
             Slots = slotArray;
 
             _equipment = new Equipment[Slots.Length];
+
+            IsActive = true;
         }
 
         /// <summary>
@@ -175,7 +177,7 @@ namespace Zilon.Core.PersonModules
         }
     }
 
-    public interface IEquipmentModule: IPersonModule
+    public interface IEquipmentModule: IPersonModule, IEnumerable<Equipment>
     {
         /// <summary>
         /// Текущие слоты экипировки.

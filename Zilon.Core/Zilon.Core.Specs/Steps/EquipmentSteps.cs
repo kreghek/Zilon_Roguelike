@@ -33,7 +33,7 @@ namespace Zilon.Core.Specs.Steps
 
             var equipment = Context.CreateEquipment(propSid);
 
-            actor.Person.Inventory.Add(equipment);
+            actor.Person.GetModule<IInventoryModule>().Add(equipment);
         }
 
         [UsedImplicitly]
@@ -62,7 +62,7 @@ namespace Zilon.Core.Specs.Steps
 
             var actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
 
             var targetEquipmentVeiwModel = new TestPropItemViewModel
             {
@@ -113,7 +113,7 @@ namespace Zilon.Core.Specs.Steps
 
             var actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
 
             var targetEquipmentVeiwModel = new TestPropItemViewModel
             {

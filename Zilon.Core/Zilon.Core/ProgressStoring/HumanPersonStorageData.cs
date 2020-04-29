@@ -34,7 +34,7 @@ namespace Zilon.Core.ProgressStoring
 
                 Equipments = humanPerson.GetModule<IEquipmentModule>().Select(CreateEquipmentStorageData).ToArray(),
 
-                Inventory = humanPerson.Inventory.CalcActualItems().Select(CreatePropStorageData).ToArray(),
+                Inventory = humanPerson.GetModule<IInventoryModule>().CalcActualItems().Select(CreatePropStorageData).ToArray(),
 
                 Perks = humanPerson.EvolutionData.Perks.Select(CreatePerkStorageData).ToArray()
             };
@@ -115,7 +115,7 @@ namespace Zilon.Core.ProgressStoring
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             var evolutionData = new EvolutionData(schemeService);
 

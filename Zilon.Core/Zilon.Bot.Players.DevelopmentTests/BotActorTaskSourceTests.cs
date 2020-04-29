@@ -67,7 +67,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             }
 
             Console.WriteLine("Start Inventory:");
-            var inventoryProps = humanPerson.Inventory.CalcActualItems().ToArray();
+            var inventoryProps = humanPerson.GetModule<IInventoryModule>().CalcActualItems().ToArray();
             foreach (var prop in inventoryProps)
             {
                 switch (prop)

@@ -103,7 +103,7 @@ namespace Zilon.Core.Tests.ProgressStoring
 
             var propFactory = new PropFactory(schemeService);
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             var evolutionData = new EvolutionData(schemeService);
 

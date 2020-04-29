@@ -30,7 +30,7 @@ namespace Zilon.Bot.Players.Triggers
                 throw new System.ArgumentNullException(nameof(strategyData));
             }
 
-            var currentInventoryEquipments = actor.Person.Inventory.CalcActualItems().OfType<Equipment>();
+            var currentInventoryEquipments = actor.Person.GetModule<IInventoryModule>().CalcActualItems().OfType<Equipment>();
 
             for (int i = 0; i < actor.Person.GetModule<IEquipmentModule>().Slots.Length; i++)
             {

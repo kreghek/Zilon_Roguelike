@@ -46,9 +46,6 @@ namespace Zilon.Core.Persons
         public override ICombatStats CombatStats { get; }
 
         /// <inheritdoc/>
-        public override IPropStore Inventory { get; }
-
-        /// <inheritdoc/>
         public override ISurvivalData Survival { get; }
 
         /// <inheritdoc/>
@@ -89,7 +86,6 @@ namespace Zilon.Core.Persons
 
             EvolutionData.PerkLeveledUp += EvolutionData_PerkLeveledUp;
 
-
             CombatStats = new CombatStats();
             ClearCalculatedStats();
             CalcCombatStats();
@@ -108,10 +104,10 @@ namespace Zilon.Core.Persons
             [NotNull] ITacticalActScheme defaultScheme,
             [NotNull] IEvolutionData evolutionData,
             [NotNull] ISurvivalRandomSource survivalRandomSource,
-            [NotNull] Inventory inventory) :
+            [NotNull] IInventoryModule inventory) :
             this(scheme, defaultScheme, evolutionData, survivalRandomSource)
         {
-            Inventory = inventory;
+            AddModule(inventory);
         }
 
         private void CalcCombatStats()
@@ -903,9 +899,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public abstract ICombatStats CombatStats { get; }
-
-        /// <inheritdoc/>
-        public abstract IPropStore Inventory { get; }
 
         /// <inheritdoc/>
         public abstract bool HasInventory { get; }

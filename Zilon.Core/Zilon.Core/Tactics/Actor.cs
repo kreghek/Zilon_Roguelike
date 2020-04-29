@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -143,7 +144,7 @@ namespace Zilon.Core.Tactics
 
             }
 
-            if (useData.Consumable && Person.Inventory != null)
+            if (useData.Consumable && Person.GetModuleSafe<IInventoryModule>() != null)
             {
                 ConsumeResource(usedProp);
 
@@ -215,11 +216,11 @@ namespace Zilon.Core.Tactics
             {
                 case Resource resource:
                     var removeResource = new Resource(resource.Scheme, 1);
-                    Person.Inventory.Remove(removeResource);
+                    Person.GetModule<IInventoryModule>().Remove(removeResource);
                     break;
 
                 case Equipment equipment:
-                    Person.Inventory.Remove(equipment);
+                    Person.GetModule<IInventoryModule>().Remove(equipment);
                     break;
             }
         }

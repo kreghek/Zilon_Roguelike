@@ -22,8 +22,6 @@ namespace Zilon.Core.Persons
 
         public override ICombatStats CombatStats { get; }
 
-        public override IPropStore Inventory => throw new NotSupportedException("Для монстров не поддерживается инвентарь.");
-
         public override ISurvivalData Survival { get; }
 
         public override EffectCollection Effects { get; }

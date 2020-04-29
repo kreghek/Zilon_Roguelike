@@ -4,7 +4,7 @@ using Zilon.Core.Props;
 
 namespace Zilon.Core.PersonModules
 {
-    public interface IPersonModule : IEnumerable<Equipment>
+    public interface IPersonModule
     {
         /// <summary>
         /// Уникальный ключ модуля.

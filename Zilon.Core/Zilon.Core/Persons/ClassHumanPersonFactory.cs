@@ -29,7 +29,7 @@ namespace Zilon.Core.Persons
         {
             var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             var evolutionData = new EvolutionData(_schemeService);
 
@@ -89,7 +89,7 @@ namespace Zilon.Core.Persons
             return person;
         }
 
-        private void AddEquipment(Inventory inventory, string equipmentSid)
+        private void AddEquipment(IInventoryModule inventory, string equipmentSid)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void AddResource(Inventory inventory, string resourceSid, int count)
+        private void AddResource(IInventoryModule inventory, string resourceSid, int count)
         {
             try
             {
