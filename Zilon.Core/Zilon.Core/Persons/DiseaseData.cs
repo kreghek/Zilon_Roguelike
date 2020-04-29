@@ -117,11 +117,10 @@ namespace Zilon.Core.Persons
             var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
                 .SingleOrDefault(x => x.Symptom == symptom);
 
-            if (currentSymptomEffect == null)
+            if (currentSymptomEffect is null)
             {
-                // По идее, этого не должно произойти. Если симптом был, то он должен был удерживать эффект болезни.
-                // Вероятнее всего это ошибка в логике.
-                Debug.Fail("Если симптом был, то он должен был удерживать эффект болезни");
+                // Просто игнорируем этот эффект.
+                // Ткущий метод может вызываться несколько раз и для симптомов, которые ушли в предыдущих итерациях.
                 return;
             }
 
@@ -162,6 +161,7 @@ namespace Zilon.Core.Persons
 
             if (currentSymptomEffect is null)
             {
+                // При создании эффекта уже фиксируется болезнь, которая его удерживает.
                 currentSymptomEffect = new DiseaseSymptomEffect(disease, symptom);
                 personEffects.Add(currentSymptomEffect);
             }
