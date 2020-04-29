@@ -57,7 +57,7 @@ namespace Zilon.Core.Tests.Commands
             var equipmentCarrier = equipmentCarrierMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
+            personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
             personMock.Setup(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentCarrier);
             personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
             var person = personMock.Object;

@@ -49,7 +49,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var combatActModule = combatActModuleMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
+            personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
