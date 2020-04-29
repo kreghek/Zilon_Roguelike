@@ -256,7 +256,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var evolutionModuleMock = new Mock<IEvolutionModule>();
             var evolutionModule = evolutionModuleMock.Object;
-            personMock.Setup(x => x.GetModule<IEvolutionModule>()).Returns(evolutionModule);
+            personMock.Setup(x => x.GetModule<IEvolutionModule>(It.IsAny<string>())).Returns(evolutionModule);
 
             var actScheme = new TestTacticalActStatsSubScheme
             {

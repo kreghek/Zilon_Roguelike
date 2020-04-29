@@ -43,8 +43,7 @@ namespace Zilon.Core.Tests.Persons
                 Stats = new TestTacticalActStatsSubScheme()
             };
 
-            var evolutionModuleMock = new Mock<IEvolutionModule>();
-            var evolutionModule = evolutionModuleMock.Object;
+            var evolutionModule = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -122,6 +121,7 @@ namespace Zilon.Core.Tests.Persons
             };
 
             var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Key).Returns(nameof(IEvolutionModule));
             evolutionModuleMock.SetupGet(x => x.Perks).Returns(new[] { perk });
             evolutionModuleMock.SetupGet(x => x.Stats).Returns(stats);
             var evolutionModule = evolutionModuleMock.Object;
@@ -183,6 +183,7 @@ namespace Zilon.Core.Tests.Persons
             var stats = System.Array.Empty<SkillStatItem>();
 
             var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Key).Returns(nameof(IEvolutionModule));
             evolutionModuleMock.SetupGet(x => x.Perks).Returns(new[] { perk });
             evolutionModuleMock.SetupGet(x => x.Stats).Returns(stats);
             var evolutionModule = evolutionModuleMock.Object;
@@ -245,6 +246,7 @@ namespace Zilon.Core.Tests.Persons
             var stats = System.Array.Empty<SkillStatItem>();
 
             var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Key).Returns(nameof(IEvolutionModule));
             evolutionModuleMock.SetupGet(x => x.Perks).Returns(new[] { perk });
             evolutionModuleMock.SetupGet(x => x.Stats).Returns(stats);
             var evolutionData = evolutionModuleMock.Object;
@@ -308,8 +310,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionModule>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -345,6 +346,14 @@ namespace Zilon.Core.Tests.Persons
             person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
         }
 
+        private static IEvolutionModule CreateEvolutionFakeModule()
+        {
+            var evolutionDataMock = new Mock<IEvolutionModule>();
+            evolutionDataMock.SetupGet(x => x.Key).Returns(nameof(IEvolutionModule));
+            var evolutionData = evolutionDataMock.Object;
+            return evolutionData;
+        }
+
         /// <summary>
         /// Тест проверяет, что если экипировать несколько предметов с бронёй,
         /// то вся броня будет учитываться.
@@ -376,8 +385,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionModule>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -464,8 +472,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionModule>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -552,8 +559,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionModule>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -640,8 +646,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionModule>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -728,8 +733,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionModule>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -829,8 +833,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionModule>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -894,8 +897,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionModule>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -980,8 +982,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionModule>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
