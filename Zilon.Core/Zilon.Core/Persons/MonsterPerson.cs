@@ -19,9 +19,6 @@ namespace Zilon.Core.Persons
         public int Hp { get; }
 
         /// <inheritdoc/>
-        public override IEvolutionData EvolutionData => throw new NotSupportedException("Для монстров не поддерживается развитие");
-
-        /// <inheritdoc/>
         public override ICombatStats CombatStats { get; }
 
         /// <inheritdoc/>

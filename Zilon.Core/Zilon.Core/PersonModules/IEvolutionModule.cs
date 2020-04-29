@@ -3,21 +3,61 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
+    /// <summary>
+    /// Интерфейс, содержащий данные о развитие персонажа.
+    /// </summary>
+    public interface IEvolutionModule: IPersonModule
+    {
+        /// <summary>
+        /// Перечень навыков.
+        /// </summary>
+        SkillStatItem[] Stats { get; }
+
+        /// <summary>
+        /// Текущие перки.
+        /// </summary>
+        IPerk[] Perks { get; }
+
+        /// <summary>
+        /// Указывает, что один из активных перков считается прокачанным.
+        /// </summary>
+        /// <param name="perk"> Активный перк, который следует считать достигнутым. </param>
+        void PerkLevelUp(IPerk perk);
+
+        /// <summary>
+        /// Добавить врождённые перки.
+        /// </summary>
+        /// <param name="perks"> Набор врождённых перков. </param>
+        /// <remarks>
+        /// Метод нужен, потому что реализация этого интерфейса сама собирает данные о доступных перках.
+        /// И реализации нужно знать, какие перки врожденные, а какие приобретаются по мере развития персонажа.
+        /// </remarks>
+        void AddBuildInPerks(IEnumerable<IPerk> perks);
+
+        /// <summary>
+        /// Выстреливает, когда один из перков повышается на уровень.
+        /// </summary>
+        event EventHandler<PerkEventArgs> PerkLeveledUp;
+    }
+
     /// <summary>
     /// Базовая реализация данных по развитию персонажа.
     /// </summary>
-    public sealed class EvolutionData : IEvolutionData
+    public sealed class EvolutionModule : IEvolutionModule
     {
         private readonly ISchemeService _schemeService;
 
         private readonly List<IPerk> _buildInPerks;
 
-        public EvolutionData(ISchemeService schemeService)
+        public EvolutionModule(ISchemeService schemeService)
         {
+            IsActive = true;
+
             _schemeService = schemeService;
 
             _buildInPerks = new List<IPerk>();
@@ -35,6 +75,12 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public IPerk[] Perks { get; private set; }
+
+        /// <inheritdoc/>
+        public string Key { get => nameof(IEvolutionModule); }
+
+        /// <inheritdoc/>
+        public bool IsActive { get; set; }
 
         /// <inheritdoc/>
         public event EventHandler<PerkEventArgs> PerkLeveledUp;
@@ -93,7 +139,7 @@ namespace Zilon.Core.Persons
                 // По идее, такие перки либо должны быть врождёнными.
                 // Следовательно, если они не отсеяны выше, то это ошибка.
                 // Такие схемы лучше проверять в тестах на валидацию схем.
-                .Where(x=> x.Levels != null);
+                .Where(x => x.Levels != null);
 
             var perks = new List<IPerk>(_buildInPerks);
             if (Perks != null)

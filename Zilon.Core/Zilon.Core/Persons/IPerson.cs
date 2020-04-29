@@ -1,5 +1,4 @@
 ﻿using Zilon.Core.PersonModules;
-using Zilon.Core.Props;
 
 namespace Zilon.Core.Persons
 {
@@ -14,11 +13,6 @@ namespace Zilon.Core.Persons
         int Id { get; set; }
 
         PhysicalSize PhysicalSize { get; }
-
-        /// <summary>
-        /// Данные о развитие персонажа.
-        /// </summary>
-        IEvolutionData EvolutionData { get; }
 
         /// <summary>
         /// Характеристики, используемые персонажем в бою.

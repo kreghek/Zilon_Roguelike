@@ -34,9 +34,6 @@ namespace Zilon.Core.Persons
         public string Name { get; }
 
         /// <inheritdoc/>
-        public override IEvolutionData EvolutionData { get; }
-
-        /// <inheritdoc/>
         public IPersonScheme Scheme { get; }
 
         /// <inheritdoc/>
@@ -56,13 +53,18 @@ namespace Zilon.Core.Persons
 
         public HumanPerson([NotNull] IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultActScheme,
-            [NotNull] IEvolutionData evolutionData,
+            [NotNull] IEvolutionModule evolutionModule,
             [NotNull] ISurvivalRandomSource survivalRandomSource) : base()
         {
+            if (evolutionModule is null)
+            {
+                throw new ArgumentNullException(nameof(evolutionModule));
+            }
+
             _defaultActScheme = defaultActScheme ?? throw new ArgumentNullException(nameof(defaultActScheme));
 
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
-            EvolutionData = evolutionData ?? throw new ArgumentNullException(nameof(evolutionData));
+            AddModule(evolutionModule);
             _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
 
             Name = scheme.Sid;
@@ -80,7 +82,7 @@ namespace Zilon.Core.Persons
             var combatActModule = new CombatActModule();
             AddModule(combatActModule);
 
-            EvolutionData.PerkLeveledUp += EvolutionData_PerkLeveledUp;
+            evolutionModule.PerkLeveledUp += EvolutionData_PerkLeveledUp;
 
             CombatStats = new CombatStats();
             ClearCalculatedStats();
@@ -98,10 +100,10 @@ namespace Zilon.Core.Persons
 
         public HumanPerson(IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultScheme,
-            [NotNull] IEvolutionData evolutionData,
+            [NotNull] IEvolutionModule evolutionModule,
             [NotNull] ISurvivalRandomSource survivalRandomSource,
             [NotNull] IInventoryModule inventory) :
-            this(scheme, defaultScheme, evolutionData, survivalRandomSource)
+            this(scheme, defaultScheme, evolutionModule, survivalRandomSource)
         {
             AddModule(inventory);
         }
@@ -110,23 +112,23 @@ namespace Zilon.Core.Persons
         {
             var bonusDict = new Dictionary<SkillStatType, float>();
 
-            if (EvolutionData.Perks != null)
+            if (this.GetModuleSafe<IEvolutionModule>().Perks != null)
             {
                 CalcPerkBonuses(bonusDict);
             }
 
-            if (EvolutionData.Stats != null)
+            if (this.GetModuleSafe<IEvolutionModule>().Stats != null)
             {
                 foreach (var bonusItem in bonusDict)
                 {
-                    var stat = EvolutionData.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
+                    var stat = this.GetModule<IEvolutionModule>().Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
                     if (stat != null)
                     {
                         ApplyBonusToStat(bonusItem.Value, stat);
                     }
                 }
 
-                foreach (var statItem in EvolutionData.Stats)
+                foreach (var statItem in this.GetModule<IEvolutionModule>().Stats)
                 {
                     statItem.Value = (float)Math.Round(statItem.Value, 1);
                 }
@@ -156,7 +158,7 @@ namespace Zilon.Core.Persons
         /// <param name="bonusDict"> Текущее состояние бонусов. </param>
         private void CalcPerkBonuses(Dictionary<SkillStatType, float> bonusDict)
         {
-            var archievedPerks = EvolutionData.GetArchievedPerks();
+            var archievedPerks = this.GetModule<IEvolutionModule>().GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
                 var currentLevel = archievedPerk.CurrentLevel;
@@ -384,7 +386,7 @@ namespace Zilon.Core.Persons
 
         private IEnumerable<IPerk> GetPerksSafe()
         {
-            var perks = EvolutionData?.GetArchievedPerks();
+            var perks = this.GetModuleSafe<IEvolutionModule>()?.GetArchievedPerks();
             if (perks == null)
             {
                 perks = Array.Empty<IPerk>();
@@ -460,12 +462,12 @@ namespace Zilon.Core.Persons
 
         private void FillSurvivalBonusesFromPerks([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
-            if (EvolutionData == null)
+            if (this.GetModuleSafe<IEvolutionModule>() is null)
             {
                 return;
             }
 
-            var archievedPerks = EvolutionData.GetArchievedPerks();
+            var archievedPerks = this.GetModule<IEvolutionModule>().GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
                 var currentLevel = archievedPerk.CurrentLevel;
@@ -690,7 +692,7 @@ namespace Zilon.Core.Persons
         {
             ClearCalculatedStats();
 
-            if (EvolutionData != null)
+            if (this.GetModuleSafe<IEvolutionModule>() != null)
             {
                 CalcCombatStats();
             }
@@ -864,7 +866,7 @@ namespace Zilon.Core.Persons
 
         private void ClearCalculatedStats()
         {
-            foreach (var stat in EvolutionData.Stats)
+            foreach (var stat in this.GetModule<IEvolutionModule>().Stats)
             {
                 stat.Value = 10;
             }
@@ -886,9 +888,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public abstract PhysicalSize PhysicalSize { get; }
-
-        /// <inheritdoc/>
-        public abstract IEvolutionData EvolutionData { get; }
 
         /// <inheritdoc/>
         public abstract ICombatStats CombatStats { get; }

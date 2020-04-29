@@ -43,13 +43,13 @@ namespace Zilon.Core.Tests.Persons
                 Stats = new TestTacticalActStatsSubScheme()
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionModuleMock = new Mock<IEvolutionModule>();
+            var evolutionModule = evolutionModuleMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionModule, survivalRandomSource);
 
             var propScheme = new TestPropScheme
             {
@@ -121,23 +121,19 @@ namespace Zilon.Core.Tests.Persons
                 new SkillStatItem{Stat = SkillStatType.Ballistic, Value = 10 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
-            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionModuleMock.SetupGet(x => x.Stats).Returns(stats);
+            var evolutionModule = evolutionModuleMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-
-
             // ACT
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
-
-
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionModule, survivalRandomSource);
 
             // ASSERT
-            var testedStat = person.EvolutionData.Stats.Single(x => x.Stat == SkillStatType.Ballistic);
+            var testedStat = person.GetModule<IEvolutionModule>().Stats.Single(x => x.Stat == SkillStatType.Ballistic);
             testedStat.Value.Should().Be(11);
         }
 
@@ -186,16 +182,16 @@ namespace Zilon.Core.Tests.Persons
 
             var stats = System.Array.Empty<SkillStatItem>();
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
-            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionModuleMock.SetupGet(x => x.Stats).Returns(stats);
+            var evolutionModule = evolutionModuleMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
             // ACT
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionModule, survivalRandomSource);
 
             // ASSERT
             var testedStat = person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
@@ -248,10 +244,10 @@ namespace Zilon.Core.Tests.Persons
 
             var stats = System.Array.Empty<SkillStatItem>();
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
-            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionModuleMock.SetupGet(x => x.Stats).Returns(stats);
+            var evolutionData = evolutionModuleMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -312,7 +308,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionDataMock = new Mock<IEvolutionModule>();
             var evolutionData = evolutionDataMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
@@ -380,7 +376,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionDataMock = new Mock<IEvolutionModule>();
             var evolutionData = evolutionDataMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
@@ -468,7 +464,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionDataMock = new Mock<IEvolutionModule>();
             var evolutionData = evolutionDataMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
@@ -556,7 +552,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionDataMock = new Mock<IEvolutionModule>();
             var evolutionData = evolutionDataMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
@@ -644,7 +640,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionDataMock = new Mock<IEvolutionModule>();
             var evolutionData = evolutionDataMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
@@ -732,7 +728,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionDataMock = new Mock<IEvolutionModule>();
             var evolutionData = evolutionDataMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
@@ -833,7 +829,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionDataMock = new Mock<IEvolutionModule>();
             var evolutionData = evolutionDataMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
@@ -898,7 +894,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionDataMock = new Mock<IEvolutionModule>();
             var evolutionData = evolutionDataMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
@@ -946,8 +942,6 @@ namespace Zilon.Core.Tests.Persons
             const int START_PERSON_HP = 10;
             const int EXPECTED_DOWNPASS = 2;
 
-
-
             var personScheme = new TestPersonScheme
             {
                 Hp = START_PERSON_HP,
@@ -986,7 +980,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
+            var evolutionDataMock = new Mock<IEvolutionModule>();
             var evolutionData = evolutionDataMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
