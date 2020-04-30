@@ -5,14 +5,16 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Diseases;
+using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Tests.Persons.TestCases;
 
-namespace Zilon.Core.Persons.Tests
+namespace Zilon.Core.Tests.PersonModules
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
-    public class DiseaseDataTests
+    public class DiseaseModuleTests
     {
         [Test]
         [TestCaseSource(typeof(DiseaseDataTestCaseSource), nameof(DiseaseDataTestCaseSource.TestCases))]
@@ -39,7 +41,7 @@ namespace Zilon.Core.Persons.Tests
                 .Returns(0.001f);
             var disease = diseaseMock.Object;
 
-            var diseaseData = new DiseaseData();
+            var diseaseData = new DiseaseModule();
 
             diseaseData.Infect(disease);
 
