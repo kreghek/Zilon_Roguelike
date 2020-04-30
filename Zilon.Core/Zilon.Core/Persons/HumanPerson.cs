@@ -37,9 +37,6 @@ namespace Zilon.Core.Persons
         public IPersonScheme Scheme { get; }
 
         /// <inheritdoc/>
-        public override ICombatStats CombatStats { get; }
-
-        /// <inheritdoc/>
         public override EffectCollection Effects { get; }
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
@@ -81,7 +78,8 @@ namespace Zilon.Core.Persons
 
             evolutionModule.PerkLeveledUp += EvolutionData_PerkLeveledUp;
 
-            CombatStats = new CombatStats();
+            var combatStatsModule = new CombatStatsModule();
+            this.AddModule(combatStatsModule);
             ClearCalculatedStats();
             CalcCombatStats();
 
@@ -226,7 +224,7 @@ namespace Zilon.Core.Persons
 
             var mergedArmors = MergeArmor(equipmentArmors);
 
-            CombatStats.DefenceStats.SetArmors(mergedArmors.ToArray());
+            this.GetModule<ICombatStatsModule>().DefenceStats.SetArmors(mergedArmors.ToArray());
         }
 
         private static IEnumerable<PersonArmorItem> GetEquipmentArmors(IEnumerable<IPropArmorItemSubScheme> armors)
@@ -887,9 +885,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public abstract PhysicalSize PhysicalSize { get; }
-
-        /// <inheritdoc/>
-        public abstract ICombatStats CombatStats { get; }
 
         /// <inheritdoc/>
         public abstract EffectCollection Effects { get; }

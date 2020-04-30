@@ -341,9 +341,9 @@ namespace Zilon.Core.Tests.Persons
             person.GetModule<IEquipmentModule>()[0] = armorProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(10);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(10);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
         }
 
         private static IEvolutionModule CreateEvolutionFakeModule()
@@ -436,9 +436,9 @@ namespace Zilon.Core.Tests.Persons
             person.GetModule<IEquipmentModule>()[1] = armorBodyProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(15);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(15);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
         }
 
         /// <summary>
@@ -523,9 +523,9 @@ namespace Zilon.Core.Tests.Persons
             person.GetModule<IEquipmentModule>()[1] = armorBodyProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(10 + 9 + 6);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(10 + 9 + 6);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
         }
 
         /// <summary>
@@ -610,9 +610,9 @@ namespace Zilon.Core.Tests.Persons
             person.GetModule<IEquipmentModule>()[1] = armorBodyProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9 + 6 * 2);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9 + 6 * 2);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
         }
 
         /// <summary>
@@ -697,9 +697,9 @@ namespace Zilon.Core.Tests.Persons
             person.GetModule<IEquipmentModule>()[1] = armorBodyProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
         }
 
         /// <summary>
@@ -789,13 +789,13 @@ namespace Zilon.Core.Tests.Persons
             person.GetModule<IEquipmentModule>()[1] = armorBodyProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9 + 6);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9 + 6);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
 
-            person.CombatStats.DefenceStats.Armors[1].Impact.Should().Be(ImpactType.Psy);
-            person.CombatStats.DefenceStats.Armors[1].ArmorRank.Should().Be(10);
-            person.CombatStats.DefenceStats.Armors[1].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[1].Impact.Should().Be(ImpactType.Psy);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[1].ArmorRank.Should().Be(10);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[1].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
         }
 
         /// <summary>

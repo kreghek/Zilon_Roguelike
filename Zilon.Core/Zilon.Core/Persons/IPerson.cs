@@ -14,11 +14,6 @@ namespace Zilon.Core.Persons
 
         PhysicalSize PhysicalSize { get; }
 
-        /// <summary>
-        /// Характеристики, используемые персонажем в бою.
-        /// </summary>
-        ICombatStats CombatStats { get; }
-
         EffectCollection Effects { get; }
 
         /// <summary>

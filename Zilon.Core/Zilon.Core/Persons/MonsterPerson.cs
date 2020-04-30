@@ -19,9 +19,6 @@ namespace Zilon.Core.Persons
         public int Hp { get; }
 
         /// <inheritdoc/>
-        public override ICombatStats CombatStats { get; }
-
-        /// <inheritdoc/>
         public override EffectCollection Effects { get; }
 
         /// <inheritdoc/>
@@ -52,12 +49,13 @@ namespace Zilon.Core.Persons
                 .Select(x => new PersonDefenceItem(x.Type, x.Level))
                 .ToArray();
 
-            CombatStats = new CombatStats
+            var combatStatsModule = new CombatStatsModule
             {
                 DefenceStats = new PersonDefenceStats(
                     defenses ?? Array.Empty<PersonDefenceItem>(),
                     Array.Empty<PersonArmorItem>())
             };
+            AddModule(combatStatsModule);
 
             var survivalModule = new MonsterSurvivalModule(scheme);
             AddModule(survivalModule);

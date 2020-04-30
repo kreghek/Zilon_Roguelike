@@ -249,7 +249,7 @@ namespace Zilon.Core.Tactics
         /// <returns> Возвращает числовое значение ранга брони указанного типа. </returns>
         private static int? GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
+            var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
             var actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
@@ -278,7 +278,7 @@ namespace Zilon.Core.Tactics
         /// </remarks>
         private static int GetSuccessArmorSave(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
+            var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
             var actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
@@ -339,7 +339,7 @@ namespace Zilon.Core.Tactics
         /// <returns> Возвращает показатель поглощения брони цели. </returns>
         private static int GetArmorAbsorbtion(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
+            var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
             var actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
@@ -399,7 +399,7 @@ namespace Zilon.Core.Tactics
         {
             var defenceType = HitHelper.GetDefence(offenceType);
 
-            return targetActor.Person.CombatStats.DefenceStats.Defences
+            return targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Defences
                             .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
         }
 
