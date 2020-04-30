@@ -112,7 +112,7 @@ namespace Zilon.Core.Tests.ProgressStoring
                                          evolutionData,
                                          survivalRandomSource,
                                          inventory);
-            person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health).Value = 7;
+            person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value = 7;
 
             // Назначаем экипировку
             var helm = propFactory.CreateEquipment(propSchemes["helm"]);

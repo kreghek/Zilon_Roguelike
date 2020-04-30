@@ -56,7 +56,7 @@ namespace Zilon.Core.Specs.Steps
         public void GivenАктёрИмеетHp(int startHp)
         {
             var actor = Context.GetActiveActor();
-            actor.Person.Survival.SetStatForce(SurvivalStatType.Health, startHp);
+            actor.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, startHp);
         }
 
         [UsedImplicitly]
@@ -72,7 +72,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var monster = Context.GetMonsterById(monsterId);
 
-            monster.Person.Survival.SetStatForce(SurvivalStatType.Health, monsterHp);
+            monster.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, monsterHp);
         }
 
         [UsedImplicitly]
@@ -297,7 +297,7 @@ namespace Zilon.Core.Specs.Steps
         public void ThenАктёрИмеетЗадасHp(int expectedHp)
         {
             var actor = Context.GetActiveActor();
-            var hpStat = actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedHp);
         }
 
@@ -306,7 +306,7 @@ namespace Zilon.Core.Specs.Steps
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
             var monster = Context.GetMonsterById(monsterId);
-            var hpStat = monster.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var hpStat = monster.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedMonsterHp);
         }
 

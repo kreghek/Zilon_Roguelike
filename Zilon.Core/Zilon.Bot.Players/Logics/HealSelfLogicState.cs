@@ -19,7 +19,7 @@ namespace Zilon.Bot.Players.Logics
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
-            var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             if (hpStat == null)
             {
                 Complete = true;

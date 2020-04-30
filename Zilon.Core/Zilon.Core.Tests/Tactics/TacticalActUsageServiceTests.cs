@@ -180,10 +180,10 @@ namespace Zilon.Core.Tests.Tactics
 
             var monsterPersonMock = new Mock<IPerson>();
 
-            var monsterSurvivalDataMock = new Mock<ISurvivalData>();
+            var monsterSurvivalDataMock = new Mock<ISurvivalModule>();
             monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(false);
             var monsterSurvival = monsterSurvivalDataMock.Object;
-            monsterPersonMock.SetupGet(x => x.Survival).Returns(monsterSurvival);
+            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
 
             var monsterCombatStatsMock = new Mock<ICombatStats>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
@@ -212,7 +212,7 @@ namespace Zilon.Core.Tests.Tactics
             var monsterPersonMock = new Mock<IPerson>();
 
             var monsterIsDead = false;
-            var monsterSurvivalDataMock = new Mock<ISurvivalData>();
+            var monsterSurvivalDataMock = new Mock<ISurvivalModule>();
             monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(() => monsterIsDead);
             monsterSurvivalDataMock
                 .Setup(x => x.DecreaseStat(
@@ -221,7 +221,7 @@ namespace Zilon.Core.Tests.Tactics
                     )
                 .Callback(() => monsterIsDead = true);
             var monsterSurvival = monsterSurvivalDataMock.Object;
-            monsterPersonMock.SetupGet(x => x.Survival).Returns(monsterSurvival);
+            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>()).Returns(monsterSurvival);
 
             var monsterCombatStatsMock = new Mock<ICombatStats>();
             var monsterCombatStats = monsterCombatStatsMock.Object;

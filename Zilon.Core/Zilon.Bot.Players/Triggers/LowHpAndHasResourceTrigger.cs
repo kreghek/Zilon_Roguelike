@@ -32,7 +32,7 @@ namespace Zilon.Bot.Players.Triggers
                 throw new System.ArgumentNullException(nameof(strategyData));
             }
 
-            var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             var hpStatCoeff = (float)hpStat.Value / (hpStat.Range.Max - hpStat.Range.Min);
             var isLowHp = hpStatCoeff <= 0.5f;
             if (!isLowHp)

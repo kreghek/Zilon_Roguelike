@@ -130,7 +130,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(expectedHp);
+            actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(expectedHp);
         }
 
         [Then(@"Максимальный запас здоровья персонажа игрока равен (\d+)")]
@@ -138,7 +138,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health)
+            actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health)
                 .Range.Max
                 .Should().Be(expectedMaxHp);
         }

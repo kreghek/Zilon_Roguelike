@@ -5,7 +5,7 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
-
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
@@ -49,7 +49,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var survivalData = new HumanSurvivalData(personScheme,
+            var survivalData = new HumanSurvivalModule(personScheme,
                 survivalStats,
                 survivalRandomSource);
 
@@ -109,13 +109,11 @@ namespace Zilon.Core.Tests.Persons
             var survivalData = CreateSurvivalData(personScheme, survivalRandomSource);
 
             // ACT
-            using (var monitor = survivalData.Monitor())
-            {
-                survivalData.DecreaseStat(SurvivalStatType.Health, damageValue);
+            using var monitor = survivalData.Monitor();
+            survivalData.DecreaseStat(SurvivalStatType.Health, damageValue);
 
-                // ASSERT
-                monitor.Should().Raise(nameof(HumanSurvivalData.Dead));
-            }
+            // ASSERT
+            monitor.Should().Raise(nameof(ISurvivalModule.Dead));
         }
 
         public static IPersonScheme CreatePersonScheme()
@@ -190,9 +188,9 @@ namespace Zilon.Core.Tests.Persons
             return survivalRandomSourceMock.Object;
         }
 
-        private static ISurvivalData CreateSurvivalData(IPersonScheme personScheme, ISurvivalRandomSource survivalRandomSource)
+        private static ISurvivalModule CreateSurvivalData(IPersonScheme personScheme, ISurvivalRandomSource survivalRandomSource)
         {
-            var survivalData = new HumanSurvivalData(personScheme, survivalRandomSource);
+            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource);
             return survivalData;
         }
     }
