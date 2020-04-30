@@ -42,7 +42,7 @@ namespace Zilon.Bot.Players.Logics
 
         private UsePropTask CheckHazard(IActor actor, SurvivalStatType hazardType, ConsumeCommonRuleType resourceType)
         {
-            var hazardEffect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
+            var hazardEffect = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == hazardType);
             if (hazardEffect == null)
             {
