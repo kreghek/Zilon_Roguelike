@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -139,7 +140,7 @@ namespace Zilon.Core.MapGenerators
 
         private static void SetMonsterInfection(IPerson monster, IDisease disease)
         {
-            monster.DiseaseData.Infect(disease);
+            monster.GetModule<IDiseaseModule>().Infect(disease);
         }
 
         /// <summary>
