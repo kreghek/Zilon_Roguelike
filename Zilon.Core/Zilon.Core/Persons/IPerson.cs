@@ -19,11 +19,6 @@ namespace Zilon.Core.Persons
         /// </summary>
         ICombatStats CombatStats { get; }
 
-        /// <summary>
-        /// Данные по выживанию персонажа.
-        /// </summary>
-        ISurvivalData Survival { get; }
-
         EffectCollection Effects { get; }
 
         /// <summary>
