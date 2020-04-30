@@ -40,9 +40,6 @@ namespace Zilon.Core.Persons
         public override ICombatStats CombatStats { get; }
 
         /// <inheritdoc/>
-        public override ISurvivalData Survival { get; }
-
-        /// <inheritdoc/>
         public override EffectCollection Effects { get; }
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
@@ -91,8 +88,9 @@ namespace Zilon.Core.Persons
             var perks = GetPerksSafe();
             combatActModule.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
 
-            Survival = new HumanSurvivalData(scheme, survivalRandomSource);
-            Survival.StatChanged += Survival_StatCrossKeyValue;
+            var survivalModule = new HumanSurvivalModule(scheme, survivalRandomSource);
+            AddModule(survivalModule);
+            survivalModule.StatChanged += Survival_StatCrossKeyValue;
             CalcSurvivalStats();
 
             DiseaseData = new DiseaseData();
@@ -399,7 +397,7 @@ namespace Zilon.Core.Persons
         {
             // Расчёт бонусов вынести в отдельный сервис, который покрыть модульными тестами
             // На вход принимает SurvivalData. SurvivalData дожен содержать метод увеличение диапазона характеристики.
-            Survival.ResetStats();
+            this.GetModule<ISurvivalModule>().ResetStats();
             var bonusList = new List<SurvivalStatBonus>();
             FillSurvivalBonusesFromEquipments(ref bonusList);
             FillSurvivalBonusesFromPerks(ref bonusList);
@@ -495,7 +493,7 @@ namespace Zilon.Core.Persons
         {
             foreach (var bonus in bonuses)
             {
-                var stat = Survival.Stats.SingleOrDefault(x => x.Type == bonus.SurvivalStatType);
+                var stat = this.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == bonus.SurvivalStatType);
                 if (stat != null)
                 {
                     var normalizedValueBonus = (int)Math.Round(bonus.ValueBonus, MidpointRounding.AwayFromZero);
@@ -619,8 +617,9 @@ namespace Zilon.Core.Persons
         private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction,
             ref List<SurvivalStatBonus> bonuses)
         {
+            var survivalModule = this.GetModule<ISurvivalModule>();
             const SurvivalStatType hpStatType = SurvivalStatType.Health;
-            var hpStat = Survival.Stats.SingleOrDefault(x => x.Type == hpStatType);
+            var hpStat = survivalModule.Stats.SingleOrDefault(x => x.Type == hpStatType);
             if (hpStat != null)
             {
                 var bonus = 0;
@@ -891,9 +890,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public abstract ICombatStats CombatStats { get; }
-
-        /// <inheritdoc/>
-        public abstract ISurvivalData Survival { get; }
 
         /// <inheritdoc/>
         public abstract EffectCollection Effects { get; }

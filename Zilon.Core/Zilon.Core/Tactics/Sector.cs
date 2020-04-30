@@ -176,9 +176,9 @@ namespace Zilon.Core.Tactics
                 // Items изменяется. Они должны падать, если убрать ToArray и выполняться, если его вернуть.
                 foreach (var effect in effects.Items.ToArray())
                 {
-                    if (effect is ISurvivalStatEffect actorEffect && actor.Person.Survival != null)
+                    if (effect is ISurvivalStatEffect actorEffect && actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                     {
-                        actorEffect.Apply(actor.Person.Survival);
+                        actorEffect.Apply(actor.Person.GetModule<ISurvivalModule>());
                     }
                 }
             }
@@ -189,7 +189,7 @@ namespace Zilon.Core.Tactics
             var actors = ActorManager.Items.ToArray();
             foreach (var actor in actors)
             {
-                var survival = actor.Person.Survival;
+                var survival = actor.Person.GetModuleSafe<ISurvivalModule>();
                 if (survival == null)
                 {
                     continue;
@@ -271,9 +271,9 @@ namespace Zilon.Core.Tactics
             {
                 HoldNodes(actor.Node, actor, Map);
 
-                if (actor.Person.Survival != null)
+                if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                 {
-                    actor.Person.Survival.Dead += ActorState_Dead;
+                    actor.Person.GetModule<ISurvivalModule>().Dead += ActorState_Dead;
                 }
 
                 actor.Moved += Actor_Moved;
@@ -338,9 +338,9 @@ namespace Zilon.Core.Tactics
             {
                 ReleaseNodes(actor, Map);
 
-                if (actor.Person.Survival != null)
+                if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                 {
-                    actor.Person.Survival.Dead -= ActorState_Dead;
+                    actor.Person.GetModule<ISurvivalModule>().Dead -= ActorState_Dead;
                 }
 
                 actor.Moved -= Actor_Moved;
@@ -349,12 +349,12 @@ namespace Zilon.Core.Tactics
 
         private void ActorState_Dead(object sender, EventArgs e)
         {
-            var actor = ActorManager.Items.Single(x => x.Person.Survival == sender);
+            var actor = ActorManager.Items.Single(x => x.Person.GetModuleSafe<ISurvivalModule>() == sender);
             ActorManager.Remove(actor);
 
-            if (actor.Person.Survival != null)
+            if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
             {
-                actor.Person.Survival.Dead -= ActorState_Dead;
+                actor.Person.GetModule<ISurvivalModule>().Dead -= ActorState_Dead;
             }
 
             ProcessMonsterDeath(actor);

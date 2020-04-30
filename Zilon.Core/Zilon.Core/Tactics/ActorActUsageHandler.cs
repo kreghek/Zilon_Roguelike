@@ -190,7 +190,7 @@ namespace Zilon.Core.Tactics
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
         private static void HealActor(IActor targetActor, TacticalActRoll tacticalActRoll)
         {
-            targetActor.Person.Survival?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
+            targetActor.Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
 
         /// <summary>

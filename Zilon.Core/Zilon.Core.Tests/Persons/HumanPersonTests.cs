@@ -195,7 +195,7 @@ namespace Zilon.Core.Tests.Persons
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionModule, survivalRandomSource);
 
             // ASSERT
-            var testedStat = person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var testedStat = person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
             testedStat.Value.Should().Be(11);
         }
 
@@ -859,8 +859,8 @@ namespace Zilon.Core.Tests.Persons
             person.GetModule<IEquipmentModule>()[0] = armorProp;
 
             // ASSERT
-            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Range.Max.Should().Be(EXPECTED_PERSON_MAX_HP);
-            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_PERSON_HP);
+            person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Range.Max.Should().Be(EXPECTED_PERSON_MAX_HP);
+            person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_PERSON_HP);
         }
 
         /// <summary>
@@ -921,8 +921,8 @@ namespace Zilon.Core.Tests.Persons
 
             var armorProp = new Equipment(armorPropScheme, System.Array.Empty<ITacticalActScheme>());
 
-            var hpStat = person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
-            person.Survival.DecreaseStat(SurvivalStatType.Health, hpStat.Value / 2);
+            var hpStat = person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            person.GetModule<ISurvivalModule>().DecreaseStat(SurvivalStatType.Health, hpStat.Value / 2);
 
             // ACT
             person.GetModule<IEquipmentModule>()[0] = armorProp;
@@ -1004,7 +1004,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var satietyStat = person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+            var satietyStat = person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
 
             var armorProp = new Equipment(armorPropScheme);
 

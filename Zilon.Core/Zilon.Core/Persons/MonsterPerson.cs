@@ -22,9 +22,6 @@ namespace Zilon.Core.Persons
         public override ICombatStats CombatStats { get; }
 
         /// <inheritdoc/>
-        public override ISurvivalData Survival { get; }
-
-        /// <inheritdoc/>
         public override EffectCollection Effects { get; }
 
         /// <inheritdoc/>
@@ -62,7 +59,8 @@ namespace Zilon.Core.Persons
                     Array.Empty<PersonArmorItem>())
             };
 
-            Survival = new MonsterSurvivalData(scheme);
+            var survivalModule = new MonsterSurvivalModule(scheme);
+            AddModule(survivalModule);
 
             Effects = new EffectCollection();
 

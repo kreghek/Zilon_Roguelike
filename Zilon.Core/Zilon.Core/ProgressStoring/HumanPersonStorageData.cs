@@ -26,7 +26,7 @@ namespace Zilon.Core.ProgressStoring
 
             var storageData = new HumanPersonStorageData
             {
-                Survival = humanPerson.Survival.Stats.Select(x => new HumanSurvivalStatStorageData
+                Survival = humanPerson.GetModule<ISurvivalModule>().Stats.Select(x => new HumanSurvivalStatStorageData
                 {
                     Type = x.Type,
                     Value = x.ValueShare
@@ -133,7 +133,7 @@ namespace Zilon.Core.ProgressStoring
             {
                 var normalizedValueShare = RangeHelper.NormalizeShare(survivalStoredItem.Value);
 
-                var stat = person.Survival.Stats.Single(x => x.Type == survivalStoredItem.Type);
+                var stat = person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == survivalStoredItem.Type);
 
                 stat.SetShare(normalizedValueShare);
             }

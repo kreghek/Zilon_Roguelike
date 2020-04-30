@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Persons
@@ -54,7 +55,7 @@ namespace Zilon.Core.Persons
         /// Применяет эффект к указанным данным.
         /// </summary>
         /// <param name="survivalData"> Данные, на коорые влияет эффект. </param>
-        public void Apply(ISurvivalData survivalData)
+        public void Apply(ISurvivalModule survivalData)
         {
             if (survivalData is null)
             {
