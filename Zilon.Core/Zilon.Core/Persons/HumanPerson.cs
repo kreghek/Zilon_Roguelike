@@ -36,9 +36,6 @@ namespace Zilon.Core.Persons
         /// <inheritdoc/>
         public IPersonScheme Scheme { get; }
 
-        /// <inheritdoc/>
-        public override EffectCollection Effects { get; }
-
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
@@ -61,10 +58,11 @@ namespace Zilon.Core.Persons
 
             Name = scheme.Sid;
 
-            Effects = new EffectCollection();
-            Effects.Added += Effects_CollectionChanged;
-            Effects.Removed += Effects_CollectionChanged;
-            Effects.Changed += Effects_CollectionChanged;
+            var effects = new EffectsModule();
+            AddModule(effects);
+            effects.Added += Effects_CollectionChanged;
+            effects.Removed += Effects_CollectionChanged;
+            effects.Changed += Effects_CollectionChanged;
 
             var equipmentModule = new EquipmentModule(Scheme.Slots);
             equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
@@ -82,7 +80,7 @@ namespace Zilon.Core.Persons
             CalcCombatStats();
 
             var perks = GetPerksSafe();
-            combatActModule.Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
+            combatActModule.Acts = CalcActs(_defaultActScheme, equipmentModule, effects, perks);
 
             var survivalModule = new HumanSurvivalModule(scheme, survivalRandomSource);
             AddModule(survivalModule);
@@ -374,7 +372,7 @@ namespace Zilon.Core.Persons
             CalcCombatStats();
 
             var perks = GetPerksSafe();
-            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
+            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, this.GetModule<IEffectsModule>(), perks);
 
             CalcSurvivalStats();
         }
@@ -404,12 +402,12 @@ namespace Zilon.Core.Persons
 
         private void FillSurvivalBonusesFromEffects([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
-            if (Effects is null)
+            if (this.GetModuleSafe<IEffectsModule>() is null)
             {
                 return;
             }
 
-            foreach (var effect in Effects.Items)
+            foreach (var effect in this.GetModule<IEffectsModule>().Items)
             {
                 switch (effect)
                 {
@@ -663,7 +661,7 @@ namespace Zilon.Core.Persons
             var perks = GetPerksSafe();
 
             var equipmentModule = this.GetModule<IEquipmentModule>();
-            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
+            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, this.GetModule<IEffectsModule>(), perks);
 
             CalcSurvivalStats();
         }
@@ -676,7 +674,7 @@ namespace Zilon.Core.Persons
             }
 
             PersonEffectHelper.UpdateSurvivalEffect(
-                Effects,
+                this.GetModule<IEffectsModule>(),
                 e.Stat,
                 e.Stat.KeySegments,
                 _survivalRandomSource,
@@ -696,14 +694,14 @@ namespace Zilon.Core.Persons
             var perks = GetPerksSafe();
 
             var equipmentModule = this.GetModule<IEquipmentModule>();
-            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, Effects, perks);
+            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, this.GetModule<IEffectsModule>(), perks);
 
             CalcSurvivalStats();
         }
 
         private static ITacticalAct[] CalcActs(ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment> equipments,
-            EffectCollection effects,
+            IEffectsModule effects,
             IEnumerable<IPerk> perks)
         {
             if (equipments == null)
@@ -736,7 +734,7 @@ namespace Zilon.Core.Persons
 
         private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
             [NotNull] Equipment equipment,
-            [NotNull] EffectCollection effects,
+            [NotNull] IEffectsModule effects,
             [NotNull, ItemNotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
@@ -818,7 +816,7 @@ namespace Zilon.Core.Persons
             return efficientModifierValue;
         }
 
-        private static void CalcSurvivalHazardOnTacticalAct(EffectCollection effects,
+        private static void CalcSurvivalHazardOnTacticalAct(IEffectsModule effects,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
@@ -884,9 +882,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public abstract PhysicalSize PhysicalSize { get; }
-
-        /// <inheritdoc/>
-        public abstract EffectCollection Effects { get; }
 
         protected PersonBase()
         {

@@ -148,8 +148,6 @@ namespace Zilon.Core.Tests.ProgressStoring
             // ASSERT
             restoredPerson.Should().BeEquivalentTo(person, options =>
             {
-                options.Excluding(g => g.Effects);
-
                 return options;
             });
         }

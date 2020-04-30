@@ -20,9 +20,6 @@ namespace Zilon.Core.Persons
         public int Hp { get; }
 
         /// <inheritdoc/>
-        public override EffectCollection Effects { get; }
-
-        /// <inheritdoc/>
         public IMonsterScheme Scheme { get; }
 
         /// <inheritdoc/>
@@ -58,7 +55,8 @@ namespace Zilon.Core.Persons
             var survivalModule = new MonsterSurvivalModule(scheme);
             AddModule(survivalModule);
 
-            Effects = new EffectCollection();
+            var effects = new EffectsModule();
+            AddModule(effects);
 
             var diseaseModule = new DiseaseModule();
             AddModule(diseaseModule);

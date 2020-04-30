@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.PersonModules
             // ARRANGE
             var effectList = new List<IPersonEffect>();
 
-            var effectCollectionMock = new Mock<IEffectCollection>();
+            var effectCollectionMock = new Mock<IEffectsModule>();
             effectCollectionMock.Setup(x => x.Add(It.IsAny<IPersonEffect>())).Callback<IPersonEffect>(x => effectList.Add(x));
             effectCollectionMock.Setup(x => x.Remove(It.IsAny<IPersonEffect>())).Callback<IPersonEffect>(x => effectList.Remove(x));
             effectCollectionMock.SetupGet(x => x.Items).Returns(effectList);

@@ -14,8 +14,6 @@ namespace Zilon.Core.Persons
 
         PhysicalSize PhysicalSize { get; }
 
-        EffectCollection Effects { get; }
-
         /// <summary>
         /// Получение модуля статического объекта.
         /// </summary>

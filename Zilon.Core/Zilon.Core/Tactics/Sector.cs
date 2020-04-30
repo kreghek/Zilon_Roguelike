@@ -129,7 +129,7 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                actor.Person.GetModule<IDiseaseModule>().Update(actor.Person.Effects);
+                actor.Person.GetModule<IDiseaseModule>().Update(actor.Person.GetModuleSafe<IEffectsModule>());
             }
         }
 
@@ -161,9 +161,9 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                var effects = actor.Person.Effects;
+                var effects = actor.Person.GetModuleSafe<IEffectsModule>();
 
-                if (effects == null)
+                if (effects is null)
                 {
                     continue;
                 }
