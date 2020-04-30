@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
@@ -12,11 +13,11 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.Tests.Persons.TestCases;
 
-namespace Zilon.Core.Tests.Persons
+namespace Zilon.Core.Tests.PersonModules
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
-    public class SurvivalDataTests
+    public class HumanSurvivalModuleTests
     {
         /// <summary>
         /// Тест проверяет, что характеристика с изменённым DownPass корректно

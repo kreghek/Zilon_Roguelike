@@ -7,10 +7,11 @@ using NUnit.Framework;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Tests.Persons
+namespace Zilon.Core.Tests.PersonModules
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
-    public class EvolutionDataTests
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
+    public class EvolutionModuleTests
     {
         /// <summary>
         /// Тест проверяет, что при получении следующего уровня перка, текущий уровень не сбрасывается.
