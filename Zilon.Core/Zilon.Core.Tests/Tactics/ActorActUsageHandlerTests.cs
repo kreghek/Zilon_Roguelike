@@ -186,11 +186,12 @@ namespace Zilon.Core.Tests.Tactics
 
             var actUsageService = new ActorActUsageHandler(perkResolver, actUsageRandomSource);
 
-            var survivalDataMock = new Mock<ISurvivalModule>();
-            var survivalData = survivalDataMock.Object;
+            var survivalModuleMock = new Mock<ISurvivalModule>();
+            var survivalModule = survivalModuleMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalData);
+            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalModule);
+            personMock.Setup(x => x.HasModule(It.Is<string>(x=>x == nameof(ISurvivalModule)))).Returns(true);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
@@ -217,7 +218,7 @@ namespace Zilon.Core.Tests.Tactics
             actUsageService.ProcessActUsage(actor, actor, usedActs);
 
             // ASSERT
-            survivalDataMock.Verify(x => x.RestoreStat(It.Is<SurvivalStatType>(type => type == SurvivalStatType.Health),
+            survivalModuleMock.Verify(x => x.RestoreStat(It.Is<SurvivalStatType>(type => type == SurvivalStatType.Health),
                 It.Is<int>(v => v == HEAL_EFFICIENT)));
         }
 
@@ -296,6 +297,7 @@ namespace Zilon.Core.Tests.Tactics
                 .Callback(() => monsterIsDead = true);
             var monsterSurvival = monsterSurvivalDataMock.Object;
             monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
+            monsterPersonMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule)))).Returns(true);
 
             var monsterCombatStatsMock = new Mock<ICombatStats>();
             var monsterCombatStats = monsterCombatStatsMock.Object;

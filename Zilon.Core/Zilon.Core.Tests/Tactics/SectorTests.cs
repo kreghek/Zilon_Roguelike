@@ -130,7 +130,8 @@ namespace Zilon.Core.Tests.Tactics
             };
             _survivalDataMock.Setup(x => x.Stats).Returns(survivalStats);
             var survivalData = _survivalDataMock.Object;
-            personMock.SetupGet(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalData);
+            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalData);
+            personMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule)))).Returns(true);
 
             var effectCollection = new EffectCollection();
             personMock.SetupGet(x => x.Effects).Returns(effectCollection);

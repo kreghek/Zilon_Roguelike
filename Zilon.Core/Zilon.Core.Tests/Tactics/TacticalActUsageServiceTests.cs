@@ -221,7 +221,7 @@ namespace Zilon.Core.Tests.Tactics
                     )
                 .Callback(() => monsterIsDead = true);
             var monsterSurvival = monsterSurvivalDataMock.Object;
-            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>()).Returns(monsterSurvival);
+            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
 
             var monsterCombatStatsMock = new Mock<ICombatStats>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
