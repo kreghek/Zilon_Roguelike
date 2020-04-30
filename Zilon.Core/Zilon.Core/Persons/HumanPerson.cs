@@ -43,8 +43,6 @@ namespace Zilon.Core.Persons
 
         public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
 
-        public override IDiseaseData DiseaseData { get; }
-
         public HumanPerson([NotNull] IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultActScheme,
             [NotNull] IEvolutionModule evolutionModule,
@@ -79,7 +77,7 @@ namespace Zilon.Core.Persons
             evolutionModule.PerkLeveledUp += EvolutionData_PerkLeveledUp;
 
             var combatStatsModule = new CombatStatsModule();
-            this.AddModule(combatStatsModule);
+            AddModule(combatStatsModule);
             ClearCalculatedStats();
             CalcCombatStats();
 
@@ -91,7 +89,8 @@ namespace Zilon.Core.Persons
             survivalModule.StatChanged += Survival_StatCrossKeyValue;
             CalcSurvivalStats();
 
-            DiseaseData = new DiseaseData();
+            var diseaseModule = new DiseaseModule();
+            AddModule(diseaseModule);
         }
 
         public HumanPerson(IPersonScheme scheme,
@@ -888,9 +887,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public abstract EffectCollection Effects { get; }
-
-        /// <inheritdoc/>
-        public abstract IDiseaseData DiseaseData { get; }
 
         protected PersonBase()
         {

@@ -460,21 +460,21 @@ namespace Zilon.Core.Tactics
         /// <param name="targetActor"> Актёр-цель заражения. </param>
         private void ProcessDiseaseInfection(IActor sourceActor, IActor targetActor)
         {
-            if (sourceActor.Person?.DiseaseData is null)
+            if (sourceActor.Person?.GetModuleSafe<IDiseaseModule>() is null)
             {
                 return;
             }
 
-            if (targetActor.Person?.DiseaseData is null)
+            if (targetActor.Person?.GetModuleSafe<IDiseaseModule>() is null)
             {
                 return;
             }
 
-            var currentDiseases = sourceActor.Person.DiseaseData.Diseases;
+            var currentDiseases = sourceActor.Person.GetModule<IDiseaseModule>().Diseases;
 
             foreach (var diseaseProcess in currentDiseases)
             {
-                targetActor.Person.DiseaseData.Infect(diseaseProcess.Disease);
+                targetActor.Person.GetModule<IDiseaseModule>().Infect(diseaseProcess.Disease);
                 CountInfectionInScore(targetActor, diseaseProcess.Disease);
             }
         }

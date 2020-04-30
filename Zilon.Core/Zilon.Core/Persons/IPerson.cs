@@ -17,11 +17,6 @@ namespace Zilon.Core.Persons
         EffectCollection Effects { get; }
 
         /// <summary>
-        /// Модуль заболеваний персонажа.
-        /// </summary>
-        IDiseaseData DiseaseData { get; }
-
-        /// <summary>
         /// Получение модуля статического объекта.
         /// </summary>
         /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>

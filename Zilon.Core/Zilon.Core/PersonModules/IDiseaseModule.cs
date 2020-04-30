@@ -1,27 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.Diseases;
+using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
+    /// <summary>
+    /// Данные персонажа о заболеваемости.
+    /// </summary>
+    public interface IDiseaseModule : IPersonModule
+    {
+        /// <summary>
+        /// Текущие болезни персонажа.
+        /// </summary>
+        IEnumerable<IDiseaseProcess> Diseases { get; }
+
+        /// <summary>
+        /// Инфицирование персонажа указанной болезнью.
+        /// </summary>
+        /// <param name="disease"> Болезнь, которой будет инфицирован персонаж. </param>
+        void Infect(IDisease disease);
+
+        /// <summary>
+        /// Процесс, обратный инфецированию. Удаляет болезнь из персонажа.
+        /// </summary>
+        /// <param name="disease"> Целевая болезнь. </param>
+        void RemoveDisease(IDisease disease);
+
+        /// <summary>
+        /// Обновление состояния модуля болезней.
+        /// </summary>
+        /// <param name="personEffects"> Ссылка на модуль эффектов персонажа. Болезни навешивают эффекты. </param>
+        void Update(IEffectCollection personEffects);
+    }
+
     /// <summary>
     /// Базовая реализация моделя болезней персонажа.
     /// </summary>
-    public class DiseaseData : IDiseaseData
+    public class DiseaseModule : IDiseaseModule
     {
         private readonly List<IDiseaseProcess> _diseases;
 
-        public DiseaseData()
+        public DiseaseModule()
         {
             _diseases = new List<IDiseaseProcess>();
+            IsActive = true;
         }
 
         /// <inheritdoc/>
         public IEnumerable<IDiseaseProcess> Diseases { get => _diseases; }
+        public string Key { get => nameof(IDiseaseModule); }
+        public bool IsActive { get; set; }
 
         /// <inheritdoc/>
         public void Infect(IDisease disease)

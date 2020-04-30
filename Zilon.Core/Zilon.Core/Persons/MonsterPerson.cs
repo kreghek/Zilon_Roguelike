@@ -2,6 +2,7 @@
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Schemes;
 
@@ -26,9 +27,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
-
-        /// <inheritdoc/>
-        public override IDiseaseData DiseaseData { get; }
 
         public MonsterPerson([NotNull] IMonsterScheme scheme) : base()
         {
@@ -62,7 +60,8 @@ namespace Zilon.Core.Persons
 
             Effects = new EffectCollection();
 
-            DiseaseData = new DiseaseData();
+            var diseaseModule = new DiseaseModule();
+            AddModule(diseaseModule);
         }
 
         /// <inheritdoc/>

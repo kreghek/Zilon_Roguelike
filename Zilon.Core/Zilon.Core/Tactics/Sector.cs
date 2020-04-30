@@ -124,12 +124,12 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                if (actor.Person.DiseaseData is null)
+                if (actor.Person.GetModuleSafe<IDiseaseModule>() is null)
                 {
                     continue;
                 }
 
-                actor.Person.DiseaseData.Update(actor.Person.Effects);
+                actor.Person.GetModule<IDiseaseModule>().Update(actor.Person.Effects);
             }
         }
 
