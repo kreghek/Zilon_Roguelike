@@ -182,7 +182,7 @@ namespace Zilon.Core.Persons
             return _schemeService.GetScheme<IDropTableScheme>(START_PROP_DROP_SID);
         }
 
-        private void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
+        private static void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
         {
             equipmentModule[slotIndex] = equipment;
         }

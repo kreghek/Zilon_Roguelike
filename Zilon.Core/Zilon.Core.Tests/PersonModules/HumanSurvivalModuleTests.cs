@@ -42,7 +42,7 @@ namespace Zilon.Core.Tests.PersonModules
                 .Returns(downPassRoll);
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            var survivalStats = new SurvivalStat[] {
+            var survivalStats = new[] {
                 new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE){
                     Type = STAT_TYPE,
                     Rate = STAT_RATE,

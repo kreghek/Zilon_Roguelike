@@ -87,7 +87,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void ValidateStatChangeValue(int value)
+        private static void ValidateStatChangeValue(int value)
         {
             if (value == 0)
             {
@@ -102,6 +102,11 @@ namespace Zilon.Core.PersonModules
 
         protected void ChangeStatInner(SurvivalStat stat, int value)
         {
+            if (stat is null)
+            {
+                throw new ArgumentNullException(nameof(stat));
+            }
+
             stat.Value += value;
 
             ProcessIfHealth(stat, value);

@@ -561,7 +561,7 @@ namespace Zilon.Core.Tests.Persons
             }
         }
 
-        private IPropScheme GetSchemeBySid(string sid)
+        private static IPropScheme GetSchemeBySid(string sid)
         {
             if (sid == null)
             {

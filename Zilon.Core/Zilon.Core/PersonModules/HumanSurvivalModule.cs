@@ -186,7 +186,7 @@ namespace Zilon.Core.PersonModules
             InvokeStatChangedEvent(this, args);
         }
 
-        private int GetStatDownRoll(SurvivalStat stat)
+        private static int GetStatDownRoll(SurvivalStat stat)
         {
             return stat.DownPassRoll;
         }

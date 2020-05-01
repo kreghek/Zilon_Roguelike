@@ -103,13 +103,13 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void AddEquipment(IEquipmentModule equipmentCarrier, int slotIndex, string equipmentSid)
+        private void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, string equipmentSid)
         {
             try
             {
                 var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
                 var equipment = _propFactory.CreateEquipment(equipmentScheme);
-                equipmentCarrier[slotIndex] = equipment;
+                equipmentModule[slotIndex] = equipment;
             }
             catch (KeyNotFoundException exception)
             {
