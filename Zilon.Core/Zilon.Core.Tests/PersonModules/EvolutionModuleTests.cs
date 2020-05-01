@@ -40,12 +40,8 @@ namespace Zilon.Core.Tests.PersonModules
 
             evolutionData.PerkLevelUp(perk);
 
-
-
             // ACT
             evolutionData.PerkLevelUp(perk);
-
-
 
             // ASSERT
             evolutionData.Perks.Length.Should().Be(1);
