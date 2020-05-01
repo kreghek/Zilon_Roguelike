@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Props;
-
-namespace Zilon.Core.PersonModules
+﻿namespace Zilon.Core.PersonModules
 {
     public interface IPersonModule
     {

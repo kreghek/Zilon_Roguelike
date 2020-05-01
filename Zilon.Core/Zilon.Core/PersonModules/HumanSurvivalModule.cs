@@ -27,6 +27,14 @@ namespace Zilon.Core.PersonModules
             }
         }
 
+        public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
+            [NotNull] IEnumerable<SurvivalStat> stats,
+            [NotNull] ISurvivalRandomSource randomSource) : base(stats.ToArray())
+        {
+            _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
+            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
+        }
+
         private static SurvivalStat[] GetStats([NotNull] IPersonScheme personScheme)
         {
             if (personScheme is null)
@@ -104,14 +112,6 @@ namespace Zilon.Core.PersonModules
             };
 
             statList.Add(hpStat);
-        }
-
-        public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
-            [NotNull] IEnumerable<SurvivalStat> stats,
-            [NotNull] ISurvivalRandomSource randomSource) : base(stats.ToArray())
-        {
-            _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
-            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
         }
 
         /// <summary>Обновление состояния данных о выживании.</summary>

@@ -532,13 +532,11 @@ namespace Zilon.Core.Persons
 
                             for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
                             {
-                                if ((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0)
+                                if ((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0 
+                                    && equipmentModule[slotIndex] != null)
                                 {
-                                    if (equipmentModule[slotIndex] != null)
-                                    {
-                                        requirementsCompleted = false;
-                                        break;
-                                    }
+                                    requirementsCompleted = false;
+                                    break;
                                 }
                             }
 

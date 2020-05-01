@@ -23,6 +23,11 @@ namespace Zilon.Core.PersonModules
 
         private static SurvivalStat[] GetStats([NotNull] IMonsterScheme monsterScheme)
         {
+            if (monsterScheme is null)
+            {
+                throw new ArgumentNullException(nameof(monsterScheme));
+            }
+
             return new[] {
                 new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp){
                     Type = SurvivalStatType.Health
