@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -42,13 +43,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             });
             var tacticalAct = tacticalActMock.Object;
 
-            var actCarrierMock = new Mock<ITacticalActCarrier>();
-            actCarrierMock.SetupGet(x => x.Acts)
+            var combatActModuleMock = new Mock<ICombatActModule>();
+            combatActModuleMock.SetupGet(x => x.Acts)
                 .Returns(new[] { tacticalAct });
-            var actCarrier = actCarrierMock.Object;
+            var combatActModule = combatActModuleMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.TacticalActCarrier).Returns(actCarrier);
+            personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();

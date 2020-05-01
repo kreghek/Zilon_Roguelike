@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Zilon.Core.Persons
+using Zilon.Core.Persons;
+
+namespace Zilon.Core.PersonModules
 {
-    public interface IEffectCollection
+    public interface IEffectsModule : IPersonModule
     {
         IEnumerable<IPersonEffect> Items { get; }
 

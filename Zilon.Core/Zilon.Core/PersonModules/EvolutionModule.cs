@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
     /// <summary>
     /// Базовая реализация данных по развитию персонажа.
     /// </summary>
-    public sealed class EvolutionData : IEvolutionData
+    public sealed class EvolutionModule : IEvolutionModule
     {
         private readonly ISchemeService _schemeService;
 
         private readonly List<IPerk> _buildInPerks;
 
-        public EvolutionData(ISchemeService schemeService)
+        public EvolutionModule(ISchemeService schemeService)
         {
+            IsActive = true;
+
             _schemeService = schemeService;
 
             _buildInPerks = new List<IPerk>();
@@ -35,6 +38,12 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public IPerk[] Perks { get; private set; }
+
+        /// <inheritdoc/>
+        public string Key { get => nameof(IEvolutionModule); }
+
+        /// <inheritdoc/>
+        public bool IsActive { get; set; }
 
         /// <inheritdoc/>
         public event EventHandler<PerkEventArgs> PerkLeveledUp;
@@ -93,7 +102,7 @@ namespace Zilon.Core.Persons
                 // По идее, такие перки либо должны быть врождёнными.
                 // Следовательно, если они не отсеяны выше, то это ошибка.
                 // Такие схемы лучше проверять в тестах на валидацию схем.
-                .Where(x=> x.Levels != null);
+                .Where(x => x.Levels != null);
 
             var perks = new List<IPerk>(_buildInPerks);
             if (Perks != null)

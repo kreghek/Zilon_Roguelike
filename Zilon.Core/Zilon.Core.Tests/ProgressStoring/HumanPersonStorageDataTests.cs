@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.ProgressStoring;
 using Zilon.Core.Props;
@@ -102,21 +103,21 @@ namespace Zilon.Core.Tests.ProgressStoring
 
             var propFactory = new PropFactory(schemeService);
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
-            var evolutionData = new EvolutionData(schemeService);
+            var evolutionData = new EvolutionModule(schemeService);
 
             var person = new HumanPerson(personSchemes["human-person"],
                                          tacticalActSchemes["default"],
                                          evolutionData,
                                          survivalRandomSource,
                                          inventory);
-            person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health).Value = 7;
+            person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value = 7;
 
             // Назначаем экипировку
             var helm = propFactory.CreateEquipment(propSchemes["helm"]);
             helm.Durable.Value = helm.Durable.Range.Max / 2;
-            person.EquipmentCarrier[0] = helm;
+            person.GetModule<IEquipmentModule>()[0] = helm;
 
             // Инвентарь
             var equipment1 = propFactory.CreateEquipment(propSchemes["helm"]);
@@ -147,8 +148,6 @@ namespace Zilon.Core.Tests.ProgressStoring
             // ASSERT
             restoredPerson.Should().BeEquivalentTo(person, options =>
             {
-                options.Excluding(g => g.Effects);
-
                 return options;
             });
         }

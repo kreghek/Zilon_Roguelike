@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 using Zilon.Core.Persons.Survival;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
     /// <summary>
     /// Аргументы события при изменения характеристики.

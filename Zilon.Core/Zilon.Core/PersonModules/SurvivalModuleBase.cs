@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Linq;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
-    public abstract class SurvivalDataBase
+    public abstract class SurvivalModuleBase : ISurvivalModule
     {
-        public SurvivalDataBase(SurvivalStat[] stats)
+        protected SurvivalModuleBase(SurvivalStat[] stats)
         {
-            Stats = stats;
+            Stats = stats ?? throw new ArgumentNullException(nameof(stats));
+            IsActive = true;
         }
 
         /// <summary>Текущие характеристики.</summary>
@@ -22,6 +25,8 @@ namespace Zilon.Core.Persons
 
         /// <summary>Признак того, что персонаж мёртв.</summary>
         public bool IsDead { get; private set; }
+        public string Key { get => nameof(ISurvivalModule); }
+        public bool IsActive { get; set; }
 
         /// <summary>Происходит, если персонаж умирает.</summary>
         public event EventHandler Dead;
@@ -65,7 +70,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         /// <param name="caller">The object performing the call</param>
         /// <param name="args">The <see cref="SurvivalStatChangedEventArgs"/> instance containing the event data.</param>
-        public void InvokeStatChangedEvent(SurvivalDataBase caller, SurvivalStatChangedEventArgs args)
+        public void InvokeStatChangedEvent(SurvivalModuleBase caller, SurvivalStatChangedEventArgs args)
         {
             StatChanged?.Invoke(caller, args);
         }
@@ -82,7 +87,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void ValidateStatChangeValue(int value)
+        private static void ValidateStatChangeValue(int value)
         {
             if (value == 0)
             {
@@ -97,6 +102,11 @@ namespace Zilon.Core.Persons
 
         protected void ChangeStatInner(SurvivalStat stat, int value)
         {
+            if (stat is null)
+            {
+                throw new ArgumentNullException(nameof(stat));
+            }
+
             stat.Value += value;
 
             ProcessIfHealth(stat, value);
@@ -163,5 +173,8 @@ namespace Zilon.Core.Persons
         {
             Dead?.Invoke(this, new EventArgs());
         }
+
+        public abstract void ResetStats();
+        public abstract void Update();
     }
 }

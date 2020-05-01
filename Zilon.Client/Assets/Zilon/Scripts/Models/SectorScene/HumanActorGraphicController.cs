@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
@@ -22,12 +23,12 @@ public class HumanActorGraphicController : MonoBehaviour
 
         UpdateEquipment();
 
-        Actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+        Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
     }
 
     public void OnDestroy()
     {
-        Actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+        Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
     }
 
     private void ProjectSlotsToVisual()
@@ -36,7 +37,7 @@ public class HumanActorGraphicController : MonoBehaviour
 
         var visualHolderList = humanHumanoidGraphic.VisualHolders.ToList();
 
-        var equipmentCarrier = Actor.Person.EquipmentCarrier;
+        var equipmentCarrier = Actor.Person.GetModule<IEquipmentModule>();
         for (var slotIndex = 0; slotIndex < equipmentCarrier.Slots.Length; slotIndex++)
         {
             var slot = equipmentCarrier.Slots[slotIndex];
@@ -56,7 +57,7 @@ public class HumanActorGraphicController : MonoBehaviour
 
     private void UpdateEquipment()
     {
-        var equipmentCarrier = Actor.Person.EquipmentCarrier;
+        var equipmentCarrier = Actor.Person.GetModule<IEquipmentModule>();
         for (var slotIndex = 0; slotIndex < equipmentCarrier.Slots.Length; slotIndex++)
         {
             if (_visualSlots.TryGetValue(slotIndex, out VisualPropHolder holder))

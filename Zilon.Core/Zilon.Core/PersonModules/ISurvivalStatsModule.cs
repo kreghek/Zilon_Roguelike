@@ -1,7 +1,9 @@
 ﻿using System;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
     /// <summary>
     /// Данные персонажа по выживанию.
@@ -9,7 +11,7 @@ namespace Zilon.Core.Persons
     /// <remarks>
     /// Здесь будут сведения о питании, отдыхе, ранах, эмоциональном состоянии персонажа.
     /// </remarks>
-    public interface ISurvivalData
+    public interface ISurvivalModule: IPersonModule
     {
         /// <summary>
         /// Текущие характеристики.

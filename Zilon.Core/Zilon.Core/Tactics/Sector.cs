@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -123,12 +124,12 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                if (actor.Person.DiseaseData is null)
+                if (actor.Person.GetModuleSafe<IDiseaseModule>() is null)
                 {
                     continue;
                 }
 
-                actor.Person.DiseaseData.Update(actor.Person.Effects);
+                actor.Person.GetModule<IDiseaseModule>().Update(actor.Person.GetModuleSafe<IEffectsModule>());
             }
         }
 
@@ -136,12 +137,12 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                if (actor.Person?.TacticalActCarrier?.Acts is null)
+                if (actor.Person?.GetModuleSafe<ICombatActModule>()?.Acts is null)
                 {
                     continue;
                 }
 
-                foreach (var act in actor.Person.TacticalActCarrier.Acts)
+                foreach (var act in actor.Person.GetModule<ICombatActModule>().Acts)
                 {
                     act.UpdateCooldown();
                 }
@@ -160,9 +161,9 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                var effects = actor.Person.Effects;
+                var effects = actor.Person.GetModuleSafe<IEffectsModule>();
 
-                if (effects == null)
+                if (effects is null)
                 {
                     continue;
                 }
@@ -175,9 +176,9 @@ namespace Zilon.Core.Tactics
                 // Items изменяется. Они должны падать, если убрать ToArray и выполняться, если его вернуть.
                 foreach (var effect in effects.Items.ToArray())
                 {
-                    if (effect is ISurvivalStatEffect actorEffect && actor.Person.Survival != null)
+                    if (effect is ISurvivalStatEffect actorEffect && actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                     {
-                        actorEffect.Apply(actor.Person.Survival);
+                        actorEffect.Apply(actor.Person.GetModule<ISurvivalModule>());
                     }
                 }
             }
@@ -188,7 +189,7 @@ namespace Zilon.Core.Tactics
             var actors = ActorManager.Items.ToArray();
             foreach (var actor in actors)
             {
-                var survival = actor.Person.Survival;
+                var survival = actor.Person.GetModuleSafe<ISurvivalModule>();
                 if (survival == null)
                 {
                     continue;
@@ -203,8 +204,8 @@ namespace Zilon.Core.Tactics
             var actors = ActorManager.Items.ToArray();
             foreach (var actor in actors)
             {
-                var equipmentCarrier = actor.Person.EquipmentCarrier;
-                if (equipmentCarrier == null)
+                var equipmentCarrier = actor.Person.GetModuleSafe<IEquipmentModule>();
+                if (equipmentCarrier is null)
                 {
                     continue;
                 }
@@ -243,7 +244,7 @@ namespace Zilon.Core.Tactics
             var container = (IPropContainer)sender;
             if (!container.Content.CalcActualItems().Any())
             {
-                var staticObject = StaticObjectManager.Items.Single(x=>ReferenceEquals(x.GetModuleSafe<IPropContainer>(), container));
+                var staticObject = StaticObjectManager.Items.Single(x => ReferenceEquals(x.GetModuleSafe<IPropContainer>(), container));
                 StaticObjectManager.Remove(staticObject);
             }
         }
@@ -270,9 +271,9 @@ namespace Zilon.Core.Tactics
             {
                 HoldNodes(actor.Node, actor, Map);
 
-                if (actor.Person.Survival != null)
+                if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                 {
-                    actor.Person.Survival.Dead += ActorState_Dead;
+                    actor.Person.GetModule<ISurvivalModule>().Dead += ActorState_Dead;
                 }
 
                 actor.Moved += Actor_Moved;
@@ -308,7 +309,7 @@ namespace Zilon.Core.Tactics
 
         private void ReleaseNodes(IActor actor, IMap map)
         {
-            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, actor.Node,  map);
+            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, actor.Node, map);
 
             foreach (var node in actorNodes)
             {
@@ -337,9 +338,9 @@ namespace Zilon.Core.Tactics
             {
                 ReleaseNodes(actor, Map);
 
-                if (actor.Person.Survival != null)
+                if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                 {
-                    actor.Person.Survival.Dead -= ActorState_Dead;
+                    actor.Person.GetModule<ISurvivalModule>().Dead -= ActorState_Dead;
                 }
 
                 actor.Moved -= Actor_Moved;
@@ -348,12 +349,12 @@ namespace Zilon.Core.Tactics
 
         private void ActorState_Dead(object sender, EventArgs e)
         {
-            var actor = ActorManager.Items.Single(x => x.Person.Survival == sender);
+            var actor = ActorManager.Items.Single(x => x.Person.GetModuleSafe<ISurvivalModule>() == sender);
             ActorManager.Remove(actor);
 
-            if (actor.Person.Survival != null)
+            if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
             {
-                actor.Person.Survival.Dead -= ActorState_Dead;
+                actor.Person.GetModule<ISurvivalModule>().Dead -= ActorState_Dead;
             }
 
             ProcessMonsterDeath(actor);

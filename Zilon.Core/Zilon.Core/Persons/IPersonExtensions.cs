@@ -1,15 +1,17 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.PersonModules;
+
+namespace Zilon.Core.Persons
 {
     public static class IPersonExtensions
     {
         public static bool CheckIsDead(this IPerson person)
         {
-            if (person.Survival == null)
+            if (person.GetModuleSafe<ISurvivalModule>() is null)
             {
                 return false;
             }
 
-            return person.Survival.IsDead;
+            return person.GetModule<ISurvivalModule>().IsDead;
 
         }
     }

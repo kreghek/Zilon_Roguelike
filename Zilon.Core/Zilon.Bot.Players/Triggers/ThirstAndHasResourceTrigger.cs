@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -16,7 +17,22 @@ namespace Zilon.Bot.Players.Triggers
 
         public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
         {
-            var hazardEffect = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>()
+            if (actor is null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
+            if (currentState is null)
+            {
+                throw new System.ArgumentNullException(nameof(currentState));
+            }
+
+            if (strategyData is null)
+            {
+                throw new System.ArgumentNullException(nameof(strategyData));
+            }
+
+            var hazardEffect = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>()
                .SingleOrDefault(x => x.Type == SurvivalStatType.Hydration);
             if (hazardEffect == null)
             {
@@ -25,7 +41,7 @@ namespace Zilon.Bot.Players.Triggers
 
             //
 
-            var props = actor.Person.Inventory.CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
             var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 ConsumeCommonRuleType.Thirst);

@@ -1,27 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.Diseases;
+using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
     /// <summary>
     /// Базовая реализация моделя болезней персонажа.
     /// </summary>
-    public class DiseaseData : IDiseaseData
+    public class DiseaseModule : IDiseaseModule
     {
         private readonly List<IDiseaseProcess> _diseases;
 
-        public DiseaseData()
+        public DiseaseModule()
         {
             _diseases = new List<IDiseaseProcess>();
+            IsActive = true;
         }
 
         /// <inheritdoc/>
         public IEnumerable<IDiseaseProcess> Diseases { get => _diseases; }
+        public string Key { get => nameof(IDiseaseModule); }
+        public bool IsActive { get; set; }
 
         /// <inheritdoc/>
         public void Infect(IDisease disease)
@@ -42,7 +45,7 @@ namespace Zilon.Core.Persons
             _diseases.Remove(currentProcess);
         }
 
-        public void Update(IEffectCollection personEffects)
+        public void Update(IEffectsModule personEffects)
         {
             if (personEffects is null)
             {
@@ -55,7 +58,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void UpdateDeseaseProcess(IEffectCollection personEffects, IDiseaseProcess diseaseProcess)
+        private void UpdateDeseaseProcess(IEffectsModule personEffects, IDiseaseProcess diseaseProcess)
         {
             diseaseProcess.Update();
 
@@ -97,7 +100,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static void UpdatePowerDown(IEffectCollection personEffects, IDisease disease, DiseaseSymptom[] symptoms, float currentPower, float symptomPowerSegment)
+        private static void UpdatePowerDown(IEffectsModule personEffects, IDisease disease, DiseaseSymptom[] symptoms, float currentPower, float symptomPowerSegment)
         {
             var activeSymptomCount = (int)Math.Floor(currentPower / symptomPowerSegment);
 
@@ -112,16 +115,15 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static void RemoveDiseaseEffectForSimptom(IEffectCollection personEffects, IDisease disease, DiseaseSymptom symptom)
+        private static void RemoveDiseaseEffectForSimptom(IEffectsModule personEffects, IDisease disease, DiseaseSymptom symptom)
         {
             var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
                 .SingleOrDefault(x => x.Symptom == symptom);
 
-            if (currentSymptomEffect == null)
+            if (currentSymptomEffect is null)
             {
-                // По идее, этого не должно произойти. Если симптом был, то он должен был удерживать эффект болезни.
-                // Вероятнее всего это ошибка в логике.
-                Debug.Fail("Если симптом был, то он должен был удерживать эффект болезни");
+                // Просто игнорируем этот эффект.
+                // Ткущий метод может вызываться несколько раз и для симптомов, которые ушли в предыдущих итерациях.
                 return;
             }
 
@@ -133,7 +135,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static void UpdatePowerUp(IEffectCollection personEffects, IDisease disease, DiseaseSymptom[] symptoms, float currentPower, float symptomPowerSegment)
+        private static void UpdatePowerUp(IEffectsModule personEffects, IDisease disease, DiseaseSymptom[] symptoms, float currentPower, float symptomPowerSegment)
         {
             if (currentPower <= 0.25f)
             {
@@ -155,13 +157,14 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static void AddDiseaseEffectForSymptom(IEffectCollection personEffects, IDisease disease, DiseaseSymptom symptom)
+        private static void AddDiseaseEffectForSymptom(IEffectsModule personEffects, IDisease disease, DiseaseSymptom symptom)
         {
             var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
                 .SingleOrDefault(x => x.Symptom == symptom);
 
             if (currentSymptomEffect is null)
             {
+                // При создании эффекта уже фиксируется болезнь, которая его удерживает.
                 currentSymptomEffect = new DiseaseSymptomEffect(disease, symptom);
                 personEffects.Add(currentSymptomEffect);
             }

@@ -1,9 +1,11 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.Persons;
+
+namespace Zilon.Core.PersonModules
 {
     /// <summary>
     /// Характеристики, используемые персонажем в бою.
     /// </summary>
-    public interface ICombatStats
+    public interface ICombatStatsModule: IPersonModule
     {
         /// <summary>
         /// Навыки оборонятся против наступательных действий.

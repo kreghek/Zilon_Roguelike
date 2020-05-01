@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using Zilon.Core.Components;
 
-namespace Zilon.Core.Persons
+using Zilon.Core.Components;
+using Zilon.Core.Persons;
+
+namespace Zilon.Core.PersonModules
 {
     /// <summary>
     /// Интерфейс, содержащий данные о развитие персонажа.
     /// </summary>
-    public interface IEvolutionData
+    public interface IEvolutionModule: IPersonModule
     {
         /// <summary>
         /// Перечень навыков.

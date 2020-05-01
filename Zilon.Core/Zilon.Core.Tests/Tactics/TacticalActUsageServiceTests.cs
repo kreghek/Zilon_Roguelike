@@ -14,6 +14,7 @@ using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
@@ -72,7 +73,7 @@ namespace Zilon.Core.Tests.Tactics
                 PropResourceCount = 1
             };
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
             var bulletScheme = new TestPropScheme
             {
                 Sid = "bullet-7-62",
@@ -82,7 +83,7 @@ namespace Zilon.Core.Tests.Tactics
                 }
             };
             inventory.Add(new Resource(bulletScheme, 10));
-            personMock.Setup(x => x.Inventory).Returns(inventory);
+            personMock.Setup(x => x.GetModule<IInventoryModule>(It.IsAny<string>())).Returns(inventory);
 
             var actMock = new Mock<ITacticalAct>();
             actMock.SetupGet(x => x.Stats).Returns(actStatsSubScheme);
@@ -179,14 +180,14 @@ namespace Zilon.Core.Tests.Tactics
 
             var monsterPersonMock = new Mock<IPerson>();
 
-            var monsterSurvivalDataMock = new Mock<ISurvivalData>();
+            var monsterSurvivalDataMock = new Mock<ISurvivalModule>();
             monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(false);
             var monsterSurvival = monsterSurvivalDataMock.Object;
-            monsterPersonMock.SetupGet(x => x.Survival).Returns(monsterSurvival);
+            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
 
-            var monsterCombatStatsMock = new Mock<ICombatStats>();
+            var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
-            monsterPersonMock.SetupGet(x => x.CombatStats).Returns(monsterCombatStats);
+            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>())).Returns(monsterCombatStats);
 
             var monsterPerson = monsterPersonMock.Object;
             monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
@@ -211,7 +212,7 @@ namespace Zilon.Core.Tests.Tactics
             var monsterPersonMock = new Mock<IPerson>();
 
             var monsterIsDead = false;
-            var monsterSurvivalDataMock = new Mock<ISurvivalData>();
+            var monsterSurvivalDataMock = new Mock<ISurvivalModule>();
             monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(() => monsterIsDead);
             monsterSurvivalDataMock
                 .Setup(x => x.DecreaseStat(
@@ -220,11 +221,11 @@ namespace Zilon.Core.Tests.Tactics
                     )
                 .Callback(() => monsterIsDead = true);
             var monsterSurvival = monsterSurvivalDataMock.Object;
-            monsterPersonMock.SetupGet(x => x.Survival).Returns(monsterSurvival);
+            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
 
-            var monsterCombatStatsMock = new Mock<ICombatStats>();
+            var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
-            monsterPersonMock.SetupGet(x => x.CombatStats).Returns(monsterCombatStats);
+            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>())).Returns(monsterCombatStats);
 
             var monsterPerson = monsterPersonMock.Object;
             monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
@@ -253,9 +254,9 @@ namespace Zilon.Core.Tests.Tactics
             var personMock = new Mock<IPerson>();
             _person = personMock.Object;
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
-            personMock.SetupGet(x => x.EvolutionData).Returns(evolutionData);
+            var evolutionModuleMock = new Mock<IEvolutionModule>();
+            var evolutionModule = evolutionModuleMock.Object;
+            personMock.Setup(x => x.GetModule<IEvolutionModule>(It.IsAny<string>())).Returns(evolutionModule);
 
             var actScheme = new TestTacticalActStatsSubScheme
             {

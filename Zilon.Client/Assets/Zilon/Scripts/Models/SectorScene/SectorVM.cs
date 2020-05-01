@@ -15,6 +15,7 @@ using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -212,7 +213,7 @@ public class SectorVM : MonoBehaviour
         var actor = actorViewModel.Actor;
         actor.OpenedContainer += PlayerActorOnOpenedContainer;
         actor.UsedAct += ActorOnUsedAct;
-        actor.Person.Survival.Dead += HumanPersonSurvival_Dead;
+        actor.Person.GetModule<ISurvivalModule>().Dead += HumanPersonSurvival_Dead;
         actor.UsedProp += Actor_UsedProp;
         actor.DepositMined += Actor_DepositMined;
     }
@@ -349,7 +350,7 @@ public class SectorVM : MonoBehaviour
             actorViewModel.Selected += EnemyActorVm_OnSelected;
             actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
             monsterActor.UsedAct += ActorOnUsedAct;
-            monsterActor.Person.Survival.Dead += Monster_Dead;
+            monsterActor.Person.GetModule<ISurvivalModule>().Dead += Monster_Dead;
 
             var fowController = actorViewModel.gameObject.AddComponent<FowActorController>();
             // Контроллеру тумана войны скармливаем только графику.
@@ -369,7 +370,7 @@ public class SectorVM : MonoBehaviour
     {
         // Используем ReferenceEquals, потому что нам нужно сравнить object и ISurvivalData по ссылке.
         // Это делаем, чтобы избежать приведения sender к ISurvivalData.
-        var viewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Actor.Person.Survival, sender));
+        var viewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Actor.Person.GetModule<ISurvivalModule>(), sender));
 
         if (viewModel != null)
         {
@@ -470,7 +471,7 @@ public class SectorVM : MonoBehaviour
 
             var containerPopup = containerPopupObj.GetComponent<ContainerPopup>();
 
-            var transferMachine = new PropTransferMachine(actor.Person.Inventory,
+            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(),
                 propContainer.Content);
             containerPopup.Init(transferMachine);
         }
@@ -496,7 +497,7 @@ public class SectorVM : MonoBehaviour
 
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
-        _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
+        _humanActorTaskSource.CurrentActor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
         _playerState.ActiveActor = null;
         _playerState.SelectedViewModel = null;
         _playerState.HoverViewModel = null;
@@ -514,7 +515,7 @@ public class SectorVM : MonoBehaviour
         foreach (var monsterActor in monsters)
         {
             monsterActor.UsedAct -= ActorOnUsedAct;
-            monsterActor.Person.Survival.Dead -= Monster_Dead;
+            monsterActor.Person.GetModule<ISurvivalModule>().Dead -= Monster_Dead;
         }
 
         _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
@@ -532,7 +533,7 @@ public class SectorVM : MonoBehaviour
     /// </remarks>
     public void AddResourceToCurrentPerson(string resourceSid, int count = 1)
     {
-        var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;
+        var inventory = _humanPlayer.MainPerson.GetModule<IInventoryModule>();
         AddResource(inventory, resourceSid, count);
     }
 
@@ -548,11 +549,11 @@ public class SectorVM : MonoBehaviour
     /// </remarks>
     public void AddEquipmentToCurrentPerson(string equipmentSid)
     {
-        var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;
+        var inventory = _humanPlayer.MainPerson.GetModule<IInventoryModule>();
         AddEquipment(inventory, equipmentSid);
     }
 
-    private void AddResource(Inventory inventory, string resourceSid, int count)
+    private void AddResource(IInventoryModule inventory, string resourceSid, int count)
     {
         try
         {
@@ -566,7 +567,7 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void AddEquipment(Inventory inventory, string equipmentSid)
+    private void AddEquipment(IInventoryModule inventory, string equipmentSid)
     {
         try
         {
@@ -627,7 +628,7 @@ public class SectorVM : MonoBehaviour
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
-        _humanActorTaskSource.CurrentActor.Person.Survival.Dead -= HumanPersonSurvival_Dead;
+        _humanActorTaskSource.CurrentActor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
 
         _progressStorageService.Destroy();
     }

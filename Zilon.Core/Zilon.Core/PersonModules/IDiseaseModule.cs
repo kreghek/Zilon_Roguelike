@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 
 using Zilon.Core.Diseases;
+using Zilon.Core.Persons;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
     /// <summary>
     /// Данные персонажа о заболеваемости.
     /// </summary>
-    public interface IDiseaseData
+    public interface IDiseaseModule : IPersonModule
     {
         /// <summary>
         /// Текущие болезни персонажа.
@@ -30,6 +31,6 @@ namespace Zilon.Core.Persons
         /// Обновление состояния модуля болезней.
         /// </summary>
         /// <param name="personEffects"> Ссылка на модуль эффектов персонажа. Болезни навешивают эффекты. </param>
-        void Update(IEffectCollection personEffects);
+        void Update(IEffectsModule personEffects);
     }
 }

@@ -19,6 +19,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
@@ -128,13 +129,13 @@ namespace Zilon.Core.Specs.Contexts
             {
                 RegularMonsterSids = new[] { "rat" },
                 MapGeneratorOptions = new SquareGenerationOptionsSubScheme
-                { 
+                {
                     Size = mapSize
                 }
             };
 
             var sectorNodeMock = new Mock<ISectorNode>();
-            sectorNodeMock.SetupGet(x=>x.State).Returns(SectorNodeState.SectorMaterialized);
+            sectorNodeMock.SetupGet(x => x.State).Returns(SectorNodeState.SectorMaterialized);
             sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorSubScheme);
             var sectorNode = sectorNodeMock.Object;
 
@@ -251,7 +252,7 @@ namespace Zilon.Core.Specs.Contexts
         {
             var resource = new Resource(resourceScheme, count);
 
-            actor.Person.Inventory.Add(resource);
+            actor.Person.GetModule<IInventoryModule>().Add(resource);
         }
 
         public IActor GetMonsterById(int id)
@@ -278,9 +279,9 @@ namespace Zilon.Core.Specs.Contexts
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var survivalRandomSource = ServiceProvider.GetRequiredService<ISurvivalRandomSource>();
 
-            var evolutionData = new EvolutionData(schemeService);
+            var evolutionData = new EvolutionModule(schemeService);
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 

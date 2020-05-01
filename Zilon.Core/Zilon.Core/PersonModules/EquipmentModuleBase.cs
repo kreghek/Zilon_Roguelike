@@ -2,17 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
     /// <summary>
     /// Базовая реализация моделя работы с экипировкой.
     /// </summary>
     /// <seealso cref="Zilon.Core.Persons.IEquipmentCarrier" />
-    public abstract class EquipmentCarrierBase : IEquipmentCarrier
+    public abstract class EquipmentModuleBase : IEquipmentModule
     {
         private readonly Equipment[] _equipment;
 
@@ -20,7 +23,7 @@ namespace Zilon.Core.Persons
         /// Конструирует экземпляр модуля работы с экипировкой типа <see cref="EquipmentCarrierBase"/>.
         /// </summary>
         /// <param name="equipments">Стартовая экипировка.</param>
-        protected EquipmentCarrierBase(IEnumerable<Equipment> equipments)
+        protected EquipmentModuleBase(IEnumerable<Equipment> equipments)
         {
             _equipment = equipments.ToArray();
         }
@@ -29,7 +32,7 @@ namespace Zilon.Core.Persons
         /// Конструирует экземпляр модуля работы с экипировкой типа <see cref="EquipmentCarrierBase"/>.
         /// </summary>
         /// <param name="size">Количество элементов экипировки.</param>
-        protected EquipmentCarrierBase(int size)
+        protected EquipmentModuleBase(int size)
         {
             _equipment = new Equipment[size];
         }
@@ -38,7 +41,7 @@ namespace Zilon.Core.Persons
         /// Конструирует экземпляр модуля работы с экипировкой типа <see cref="EquipmentCarrierBase"/>.
         /// </summary>
         /// <param name="slots">Набор слотов, на основе которого создаётся модель работы с экипировкой.</param>
-        protected EquipmentCarrierBase([NotNull] [ItemNotNull] IEnumerable<PersonSlotSubScheme> slots)
+        protected EquipmentModuleBase([NotNull] [ItemNotNull] IEnumerable<PersonSlotSubScheme> slots)
         {
             if (slots == null)
             {
@@ -54,6 +57,8 @@ namespace Zilon.Core.Persons
             Slots = slotArray;
 
             _equipment = new Equipment[Slots.Length];
+
+            IsActive = true;
         }
 
         /// <summary>
@@ -77,6 +82,12 @@ namespace Zilon.Core.Persons
         /// Текущие слоты экипировки.
         /// </summary>
         public abstract PersonSlotSubScheme[] Slots { get; protected set; }
+
+        /// <inheritdoc/>
+        public string Key { get => nameof(IEquipmentModule); }
+
+        /// <inheritdoc/>
+        public bool IsActive { get; set; }
 
         /// <summary>
         /// Выстреливает, когда экипировка изменяется.

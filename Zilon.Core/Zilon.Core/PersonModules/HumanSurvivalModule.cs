@@ -4,20 +4,18 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
-    /// <summary>
-    /// Базовая реализация данных о выживании для человеческих персонажей.
-    /// </summary>
-    public sealed class HumanSurvivalData : SurvivalDataBase, ISurvivalData
+    public sealed class HumanSurvivalModule : SurvivalModuleBase
     {
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
 
-        public HumanSurvivalData([NotNull] IPersonScheme personScheme,
+        public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource) : base(GetStats(personScheme))
         {
             _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
@@ -27,6 +25,14 @@ namespace Zilon.Core.Persons
             {
                 stat.Changed += Stat_Changed;
             }
+        }
+
+        public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
+            [NotNull] IEnumerable<SurvivalStat> stats,
+            [NotNull] ISurvivalRandomSource randomSource) : base(stats.ToArray())
+        {
+            _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
+            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
         }
 
         private static SurvivalStat[] GetStats([NotNull] IPersonScheme personScheme)
@@ -108,16 +114,8 @@ namespace Zilon.Core.Persons
             statList.Add(hpStat);
         }
 
-        public HumanSurvivalData([NotNull] IPersonScheme personScheme,
-            [NotNull] IEnumerable<SurvivalStat> stats,
-            [NotNull] ISurvivalRandomSource randomSource) : base(stats.ToArray())
-        {
-            _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
-            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
-        }
-
         /// <summary>Обновление состояния данных о выживании.</summary>
-        public void Update()
+        public override void Update()
         {
             foreach (var stat in Stats)
             {
@@ -188,13 +186,13 @@ namespace Zilon.Core.Persons
             InvokeStatChangedEvent(this, args);
         }
 
-        private int GetStatDownRoll(SurvivalStat stat)
+        private static int GetStatDownRoll(SurvivalStat stat)
         {
             return stat.DownPassRoll;
         }
 
         /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
-        public void ResetStats()
+        public override void ResetStats()
         {
             Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health)?.ChangeStatRange(0, _personScheme.Hp);
 

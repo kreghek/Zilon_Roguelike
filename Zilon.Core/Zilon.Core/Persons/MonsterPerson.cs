@@ -3,7 +3,7 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
-using Zilon.Core.Props;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -11,61 +11,58 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Персонаж для монстров в секторе.
     /// </summary>
-    public class MonsterPerson : IPerson
+    public class MonsterPerson : PersonBase
     {
-        public int Id { get; set; }
+        /// <inheritdoc/>
+        public override int Id { get; set; }
+
+        /// <inheritdoc/>
         public int Hp { get; }
-        public IEquipmentCarrier EquipmentCarrier => null;
 
-        public ITacticalActCarrier TacticalActCarrier { get; }
-
-        public IEvolutionData EvolutionData => throw new NotSupportedException("Для монстров не поддерживается развитие");
-
-        public ICombatStats CombatStats { get; }
-
-        public IPropStore Inventory => throw new NotSupportedException("Для монстров не поддерживается инвентарь.");
-
-        public ISurvivalData Survival { get; }
-
-        public EffectCollection Effects { get; }
-
+        /// <inheritdoc/>
         public IMonsterScheme Scheme { get; }
 
-        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
-        public bool HasInventory { get => false; }
-        public IDiseaseData DiseaseData { get; }
+        /// <inheritdoc/>
+        public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
 
-        public MonsterPerson([NotNull] IMonsterScheme scheme)
+        public MonsterPerson([NotNull] IMonsterScheme scheme) : base()
         {
 
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
 
             Hp = scheme.Hp;
-            TacticalActCarrier = new TacticalActCarrier
+            var combaActModule = new CombatActModule
             {
                 Acts = new ITacticalAct[] {
                     new MonsterTacticalAct(scheme.PrimaryAct)
                 }
             };
 
+            AddModule(combaActModule);
+
             var defenses = scheme.Defense?.Defenses?
                 .Select(x => new PersonDefenceItem(x.Type, x.Level))
                 .ToArray();
 
-            CombatStats = new CombatStats
+            var combatStatsModule = new CombatStatsModule
             {
                 DefenceStats = new PersonDefenceStats(
-                    defenses ?? new PersonDefenceItem[0],
-                    new PersonArmorItem[0])
+                    defenses ?? Array.Empty<PersonDefenceItem>(),
+                    Array.Empty<PersonArmorItem>())
             };
+            AddModule(combatStatsModule);
 
-            Survival = new MonsterSurvivalData(scheme);
+            var survivalModule = new MonsterSurvivalModule(scheme);
+            AddModule(survivalModule);
 
-            Effects = new EffectCollection();
+            var effects = new EffectsModule();
+            AddModule(effects);
 
-            DiseaseData = new DiseaseData();
+            var diseaseModule = new DiseaseModule();
+            AddModule(diseaseModule);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{Scheme?.Name?.En}";

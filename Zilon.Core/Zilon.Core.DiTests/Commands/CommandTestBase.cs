@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +10,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -46,20 +45,20 @@ namespace Zilon.Core.Tests.Commands
             var cooldownAct = CreateActWithCooldown();
             var cooldownResolvedAct = CreateActWithResolvedCooldown();
 
-            var actCarrierMock = new Mock<ITacticalActCarrier>();
-            actCarrierMock.SetupGet(x => x.Acts)
+            var combatActModuleMock = new Mock<ICombatActModule>();
+            combatActModuleMock.SetupGet(x => x.Acts)
                 .Returns(new[] { simpleAct, cooldownAct, cooldownResolvedAct });
-            var actCarrier = actCarrierMock.Object;
+            var combatActModule = combatActModuleMock.Object;
 
-            var equipmentCarrierMock = new Mock<IEquipmentCarrier>();
+            var equipmentCarrierMock = new Mock<IEquipmentModule>();
             equipmentCarrierMock.SetupGet(x => x.Slots).Returns(new[] { new PersonSlotSubScheme {
                 Types = EquipmentSlotTypes.Hand
             } });
             var equipmentCarrier = equipmentCarrierMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.TacticalActCarrier).Returns(actCarrier);
-            personMock.SetupGet(x => x.EquipmentCarrier).Returns(equipmentCarrier);
+            personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
+            personMock.Setup(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentCarrier);
             personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
             var person = personMock.Object;
 

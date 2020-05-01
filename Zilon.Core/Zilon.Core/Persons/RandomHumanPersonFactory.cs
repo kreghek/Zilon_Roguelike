@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Zilon.Core.CommonServices.Dices;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -44,9 +45,9 @@ namespace Zilon.Core.Persons
         {
             var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
-            var evolutionData = new EvolutionData(_schemeService);
+            var evolutionData = new EvolutionModule(_schemeService);
 
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
@@ -59,7 +60,7 @@ namespace Zilon.Core.Persons
             return person;
         }
 
-        private void RollTraitPerks(IEvolutionData evolutionData)
+        private void RollTraitPerks(IEvolutionModule evolutionData)
         {
             if (evolutionData is null)
             {
@@ -70,7 +71,7 @@ namespace Zilon.Core.Persons
             evolutionData.AddBuildInPerks(rolledTraits);
         }
 
-        private void RollStartEquipment(Inventory inventory, HumanPerson person)
+        private void RollStartEquipment(IInventoryModule inventory, HumanPerson person)
         {
             var headDropScheme = GetHeads();
             FillSlot(person, headDropScheme, HEAD_SLOT_INDEX);
@@ -100,7 +101,7 @@ namespace Zilon.Core.Persons
             AddResource(inventory, "bullet-45", 100);
         }
 
-        private void AddEquipment(Inventory inventory, string sid)
+        private void AddEquipment(IInventoryModule inventory, string sid)
         {
             var scheme = _schemeService.GetScheme<IPropScheme>(sid);
             var prop = _propFactory.CreateEquipment(scheme);
@@ -115,16 +116,16 @@ namespace Zilon.Core.Persons
             // Остальные дропнутые предметы складываем просто в инвентарь.
             // Если текущий предмет невозможно экипировать, то его тоже помещаем в инвентарь.
 
-            var inventory = person.Inventory;
+            var inventory = person.GetModule<IInventoryModule>();
             var dropedProps = _dropResolver.Resolve(new[] { dropScheme });
             var usedEquipment = dropedProps.OfType<Equipment>().FirstOrDefault();
             if (usedEquipment != null)
             {
-
-                var canBeEquiped = CanBeEquiped(person.EquipmentCarrier, slotIndex, usedEquipment);
+                var equipmentModule = person.GetModule<IEquipmentModule>();
+                var canBeEquiped = CanBeEquiped(equipmentModule, slotIndex, usedEquipment);
                 if (canBeEquiped)
                 {
-                    AddEquipment(person.EquipmentCarrier, slotIndex, usedEquipment);
+                    AddEquipment(equipmentModule, slotIndex, usedEquipment);
                     var unusedMainWeaponDrops = dropedProps.Where(x => x != usedEquipment).ToArray();
                     foreach (var prop in unusedMainWeaponDrops)
                     {
@@ -149,11 +150,11 @@ namespace Zilon.Core.Persons
         }
 
         private static bool CanBeEquiped(
-            IEquipmentCarrier equipmentCarrier,
+            IEquipmentModule equipmentModule,
             int slotIndex,
             Equipment equipment)
         {
-            return EquipmentCarrierHelper.CanBeEquiped(equipmentCarrier, slotIndex, equipment);
+            return EquipmentCarrierHelper.CanBeEquiped(equipmentModule, slotIndex, equipment);
         }
 
         private IDropTableScheme GetHeads()
@@ -181,9 +182,9 @@ namespace Zilon.Core.Persons
             return _schemeService.GetScheme<IDropTableScheme>(START_PROP_DROP_SID);
         }
 
-        private void AddEquipment(IEquipmentCarrier equipmentCarrier, int slotIndex, Equipment equipment)
+        private static void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
         {
-            equipmentCarrier[slotIndex] = equipment;
+            equipmentModule[slotIndex] = equipment;
         }
 
         private void AddPropToInventory(IPropStore inventory, IProp prop)
@@ -191,7 +192,7 @@ namespace Zilon.Core.Persons
             inventory.Add(prop);
         }
 
-        private void AddResource(Inventory inventory, string resourceSid, int count)
+        private void AddResource(IInventoryModule inventory, string resourceSid, int count)
         {
             try
             {

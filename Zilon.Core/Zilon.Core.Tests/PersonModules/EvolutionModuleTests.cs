@@ -4,13 +4,14 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.Persons;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Tests.Persons
+namespace Zilon.Core.Tests.PersonModules
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
-    public class EvolutionDataTests
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
+    public class EvolutionModuleTests
     {
         /// <summary>
         /// Тест проверяет, что при получении следующего уровня перка, текущий уровень не сбрасывается.
@@ -26,25 +27,21 @@ namespace Zilon.Core.Tests.Persons
                         Levels = new[]{
                             new PerkLevelSubScheme{
                                 MaxValue = 2,
-                                Jobs = new IJobSubScheme[0]
+                                Jobs = System.Array.Empty<IJobSubScheme>()
                             }
                         }
                     }
                 });
             var schemeService = schemeServiceMock.Object;
 
-            var evolutionData = new EvolutionData(schemeService);
+            var evolutionData = new EvolutionModule(schemeService);
 
             var perk = evolutionData.Perks[0];
 
             evolutionData.PerkLevelUp(perk);
 
-
-
             // ACT
             evolutionData.PerkLevelUp(perk);
-
-
 
             // ASSERT
             evolutionData.Perks.Length.Should().Be(1);

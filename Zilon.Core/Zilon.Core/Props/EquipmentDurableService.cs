@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Props
@@ -82,7 +82,7 @@ namespace Zilon.Core.Props
         {
             if (equipment.Durable.Value <= 0)
             {
-                var equipmentCarrier = equipmentOwner.EquipmentCarrier;
+                var equipmentCarrier = equipmentOwner.GetModule<IEquipmentModule>();
                 if (equipmentCarrier == null)
                 {
                     return;

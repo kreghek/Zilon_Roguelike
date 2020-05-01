@@ -5,7 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 
 using Zilon.Core.Client;
-using Zilon.Core.Persons;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.Client
             var resourceScheme = new TestPropScheme();
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             // контейнер
             var containerProps = new IProp[] {
@@ -67,7 +67,7 @@ namespace Zilon.Core.Tests.Client
             };
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             // контейнер
             var containerProps = new IProp[] {
@@ -102,7 +102,7 @@ namespace Zilon.Core.Tests.Client
             var resource = new Resource(resourceScheme, 1);
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             // контейнер
             var containerProps = new IProp[]
@@ -143,7 +143,7 @@ namespace Zilon.Core.Tests.Client
             var resourceScheme = new TestPropScheme();
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
             inventory.Add(new Resource(resourceScheme, 1));
 
             // контейнер
@@ -180,7 +180,7 @@ namespace Zilon.Core.Tests.Client
             var resourceScheme = new TestPropScheme();
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
             inventory.Add(new Resource(resourceScheme, 1));
 
             // контейнер
@@ -220,7 +220,7 @@ namespace Zilon.Core.Tests.Client
             };
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             // контейнер
             var containerProps = new IProp[] {
@@ -260,7 +260,7 @@ namespace Zilon.Core.Tests.Client
             };
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
             inventory.Add(new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>()));
 
             // контейнер

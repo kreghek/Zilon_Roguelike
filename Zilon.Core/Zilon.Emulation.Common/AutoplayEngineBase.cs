@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Players;
 using Zilon.Bot.Sdk;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Scoring;
@@ -41,7 +42,7 @@ namespace Zilon.Emulation.Common
             botActorTaskSource.Configure(BotSettings);
 
             var iterationCounter = 1;
-            while (!humanActor.Person.Survival.IsDead && iterationCounter <= ITERATION_LIMIT)
+            while (!humanActor.Person.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
             {
                 try
                 {

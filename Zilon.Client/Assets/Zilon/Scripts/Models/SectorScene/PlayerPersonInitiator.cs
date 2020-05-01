@@ -12,6 +12,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -141,7 +142,7 @@ public class PlayerPersonInitiator : MonoBehaviour
         actorViewModel.transform.position = actorPosition;
         actorViewModel.Actor = actor;
 
-        if (!actor.Person.Inventory.CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
+        if (!actor.Person.GetModule<IInventoryModule>().CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
         {
             AddResourceToCurrentPerson("camp-tools");
         }
@@ -166,11 +167,11 @@ public class PlayerPersonInitiator : MonoBehaviour
     /// </remarks>
     public void AddResourceToCurrentPerson(string resourceSid, int count = 1)
     {
-        var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;
+        var inventory = _humanPlayer.MainPerson.GetModule<IInventoryModule>();
         AddResource(inventory, resourceSid, count);
     }
 
-    private void AddResource(Inventory inventory, string resourceSid, int count)
+    private void AddResource(IInventoryModule inventory, string resourceSid, int count)
     {
         try
         {

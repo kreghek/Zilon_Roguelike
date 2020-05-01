@@ -13,6 +13,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Common;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -55,9 +56,9 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
     public void Start()
     {
         Actor.Moved += Actor_Moved;
-        if (Actor.Person.Survival != null)
+        if (Actor.Person.GetModuleSafe<ISurvivalModule>() != null)
         {
-            Actor.Person.Survival.Dead += Survival_Dead;
+            Actor.Person.GetModule<ISurvivalModule>().Dead += Survival_Dead;
         }
 
         Actor.OpenedContainer += Actor_OpenedContainer;
@@ -68,9 +69,9 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
     {
         Actor.Moved -= Actor_Moved;
 
-        if (Actor.Person.Survival != null)
+        if (Actor.Person.GetModuleSafe<ISurvivalModule>() != null)
         {
-            Actor.Person.Survival.Dead -= Survival_Dead;
+            Actor.Person.GetModule<ISurvivalModule>().Dead -= Survival_Dead;
         }
 
         Actor.OpenedContainer -= Actor_OpenedContainer;

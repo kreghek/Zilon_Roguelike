@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 using Zilon.Bot.Sdk;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.ScoreResultGenerating;
@@ -47,14 +48,14 @@ namespace Zilon.Bot.Players.DevelopmentTests
         private static void PrintPersonBacklog(HumanPerson humanPerson)
         {
             Console.WriteLine("Build In Traits:");
-            var buildinTraits = humanPerson.EvolutionData.Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
+            var buildinTraits = humanPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
             foreach (var buildInTrait in buildinTraits)
             {
                 Console.WriteLine(buildInTrait.Scheme.Name.En);
             }
 
             Console.WriteLine("Start Equipments:");
-            var equipments = humanPerson.EquipmentCarrier.ToArray();
+            var equipments = humanPerson.GetModule<IEquipmentModule>().ToArray();
             foreach (var equipment in equipments)
             {
                 if (equipment is null)
@@ -66,7 +67,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             }
 
             Console.WriteLine("Start Inventory:");
-            var inventoryProps = humanPerson.Inventory.CalcActualItems().ToArray();
+            var inventoryProps = humanPerson.GetModule<IInventoryModule>().CalcActualItems().ToArray();
             foreach (var prop in inventoryProps)
             {
                 switch (prop)

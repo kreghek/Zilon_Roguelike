@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonModules
 {
-    /// <summary>
-    /// Интерфейс для работы с экипировкой.
-    /// </summary>
-    public interface IEquipmentCarrier : IEnumerable<Equipment>
+    public interface IEquipmentModule: IPersonModule, IEnumerable<Equipment>
     {
         /// <summary>
         /// Текущие слоты экипировки.

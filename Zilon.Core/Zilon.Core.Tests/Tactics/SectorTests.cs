@@ -6,6 +6,7 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
@@ -19,7 +20,7 @@ namespace Zilon.Core.Tests.Tactics
     [TestFixture]
     public class SectorTests
     {
-        private Mock<ISurvivalData> _survivalDataMock;
+        private Mock<ISurvivalModule> _survivalDataMock;
 
         /// <summary>
         /// Тест проверяет, что при обновлении состояния сектора у актёра игрока в сектора падают
@@ -120,7 +121,7 @@ namespace Zilon.Core.Tests.Tactics
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            _survivalDataMock = new Mock<ISurvivalData>();
+            _survivalDataMock = new Mock<ISurvivalModule>();
             var survivalStats = new[] {
                 new SurvivalStat(0,-10,10){
                     Type = SurvivalStatType.Satiety,
@@ -129,10 +130,11 @@ namespace Zilon.Core.Tests.Tactics
             };
             _survivalDataMock.Setup(x => x.Stats).Returns(survivalStats);
             var survivalData = _survivalDataMock.Object;
-            personMock.SetupGet(x => x.Survival).Returns(survivalData);
+            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalData);
+            personMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule)))).Returns(true);
 
-            var effectCollection = new EffectCollection();
-            personMock.SetupGet(x => x.Effects).Returns(effectCollection);
+            var effectCollection = new EffectsModule();
+            personMock.Setup(x => x.GetModule<IEffectsModule>(It.IsAny<string>())).Returns(effectCollection);
 
             return actorMock;
         }

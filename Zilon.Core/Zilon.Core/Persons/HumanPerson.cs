@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.LogicCalculations;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons.Auxiliary;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
@@ -21,120 +22,106 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Персонаж, находящийся под управлением игрока.
     /// </summary>
-    public class HumanPerson : IPerson
+    public class HumanPerson : PersonBase
     {
         private readonly ITacticalActScheme _defaultActScheme;
         private readonly ISurvivalRandomSource _survivalRandomSource;
 
         /// <inheritdoc/>
-        public int Id { get; set; }
+        public override int Id { get; set; }
 
         /// <inheritdoc/>
         public string Name { get; }
 
         /// <inheritdoc/>
-        public IEquipmentCarrier EquipmentCarrier { get; }
-
-        /// <inheritdoc/>
-        public ITacticalActCarrier TacticalActCarrier { get; }
-
-        /// <inheritdoc/>
-        public IEvolutionData EvolutionData { get; }
-
-        /// <inheritdoc/>
         public IPersonScheme Scheme { get; }
-
-        /// <inheritdoc/>
-        public ICombatStats CombatStats { get; }
-
-        /// <inheritdoc/>
-        public IPropStore Inventory { get; }
-
-        /// <inheritdoc/>
-        public ISurvivalData Survival { get; }
-
-        /// <inheritdoc/>
-        public EffectCollection Effects { get; }
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
-        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
-
-        public bool HasInventory { get => true; }
-
-        public IDiseaseData DiseaseData { get; }
+        public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
 
         public HumanPerson([NotNull] IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultActScheme,
-            [NotNull] IEvolutionData evolutionData,
-            [NotNull] ISurvivalRandomSource survivalRandomSource)
+            [NotNull] IEvolutionModule evolutionModule,
+            [NotNull] ISurvivalRandomSource survivalRandomSource) : base()
         {
+            if (evolutionModule is null)
+            {
+                throw new ArgumentNullException(nameof(evolutionModule));
+            }
+
             _defaultActScheme = defaultActScheme ?? throw new ArgumentNullException(nameof(defaultActScheme));
 
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
-            EvolutionData = evolutionData ?? throw new ArgumentNullException(nameof(evolutionData));
+            AddModule(evolutionModule);
             _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
 
             Name = scheme.Sid;
 
-            Effects = new EffectCollection();
-            Effects.Added += Effects_CollectionChanged;
-            Effects.Removed += Effects_CollectionChanged;
-            Effects.Changed += Effects_CollectionChanged;
+            var effects = new EffectsModule();
+            AddModule(effects);
+            effects.Added += Effects_CollectionChanged;
+            effects.Removed += Effects_CollectionChanged;
+            effects.Changed += Effects_CollectionChanged;
 
-            EquipmentCarrier = new EquipmentCarrier(Scheme.Slots);
-            EquipmentCarrier.EquipmentChanged += EquipmentCarrier_EquipmentChanged;
+            var equipmentModule = new EquipmentModule(Scheme.Slots);
+            equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
 
-            TacticalActCarrier = new TacticalActCarrier();
+            AddModule(equipmentModule);
 
-            EvolutionData.PerkLeveledUp += EvolutionData_PerkLeveledUp;
+            var combatActModule = new CombatActModule();
+            AddModule(combatActModule);
 
+            evolutionModule.PerkLeveledUp += EvolutionData_PerkLeveledUp;
 
-            CombatStats = new CombatStats();
+            var combatStatsModule = new CombatStatsModule();
+            AddModule(combatStatsModule);
             ClearCalculatedStats();
             CalcCombatStats();
 
             var perks = GetPerksSafe();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
+            combatActModule.Acts = CalcActs(_defaultActScheme, equipmentModule, effects, perks);
 
-            Survival = new HumanSurvivalData(scheme, survivalRandomSource);
-            Survival.StatChanged += Survival_StatCrossKeyValue;
+            var survivalModule = new HumanSurvivalModule(scheme, survivalRandomSource);
+            AddModule(survivalModule);
+            survivalModule.StatChanged += Survival_StatCrossKeyValue;
             CalcSurvivalStats();
 
-            DiseaseData = new DiseaseData();
+            var diseaseModule = new DiseaseModule();
+            AddModule(diseaseModule);
         }
 
         public HumanPerson(IPersonScheme scheme,
             [NotNull] ITacticalActScheme defaultScheme,
-            [NotNull] IEvolutionData evolutionData,
+            [NotNull] IEvolutionModule evolutionModule,
             [NotNull] ISurvivalRandomSource survivalRandomSource,
-            [NotNull] Inventory inventory) :
-            this(scheme, defaultScheme, evolutionData, survivalRandomSource)
+            [NotNull] IInventoryModule inventory) :
+            this(scheme, defaultScheme, evolutionModule, survivalRandomSource)
         {
-            Inventory = inventory;
+            AddModule(inventory);
         }
 
         private void CalcCombatStats()
         {
             var bonusDict = new Dictionary<SkillStatType, float>();
 
-            if (EvolutionData.Perks != null)
+            if (this.GetModuleSafe<IEvolutionModule>().Perks != null)
             {
                 CalcPerkBonuses(bonusDict);
             }
 
-            if (EvolutionData.Stats != null)
+            if (this.GetModuleSafe<IEvolutionModule>().Stats != null)
             {
                 foreach (var bonusItem in bonusDict)
                 {
-                    var stat = EvolutionData.Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
+                    var stat = this.GetModule<IEvolutionModule>().Stats.SingleOrDefault(x => x.Stat == bonusItem.Key);
                     if (stat != null)
                     {
                         ApplyBonusToStat(bonusItem.Value, stat);
                     }
                 }
 
-                foreach (var statItem in EvolutionData.Stats)
+                foreach (var statItem in this.GetModule<IEvolutionModule>().Stats)
                 {
                     statItem.Value = (float)Math.Round(statItem.Value, 1);
                 }
@@ -164,7 +151,7 @@ namespace Zilon.Core.Persons
         /// <param name="bonusDict"> Текущее состояние бонусов. </param>
         private void CalcPerkBonuses(Dictionary<SkillStatType, float> bonusDict)
         {
-            var archievedPerks = EvolutionData.GetArchievedPerks();
+            var archievedPerks = this.GetModule<IEvolutionModule>().GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
                 var currentLevel = archievedPerk.CurrentLevel;
@@ -213,8 +200,10 @@ namespace Zilon.Core.Persons
         /// </summary>
         private void RecalculatePersonArmor()
         {
+            var equipmentModule = this.GetModule<IEquipmentModule>();
+
             var equipmentArmors = new List<PersonArmorItem>();
-            foreach (var equipment in EquipmentCarrier)
+            foreach (var equipment in equipmentModule)
             {
                 if (equipment == null)
                 {
@@ -232,7 +221,7 @@ namespace Zilon.Core.Persons
 
             var mergedArmors = MergeArmor(equipmentArmors);
 
-            CombatStats.DefenceStats.SetArmors(mergedArmors.ToArray());
+            this.GetModule<ICombatStatsModule>().DefenceStats.SetArmors(mergedArmors.ToArray());
         }
 
         private static IEnumerable<PersonArmorItem> GetEquipmentArmors(IEnumerable<IPropArmorItemSubScheme> armors)
@@ -374,21 +363,23 @@ namespace Zilon.Core.Persons
             bonusDict[targetStatType] = value;
         }
 
-        private void EquipmentCarrier_EquipmentChanged(object sender, EventArgs e)
+        private void EquipmentModule_EquipmentChanged(object sender, EventArgs e)
         {
+            var equipmentModule = this.GetModule<IEquipmentModule>();
+
             ClearCalculatedStats();
 
             CalcCombatStats();
 
             var perks = GetPerksSafe();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
+            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, this.GetModule<IEffectsModule>(), perks);
 
             CalcSurvivalStats();
         }
 
         private IEnumerable<IPerk> GetPerksSafe()
         {
-            var perks = EvolutionData?.GetArchievedPerks();
+            var perks = this.GetModuleSafe<IEvolutionModule>()?.GetArchievedPerks();
             if (perks == null)
             {
                 perks = Array.Empty<IPerk>();
@@ -401,7 +392,7 @@ namespace Zilon.Core.Persons
         {
             // Расчёт бонусов вынести в отдельный сервис, который покрыть модульными тестами
             // На вход принимает SurvivalData. SurvivalData дожен содержать метод увеличение диапазона характеристики.
-            Survival.ResetStats();
+            this.GetModule<ISurvivalModule>().ResetStats();
             var bonusList = new List<SurvivalStatBonus>();
             FillSurvivalBonusesFromEquipments(ref bonusList);
             FillSurvivalBonusesFromPerks(ref bonusList);
@@ -411,12 +402,12 @@ namespace Zilon.Core.Persons
 
         private void FillSurvivalBonusesFromEffects([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
-            if (Effects is null)
+            if (this.GetModuleSafe<IEffectsModule>() is null)
             {
                 return;
             }
 
-            foreach (var effect in Effects.Items)
+            foreach (var effect in this.GetModule<IEffectsModule>().Items)
             {
                 switch (effect)
                 {
@@ -464,12 +455,12 @@ namespace Zilon.Core.Persons
 
         private void FillSurvivalBonusesFromPerks([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
-            if (EvolutionData == null)
+            if (this.GetModuleSafe<IEvolutionModule>() is null)
             {
                 return;
             }
 
-            var archievedPerks = EvolutionData.GetArchievedPerks();
+            var archievedPerks = this.GetModule<IEvolutionModule>().GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
                 var currentLevel = archievedPerk.CurrentLevel;
@@ -497,7 +488,7 @@ namespace Zilon.Core.Persons
         {
             foreach (var bonus in bonuses)
             {
-                var stat = Survival.Stats.SingleOrDefault(x => x.Type == bonus.SurvivalStatType);
+                var stat = this.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == bonus.SurvivalStatType);
                 if (stat != null)
                 {
                     var normalizedValueBonus = (int)Math.Round(bonus.ValueBonus, MidpointRounding.AwayFromZero);
@@ -510,9 +501,11 @@ namespace Zilon.Core.Persons
 
         private void FillSurvivalBonusesFromEquipments([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
-            for (var i = 0; i < EquipmentCarrier.Count(); i++)
+            var equipmentModule = this.GetModule<IEquipmentModule>();
+
+            for (var i = 0; i < equipmentModule.Count(); i++)
             {
-                var equipment = EquipmentCarrier[i];
+                var equipment = equipmentModule[i];
                 if (equipment == null)
                 {
                     continue;
@@ -537,15 +530,13 @@ namespace Zilon.Core.Persons
 
                             var requirementsCompleted = true;
 
-                            for (var slotIndex = 0; slotIndex < EquipmentCarrier.Count(); slotIndex++)
+                            for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
                             {
-                                if ((EquipmentCarrier.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0)
+                                if ((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0 
+                                    && equipmentModule[slotIndex] != null)
                                 {
-                                    if (EquipmentCarrier[slotIndex] != null)
-                                    {
-                                        requirementsCompleted = false;
-                                        break;
-                                    }
+                                    requirementsCompleted = false;
+                                    break;
                                 }
                             }
 
@@ -619,8 +610,9 @@ namespace Zilon.Core.Persons
         private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction,
             ref List<SurvivalStatBonus> bonuses)
         {
+            var survivalModule = this.GetModule<ISurvivalModule>();
             const SurvivalStatType hpStatType = SurvivalStatType.Health;
-            var hpStat = Survival.Stats.SingleOrDefault(x => x.Type == hpStatType);
+            var hpStat = survivalModule.Stats.SingleOrDefault(x => x.Type == hpStatType);
             if (hpStat != null)
             {
                 var bonus = 0;
@@ -665,7 +657,9 @@ namespace Zilon.Core.Persons
             CalcCombatStats();
 
             var perks = GetPerksSafe();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
+
+            var equipmentModule = this.GetModule<IEquipmentModule>();
+            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, this.GetModule<IEffectsModule>(), perks);
 
             CalcSurvivalStats();
         }
@@ -678,7 +672,7 @@ namespace Zilon.Core.Persons
             }
 
             PersonEffectHelper.UpdateSurvivalEffect(
-                Effects,
+                this.GetModule<IEffectsModule>(),
                 e.Stat,
                 e.Stat.KeySegments,
                 _survivalRandomSource,
@@ -690,20 +684,22 @@ namespace Zilon.Core.Persons
         {
             ClearCalculatedStats();
 
-            if (EvolutionData != null)
+            if (this.GetModuleSafe<IEvolutionModule>() != null)
             {
                 CalcCombatStats();
             }
 
             var perks = GetPerksSafe();
-            TacticalActCarrier.Acts = CalcActs(_defaultActScheme, EquipmentCarrier, Effects, perks);
+
+            var equipmentModule = this.GetModule<IEquipmentModule>();
+            this.GetModule<ICombatActModule>().Acts = CalcActs(_defaultActScheme, equipmentModule, this.GetModule<IEffectsModule>(), perks);
 
             CalcSurvivalStats();
         }
 
         private static ITacticalAct[] CalcActs(ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment> equipments,
-            EffectCollection effects,
+            IEffectsModule effects,
             IEnumerable<IPerk> perks)
         {
             if (equipments == null)
@@ -736,7 +732,7 @@ namespace Zilon.Core.Persons
 
         private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
             [NotNull] Equipment equipment,
-            [NotNull] EffectCollection effects,
+            [NotNull] IEffectsModule effects,
             [NotNull, ItemNotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
@@ -818,7 +814,7 @@ namespace Zilon.Core.Persons
             return efficientModifierValue;
         }
 
-        private static void CalcSurvivalHazardOnTacticalAct(EffectCollection effects,
+        private static void CalcSurvivalHazardOnTacticalAct(IEffectsModule effects,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
@@ -862,7 +858,7 @@ namespace Zilon.Core.Persons
 
         private void ClearCalculatedStats()
         {
-            foreach (var stat in EvolutionData.Stats)
+            foreach (var stat in this.GetModule<IEvolutionModule>().Stats)
             {
                 stat.Value = 10;
             }
@@ -873,6 +869,5 @@ namespace Zilon.Core.Persons
         {
             return $"{Name}";
         }
-
     }
 }

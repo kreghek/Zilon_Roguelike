@@ -10,6 +10,7 @@ using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -55,7 +56,7 @@ namespace Zilon.Core.Specs.Steps
         public void GivenАктёрИмеетHp(int startHp)
         {
             var actor = Context.GetActiveActor();
-            actor.Person.Survival.SetStatForce(SurvivalStatType.Health, startHp);
+            actor.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, startHp);
         }
 
         [UsedImplicitly]
@@ -71,7 +72,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var monster = Context.GetMonsterById(monsterId);
 
-            monster.Person.Survival.SetStatForce(SurvivalStatType.Health, monsterHp);
+            monster.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, monsterHp);
         }
 
         [UsedImplicitly]
@@ -180,7 +181,7 @@ namespace Zilon.Core.Specs.Steps
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
-            var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.GetModule<IPropContainer>().Content);
+            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(), container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
             var equipment = container.GetModule<IPropContainer>().Content.CalcActualItems().Single(x => x.Scheme.Sid == equipmentSchemeSid);
@@ -203,7 +204,7 @@ namespace Zilon.Core.Specs.Steps
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
-            var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.GetModule<IPropContainer>().Content);
+            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(), container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
             var resource = container.GetModule<IPropContainer>().Content.CalcActualItems()
@@ -233,7 +234,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var inventoryItems = actor.Person.Inventory.CalcActualItems();
+            var inventoryItems = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var foundEquipment = inventoryItems.SingleOrDefault(x => x.Scheme.Sid == equipmentSchemeSid);
 
             foundEquipment.Should().NotBeNull();
@@ -270,7 +271,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var propsInInventory = actor.Person.Inventory.CalcActualItems();
+            var propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
 
             testedProp.Should().BeOfType<Resource>();
@@ -285,7 +286,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var propsInInventory = actor.Person.Inventory.CalcActualItems();
+            var propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
 
             testedProp.Should().BeNull();
@@ -296,7 +297,7 @@ namespace Zilon.Core.Specs.Steps
         public void ThenАктёрИмеетЗадасHp(int expectedHp)
         {
             var actor = Context.GetActiveActor();
-            var hpStat = actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedHp);
         }
 
@@ -305,7 +306,7 @@ namespace Zilon.Core.Specs.Steps
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
             var monster = Context.GetMonsterById(monsterId);
-            var hpStat = monster.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var hpStat = monster.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedMonsterHp);
         }
 

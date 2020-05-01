@@ -1,4 +1,4 @@
-﻿using Zilon.Core.Props;
+﻿using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Persons
 {
@@ -15,49 +15,23 @@ namespace Zilon.Core.Persons
         PhysicalSize PhysicalSize { get; }
 
         /// <summary>
-        /// Носитель экипировки.
+        /// Получение модуля статического объекта.
         /// </summary>
-        IEquipmentCarrier EquipmentCarrier { get; }
+        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
+        /// <returns>Возвращает объект модуля.</returns>
+        TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IPersonModule;
 
         /// <summary>
-        /// Носитель тактических действий.
+        /// Добавление модуля статического объекта.
         /// </summary>
-        ITacticalActCarrier TacticalActCarrier { get; }
+        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
+        /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
+        void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IPersonModule;
 
         /// <summary>
-        /// Данные о развитие персонажа.
+        /// Проверка наличия модуля статического объекта.
         /// </summary>
-        IEvolutionData EvolutionData { get; }
-
-        /// <summary>
-        /// Характеристики, используемые персонажем в бою.
-        /// </summary>
-        ICombatStats CombatStats { get; }
-
-        /// <summary>
-        /// Инвентарь персонажа.
-        /// </summary>
-        /// <remarks>
-        /// Для монстров равен null.
-        /// </remarks>
-        IPropStore Inventory { get; }
-
-        /// <summary>
-        /// Признак того, что персонаж может иметь инвентарь.
-        /// Для монстров - false.
-        /// </summary>
-        bool HasInventory { get; }
-
-        /// <summary>
-        /// Данные по выживанию персонажа.
-        /// </summary>
-        ISurvivalData Survival { get; }
-
-        EffectCollection Effects { get; }
-
-        /// <summary>
-        /// Модуль заболеваний персонажа.
-        /// </summary>
-        IDiseaseData DiseaseData { get; }
+        /// <returns>Возвращает true, если модуль указанного типа есть у объекта. Иначе, false.</returns>
+        bool HasModule(string key);
     }
 }

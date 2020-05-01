@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
@@ -77,7 +78,7 @@ namespace Zilon.Core.Commands
 
                 if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
                 {
-                    var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.Inventory,
+                    var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>(),
                         act.Constrains.PropResourceType,
                         act.Constrains.PropResourceCount.Value);
 

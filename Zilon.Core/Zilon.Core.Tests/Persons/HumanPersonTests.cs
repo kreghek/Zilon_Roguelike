@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -15,7 +16,8 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class HumanPersonTests
     {
         /// <summary>
@@ -41,13 +43,12 @@ namespace Zilon.Core.Tests.Persons
                 Stats = new TestTacticalActStatsSubScheme()
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionModule = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionModule, survivalRandomSource);
 
             var propScheme = new TestPropScheme
             {
@@ -66,16 +67,12 @@ namespace Zilon.Core.Tests.Persons
 
             const int expectedSlotIndex = 0;
 
-
-
             // ACT
 
-            person.EquipmentCarrier[expectedSlotIndex] = equipment;
-
-
+            person.GetModule<IEquipmentModule>()[expectedSlotIndex] = equipment;
 
             // ARRANGE
-            person.TacticalActCarrier.Acts[0].Stats.Should().Be(tacticalActScheme.Stats);
+            person.GetModule<ICombatActModule>().Acts[0].Stats.Should().Be(tacticalActScheme.Stats);
         }
 
         /// <summary>
@@ -123,23 +120,20 @@ namespace Zilon.Core.Tests.Persons
                 new SkillStatItem{Stat = SkillStatType.Ballistic, Value = 10 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
-            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Key).Returns(nameof(IEvolutionModule));
+            evolutionModuleMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionModuleMock.SetupGet(x => x.Stats).Returns(stats);
+            var evolutionModule = evolutionModuleMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-
-
             // ACT
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
-
-
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionModule, survivalRandomSource);
 
             // ASSERT
-            var testedStat = person.EvolutionData.Stats.Single(x => x.Stat == SkillStatType.Ballistic);
+            var testedStat = person.GetModule<IEvolutionModule>().Stats.Single(x => x.Stat == SkillStatType.Ballistic);
             testedStat.Value.Should().Be(11);
         }
 
@@ -186,25 +180,22 @@ namespace Zilon.Core.Tests.Persons
             });
             var perk = perkMock.Object;
 
-            var stats = new SkillStatItem[0];
+            var stats = System.Array.Empty<SkillStatItem>();
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
-            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Key).Returns(nameof(IEvolutionModule));
+            evolutionModuleMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionModuleMock.SetupGet(x => x.Stats).Returns(stats);
+            var evolutionModule = evolutionModuleMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-
-
             // ACT
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
-
-
+            var person = new HumanPerson(personScheme, defaultActScheme, evolutionModule, survivalRandomSource);
 
             // ASSERT
-            var testedStat = person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var testedStat = person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
             testedStat.Value.Should().Be(11);
         }
 
@@ -252,12 +243,13 @@ namespace Zilon.Core.Tests.Persons
             });
             var perk = perkMock.Object;
 
-            var stats = new SkillStatItem[0];
+            var stats = System.Array.Empty<SkillStatItem>();
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            evolutionDataMock.SetupGet(x => x.Perks).Returns(new[] { perk });
-            evolutionDataMock.SetupGet(x => x.Stats).Returns(stats);
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Key).Returns(nameof(IEvolutionModule));
+            evolutionModuleMock.SetupGet(x => x.Perks).Returns(new[] { perk });
+            evolutionModuleMock.SetupGet(x => x.Stats).Returns(stats);
+            var evolutionData = evolutionModuleMock.Object;
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -282,16 +274,12 @@ namespace Zilon.Core.Tests.Persons
 
             var equipment = new Equipment(swordScheme, new ITacticalActScheme[] { swordAct });
 
-
-
             // ACT
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, survivalRandomSource);
-            person.EquipmentCarrier[0] = equipment;
-
-
+            person.GetModule<IEquipmentModule>()[0] = equipment;
 
             // ASSERT
-            var testedAct = person.TacticalActCarrier.Acts[0];
+            var testedAct = person.GetModule<ICombatActModule>().Acts[0];
             testedAct.Efficient.Modifiers.ResultBuff.Should().Be(10);
         }
 
@@ -322,8 +310,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -348,19 +335,23 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var armorProp = new Equipment(armorPropScheme, new ITacticalActScheme[0]);
-
-
+            var armorProp = new Equipment(armorPropScheme, System.Array.Empty<ITacticalActScheme>());
 
             // ACT
-            person.EquipmentCarrier[0] = armorProp;
-
-
+            person.GetModule<IEquipmentModule>()[0] = armorProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(10);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(10);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+        }
+
+        private static IEvolutionModule CreateEvolutionFakeModule()
+        {
+            var evolutionDataMock = new Mock<IEvolutionModule>();
+            evolutionDataMock.SetupGet(x => x.Key).Returns(nameof(IEvolutionModule));
+            var evolutionData = evolutionDataMock.Object;
+            return evolutionData;
         }
 
         /// <summary>
@@ -394,8 +385,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -438,21 +428,17 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var armorHeadProp = new Equipment(armorHeadPropScheme, new ITacticalActScheme[0]);
-            var armorBodyProp = new Equipment(armorBodyPropScheme, new ITacticalActScheme[0]);
-
-
+            var armorHeadProp = new Equipment(armorHeadPropScheme, System.Array.Empty<ITacticalActScheme>());
+            var armorBodyProp = new Equipment(armorBodyPropScheme, System.Array.Empty<ITacticalActScheme>());
 
             // ACT
-            person.EquipmentCarrier[0] = armorHeadProp;
-            person.EquipmentCarrier[1] = armorBodyProp;
-
-
+            person.GetModule<IEquipmentModule>()[0] = armorHeadProp;
+            person.GetModule<IEquipmentModule>()[1] = armorBodyProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(15);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(15);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
         }
 
         /// <summary>
@@ -486,8 +472,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -530,21 +515,17 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var armorHeadProp = new Equipment(armorHeadPropScheme, new ITacticalActScheme[0]);
-            var armorBodyProp = new Equipment(armorBodyPropScheme, new ITacticalActScheme[0]);
-
-
+            var armorHeadProp = new Equipment(armorHeadPropScheme, System.Array.Empty<ITacticalActScheme>());
+            var armorBodyProp = new Equipment(armorBodyPropScheme, System.Array.Empty<ITacticalActScheme>());
 
             // ACT
-            person.EquipmentCarrier[0] = armorHeadProp;
-            person.EquipmentCarrier[1] = armorBodyProp;
-
-
+            person.GetModule<IEquipmentModule>()[0] = armorHeadProp;
+            person.GetModule<IEquipmentModule>()[1] = armorBodyProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(10 + 9 + 6);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(10 + 9 + 6);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
         }
 
         /// <summary>
@@ -578,8 +559,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -625,18 +605,14 @@ namespace Zilon.Core.Tests.Persons
             var armorHeadProp = new Equipment(armorHeadPropScheme);
             var armorBodyProp = new Equipment(armorBodyPropScheme);
 
-
-
             // ACT
-            person.EquipmentCarrier[0] = armorHeadProp;
-            person.EquipmentCarrier[1] = armorBodyProp;
-
-
+            person.GetModule<IEquipmentModule>()[0] = armorHeadProp;
+            person.GetModule<IEquipmentModule>()[1] = armorBodyProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9 + 6 * 2);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9 + 6 * 2);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
         }
 
         /// <summary>
@@ -670,8 +646,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -714,21 +689,17 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var armorHeadProp = new Equipment(armorHeadPropScheme, new ITacticalActScheme[0]);
-            var armorBodyProp = new Equipment(armorBodyPropScheme, new ITacticalActScheme[0]);
-
-
+            var armorHeadProp = new Equipment(armorHeadPropScheme, System.Array.Empty<ITacticalActScheme>());
+            var armorBodyProp = new Equipment(armorBodyPropScheme, System.Array.Empty<ITacticalActScheme>());
 
             // ACT
-            person.EquipmentCarrier[0] = armorHeadProp;
-            person.EquipmentCarrier[1] = armorBodyProp;
-
-
+            person.GetModule<IEquipmentModule>()[0] = armorHeadProp;
+            person.GetModule<IEquipmentModule>()[1] = armorBodyProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
         }
 
         /// <summary>
@@ -762,8 +733,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -811,25 +781,21 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var armorHeadProp = new Equipment(armorHeadPropScheme, new ITacticalActScheme[0]);
-            var armorBodyProp = new Equipment(armorBodyPropScheme, new ITacticalActScheme[0]);
-
-
+            var armorHeadProp = new Equipment(armorHeadPropScheme, System.Array.Empty<ITacticalActScheme>());
+            var armorBodyProp = new Equipment(armorBodyPropScheme, System.Array.Empty<ITacticalActScheme>());
 
             // ACT
-            person.EquipmentCarrier[0] = armorHeadProp;
-            person.EquipmentCarrier[1] = armorBodyProp;
-
-
+            person.GetModule<IEquipmentModule>()[0] = armorHeadProp;
+            person.GetModule<IEquipmentModule>()[1] = armorBodyProp;
 
             // ASSERT
-            person.CombatStats.DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
-            person.CombatStats.DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9 + 6);
-            person.CombatStats.DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].ArmorRank.Should().Be(1 + 9 + 6);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Lesser);
 
-            person.CombatStats.DefenceStats.Armors[1].Impact.Should().Be(ImpactType.Psy);
-            person.CombatStats.DefenceStats.Armors[1].ArmorRank.Should().Be(10);
-            person.CombatStats.DefenceStats.Armors[1].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[1].Impact.Should().Be(ImpactType.Psy);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[1].ArmorRank.Should().Be(10);
+            person.GetModule<ICombatStatsModule>().DefenceStats.Armors[1].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
         }
 
         /// <summary>
@@ -846,7 +812,7 @@ namespace Zilon.Core.Tests.Persons
 
             const int EXPECTED_PERSON_MAX_HP = START_PERSON_HP + LESSER_HP_BONUS;
             const int EXPECTED_PERSON_HP = EXPECTED_PERSON_MAX_HP;
-            
+
 
             var personScheme = new TestPersonScheme
             {
@@ -867,8 +833,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -888,18 +853,14 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var armorProp = new Equipment(armorPropScheme, new ITacticalActScheme[0]);
-
-
+            var armorProp = new Equipment(armorPropScheme, System.Array.Empty<ITacticalActScheme>());
 
             // ACT
-            person.EquipmentCarrier[0] = armorProp;
-
-
+            person.GetModule<IEquipmentModule>()[0] = armorProp;
 
             // ASSERT
-            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Range.Max.Should().Be(EXPECTED_PERSON_MAX_HP);
-            person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_PERSON_HP);
+            person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Range.Max.Should().Be(EXPECTED_PERSON_MAX_HP);
+            person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_PERSON_HP);
         }
 
         /// <summary>
@@ -936,8 +897,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -959,17 +919,13 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var armorProp = new Equipment(armorPropScheme, new ITacticalActScheme[0]);
+            var armorProp = new Equipment(armorPropScheme, System.Array.Empty<ITacticalActScheme>());
 
-            var hpStat = person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
-            person.Survival.DecreaseStat(SurvivalStatType.Health, hpStat.Value / 2);
-
-
+            var hpStat = person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            person.GetModule<ISurvivalModule>().DecreaseStat(SurvivalStatType.Health, hpStat.Value / 2);
 
             // ACT
-            person.EquipmentCarrier[0] = armorProp;
-
-
+            person.GetModule<IEquipmentModule>()[0] = armorProp;
 
             // ASSERT
             hpStat.Range.Max.Should().Be(EXPECTED_PERSON_MAX_HP);
@@ -988,8 +944,6 @@ namespace Zilon.Core.Tests.Persons
             const int START_PERSON_HP = 10;
             const int EXPECTED_DOWNPASS = 2;
 
-            
-
             var personScheme = new TestPersonScheme
             {
                 Hp = START_PERSON_HP,
@@ -1007,7 +961,7 @@ namespace Zilon.Core.Tests.Persons
                         Type = PersonSurvivalStatType.Satiety,
                         MinValue = -100,
                         MaxValue = 100,
-                        StartValue = 0                        
+                        StartValue = 0
                     },
 
                     new TestPersonSurvivalStatSubScheme
@@ -1028,8 +982,7 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionData = CreateEvolutionFakeModule();
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -1051,16 +1004,12 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var satietyStat = person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+            var satietyStat = person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
 
             var armorProp = new Equipment(armorPropScheme);
 
-
-
             // ACT
-            person.EquipmentCarrier[0] = armorProp;
-
-
+            person.GetModule<IEquipmentModule>()[0] = armorProp;
 
             // ASSERT
             satietyStat.DownPassRoll.Should().Be(EXPECTED_DOWNPASS);

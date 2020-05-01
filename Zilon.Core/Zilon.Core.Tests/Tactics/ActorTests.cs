@@ -3,6 +3,7 @@
 using NUnit.Framework;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -21,11 +22,12 @@ namespace Zilon.Core.Tactics.Tests
         public void UserProp_ComsumableWithDetoxication_ReduceIntoxication()
         {
             // ARRANGE
-            var survivalMock = new Mock<ISurvivalData>();
-            var survival = survivalMock.Object;
+            var survivalModuleMock = new Mock<ISurvivalModule>();
+            var survivalModule = survivalModuleMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.Survival).Returns(survival);
+            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalModule);
+            personMock.Setup(x => x.HasModule(It.IsAny<string>())).Returns(true);
             var person = personMock.Object;
 
             var player = new Mock<IPlayer>().Object;
@@ -51,7 +53,7 @@ namespace Zilon.Core.Tactics.Tests
             actor.UseProp(testResource);
 
             // ASSERT
-            survivalMock.Verify(x => x.DecreaseStat(It.Is<SurvivalStatType>(v => v == SurvivalStatType.Intoxication),
+            survivalModuleMock.Verify(x => x.DecreaseStat(It.Is<SurvivalStatType>(v => v == SurvivalStatType.Intoxication),
                 It.IsAny<int>()));
         }
     }

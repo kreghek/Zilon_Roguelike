@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Components;
 using Zilon.Core.Diseases;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -166,7 +167,7 @@ namespace Zilon.Core.Tactics
 
         private void ReduceTargetEquipmentDurability(IActor targetActor)
         {
-            if (EquipmentDurableService is null || targetActor.Person.EquipmentCarrier is null)
+            if (EquipmentDurableService is null || targetActor.Person.GetModuleSafe<IEquipmentModule>() is null)
             {
                 return;
             }
@@ -189,7 +190,7 @@ namespace Zilon.Core.Tactics
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
         private static void HealActor(IActor targetActor, TacticalActRoll tacticalActRoll)
         {
-            targetActor.Person.Survival?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
+            targetActor.Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
 
         /// <summary>
@@ -248,7 +249,7 @@ namespace Zilon.Core.Tactics
         /// <returns> Возвращает числовое значение ранга брони указанного типа. </returns>
         private static int? GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
+            var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
             var actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
@@ -277,7 +278,7 @@ namespace Zilon.Core.Tactics
         /// </remarks>
         private static int GetSuccessArmorSave(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
+            var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
             var actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
@@ -338,7 +339,7 @@ namespace Zilon.Core.Tactics
         /// <returns> Возвращает показатель поглощения брони цели. </returns>
         private static int GetArmorAbsorbtion(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            var actorArmors = targetActor.Person.CombatStats.DefenceStats.Armors;
+            var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
             var actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
@@ -398,7 +399,7 @@ namespace Zilon.Core.Tactics
         {
             var defenceType = HitHelper.GetDefence(offenceType);
 
-            return targetActor.Person.CombatStats.DefenceStats.Defences
+            return targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Defences
                             .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
         }
 
@@ -439,10 +440,10 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var evolutionData = actor.Person.EvolutionData;
+            var evolutionData = actor.Person.GetModuleSafe<IEvolutionModule>();
 
             //TODO Такую же проверку добавить в CountActorDefeat (учёт убиства актёра).
-            if (evolutionData == null)
+            if (evolutionData is null)
             {
                 return;
             }
@@ -459,21 +460,21 @@ namespace Zilon.Core.Tactics
         /// <param name="targetActor"> Актёр-цель заражения. </param>
         private void ProcessDiseaseInfection(IActor sourceActor, IActor targetActor)
         {
-            if (sourceActor.Person?.DiseaseData is null)
+            if (sourceActor.Person?.GetModuleSafe<IDiseaseModule>() is null)
             {
                 return;
             }
 
-            if (targetActor.Person?.DiseaseData is null)
+            if (targetActor.Person?.GetModuleSafe<IDiseaseModule>() is null)
             {
                 return;
             }
 
-            var currentDiseases = sourceActor.Person.DiseaseData.Diseases;
+            var currentDiseases = sourceActor.Person.GetModule<IDiseaseModule>().Diseases;
 
             foreach (var diseaseProcess in currentDiseases)
             {
-                targetActor.Person.DiseaseData.Infect(diseaseProcess.Disease);
+                targetActor.Person.GetModule<IDiseaseModule>().Infect(diseaseProcess.Disease);
                 CountInfectionInScore(targetActor, diseaseProcess.Disease);
             }
         }
@@ -520,13 +521,13 @@ namespace Zilon.Core.Tactics
 
         private Equipment GetDamagedEquipment(IActor targetActor)
         {
-            if (targetActor.Person.EquipmentCarrier == null)
+            if (targetActor.Person.GetModuleSafe<IEquipmentModule>() is null)
             {
                 throw new ArgumentException("Передан персонаж, который не может носить экипировку.");
             }
 
             var armorEquipments = new List<Equipment>();
-            foreach (var currentEquipment in targetActor.Person.EquipmentCarrier)
+            foreach (var currentEquipment in targetActor.Person.GetModule<IEquipmentModule>())
             {
                 if (currentEquipment == null)
                 {
@@ -557,7 +558,7 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var evolutionData = actor.Person.EvolutionData;
+            var evolutionData = actor.Person.GetModule<IEvolutionModule>();
 
             var defeatProgress = new DefeatActorJobProgress(targetActor);
 

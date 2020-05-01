@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -28,46 +29,48 @@ namespace Zilon.Core.Persons
         {
             var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
-            var evolutionData = new EvolutionData(_schemeService);
+            var evolutionData = new EvolutionModule(_schemeService);
 
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, _survivalRandomSource, inventory);
 
+            var equipmentModule = person.GetModule<IEquipmentModule>();
+
             var classRoll = _dice.RollD6();
             switch (classRoll)
             {
                 case 1:
-                    AddEquipment(person.EquipmentCarrier, 2, "short-sword");
-                    AddEquipment(person.EquipmentCarrier, 1, "steel-armor");
-                    AddEquipment(person.EquipmentCarrier, 3, "wooden-shield");
+                    AddEquipment(equipmentModule, 2, "short-sword");
+                    AddEquipment(equipmentModule, 1, "steel-armor");
+                    AddEquipment(equipmentModule, 3, "wooden-shield");
                     break;
 
                 case 2:
-                    AddEquipment(person.EquipmentCarrier, 2, "battle-axe");
-                    AddEquipment(person.EquipmentCarrier, 3, "battle-axe");
-                    AddEquipment(person.EquipmentCarrier, 0, "highlander-helmet");
+                    AddEquipment(equipmentModule, 2, "battle-axe");
+                    AddEquipment(equipmentModule, 3, "battle-axe");
+                    AddEquipment(equipmentModule, 0, "highlander-helmet");
                     break;
 
                 case 3:
-                    AddEquipment(person.EquipmentCarrier, 2, "bow");
-                    AddEquipment(person.EquipmentCarrier, 1, "leather-jacket");
+                    AddEquipment(equipmentModule, 2, "bow");
+                    AddEquipment(equipmentModule, 1, "leather-jacket");
                     AddEquipment(inventory, "short-sword");
                     AddResource(inventory, "arrow", 10);
                     break;
 
                 case 4:
-                    AddEquipment(person.EquipmentCarrier, 2, "fireball-staff");
-                    AddEquipment(person.EquipmentCarrier, 1, "scholar-robe");
-                    AddEquipment(person.EquipmentCarrier, 0, "wizard-hat");
+                    AddEquipment(equipmentModule, 2, "fireball-staff");
+                    AddEquipment(equipmentModule, 1, "scholar-robe");
+                    AddEquipment(equipmentModule, 0, "wizard-hat");
                     AddResource(inventory, "mana", 15);
                     break;
 
                 case 5:
-                    AddEquipment(person.EquipmentCarrier, 2, "pistol");
-                    AddEquipment(person.EquipmentCarrier, 0, "elder-hat");
+                    AddEquipment(equipmentModule, 2, "pistol");
+                    AddEquipment(equipmentModule, 0, "elder-hat");
                     AddResource(inventory, "bullet-45", 5);
 
                     AddResource(inventory, "packed-food", 1);
@@ -86,7 +89,7 @@ namespace Zilon.Core.Persons
             return person;
         }
 
-        private void AddEquipment(Inventory inventory, string equipmentSid)
+        private void AddEquipment(IInventoryModule inventory, string equipmentSid)
         {
             try
             {
@@ -100,13 +103,13 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void AddEquipment(IEquipmentCarrier equipmentCarrier, int slotIndex, string equipmentSid)
+        private void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, string equipmentSid)
         {
             try
             {
                 var equipmentScheme = _schemeService.GetScheme<IPropScheme>(equipmentSid);
                 var equipment = _propFactory.CreateEquipment(equipmentScheme);
-                equipmentCarrier[slotIndex] = equipment;
+                equipmentModule[slotIndex] = equipment;
             }
             catch (KeyNotFoundException exception)
             {
@@ -114,7 +117,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private void AddResource(Inventory inventory, string resourceSid, int count)
+        private void AddResource(IInventoryModule inventory, string resourceSid, int count)
         {
             try
             {
