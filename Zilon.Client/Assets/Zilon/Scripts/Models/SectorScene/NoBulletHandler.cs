@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 
 public class NoBulletHandler : MonoBehaviour
@@ -44,7 +45,7 @@ public class NoBulletHandler : MonoBehaviour
 
         if (activeAct.Constrains?.PropResourceType != null)
         {
-            var bulletInInventory = from resource in person.Inventory.CalcActualItems().OfType<Resource>()
+            var bulletInInventory = from resource in person.GetModule<IInventoryModule>().CalcActualItems().OfType<Resource>()
                                     where resource.Scheme.Bullet?.Caliber == activeAct.Constrains.PropResourceType
                                     where resource.Count >= activeAct.Constrains.PropResourceCount
                                     select resource;

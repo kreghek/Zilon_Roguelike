@@ -11,6 +11,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 
@@ -198,7 +199,7 @@ public class SectorUiHandler : MonoBehaviour
         // Защита от бага.
         // Пользователь может нажать T и выполнить переход.
         // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
-        if (_playerState.ActiveActor?.Actor.Person.Survival.IsDead != false)
+        if (_playerState.ActiveActor?.Actor.Person.GetModule<ISurvivalModule>().IsDead != false)
         {
             return;
         }
@@ -211,7 +212,7 @@ public class SectorUiHandler : MonoBehaviour
         // Защита от бага.
         // Пользователь может нажать Q и выйти из сектора на глобальную карту.
         // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
-        if (_playerState.ActiveActor?.Actor.Person.Survival.IsDead != false)
+        if (_playerState.ActiveActor?.Actor.Person.GetModule<ISurvivalModule>().IsDead != false)
         {
             return;
         }

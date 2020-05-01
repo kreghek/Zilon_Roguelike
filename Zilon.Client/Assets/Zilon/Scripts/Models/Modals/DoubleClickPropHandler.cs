@@ -7,6 +7,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 
 public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
 {
@@ -56,7 +57,7 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
 
         var actor = _playerState.ActiveActor.Actor;
         var person = actor.Person;
-        var personSlots = person.EquipmentCarrier.Slots;
+        var personSlots = person.GetModule<IEquipmentModule>().Slots;
 
         for (var slotIndex = 0; slotIndex < personSlots.Length; slotIndex++)
         {
