@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.Persons;
+
+namespace Zilon.Core.PersonGeneration
 {
     public interface IHumanPersonFactory
     {

@@ -17,16 +17,16 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Получение модуля статического объекта.
         /// </summary>
-        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
+        /// <typeparam name="TPersonModule">Тип модуля.</typeparam>
         /// <returns>Возвращает объект модуля.</returns>
-        TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IPersonModule;
+        TPersonModule GetModule<TPersonModule>(string key) where TPersonModule : IPersonModule;
 
         /// <summary>
         /// Добавление модуля статического объекта.
         /// </summary>
-        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
+        /// <typeparam name="TPersonModule">Тип модуля.</typeparam>
         /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
-        void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IPersonModule;
+        void AddModule<TPersonModule>(TPersonModule sectorObjectModule) where TPersonModule : IPersonModule;
 
         /// <summary>
         /// Проверка наличия модуля статического объекта.

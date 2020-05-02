@@ -2,10 +2,11 @@
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonGeneration
 {
     public sealed class ClassHumanPersonFactory : IHumanPersonFactory
     {

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonGeneration
 {
     public sealed class RandomHumanPersonFactory : IHumanPersonFactory
     {
@@ -20,25 +21,28 @@ namespace Zilon.Core.Persons
         private const string BODY_DROP_SID = "start-armors";
         private const string OFF_WEAPON_DROP_SID = "start-off-weapons";
         private const string START_PROP_DROP_SID = "start-props";
-        
+
         private readonly ISchemeService _schemeService;
         private readonly ISurvivalRandomSource _survivalRandomSource;
         private readonly IPropFactory _propFactory;
         private readonly IDropResolver _dropResolver;
         private readonly IPersonPerkInitializator _personPerkInitializator;
+        private readonly IDice _dice;
 
         public RandomHumanPersonFactory(
             ISchemeService schemeService,
             ISurvivalRandomSource survivalRandomSource,
             IPropFactory propFactory,
             IDropResolver dropResolver,
-            IPersonPerkInitializator personPerkInitializator)
+            IPersonPerkInitializator personPerkInitializator,
+            IDice dice)
         {
-            _schemeService = schemeService ?? throw new System.ArgumentNullException(nameof(schemeService));
-            _survivalRandomSource = survivalRandomSource ?? throw new System.ArgumentNullException(nameof(survivalRandomSource));
-            _propFactory = propFactory ?? throw new System.ArgumentNullException(nameof(propFactory));
-            _dropResolver = dropResolver ?? throw new System.ArgumentNullException(nameof(dropResolver));
-            _personPerkInitializator = personPerkInitializator;
+            _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
+            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
+            _propFactory = propFactory ?? throw new ArgumentNullException(nameof(propFactory));
+            _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
+            _personPerkInitializator = personPerkInitializator ?? throw new ArgumentNullException(nameof(personPerkInitializator));
+            _dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
         public HumanPerson Create()
@@ -53,11 +57,32 @@ namespace Zilon.Core.Persons
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, _survivalRandomSource, inventory);
 
+            RollAndAddPersonAttributesToPerson(person);
+
             RollStartEquipment(inventory, person);
 
             RollTraitPerks(evolutionData);
 
             return person;
+        }
+
+        private void RollAndAddPersonAttributesToPerson(IPerson person)
+        {
+            var attributes = new[] { 
+                RollAttribute(PersonAttributeType.PhysicalStrength),
+                RollAttribute(PersonAttributeType.PhysicalAgility),
+                RollAttribute(PersonAttributeType.Perception)
+            };
+
+            var attributesModule = new AttributesModule(attributes);
+
+            person.AddModule(attributesModule);
+        }
+
+        private PersonAttribute RollAttribute(PersonAttributeType attributeType)
+        {
+            var value = 10 + _dice.Roll(-5, 5);
+            return new PersonAttribute(attributeType, value);
         }
 
         private void RollTraitPerks(IEvolutionModule evolutionData)
