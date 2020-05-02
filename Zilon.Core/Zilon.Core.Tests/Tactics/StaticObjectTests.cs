@@ -57,7 +57,6 @@ namespace Zilon.Core.Tactics.Tests
             factTestModule.Should().BeOfType<DropTablePropChest>();
         }
 
-        [StaticObjectModule]
         private interface ITestModule: IStaticObjectModule
         {
         }
