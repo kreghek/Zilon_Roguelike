@@ -51,7 +51,7 @@ namespace Zilon.Core.PersonGeneration
 
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, _survivalRandomSource, inventory);
+            var person = new HumanPerson(personScheme, defaultActScheme);
 
             var inventoryModule = new InventoryModule();
             person.AddModule(inventoryModule);
@@ -73,11 +73,15 @@ namespace Zilon.Core.PersonGeneration
 
             RollStartEquipment(inventoryModule, person);
 
-            var combatActModule = new CombatActModule();
+            var defacultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
+            var combatActModule = new CombatActModule(defacultActScheme, equipmentModule, effectsModule, evolutionModule);
             person.AddModule(combatActModule);
 
             var combatStatsModule = new CombatStatsModule();
             person.AddModule(combatStatsModule);
+
+            var diseaseModule = new DiseaseModule();
+            person.AddModule(diseaseModule);
 
             return person;
         }
