@@ -7,6 +7,7 @@ using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.PersonGeneration
@@ -29,6 +30,8 @@ namespace Zilon.Core.PersonGeneration
         private readonly IDropResolver _dropResolver;
         private readonly IPersonPerkInitializator _personPerkInitializator;
         private readonly IDice _dice;
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public RandomHumanPersonFactory(
             ISchemeService schemeService,
@@ -81,6 +84,8 @@ namespace Zilon.Core.PersonGeneration
 
             var diseaseModule = new DiseaseModule();
             person.AddModule(diseaseModule);
+
+            person.PlayerEventLogService = PlayerEventLogService;
 
             return person;
         }
