@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -77,7 +78,7 @@ namespace Zilon.Core.PersonGeneration
             var combatActModule = new CombatActModule(defacultActScheme, equipmentModule, effectsModule, evolutionModule);
             person.AddModule(combatActModule);
 
-            var combatStatsModule = new CombatStatsModule();
+            var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
             person.AddModule(combatStatsModule);
 
             var diseaseModule = new DiseaseModule();
