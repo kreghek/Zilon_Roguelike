@@ -49,19 +49,35 @@ namespace Zilon.Core.PersonGeneration
         {
             var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var inventory = new InventoryModule();
-
-            var evolutionData = new EvolutionModule(_schemeService);
-
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
 
             var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, _survivalRandomSource, inventory);
 
+            var inventoryModule = new InventoryModule();
+            person.AddModule(inventoryModule);
+
+            var equipmentModule = new EquipmentModule(personScheme.Slots);
+            person.AddModule(equipmentModule);
+
+            var effectsModule = new EffectsModule();
+            person.AddModule(effectsModule);
+
+            var evolutionModule = new EvolutionModule(_schemeService);
+            person.AddModule(evolutionModule);
+            RollTraitPerks(evolutionModule);
+
+            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, effectsModule, evolutionModule, equipmentModule);
+            person.AddModule(survivalModule);
+
             RollAndAddPersonAttributesToPerson(person);
 
-            RollStartEquipment(inventory, person);
+            RollStartEquipment(inventoryModule, person);
 
-            RollTraitPerks(evolutionData);
+            var combatActModule = new CombatActModule();
+            person.AddModule(combatActModule);
+
+            var combatStatsModule = new CombatStatsModule();
+            person.AddModule(combatStatsModule);
 
             return person;
         }
