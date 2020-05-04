@@ -18,7 +18,7 @@ namespace Zilon.Emulation.Common
         /// <returns> Возвращает созданного персонажа. </returns>
         public static HumanPerson CreateStartPerson(IServiceProvider serviceProvider)
         {
-            var personFactory = serviceProvider.GetRequiredService<IHumanPersonFactory>();
+            var personFactory = serviceProvider.GetRequiredService<IPersonFactory>();
             var startPerson = personFactory.Create();
             return startPerson;
         }

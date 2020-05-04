@@ -117,7 +117,7 @@ namespace Zilon.Core.Tactics
 
             UpdateEquipments();
 
-            UpdateActorActs();
+            UpdateActorCombatActs();
         }
 
         private void UpdateDiseases()
@@ -133,16 +133,19 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void UpdateActorActs()
+        private void UpdateActorCombatActs()
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                if (actor.Person?.GetModuleSafe<ICombatActModule>()?.Acts is null)
+                var combatActModule = actor.Person?.GetModuleSafe<ICombatActModule>();
+                if (combatActModule is null)
                 {
                     continue;
                 }
 
-                foreach (var act in actor.Person.GetModule<ICombatActModule>().Acts)
+                var combatActs = combatActModule.CalcCombatActs();
+
+                foreach (var act in combatActs)
                 {
                     act.UpdateCooldown();
                 }

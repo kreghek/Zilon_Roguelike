@@ -49,7 +49,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (Actor.Person.GetModuleSafe<IEquipmentModule>() == null)
             {
-                yield return Actor.Person.GetModule<ICombatActModule>().Acts.First();
+                yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
             }
             else
             {
@@ -68,7 +68,7 @@ namespace Zilon.Core.Tactics.Behaviour
                         continue;
                     }
 
-                    var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().Acts
+                    var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
                                         where act.Equipment == slotEquipment
                                         select act;
 
@@ -84,7 +84,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (!usedEquipmentActs)
                 {
-                    yield return Actor.Person.GetModule<ICombatActModule>().Acts.First();
+                    yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
                 }
             }
         }

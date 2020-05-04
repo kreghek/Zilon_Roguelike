@@ -11,7 +11,7 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.PersonGeneration
 {
-    public sealed class RandomHumanPersonFactory : IHumanPersonFactory
+    public sealed class RandomHumanPersonFactory : IPersonFactory
     {
         private const int HEAD_SLOT_INDEX = 0;
         private const int BODY_SLOT_INDEX = 1;
@@ -46,13 +46,11 @@ namespace Zilon.Core.PersonGeneration
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
-        public HumanPerson Create()
+        public IPerson Create()
         {
             var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
-
-            var person = new HumanPerson(personScheme, defaultActScheme);
+            var person = new HumanPerson(personScheme);
 
             var inventoryModule = new InventoryModule();
             person.AddModule(inventoryModule);
@@ -74,8 +72,8 @@ namespace Zilon.Core.PersonGeneration
 
             RollStartEquipment(inventoryModule, person);
 
-            var defacultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
-            var combatActModule = new CombatActModule(defacultActScheme, equipmentModule, effectsModule, evolutionModule);
+            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
+            var combatActModule = new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
             person.AddModule(combatActModule);
 
             var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
