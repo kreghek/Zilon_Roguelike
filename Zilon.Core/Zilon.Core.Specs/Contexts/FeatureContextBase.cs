@@ -19,6 +19,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
@@ -276,20 +277,9 @@ namespace Zilon.Core.Specs.Contexts
             [NotNull] IGraphNode startNode,
             [NotNull] IPerkResolver perkResolver)
         {
-            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
-            var survivalRandomSource = ServiceProvider.GetRequiredService<ISurvivalRandomSource>();
+            var personFactory = ServiceProvider.GetRequiredService<IPersonFactory>();
 
-            var evolutionData = new EvolutionModule(schemeService);
-
-            var inventory = new InventoryModule();
-
-            var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
-
-            var person = new HumanPerson(personScheme,
-                defaultActScheme,
-                evolutionData,
-                survivalRandomSource,
-                inventory);
+            var person = personFactory.Create();
 
             var actor = new Actor(person, player, startNode, perkResolver);
 

@@ -46,6 +46,7 @@ namespace Zilon.Core.Tests.Persons
         /// Тест проверяет, что монстру корректно присваивается значение Hp.
         /// </summary>
         [Test]
+        [Ignore("Этот тест должен быть переписан, т.к. теперь хп только в модуле выживания.")]
         public void Constructor_HpInScheme_ActorHpEqualsSchemeHp()
         {
             // ARRANGE
@@ -59,8 +60,8 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             var monster = new MonsterPerson(monsterScheme);
 
-            // ARRANGE
-            monster.Hp.Should().Be(expectedHp);
+            //// ARRANGE
+            //monster.Hp.Should().Be(expectedHp);
         }
 
         /// <summary>

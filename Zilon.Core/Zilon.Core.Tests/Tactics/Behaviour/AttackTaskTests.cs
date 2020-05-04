@@ -44,7 +44,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var tacticalAct = tacticalActMock.Object;
 
             var combatActModuleMock = new Mock<ICombatActModule>();
-            combatActModuleMock.SetupGet(x => x.Acts)
+            combatActModuleMock.Setup(x => x.CalcCombatActs())
                 .Returns(new[] { tacticalAct });
             var combatActModule = combatActModuleMock.Object;
 

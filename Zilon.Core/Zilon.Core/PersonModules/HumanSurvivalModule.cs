@@ -42,6 +42,17 @@ namespace Zilon.Core.PersonModules
             CalcSurvivalStats();
         }
 
+        public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
+            [NotNull] ISurvivalRandomSource randomSource) : this(
+                personScheme,
+                randomSource,
+                effectsModule: null,
+                evolutionModule: null,
+                equipmentModule: null)
+        {
+
+        }
+
         private void RegisterModuleEventHandlers()
         {
             if (_equipmentModule != null)

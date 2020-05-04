@@ -107,11 +107,7 @@ namespace Zilon.Core.Tests.ProgressStoring
 
             var evolutionData = new EvolutionModule(schemeService);
 
-            var person = new HumanPerson(personSchemes["human-person"],
-                                         tacticalActSchemes["default"],
-                                         evolutionData,
-                                         survivalRandomSource,
-                                         inventory);
+            var person = new HumanPerson(personSchemes["human-person"]);
             person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value = 7;
 
             // Назначаем экипировку

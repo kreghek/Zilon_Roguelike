@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Microsoft.Extensions.DependencyInjection;
+
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 
@@ -16,7 +17,7 @@ namespace Zilon.Emulation.Common
         /// </summary>
         /// <param name="serviceProvider"> Контейнер DI, откуда извлекаются сервисы для создания персонажа. </param>
         /// <returns> Возвращает созданного персонажа. </returns>
-        public static HumanPerson CreateStartPerson(IServiceProvider serviceProvider)
+        public static IPerson CreateStartPerson(IServiceProvider serviceProvider)
         {
             var personFactory = serviceProvider.GetRequiredService<IPersonFactory>();
             var startPerson = personFactory.Create();
