@@ -24,7 +24,11 @@ namespace Zilon.Core.PersonModules
 
         /// <inheritdoc/>
         public IEnumerable<IDiseaseProcess> Diseases { get => _diseases; }
+
+        /// <inheritdoc/>
         public string Key { get => nameof(IDiseaseModule); }
+
+        /// <inheritdoc/>
         public bool IsActive { get; set; }
 
         /// <inheritdoc/>

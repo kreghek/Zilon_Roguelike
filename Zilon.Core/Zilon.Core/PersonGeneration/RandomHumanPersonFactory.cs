@@ -240,7 +240,7 @@ namespace Zilon.Core.PersonGeneration
             equipmentModule[slotIndex] = equipment;
         }
 
-        private void AddPropToInventory(IPropStore inventory, IProp prop)
+        private static void AddPropToInventory(IPropStore inventory, IProp prop)
         {
             inventory.Add(prop);
         }

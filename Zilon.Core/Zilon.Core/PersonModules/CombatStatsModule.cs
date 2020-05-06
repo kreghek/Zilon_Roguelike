@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -20,8 +21,15 @@ namespace Zilon.Core.PersonModules
             DefenceStats = new PersonDefenceStats(Array.Empty<PersonDefenceItem>(), Array.Empty<PersonArmorItem>());
             IsActive = true;
 
-            _evolutionModule = evolutionModule;
-            _equipmentModule = equipmentModule;
+            _evolutionModule = evolutionModule ?? throw new ArgumentNullException(nameof(evolutionModule));
+            _equipmentModule = equipmentModule ?? throw new ArgumentNullException(nameof(equipmentModule));
+
+            _equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
+        }
+
+        private void EquipmentModule_EquipmentChanged(object sender, EquipmentChangedEventArgs e)
+        {
+            CalcCombatStats();
         }
 
         /// <summary>
@@ -123,9 +131,12 @@ namespace Zilon.Core.PersonModules
                     AddStatToDict(bonusDict, SkillStatType.Ballistic, rule.Level, PersonRuleDirection.Positive);
                     break;
 
-                    //case PersonRuleType.Undefined:
-                    //default:
-                    //    throw new ArgumentOutOfRangeException($"Тип правила перка {rule.Type} не поддерживается.");
+                case PersonRuleType.Undefined:
+                    throw new InvalidOperationException("Undefined rule");
+
+                default:
+                    // Остальные правила обрабатываются в других модулях.
+                    break;
             }
         }
 

@@ -25,7 +25,7 @@ namespace Zilon.Core.Persons
 
         public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
 
-        public HumanPerson([NotNull] IPersonScheme scheme) : base()
+        public HumanPerson([NotNull] IPersonScheme scheme)
         {
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
 

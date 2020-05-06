@@ -39,7 +39,6 @@ namespace Zilon.Core.PersonModules
             _evolutionModule = evolutionModule;
         }
 
-        public ITacticalAct[] Acts { get; set; }
         public string Key { get => nameof(ICombatActModule); }
         public bool IsActive { get; set; }
 
@@ -49,7 +48,7 @@ namespace Zilon.Core.PersonModules
             return CalcActs(_defaultActScheme, _equipmentModule, _effectsModule, perks);
         }
 
-        private static ITacticalAct[] CalcActs(ITacticalActScheme defaultActScheme,
+        private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment> equipments,
             IEffectsModule effects,
             IEnumerable<IPerk> perks)
@@ -59,30 +58,23 @@ namespace Zilon.Core.PersonModules
                 throw new ArgumentNullException(nameof(equipments));
             }
 
-            var actList = new List<ITacticalAct>();
-
             var defaultAct = CreateTacticalAct(defaultActScheme, equipment: null, effects: effects, perks: perks);
-            actList.Insert(0, defaultAct);
+            yield return defaultAct;
 
-            if (equipments != null)
+            foreach (var equipment in equipments)
             {
-                foreach (var equipment in equipments)
+                if (equipment == null)
                 {
-                    if (equipment == null)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    foreach (var actScheme in equipment.Acts)
-                    {
-                        var act = CreateTacticalAct(actScheme, equipment, effects, perks);
+                foreach (var actScheme in equipment.Acts)
+                {
+                    var act = CreateTacticalAct(actScheme, equipment, effects, perks);
 
-                        actList.Insert(0, act);
-                    }
+                    yield return act;
                 }
             }
-
-            return actList.ToArray();
         }
 
         private IEnumerable<IPerk> GetPerksSafe()
@@ -134,18 +126,30 @@ namespace Zilon.Core.PersonModules
                 {
                     foreach (var rule in currentLevelScheme.Rules)
                     {
-                        switch (rule.Type)
-                        {
-                            case PersonRuleType.Damage:
-                                efficientModifierValue = GetRollModifierByPerkRule(equipment, efficientModifierValue, rule);
-                                break;
-
-                            case PersonRuleType.ToHit:
-                                toHitModifierValue = GetRollModifierByPerkRule(equipment, toHitModifierValue, rule);
-                                break;
-                        }
+                        GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
                     }
                 }
+            }
+        }
+
+        private static void GetRuleModifierValue(PerkRuleSubScheme rule, Equipment equipment, ref int toHitModifierValue, ref int efficientModifierValue)
+        {
+            switch (rule.Type)
+            {
+                case PersonRuleType.Damage:
+                    efficientModifierValue = GetRollModifierByPerkRule(equipment, efficientModifierValue, rule);
+                    break;
+
+                case PersonRuleType.ToHit:
+                    toHitModifierValue = GetRollModifierByPerkRule(equipment, toHitModifierValue, rule);
+                    break;
+
+                case PersonRuleType.Undefined:
+                    throw new InvalidOperationException("Правило не определно.");
+
+                default:
+                    // Все остальные правила игнорируем, потому что этот модуль их не обрабатывает.
+                    break;
             }
         }
 

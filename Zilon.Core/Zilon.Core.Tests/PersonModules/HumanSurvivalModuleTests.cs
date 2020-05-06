@@ -29,8 +29,6 @@ namespace Zilon.Core.Tests.PersonModules
         {
             // ARRANGE
 
-            var personScheme = CreatePersonScheme();
-
             const int STAT_RATE = 1;
             const int MIN_STAT_VALUE = 0;
             const int MAX_STAT_VALUE = 1;

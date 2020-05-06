@@ -416,43 +416,53 @@ namespace Zilon.Core.PersonModules
 
                 foreach (var rule in rules)
                 {
-                    switch (rule.Type)
-                    {
-                        case EquipCommonRuleType.Health:
-                            BonusToHealth(rule.Level, rule.Direction, ref bonusList);
-                            break;
-
-                        case EquipCommonRuleType.HealthIfNoBody:
-
-                            var requirementsCompleted = true;
-
-                            for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
-                            {
-                                if ((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0
-                                    && equipmentModule[slotIndex] != null)
-                                {
-                                    requirementsCompleted = false;
-                                    break;
-                                }
-                            }
-
-                            if (requirementsCompleted)
-                            {
-                                BonusToHealth(rule.Level, rule.Direction, ref bonusList);
-                            }
-
-                            break;
-
-                        case EquipCommonRuleType.HungerResistance:
-                            BonusToDownPass(SurvivalStatType.Satiety, rule.Level, rule.Direction, ref bonusList);
-                            break;
-
-                        case EquipCommonRuleType.ThristResistance:
-                            BonusToDownPass(SurvivalStatType.Hydration, rule.Level, rule.Direction, ref bonusList);
-                            break;
-                    }
+                    bonusList = ProcessRuleAndChangeBonusList(bonusList, equipmentModule, rule);
                 }
             }
+        }
+
+        private List<SurvivalStatBonus> ProcessRuleAndChangeBonusList(List<SurvivalStatBonus> bonusList, IEquipmentModule equipmentModule, PersonRule rule)
+        {
+            switch (rule.Type)
+            {
+                case EquipCommonRuleType.Health:
+                    BonusToHealth(rule.Level, rule.Direction, ref bonusList);
+                    break;
+
+                case EquipCommonRuleType.HealthIfNoBody:
+
+                    var requirementsCompleted = true;
+
+                    for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
+                    {
+                        if ((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0
+                            && equipmentModule[slotIndex] != null)
+                        {
+                            requirementsCompleted = false;
+                            break;
+                        }
+                    }
+
+                    if (requirementsCompleted)
+                    {
+                        BonusToHealth(rule.Level, rule.Direction, ref bonusList);
+                    }
+
+                    break;
+
+                case EquipCommonRuleType.HungerResistance:
+                    BonusToDownPass(SurvivalStatType.Satiety, rule.Level, rule.Direction, ref bonusList);
+                    break;
+
+                case EquipCommonRuleType.ThristResistance:
+                    BonusToDownPass(SurvivalStatType.Hydration, rule.Level, rule.Direction, ref bonusList);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Правило {rule.Type} не обрабатывается.");
+            }
+
+            return bonusList;
         }
 
         /// <summary>
@@ -533,6 +543,8 @@ namespace Zilon.Core.PersonModules
                     break;
 
                 case PersonRuleLevel.None:
+                    Debug.Fail("Предположительно, это ошибка.");
+                    break;
                 default:
                     Debug.Fail("Предположительно, это ошибка.");
                     break;
