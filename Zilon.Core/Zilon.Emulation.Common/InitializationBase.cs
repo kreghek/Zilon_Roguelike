@@ -51,6 +51,7 @@ namespace Zilon.Emulation.Common
         protected virtual void RegisterMonsterGeneratorRandomSource(IServiceCollection serviceRegistry)
         {
             serviceRegistry.AddScoped<IMonsterGenerator, MonsterGenerator>();
+            serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
             serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
         }
 

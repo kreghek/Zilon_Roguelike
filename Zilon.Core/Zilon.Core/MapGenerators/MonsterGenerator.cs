@@ -4,6 +4,7 @@ using System.Linq;
 
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -20,6 +21,7 @@ namespace Zilon.Core.MapGenerators
     public class MonsterGenerator : IMonsterGenerator
     {
         private readonly ISchemeService _schemeService;
+        private readonly IMonsterPersonFactory _monsterFactory;
         private readonly IMonsterGeneratorRandomSource _generatorRandomSource;
 
         /// <summary>
@@ -28,9 +30,11 @@ namespace Zilon.Core.MapGenerators
         /// <param name="schemeService"> Сервис схем. </param>
         /// <param name="generatorRandomSource"> Источник рандома для генератора. </param>
         public MonsterGenerator(ISchemeService schemeService,
+            IMonsterPersonFactory monsterFactory,
             IMonsterGeneratorRandomSource generatorRandomSource)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
+            _monsterFactory = monsterFactory ?? throw new ArgumentNullException(nameof(monsterFactory));
             _generatorRandomSource = generatorRandomSource ?? throw new ArgumentNullException(nameof(generatorRandomSource));
         }
 
@@ -225,9 +229,9 @@ namespace Zilon.Core.MapGenerators
             return actor;
         }
 
-        private static IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode, IBotPlayer botPlayer)
+        private IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode, IBotPlayer botPlayer)
         {
-            var person = new MonsterPerson(monsterScheme);
+            var person = _monsterFactory.Create(monsterScheme);
             var actor = new Actor(person, botPlayer, startNode);
             actorManager.Add(actor);
             return actor;

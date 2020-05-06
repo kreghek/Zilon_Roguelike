@@ -13,7 +13,6 @@ namespace Zilon.Core.PersonGeneration
         {
             var monsterPerson = new MonsterPerson(monsterScheme);
 
-
             var Acts = new ITacticalAct[] {
                     new MonsterTacticalAct(monsterScheme.PrimaryAct)
                 };
@@ -36,7 +35,7 @@ namespace Zilon.Core.PersonGeneration
             var survivalModule = new MonsterSurvivalModule(monsterScheme);
             monsterPerson.AddModule(survivalModule);
 
-            var diseaseModule = new DiseaseModule();
+            var diseaseModule = new MonsterDiseaseModule();
             monsterPerson.AddModule(diseaseModule);
 
             return monsterPerson;
