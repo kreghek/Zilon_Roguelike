@@ -6,7 +6,7 @@ using BenchmarkDotNet.Attributes;
 using JetBrains.Annotations;
 
 using Microsoft.Extensions.DependencyInjection;
-
+using Zilon.Core.Benchmark;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Graphs;
@@ -148,7 +148,10 @@ namespace Zilon.Core.Benchmarks.Move
                 .SingleOrDefault(x => x.IsStart).Nodes
                 .First();
 
-            var playerActorVm = CreateHumanActorVm(humanPlayer,
+            var survivalRandomSource = _serviceProvider.GetRequiredService<ISurvivalRandomSource>();
+            var playerActorVm = BenchHelper.CreateHumanActorVm(humanPlayer,
+                schemeService,
+                survivalRandomSource,
                 personScheme,
                 actorManager,
                 playerActorStartNode);
@@ -156,38 +159,6 @@ namespace Zilon.Core.Benchmarks.Move
             //Лучше централизовать переключение текущего актёра только в playerState
             playerState.ActiveActor = playerActorVm;
             humanActorTaskSource.SwitchActor(playerState.ActiveActor.Actor);
-        }
-
-        private IActorViewModel CreateHumanActorVm([NotNull] IPlayer player,
-        [NotNull] IPersonScheme personScheme,
-        [NotNull] IActorManager actorManager,
-        [NotNull] IGraphNode startNode)
-        {
-            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
-            var survivalRandomSource = _serviceProvider.GetRequiredService<ISurvivalRandomSource>();
-
-            var inventory = new InventoryModule();
-
-            var evolutionData = new EvolutionModule(schemeService);
-
-            var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
-
-            var person = new HumanPerson(personScheme,
-                defaultActScheme,
-                evolutionData,
-                survivalRandomSource,
-                inventory);
-
-            var actor = new Actor(person, player, startNode);
-
-            actorManager.Add(actor);
-
-            var actorViewModel = new TestActorViewModel
-            {
-                Actor = actor
-            };
-
-            return actorViewModel;
         }
     }
 }

@@ -33,7 +33,7 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
 
     public event EventHandler Closed;
 
-    public void Init(HumanPerson playerPerson)
+    public void Init(IPerson playerPerson)
     {
         var currentLanguage = _uiSettingService.CurrentLanguage;
 

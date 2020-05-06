@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -8,9 +9,9 @@ namespace Zilon.Core.PersonModules
 {
     public abstract class SurvivalModuleBase : ISurvivalModule
     {
-        protected SurvivalModuleBase(SurvivalStat[] stats)
+        protected SurvivalModuleBase(IEnumerable<SurvivalStat> stats)
         {
-            Stats = stats ?? throw new ArgumentNullException(nameof(stats));
+            Stats = stats?.ToArray() ?? throw new ArgumentNullException(nameof(stats));
             IsActive = true;
         }
 

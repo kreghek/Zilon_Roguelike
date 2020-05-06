@@ -26,6 +26,6 @@ namespace Zilon.Core.Client.Windows
         /// Показать окно создания персонажа.
         /// Используется на старте игры, чтобы показать начальные перки и экипировку персонажа.
         /// </summary>
-        void ShowCreatePersonModal(HumanPerson playerPerson);
+        void ShowCreatePersonModal(IPerson playerPerson);
     }
 }

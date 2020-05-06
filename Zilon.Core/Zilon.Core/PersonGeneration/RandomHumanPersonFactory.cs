@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.PersonGeneration
 {
-    public sealed class RandomHumanPersonFactory : IHumanPersonFactory
+    public sealed class RandomHumanPersonFactory : IPersonFactory
     {
         private const int HEAD_SLOT_INDEX = 0;
         private const int BODY_SLOT_INDEX = 1;
@@ -20,44 +23,94 @@ namespace Zilon.Core.Persons
         private const string BODY_DROP_SID = "start-armors";
         private const string OFF_WEAPON_DROP_SID = "start-off-weapons";
         private const string START_PROP_DROP_SID = "start-props";
-        
+
         private readonly ISchemeService _schemeService;
         private readonly ISurvivalRandomSource _survivalRandomSource;
         private readonly IPropFactory _propFactory;
         private readonly IDropResolver _dropResolver;
         private readonly IPersonPerkInitializator _personPerkInitializator;
+        private readonly IDice _dice;
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public RandomHumanPersonFactory(
             ISchemeService schemeService,
             ISurvivalRandomSource survivalRandomSource,
             IPropFactory propFactory,
             IDropResolver dropResolver,
-            IPersonPerkInitializator personPerkInitializator)
+            IPersonPerkInitializator personPerkInitializator,
+            IDice dice)
         {
-            _schemeService = schemeService ?? throw new System.ArgumentNullException(nameof(schemeService));
-            _survivalRandomSource = survivalRandomSource ?? throw new System.ArgumentNullException(nameof(survivalRandomSource));
-            _propFactory = propFactory ?? throw new System.ArgumentNullException(nameof(propFactory));
-            _dropResolver = dropResolver ?? throw new System.ArgumentNullException(nameof(dropResolver));
-            _personPerkInitializator = personPerkInitializator;
+            _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
+            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
+            _propFactory = propFactory ?? throw new ArgumentNullException(nameof(propFactory));
+            _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
+            _personPerkInitializator = personPerkInitializator ?? throw new ArgumentNullException(nameof(personPerkInitializator));
+            _dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
-        public HumanPerson Create()
+        public IPerson Create(string personSchemeSid)
         {
-            var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
+            var personScheme = _schemeService.GetScheme<IPersonScheme>(personSchemeSid);
 
-            var inventory = new InventoryModule();
+            var person = new HumanPerson(personScheme);
 
-            var evolutionData = new EvolutionModule(_schemeService);
+            var inventoryModule = new InventoryModule();
+            person.AddModule(inventoryModule);
 
-            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
+            var equipmentModule = new EquipmentModule(personScheme.Slots);
+            person.AddModule(equipmentModule);
 
-            var person = new HumanPerson(personScheme, defaultActScheme, evolutionData, _survivalRandomSource, inventory);
+            var effectsModule = new EffectsModule();
+            person.AddModule(effectsModule);
 
-            RollStartEquipment(inventory, person);
+            var evolutionModule = new EvolutionModule(_schemeService);
+            person.AddModule(evolutionModule);
+            RollTraitPerks(evolutionModule);
 
-            RollTraitPerks(evolutionData);
+            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, effectsModule, evolutionModule, equipmentModule)
+            {
+                PlayerEventLogService = PlayerEventLogService
+            };
+            person.AddModule(survivalModule);
+
+            RollAndAddPersonAttributesToPerson(person);
+
+            RollStartEquipment(inventoryModule, person);
+
+            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
+            var combatActModule = new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
+            person.AddModule(combatActModule);
+
+            var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
+            person.AddModule(combatStatsModule);
+
+            var diseaseModule = new DiseaseModule();
+            person.AddModule(diseaseModule);
+
+            person.PlayerEventLogService = PlayerEventLogService;
 
             return person;
+        }
+
+        private void RollAndAddPersonAttributesToPerson(IPerson person)
+        {
+            var attributes = new[] {
+                RollAttribute(PersonAttributeType.PhysicalStrength),
+                RollAttribute(PersonAttributeType.Dexterity),
+                RollAttribute(PersonAttributeType.Perception),
+                RollAttribute(PersonAttributeType.Constitution)
+            };
+
+            var attributesModule = new AttributesModule(attributes);
+
+            person.AddModule(attributesModule);
+        }
+
+        private PersonAttribute RollAttribute(PersonAttributeType attributeType)
+        {
+            var value = 10 + _dice.Roll(-5, 5);
+            return new PersonAttribute(attributeType, value);
         }
 
         private void RollTraitPerks(IEvolutionModule evolutionData)
@@ -187,7 +240,7 @@ namespace Zilon.Core.Persons
             equipmentModule[slotIndex] = equipment;
         }
 
-        private void AddPropToInventory(IPropStore inventory, IProp prop)
+        private static void AddPropToInventory(IPropStore inventory, IProp prop)
         {
             inventory.Add(prop);
         }

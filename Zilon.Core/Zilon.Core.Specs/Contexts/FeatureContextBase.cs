@@ -19,6 +19,7 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
@@ -186,18 +187,15 @@ namespace Zilon.Core.Specs.Contexts
         public void AddHumanActor(string personSid, OffsetCoords startCoords)
         {
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
-            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
             var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
             var actorManager = sectorManager.CurrentSector.ActorManager;
             var humanPlayer = ServiceProvider.GetRequiredService<HumanPlayer>();
             var perkResolver = ServiceProvider.GetRequiredService<IPerkResolver>();
 
-            var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
-
             // Подготовка актёров
             var humanStartNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
-            var humanActor = CreateHumanActor(humanPlayer, personScheme, humanStartNode, perkResolver);
+            var humanActor = CreateHumanActor(humanPlayer, personSid, humanStartNode, perkResolver);
 
             humanTaskSource.SwitchActor(humanActor);
 
@@ -272,24 +270,13 @@ namespace Zilon.Core.Specs.Contexts
         }
 
         private IActor CreateHumanActor([NotNull] IPlayer player,
-            [NotNull] IPersonScheme personScheme,
+            [NotNull] string personSchemeSid,
             [NotNull] IGraphNode startNode,
             [NotNull] IPerkResolver perkResolver)
         {
-            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
-            var survivalRandomSource = ServiceProvider.GetRequiredService<ISurvivalRandomSource>();
+            var personFactory = ServiceProvider.GetRequiredService<IPersonFactory>();
 
-            var evolutionData = new EvolutionModule(schemeService);
-
-            var inventory = new InventoryModule();
-
-            var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
-
-            var person = new HumanPerson(personScheme,
-                defaultActScheme,
-                evolutionData,
-                survivalRandomSource,
-                inventory);
+            var person = personFactory.Create(personSchemeSid);
 
             var actor = new Actor(person, player, startNode, perkResolver);
 
@@ -300,7 +287,9 @@ namespace Zilon.Core.Specs.Contexts
             [NotNull] IMonsterScheme monsterScheme,
             [NotNull] IGraphNode startNode)
         {
-            var monsterPerson = new MonsterPerson(monsterScheme);
+            var monsterFactory = ServiceProvider.GetRequiredService<IMonsterPersonFactory>();
+
+            var monsterPerson = monsterFactory.Create(monsterScheme);
 
             var actor = new Actor(monsterPerson, player, startNode);
 
@@ -329,6 +318,8 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
             serviceCollection.AddSingleton<IActorInteractionBus, ActorInteractionBus>();
+            serviceCollection.AddSingleton<IPersonFactory, TestEmptyPersonFactory>();
+            serviceCollection.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
         }
 
         private static void RegisterGameLoop(IServiceCollection serviceCollection)

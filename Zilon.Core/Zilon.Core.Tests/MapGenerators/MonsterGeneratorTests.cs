@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -60,7 +61,10 @@ namespace Zilon.Core.Tests.MapGenerators
             var propContainerManager = propContainerManagerMock.Object;
             propContainerManagerMock.SetupGet(x => x.Items).Returns(System.Array.Empty<IStaticObject>());
 
+            var monsterFactory = new MonsterPersonFactory();
+
             var monsterGenerator = new MonsterGenerator(schemeService,
+                monsterFactory,
                 randomSource);
 
             var map = await SquareMapFactory.CreateAsync(20).ConfigureAwait(false);

@@ -29,8 +29,6 @@ namespace Zilon.Core.Tests.PersonModules
         {
             // ARRANGE
 
-            var personScheme = CreatePersonScheme();
-
             const int STAT_RATE = 1;
             const int MIN_STAT_VALUE = 0;
             const int MAX_STAT_VALUE = 1;
@@ -50,9 +48,7 @@ namespace Zilon.Core.Tests.PersonModules
                 }
             };
 
-            var survivalData = new HumanSurvivalModule(personScheme,
-                survivalStats,
-                survivalRandomSource);
+            var survivalData = new HumanSurvivalModule(survivalStats, survivalRandomSource);
 
             // ACT
             survivalData.Update();

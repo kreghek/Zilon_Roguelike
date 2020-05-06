@@ -1,12 +1,14 @@
-﻿using Zilon.Core.Persons;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
     public interface ICombatActModule: IPersonModule
     {
         /// <summary>
-        /// Набор всех действий.
+        /// Рассчёт всех действий, используемых в бою.
         /// </summary>
-        ITacticalAct[] Acts { get; set; }
+        IEnumerable<ITacticalAct> CalcCombatActs();
     }
 }

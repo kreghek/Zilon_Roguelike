@@ -121,13 +121,9 @@ namespace Zilon.Core.ProgressStoring
 
             RestoreEvolutionData(schemeService, storedPerson, evolutionData);
 
-            var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
+            var person = new HumanPerson(personScheme);
 
-            var person = new HumanPerson(personScheme,
-                                         defaultActScheme,
-                                         evolutionData,
-                                         survivalRandomSource,
-                                         inventory);
+            //TODO Создать необходимые модули и заполнить их.
 
             foreach (var survivalStoredItem in storedPerson.Survival)
             {

@@ -46,7 +46,7 @@ namespace Zilon.Core.Tests.Commands
             var cooldownResolvedAct = CreateActWithResolvedCooldown();
 
             var combatActModuleMock = new Mock<ICombatActModule>();
-            combatActModuleMock.SetupGet(x => x.Acts)
+            combatActModuleMock.Setup(x => x.CalcCombatActs())
                 .Returns(new[] { simpleAct, cooldownAct, cooldownResolvedAct });
             var combatActModule = combatActModuleMock.Object;
 

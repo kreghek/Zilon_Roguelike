@@ -15,6 +15,7 @@ using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -103,7 +104,7 @@ public class SectorVM : MonoBehaviour
 
     [Inject] private readonly ProgressStorageService _progressStorageService;
 
-    [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
+    [Inject] private readonly IPersonFactory _humanPersonFactory;
 
     [Inject] private readonly UiSettingService _uiSettingService;
 

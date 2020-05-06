@@ -29,7 +29,7 @@ namespace Zilon.Emulation.Common
             BotSettings = botSettings;
         }
 
-        public async Task StartAsync(HumanPerson startPerson, IServiceProvider serviceProvider)
+        public async Task StartAsync(IPerson startPerson, IServiceProvider serviceProvider)
         {
             if (serviceProvider is null)
             {
@@ -85,7 +85,7 @@ namespace Zilon.Emulation.Common
         protected abstract void ProcessEnd();
 
         private static IActor CreateHumanActor(HumanPlayer humanPlayer,
-            HumanPerson humanPerson,
+            IPerson humanPerson,
             ISectorManager sectorManager,
             IPlayerEventLogService playerEventLogService)
         {
@@ -94,7 +94,6 @@ namespace Zilon.Emulation.Common
                 .Nodes
                 .First();
 
-            humanPerson.PlayerEventLogService = playerEventLogService;
             humanPlayer.MainPerson = humanPerson;
 
             var actor = new Actor(humanPerson, humanPlayer, playerActorStartNode);
@@ -106,7 +105,7 @@ namespace Zilon.Emulation.Common
             return actor;
         }
 
-        private async Task<IActor> CreateSectorAsync(HumanPerson startPerson, IServiceProvider _globalServiceProvider)
+        private async Task<IActor> CreateSectorAsync(IPerson startPerson, IServiceProvider _globalServiceProvider)
         {
             if (ServiceScope != null)
             {
