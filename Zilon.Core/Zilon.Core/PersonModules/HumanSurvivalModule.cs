@@ -7,8 +7,10 @@ using JetBrains.Annotations;
 
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Auxiliary;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 
 namespace Zilon.Core.PersonModules
 {
@@ -19,6 +21,8 @@ namespace Zilon.Core.PersonModules
         private readonly IEffectsModule _effectsModule;
         private readonly IEvolutionModule _evolutionModule;
         private readonly IEquipmentModule _equipmentModule;
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource,
@@ -152,6 +156,20 @@ namespace Zilon.Core.PersonModules
 
         private void Stat_Changed(object sender, EventArgs e)
         {
+            var stat = (SurvivalStat)sender;
+
+            if (stat.KeySegments is null)
+            {
+                return;
+            }
+
+            PersonEffectHelper.UpdateSurvivalEffect(
+                _effectsModule,
+                stat,
+                stat.KeySegments,
+                _randomSource,
+                PlayerEventLogService);
+
             DoStatChanged((SurvivalStat)sender);
         }
 

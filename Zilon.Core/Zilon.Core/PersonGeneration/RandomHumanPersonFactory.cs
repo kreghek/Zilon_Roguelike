@@ -68,7 +68,10 @@ namespace Zilon.Core.PersonGeneration
             person.AddModule(evolutionModule);
             RollTraitPerks(evolutionModule);
 
-            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, effectsModule, evolutionModule, equipmentModule);
+            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, effectsModule, evolutionModule, equipmentModule)
+            {
+                PlayerEventLogService = PlayerEventLogService
+            };
             person.AddModule(survivalModule);
 
             RollAndAddPersonAttributesToPerson(person);

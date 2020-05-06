@@ -190,7 +190,12 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
-            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>();
+            container.AddSingleton<RandomHumanPersonFactory>();
+            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider=> {
+                var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
+                factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+                return factory;
+            });
             container.AddSingleton<IPersonPerkInitializator, PersonPerkInitializator>();
 
             container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();
