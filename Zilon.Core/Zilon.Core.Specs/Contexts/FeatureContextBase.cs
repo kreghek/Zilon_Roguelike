@@ -290,7 +290,9 @@ namespace Zilon.Core.Specs.Contexts
             [NotNull] IMonsterScheme monsterScheme,
             [NotNull] IGraphNode startNode)
         {
-            var monsterPerson = new MonsterPerson(monsterScheme);
+            var monsterFactory = ServiceProvider.GetRequiredService<IMonsterPersonFactory>();
+
+            var monsterPerson = monsterFactory.Create(monsterScheme);
 
             var actor = new Actor(monsterPerson, player, startNode);
 
@@ -319,6 +321,8 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
             serviceCollection.AddSingleton<IActorInteractionBus, ActorInteractionBus>();
+            serviceCollection.AddSingleton<IPersonFactory, TestEmptyPersonFactory>();
+            serviceCollection.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
         }
 
         private static void RegisterGameLoop(IServiceCollection serviceCollection)
