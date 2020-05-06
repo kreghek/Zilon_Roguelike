@@ -84,7 +84,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
                         Console.WriteLine(prop.Scheme.Name.En);
                         break;
                 }
-
             }
         }
 

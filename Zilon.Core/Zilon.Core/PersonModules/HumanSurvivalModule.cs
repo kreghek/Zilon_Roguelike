@@ -290,7 +290,6 @@ namespace Zilon.Core.PersonModules
             return keyPoints.SingleOrDefault(x => x.Level == level);
         }
 
-
         private void FillSurvivalBonusesFromEffects([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_effectsModule is null)
