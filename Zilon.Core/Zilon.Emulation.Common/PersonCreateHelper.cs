@@ -20,7 +20,7 @@ namespace Zilon.Emulation.Common
         public static IPerson CreateStartPerson(IServiceProvider serviceProvider)
         {
             var personFactory = serviceProvider.GetRequiredService<IPersonFactory>();
-            var startPerson = personFactory.Create();
+            var startPerson = personFactory.Create("human-person");
             return startPerson;
         }
     }

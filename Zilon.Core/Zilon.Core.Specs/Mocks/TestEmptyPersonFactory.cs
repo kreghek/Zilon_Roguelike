@@ -18,9 +18,9 @@ namespace Zilon.Core.Specs.Mocks
             _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
         }
 
-        public IPerson Create()
+        public IPerson Create(string personSchemeSid)
         {
-            var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
+            var personScheme = _schemeService.GetScheme<IPersonScheme>(personSchemeSid);
 
             var person = new HumanPerson(personScheme);
 

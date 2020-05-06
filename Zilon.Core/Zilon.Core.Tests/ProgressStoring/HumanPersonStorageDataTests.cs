@@ -24,6 +24,7 @@ namespace Zilon.Core.Tests.ProgressStoring
     public class HumanPersonStorageDataTests
     {
         [Test]
+        [Ignore("Тест пока не актуален, т.к. прогресс сейчас не сохраняется")]
         public void Restore_MinimunPersonAfterSave_RestoredPersonEqualsOriginal()
         {
             // ARRANGE

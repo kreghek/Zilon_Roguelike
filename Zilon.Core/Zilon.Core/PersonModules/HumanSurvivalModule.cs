@@ -50,7 +50,13 @@ namespace Zilon.Core.PersonModules
                 evolutionModule: null,
                 equipmentModule: null)
         {
+        }
 
+        public HumanSurvivalModule([NotNull] IEnumerable<SurvivalStat> personStats,
+            [NotNull] ISurvivalRandomSource randomSource) : base(
+                personStats)
+        {
+            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
         }
 
         private void RegisterModuleEventHandlers()
@@ -92,7 +98,7 @@ namespace Zilon.Core.PersonModules
             ApplySurvivalBonuses(bonusList);
         }
 
-        private static SurvivalStat[] GetStats([NotNull] IPersonScheme personScheme)
+        private static IEnumerable<SurvivalStat> GetStats([NotNull] IPersonScheme personScheme)
         {
             if (personScheme is null)
             {
@@ -368,6 +374,11 @@ namespace Zilon.Core.PersonModules
 
         private void FillSurvivalBonusesFromEquipments([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
+            if (_equipmentModule is null)
+            {
+                return;
+            }
+
             var equipmentModule = _equipmentModule;
 
             for (var i = 0; i < equipmentModule.Count(); i++)

@@ -50,7 +50,7 @@ namespace Zilon.Core.Tests.PersonModules
                 }
             };
 
-            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource);
+            var survivalData = new HumanSurvivalModule(survivalStats, survivalRandomSource);
 
             // ACT
             survivalData.Update();

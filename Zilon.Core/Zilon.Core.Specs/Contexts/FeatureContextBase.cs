@@ -187,18 +187,15 @@ namespace Zilon.Core.Specs.Contexts
         public void AddHumanActor(string personSid, OffsetCoords startCoords)
         {
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
-            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
             var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
             var actorManager = sectorManager.CurrentSector.ActorManager;
             var humanPlayer = ServiceProvider.GetRequiredService<HumanPlayer>();
             var perkResolver = ServiceProvider.GetRequiredService<IPerkResolver>();
 
-            var personScheme = schemeService.GetScheme<IPersonScheme>(personSid);
-
             // Подготовка актёров
             var humanStartNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
-            var humanActor = CreateHumanActor(humanPlayer, personScheme, humanStartNode, perkResolver);
+            var humanActor = CreateHumanActor(humanPlayer, personSid, humanStartNode, perkResolver);
 
             humanTaskSource.SwitchActor(humanActor);
 
@@ -273,13 +270,13 @@ namespace Zilon.Core.Specs.Contexts
         }
 
         private IActor CreateHumanActor([NotNull] IPlayer player,
-            [NotNull] IPersonScheme personScheme,
+            [NotNull] string personSchemeSid,
             [NotNull] IGraphNode startNode,
             [NotNull] IPerkResolver perkResolver)
         {
             var personFactory = ServiceProvider.GetRequiredService<IPersonFactory>();
 
-            var person = personFactory.Create();
+            var person = personFactory.Create(personSchemeSid);
 
             var actor = new Actor(person, player, startNode, perkResolver);
 
