@@ -12,6 +12,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -55,7 +56,7 @@ public class PlayerPersonInitiator : MonoBehaviour
 
     [NotNull]
     [Inject]
-    private readonly IHumanPersonFactory _humanPersonFactory;
+    private readonly IPersonFactory _humanPersonFactory;
 
     [NotNull]
     [Inject]
@@ -110,7 +111,7 @@ public class PlayerPersonInitiator : MonoBehaviour
         {
             if (!_progressStorageService.LoadPerson())
             {
-                var playerPerson = _humanPersonFactory.Create();
+                var playerPerson = _humanPersonFactory.Create("human-person");
 
                 _humanPlayer.MainPerson = playerPerson;
 
@@ -122,7 +123,6 @@ public class PlayerPersonInitiator : MonoBehaviour
 
         var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
         _playerEventLogService.Actor = actor;
-        _humanPlayer.MainPerson.PlayerEventLogService = _playerEventLogService;
 
         actorManager.Add(actor);
 
@@ -150,7 +150,7 @@ public class PlayerPersonInitiator : MonoBehaviour
         return actorViewModel;
     }
 
-    private void ShowCreatePersonModal(HumanPerson playerPerson)
+    private void ShowCreatePersonModal(IPerson playerPerson)
     {
         _sectorModalManager.ShowCreatePersonModal(playerPerson);
     }

@@ -42,7 +42,7 @@ public class ActPanelHandler : MonoBehaviour
 
         _equipmentModule.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
 
-        var acts = actor.Person.GetModule<ICombatActModule>().Acts;
+        var acts = actor.Person.GetModule<ICombatActModule>().CalcCombatActs().ToArray();
 
         UpdateSelectedAct(currentAct: null, acts);
 
@@ -62,7 +62,7 @@ public class ActPanelHandler : MonoBehaviour
         var actorVm = _playerState.ActiveActor;
         var actor = actorVm.Actor;
 
-        var acts = actor.Person.GetModule<ICombatActModule>().Acts;
+        var acts = actor.Person.GetModule<ICombatActModule>().CalcCombatActs().ToArray();
 
         UpdateSelectedAct(currentAct, acts);
 

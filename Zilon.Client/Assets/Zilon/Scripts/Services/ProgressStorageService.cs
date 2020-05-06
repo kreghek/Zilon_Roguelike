@@ -51,9 +51,9 @@ namespace Assets.Zilon.Scripts.Services
 
         public void SavePerson()
         {
-            var storageDataObject = HumanPersonStorageData.Create(_humanPlayer.MainPerson);
+            //var storageDataObject = HumanPersonStorageData.Create(_humanPlayer.MainPerson);
 
-            SaveInner(storageDataObject, "Person.txt");
+            //SaveInner(storageDataObject, "Person.txt");
         }
 
         public bool LoadPerson()
