@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 
 using JetBrains.Annotations;
 
-using Zilon.Core.PersonModules;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons

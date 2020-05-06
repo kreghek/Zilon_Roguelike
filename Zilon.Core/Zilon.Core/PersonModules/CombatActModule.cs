@@ -53,13 +53,13 @@ namespace Zilon.Core.PersonModules
             IEffectsModule effects,
             IEnumerable<IPerk> perks)
         {
-            if (equipments is null)
-            {
-                throw new ArgumentNullException(nameof(equipments));
-            }
-
             var defaultAct = CreateTacticalAct(defaultActScheme, equipment: null, effects: effects, perks: perks);
             yield return defaultAct;
+
+            if (equipments == null)
+            {
+                yield break;
+            }
 
             foreach (var equipment in equipments)
             {

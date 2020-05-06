@@ -121,8 +121,6 @@ namespace Zilon.Core.ProgressStoring
 
             RestoreEvolutionData(schemeService, storedPerson, evolutionData);
 
-            var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
-
             var person = new HumanPerson(personScheme);
 
             //TODO Создать необходимые модули и заполнить их.
