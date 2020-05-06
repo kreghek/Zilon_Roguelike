@@ -163,12 +163,15 @@ namespace Zilon.Core.PersonModules
                 return;
             }
 
-            PersonEffectHelper.UpdateSurvivalEffect(
-                _effectsModule,
-                stat,
-                stat.KeySegments,
-                _randomSource,
-                PlayerEventLogService);
+            if (_effectsModule != null)
+            {
+                PersonEffectHelper.UpdateSurvivalEffect(
+                    _effectsModule,
+                    stat,
+                    stat.KeySegments,
+                    _randomSource,
+                    PlayerEventLogService);
+            }
 
             DoStatChanged((SurvivalStat)sender);
         }
@@ -474,9 +477,8 @@ namespace Zilon.Core.PersonModules
         private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction,
             ref List<SurvivalStatBonus> bonuses)
         {
-            var survivalModule = this;
             const SurvivalStatType hpStatType = SurvivalStatType.Health;
-            var hpStat = survivalModule.Stats.SingleOrDefault(x => x.Type == hpStatType);
+            var hpStat = Stats.SingleOrDefault(x => x.Type == hpStatType);
             if (hpStat != null)
             {
                 var bonus = 0;
@@ -497,6 +499,12 @@ namespace Zilon.Core.PersonModules
                     case PersonRuleLevel.Absolute:
                         bonus = 10;
                         break;
+
+                    case PersonRuleLevel.None:
+                        throw new InvalidOperationException("Неопределённое правило.");
+
+                    default:
+                        throw new InvalidOperationException($"Правило {level} не обрабатывается.");
                 }
 
                 if (direction == PersonRuleDirection.Negative)

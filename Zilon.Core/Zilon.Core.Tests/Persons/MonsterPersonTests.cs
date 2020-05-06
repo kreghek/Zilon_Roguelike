@@ -43,28 +43,6 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
-        /// Тест проверяет, что монстру корректно присваивается значение Hp.
-        /// </summary>
-        [Test]
-        [Ignore("Этот тест должен быть переписан, т.к. теперь хп только в модуле выживания.")]
-        public void Constructor_HpInScheme_ActorHpEqualsSchemeHp()
-        {
-            // ARRANGE
-            const int expectedHp = 100;
-            var monsterScheme = new TestMonsterScheme
-            {
-                Hp = expectedHp,
-                PrimaryAct = new TestTacticalActStatsSubScheme()
-            };
-
-            // ACT
-            var monster = new MonsterPerson(monsterScheme);
-
-            //// ARRANGE
-            //monster.Hp.Should().Be(expectedHp);
-        }
-
-        /// <summary>
         /// Тест проверяет, что для монстров выбрасывается сообщение на не поддерживаемые компоненты (Развитие).
         /// </summary>
         [Test]
