@@ -12,5 +12,12 @@ namespace Zilon.Core.PersonModules
         /// </summary>
         /// <returns></returns>
         IEnumerable<PersonAttribute> GetAttributes();
+
+        /// <summary>
+        /// Возвращает значение конкретного атрибута персонажа.
+        /// </summary>
+        /// <param name="personAttributeType"> Требуемый тип атриубта. </param>
+        /// <returns> Возвращает атрибут. </returns>
+        PersonAttribute GetAttribute(PersonAttributeType personAttributeType);
     }
 }

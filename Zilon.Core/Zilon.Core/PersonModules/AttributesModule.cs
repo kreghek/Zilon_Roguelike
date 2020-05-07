@@ -28,6 +28,11 @@ namespace Zilon.Core.PersonModules
         /// <inheritdoc/>
         public bool IsActive { get; set; }
 
+        public PersonAttribute GetAttribute(PersonAttributeType personAttributeType)
+        {
+            return _attributes.SingleOrDefault(x => x.Type == personAttributeType);
+        }
+
         /// <inheritdoc/>
         public IEnumerable<PersonAttribute> GetAttributes()
         {
