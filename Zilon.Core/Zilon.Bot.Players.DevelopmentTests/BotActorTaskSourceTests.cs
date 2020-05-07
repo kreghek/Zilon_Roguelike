@@ -85,6 +85,12 @@ namespace Zilon.Bot.Players.DevelopmentTests
                         break;
                 }
             }
+
+            Console.WriteLine("Start attributes:");
+            foreach (var attr in humanPerson.GetModule<IAttributesModule>().GetAttributes())
+            {
+                Console.WriteLine($"{attr.Type}: {attr.Value}");
+            }
         }
 
         private static void PrintResult(ServiceProvider serviceProvider)
