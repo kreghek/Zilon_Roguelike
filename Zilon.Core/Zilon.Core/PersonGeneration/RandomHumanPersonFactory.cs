@@ -111,7 +111,7 @@ namespace Zilon.Core.PersonGeneration
 
         private PersonAttribute RollAttribute(PersonAttributeType attributeType)
         {
-            var value = 10 + _dice.Roll(-5, 5);
+            var value = 10 + _dice.Roll(-4, 4);
             return new PersonAttribute(attributeType, value);
         }
 
