@@ -113,6 +113,66 @@ namespace Zilon.Core.Tests.PersonModules
             monitor.Should().Raise(nameof(ISurvivalModule.Dead));
         }
 
+        /// <summary>
+        /// Проверяет, что при конституции больше базового значения увеличивается запас ХП.
+        /// </summary>
+        [Test]
+        public void Constructor_ConstitutionAboveBase_HpIncreased()
+        {
+            // ARRANGE
+
+            const int PERSON_HP = 1;
+            const int EXPECTED_HP = PERSON_HP + 2;
+            const int CONSTITUTION_BASE = 10;
+            const int CONSTITUTION_VALUE = CONSTITUTION_BASE + 1;
+
+            var personScheme = CreatePersonScheme();
+            var survivalRandomSource = CreateSurvivalRandomSource();
+
+            personScheme.Hp = PERSON_HP;
+
+            var attributesModuleMock = new Mock<IAttributesModule>();
+            attributesModuleMock.Setup(x => x.GetAttribute(PersonAttributeType.Constitution))
+                .Returns(new PersonAttribute(PersonAttributeType.Constitution, CONSTITUTION_VALUE));
+            var attributesModule = attributesModuleMock.Object;
+
+            // ACT
+            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
+
+            // ASSERT
+            survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_HP);
+        }
+
+        /// <summary>
+        /// Проверяет, что при конституции ниже базового значения увеличивается запас ХП.
+        /// </summary>
+        [Test]
+        public void Constructor_ConstitutionBelowBase_HpDecreased()
+        {
+            // ARRANGE
+
+            const int PERSON_HP = 3;
+            const int EXPECTED_HP = PERSON_HP - 2;
+            const int CONSTITUTION_BASE = 10;
+            const int CONSTITUTION_VALUE = CONSTITUTION_BASE - 1;
+
+            var personScheme = CreatePersonScheme();
+            var survivalRandomSource = CreateSurvivalRandomSource();
+
+            personScheme.Hp = PERSON_HP;
+
+            var attributesModuleMock = new Mock<IAttributesModule>();
+            attributesModuleMock.Setup(x => x.GetAttribute(PersonAttributeType.Constitution))
+                .Returns(new PersonAttribute(PersonAttributeType.Constitution, CONSTITUTION_VALUE));
+            var attributesModule = attributesModuleMock.Object;
+
+            // ACT
+            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
+
+            // ASSERT
+            survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_HP);
+        }
+
         public static IPersonScheme CreatePersonScheme()
         {
             var personScheme = new TestPersonScheme

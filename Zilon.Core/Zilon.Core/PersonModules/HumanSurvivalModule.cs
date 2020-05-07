@@ -18,6 +18,7 @@ namespace Zilon.Core.PersonModules
     {
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
+        private readonly IAttributesModule _attributesModule;
         private readonly IEffectsModule _effectsModule;
         private readonly IEvolutionModule _evolutionModule;
         private readonly IEquipmentModule _equipmentModule;
@@ -33,6 +34,7 @@ namespace Zilon.Core.PersonModules
         {
             _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
+            _attributesModule = attributesModule ?? throw new ArgumentNullException(nameof(attributesModule));
             _effectsModule = effectsModule;
             _evolutionModule = evolutionModule;
             _equipmentModule = equipmentModule;
@@ -312,7 +314,9 @@ namespace Zilon.Core.PersonModules
         /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
         public override void ResetStats()
         {
-            Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health)?.ChangeStatRange(0, _personScheme.Hp);
+            var constitutionBonus = GetConstitutionHpBonus(_attributesModule);
+            var totalHp = _personScheme.Hp + constitutionBonus;
+            Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health)?.ChangeStatRange(0, totalHp);
 
             foreach (var stat in Stats)
             {
