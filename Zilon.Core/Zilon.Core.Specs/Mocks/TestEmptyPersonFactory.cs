@@ -24,6 +24,15 @@ namespace Zilon.Core.Specs.Mocks
 
             var person = new HumanPerson(personScheme);
 
+            var attributes = new[] {
+                new PersonAttribute(PersonAttributeType.PhysicalStrength, 10),
+                new PersonAttribute(PersonAttributeType.Dexterity, 10),
+                new PersonAttribute(PersonAttributeType.Perception, 10),
+                new PersonAttribute(PersonAttributeType.Constitution, 10)
+            };
+            var attributesModule = new AttributesModule(attributes);
+            person.AddModule(attributesModule);
+
             var inventoryModule = new InventoryModule();
             person.AddModule(inventoryModule);
 
@@ -36,17 +45,8 @@ namespace Zilon.Core.Specs.Mocks
             var evolutionModule = new EvolutionModule(_schemeService);
             person.AddModule(evolutionModule);
 
-            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, effectsModule, evolutionModule, equipmentModule);
+            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, attributesModule, effectsModule, evolutionModule, equipmentModule);
             person.AddModule(survivalModule);
-
-            var attributes = new[] {
-                new PersonAttribute(PersonAttributeType.PhysicalStrength, 10),
-                new PersonAttribute(PersonAttributeType.Dexterity, 10),
-                new PersonAttribute(PersonAttributeType.Perception, 10),
-                new PersonAttribute(PersonAttributeType.Constitution, 10)
-            };
-            var attributesModule = new AttributesModule(attributes);
-            person.AddModule(attributesModule);
 
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
             var combatActModule = new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);

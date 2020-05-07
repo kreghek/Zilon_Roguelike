@@ -18,6 +18,7 @@ namespace Zilon.Core.PersonModules
     {
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
+        private readonly IAttributesModule _attributesModule;
         private readonly IEffectsModule _effectsModule;
         private readonly IEvolutionModule _evolutionModule;
         private readonly IEquipmentModule _equipmentModule;
@@ -26,12 +27,14 @@ namespace Zilon.Core.PersonModules
 
         public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource,
+            [NotNull] IAttributesModule attributesModule,
             IEffectsModule effectsModule,
             IEvolutionModule evolutionModule,
-            IEquipmentModule equipmentModule) : base(GetStats(personScheme))
+            IEquipmentModule equipmentModule) : base(GetStats(personScheme, attributesModule))
         {
             _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
+            _attributesModule = attributesModule ?? throw new ArgumentNullException(nameof(attributesModule));
             _effectsModule = effectsModule;
             _evolutionModule = evolutionModule;
             _equipmentModule = equipmentModule;
@@ -47,9 +50,11 @@ namespace Zilon.Core.PersonModules
         }
 
         public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
-            [NotNull] ISurvivalRandomSource randomSource) : this(
+            [NotNull] ISurvivalRandomSource randomSource,
+            [NotNull] IAttributesModule attributesModule) : this(
                 personScheme,
                 randomSource,
+                attributesModule,
                 effectsModule: null,
                 evolutionModule: null,
                 equipmentModule: null)
@@ -102,47 +107,51 @@ namespace Zilon.Core.PersonModules
             ApplySurvivalBonuses(bonusList);
         }
 
-        private static IEnumerable<SurvivalStat> GetStats([NotNull] IPersonScheme personScheme)
+        private static IEnumerable<SurvivalStat> GetStats([NotNull] IPersonScheme personScheme, [NotNull] IAttributesModule attributesModule)
         {
             if (personScheme is null)
             {
                 throw new ArgumentNullException(nameof(personScheme));
             }
+
+            if (attributesModule is null)
+            {
+                throw new ArgumentNullException(nameof(attributesModule));
+            }
+
+            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null);
+        }
+
+        private static IEnumerable<SurvivalStat> GetStatsIterator([NotNull] IPersonScheme personScheme, IAttributesModule attributesModule)
+        {
             // Устанавливаем характеристики выживания персонажа
-            var statList = new List<SurvivalStat>();
-            SetHitPointsStat(personScheme, statList);
+            yield return SetHitPointsStat(personScheme, attributesModule);
 
             // Выставляем сытость/упоённость
             if (personScheme.SurvivalStats != null)
             {
-                CreateStatFromScheme(personScheme.SurvivalStats,
+                yield return CreateStatFromScheme(personScheme.SurvivalStats,
                     SurvivalStatType.Satiety,
-                    PersonSurvivalStatType.Satiety,
-                    statList);
+                    PersonSurvivalStatType.Satiety);
 
-                CreateStatFromScheme(personScheme.SurvivalStats,
+                yield return CreateStatFromScheme(personScheme.SurvivalStats,
                     SurvivalStatType.Hydration,
-                    PersonSurvivalStatType.Hydration,
-                    statList);
+                    PersonSurvivalStatType.Hydration);
 
-                CreateStatFromScheme(personScheme.SurvivalStats,
+                yield return CreateStatFromScheme(personScheme.SurvivalStats,
                     SurvivalStatType.Intoxication,
-                    PersonSurvivalStatType.Intoxication,
-                    statList);
+                    PersonSurvivalStatType.Intoxication);
 
-                CreateStatFromScheme(personScheme.SurvivalStats,
+                yield return CreateStatFromScheme(personScheme.SurvivalStats,
                     SurvivalStatType.Wound,
-                    PersonSurvivalStatType.Wound,
-                    statList);
+                    PersonSurvivalStatType.Wound);
             }
 
-            CreateUselessStat(SurvivalStatType.Breath, statList);
-            CreateUselessStat(SurvivalStatType.Energy, statList);
-
-            return statList.ToArray();
+            yield return CreateUselessStat(SurvivalStatType.Breath);
+            yield return CreateUselessStat(SurvivalStatType.Energy);
         }
 
-        private static void CreateUselessStat(SurvivalStatType statType, List<SurvivalStat> statList)
+        private static SurvivalStat CreateUselessStat(SurvivalStatType statType)
         {
             var stat = new SurvivalStat(100, 0, 100)
             {
@@ -151,7 +160,7 @@ namespace Zilon.Core.PersonModules
                 DownPassRoll = 0
             };
 
-            statList.Add(stat);
+            return stat;
         }
 
         private void Stat_Changed(object sender, EventArgs e)
@@ -176,26 +185,53 @@ namespace Zilon.Core.PersonModules
             DoStatChanged((SurvivalStat)sender);
         }
 
-        private static void CreateStatFromScheme(IPersonSurvivalStatSubScheme[] survivalStats,
+        private static SurvivalStat CreateStatFromScheme(IPersonSurvivalStatSubScheme[] survivalStats,
             SurvivalStatType statType,
-            PersonSurvivalStatType schemeStatType,
-            List<SurvivalStat> statList)
+            PersonSurvivalStatType schemeStatType)
         {
             var stat = CreateStat(statType, schemeStatType, survivalStats);
-            if (stat != null)
-            {
-                statList.Add(stat);
-            }
+            return stat ?? null;
         }
 
-        private static void SetHitPointsStat(IPersonScheme personScheme, IList<SurvivalStat> statList)
+        private static SurvivalStat SetHitPointsStat(IPersonScheme personScheme, IAttributesModule attributesModule)
         {
-            var hpStat = new HpSurvivalStat(personScheme.Hp, 0, personScheme.Hp)
+            var constitutionHpBonus = GetConstitutionHpBonus(attributesModule);
+
+            // В схеме храним базовые ХП.
+            // Конституция добавяет или снижает ХП.
+            var totalHp = personScheme.Hp + constitutionHpBonus;
+            var hpStat = new HpSurvivalStat(totalHp, 0, totalHp)
             {
                 Type = SurvivalStatType.Health
             };
 
-            statList.Add(hpStat);
+            return hpStat;
+        }
+
+        private static int GetConstitutionHpBonus(IAttributesModule attributesModule)
+        {
+            var constitutionAttribute = attributesModule.GetAttribute(PersonAttributeType.Constitution);
+            int constitutionHpBonus;
+            if (constitutionAttribute is null)
+            {
+                constitutionHpBonus = 0;
+            }
+            else
+            {
+                const int CONSTITUTION_HP_INFLUENCE = 2;
+                const int BASE_CONSTITUTION = 10;
+
+                if (constitutionAttribute.Value > 10)
+                {
+                    constitutionHpBonus = ((int)constitutionAttribute.Value - BASE_CONSTITUTION) * CONSTITUTION_HP_INFLUENCE;
+                }
+                else
+                {
+                    constitutionHpBonus = -(BASE_CONSTITUTION - (int)constitutionAttribute.Value) * CONSTITUTION_HP_INFLUENCE;
+                }
+            }
+
+            return constitutionHpBonus;
         }
 
         /// <summary>Обновление состояния данных о выживании.</summary>
@@ -278,7 +314,9 @@ namespace Zilon.Core.PersonModules
         /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
         public override void ResetStats()
         {
-            Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health)?.ChangeStatRange(0, _personScheme.Hp);
+            var constitutionBonus = GetConstitutionHpBonus(_attributesModule);
+            var totalHp = _personScheme.Hp + constitutionBonus;
+            Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health)?.ChangeStatRange(0, totalHp);
 
             foreach (var stat in Stats)
             {
