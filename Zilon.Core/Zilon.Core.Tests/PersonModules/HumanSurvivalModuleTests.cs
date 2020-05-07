@@ -187,7 +187,10 @@ namespace Zilon.Core.Tests.PersonModules
 
         private static ISurvivalModule CreateSurvivalData(IPersonScheme personScheme, ISurvivalRandomSource survivalRandomSource)
         {
-            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource);
+            var attributesModuleMock = new Mock<IAttributesModule>();
+            var attributesModule = attributesModuleMock.Object;
+
+            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
             return survivalData;
         }
     }

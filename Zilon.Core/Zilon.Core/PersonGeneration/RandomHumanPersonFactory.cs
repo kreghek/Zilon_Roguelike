@@ -55,6 +55,8 @@ namespace Zilon.Core.PersonGeneration
 
             var person = new HumanPerson(personScheme);
 
+            var attributeModule = RollAndAddPersonAttributesToPerson(person);
+
             var inventoryModule = new InventoryModule();
             person.AddModule(inventoryModule);
 
@@ -68,13 +70,11 @@ namespace Zilon.Core.PersonGeneration
             person.AddModule(evolutionModule);
             RollTraitPerks(evolutionModule);
 
-            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, effectsModule, evolutionModule, equipmentModule)
+            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, attributeModule, effectsModule, evolutionModule, equipmentModule)
             {
                 PlayerEventLogService = PlayerEventLogService
             };
             person.AddModule(survivalModule);
-
-            RollAndAddPersonAttributesToPerson(person);
 
             RollStartEquipment(inventoryModule, person);
 
@@ -93,7 +93,7 @@ namespace Zilon.Core.PersonGeneration
             return person;
         }
 
-        private void RollAndAddPersonAttributesToPerson(IPerson person)
+        private IAttributesModule RollAndAddPersonAttributesToPerson(IPerson person)
         {
             var attributes = new[] {
                 RollAttribute(PersonAttributeType.PhysicalStrength),
@@ -105,6 +105,8 @@ namespace Zilon.Core.PersonGeneration
             var attributesModule = new AttributesModule(attributes);
 
             person.AddModule(attributesModule);
+
+            return attributesModule;
         }
 
         private PersonAttribute RollAttribute(PersonAttributeType attributeType)
