@@ -153,6 +153,9 @@ namespace Zilon.Emulation.Common
 
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
             sectorManager.CurrentSector.HumanGroupExit -= CurrentSector_HumanGroupExit;
+
+            var humanPlayer = ServiceScope.ServiceProvider.GetRequiredService<HumanPlayer>();
+            humanPlayer.BindSectorNode(e.Transition.SectorNode);
         }
 
         protected abstract void ProcessSectorExit();

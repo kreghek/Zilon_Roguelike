@@ -66,7 +66,7 @@ namespace Zilon.Bot.Players.Logics
         private MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode)
         {
             var targetNodeIsBlockedByObstacles = GetObstableInNode(_sector, targetExitNode);
-            Debug.Assert(targetNodeIsBlockedByObstacles,
+            Debug.Assert(!targetNodeIsBlockedByObstacles,
                 "Узел с выходом не должен быть препятствием.");
 
             if (!_map.IsPositionAvailableFor(targetExitNode, actor))

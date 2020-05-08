@@ -99,7 +99,7 @@ namespace Zilon.Core.Commands
             return true;
         }
 
-        private IAttackTarget GetTarget(ISectorUiState sectorUiState)
+        private static IAttackTarget GetTarget(ISectorUiState sectorUiState)
         {
             var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
             var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
