@@ -107,6 +107,8 @@ namespace Zilon.Emulation.Common
             //TODO сделать генераторы независимыми от сектора.
             // Такое время жизни, потому что в зависимостях есть менеджеры.
             container.AddScoped<ISectorGenerator, SectorGenerator>();
+            container.AddSingleton<IBiomeInitializer, BiomeInitializer>();
+            container.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
             container.AddSingleton<IResourceMaterializationMap, ResourceMaterializationMap>();
             RegisterMonsterGeneratorRandomSource(container);
             RegisterChestGeneratorRandomSource(container);
