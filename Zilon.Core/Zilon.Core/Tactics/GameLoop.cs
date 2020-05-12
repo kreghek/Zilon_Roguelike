@@ -111,15 +111,15 @@ namespace Zilon.Core.Tactics
             {
                 foreach (var taskSource in ActorTaskSources)
                 {
-                    var actorTasks = taskSource.GetActorTasks(actor);
-
-                    if (actorTasks != null)
+                    if (!taskSource.CanGetTask(actor))
                     {
-                        var task = actorTasks.First();
-
-                        var state = new TaskState(task);
-                        taskDict.Add(actor, state);
+                        continue;
                     }
+
+                    var task = taskSource.GetActorTask(actor);
+
+                    var state = new TaskState(task);
+                    taskDict.Add(actor, state);
                 }
             }
         }
@@ -135,27 +135,27 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessActor(IActor actor)
-        {
-            foreach (var taskSource in ActorTaskSources)
-            {
-                var actorTasks = taskSource.GetActorTasks(actor);
+        //private void ProcessActor(IActor actor)
+        //{
+        //    foreach (var taskSource in ActorTaskSources)
+        //    {
+        //        var actorTasks = taskSource.GetActorTask(actor);
 
-                foreach (var actorTask in actorTasks)
-                {
-                    try
-                    {
-                        actorTask.Execute();
-                    }
-                    catch (Exception exception)
-                    {
-                        throw new ActorTaskExecutionException($"Ошибка при работе источника команд {taskSource.GetType().FullName}",
-                            taskSource,
-                            exception);
-                    }
-                }
-            }
-        }
+        //        foreach (var actorTask in actorTasks)
+        //        {
+        //            try
+        //            {
+        //                actorTask.Execute();
+        //            }
+        //            catch (Exception exception)
+        //            {
+        //                throw new ActorTaskExecutionException($"Ошибка при работе источника команд {taskSource.GetType().FullName}",
+        //                    taskSource,
+        //                    exception);
+        //            }
+        //        }
+        //    }
+        //}
 
         private static IActor[] CalcActorList(IActorManager actorManager)
         {

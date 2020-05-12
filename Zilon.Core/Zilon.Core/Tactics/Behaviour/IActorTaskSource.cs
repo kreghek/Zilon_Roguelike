@@ -17,6 +17,8 @@
         /// 3. Источник задач для актёров игрока, которые не находятся
         /// под прямым управлением игрока (напарники по группе, неактивные ключевые актёры).
         /// </remarks>
-        IActorTask[] GetActorTasks(IActor actor);
+        IActorTask GetActorTask(IActor actor);
+
+        bool CanGetTask(IActor actor);
     }
 }

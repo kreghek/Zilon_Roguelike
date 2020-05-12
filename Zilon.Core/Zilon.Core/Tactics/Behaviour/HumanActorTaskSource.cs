@@ -20,17 +20,17 @@ namespace Zilon.Core.Tactics.Behaviour
             _currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
         }
 
-        public IActorTask[] GetActorTasks(IActor actor)
+        public IActorTask GetActorTask(IActor actor)
         {
             if (actor != CurrentActor)
             {
-                return Array.Empty<IActorTask>();
+                throw new InvalidOperationException();
             }
 
             var currentTaskIsComplete = _currentTask?.IsComplete;
             if (currentTaskIsComplete != null && !currentTaskIsComplete.Value && _currentIntention == null)
             {
-                return new[] { _currentTask };
+                return _currentTask;
             }
 
             if (CurrentActor == null)
@@ -40,7 +40,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_currentIntention == null)
             {
-                return Array.Empty<IActorTask>();
+                throw new InvalidOperationException();
             }
 
             _currentTask = _currentIntention.CreateActorTask(_currentTask, CurrentActor);
@@ -48,10 +48,15 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_currentTask != null)
             {
-                return new[] { _currentTask };
+                return _currentTask;
             }
 
-            return Array.Empty<IActorTask>();
+            throw new InvalidOperationException();
+        }
+
+        public bool CanGetTask(IActor actor)
+        {
+            return actor == CurrentActor;
         }
     }
 }
