@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -9,6 +10,10 @@ namespace Zilon.Core.Tactics
 {
     public sealed class GameLoop : IGameLoop
     {
+        private int _turnCounter;
+
+        private Dictionary<IActor, TaskState> _taskDict;
+
         private readonly ISectorManager _sectorManager;
 
         public event EventHandler Updated;
@@ -16,13 +21,15 @@ namespace Zilon.Core.Tactics
         public GameLoop(ISectorManager sectorManager)
         {
             _sectorManager = sectorManager;
+
+            _taskDict = new Dictionary<IActor, TaskState>();
         }
 
         public IActorTaskSource[] ActorTaskSources { get; set; }
 
         public void Update()
         {
-            if (ActorTaskSources == null)
+            if (ActorTaskSources is null)
             {
                 throw new InvalidOperationException("Не заданы источники команд");
             }
@@ -39,27 +46,93 @@ namespace Zilon.Core.Tactics
             // Как только до актёра доходит очередь (признак - он выполнил текущую задачу),
             // он генерирует следующую задачу и она ставится в очередь.
 
-            var actorsQueue = CalcActorList(_sectorManager.CurrentSector.ActorManager);
-
-            var firstIsHumanPlayer = actorsQueue.FirstOrDefault()?.Owner is HumanPlayer;
-            if (!firstIsHumanPlayer && actorsQueue.Any(x => x.Owner is HumanPlayer))
+            var actorsWithoutTasks = GetActorsWithoutTasks(_sectorManager.CurrentSector.ActorManager, _taskDict);
+            GenerateActorTasksAndPutInDict(actorsWithoutTasks, _taskDict);
+            ProcessTasks(_taskDict);
+            _turnCounter++;
+            if (_turnCounter >= 1000)
             {
-                throw new InvalidOperationException("Первым должен быть персонаж, которым управляет актёр");
+                _turnCounter = 1000 - _turnCounter;
+
+                _sectorManager.CurrentSector.Update();
+
+                Updated?.Invoke(this, new EventArgs());
             }
+        }
 
-            foreach (var actor in actorsQueue)
+        private void ProcessTasks(Dictionary<IActor, TaskState> taskDict)
+        {
+            var states = taskDict.Values;
+            foreach (var state in states)
             {
-                if (actor.Person.CheckIsDead())
+                state.UpdateCounter();
+                if (state.TaskIsExecuting)
                 {
-                    continue;
+                    state.Task.Execute();
                 }
-
-                ProcessActor(actor);
             }
 
-            _sectorManager.CurrentSector.Update();
+            // удаляем выполненные задачи.
+            foreach (var taskStatePair in taskDict.ToArray())
+            {
+                if (taskStatePair.Value.TaskComplete)
+                {
+                    taskDict.Remove(taskStatePair.Key);
+                }
+            }
+        }
 
-            Updated?.Invoke(this, new EventArgs());
+        private class TaskState
+        {
+            private readonly int _valueToExecute;
+
+            public TaskState(IActorTask task)
+            {
+                Task = task ?? throw new ArgumentNullException(nameof(task));
+                Counter = Task.Cost;
+                _valueToExecute = Task.Cost / 2;
+            }
+
+            public IActorTask Task { get; }
+            public int Counter { get; private set; }
+            public void UpdateCounter()
+            {
+                Counter--;
+            }
+
+            public bool TaskIsExecuting { get => Counter <= _valueToExecute; }
+
+            public bool TaskComplete { get => Counter <= 0; }
+        }
+
+        private void GenerateActorTasksAndPutInDict(IEnumerable<IActor> actors, Dictionary<IActor, TaskState> taskDict)
+        {
+            foreach (var actor in actors)
+            {
+                foreach (var taskSource in ActorTaskSources)
+                {
+                    var actorTasks = taskSource.GetActorTasks(actor);
+
+                    if (actorTasks != null)
+                    {
+                        var task = actorTasks.First();
+
+                        var state = new TaskState(task);
+                        taskDict.Add(actor, state);
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<IActor> GetActorsWithoutTasks(IActorManager actorManager, Dictionary<IActor, TaskState> taskDict)
+        {
+            foreach (var actor in actorManager.Items)
+            {
+                if (!taskDict.TryGetValue(actor, out _))
+                {
+                    yield return actor;                         
+                }
+            }
         }
 
         private void ProcessActor(IActor actor)
