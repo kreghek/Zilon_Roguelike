@@ -96,7 +96,7 @@ namespace Zilon.Core.Tactics
                 Counter--;
             }
 
-            public bool TaskIsExecuting { get => Counter <= _valueToExecute; }
+            public bool TaskIsExecuting { get => Counter == _valueToExecute; }
 
             public bool TaskComplete { get => Counter <= 0; }
         }
