@@ -35,18 +35,20 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var nextNode = _path[0];
 
-            if (!_map.IsPositionAvailableFor(nextNode, Actor))
+            if (_map.IsPositionAvailableFor(nextNode, Actor))
             {
-                throw new InvalidOperationException($"Попытка переместиться в заблокированную ячейку {nextNode}.");
+                ReleaseNodes(Actor);
+                Actor.MoveToNode(nextNode);
+                HoldNodes(nextNode, Actor);
+
+                _path.RemoveAt(0);
+
+                if (!_path.Any())
+                {
+                    IsComplete = true;
+                }
             }
-
-            ReleaseNodes(Actor);
-            Actor.MoveToNode(nextNode);
-            HoldNodes(nextNode, Actor);
-
-            _path.RemoveAt(0);
-
-            if (!_path.Any())
+            else
             {
                 IsComplete = true;
             }

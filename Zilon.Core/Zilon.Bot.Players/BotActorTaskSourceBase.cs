@@ -79,7 +79,7 @@ namespace Zilon.Bot.Players
 
                 if (actorTask == null)
                 {
-                    throw new System.Exception();
+                    return new IdleTask(actor, 1);
                 }
 
                 return actorTask;

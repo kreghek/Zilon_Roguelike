@@ -66,12 +66,14 @@ namespace Zilon.Emulation.Common
                 catch (AggregateException exception)
                 {
                     CatchException(exception.InnerException);
+                    throw;
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception exception)
 #pragma warning restore CA1031 // Do not catch general exception types
                 {
                     CatchException(exception);
+                    throw;
                 }
             }
 
