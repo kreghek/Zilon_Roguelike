@@ -6,9 +6,9 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.Graphs;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common.Schemes;
 
@@ -26,8 +26,6 @@ namespace Zilon.Core.Tests.Tactics
         public void DropTablePropContainerTest()
         {
             // ARRANGE
-            var nodeMock = new Mock<IGraphNode>();
-            var node = nodeMock.Object;
 
             var dropTableRecord = new TestDropTableRecordSubScheme
             {
@@ -49,16 +47,11 @@ namespace Zilon.Core.Tests.Tactics
                 .Returns(new IProp[] { new Resource(testPropScheme, 1) });
             var dropResolver = dropResolverMock.Object;
 
-            var container = new DropTablePropChest(node,
-                new IDropTableScheme[] { dropTable },
+            var container = new DropTablePropChest(new IDropTableScheme[] { dropTable },
                 dropResolver);
-
-
 
             // ACT
             var factProps = container.Content.CalcActualItems();
-
-
 
             // ASSERT
             factProps.Length.Should().Be(1);

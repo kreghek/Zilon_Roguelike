@@ -44,14 +44,14 @@ namespace Zilon.Core.World
             // Важно генерировать соседние узлы до начала генерации сектора,
             // чтобы знать переходы из сектора.
 
-            await CreateNextSectorNodesAsync(sectorNode, biom).ConfigureAwait(false);
+            CreateNextSectorNodes(sectorNode, biom);
 
             var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
 
             sectorNode.MaterializeSector(sector);
         }
 
-        private async Task<SectorNode> RollAndBindBiomeAsync()
+        private SectorNode RollAndBindBiome()
         {
             var rolledLocationScheme = _biomeSchemeRoller.Roll();
 
@@ -79,14 +79,14 @@ namespace Zilon.Core.World
 
             biome.AddNode(sectorNode);
 
-            await CreateNextSectorNodesAsync(sectorNode, biome).ConfigureAwait(false);
+            CreateNextSectorNodes(sectorNode, biome);
 
             var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
 
             sectorNode.MaterializeSector(sector);
         }
 
-        private async Task CreateNextSectorNodesAsync(ISectorNode sectorNode, IBiome biom)
+        private void CreateNextSectorNodes(ISectorNode sectorNode, IBiome biom)
         {
             var nextSectorLevels = biom.LocationScheme.SectorLevels
                     .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid).Contains(x.Sid));
@@ -104,7 +104,7 @@ namespace Zilon.Core.World
             // Генерируем новый биом, стартовый узел и организуем связь с текущим узлом.
             if (sectorNode.SectorScheme.TransSectorSids.Any(x => x.SectorLevelSid is null))
             {
-                var nextSectorNode = await RollAndBindBiomeAsync().ConfigureAwait(false);
+                var nextSectorNode = RollAndBindBiome();
 
                 // Организуем связь между двумя биомами.
 

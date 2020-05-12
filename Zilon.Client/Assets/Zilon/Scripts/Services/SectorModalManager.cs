@@ -1,6 +1,5 @@
 ﻿using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
-using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
 namespace Assets.Zilon.Scripts.Services
@@ -21,10 +20,6 @@ namespace Assets.Zilon.Scripts.Services
         public PerksModalBody PersonModalPrefab;
 
         public InstructionModalBody InstructionModalPrefab;
-
-        public TraderModalBody TraderModalPrefab;
-
-        public DialogModalBody DialogModalPrefab;
 
         // ReSharper restore MemberCanBePrivate.Global
         // ReSharper restore UnassignedField.Global
@@ -55,18 +50,6 @@ namespace Assets.Zilon.Scripts.Services
         public void ShowInstructionModal()
         {
             CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
-        }
-
-        public void ShowTraderModal(CitizenPerson trader)
-        {
-            var modalBody = CreateWindowHandler<TraderModalBody>(TraderModalPrefab.gameObject);
-            modalBody.Init(trader);
-        }
-
-        public void ShowDialogModal(CitizenPerson citizen)
-        {
-            var modalBody = CreateWindowHandler<DialogModalBody>(DialogModalPrefab.gameObject);
-            modalBody.Init(citizen);
         }
     }
 }

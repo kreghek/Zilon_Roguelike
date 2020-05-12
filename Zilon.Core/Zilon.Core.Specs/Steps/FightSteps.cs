@@ -14,6 +14,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
@@ -98,17 +99,17 @@ namespace Zilon.Core.Specs.Steps
 
         private static IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
         {
-            if (actor.Person.EquipmentCarrier == null)
+            if (actor.Person.GetModuleSafe<IEquipmentModule>() is null)
             {
-                yield return actor.Person.TacticalActCarrier.Acts.First();
+                yield return actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
             }
             else
             {
                 var usedEquipmentActs = false;
-                var slots = actor.Person.EquipmentCarrier.Slots;
+                var slots = actor.Person.GetModule<IEquipmentModule>().Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
-                    var slotEquipment = actor.Person.EquipmentCarrier[i];
+                    var slotEquipment = actor.Person.GetModule<IEquipmentModule>()[i];
                     if (slotEquipment == null)
                     {
                         continue;
@@ -119,7 +120,7 @@ namespace Zilon.Core.Specs.Steps
                         continue;
                     }
 
-                    var equipmentActs = from act in actor.Person.TacticalActCarrier.Acts
+                    var equipmentActs = from act in actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
                                         where act.Equipment == slotEquipment
                                         select act;
 
@@ -135,7 +136,7 @@ namespace Zilon.Core.Specs.Steps
 
                 if (!usedEquipmentActs)
                 {
-                    yield return actor.Person.TacticalActCarrier.Acts.First();
+                    yield return actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
                 }
             }
         }
@@ -145,7 +146,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.Survival.IsDead.Should().BeTrue();
+            actor.Person.GetModule<ISurvivalModule>().IsDead.Should().BeTrue();
         }
 
         [Then(@"Монстр Id:(.*) успешно обороняется")]
@@ -166,7 +167,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var act = actor.Person.TacticalActCarrier.Acts.OfType<TacticalAct>()
+            var act = actor.Person.GetModule<ICombatActModule>().CalcCombatActs().OfType<TacticalAct>()
                 .Single(x => x.Scheme.Sid == tacticalActSid);
 
             act.Efficient.Modifiers.ResultBuff.Should().Be(-1);

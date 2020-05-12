@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Assets.Zilon.Scripts.Models;
+
 using UnityEngine;
 
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
 public class ActPanelHandler : MonoBehaviour
 {
-    private IEquipmentCarrier _equipmentCarrier;
+    private IEquipmentModule _equipmentModule;
 
     private readonly List<ActItemVm> _actViewModels;
 
@@ -35,11 +38,11 @@ public class ActPanelHandler : MonoBehaviour
 
         // Запоминаем объект equipmentCarrier, чтобы затем корректно отписаться от события,
         // которое навешиваем ниже. Даже если активный персонаж изменится.
-        _equipmentCarrier = actor.Person.EquipmentCarrier;
+        _equipmentModule = actor.Person.GetModule<IEquipmentModule>();
 
-        _equipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+        _equipmentModule.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
 
-        var acts = actor.Person.TacticalActCarrier.Acts;
+        var acts = actor.Person.GetModule<ICombatActModule>().CalcCombatActs().ToArray();
 
         UpdateSelectedAct(currentAct: null, acts);
 
@@ -48,7 +51,7 @@ public class ActPanelHandler : MonoBehaviour
 
     public void OnDestroy()
     {
-        _equipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+        _equipmentModule.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
     }
 
     private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)
@@ -59,7 +62,7 @@ public class ActPanelHandler : MonoBehaviour
         var actorVm = _playerState.ActiveActor;
         var actor = actorVm.Actor;
 
-        var acts = actor.Person.TacticalActCarrier.Acts;
+        var acts = actor.Person.GetModule<ICombatActModule>().CalcCombatActs().ToArray();
 
         UpdateSelectedAct(currentAct, acts);
 

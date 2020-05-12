@@ -10,6 +10,7 @@ using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tests.Common;
@@ -32,7 +33,7 @@ namespace Zilon.Core.Specs.Steps
 
             var equipment = Context.CreateEquipment(propSid);
 
-            actor.Person.Inventory.Add(equipment);
+            actor.Person.GetModule<IInventoryModule>().Add(equipment);
         }
 
         [UsedImplicitly]
@@ -47,7 +48,7 @@ namespace Zilon.Core.Specs.Steps
             var equipment = Context.CreateEquipment(propSid);
 
             var actor = Context.GetActiveActor();
-            actor.Person.EquipmentCarrier[slotIndex] = equipment;
+            actor.Person.GetModule<IEquipmentModule>()[slotIndex] = equipment;
         }
 
         [UsedImplicitly]
@@ -61,7 +62,7 @@ namespace Zilon.Core.Specs.Steps
 
             var actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
 
             var targetEquipmentVeiwModel = new TestPropItemViewModel
             {
@@ -91,7 +92,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.EquipmentCarrier[slotIndex].Scheme.Sid.Should().Be(propSid);
+            actor.Person.GetModule<IEquipmentModule>()[slotIndex].Scheme.Sid.Should().Be(propSid);
         }
 
         [Then(@"В слоте Index: (\d+) актёра игрока ничего нет")]
@@ -99,7 +100,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.EquipmentCarrier[slotIndex].Should().BeNull();
+            actor.Person.GetModule<IEquipmentModule>()[slotIndex].Should().BeNull();
         }
 
         [Then(@"Невозможна экипировка предмета (.+) в слот Index: (.+)")]
@@ -112,7 +113,7 @@ namespace Zilon.Core.Specs.Steps
 
             var actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
 
             var targetEquipmentVeiwModel = new TestPropItemViewModel
             {
@@ -129,7 +130,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(expectedHp);
+            actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(expectedHp);
         }
 
         [Then(@"Максимальный запас здоровья персонажа игрока равен (\d+)")]
@@ -137,7 +138,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health)
+            actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health)
                 .Range.Max
                 .Should().Be(expectedMaxHp);
         }

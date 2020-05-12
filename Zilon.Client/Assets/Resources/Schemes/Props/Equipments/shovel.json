@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "tool", "shovel" ],
+  "Equip": {
+    "ActSids": [
+      "chop"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Лопата",
+	"En": "Shovel"
+  }
+}

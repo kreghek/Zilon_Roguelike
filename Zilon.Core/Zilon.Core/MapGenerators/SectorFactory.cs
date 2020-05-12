@@ -25,7 +25,7 @@ namespace Zilon.Core.MapGenerators
         public ISector Create(ISectorMap map, ILocationScheme locationScheme)
         {
             var actorManager = new ActorManager();
-            var propContainerManager = new PropContainerManager();
+            var propContainerManager = new StaticObjectManager();
 
             var sector = new Sector(map,
                 actorManager,

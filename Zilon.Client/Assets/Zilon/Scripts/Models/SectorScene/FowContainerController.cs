@@ -6,7 +6,7 @@ using Zilon.Core.Tactics;
 
 public class FowContainerController : MonoBehaviour, IFowObjectController
 {
-    public ContainerVm ViewModel;
+    public StaticObjectViewModel ViewModel;
     public SpriteRenderer[] NodeSprites;
 
     public void ChangeState(SectorMapNodeFowState state)

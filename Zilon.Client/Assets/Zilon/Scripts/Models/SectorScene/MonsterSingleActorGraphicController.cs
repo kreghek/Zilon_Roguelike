@@ -9,7 +9,6 @@ public class MonsterSingleActorGraphicController : MonoBehaviour
 {
     public IActor Actor { get; set; }
 
-    private const int TRADER_VISUAL_COUNT = 4;
     public ActorGraphicBase Graphic;
 
     public void Start()
@@ -23,11 +22,6 @@ public class MonsterSingleActorGraphicController : MonoBehaviour
         {
             case MonsterPerson monsterPerson:
                 SetMonsterVisualProp(monsterPerson.Scheme.Sid);
-                break;
-
-            case CitizenPerson citizenPerson:
-                var citizenType = citizenPerson.CitizenType;
-                SetCitizenVisualProp((int)citizenType);
                 break;
 
             default:
@@ -49,23 +43,5 @@ public class MonsterSingleActorGraphicController : MonoBehaviour
             visualPropResource = Resources.Load<VisualProp>($"VisualProps/Monsters/undef");
             Instantiate(visualPropResource, holder.transform);
         }
-        
-    }
-
-    private void SetCitizenVisualProp(int traderVisualIndex)
-    {
-        var monoGraphics = (MonoActorGraphic)Graphic;
-        var holder = monoGraphics.VisualPropHolder;
-        var visualPropResource = Resources.Load<VisualProp>($"VisualProps/Traders/trader{traderVisualIndex}");
-        if (visualPropResource != null)
-        {
-            Instantiate(visualPropResource, holder.transform);
-        }
-        else
-        {
-            visualPropResource = Resources.Load<VisualProp>($"VisualProps/Monsters/undef");
-            Instantiate(visualPropResource, holder.transform);
-        }
-
     }
 }

@@ -27,7 +27,7 @@ namespace Assets.Zilon.Scripts.Services
             modalBody.Init();
         }
 
-        public void ShowCreatePersonModal(HumanPerson playerPerson)
+        public void ShowCreatePersonModal(IPerson playerPerson)
         {
             var modalBody = CreateWindowHandler<PersonCreateModalBody>(PersonCreateModalPrefab.gameObject);
             modalBody.Init(playerPerson);

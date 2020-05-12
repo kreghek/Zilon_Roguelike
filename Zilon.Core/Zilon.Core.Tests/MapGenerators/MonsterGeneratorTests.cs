@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -56,11 +57,14 @@ namespace Zilon.Core.Tests.MapGenerators
             actorManagerMock.SetupGet(x => x.Items).Returns(actorList);
             var actorManager = actorManagerMock.Object;
 
-            var propContainerManagerMock = new Mock<IPropContainerManager>();
+            var propContainerManagerMock = new Mock<IStaticObjectManager>();
             var propContainerManager = propContainerManagerMock.Object;
-            propContainerManagerMock.SetupGet(x => x.Items).Returns(System.Array.Empty<IPropContainer>());
+            propContainerManagerMock.SetupGet(x => x.Items).Returns(System.Array.Empty<IStaticObject>());
+
+            var monsterFactory = new MonsterPersonFactory();
 
             var monsterGenerator = new MonsterGenerator(schemeService,
+                monsterFactory,
                 randomSource);
 
             var map = await SquareMapFactory.CreateAsync(20).ConfigureAwait(false);
@@ -69,7 +73,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
             sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);
             sectorMock.SetupGet(x => x.ActorManager).Returns(actorManager);
-            sectorMock.SetupGet(x => x.PropContainerManager).Returns(propContainerManager);
+            sectorMock.SetupGet(x => x.StaticObjectManager).Returns(propContainerManager);
             var sector = sectorMock.Object;
 
             var monsterRegions = new List<MapRegion> {

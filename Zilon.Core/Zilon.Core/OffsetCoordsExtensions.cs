@@ -9,11 +9,6 @@
         /// <returns> Возвращает true, если компоненты координат равны указанным значениям. Иначе, false. </returns>
         public static bool CompsEqual(this OffsetCoords coords, int x, int y)
         {
-            if (coords == null)
-            {
-                return false;
-            }
-
             if (coords.X != x)
             {
                 return false;

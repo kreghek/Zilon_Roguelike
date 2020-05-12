@@ -4,6 +4,7 @@ using UnityEngine;
 
 using Zenject;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
@@ -35,7 +36,7 @@ public class PersonEffectHandler : MonoBehaviour
         // Будет проблема, если этот скрипт будет запущен перед скриптом создания персонажа.
         if (person != null)
         {
-            person.Survival.StatChanged += Survival_StatChanged;
+            person.GetModule<ISurvivalModule>().StatChanged += Survival_StatChanged;
         }
     }
 
@@ -45,7 +46,7 @@ public class PersonEffectHandler : MonoBehaviour
 
         if (person != null)
         {
-            person.Survival.StatChanged -= Survival_StatChanged;
+            person.GetModule<ISurvivalModule>().StatChanged -= Survival_StatChanged;
         }
     }
 
@@ -68,7 +69,7 @@ public class PersonEffectHandler : MonoBehaviour
             return;
         }
 
-        var effects = person.Effects;
+        var effects = person.GetModule<IEffectsModule>();
 
         foreach (var effect in effects.Items)
         {

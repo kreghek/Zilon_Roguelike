@@ -60,9 +60,14 @@ namespace Zilon.Core.Tactics.Spatial
         /// <param name="node"></param>
         public override void AddNode(IGraphNode node)
         {
+            if (node is null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
+
             var hexNode = (HexNode)node;
-            var offsetX = hexNode.OffsetX;
-            var offsetY = hexNode.OffsetY;
+            var offsetX = hexNode.OffsetCoords.X;
+            var offsetY = hexNode.OffsetCoords.Y;
 
             var nodeMatrix = _segmentDict.First().Value;
 
@@ -99,8 +104,13 @@ namespace Zilon.Core.Tactics.Spatial
         /// <returns>Возвращает набор соседних узлов.</returns>
         public override IEnumerable<IGraphNode> GetNext(IGraphNode node)
         {
+            if (node is null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
+
             var hexCurrent = (HexNode)node;
-            var offsetCoords = new OffsetCoords(hexCurrent.OffsetX, hexCurrent.OffsetY);
+            var offsetCoords = hexCurrent.OffsetCoords;
             var segmentX = offsetCoords.X / _segmentSize;
             if (offsetCoords.X < 0)
             {
@@ -119,6 +129,11 @@ namespace Zilon.Core.Tactics.Spatial
             var segmentKey = new SegmentKey(segmentX, segmentY);
             var matrix = _segmentDict[segmentKey];
 
+            return GetNextFromMatrix(localOffsetX, localOffsetY, segmentX, segmentY, matrix);
+        }
+
+        private IEnumerable<IGraphNode> GetNextFromMatrix(int localOffsetX, int localOffsetY, int segmentX, int segmentY, IGraphNode[,] matrix)
+        {
             var directions = HexHelper.GetOffsetClockwise();
             var currentCubeCoords = HexHelper.ConvertToCube(localOffsetX, localOffsetY);
 
@@ -186,8 +201,7 @@ namespace Zilon.Core.Tactics.Spatial
                 return false;
             }
 
-            var hexIsObstacle = CheckNodeIsObstable(targetNode);
-            return !hexIsObstacle;
+            return true;
         }
 
         /// <summary>Удаляет ребро между двумя узлами графа карты.</summary>
@@ -235,6 +249,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         private void CreateSegment(int segmentX, int segmentY)
         {
+            //TODO Отказаться от многомерного массива. Вместо этого сделать одномерный и адресацию через смещение.
             var matrix = new IGraphNode[_segmentSize, _segmentSize];
 
             var key = new SegmentKey(segmentX, segmentY);
@@ -255,17 +270,9 @@ namespace Zilon.Core.Tactics.Spatial
             return neighborX;
         }
 
-        private static bool CheckNodeIsObstable(IGraphNode targetNode)
-        {
-            var hex = (HexNode)targetNode;
-            var hexIsObstacle = hex.IsObstacle;
-            return hexIsObstacle;
-        }
-
         public override bool IsPositionAvailableForContainer(IGraphNode targetNode)
         {
-            var isObstacle = CheckNodeIsObstable(targetNode);
-            return !isObstacle;
+            return true;
         }
 
         /// <summary>
@@ -302,7 +309,7 @@ namespace Zilon.Core.Tactics.Spatial
             throw new NotImplementedException();
         }
 
-        private struct SegmentKey
+        private struct SegmentKey : IEquatable<SegmentKey>
         {
             // ReSharper disable once MemberCanBePrivate.Local
             public readonly int X;
@@ -318,9 +325,13 @@ namespace Zilon.Core.Tactics.Spatial
 
             public override bool Equals(object obj)
             {
-                return obj is SegmentKey key &&
-                       X == key.X &&
-                       Y == key.Y;
+                return obj is SegmentKey key && Equals(key);
+            }
+
+            public bool Equals(SegmentKey other)
+            {
+                return X == other.X &&
+                       Y == other.Y;
             }
 
             public override int GetHashCode()

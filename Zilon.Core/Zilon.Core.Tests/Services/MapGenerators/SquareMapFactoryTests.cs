@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
-using Zilon.Core.Graphs;
+
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
@@ -25,12 +23,8 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             // ARRANGE
 
-
-
             // ACT
-            var map = await SquareMapFactory.CreateAsync(7);
-
-
+            var map = await SquareMapFactory.CreateAsync(7).ConfigureAwait(false);
 
             // ASSERT
             AssertEdge(map, 0, 0, 1, 0);
@@ -60,14 +54,11 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             // ARRANGE
 
-
             // ACT
             Action act = () =>
             {
                 var map = SquareMapFactory.CreateAsync(7);
             };
-
-
 
             // ASSERT
             act.Should().NotThrow();
@@ -81,22 +72,10 @@ namespace Zilon.Core.Tests.MapGenerators
 
         private void AssertEdge(IMap map, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
         {
-            var node1 = map.Nodes.Cast<HexNode>().SelectBy(offsetX1, offsetY1);
-            var node2 = map.Nodes.Cast<HexNode>().SelectBy(offsetX2, offsetY2);
+            var node1 = map.Nodes.SelectByHexCoords(offsetX1, offsetY1);
+            var node2 = map.Nodes.SelectByHexCoords(offsetX2, offsetY2);
             var hasEdge = HasEdge(map, node1, node2);
             hasEdge.Should().BeTrue();
-        }
-
-        private static IMap CreateFakeMap()
-        {
-            var nodes = new List<IGraphNode>();
-
-            var mapMock = new Mock<IMap>();
-            mapMock.SetupGet(x => x.Nodes).Returns(nodes);
-
-            var map = mapMock.Object;
-
-            return map;
         }
     }
 }

@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -28,23 +26,23 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
 
             return Task.Run(() =>
             {
-                var containerManager = scopeContainer.GetRequiredService<IPropContainerManager>();
-                var containerNodes = containerManager.Items.Select(x => x.Node);
+                var staticObjectManager = sector.StaticObjectManager;
+                var containerNodes = staticObjectManager.Items.Select(x => x.Node);
 
-                var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>().Where(x => !x.IsObstacle).ToArray();
+                var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>().ToArray();
                 var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));
                 var allNodes = allNonContainerNodes.ToArray();
 
                 var matrix = new Matrix<bool>(1000, 1000);
                 foreach (var node in allNodes)
                 {
-                    var x = node.OffsetX;
-                    var y = node.OffsetY;
+                    var x = node.OffsetCoords.X;
+                    var y = node.OffsetCoords.Y;
                     matrix.Items[x, y] = true;
                 }
 
                 var startNode = allNodes.First();
-                var startPoint = new OffsetCoords(startNode.OffsetX, startNode.OffsetY);
+                var startPoint = startNode.OffsetCoords;
                 var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
 
                 foreach (var point in floodPoints)
@@ -54,8 +52,8 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
 
                 foreach (var node in allNodes)
                 {
-                    var x = node.OffsetX;
-                    var y = node.OffsetY;
+                    var x = node.OffsetCoords.X;
+                    var y = node.OffsetCoords.Y;
                     if (matrix.Items[x, y])
                     {
                         throw new SectorValidationException($"Точка ({x}, {y}) недоступна для прохода.");

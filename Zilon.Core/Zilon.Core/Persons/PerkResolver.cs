@@ -1,10 +1,12 @@
 ﻿using System.Linq;
 
+using Zilon.Core.PersonModules;
+
 namespace Zilon.Core.Persons
 {
     public class PerkResolver : IPerkResolver
     {
-        public void ApplyProgress(IJobProgress progress, IEvolutionData evolutionData)
+        public void ApplyProgress(IJobProgress progress, IEvolutionModule evolutionData)
         {
             if (evolutionData == null)
             {

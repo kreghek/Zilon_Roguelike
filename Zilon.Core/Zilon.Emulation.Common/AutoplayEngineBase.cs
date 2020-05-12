@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Players;
 using Zilon.Bot.Sdk;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Scoring;
@@ -28,7 +29,7 @@ namespace Zilon.Emulation.Common
             BotSettings = botSettings;
         }
 
-        public async Task StartAsync(HumanPerson startPerson, IServiceProvider serviceProvider)
+        public async Task StartAsync(IPerson startPerson, IServiceProvider serviceProvider)
         {
             if (serviceProvider is null)
             {
@@ -41,7 +42,7 @@ namespace Zilon.Emulation.Common
             botActorTaskSource.Configure(BotSettings);
 
             var iterationCounter = 1;
-            while (!humanActor.Person.Survival.IsDead && iterationCounter <= ITERATION_LIMIT)
+            while (!humanActor.Person.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
             {
                 try
                 {
@@ -84,7 +85,7 @@ namespace Zilon.Emulation.Common
         protected abstract void ProcessEnd();
 
         private static IActor CreateHumanActor(HumanPlayer humanPlayer,
-            HumanPerson humanPerson,
+            IPerson humanPerson,
             ISectorManager sectorManager,
             IPlayerEventLogService playerEventLogService)
         {
@@ -93,7 +94,6 @@ namespace Zilon.Emulation.Common
                 .Nodes
                 .First();
 
-            humanPerson.PlayerEventLogService = playerEventLogService;
             humanPlayer.MainPerson = humanPerson;
 
             var actor = new Actor(humanPerson, humanPlayer, playerActorStartNode);
@@ -105,7 +105,7 @@ namespace Zilon.Emulation.Common
             return actor;
         }
 
-        private async Task<IActor> CreateSectorAsync(HumanPerson startPerson, IServiceProvider _globalServiceProvider)
+        private async Task<IActor> CreateSectorAsync(IPerson startPerson, IServiceProvider _globalServiceProvider)
         {
             if (ServiceScope != null)
             {
@@ -153,6 +153,9 @@ namespace Zilon.Emulation.Common
 
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
             sectorManager.CurrentSector.HumanGroupExit -= CurrentSector_HumanGroupExit;
+
+            var humanPlayer = ServiceScope.ServiceProvider.GetRequiredService<HumanPlayer>();
+            humanPlayer.BindSectorNode(e.Transition.SectorNode);
         }
 
         protected abstract void ProcessSectorExit();

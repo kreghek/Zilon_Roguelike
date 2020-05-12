@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -22,7 +23,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException("Попытка атаковать цель, которой нельзя нанести урон.");
             }
 
-            if (Actor.Person.TacticalActCarrier == null)
+            if (Actor.Person.GetModuleSafe<ICombatActModule>() is null)
             {
                 throw new NotImplementedException("Не неализована возможность атаковать без навыков.");
             }
@@ -46,17 +47,17 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private IEnumerable<ITacticalAct> GetUsedActs()
         {
-            if (Actor.Person.EquipmentCarrier == null)
+            if (Actor.Person.GetModuleSafe<IEquipmentModule>() == null)
             {
-                yield return Actor.Person.TacticalActCarrier.Acts.First();
+                yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
             }
             else
             {
                 var usedEquipmentActs = false;
-                var slots = Actor.Person.EquipmentCarrier.Slots;
+                var slots = Actor.Person.GetModule<IEquipmentModule>().Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
-                    var slotEquipment = Actor.Person.EquipmentCarrier[i];
+                    var slotEquipment = Actor.Person.GetModule<IEquipmentModule>()[i];
                     if (slotEquipment == null)
                     {
                         continue;
@@ -67,7 +68,7 @@ namespace Zilon.Core.Tactics.Behaviour
                         continue;
                     }
 
-                    var equipmentActs = from act in Actor.Person.TacticalActCarrier.Acts
+                    var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
                                         where act.Equipment == slotEquipment
                                         select act;
 
@@ -83,7 +84,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (!usedEquipmentActs)
                 {
-                    yield return Actor.Person.TacticalActCarrier.Acts.First();
+                    yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
                 }
             }
         }

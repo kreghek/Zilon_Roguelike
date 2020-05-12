@@ -6,6 +6,8 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
@@ -13,7 +15,8 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture
+        ][Parallelizable(ParallelScope.All)]
     public class GameLoopTests
     {
         /// <summary>
@@ -49,12 +52,8 @@ namespace Zilon.Core.Tests.Tactics
                 ActorTaskSources = Array.Empty<IActorTaskSource>()
             };
 
-
-
             // ACT
             Action act = () => { gameLoop.Update(); };
-
-
 
             // ARRANGE
             act.Should().NotThrow();
@@ -70,9 +69,9 @@ namespace Zilon.Core.Tests.Tactics
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            var survivalDataMock = new Mock<ISurvivalData>();
+            var survivalDataMock = new Mock<ISurvivalModule>();
             var survivalData = survivalDataMock.Object;
-            personMock.SetupGet(x => x.Survival).Returns(survivalData);
+            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalData);
 
             return actor;
         }

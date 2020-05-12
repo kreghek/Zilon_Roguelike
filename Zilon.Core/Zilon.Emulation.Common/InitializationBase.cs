@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,8 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.MapGenerators.StaticObjectFactories;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -17,6 +20,7 @@ using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.World;
 
 namespace Zilon.Emulation.Common
 {
@@ -47,13 +51,28 @@ namespace Zilon.Emulation.Common
         protected virtual void RegisterMonsterGeneratorRandomSource(IServiceCollection serviceRegistry)
         {
             serviceRegistry.AddScoped<IMonsterGenerator, MonsterGenerator>();
+            serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
             serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
         }
 
         protected virtual void RegisterChestGeneratorRandomSource(IServiceCollection serviceRegistry)
         {
+            serviceRegistry.AddScoped<IStaticObstaclesGenerator, StaticObstaclesGenerator>();
+            serviceRegistry.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
             serviceRegistry.AddScoped<IChestGenerator, ChestGenerator>();
             serviceRegistry.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
+            serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory =>
+            {
+                var factories = diFactory.GetServices<IStaticObjectFactory>().ToArray();
+                return new StaticObjectFactoryCollector(factories);
+            });
+            serviceRegistry.AddSingleton<IStaticObjectFactory, StoneDepositFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, OreDepositFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, TrashHeapFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, CherryBrushFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, PitFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, PuddleFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectsGeneratorRandomSource, StaticObjectsGeneratorRandomSource>();
         }
 
         private void RegisterSectorServices(IServiceCollection serviceRegistry)
@@ -88,32 +107,65 @@ namespace Zilon.Emulation.Common
             //TODO сделать генераторы независимыми от сектора.
             // Такое время жизни, потому что в зависимостях есть менеджеры.
             container.AddScoped<ISectorGenerator, SectorGenerator>();
+            container.AddSingleton<IBiomeInitializer, BiomeInitializer>();
+            container.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
+            container.AddSingleton<IResourceMaterializationMap, ResourceMaterializationMap>();
             RegisterMonsterGeneratorRandomSource(container);
             RegisterChestGeneratorRandomSource(container);
-            container.AddScoped<ICitizenGenerator, CitizenGenerator>();
             container.AddScoped<ISectorFactory, SectorFactory>();
             container.AddScoped<ISectorManager, InfiniteSectorManager>();
+            RegisterActUsageServices(container);
+            container.AddScoped<MonsterBotActorTaskSource>();
+        }
+
+        private static void RegisterActUsageServices(IServiceCollection container)
+        {
+            container.AddScoped<IActUsageHandlerSelector>(serviceProvider =>
+            {
+                var handlers = serviceProvider.GetServices<IActUsageHandler>();
+                var handlersArray = handlers.ToArray();
+                var handlerSelector = new ActUsageHandlerSelector(handlersArray);
+                return handlerSelector;
+            });
+            container.AddScoped<IActUsageHandler>(serviceProvider =>
+            {
+                var perkResolver = serviceProvider.GetRequiredService<IPerkResolver>();
+                var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
+                var handler = new ActorActUsageHandler(perkResolver, randomSource);
+                ConfigurateActorActUsageHandler(serviceProvider, handler);
+                return handler;
+            });
+            container.AddScoped<IActUsageHandler, StaticObjectActUsageHandler>();
             container.AddScoped<ITacticalActUsageService>(serviceProvider =>
             {
                 var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
-                var perkResolver = serviceProvider.GetRequiredService<IPerkResolver>();
+                var actHandlerSelector = serviceProvider.GetRequiredService<IActUsageHandlerSelector>();
                 var sectorManager = serviceProvider.GetRequiredService<ISectorManager>();
 
-                var tacticalActUsageService = new TacticalActUsageService(randomSource, perkResolver, sectorManager);
+                var tacticalActUsageService = new TacticalActUsageService(randomSource, sectorManager, actHandlerSelector);
 
                 ConfigurateTacticalActUsageService(serviceProvider, tacticalActUsageService);
 
                 return tacticalActUsageService;
             });
-            container.AddScoped<MonsterBotActorTaskSource>();
         }
 
         private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider, TacticalActUsageService tacticalActUsageService)
         {
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
-            tacticalActUsageService.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
-            tacticalActUsageService.ScoreManager = serviceProvider.GetService<IScoreManager>();
+        }
+
+        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider, ActorActUsageHandler handler)
+        {
+            // Указание необязательных зависимостей
+            handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
+
+            handler.ActorInteractionBus = serviceProvider.GetService<IActorInteractionBus>();
+
+            handler.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+
+            handler.ScoreManager = serviceProvider.GetService<IScoreManager>();
         }
 
         private static void RegisterGameLoop(IServiceCollection serviceRegistry)
@@ -140,7 +192,12 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
-            container.AddSingleton<IHumanPersonFactory, RandomHumanPersonFactory>();
+            container.AddSingleton<RandomHumanPersonFactory>();
+            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider=> {
+                var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
+                factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+                return factory;
+            });
             container.AddSingleton<IPersonPerkInitializator, PersonPerkInitializator>();
 
             container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();
@@ -149,7 +206,6 @@ namespace Zilon.Emulation.Common
             container.AddSingleton(CreateRoomGeneratorRandomSource);
             container.AddSingleton<CellularAutomatonMapFactory>();
             container.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
-            container.AddSingleton<ICitizenGeneratorRandomSource, CitizenGeneratorRandomSource>();
 
             container.AddSingleton<IUserTimeProvider, UserTimeProvider>();
 

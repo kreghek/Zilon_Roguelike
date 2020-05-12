@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using Zilon.Bot.Players.Triggers;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -18,7 +19,7 @@ namespace Zilon.Bot.Players.Logics
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
-            var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             if (hpStat == null)
             {
                 Complete = true;
@@ -33,7 +34,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var props = actor.Person.Inventory.CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
             var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 ConsumeCommonRuleType.Health);

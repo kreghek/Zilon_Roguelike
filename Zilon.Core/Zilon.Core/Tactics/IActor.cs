@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -16,7 +17,7 @@ namespace Zilon.Core.Tactics
     /// персонажа, которого этот актёр отыгрывает. Состояниеи характеристики актёра могут меняться.
     /// Актёр может умереть.
     /// </remarks>
-    public interface IActor: IAttackTarget, IPassMapBlocker
+    public interface IActor : IAttackTarget, IPassMapBlocker
     {
         /// <summary>
         /// Песонаж, который лежит в основе актёра.
@@ -45,7 +46,14 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="container"> Целевой контейнер в секторе. </param>
         /// <param name="method"> Метод открытия контейнера. </param>
-        void OpenContainer(IPropContainer container, IOpenContainerMethod method);
+        void OpenContainer(IStaticObject container, IOpenContainerMethod method);
+
+        /// <summary>
+        /// Добыча ресурса из залежей.
+        /// </summary>
+        /// <param name="deposit"> Целевые залежи. </param>
+        /// <param name="method"> Метод добычи. </param>
+        void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
 
         /// <summary>
         /// Происходит, когда актёр переместился.
@@ -56,6 +64,11 @@ namespace Zilon.Core.Tactics
         /// Происходит, когда актёр открывает контейнер в секторе.
         /// </summary>
         event EventHandler<OpenContainerEventArgs> OpenedContainer;
+
+        /// <summary>
+        /// Происходит, когда актёр выполняет добычу ресурса в секторе.
+        /// </summary>
+        event EventHandler<MineDepositEventArgs> DepositMined;
 
         /// <summary>
         /// Происходит, когда актёр выполняет действие.

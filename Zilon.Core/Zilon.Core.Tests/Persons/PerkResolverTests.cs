@@ -4,13 +4,15 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class PerkResolverTests
     {
         /// <summary>
@@ -62,23 +64,18 @@ namespace Zilon.Core.Tests.Persons
             var perks = new[] {
                 perk
             };
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            evolutionDataMock.SetupGet(x => x.Perks)
+            var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Perks)
                 .Returns(perks);
-            var evolutionData = evolutionDataMock.Object;
+            var evolutionModule = evolutionModuleMock.Object;
 
             var perkResolver = new PerkResolver();
 
-
-
-
             // ACT
-            perkResolver.ApplyProgress(progress, evolutionData);
-
-
+            perkResolver.ApplyProgress(progress, evolutionModule);
 
             // ASSERT
-            evolutionDataMock.Verify(x => x.PerkLevelUp(It.IsAny<IPerk>()));
+            evolutionModuleMock.Verify(x => x.PerkLevelUp(It.IsAny<IPerk>()));
         }
 
         /// <summary>
@@ -126,23 +123,18 @@ namespace Zilon.Core.Tests.Persons
             var perks = new[] {
                 perk
             };
-            var evolutionDataMock = new Mock<IEvolutionData>();
-            evolutionDataMock.SetupGet(x => x.Perks)
+            var evolutionModuleMock = new Mock<IEvolutionModule>();
+            evolutionModuleMock.SetupGet(x => x.Perks)
                 .Returns(perks);
-            var evolutionData = evolutionDataMock.Object;
-
+            var evolutionModule = evolutionModuleMock.Object;
 
             var perkResolver = new PerkResolver();
 
-
-
             // ACT
-            perkResolver.ApplyProgress(progress, evolutionData);
-
-
+            perkResolver.ApplyProgress(progress, evolutionModule);
 
             // ASSERT
-            evolutionDataMock.Verify(x => x.PerkLevelUp(It.IsAny<IPerk>()), Times.Never);
+            evolutionModuleMock.Verify(x => x.PerkLevelUp(It.IsAny<IPerk>()), Times.Never);
         }
     }
 }

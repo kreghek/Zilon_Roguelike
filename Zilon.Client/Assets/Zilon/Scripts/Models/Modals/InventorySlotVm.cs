@@ -14,6 +14,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
@@ -39,7 +40,7 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
     {
         get
         {
-            var prop = Actor.Person.EquipmentCarrier[SlotIndex];
+            var prop = Actor.Person.GetModule<IEquipmentModule>()[SlotIndex];
             return prop;
         }
     }
@@ -78,7 +79,7 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
             return;
         }
 
-        var currentEquipment = Actor.Person.EquipmentCarrier[SlotIndex];
+        var currentEquipment = Actor.Person.GetModule<IEquipmentModule>()[SlotIndex];
         if (currentEquipment != null)
         {
             SetEquipmentIcon(currentEquipment);
@@ -151,12 +152,12 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
 
     private void InitEventHandlers()
     {
-        Actor.Person.EquipmentCarrier.EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
+        Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += EquipmentCarrierOnEquipmentChanged;
     }
 
     private void ClearEventHandlers()
     {
-        Actor.Person.EquipmentCarrier.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+        Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
     }
 
     public void SetDraggingState(bool value)

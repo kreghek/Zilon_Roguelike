@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
@@ -92,7 +93,7 @@ namespace Zilon.Core.Specs.Steps
         public void GivenАктёрЗначениеСытостьРавное(string statName, int statValue)
         {
             var actor = Context.GetActiveActor();
-            var survival = actor.Person.Survival;
+            var survival = actor.Person.GetModule<ISurvivalModule>();
 
             SurvivalStatType statType;
             switch (statName)
@@ -125,7 +126,7 @@ namespace Zilon.Core.Specs.Steps
 
             var effect = new SurvivalStatHazardEffect(stat, level, survivalRandomSource);
 
-            actor.Person.Effects.Add(effect);
+            actor.Person.GetModule<IEffectsModule>().Add(effect);
         }
 
         [When(@"Я перемещаю персонажа на (.*) клетку")]
@@ -222,7 +223,7 @@ namespace Zilon.Core.Specs.Steps
 
             if (stat != SurvivalStatType.Undefined)
             {
-                var effect = actor.Person.Effects.Items
+                var effect = actor.Person.GetModule<IEffectsModule>().Items
                     .OfType<SurvivalStatHazardEffect>()
                     .Single(x => x.Type == stat);
 
@@ -231,7 +232,7 @@ namespace Zilon.Core.Specs.Steps
             }
             else
             {
-                var effects = actor.Person.Effects.Items.OfType<SurvivalStatHazardEffect>();
+                var effects = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>();
                 effects.Should().BeEmpty();
             }
         }
@@ -282,7 +283,7 @@ namespace Zilon.Core.Specs.Steps
 
         private int? GetSurvivalValue(IActor actor, SurvivalStatType type)
         {
-            var stat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == type);
+            var stat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == type);
             return stat?.Value;
         }
     }

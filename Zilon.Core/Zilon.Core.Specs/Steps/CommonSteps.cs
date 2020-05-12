@@ -10,10 +10,12 @@ using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common;
 
@@ -54,7 +56,7 @@ namespace Zilon.Core.Specs.Steps
         public void GivenАктёрИмеетHp(int startHp)
         {
             var actor = Context.GetActiveActor();
-            actor.Person.Survival.SetStatForce(SurvivalStatType.Health, startHp);
+            actor.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, startHp);
         }
 
         [UsedImplicitly]
@@ -70,7 +72,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var monster = Context.GetMonsterById(monsterId);
 
-            monster.Person.Survival.SetStatForce(SurvivalStatType.Health, monsterHp);
+            monster.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, monsterHp);
         }
 
         [UsedImplicitly]
@@ -85,32 +87,36 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Сундук содержит Id:(.*) экипировку (.*)")]
         public void GivenСундукСодержитIdЭкипировкуPistol(int id, string equipmentSid)
         {
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
             var propFactory = Context.ServiceProvider.GetRequiredService<IPropFactory>();
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
 
-            var container = containerManager.Items.Single(x => x.Id == id);
+            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
+
+            var container = staticObjectManager.Items.Single(x => x.Id == id);
 
             var propScheme = schemeService.GetScheme<IPropScheme>(equipmentSid);
             var equipment = propFactory.CreateEquipment(propScheme);
 
-            container.Content.Add(equipment);
+            container.GetModule<IPropContainer>().Content.Add(equipment);
         }
 
         [UsedImplicitly]
         [Given(@"Сундук содержит Id:(.*) ресурс (.*) в количестве (.*)")]
         public void GivenСундукСодержитIdРусурсPistol(int id, string resourceSid, int count)
         {
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
             var propFactory = Context.ServiceProvider.GetRequiredService<IPropFactory>();
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
 
-            var container = containerManager.Items.Single(x => x.Id == id);
+            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
+
+            var container = staticObjectManager.Items.Single(x => x.Id == id);
 
             var propScheme = schemeService.GetScheme<IPropScheme>(resourceSid);
             var resource = propFactory.CreateResource(propScheme, count);
 
-            container.Content.Add(resource);
+            container.GetModule<IPropContainer>().Content.Add(resource);
         }
 
         [Given(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
@@ -151,14 +157,15 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Я выбираю сундук Id:(.*)")]
         public void WhenЯВыбираюСундукId(int id)
         {
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
+            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
-            var container = containerManager.Items.Single(x => x.Id == id);
+            var container = staticObjectManager.Items.Single(x => x.Id == id);
 
             var chestViewMdel = new TestContainerViewModel
             {
-                Container = container
+                StaticObject = container
             };
 
             playerState.HoverViewModel = chestViewMdel;
@@ -172,12 +179,12 @@ namespace Zilon.Core.Specs.Steps
             var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
 
             var actor = Context.GetActiveActor();
-            var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
+            var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
-            var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.Content);
+            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(), container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
-            var equipment = container.Content.CalcActualItems().Single(x => x.Scheme.Sid == equipmentSchemeSid);
+            var equipment = container.GetModule<IPropContainer>().Content.CalcActualItems().Single(x => x.Scheme.Sid == equipmentSchemeSid);
 
             transferMachine.TransferProp(equipment,
                 PropTransferMachineStores.Container,
@@ -195,12 +202,12 @@ namespace Zilon.Core.Specs.Steps
             var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
 
             var actor = Context.GetActiveActor();
-            var container = ((IContainerViewModel)playerState.HoverViewModel).Container;
+            var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
-            var transferMachine = new PropTransferMachine(actor.Person.Inventory, container.Content);
+            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(), container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
-            var resource = container.Content.CalcActualItems()
+            var resource = container.GetModule<IPropContainer>().Content.CalcActualItems()
                 .OfType<Resource>()
                 .Single(x => x.Scheme.Sid == resourceSid);
 
@@ -227,7 +234,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var inventoryItems = actor.Person.Inventory.CalcActualItems();
+            var inventoryItems = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var foundEquipment = inventoryItems.SingleOrDefault(x => x.Scheme.Sid == equipmentSchemeSid);
 
             foundEquipment.Should().NotBeNull();
@@ -237,10 +244,11 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"В сундуке Id:(.*) нет экипировки (.*)")]
         public void ThenВСундукеIdНетЭкипировкиPistol(int id, string propSid)
         {
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
+            var containerManager = sectorManager.CurrentSector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == id);
-            var prop = container.Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
+            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
 
             prop.Should().BeNull();
         }
@@ -249,10 +257,11 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"В сундуке Id:(.*) нет предмета (.*)")]
         public void ThenВСундукеIdНетПредметаWater(int containerId, string resourceSid)
         {
-            var containerManager = Context.ServiceProvider.GetRequiredService<IPropContainerManager>();
+            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
+            var containerManager = sectorManager.CurrentSector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == containerId);
-            var prop = container.Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);
+            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);
 
             prop.Should().BeNull();
         }
@@ -262,7 +271,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var propsInInventory = actor.Person.Inventory.CalcActualItems();
+            var propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
 
             testedProp.Should().BeOfType<Resource>();
@@ -277,7 +286,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var propsInInventory = actor.Person.Inventory.CalcActualItems();
+            var propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
 
             testedProp.Should().BeNull();
@@ -288,7 +297,7 @@ namespace Zilon.Core.Specs.Steps
         public void ThenАктёрИмеетЗадасHp(int expectedHp)
         {
             var actor = Context.GetActiveActor();
-            var hpStat = actor.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedHp);
         }
 
@@ -297,7 +306,7 @@ namespace Zilon.Core.Specs.Steps
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
             var monster = Context.GetMonsterById(monsterId);
-            var hpStat = monster.Person.Survival.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var hpStat = monster.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedMonsterHp);
         }
 

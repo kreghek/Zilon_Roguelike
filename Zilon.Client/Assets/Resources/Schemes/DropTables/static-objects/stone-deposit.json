@@ -1,0 +1,18 @@
+{
+  "Rolls": 1,
+  "Records": [
+	{
+      "SchemeSid": "iron-ore",
+	  "MinCount": 1,
+	  "MaxCount": 1,
+      "Weight": 10
+    },
+	
+	{
+      "SchemeSid": "iron-ore",
+	  "MinCount": 2,
+	  "MaxCount": 5,
+      "Weight": 1
+    }
+  ]
+}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Common;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -18,19 +19,25 @@ namespace Zilon.Core.ProgressStoring
 
         public static HumanPersonStorageData Create(HumanPerson humanPerson)
         {
-            var storageData = new HumanPersonStorageData();
-
-            storageData.Survival = humanPerson.Survival.Stats.Select(x => new HumanSurvivalStatStorageData
+            if (humanPerson is null)
             {
-                Type = x.Type,
-                Value = x.ValueShare
-            }).ToArray();
+                throw new ArgumentNullException(nameof(humanPerson));
+            }
 
-            storageData.Equipments = humanPerson.EquipmentCarrier.Select(CreateEquipmentStorageData).ToArray();
+            var storageData = new HumanPersonStorageData
+            {
+                Survival = humanPerson.GetModule<ISurvivalModule>().Stats.Select(x => new HumanSurvivalStatStorageData
+                {
+                    Type = x.Type,
+                    Value = x.ValueShare
+                }).ToArray(),
 
-            storageData.Inventory = humanPerson.Inventory.CalcActualItems().Select(CreatePropStorageData).ToArray();
+                Equipments = humanPerson.GetModule<IEquipmentModule>().Select(CreateEquipmentStorageData).ToArray(),
 
-            storageData.Perks = humanPerson.EvolutionData.Perks.Select(CreatePerkStorageData).ToArray();
+                Inventory = humanPerson.GetModule<IInventoryModule>().CalcActualItems().Select(CreatePropStorageData).ToArray(),
+
+                Perks = humanPerson.GetModule<IEvolutionModule>().Perks.Select(CreatePerkStorageData).ToArray()
+            };
 
             return storageData;
         }
@@ -89,29 +96,40 @@ namespace Zilon.Core.ProgressStoring
             ISurvivalRandomSource survivalRandomSource,
             IPropFactory propFactory)
         {
+            if (schemeService is null)
+            {
+                throw new ArgumentNullException(nameof(schemeService));
+            }
+
+            if (survivalRandomSource is null)
+            {
+                throw new ArgumentNullException(nameof(survivalRandomSource));
+            }
+
+            if (propFactory is null)
+            {
+                throw new ArgumentNullException(nameof(propFactory));
+            }
+
             var storedPerson = this;
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
-            var evolutionData = new EvolutionData(schemeService);
+            var evolutionData = new EvolutionModule(schemeService);
 
             RestoreEvolutionData(schemeService, storedPerson, evolutionData);
 
-            var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
+            var person = new HumanPerson(personScheme);
 
-            var person = new HumanPerson(personScheme,
-                                         defaultActScheme,
-                                         evolutionData,
-                                         survivalRandomSource,
-                                         inventory);
+            //TODO Создать необходимые модули и заполнить их.
 
             foreach (var survivalStoredItem in storedPerson.Survival)
             {
                 var normalizedValueShare = RangeHelper.NormalizeShare(survivalStoredItem.Value);
 
-                var stat = person.Survival.Stats.Single(x => x.Type == survivalStoredItem.Type);
+                var stat = person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == survivalStoredItem.Type);
 
                 stat.SetShare(normalizedValueShare);
             }
@@ -154,7 +172,7 @@ namespace Zilon.Core.ProgressStoring
                 var equipment = propFactory.CreateEquipment(equipmentScheme);
                 equipment.Durable.Value = storedEquipment.Durable;
 
-                person.EquipmentCarrier[i] = equipment;
+                person.GetModule<IEquipmentModule>()[i] = equipment;
                 //TODO Уменьшать прочность согласно сохранённым данным
             }
 
@@ -163,7 +181,7 @@ namespace Zilon.Core.ProgressStoring
 
         private static void RestoreEvolutionData(ISchemeService schemeService,
             HumanPersonStorageData storedPerson,
-            EvolutionData evolutionData)
+            EvolutionModule evolutionData)
         {
             var perksFromSave = new List<IPerk>();
             foreach (var storedPerk in storedPerson.Perks)

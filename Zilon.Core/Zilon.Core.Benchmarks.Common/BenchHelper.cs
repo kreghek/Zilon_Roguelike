@@ -55,17 +55,7 @@ namespace Zilon.Core.Benchmark
                 throw new System.ArgumentNullException(nameof(startNode));
             }
 
-            var inventory = new Inventory();
-
-            var evolutionData = new EvolutionData(schemeService);
-
-            var defaultActScheme = schemeService.GetScheme<ITacticalActScheme>(personScheme.DefaultAct);
-
-            var person = new HumanPerson(personScheme,
-                defaultActScheme,
-                evolutionData,
-                survivalRandomSource,
-                inventory);
+            var person = new HumanPerson(personScheme);
 
             var actor = new Actor(person, player, startNode);
 

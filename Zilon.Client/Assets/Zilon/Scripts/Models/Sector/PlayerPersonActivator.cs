@@ -9,6 +9,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
@@ -18,7 +19,7 @@ public class PlayerPersonActivator : MonoBehaviour
 {
     [NotNull] [Inject] private readonly HumanPlayer _humanPlayer;
     [Inject] private readonly IHumanActorTaskSource _humanActorTaskSource;
-    [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
+    [Inject] private readonly IPersonFactory _humanPersonFactory;
     [NotNull] [Inject] private readonly DiContainer _container;
     [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
@@ -36,7 +37,7 @@ public class PlayerPersonActivator : MonoBehaviour
     {
         if (SectorViewModel.IsInitialized)
         {
-            _humanPlayer.MainPerson = _humanPersonFactory.Create();
+            _humanPlayer.MainPerson = _humanPersonFactory.Create("human-person");
 
             var playerActorViewModel = SelectNodeAndCreateHumanPersonViewModelFromMainPerson();
 
@@ -72,8 +73,6 @@ public class PlayerPersonActivator : MonoBehaviour
     {
         var fowData = new HumanSectorFowData();
         var actor = new Actor(_humanPlayer.MainPerson, _humanPlayer, startNode, perkResolver, fowData);
-
-        FowHelper.UpdateFowData(actor.SectorFowData, SectorViewModel.Sector.Map, startNode, 5);
 
         actorManager.Add(actor);
 

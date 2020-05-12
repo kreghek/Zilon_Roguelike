@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
 public class MonsterInfoPanel : MonoBehaviour
@@ -61,13 +62,15 @@ public class MonsterInfoPanel : MonoBehaviour
 
     private void SetMonsterStats(MonsterPerson monsterPerson, Language currentLanguage)
     {
-        var hpStat = monsterPerson.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
-        if (hpStat != null)
+        var hpStat = monsterPerson.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+        if (hpStat == null)
         {
-            var monsterHealthStateKey = HealthHelper.GetHealthStateKey(hpStat);
-            var monsterHealthState = StaticPhrases.GetValue($"state-hp-{monsterHealthStateKey}", currentLanguage);
-            MonsterHpText.text = monsterHealthState;
+            return;
         }
+
+        var monsterHealthStateKey = HealthHelper.GetHealthStateKey(hpStat);
+        var monsterHealthState = StaticPhrases.GetValue($"state-hp-{monsterHealthStateKey}", currentLanguage);
+        MonsterHpText.text = monsterHealthState;
     }
 
     private void SetMonsterName(MonsterPerson monsterPerson, Language currentLanguage)

@@ -12,6 +12,8 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonGeneration;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -54,7 +56,7 @@ public class PlayerPersonInitiator : MonoBehaviour
 
     [NotNull]
     [Inject]
-    private readonly IHumanPersonFactory _humanPersonFactory;
+    private readonly IPersonFactory _humanPersonFactory;
 
     [NotNull]
     [Inject]
@@ -90,13 +92,6 @@ public class PlayerPersonInitiator : MonoBehaviour
             playerActorStartNode,
             nodeViewModels);
 
-        //TODO Обновлять, когда любой актёр создаётся. Нужно подумать как.
-        FowHelper.UpdateFowData(
-            playerActorViewModel.Actor.SectorFowData,
-            _sectorManager.CurrentSector.Map,
-            playerActorStartNode,
-            radius: 5);
-
         //Лучше централизовать переключение текущего актёра только в playerState
         _playerState.ActiveActor = playerActorViewModel;
         _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
@@ -116,7 +111,7 @@ public class PlayerPersonInitiator : MonoBehaviour
         {
             if (!_progressStorageService.LoadPerson())
             {
-                var playerPerson = _humanPersonFactory.Create();
+                var playerPerson = _humanPersonFactory.Create("human-person");
 
                 _humanPlayer.MainPerson = playerPerson;
 
@@ -128,7 +123,6 @@ public class PlayerPersonInitiator : MonoBehaviour
 
         var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
         _playerEventLogService.Actor = actor;
-        _humanPlayer.MainPerson.PlayerEventLogService = _playerEventLogService;
 
         actorManager.Add(actor);
 
@@ -148,7 +142,7 @@ public class PlayerPersonInitiator : MonoBehaviour
         actorViewModel.transform.position = actorPosition;
         actorViewModel.Actor = actor;
 
-        if (!actor.Person.Inventory.CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
+        if (!actor.Person.GetModule<IInventoryModule>().CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
         {
             AddResourceToCurrentPerson("camp-tools");
         }
@@ -156,7 +150,7 @@ public class PlayerPersonInitiator : MonoBehaviour
         return actorViewModel;
     }
 
-    private void ShowCreatePersonModal(HumanPerson playerPerson)
+    private void ShowCreatePersonModal(IPerson playerPerson)
     {
         _sectorModalManager.ShowCreatePersonModal(playerPerson);
     }
@@ -173,11 +167,11 @@ public class PlayerPersonInitiator : MonoBehaviour
     /// </remarks>
     public void AddResourceToCurrentPerson(string resourceSid, int count = 1)
     {
-        var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;
+        var inventory = _humanPlayer.MainPerson.GetModule<IInventoryModule>();
         AddResource(inventory, resourceSid, count);
     }
 
-    private void AddResource(Inventory inventory, string resourceSid, int count)
+    private void AddResource(IInventoryModule inventory, string resourceSid, int count)
     {
         try
         {

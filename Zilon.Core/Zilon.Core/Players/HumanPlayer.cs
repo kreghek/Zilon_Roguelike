@@ -14,7 +14,7 @@ namespace Zilon.Core.Players
         /// <summary>
         /// Ссылка на основного персонажа игрока.
         /// </summary>
-        public HumanPerson MainPerson { get; set; }
+        public IPerson MainPerson { get; set; }
 
         public void BindSectorNode(ISectorNode sectorNode)
         {
