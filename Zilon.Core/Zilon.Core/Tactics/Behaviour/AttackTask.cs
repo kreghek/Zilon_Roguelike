@@ -20,7 +20,8 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (!Target.CanBeDamaged())
             {
-                throw new InvalidOperationException("Попытка атаковать цель, которой нельзя нанести урон.");
+                return;
+                //throw new InvalidOperationException("Попытка атаковать цель, которой нельзя нанести урон.");
             }
 
             if (Actor.Person.GetModuleSafe<ICombatActModule>() is null)

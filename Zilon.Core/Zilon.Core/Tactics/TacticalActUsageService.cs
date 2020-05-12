@@ -127,7 +127,8 @@ namespace Zilon.Core.Tactics
 
             if (!isInDistance)
             {
-                throw new UsageOutOfDistanceException("Попытка атаковать цель, находящуюся за пределами атаки.");
+                //throw new UsageOutOfDistanceException("Попытка атаковать цель, находящуюся за пределами атаки.");
+                return;
             }
 
             var targetNode = target.Node;
