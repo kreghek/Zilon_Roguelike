@@ -20,19 +20,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IGraphNode TargetNode { get; }
 
-        public IActorTask CreateActorTask([CanBeNull] IActorTask currentTask, [NotNull] IActor actor)
+        public IActorTask CreateActorTask([NotNull] IActor actor)
         {
-            var currentMoveTask = currentTask as MoveTask;
-            if (currentMoveTask == null)
-            {
-                return CreateTaskInner(actor);
-            }
-
-            if (currentMoveTask.TargetNode == TargetNode)
-            {
-                return currentMoveTask;
-            }
-
             return CreateTaskInner(actor);
         }
 

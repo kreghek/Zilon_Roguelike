@@ -1,280 +1,409 @@
-﻿//using System;
-//using System.Linq;
-//using System.Threading.Tasks;
-
-//using FluentAssertions;
-
-//using Moq;
-
-//using NUnit.Framework;
-
-//using Zilon.Core.MapGenerators.PrimitiveStyle;
-//using Zilon.Core.Persons;
-//using Zilon.Core.Players;
-//using Zilon.Core.Tactics;
-//using Zilon.Core.Tactics.Behaviour;
-//using Zilon.Core.Tactics.Spatial;
-//using Zilon.Core.Tests.Common;
-
-//namespace Zilon.Core.Tests.Tactics.Behaviour
-//{
-//    /// <summary>
-//    /// Тест проверяет, что источник намерений генерирует задачу после указания целевого узла.
-//    /// По окончанию задачи на перемещение должен выдавать пустые задачи.
-//    /// </summary>
-//    [TestFixture]
-//    public class HumanActorTaskSourceTests
-//    {
-//        /// <summary>
-//        /// Тест проверяет, чтобы всегда при выдачи задачи на перемещение генерировалась хотя бы одна задача.
-//        /// </summary>
-//        /// <remarks>
-//        /// Потому что уже команда должна разбираться, что делать, если актёр уже стоит в целевой точке.
-//        /// </remarks>
-//        [Test]
-//        public async Task Intent_TargetToStartPoint_GenerateMoveCommand()
-//        {
-//            // ARRANGE
-
-//            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
-
-//            var startNode = map.Nodes.SelectByHexCoords(3, 3);
-
-//            var actor = CreateActor(map, startNode);
-
-//            var taskSource = InitTaskSource(actor);
-
-//            var moveIntention = new MoveIntention(startNode, map);
-
-//            // ACT
-//            var tasks = SetHumanIntention(actor, taskSource, moveIntention);
-
-//            // ASSERT
-//            tasks.Should().NotBeNullOrEmpty();
-//            tasks[0].Should().BeOfType<MoveTask>();
-//        }
-
-//        /// <summary>
-//        /// Тест проверяет, чтобы метод назначения задачи на перемещение проверял аргумент.
-//        /// Аргумент не должен быть null. Класс поведения не знает, как в этом случае поступать.
-//        /// </summary>
-//        /// <remarks>
-//        /// Для отмены текущего намерения или выполняемой команды используем специальное намерение CancelIntention.
-//        /// </remarks>
-//        [Test]
-//        public async Task Intent_SetNullTarget_ThrownException()
-//        {
-//            // ARRANGE
-
-//            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
-
-//            var startNode = map.Nodes.SelectByHexCoords(3, 3);
-
-//            var actor = CreateActor(map, startNode);
-
-//            var taskSource = InitTaskSource(actor);
-
-//            // ACT
-//            Action act = () => { taskSource.Intent(null); };
-
-//            // ASSERT
-//            act.Should().Throw<ArgumentException>();
-//        }
-
-//        /// <summary>
-//        /// Тест проверяет, что после окончания задачи на перемещение
-//        /// и назначения новой задачи всё работает корректно.
-//        /// То есть новая команда и возвращается при запросе.
-//        /// </summary>
-//        [Test]
-//        public async Task Intent_AssignAfterTaskComplete_NoNullCommand()
-//        {
-//            // ARRANGE
-
-//            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
-
-//            var startNode = map.Nodes.SelectByHexCoords(3, 3);
-//            var finishNode = map.Nodes.SelectByHexCoords(1, 5);
-//            var finishNode2 = map.Nodes.SelectByHexCoords(3, 2);
-
-//            var actor = CreateActor(map, startNode);
+﻿using NUnit.Framework;
+using Zilon.Core.Tactics.Behaviour;
+
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.Persons;
+using Zilon.Core.Players;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
+
+namespace Zilon.Core.Tests.Tactics.Behaviour
+{
+    /// <summary>
+    /// Тест проверяет, что источник намерений генерирует задачу после указания целевого узла.
+    /// По окончанию задачи на перемещение должен выдавать пустые задачи.
+    /// </summary>
+    [TestFixture]
+    public class HumanActorTaskSourceTests
+    {
+        /// <summary>
+        /// Тест проверяет получение задачи актёра после указания намерения.
+        /// </summary>
+        [Test]
+        // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
+        //[Timeout(1000)]
+        public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask()
+        {
+            // ARRANGE
+
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+
+            var actorNode = map.Nodes.SelectByHexCoords(0, 0);
+
+            var actor = CreateActor(map, actorNode);
+
+            var taskMock = new Mock<IActorTask>();
+            var task = taskMock.Object;
+            var intentionMock = new Mock<IIntention>();
+            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
+            var intention = intentionMock.Object;
+
+            var taskSource = new HumanActorTaskSource(actor);
+
+            // ACT
+
+            var getActorTaskTask = taskSource.GetActorTaskAsync(actor);
+            taskSource.Intent(intention);
+            var factActorTask = await getActorTaskTask.ConfigureAwait(false);
 
-//            var taskSource = InitTaskSource(actor);
+            // ASSERT
+            factActorTask.Should().Be(task);
+        }
 
-//            var moveIntention = new MoveIntention(finishNode, map);
-//            var moveIntention2 = new MoveIntention(finishNode2, map);
+        /// <summary>
+        /// Тест проверяет получение задачи актёра после указания намерения.
+        /// </summary>
+        [Test]
+        // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
+        //[Timeout(1000)]
+        public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask2()
+        {
+            // ARRANGE
+
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+
+            var actorNode = map.Nodes.SelectByHexCoords(0, 0);
+
+            var actor = CreateActor(map, actorNode);
+
+            var taskMock = new Mock<IActorTask>();
+            var task = taskMock.Object;
+            var intentionMock = new Mock<IIntention>();
+            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
+            var intention = intentionMock.Object;
+
+            var taskSource = new HumanActorTaskSource(actor);
+
+            // ACT
+
+            taskSource.Intent(intention);
+            var getActorTaskTask = taskSource.GetActorTaskAsync(actor);
+            var factActorTask = await getActorTaskTask.ConfigureAwait(false);
+
+            // ASSERT
+            factActorTask.Should().Be(task);
+        }
+
+        /// <summary>
+        /// Тест проверяет получение задачи актёра после указания намерения.
+        /// </summary>
+        [Test]
+        // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
+        //[Timeout(1000)]
+        public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask3()
+        {
+            // ARRANGE
+
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+
+            var actorNode = map.Nodes.SelectByHexCoords(0, 0);
+
+            var actor = CreateActor(map, actorNode);
+
+            var taskMock = new Mock<IActorTask>();
+            var task = taskMock.Object;
+            var intentionMock = new Mock<IIntention>();
+            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
+            var intention = intentionMock.Object;
 
-//            // ACT
+            var taskSource = new HumanActorTaskSource(actor);
 
-//            // 1. Ждём, пока задача на перемещение не отработает.
-//            // В конце текущая задача актёра будет IsComplete.
-//            var tasks = SetHumanIntention(actor, taskSource, moveIntention);
+            // ACT
 
-//            for (var i = 0; i < 3; i++)
-//            {
-//                foreach (var task in tasks)
-//                {
-//                    task.Execute();
-//                }
-//            }
+            taskSource.Intent(intention);
+            var getActorTaskTask1 = taskSource.GetActorTaskAsync(actor);
+            var factActorTask1 = await getActorTaskTask1.ConfigureAwait(false);
 
-//            foreach (var task in tasks)
-//            {
-//                task.IsComplete.Should().Be(true);
-//            }
+            taskSource.Intent(intention);
+            var getActorTaskTask2 = taskSource.GetActorTaskAsync(actor);
+            var factActorTask2 = await getActorTaskTask2.ConfigureAwait(false);
 
-//            // 2. Указываем намерение на ещё одну задачу.
-//            var factTasks = SetHumanIntention(actor, taskSource, moveIntention2);
+            // ASSERT
+            factActorTask1.Should().Be(task);
+            factActorTask2.Should().Be(task);
+        }
 
-//            // ASSERT
-//            factTasks.Should().NotBeNullOrEmpty();
-//        }
+        /*
+        /// <summary>
+        /// Тест проверяет, чтобы всегда при выдачи задачи на перемещение генерировалась хотя бы одна задача.
+        /// </summary>
+        /// <remarks>
+        /// Потому что уже команда должна разбираться, что делать, если актёр уже стоит в целевой точке.
+        /// </remarks>
+        [Test]
+        public async Task Intent_TargetToStartPoint_GenerateMoveCommand()
+        {
+            // ARRANGE
+
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+
+            var startNode = map.Nodes.SelectByHexCoords(3, 3);
+
+            var actor = CreateActor(map, startNode);
+
+            var taskSource = InitTaskSource(actor);
+
+            var moveIntention = new MoveIntention(startNode, map);
+
+            // ACT
+            var tasks = SetHumanIntention(actor, taskSource, moveIntention);
+
+            // ASSERT
+            tasks.Should().NotBeNullOrEmpty();
+            tasks[0].Should().BeOfType<MoveTask>();
+        }
+        
+        /// <summary>
+        /// Тест проверяет, чтобы метод назначения задачи на перемещение проверял аргумент.
+        /// Аргумент не должен быть null. Класс поведения не знает, как в этом случае поступать.
+        /// </summary>
+        /// <remarks>
+        /// Для отмены текущего намерения или выполняемой команды используем специальное намерение CancelIntention.
+        /// </remarks>
+        [Test]
+        public async Task Intent_SetNullTarget_ThrownException()
+        {
+            // ARRANGE
 
-//        /// <summary>
-//        /// Тест проверяет, что если указать ещё одно намерение на перемещение, пока предыдущая задача не выполнилась,
-//        /// то новое намерение замещает текущее.
-//        /// </summary>
-//        [Test]
-//        public async Task Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommand()
-//        {
-//            // ARRANGE
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-//            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+            var startNode = map.Nodes.SelectByHexCoords(3, 3);
+
+            var actor = CreateActor(map, startNode);
 
-//            var startNode = map.Nodes.SelectByHexCoords(3, 3);
-//            var finishNode = map.Nodes.SelectByHexCoords(1, 5);
-//            var finishNode2 = map.Nodes.SelectByHexCoords(3, 2);
+            var taskSource = InitTaskSource(actor);
 
-//            var actor = CreateActor(map, startNode);
+            // ACT
+            Action act = () => { taskSource.Intent(null); };
+
+            // ASSERT
+            act.Should().Throw<ArgumentException>();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что после окончания задачи на перемещение
+        /// и назначения новой задачи всё работает корректно.
+        /// То есть новая команда и возвращается при запросе.
+        /// </summary>
+        [Test]
+        public async Task Intent_AssignAfterTaskComplete_NoNullCommand()
+        {
+            // ARRANGE
+
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+
+            var startNode = map.Nodes.SelectByHexCoords(3, 3);
+            var finishNode = map.Nodes.SelectByHexCoords(1, 5);
+            var finishNode2 = map.Nodes.SelectByHexCoords(3, 2);
 
-//            var taskSource = InitTaskSource(actor);
+            var actor = CreateActor(map, startNode);
 
-//            var moveIntention = new MoveIntention(finishNode, map);
-//            var moveIntention2 = new MoveIntention(finishNode2, map);
+            var taskSource = InitTaskSource(actor);
 
-//            // ACT
+            var moveIntention = new MoveIntention(finishNode, map);
+            var moveIntention2 = new MoveIntention(finishNode2, map);
 
-//            // 1. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
-//            var tasks = SetHumanIntention(actor, taskSource, moveIntention);
+            // ACT
 
-//            for (var i = 0; i < 1; i++)
-//            {
-//                foreach (var task in tasks)
-//                {
-//                    task.Execute();
-//                }
-//            }
+            // 1. Ждём, пока задача на перемещение не отработает.
+            // В конце текущая задача актёра будет IsComplete.
+            var tasks = SetHumanIntention(actor, taskSource, moveIntention);
 
-//            foreach (var task in tasks)
-//            {
-//                task.IsComplete.Should().Be(false);
-//            }
+            for (var i = 0; i < 3; i++)
+            {
+                foreach (var task in tasks)
+                {
+                    task.Execute();
+                }
+            }
 
-//            // 2. Указываем другое намерение до того, как текущая задача на перемещение выполнена до конца.
-//            var factTasks = SetHumanIntention(actor, taskSource, moveIntention2);
+            foreach (var task in tasks)
+            {
+                task.IsComplete.Should().Be(true);
+            }
 
-//            // ASSERT
-//            factTasks.Should().NotBeNullOrEmpty();
-//        }
+            // 2. Указываем намерение на ещё одну задачу.
+            var factTasks = SetHumanIntention(actor, taskSource, moveIntention2);
 
-//        /// <summary>
-//        /// Тест проверяет, то источник задач возвращает задачу, если указать намерение атаковать.
-//        /// </summary>
-//        [Test]
-//        public async Task IntentAttack_SetTarget_ReturnsAttackTask()
-//        {
-//            //ARRANGE
-//            var usageService = CreateTacticalActUsageService();
+            // ASSERT
+            factTasks.Should().NotBeNullOrEmpty();
+        }
 
-//            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+        /// <summary>
+        /// Тест проверяет, что если указать ещё одно намерение на перемещение, пока предыдущая задача не выполнилась,
+        /// то новое намерение замещает текущее.
+        /// </summary>
+        [Test]
+        public async Task Intent_AssignTaskBeforeCurrentTaskComplete_NoNullCommand()
+        {
+            // ARRANGE
 
-//            var attackerStartNode = map.Nodes.SelectByHexCoords(3, 3);
-//            var targetStartNode = map.Nodes.SelectByHexCoords(2, 3);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-//            var attackerActor = CreateActor(map, attackerStartNode);
-//            var targetActor = CreateActor(map, targetStartNode);
+            var startNode = map.Nodes.SelectByHexCoords(3, 3);
+            var finishNode = map.Nodes.SelectByHexCoords(1, 5);
+            var finishNode2 = map.Nodes.SelectByHexCoords(3, 2);
 
-//            var taskSource = InitTaskSource(attackerActor);
+            var actor = CreateActor(map, startNode);
 
-//            var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, tacticalAct: null, actService: usageService));
+            var taskSource = InitTaskSource(actor);
 
-//            // ACT
-//            var task = SetHumanIntention(attackerActor, taskSource, attackIntention);
+            var moveIntention = new MoveIntention(finishNode, map);
+            var moveIntention2 = new MoveIntention(finishNode2, map);
 
-//            // ASSERT
-//            task.Should().NotBeNull();
-//            task.Should().BeOfType<AttackTask>();
-//        }
+            // ACT
 
-//        /// <summary>
-//        /// Тест проверяет, то источник задач возвращает задачу, если указать намерение открыть контейнер.
-//        /// </summary>
-//        [Test]
-//        public async Task IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
-//        {
-//            //ARRANGE
-//            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+            // 1. Продвигаем выполнение текущего намерения. НО НЕ ДО ОКОНЧАНИЯ.
+            var tasks = SetHumanIntention(actor, taskSource, moveIntention);
+
+            for (var i = 0; i < 1; i++)
+            {
+                foreach (var task in tasks)
+                {
+                    task.Execute();
+                }
+            }
 
-//            var startNode = map.Nodes.SelectByHexCoords(0, 0);
+            foreach (var task in tasks)
+            {
+                task.IsComplete.Should().Be(false);
+            }
 
-//            var actor = CreateActor(map, startNode);
+            // 2. Указываем другое намерение до того, как текущая задача на перемещение выполнена до конца.
+            var factTasks = SetHumanIntention(actor, taskSource, moveIntention2);
 
-//            var taskSource = InitTaskSource(actor);
+            // ASSERT
+            factTasks.Should().NotBeNullOrEmpty();
+        }
 
-//            var containerMock = new Mock<IStaticObject>();
-//            var container = containerMock.Object;
+        /// <summary>
+        /// Тест проверяет, то источник задач возвращает задачу, если указать намерение атаковать.
+        /// </summary>
+        [Test]
+        public async Task IntentAttack_SetTarget_ReturnsAttackTask()
+        {
+            //ARRANGE
+            var usageService = CreateTacticalActUsageService();
 
-//            var methodMock = new Mock<IOpenContainerMethod>();
-//            var method = methodMock.Object;
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-//            var intention = new Intention<OpenContainerTask>(a => new OpenContainerTask(a, container, method, map));
+            var attackerStartNode = map.Nodes.SelectByHexCoords(3, 3);
+            var targetStartNode = map.Nodes.SelectByHexCoords(2, 3);
 
-//            // ACT
-//            var task = SetHumanIntention(actor, taskSource, intention);
+            var attackerActor = CreateActor(map, attackerStartNode);
+            var targetActor = CreateActor(map, targetStartNode);
 
-//            // ASSERT
-//            task.Should().NotBeNull();
-//            task.Should().BeOfType<OpenContainerTask>();
-//        }
+            var taskSource = InitTaskSource(attackerActor);
 
-//        private static ITacticalActUsageService CreateTacticalActUsageService()
-//        {
-//            var tacticalActUsageServiceMock = new Mock<ITacticalActUsageService>();
-//            var tacticalActUsageService = tacticalActUsageServiceMock.Object;
-//            return tacticalActUsageService;
-//        }
+            var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, tacticalAct: null, actService: usageService));
 
-//        private static IHumanActorTaskSource InitTaskSource(IActor currentActor)
-//        {
-//            var taskSource = new HumanActorTaskSource();
-//            taskSource.SwitchActor(currentActor);
-//            return taskSource;
-//        }
+            // ACT
+            var task = SetHumanIntention(attackerActor, taskSource, attackIntention);
 
-//        private static IActor CreateActor(IMap map, HexNode startNode)
-//        {
-//            var playerMock = new Mock<IPlayer>();
-//            var player = playerMock.Object;
+            // ASSERT
+            task.Should().NotBeNull();
+            task.Should().BeOfType<AttackTask>();
+        }
 
-//            var personMock = new Mock<IPerson>();
-//            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
-//            var person = personMock.Object;
+        /// <summary>
+        /// Тест проверяет, то источник задач возвращает задачу, если указать намерение открыть контейнер.
+        /// </summary>
+        [Test]
+        public async Task IntentOpenContainer_SetContainerAndMethod_ReturnsTask()
+        {
+            //ARRANGE
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-//            var actor = new Actor(person, player, startNode);
+            var startNode = map.Nodes.SelectByHexCoords(0, 0);
 
-//            map.HoldNode(startNode, actor);
+            var actor = CreateActor(map, startNode);
 
-//            return actor;
-//        }
+            var taskSource = InitTaskSource(actor);
 
-//        private static IActorTask SetHumanIntention(IActor actor,
-//            IHumanActorTaskSource taskSource,
-//            IIntention intention)
-//        {
-//            taskSource.Intent(intention);
+            var containerMock = new Mock<IStaticObject>();
+            var container = containerMock.Object;
 
-//            var task = taskSource.GetActorTask(actor);
-//            return task;
-//        }
-//    }
-//}
+            var methodMock = new Mock<IOpenContainerMethod>();
+            var method = methodMock.Object;
+
+            var intention = new Intention<OpenContainerTask>(a => new OpenContainerTask(a, container, method, map));
+
+            // ACT
+            var task = SetHumanIntention(actor, taskSource, intention);
+
+            // ASSERT
+            task.Should().NotBeNull();
+            task.Should().BeOfType<OpenContainerTask>();
+        }
+        
+
+        private static ITacticalActUsageService CreateTacticalActUsageService()
+        {
+            var tacticalActUsageServiceMock = new Mock<ITacticalActUsageService>();
+            var tacticalActUsageService = tacticalActUsageServiceMock.Object;
+            return tacticalActUsageService;
+        }
+
+        private static IHumanActorTaskSource InitTaskSource(IActor currentActor)
+        {
+            var taskSource = new HumanActorTaskSource();
+            taskSource.SwitchActor(currentActor);
+            return taskSource;
+        }
+
+        private static IActor CreateActor(IMap map, HexNode startNode)
+        {
+            var playerMock = new Mock<IPlayer>();
+            var player = playerMock.Object;
+
+            var personMock = new Mock<IPerson>();
+            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
+            var person = personMock.Object;
+
+            var actor = new Actor(person, player, startNode);
+
+            map.HoldNode(startNode, actor);
+
+            return actor;
+        }
+
+        private static IActorTask SetHumanIntention(IActor actor,
+            IHumanActorTaskSource taskSource,
+            IIntention intention)
+        {
+            taskSource.Intent(intention);
+
+            var task = taskSource.GetActorTask(actor);
+            return task;
+        }
+        */
+
+        private static IActor CreateActor(IMap map, HexNode startNode)
+        {
+            var playerMock = new Mock<IPlayer>();
+            var player = playerMock.Object;
+
+            var personMock = new Mock<IPerson>();
+            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
+            var person = personMock.Object;
+
+            var actor = new Actor(person, player, startNode);
+
+            map.HoldNode(startNode, actor);
+
+            return actor;
+        }
+    }
+}

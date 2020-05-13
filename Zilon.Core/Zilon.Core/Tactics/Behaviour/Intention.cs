@@ -11,7 +11,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public Func<IActor, TActorTask> TaskFactory { get; }
 
-        public IActorTask CreateActorTask(IActorTask currentTask, IActor actor)
+        public IActorTask CreateActorTask(IActor actor)
         {
             var task = TaskFactory(actor);
             return task;

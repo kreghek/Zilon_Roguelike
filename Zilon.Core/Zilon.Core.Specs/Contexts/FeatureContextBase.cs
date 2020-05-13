@@ -197,7 +197,7 @@ namespace Zilon.Core.Specs.Contexts
             var humanStartNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
             var humanActor = CreateHumanActor(humanPlayer, personSid, humanStartNode, perkResolver);
 
-            humanTaskSource.SwitchActor(humanActor);
+            humanTaskSource.SwitchActiveActor(humanActor);
 
             actorManager.Add(humanActor);
 

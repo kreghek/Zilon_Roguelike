@@ -7,24 +7,35 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private TaskCompletionSource<IActorTask> _taskCompletionSource;
 
-        private IActorTask _currentTask;
-
-        public void SwitchActor(IActor currentActor)
+        public HumanActorTaskSource()
         {
-            CurrentActor = currentActor;
+            _taskCompletionSource = new TaskCompletionSource<IActorTask>();
         }
 
-        public IActor CurrentActor { get; private set; }
+        public HumanActorTaskSource(IActor activeActor) : this()
+        {
+            SwitchActiveActor(activeActor);
+        }
+
+        public void SwitchActiveActor(IActor currentActor)
+        {
+            ActiveActor = currentActor;
+        }
+
+        public IActor ActiveActor { get; private set; }
 
 
         public void Intent(IIntention intention)
         {
-            _taskCompletionSource = new TaskCompletionSource<IActorTask>();
-
             var currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
-            var actorTask = currentIntention.CreateActorTask(_currentTask, CurrentActor);
-            _currentTask = actorTask;
-            _taskCompletionSource.SetResult(_currentTask);
+
+            var actorTask = currentIntention.CreateActorTask(ActiveActor);
+            _taskCompletionSource.SetResult(actorTask);
+            
+            if (_taskRequested)
+            {
+                RefreshTaskCompetitonSource();
+            }
         }
 
         public Task<IActorTask> GetActorTaskAsync(IActor actor)
@@ -33,31 +44,37 @@ namespace Zilon.Core.Tactics.Behaviour
             // Этот источник команд ждёт, пока игрок не укажет задачу.
             // Задача генерируется из намерения. Это значит, что ждать нужно, пока не будет задано намерение.
 
-            if (CurrentActor is null)
+            if (ActiveActor is null)
             {
                 throw new InvalidOperationException("Не выбран текущий ключевой актёр.");
             }
 
-            if (actor != CurrentActor)
+            if (actor != ActiveActor)
             {
                 throw new InvalidOperationException($"Получение задачи актёра без предварительно проверки в {nameof(CanGetTask)}");
             }
 
-            // Намерение может не задаваться каждую итерацию. Потому что задачи длятся больше одной итерации.
-            // Поэтому если уже назначена задача и она еще не выполнена,
-            // то предполагаем, что игрок не изменял текущую задачу.
-            var currentTaskIsComplete = _currentTask?.IsComplete;
-            if (currentTaskIsComplete != null && !currentTaskIsComplete.Value)
+            if (_taskCompletionSource is null)
             {
-                return Task.FromResult(_currentTask);
+                throw new InvalidOperationException("Сначала нужно задать намерение.");
             }
 
-            return _taskCompletionSource.Task;
+            var actorTaskTask = _taskCompletionSource.Task;
+            _taskRequested = true;
+
+            return actorTaskTask;
+        }
+
+        private bool _taskRequested = false;
+
+        private void RefreshTaskCompetitonSource()
+        {
+            _taskCompletionSource = new TaskCompletionSource<IActorTask>();
         }
 
         public bool CanGetTask(IActor actor)
         {
-            return actor == CurrentActor;
+            return actor == ActiveActor;
         }
     }
 }
