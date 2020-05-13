@@ -135,6 +135,45 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             factActorTask2.Should().Be(task);
         }
 
+        /// <summary>
+        /// Тест проверяет получение задачи актёра после указания намерения.
+        /// </summary>
+        [Test]
+        // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
+        //[Timeout(1000)]
+        public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask4()
+        {
+            // ARRANGE
+
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+
+            var actorNode = map.Nodes.SelectByHexCoords(0, 0);
+
+            var actor = CreateActor(map, actorNode);
+
+            var taskMock = new Mock<IActorTask>();
+            var task = taskMock.Object;
+            var intentionMock = new Mock<IIntention>();
+            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
+            var intention = intentionMock.Object;
+
+            var taskSource = new HumanActorTaskSource(actor);
+
+            // ACT
+
+            var getActorTaskTask1 = taskSource.GetActorTaskAsync(actor);
+            taskSource.Intent(intention);
+            var factActorTask1 = await getActorTaskTask1.ConfigureAwait(false);
+
+            var getActorTaskTask2 = taskSource.GetActorTaskAsync(actor);
+            taskSource.Intent(intention);
+            var factActorTask2 = await getActorTaskTask2.ConfigureAwait(false);
+
+            // ASSERT
+            factActorTask1.Should().Be(task);
+            factActorTask2.Should().Be(task);
+        }
+
         /*
         /// <summary>
         /// Тест проверяет, чтобы всегда при выдачи задачи на перемещение генерировалась хотя бы одна задача.

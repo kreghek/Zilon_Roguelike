@@ -30,7 +30,12 @@ namespace Zilon.Core.Tactics.Behaviour
             var currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
 
             var actorTask = currentIntention.CreateActorTask(ActiveActor);
-            _taskCompletionSource.SetResult(actorTask);
+            if (!_taskCompletionSource.TrySetResult(actorTask))
+            {
+                _taskRequested = false;
+                RefreshTaskCompetitonSource();
+                _taskCompletionSource.SetResult(actorTask);
+            }
             
             if (_taskRequested)
             {
