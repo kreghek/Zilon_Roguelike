@@ -53,7 +53,7 @@ namespace Zilon.Core.Tests.Tactics
             };
 
             // ACT
-            Action act = () => { gameLoop.Update(); };
+            Action act = () => { gameLoop.UpdateAsync(); };
 
             // ARRANGE
             act.Should().NotThrow();

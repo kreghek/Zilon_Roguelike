@@ -33,7 +33,7 @@ namespace Zilon.Core.Commands
 
             if (UpdateGameLoop)
             {
-                _gameLoop.Update();
+                _gameLoop.UpdateAsync();
             }
         }
 

@@ -131,7 +131,7 @@ namespace Zilon.Core.Specs.Steps
         public void WhenСледующаяИтерацияСектора()
         {
             var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
-            gameLoop.Update();
+            gameLoop.UpdateAsync();
         }
 
         [UsedImplicitly]
@@ -142,7 +142,7 @@ namespace Zilon.Core.Specs.Steps
 
             for (var i = 0; i < count; i++)
             {
-                gameLoop.Update();
+                gameLoop.UpdateAsync();
             }
         }
 

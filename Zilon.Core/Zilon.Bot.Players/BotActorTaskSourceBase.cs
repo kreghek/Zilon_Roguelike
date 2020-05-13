@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
@@ -28,7 +29,7 @@ namespace Zilon.Bot.Players
 
         public abstract void Configure(IBotSettings botSettings);
 
-        public IActorTask GetActorTask(IActor actor)
+        public Task<IActorTask> GetActorTaskAsync(IActor actor)
         {
             if (actor is null)
             {
@@ -79,10 +80,10 @@ namespace Zilon.Bot.Players
 
                 if (actorTask == null)
                 {
-                    return new IdleTask(actor, 1);
+                    return Task.FromResult<IActorTask>(new IdleTask(actor, 1));
                 }
 
-                return actorTask;
+                return Task.FromResult(actorTask);
             }
             else
             {

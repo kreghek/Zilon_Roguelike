@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics
 {
-    public sealed class GameLoop : IGameLoop
+    public sealed partial class GameLoop : IGameLoop
     {
         private int _turnCounter;
 
@@ -27,7 +26,7 @@ namespace Zilon.Core.Tactics
 
         public IActorTaskSource[] ActorTaskSources { get; set; }
 
-        public void Update()
+        public async Task UpdateAsync()
         {
             if (ActorTaskSources is null)
             {
@@ -42,7 +41,7 @@ namespace Zilon.Core.Tactics
             // После выполнения 1000 итераций переход к следующему игровому циклу - обновление голода, жажды, сектора и т.д.
 
             var actorsWithoutTasks = GetActorsWithoutTasks(_sectorManager.CurrentSector.ActorManager, _taskDict);
-            GenerateActorTasksAndPutInDict(actorsWithoutTasks, _taskDict);
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks, _taskDict).ConfigureAwait(false);
             ProcessTasks(_taskDict);
             _turnCounter++;
             if (_turnCounter >= 1000)
@@ -78,30 +77,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private class TaskState
-        {
-            private readonly int _valueToExecute;
-
-            public TaskState(IActorTask task)
-            {
-                Task = task ?? throw new ArgumentNullException(nameof(task));
-                Counter = Task.Cost;
-                _valueToExecute = Task.Cost / 2;
-            }
-
-            public IActorTask Task { get; }
-            public int Counter { get; private set; }
-            public void UpdateCounter()
-            {
-                Counter--;
-            }
-
-            public bool TaskIsExecuting { get => Counter == _valueToExecute; }
-
-            public bool TaskComplete { get => Counter <= 0; }
-        }
-
-        private void GenerateActorTasksAndPutInDict(IEnumerable<IActor> actors, Dictionary<IActor, TaskState> taskDict)
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<IActor> actors, Dictionary<IActor, TaskState> taskDict)
         {
             foreach (var actor in actors)
             {
@@ -112,7 +88,7 @@ namespace Zilon.Core.Tactics
                         continue;
                     }
 
-                    var task = taskSource.GetActorTask(actor);
+                    var task = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
 
                     var state = new TaskState(task);
                     taskDict.Add(actor, state);
@@ -129,40 +105,6 @@ namespace Zilon.Core.Tactics
                     yield return actor;                         
                 }
             }
-        }
-
-        //private void ProcessActor(IActor actor)
-        //{
-        //    foreach (var taskSource in ActorTaskSources)
-        //    {
-        //        var actorTasks = taskSource.GetActorTask(actor);
-
-        //        foreach (var actorTask in actorTasks)
-        //        {
-        //            try
-        //            {
-        //                actorTask.Execute();
-        //            }
-        //            catch (Exception exception)
-        //            {
-        //                throw new ActorTaskExecutionException($"Ошибка при работе источника команд {taskSource.GetType().FullName}",
-        //                    taskSource,
-        //                    exception);
-        //            }
-        //        }
-        //    }
-        //}
-
-        private static IActor[] CalcActorList(IActorManager actorManager)
-        {
-            // Персонаж, которым в данный момент управляет актёр, должен обрабатываться первым.
-            var sortedActors = actorManager.Items.Where(x => !x.Person.CheckIsDead())
-                .OrderByDescending(x => x.Owner is HumanPlayer)
-                .ThenBy(x => x.Person.Id)
-                .ToArray();
-
-            // отсортировать по инициативе
-            return sortedActors;
         }
     }
 }

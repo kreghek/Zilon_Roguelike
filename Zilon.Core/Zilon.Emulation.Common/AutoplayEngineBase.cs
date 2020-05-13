@@ -46,7 +46,7 @@ namespace Zilon.Emulation.Common
             {
                 try
                 {
-                    gameLoop.Update();
+                    gameLoop.UpdateAsync();
 
                     if (_changeSector)
                     {

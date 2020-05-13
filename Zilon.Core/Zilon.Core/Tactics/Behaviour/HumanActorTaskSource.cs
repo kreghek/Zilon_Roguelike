@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class HumanActorTaskSource : IHumanActorTaskSource
     {
+        private TaskCompletionSource<IActorTask> _taskCompletionSource;
+
         private IActorTask _currentTask;
         private IIntention _currentIntention;
 
@@ -17,10 +20,13 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void Intent(IIntention intention)
         {
-            _currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
+            var currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
+            var actorTask = currentIntention.CreateActorTask(_currentTask, CurrentActor);
+            _currentTask = actorTask;
+            _taskCompletionSource.SetResult(_currentTask);
         }
 
-        public IActorTask GetActorTask(IActor actor)
+        public Task<IActorTask> GetActorTaskAsync(IActor actor)
         {
             if (actor != CurrentActor)
             {
@@ -30,7 +36,7 @@ namespace Zilon.Core.Tactics.Behaviour
             var currentTaskIsComplete = _currentTask?.IsComplete;
             if (currentTaskIsComplete != null && !currentTaskIsComplete.Value && _currentIntention == null)
             {
-                return _currentTask;
+                return Task.FromResult(_currentTask);
             }
 
             if (CurrentActor == null)
@@ -48,7 +54,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_currentTask != null)
             {
-                return _currentTask;
+                Task.FromResult(_currentTask);
             }
 
             throw new InvalidOperationException();
