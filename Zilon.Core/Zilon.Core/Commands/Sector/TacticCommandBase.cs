@@ -31,10 +31,10 @@ namespace Zilon.Core.Commands
 
             ExecuteTacticCommand();
 
-            if (UpdateGameLoop)
-            {
-                _gameLoop.UpdateAsync().Wait();
-            }
+            //if (UpdateGameLoop)
+            //{
+            //    _gameLoop.UpdateAsync().Wait();
+            //}
         }
 
         /// <summary>

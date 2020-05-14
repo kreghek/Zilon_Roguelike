@@ -177,6 +177,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
             var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
+            var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
 
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
@@ -191,6 +192,11 @@ namespace Zilon.Core.Specs.Steps
                 PropTransferMachineStores.Inventory);
 
             propTransferCommand.Execute();
+
+            for (var i = 0; i < 1000; i++)
+            {
+                gameLoop.UpdateAsync().Wait();
+            }
         }
 
         [UsedImplicitly]
@@ -200,6 +206,7 @@ namespace Zilon.Core.Specs.Steps
             var propFactory = Context.ServiceProvider.GetRequiredService<IPropFactory>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
             var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
+            var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
 
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
@@ -226,6 +233,11 @@ namespace Zilon.Core.Specs.Steps
                 PropTransferMachineStores.Inventory);
 
             propTransferCommand.Execute();
+
+            for (var i = 0; i < 1000; i++)
+            {
+                gameLoop.UpdateAsync().Wait();
+            }
         }
 
         [UsedImplicitly]
