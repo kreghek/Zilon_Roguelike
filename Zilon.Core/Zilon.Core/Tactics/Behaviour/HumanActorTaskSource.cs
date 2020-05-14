@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class HumanActorTaskSource : IHumanActorTaskSource
     {
-        private TaskCompletionSource<IActorTask> _taskCompletionSource;
+        private SpscChannel<IActorTask> _spscChannel;
 
         public HumanActorTaskSource()
         {
-            _taskCompletionSource = new TaskCompletionSource<IActorTask>();
+            _spscChannel = new SpscChannel<IActorTask>();
         }
 
         public HumanActorTaskSource(IActor activeActor) : this()
@@ -25,22 +27,13 @@ namespace Zilon.Core.Tactics.Behaviour
         public IActor ActiveActor { get; private set; }
 
 
-        public void Intent(IIntention intention)
+        public Task IntentAsync(IIntention intention)
         {
             var currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
 
             var actorTask = currentIntention.CreateActorTask(ActiveActor);
-            if (!_taskCompletionSource.TrySetResult(actorTask))
-            {
-                _taskRequested = false;
-                RefreshTaskCompetitonSource();
-                _taskCompletionSource.SetResult(actorTask);
-            }
-            
-            if (_taskRequested)
-            {
-                RefreshTaskCompetitonSource();
-            }
+
+            return _spscChannel.SendAsync(actorTask);
         }
 
         public Task<IActorTask> GetActorTaskAsync(IActor actor)
@@ -59,27 +52,88 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException($"Получение задачи актёра без предварительно проверки в {nameof(CanGetTask)}");
             }
 
-            if (_taskCompletionSource is null)
-            {
-                throw new InvalidOperationException("Сначала нужно задать намерение.");
-            }
-
-            var actorTaskTask = _taskCompletionSource.Task;
-            _taskRequested = true;
-
-            return actorTaskTask;
-        }
-
-        private bool _taskRequested = false;
-
-        private void RefreshTaskCompetitonSource()
-        {
-            _taskCompletionSource = new TaskCompletionSource<IActorTask>();
+            return _spscChannel.ReceiveAsync();
         }
 
         public bool CanGetTask(IActor actor)
         {
             return actor == ActiveActor;
         }
+
+        public void Intent(IIntention intention)
+        {
+            IntentAsync(intention).ConfigureAwait(false);
+        }
     }
+
+    public interface ISender<in T>
+    {
+        Task SendAsync(T obj);
+    }
+
+    public interface IReceiver<T>
+    {
+        Task<T> ReceiveAsync();
+    }
+
+    public sealed class SpscChannel<T> : ISender<T>, IReceiver<T>, IDisposable
+    {
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
+
+        private readonly IProducerConsumerCollection<TaskCompletionSource<T>> _receivers =
+            new ConcurrentQueue<TaskCompletionSource<T>>();
+
+        private readonly IProducerConsumerCollection<T> _values = new ConcurrentQueue<T>();
+
+        public async Task SendAsync(T obj)
+        {
+            await _semaphore.WaitAsync().ConfigureAwait(false);
+
+            try
+            {
+                if (_receivers.TryTake(out var receiver))
+                {
+                    receiver.SetResult(obj);
+                }
+                else
+                {
+                    _values.TryAdd(obj);
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+
+        public async Task<T> ReceiveAsync()
+        {
+            TaskCompletionSource<T> source;
+            await _semaphore.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                if (_values.TryTake(out var value))
+                {
+                    return value;
+                }
+                else
+                {
+                    source = new TaskCompletionSource<T>();
+                    _receivers.TryAdd(source);
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+
+            return await source.Task.ConfigureAwait(false);
+        }
+
+        public void Dispose()
+        {
+            _semaphore.Dispose();
+        }
+    }
+
 }

@@ -234,7 +234,8 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var inventoryItems = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            var inventoryModule = actor.Person.GetModule<IInventoryModule>();
+            var inventoryItems = inventoryModule.CalcActualItems();
             var foundEquipment = inventoryItems.SingleOrDefault(x => x.Scheme.Sid == equipmentSchemeSid);
 
             foundEquipment.Should().NotBeNull();

@@ -122,11 +122,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             // ACT
 
-            taskSource.Intent(intention);
+            await taskSource.IntentAsync(intention).ConfigureAwait(false);
             var getActorTaskTask1 = taskSource.GetActorTaskAsync(actor);
             var factActorTask1 = await getActorTaskTask1.ConfigureAwait(false);
 
-            taskSource.Intent(intention);
+            await taskSource.IntentAsync(intention).ConfigureAwait(false);
             var getActorTaskTask2 = taskSource.GetActorTaskAsync(actor);
             var factActorTask2 = await getActorTaskTask2.ConfigureAwait(false);
 
@@ -162,11 +162,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // ACT
 
             var getActorTaskTask1 = taskSource.GetActorTaskAsync(actor);
-            taskSource.Intent(intention);
+            await taskSource.IntentAsync(intention).ConfigureAwait(false);
             var factActorTask1 = await getActorTaskTask1.ConfigureAwait(false);
 
             var getActorTaskTask2 = taskSource.GetActorTaskAsync(actor);
-            taskSource.Intent(intention);
+            await taskSource.IntentAsync(intention).ConfigureAwait(false);
             var factActorTask2 = await getActorTaskTask2.ConfigureAwait(false);
 
             // ASSERT

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using Moq;
@@ -53,7 +53,7 @@ namespace Zilon.Core.Tests.Tactics
             };
 
             // ACT
-            Action act = () => { gameLoop.UpdateAsync(); };
+            Func<Task> act = () => gameLoop.UpdateAsync();
 
             // ARRANGE
             act.Should().NotThrow();
