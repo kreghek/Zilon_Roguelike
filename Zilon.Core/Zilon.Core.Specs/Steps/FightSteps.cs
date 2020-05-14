@@ -146,7 +146,8 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.GetModule<ISurvivalModule>().IsDead.Should().BeTrue();
+            var survivalModule = actor.Person.GetModule<ISurvivalModule>();
+            survivalModule.IsDead.Should().BeTrue();
         }
 
         [Then(@"Монстр Id:(.*) успешно обороняется")]

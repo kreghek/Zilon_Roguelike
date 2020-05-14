@@ -192,11 +192,6 @@ namespace Zilon.Core.Specs.Steps
                 PropTransferMachineStores.Inventory);
 
             propTransferCommand.Execute();
-
-            for (var i = 0; i < 1000; i++)
-            {
-                gameLoop.UpdateAsync().Wait();
-            }
         }
 
         [UsedImplicitly]
@@ -206,7 +201,6 @@ namespace Zilon.Core.Specs.Steps
             var propFactory = Context.ServiceProvider.GetRequiredService<IPropFactory>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
             var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
-            var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
 
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
@@ -233,12 +227,19 @@ namespace Zilon.Core.Specs.Steps
                 PropTransferMachineStores.Inventory);
 
             propTransferCommand.Execute();
+        }
 
-            for (var i = 0; i < 1000; i++)
+        [When(@"Жду (.*) единиц времени")]
+        public void WhenЖдуЕдиницВремени(int timeUnitCount)
+        {
+            var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
+
+            for (var i = 0; i < timeUnitCount; i++)
             {
                 gameLoop.UpdateAsync().Wait();
             }
         }
+
 
         [UsedImplicitly]
         [Then(@"У актёра в инвентаре есть (.*)")]

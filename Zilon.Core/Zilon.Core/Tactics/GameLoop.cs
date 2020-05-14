@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics
@@ -59,6 +59,15 @@ namespace Zilon.Core.Tactics
             var states = taskDict.Values;
             foreach (var state in states)
             {
+                if (state.Actor.Person.GetModuleSafe<ISurvivalModule>()?.IsDead == true)
+                {
+                    // Персонажи, у которых есть модуль выживания, могут умереть.
+                    // Мертвые персонажы не выполняют задач.
+                    // Их задачи игнорируем, т.к. задачи могут выполниться после смерти персонажа,
+                    // что противоречит логике задач.
+                    continue;
+                }
+
                 state.UpdateCounter();
 
                 if (state.TaskIsExecuting)
@@ -73,6 +82,18 @@ namespace Zilon.Core.Tactics
                 if (taskStatePair.Value.TaskComplete)
                 {
                     taskDict.Remove(taskStatePair.Key);
+                    continue;
+                }
+
+                if (taskStatePair.Key.Person.GetModuleSafe<ISurvivalModule>()?.IsDead == true)
+                {
+                    // Персонажи, у которых есть модуль выживания, могут умереть.
+                    // Мертвые персонажы не выполняют задач.
+                    // Их задачи можно прервать, потому что:
+                    // 1. Возможна ситуация, когда мертвый персонаж всё еще выполнить действие.
+                    // 2. Экономит ресурсы.
+                    taskDict.Remove(taskStatePair.Key);
+                    continue;
                 }
             }
         }
@@ -90,7 +111,7 @@ namespace Zilon.Core.Tactics
 
                     var task = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
 
-                    var state = new TaskState(task);
+                    var state = new TaskState(actor, task);
                     taskDict.Add(actor, state);
                 }
             }

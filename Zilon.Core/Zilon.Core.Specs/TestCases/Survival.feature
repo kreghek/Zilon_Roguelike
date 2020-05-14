@@ -107,6 +107,7 @@ Scenario Outline: Эффекты угроз выживания наносят у
 	And Есть актёр игрока класса captain в ячейке (0, 0)
 	And Актёр имеет эффект <startEffect>
 	When Я перемещаю персонажа на <moveDistance> клетку
+	And Жду 1000 единиц времени
 	Then Актёр игрока имеет запас hp <expectedHpValue>
 
 	Examples: 
@@ -125,6 +126,7 @@ Scenario Outline: Угрозы выживания (имеются изначал
 	And В инвентаре у актёра игрока есть предмет: <equipmentSid>
 	And Актёр имеет эффект <startEffect>
 	When Экипирую предмет <equipmentSid> в слот Index: <slotIndex>
+	And Жду 1000 единиц времени
 	Then Тактическое умение <tacticalActSid> имеет дебафф на эффективность
 
 Examples: 
