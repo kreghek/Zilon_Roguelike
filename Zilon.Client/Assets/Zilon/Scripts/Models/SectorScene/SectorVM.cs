@@ -152,6 +152,12 @@ public class SectorVM : MonoBehaviour
         if (!_commandBlockerService.HasBlockers)
         {
             ExecuteCommands();
+
+            var actorWithoutActors = _gameLoop.Update();
+            if (actorWithoutActors.Any(x => x == _playerState.ActiveActor))
+            {
+                CanIntent = true;
+            }
         }
     }
 
