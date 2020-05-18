@@ -129,24 +129,13 @@ namespace Zilon.Core.Specs.Steps
 
         [UsedImplicitly]
         [When(@"Следующая итерация сектора (\d+) раз")]
-        public void WhenСледующаяИтерацияСектора(int count)
+        public async System.Threading.Tasks.Task WhenСледующаяИтерацияСектораAsync(int count)
         {
             var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
-            var playerTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
 
             for (var i = 0; i < count; i++)
             {
-                gameLoop.Update();
-
-                var actorsWithoutTasks = gameLoop.Update();
-                if (actorsWithoutTasks.Any(x => x == playerTaskSource.ActiveActor))
-                {
-                    // Если среди актёров остался актёр, которым управлет игрок,
-                    // то это нездоровая телега.
-                    // В реальном мире цикл долже ждать и не продолжать выполнять другие операции, пока
-                    // игрок не назначит намерение.
-                    throw new System.Exception();
-                }
+                await gameLoop.UpdateAsync();
             }
         }
 
@@ -234,18 +223,9 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [When(@"Жду (.*) единиц времени")]
-        public void WhenЖдуЕдиницВремени(int timeUnitCount)
+        public async System.Threading.Tasks.Task WhenЖдуЕдиницВремениAsync(int timeUnitCount)
         {
-            var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
-
-            for (var i = 0; i < timeUnitCount; i++)
-            {
-                var actorsWithoutTasks = gameLoop.Update();
-                if (actorsWithoutTasks.Any())
-                {
-                    throw new System.Exception();
-                }
-            }
+            await WhenСледующаяИтерацияСектораAsync(timeUnitCount);
         }
 
 

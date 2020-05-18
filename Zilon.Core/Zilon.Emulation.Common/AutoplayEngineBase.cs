@@ -46,7 +46,7 @@ namespace Zilon.Emulation.Common
             {
                 try
                 {
-                    var actorsWithoutTasks = gameLoop.Update();
+                    var actorsWithoutTasks = gameLoop.UpdateAsync();
 
                     if (_changeSector)
                     {

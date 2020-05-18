@@ -161,20 +161,12 @@ public class SectorUiHandler : MonoBehaviour
 
     public void NextTurn()
     {
-        //if (_playerState.ActiveActor == null)
-        //{
-        //    return;
-        //}
-
-        //_clientCommandExecutor.Push(_nextTurnCommand);
-        for (var i = 0; i < 1000; i++)
+        if (_playerState.ActiveActor == null)
         {
-            var actorWithoutActors = _gameLoop.Update();
-            if (actorWithoutActors.Any(x => x == _playerState.ActiveActor))
-            {
-                SectorVM.CanIntent = true;
-            }
+            return;
         }
+
+        _clientCommandExecutor.Push(_nextTurnCommand);
     }
 
     public void ShowInventoryButton_Handler()

@@ -147,17 +147,11 @@ public class SectorVM : MonoBehaviour
 #pragma warning restore 649
 
     // ReSharper disable once UnusedMember.Local
-    public void Update()
+    public async Task Update()
     {
         if (!_commandBlockerService.HasBlockers)
         {
             ExecuteCommands();
-
-            var actorWithoutActors = _gameLoop.Update();
-            if (actorWithoutActors.Any(x => x == _playerState.ActiveActor))
-            {
-                CanIntent = true;
-            }
         }
     }
 
@@ -180,13 +174,13 @@ public class SectorVM : MonoBehaviour
                     return;
                 }
 
-                if (command is IRepeatableCommand repeatableCommand && CanIntent)
-                {
-                    if (repeatableCommand.CanRepeat())
-                    {
-                        _clientCommandExecutor.Push(repeatableCommand);
-                    }
-                }
+                //if (command is IRepeatableCommand repeatableCommand && CanIntent)
+                //{
+                //    if (repeatableCommand.CanRepeat())
+                //    {
+                //        _clientCommandExecutor.Push(repeatableCommand);
+                //    }
+                //}
             }
         }
         catch (Exception exception)

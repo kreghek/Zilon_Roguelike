@@ -26,12 +26,20 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IActor ActiveActor { get; private set; }
 
+        private bool _intentionWait;
 
         public Task IntentAsync(IIntention intention)
         {
+            if (_intentionWait)
+            {
+                throw new Exception();
+            }
+
             var currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
 
             var actorTask = currentIntention.CreateActorTask(ActiveActor);
+
+            _intentionWait = true;
 
             return _spscChannel.SendAsync(actorTask);
         }
@@ -62,7 +70,25 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void Intent(IIntention intention)
         {
-            IntentAsync(intention).ConfigureAwait(false);
+            IntentAsync(intention).Wait();
+        }
+
+        public bool CanIntent()
+        {
+            return !_intentionWait;
+        }
+
+        public void ProcessTaskExecuted(IActorTask actorTask)
+        {
+            // Пока ничего не делаем.
+            // Это задел для парного оружия.
+            // Парное оружие будет позволять выполнять удар вторым оружием,
+            // когда задача выполнена, но не закончена.
+        }
+
+        public void ProcessTaskComplete(IActorTask actorTask)
+        {
+            _intentionWait = false;
         }
     }
 

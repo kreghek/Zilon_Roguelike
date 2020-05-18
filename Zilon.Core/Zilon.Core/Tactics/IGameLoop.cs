@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Zilon.Core.Tactics.Behaviour;
 
@@ -7,7 +7,7 @@ namespace Zilon.Core.Tactics
 {
     public interface IGameLoop
     {
-        IEnumerable<IActor> Update();
+        Task UpdateAsync();
 
         IActorTaskSource[] ActorTaskSources { get; set; }
 

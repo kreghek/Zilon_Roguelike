@@ -18,5 +18,7 @@ namespace Zilon.Core.Tactics.Behaviour
         Task IntentAsync(IIntention intention);
 
         void Intent(IIntention intention);
+
+        bool CanIntent();
     }
 }

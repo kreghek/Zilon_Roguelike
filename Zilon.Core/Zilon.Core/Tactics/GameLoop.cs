@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -27,27 +28,15 @@ namespace Zilon.Core.Tactics
 
         public IActorTaskSource[] ActorTaskSources { get; set; }
 
-        public IEnumerable<IActor> Update()
+        public async Task UpdateAsync()
         {
             if (ActorTaskSources is null)
             {
                 throw new InvalidOperationException("Не заданы источники команд");
             }
 
-            // Алгоритм:
-            // Выполняем итерацию.
-            // Сначала в отдельном публичном методе создаём задачи персонажам.
-            // Возврат - персонажи, у которых нет задач (сейчас это один персонаж).
-
-            // В этом методе выполняем задачи.
-
             var actorsWithoutTasks = GetActorsWithoutTasks(_sectorManager.CurrentSector.ActorManager, _taskDict);
-            GenerateActorTasksAndPutInDict(actorsWithoutTasks, _taskDict);
-            var actorsWithoutTasksAfterGeneration = GetActorsWithoutTasks(_sectorManager.CurrentSector.ActorManager, _taskDict);
-            if (actorsWithoutTasksAfterGeneration.Any())
-            {
-                return actorsWithoutTasksAfterGeneration;
-            }
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks, _taskDict).ConfigureAwait(false);
 
             ProcessTasks(_taskDict);
             _turnCounter++;
@@ -59,8 +48,6 @@ namespace Zilon.Core.Tactics
 
                 Updated?.Invoke(this, new EventArgs());
             }
-
-            return Array.Empty<IActor>();
         }
 
         private void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
@@ -82,15 +69,18 @@ namespace Zilon.Core.Tactics
                 if (state.TaskIsExecuting)
                 {
                     state.Task.Execute();
+                    state.TaskSource.ProcessTaskExecuted(state.Task);
                 }
             }
 
             // удаляем выполненные задачи.
             foreach (var taskStatePair in taskDict.ToArray())
             {
-                if (taskStatePair.Value.TaskComplete)
+                var state = taskStatePair.Value;
+                if (state.TaskComplete)
                 {
                     taskDict.Remove(taskStatePair.Key);
+                    state.TaskSource.ProcessTaskComplete(state.Task);
                     continue;
                 }
 
@@ -107,9 +97,9 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void GenerateActorTasksAndPutInDict(IEnumerable<IActor> actors, ConcurrentDictionary<IActor, TaskState> taskDict)
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<IActor> actors, ConcurrentDictionary<IActor, TaskState> taskDict)
         {
-            Parallel.ForEach(actors, async (actor) =>
+            foreach(var actor in actors)
             {
                 foreach (var taskSource in ActorTaskSources)
                 {
@@ -118,15 +108,17 @@ namespace Zilon.Core.Tactics
                         continue;
                     }
 
-                    var task = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
+                    var actorTask = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
 
-                    var state = new TaskState(actor, task);
+                    var state = new TaskState(actor, actorTask, taskSource);
                     if (!taskDict.TryAdd(actor, state))
                     {
+                        // Это происходит, когда игрок пытается присвоить новую команду,
+                        // когда старая еще не закончена и не может быть заменена.
                         throw new Exception();
                     }
                 }
-            });
+            }
         }
 
         private IEnumerable<IActor> GetActorsWithoutTasks(IActorManager actorManager, IDictionary<IActor, TaskState> taskDict)

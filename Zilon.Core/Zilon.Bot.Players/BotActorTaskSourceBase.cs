@@ -93,6 +93,16 @@ namespace Zilon.Bot.Players
             throw new System.Exception();
         }
 
+        public void ProcessTaskComplete(IActorTask actorTask)
+        {
+            
+        }
+
+        public void ProcessTaskExecuted(IActorTask actorTask)
+        {
+            
+        }
+
         protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
     }
 }

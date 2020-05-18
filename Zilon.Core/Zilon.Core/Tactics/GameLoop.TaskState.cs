@@ -9,16 +9,18 @@ namespace Zilon.Core.Tactics
         {
             private readonly int _valueToExecute;
 
-            public TaskState(IActor actor, IActorTask task)
+            public TaskState(IActor actor, IActorTask task, IActorTaskSource taskSource)
             {
                 Actor = actor ?? throw new ArgumentNullException(nameof(actor));
                 Task = task ?? throw new ArgumentNullException(nameof(task));
+                TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
 
                 Counter = Task.Cost;
                 _valueToExecute = Task.Cost / 2;
             }
 
             public IActorTask Task { get; }
+            public IActorTaskSource TaskSource { get; }
             public int Counter { get; private set; }
             public void UpdateCounter()
             {
