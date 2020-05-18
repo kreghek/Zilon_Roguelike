@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public virtual bool IsComplete { get; protected set; }
 
-        public int Cost { get => 1000; }
+        public virtual int Cost { get => 1000; }
 
         public abstract void Execute();
     }
