@@ -16,7 +16,7 @@ namespace Zilon.Emulation.Common
 {
     public abstract class AutoplayEngineBase<T> where T : IPluggableActorTaskSource
     {
-        private const int ITERATION_LIMIT = 40_000;
+        private const int ITERATION_LIMIT = 40_000_000;
 
         private bool _changeSector;
 
@@ -46,7 +46,7 @@ namespace Zilon.Emulation.Common
             {
                 try
                 {
-                    gameLoop.UpdateAsync();
+                    var actorsWithoutTasks = gameLoop.Update();
 
                     if (_changeSector)
                     {

@@ -338,6 +338,7 @@ MonoBehaviour:
   FowManager: {fileID: 160909245}
   SleepShadowManager: {fileID: 261788445}
   PlayerPersonInitiator: {fileID: 1142505918}
+  CanIntent: 1
 --- !u!114 &160909243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,6 +758,7 @@ MonoBehaviour:
   SectorTransitionMoveButton: {fileID: 299468032}
   CityQuickExitButton: {fileID: 185488352}
   OpenLootButton: {fileID: 726220372}
+  SectorVM: {fileID: 160909242}
 --- !u!114 &227365887
 MonoBehaviour:
   m_ObjectHideFlags: 0

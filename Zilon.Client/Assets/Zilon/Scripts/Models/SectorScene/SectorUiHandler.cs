@@ -28,6 +28,9 @@ public class SectorUiHandler : MonoBehaviour
 
     [Inject] private readonly ICommandManager _clientCommandExecutor;
 
+    [Inject]
+    private readonly IGameLoop _gameLoop;
+
     [Inject(Id = "next-turn-command")] private readonly ICommand _nextTurnCommand;
 
     [Inject(Id = "show-inventory-command")] private readonly ICommand _showInventoryCommand;
@@ -51,6 +54,8 @@ public class SectorUiHandler : MonoBehaviour
     public Button SectorTransitionMoveButton;
     public Button CityQuickExitButton;
     public Button OpenLootButton;
+
+    public SectorVM SectorVM;
 
     public void Update()
     {
@@ -156,12 +161,20 @@ public class SectorUiHandler : MonoBehaviour
 
     public void NextTurn()
     {
-        if (_playerState.ActiveActor == null)
-        {
-            return;
-        }
+        //if (_playerState.ActiveActor == null)
+        //{
+        //    return;
+        //}
 
-        _clientCommandExecutor.Push(_nextTurnCommand);
+        //_clientCommandExecutor.Push(_nextTurnCommand);
+        for (var i = 0; i < 1000; i++)
+        {
+            var actorWithoutActors = _gameLoop.Update();
+            if (actorWithoutActors.Any(x => x == _playerState.ActiveActor))
+            {
+                SectorVM.CanIntent = true;
+            }
+        }
     }
 
     public void ShowInventoryButton_Handler()

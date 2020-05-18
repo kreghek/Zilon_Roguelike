@@ -155,6 +155,8 @@ public class SectorVM : MonoBehaviour
         }
     }
 
+    public bool CanIntent = true;
+
     private void ExecuteCommands()
     {
         var command = _clientCommandExecutor.Pop();
@@ -165,12 +167,14 @@ public class SectorVM : MonoBehaviour
             {
                 command.Execute();
 
+                CanIntent = false;
+
                 if (_interuptCommands)
                 {
                     return;
                 }
 
-                if (command is IRepeatableCommand repeatableCommand)
+                if (command is IRepeatableCommand repeatableCommand && CanIntent)
                 {
                     if (repeatableCommand.CanRepeat())
                     {
@@ -498,11 +502,15 @@ public class SectorVM : MonoBehaviour
 
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
-        _humanActorTaskSource.CurrentActor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
+
+        var activeActor = _humanActorTaskSource.ActiveActor;
+        var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
+        survivalModule.Dead -= HumanPersonSurvival_Dead;
+
         _playerState.ActiveActor = null;
         _playerState.SelectedViewModel = null;
         _playerState.HoverViewModel = null;
-        _humanActorTaskSource.SwitchActor(null);
+        _humanActorTaskSource.SwitchActiveActor(null);
 
         var nextSectorNode = e.Transition.SectorNode;
         _humanPlayer.BindSectorNode(nextSectorNode);
@@ -629,7 +637,9 @@ public class SectorVM : MonoBehaviour
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
-        _humanActorTaskSource.CurrentActor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
+        var activeActor = _humanActorTaskSource.ActiveActor;
+        var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
+        survivalModule.Dead -= HumanPersonSurvival_Dead;
 
         _progressStorageService.Destroy();
     }

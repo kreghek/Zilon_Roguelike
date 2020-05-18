@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace Zilon.Core.Tactics
     {
         private int _turnCounter;
 
-        private Dictionary<IActor, TaskState> _taskDict;
+        private ConcurrentDictionary<IActor, TaskState> _taskDict;
 
         private readonly ISectorManager _sectorManager;
 
@@ -21,12 +22,12 @@ namespace Zilon.Core.Tactics
         {
             _sectorManager = sectorManager;
 
-            _taskDict = new Dictionary<IActor, TaskState>();
+            _taskDict = new ConcurrentDictionary<IActor, TaskState>();
         }
 
         public IActorTaskSource[] ActorTaskSources { get; set; }
 
-        public async Task UpdateAsync()
+        public IEnumerable<IActor> Update()
         {
             if (ActorTaskSources is null)
             {
@@ -34,14 +35,20 @@ namespace Zilon.Core.Tactics
             }
 
             // Алгоритм:
-            // В игровом цикле 1000 итераций. На каждой итерации проверяем, какой актёр еще ничего не делает.
-            // Если актёр ничего не делает, то запрашиваем для него задачу. Задачу запоминаем.
-            // Каждую итерацию существующие задачи имеют свой счётчик. Задача выполняется, когда счётчик достигнет значения выполнения.
-            // Задача на актёра убирается, когда счётчик задачи достигнет 0.
-            // После выполнения 1000 итераций переход к следующему игровому циклу - обновление голода, жажды, сектора и т.д.
+            // Выполняем итерацию.
+            // Сначала в отдельном публичном методе создаём задачи персонажам.
+            // Возврат - персонажи, у которых нет задач (сейчас это один персонаж).
+
+            // В этом методе выполняем задачи.
 
             var actorsWithoutTasks = GetActorsWithoutTasks(_sectorManager.CurrentSector.ActorManager, _taskDict);
-            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks, _taskDict).ConfigureAwait(false);
+            GenerateActorTasksAndPutInDict(actorsWithoutTasks, _taskDict);
+            var actorsWithoutTasksAfterGeneration = GetActorsWithoutTasks(_sectorManager.CurrentSector.ActorManager, _taskDict);
+            if (actorsWithoutTasksAfterGeneration.Any())
+            {
+                return actorsWithoutTasksAfterGeneration;
+            }
+
             ProcessTasks(_taskDict);
             _turnCounter++;
             if (_turnCounter >= 1000)
@@ -52,9 +59,11 @@ namespace Zilon.Core.Tactics
 
                 Updated?.Invoke(this, new EventArgs());
             }
+
+            return Array.Empty<IActor>();
         }
 
-        private void ProcessTasks(Dictionary<IActor, TaskState> taskDict)
+        private void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
         {
             var states = taskDict.Values;
             foreach (var state in states)
@@ -98,9 +107,9 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<IActor> actors, Dictionary<IActor, TaskState> taskDict)
+        private void GenerateActorTasksAndPutInDict(IEnumerable<IActor> actors, ConcurrentDictionary<IActor, TaskState> taskDict)
         {
-            foreach (var actor in actors)
+            Parallel.ForEach(actors, async (actor) =>
             {
                 foreach (var taskSource in ActorTaskSources)
                 {
@@ -112,19 +121,24 @@ namespace Zilon.Core.Tactics
                     var task = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
 
                     var state = new TaskState(actor, task);
-                    taskDict.Add(actor, state);
+                    if (!taskDict.TryAdd(actor, state))
+                    {
+                        throw new Exception();
+                    }
                 }
-            }
+            });
         }
 
-        private IEnumerable<IActor> GetActorsWithoutTasks(IActorManager actorManager, Dictionary<IActor, TaskState> taskDict)
+        private IEnumerable<IActor> GetActorsWithoutTasks(IActorManager actorManager, IDictionary<IActor, TaskState> taskDict)
         {
             foreach (var actor in actorManager.Items)
             {
-                if (!taskDict.TryGetValue(actor, out _))
+                if (taskDict.TryGetValue(actor, out _))
                 {
-                    yield return actor;                         
+                    continue;
                 }
+
+                yield return actor;
             }
         }
     }
