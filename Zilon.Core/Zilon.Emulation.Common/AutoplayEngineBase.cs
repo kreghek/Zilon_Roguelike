@@ -133,11 +133,6 @@ namespace Zilon.Emulation.Common
             sectorManager.CurrentSector.ScoreManager = scoreManager;
             sectorManager.CurrentSector.HumanGroupExit += CurrentSector_HumanGroupExit;
 
-            gameLoop.ActorTaskSources = new Core.Tactics.Behaviour.IActorTaskSource[] {
-                botActorTaskSource,
-                monsterActorTaskSource
-            };
-
             var humanActor = CreateHumanActor(humanPlayer,
                 startPerson,
                 sectorManager,

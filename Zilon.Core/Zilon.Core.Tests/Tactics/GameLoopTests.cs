@@ -47,10 +47,10 @@ namespace Zilon.Core.Tests.Tactics
             var botActor = CreateActor(botPlayer);
             actorInnerList.Add(botActor);
 
-            var gameLoop = new GameLoop(sectorManager)
-            {
-                ActorTaskSources = Array.Empty<IActorTaskSource>()
-            };
+            var actorTaskScourceCollectorMock = new Mock<IActorTaskSourceCollector>();
+            var actorTaskScourceCollector = actorTaskScourceCollectorMock.Object;
+
+            var gameLoop = new GameLoop(sectorManager, actorTaskScourceCollector);
 
             // ACT
             Func<Task> act = () => gameLoop.UpdateAsync();

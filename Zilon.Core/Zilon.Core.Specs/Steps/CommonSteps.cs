@@ -229,9 +229,9 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [When(@"Жду (.*) единиц времени")]
-        public async System.Threading.Tasks.Task WhenЖдуЕдиницВремениAsync(int timeUnitCount)
+        public System.Threading.Tasks.Task WhenЖдуЕдиницВремениAsync(int timeUnitCount)
         {
-            await WhenСледующаяИтерацияСектораAsync(timeUnitCount);
+            return WhenСледующаяИтерацияСектораAsync(timeUnitCount);
         }
 
         [When(@"Я выполняю простой")]

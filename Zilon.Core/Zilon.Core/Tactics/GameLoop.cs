@@ -11,30 +11,24 @@ namespace Zilon.Core.Tactics
 {
     public sealed partial class GameLoop : IGameLoop
     {
-        private int _turnCounter;
-
-        private ConcurrentDictionary<IActor, TaskState> _taskDict;
+        private readonly ConcurrentDictionary<IActor, TaskState> _taskDict;
 
         private readonly ISectorManager _sectorManager;
+        private readonly IActorTaskSourceCollector _actorTaskSourceCollector;
+        private int _turnCounter;
 
         public event EventHandler Updated;
 
-        public GameLoop(ISectorManager sectorManager)
+        public GameLoop(ISectorManager sectorManager, IActorTaskSourceCollector actorTaskSourceCollector)
         {
-            _sectorManager = sectorManager;
-
             _taskDict = new ConcurrentDictionary<IActor, TaskState>();
-        }
 
-        public IActorTaskSource[] ActorTaskSources { get; set; }
+            _sectorManager = sectorManager ?? throw new ArgumentNullException(nameof(sectorManager));
+            _actorTaskSourceCollector = actorTaskSourceCollector ?? throw new ArgumentNullException(nameof(actorTaskSourceCollector));
+        }
 
         public async Task UpdateAsync()
         {
-            if (ActorTaskSources is null)
-            {
-                throw new InvalidOperationException("Не заданы источники команд");
-            }
-
             var actorsWithoutTasks = GetActorsWithoutTasks(_sectorManager.CurrentSector.ActorManager, _taskDict);
             await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks, _taskDict).ConfigureAwait(false);
 
@@ -99,9 +93,11 @@ namespace Zilon.Core.Tactics
 
         private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<IActor> actors, ConcurrentDictionary<IActor, TaskState> taskDict)
         {
-            foreach(var actor in actors)
+            var taskSources = _actorTaskSourceCollector.GetCurrentTaskSources();
+
+            foreach (var actor in actors)
             {
-                foreach (var taskSource in ActorTaskSources)
+                foreach (var taskSource in taskSources)
                 {
                     if (!taskSource.CanGetTask(actor))
                     {
