@@ -1,17 +1,20 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Threading;
 using System.Threading.Tasks;
+
+using Zilon.Core.Common;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class HumanActorTaskSource : IHumanActorTaskSource
     {
-        private SpscChannel<IActorTask> _spscChannel;
+        private readonly ISender<IActorTask> _actorTaskSender;
+        private readonly IReceiver<IActorTask> _actorTaskReceiver;
 
         public HumanActorTaskSource()
         {
-            _spscChannel = new SpscChannel<IActorTask>();
+            var spscChannel = new SpscChannel<IActorTask>();
+            _actorTaskSender = spscChannel;
+            _actorTaskReceiver = spscChannel;
         }
 
         public HumanActorTaskSource(IActor activeActor) : this()
@@ -32,7 +35,12 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (_intentionWait)
             {
-                throw new Exception();
+                // Это может происходить, если в клиентском коде предварительно не выполнили проверку CanIntent().
+                // Проверка нужна, чтобы не допустить получение очереди задач.
+                // Текущая реализация не допускает переопределение задач.
+                // Поэтому каждое новое намерение будет складывать по новой задаче в очередь, пока выполняется текущая задача
+                // Текущая задача выполняется в основном игровом цикле, который накручивает счётчик итераций, чтобы выполнить предусловия задачи.
+                throw new InvalidOperationException("Попытка задать новое намерение, пока не выполнена текущая задача.");
             }
 
             var currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
@@ -41,7 +49,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             _intentionWait = true;
 
-            return _spscChannel.SendAsync(actorTask);
+            return _actorTaskSender.SendAsync(actorTask);
         }
 
         public Task<IActorTask> GetActorTaskAsync(IActor actor)
@@ -60,7 +68,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException($"Получение задачи актёра без предварительно проверки в {nameof(CanGetTask)}");
             }
 
-            return _spscChannel.ReceiveAsync();
+            return _actorTaskReceiver.ReceiveAsync();
         }
 
         public bool CanGetTask(IActor actor)
@@ -68,6 +76,9 @@ namespace Zilon.Core.Tactics.Behaviour
             return actor == ActiveActor;
         }
 
+        //TODO Избавиться от синхронного варианта.
+        // Сейчас он оставлен прото из-за тестов. Сложностей с удалением нет, кроме рутины.
+        [Obsolete("Использовать асинк-вариант вместо этого")]
         public void Intent(IIntention intention)
         {
             IntentAsync(intention).Wait();
@@ -91,75 +102,4 @@ namespace Zilon.Core.Tactics.Behaviour
             _intentionWait = false;
         }
     }
-
-    public interface ISender<in T>
-    {
-        Task SendAsync(T obj);
-    }
-
-    public interface IReceiver<T>
-    {
-        Task<T> ReceiveAsync();
-    }
-
-    public sealed class SpscChannel<T> : ISender<T>, IReceiver<T>, IDisposable
-    {
-        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
-
-        private readonly IProducerConsumerCollection<TaskCompletionSource<T>> _receivers =
-            new ConcurrentQueue<TaskCompletionSource<T>>();
-
-        private readonly IProducerConsumerCollection<T> _values = new ConcurrentQueue<T>();
-
-        public async Task SendAsync(T obj)
-        {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
-
-            try
-            {
-                if (_receivers.TryTake(out var receiver))
-                {
-                    receiver.SetResult(obj);
-                }
-                else
-                {
-                    _values.TryAdd(obj);
-                }
-            }
-            finally
-            {
-                _semaphore.Release();
-            }
-        }
-
-        public async Task<T> ReceiveAsync()
-        {
-            TaskCompletionSource<T> source;
-            await _semaphore.WaitAsync().ConfigureAwait(false);
-            try
-            {
-                if (_values.TryTake(out var value))
-                {
-                    return value;
-                }
-                else
-                {
-                    source = new TaskCompletionSource<T>();
-                    _receivers.TryAdd(source);
-                }
-            }
-            finally
-            {
-                _semaphore.Release();
-            }
-
-            return await source.Task.ConfigureAwait(false);
-        }
-
-        public void Dispose()
-        {
-            _semaphore.Dispose();
-        }
-    }
-
 }

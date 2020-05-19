@@ -10,6 +10,7 @@ using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -138,9 +139,9 @@ namespace Zilon.Core.Specs.Steps
 
             var survivalModule = humatTaskSource.ActiveActor?.Person?.GetModuleSafe<ISurvivalModule>();
             while ((!humatTaskSource.CanIntent() && humatTaskSource.ActiveActor != null && survivalModule?.IsDead == false) ||
-                (humatTaskSource.ActiveActor == null && counter>0))
+                (humatTaskSource.ActiveActor == null && counter > 0))
             {
-                await gameLoop.UpdateAsync().ConfigureAwait(false);
+                await gameLoop.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
                 counter--;
             }
         }

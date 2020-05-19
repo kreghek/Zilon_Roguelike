@@ -25,6 +25,11 @@ namespace Zilon.Bot.Players
 
         public bool CanGetTask(IActor actor)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
             return actor.Owner == _player;
         }
 
@@ -34,13 +39,13 @@ namespace Zilon.Bot.Players
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
-            // TODO Лучше сразу отдавать на обработку актёров текущего игрока.
-            if (actor.Owner != _player)
+            if (!CanGetTask(actor))
             {
-                throw new System.Exception();
+                // Это может случиться, если попытаться вызвать этот метод без предварительной проверки.
+                throw new InvalidOperationException("Произведена попытка получить задачу для актёра, которого не может обработать данных источник задач.");
             }
 
             // Основные компоненты:
