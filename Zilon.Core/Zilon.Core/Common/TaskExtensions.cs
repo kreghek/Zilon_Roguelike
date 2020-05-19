@@ -14,13 +14,18 @@ namespace Zilon.Core.Common
         /// <returns>Возвращает агрегирующую задачу для вычисления результата TResult.</returns>
         /// <exception cref="System.TimeoutException">Исключение выбрасывается, если задача выполняется дольше,
         /// чем указанный таймаут.</exception>
-        public static async Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, int millisecondsTimeout)
+        public static Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, int millisecondsTimeout)
         {
             if (task is null)
             {
                 throw new ArgumentNullException(nameof(task));
             }
 
+            return TimeoutAfterInner(task, millisecondsTimeout);
+        }
+
+        private static async Task<TResult> TimeoutAfterInner<TResult>(Task<TResult> task, int millisecondsTimeout)
+        {
             var completedTask = await Task.WhenAny(task, Task.Delay(millisecondsTimeout)).ConfigureAwait(false);
             if (task == completedTask)
             {
@@ -40,13 +45,18 @@ namespace Zilon.Core.Common
         /// <returns>Возвращает агрегирующую задачу для вычисления результата TResult.</returns>
         /// <exception cref="System.TimeoutException">Исключение выбрасывается, если задача выполняется дольше,
         /// чем указанный таймаут.</exception>
-        public static async Task TimeoutAfter(this Task task, int millisecondsTimeout)
+        public static Task TimeoutAfter(this Task task, int millisecondsTimeout)
         {
             if (task is null)
             {
                 throw new ArgumentNullException(nameof(task));
             }
 
+            return TimeoutAfterInner(task, millisecondsTimeout);
+        }
+
+        private static async Task TimeoutAfterInner(Task task, int millisecondsTimeout)
+        {
             var completedTask = await Task.WhenAny(task, Task.Delay(millisecondsTimeout)).ConfigureAwait(false);
             if (task == completedTask)
             {

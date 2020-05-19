@@ -9,7 +9,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics
 {
-    public sealed partial class GameLoop : IGameLoop
+    public sealed class GameLoop : IGameLoop
     {
         private readonly ConcurrentDictionary<IActor, TaskState> _taskDict;
 
