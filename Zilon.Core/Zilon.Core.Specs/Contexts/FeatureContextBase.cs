@@ -445,6 +445,7 @@ namespace Zilon.Core.Specs.Contexts
         private static void RegisterCommands(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<MoveCommand>();
+            serviceCollection.AddSingleton<NextTurnCommand>();
             serviceCollection.AddSingleton<UseSelfCommand>();
             serviceCollection.AddSingleton<AttackCommand>();
 

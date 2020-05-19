@@ -132,10 +132,16 @@ namespace Zilon.Core.Specs.Steps
         public async System.Threading.Tasks.Task WhenСледующаяИтерацияСектораAsync(int count)
         {
             var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
+            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
 
-            for (var i = 0; i < count; i++)
+            var counter = count;
+
+            var survivalModule = humatTaskSource.ActiveActor?.Person?.GetModuleSafe<ISurvivalModule>();
+            while ((!humatTaskSource.CanIntent() && humatTaskSource.ActiveActor != null && survivalModule?.IsDead == false) ||
+                (humatTaskSource.ActiveActor == null && counter>0))
             {
                 await gameLoop.UpdateAsync();
+                counter--;
             }
         }
 
@@ -227,6 +233,14 @@ namespace Zilon.Core.Specs.Steps
         {
             await WhenСледующаяИтерацияСектораAsync(timeUnitCount);
         }
+
+        [When(@"Я выполняю простой")]
+        public void WhenЯВыполняюПростой()
+        {
+            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+            idleCommand.Execute();
+        }
+
 
 
         [UsedImplicitly]
