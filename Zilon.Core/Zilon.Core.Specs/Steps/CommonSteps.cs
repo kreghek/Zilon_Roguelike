@@ -140,7 +140,7 @@ namespace Zilon.Core.Specs.Steps
             while ((!humatTaskSource.CanIntent() && humatTaskSource.ActiveActor != null && survivalModule?.IsDead == false) ||
                 (humatTaskSource.ActiveActor == null && counter>0))
             {
-                await gameLoop.UpdateAsync();
+                await gameLoop.UpdateAsync().ConfigureAwait(false);
                 counter--;
             }
         }
@@ -176,7 +176,6 @@ namespace Zilon.Core.Specs.Steps
         {
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
             var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
-            var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
 
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;

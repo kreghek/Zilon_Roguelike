@@ -35,10 +35,10 @@ namespace Zilon.Core.Commands
         /// <param name="actorManager"> Менеджер актёров.
         /// Нужен для отслеживания противников при автоперемещении. </param>
         [ExcludeFromCodeCoverage]
-        public MoveCommand(IGameLoop gameLoop,
+        public MoveCommand(
             ISectorManager sectorManager,
             ISectorUiState playerState) :
-            base(gameLoop, sectorManager, playerState)
+            base(sectorManager, playerState)
         {
             Path = new List<IGraphNode>();
         }

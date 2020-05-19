@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
 {
@@ -9,16 +7,6 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class TacticCommandBase : ICommand
     {
-        private readonly IGameLoop _gameLoop;
-
-        protected virtual bool UpdateGameLoop => true;
-
-        [ExcludeFromCodeCoverage]
-        protected TacticCommandBase(IGameLoop gameLoop)
-        {
-            _gameLoop = gameLoop;
-        }
-
         public abstract bool CanExecute();
 
         public void Execute()
@@ -30,11 +18,6 @@ namespace Zilon.Core.Commands
             }
 
             ExecuteTacticCommand();
-
-            //if (UpdateGameLoop)
-            //{
-            //    _gameLoop.UpdateAsync().Wait();
-            //}
         }
 
         /// <summary>

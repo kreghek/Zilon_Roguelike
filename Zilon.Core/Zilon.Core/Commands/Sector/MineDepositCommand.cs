@@ -16,10 +16,9 @@ namespace Zilon.Core.Commands.Sector
         private readonly IMineDepositMethodRandomSource _mineDepositMethodRandomSource;
 
         public MineDepositCommand(
-            IGameLoop gameLoop,
             ISectorManager sectorManager,
             ISectorUiState playerState,
-            IMineDepositMethodRandomSource mineDepositMethodRandomSource) : base(gameLoop, sectorManager, playerState)
+            IMineDepositMethodRandomSource mineDepositMethodRandomSource) : base(sectorManager, playerState)
         {
             _mineDepositMethodRandomSource = mineDepositMethodRandomSource;
         }

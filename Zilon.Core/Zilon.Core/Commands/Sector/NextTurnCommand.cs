@@ -1,15 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Core.Commands
 {
     public class NextTurnCommand : ActorCommandBase
     {
-        private readonly IDecisionSource _decisionSource;
+        public NextTurnCommand(
+            ISectorManager sectorManager,
+            ISectorUiState playerState) : base(sectorManager, playerState)
+        {
+        }
 
         public override bool CanExecute()
         {
@@ -18,18 +19,8 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var intention = new Intention<IdleTask>(actor => new IdleTask(actor, _decisionSource));
+            var intention = new Intention<IdleTask>(actor => new IdleTask(actor, 1000));
             PlayerState.TaskSource.Intent(intention);
-        }
-
-        [ExcludeFromCodeCoverage]
-        public NextTurnCommand(IGameLoop gameLoop,
-            ISectorManager sectorManager,
-            ISectorUiState playerState,
-            IDecisionSource decisionSource) :
-            base(gameLoop, sectorManager, playerState)
-        {
-            _decisionSource = decisionSource;
         }
     }
 }

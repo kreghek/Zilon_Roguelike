@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Zilon.Bot.Sdk;
@@ -90,17 +91,24 @@ namespace Zilon.Bot.Players
                 _actorStrategies.Remove(actor);
             }
 
-            throw new System.Exception();
+
+            // Сюда попадаем в случае смерти персонажа.
+            // Когда мы пытаемся выполнить какую-то задачу, а персонаж при это был/стал мертв.
+            throw new InvalidOperationException("Произведена попытка получить задачу для мертвого персонажа.");
         }
 
         public void ProcessTaskComplete(IActorTask actorTask)
         {
-            
+            // Этот метод был введен для HumanActorTaskSource.
+            // В этой реализации источника команд не используется.
         }
 
         public void ProcessTaskExecuted(IActorTask actorTask)
         {
-            
+            // Этот метод был введен для HumanActorTaskSource.
+            // Нужен для того, чтобы сразу начать выполнение следующего действия, не дожидаясь окончания текущего.
+            // Например, при использовании парного оружия.
+            // Механика пока не реализована.
         }
 
         protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
