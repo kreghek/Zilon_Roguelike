@@ -44,12 +44,13 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
+        private static void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
         {
             var states = taskDict.Values;
             foreach (var state in states)
             {
-                if (state.Actor.Person.GetModuleSafe<ISurvivalModule>()?.IsDead == true)
+                var survivalModule = state.Actor.Person.GetModuleSafe<ISurvivalModule>();
+                if (survivalModule?.IsDead == true)
                 {
                     // Персонажи, у которых есть модуль выживания, могут умереть.
                     // Мертвые персонажы не выполняют задач.
@@ -75,10 +76,11 @@ namespace Zilon.Core.Tactics
                 {
                     taskDict.Remove(taskStatePair.Key);
                     state.TaskSource.ProcessTaskComplete(state.Task);
-                    continue;
                 }
 
-                if (taskStatePair.Key.Person.GetModuleSafe<ISurvivalModule>()?.IsDead == true)
+                var person = taskStatePair.Key.Person;
+                var survivalModule = person.GetModuleSafe<ISurvivalModule>();
+                if (survivalModule?.IsDead == true)
                 {
                     // Персонажи, у которых есть модуль выживания, могут умереть.
                     // Мертвые персонажы не выполняют задач.
@@ -86,7 +88,6 @@ namespace Zilon.Core.Tactics
                     // 1. Возможна ситуация, когда мертвый персонаж всё еще выполнить действие.
                     // 2. Экономит ресурсы.
                     taskDict.Remove(taskStatePair.Key);
-                    continue;
                 }
             }
         }
@@ -111,13 +112,13 @@ namespace Zilon.Core.Tactics
                     {
                         // Это происходит, когда игрок пытается присвоить новую команду,
                         // когда старая еще не закончена и не может быть заменена.
-                        throw new Exception();
+                        throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
                     }
                 }
             }
         }
 
-        private IEnumerable<IActor> GetActorsWithoutTasks(IActorManager actorManager, IDictionary<IActor, TaskState> taskDict)
+        private static IEnumerable<IActor> GetActorsWithoutTasks(IActorManager actorManager, IDictionary<IActor, TaskState> taskDict)
         {
             foreach (var actor in actorManager.Items)
             {
