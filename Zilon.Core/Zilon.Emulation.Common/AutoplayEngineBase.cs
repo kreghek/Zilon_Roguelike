@@ -122,10 +122,7 @@ namespace Zilon.Emulation.Common
             var humanPlayer = _globalServiceProvider.GetRequiredService<HumanPlayer>();
             var scoreManager = _globalServiceProvider.GetRequiredService<IScoreManager>();
 
-            var gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
-            var botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
-            var monsterActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<MonsterBotActorTaskSource>();
             var playerEventLogService = ServiceScope.ServiceProvider.GetService<IPlayerEventLogService>();
 
             await sectorManager.CreateSectorAsync().ConfigureAwait(false);
