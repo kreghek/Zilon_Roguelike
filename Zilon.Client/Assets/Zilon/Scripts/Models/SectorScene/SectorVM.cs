@@ -96,8 +96,6 @@ public class SectorVM : MonoBehaviour
 
     [Inject] private readonly IHumanActorTaskSource _humanActorTaskSource;
 
-    [Inject(Id = "monster")] private readonly IActorTaskSource _monsterActorTaskSource;
-
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     [Inject] private readonly ILogicStateFactory _logicStateFactory;
