@@ -263,11 +263,6 @@ public class SectorVM : MonoBehaviour
 
         _playerState.TaskSource = _humanActorTaskSource;
 
-        _gameLoop.ActorTaskSources = new[] {
-            _humanActorTaskSource,
-            _monsterActorTaskSource
-        };
-
         _sectorManager.CurrentSector.HumanGroupExit += Sector_HumanGroupExit;
     }
 
