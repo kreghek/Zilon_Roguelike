@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-
+using Assets.Zilon.Scripts.Services;
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -11,6 +11,7 @@ using Zilon.Core.Tactics;
 public class GameLoopUpdater : MonoBehaviour
 {
     [NotNull] [Inject] private readonly IGameLoop _gameLoop;
+    [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     void Start()
     {
@@ -22,6 +23,7 @@ public class GameLoopUpdater : MonoBehaviour
         while (true)
         {
             await _gameLoop.UpdateAsync();
+            await _commandBlockerService.WaitBlockers();
         }
     }
 }

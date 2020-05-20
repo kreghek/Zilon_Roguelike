@@ -92,8 +92,12 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
         if (_moveCounter >= END_MOVE_COUNTER)
         {
             _moveCounter = null;
-            _moveCommandBlocker.Release();
-            _moveCommandBlocker = null;
+
+            if (_moveCommandBlocker != null)
+            {
+                _moveCommandBlocker.Release();
+                _moveCommandBlocker = null;
+            }
         }
     }
 
@@ -148,8 +152,12 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
         var actorHexNode = (HexNode)Actor.Node;
         var worldPositionParts = HexHelper.ConvertToWorld(actorHexNode.OffsetCoords);
         _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, actorHexNode.OffsetCoords.Y - 0.26f);
-        _moveCommandBlocker = new MoveCommandBlocker();
-        _commandBlockerService.AddBlocker(_moveCommandBlocker);
+
+        if (GraphicRoot.gameObject.activeSelf)
+        {
+            _moveCommandBlocker = new MoveCommandBlocker();
+            _commandBlockerService.AddBlocker(_moveCommandBlocker);
+        }
         GraphicRoot.ProcessMove(_targetPosition);
     }
 

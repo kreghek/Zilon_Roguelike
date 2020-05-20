@@ -27,7 +27,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private MoveTask CreateTaskInner(IActor actor)
         {
-            return new MoveTask(actor, TargetNode, _map, 500);
+            return new MoveTask(actor, TargetNode, _map, 2000);
         }
     }
 }
