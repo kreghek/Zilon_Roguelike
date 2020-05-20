@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Assets.Zilon.Scripts.Services
 {
@@ -22,6 +23,20 @@ namespace Assets.Zilon.Scripts.Services
         public void DropBlockers()
         {
             _commandBlockers.Clear();
+        }
+
+        public Task WaitBlockers()
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            Task.Run(() =>
+            {
+                while (HasBlockers)
+                {
+                }
+
+                tcs.SetResult(true);
+            });
+            return tcs.Task;
         }
 
         private void CommandBlocker_Release(object sender, System.EventArgs e)
