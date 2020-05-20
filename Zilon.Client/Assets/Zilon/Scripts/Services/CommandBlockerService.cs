@@ -7,6 +7,8 @@ namespace Assets.Zilon.Scripts.Services
     {
         private readonly HashSet<ICommandBlocker> _commandBlockers;
 
+        private TaskCompletionSource<bool> tcs;
+
         public CommandBlockerService()
         {
             _commandBlockers = new HashSet<ICommandBlocker>();
@@ -18,6 +20,7 @@ namespace Assets.Zilon.Scripts.Services
         {
             commandBlocker.Released += CommandBlocker_Release;
             _commandBlockers.Add(commandBlocker);
+            tcs = new TaskCompletionSource<bool>();
         }
 
         public void DropBlockers()
@@ -27,16 +30,14 @@ namespace Assets.Zilon.Scripts.Services
 
         public Task WaitBlockers()
         {
-            var tcs = new TaskCompletionSource<bool>();
-            Task.Run(() =>
+            if (tcs is null)
             {
-                while (HasBlockers)
-                {
-                }
-
-                tcs.SetResult(true);
-            });
-            return tcs.Task;
+                return Task.CompletedTask;
+            }
+            else
+            {
+                return tcs.Task;
+            }
         }
 
         private void CommandBlocker_Release(object sender, System.EventArgs e)
@@ -44,6 +45,14 @@ namespace Assets.Zilon.Scripts.Services
             var blocker = (ICommandBlocker)sender;
             blocker.Released -= CommandBlocker_Release;
             _commandBlockers.Remove(blocker);
+
+            if (!HasBlockers)
+            {
+                if (tcs != null)
+                {
+                    tcs.SetResult(true);
+                }
+            }
         }
     }
 }

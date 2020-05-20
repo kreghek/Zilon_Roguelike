@@ -22,9 +22,8 @@ public class GameLoopUpdater : MonoBehaviour
     {
         while (true)
         {
-            await _commandBlockerService.WaitBlockers();
-
             await _gameLoop.UpdateAsync();
+            await _commandBlockerService.WaitBlockers();
         }
     }
 }
