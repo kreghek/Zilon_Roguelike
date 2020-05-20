@@ -13,10 +13,10 @@ namespace Zilon.Core.Commands
     public class OpenContainerCommand : ActorCommandBase
     {
         [ExcludeFromCodeCoverage]
-        public OpenContainerCommand(IGameLoop gameLoop,
+        public OpenContainerCommand(
             ISectorManager sectorManager,
             ISectorUiState playerState) :
-            base(gameLoop, sectorManager, playerState)
+            base(sectorManager, playerState)
         {
         }
 

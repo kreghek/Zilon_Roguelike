@@ -65,8 +65,6 @@ namespace Zilon.Core.Specs.Contexts
 
             ConfigureEventBus(serviceProvider);
 
-            ConfigureGameLoop(serviceProvider);
-
             RegisterManager.ConfigureAuxServices(serviceProvider);
         }
 
@@ -74,14 +72,6 @@ namespace Zilon.Core.Specs.Contexts
         {
             var eventMessageBus = serviceProvider.GetRequiredService<IActorInteractionBus>();
             eventMessageBus.NewEvent += EventMessageBus_NewEvent;
-        }
-
-        private static void ConfigureGameLoop(ServiceProvider serviceProvider)
-        {
-            var gameLoop = serviceProvider.GetRequiredService<IGameLoop>();
-            var humanTaskSource = serviceProvider.GetRequiredService<IHumanActorTaskSource>();
-            var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource>();
-            gameLoop.ActorTaskSources = new IActorTaskSource[] { humanTaskSource, monsterTaskSource };
         }
 
         private ServiceCollection RegisterServices()
@@ -197,7 +187,7 @@ namespace Zilon.Core.Specs.Contexts
             var humanStartNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
             var humanActor = CreateHumanActor(humanPlayer, personSid, humanStartNode, perkResolver);
 
-            humanTaskSource.SwitchActor(humanActor);
+            humanTaskSource.SwitchActiveActor(humanActor);
 
             actorManager.Add(humanActor);
 
@@ -445,6 +435,7 @@ namespace Zilon.Core.Specs.Contexts
         private static void RegisterCommands(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<MoveCommand>();
+            serviceCollection.AddSingleton<NextTurnCommand>();
             serviceCollection.AddSingleton<UseSelfCommand>();
             serviceCollection.AddSingleton<AttackCommand>();
 
@@ -458,6 +449,12 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
             serviceCollection.AddSingleton<IHumanActorTaskSource, HumanActorTaskSource>();
             serviceCollection.AddSingleton<MonsterBotActorTaskSource>();
+            serviceCollection.AddSingleton<IActorTaskSourceCollector>(serviceProvider =>
+            {
+                var humanTaskSource = serviceProvider.GetRequiredService<IHumanActorTaskSource>();
+                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource>();
+                return new ActorTaskSourceCollector(humanTaskSource, monsterTaskSource);
+            });
             RegisterManager.RegisterBot(serviceCollection);
         }
 

@@ -104,5 +104,9 @@ namespace Zilon.Core.Tactics
         /// Но будут специфичны для каждого актёра. Например, для ботов.
         /// </remarks>
         ISectorFowData SectorFowData { get; }
+
+        int GameLoopCounter { get; }
+
+        void IncreaseGameLoopCounter(int value);
     }
 }

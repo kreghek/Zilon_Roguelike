@@ -11,6 +11,7 @@ namespace Zilon.Core.Tactics.Behaviour
     public class MoveTask : ActorTaskBase
     {
         private readonly ISectorMap _map;
+        private readonly int _cost;
         private readonly List<IGraphNode> _path;
 
         public IGraphNode TargetNode { get; }
@@ -35,18 +36,20 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var nextNode = _path[0];
 
-            if (!_map.IsPositionAvailableFor(nextNode, Actor))
+            if (_map.IsPositionAvailableFor(nextNode, Actor))
             {
-                throw new InvalidOperationException($"Попытка переместиться в заблокированную ячейку {nextNode}.");
+                ReleaseNodes(Actor);
+                Actor.MoveToNode(nextNode);
+                HoldNodes(nextNode, Actor);
+
+                _path.RemoveAt(0);
+
+                if (!_path.Any())
+                {
+                    IsComplete = true;
+                }
             }
-
-            ReleaseNodes(Actor);
-            Actor.MoveToNode(nextNode);
-            HoldNodes(nextNode, Actor);
-
-            _path.RemoveAt(0);
-
-            if (!_path.Any())
+            else
             {
                 IsComplete = true;
             }
@@ -98,11 +101,17 @@ namespace Zilon.Core.Tactics.Behaviour
             return _map.IsPositionAvailableFor(nextNode, Actor);
         }
 
-        public MoveTask(IActor actor, IGraphNode targetNode, ISectorMap map) : base(actor)
+        public override int Cost => _cost;
+
+        public MoveTask(IActor actor, IGraphNode targetNode, ISectorMap map) : this(actor, targetNode, map, 1000)
+        { 
+        }
+
+        public MoveTask(IActor actor, IGraphNode targetNode, ISectorMap map, int cost) : base(actor)
         {
             TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
             _map = map ?? throw new ArgumentNullException(nameof(map));
-
+            _cost = cost;
             if (actor.Node == targetNode)
             {
                 // Это может произойти, если источник команд выбрал целевую точку ту же, что и сам актёр

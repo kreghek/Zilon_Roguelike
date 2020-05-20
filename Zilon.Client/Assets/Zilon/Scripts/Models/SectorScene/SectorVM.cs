@@ -147,13 +147,15 @@ public class SectorVM : MonoBehaviour
 #pragma warning restore 649
 
     // ReSharper disable once UnusedMember.Local
-    public void Update()
+    public async Task Update()
     {
         if (!_commandBlockerService.HasBlockers)
         {
             ExecuteCommands();
         }
     }
+
+    public bool CanIntent = true;
 
     private void ExecuteCommands()
     {
@@ -165,18 +167,20 @@ public class SectorVM : MonoBehaviour
             {
                 command.Execute();
 
+                CanIntent = false;
+
                 if (_interuptCommands)
                 {
                     return;
                 }
 
-                if (command is IRepeatableCommand repeatableCommand)
-                {
-                    if (repeatableCommand.CanRepeat())
-                    {
-                        _clientCommandExecutor.Push(repeatableCommand);
-                    }
-                }
+                //if (command is IRepeatableCommand repeatableCommand && CanIntent)
+                //{
+                //    if (repeatableCommand.CanRepeat())
+                //    {
+                //        _clientCommandExecutor.Push(repeatableCommand);
+                //    }
+                //}
             }
         }
         catch (Exception exception)
@@ -258,11 +262,6 @@ public class SectorVM : MonoBehaviour
         _staticObjectManager.Removed += StaticObjectManager_Removed;
 
         _playerState.TaskSource = _humanActorTaskSource;
-
-        _gameLoop.ActorTaskSources = new[] {
-            _humanActorTaskSource,
-            _monsterActorTaskSource
-        };
 
         _sectorManager.CurrentSector.HumanGroupExit += Sector_HumanGroupExit;
     }
@@ -498,11 +497,15 @@ public class SectorVM : MonoBehaviour
 
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
-        _humanActorTaskSource.CurrentActor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
+
+        var activeActor = _humanActorTaskSource.ActiveActor;
+        var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
+        survivalModule.Dead -= HumanPersonSurvival_Dead;
+
         _playerState.ActiveActor = null;
         _playerState.SelectedViewModel = null;
         _playerState.HoverViewModel = null;
-        _humanActorTaskSource.SwitchActor(null);
+        _humanActorTaskSource.SwitchActiveActor(null);
 
         var nextSectorNode = e.Transition.SectorNode;
         _humanPlayer.BindSectorNode(nextSectorNode);
@@ -629,7 +632,9 @@ public class SectorVM : MonoBehaviour
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
-        _humanActorTaskSource.CurrentActor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
+        var activeActor = _humanActorTaskSource.ActiveActor;
+        var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
+        survivalModule.Dead -= HumanPersonSurvival_Dead;
 
         _progressStorageService.Destroy();
     }

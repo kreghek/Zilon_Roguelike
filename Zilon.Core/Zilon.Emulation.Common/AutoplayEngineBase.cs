@@ -16,7 +16,7 @@ namespace Zilon.Emulation.Common
 {
     public abstract class AutoplayEngineBase<T> where T : IPluggableActorTaskSource
     {
-        private const int ITERATION_LIMIT = 40_000;
+        private const int ITERATION_LIMIT = 40_000_000;
 
         private bool _changeSector;
 
@@ -46,7 +46,7 @@ namespace Zilon.Emulation.Common
             {
                 try
                 {
-                    gameLoop.Update();
+                    await gameLoop.UpdateAsync().ConfigureAwait(false);
 
                     if (_changeSector)
                     {
@@ -66,12 +66,14 @@ namespace Zilon.Emulation.Common
                 catch (AggregateException exception)
                 {
                     CatchException(exception.InnerException);
+                    throw;
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception exception)
 #pragma warning restore CA1031 // Do not catch general exception types
                 {
                     CatchException(exception);
+                    throw;
                 }
             }
 
@@ -120,21 +122,13 @@ namespace Zilon.Emulation.Common
             var humanPlayer = _globalServiceProvider.GetRequiredService<HumanPlayer>();
             var scoreManager = _globalServiceProvider.GetRequiredService<IScoreManager>();
 
-            var gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
-            var botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
-            var monsterActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<MonsterBotActorTaskSource>();
             var playerEventLogService = ServiceScope.ServiceProvider.GetService<IPlayerEventLogService>();
 
             await sectorManager.CreateSectorAsync().ConfigureAwait(false);
 
             sectorManager.CurrentSector.ScoreManager = scoreManager;
             sectorManager.CurrentSector.HumanGroupExit += CurrentSector_HumanGroupExit;
-
-            gameLoop.ActorTaskSources = new Core.Tactics.Behaviour.IActorTaskSource[] {
-                botActorTaskSource,
-                monsterActorTaskSource
-            };
 
             var humanActor = CreateHumanActor(humanPlayer,
                 startPerson,

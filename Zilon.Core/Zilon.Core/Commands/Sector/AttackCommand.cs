@@ -22,11 +22,11 @@ namespace Zilon.Core.Commands
         private readonly ITacticalActUsageService _tacticalActUsageService;
 
         [ExcludeFromCodeCoverage]
-        public AttackCommand(IGameLoop gameLoop,
+        public AttackCommand(
             ISectorManager sectorManager,
             ISectorUiState playerState,
             ITacticalActUsageService tacticalActUsageService) :
-            base(gameLoop, sectorManager, playerState)
+            base(sectorManager, playerState)
         {
             _tacticalActUsageService = tacticalActUsageService;
         }

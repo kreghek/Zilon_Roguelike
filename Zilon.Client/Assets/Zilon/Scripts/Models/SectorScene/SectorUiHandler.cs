@@ -28,6 +28,9 @@ public class SectorUiHandler : MonoBehaviour
 
     [Inject] private readonly ICommandManager _clientCommandExecutor;
 
+    [Inject]
+    private readonly IGameLoop _gameLoop;
+
     [Inject(Id = "next-turn-command")] private readonly ICommand _nextTurnCommand;
 
     [Inject(Id = "show-inventory-command")] private readonly ICommand _showInventoryCommand;
@@ -51,6 +54,8 @@ public class SectorUiHandler : MonoBehaviour
     public Button SectorTransitionMoveButton;
     public Button CityQuickExitButton;
     public Button OpenLootButton;
+
+    public SectorVM SectorVM;
 
     public void Update()
     {

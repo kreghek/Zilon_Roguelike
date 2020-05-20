@@ -10,6 +10,7 @@ using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -17,6 +18,7 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Specs.Steps
@@ -127,22 +129,20 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [When(@"Следующая итерация сектора")]
-        public void WhenСледующаяИтерацияСектора()
-        {
-            var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
-            gameLoop.Update();
-        }
-
-        [UsedImplicitly]
         [When(@"Следующая итерация сектора (\d+) раз")]
-        public void WhenСледующаяИтерацияСектора(int count)
+        public async System.Threading.Tasks.Task WhenСледующаяИтерацияСектораAsync(int count)
         {
             var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
+            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
 
-            for (var i = 0; i < count; i++)
+            var counter = count;
+
+            var survivalModule = humatTaskSource.ActiveActor?.Person?.GetModuleSafe<ISurvivalModule>();
+            while ((!humatTaskSource.CanIntent() && humatTaskSource.ActiveActor != null && survivalModule?.IsDead == false) ||
+                (humatTaskSource.ActiveActor == null && counter > 0))
             {
-                gameLoop.Update();
+                await gameLoop.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
+                counter--;
             }
         }
 
@@ -228,13 +228,27 @@ namespace Zilon.Core.Specs.Steps
             propTransferCommand.Execute();
         }
 
+        [When(@"Жду (.*) единиц времени")]
+        public System.Threading.Tasks.Task WhenЖдуЕдиницВремениAsync(int timeUnitCount)
+        {
+            return WhenСледующаяИтерацияСектораAsync(timeUnitCount);
+        }
+
+        [When(@"Я выполняю простой")]
+        public void WhenЯВыполняюПростой()
+        {
+            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+            idleCommand.Execute();
+        }
+
         [UsedImplicitly]
         [Then(@"У актёра в инвентаре есть (.*)")]
         public void ThenУАктёраВИнвентареЕстьPistol(string equipmentSchemeSid)
         {
             var actor = Context.GetActiveActor();
 
-            var inventoryItems = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            var inventoryModule = actor.Person.GetModule<IInventoryModule>();
+            var inventoryItems = inventoryModule.CalcActualItems();
             var foundEquipment = inventoryItems.SingleOrDefault(x => x.Scheme.Sid == equipmentSchemeSid);
 
             foundEquipment.Should().NotBeNull();

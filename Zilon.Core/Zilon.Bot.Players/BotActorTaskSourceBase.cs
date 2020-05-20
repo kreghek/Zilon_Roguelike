@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
@@ -21,19 +23,29 @@ namespace Zilon.Bot.Players
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
 
-        public abstract void Configure(IBotSettings botSettings);
-
-        public IActorTask[] GetActorTasks(IActor actor)
+        public bool CanGetTask(IActor actor)
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
-            // TODO Лучше сразу отдавать на обработку актёров текущего игрока.
-            if (actor.Owner != _player)
+            return actor.Owner == _player;
+        }
+
+        public abstract void Configure(IBotSettings botSettings);
+
+        public Task<IActorTask> GetActorTaskAsync(IActor actor)
+        {
+            if (actor is null)
             {
-                return System.Array.Empty<IActorTask>();
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            if (!CanGetTask(actor))
+            {
+                // Это может случиться, если попытаться вызвать этот метод без предварительной проверки.
+                throw new InvalidOperationException("Произведена попытка получить задачу для актёра, которого не может обработать данных источник задач.");
             }
 
             // Основные компоненты:
@@ -74,17 +86,33 @@ namespace Zilon.Bot.Players
 
                 if (actorTask == null)
                 {
-                    return System.Array.Empty<IActorTask>();
+                    return Task.FromResult<IActorTask>(new IdleTask(actor, 1));
                 }
 
-                return new[] { actorTask };
+                return Task.FromResult(actorTask);
             }
             else
             {
                 _actorStrategies.Remove(actor);
             }
 
-            return System.Array.Empty<IActorTask>();
+            // Сюда попадаем в случае смерти персонажа.
+            // Когда мы пытаемся выполнить какую-то задачу, а персонаж при это был/стал мертв.
+            throw new InvalidOperationException("Произведена попытка получить задачу для мертвого персонажа.");
+        }
+
+        public void ProcessTaskComplete(IActorTask actorTask)
+        {
+            // Этот метод был введен для HumanActorTaskSource.
+            // В этой реализации источника команд не используется.
+        }
+
+        public void ProcessTaskExecuted(IActorTask actorTask)
+        {
+            // Этот метод был введен для HumanActorTaskSource.
+            // Нужен для того, чтобы сразу начать выполнение следующего действия, не дожидаясь окончания текущего.
+            // Например, при использовании парного оружия.
+            // Механика пока не реализована.
         }
 
         protected abstract ILogicStrategy GetLogicStrategy(IActor actor);

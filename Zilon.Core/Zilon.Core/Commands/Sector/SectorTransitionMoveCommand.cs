@@ -13,7 +13,6 @@ namespace Zilon.Core.Commands
         /// <summary>
         /// Конструктор на создание команды перемещения.
         /// </summary>
-        /// <param name="gameLoop"> Игровой цикл.
         /// Нужен для того, чтобы команда выполнила обновление игрового цикла
         /// после завершения перемещения персонажа. </param>
         /// <param name="sectorManager"> Менеджер сектора.
@@ -21,10 +20,10 @@ namespace Zilon.Core.Commands
         /// <param name="playerState"> Состояние игрока.
         /// Нужен для получения информации о текущем состоянии игрока. </param>
         [ExcludeFromCodeCoverage]
-        public SectorTransitionMoveCommand(IGameLoop gameLoop,
+        public SectorTransitionMoveCommand(
             ISectorManager sectorManager,
             ISectorUiState playerState) :
-            base(gameLoop, sectorManager, playerState)
+            base(sectorManager, playerState)
         {
         }
 

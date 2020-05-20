@@ -16,10 +16,9 @@ namespace Zilon.Core.Commands.Sector
         private readonly IMineDepositMethodRandomSource _mineDepositMethodRandomSource;
 
         public MineDepositCommand(
-            IGameLoop gameLoop,
             ISectorManager sectorManager,
             ISectorUiState playerState,
-            IMineDepositMethodRandomSource mineDepositMethodRandomSource) : base(gameLoop, sectorManager, playerState)
+            IMineDepositMethodRandomSource mineDepositMethodRandomSource) : base(sectorManager, playerState)
         {
             _mineDepositMethodRandomSource = mineDepositMethodRandomSource;
         }
@@ -78,14 +77,14 @@ namespace Zilon.Core.Commands.Sector
                 else
                 {
                     var intetion = new Intention<MineTask>(actor => CreateTaskByInstrument(actor, targetStaticObject, equipedTool));
-                    PlayerState.TaskSource.Intent(intetion);
+                    PlayerState.TaskSource.IntentAsync(intetion).Wait();
                 }
             }
             else
             {
                 // Добыча руками, если никаких тегов инструмента не задано.
                 var intetion = new Intention<MineTask>(actor => CreateTaskByHands(actor, targetStaticObject));
-                PlayerState.TaskSource.Intent(intetion);
+                PlayerState.TaskSource.IntentAsync(intetion).Wait();
             }
         }
 

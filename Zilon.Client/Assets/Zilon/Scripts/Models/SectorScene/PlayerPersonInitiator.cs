@@ -94,7 +94,7 @@ public class PlayerPersonInitiator : MonoBehaviour
 
         //Лучше централизовать переключение текущего актёра только в playerState
         _playerState.ActiveActor = playerActorViewModel;
-        _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
+        _humanActorTaskSource.SwitchActiveActor(_playerState.ActiveActor.Actor);
 
         ActorViewModels.Add(playerActorViewModel);
 

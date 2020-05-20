@@ -11,11 +11,10 @@ namespace Zilon.Core.Commands
     public abstract class SpecialActorCommandBase : ActorCommandBase
     {
         [ExcludeFromCodeCoverage]
-        protected SpecialActorCommandBase(IGameLoop gameloop,
+        protected SpecialActorCommandBase(
             ISectorManager sectorManager,
-            ISectorUiState playerState) : base(gameloop, sectorManager, playerState)
+            ISectorUiState playerState) : base(sectorManager, playerState)
         {
-
         }
     }
 }

@@ -18,14 +18,21 @@ namespace Zilon.Core.Tactics.Behaviour
 
         protected override void ExecuteTask()
         {
-            if (!Target.CanBeDamaged())
-            {
-                throw new InvalidOperationException("Попытка атаковать цель, которой нельзя нанести урон.");
-            }
-
             if (Actor.Person.GetModuleSafe<ICombatActModule>() is null)
             {
                 throw new NotImplementedException("Не неализована возможность атаковать без навыков.");
+            }
+
+            if (!Target.CanBeDamaged())
+            {
+                // Эта ситуация может произойти, когда:
+                // 1. Текущий актёр начал выполнять задачу.
+                // 2. Цель убили/умерла сама.
+                // 3. Наступил момент, когда задача текущего актёра должна выполниться.
+
+                // Эту првоерку нужно проводить выше, когда пользователю сообщаяется возможность
+                // выполнить эту задачу до её начала.
+                return;
             }
 
             var availableSlotAct = GetUsedActs();

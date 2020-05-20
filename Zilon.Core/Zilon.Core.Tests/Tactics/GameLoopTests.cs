@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using Moq;
@@ -47,13 +47,13 @@ namespace Zilon.Core.Tests.Tactics
             var botActor = CreateActor(botPlayer);
             actorInnerList.Add(botActor);
 
-            var gameLoop = new GameLoop(sectorManager)
-            {
-                ActorTaskSources = Array.Empty<IActorTaskSource>()
-            };
+            var actorTaskScourceCollectorMock = new Mock<IActorTaskSourceCollector>();
+            var actorTaskScourceCollector = actorTaskScourceCollectorMock.Object;
+
+            var gameLoop = new GameLoop(sectorManager, actorTaskScourceCollector);
 
             // ACT
-            Action act = () => { gameLoop.Update(); };
+            Func<Task> act = () => gameLoop.UpdateAsync();
 
             // ARRANGE
             act.Should().NotThrow();

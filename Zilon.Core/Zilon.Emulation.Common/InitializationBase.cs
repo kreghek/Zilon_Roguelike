@@ -19,6 +19,7 @@ using Zilon.Core.Schemes;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
 
@@ -116,6 +117,11 @@ namespace Zilon.Emulation.Common
             container.AddScoped<ISectorManager, InfiniteSectorManager>();
             RegisterActUsageServices(container);
             container.AddScoped<MonsterBotActorTaskSource>();
+            container.AddScoped<IActorTaskSourceCollector, ActorTaskSourceCollector>(serviceProvider =>
+            {
+                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource>();
+                return new ActorTaskSourceCollector(monsterTaskSource);
+            });
         }
 
         private static void RegisterActUsageServices(IServiceCollection container)

@@ -16,9 +16,8 @@ namespace Zilon.Core.Commands
         protected ISectorUiState PlayerState { get; }
 
         [ExcludeFromCodeCoverage]
-        protected ActorCommandBase(IGameLoop gameLoop,
-            ISectorManager sectorManager,
-            ISectorUiState playerState) : base(gameLoop)
+        protected ActorCommandBase(ISectorManager sectorManager,
+            ISectorUiState playerState)
         {
             SectorManager = sectorManager;
             PlayerState = playerState;

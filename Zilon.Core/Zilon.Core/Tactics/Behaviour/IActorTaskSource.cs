@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using System.Threading.Tasks;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Источник задач для актёров (управление пользователя или AI).
@@ -17,6 +19,12 @@
         /// 3. Источник задач для актёров игрока, которые не находятся
         /// под прямым управлением игрока (напарники по группе, неактивные ключевые актёры).
         /// </remarks>
-        IActorTask[] GetActorTasks(IActor actor);
+        Task<IActorTask> GetActorTaskAsync(IActor actor);
+
+        bool CanGetTask(IActor actor);
+
+        void ProcessTaskExecuted(IActorTask actorTask);
+
+        void ProcessTaskComplete(IActorTask actorTask);
     }
 }

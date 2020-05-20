@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using System.Threading.Tasks;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     public interface IHumanActorTaskSource: IActorTaskSource
     {
@@ -6,13 +8,17 @@
         /// Переключает текущего ключевого актёра.
         /// </summary>
         /// <param name="currentActor"> Целевой клчевой актёр. </param>
-        void SwitchActor(IActor currentActor);
+        void SwitchActiveActor(IActor currentActor);
 
         /// <summary>
         /// Текущий активный ключевой актёр.
         /// </summary>
-        IActor CurrentActor { get; }
+        IActor ActiveActor { get; }
+
+        Task IntentAsync(IIntention intention);
 
         void Intent(IIntention intention);
+
+        bool CanIntent();
     }
 }
