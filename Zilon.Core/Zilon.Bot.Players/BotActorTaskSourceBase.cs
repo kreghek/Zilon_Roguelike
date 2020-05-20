@@ -96,7 +96,6 @@ namespace Zilon.Bot.Players
                 _actorStrategies.Remove(actor);
             }
 
-
             // Сюда попадаем в случае смерти персонажа.
             // Когда мы пытаемся выполнить какую-то задачу, а персонаж при это был/стал мертв.
             throw new InvalidOperationException("Произведена попытка получить задачу для мертвого персонажа.");

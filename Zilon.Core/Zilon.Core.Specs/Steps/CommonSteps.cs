@@ -241,8 +241,6 @@ namespace Zilon.Core.Specs.Steps
             idleCommand.Execute();
         }
 
-
-
         [UsedImplicitly]
         [Then(@"У актёра в инвентаре есть (.*)")]
         public void ThenУАктёраВИнвентареЕстьPistol(string equipmentSchemeSid)
