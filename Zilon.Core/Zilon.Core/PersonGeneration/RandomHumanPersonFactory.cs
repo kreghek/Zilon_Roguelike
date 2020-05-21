@@ -57,6 +57,9 @@ namespace Zilon.Core.PersonGeneration
 
             var attributeModule = RollAndAddPersonAttributesToPerson(person);
 
+            var movingModule = new MovingModule(attributeModule);
+            person.AddModule(movingModule);
+
             var inventoryModule = new InventoryModule();
             person.AddModule(inventoryModule);
 

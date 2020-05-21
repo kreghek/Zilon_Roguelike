@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -27,7 +28,16 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private MoveTask CreateTaskInner(IActor actor)
         {
-            return new MoveTask(actor, TargetNode, _map, 2000);
+            var movingModule = actor.Person.GetModuleSafe<IMovingModule>();
+            if (movingModule is null)
+            {
+                return new MoveTask(actor, TargetNode, _map);
+            }
+            else
+            {
+                var moveCost = movingModule.CalculateCost();
+                return new MoveTask(actor, TargetNode, _map, moveCost);
+            }
         }
     }
 }
