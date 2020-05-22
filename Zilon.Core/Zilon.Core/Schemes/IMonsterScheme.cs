@@ -32,6 +32,11 @@
         ITacticalActStatsSubScheme PrimaryAct { get; }
 
         /// <summary>
+        /// Базовая скорость передвижения монстра.
+        /// </summary>
+        int BaseMoveSpeed { get; }
+
+        /// <summary>
         /// Теги для классификации монстров.
         /// </summary>
         string[] Tags { get; }
