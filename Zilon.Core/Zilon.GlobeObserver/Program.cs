@@ -1,8 +1,8 @@
 ﻿using System;
+
 using Microsoft.Extensions.DependencyInjection;
-using Zilon.Bot.Players;
-using Zilon.Bot.Sdk;
-using Zilon.Emulation.Common;
+
+using Zilon.Core.World;
 
 namespace Zilon.GlobeObserver
 {
@@ -15,13 +15,20 @@ namespace Zilon.GlobeObserver
             startUp.RegisterServices(serviceContainer);
             var serviceProvider = serviceContainer.BuildServiceProvider();
 
-            var botSettings = new BotSettings();
+            // Create globe
+            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
+            var globe = globeInitializer.CreateGlobeAsync();
 
-            var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource>(startUp, botSettings);
+            // Iterate globe
+            do
+            {
+                var iterationCount = int.Parse(Console.ReadLine());
+                for (var i = 0; i < iterationCount; i++)
+                {
+                    globe.Update();
+                }
 
-            var startPerson = PersonCreateHelper.CreateStartPerson(serviceProvider);
-
-            await autoPlayEngine.StartAsync(startPerson, serviceProvider).ConfigureAwait(false);
+            } while (true);
         }
     }
 }
