@@ -1,0 +1,24 @@
+{
+  "Name": {
+    "Ru": "Уклоняющийся Секуший Удар",
+	"En": "Evasion Slash"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 2,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Tactical",
+      "Impact":  "Kinetic",
+	  "ApRank": 2
+    }
+  }
+}
