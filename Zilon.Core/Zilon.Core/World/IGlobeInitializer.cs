@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
@@ -7,17 +11,26 @@ namespace Zilon.Core.World
 {
     public interface IGlobeInitializer
     {
-        System.Threading.Tasks.Task<IGlobe> CreateGlobeAsync();
+        System.Threading.Tasks.Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid);
     }
 
     public interface IGlobe
     {
-        void Update();
+        Task UpdateAsync();
     }
 
     public sealed class Globe : IGlobe
     {
+        private int _turnCounter;
+
         private readonly IList<ISectorNode> _sectorNodes;
+
+        private readonly ConcurrentDictionary<IActor, TaskState> _taskDict;
+
+        public Globe()
+        {
+            _taskDict = new ConcurrentDictionary<IActor, TaskState>();
+        }
 
         public IEnumerable<ISectorNode> SectorNodes { get; }
 
@@ -26,9 +39,110 @@ namespace Zilon.Core.World
             _sectorNodes.Add(sectorNode);
         }
 
-        public void Update()
+        public async Task UpdateAsync()
         {
-            throw new System.NotImplementedException();
+            var actorsWithoutTasks = GetActorsWithoutTasks();
+
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
+
+            ProcessTasks(_taskDict);
+            _turnCounter++;
+            if (_turnCounter >= 1000)
+            {
+                _turnCounter = 1000 - _turnCounter;
+
+                foreach (var sectorNode in SectorNodes)
+                {
+                    sectorNode.Sector.Update();
+                }
+            }
+        }
+
+        private IEnumerable<IActor> GetActorsWithoutTasks()
+        {
+            foreach (var sectorNode in _sectorNodes)
+                foreach (var actor in sectorNode.Sector.ActorManager.Items)
+                {
+                    if (_taskDict.TryGetValue(actor, out _))
+                    {
+                        continue;
+                    }
+
+                    yield return actor;
+                }
+        }
+
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<IActor> actors)
+        {
+            foreach (var actor in actors)
+            {
+                var taskSource = actor.ActorTaskSource;
+
+                if (!taskSource.CanGetTask(actor))
+                {
+                    continue;
+                }
+
+                var actorTask = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
+
+                var state = new TaskState(actor, actorTask, taskSource);
+                if (!_taskDict.TryAdd(actor, state))
+                {
+                    // Это происходит, когда игрок пытается присвоить новую команду,
+                    // когда старая еще не закончена и не может быть заменена.
+                    throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
+                }
+
+            }
+        }
+
+        private static void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
+        {
+            var states = taskDict.Values;
+            foreach (var state in states)
+            {
+                if (!state.Actor.CanExecuteTasks)
+                {
+                    // По сути, возможность выполнять задачи - это основая роль этого объекта.
+                    // песонаж может перестать выполнять задачи по следующим причинам:
+                    // 1. Персонажи, у которых есть модуль выживания, могут умереть, пока выполняют текущую задачу (выполняются предусловия).
+                    // Мертвые персонажы не выполняют задач.
+                    // Их задачи игнорируем, т.к. задачи могут выполниться после смерти персонажа,
+                    // что противоречит логике задач.
+                    continue;
+                }
+
+                state.UpdateCounter();
+
+                if (state.TaskIsExecuting)
+                {
+                    state.Task.Execute();
+                    state.TaskSource.ProcessTaskExecuted(state.Task);
+                }
+            }
+
+            // удаляем выполненные задачи.
+            foreach (var taskStatePair in taskDict.ToArray())
+            {
+                var state = taskStatePair.Value;
+                if (state.TaskComplete)
+                {
+                    taskDict.Remove(taskStatePair.Key);
+                    state.TaskSource.ProcessTaskComplete(state.Task);
+                }
+
+                var actor = taskStatePair.Key;
+                if (!actor.CanExecuteTasks)
+                {
+                    // Песонаж может перестать выполнять задачи по следующим причинам:
+                    // 1. Персонажи, у которых есть модуль выживания, могут умереть.
+                    // Мертвые персонажы не выполняют задач.
+                    // Их задачи можно прервать, потому что:
+                    //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
+                    //   * Экономит ресурсы.
+                    taskDict.Remove(taskStatePair.Key);
+                }
+            }
         }
     }
 
@@ -43,11 +157,11 @@ namespace Zilon.Core.World
             _schemeService = schemeService;
         }
 
-        public async System.Threading.Tasks.Task<IGlobe> CreateGlobeAsync()
+        public async System.Threading.Tasks.Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid)
         {
             var globe = new Globe();
 
-            var startLocation = _schemeService.GetScheme<ILocationScheme>("init");
+            var startLocation = _schemeService.GetScheme<ILocationScheme>(startLocationSchemeSid);
             var startBiom = await _biomeInitializer.InitBiomeAsync(startLocation).ConfigureAwait(false);
             var startNode = startBiom.Sectors.First();
 
