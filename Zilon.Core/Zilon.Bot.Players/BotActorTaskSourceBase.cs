@@ -23,16 +23,6 @@ namespace Zilon.Bot.Players
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
 
-        public bool CanGetTask(IActor actor)
-        {
-            if (actor is null)
-            {
-                throw new ArgumentNullException(nameof(actor));
-            }
-
-            return actor.Owner == _player;
-        }
-
         public abstract void Configure(IBotSettings botSettings);
 
         public Task<IActorTask> GetActorTaskAsync(IActor actor)
@@ -40,12 +30,6 @@ namespace Zilon.Bot.Players
             if (actor is null)
             {
                 throw new ArgumentNullException(nameof(actor));
-            }
-
-            if (!CanGetTask(actor))
-            {
-                // Это может случиться, если попытаться вызвать этот метод без предварительной проверки.
-                throw new InvalidOperationException("Произведена попытка получить задачу для актёра, которого не может обработать данных источник задач.");
             }
 
             // Основные компоненты:

@@ -13,11 +13,15 @@ namespace Zilon.GlobeObserver
             var serviceContainer = new ServiceCollection();
             var startUp = new StartUp();
             startUp.RegisterServices(serviceContainer);
+
+
+            serviceContainer.AddSingleton<IGlobeInitializer, GlobeInitializer>();
+
             var serviceProvider = serviceContainer.BuildServiceProvider();
 
             // Create globe
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
-            var globe = globeInitializer.CreateGlobeAsync();
+            var globe = await globeInitializer.CreateGlobeAsync("intro");
 
             // Iterate globe
             do
@@ -25,7 +29,7 @@ namespace Zilon.GlobeObserver
                 var iterationCount = int.Parse(Console.ReadLine());
                 for (var i = 0; i < iterationCount; i++)
                 {
-                    globe.Update();
+                    await globe.UpdateAsync();
                 }
 
             } while (true);

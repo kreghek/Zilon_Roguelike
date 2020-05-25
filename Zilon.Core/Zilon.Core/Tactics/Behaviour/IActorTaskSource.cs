@@ -21,8 +21,6 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </remarks>
         Task<IActorTask> GetActorTaskAsync(IActor actor);
 
-        bool CanGetTask(IActor actor);
-
         void ProcessTaskExecuted(IActorTask actorTask);
 
         void ProcessTaskComplete(IActorTask actorTask);

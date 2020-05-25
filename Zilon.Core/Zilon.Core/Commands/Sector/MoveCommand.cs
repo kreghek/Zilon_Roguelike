@@ -150,7 +150,7 @@ namespace Zilon.Core.Commands
         {
             var actor = PlayerState.ActiveActor.Actor;
             var enemies = SectorManager.CurrentSector.ActorManager.Items
-                .Where(x => x != actor && x.Owner != actor.Owner).ToArray();
+                .Where(x => x != actor && x.Person.Fraction != actor.Person.Fraction).ToArray();
 
             foreach (var enemyActor in enemies)
             {

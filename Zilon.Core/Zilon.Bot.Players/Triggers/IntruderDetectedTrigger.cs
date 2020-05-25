@@ -22,7 +22,7 @@ namespace Zilon.Bot.Players.Triggers
             var foundIntruders = new List<IActor>();
             foreach (var target in _sectorManager.CurrentSector.ActorManager.Items)
             {
-                if (target.Owner == actor.Owner)
+                if (target.Person.Fraction == actor.Person.Fraction)
                 {
                     continue;
                 }

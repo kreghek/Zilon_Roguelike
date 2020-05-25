@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Zilon.Core.PersonModules;
+
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
@@ -11,11 +11,12 @@ namespace Zilon.Core.World
 {
     public interface IGlobeInitializer
     {
-        System.Threading.Tasks.Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid);
+        Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid);
     }
 
     public interface IGlobe
     {
+        void AddSectorNode(ISectorNode sectorNode);
         Task UpdateAsync();
     }
 
@@ -30,6 +31,7 @@ namespace Zilon.Core.World
         public Globe()
         {
             _taskDict = new ConcurrentDictionary<IActor, TaskState>();
+            _sectorNodes = new List<ISectorNode>();
         }
 
         public IEnumerable<ISectorNode> SectorNodes { get; }
@@ -61,6 +63,7 @@ namespace Zilon.Core.World
         private IEnumerable<IActor> GetActorsWithoutTasks()
         {
             foreach (var sectorNode in _sectorNodes)
+            {
                 foreach (var actor in sectorNode.Sector.ActorManager.Items)
                 {
                     if (_taskDict.TryGetValue(actor, out _))
@@ -70,6 +73,7 @@ namespace Zilon.Core.World
 
                     yield return actor;
                 }
+            }
         }
 
         private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<IActor> actors)
@@ -77,11 +81,6 @@ namespace Zilon.Core.World
             foreach (var actor in actors)
             {
                 var taskSource = actor.ActorTaskSource;
-
-                if (!taskSource.CanGetTask(actor))
-                {
-                    continue;
-                }
 
                 var actorTask = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
 
@@ -157,17 +156,41 @@ namespace Zilon.Core.World
             _schemeService = schemeService;
         }
 
-        public async System.Threading.Tasks.Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid)
+        public async Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid)
         {
             var globe = new Globe();
 
             var startLocation = _schemeService.GetScheme<ILocationScheme>(startLocationSchemeSid);
             var startBiom = await _biomeInitializer.InitBiomeAsync(startLocation).ConfigureAwait(false);
-            var startNode = startBiom.Sectors.First();
+            var startNode = startBiom.Sectors.First(x=>x.State == SectorNodeState.SectorMaterialized);
 
             globe.AddSectorNode(startNode);
 
             return globe;
+        }
+
+        public async Task ExpandGlobeAsync(IGlobe globe, ISectorNode sectorNode)
+        {
+            if (globe is null)
+            {
+                throw new ArgumentNullException(nameof(globe));
+            }
+
+            if (sectorNode is null)
+            {
+                throw new ArgumentNullException(nameof(sectorNode));
+            }
+
+            if (sectorNode.State == SectorNodeState.SectorMaterialized)
+            {
+                throw new InvalidOperationException("В этом случае такой узел должен уже быть использован.");
+            }
+
+            await _biomeInitializer.MaterializeLevelAsync(sectorNode).ConfigureAwait(false);
+
+            // Фиксируем новый узел, как известную, материализованную часть мира.
+            // Далее этот узел будет обрабатываться при каждом изменении мира.
+            globe.AddSectorNode(sectorNode);
         }
     }
 }

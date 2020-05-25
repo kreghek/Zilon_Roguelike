@@ -52,6 +52,8 @@ namespace Zilon.Core.Tactics
         public IPlayer Owner { get; }
         public ISectorFowData SectorFowData { get; }
         public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
+        public IActorTaskSource ActorTaskSource { get; }
+        public bool CanExecuteTasks { get; }
 
         [ExcludeFromCodeCoverage]
         public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
@@ -468,6 +470,11 @@ namespace Zilon.Core.Tactics
         {
             var e = new MineDepositEventArgs(deposit, openResult);
             DepositMined?.Invoke(this, e);
+        }
+
+        public void Switch(IActorTaskSource actorTaskSource)
+        {
+            throw new NotImplementedException();
         }
     }
 }

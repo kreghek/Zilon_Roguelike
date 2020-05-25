@@ -100,10 +100,10 @@ namespace Zilon.Core.Tactics
             {
                 foreach (var taskSource in taskSources)
                 {
-                    if (!taskSource.CanGetTask(actor))
-                    {
-                        continue;
-                    }
+                    //if (!taskSource.CanGetTask(actor))
+                    //{
+                    //    continue;
+                    //}
 
                     var actorTask = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
 

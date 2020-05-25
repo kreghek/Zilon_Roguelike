@@ -12,6 +12,7 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public abstract PhysicalSize PhysicalSize { get; }
+        public IFraction Fraction { get; }
 
         protected PersonBase()
         {

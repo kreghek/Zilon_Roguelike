@@ -54,7 +54,7 @@ namespace Zilon.Bot.Players.Logics
         {
             foreach (var target in _sectorManager.CurrentSector.ActorManager.Items)
             {
-                if (target.Owner == actor.Owner)
+                if (target.Person.Fraction == actor.Person.Fraction)
                 {
                     continue;
                 }
