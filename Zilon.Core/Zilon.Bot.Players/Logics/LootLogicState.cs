@@ -16,20 +16,6 @@ namespace Zilon.Bot.Players.Logics
 
         private MoveTask _moveTask;
 
-        private readonly ISectorMap _map;
-        private readonly ISectorManager _sectorManager;
-
-        public LootLogicState(ISectorManager sectorManager)
-        {
-            if (sectorManager is null)
-            {
-                throw new System.ArgumentNullException(nameof(sectorManager));
-            }
-
-            _map = sectorManager.CurrentSector.Map;
-            _sectorManager = sectorManager;
-        }
-
         public IStaticObject FindContainer(IActor actor)
         {
             if (actor is null)
@@ -50,7 +36,7 @@ namespace Zilon.Bot.Players.Logics
             return nearbyContainer;
         }
 
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             _staticObject = FindContainer(actor);
 

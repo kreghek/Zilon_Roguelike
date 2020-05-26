@@ -14,11 +14,11 @@ namespace Zilon.Bot.Players.Logics
     // Есть подозрение, что оно не работает.
     public sealed class ExploreLogicState : MoveLogicStateBase
     {
-        public ExploreLogicState(IDecisionSource decisionSource, ISectorManager sectorManager) : base(decisionSource, sectorManager)
+        public ExploreLogicState(IDecisionSource decisionSource) : base(decisionSource)
         {
         }
 
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             if (MoveTask == null)
             {

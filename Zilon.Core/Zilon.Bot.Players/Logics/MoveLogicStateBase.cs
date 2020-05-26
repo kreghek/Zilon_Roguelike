@@ -1,9 +1,7 @@
 ﻿using System;
 
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Logics
 {
@@ -14,17 +12,9 @@ namespace Zilon.Bot.Players.Logics
 
         protected IDecisionSource DecisionSource { get; }
 
-        protected ISectorMap Map { get; }
-
-        protected MoveLogicStateBase(IDecisionSource decisionSource, ISectorManager sectorManager)
+        protected MoveLogicStateBase(IDecisionSource decisionSource)
         {
-            if (sectorManager is null)
-            {
-                throw new ArgumentNullException(nameof(sectorManager));
-            }
-
             DecisionSource = decisionSource ?? throw new ArgumentNullException(nameof(decisionSource));
-            Map = sectorManager.CurrentSector.Map;
         }
 
         protected override void ResetData()

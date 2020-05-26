@@ -12,7 +12,7 @@ namespace Zilon.Bot.Players.Logics
 {
     public class EatProviantLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {

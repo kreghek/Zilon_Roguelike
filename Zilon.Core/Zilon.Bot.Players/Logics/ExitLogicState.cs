@@ -14,18 +14,7 @@ namespace Zilon.Bot.Players.Logics
 
         private MoveTask _moveTask;
 
-        public ExitLogicState(ISectorManager sectorManager)
-        {
-            if (sectorManager is null)
-            {
-                throw new System.ArgumentNullException(nameof(sectorManager));
-            }
-
-            _sector = sectorManager.CurrentSector;
-            _map = sectorManager.CurrentSector.Map;
-        }
-
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             if (!strategyData.ExitNodes.Any())
             {

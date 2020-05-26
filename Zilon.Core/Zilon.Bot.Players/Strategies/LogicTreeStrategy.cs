@@ -29,7 +29,7 @@ namespace Zilon.Bot.Players.Strategies
         public ILogicState CurrentState { get; private set; }
         public ILogicStrategyData StrategyData => _strategyData;
 
-        public IActorTask GetActorTask()
+        public IActorTask GetActorTask(ISectorTaskSourceContext context)
         {
             // Для текущего состояния проверяем каждый из переходов.
             // Если переход выстреливает, то генерируем задачу актёру.

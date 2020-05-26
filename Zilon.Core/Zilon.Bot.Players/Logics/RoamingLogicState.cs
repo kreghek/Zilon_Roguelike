@@ -9,7 +9,7 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class RoamingLogicState : MoveLogicStateBase
     {
-        public RoamingLogicState(IDecisionSource decisionSource, ISectorManager sectorManager) : base(decisionSource, sectorManager)
+        public RoamingLogicState(IDecisionSource decisionSource) : base(decisionSource)
         {
         }
 
@@ -33,7 +33,7 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             if (MoveTask == null)
             {

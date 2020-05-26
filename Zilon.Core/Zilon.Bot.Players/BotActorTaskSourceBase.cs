@@ -24,7 +24,7 @@ namespace Zilon.Bot.Players
 
         public abstract void Configure(IBotSettings botSettings);
 
-        public Task<IActorTask> GetActorTaskAsync(IActor actor)
+        public Task<IActorTask> GetActorTaskAsync(IActor actor, ISectorTaskSourceContext context)
         {
             if (actor is null)
             {
@@ -65,7 +65,7 @@ namespace Zilon.Bot.Players
                     _actorStrategies[actor] = logicStrategy;
                 }
 
-                var actorTask = logicStrategy.GetActorTask();
+                var actorTask = logicStrategy.GetActorTask(context);
 
                 if (actorTask == null)
                 {

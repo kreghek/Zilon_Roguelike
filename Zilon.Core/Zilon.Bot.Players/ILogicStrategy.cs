@@ -9,7 +9,7 @@ namespace Zilon.Bot.Players
 
         ILogicState CurrentState { get; }
 
-        IActorTask GetActorTask();
+        IActorTask GetActorTask(ISectorTaskSourceContext context);
 
         ILogicStrategyData StrategyData { get; }
     }

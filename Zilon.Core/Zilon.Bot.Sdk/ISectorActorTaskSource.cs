@@ -2,7 +2,7 @@
 
 namespace Zilon.Bot.Sdk
 {
-    public interface ISectorActorTaskSource: IActorTaskSource
+    public interface ISectorActorTaskSource: IActorTaskSource<ISectorTaskSourceContext>
     {
         void Configure(IBotSettings botSettings);
     }
