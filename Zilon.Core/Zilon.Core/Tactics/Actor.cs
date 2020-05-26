@@ -52,14 +52,14 @@ namespace Zilon.Core.Tactics
         public IPlayer Owner { get; }
         public ISectorFowData SectorFowData { get; }
         public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
-        public IActorTaskSource ActorTaskSource { get; }
+        public IActorTaskSource TaskSource { get; }
         public bool CanExecuteTasks { get; }
 
         [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
+        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource taskSource, [NotNull]  IGraphNode node)
         {
             Person = person ?? throw new ArgumentNullException(nameof(person));
-            Owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
             Node = node ?? throw new ArgumentNullException(nameof(node));
 
             if (SectorFowData == null)
@@ -68,14 +68,14 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
+        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource taskSource, [NotNull]  IGraphNode node,
+            [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, owner, node)
+        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource taskSource, [NotNull]  IGraphNode node,
+            [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
 
@@ -472,7 +472,7 @@ namespace Zilon.Core.Tactics
             DepositMined?.Invoke(this, e);
         }
 
-        public void Switch(IActorTaskSource actorTaskSource)
+        public void SwitchTaskSource(IActorTaskSource actorTaskSource)
         {
             throw new NotImplementedException();
         }

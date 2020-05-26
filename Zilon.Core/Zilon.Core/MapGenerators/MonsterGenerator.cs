@@ -10,6 +10,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
@@ -23,6 +24,7 @@ namespace Zilon.Core.MapGenerators
         private readonly ISchemeService _schemeService;
         private readonly IMonsterPersonFactory _monsterFactory;
         private readonly IMonsterGeneratorRandomSource _generatorRandomSource;
+        private readonly IActorTaskSource _actorTaskSource;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="MonsterGenerator"/>.
@@ -31,11 +33,13 @@ namespace Zilon.Core.MapGenerators
         /// <param name="generatorRandomSource"> Источник рандома для генератора. </param>
         public MonsterGenerator(ISchemeService schemeService,
             IMonsterPersonFactory monsterFactory,
-            IMonsterGeneratorRandomSource generatorRandomSource)
+            IMonsterGeneratorRandomSource generatorRandomSource,
+            IActorTaskSource actorTaskSource)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _monsterFactory = monsterFactory ?? throw new ArgumentNullException(nameof(monsterFactory));
             _generatorRandomSource = generatorRandomSource ?? throw new ArgumentNullException(nameof(generatorRandomSource));
+            _actorTaskSource = actorTaskSource;
         }
 
         /// <summary>Создаёт монстров в секторе по указанной схеме.</summary>
@@ -121,7 +125,7 @@ namespace Zilon.Core.MapGenerators
 
             var monsterScheme = _generatorRandomSource.RollMonsterScheme(availableMonsterSchemes);
 
-            var monster = CreateMonster(sector.ActorManager, monsterScheme, monsterNode, monsterPlayer);
+            var monster = CreateMonster(sector.ActorManager, monsterScheme, monsterNode, _actorTaskSource);
 
             return monster;
         }
@@ -222,17 +226,17 @@ namespace Zilon.Core.MapGenerators
             return currentRarity;
         }
 
-        private static IActor CreateMonster(IActorManager actorManager, MonsterPerson person, IGraphNode startNode, IBotPlayer botPlayer)
+        private static IActor CreateMonster(IActorManager actorManager, MonsterPerson person, IGraphNode startNode, IActorTaskSource actorTaskSource)
         {
-            var actor = new Actor(person, botPlayer, startNode);
+            var actor = new Actor(person, actorTaskSource, startNode);
             actorManager.Add(actor);
             return actor;
         }
 
-        private IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode, IBotPlayer botPlayer)
+        private IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode, IActorTaskSource actorTaskSource)
         {
             var person = _monsterFactory.Create(monsterScheme);
-            var actor = new Actor(person, botPlayer, startNode);
+            var actor = new Actor(person, actorTaskSource, startNode);
             actorManager.Add(actor);
             return actor;
         }
@@ -266,7 +270,7 @@ namespace Zilon.Core.MapGenerators
                 var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
 
                 var monsterNode = freeNodes[rollIndex];
-                var monster = CreateMonster(sector.ActorManager, monsterPerson, monsterNode, monsterPlayer);
+                var monster = CreateMonster(sector.ActorManager, monsterPerson, monsterNode, _actorTaskSource);
 
                 freeNodes.Remove(monster.Node);
             }

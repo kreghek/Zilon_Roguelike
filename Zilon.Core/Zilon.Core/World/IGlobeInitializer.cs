@@ -3,9 +3,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Zilon.Core.PersonGeneration;
+using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.World
 {
@@ -80,7 +83,7 @@ namespace Zilon.Core.World
         {
             foreach (var actor in actors)
             {
-                var taskSource = actor.ActorTaskSource;
+                var taskSource = actor.TaskSource;
 
                 var actorTask = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
 
@@ -149,11 +152,15 @@ namespace Zilon.Core.World
     {
         private readonly IBiomeInitializer _biomeInitializer;
         private readonly ISchemeService _schemeService;
+        private readonly IPersonFactory _personFactory;
+        private readonly IActorTaskSource _actorTaskSource;
 
-        public GlobeInitializer(IBiomeInitializer biomeInitializer, ISchemeService schemeService)
+        public GlobeInitializer(IBiomeInitializer biomeInitializer, ISchemeService schemeService, IPersonFactory personFactory, IActorTaskSource actorTaskSource)
         {
             _biomeInitializer = biomeInitializer;
             _schemeService = schemeService;
+            _personFactory = personFactory;
+            _actorTaskSource = actorTaskSource;
         }
 
         public async Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid)
@@ -162,11 +169,62 @@ namespace Zilon.Core.World
 
             var startLocation = _schemeService.GetScheme<ILocationScheme>(startLocationSchemeSid);
             var startBiom = await _biomeInitializer.InitBiomeAsync(startLocation).ConfigureAwait(false);
-            var startNode = startBiom.Sectors.First(x=>x.State == SectorNodeState.SectorMaterialized);
+            var startSectorNode = startBiom.Sectors.First(x=>x.State == SectorNodeState.SectorMaterialized);
 
-            globe.AddSectorNode(startNode);
+            globe.AddSectorNode(startSectorNode);
+
+            // Добавляем стартовых персонажей-пилигримов
+            var sector = startSectorNode.Sector;
+            for (var i = 0; i < 40; i++)
+            {
+                var person = CreateStartPerson("human-person", _personFactory);
+
+                var startNode = sector.Map.Regions.SingleOrDefault(x => x.IsStart)
+                    .Nodes
+                    .Skip(i)
+                    .First();
+                var actor = CreateHumanActor(person, startNode, _actorTaskSource);
+
+                sector.ActorManager.Add(actor);
+            }
 
             return globe;
+        }
+
+        private static IActor CreateHumanActor(
+            IPerson humanPerson,
+            Graphs.IGraphNode startNode,
+            IActorTaskSource actorTaskSource)
+        {
+            var actor = new Actor(humanPerson, actorTaskSource, startNode);
+
+            return actor;
+        }
+
+        /// <summary>
+        /// Создаёт персонажа.
+        /// </summary>
+        /// <param name="serviceProvider"> Контейнер DI, откуда извлекаются сервисы для создания персонажа. </param>
+        /// <returns> Возвращает созданного персонажа. </returns>
+        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory)
+        {
+            var startPerson = personFactory.Create(personSchemeSid);
+            return startPerson;
+        }
+    }
+
+    public interface IGlobeService
+    {
+        Task ExpandGlobeAsync(IGlobe globe, ISectorNode sectorNode);
+    }
+
+    public sealed class GlobeService : IGlobeService
+    {
+        private readonly IBiomeInitializer _biomeInitializer;
+
+        public GlobeService(IBiomeInitializer biomeInitializer)
+        {
+            _biomeInitializer = biomeInitializer;
         }
 
         public async Task ExpandGlobeAsync(IGlobe globe, ISectorNode sectorNode)

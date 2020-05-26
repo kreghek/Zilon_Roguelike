@@ -11,6 +11,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Emulation.Common
 {
@@ -87,6 +88,7 @@ namespace Zilon.Emulation.Common
         protected abstract void ProcessEnd();
 
         private static IActor CreateHumanActor(HumanPlayer humanPlayer,
+            IActorTaskSource actorTaskSource,
             IPerson humanPerson,
             ISectorManager sectorManager,
             IPlayerEventLogService playerEventLogService)
@@ -98,7 +100,7 @@ namespace Zilon.Emulation.Common
 
             humanPlayer.MainPerson = humanPerson;
 
-            var actor = new Actor(humanPerson, humanPlayer, playerActorStartNode);
+            var actor = new Actor(humanPerson, actorTaskSource, playerActorStartNode);
 
             playerEventLogService.Actor = actor;
 
@@ -124,6 +126,7 @@ namespace Zilon.Emulation.Common
 
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
             var playerEventLogService = ServiceScope.ServiceProvider.GetService<IPlayerEventLogService>();
+            var actorTaskSource = ServiceScope.ServiceProvider.GetService<IActorTaskSource>();
 
             await sectorManager.CreateSectorAsync().ConfigureAwait(false);
 
@@ -131,6 +134,7 @@ namespace Zilon.Emulation.Common
             sectorManager.CurrentSector.HumanGroupExit += CurrentSector_HumanGroupExit;
 
             var humanActor = CreateHumanActor(humanPlayer,
+                actorTaskSource,
                 startPerson,
                 sectorManager,
                 playerEventLogService);

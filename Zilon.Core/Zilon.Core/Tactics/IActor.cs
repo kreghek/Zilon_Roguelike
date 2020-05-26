@@ -24,9 +24,9 @@ namespace Zilon.Core.Tactics
         /// </summary>
         IPerson Person { get; }
 
-        IActorTaskSource ActorTaskSource { get; }
+        IActorTaskSource TaskSource { get; }
 
-        void Switch(IActorTaskSource actorTaskSource);
+        void SwitchTaskSource(IActorTaskSource actorTaskSource);
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.
