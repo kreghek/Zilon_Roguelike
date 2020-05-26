@@ -2,7 +2,6 @@
 
 using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
-using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players
@@ -12,7 +11,7 @@ namespace Zilon.Bot.Players
         private IBotSettings _botSettings;
         private readonly LogicStateTreePatterns _logicStateTreePatterns;
 
-        public HumanBotActorTaskSource(HumanPlayer player, LogicStateTreePatterns logicStateTreePatterns) : base(player)
+        public HumanBotActorTaskSource(LogicStateTreePatterns logicStateTreePatterns)
         {
             _logicStateTreePatterns = logicStateTreePatterns;
         }

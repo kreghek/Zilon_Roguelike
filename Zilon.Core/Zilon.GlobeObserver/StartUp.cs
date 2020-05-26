@@ -6,6 +6,7 @@ using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Emulation.Common;
 
 namespace Zilon.GlobeObserver
@@ -23,7 +24,7 @@ namespace Zilon.GlobeObserver
             serviceCollection.AddScoped<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
             serviceCollection.AddScoped<LogicStateTreePatterns>();
 
-            serviceCollection.AddScoped<HumanBotActorTaskSource>();
+            serviceCollection.AddScoped<IActorTaskSource, HumanBotActorTaskSource>();
         }
     }
 }

@@ -53,7 +53,7 @@ namespace Zilon.Core.Tactics
         public ISectorFowData SectorFowData { get; }
         public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
         public IActorTaskSource TaskSource { get; }
-        public bool CanExecuteTasks { get; }
+        public bool CanExecuteTasks { get => !Person.CheckIsDead(); }
 
         [ExcludeFromCodeCoverage]
         public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource taskSource, [NotNull]  IGraphNode node)

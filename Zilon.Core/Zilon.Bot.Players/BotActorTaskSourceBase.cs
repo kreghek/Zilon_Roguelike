@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Zilon.Bot.Sdk;
-using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -12,14 +10,15 @@ namespace Zilon.Bot.Players
 {
     public abstract class BotActorTaskSourceBase : ISectorActorTaskSource
     {
-        private readonly IPlayer _player;
-
+        //TODO Есть риск утечки.
+        // Актёры могут быть удалены, но информация о них будет храниться здесь, предотвращая чистку.
+        // Рассмотреть варианты:
+        // 1. Периодическая чистка внутри самого источника команд. Тогда нужна зависимость от менеджера актёров.
+        // 2. В интерфейс добавить метод для обработки удаления актёра.
         private readonly Dictionary<IActor, ILogicStrategy> _actorStrategies;
 
-        public BotActorTaskSourceBase(IPlayer player)
+        public BotActorTaskSourceBase()
         {
-            _player = player;
-
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
 
@@ -56,7 +55,7 @@ namespace Zilon.Bot.Players
             // Если логика закончена, её нужно сменить. Если нет селектора, который указывает на следующую логику,
             // то выполнять переход на стартовую логику.
 
-            if (!actor.Person.CheckIsDead())
+            if (actor.CanExecuteTasks)
             {
                 if (!_actorStrategies.TryGetValue(actor, out var logicStrategy))
                 {

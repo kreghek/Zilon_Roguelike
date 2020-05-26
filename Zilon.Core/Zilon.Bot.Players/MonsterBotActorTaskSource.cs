@@ -12,7 +12,7 @@ namespace Zilon.Bot.Players
     {
         private readonly LogicStateTreePatterns _logicStateTreePatterns;
 
-        public MonsterBotActorTaskSource(IBotPlayer player, LogicStateTreePatterns logicStateTreePatterns) : base(player)
+        public MonsterBotActorTaskSource(LogicStateTreePatterns logicStateTreePatterns)
         {
             _logicStateTreePatterns = logicStateTreePatterns;
         }

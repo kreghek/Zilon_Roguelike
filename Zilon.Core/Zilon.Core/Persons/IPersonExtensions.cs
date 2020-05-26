@@ -8,6 +8,7 @@ namespace Zilon.Core.Persons
         {
             if (person.GetModuleSafe<ISurvivalModule>() is null)
             {
+                // Те, у кого нет модуля выживания, не могут умереть.
                 return false;
             }
 

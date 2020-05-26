@@ -179,7 +179,7 @@ namespace Zilon.Core.World
             {
                 var person = CreateStartPerson("human-person", _personFactory);
 
-                var startNode = sector.Map.Regions.SingleOrDefault(x => x.IsStart)
+                var startNode = sector.Map
                     .Nodes
                     .Skip(i)
                     .First();

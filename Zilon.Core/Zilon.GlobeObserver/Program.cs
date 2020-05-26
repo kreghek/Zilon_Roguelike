@@ -14,7 +14,6 @@ namespace Zilon.GlobeObserver
             var startUp = new StartUp();
             startUp.RegisterServices(serviceContainer);
 
-
             serviceContainer.AddSingleton<IGlobeInitializer, GlobeInitializer>();
 
             var serviceProvider = serviceContainer.BuildServiceProvider();

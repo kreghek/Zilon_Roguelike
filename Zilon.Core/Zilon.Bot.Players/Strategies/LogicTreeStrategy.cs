@@ -17,8 +17,9 @@ namespace Zilon.Bot.Players.Strategies
 
         public LogicTreeStrategy(IActor actor, LogicStateTree stateTree)
         {
-            Actor = actor;
-            _stateTree = stateTree;
+            Actor = actor ?? throw new ArgumentNullException(nameof(actor));
+            _stateTree = stateTree ?? throw new ArgumentNullException(nameof(stateTree));
+
             _strategyData = new LogicTreeStrategyData();
 
             CurrentState = _stateTree.StartState;
