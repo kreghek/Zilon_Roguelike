@@ -40,7 +40,7 @@ namespace Zilon.Bot.Players.Logics
             return nearbyIntruder;
         }
 
-        private IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap _map, IActorManager actorManager)
+        private IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
         {
             foreach (var target in actorManager.Items)
             {
@@ -54,7 +54,7 @@ namespace Zilon.Bot.Players.Logics
                     continue;
                 }
 
-                var isVisible = LogicHelper.CheckTargetVisible(_map, actor.Node, target.Node);
+                var isVisible = LogicHelper.CheckTargetVisible(map, actor.Node, target.Node);
                 if (!isVisible)
                 {
                     continue;
@@ -64,7 +64,7 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target, ISectorMap _map)
+        private AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target, ISectorMap map)
         {
             if (actor.Person.GetModuleSafe<ICombatActModule>() is null)
             {
@@ -75,8 +75,8 @@ namespace Zilon.Bot.Players.Logics
 
             var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().CalcCombatActs(), inventory);
 
-            var isInDistance = act.CheckDistance(actor.Node, target.Node, _map);
-            var targetIsOnLine = _map.TargetIsOnLine(actor.Node, target.Node);
+            var isInDistance = act.CheckDistance(actor.Node, target.Node, map);
+            var targetIsOnLine = map.TargetIsOnLine(actor.Node, target.Node);
 
             var attackParams = new AttackParams
             {
@@ -121,13 +121,13 @@ namespace Zilon.Bot.Players.Logics
                 }
                 else
                 {
-                    var _map = context.Sector.Map;
+                    var map = context.Sector.Map;
                     _refreshCounter = REFRESH_COUNTER_VALUE;
-                    var targetIsOnLine = _map.TargetIsOnLine(actor.Node, _target.Node);
+                    var targetIsOnLine = map.TargetIsOnLine(actor.Node, _target.Node);
 
                     if (targetIsOnLine)
                     {
-                        _moveTask = new MoveTask(actor, _target.Node, _map);
+                        _moveTask = new MoveTask(actor, _target.Node, map);
                         return _moveTask;
                     }
                     else

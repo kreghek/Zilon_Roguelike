@@ -6,7 +6,7 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class IdleLogicState : LogicStateBase
     {
-        private IdleTask IdleTask;
+        private IdleTask _idleTask;
         private readonly IDecisionSource _decisionSource;
 
         public IdleLogicState(IDecisionSource decisionSource)
@@ -14,25 +14,25 @@ namespace Zilon.Bot.Players.Logics
             _decisionSource = decisionSource;
         }
 
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
-            if (IdleTask == null)
+            if (_idleTask == null)
             {
-                IdleTask = new IdleTask(actor, _decisionSource);
+                _idleTask = new IdleTask(actor, _decisionSource);
             }
 
-            if (IdleTask.IsComplete)
+            if (_idleTask.IsComplete)
             {
                 Complete = true;
                 return null;
             }
 
-            return IdleTask;
+            return _idleTask;
         }
 
         protected override void ResetData()
         {
-            IdleTask = null;
+            _idleTask = null;
         }
     }
 }

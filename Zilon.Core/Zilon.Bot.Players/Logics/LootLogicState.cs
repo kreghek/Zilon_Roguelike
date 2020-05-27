@@ -16,21 +16,31 @@ namespace Zilon.Bot.Players.Logics
 
         private MoveTask _moveTask;
 
-        public IStaticObject FindContainer(IActor actor)
+        public IStaticObject FindContainer(IActor actor, IStaticObjectManager staticObjectManager, ISectorMap map)
         {
             if (actor is null)
             {
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
-            var containerStaticObjects = _sectorManager.CurrentSector.StaticObjectManager.Items
+            if (staticObjectManager is null)
+            {
+                throw new System.ArgumentNullException(nameof(staticObjectManager));
+            }
+
+            if (map is null)
+            {
+                throw new System.ArgumentNullException(nameof(map));
+            }
+
+            var containerStaticObjects = staticObjectManager.Items
                 .Where(x => x.HasModule<IPropContainer>());
 
             var foundContainers = LootHelper.FindAvailableContainers(containerStaticObjects,
                 actor.Node,
-                _map);
+                map);
 
-            var orderedContainers = foundContainers.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
+            var orderedContainers = foundContainers.OrderBy(x => map.DistanceBetween(actor.Node, x.Node));
             var nearbyContainer = orderedContainers.FirstOrDefault();
 
             return nearbyContainer;
@@ -38,7 +48,9 @@ namespace Zilon.Bot.Players.Logics
 
         public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
-            _staticObject = FindContainer(actor);
+            var map = context.Sector.Map;
+            var staticObjectManager = context.Sector.StaticObjectManager;
+            _staticObject = FindContainer(actor, staticObjectManager, map);
 
             if (_staticObject == null || !_staticObject.GetModule<IPropContainer>().Content.CalcActualItems().Any())
             {
@@ -46,7 +58,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var distance = _map.DistanceBetween(actor.Node, _staticObject.Node);
+            var distance = map.DistanceBetween(actor.Node, _staticObject.Node);
             if (distance <= 1)
             {
                 return TakeAllFromContainerTask(actor, _staticObject);
@@ -54,18 +66,18 @@ namespace Zilon.Bot.Players.Logics
             else
             {
                 var storedMoveTask = _moveTask;
-                var moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask);
+                var moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask, map);
                 _moveTask = moveTask;
                 return moveTask;
             }
         }
 
-        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask)
+        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask, ISectorMap map)
         {
             var moveTask = storedMoveTask;
             if (storedMoveTask == null)
             {
-                moveTask = new MoveTask(actor, containerMapNode, _map);
+                moveTask = new MoveTask(actor, containerMapNode, map);
             }
 
             if (moveTask.IsComplete || !moveTask.CanExecute())

@@ -22,7 +22,7 @@ namespace Zilon.Bot.Players.Logics
         {
             if (MoveTask == null)
             {
-                MoveTask = CreateBypassMoveTask(actor, strategyData);
+                MoveTask = CreateBypassMoveTask(actor, strategyData, context.Sector.Map);
 
                 if (MoveTask != null)
                 {
@@ -46,7 +46,7 @@ namespace Zilon.Bot.Players.Logics
                     // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
                     if (!MoveTask.CanExecute())
                     {
-                        MoveTask = CreateBypassMoveTask(actor, strategyData);
+                        MoveTask = CreateBypassMoveTask(actor, strategyData, context.Sector.Map);
                     }
 
                     if (MoveTask != null)
@@ -65,9 +65,9 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private IEnumerable<IGraphNode> WriteObservedNodes(IActor actor, ILogicStrategyData strategyData)
+        private IEnumerable<IGraphNode> WriteObservedNodes(IActor actor, ILogicStrategyData strategyData, ISectorMap map)
         {
-            var observeNodes = Map.Nodes.Where(x => Map.DistanceBetween(x, actor.Node) < 5);
+            var observeNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
 
             foreach (var mapNode in observeNodes)
             {
@@ -78,7 +78,7 @@ namespace Zilon.Bot.Players.Logics
             var frontNodes = new HashSet<IGraphNode>();
             foreach (var observedNode in strategyData.ObserverdNodes)
             {
-                var nextNodes = Map.GetNext(observedNode);
+                var nextNodes = map.GetNext(observedNode);
 
                 var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObserverdNodes.Contains(x));
 
@@ -88,14 +88,14 @@ namespace Zilon.Bot.Players.Logics
                 }
 
                 // Примечаем выходы
-                if (Map.Transitions.ContainsKey(observedNode))
+                if (map.Transitions.ContainsKey(observedNode))
                 {
                     strategyData.ExitNodes.Add(observedNode);
                 }
             }
 
             var emptyFrontNodes = !frontNodes.Any();
-            var allNodesObserved = Map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
+            var allNodesObserved = map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
 
             Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
                 "Это состояние выполняется, только если есть неисследованые узлы.");
@@ -103,10 +103,10 @@ namespace Zilon.Bot.Players.Logics
             return frontNodes;
         }
 
-        private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData)
+        private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData, ISectorMap map)
         {
             IEnumerable<IGraphNode> availableNodes;
-            var frontNodes = WriteObservedNodes(actor, strategyData).ToArray();
+            var frontNodes = WriteObservedNodes(actor, strategyData, map).ToArray();
             if (frontNodes.Any())
             {
                 availableNodes = frontNodes;
@@ -121,9 +121,9 @@ namespace Zilon.Bot.Players.Logics
             {
                 var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
 
-                if (Map.IsPositionAvailableFor(targetNode, actor))
+                if (map.IsPositionAvailableFor(targetNode, actor))
                 {
-                    var moveTask = new MoveTask(actor, targetNode, Map);
+                    var moveTask = new MoveTask(actor, targetNode, map);
 
                     return moveTask;
                 }
