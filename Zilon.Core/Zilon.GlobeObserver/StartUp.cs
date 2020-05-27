@@ -24,7 +24,7 @@ namespace Zilon.GlobeObserver
             serviceCollection.AddScoped<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
             serviceCollection.AddScoped<LogicStateTreePatterns>();
 
-            serviceCollection.AddScoped<IActorTaskSource, HumanBotActorTaskSource>();
+            serviceCollection.AddScoped<IActorTaskSource<ISectorTaskSourceContext>, HumanBotActorTaskSource>();
         }
     }
 }

@@ -3,6 +3,7 @@
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Triggers
 {
@@ -13,7 +14,7 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния.
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {

@@ -37,8 +37,6 @@ namespace Zilon.Core.World
             _sectorNodes = new List<ISectorNode>();
         }
 
-        public IEnumerable<ISectorNode> SectorNodes { get; }
-
         public void AddSectorNode(ISectorNode sectorNode)
         {
             _sectorNodes.Add(sectorNode);
@@ -56,7 +54,7 @@ namespace Zilon.Core.World
             {
                 _turnCounter = 1000 - _turnCounter;
 
-                foreach (var sectorNode in SectorNodes)
+                foreach (var sectorNode in _sectorNodes)
                 {
                     sectorNode.Sector.Update();
                 }

@@ -52,7 +52,7 @@ namespace Zilon.Core.Tactics.Behaviour
             return _actorTaskSender.SendAsync(actorTask);
         }
 
-        public Task<IActorTask> GetActorTaskAsync(IActor actor)
+        public Task<IActorTask> GetActorTaskAsync(IActor actor, ISectorTaskSourceContext context)
         {
             // Тезисы:
             // Этот источник команд ждёт, пока игрок не укажет задачу.

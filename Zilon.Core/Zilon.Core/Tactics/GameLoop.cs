@@ -30,7 +30,8 @@ namespace Zilon.Core.Tactics
         public async Task UpdateAsync()
         {
             var actorsWithoutTasks = GetActorsWithoutTasks(_sectorManager.CurrentSector.ActorManager, _taskDict);
-            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks, _taskDict).ConfigureAwait(false);
+            var context = new SectorTaskSourceContext(_sectorManager.CurrentSector);
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks, _taskDict, context).ConfigureAwait(false);
 
             ProcessTasks(_taskDict);
             _turnCounter++;
@@ -92,7 +93,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<IActor> actors, ConcurrentDictionary<IActor, TaskState> taskDict)
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<IActor> actors, ConcurrentDictionary<IActor, TaskState> taskDict, ISectorTaskSourceContext context)
         {
             var taskSources = _actorTaskSourceCollector.GetCurrentTaskSources();
 
@@ -105,7 +106,7 @@ namespace Zilon.Core.Tactics
                     //    continue;
                     //}
 
-                    var actorTask = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
+                    var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
 
                     var state = new TaskState(actor, actorTask, taskSource);
                     if (!taskDict.TryAdd(actor, state))

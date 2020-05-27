@@ -88,7 +88,7 @@ namespace Zilon.Emulation.Common
         protected abstract void ProcessEnd();
 
         private static IActor CreateHumanActor(HumanPlayer humanPlayer,
-            IActorTaskSource actorTaskSource,
+            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource,
             IPerson humanPerson,
             ISectorManager sectorManager,
             IPlayerEventLogService playerEventLogService)
@@ -126,7 +126,7 @@ namespace Zilon.Emulation.Common
 
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
             var playerEventLogService = ServiceScope.ServiceProvider.GetService<IPlayerEventLogService>();
-            var actorTaskSource = ServiceScope.ServiceProvider.GetService<IActorTaskSource>();
+            var actorTaskSource = ServiceScope.ServiceProvider.GetService<IActorTaskSource<ISectorTaskSourceContext>>();
 
             await sectorManager.CreateSectorAsync().ConfigureAwait(false);
 

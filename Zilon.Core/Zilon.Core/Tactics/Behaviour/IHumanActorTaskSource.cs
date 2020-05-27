@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public interface IHumanActorTaskSource: IActorTaskSource
+    public interface IHumanActorTaskSource: IActorTaskSource<ISectorTaskSourceContext>
     {
         /// <summary>
         /// Переключает текущего ключевого актёра.
