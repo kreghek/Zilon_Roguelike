@@ -52,11 +52,11 @@ namespace Zilon.Core.Tactics
         public IPlayer Owner { get; }
         public ISectorFowData SectorFowData { get; }
         public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
-        public IActorTaskSource TaskSource { get; }
+        public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
         public bool CanExecuteTasks { get => !Person.CheckIsDead(); }
 
         [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource taskSource, [NotNull]  IGraphNode node)
+        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull]  IGraphNode node)
         {
             Person = person ?? throw new ArgumentNullException(nameof(person));
             TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
@@ -68,13 +68,13 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource taskSource, [NotNull]  IGraphNode node,
+        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull]  IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource taskSource, [NotNull]  IGraphNode node,
+        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull]  IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
@@ -472,9 +472,9 @@ namespace Zilon.Core.Tactics
             DepositMined?.Invoke(this, e);
         }
 
-        public void SwitchTaskSource(IActorTaskSource actorTaskSource)
+        public void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
-            throw new NotImplementedException();
+            TaskSource = actorTaskSource;
         }
     }
 }

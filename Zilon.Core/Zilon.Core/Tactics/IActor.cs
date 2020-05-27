@@ -2,7 +2,6 @@
 
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -24,9 +23,9 @@ namespace Zilon.Core.Tactics
         /// </summary>
         IPerson Person { get; }
 
-        IActorTaskSource TaskSource { get; }
+        IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
 
-        void SwitchTaskSource(IActorTaskSource actorTaskSource);
+        void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.

@@ -63,29 +63,35 @@ namespace Zilon.Core.World
             }
         }
 
-        private IEnumerable<IActor> GetActorsWithoutTasks()
+        private IEnumerable<ActorInSector> GetActorsWithoutTasks()
         {
             foreach (var sectorNode in _sectorNodes)
             {
-                foreach (var actor in sectorNode.Sector.ActorManager.Items)
+                var sector = sectorNode.Sector;
+                foreach (var actor in sector.ActorManager.Items)
                 {
                     if (_taskDict.TryGetValue(actor, out _))
                     {
                         continue;
                     }
 
-                    yield return actor;
+                    yield return new ActorInSector { Actor = actor, Sector = sector };
                 }
             }
         }
 
-        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<IActor> actors)
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
         {
-            foreach (var actor in actors)
+            foreach (var actorDataItem in actorDataList)
             {
+                var actor = actorDataItem.Actor;
+                var sector = actorDataItem.Sector;
+
                 var taskSource = actor.TaskSource;
 
-                var actorTask = await taskSource.GetActorTaskAsync(actor).ConfigureAwait(false);
+                var context = new SectorTaskSourceContext(sector);
+
+                var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
 
                 var state = new TaskState(actor, actorTask, taskSource);
                 if (!_taskDict.TryAdd(actor, state))
@@ -94,7 +100,6 @@ namespace Zilon.Core.World
                     // когда старая еще не закончена и не может быть заменена.
                     throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
                 }
-
             }
         }
 
@@ -146,6 +151,12 @@ namespace Zilon.Core.World
                 }
             }
         }
+
+        private sealed class ActorInSector
+        {
+            public ISector Sector { get; set; }
+            public IActor Actor { get; set; }
+        }
     }
 
     public sealed class GlobeInitializer : IGlobeInitializer
@@ -153,9 +164,9 @@ namespace Zilon.Core.World
         private readonly IBiomeInitializer _biomeInitializer;
         private readonly ISchemeService _schemeService;
         private readonly IPersonFactory _personFactory;
-        private readonly IActorTaskSource _actorTaskSource;
+        private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
 
-        public GlobeInitializer(IBiomeInitializer biomeInitializer, ISchemeService schemeService, IPersonFactory personFactory, IActorTaskSource actorTaskSource)
+        public GlobeInitializer(IBiomeInitializer biomeInitializer, ISchemeService schemeService, IPersonFactory personFactory, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             _biomeInitializer = biomeInitializer;
             _schemeService = schemeService;
@@ -194,7 +205,7 @@ namespace Zilon.Core.World
         private static IActor CreateHumanActor(
             IPerson humanPerson,
             Graphs.IGraphNode startNode,
-            IActorTaskSource actorTaskSource)
+            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             var actor = new Actor(humanPerson, actorTaskSource, startNode);
 

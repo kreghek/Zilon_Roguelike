@@ -24,7 +24,7 @@ namespace Zilon.Core.MapGenerators
         private readonly ISchemeService _schemeService;
         private readonly IMonsterPersonFactory _monsterFactory;
         private readonly IMonsterGeneratorRandomSource _generatorRandomSource;
-        private readonly IActorTaskSource _actorTaskSource;
+        private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="MonsterGenerator"/>.
@@ -34,7 +34,7 @@ namespace Zilon.Core.MapGenerators
         public MonsterGenerator(ISchemeService schemeService,
             IMonsterPersonFactory monsterFactory,
             IMonsterGeneratorRandomSource generatorRandomSource,
-            IActorTaskSource actorTaskSource)
+            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _monsterFactory = monsterFactory ?? throw new ArgumentNullException(nameof(monsterFactory));
@@ -226,14 +226,14 @@ namespace Zilon.Core.MapGenerators
             return currentRarity;
         }
 
-        private static IActor CreateMonster(IActorManager actorManager, MonsterPerson person, IGraphNode startNode, IActorTaskSource actorTaskSource)
+        private static IActor CreateMonster(IActorManager actorManager, MonsterPerson person, IGraphNode startNode, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             var actor = new Actor(person, actorTaskSource, startNode);
             actorManager.Add(actor);
             return actor;
         }
 
-        private IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode, IActorTaskSource actorTaskSource)
+        private IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             var person = _monsterFactory.Create(monsterScheme);
             var actor = new Actor(person, actorTaskSource, startNode);
