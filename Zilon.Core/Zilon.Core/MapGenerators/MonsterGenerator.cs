@@ -52,8 +52,6 @@ namespace Zilon.Core.MapGenerators
             IEnumerable<MapRegion> monsterRegions,
             ISectorSubScheme sectorScheme)
         {
-            return;
-
             if (sector is null)
             {
                 throw new ArgumentNullException(nameof(sector));

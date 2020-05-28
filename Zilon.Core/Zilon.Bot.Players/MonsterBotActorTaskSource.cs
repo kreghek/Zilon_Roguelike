@@ -3,7 +3,6 @@
 using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players
