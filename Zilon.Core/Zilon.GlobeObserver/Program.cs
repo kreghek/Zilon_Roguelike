@@ -2,7 +2,7 @@
 using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
-
+using Zilon.Core.Persons;
 using Zilon.Core.World;
 
 namespace Zilon.GlobeObserver
@@ -35,9 +35,10 @@ namespace Zilon.GlobeObserver
 
                     globeIterationCounter++;
 
-                    var hasActors = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Any();
+                    var hasActors = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Any(x => x.Person.Fraction != Fractions.MonsterFraction);
                     if (!hasActors)
                     {
+                        // Все персонажи-немонстры вымерли.
                         break;
                     }
                 }
@@ -55,6 +56,12 @@ namespace Zilon.GlobeObserver
 
             var actorCount = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Count();
             Console.WriteLine($"Actors: {actorCount}");
+
+            var fractions = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).GroupBy(x => x.Person.Fraction);
+            foreach (var fractionGroup in fractions)
+            {
+                Console.WriteLine($"Fraction {fractionGroup.Key.Name}: {fractionGroup.Count()}");
+            }
         }
     }
 }

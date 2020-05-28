@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -189,9 +189,10 @@ namespace Zilon.Core.World
 
             // Добавляем стартовых персонажей-пилигримов
             var sector = startSectorNode.Sector;
+            var startPilgrimFraction = new Fraction("Pilgrims");
             for (var i = 0; i < 40; i++)
             {
-                var person = CreateStartPerson("human-person", _personFactory);
+                var person = CreateStartPerson("human-person", _personFactory, startPilgrimFraction);
 
                 var startNode = sector.Map
                     .Nodes
@@ -220,9 +221,9 @@ namespace Zilon.Core.World
         /// </summary>
         /// <param name="serviceProvider"> Контейнер DI, откуда извлекаются сервисы для создания персонажа. </param>
         /// <returns> Возвращает созданного персонажа. </returns>
-        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory)
+        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory, IFraction fraction)
         {
-            var startPerson = personFactory.Create(personSchemeSid);
+            var startPerson = personFactory.Create(personSchemeSid, fraction);
             return startPerson;
         }
     }

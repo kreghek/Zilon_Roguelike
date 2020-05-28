@@ -49,11 +49,11 @@ namespace Zilon.Core.PersonGeneration
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
-        public IPerson Create(string personSchemeSid)
+        public IPerson Create(string personSchemeSid, IFraction fraction)
         {
             var personScheme = _schemeService.GetScheme<IPersonScheme>(personSchemeSid);
 
-            var person = new HumanPerson(personScheme);
+            var person = new HumanPerson(personScheme, fraction);
 
             var attributeModule = RollAndAddPersonAttributesToPerson(person);
 

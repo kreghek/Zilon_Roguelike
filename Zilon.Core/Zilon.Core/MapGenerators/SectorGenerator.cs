@@ -86,7 +86,6 @@ namespace Zilon.Core.MapGenerators
 
             var monsterRegions = gameObjectRegions.ToArray();
             _monsterGenerator.CreateMonsters(sector,
-                _botPlayer,
                 monsterRegions,
                 sectorScheme);
 

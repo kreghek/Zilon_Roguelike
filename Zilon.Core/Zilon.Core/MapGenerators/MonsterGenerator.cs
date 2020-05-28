@@ -44,22 +44,15 @@ namespace Zilon.Core.MapGenerators
 
         /// <summary>Создаёт монстров в секторе по указанной схеме.</summary>
         /// <param name="sector">Целевой сектор.</param>
-        /// <param name="monsterPlayer">Бот, управляющий монстрами. По сути, команда монстров.</param>
         /// <param name="monsterRegions">Регионы сектора, где могут быть монстры.</param>
         /// <param name="sectorScheme">Схема сектора. Отсюда берутся параметры генерации монстров.</param>
         public void CreateMonsters(ISector sector,
-            IBotPlayer monsterPlayer,
             IEnumerable<MapRegion> monsterRegions,
             ISectorSubScheme sectorScheme)
         {
             if (sector is null)
             {
                 throw new ArgumentNullException(nameof(sector));
-            }
-
-            if (monsterPlayer is null)
-            {
-                throw new ArgumentNullException(nameof(monsterPlayer));
             }
 
             if (monsterRegions is null)
@@ -77,14 +70,14 @@ namespace Zilon.Core.MapGenerators
 
             foreach (var region in monsterRegions)
             {
-                CreateMonstersForRegion(sector, monsterPlayer, sectorScheme, resultMonsterActors, region, rarityCounter);
+                CreateMonstersForRegion(sector, sectorScheme, resultMonsterActors, region, rarityCounter);
             }
 
             // Инфицируем монстров, если в секторе есть болезни.
             RollInfections(sector, resultMonsterActors);
         }
 
-        private void CreateMonstersForRegion(ISector sector, IBotPlayer monsterPlayer, ISectorSubScheme sectorScheme, List<IActor> resultMonsterActors, MapRegion region, int[] rarityCounter)
+        private void CreateMonstersForRegion(ISector sector, ISectorSubScheme sectorScheme, List<IActor> resultMonsterActors, MapRegion region, int[] rarityCounter)
         {
             var regionNodes = region.Nodes.OfType<HexNode>();
             var staticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
@@ -107,14 +100,14 @@ namespace Zilon.Core.MapGenerators
                 var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
                 var monsterNode = freeNodes[rollIndex];
 
-                var monster = RollRarityAndCreateMonster(sector, monsterPlayer, sectorScheme, monsterNode, rarityCounter);
+                var monster = RollRarityAndCreateMonster(sector, sectorScheme, monsterNode, rarityCounter);
 
                 freeNodes.Remove(monster.Node);
                 resultMonsterActors.Add(monster);
             }
         }
 
-        private IActor RollRarityAndCreateMonster(ISector sector, IBotPlayer monsterPlayer, ISectorSubScheme sectorScheme, IGraphNode monsterNode, int[] rarityCounter)
+        private IActor RollRarityAndCreateMonster(ISector sector, ISectorSubScheme sectorScheme, IGraphNode monsterNode, int[] rarityCounter)
         {
             var rarityMaxCounter = new[] { -1, 10, 1 };
 
@@ -241,16 +234,11 @@ namespace Zilon.Core.MapGenerators
             return actor;
         }
 
-        public void CreateMonsters(ISector sector, IBotPlayer monsterPlayer, IEnumerable<MapRegion> monsterRegions, IEnumerable<MonsterPerson> monsterPersons)
+        public void CreateMonsters(ISector sector, IEnumerable<MapRegion> monsterRegions, IEnumerable<MonsterPerson> monsterPersons)
         {
             if (sector == null)
             {
                 throw new ArgumentNullException(nameof(sector));
-            }
-
-            if (monsterPlayer == null)
-            {
-                throw new ArgumentNullException(nameof(monsterPlayer));
             }
 
             if (monsterRegions == null)

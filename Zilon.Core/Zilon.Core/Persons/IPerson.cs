@@ -1,4 +1,6 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System;
+using System.Drawing;
+using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Persons
 {
@@ -39,5 +41,26 @@ namespace Zilon.Core.Persons
 
     public interface IFraction
     {
+        string Name { get; }
+    }
+
+    public sealed class Fraction : IFraction
+    {
+        public Fraction(string name)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+        }
+
+        public string Name { get; }
+    }
+
+    public static class Fractions
+    {
+        static Fractions()
+        {
+            MonsterFraction = new Fraction("Monsters");
+        }
+
+        public static IFraction MonsterFraction { get; private set; }
     }
 }

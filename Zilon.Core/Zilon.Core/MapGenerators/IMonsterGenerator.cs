@@ -18,11 +18,9 @@ namespace Zilon.Core.MapGenerators
     {
         /// <summary> Создаёт монстров в секторе по указанной схеме. </summary>
         /// <param name="sector"> Целевой сектор. </param>
-        /// <param name="monsterPlayer"> Бот, управляющий монстрами. По сути, команда монстров. </param>
         /// <param name="monsterRegions"> Регионы сектора, где могут быть монстры. </param>
         /// <param name="sectorScheme"> Схема сектора. Отсюда берутся параметры генерации монстров. </param>
         void CreateMonsters(ISector sector,
-            IBotPlayer monsterPlayer,
             IEnumerable<MapRegion> monsterRegions,
             ISectorSubScheme sectorScheme);
 
@@ -34,7 +32,6 @@ namespace Zilon.Core.MapGenerators
         /// <param name="monsterRegions"> Регионы сектора, где могут быть монстры. </param>
         /// <param name="monsterPersons"> Персонажи монстров из состояния узла провинции на глобальной карте. </param>
         void CreateMonsters(ISector sector,
-            IBotPlayer monsterPlayer,
             IEnumerable<MapRegion> monsterRegions,
             IEnumerable<MonsterPerson> monsterPersons);
     }
