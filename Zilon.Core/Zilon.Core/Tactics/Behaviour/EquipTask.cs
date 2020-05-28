@@ -15,9 +15,10 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly int _slotIndex;
 
         public EquipTask(IActor actor,
+            IActorTaskContext context,
             Equipment equipment,
             int slotIndex) :
-            base(actor)
+            base(actor, context)
         {
             _equipment = equipment;
             _slotIndex = slotIndex;

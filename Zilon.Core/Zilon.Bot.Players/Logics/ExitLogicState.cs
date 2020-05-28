@@ -64,7 +64,9 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var moveTask = new MoveTask(actor, targetExitNode, map);
+            var context = new ActorTaskContext(sector);
+
+            var moveTask = new MoveTask(actor, context, targetExitNode, map);
 
             return moveTask;
         }

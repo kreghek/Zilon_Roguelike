@@ -155,9 +155,8 @@ namespace Zilon.Emulation.Common
             {
                 var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
                 var actHandlerSelector = serviceProvider.GetRequiredService<IActUsageHandlerSelector>();
-                var sectorManager = serviceProvider.GetRequiredService<ISectorManager>();
 
-                var tacticalActUsageService = new TacticalActUsageService(randomSource, sectorManager, actHandlerSelector);
+                var tacticalActUsageService = new TacticalActUsageService(randomSource, actHandlerSelector);
 
                 ConfigurateTacticalActUsageService(serviceProvider, tacticalActUsageService);
 

@@ -66,18 +66,21 @@ namespace Zilon.Bot.Players.Logics
             else
             {
                 var storedMoveTask = _moveTask;
-                var moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask, map);
+                var moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask, context.Sector);
                 _moveTask = moveTask;
                 return moveTask;
             }
         }
 
-        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask, ISectorMap map)
+        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask, ISector sector)
         {
+            var map = sector.Map;
+
             var moveTask = storedMoveTask;
             if (storedMoveTask == null)
             {
-                moveTask = new MoveTask(actor, containerMapNode, map);
+                var taskContext = new ActorTaskContext(sector);
+                moveTask = new MoveTask(actor, taskContext, containerMapNode, map);
             }
 
             if (moveTask.IsComplete || !moveTask.CanExecute())

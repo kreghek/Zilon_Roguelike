@@ -13,8 +13,9 @@ namespace Zilon.Bot.Players.Logics
         {
         }
 
-        private MoveTask CreateBypassMoveTask(IActor actor, ISectorMap map)
+        private MoveTask CreateBypassMoveTask(IActor actor, ISector sector)
         {
+            var map = sector.Map;
             var availableNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
 
             var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
@@ -24,7 +25,8 @@ namespace Zilon.Bot.Players.Logics
 
                 if (map.IsPositionAvailableFor(targetNode, actor))
                 {
-                    var moveTask = new MoveTask(actor, targetNode, map);
+                    var taskContext = new ActorTaskContext(sector);
+                    var moveTask = new MoveTask(actor, taskContext, targetNode, map);
 
                     return moveTask;
                 }
@@ -37,7 +39,7 @@ namespace Zilon.Bot.Players.Logics
         {
             if (MoveTask == null)
             {
-                MoveTask = CreateBypassMoveTask(actor, context.Sector.Map);
+                MoveTask = CreateBypassMoveTask(actor, context.Sector);
 
                 if (MoveTask != null)
                 {
@@ -61,7 +63,7 @@ namespace Zilon.Bot.Players.Logics
                     // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
                     if (!MoveTask.CanExecute())
                     {
-                        MoveTask = CreateBypassMoveTask(actor, context.Sector.Map);
+                        MoveTask = CreateBypassMoveTask(actor, context.Sector);
                     }
 
                     if (MoveTask != null)

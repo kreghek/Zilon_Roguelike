@@ -105,7 +105,10 @@ namespace Zilon.Bot.Players.Logics
             if (attackParams.IsAvailable)
             {
                 var act = attackParams.TacticalAct;
-                var attackTask = new AttackTask(actor, _target, act, _actService);
+
+                var taskContext = new ActorTaskContext(context.Sector);
+
+                var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
                 return attackTask;
             }
             else
@@ -127,7 +130,9 @@ namespace Zilon.Bot.Players.Logics
 
                     if (targetIsOnLine)
                     {
-                        _moveTask = new MoveTask(actor, _target.Node, map);
+                        var taskContext = new ActorTaskContext(context.Sector);
+
+                        _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
                         return _moveTask;
                     }
                     else
