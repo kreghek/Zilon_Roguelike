@@ -20,6 +20,9 @@ namespace Zilon.Core.World
     public interface IGlobe
     {
         void AddSectorNode(ISectorNode sectorNode);
+
+        IEnumerable<ISectorNode> SectorNodes { get; }
+
         Task UpdateAsync();
     }
 
@@ -30,6 +33,8 @@ namespace Zilon.Core.World
         private readonly IList<ISectorNode> _sectorNodes;
 
         private readonly ConcurrentDictionary<IActor, TaskState> _taskDict;
+
+        public IEnumerable<ISectorNode> SectorNodes { get => _sectorNodes; }
 
         public Globe()
         {
