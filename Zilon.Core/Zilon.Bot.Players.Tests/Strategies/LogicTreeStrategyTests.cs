@@ -88,7 +88,7 @@ namespace Zilon.Bot.Players.Strategies.Tests
             var startLogicStateMock = new Mock<ILogicState>();
             var startActorTaskMock = new Mock<IActorTask>();
             actorTask = startActorTaskMock.Object;
-            startLogicStateMock.Setup(x => x.GetTask(It.IsAny<IActor>(), It.IsAny<ILogicStrategyData>()))
+            startLogicStateMock.Setup(x => x.GetTask(It.IsAny<IActor>(), It.IsAny<ISectorTaskSourceContext>(), It.IsAny<ILogicStrategyData>()))
                 .Returns(actorTask);
             logicState = startLogicStateMock.Object;
         }

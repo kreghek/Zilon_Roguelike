@@ -149,7 +149,7 @@ namespace Zilon.Core.Benchmarks.Move
                 .First();
 
             var survivalRandomSource = _serviceProvider.GetRequiredService<ISurvivalRandomSource>();
-            var playerActorVm = BenchHelper.CreateHumanActorVm(humanPlayer,
+            var playerActorVm = BenchHelper.CreateHumanActorVm(humanActorTaskSource,
                 schemeService,
                 survivalRandomSource,
                 personScheme,

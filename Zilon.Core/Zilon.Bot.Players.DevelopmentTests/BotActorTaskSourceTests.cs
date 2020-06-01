@@ -36,7 +36,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource>(startUp, botSettings);
 
-            var startPerson = PersonCreateHelper.CreateStartPerson(serviceProvider);
+            var startPerson = PersonCreateHelper.CreateStartPerson(serviceProvider, Fractions.MainPersonFraction);
 
             PrintPersonBacklog(startPerson);
 
