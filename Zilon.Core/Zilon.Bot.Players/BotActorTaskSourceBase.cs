@@ -31,6 +31,11 @@ namespace Zilon.Bot.Players
                 throw new ArgumentNullException(nameof(actor));
             }
 
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             // Основные компоненты:
             // -- Стратегия.
             // ---- Стартовая логика (не равна нулю).
@@ -69,7 +74,8 @@ namespace Zilon.Bot.Players
 
                 if (actorTask == null)
                 {
-                    return Task.FromResult<IActorTask>(new IdleTask(actor, 1));
+                    var taskContext = new ActorTaskContext(context.Sector);
+                    return Task.FromResult<IActorTask>(new IdleTask(actor, taskContext, 1));
                 }
 
                 return Task.FromResult(actorTask);

@@ -83,9 +83,10 @@ namespace Zilon.Core.Commands
             CreatePath(selectedNodeVm);
 
             var targetNode = selectedNodeVm.Node;
-            var targetMap = SectorManager.CurrentSector.Map;
 
-            var moveIntetion = new MoveIntention(targetNode, targetMap);
+            var currentSector = SectorManager.CurrentSector;
+
+            var moveIntetion = new MoveIntention(targetNode, currentSector);
             PlayerState.TaskSource.Intent(moveIntetion);
         }
 

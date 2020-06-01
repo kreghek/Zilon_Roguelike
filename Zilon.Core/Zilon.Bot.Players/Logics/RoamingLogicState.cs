@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-
+using System.Threading.Tasks;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -50,7 +50,8 @@ namespace Zilon.Bot.Players.Logics
                     // Это может произойти, если актёр не выбрал следующий узел.
                     // Тогда переводим актёра в режим ожидания.
 
-                    IdleTask = new IdleTask(actor, DecisionSource);
+                    var taskContext = new ActorTaskContext(context.Sector);
+                    IdleTask = new IdleTask(actor, taskContext, DecisionSource);
                     return IdleTask;
                 }
             }
@@ -71,7 +72,8 @@ namespace Zilon.Bot.Players.Logics
                         return MoveTask;
                     }
 
-                    IdleTask = new IdleTask(actor, DecisionSource);
+                    var taskContext = new ActorTaskContext(context.Sector);
+                    IdleTask = new IdleTask(actor, taskContext, DecisionSource);
                     return IdleTask;
                 }
                 else

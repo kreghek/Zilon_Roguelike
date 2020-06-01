@@ -73,7 +73,10 @@ namespace Zilon.Core.Commands
         private OpenContainerTask CreateTask(IActor actor, IStaticObject staticObject)
         {
             var openMethod = new HandOpenContainerMethod();
-            return new OpenContainerTask(actor, staticObject, openMethod, SectorManager.CurrentSector.Map);
+
+            var taskContext = new ActorTaskContext(SectorManager.CurrentSector);
+
+            return new OpenContainerTask(actor, taskContext, staticObject, openMethod);
         }
 
         private IContainerViewModel GetSelectedNodeViewModel()

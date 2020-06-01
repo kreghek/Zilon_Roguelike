@@ -19,6 +19,11 @@ namespace Zilon.Bot.Players.Logics
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
+            if (context is null)
+            {
+                throw new System.ArgumentNullException(nameof(context));
+            }
+
             var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             if (hpStat == null)
             {
@@ -45,7 +50,8 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            return new UsePropTask(actor, bestResource);
+            var taskContext = new ActorTaskContext(context.Sector);
+            return new UsePropTask(actor, taskContext, bestResource);
         }
 
         protected override void ResetData()

@@ -19,7 +19,9 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var intention = new Intention<IdleTask>(actor => new IdleTask(actor, 1000));
+            var taskContext = new ActorTaskContext(SectorManager.CurrentSector);
+
+            var intention = new Intention<IdleTask>(actor => new IdleTask(actor, taskContext, 1000));
             PlayerState.TaskSource.Intent(intention);
         }
     }

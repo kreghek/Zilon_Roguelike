@@ -119,15 +119,17 @@ namespace Zilon.Core.Commands.Sector
         private MineTask CreateTaskByInstrument(IActor actor, IStaticObject staticObject, Equipment equipedTool)
         {
             var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool, _mineDepositMethodRandomSource);
-            var map = SectorManager.CurrentSector.Map;
-            return new MineTask(actor, staticObject, toolMineDepositMethod, map);
+
+            var taskContext = new ActorTaskContext(SectorManager.CurrentSector);
+            return new MineTask(actor,taskContext, staticObject, toolMineDepositMethod);
         }
 
         private MineTask CreateTaskByHands(IActor actor, IStaticObject staticObject)
         {
             var handMineDepositMethod = new HandMineDepositMethod(_mineDepositMethodRandomSource);
-            var map = SectorManager.CurrentSector.Map;
-            return new MineTask(actor, staticObject, handMineDepositMethod, map);
+
+            var taskContext = new ActorTaskContext(SectorManager.CurrentSector);
+            return new MineTask(actor, taskContext, staticObject, handMineDepositMethod);
         }
     }
 }

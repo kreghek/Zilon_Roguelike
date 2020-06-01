@@ -33,7 +33,8 @@ namespace Zilon.Bot.Players.Logics
                     // Это может произойти, если актёр не выбрал следующий узел.
                     // Тогда переводим актёра в режим ожидания.
 
-                    IdleTask = new IdleTask(actor, DecisionSource);
+                    var taskContext = new ActorTaskContext(context.Sector);
+                    IdleTask = new IdleTask(actor, taskContext, DecisionSource);
                     return IdleTask;
                 }
             }
@@ -54,7 +55,8 @@ namespace Zilon.Bot.Players.Logics
                         return MoveTask;
                     }
 
-                    IdleTask = new IdleTask(actor, DecisionSource);
+                    var taskContext = new ActorTaskContext(context.Sector);
+                    IdleTask = new IdleTask(actor, taskContext, DecisionSource);
                     return IdleTask;
                 }
                 else

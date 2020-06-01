@@ -36,7 +36,9 @@ namespace Zilon.Core.Commands
                 TransferMachine.Container.PropAdded,
                 TransferMachine.Container.PropRemoved);
 
-            var intention = new Intention<TransferPropsTask>(a => new TransferPropsTask(a, new[] { inventoryTransfer, containerTransfer }));
+            var taskContext = new ActorTaskContext(SectorManager.CurrentSector);
+
+            var intention = new Intention<TransferPropsTask>(actor => new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer }));
             PlayerState.TaskSource.Intent(intention);
         }
     }

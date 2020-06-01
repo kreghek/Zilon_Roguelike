@@ -61,7 +61,7 @@ namespace Zilon.Bot.Players.Logics
             var distance = map.DistanceBetween(actor.Node, _staticObject.Node);
             if (distance <= 1)
             {
-                return TakeAllFromContainerTask(actor, _staticObject);
+                return TakeAllFromContainerTask(actor, _staticObject, context.Sector);
             }
             else
             {
@@ -92,7 +92,7 @@ namespace Zilon.Bot.Players.Logics
             return moveTask;
         }
 
-        private static IActorTask TakeAllFromContainerTask(IActor actor, IStaticObject container)
+        private static IActorTask TakeAllFromContainerTask(IActor actor, IStaticObject container, ISector sector)
         {
             var inventoryTransfer = new PropTransfer(actor.Person.GetModule<IInventoryModule>(),
                                 container.GetModule<IPropContainer>().Content.CalcActualItems(),
@@ -102,7 +102,8 @@ namespace Zilon.Bot.Players.Logics
                 System.Array.Empty<IProp>(),
                 container.GetModule<IPropContainer>().Content.CalcActualItems());
 
-            return new TransferPropsTask(actor, new[] { inventoryTransfer, containerTransfer });
+            var taskContext = new ActorTaskContext(sector);
+            return new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer });
         }
 
         protected override void ResetData()

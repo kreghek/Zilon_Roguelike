@@ -11,8 +11,9 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly PropTransfer[] _transfers;
 
         public TransferPropsTask(IActor actor,
+            IActorTaskContext context,
             IEnumerable<PropTransfer> transfers) :
-            base(actor)
+            base(actor, context)
         {
             _transfers = transfers.ToArray();
         }
