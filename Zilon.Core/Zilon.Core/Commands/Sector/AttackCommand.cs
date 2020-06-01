@@ -118,7 +118,9 @@ namespace Zilon.Core.Commands
 
             var tacticalAct = PlayerState.TacticalAct;
 
-            var intention = new Intention<AttackTask>(a => new AttackTask(a, target, tacticalAct, _tacticalActUsageService));
+            var taskContext = new ActorTaskContext(SectorManager.CurrentSector);
+
+            var intention = new Intention<AttackTask>(a => new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
             PlayerState.TaskSource.Intent(intention);
         }
 
@@ -130,21 +132,59 @@ namespace Zilon.Core.Commands
             var propResources = new List<Resource>();
             foreach (var prop in props)
             {
-                var propResource = prop as Resource;
-                if (propResource == null)
+                switch (prop)
                 {
-                    continue;
-                }
-
-                if (propResource.Scheme.Bullet?.Caliber == usedPropResourceType)
-                {
-                    propResources.Add(propResource);
+                    case Resource propResource:
+                        AddResourceOfUsageToList(usedPropResourceType, usedPropResourceCount, propResources, propResource);
+                        break;
+                    default:
+                        // Остальные типы предметов пока не могут выступать, как источник ресурса.
+                        // Далее нужно будет сделать, чтобы:
+                        // 1. У персонажа был предмет экипировки, который позволяет выполнять
+                        // определённые действия другим предметов. Условно, симбиоз двух предметов (или сет предметов).
+                        // 2. У персонажа был экипирован предмет, который позволяет выполнять
+                        // определённые действия другим предметов.
+                        // 3. Расход прочности другого предмета.
+                        // 4. Применение обойм. Механика расхода предметов, когда ресурсы изымаются не из инвентаря,
+                        // а их специального контейнера внутри предмета. При необходимости, предмет нужно перезаряжать за
+                        // отдельное время.
+                        break;
                 }
             }
 
             var preferredPropResource = propResources.FirstOrDefault();
 
             return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
+        }
+
+        private static void AddResourceOfUsageToList(
+            string usedPropResourceType,
+            int requiredCount,
+            IList<Resource> propResources,
+            Resource propResource)
+        {
+            var bulletData = propResource.Scheme.Bullet;
+            if (bulletData is null)
+            {
+                return;
+            }
+
+            var isRequiredResourceType = string.Equals(
+                bulletData.Caliber,
+                usedPropResourceType,
+                System.StringComparison.InvariantCulture);
+
+            if (!isRequiredResourceType)
+            {
+                return;
+            }
+
+            if (propResource.Count < requiredCount)
+            {
+                return;
+            }
+
+            propResources.Add(propResource);
         }
 
         private static IActorViewModel GetCanExecuteActorViewModel(ISectorUiState sectorUiState)
