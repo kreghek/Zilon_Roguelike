@@ -18,11 +18,11 @@ namespace Zilon.Core.Specs.Mocks
             _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
         }
 
-        public IPerson Create(string personSchemeSid)
+        public IPerson Create(string personSchemeSid, IFraction fraction)
         {
             var personScheme = _schemeService.GetScheme<IPersonScheme>(personSchemeSid);
 
-            var person = new HumanPerson(personScheme);
+            var person = new HumanPerson(personScheme, fraction);
 
             var attributes = new[] {
                 new PersonAttribute(PersonAttributeType.PhysicalStrength, 10),

@@ -1,9 +1,4 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Tactics.Behaviour;
-
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -11,6 +6,7 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -33,7 +29,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// </summary>
         [Test]
         // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
-        //[Timeout(1000)]
+        [Timeout(1000)]
         public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask()
         {
             // ARRANGE
@@ -52,10 +48,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var taskSource = new HumanActorTaskSource(actor);
 
+            var contextMock = new Mock<ISectorTaskSourceContext>();
+            var context = contextMock.Object;
+
             // ACT
 
-            var getActorTaskTask = taskSource.GetActorTaskAsync(actor);
-            taskSource.Intent(intention);
+            var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
+            await taskSource.IntentAsync(intention).ConfigureAwait(false);
             var factActorTask = await getActorTaskTask.ConfigureAwait(false);
 
             // ASSERT
@@ -84,12 +83,15 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
             var intention = intentionMock.Object;
 
+            var contextMock = new Mock<ISectorTaskSourceContext>();
+            var context = contextMock.Object;
+
             var taskSource = new HumanActorTaskSource(actor);
 
             // ACT
 
-            taskSource.Intent(intention);
-            var getActorTaskTask = taskSource.GetActorTaskAsync(actor);
+            await taskSource.IntentAsync(intention).ConfigureAwait(false);
+            var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
             var factActorTask = await getActorTaskTask.ConfigureAwait(false);
 
             // ASSERT
@@ -351,7 +353,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         }
         */
 
-        private static IActor CreateActor(IMap map, HexNode startNode)
+        private static IActor CreateActor(IMap map, IGraphNode startNode)
         {
             var playerMock = new Mock<IPlayer>();
             var player = playerMock.Object;
@@ -360,7 +362,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
             var person = personMock.Object;
 
-            var actor = new Actor(person, player, startNode);
+            var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
+            var taskSource = taskSourceMock.Object;
+
+            var actor = new Actor(person, taskSource, startNode);
 
             map.HoldNode(startNode, actor);
 

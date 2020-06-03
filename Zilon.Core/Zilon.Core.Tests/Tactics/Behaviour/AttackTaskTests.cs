@@ -60,7 +60,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
             _actor = actorMock.Object;
 
-
             var targetMock = new Mock<IActor>();
             var targetNode = _testMap.Nodes.SelectByHexCoords(2, 0);
             targetMock.Setup(x => x.CanBeDamaged()).Returns(true);
@@ -70,9 +69,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var actServiceMock = new Mock<ITacticalActUsageService>();
             var actService = actServiceMock.Object;
 
+            var taskContextMock = new Mock<IActorTaskContext>();
+            var taskContext = taskContextMock.Object;
 
             // Создаём саму команду
-            _attackTask = new AttackTask(_actor, target, tacticalAct, actService);
+            _attackTask = new AttackTask(_actor, taskContext, target, tacticalAct, actService);
 
             Action act = () =>
             {

@@ -3,6 +3,7 @@
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -23,7 +24,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     /// (0) изымаем предмет из инвентаря                 меняем предметы в слотах местами
     /// (1) изымаем из инвентаря, а текущий в инвентярь  меняем предметы в слотах местами
     /// </remarks>
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class EquipTaskTests
     {
         /// <summary>
@@ -57,15 +59,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var inventory = inventoryMock.Object;
             personMock.Setup(x => x.GetModule<IInventoryModule>(It.IsAny<string>())).Returns(inventory);
 
+            var contextMock = new Mock<IActorTaskContext>();
+            var context = contextMock.Object;
 
-            var task = new EquipTask(actor, testedEquipmentProp, testedSlotIndex);
-
-
+            var task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
 
             // ACT
             task.Execute();
-
-
 
             // ASSERT
             equipmentModule[0].Should().BeSameAs(testedEquipmentProp);
@@ -106,16 +106,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var inventory = inventoryMock.Object;
             personMock.Setup(x => x.GetModule<IInventoryModule>(It.IsAny<string>())).Returns(inventory);
 
+            var contextMock = new Mock<IActorTaskContext>();
+            var context = contextMock.Object;
 
-
-            var task = new EquipTask(actor, testedEquipmentProp, testedSlotIndex);
-
-
+            var task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
 
             // ACT
             task.Execute();
-
-
 
             // ASSERT
             equipmentModule[0].Should().BeSameAs(testedEquipmentProp);
@@ -155,16 +152,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var inventory = inventoryMock.Object;
             personMock.Setup(x => x.GetModule<IInventoryModule>(It.IsAny<string>())).Returns(inventory);
 
+            var contextMock = new Mock<IActorTaskContext>();
+            var context = contextMock.Object;
 
-
-            var task = new EquipTask(actor, testedEquipmentProp, testedSlotIndex);
-
-
+            var task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
 
             // ACT
             task.Execute();
-
-
 
             // ASSERT
             equipmentModule[0].Should().BeSameAs(testedEquipmentProp);
@@ -206,16 +200,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var inventory = inventoryMock.Object;
             personMock.Setup(x => x.GetModule<IInventoryModule>(It.IsAny<string>())).Returns(inventory);
 
+            var contextMock = new Mock<IActorTaskContext>();
+            var context = contextMock.Object;
 
-
-            var task = new EquipTask(actor, testedEquipmentProp, testedSlotIndex);
-
-
+            var task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
 
             // ACT
             task.Execute();
-
-
 
             // ASSERT
             equipmentModule[0].Should().BeSameAs(testedEquipmentProp);

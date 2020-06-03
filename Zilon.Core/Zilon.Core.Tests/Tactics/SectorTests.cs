@@ -9,7 +9,6 @@ using NUnit.Framework;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -102,7 +101,6 @@ namespace Zilon.Core.Tests.Tactics
                 equipmentDurableService);
 
             var actorMock = CreateActorMock();
-            actorMock.SetupGet(x => x.Owner).Returns(new Mock<HumanPlayer>().Object);
             innerActorList.Add(actorMock.Object);
 
             // ACT

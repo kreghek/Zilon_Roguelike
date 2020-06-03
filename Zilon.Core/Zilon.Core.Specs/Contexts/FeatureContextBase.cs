@@ -185,7 +185,7 @@ namespace Zilon.Core.Specs.Contexts
 
             // Подготовка актёров
             var humanStartNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
-            var humanActor = CreateHumanActor(humanPlayer, personSid, humanStartNode, perkResolver);
+            var humanActor = CreateHumanActor(personSid, humanStartNode, perkResolver);
 
             humanTaskSource.SwitchActiveActor(humanActor);
 
@@ -202,12 +202,11 @@ namespace Zilon.Core.Specs.Contexts
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
             var actorManager = sectorManager.CurrentSector.ActorManager;
-            var botPlayer = ServiceProvider.GetRequiredService<IBotPlayer>();
 
             var monsterScheme = schemeService.GetScheme<IMonsterScheme>(monsterSid);
             var monsterStartNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
 
-            var monster = CreateMonsterActor(botPlayer, monsterScheme, monsterStartNode);
+            var monster = CreateMonsterActor(monsterScheme, monsterStartNode);
             monster.Person.Id = monsterId;
 
             actorManager.Add(monster);
@@ -259,29 +258,30 @@ namespace Zilon.Core.Specs.Contexts
             _specificActUsageRandomSource = actUsageRandomSource;
         }
 
-        private IActor CreateHumanActor([NotNull] IPlayer player,
-            [NotNull] string personSchemeSid,
+        private IActor CreateHumanActor([NotNull] string personSchemeSid,
             [NotNull] IGraphNode startNode,
             [NotNull] IPerkResolver perkResolver)
         {
             var personFactory = ServiceProvider.GetRequiredService<IPersonFactory>();
+            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
 
-            var person = personFactory.Create(personSchemeSid);
+            var person = personFactory.Create(personSchemeSid, Fractions.MainPersonFraction);
 
-            var actor = new Actor(person, player, startNode, perkResolver);
+            var actor = new Actor(person, humanTaskSource, startNode, perkResolver);
 
             return actor;
         }
 
-        private IActor CreateMonsterActor([NotNull] IBotPlayer player,
-            [NotNull] IMonsterScheme monsterScheme,
+        private IActor CreateMonsterActor([NotNull] IMonsterScheme monsterScheme,
             [NotNull] IGraphNode startNode)
         {
             var monsterFactory = ServiceProvider.GetRequiredService<IMonsterPersonFactory>();
 
+            var taskSource = ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
+
             var monsterPerson = monsterFactory.Create(monsterScheme);
 
-            var actor = new Actor(monsterPerson, player, startNode);
+            var actor = new Actor(monsterPerson, taskSource, startNode);
 
             return actor;
         }
@@ -368,9 +368,8 @@ namespace Zilon.Core.Specs.Contexts
             {
                 var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
                 var actHandlerSelector = serviceProvider.GetRequiredService<IActUsageHandlerSelector>();
-                var sectorManager = serviceProvider.GetRequiredService<ISectorManager>();
 
-                var tacticalActUsageService = new TacticalActUsageService(randomSource, sectorManager, actHandlerSelector);
+                var tacticalActUsageService = new TacticalActUsageService(randomSource, actHandlerSelector);
 
                 ConfigurateTacticalActUsageService(serviceProvider, tacticalActUsageService);
 

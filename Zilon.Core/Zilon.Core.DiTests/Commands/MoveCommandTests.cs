@@ -89,11 +89,7 @@ namespace Zilon.Core.Tests.Commands
             var command = ServiceProvider.GetRequiredService<MoveCommand>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
-            var playerMock = new Mock<IPlayer>();
-            var player = playerMock.Object;
-
             var monsterMock = new Mock<IActor>();
-            monsterMock.Setup(x => x.Owner).Returns(player);
 
             var monsterNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(0, 2);
             monsterMock.SetupGet(x => x.Node).Returns(monsterNode);
@@ -124,7 +120,6 @@ namespace Zilon.Core.Tests.Commands
             var player = playerMock.Object;
 
             var monsterMock = new Mock<IActor>();
-            monsterMock.Setup(x => x.Owner).Returns(player);
 
             var monsterNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(0, 6);
             monsterMock.SetupGet(x => x.Node).Returns(monsterNode);

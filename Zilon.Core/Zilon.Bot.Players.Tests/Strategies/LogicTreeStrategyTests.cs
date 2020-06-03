@@ -30,10 +30,13 @@ namespace Zilon.Bot.Players.Strategies.Tests
             var actorMock = new Mock<IActor>();
             var actor = actorMock.Object;
 
+            var taskContextMock = new Mock<ISectorTaskSourceContext>();
+            var taskContext = taskContextMock.Object;
+
             var strategy = new LogicTreeStrategy(actor, logicTree);
 
             // ACT
-            var factTask = strategy.GetActorTask();
+            var factTask = strategy.GetActorTask(taskContext);
 
             // ASSERT
             factTask.Should().Be(actorTask);
@@ -57,7 +60,7 @@ namespace Zilon.Bot.Players.Strategies.Tests
             CreateLogicState(out var secondLogicState, out var secondActorTask);
 
             var triggerMock = new Mock<ILogicStateTrigger>();
-            triggerMock.Setup(x => x.Test(It.IsAny<IActor>(), It.IsAny<ILogicState>(), It.IsAny<ILogicStrategyData>()))
+            triggerMock.Setup(x => x.Test(It.IsAny<IActor>(), It.IsAny<ISectorTaskSourceContext>(), It.IsAny<ILogicState>(), It.IsAny<ILogicStrategyData>()))
                 .Returns(true);
             var trigger = triggerMock.Object;
 
@@ -74,10 +77,13 @@ namespace Zilon.Bot.Players.Strategies.Tests
             var actorMock = new Mock<IActor>();
             var actor = actorMock.Object;
 
+            var taskContextMock = new Mock<ISectorTaskSourceContext>();
+            var taskContext = taskContextMock.Object;
+
             var strategy = new LogicTreeStrategy(actor, logicTree);
 
             // ACT
-            var factTask = strategy.GetActorTask();
+            var factTask = strategy.GetActorTask(taskContext);
 
             // ASSERT
             factTask.Should().Be(secondActorTask);

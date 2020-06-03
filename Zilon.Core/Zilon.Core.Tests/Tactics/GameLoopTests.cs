@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using FluentAssertions;
 
 using Moq;
@@ -9,14 +10,13 @@ using NUnit.Framework;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture
-        ][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class GameLoopTests
     {
         /// <summary>
@@ -39,12 +39,10 @@ namespace Zilon.Core.Tests.Tactics
             var actorManager = actorManagerMock.Object;
             sectorMock.SetupGet(x => x.ActorManager).Returns(actorManager);
 
-            var humanPlayer = new HumanPlayer();
-            var humanActor = CreateActor(humanPlayer);
+            var humanActor = CreateActor();
             actorInnerList.Add(humanActor);
 
-            var botPlayer = new BotPlayer();
-            var botActor = CreateActor(botPlayer);
+            var botActor = CreateActor();
             actorInnerList.Add(botActor);
 
             var actorTaskScourceCollectorMock = new Mock<IActorTaskSourceCollector>();
@@ -59,10 +57,9 @@ namespace Zilon.Core.Tests.Tactics
             act.Should().NotThrow();
         }
 
-        private IActor CreateActor(IPlayer player)
+        private IActor CreateActor()
         {
             var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Owner).Returns(player);
             var actor = actorMock.Object;
 
             var personMock = new Mock<IPerson>();

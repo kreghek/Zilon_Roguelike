@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using Moq;
 
@@ -40,7 +39,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var method = CreateMethod();
 
-            var task = new OpenContainerTask(actor, container, method, map);
+            var contextMock = new Mock<IActorTaskContext>();
+            var context = contextMock.Object;
+
+            var task = new OpenContainerTask(actor, context, container, method);
 
             // ACT
             task.Execute();
@@ -75,7 +77,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var method = CreateMethod();
 
-            var task = new OpenContainerTask(actor, container, method, map);
+            var contextMock = new Mock<IActorTaskContext>();
+            var context = contextMock.Object;
+
+            var task = new OpenContainerTask(actor, context, container, method);
 
             // ACT
             task.Execute();
