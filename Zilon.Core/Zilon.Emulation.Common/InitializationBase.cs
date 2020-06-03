@@ -56,7 +56,7 @@ namespace Zilon.Emulation.Common
                 var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
                 var monsterFactory = serviceProvider.GetRequiredService<IMonsterPersonFactory>();
                 var randomSource = serviceProvider.GetRequiredService<IMonsterGeneratorRandomSource>();
-                var actorTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource>();
+                var actorTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
 
                 var generator = new MonsterGenerator(schemeService, monsterFactory, randomSource, actorTaskSource);
                 return generator;
@@ -125,10 +125,10 @@ namespace Zilon.Emulation.Common
             container.AddScoped<ISectorFactory, SectorFactory>();
             container.AddScoped<ISectorManager, InfiniteSectorManager>();
             RegisterActUsageServices(container);
-            container.AddScoped<MonsterBotActorTaskSource>();
+            container.AddScoped<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
             container.AddScoped<IActorTaskSourceCollector, ActorTaskSourceCollector>(serviceProvider =>
             {
-                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource>();
+                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
                 return new ActorTaskSourceCollector(monsterTaskSource);
             });
         }

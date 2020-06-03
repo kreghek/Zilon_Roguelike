@@ -12,6 +12,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
@@ -34,7 +35,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             var botSettings = new BotSettings { Mode = mode };
 
-            var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource>(startUp, botSettings);
+            var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource<ISectorTaskSourceContext>>(startUp, botSettings);
 
             var startPerson = PersonCreateHelper.CreateStartPerson(serviceProvider, Fractions.MainPersonFraction);
 

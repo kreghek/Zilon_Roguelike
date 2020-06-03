@@ -21,7 +21,7 @@ namespace Zilon.Core.Client
         }
 
         /// <summary>Пользовательский источник задач для актёров.</summary>
-        public IHumanActorTaskSource TaskSource { get; set; }
+        public IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource { get; set; }
 
         public event EventHandler ActiveActorChanged;
 

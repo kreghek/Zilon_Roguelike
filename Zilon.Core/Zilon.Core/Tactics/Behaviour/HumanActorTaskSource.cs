@@ -5,7 +5,7 @@ using Zilon.Core.Common;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class HumanActorTaskSource : IHumanActorTaskSource
+    public class HumanActorTaskSource<TContext> : IHumanActorTaskSource<TContext> where TContext: ISectorTaskSourceContext
     {
         private readonly ISender<IActorTask> _actorTaskSender;
         private readonly IReceiver<IActorTask> _actorTaskReceiver;
@@ -52,7 +52,7 @@ namespace Zilon.Core.Tactics.Behaviour
             return _actorTaskSender.SendAsync(actorTask);
         }
 
-        public Task<IActorTask> GetActorTaskAsync(IActor actor, ISectorTaskSourceContext context)
+        public Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
         {
             // Тезисы:
             // Этот источник команд ждёт, пока игрок не укажет задачу.

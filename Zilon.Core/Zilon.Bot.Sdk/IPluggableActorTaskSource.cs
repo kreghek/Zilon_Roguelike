@@ -1,9 +1,11 @@
-﻿namespace Zilon.Bot.Sdk
+﻿using Zilon.Core.Tactics.Behaviour;
+
+namespace Zilon.Bot.Sdk
 {
     /// <summary>
     /// Интерфейс источника команд для динамического подключения.
     /// </summary>
-    public interface IPluggableActorTaskSource : ISectorActorTaskSource
+    public interface IPluggableActorTaskSource<TContext> : ISectorActorTaskSource<TContext> where TContext: ISectorTaskSourceContext
     {
     }
 }

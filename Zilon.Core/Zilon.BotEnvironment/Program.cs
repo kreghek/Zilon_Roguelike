@@ -70,8 +70,8 @@ namespace Zilon.BotEnvironment
 
             // Регистрируем сервис источника команд.
             var botActorTaskSourceType = GetBotActorTaskSource(registerManager);
-            serviceRegistry.AddScoped(typeof(IPluggableActorTaskSource), botActorTaskSourceType);
-            serviceRegistry.AddScoped<IActorTaskSource<ISectorTaskSourceContext>>(factory => factory.GetRequiredService<IPluggableActorTaskSource>());
+            serviceRegistry.AddScoped(typeof(IPluggableActorTaskSource<ISectorTaskSourceContext>), botActorTaskSourceType);
+            serviceRegistry.AddScoped<IActorTaskSource<ISectorTaskSourceContext>>(factory => factory.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>());
 
             var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);
             registerAuxMethod.Invoke(null, new object[] { serviceRegistry });

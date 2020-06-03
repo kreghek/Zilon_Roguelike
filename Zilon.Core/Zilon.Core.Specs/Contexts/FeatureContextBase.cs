@@ -178,7 +178,7 @@ namespace Zilon.Core.Specs.Contexts
         {
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
-            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var actorManager = sectorManager.CurrentSector.ActorManager;
             var humanPlayer = ServiceProvider.GetRequiredService<HumanPlayer>();
             var perkResolver = ServiceProvider.GetRequiredService<IPerkResolver>();
@@ -217,7 +217,7 @@ namespace Zilon.Core.Specs.Contexts
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
             var node = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
-            var chest = new FixedPropChest(new IProp[0]);
+            var chest = new FixedPropChest(Array.Empty<IProp>());
             var staticObject = new StaticObject(node, chest.Purpose, id);
             staticObject.AddModule<IPropContainer>(chest);
 
@@ -235,8 +235,13 @@ namespace Zilon.Core.Specs.Contexts
             AddResourceToActor(resourceScheme, count, actor);
         }
 
-        public void AddResourceToActor(IPropScheme resourceScheme, int count, IActor actor)
+        public static void AddResourceToActor(IPropScheme resourceScheme, int count, IActor actor)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
             var resource = new Resource(resourceScheme, count);
 
             actor.Person.GetModule<IInventoryModule>().Add(resource);
@@ -263,7 +268,7 @@ namespace Zilon.Core.Specs.Contexts
             [NotNull] IPerkResolver perkResolver)
         {
             var personFactory = ServiceProvider.GetRequiredService<IPersonFactory>();
-            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
             var person = personFactory.Create(personSchemeSid, Fractions.MainPersonFraction);
 
@@ -414,7 +419,7 @@ namespace Zilon.Core.Specs.Contexts
             return actUsageRandomSource;
         }
 
-        private ISurvivalRandomSource CreateSurvivalRandomSource()
+        private static ISurvivalRandomSource CreateSurvivalRandomSource()
         {
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -446,12 +451,12 @@ namespace Zilon.Core.Specs.Contexts
         {
             serviceCollection.AddSingleton<HumanPlayer>();
             serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
-            serviceCollection.AddSingleton<IHumanActorTaskSource, HumanActorTaskSource>();
-            serviceCollection.AddSingleton<MonsterBotActorTaskSource>();
+            serviceCollection.AddSingleton<IHumanActorTaskSource<ISectorTaskSourceContext>, HumanActorTaskSource<ISectorTaskSourceContext>>();
+            serviceCollection.AddSingleton<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
             serviceCollection.AddSingleton<IActorTaskSourceCollector>(serviceProvider =>
             {
-                var humanTaskSource = serviceProvider.GetRequiredService<IHumanActorTaskSource>();
-                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource>();
+                var humanTaskSource = serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
                 return new ActorTaskSourceCollector(humanTaskSource, monsterTaskSource);
             });
             RegisterManager.RegisterBot(serviceCollection);
@@ -459,7 +464,7 @@ namespace Zilon.Core.Specs.Contexts
 
         private void InitClientServices()
         {
-            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             playerState.TaskSource = humanTaskSource;

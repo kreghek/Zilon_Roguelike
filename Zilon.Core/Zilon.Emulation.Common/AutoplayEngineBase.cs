@@ -15,7 +15,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Emulation.Common
 {
-    public abstract class AutoplayEngineBase<T> where T : IPluggableActorTaskSource
+    public abstract class AutoplayEngineBase<T> where T : IPluggableActorTaskSource<ISectorTaskSourceContext>
     {
         private const int ITERATION_LIMIT = 40_000_000;
 
@@ -125,8 +125,8 @@ namespace Zilon.Emulation.Common
             var scoreManager = _globalServiceProvider.GetRequiredService<IScoreManager>();
 
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
-            var playerEventLogService = ServiceScope.ServiceProvider.GetService<IPlayerEventLogService>();
-            var actorTaskSource = ServiceScope.ServiceProvider.GetService<IActorTaskSource<ISectorTaskSourceContext>>();
+            var playerEventLogService = ServiceScope.ServiceProvider.GetRequiredService<IPlayerEventLogService>();
+            var actorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
 
             await sectorManager.CreateSectorAsync().ConfigureAwait(false);
 

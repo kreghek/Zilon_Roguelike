@@ -23,7 +23,7 @@ namespace Zilon.Core.Client
         /// <summary>
         /// Пользовательский источник задач для актёров.
         /// </summary>
-        IHumanActorTaskSource TaskSource { get; set; }
+        IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource { get; set; }
 
         /// <summary>
         /// Выстреливает, когда изменяется активный персонаж игрока.

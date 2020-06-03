@@ -2,11 +2,12 @@
 
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Emulation.Common;
 
 namespace Zilon.GlobeObserver
 {
-    class AutoplayEngine<T> : AutoplayEngineBase<T> where T : IPluggableActorTaskSource
+    class AutoplayEngine<T> : AutoplayEngineBase<T> where T : IPluggableActorTaskSource<ISectorTaskSourceContext>
     {
         private readonly StartUp _startup;
 

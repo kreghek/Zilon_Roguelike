@@ -46,7 +46,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
             var intention = intentionMock.Object;
 
-            var taskSource = new HumanActorTaskSource(actor);
+            var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>(actor);
 
             var contextMock = new Mock<ISectorTaskSourceContext>();
             var context = contextMock.Object;
@@ -86,7 +86,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var contextMock = new Mock<ISectorTaskSourceContext>();
             var context = contextMock.Object;
 
-            var taskSource = new HumanActorTaskSource(actor);
+            var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>(actor);
 
             // ACT
 
