@@ -72,7 +72,7 @@ namespace Zilon.Core.Tests.Commands
             actorVmMock.SetupProperty(x => x.Actor, actor);
             var actorVm = actorVmMock.Object;
 
-            var humanTaskSourceMock = new Mock<IHumanActorTaskSource>();
+            var humanTaskSourceMock = new Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var humanTaskSource = humanTaskSourceMock.Object;
 
             var playerStateMock = new Mock<ISectorUiState>();

@@ -21,10 +21,10 @@ namespace Zilon.GlobeObserver
         protected override void RegisterBot(IServiceCollection serviceCollection)
         {
             serviceCollection.RegisterLogicState();
-            serviceCollection.AddScoped<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
-            serviceCollection.AddScoped<LogicStateTreePatterns>();
+            serviceCollection.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
+            serviceCollection.AddSingleton<LogicStateTreePatterns>();
 
-            serviceCollection.AddScoped<IActorTaskSource<ISectorTaskSourceContext>, HumanBotActorTaskSource>();
+            serviceCollection.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanBotActorTaskSource<ISectorTaskSourceContext>>();
         }
     }
 }

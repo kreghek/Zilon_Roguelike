@@ -79,7 +79,6 @@ namespace Zilon.Core.Specs.Contexts
             var serviceCollection = new ServiceCollection();
             RegisterSchemeService(serviceCollection);
             RegisterSectorService(serviceCollection);
-            RegisterGameLoop(serviceCollection);
             RegisterAuxServices(serviceCollection);
             RegisterPlayerServices(serviceCollection);
             RegisterClientServices(serviceCollection);
@@ -317,11 +316,6 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
         }
 
-        private static void RegisterGameLoop(IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<IGameLoop, GameLoop>();
-        }
-
         /// <summary>
         /// Подготовка дополнительных сервисов
         /// </summary>
@@ -450,7 +444,6 @@ namespace Zilon.Core.Specs.Contexts
         private static void RegisterPlayerServices(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<HumanPlayer>();
-            serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
             serviceCollection.AddSingleton<IHumanActorTaskSource<ISectorTaskSourceContext>, HumanActorTaskSource<ISectorTaskSourceContext>>();
             serviceCollection.AddSingleton<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
             serviceCollection.AddSingleton<IActorTaskSourceCollector>(serviceProvider =>

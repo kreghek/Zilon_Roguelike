@@ -86,7 +86,7 @@ namespace Zilon.Core.Specs.Steps
                 }
             };
 
-            Context.AddResourceToActor(propScheme, 1, actor);
+            FeatureContextBase.AddResourceToActor(propScheme, 1, actor);
         }
 
         [Given(@"Актёр значение (.*) равное (.*)")]

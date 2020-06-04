@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
+
 using Zilon.Core.Persons;
 using Zilon.Core.World;
 
@@ -9,7 +10,7 @@ namespace Zilon.GlobeObserver
 {
     class Program
     {
-        static async System.Threading.Tasks.Task Main(string[] args)
+        static async System.Threading.Tasks.Task Main()
         {
             var serviceContainer = new ServiceCollection();
             var startUp = new StartUp();

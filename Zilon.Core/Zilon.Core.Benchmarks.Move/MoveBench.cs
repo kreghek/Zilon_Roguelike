@@ -116,7 +116,7 @@ namespace Zilon.Core.Benchmarks.Move
             var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
             var humanPlayer = _serviceProvider.GetRequiredService<HumanPlayer>();
             var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
-            var humanActorTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var humanActorTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
             TestSectorSubScheme testSectorSubScheme = new TestSectorSubScheme
             {

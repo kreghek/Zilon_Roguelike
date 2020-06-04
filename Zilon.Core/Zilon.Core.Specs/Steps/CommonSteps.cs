@@ -133,7 +133,7 @@ namespace Zilon.Core.Specs.Steps
         public async System.Threading.Tasks.Task WhenСледующаяИтерацияСектораAsync(int count)
         {
             var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
-            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource>();
+            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
             var counter = count;
 

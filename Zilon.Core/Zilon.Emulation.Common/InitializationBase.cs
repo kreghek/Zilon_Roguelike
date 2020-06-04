@@ -88,7 +88,6 @@ namespace Zilon.Emulation.Common
         private void RegisterSectorServices(IServiceCollection serviceRegistry)
         {
             RegisterClientServices(serviceRegistry);
-            RegisterGameLoop(serviceRegistry);
             RegisterScopedSectorService(serviceRegistry);
             RegisterBot(serviceRegistry);
         }
@@ -180,11 +179,6 @@ namespace Zilon.Emulation.Common
             handler.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
 
             handler.ScoreManager = serviceProvider.GetService<IScoreManager>();
-        }
-
-        private static void RegisterGameLoop(IServiceCollection serviceRegistry)
-        {
-            serviceRegistry.AddScoped<IGameLoop, GameLoop>();
         }
 
         /// <summary>
@@ -312,7 +306,6 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IPlayerEventLogService, PlayerEventLogService>();
             serviceCollection.AddSingleton<DeathReasonService>();
             serviceCollection.AddSingleton<HumanPlayer>();
-            serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
         }
 
         protected abstract void RegisterBot(IServiceCollection serviceCollection);

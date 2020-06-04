@@ -84,7 +84,7 @@ namespace Zilon.Core.Tests.Commands
             var command = ServiceProvider.GetRequiredService<EquipCommand>();
             command.SlotIndex = 0;
 
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();

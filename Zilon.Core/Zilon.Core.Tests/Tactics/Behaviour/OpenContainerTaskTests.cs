@@ -39,7 +39,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var method = CreateMethod();
 
+            var sectorMock = new Mock<ISector>();
+            sectorMock.SetupGet(x => x.Map).Returns(map);
+            var sector = sectorMock.Object;
+
             var contextMock = new Mock<IActorTaskContext>();
+            contextMock.SetupGet(x => x.Sector).Returns(sector);
             var context = contextMock.Object;
 
             var task = new OpenContainerTask(actor, context, container, method);
@@ -77,7 +82,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var method = CreateMethod();
 
+            var sectorMock = new Mock<ISector>();
+            sectorMock.SetupGet(x => x.Map).Returns(map);
+            var sector = sectorMock.Object;
+
             var contextMock = new Mock<IActorTaskContext>();
+            contextMock.SetupGet(x => x.Sector).Returns(sector);
             var context = contextMock.Object;
 
             var task = new OpenContainerTask(actor, context, container, method);

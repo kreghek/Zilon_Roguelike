@@ -44,7 +44,7 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<UseSelfCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 

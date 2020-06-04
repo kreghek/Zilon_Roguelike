@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -93,6 +94,11 @@ namespace Zilon.Core.Tests.Commands
             var monsterNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(0, 2);
             monsterMock.SetupGet(x => x.Node).Returns(monsterNode);
 
+            var personMock = new Mock<IPerson>();
+            personMock.SetupGet(x => x.Fraction).Returns(Fractions.MonsterFraction);
+            var person = personMock.Object;
+            monsterMock.SetupGet(x => x.Person).Returns(person);
+
             var monster = monsterMock.Object;
             _actorList.Add(monster);
 
@@ -115,13 +121,15 @@ namespace Zilon.Core.Tests.Commands
             var command = ServiceProvider.GetRequiredService<MoveCommand>();
             var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
 
-            var playerMock = new Mock<IPlayer>();
-            var player = playerMock.Object;
-
             var monsterMock = new Mock<IActor>();
 
             var monsterNode = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(0, 6);
             monsterMock.SetupGet(x => x.Node).Returns(monsterNode);
+
+            var personMock = new Mock<IPerson>();
+            personMock.SetupGet(x => x.Fraction).Returns(Fractions.MonsterFraction);
+            var person = personMock.Object;
+            monsterMock.SetupGet(x => x.Person).Returns(person);
 
             var monster = monsterMock.Object;
             _actorList.Add(monster);

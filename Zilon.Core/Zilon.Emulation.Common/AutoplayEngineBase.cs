@@ -12,6 +12,7 @@ using Zilon.Core.Players;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.World;
 
 namespace Zilon.Emulation.Common
 {
@@ -37,8 +38,11 @@ namespace Zilon.Emulation.Common
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
 
+            // Create globe
+            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
+            var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
+
             var humanActor = await CreateSectorAsync(startPerson, serviceProvider).ConfigureAwait(false);
-            var gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
             var botActorTaskSource = serviceProvider.GetRequiredService<T>();
             botActorTaskSource.Configure(BotSettings);
 
@@ -47,13 +51,12 @@ namespace Zilon.Emulation.Common
             {
                 try
                 {
-                    await gameLoop.UpdateAsync().ConfigureAwait(false);
+                    await globe.UpdateAsync().ConfigureAwait(false);
 
                     if (_changeSector)
                     {
                         humanActor = await CreateSectorAsync(startPerson, serviceProvider).ConfigureAwait(false);
 
-                        gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
                         botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
                         botActorTaskSource.Configure(BotSettings);
 
@@ -126,7 +129,7 @@ namespace Zilon.Emulation.Common
 
             var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
             var playerEventLogService = ServiceScope.ServiceProvider.GetRequiredService<IPlayerEventLogService>();
-            var actorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
+            var actorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<HumanBotActorTaskSource<ISectorTaskSourceContext>>();
 
             await sectorManager.CreateSectorAsync().ConfigureAwait(false);
 

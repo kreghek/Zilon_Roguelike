@@ -16,7 +16,6 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly IStaticObstaclesGenerator _staticObstaclesGenerator;
         private readonly IDiseaseGenerator _diseaseGenerator;
-        private readonly IBotPlayer _botPlayer;
         private readonly IResourceMaterializationMap _resourceMaterializationMap;
         private readonly IMapFactorySelector _mapFactorySelector;
         private readonly ISectorFactory _sectorFactory;
@@ -28,15 +27,12 @@ namespace Zilon.Core.MapGenerators
         /// <param name="mapFactorySelector"> Сервис для выбора фабрики для создания карты. </param>
         /// <param name="sectorFactory"> Фабрика сектора. </param>
         /// <param name="monsterGenerator"> Генератор монстров для подземелий. </param>
-        /// <param name="chestGenerator"> Генератор сундуков для подземеоий </param>
-        /// <param name="botPlayer"> Игрок, управляющий монстрами, мирными жителями. </param>
         public SectorGenerator(
             IMapFactorySelector mapFactorySelector,
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
             IStaticObstaclesGenerator staticObstaclesGenerator,
             IDiseaseGenerator diseaseGenerator,
-            IBotPlayer botPlayer,
             IResourceMaterializationMap resourceMaterializationMap)
         {
             _mapFactorySelector = mapFactorySelector ?? throw new ArgumentNullException(nameof(mapFactorySelector));
@@ -44,7 +40,6 @@ namespace Zilon.Core.MapGenerators
             _monsterGenerator = monsterGenerator ?? throw new ArgumentNullException(nameof(monsterGenerator));
             _staticObstaclesGenerator = staticObstaclesGenerator ?? throw new ArgumentNullException(nameof(staticObstaclesGenerator));
             _diseaseGenerator = diseaseGenerator ?? throw new ArgumentNullException(nameof(diseaseGenerator));
-            _botPlayer = botPlayer ?? throw new ArgumentNullException(nameof(botPlayer));
             _resourceMaterializationMap = resourceMaterializationMap ?? throw new ArgumentNullException(nameof(resourceMaterializationMap));
         }
 
