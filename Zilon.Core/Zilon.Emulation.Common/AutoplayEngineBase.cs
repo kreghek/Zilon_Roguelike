@@ -31,7 +31,7 @@ namespace Zilon.Emulation.Common
             BotSettings = botSettings;
         }
 
-        public async Task StartAsync(IPerson startPerson, IServiceProvider serviceProvider)
+        public async Task StartAsync(IPerson humanPerson, IServiceProvider serviceProvider)
         {
             if (serviceProvider is null)
             {
@@ -44,7 +44,7 @@ namespace Zilon.Emulation.Common
 
             var sector = globe.SectorNodes.First().Sector;
 
-            var humanActor = await CreateSectorAsync(startPerson, serviceProvider).ConfigureAwait(false);
+            var humanActor = await CreateSectorAsync(humanPerson, serviceProvider).ConfigureAwait(false);
             var botActorTaskSource = serviceProvider.GetRequiredService<T>();
             botActorTaskSource.Configure(BotSettings);
 
@@ -57,7 +57,7 @@ namespace Zilon.Emulation.Common
 
                     if (_changeSector)
                     {
-                        humanActor = await CreateSectorAsync(startPerson, serviceProvider).ConfigureAwait(false);
+                        humanActor = await CreateSectorAsync(humanPerson, serviceProvider).ConfigureAwait(false);
 
                         botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
                         botActorTaskSource.Configure(BotSettings);

@@ -162,19 +162,66 @@ namespace Zilon.Core.World
         }
     }
 
+    public interface IPersonInitializer
+    {
+        Task<IEnumerable<IPerson>> CreateStartPersonsAsync();
+    }
+
+    public sealed class HumanPersonInitializer: 
+
+    public sealed class AutoPersonInitializer : IPersonInitializer
+    {
+        private readonly IFraction _pilgrimFraction;
+        private readonly IPersonFactory _personFactory;
+
+        public AutoPersonInitializer(IPersonFactory personFactory)
+        {
+            _pilgrimFraction = new Fraction("Pilgrims");
+
+            _personFactory = personFactory;
+        }
+
+        public IEnumerable<IPerson> CreateStartPersonsInner()
+        {
+            for (var i = 0; i < 40; i++)
+            {
+                yield return CreateStartPerson("human-person", _personFactory, _pilgrimFraction);
+            }
+        }
+
+        /// <summary>
+        /// Создаёт персонажа.
+        /// </summary>
+        /// <returns> Возвращает созданного персонажа. </returns>
+        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory, IFraction fraction)
+        {
+            var startPerson = personFactory.Create(personSchemeSid, fraction);
+            return startPerson;
+        }
+
+        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync()
+        {
+            return Task.FromResult(CreateStartPersonsInner());
+        }
+    }
+
     public sealed class GlobeInitializer : IGlobeInitializer
     {
         private readonly IBiomeInitializer _biomeInitializer;
         private readonly ISchemeService _schemeService;
-        private readonly IPersonFactory _personFactory;
         private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
+        private readonly IPersonInitializer _personInitializer;
 
-        public GlobeInitializer(IBiomeInitializer biomeInitializer, ISchemeService schemeService, IPersonFactory personFactory, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
+        public GlobeInitializer(
+            IBiomeInitializer biomeInitializer,
+            ISchemeService schemeService,
+            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource,
+            IPersonInitializer personInitializer)
         {
             _biomeInitializer = biomeInitializer;
             _schemeService = schemeService;
-            _personFactory = personFactory;
             _actorTaskSource = actorTaskSource;
+            _personInitializer = personInitializer;
         }
 
         public async Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid)
@@ -188,19 +235,22 @@ namespace Zilon.Core.World
             globe.AddSectorNode(startSectorNode);
 
             // Добавляем стартовых персонажей-пилигримов
+
+            var startPersons = await _personInitializer.CreateStartPersonsAsync().ConfigureAwait(false);
+
             var sector = startSectorNode.Sector;
             var startPilgrimFraction = new Fraction("Pilgrims");
-            for (var i = 0; i < 40; i++)
+            var personCounter = 0;
+            foreach (var person in startPersons)
             {
-                var person = CreateStartPerson("human-person", _personFactory, startPilgrimFraction);
-
                 var startNode = sector.Map
                     .Nodes
-                    .Skip(i)
+                    .Skip(personCounter)
                     .First();
                 var actor = CreateHumanActor(person, startNode, _actorTaskSource);
 
                 sector.ActorManager.Add(actor);
+                personCounter++;
             }
 
             return globe;
@@ -214,17 +264,6 @@ namespace Zilon.Core.World
             var actor = new Actor(humanPerson, actorTaskSource, startNode);
 
             return actor;
-        }
-
-        /// <summary>
-        /// Создаёт персонажа.
-        /// </summary>
-        /// <param name="serviceProvider"> Контейнер DI, откуда извлекаются сервисы для создания персонажа. </param>
-        /// <returns> Возвращает созданного персонажа. </returns>
-        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory, IFraction fraction)
-        {
-            var startPerson = personFactory.Create(personSchemeSid, fraction);
-            return startPerson;
         }
     }
 
