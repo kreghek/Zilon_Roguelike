@@ -42,6 +42,8 @@ namespace Zilon.Emulation.Common
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
             var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
 
+            var sector = globe.SectorNodes.First().Sector;
+
             var humanActor = await CreateSectorAsync(startPerson, serviceProvider).ConfigureAwait(false);
             var botActorTaskSource = serviceProvider.GetRequiredService<T>();
             botActorTaskSource.Configure(BotSettings);
@@ -90,13 +92,14 @@ namespace Zilon.Emulation.Common
 
         protected abstract void ProcessEnd();
 
-        private static IActor CreateHumanActor(HumanPlayer humanPlayer,
+        private static IActor CreateHumanActor(
+            ISector sector,
+            IPlayer humanPlayer,
             IActorTaskSource<ISectorTaskSourceContext> actorTaskSource,
             IPerson humanPerson,
-            ISectorManager sectorManager,
             IPlayerEventLogService playerEventLogService)
         {
-            var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
+            var playerActorStartNode = sector.Map.Regions
                 .SingleOrDefault(x => x.IsStart)
                 .Nodes
                 .First();
@@ -107,7 +110,7 @@ namespace Zilon.Emulation.Common
 
             playerEventLogService.Actor = actor;
 
-            sectorManager.CurrentSector.ActorManager.Add(actor);
+            sector.ActorManager.Add(actor);
 
             return actor;
         }
@@ -127,7 +130,6 @@ namespace Zilon.Emulation.Common
             var humanPlayer = _globalServiceProvider.GetRequiredService<HumanPlayer>();
             var scoreManager = _globalServiceProvider.GetRequiredService<IScoreManager>();
 
-            var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
             var playerEventLogService = ServiceScope.ServiceProvider.GetRequiredService<IPlayerEventLogService>();
             var actorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<HumanBotActorTaskSource<ISectorTaskSourceContext>>();
 
