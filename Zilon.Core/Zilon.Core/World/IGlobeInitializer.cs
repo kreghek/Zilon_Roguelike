@@ -75,6 +75,7 @@ namespace Zilon.Core.World
                 if (sectorNode.State != SectorNodeState.SectorMaterialized)
                 {
                     await _globeExpander.ExpandAsync(sectorNode).ConfigureAwait(false);
+                    globe.AddSectorNode(sectorNode);
                 }
             }
             finally
@@ -151,7 +152,10 @@ namespace Zilon.Core.World
 
         private IEnumerable<ActorInSector> GetActorsWithoutTasks()
         {
-            foreach (var sectorNode in _sectorNodes)
+            // _sectorNodes фиксируем в отдельный массив.
+            // потому что по мере выполнения задач актёров, может быть переход в новый узел мира.
+            // Мир при том расширится и список поменяется. А это приведёт к ошибке, что коллекция в foreach изменяется.
+            foreach (var sectorNode in _sectorNodes.ToArray())
             {
                 var sector = sectorNode.Sector;
                 foreach (var actor in sector.ActorManager.Items.ToArray())
