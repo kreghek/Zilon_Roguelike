@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -12,17 +13,20 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class OpenContainerCommand : ActorCommandBase
     {
+        private readonly IPlayer _player;
+
         [ExcludeFromCodeCoverage]
         public OpenContainerCommand(
-            ISectorManager sectorManager,
+            IPlayer player,
             ISectorUiState playerState) :
-            base(sectorManager, playerState)
+            base(playerState)
         {
+            _player = player;
         }
 
         public override bool CanExecute()
         {
-            var map = SectorManager.CurrentSector.Map;
+            var map = _player.SectorNode.Sector.Map;
 
             var currentNode = PlayerState.ActiveActor.Actor.Node;
 
@@ -74,7 +78,7 @@ namespace Zilon.Core.Commands
         {
             var openMethod = new HandOpenContainerMethod();
 
-            var taskContext = new ActorTaskContext(SectorManager.CurrentSector);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             return new OpenContainerTask(actor, taskContext, staticObject, openMethod);
         }

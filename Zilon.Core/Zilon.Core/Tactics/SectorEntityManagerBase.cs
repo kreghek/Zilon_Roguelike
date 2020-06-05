@@ -11,13 +11,13 @@ namespace Zilon.Core.Tactics
     /// Тип сущности сектора.
     /// Сейчас это либо <see cref="IActor">IActor</see> либо <see cref="IPropContainer">IPropContainer</see>.
     /// </typeparam>
-    public abstract class SectorEntityManager<TSectorEntity> : ISectorEntityManager<TSectorEntity> where TSectorEntity : class
+    public abstract class SectorEntityManagerBase<TSectorEntity> : ISectorEntityManager<TSectorEntity> where TSectorEntity : class
     {
         private readonly List<TSectorEntity> _items;
 
         public IEnumerable<TSectorEntity> Items => _items;
 
-        protected SectorEntityManager()
+        protected SectorEntityManagerBase()
         {
             _items = new List<TSectorEntity>();
         }

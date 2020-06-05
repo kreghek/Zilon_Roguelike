@@ -17,6 +17,8 @@ namespace Zilon.GlobeObserver
             startUp.RegisterServices(serviceContainer);
 
             serviceContainer.AddSingleton<IGlobeInitializer, GlobeInitializer>();
+            serviceContainer.AddSingleton<IGlobeExpander>(provider => (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
+            serviceContainer.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
 
             var serviceProvider = serviceContainer.BuildServiceProvider();
 

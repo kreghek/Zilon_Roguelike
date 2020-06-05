@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
-using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
 {
@@ -12,8 +11,7 @@ namespace Zilon.Core.Commands
     {
         [ExcludeFromCodeCoverage]
         protected SpecialActorCommandBase(
-            ISectorManager sectorManager,
-            ISectorUiState playerState) : base(sectorManager, playerState)
+            ISectorUiState playerState) : base(playerState)
         {
         }
     }

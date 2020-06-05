@@ -122,7 +122,6 @@ namespace Zilon.Emulation.Common
             RegisterMonsterGeneratorRandomSource(container);
             RegisterChestGeneratorRandomSource(container);
             container.AddScoped<ISectorFactory, SectorFactory>();
-            container.AddScoped<ISectorManager, InfiniteSectorManager>();
             RegisterActUsageServices(container);
             container.AddScoped<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
             container.AddScoped<IActorTaskSourceCollector, ActorTaskSourceCollector>(serviceProvider =>

@@ -6,6 +6,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
@@ -19,21 +20,23 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class AttackCommand : ActorCommandBase
     {
+        private readonly IPlayer _player;
         private readonly ITacticalActUsageService _tacticalActUsageService;
 
         [ExcludeFromCodeCoverage]
         public AttackCommand(
-            ISectorManager sectorManager,
+            IPlayer player,
             ISectorUiState playerState,
             ITacticalActUsageService tacticalActUsageService) :
-            base(sectorManager, playerState)
+            base(playerState)
         {
+            _player = player;
             _tacticalActUsageService = tacticalActUsageService;
         }
 
         public override bool CanExecute()
         {
-            var map = SectorManager.CurrentSector.Map;
+            var map = _player.SectorNode.Sector.Map;
 
             var currentNode = PlayerState.ActiveActor.Actor.Node;
 
@@ -62,7 +65,7 @@ namespace Zilon.Core.Commands
                     return false;
                 }
 
-                var isInDistance = act.CheckDistance(currentNode, targetNode, SectorManager.CurrentSector.Map);
+                var isInDistance = act.CheckDistance(currentNode, targetNode, _player.SectorNode.Sector.Map);
                 if (!isInDistance)
                 {
                     return false;
@@ -118,7 +121,7 @@ namespace Zilon.Core.Commands
 
             var tacticalAct = PlayerState.TacticalAct;
 
-            var taskContext = new ActorTaskContext(SectorManager.CurrentSector);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             var intention = new Intention<AttackTask>(a => new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
             PlayerState.TaskSource.Intent(intention);
