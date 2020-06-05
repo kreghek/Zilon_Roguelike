@@ -13,6 +13,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
@@ -89,11 +90,11 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Сундук содержит Id:(.*) экипировку (.*)")]
         public void GivenСундукСодержитIdЭкипировкуPistol(int id, string equipmentSid)
         {
-            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
+            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
             var propFactory = Context.ServiceProvider.GetRequiredService<IPropFactory>();
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
 
-            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
+            var staticObjectManager = player.SectorNode.Sector.StaticObjectManager;
 
             var container = staticObjectManager.Items.Single(x => x.Id == id);
 
@@ -107,11 +108,11 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Сундук содержит Id:(.*) ресурс (.*) в количестве (.*)")]
         public void GivenСундукСодержитIdРусурсPistol(int id, string resourceSid, int count)
         {
-            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
+            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
             var propFactory = Context.ServiceProvider.GetRequiredService<IPropFactory>();
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
 
-            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
+            var staticObjectManager = player.SectorNode.Sector.StaticObjectManager;
 
             var container = staticObjectManager.Items.Single(x => x.Id == id);
 
@@ -132,7 +133,7 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Следующая итерация сектора (\d+) раз")]
         public async System.Threading.Tasks.Task WhenСледующаяИтерацияСектораAsync(int count)
         {
-            var gameLoop = Context.ServiceProvider.GetRequiredService<IGameLoop>();
+            var gameLoop = Context.Globe;
             var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
             var counter = count;
@@ -157,8 +158,8 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Я выбираю сундук Id:(.*)")]
         public void WhenЯВыбираюСундукId(int id)
         {
-            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
-            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
+            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
+            var staticObjectManager = player.SectorNode.Sector.StaticObjectManager;
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var container = staticObjectManager.Items.Single(x => x.Id == id);
@@ -258,8 +259,8 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"В сундуке Id:(.*) нет экипировки (.*)")]
         public void ThenВСундукеIdНетЭкипировкиPistol(int id, string propSid)
         {
-            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
-            var containerManager = sectorManager.CurrentSector.StaticObjectManager;
+            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
+            var containerManager = player.SectorNode.Sector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == id);
             var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
@@ -271,8 +272,8 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"В сундуке Id:(.*) нет предмета (.*)")]
         public void ThenВСундукеIdНетПредметаWater(int containerId, string resourceSid)
         {
-            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
-            var containerManager = sectorManager.CurrentSector.StaticObjectManager;
+            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
+            var containerManager = player.SectorNode.Sector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == containerId);
             var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);

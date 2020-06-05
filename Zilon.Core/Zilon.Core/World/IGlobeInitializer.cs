@@ -2,10 +2,12 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-
+using Zilon.Core.MapGenerators;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -26,6 +28,71 @@ namespace Zilon.Core.World
         Task UpdateAsync();
     }
 
+    public interface IGlobeTransitionHandler
+    {
+        Task ProcessAsync(IGlobe globe, IActor actor, RoomTransition transition);
+    }
+
+    public sealed class GlobeTransitionHandler : IGlobeTransitionHandler
+    {
+        private readonly IGlobeExpander _globeExpander;
+
+        //Instantiate a Singleton of the Semaphore with a value of 1. This means that only 1 thread can be granted access at a time.
+        static readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+
+        public GlobeTransitionHandler(IGlobeExpander globeExpander)
+        {
+            _globeExpander = globeExpander ?? throw new ArgumentNullException(nameof(globeExpander));
+        }
+
+        public async Task ProcessAsync(IGlobe globe, IActor actor, RoomTransition transition)
+        {
+            if (globe is null)
+            {
+                throw new ArgumentNullException(nameof(globe));
+            }
+
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            if (transition is null)
+            {
+                throw new ArgumentNullException(nameof(transition));
+            }
+
+            var sectorNode = transition.SectorNode;
+
+            //TODO Разобраться с этим кодом.
+            // https://blog.cdemi.io/async-waiting-inside-c-sharp-locks/
+            //Asynchronously wait to enter the Semaphore. If no-one has been granted access to the Semaphore, code execution will proceed, otherwise this thread waits here until the semaphore is released 
+#pragma warning disable CA2007 // Consider calling ConfigureAwait on the awaited task
+            await _semaphoreSlim.WaitAsync();
+#pragma warning restore CA2007 // Consider calling ConfigureAwait on the awaited task
+            try
+            {
+                if (sectorNode.State != SectorNodeState.SectorMaterialized)
+                {
+                    await _globeExpander.ExpandAsync(sectorNode).ConfigureAwait(false);
+                }
+            }
+            finally
+            {
+                //When the task is ready, release the semaphore. It is vital to ALWAYS release the semaphore when we are ready, or else we will end up with a Semaphore that is forever locked.
+                //This is why it is important to do the Release within a try...finally clause; program execution may crash or take a different path, this way you are guaranteed execution
+                _semaphoreSlim.Release();
+            }
+
+            var sector = sectorNode.Sector;
+            sector.ActorManager.Remove(actor);
+
+            var nodeForTransition = sector.Map.Transitions.First(x => x.Value.SectorNode == sectorNode).Key;
+            var actorInNewSector = new Actor(actor.Person, actor.TaskSource, nodeForTransition);
+            sector.ActorManager.Add(actorInNewSector);
+        }
+    }
+
     public sealed class Globe : IGlobe
     {
         private int _turnCounter;
@@ -33,18 +100,33 @@ namespace Zilon.Core.World
         private readonly IList<ISectorNode> _sectorNodes;
 
         private readonly ConcurrentDictionary<IActor, TaskState> _taskDict;
+        private readonly IGlobeTransitionHandler _globeTransitionHandler;
 
         public IEnumerable<ISectorNode> SectorNodes { get => _sectorNodes; }
 
-        public Globe()
+        public Globe(IGlobeTransitionHandler globeTransitionHandler)
         {
             _taskDict = new ConcurrentDictionary<IActor, TaskState>();
+
             _sectorNodes = new List<ISectorNode>();
+
+            _globeTransitionHandler = globeTransitionHandler ?? throw new ArgumentNullException(nameof(globeTransitionHandler));
         }
 
         public void AddSectorNode(ISectorNode sectorNode)
         {
+            if (sectorNode is null)
+            {
+                throw new ArgumentNullException(nameof(sectorNode));
+            }
+
             _sectorNodes.Add(sectorNode);
+            sectorNode.Sector.TrasitionUsed += Sector_TrasitionUsed;
+        }
+
+        private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)
+        {
+            await _globeTransitionHandler.ProcessAsync(this, e.Actor, e.Transition).ConfigureAwait(false);
         }
 
         public async Task UpdateAsync()
@@ -167,7 +249,34 @@ namespace Zilon.Core.World
         Task<IEnumerable<IPerson>> CreateStartPersonsAsync();
     }
 
-    public sealed class HumanPersonInitializer: 
+    public sealed class HumanPersonInitializer : IPersonInitializer
+    {
+        private readonly IPersonFactory _personFactory;
+        private readonly IPlayer _player;
+
+        public HumanPersonInitializer(IPersonFactory personFactory, IPlayer player)
+        {
+            _personFactory = personFactory ?? throw new ArgumentNullException(nameof(personFactory));
+            _player = player ?? throw new ArgumentNullException(nameof(player));
+        }
+
+        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync()
+        {
+            var person = CreateStartPerson("human-person", _personFactory, Fractions.MainPersonFraction);
+            _player.MainPerson = person;
+            return Task.FromResult(new[] { person }.AsEnumerable());
+        }
+
+        /// <summary>
+        /// Создаёт персонажа.
+        /// </summary>
+        /// <returns> Возвращает созданного персонажа. </returns>
+        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory, IFraction fraction)
+        {
+            var startPerson = personFactory.Create(personSchemeSid, fraction);
+            return startPerson;
+        }
+    }
 
     public sealed class AutoPersonInitializer : IPersonInitializer
     {
@@ -208,17 +317,20 @@ namespace Zilon.Core.World
     public sealed class GlobeInitializer : IGlobeInitializer
     {
         private readonly IBiomeInitializer _biomeInitializer;
+        private readonly IGlobeTransitionHandler _globeTransitionHandler;
         private readonly ISchemeService _schemeService;
         private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
         private readonly IPersonInitializer _personInitializer;
 
         public GlobeInitializer(
             IBiomeInitializer biomeInitializer,
+            IGlobeTransitionHandler globeTransitionHandler,
             ISchemeService schemeService,
             IActorTaskSource<ISectorTaskSourceContext> actorTaskSource,
             IPersonInitializer personInitializer)
         {
             _biomeInitializer = biomeInitializer;
+            _globeTransitionHandler = globeTransitionHandler;
             _schemeService = schemeService;
             _actorTaskSource = actorTaskSource;
             _personInitializer = personInitializer;
@@ -226,7 +338,7 @@ namespace Zilon.Core.World
 
         public async Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid)
         {
-            var globe = new Globe();
+            var globe = new Globe(_globeTransitionHandler);
 
             var startLocation = _schemeService.GetScheme<ILocationScheme>(startLocationSchemeSid);
             var startBiom = await _biomeInitializer.InitBiomeAsync(startLocation).ConfigureAwait(false);
@@ -247,7 +359,7 @@ namespace Zilon.Core.World
                     .Nodes
                     .Skip(personCounter)
                     .First();
-                var actor = CreateHumanActor(person, startNode, _actorTaskSource);
+                var actor = CreateActor(person, startNode, _actorTaskSource);
 
                 sector.ActorManager.Add(actor);
                 personCounter++;
@@ -256,7 +368,7 @@ namespace Zilon.Core.World
             return globe;
         }
 
-        private static IActor CreateHumanActor(
+        private static IActor CreateActor(
             IPerson humanPerson,
             Graphs.IGraphNode startNode,
             IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)

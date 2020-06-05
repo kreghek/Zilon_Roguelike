@@ -20,8 +20,6 @@ namespace Zilon.Emulation.Common
     {
         private const int ITERATION_LIMIT = 40_000_000;
 
-        private bool _changeSector;
-
         protected IServiceScope ServiceScope { get; set; }
 
         protected BotSettings BotSettings { get; }
@@ -42,28 +40,15 @@ namespace Zilon.Emulation.Common
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
             var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
 
-            var sector = globe.SectorNodes.First().Sector;
-
-            var humanActor = await CreateSectorAsync(humanPerson, serviceProvider).ConfigureAwait(false);
-            var botActorTaskSource = serviceProvider.GetRequiredService<T>();
-            botActorTaskSource.Configure(BotSettings);
+            var player = serviceProvider.GetRequiredService<IPlayer>();
+            var followedPerson = player.MainPerson;
 
             var iterationCounter = 1;
-            while (!humanActor.Person.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
+            while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
             {
                 try
                 {
                     await globe.UpdateAsync().ConfigureAwait(false);
-
-                    if (_changeSector)
-                    {
-                        humanActor = await CreateSectorAsync(humanPerson, serviceProvider).ConfigureAwait(false);
-
-                        botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
-                        botActorTaskSource.Configure(BotSettings);
-
-                        _changeSector = false;
-                    }
                 }
                 catch (ActorTaskExecutionException exception)
                 {
@@ -92,74 +77,7 @@ namespace Zilon.Emulation.Common
 
         protected abstract void ProcessEnd();
 
-        private static IActor CreateHumanActor(
-            ISector sector,
-            IPlayer humanPlayer,
-            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource,
-            IPerson humanPerson,
-            IPlayerEventLogService playerEventLogService)
-        {
-            var playerActorStartNode = sector.Map.Regions
-                .SingleOrDefault(x => x.IsStart)
-                .Nodes
-                .First();
-
-            humanPlayer.MainPerson = humanPerson;
-
-            var actor = new Actor(humanPerson, actorTaskSource, playerActorStartNode);
-
-            playerEventLogService.Actor = actor;
-
-            sector.ActorManager.Add(actor);
-
-            return actor;
-        }
-
-        private async Task<IActor> CreateSectorAsync(IPerson startPerson, IServiceProvider _globalServiceProvider)
-        {
-            if (ServiceScope != null)
-            {
-                ServiceScope.Dispose();
-                ServiceScope = null;
-            }
-
-            ServiceScope = _globalServiceProvider.CreateScope();
-
-            ConfigBotAux();
-
-            var humanPlayer = _globalServiceProvider.GetRequiredService<HumanPlayer>();
-            var scoreManager = _globalServiceProvider.GetRequiredService<IScoreManager>();
-
-            var playerEventLogService = ServiceScope.ServiceProvider.GetRequiredService<IPlayerEventLogService>();
-            var actorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<HumanBotActorTaskSource<ISectorTaskSourceContext>>();
-
-            await sectorManager.CreateSectorAsync().ConfigureAwait(false);
-
-            sectorManager.CurrentSector.ScoreManager = scoreManager;
-            sectorManager.CurrentSector.HumanGroupExit += CurrentSector_HumanGroupExit;
-
-            var humanActor = CreateHumanActor(humanPlayer,
-                actorTaskSource,
-                startPerson,
-                sectorManager,
-                playerEventLogService);
-
-            return humanActor;
-        }
-
         protected abstract void ConfigBotAux();
-
-        private void CurrentSector_HumanGroupExit(object sender, SectorExitEventArgs e)
-        {
-            ProcessSectorExit();
-            _changeSector = true;
-
-            var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
-            sectorManager.CurrentSector.HumanGroupExit -= CurrentSector_HumanGroupExit;
-
-            var humanPlayer = ServiceScope.ServiceProvider.GetRequiredService<HumanPlayer>();
-            humanPlayer.BindSectorNode(e.Transition.SectorNode);
-        }
 
         protected abstract void ProcessSectorExit();
     }

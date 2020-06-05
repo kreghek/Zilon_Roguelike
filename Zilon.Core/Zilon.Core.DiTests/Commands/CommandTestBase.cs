@@ -38,9 +38,6 @@ namespace Zilon.Core.Tests.Commands
             sectorMock.SetupGet(x => x.Map).Returns(testMap);
             var sector = sectorMock.Object;
 
-            var sectorManagerMock = new Mock<ISectorManager>();
-            sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
-            var sectorManager = sectorManagerMock.Object;
             var simpleAct = CreateSimpleAct();
             var cooldownAct = CreateActWithCooldown();
             var cooldownResolvedAct = CreateActWithResolvedCooldown();
@@ -84,16 +81,11 @@ namespace Zilon.Core.Tests.Commands
             sectorMock.SetupGet(x => x.ActorManager)
                 .Returns(() => ServiceProvider.GetRequiredService<IActorManager>());
 
-            var gameLoopMock = new Mock<IGameLoop>();
-            var gameLoop = gameLoopMock.Object;
-
             var usageServiceMock = new Mock<ITacticalActUsageService>();
             var usageService = usageServiceMock.Object;
 
-            Container.AddSingleton(factory => sectorManager);
             Container.AddSingleton(factory => humanTaskSourceMock);
             Container.AddSingleton(factory => playerState);
-            Container.AddSingleton(factory => gameLoop);
             Container.AddSingleton(factory => usageService);
 
             RegisterSpecificServices(testMap, playerStateMock);

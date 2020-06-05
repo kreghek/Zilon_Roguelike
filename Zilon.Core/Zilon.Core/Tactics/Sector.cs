@@ -35,7 +35,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
-        public event EventHandler<SectorExitEventArgs> HumanGroupExit;
+        public event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
 
         /// <summary>
         /// Карта в основе сектора.
@@ -413,15 +413,15 @@ namespace Zilon.Core.Tactics
             return schemes;
         }
 
-        private void DoActorExit([NotNull] RoomTransition roomTransition)
+        private void DoActorExit([NotNull] IActor actor, [NotNull] RoomTransition roomTransition)
         {
-            var e = new SectorExitEventArgs(roomTransition);
-            HumanGroupExit?.Invoke(this, e);
+            var e = new TransitionUsedEventArgs(actor, roomTransition);
+            TrasitionUsed?.Invoke(this, e);
         }
 
-        public void UseTransition(RoomTransition transition)
+        public void UseTransition(IActor actor, RoomTransition transition)
         {
-            DoActorExit(transition);
+            DoActorExit(actor, transition);
         }
     }
 }

@@ -7,7 +7,21 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.World
 {
-    public class BiomeInitializer : IBiomeInitializer
+    /// <summary>
+    /// Интерфейс расширителя мира.
+    /// Каждый раз, когда кто-нибудь доходит до края мира, мир будет расширяться.
+    /// </summary>
+    public interface IGlobeExpander
+    {
+        /// <summary>
+        /// Расширение мира в указанной узл.
+        /// В результате указанный узел будет материализован и иметь переходы в новые нематериализованные узлы.
+        /// </summary>
+        /// <param name="sectorNode"> Узел расширения. </param>
+        Task ExpandAsync(ISectorNode sectorNode);
+    }
+
+    public class BiomeInitializer : IBiomeInitializer, IGlobeExpander
     {
         private readonly ISectorGenerator _sectorGenerator;
         private readonly IBiomeSchemeRoller _biomeSchemeRoller;
@@ -114,6 +128,11 @@ namespace Zilon.Core.World
 
                 nextBiom.AddEdge(sectorNode, nextSectorNode);
             }
+        }
+
+        public Task ExpandAsync(ISectorNode sectorNode)
+        {
+            return MaterializeLevelAsync(sectorNode);
         }
     }
 }

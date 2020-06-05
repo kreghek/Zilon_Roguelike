@@ -108,7 +108,7 @@ namespace Zilon.Core.Tests.Tactics
             sector.Update();
 
             // ASSERT
-            monitor.Should().NotRaise(nameof(sector.HumanGroupExit));
+            monitor.Should().NotRaise(nameof(sector.TrasitionUsed));
         }
 
         private Mock<IActor> CreateActorMock()
