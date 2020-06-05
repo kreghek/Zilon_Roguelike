@@ -30,7 +30,7 @@ namespace Zilon.Core.World
 
     public interface IGlobeTransitionHandler
     {
-        Task ProcessAsync(IGlobe globe, IActor actor, RoomTransition transition);
+        Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition);
     }
 
     public sealed class GlobeTransitionHandler : IGlobeTransitionHandler
@@ -45,7 +45,7 @@ namespace Zilon.Core.World
             _globeExpander = globeExpander ?? throw new ArgumentNullException(nameof(globeExpander));
         }
 
-        public async Task ProcessAsync(IGlobe globe, IActor actor, RoomTransition transition)
+        public async Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
         {
             if (globe is null)
             {
@@ -84,12 +84,12 @@ namespace Zilon.Core.World
                 _semaphoreSlim.Release();
             }
 
-            var sector = sectorNode.Sector;
             sector.ActorManager.Remove(actor);
 
-            var nodeForTransition = sector.Map.Transitions.First(x => x.Value.SectorNode == sectorNode).Key;
+            var nextSector = sectorNode.Sector;
+            var nodeForTransition = nextSector.Map.Transitions.First(x => x.Value.SectorNode.Sector == sector).Key;
             var actorInNewSector = new Actor(actor.Person, actor.TaskSource, nodeForTransition);
-            sector.ActorManager.Add(actorInNewSector);
+            nextSector.ActorManager.Add(actorInNewSector);
         }
     }
 
@@ -126,7 +126,8 @@ namespace Zilon.Core.World
 
         private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)
         {
-            await _globeTransitionHandler.ProcessAsync(this, e.Actor, e.Transition).ConfigureAwait(false);
+            var sector = (ISector)sender;
+            await _globeTransitionHandler.ProcessAsync(this, sector, e.Actor, e.Transition).ConfigureAwait(false);
         }
 
         public async Task UpdateAsync()
@@ -153,8 +154,15 @@ namespace Zilon.Core.World
             foreach (var sectorNode in _sectorNodes)
             {
                 var sector = sectorNode.Sector;
-                foreach (var actor in sector.ActorManager.Items)
+                foreach (var actor in sector.ActorManager.Items.ToArray())
                 {
+                    if (!sector.ActorManager.Items.Contains(actor))
+                    {
+                        // Это может произойти, когда в процессе исполнения задач,
+                        // актёр вышел из сектора. Соответственно, его уже нет в списке актёров сектора.
+                        continue;
+                    }
+
                     if (_taskDict.TryGetValue(actor, out _))
                     {
                         continue;

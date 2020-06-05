@@ -11,7 +11,7 @@ namespace Zilon.Core.Props
     /// </summary>
     public abstract class PropStoreBase : IPropStore
     {
-        protected readonly HashSet<IProp> Items;
+        protected HashSet<IProp> Items { get; }
 
         public event EventHandler<PropStoreEventArgs> Added;
         public event EventHandler<PropStoreEventArgs> Removed;
@@ -155,6 +155,38 @@ namespace Zilon.Core.Props
                 currentResource.Count -= resource.Count;
                 DoChangedProp(currentResource);
             }
+        }
+
+        public bool Has(IProp prop)
+        {
+            switch (prop)
+            {
+                case Equipment equipment:
+                    return HasEquipment(equipment);
+
+                case Resource resource:
+                    return HasResource(resource);
+
+                case Concept concept:
+                    return HasConcept(concept);
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        private bool HasConcept(Concept concept)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool HasResource(Resource resource)
+        {
+            return Items.OfType<Resource>().Any(x => x.Scheme.Sid == resource.Scheme.Sid && x.Count >= resource.Count);
+        }
+
+        private bool HasEquipment(Equipment equipment)
+        {
+            return Items.Contains(equipment);
         }
     }
 }

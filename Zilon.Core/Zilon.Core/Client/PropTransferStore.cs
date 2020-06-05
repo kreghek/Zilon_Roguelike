@@ -272,5 +272,12 @@ namespace Zilon.Core.Client
 
             oppositList.Add(prop);
         }
+
+        public bool Has(IProp prop)
+        {
+            //TODO Неправильная реализация
+            // Не учитывает списки добавленных и удалённых предметов.
+            return PropStore.Has(prop);
+        }
     }
 }
