@@ -42,6 +42,15 @@ namespace Zilon.Core.Persons
     public interface IFraction
     {
         string Name { get; }
+
+        FractionRelation GetRelation(IFraction targetFraction);
+    }
+
+    public enum FractionRelation
+    { 
+        Undefined = 0,
+        Neutral,
+        Enemy
     }
 
     public sealed class Fraction : IFraction
@@ -52,6 +61,27 @@ namespace Zilon.Core.Persons
         }
 
         public string Name { get; }
+
+        public FractionRelation GetRelation(IFraction targetFraction)
+        {
+            if (this == Fractions.MonsterFraction && targetFraction != Fractions.MonsterFraction)
+            {
+                // Фракция монстров нападает на всех, кроме монстров.
+                // У монстров нет друзей.
+                return FractionRelation.Enemy;
+            }
+            else if (this != Fractions.MonsterFraction && targetFraction == Fractions.MonsterFraction)
+            {
+                // С монтсрами никто не дружит.
+                // Все фракции считают их врагами.
+                return FractionRelation.Enemy;
+            }
+            else
+            {
+                // Все фракции, кроме монстров, друг к другу относятся нейтрально.
+                return FractionRelation.Neutral;
+            }
+        }
     }
 
     public static class Fractions
