@@ -78,6 +78,7 @@ namespace Zilon.Core.Specs.Contexts
         private ServiceCollection RegisterServices()
         {
             var serviceCollection = new ServiceCollection();
+            RegisterGlobeInitializationServices(serviceCollection);
             RegisterSchemeService(serviceCollection);
             RegisterSectorService(serviceCollection);
             RegisterAuxServices(serviceCollection);
@@ -85,6 +86,18 @@ namespace Zilon.Core.Specs.Contexts
             RegisterClientServices(serviceCollection);
             RegisterCommands(serviceCollection);
             return serviceCollection;
+        }
+
+        private void RegisterGlobeInitializationServices(ServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
+            serviceCollection.AddSingleton<IBiomeInitializer, BiomeInitializer>();
+            serviceCollection.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
+            serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
+            serviceCollection.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
+            serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider => {
+                return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
+            });
         }
 
         private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
@@ -114,7 +127,7 @@ namespace Zilon.Core.Specs.Contexts
             });
 
             var globeInitialzer = ServiceProvider.GetRequiredService<IGlobeInitializer>();
-            var globe = await globeInitialzer.CreateGlobeAsync(string.Empty).ConfigureAwait(false);
+            var globe = await globeInitialzer.CreateGlobeAsync("intro").ConfigureAwait(false);
             Globe = globe;
 
             var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
@@ -443,6 +456,7 @@ namespace Zilon.Core.Specs.Contexts
         private static void RegisterPlayerServices(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
+            serviceCollection.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanBotActorTaskSource<ISectorTaskSourceContext>>();
             serviceCollection.AddSingleton<IHumanActorTaskSource<ISectorTaskSourceContext>, HumanActorTaskSource<ISectorTaskSourceContext>>();
             serviceCollection.AddSingleton<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
             serviceCollection.AddSingleton<IActorTaskSourceCollector>(serviceProvider =>

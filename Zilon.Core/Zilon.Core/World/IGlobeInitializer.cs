@@ -363,7 +363,6 @@ namespace Zilon.Core.World
             var startPersons = await _personInitializer.CreateStartPersonsAsync().ConfigureAwait(false);
 
             var sector = startSectorNode.Sector;
-            var startPilgrimFraction = new Fraction("Pilgrims");
             var personCounter = 0;
             foreach (var person in startPersons)
             {
