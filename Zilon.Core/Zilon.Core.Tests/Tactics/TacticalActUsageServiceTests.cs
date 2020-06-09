@@ -269,9 +269,6 @@ namespace Zilon.Core.Tests.Tactics
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             _act = actMock.Object;
 
-            var sectorManagerMock = new Mock<ISectorManager>();
-            var sectorManager = sectorManagerMock.Object;
-
             var map = await SquareMapFactory.CreateAsync(3).ConfigureAwait(false);
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);
@@ -280,9 +277,6 @@ namespace Zilon.Core.Tests.Tactics
 
         private ISector CreateSectorManagerWithWall()
         {
-            var sectorManagerMock = new Mock<ISectorManager>();
-            var sectorManager = sectorManagerMock.Object;
-
             var mapMock = new Mock<ISectorMap>();
             mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
                 .Returns(false);
