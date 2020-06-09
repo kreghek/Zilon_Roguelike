@@ -45,9 +45,23 @@ namespace Zilon.Emulation.Common
             RegisterPlayerServices(serviceCollection);
 
             RegisterSectorServices(serviceCollection);
+
+            RegisterGlobeInitializationServices(serviceCollection);
         }
 
         public abstract void ConfigureAux(IServiceProvider serviceFactory);
+
+        private void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
+            serviceCollection.AddSingleton<IBiomeInitializer, BiomeInitializer>();
+            serviceCollection.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
+            serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
+            serviceCollection.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
+            serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider => {
+                return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
+            });
+        }
 
         protected virtual void RegisterMonsterGeneratorRandomSource(IServiceCollection serviceRegistry)
         {

@@ -88,7 +88,7 @@ namespace Zilon.Core.Specs.Contexts
             return serviceCollection;
         }
 
-        private void RegisterGlobeInitializationServices(ServiceCollection serviceCollection)
+        private void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
             serviceCollection.AddSingleton<IBiomeInitializer, BiomeInitializer>();
