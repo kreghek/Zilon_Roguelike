@@ -3,14 +3,11 @@ using System.Linq;
 
 using BenchmarkDotNet.Attributes;
 
-using JetBrains.Annotations;
-
 using Microsoft.Extensions.DependencyInjection;
+
 using Zilon.Core.Benchmark;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Graphs;
-using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
@@ -29,7 +26,7 @@ namespace Zilon.Core.Benchmarks.Move
         [Benchmark(Description = "Move100")]
         public void Move100()
         {
-            var sectorManager = _serviceProvider.GetRequiredService<ISectorManager>();
+            var player = _serviceProvider.GetRequiredService<IPlayer>();
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var moveCommand = _serviceProvider.GetRequiredService<MoveCommand>();
             var commandManger = _serviceProvider.GetRequiredService<ICommandManager>();
@@ -37,7 +34,7 @@ namespace Zilon.Core.Benchmarks.Move
             for (var i = 0; i < 100; i++)
             {
                 var currentActorNode = playerState.ActiveActor.Actor.Node;
-                var nextNodes = sectorManager.CurrentSector.Map.GetNext(currentActorNode);
+                var nextNodes = player.SectorNode.Sector.Map.GetNext(currentActorNode);
                 var moveTargetNode = (HexNode)nextNodes.First();
 
                 playerState.SelectedViewModel = new TestNodeViewModel
@@ -67,15 +64,16 @@ namespace Zilon.Core.Benchmarks.Move
         [Benchmark(Description = "Move1")]
         public void Move1()
         {
-            var sectorManager = _serviceProvider.GetRequiredService<ISectorManager>();
+            var player = _serviceProvider.GetRequiredService<IPlayer>();
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var moveCommand = _serviceProvider.GetRequiredService<MoveCommand>();
             var commandManger = _serviceProvider.GetRequiredService<ICommandManager>();
 
+            var sector = player.SectorNode.Sector;
             for (var i = 0; i < 1; i++)
             {
                 var currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
-                var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sectorManager.CurrentSector.Map.Nodes.Cast<HexNode>());
+                var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sector.Map.Nodes.Cast<HexNode>());
                 var moveTargetNode = nextNodes.First();
 
                 playerState.SelectedViewModel = new TestNodeViewModel
@@ -111,10 +109,9 @@ namespace Zilon.Core.Benchmarks.Move
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var sectorManager = _serviceProvider.GetRequiredService<ISectorManager>();
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
-            var humanPlayer = _serviceProvider.GetRequiredService<HumanPlayer>();
+            var humanPlayer = _serviceProvider.GetRequiredService<IPlayer>();
             var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
             var humanActorTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
@@ -140,11 +137,9 @@ namespace Zilon.Core.Benchmarks.Move
 
             humanPlayer.BindSectorNode(sectorNode);
 
-            sectorManager.CreateSectorAsync().Wait();
-
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
+            var playerActorStartNode = humanPlayer.SectorNode.Sector.Map.Regions
                 .SingleOrDefault(x => x.IsStart).Nodes
                 .First();
 
