@@ -33,7 +33,7 @@ namespace Zilon.Bot.Players.Triggers
                 throw new System.ArgumentNullException(nameof(strategyData));
             }
 
-            var hazardEffect = actor.Person.GetModuleSafe<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>()
+            var hazardEffect = actor.Person.GetModuleSafe<IEffectsModule>()?.Items?.OfType<SurvivalStatHazardEffect>()
                .SingleOrDefault(x => x.Type == SurvivalStatType.Hydration);
             if (hazardEffect == null)
             {

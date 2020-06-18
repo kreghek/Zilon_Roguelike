@@ -266,13 +266,11 @@ namespace Zilon.Core.World
     {
         private readonly IPersonFactory _personFactory;
         private readonly IPlayer _player;
-        private readonly IPlayerEventLogService _playerEventLogService;
 
-        public HumanPersonInitializer(IPersonFactory personFactory, IPlayer player, IPlayerEventLogService playerEventLogService)
+        public HumanPersonInitializer(IPersonFactory personFactory, IPlayer player)
         {
             _personFactory = personFactory ?? throw new ArgumentNullException(nameof(personFactory));
             _player = player ?? throw new ArgumentNullException(nameof(player));
-            _playerEventLogService = playerEventLogService;
         }
 
         public Task<IEnumerable<IPerson>> CreateStartPersonsAsync()
