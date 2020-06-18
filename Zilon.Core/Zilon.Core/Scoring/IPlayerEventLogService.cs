@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Tactics;
+﻿using Zilon.Core.Persons;
+using Zilon.Core.Players;
 
 namespace Zilon.Core.Scoring
 {
@@ -13,10 +14,7 @@ namespace Zilon.Core.Scoring
         /// <param name="playerEvent"></param>
         void Log(IPlayerEvent playerEvent);
 
-        /// <summary>
-        /// Актёр игрока.
-        /// </summary>
-        IActor Actor { get; set; }
+        IPlayer Player { get; }
 
         /// <summary>
         /// Вернуть последнее зарегистрированние событие.

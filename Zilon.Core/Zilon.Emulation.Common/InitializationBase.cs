@@ -213,7 +213,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
-            container.AddSingleton<RandomHumanPersonFactory>();
+            container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
             container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider=> {
                 var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
                 factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();

@@ -9,10 +9,12 @@ using NUnit.Framework;
 using Zilon.Bot.Sdk;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
@@ -35,13 +37,20 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             var botSettings = new BotSettings { Mode = mode };
 
-            var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource<ISectorTaskSourceContext>>(startUp, botSettings);
+            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
+            var player = serviceProvider.GetRequiredService<IPlayer>();
 
-            var startPerson = PersonCreateHelper.CreateStartPerson(serviceProvider, Fractions.MainPersonFraction);
+            var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource<ISectorTaskSourceContext>>(
+                startUp,
+                botSettings,
+                globeInitializer);
 
-            PrintPersonBacklog(startPerson);
+            var globe = await autoPlayEngine.CreateGlobeAsync().ConfigureAwait(false);
+            var followedPerson = player.MainPerson;
 
-            await autoPlayEngine.StartAsync(startPerson, serviceProvider).ConfigureAwait(false);
+            PrintPersonBacklog(followedPerson);
+
+            await autoPlayEngine.StartAsync(globe, followedPerson).ConfigureAwait(false);
 
             PrintResult(serviceProvider);
         }

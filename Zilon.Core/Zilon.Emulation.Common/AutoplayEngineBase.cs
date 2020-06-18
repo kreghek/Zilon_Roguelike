@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using Zilon.Bot.Players;
 using Zilon.Bot.Sdk;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
-using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
@@ -19,30 +15,29 @@ namespace Zilon.Emulation.Common
     public abstract class AutoplayEngineBase<T> where T : IPluggableActorTaskSource<ISectorTaskSourceContext>
     {
         private const int ITERATION_LIMIT = 40_000_000;
+        private readonly IGlobeInitializer _globeInitializer;
 
         protected IServiceScope ServiceScope { get; set; }
 
         protected BotSettings BotSettings { get; }
 
-        protected AutoplayEngineBase(BotSettings botSettings)
+        protected AutoplayEngineBase(BotSettings botSettings,
+            IGlobeInitializer globeInitializer)
         {
             BotSettings = botSettings;
+            _globeInitializer = globeInitializer;
         }
 
-        public async Task StartAsync(IPerson humanPerson, IServiceProvider serviceProvider)
+        public async Task<IGlobe> CreateGlobeAsync()
         {
-            if (serviceProvider is null)
-            {
-                throw new ArgumentNullException(nameof(serviceProvider));
-            }
-
             // Create globe
-            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
+            var globeInitializer = _globeInitializer;
             var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
+            return globe;
+        }
 
-            var player = serviceProvider.GetRequiredService<IPlayer>();
-            var followedPerson = player.MainPerson;
-
+        public async Task StartAsync(IGlobe globe, IPerson followedPerson)
+        {
             var iterationCounter = 1;
             while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
             {

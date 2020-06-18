@@ -9,6 +9,7 @@ using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -265,11 +266,13 @@ namespace Zilon.Core.World
     {
         private readonly IPersonFactory _personFactory;
         private readonly IPlayer _player;
+        private readonly IPlayerEventLogService _playerEventLogService;
 
-        public HumanPersonInitializer(IPersonFactory personFactory, IPlayer player)
+        public HumanPersonInitializer(IPersonFactory personFactory, IPlayer player, IPlayerEventLogService playerEventLogService)
         {
             _personFactory = personFactory ?? throw new ArgumentNullException(nameof(personFactory));
             _player = player ?? throw new ArgumentNullException(nameof(player));
+            _playerEventLogService = playerEventLogService;
         }
 
         public Task<IEnumerable<IPerson>> CreateStartPersonsAsync()

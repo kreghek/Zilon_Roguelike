@@ -3,6 +3,7 @@
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
@@ -11,7 +12,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
     {
         private readonly Startup _startup;
 
-        public AutoplayEngine(Startup startup, BotSettings botSettings) : base(botSettings)
+        public AutoplayEngine(Startup startup, BotSettings botSettings, IGlobeInitializer globeInitializer) : base(botSettings, globeInitializer)
         {
             _startup = startup;
         }
