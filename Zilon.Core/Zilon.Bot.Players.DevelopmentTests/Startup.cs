@@ -6,6 +6,7 @@ using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Players;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Emulation.Common;
 
@@ -29,6 +30,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             serviceProvider.GetRequiredService<HumanBotActorTaskSource<ISectorTaskSourceContext>>());
 
             container.AddSingleton<IPlayer, HumanPlayer>();
+            container.AddSingleton<IScoreManager, ScoreManager>();
         }
     }
 }

@@ -135,7 +135,14 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IResourceMaterializationMap, ResourceMaterializationMap>();
             RegisterMonsterGeneratorRandomSource(container);
             RegisterChestGeneratorRandomSource(container);
-            container.AddScoped<ISectorFactory, SectorFactory>();
+            container.AddScoped<SectorFactory>();  // TOOD Костфль, чтобы не заполнять конструктор сервиса руками. 
+            container.AddScoped<ISectorFactory, SectorFactory>(serviceProvider =>
+            {
+                var sectorFactory = serviceProvider.GetRequiredService<SectorFactory>();
+                var scoreManager = serviceProvider.GetService<IScoreManager>();
+                sectorFactory.ScoreManager = scoreManager;
+                return sectorFactory;
+            });
             RegisterActUsageServices(container);
             container.AddScoped<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
             container.AddScoped<IActorTaskSourceCollector, ActorTaskSourceCollector>(serviceProvider =>
