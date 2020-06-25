@@ -325,7 +325,7 @@ MonoBehaviour:
     type: 3}
   GunShootTracer: {fileID: 2410495921235558811, guid: 8641df7d305826c4cbc9c7f91dfe37b7,
     type: 3}
-  HumanoidGraphicPrefab: {fileID: 114666758840654916, guid: 7f822e7910e8df74ebd825ddc939cc9c,
+  HumanoidGraphicPrefab: {fileID: 7924592001262659243, guid: feb383b8be7292140a1263a1233e6c32,
     type: 3}
   MonoGraphicPrefab: {fileID: 114996966571026226, guid: 922e148277128b8438390520a146d41a,
     type: 3}
@@ -3112,7 +3112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ActorPrefab: {fileID: 114531107507698972, guid: 80a421927c97aa74dafb7098a38e3afc,
     type: 3}
-  HumanoidGraphicPrefab: {fileID: 114666758840654916, guid: 7f822e7910e8df74ebd825ddc939cc9c,
+  HumanoidGraphicPrefab: {fileID: 7924592001262659243, guid: feb383b8be7292140a1263a1233e6c32,
     type: 3}
 --- !u!1 &1239344730
 GameObject:

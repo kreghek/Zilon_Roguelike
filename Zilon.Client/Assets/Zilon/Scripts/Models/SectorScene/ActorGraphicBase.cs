@@ -60,7 +60,7 @@ public class ActorGraphicBase : MonoBehaviour
         Animator.Play("HumanoidDeath");
     }
 
-    private void RotateTo(Vector3 targetPosition)
+    protected void RotateTo(Vector3 targetPosition)
     {
         var direction = transform.position - targetPosition;
         if (direction.x >= 0)

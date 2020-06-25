@@ -28,7 +28,7 @@ public class PlayerPersonInitiator : MonoBehaviour
     public ActorViewModel ActorPrefab;
 
     [NotNull]
-    public HumanoidActorGraphic HumanoidGraphicPrefab;
+    public ActorGraphicBase HumanoidGraphicPrefab;
 
     [NotNull]
     [Inject]

@@ -49,7 +49,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] public GunShootTracer GunShootTracer;
 
-    [NotNull] public HumanoidActorGraphic HumanoidGraphicPrefab;
+    [NotNull] public ActorGraphicBase HumanoidGraphicPrefab;
 
     [NotNull] public MonoActorGraphic MonoGraphicPrefab;
 
