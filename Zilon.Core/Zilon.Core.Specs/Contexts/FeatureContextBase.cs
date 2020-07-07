@@ -40,27 +40,25 @@ namespace Zilon.Core.Specs.Contexts
 {
     public abstract class FeatureContextBase
     {
-        private ITacticalActUsageRandomSource _specificActUsageRandomSource;
-
         public IServiceProvider ServiceProvider { get; }
 
         public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
-
+        public RegisterServices RegisterServices { get; private set; }
         public IGlobe Globe { get; private set; }
 
         protected FeatureContextBase()
         {
             RaisedActorInteractionEvents = new List<IActorInteractionEvent>();
 
-            var serviceCollection = RegisterServices();
+            RegisterServices = new RegisterServices();
+            var serviceProvider = RegisterServices.Register();
 
-            var serviceProvider = serviceCollection.BuildServiceProvider();
             ServiceProvider = serviceProvider;
 
             ConfigureServices(serviceProvider);
         }
 
-        private void ConfigureServices(ServiceProvider serviceProvider)
+        private void ConfigureServices(IServiceProvider serviceProvider)
         {
             InitClientServices();
 
@@ -69,35 +67,10 @@ namespace Zilon.Core.Specs.Contexts
             RegisterManager.ConfigureAuxServices(serviceProvider);
         }
 
-        private void ConfigureEventBus(ServiceProvider serviceProvider)
+        private void ConfigureEventBus(IServiceProvider serviceProvider)
         {
             var eventMessageBus = serviceProvider.GetRequiredService<IActorInteractionBus>();
             eventMessageBus.NewEvent += EventMessageBus_NewEvent;
-        }
-
-        private ServiceCollection RegisterServices()
-        {
-            var serviceCollection = new ServiceCollection();
-            RegisterGlobeInitializationServices(serviceCollection);
-            RegisterSchemeService(serviceCollection);
-            RegisterSectorService(serviceCollection);
-            RegisterAuxServices(serviceCollection);
-            RegisterPlayerServices(serviceCollection);
-            RegisterClientServices(serviceCollection);
-            RegisterCommands(serviceCollection);
-            return serviceCollection;
-        }
-
-        private void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
-            serviceCollection.AddSingleton<IBiomeInitializer, BiomeInitializer>();
-            serviceCollection.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
-            serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
-            serviceCollection.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
-            serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider => {
-                return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
-            });
         }
 
         private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
@@ -190,6 +163,7 @@ namespace Zilon.Core.Specs.Contexts
             // Подготовка актёров
             var humanStartNode = sector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
             var humanActor = CreateHumanActor(personSid, humanStartNode, perkResolver);
+            humanPlayer.MainPerson = humanActor.Person;
 
             humanTaskSource.SwitchActiveActor(humanActor);
 
@@ -270,11 +244,6 @@ namespace Zilon.Core.Specs.Contexts
             return monster;
         }
 
-        public void SpecifyTacticalActUsageRandomSource(ITacticalActUsageRandomSource actUsageRandomSource)
-        {
-            _specificActUsageRandomSource = actUsageRandomSource;
-        }
-
         private IActor CreateHumanActor([NotNull] string personSchemeSid,
             [NotNull] IGraphNode startNode,
             [NotNull] IPerkResolver perkResolver)
@@ -294,178 +263,13 @@ namespace Zilon.Core.Specs.Contexts
         {
             var monsterFactory = ServiceProvider.GetRequiredService<IMonsterPersonFactory>();
 
-            var taskSource = ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
+            var taskSource = ServiceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
 
             var monsterPerson = monsterFactory.Create(monsterScheme);
 
             var actor = new Actor(monsterPerson, taskSource, startNode);
 
             return actor;
-        }
-
-        private static void RegisterSchemeService(ServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<ISchemeLocator>(factory =>
-            {
-                var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
-
-                return schemeLocator;
-            });
-
-            serviceCollection.AddSingleton<ISchemeService, SchemeService>();
-
-            serviceCollection.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
-        }
-
-        private static void RegisterSectorService(ServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<IMapFactory, FuncMapFactory>();
-            serviceCollection.AddSingleton<ISectorGenerator, TestEmptySectorGenerator>();
-            serviceCollection.AddSingleton<IRoomGenerator, RoomGenerator>();
-            serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
-            serviceCollection.AddSingleton<IActorInteractionBus, ActorInteractionBus>();
-            serviceCollection.AddSingleton<IPersonFactory, TestEmptyPersonFactory>();
-            serviceCollection.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
-        }
-
-        /// <summary>
-        /// Подготовка дополнительных сервисов
-        /// </summary>
-        private void RegisterAuxServices(IServiceCollection serviceCollection)
-        {
-            var dice = new LinearDice(123);
-            serviceCollection.AddSingleton<IDice>(factory => dice);
-
-            var decisionSourceMock = new Mock<DecisionSource>(dice).As<IDecisionSource>();
-            decisionSourceMock.CallBase = true;
-            var decisionSource = decisionSourceMock.Object;
-
-            serviceCollection.AddSingleton(factory => decisionSource);
-            serviceCollection.AddSingleton(factory => CreateActUsageRandomSource(dice));
-
-            serviceCollection.AddSingleton<IPerkResolver, PerkResolver>();
-            RegisterActUsageServices(serviceCollection);
-
-            serviceCollection.AddSingleton<IPropFactory, PropFactory>();
-            serviceCollection.AddSingleton<IDropResolver, DropResolver>();
-            serviceCollection.AddSingleton<IDropResolverRandomSource, DropResolverRandomSource>();
-            serviceCollection.AddSingleton(factory => CreateSurvivalRandomSource());
-
-            serviceCollection.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
-            serviceCollection.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
-
-            serviceCollection.AddSingleton<IUserTimeProvider, UserTimeProvider>();
-        }
-
-        private static void RegisterActUsageServices(IServiceCollection container)
-        {
-            container.AddScoped<IActUsageHandlerSelector>(serviceProvider =>
-            {
-                var handlers = serviceProvider.GetServices<IActUsageHandler>();
-                var handlersArray = handlers.ToArray();
-                var handlerSelector = new ActUsageHandlerSelector(handlersArray);
-                return handlerSelector;
-            });
-            container.AddScoped<IActUsageHandler>(serviceProvider =>
-            {
-                var perkResolver = serviceProvider.GetRequiredService<IPerkResolver>();
-                var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
-                var handler = new ActorActUsageHandler(perkResolver, randomSource);
-                ConfigurateActorActUsageHandler(serviceProvider, handler);
-                return handler;
-            });
-            container.AddScoped<IActUsageHandler, StaticObjectActUsageHandler>();
-            container.AddScoped<ITacticalActUsageService>(serviceProvider =>
-            {
-                var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
-                var actHandlerSelector = serviceProvider.GetRequiredService<IActUsageHandlerSelector>();
-
-                var tacticalActUsageService = new TacticalActUsageService(randomSource, actHandlerSelector);
-
-                ConfigurateTacticalActUsageService(serviceProvider, tacticalActUsageService);
-
-                return tacticalActUsageService;
-            });
-        }
-
-        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider, TacticalActUsageService tacticalActUsageService)
-        {
-            // Указание необязательных зависимостей
-            tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
-        }
-
-        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider, ActorActUsageHandler handler)
-        {
-            // Указание необязательных зависимостей
-            handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
-
-            handler.ActorInteractionBus = serviceProvider.GetService<IActorInteractionBus>();
-
-            handler.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
-
-            handler.ScoreManager = serviceProvider.GetService<IScoreManager>();
-        }
-
-        private ITacticalActUsageRandomSource CreateActUsageRandomSource(IDice dice)
-        {
-            if (_specificActUsageRandomSource != null)
-            {
-                return _specificActUsageRandomSource;
-            }
-
-            var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
-            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
-                .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);  // Всегда берётся среднее значение среди всех бросков
-            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
-                .Returns(4);
-            actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
-                .Returns(4);
-            var actUsageRandomSource = actUsageRandomSourceMock.Object;
-
-            return actUsageRandomSource;
-        }
-
-        private static ISurvivalRandomSource CreateSurvivalRandomSource()
-        {
-            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
-            var survivalRandomSource = survivalRandomSourceMock.Object;
-
-            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(6);
-            survivalRandomSourceMock.Setup(x => x.RollMaxHazardDamage()).Returns(6);
-
-            return survivalRandomSource;
-        }
-
-        private static void RegisterClientServices(ServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<ISectorUiState, SectorUiState>();
-            serviceCollection.AddSingleton<IInventoryState, InventoryState>();
-        }
-
-        private static void RegisterCommands(ServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<MoveCommand>();
-            serviceCollection.AddSingleton<NextTurnCommand>();
-            serviceCollection.AddSingleton<UseSelfCommand>();
-            serviceCollection.AddSingleton<AttackCommand>();
-
-            serviceCollection.AddTransient<PropTransferCommand>();
-            serviceCollection.AddTransient<EquipCommand>();
-        }
-
-        private static void RegisterPlayerServices(ServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
-            serviceCollection.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanBotActorTaskSource<ISectorTaskSourceContext>>();
-            serviceCollection.AddSingleton<IHumanActorTaskSource<ISectorTaskSourceContext>, HumanActorTaskSource<ISectorTaskSourceContext>>();
-            serviceCollection.AddSingleton<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
-            serviceCollection.AddSingleton<IActorTaskSourceCollector>(serviceProvider =>
-            {
-                var humanTaskSource = serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
-                return new ActorTaskSourceCollector(humanTaskSource, monsterTaskSource);
-            });
-            RegisterManager.RegisterBot(serviceCollection);
         }
 
         private void InitClientServices()
