@@ -12,12 +12,14 @@ using Zilon.Core.Components;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.Commands
 {
@@ -37,6 +39,15 @@ namespace Zilon.Core.Tests.Commands
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(testMap);
             var sector = sectorMock.Object;
+
+            var sectorNodeMock = new Mock<ISectorNode>();
+            sectorNodeMock.SetupGet(x => x.Sector).Returns(sector);
+            var sectorNode = sectorNodeMock.Object;
+
+            var playerMock = new Mock<IPlayer>();
+            playerMock.SetupGet(x => x.SectorNode).Returns(sectorNode);
+            var player = playerMock.Object;
+            Container.AddSingleton(player);
 
             var simpleAct = CreateSimpleAct();
             var cooldownAct = CreateActWithCooldown();
