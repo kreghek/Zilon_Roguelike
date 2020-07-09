@@ -53,7 +53,7 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode, ISector sector, ISectorMap map)
+        private static MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode, ISector sector, ISectorMap map)
         {
             var targetNodeIsBlockedByObstacles = GetObstableInNode(sector, targetExitNode);
             Debug.Assert(!targetNodeIsBlockedByObstacles,
