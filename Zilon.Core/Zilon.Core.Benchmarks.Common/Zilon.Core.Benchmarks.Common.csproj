@@ -9,7 +9,7 @@
             <ExcludeAssets>runtime; build</ExcludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-            <Version>3.0.0</Version>
+            <Version>3.3.0</Version>
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
