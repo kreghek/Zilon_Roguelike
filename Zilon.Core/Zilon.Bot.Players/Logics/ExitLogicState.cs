@@ -26,6 +26,7 @@ namespace Zilon.Bot.Players.Logics
             var actorNode = actor.Node;
             if (map.Transitions.TryGetValue(actorNode, out var currentTransition))
             {
+                System.Console.WriteLine("trans");
                 sector.UseTransition(actor, currentTransition);
                 Complete = true;
                 return null;

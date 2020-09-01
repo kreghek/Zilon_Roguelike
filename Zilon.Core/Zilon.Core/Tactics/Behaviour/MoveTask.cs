@@ -36,7 +36,9 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var nextNode = _path[0];
 
-            if (_map.IsPositionAvailableFor(nextNode, Actor))
+            var actorCanMove = !Actor.Person.CheckIsDead();
+
+            if (actorCanMove && _map.IsPositionAvailableFor(nextNode, Actor))
             {
                 ReleaseNodes(Actor);
                 Actor.MoveToNode(nextNode);

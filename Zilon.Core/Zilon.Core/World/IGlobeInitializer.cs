@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Zilon.Core.MapGenerators;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
-using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -53,6 +53,11 @@ namespace Zilon.Core.World
                 throw new ArgumentNullException(nameof(globe));
             }
 
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
             if (actor is null)
             {
                 throw new ArgumentNullException(nameof(actor));
@@ -86,7 +91,16 @@ namespace Zilon.Core.World
                 _semaphoreSlim.Release();
             }
 
-            sector.ActorManager.Remove(actor);
+            try
+            {
+                sector.ActorManager.Remove(actor);
+            }
+            catch (InvalidOperationException exception)
+            {
+                // Пока ничего не делаем
+                Console.WriteLine(sector.GetHashCode());
+                Console.WriteLine(actor);
+            }
 
             var nextSector = sectorNode.Sector;
             var nodeForTransition = nextSector.Map.Transitions.First(x => x.Value.SectorNode.Sector == sector).Key;
