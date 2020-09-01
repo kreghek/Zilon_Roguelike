@@ -204,7 +204,14 @@ namespace Zilon.Core.World
         private static void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
         {
             var states = taskDict.Values;
-            foreach (var state in states)
+            // Все актёры еще раз сортируются, чтобы зафиксировать поведение для тестов.
+            // Может быть ситуация, когда найдено одновременно два актёра без задач (в самом начале теста, например).
+            // В этом случае порядок элементов, полученных из states, не фиксирован.
+            // В тестах мжет быть важно, в каком порядке ходят актёры, чтобы корректно обрабатывать коллизии.
+            // Поэтому тут выполняется еще одна сортировка, от которой, по-хорошему нужно избавиться.
+            // Лучше сразу иметь список states с сортировкой по приоритету при добавлении элемента.
+            var orderedStates = states.OrderBy(x => x.Actor.Person.Id);
+            foreach (var state in orderedStates)
             {
                 if (!state.Actor.CanExecuteTasks)
                 {

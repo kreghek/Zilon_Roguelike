@@ -51,6 +51,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
             else
             {
+                // Это может произойти, если кто-то опередил текущего персонажа и занял узел первым.
                 IsComplete = true;
             }
         }

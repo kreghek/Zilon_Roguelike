@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -18,7 +19,6 @@ using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.StaticObjectModules;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tests.Common;
 
@@ -28,6 +28,12 @@ namespace Zilon.Core.Specs.Steps
     [Binding]
     public class CommonSteps : GenericStepsBase<CommonGameActionsContext>
     {
+        /// <summary>
+        /// Количество миллисекунд, которые можно потратить на выполнение быстрой операции.
+        /// Эта константа нужна, чтобы задавать лимит по времени. Чтобы быстрее проваливать тесты, которые "подвисают".
+        /// </summary>
+        private const int TEST_SHORT_OP_LIMIT_MS = 1000;
+
         [UsedImplicitly]
         public CommonSteps(CommonGameActionsContext context) : base(context)
         {
@@ -35,7 +41,7 @@ namespace Zilon.Core.Specs.Steps
 
         [UsedImplicitly]
         [Given(@"Есть карта размером (\d*)")]
-        public async System.Threading.Tasks.Task GivenЕстьКартаРазмеромAsync(int mapSize)
+        public async Task GivenЕстьКартаРазмеромAsync(int mapSize)
         {
             await Context.CreateGlobeAsync(mapSize).ConfigureAwait(false);
         }
@@ -131,9 +137,9 @@ namespace Zilon.Core.Specs.Steps
 
         [UsedImplicitly]
         [When(@"Следующая итерация сектора (\d+) раз")]
-        public async System.Threading.Tasks.Task WhenСледующаяИтерацияСектораAsync(int count)
+        public async Task WhenСледующаяИтерацияСектораAsync(int count)
         {
-            var gameLoop = Context.Globe;
+            var globe = Context.Globe;
             var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
             var counter = count;
@@ -142,7 +148,7 @@ namespace Zilon.Core.Specs.Steps
             while ((!humatTaskSource.CanIntent() && humatTaskSource.ActiveActor != null && survivalModule?.IsDead == false) ||
                 (humatTaskSource.ActiveActor == null && counter > 0))
             {
-                await gameLoop.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
+                await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
                 counter--;
             }
         }
@@ -230,7 +236,7 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [When(@"Жду (.*) единиц времени")]
-        public System.Threading.Tasks.Task WhenЖдуЕдиницВремениAsync(int timeUnitCount)
+        public Task WhenЖдуЕдиницВремениAsync(int timeUnitCount)
         {
             return WhenСледующаяИтерацияСектораAsync(timeUnitCount);
         }
