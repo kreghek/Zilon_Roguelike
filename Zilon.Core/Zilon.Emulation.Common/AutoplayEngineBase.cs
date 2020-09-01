@@ -38,6 +38,16 @@ namespace Zilon.Emulation.Common
 
         public async Task StartAsync(IGlobe globe, IPerson followedPerson)
         {
+            if (globe is null)
+            {
+                throw new ArgumentNullException(nameof(globe));
+            }
+
+            if (followedPerson is null)
+            {
+                throw new ArgumentNullException(nameof(followedPerson));
+            }
+
             var iterationCounter = 1;
             while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
             {

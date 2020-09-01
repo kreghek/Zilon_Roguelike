@@ -10,6 +10,7 @@ using Zilon.Bot.Sdk;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
@@ -32,8 +33,9 @@ namespace Zilon.BotEnvironment
 
         public AutoplayEngine(Startup startup,
             BotSettings botSettings,
-            string scoreFilePreffix
-            ) : base(botSettings)
+            string scoreFilePreffix,
+            IGlobeInitializer globeInitializer
+            ) : base(botSettings, globeInitializer)
         {
             _startup = startup;
             _scoreFilePreffix = scoreFilePreffix;

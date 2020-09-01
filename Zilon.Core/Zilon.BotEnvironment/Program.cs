@@ -11,7 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Bot.Sdk;
 using Zilon.CommonUtilities;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
@@ -37,17 +39,20 @@ namespace Zilon.BotEnvironment
                 Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG)
             };
 
-            var autoPlayEngine = new AutoplayEngine(_startUp, botSettings, scoreFilePreffix);
-
             var serviceProvider = serviceCollection.BuildServiceProvider();
-
             LoadBotAssembly("cdt", "Zilon.Bot.Players.NetCore.dll", serviceCollection, serviceProvider);
+            var serviceProviderWithDynamicBotServices = serviceCollection.BuildServiceProvider();
 
-            serviceProvider = serviceCollection.BuildServiceProvider();
+            var globeInitializer = serviceProviderWithDynamicBotServices.GetRequiredService<IGlobeInitializer>();
 
-            var startPerson = PersonCreateHelper.CreateStartPerson(serviceProvider, Fractions.MainPersonFraction);
+            var autoPlayEngine = new AutoplayEngine(_startUp, botSettings, scoreFilePreffix, globeInitializer);
 
-            await autoPlayEngine.StartAsync(startPerson, serviceProvider);
+            var player = serviceProvider.GetRequiredService<IPlayer>();
+            var startPerson = player.MainPerson;
+
+            var globe = await autoPlayEngine.CreateGlobeAsync();
+
+            await autoPlayEngine.StartAsync(globe, startPerson);
 
             Console.WriteLine(autoPlayEngine.LogOutput);
 
