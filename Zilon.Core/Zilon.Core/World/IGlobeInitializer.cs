@@ -194,7 +194,8 @@ namespace Zilon.Core.World
 
         private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
         {
-            foreach (var actorDataItem in actorDataList)
+            var actorDataListMaterialized = actorDataList.ToArray();
+            foreach (var actorDataItem in actorDataListMaterialized)
             {
                 var actor = actorDataItem.Actor;
                 var sector = actorDataItem.Sector;
@@ -203,6 +204,7 @@ namespace Zilon.Core.World
 
                 var context = new SectorTaskSourceContext(sector);
 
+                //TODO Это можно делать параллельно. Одновременно должны думать сразу все актёры.
                 var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
 
                 var state = new TaskState(actor, actorTask, taskSource);

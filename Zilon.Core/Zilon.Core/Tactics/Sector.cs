@@ -352,7 +352,7 @@ namespace Zilon.Core.Tactics
 
         private void ActorState_Dead(object sender, EventArgs e)
         {
-            var actor = ActorManager.Items.Single(x => x.Person.GetModuleSafe<ISurvivalModule>() == sender);
+            var actor = ActorManager.Items.Single(x => ReferenceEquals(x.Person.GetModuleSafe<ISurvivalModule>(), sender));
             ActorManager.Remove(actor);
 
             if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)

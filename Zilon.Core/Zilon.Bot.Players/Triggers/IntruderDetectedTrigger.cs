@@ -9,9 +9,10 @@ namespace Zilon.Bot.Players.Triggers
 {
     public class IntruderDetectedTrigger: ILogicStateTrigger
     {
-        private IActor[] CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
+        private static IActor[] CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
         {
             var foundIntruders = new List<IActor>();
+
             foreach (var target in actorManager.Items)
             {
                 if (target.Person.Fraction == actor.Person.Fraction)

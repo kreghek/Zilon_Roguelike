@@ -51,7 +51,7 @@ namespace Zilon.Emulation.Common
 
         public abstract void ConfigureAux(IServiceProvider serviceFactory);
 
-        private void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
+        private static void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
             serviceCollection.AddSingleton<IBiomeInitializer, BiomeInitializer>();
