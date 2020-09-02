@@ -35,7 +35,7 @@ jobs:
           pull_request_base: master
       - run: dotnet build Zilon.Core/Zilon.Core.SonarScanner.sln -c Release
       - sonarcloud/end-scan
-  test_45:
+  unit_test_debug:
     working_directory: /test45
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
@@ -45,9 +45,20 @@ jobs:
       ZILON_LIV_SCHEME_CATALOG: /test45/Zilon.Client/Assets/Resources/Schemes
     steps:
       - checkout
-      - run: dotnet test Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -c Release -r ./Results
+      - run: dotnet test Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -c Debug -r ./Results
       - store_test_results:
           path: ./Results/Zilon.Core.Tests.xml
+  unit_test_release:
+    working_directory: /test45
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      ZILON_LIV_SCHEME_CATALOG: /test45/Zilon.Client/Assets/Resources/Schemes
+    steps:
+      - checkout
+      - run: dotnet test Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj -c Release
   test_di:
     working_directory: /test_di
     docker:
@@ -96,7 +107,7 @@ jobs:
     steps:
       - checkout
       - run: dotnet test Zilon.Core/Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj -c Release -r ./Results
-  test_bots:
+  test_bots_release:
     working_directory: /test_bots
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
@@ -106,7 +117,18 @@ jobs:
       ZILON_LIV_SCHEME_CATALOG: /test_bots/Zilon.Client/Assets/Resources/Schemes
     steps:
       - checkout
-      - run: dotnet test Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj -c Release -r ./Results
+      - run: dotnet test Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj -c Release
+  test_bots_debug:
+    working_directory: /test_bots
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      ZILON_LIV_SCHEME_CATALOG: /test_bots/Zilon.Client/Assets/Resources/Schemes
+    steps:
+      - checkout
+      - run: dotnet test Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj -c Debug
   test_specflow:
     working_directory: /test_specflow
     docker:
@@ -368,15 +390,22 @@ workflows:
       - build
       - sonar-scan:
           context: SonarCloud
-      - test_45:
+      - unit_test_debug:
+          requires:
+            - build
+      - unit_test_release:
           requires:
             - build
       - test_di:
           requires:
             - build
+            - unit_test_debug
+            - unit_test_release
       - test_players:
           requires:
             - build
+            - unit_test_debug
+            - unit_test_release
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
 #      - test_specflow:
@@ -385,7 +414,8 @@ workflows:
       - test_bots:
           requires:
             - build
-            - test_45
+            - unit_test_debug
+            - unit_test_release
             - test_di
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
@@ -393,7 +423,8 @@ workflows:
       - build_Win_x64:
           requires:
             - build
-            - test_45
+            - unit_test_debug
+            - unit_test_release
             - test_di
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
@@ -405,9 +436,13 @@ workflows:
             branches:
               only:
                 - /release.*/
+      - unit_test_release:
+          requires:
+            - build
       - build_Win_x64:
           requires:
             - build
+            - unit_test_release
           filters:
             branches:
               only:
@@ -415,6 +450,7 @@ workflows:
       - build_Win_x32:
           requires:
             - build
+            - unit_test_release
           filters:
             branches:
               only:
@@ -422,6 +458,7 @@ workflows:
       - build_Linux_x64:
           requires:
             - build
+            - unit_test_release
           filters:
             branches:
               only:
@@ -429,6 +466,7 @@ workflows:
       - build_MacOS_Universal:
           requires:
             - build
+            - unit_test_release
           filters:
             branches:
               only:
@@ -436,7 +474,7 @@ workflows:
 #      - build_Linux_x32:
 #          requires:
 #            - build
-#            - test_45
+#            - unit_test_release
   nightly:
     triggers:
       - schedule:
@@ -448,7 +486,10 @@ workflows:
                 - beta
     jobs:
       - build
-      - test_45:
+      - unit_test_debug:
+          requires:
+            - build
+      - unit_test_release:
           requires:
             - build
       - test_di:
@@ -462,10 +503,17 @@ workflows:
 #      - test_specflow:
 #          requires:
 #            - build
-      - test_bots:
+      - test_bots_debug:
           requires:
             - build
-            - test_45
+            - unit_test_debug
+            - unit_test_release
+            - test_di
+      - test_bots_release:
+          requires:
+            - build
+            - unit_test_debug
+            - unit_test_release
             - test_di
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
@@ -474,13 +522,15 @@ workflows:
 #      - test_mass_sector_generator:
 #           requires:
 #            - build
-#            - test_45
+#            - unit_test_debug
+#            - unit_test_release
 #            - test_di
 #            - test_specflow
       - build_Win_x64:
           requires:
             - build
-            - test_45
+            - unit_test_debug
+            - unit_test_release
             - test_di
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
@@ -488,7 +538,8 @@ workflows:
       - build_Win_x32:
           requires:
             - build
-            - test_45
+            - unit_test_debug
+            - unit_test_release
             - test_di
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
@@ -496,7 +547,8 @@ workflows:
       - build_Linux_x64:
           requires:
             - build
-            - test_45
+            - unit_test_debug
+            - unit_test_release
             - test_di
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
@@ -504,14 +556,16 @@ workflows:
       - build_MacOS_Universal:
           requires:
             - build
-            - test_45
+            - unit_test_debug
+            - unit_test_release
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
 #            - test_specflow
 #      - build_Linux_x32:
 #          requires:
 #            - build
-#            - test_45
+#            - unit_test_debug
+#            - unit_test_release
 # Не работает и не собирается, потому что бенчи написаны под net46,
 # а тестируемые библиотеки теперь netstandard20
 # Раскомментировать, когда будет восстановлена сборка.
