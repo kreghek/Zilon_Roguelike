@@ -15,7 +15,6 @@ using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
-using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
