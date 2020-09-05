@@ -114,12 +114,19 @@ public class PlayerPersonInitiator : MonoBehaviour
         actorViewModel.transform.position = actorPosition;
         actorViewModel.Actor = actor;
 
-        if (!actor.Person.GetModule<IInventoryModule>().CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
-        {
-            AddResourceToCurrentPerson("camp-tools");
-        }
+        EnsurePlayerPersonHasCampTool(actor);
 
         return actorViewModel;
+    }
+
+    private void EnsurePlayerPersonHasCampTool(Actor actor)
+    {
+        if (actor.Person.GetModule<IInventoryModule>().CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
+        {
+            return;
+        }
+
+        AddResourceToCurrentPerson("camp-tools");
     }
 
     private bool GetCreationModal()

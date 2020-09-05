@@ -123,6 +123,15 @@ public class SectorVM : MonoBehaviour
     [NotNull]
     [Inject(Id = "mine-deposit-command")]
     private readonly ICommand _mineDepositCommand;
+
+    [NotNull]
+    [Inject]
+    private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
+
+    [NotNull]
+    [Inject]
+    private readonly GlobeStorage _globeStorage;
+
     public List<ActorViewModel> ActorViewModels { get; }
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
@@ -197,7 +206,11 @@ public class SectorVM : MonoBehaviour
 
         FowManager.InitViewModels(nodeViewModels, ActorViewModels, _staticObjectViewModels);
 
-        _gameLoop.Updated += GameLoop_Updated;
+        //TODO Этот фрагмент нужно заменить следующим:
+        // Для сектора/мира добавить события на итерацию.
+        // Еще лучше - событие, когда актёр выполняет/начинает выполнять задачу.
+        // Не забыть отписываться.
+        //_gameLoop.Updated += GameLoop_Updated;
 
         //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
         _commandBlockerService.DropBlockers();
@@ -232,21 +245,24 @@ public class SectorVM : MonoBehaviour
     {
         var sectorNode = _humanPlayer.SectorNode;
 
-        if (sectorNode == null)
-        {
-            var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
-            var biom = await _biomeInitializer.InitBiomeAsync(introLocationScheme);
-            sectorNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
-        }
-        else if (sectorNode.State == SectorNodeState.SchemeKnown)
-        {
-            await _biomeInitializer.MaterializeLevelAsync(sectorNode);
-        }
+        //TODO эти операции лучше выполнять на однельной сцене генерации мира.
+        // Там же нужно записывать созданные мир в хранилище.
 
-        _humanPlayer.BindSectorNode(sectorNode);
-        await _sectorManager.CreateSectorAsync();
+        //if (sectorNode == null)
+        //{
+        //    var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
+        //    var biom = await _biomeInitializer.InitBiomeAsync(introLocationScheme);
+        //    sectorNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
+        //}
+        //else if (sectorNode.State == SectorNodeState.SchemeKnown)
+        //{
+        //    await _biomeInitializer.MaterializeLevelAsync(sectorNode);
+        //}
 
-        sectorNode.Sector.ScoreManager = _scoreManager;
+        //_humanPlayer.BindSectorNode(sectorNode);
+        //await _sectorManager.CreateSectorAsync();
+
+        //sectorNode.Sector.ScoreManager = _scoreManager;
 
         _staticObjectManager = sectorNode.Sector.StaticObjectManager;
 
@@ -255,7 +271,7 @@ public class SectorVM : MonoBehaviour
 
         _playerState.TaskSource = _humanActorTaskSource;
 
-        _sectorManager.CurrentSector.HumanGroupExit += Sector_HumanGroupExit;
+        sectorNode.Sector.TrasitionUsed += Sector_HumanGroupExit;
     }
 
     private void StaticObjectManager_Removed(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
@@ -273,7 +289,7 @@ public class SectorVM : MonoBehaviour
         _staticObjectManager.Added -= StaticObjectManager_Added;
         _staticObjectManager.Removed -= StaticObjectManager_Removed;
 
-        _gameLoop.Updated -= GameLoop_Updated;
+        //_gameLoop.Updated -= GameLoop_Updated;
     }
 
     private List<MapNodeVM> InitNodeViewModels()
@@ -293,7 +309,7 @@ public class SectorVM : MonoBehaviour
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
             mapNodeVm.Neighbors = map.GetNext(node).Cast<HexNode>().ToArray();
-            mapNodeVm.LocaltionScheme = _sectorManager.CurrentSector.Scheme;
+            mapNodeVm.LocaltionScheme = _humanPlayer.SectorNode.Sector.Scheme;
 
             if (map.Transitions.ContainsKey(node))
             {
@@ -478,7 +494,7 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
+    private void Sector_HumanGroupExit(object sender, TransitionUsedEventArgs e)
     {
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;
@@ -514,7 +530,7 @@ public class SectorVM : MonoBehaviour
             monsterActor.Person.GetModule<ISurvivalModule>().Dead -= Monster_Dead;
         }
 
-        _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
+        _humanPlayer.SectorNode.Sector.TrasitionUsed -= Sector_HumanGroupExit;
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.

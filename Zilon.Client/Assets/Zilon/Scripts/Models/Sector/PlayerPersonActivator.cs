@@ -8,20 +8,13 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
-using Zilon.Core.Graphs;
-using Zilon.Core.PersonGeneration;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 
 public class PlayerPersonActivator : MonoBehaviour
 {
-    [NotNull] [Inject] private readonly HumanPlayer _humanPlayer;
-    [Inject] private readonly IHumanActorTaskSource _humanActorTaskSource;
-    [Inject] private readonly IPersonFactory _humanPersonFactory;
+    [NotNull] [Inject] private readonly IPlayer _humanPlayer;
     [NotNull] [Inject] private readonly DiContainer _container;
-    [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     [NotNull] public ActorViewModel ActorPrefab;
@@ -37,14 +30,11 @@ public class PlayerPersonActivator : MonoBehaviour
     {
         if (SectorViewModel.IsInitialized)
         {
-            _humanPlayer.MainPerson = _humanPersonFactory.Create("human-person");
-
             var playerActorViewModel = SelectNodeAndCreateHumanPersonViewModelFromMainPerson();
 
             ActorsViewModel.ActorViewModels.Add(playerActorViewModel);
 
             _playerState.ActiveActor = playerActorViewModel;
-            _humanActorTaskSource.SwitchActiveActor(playerActorViewModel.Actor);
 
             Destroy(gameObject);
         }
@@ -58,8 +48,6 @@ public class PlayerPersonActivator : MonoBehaviour
 
         var playerActorViewModel = CreateHumanActorViewModelFromMainPerson(
             SectorViewModel.Sector.ActorManager,
-            _perkResolver,
-            playerActorStartNode,
             SectorMapViewModel.NodeViewModels);
 
         return playerActorViewModel;
@@ -67,12 +55,9 @@ public class PlayerPersonActivator : MonoBehaviour
 
     private ActorViewModel CreateHumanActorViewModelFromMainPerson(
         [NotNull] IActorManager actorManager,
-        [NotNull] IPerkResolver perkResolver,
-        [NotNull] IGraphNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        var fowData = new HumanSectorFowData();
-        var actor = new Actor(_humanPlayer.MainPerson, _humanPlayer, startNode, perkResolver, fowData);
+        var actor = _humanPlayer.SectorNode.Sector.ActorManager.Items.Single(x=>x.Person == _humanPlayer);
 
         actorManager.Add(actor);
 
