@@ -13,7 +13,7 @@ public class SectorNameHandler : MonoBehaviour
 {
     public Text SectorNameText;
 
-    [Inject] [NotNull] private readonly HumanPlayer _humanPlayer;
+    [Inject] [NotNull] private readonly IPlayer _humanPlayer;
     [Inject] [NotNull] private readonly UiSettingService _uiSettingService;
 
     public void FixedUpdate()

@@ -56,7 +56,7 @@ public class PlayerPersonInitiator : MonoBehaviour
 
     [NotNull]
     [Inject]
-    private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
+    private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
 
     public ActorViewModel InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels, List<ActorViewModel> ActorViewModels)
     {

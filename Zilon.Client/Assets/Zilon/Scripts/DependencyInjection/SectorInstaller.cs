@@ -6,7 +6,6 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -21,8 +20,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<GlobeStorage>().AsSingle();
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
 
-        Container.RegisterActorTaskSourcesServices();
-
         Container.RegisterActUsageService();
 
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
@@ -33,9 +30,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();
 
         Container.Bind<IMineDepositMethodRandomSource>().To<MineDepositMethodRandomSource>().AsSingle();
-
-        // генерация сектора
-        Container.RegisterGenerationServices();
 
         // Специализированные сервисы для Ui.
         Container.Bind<IInventoryState>().To<InventoryState>().AsSingle();
@@ -49,8 +43,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 
         // Специализированные команды для Ui.
         Container.RegisterSpecialCommands();
-
-        Container.RegisterStaticObjecServices();
     }
 
     private SectorModalManager GetSectorModalManager()
