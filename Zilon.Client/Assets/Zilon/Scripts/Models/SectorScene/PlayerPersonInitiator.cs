@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using Assets.Zilon.Scripts.Services;
-
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -12,13 +10,11 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Graphs;
-using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -36,11 +32,7 @@ public class PlayerPersonInitiator : MonoBehaviour
 
     [NotNull]
     [Inject]
-    private readonly ISectorManager _sectorManager;
-
-    [NotNull]
-    [Inject]
-    private readonly HumanPlayer _humanPlayer;
+    private readonly IPlayer _humanPlayer;
 
     [NotNull]
     [Inject]
@@ -49,21 +41,6 @@ public class PlayerPersonInitiator : MonoBehaviour
     [NotNull]
     [Inject]
     private readonly ISectorUiState _playerState;
-
-    [NotNull]
-    [Inject]
-    private readonly IHumanActorTaskSource _humanActorTaskSource;
-
-    [NotNull]
-    [Inject]
-    private readonly IPersonFactory _humanPersonFactory;
-
-    [NotNull]
-    [Inject]
-    private readonly ProgressStorageService _progressStorageService;
-
-    [Inject]
-    private readonly IPlayerEventLogService _playerEventLogService;
 
     [NotNull]
     [Inject]
@@ -77,52 +54,47 @@ public class PlayerPersonInitiator : MonoBehaviour
     [Inject]
     private readonly ISectorModalManager _sectorModalManager;
 
+    [NotNull]
+    [Inject]
+    private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
+
     public ActorViewModel InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels, List<ActorViewModel> ActorViewModels)
     {
         var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-        var playerActorStartNode = _sectorManager.CurrentSector.Map.Regions
+        var playerActorStartNode = _humanPlayer.SectorNode.Sector.Map.Regions
             .Single(x => x.IsStart).Nodes
             .First();
 
         var playerActorViewModel = CreateHumanActorViewModel(
-            _humanPlayer,
             _humanPlayer.SectorNode.Sector.ActorManager,
             _perkResolver,
             playerActorStartNode,
             nodeViewModels);
 
-        //Лучше централизовать переключение текущего актёра только в playerState
+        //Не забывать изменять активного персонажа в источнике команд.
         _playerState.ActiveActor = playerActorViewModel;
-        _humanActorTaskSource.SwitchActiveActor(_playerState.ActiveActor.Actor);
 
         ActorViewModels.Add(playerActorViewModel);
 
         return playerActorViewModel;
     }
 
-    private ActorViewModel CreateHumanActorViewModel([NotNull] IPlayer player,
-       [NotNull] IActorManager actorManager,
-       [NotNull] IPerkResolver perkResolver,
-       [NotNull] IGraphNode startNode,
-       [NotNull] IEnumerable<MapNodeVM> nodeVMs)
+    private ActorViewModel CreateHumanActorViewModel([NotNull] IActorManager actorManager,
+        [NotNull] IPerkResolver perkResolver,
+        [NotNull] IGraphNode startNode,
+        [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        if (_humanPlayer.MainPerson == null)
+        bool showCreationModal = GetCreationModal();
+
+        if (showCreationModal)
         {
-            if (!_progressStorageService.LoadPerson())
-            {
-                var playerPerson = _humanPersonFactory.Create("human-person");
-
-                _humanPlayer.MainPerson = playerPerson;
-
-                ShowCreatePersonModal(playerPerson);
-            }
+            ShowCreatePersonModal(_humanPlayer.MainPerson);
         }
 
         var fowData = new HumanSectorFowData();
 
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
-        _playerEventLogService.Actor = actor;
+        var actor = new Actor(_humanPlayer.MainPerson, _actorTaskSource, startNode, perkResolver, fowData);
 
         actorManager.Add(actor);
 
@@ -148,6 +120,12 @@ public class PlayerPersonInitiator : MonoBehaviour
         }
 
         return actorViewModel;
+    }
+
+    private bool GetCreationModal()
+    {
+        // Считывать из настроек в клиентской части.
+        return true;
     }
 
     private void ShowCreatePersonModal(IPerson playerPerson)

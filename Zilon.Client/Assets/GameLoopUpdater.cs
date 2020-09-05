@@ -10,20 +10,20 @@ using Zilon.Core.Tactics;
 
 public class GameLoopUpdater : MonoBehaviour
 {
-    [NotNull] [Inject] private readonly IGameLoop _gameLoop;
-    [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
+    //[NotNull] [Inject] private readonly IGameLoop _gameLoop;
+    //[NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
-    void Start()
-    {
-        StartGameLoopUpdate();
-    }
+    //void Start()
+    //{
+    //    StartGameLoopUpdate();
+    //}
 
-    private async Task StartGameLoopUpdate()
-    {
-        while (true)
-        {
-            await _gameLoop.UpdateAsync();
-            await _commandBlockerService.WaitBlockers();
-        }
-    }
+    //private async Task StartGameLoopUpdate()
+    //{
+    //    while (true)
+    //    {
+    //        await _gameLoop.UpdateAsync();
+    //        await _commandBlockerService.WaitBlockers();
+    //    }
+    //}
 }

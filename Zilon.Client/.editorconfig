@@ -2,3 +2,13 @@
 
 # IDE0066: Convert switch statement to expression
 csharp_style_prefer_switch_expression = false:suggestion
+
+# Constants are UPPERCASE
+dotnet_naming_rule.constants_should_be_upper_case.severity = suggestion
+dotnet_naming_rule.constants_should_be_upper_case.symbols = constants
+dotnet_naming_rule.constants_should_be_upper_case.style = constant_style
+
+dotnet_naming_symbols.constants.applicable_kinds = field, local
+dotnet_naming_symbols.constants.required_modifiers = const
+
+dotnet_naming_style.constant_style.capitalization = all_upper

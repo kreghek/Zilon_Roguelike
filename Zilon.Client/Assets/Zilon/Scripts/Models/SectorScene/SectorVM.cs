@@ -71,11 +71,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly DiContainer _container;
 
-    [NotNull] [Inject] private readonly IGameLoop _gameLoop;
-
     [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
-
-    [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
@@ -85,7 +81,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly IPropFactory _propFactory;
 
-    [NotNull] [Inject] private readonly HumanPlayer _humanPlayer;
+    [NotNull] [Inject] private readonly IPlayer _humanPlayer;
 
     //TODO Вернуть, когда будет придуман туториал
     //[NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
@@ -93,8 +89,6 @@ public class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly IScoreManager _scoreManager;
 
     [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
-
-    [Inject] private readonly IHumanActorTaskSource _humanActorTaskSource;
 
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
