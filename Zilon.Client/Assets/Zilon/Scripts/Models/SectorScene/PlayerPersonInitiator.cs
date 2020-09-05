@@ -9,14 +9,12 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
-using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 
 public class PlayerPersonInitiator : MonoBehaviour
 {
@@ -36,10 +34,6 @@ public class PlayerPersonInitiator : MonoBehaviour
 
     [NotNull]
     [Inject]
-    private readonly IPerkResolver _perkResolver;
-
-    [NotNull]
-    [Inject]
     private readonly ISectorUiState _playerState;
 
     [NotNull]
@@ -54,10 +48,6 @@ public class PlayerPersonInitiator : MonoBehaviour
     [Inject]
     private readonly ISectorModalManager _sectorModalManager;
 
-    [NotNull]
-    [Inject]
-    private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
-
     public ActorViewModel InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels, List<ActorViewModel> ActorViewModels)
     {
         var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
@@ -68,8 +58,6 @@ public class PlayerPersonInitiator : MonoBehaviour
 
         var playerActorViewModel = CreateHumanActorViewModel(
             _humanPlayer.SectorNode.Sector.ActorManager,
-            _perkResolver,
-            playerActorStartNode,
             nodeViewModels);
 
         //Не забывать изменять активного персонажа в источнике команд.
@@ -81,8 +69,6 @@ public class PlayerPersonInitiator : MonoBehaviour
     }
 
     private ActorViewModel CreateHumanActorViewModel([NotNull] IActorManager actorManager,
-        [NotNull] IPerkResolver perkResolver,
-        [NotNull] IGraphNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
         bool showCreationModal = GetCreationModal();
@@ -92,11 +78,7 @@ public class PlayerPersonInitiator : MonoBehaviour
             ShowCreatePersonModal(_humanPlayer.MainPerson);
         }
 
-        var fowData = new HumanSectorFowData();
-
-        var actor = new Actor(_humanPlayer.MainPerson, _actorTaskSource, startNode, perkResolver, fowData);
-
-        actorManager.Add(actor);
+        var actor = actorManager.Items.Single(x=>x.Person == _humanPlayer.MainPerson);
 
         var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
@@ -119,7 +101,7 @@ public class PlayerPersonInitiator : MonoBehaviour
         return actorViewModel;
     }
 
-    private void EnsurePlayerPersonHasCampTool(Actor actor)
+    private void EnsurePlayerPersonHasCampTool(IActor actor)
     {
         if (actor.Person.GetModule<IInventoryModule>().CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
         {
@@ -137,7 +119,7 @@ public class PlayerPersonInitiator : MonoBehaviour
 
     private void ShowCreatePersonModal(IPerson playerPerson)
     {
-        _sectorModalManager.ShowCreatePersonModal(playerPerson);
+        //_sectorModalManager.ShowCreatePersonModal(playerPerson);
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.

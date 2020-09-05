@@ -16,7 +16,7 @@ public class SectorNameHandler : MonoBehaviour
     [Inject] [NotNull] private readonly IPlayer _humanPlayer;
     [Inject] [NotNull] private readonly UiSettingService _uiSettingService;
 
-    public void FixedUpdate()
+    public void Update()
     {
         var locationScheme = _humanPlayer.SectorNode.Biome.LocationScheme;
         var scheme = _humanPlayer.SectorNode.SectorScheme;
