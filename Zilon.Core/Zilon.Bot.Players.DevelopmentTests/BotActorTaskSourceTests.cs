@@ -26,7 +26,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
         [TestCase("duncan")]
         [TestCase("")]
         [TestCase("monster")]
-        [Parallelizable(ParallelScope.All)]
         public async Task GetActorTasksTestAsync(string mode)
         {
             var serviceContainer = new ServiceCollection();

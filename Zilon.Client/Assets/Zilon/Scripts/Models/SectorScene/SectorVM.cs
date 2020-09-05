@@ -132,6 +132,10 @@ public class SectorVM : MonoBehaviour
     [Inject]
     private readonly GlobeStorage _globeStorage;
 
+    [NotNull]
+    [Inject]
+    private readonly IGlobeInitializer _globeInitializer;
+
     public List<ActorViewModel> ActorViewModels { get; }
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
@@ -243,6 +247,14 @@ public class SectorVM : MonoBehaviour
 
     private async Task InitServicesAsync()
     {
+        //TODO эти операции лучше выполнять на однельной сцене генерации мира.
+        if (_globeStorage.Globe == null)
+        {
+            var globe = await _globeInitializer.CreateGlobeAsync("intro");
+            _globeStorage.AssignGlobe(globe);
+        }
+
+
         var sectorNode = _humanPlayer.SectorNode;
 
         //TODO эти операции лучше выполнять на однельной сцене генерации мира.

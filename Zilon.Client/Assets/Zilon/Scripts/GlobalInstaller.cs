@@ -28,6 +28,8 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
         RegisterDices();
 
+        Container.Bind<IPlayer>().To<HumanPlayer>().AsSingle();
+
         Container.Bind<IDecisionSource>().To<DecisionSource>().AsSingle();
         Container.Bind<ISchemeService>().To<SchemeService>().AsSingle();
         Container.Bind<ISchemeServiceHandlerFactory>().To<SchemeServiceHandlerFactory>().AsSingle();
@@ -49,10 +51,9 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
         Container.Bind<IDiseaseGenerator>().To<DiseaseGenerator>().AsSingle();
 
-        Container.Bind<HumanPlayer>().AsSingle();
-        Container.Bind<IBotPlayer>().To<BotPlayer>().AsSingle();
-
         Container.Bind<IBiomeSchemeRoller>().To<BiomeSchemeRoller>().AsSingle();
+
+        Container.Bind<IPersonInitializer>().To<HumanPersonInitializer>().AsSingle();
 
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
 

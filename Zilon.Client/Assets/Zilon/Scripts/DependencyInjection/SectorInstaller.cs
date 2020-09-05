@@ -6,6 +6,7 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -17,7 +18,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
     {
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
 
-        Container.Bind<IGameLoop>().To<GameLoop>().AsSingle();
+        Container.Bind<GlobeStorage>().AsSingle();
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
 
         Container.RegisterActorTaskSourcesServices();
@@ -27,7 +28,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
-        Container.Bind<ISectorManager>().To<InfSectorManager>().AsSingle();
         Container.Bind<IBiomeInitializer>().To<BiomeInitializer>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
         Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();
