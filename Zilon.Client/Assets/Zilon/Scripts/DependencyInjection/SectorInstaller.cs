@@ -20,14 +20,11 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<GlobeStorage>().AsSingle();
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
 
-        Container.RegisterActUsageService();
-
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();
         Container.Bind<IEquipmentDurableServiceRandomSource>().To<EquipmentDurableServiceRandomSource>().AsSingle();
 
         Container.Bind<IBiomeInitializer>().To<BiomeInitializer>().AsSingle();
         Container.Bind<ISectorModalManager>().FromInstance(GetSectorModalManager()).AsSingle();
-        Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();
 
         Container.Bind<IMineDepositMethodRandomSource>().To<MineDepositMethodRandomSource>().AsSingle();
 

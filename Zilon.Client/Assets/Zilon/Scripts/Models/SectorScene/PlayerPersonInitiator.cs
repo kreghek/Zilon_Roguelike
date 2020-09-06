@@ -15,6 +15,7 @@ using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 public class PlayerPersonInitiator : MonoBehaviour
 {
@@ -44,6 +45,10 @@ public class PlayerPersonInitiator : MonoBehaviour
     [Inject]
     private readonly IPropFactory _propFactory;
 
+    [NotNull]
+    [Inject]
+    private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
+
     public ActorViewModel InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels, List<ActorViewModel> ActorViewModels)
     {
         var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
@@ -57,11 +62,21 @@ public class PlayerPersonInitiator : MonoBehaviour
             nodeViewModels);
 
         //Не забывать изменять активного персонажа в источнике команд.
-        _playerState.ActiveActor = playerActorViewModel;
+        SetActiveActor(playerActorViewModel);
 
         ActorViewModels.Add(playerActorViewModel);
 
         return playerActorViewModel;
+    }
+
+    private void SetActiveActor(ActorViewModel playerActorViewModel)
+    {
+        // Это нужно для UI, чтобы они реагировали на состояние текущего персонажа.
+        _playerState.ActiveActor = playerActorViewModel;
+
+        // Это нужно для команд. Команды берут актуивного актёра из источника команд.
+        // 0_о. И генерируют намерение для источника команд.
+        _humanActorTaskSource.SwitchActiveActor(_playerState.ActiveActor.Actor);
     }
 
     private ActorViewModel CreateHumanActorViewModel([NotNull] IActorManager actorManager,

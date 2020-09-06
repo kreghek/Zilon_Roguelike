@@ -6,14 +6,14 @@ namespace Zilon.Core.Persons
     {
         public static bool CheckIsDead(this IPerson person)
         {
-            if (person.GetModuleSafe<ISurvivalModule>() is null)
+            var survivalModule = person.GetModuleSafe<ISurvivalModule>();
+            if (survivalModule is null)
             {
                 // Те, у кого нет модуля выживания, не могут умереть.
                 return false;
             }
 
-            return person.GetModule<ISurvivalModule>().IsDead;
-
+            return survivalModule.IsDead;
         }
     }
 }
