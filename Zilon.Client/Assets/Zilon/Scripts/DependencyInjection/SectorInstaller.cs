@@ -17,7 +17,6 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
     {
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
 
-        Container.Bind<GlobeStorage>().AsSingle();
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
 
         Container.Bind<IEquipmentDurableService>().To<EquipmentDurableService>().AsSingle();

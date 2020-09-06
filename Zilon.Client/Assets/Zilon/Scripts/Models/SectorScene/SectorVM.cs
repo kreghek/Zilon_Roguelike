@@ -517,7 +517,6 @@ public class SectorVM : MonoBehaviour
     {
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;
-        _humanPlayer.SectorNode.Sector.ActorManager.Remove(actor);
 
         // Отписываемся от событий в этом секторе
         UnscribeSectorDependentEvents();
@@ -542,13 +541,20 @@ public class SectorVM : MonoBehaviour
 
     private void UnscribeSectorDependentEvents()
     {
+        var persons = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is HumanPerson).ToArray();
+        foreach (var personActor in persons)
+        {
+            personActor.UsedAct -= ActorOnUsedAct;
+            personActor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
+        }
+
         var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
         foreach (var monsterActor in monsters)
         {
             monsterActor.UsedAct -= ActorOnUsedAct;
             monsterActor.Person.GetModule<ISurvivalModule>().Dead -= Monster_Dead;
         }
-
+        
         _humanPlayer.SectorNode.Sector.TrasitionUsed -= Sector_HumanGroupExit;
     }
 
