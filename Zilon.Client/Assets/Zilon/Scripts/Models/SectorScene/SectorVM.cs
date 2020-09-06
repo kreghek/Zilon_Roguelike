@@ -219,6 +219,10 @@ public class SectorVM : MonoBehaviour
         //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
         _commandBlockerService.DropBlockers();
 
+        // Изначально канвас отключен.
+        // Эта операция нужна, чтобы Start у всяких панелей выполнялся после инициализации
+        // таких сервисов, как ISectorUiState. Потому что есть много элементов UI,
+        // которые зависят от значения ActiveActor.
         WindowCanvas.gameObject.SetActive(true);
     }
 

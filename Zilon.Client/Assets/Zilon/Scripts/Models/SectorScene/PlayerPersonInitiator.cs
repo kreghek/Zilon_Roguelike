@@ -44,10 +44,6 @@ public class PlayerPersonInitiator : MonoBehaviour
     [Inject]
     private readonly IPropFactory _propFactory;
 
-    [NotNull]
-    [Inject]
-    private readonly ISectorModalManager _sectorModalManager;
-
     public ActorViewModel InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels, List<ActorViewModel> ActorViewModels)
     {
         var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");

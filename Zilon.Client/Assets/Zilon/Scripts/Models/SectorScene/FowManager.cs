@@ -20,18 +20,15 @@ public class FowManager : MonoBehaviour
     private IList<ActorViewModel> _actorViewModels;
     private IList<StaticObjectViewModel> _staticObjectViewModels;
 
-    public void Start()
+    public void Update()
     {
-        PrepareSlowUpdate();
-    }
-
-    public void FixedUpdate()
-    {
-        if (Time.fixedTime >= _fowUpdateCounter)
+        if (_fowUpdateCounter >= UPDATE_FOW_DELAY)
         {
             UpdateFowState();
-
-            _fowUpdateCounter = Time.fixedTime + UPDATE_FOW_DELAY;
+        }
+        else
+        {
+            _fowUpdateCounter += Time.deltaTime;
         }
     }
 
@@ -57,11 +54,6 @@ public class FowManager : MonoBehaviour
         _actorViewModels = actorViewModels;
 
         _staticObjectViewModels = staticObjectViewModels;
-    }
-
-    private void PrepareSlowUpdate()
-    {
-        _fowUpdateCounter = Time.fixedTime + UPDATE_FOW_DELAY;
     }
 
     private void UpdateFowState()
