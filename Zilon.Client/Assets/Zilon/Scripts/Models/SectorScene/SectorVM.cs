@@ -156,7 +156,14 @@ public class SectorVM : MonoBehaviour
     {
         if (!_commandBlockerService.HasBlockers)
         {
-            ExecuteCommands();
+            try
+            {
+                ExecuteCommands();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(exception);
+            }
         }
     }
 

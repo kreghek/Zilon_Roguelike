@@ -10,6 +10,8 @@ namespace Zilon.Core.Tactics.Behaviour
         {
         }
 
+        public override int Cost => 1;
+
         public override void Execute()
         {
             var actorNode = Actor.Node;
