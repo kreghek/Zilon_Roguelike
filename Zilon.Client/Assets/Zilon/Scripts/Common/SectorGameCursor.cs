@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 using Zenject;
@@ -13,6 +16,7 @@ public class SectorGameCursor : MonoBehaviour
     public Sprite InteractiveCursorSprite;
     public Sprite CantMoveCursorSprite;
     public SpriteRenderer SpriteRenderer;
+    private TaskScheduler _taskScheduler;
 
     [Inject] private readonly ISectorUiState _playerState;
     [Inject(Id = "move-command")] private readonly ICommand _moveCommand;
@@ -20,6 +24,8 @@ public class SectorGameCursor : MonoBehaviour
 
     public void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         Cursor.visible = false;
         SpriteRenderer.sprite = DefaultCursorSprite;
 
@@ -27,6 +33,14 @@ public class SectorGameCursor : MonoBehaviour
     }
 
     private void PlayerState_HoverChanged(object sender, System.EventArgs e)
+    {
+        Task.Factory.StartNew(() =>
+        {
+            HoverChangedHandlerInner();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+    }
+
+    private void HoverChangedHandlerInner()
     {
         SpriteRenderer.sprite = DefaultCursorSprite;
 
