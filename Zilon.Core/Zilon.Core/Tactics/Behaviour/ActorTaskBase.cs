@@ -17,8 +17,8 @@ namespace Zilon.Core.Tactics.Behaviour
         [ExcludeFromCodeCoverage]
         protected ActorTaskBase([NotNull] IActor actor, IActorTaskContext context)
         {
-            Actor = actor ?? throw new System.ArgumentNullException(nameof(actor));
-            Context = context ?? throw new System.ArgumentNullException(nameof(context));
+            Actor = actor ?? throw new ArgumentNullException(nameof(actor));
+            Context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         protected IActor Actor { get; }

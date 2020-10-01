@@ -9,7 +9,7 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public static class TransitionDetection
     {
-        /// <summary> Определяет, что все указанные узлы находятся в одном узле перехода. </summary>
+        /// <summary> Определяет, что все указанные узлы (в них обычно стоят актёры игрока) находятся в одном узле перехода. </summary>
         /// <param name="transitions"> Доступные переходы. </param>
         /// <param name="actorNodes"> Набор проверяемых узлов. Сюда передаются узлы актеров, которые пренадлежат игроку. </param>
         /// <returns> Возвращает отработавший переход. Иначе возаращает null. </returns>

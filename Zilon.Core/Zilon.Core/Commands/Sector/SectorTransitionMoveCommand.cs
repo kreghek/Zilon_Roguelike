@@ -3,6 +3,7 @@
 using Zilon.Core.Client;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
@@ -57,12 +58,9 @@ namespace Zilon.Core.Commands
         /// </summary>
         protected override void ExecuteTacticCommand()
         {
-            var actorNode = CurrentActor.Node;
-            var map = _player.SectorNode.Sector.Map;
-
-            var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
-
-            _player.SectorNode.Sector.UseTransition(CurrentActor, detectedTransition);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var intention = new Intention<SectorTransitTask>(a => new SectorTransitTask(a, taskContext));
+            PlayerState.TaskSource.Intent(intention);
         }
     }
 }

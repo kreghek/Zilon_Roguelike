@@ -258,9 +258,10 @@ public class SectorVM : MonoBehaviour
         {
             var globe = await _globeInitializer.CreateGlobeAsync("intro");
             _globeStorage.AssignGlobe(globe);
-            var sectorNode1 = globe.SectorNodes.Single(x => x.Sector.ActorManager.Items.Any(actor => actor.Person == _humanPlayer.MainPerson));
-            _humanPlayer.BindSectorNode(sectorNode1);
         }
+        
+        var sectorNode1 = _globeStorage.Globe.SectorNodes.Single(x => x.Sector.ActorManager.Items.Any(actor => actor.Person == _humanPlayer.MainPerson));
+        _humanPlayer.BindSectorNode(sectorNode1);
 
         var sectorNode = _humanPlayer.SectorNode;
 
