@@ -14,7 +14,7 @@ namespace Assets.Zilon.Scripts.DependencyInjection
     {
         public static void RegisterGenerationServices(this DiContainer diContainer)
         {
-            diContainer.Bind<ISectorGenerator>().To<SectorGenerator>().AsSingle();
+            diContainer.Bind<ISectorGenerator>().To<MySectorGenerator>().AsSingle();
             diContainer.Bind<IMapFactory>().WithId("room").To<RoomMapFactory>().AsSingle();
             diContainer.Bind<IMapFactory>().WithId("cave").To<CellularAutomatonMapFactory>().AsSingle();
             diContainer.Bind<IMapFactorySelector>().To<MapFactorySelector>().AsSingle();
