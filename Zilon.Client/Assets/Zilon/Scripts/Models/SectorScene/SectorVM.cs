@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
@@ -147,6 +148,11 @@ public class SectorVM : MonoBehaviour
         _staticObjectViewModels = new List<StaticObjectViewModel>();
     }
 
+    public void Start()
+    {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+    }
+
     // ReSharper restore NotNullMemberIsNotInitialized
     // ReSharper restore MemberCanBePrivate.Global
 #pragma warning restore 649
@@ -168,6 +174,7 @@ public class SectorVM : MonoBehaviour
     }
 
     public bool CanIntent = true;
+    private TaskScheduler _taskScheduler;
 
     private void ExecuteCommands()
     {
@@ -522,6 +529,21 @@ public class SectorVM : MonoBehaviour
     }
 
     private void Sector_HumanGroupExit(object sender, TransitionUsedEventArgs e)
+    {
+        Task.Factory.StartNew(() =>
+        {
+            try
+            {
+                HandleSectorTransitionInner(e);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(exception);
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Wait();
+    }
+
+    private void HandleSectorTransitionInner(TransitionUsedEventArgs e)
     {
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;

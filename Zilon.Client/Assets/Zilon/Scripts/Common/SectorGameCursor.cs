@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using UnityEngine;
@@ -34,10 +35,23 @@ public class SectorGameCursor : MonoBehaviour
 
     private void PlayerState_HoverChanged(object sender, System.EventArgs e)
     {
+        if (_playerState.HoverViewModel == null)
+        {
+            return;
+        }
+
         Task.Factory.StartNew(() =>
         {
-            HoverChangedHandlerInner();
-        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+            //HoverChangedHandlerInner();
+            try
+            {
+                HoverChangedHandlerInner();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(exception);
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Wait();
     }
 
     private void HoverChangedHandlerInner()

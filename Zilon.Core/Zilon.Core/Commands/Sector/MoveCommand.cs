@@ -65,6 +65,11 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
+            if (!CanExecuteForSelected())
+            {
+                return false;
+            }
+
             CreatePath(nodeViewModel);
             return Path.Any();
         }
@@ -113,7 +118,12 @@ namespace Zilon.Core.Commands
         private bool CanExecuteForSelected()
         {
             var nodeViewModel = GetSelectedNodeViewModel();
-            if (nodeViewModel == null)
+            if (nodeViewModel is null)
+            {
+                return false;
+            }
+
+            if (PlayerState.ActiveActor?.Actor is null)
             {
                 return false;
             }
