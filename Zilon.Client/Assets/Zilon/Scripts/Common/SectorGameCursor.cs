@@ -42,7 +42,6 @@ public class SectorGameCursor : MonoBehaviour
 
         Task.Factory.StartNew(() =>
         {
-            //HoverChangedHandlerInner();
             try
             {
                 HoverChangedHandlerInner();
