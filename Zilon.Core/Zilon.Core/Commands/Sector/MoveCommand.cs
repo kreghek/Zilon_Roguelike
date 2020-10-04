@@ -89,20 +89,28 @@ namespace Zilon.Core.Commands
         /// </summary>
         protected override void ExecuteTacticCommand()
         {
-            var selectedNodeVm = GetSelectedNodeViewModel();
-            if (selectedNodeVm == null)
+            try
             {
-                throw new InvalidOperationException("Невозможно выполнить команду на перемещение, если не указан целевой узел.");
+                var selectedNodeVm = GetSelectedNodeViewModel();
+                if (selectedNodeVm == null)
+                {
+                    throw new InvalidOperationException("Невозможно выполнить команду на перемещение, если не указан целевой узел.");
+                }
+
+                CreatePath(selectedNodeVm);
+
+                var targetNode = selectedNodeVm.Node;
+
+                var currentSector = _player.SectorNode.Sector;
+
+                var moveIntetion = new MoveIntention(targetNode, currentSector);
+                PlayerState.TaskSource.Intent(moveIntetion);
             }
+            catch (Exception exception)
+            {
 
-            CreatePath(selectedNodeVm);
-
-            var targetNode = selectedNodeVm.Node;
-
-            var currentSector = _player.SectorNode.Sector;
-
-            var moveIntetion = new MoveIntention(targetNode, currentSector);
-            PlayerState.TaskSource.Intent(moveIntetion);
+                throw;
+            }
         }
 
         private IMapNodeViewModel GetHoverNodeViewModel()
