@@ -34,16 +34,18 @@ namespace Zilon.Core.World
         Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition);
     }
 
-    public sealed class GlobeTransitionHandler : IGlobeTransitionHandler
+    public sealed class GlobeTransitionHandler : IGlobeTransitionHandler, IDisposable
     {
         private readonly IGlobeExpander _globeExpander;
 
-        //Instantiate a Singleton of the Semaphore with a value of 1. This means that only 1 thread can be granted access at a time.
-        static readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _semaphoreSlim;
 
         public GlobeTransitionHandler(IGlobeExpander globeExpander)
         {
             _globeExpander = globeExpander ?? throw new ArgumentNullException(nameof(globeExpander));
+
+            //Instantiate a Singleton of the Semaphore with a value of 1. This means that only 1 thread can be granted access at a time.
+            _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
         public async Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
@@ -83,6 +85,23 @@ namespace Zilon.Core.World
                     await _globeExpander.ExpandAsync(sectorNode).ConfigureAwait(false);
                     globe.AddSectorNode(sectorNode);
                 }
+
+                try
+                {
+                    sector.ActorManager.Remove(actor);
+                }
+                catch (InvalidOperationException exception)
+                {
+                    // Пока ничего не делаем
+                    Console.WriteLine(exception);
+                    Console.WriteLine(sector.GetHashCode());
+                    Console.WriteLine(actor);
+                }
+
+                var nextSector = sectorNode.Sector;
+                var nodeForTransition = nextSector.Map.Transitions.First(x => x.Value.SectorNode.Sector == sector).Key;
+                var actorInNewSector = new Actor(actor.Person, actor.TaskSource, nodeForTransition);
+                nextSector.ActorManager.Add(actorInNewSector);
             }
             finally
             {
@@ -90,22 +109,11 @@ namespace Zilon.Core.World
                 //This is why it is important to do the Release within a try...finally clause; program execution may crash or take a different path, this way you are guaranteed execution
                 _semaphoreSlim.Release();
             }
+        }
 
-            try
-            {
-                sector.ActorManager.Remove(actor);
-            }
-            catch (InvalidOperationException exception)
-            {
-                // Пока ничего не делаем
-                Console.WriteLine(sector.GetHashCode());
-                Console.WriteLine(actor);
-            }
-
-            var nextSector = sectorNode.Sector;
-            var nodeForTransition = nextSector.Map.Transitions.First(x => x.Value.SectorNode.Sector == sector).Key;
-            var actorInNewSector = new Actor(actor.Person, actor.TaskSource, nodeForTransition);
-            nextSector.ActorManager.Add(actorInNewSector);
+        public void Dispose()
+        {
+            _semaphoreSlim.Dispose();
         }
     }
 
@@ -245,7 +253,15 @@ namespace Zilon.Core.World
 
                 if (state.TaskIsExecuting)
                 {
-                    state.Task.Execute();
+                    try
+                    {
+                        state.Task.Execute();
+                    }
+                    catch (Exception exception)
+                    { 
+
+                    }
+
                     state.TaskSource.ProcessTaskExecuted(state.Task);
                 }
             }

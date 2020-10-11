@@ -25,6 +25,8 @@ namespace Zilon.Core.Tactics.Behaviour
         void ProcessTaskExecuted(IActorTask actorTask);
 
         void ProcessTaskComplete(IActorTask actorTask);
+
+        bool Enabled { get; }
     }
 
     public sealed class SectorTaskSourceContext : ISectorTaskSourceContext

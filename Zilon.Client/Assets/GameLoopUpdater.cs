@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Services;
 
@@ -24,7 +25,15 @@ public class GameLoopUpdater : MonoBehaviour
     {
         while (true)
         {
-            await _globeStorage.Globe.UpdateAsync();
+            try
+            {
+                await _globeStorage.Globe.UpdateAsync();
+            }
+            catch(Exception exception)
+            {
+                Debug.LogError(exception);
+                return;
+            }
             await _commandBlockerService.WaitBlockers();
         }
     }

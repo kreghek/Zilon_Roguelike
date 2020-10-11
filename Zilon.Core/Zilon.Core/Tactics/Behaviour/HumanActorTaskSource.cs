@@ -28,6 +28,7 @@ namespace Zilon.Core.Tactics.Behaviour
         }
 
         public IActor ActiveActor { get; private set; }
+        public bool Enabled { get => ActiveActor != null; }
 
         private bool _intentionWait;
 
