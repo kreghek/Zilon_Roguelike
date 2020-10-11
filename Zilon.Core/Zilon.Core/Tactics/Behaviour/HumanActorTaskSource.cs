@@ -31,7 +31,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private bool _intentionWait;
 
-        public Task IntentAsync(IIntention intention)
+        public async Task IntentAsync(IIntention intention)
         {
             if (_intentionWait)
             {
@@ -49,7 +49,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             _intentionWait = true;
 
-            return _actorTaskSender.SendAsync(actorTask);
+            await _actorTaskSender.SendAsync(actorTask).ConfigureAwait(false);
         }
 
         public Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
