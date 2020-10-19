@@ -563,6 +563,9 @@ public class SectorVM : MonoBehaviour
         _playerState.HoverViewModel = null;
         _humanActorTaskSource.SwitchActiveActor(null);
 
+        var actorInNewSector = e.Transition.SectorNode.Sector.ActorManager.Items.SingleOrDefault(x=>x.Person == actor.Person);
+        _humanActorTaskSource.SwitchActiveActor(actorInNewSector);
+
         var nextSectorNode = e.Transition.SectorNode;
         _humanPlayer.BindSectorNode(nextSectorNode);
 
