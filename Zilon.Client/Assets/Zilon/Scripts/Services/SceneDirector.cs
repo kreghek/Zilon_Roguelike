@@ -36,6 +36,11 @@ public sealed class SceneDirector : MonoBehaviour
         _actorInteractionBus.NewEvent += ActorInteractionBus_NewEvent;
     }
 
+    public void OnDestroy()
+    {
+        _actorInteractionBus.NewEvent -= ActorInteractionBus_NewEvent;
+    }
+
     private void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
     {
         var currentLanguage = _uiSettingService.CurrentLanguage;

@@ -8,7 +8,6 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
-using Zilon.Core.Client.Windows;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;

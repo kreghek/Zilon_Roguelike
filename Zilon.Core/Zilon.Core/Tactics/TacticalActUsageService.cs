@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.Components;
@@ -68,6 +69,14 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(usedActs));
             }
 
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
+            Debug.Assert(SectorHasCurrentActor(sector, actor), "Current actor must be in sector");
+            Debug.Assert(SectorHasAttackTarget(sector, target), "Target must be in sector");
+
             foreach (var act in usedActs.Primary)
             {
                 if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && actor == target)
@@ -92,6 +101,16 @@ namespace Zilon.Core.Tactics
 
                 UseAct(actor, target, act, sector.Map);
             }
+        }
+
+        private static bool SectorHasCurrentActor(ISector sector, IActor actor)
+        {
+            return sector.ActorManager.Items.Any(x => x == actor);
+        }
+
+        private static bool SectorHasAttackTarget(ISector sector, IAttackTarget target)
+        {
+            return sector.ActorManager.Items.Any(x => ReferenceEquals(x, target));
         }
 
         private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSize physicalSize, IGraphNode baseNode, IMap map)
