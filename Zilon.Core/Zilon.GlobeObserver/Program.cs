@@ -21,7 +21,7 @@ namespace Zilon.GlobeObserver
             serviceContainer.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceContainer.AddSingleton<IPersonInitializer, AutoPersonInitializer>();
 
-            var serviceProvider = serviceContainer.BuildServiceProvider();
+            using var serviceProvider = serviceContainer.BuildServiceProvider();
 
             // Create globe
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
