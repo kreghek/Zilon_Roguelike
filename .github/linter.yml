@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       working-directory : ./Zilon.Client/
-    
+
     steps:
       - uses: actions/checkout@v2
       - run: git pull
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       working-directory : ./Zilon.Core/
-    
+
     steps:
       - uses: actions/checkout@v2
       - run: git pull
