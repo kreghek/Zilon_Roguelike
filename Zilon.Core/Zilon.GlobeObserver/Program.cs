@@ -8,7 +8,7 @@ using Zilon.Core.World;
 
 namespace Zilon.GlobeObserver
 {
-    class Program
+    static class Program
     {
         static async System.Threading.Tasks.Task Main()
         {
