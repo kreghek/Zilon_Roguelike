@@ -22,6 +22,12 @@ namespace Zilon.Bot.Players
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
 
+        public void CancelTask(IActorTask cencelledActorTask)
+        {
+            // Этот метод был введен для HumanActorTaskSource.
+            // В этой реализации источника команд не используется.
+        }
+
         public abstract void Configure(IBotSettings botSettings);
 
         public Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)

@@ -102,5 +102,10 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             _intentionWait = false;
         }
+
+        public void CancelTask(IActorTask cencelledActorTask)
+        {
+            _intentionWait = false;
+        }
     }
 }

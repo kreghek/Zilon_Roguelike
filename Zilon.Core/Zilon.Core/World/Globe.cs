@@ -41,6 +41,19 @@ namespace Zilon.Core.World
 
             _sectorNodes.Add(sectorNode);
             sectorNode.Sector.TrasitionUsed += Sector_TrasitionUsed;
+            sectorNode.Sector.ActorManager.Removed += ActorManager_Removed;
+        }
+
+        private void ActorManager_Removed(object sender, ManagerItemsChangedEventArgs<IActor> e)
+        {
+            // Remove all current tasks
+            foreach (var removedActor in e.Items)
+            {
+                if (_taskDict.TryRemove(removedActor, out var taskState))
+                {
+                    taskState.TaskSource.CancelTask(taskState.Task);
+                }
+            }
         }
 
         private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)

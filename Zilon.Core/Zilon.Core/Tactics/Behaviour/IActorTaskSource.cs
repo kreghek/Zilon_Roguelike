@@ -25,6 +25,12 @@ namespace Zilon.Core.Tactics.Behaviour
         void ProcessTaskExecuted(IActorTask actorTask);
 
         void ProcessTaskComplete(IActorTask actorTask);
+
+        /// <summary>
+        /// Calle then task cancelled/ Example, when actor removed from sector.
+        /// </summary>
+        /// <param name="cencelledActorTask"></param>
+        void CancelTask(IActorTask cencelledActorTask);
     }
 
     public sealed class SectorTaskSourceContext : ISectorTaskSourceContext
