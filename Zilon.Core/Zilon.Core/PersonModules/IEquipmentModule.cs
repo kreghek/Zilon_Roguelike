@@ -9,7 +9,7 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.PersonModules
 {
-    public interface IEquipmentModule: IPersonModule, IEnumerable<Equipment>
+    public interface IEquipmentModule : IPersonModule, IEnumerable<Equipment>
     {
         /// <summary>
         /// Текущие слоты экипировки.

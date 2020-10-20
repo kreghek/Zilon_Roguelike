@@ -13,7 +13,7 @@ namespace Zilon.Core.PersonModules
     {
         public override PersonSlotSubScheme[] Slots { get; protected set; }
 
-        public EquipmentModule([NotNull] [ItemNotNull] IEnumerable<PersonSlotSubScheme> slots) : base(slots)
+        public EquipmentModule([NotNull][ItemNotNull] IEnumerable<PersonSlotSubScheme> slots) : base(slots)
         {
         }
 

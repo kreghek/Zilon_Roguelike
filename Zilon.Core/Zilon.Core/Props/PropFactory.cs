@@ -30,7 +30,7 @@ namespace Zilon.Core.Props
 
             var actSchemes = new List<ITacticalActScheme>();
             var actSchemeSids = scheme.Equip.ActSids;
-            
+
             foreach (var actSchemeSid in actSchemeSids)
             {
                 var actScheme = _schemeService.GetScheme<ITacticalActScheme>(actSchemeSid);

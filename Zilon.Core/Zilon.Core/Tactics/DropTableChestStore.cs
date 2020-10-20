@@ -30,7 +30,7 @@ namespace Zilon.Core.Tactics
             {
                 return base.CalcActualItems();
             }
-            
+
             var props = GenerateProps();
             AddToContent(props);
             _contentResolved = true;

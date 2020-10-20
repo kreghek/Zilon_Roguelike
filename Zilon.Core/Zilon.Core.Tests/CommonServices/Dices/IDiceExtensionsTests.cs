@@ -8,7 +8,8 @@ using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tests.CommonServices.Dices
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class DiceExtensionsTests
     {
         /// <summary>

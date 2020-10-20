@@ -11,7 +11,7 @@ namespace Zilon.Core.Client
     /// <remarks>
     /// Используется командами для получения ввода игрока. Хранит состояние объектов боя.
     /// </remarks>
-    public interface ISectorUiState: IUiState
+    public interface ISectorUiState : IUiState
     {
         /// <summary>
         /// Активный актёр.

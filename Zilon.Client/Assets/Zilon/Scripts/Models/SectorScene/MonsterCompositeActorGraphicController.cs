@@ -6,7 +6,7 @@ public class MonsterCompositeActorGraphicController : MonoBehaviour
 {
     public IActor Actor { get; set; }
     public ActorGraphicBase Graphic;
-    
+
     //public void Start()
     //{
     //    SetVisualProp("steel-armor", 2);

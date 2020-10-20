@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.StaticObjectModules
 {
-    public interface IPropDepositModule: IStaticObjectModule
+    public interface IPropDepositModule : IStaticObjectModule
     {
         /// <summary>
         /// Возвращает теги инструментов, которыми возможна разработка залежей.

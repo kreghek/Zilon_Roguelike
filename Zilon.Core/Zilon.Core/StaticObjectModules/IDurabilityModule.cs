@@ -3,7 +3,7 @@
     /// <summary>
     /// Module to damage static object; removable by brute force.
     /// </summary>
-    public interface IDurabilityModule: IStaticObjectModule
+    public interface IDurabilityModule : IStaticObjectModule
     {
         /// <summary>
         /// Current value of durability. Starting value is 1. If below 0, static object lost all durability.

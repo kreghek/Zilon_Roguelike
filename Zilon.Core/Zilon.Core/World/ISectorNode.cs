@@ -7,23 +7,23 @@ namespace Zilon.Core.World
     /// <summary>
     /// Узел с сектором в графе биома.
     /// </summary>
-    public interface ISectorNode: IGraphNode
+    public interface ISectorNode : IGraphNode
     {
         /// <summary>
         /// Биом, частью которого является узел графа.
         /// </summary>
         IBiome Biome { get; }
-        
+
         /// <summary>
         /// Материализованный сектор, если он есть.
         /// </summary>
         ISector Sector { get; }
-        
+
         /// <summary>
         /// Схема, по которой был материализован сектор.
         /// </summary>
         ISectorSubScheme SectorScheme { get; }
-        
+
         /// <summary>
         /// Состояние узла графа биома.
         /// </summary>

@@ -3,13 +3,15 @@
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class ActUsageRandomSourceTests
     {
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics.Spatial;
 

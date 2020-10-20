@@ -57,7 +57,7 @@ namespace Zilon.Core.Tactics
         public int GameLoopCounter { get => _gameLoopCounter; }
 
         [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
+        public Actor([NotNull] IPerson person, [NotNull] IPlayer owner, [NotNull] IGraphNode node)
         {
             Person = person ?? throw new ArgumentNullException(nameof(person));
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));
@@ -69,13 +69,13 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
+        public Actor([NotNull] IPerson person, [NotNull] IPlayer owner, [NotNull] IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
         {
             _perkResolver = perkResolver;
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
+        public Actor([NotNull] IPerson person, [NotNull] IPlayer owner, [NotNull] IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, owner, node)
         {
             _perkResolver = perkResolver;

@@ -8,7 +8,7 @@ using Zilon.Core.Props;
 
 namespace Assets.Zilon.Scripts.Models.Modals
 {
-    public class PropItemViewModelBase: MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
+    public class PropItemViewModelBase : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
     {
         public Text CountText;
         public Text DurableStatusText;

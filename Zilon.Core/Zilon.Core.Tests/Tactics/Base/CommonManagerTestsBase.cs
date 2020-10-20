@@ -18,7 +18,7 @@ namespace Zilon.Core.Tests.Tactics.Base
     /// <remarks>
     /// Проверяет выстреливание событий и корректность аргументов событий при добавлении и удалении сущностей.
     /// </remarks>
-    public abstract class CommonManagerTestsBase<TSectorEntity> where TSectorEntity: class
+    public abstract class CommonManagerTestsBase<TSectorEntity> where TSectorEntity : class
     {
         /// <summary>
         /// Тест проверяет, что менеджер выбрасывает событие, если добавлен один актёр.

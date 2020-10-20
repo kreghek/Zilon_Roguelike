@@ -41,7 +41,7 @@ namespace Zilon.Core.Tactics
             var rolledRecords = new List<IDropTableRecordSubScheme>();
 
             var openDropTables = new List<IDropTableScheme>(dropTables);
-            while(openDropTables.Any())
+            while (openDropTables.Any())
             {
                 var table = openDropTables[0];
                 var records = table.Records;

@@ -3,6 +3,7 @@
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -23,7 +24,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     /// (0) изымаем предмет из инвентаря                 меняем предметы в слотах местами
     /// (1) изымаем из инвентаря, а текущий в инвентярь  меняем предметы в слотах местами
     /// </remarks>
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class EquipTaskTests
     {
         /// <summary>

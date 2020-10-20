@@ -3,7 +3,7 @@
     /// <summary>
     /// Требуемые профессиональные компетенции.
     /// </summary>
-    public sealed class ProfessionRequirementSubScheme: SubSchemeBase
+    public sealed class ProfessionRequirementSubScheme : SubSchemeBase
     {
         /// <summary>
         /// Тип компетенции.

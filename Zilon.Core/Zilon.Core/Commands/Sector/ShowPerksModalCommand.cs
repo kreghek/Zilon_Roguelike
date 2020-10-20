@@ -22,7 +22,7 @@ namespace Zilon.Core.Commands
         {
             _playerState = playerState;
         }
-        
+
         public override void Execute()
         {
             ModalManager.ShowPerksModal(_playerState.ActiveActor.Actor);

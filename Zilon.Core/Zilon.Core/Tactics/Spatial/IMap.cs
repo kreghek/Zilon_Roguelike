@@ -8,7 +8,7 @@ namespace Zilon.Core.Tactics.Spatial
     /// <summary>
     /// Карта, как граф.
     /// </summary>
-    public interface IMap: ISpatialGraph
+    public interface IMap : ISpatialGraph
     {
         /// <summary>
         /// Регионы карты.

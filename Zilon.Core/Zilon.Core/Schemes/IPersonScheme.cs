@@ -6,13 +6,13 @@ namespace Zilon.Core.Schemes
     /// Схема персонажа.
     /// Это может быть персонаж игрока или напарник. Но не НПС и не монстр.
     /// </summary>
-    public interface IPersonScheme: IScheme
+    public interface IPersonScheme : IScheme
     {
         [NotNull]
         string DefaultAct { get; set; }
-        
+
         int Hp { get; set; }
-        
+
         [NotNull, ItemNotNull]
         PersonSlotSubScheme[] Slots { get; set; }
 

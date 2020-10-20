@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+
 using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
