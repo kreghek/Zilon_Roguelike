@@ -127,7 +127,7 @@ namespace Zilon.Core.Commands
             PlayerState.TaskSource.Intent(intention);
         }
 
-        private bool CheckPropResource(IPropStore inventory,
+        private static bool CheckPropResource(IPropStore inventory,
             string usedPropResourceType,
             int usedPropResourceCount)
         {
@@ -135,24 +135,21 @@ namespace Zilon.Core.Commands
             var propResources = new List<Resource>();
             foreach (var prop in props)
             {
-                switch (prop)
+                if (prop is Resource propResource)
                 {
-                    case Resource propResource:
-                        AddResourceOfUsageToList(usedPropResourceType, usedPropResourceCount, propResources, propResource);
-                        break;
-                    default:
-                        // Остальные типы предметов пока не могут выступать, как источник ресурса.
-                        // Далее нужно будет сделать, чтобы:
-                        // 1. У персонажа был предмет экипировки, который позволяет выполнять
-                        // определённые действия другим предметов. Условно, симбиоз двух предметов (или сет предметов).
-                        // 2. У персонажа был экипирован предмет, который позволяет выполнять
-                        // определённые действия другим предметов.
-                        // 3. Расход прочности другого предмета.
-                        // 4. Применение обойм. Механика расхода предметов, когда ресурсы изымаются не из инвентаря,
-                        // а их специального контейнера внутри предмета. При необходимости, предмет нужно перезаряжать за
-                        // отдельное время.
-                        break;
+                    AddResourceOfUsageToList(usedPropResourceType, usedPropResourceCount, propResources, propResource);
                 }
+
+                // Остальные типы предметов пока не могут выступать, как источник ресурса.
+                // Далее нужно будет сделать, чтобы:
+                // 1. У персонажа был предмет экипировки, который позволяет выполнять
+                // определённые действия другим предметов. Условно, симбиоз двух предметов (или сет предметов).
+                // 2. У персонажа был экипирован предмет, который позволяет выполнять
+                // определённые действия другим предметов.
+                // 3. Расход прочности другого предмета.
+                // 4. Применение обойм. Механика расхода предметов, когда ресурсы изымаются не из инвентаря,
+                // а их специального контейнера внутри предмета. При необходимости, предмет нужно перезаряжать за
+                // отдельное время.
             }
 
             var preferredPropResource = propResources.FirstOrDefault();
