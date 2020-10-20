@@ -49,10 +49,15 @@ namespace Zilon.Core.World
             // Remove all current tasks
             foreach (var removedActor in e.Items)
             {
-                if (_taskDict.TryRemove(removedActor, out var taskState))
-                {
-                    taskState.TaskSource.CancelTask(taskState.Task);
-                }
+                RemoveActorTaskState(removedActor);
+            }
+        }
+
+        private void RemoveActorTaskState(IActor actor)
+        {
+            if (_taskDict.TryRemove(actor, out var taskState))
+            {
+                taskState.TaskSource.CancelTask(taskState.Task);
             }
         }
 
@@ -95,6 +100,9 @@ namespace Zilon.Core.World
                     {
                         // Это может произойти, когда в процессе исполнения задач,
                         // актёр вышел из сектора. Соответственно, его уже нет в списке актёров сектора.
+
+                        RemoveActorTaskState(actor);
+
                         continue;
                     }
 

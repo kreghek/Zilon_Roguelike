@@ -53,7 +53,7 @@ namespace Zilon.Core.Tactics.Behaviour
             await _actorTaskSender.SendAsync(actorTask).ConfigureAwait(false);
         }
 
-        public Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
+        public async Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
         {
             // Тезисы:
             // Этот источник команд ждёт, пока игрок не укажет задачу.
@@ -69,7 +69,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new InvalidOperationException($"Получение задачи актёра без предварительно проверки в {nameof(CanGetTask)}");
             }
 
-            return _actorTaskReceiver.ReceiveAsync();
+            return await _actorTaskReceiver.ReceiveAsync().ConfigureAwait(false);
         }
 
         public bool CanGetTask(IActor actor)
