@@ -29,7 +29,7 @@ namespace Zilon.Core.Schemes
         [ExcludeFromCodeCoverage]
         public static FileSchemeLocator CreateFromEnvVariable()
         {
-            var schemeCatalogFromEnvVariable= Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
+            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
             if (string.IsNullOrWhiteSpace(schemeCatalogFromEnvVariable))
             {
                 throw new InvalidOperationException($"Переменная окружения {schemeCatalogEnvVariable} не задана.");

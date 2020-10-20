@@ -55,10 +55,12 @@ namespace Zilon.Core.Common
 
         public T this[int x, int y]
         {
-            get {
+            get
+            {
                 return Items[x, y];
             }
-            set {
+            set
+            {
                 Items[x, y] = value;
             }
         }

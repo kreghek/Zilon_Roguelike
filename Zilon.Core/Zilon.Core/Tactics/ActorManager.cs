@@ -6,6 +6,6 @@
     /// </summary>
     public class ActorManager : SectorEntityManager<IActor>, IActorManager
     {
-       
+
     }
 }

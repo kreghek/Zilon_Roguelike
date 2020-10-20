@@ -6,6 +6,7 @@ using BenchmarkDotNet.Attributes;
 using JetBrains.Annotations;
 
 using Microsoft.Extensions.DependencyInjection;
+
 using Zilon.Core.Benchmark;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;

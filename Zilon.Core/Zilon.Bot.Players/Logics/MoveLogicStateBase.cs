@@ -7,7 +7,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Logics
 {
-    public abstract class MoveLogicStateBase: LogicStateBase
+    public abstract class MoveLogicStateBase : LogicStateBase
     {
         protected MoveTask MoveTask { get; set; }
         protected IdleTask IdleTask { get; set; }

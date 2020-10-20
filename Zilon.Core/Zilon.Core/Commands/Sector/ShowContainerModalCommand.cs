@@ -24,7 +24,7 @@ namespace Zilon.Core.Commands
         {
             _playerState = playerState;
         }
-        
+
         public override void Execute()
         {
             var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
@@ -32,7 +32,7 @@ namespace Zilon.Core.Commands
             var container = targetContainerViewModel.StaticObject;
             var containerContent = container.GetModule<IPropContainer>().Content;
             var transferMachine = new PropTransferMachine(inventory, containerContent);
-            
+
             ModalManager.ShowContainerModal(transferMachine);
         }
 

@@ -1,9 +1,10 @@
 ﻿using System;
+
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics
 {
-    public sealed class SectorExitEventArgs: EventArgs
+    public sealed class SectorExitEventArgs : EventArgs
     {
         public SectorExitEventArgs(RoomTransition transition)
         {

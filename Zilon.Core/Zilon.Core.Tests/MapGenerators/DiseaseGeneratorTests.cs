@@ -23,7 +23,7 @@ namespace Zilon.Core.MapGenerators.Tests
         public void Create_DifferentDiceSeed_GenerateUniqueDiseases([Values(1, 2, 3, 4, 5)] int diceSeed, [Values(1, 10, 100)] int count)
         {
             // ARRANGE
-            
+
             var dice = new LinearDice(diceSeed);
 
             var generator = new DiseaseGenerator(dice);

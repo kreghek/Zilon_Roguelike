@@ -1,11 +1,13 @@
 ﻿
 using NUnit.Framework;
+
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Tests.Persons.TestCases;
 
 namespace Zilon.Core.Tests.Persons
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class SurvivalStatTests
     {
         /// <summary>
@@ -34,7 +36,7 @@ namespace Zilon.Core.Tests.Persons
         /// </summary>
         [Test]
         [TestCaseSource(typeof(SurvivalStatTestCasesSource), nameof(SurvivalStatTestCasesSource.RangeTestCases))]
-        public int Value_IncrementDecrementRange_ExpectedResults(int startValue, int min, int max, 
+        public int Value_IncrementDecrementRange_ExpectedResults(int startValue, int min, int max,
             int newMin, int newMax)
         {
             // ARRANGE

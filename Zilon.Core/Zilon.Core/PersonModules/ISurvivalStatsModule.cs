@@ -11,7 +11,7 @@ namespace Zilon.Core.PersonModules
     /// <remarks>
     /// Здесь будут сведения о питании, отдыхе, ранах, эмоциональном состоянии персонажа.
     /// </remarks>
-    public interface ISurvivalModule: IPersonModule
+    public interface ISurvivalModule : IPersonModule
     {
         /// <summary>
         /// Текущие характеристики.

@@ -3,7 +3,7 @@
     /// <summary>
     /// Интерфейс менеджера статических объектов.
     /// </summary>
-    public interface IStaticObjectManager: ISectorEntityManager<IStaticObject>
+    public interface IStaticObjectManager : ISectorEntityManager<IStaticObject>
     {
     }
 }

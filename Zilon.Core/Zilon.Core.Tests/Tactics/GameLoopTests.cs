@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using FluentAssertions;
 
 using Moq;
@@ -16,7 +17,8 @@ using Zilon.Core.Tactics.Behaviour;
 namespace Zilon.Core.Tests.Tactics
 {
     [TestFixture
-        ][Parallelizable(ParallelScope.All)]
+        ]
+    [Parallelizable(ParallelScope.All)]
     public class GameLoopTests
     {
         /// <summary>

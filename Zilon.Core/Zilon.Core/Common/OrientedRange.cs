@@ -6,7 +6,7 @@ namespace Zilon.Core.Common
     /// Расширенный диапазон значений с указанием направления.
     /// </summary>
     /// <typeparam name="T"> Тип значений. </typeparam>
-    public sealed class OrientedRange<T>: Range<T> where T : IComparable
+    public sealed class OrientedRange<T> : Range<T> where T : IComparable
     {
         /// <summary>
         /// Направление диапазона.
@@ -19,7 +19,7 @@ namespace Zilon.Core.Common
         /// <param name="min"> Минимальное значение диапазона. </param>
         /// <param name="max"> Максимальное значение диапазона. </param>
         /// <param name="isAcs"> Указывает направление диапазона. </param>
-        public OrientedRange(T min, T max, bool isAcs): base(min, max)
+        public OrientedRange(T min, T max, bool isAcs) : base(min, max)
         {
             IsAcs = isAcs;
         }

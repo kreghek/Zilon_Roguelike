@@ -104,7 +104,7 @@ namespace Zilon.Core.Tactics.Behaviour
         public override int Cost => _cost;
 
         public MoveTask(IActor actor, IGraphNode targetNode, ISectorMap map) : this(actor, targetNode, map, 1000)
-        { 
+        {
         }
 
         public MoveTask(IActor actor, IGraphNode targetNode, ISectorMap map, int cost) : base(actor)

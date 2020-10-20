@@ -9,7 +9,7 @@ namespace Zilon.Core.Common
         [ExcludeFromCodeCoverage]
         public Roll(int dice, int count) : this(dice, count, null)
         {
-            
+
         }
 
         [JsonConstructor]

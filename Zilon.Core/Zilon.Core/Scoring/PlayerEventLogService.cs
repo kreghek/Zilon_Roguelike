@@ -9,7 +9,7 @@ namespace Zilon.Core.Scoring
         public IActor Actor { get; set; }
 
         public IPlayerEvent GetPlayerEvent()
-        { 
+        {
             return _playerEvent;
         }
 

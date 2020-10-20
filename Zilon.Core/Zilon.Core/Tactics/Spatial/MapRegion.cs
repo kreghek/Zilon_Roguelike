@@ -1,6 +1,7 @@
 ﻿using System;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial

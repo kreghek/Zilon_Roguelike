@@ -10,7 +10,8 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class DropTableChestStoreTests
     {
         /// <summary>

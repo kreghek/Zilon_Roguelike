@@ -8,6 +8,6 @@
     /// </remarks>
     public sealed class ChestStore : PropStoreBase
     {
-        
+
     }
 }

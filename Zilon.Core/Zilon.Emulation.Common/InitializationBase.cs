@@ -199,7 +199,8 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
             container.AddSingleton<RandomHumanPersonFactory>();
-            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider=> {
+            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
+            {
                 var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
                 factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
                 return factory;
