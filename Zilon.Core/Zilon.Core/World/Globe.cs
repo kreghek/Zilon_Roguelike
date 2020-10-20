@@ -148,14 +148,7 @@ namespace Zilon.Core.World
 
                 if (state.TaskIsExecuting)
                 {
-                    try
-                    {
-                        state.Task.Execute();
-                    }
-                    catch (Exception exception)
-                    { 
-
-                    }
+                    state.Task.Execute();
 
                     state.TaskSource.ProcessTaskExecuted(state.Task);
                 }
