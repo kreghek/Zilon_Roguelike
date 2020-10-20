@@ -67,7 +67,7 @@ namespace Zilon.Core.Common
             var offsets = GetOffsetClockwise();
             var neighborCoords = new CubeCoords[6];
             for (var i = 0; i < 6; i++)
-            { 
+            {
                 var offset = offsets[i];
                 neighborCoords[i] = offset + baseCoords;
             }

@@ -11,10 +11,10 @@ namespace Zilon.Core.Persons
     {
         [PublicAPI]
         public Equipment Equipment { get; }
-        
+
         [PublicAPI]
         public Equipment OldEquipment { get; }
-        
+
         [PublicAPI]
         public int SlotIndex { get; }
 

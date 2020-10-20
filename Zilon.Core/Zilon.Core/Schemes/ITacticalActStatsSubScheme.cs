@@ -3,7 +3,7 @@ using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
-    public interface ITacticalActStatsSubScheme: ISubScheme
+    public interface ITacticalActStatsSubScheme : ISubScheme
     {
         /// <summary>
         /// Характеристики атакующей способности действия.

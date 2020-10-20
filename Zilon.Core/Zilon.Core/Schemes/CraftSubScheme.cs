@@ -5,7 +5,7 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Подсхема для хранения данных о крафте предмета.
     /// </summary>
-    public sealed class CraftSubScheme: SubSchemeBase
+    public sealed class CraftSubScheme : SubSchemeBase
     {
         /// <summary>
 		/// Ресурсы (черновики), которые требуются для прототипирования.

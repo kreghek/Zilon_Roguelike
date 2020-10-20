@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Zilon.Core.Components;
 
-public class VisualPropHolder: MonoBehaviour
+public class VisualPropHolder : MonoBehaviour
 {
     public EquipmentSlotTypes SlotTypes;
 

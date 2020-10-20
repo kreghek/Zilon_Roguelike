@@ -5,7 +5,7 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Схема инструментов, требуемых для крафта.
     /// </summary>
-    public sealed class InstrumentLevelFunctionSubScheme: SubSchemeBase
+    public sealed class InstrumentLevelFunctionSubScheme : SubSchemeBase
     {
         /// <summary>
         /// Функциональное назначение инструментов.

@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Zilon.Core.Persons
 {
-    public class PerkEventArgs: EventArgs
+    public class PerkEventArgs : EventArgs
     {
         public PerkEventArgs(IPerk perk)
         {

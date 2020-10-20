@@ -10,7 +10,8 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Client
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class PropTransferStoreTests
     {
         /// <summary>

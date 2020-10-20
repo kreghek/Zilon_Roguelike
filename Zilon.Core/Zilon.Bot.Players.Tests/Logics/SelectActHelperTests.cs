@@ -1,6 +1,9 @@
 ﻿using System;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
 
 using Zilon.Core.Persons;
@@ -77,9 +80,9 @@ namespace Zilon.Bot.Players.Logics.Tests
             // ARRANGE
 
             var acts = new ITacticalAct[] {
-                new TacticalAct(new TestTacticalActScheme{ 
+                new TacticalAct(new TestTacticalActScheme{
                     Sid = "default",
-                    Stats = new TestTacticalActStatsSubScheme{ 
+                    Stats = new TestTacticalActStatsSubScheme{
                         Effect = Core.Schemes.TacticalActEffectType.Damage,
                         Efficient = new Core.Common.Roll(3,1),
                         Offence = new TestTacticalActOffenceSubScheme
@@ -107,7 +110,7 @@ namespace Zilon.Bot.Players.Logics.Tests
                         }
                     },
                     Constrains = new TestTacticalActConstrainsSubScheme
-                    { 
+                    {
                         PropResourceType = "resource",
                         PropResourceCount = 1
                     }

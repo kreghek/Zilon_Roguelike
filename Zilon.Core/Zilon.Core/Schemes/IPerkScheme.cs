@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Schemes
 {
-    public interface IPerkScheme: IScheme
+    public interface IPerkScheme : IScheme
     {
         PerkConditionSubScheme[] BaseConditions { get; set; }
         string IconSid { get; set; }

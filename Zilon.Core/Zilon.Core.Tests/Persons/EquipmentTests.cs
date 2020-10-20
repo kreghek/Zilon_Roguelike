@@ -11,7 +11,8 @@ using Zilon.Core.Tests.Common.Schemes;
 namespace Zilon.Core.Tests.Persons
 {
 
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class EquipmentTests
     {
         /// <summary>
@@ -22,7 +23,8 @@ namespace Zilon.Core.Tests.Persons
         public void Equipment_SchemeWithOutEquipSubScheme_NoExceptions()
         {
             // ARRANGE
-            var scheme = new TestPropScheme {
+            var scheme = new TestPropScheme
+            {
                 Equip = null //Явно указываем, что предмет не является экипировкой.
             };
 

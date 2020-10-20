@@ -24,7 +24,7 @@ public class PlayerPersonActivator : MonoBehaviour
     public SectorMapViewModel SectorMapViewModel;
     public Transform TargetObject;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members", 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members",
         Justification = "Неявно вызывается Unity.")]
     private void FixedUpdate()
     {

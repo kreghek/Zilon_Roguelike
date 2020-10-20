@@ -191,7 +191,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var personMock = new Mock<IPerson>();
             personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalModule);
-            personMock.Setup(x => x.HasModule(It.Is<string>(x=>x == nameof(ISurvivalModule)))).Returns(true);
+            personMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule)))).Returns(true);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();

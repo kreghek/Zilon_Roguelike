@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.PersonModules
 {
-    public interface IInventoryModule: IPersonModule, IPropStore
+    public interface IInventoryModule : IPersonModule, IPropStore
     {
     }
 }

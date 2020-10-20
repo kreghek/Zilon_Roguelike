@@ -17,7 +17,7 @@ namespace Zilon.Core.Scoring
         public IPlayer Player { get; }
 
         public IPlayerEvent GetPlayerEvent()
-        { 
+        {
             return _playerEvent;
         }
 

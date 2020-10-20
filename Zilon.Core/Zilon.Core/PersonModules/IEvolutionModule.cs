@@ -9,7 +9,7 @@ namespace Zilon.Core.PersonModules
     /// <summary>
     /// Интерфейс, содержащий данные о развитие персонажа.
     /// </summary>
-    public interface IEvolutionModule: IPersonModule
+    public interface IEvolutionModule : IPersonModule
     {
         /// <summary>
         /// Перечень навыков.

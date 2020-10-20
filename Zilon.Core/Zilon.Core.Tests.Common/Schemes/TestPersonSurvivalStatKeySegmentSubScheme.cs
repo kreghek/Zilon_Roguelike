@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
-    public sealed class TestPersonSurvivalStatKeySegmentSubScheme: IPersonSurvivalStatKeySegmentSubScheme
+    public sealed class TestPersonSurvivalStatKeySegmentSubScheme : IPersonSurvivalStatKeySegmentSubScheme
     {
         public PersonSurvivalStatKeypointLevel Level { get; set; }
 

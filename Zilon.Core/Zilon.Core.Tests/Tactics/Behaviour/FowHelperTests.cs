@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.CoreTestsTemp.Tactics.Behaviour.TestCases;
@@ -100,7 +101,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             FowHelper.UpdateFowData(fowData, fowContext, baseNode, radius);
 
             // ARRANGE
-            var factObservingNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Observing).Select(x=>x.Node);
+            var factObservingNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Observing).Select(x => x.Node);
             factObservingNodes.Should().BeEquivalentTo(expectedObservingNodes);
         }
     }

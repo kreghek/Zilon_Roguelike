@@ -2,7 +2,7 @@
 
 namespace Assets.Zilon.Scripts.Models.Sector
 {
-    public sealed class NodeInteractEventArgs: EventArgs
+    public sealed class NodeInteractEventArgs : EventArgs
     {
         public NodeInteractEventArgs(MapNodeVM nodeViewModel)
         {

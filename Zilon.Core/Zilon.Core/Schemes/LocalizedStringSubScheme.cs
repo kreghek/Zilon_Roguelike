@@ -7,7 +7,7 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Локализованная на разные языки строка.
     /// </summary>
-    public sealed class LocalizedStringSubScheme: ILocalizedString
+    public sealed class LocalizedStringSubScheme : ILocalizedString
     {
         /// <summary>
         /// Английский вариант.

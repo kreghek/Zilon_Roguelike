@@ -1,19 +1,22 @@
-﻿using NUnit.Framework;
-using Zilon.Core.World;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
-using Moq;
-using System.Threading.Tasks;
-using Zilon.Core.Tests.Common.Schemes;
-using System.Linq;
 using Zilon.Core.Tactics;
-using System.Drawing;
-using Zilon.Core.Common;
-using System.Globalization;
+using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.World.Tests
 {

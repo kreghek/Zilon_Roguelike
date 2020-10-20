@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -7,7 +8,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Triggers
 {
-    public class IntruderDetectedTrigger: ILogicStateTrigger
+    public class IntruderDetectedTrigger : ILogicStateTrigger
     {
         private static IActor[] CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
         {

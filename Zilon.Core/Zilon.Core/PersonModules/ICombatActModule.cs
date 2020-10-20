@@ -4,7 +4,7 @@ using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
-    public interface ICombatActModule: IPersonModule
+    public interface ICombatActModule : IPersonModule
     {
         /// <summary>
         /// Рассчёт всех действий, используемых в бою.

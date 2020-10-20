@@ -3,7 +3,7 @@
     /// <summary>
     /// Подсхема характеристики выживания персонажа.
     /// </summary>
-    public interface IPersonSurvivalStatSubScheme: ISubScheme
+    public interface IPersonSurvivalStatSubScheme : ISubScheme
     {
         /// <summary>
         /// Тип характеристики выживания. Сытость/гидратация.

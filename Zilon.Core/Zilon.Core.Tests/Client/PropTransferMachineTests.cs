@@ -109,7 +109,7 @@ namespace Zilon.Core.Tests.Client
             {
                 resource
             };
-            
+
             var container = new FixedPropChest(containerProps);
 
             // трансферная машина
