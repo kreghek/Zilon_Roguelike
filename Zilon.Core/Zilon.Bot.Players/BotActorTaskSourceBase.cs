@@ -17,7 +17,7 @@ namespace Zilon.Bot.Players
         // 2. В интерфейс добавить метод для обработки удаления актёра.
         private readonly Dictionary<IActor, ILogicStrategy> _actorStrategies;
 
-        public BotActorTaskSourceBase()
+        protected BotActorTaskSourceBase()
         {
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
