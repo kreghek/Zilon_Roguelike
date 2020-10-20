@@ -7,7 +7,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public sealed class HumanBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext>, IPluggableActorTaskSource<TContext> where TContext: class, ISectorTaskSourceContext
+    public sealed class HumanBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext>, IPluggableActorTaskSource<TContext> where TContext : class, ISectorTaskSourceContext
     {
         private IBotSettings _botSettings;
         private readonly LogicStateTreePatterns _logicStateTreePatterns;

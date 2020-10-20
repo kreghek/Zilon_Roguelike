@@ -8,7 +8,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public abstract class BotActorTaskSourceBase<TContext> : ISectorActorTaskSource<TContext> where TContext: class, ISectorTaskSourceContext
+    public abstract class BotActorTaskSourceBase<TContext> : ISectorActorTaskSource<TContext> where TContext : class, ISectorTaskSourceContext
     {
         //TODO Есть риск утечки.
         // Актёры могут быть удалены, но информация о них будет храниться здесь, предотвращая чистку.

@@ -1,9 +1,10 @@
 ﻿using System;
+
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics
 {
-    public sealed class TransitionUsedEventArgs: EventArgs
+    public sealed class TransitionUsedEventArgs : EventArgs
     {
         public TransitionUsedEventArgs(IActor actor, RoomTransition transition)
         {

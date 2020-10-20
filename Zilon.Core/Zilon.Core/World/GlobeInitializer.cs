@@ -36,7 +36,7 @@ namespace Zilon.Core.World
 
             var startLocation = _schemeService.GetScheme<ILocationScheme>(startLocationSchemeSid);
             var startBiom = await _biomeInitializer.InitBiomeAsync(startLocation).ConfigureAwait(false);
-            var startSectorNode = startBiom.Sectors.First(x=>x.State == SectorNodeState.SectorMaterialized);
+            var startSectorNode = startBiom.Sectors.First(x => x.State == SectorNodeState.SectorMaterialized);
 
             globe.AddSectorNode(startSectorNode);
 

@@ -24,7 +24,7 @@ namespace Zilon.Bot.Players.NetCore
         }
 
         [ConfigureAuxServices]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter",
             Justification = "Относится к параметру serviceFactory, потому что он используется через рефлексию.")]
         public static void ConfigureAuxServices(IServiceProvider serviceFactory)
         {

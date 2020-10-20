@@ -8,7 +8,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public sealed class MonsterBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext> where TContext: class, ISectorTaskSourceContext
+    public sealed class MonsterBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext> where TContext : class, ISectorTaskSourceContext
     {
         private readonly LogicStateTreePatterns _logicStateTreePatterns;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+
 using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Persons
@@ -47,7 +48,7 @@ namespace Zilon.Core.Persons
     }
 
     public enum FractionRelation
-    { 
+    {
         Undefined = 0,
         Neutral,
         Enemy

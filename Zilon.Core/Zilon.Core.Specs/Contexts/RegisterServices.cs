@@ -69,7 +69,8 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
             serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceCollection.AddSingleton<IPersonInitializer, EmptyPersonInitializer>();
-            serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider => {
+            serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider =>
+            {
                 return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
             });
         }

@@ -124,7 +124,7 @@ namespace Zilon.Core.Commands.Sector
             var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool, _mineDepositMethodRandomSource);
 
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
-            return new MineTask(actor,taskContext, staticObject, toolMineDepositMethod);
+            return new MineTask(actor, taskContext, staticObject, toolMineDepositMethod);
         }
 
         private MineTask CreateTaskByHands(IActor actor, IStaticObject staticObject)

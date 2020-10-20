@@ -56,7 +56,7 @@ namespace Zilon.Core.Tactics
         public bool CanExecuteTasks { get => !Person.CheckIsDead(); }
 
         [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull]  IGraphNode node)
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node)
         {
             Person = person ?? throw new ArgumentNullException(nameof(person));
             TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
@@ -68,13 +68,13 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull]  IGraphNode node,
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull]  IGraphNode node,
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;

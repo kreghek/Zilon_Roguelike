@@ -58,7 +58,8 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
             serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceCollection.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
-            serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider => {
+            serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider =>
+            {
                 return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
             });
         }
@@ -221,7 +222,8 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
             container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
-            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider=> {
+            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
+            {
                 var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
                 factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
                 return factory;

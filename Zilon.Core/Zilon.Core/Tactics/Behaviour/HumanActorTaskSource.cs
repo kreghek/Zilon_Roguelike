@@ -5,7 +5,7 @@ using Zilon.Core.Common;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class HumanActorTaskSource<TContext> : IHumanActorTaskSource<TContext> where TContext: ISectorTaskSourceContext
+    public class HumanActorTaskSource<TContext> : IHumanActorTaskSource<TContext> where TContext : ISectorTaskSourceContext
     {
         private readonly ISender<IActorTask> _actorTaskSender;
         private readonly IReceiver<IActorTask> _actorTaskReceiver;
