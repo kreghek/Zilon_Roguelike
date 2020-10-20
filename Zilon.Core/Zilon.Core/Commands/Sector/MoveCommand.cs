@@ -107,6 +107,8 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
+            //test
+
             CreatePath(nodeViewModel);
             return Path.Any();
         }
