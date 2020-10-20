@@ -103,7 +103,7 @@ public class SectorUiHandler : MonoBehaviour
         return CurrentSector?.Scheme.Sid == "city";
     }
 
-    private ISector CurrentSector =>  _player.SectorNode.Sector;
+    private ISector CurrentSector => _player.SectorNode.Sector;
 
     private bool GetCanOpenLoot()
     {

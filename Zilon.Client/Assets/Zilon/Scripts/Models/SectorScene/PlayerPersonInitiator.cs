@@ -89,7 +89,7 @@ public class PlayerPersonInitiator : MonoBehaviour
             ShowCreatePersonModal(_humanPlayer.MainPerson);
         }
 
-        var actor = actorManager.Items.Single(x=>x.Person == _humanPlayer.MainPerson);
+        var actor = actorManager.Items.Single(x => x.Person == _humanPlayer.MainPerson);
 
         var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();

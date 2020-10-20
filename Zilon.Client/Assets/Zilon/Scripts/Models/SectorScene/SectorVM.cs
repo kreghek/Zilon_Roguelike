@@ -273,7 +273,7 @@ public class SectorVM : MonoBehaviour
             var globe = await _globeInitializer.CreateGlobeAsync("intro");
             _globeStorage.AssignGlobe(globe);
         }
-        
+
         var sectorNode1 = _globeStorage.Globe.SectorNodes.Single(x => x.Sector.ActorManager.Items.Any(actor => actor.Person == _humanPlayer.MainPerson));
         _humanPlayer.BindSectorNode(sectorNode1);
 
@@ -563,7 +563,7 @@ public class SectorVM : MonoBehaviour
         _playerState.HoverViewModel = null;
         _humanActorTaskSource.SwitchActiveActor(null);
 
-        var actorInNewSector = e.Transition.SectorNode.Sector.ActorManager.Items.SingleOrDefault(x=>x.Person == actor.Person);
+        var actorInNewSector = e.Transition.SectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Person == actor.Person);
         _humanActorTaskSource.SwitchActiveActor(actorInNewSector);
 
         var nextSectorNode = e.Transition.SectorNode;
@@ -587,7 +587,7 @@ public class SectorVM : MonoBehaviour
             monsterActor.UsedAct -= ActorOnUsedAct;
             monsterActor.Person.GetModule<ISurvivalModule>().Dead -= Monster_Dead;
         }
-        
+
         _humanPlayer.SectorNode.Sector.TrasitionUsed -= Sector_HumanGroupExit;
     }
 

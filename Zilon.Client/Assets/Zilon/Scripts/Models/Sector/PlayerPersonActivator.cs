@@ -57,7 +57,7 @@ public class PlayerPersonActivator : MonoBehaviour
         [NotNull] IActorManager actorManager,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        var actor = _humanPlayer.SectorNode.Sector.ActorManager.Items.Single(x=>x.Person == _humanPlayer);
+        var actor = _humanPlayer.SectorNode.Sector.ActorManager.Items.Single(x => x.Person == _humanPlayer);
 
         actorManager.Add(actor);
 

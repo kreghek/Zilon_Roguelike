@@ -55,7 +55,8 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IBiomeSchemeRoller>().To<BiomeSchemeRoller>().AsSingle();
 
         Container.Bind<IPersonInitializer>().To<HumanPersonInitializer>().AsSingle();
-        Container.Bind<IGlobeInitializer>().FromMethod(injectContext => {
+        Container.Bind<IGlobeInitializer>().FromMethod(injectContext =>
+        {
             var biomInitializer = injectContext.Container.Resolve<IBiomeInitializer>();
             var globeTransitionHandler = injectContext.Container.Resolve<IGlobeTransitionHandler>();
             var schemeService = injectContext.Container.Resolve<ISchemeService>();
@@ -65,10 +66,12 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
             return globeIntializer;
         }).AsSingle();
         Container.Bind<BiomeInitializer>().AsSingle();
-        Container.Bind<IGlobeExpander>().FromMethod(injectContext => {
+        Container.Bind<IGlobeExpander>().FromMethod(injectContext =>
+        {
             return injectContext.Container.Resolve<BiomeInitializer>();
         }).AsSingle();
-        Container.Bind<IBiomeInitializer>().FromMethod(injectContext => {
+        Container.Bind<IBiomeInitializer>().FromMethod(injectContext =>
+        {
             return injectContext.Container.Resolve<BiomeInitializer>();
         }).AsSingle();
         Container.Bind<IGlobeTransitionHandler>().To<GlobeTransitionHandler>().AsSingle();
