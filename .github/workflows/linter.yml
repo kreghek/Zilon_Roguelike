@@ -43,7 +43,7 @@ jobs:
       - run: git pull
       - run: dotnet tool install -g dotnet-format
       - name: format
-        run: dotnet-format -v d
+        run: dotnet-format -f Zilon.Core.sln -v d
         working-directory: ${{env.working-directory}}
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
