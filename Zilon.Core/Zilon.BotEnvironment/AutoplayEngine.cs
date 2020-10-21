@@ -15,7 +15,7 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
-    class AutoplayEngine : AutoplayEngineBase<IPluggableActorTaskSource<ISectorTaskSourceContext>>
+    class AutoplayEngine : AutoplayEngineBase
     {
         private const string SCORE_FILE_PATH = "bot-scores";
         private const int BOT_EXCEPTION_LIMIT = 3;

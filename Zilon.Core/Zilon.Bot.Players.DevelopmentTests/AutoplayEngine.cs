@@ -2,13 +2,12 @@
 
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
-    class AutoplayEngine<T> : AutoplayEngineBase<T> where T : IPluggableActorTaskSource<ISectorTaskSourceContext>
+    class AutoplayEngine : AutoplayEngineBase
     {
         private readonly Startup _startup;
 

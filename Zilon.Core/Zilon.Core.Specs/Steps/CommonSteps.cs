@@ -194,8 +194,8 @@ namespace Zilon.Core.Specs.Steps
             var equipment = container.GetModule<IPropContainer>().Content.CalcActualItems().Single(x => x.Scheme.Sid == equipmentSchemeSid);
 
             transferMachine.TransferProp(equipment,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             propTransferCommand.Execute();
         }
@@ -229,8 +229,8 @@ namespace Zilon.Core.Specs.Steps
             }
 
             transferMachine.TransferProp(takenResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             propTransferCommand.Execute();
         }

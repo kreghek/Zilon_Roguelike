@@ -13,7 +13,6 @@ using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 
 namespace Zilon.Bot.Players.DevelopmentTests
@@ -38,7 +37,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
             var player = serviceProvider.GetRequiredService<IPlayer>();
 
-            var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource<ISectorTaskSourceContext>>(
+            var autoPlayEngine = new AutoplayEngine(
                 startUp,
                 botSettings,
                 globeInitializer);

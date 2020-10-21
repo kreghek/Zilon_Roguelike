@@ -7,12 +7,11 @@ using Zilon.Bot.Sdk;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 
 namespace Zilon.Emulation.Common
 {
-    public abstract class AutoplayEngineBase<T> where T : IPluggableActorTaskSource<ISectorTaskSourceContext>
+    public abstract class AutoplayEngineBase
     {
         private const int ITERATION_LIMIT = 40_000_000;
         private readonly IGlobeInitializer _globeInitializer;
