@@ -11,6 +11,8 @@ namespace Zilon.Core.World
 {
     public sealed class HumanPersonInitializer : IPersonInitializer
     {
+        private const string PERSON_SCHEME_SID = "human-person";
+
         private readonly IPersonFactory _personFactory;
         private readonly IPlayer _player;
 
@@ -22,7 +24,7 @@ namespace Zilon.Core.World
 
         public Task<IEnumerable<IPerson>> CreateStartPersonsAsync()
         {
-            var person = CreateStartPerson("human-person", _personFactory, Fractions.MainPersonFraction);
+            var person = CreateStartPerson(PERSON_SCHEME_SID, _personFactory, Fractions.MainPersonFraction);
             _player.MainPerson = person;
             return Task.FromResult(new[] { person }.AsEnumerable());
         }
