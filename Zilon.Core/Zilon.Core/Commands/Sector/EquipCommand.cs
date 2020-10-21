@@ -99,7 +99,7 @@ namespace Zilon.Core.Commands
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             var intention = new Intention<EquipTask>(a => new EquipTask(a, taskContext, equipment, SlotIndex.Value));
-            PlayerState.TaskSource.Intent(intention);
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
 
         private Equipment GetInventorySelectedEquipment()

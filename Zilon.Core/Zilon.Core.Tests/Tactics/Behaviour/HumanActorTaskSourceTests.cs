@@ -50,7 +50,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
             var intention = intentionMock.Object;
 
-            var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>(actor);
+            var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
 
             var contextMock = new Mock<ISectorTaskSourceContext>();
             var context = contextMock.Object;
@@ -58,7 +58,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // ACT
 
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
-            await taskSource.IntentAsync(intention).ConfigureAwait(false);
+            await taskSource.IntentAsync(intention, actor).ConfigureAwait(false);
             var factActorTask = await getActorTaskTask.ConfigureAwait(false);
 
             // ASSERT
@@ -90,11 +90,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var contextMock = new Mock<ISectorTaskSourceContext>();
             var context = contextMock.Object;
 
-            var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>(actor);
+            var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
 
             // ACT
 
-            await taskSource.IntentAsync(intention).ConfigureAwait(false);
+            await taskSource.IntentAsync(intention, actor).ConfigureAwait(false);
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
             var factActorTask = await getActorTaskTask.ConfigureAwait(false);
 

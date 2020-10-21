@@ -71,7 +71,7 @@ namespace Zilon.Core.Commands
             }
 
             var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, staticObject));
-            PlayerState.TaskSource.Intent(intetion);
+            PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
         }
 
         private OpenContainerTask CreateTask(IActor actor, IStaticObject staticObject)

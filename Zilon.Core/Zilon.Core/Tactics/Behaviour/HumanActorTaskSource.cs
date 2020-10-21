@@ -9,6 +9,7 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly ISender<IActorTask> _actorTaskSender;
         private readonly IReceiver<IActorTask> _actorTaskReceiver;
+        private bool _intentionWait;
 
         public HumanActorTaskSource()
         {
@@ -17,22 +18,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _actorTaskReceiver = spscChannel;
         }
 
-        public HumanActorTaskSource(IActor activeActor) : this()
-        {
-            SwitchActiveActor(activeActor);
-        }
-
-        public void SwitchActiveActor(IActor currentActor)
-        {
-            ActiveActor = currentActor;
-        }
-
-        public IActor ActiveActor { get; private set; }
-        public bool Enabled { get => ActiveActor != null; }
-
-        private bool _intentionWait;
-
-        public async Task IntentAsync(IIntention intention)
+        public async Task IntentAsync(IIntention intention, IActor activeActor)
         {
             if (_intentionWait)
             {
@@ -46,7 +32,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
 
-            var actorTask = currentIntention.CreateActorTask(ActiveActor);
+            var actorTask = currentIntention.CreateActorTask(activeActor);
 
             _intentionWait = true;
 
@@ -59,30 +45,15 @@ namespace Zilon.Core.Tactics.Behaviour
             // Этот источник команд ждёт, пока игрок не укажет задачу.
             // Задача генерируется из намерения. Это значит, что ждать нужно, пока не будет задано намерение.
 
-            if (ActiveActor is null)
-            {
-                throw new InvalidOperationException("Не выбран текущий ключевой актёр.");
-            }
-
-            if (actor != ActiveActor)
-            {
-                throw new InvalidOperationException($"Получение задачи актёра без предварительно проверки в {nameof(CanGetTask)}");
-            }
-
             return await _actorTaskReceiver.ReceiveAsync().ConfigureAwait(false);
-        }
-
-        public bool CanGetTask(IActor actor)
-        {
-            return actor == ActiveActor;
         }
 
         //TODO Избавиться от синхронного варианта.
         // Сейчас он оставлен прото из-за тестов. Сложностей с удалением нет, кроме рутины.
         [Obsolete("Использовать асинк-вариант вместо этого")]
-        public void Intent(IIntention intention)
+        public void Intent(IIntention intention, IActor activeActor)
         {
-            IntentAsync(intention).Wait();
+            IntentAsync(intention, activeActor).Wait();
         }
 
         public bool CanIntent()

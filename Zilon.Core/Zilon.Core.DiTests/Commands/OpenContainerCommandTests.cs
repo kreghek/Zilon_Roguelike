@@ -51,7 +51,7 @@ namespace Zilon.Core.Tests.Commands
             command.Execute();
 
             // ASSERT
-            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()));
+            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>(), It.IsAny<IActor>()));
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)

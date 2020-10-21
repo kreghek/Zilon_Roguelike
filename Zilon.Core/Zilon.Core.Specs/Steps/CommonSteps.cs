@@ -141,12 +141,13 @@ namespace Zilon.Core.Specs.Steps
         {
             var globe = Context.Globe;
             var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var counter = count;
 
-            var survivalModule = humatTaskSource.ActiveActor?.Person?.GetModuleSafe<ISurvivalModule>();
-            while ((!humatTaskSource.CanIntent() && humatTaskSource.ActiveActor != null && survivalModule?.IsDead == false) ||
-                (humatTaskSource.ActiveActor == null && counter > 0))
+            var survivalModule = playerState.ActiveActor?.Actor.Person?.GetModuleSafe<ISurvivalModule>();
+            while ((!humatTaskSource.CanIntent() && playerState.ActiveActor?.Actor != null && survivalModule?.IsDead == false) ||
+                (playerState.ActiveActor?.Actor == null && counter > 0))
             {
                 await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
                 counter--;

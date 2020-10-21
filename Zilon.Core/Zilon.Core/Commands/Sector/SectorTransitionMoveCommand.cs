@@ -60,7 +60,7 @@ namespace Zilon.Core.Commands
         {
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
             var intention = new Intention<SectorTransitTask>(a => new SectorTransitTask(a, taskContext));
-            PlayerState.TaskSource.Intent(intention);
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Zilon.Core.Tests.Commands
 
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
                 CheckAttackIntention(intention, playerState, target)
-            )));
+            ), It.IsAny<IActor>()));
         }
 
         private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)

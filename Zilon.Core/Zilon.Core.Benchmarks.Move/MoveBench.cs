@@ -153,7 +153,6 @@ namespace Zilon.Core.Benchmarks.Move
 
             //Лучше централизовать переключение текущего актёра только в playerState
             playerState.ActiveActor = playerActorVm;
-            humanActorTaskSource.SwitchActiveActor(playerState.ActiveActor.Actor);
         }
     }
 }

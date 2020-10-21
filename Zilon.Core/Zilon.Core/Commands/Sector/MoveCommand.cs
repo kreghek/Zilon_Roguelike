@@ -102,7 +102,7 @@ namespace Zilon.Core.Commands
             var currentSector = _player.SectorNode.Sector;
 
             var moveIntetion = new MoveIntention(targetNode, currentSector);
-            PlayerState.TaskSource.Intent(moveIntetion);
+            PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
         }
 
         private IMapNodeViewModel GetHoverNodeViewModel()

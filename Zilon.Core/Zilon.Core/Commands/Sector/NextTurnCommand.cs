@@ -25,7 +25,7 @@ namespace Zilon.Core.Commands
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             var intention = new Intention<IdleTask>(actor => new IdleTask(actor, taskContext, 1000));
-            PlayerState.TaskSource.Intent(intention);
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
     }
 }

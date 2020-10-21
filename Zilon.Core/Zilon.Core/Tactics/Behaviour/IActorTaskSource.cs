@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -31,15 +30,5 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </summary>
         /// <param name="cencelledActorTask"></param>
         void CancelTask(IActorTask cencelledActorTask);
-    }
-
-    public sealed class SectorTaskSourceContext : ISectorTaskSourceContext
-    {
-        public SectorTaskSourceContext(ISector sector)
-        {
-            Sector = sector ?? throw new ArgumentNullException(nameof(sector));
-        }
-
-        public ISector Sector { get; }
     }
 }

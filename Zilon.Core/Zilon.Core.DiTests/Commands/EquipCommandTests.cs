@@ -11,6 +11,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.Components;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
@@ -90,7 +91,7 @@ namespace Zilon.Core.Tests.Commands
             command.Execute();
 
             // ASSERT
-            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()), Times.Once);
+            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>(), It.IsAny<IActor>()), Times.Once);
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)

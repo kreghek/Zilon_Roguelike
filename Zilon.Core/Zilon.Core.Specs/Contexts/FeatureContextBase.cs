@@ -110,11 +110,11 @@ namespace Zilon.Core.Specs.Contexts
             humanPlayer.BindSectorNode(sectorNode);
         }
 
-        private class SquareGenerationOptionsSubScheme : ISectorSquareMapFactoryOptionsSubScheme
-        {
-            public SchemeSectorMapGenerator MapGenerator { get => SchemeSectorMapGenerator.SquarePlane; }
-            public int Size { get; set; }
-        }
+        //private class SquareGenerationOptionsSubScheme : ISectorSquareMapFactoryOptionsSubScheme
+        //{
+        //    public SchemeSectorMapGenerator MapGenerator { get => SchemeSectorMapGenerator.SquarePlane; }
+        //    public int Size { get; set; }
+        //}
 
         public ISector GetSector()
         {
@@ -164,8 +164,6 @@ namespace Zilon.Core.Specs.Contexts
             var humanStartNode = sector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
             var humanActor = CreateHumanActor(personSid, humanStartNode, perkResolver);
             humanPlayer.MainPerson = humanActor.Person;
-
-            humanTaskSource.SwitchActiveActor(humanActor);
 
             actorManager.Add(humanActor);
 

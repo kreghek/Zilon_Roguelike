@@ -42,7 +42,7 @@ namespace Zilon.Core.Commands
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             var intention = new Intention<TransferPropsTask>(actor => new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer }));
-            PlayerState.TaskSource.Intent(intention);
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
     }
 }

@@ -80,14 +80,14 @@ namespace Zilon.Core.Commands.Sector
                 else
                 {
                     var intetion = new Intention<MineTask>(actor => CreateTaskByInstrument(actor, targetStaticObject, equipedTool));
-                    PlayerState.TaskSource.IntentAsync(intetion).Wait();
+                    PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
                 }
             }
             else
             {
                 // Добыча руками, если никаких тегов инструмента не задано.
                 var intetion = new Intention<MineTask>(actor => CreateTaskByHands(actor, targetStaticObject));
-                PlayerState.TaskSource.IntentAsync(intetion).Wait();
+                PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
             }
         }
 

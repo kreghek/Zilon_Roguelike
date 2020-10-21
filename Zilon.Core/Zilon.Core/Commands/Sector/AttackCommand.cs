@@ -124,7 +124,7 @@ namespace Zilon.Core.Commands
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             var intention = new Intention<AttackTask>(a => new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
-            PlayerState.TaskSource.Intent(intention);
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
 
         private static bool CheckPropResource(IPropStore inventory,
