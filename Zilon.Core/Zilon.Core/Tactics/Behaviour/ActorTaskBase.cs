@@ -31,19 +31,4 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public abstract void Execute();
     }
-
-    public interface IActorTaskContext
-    {
-        ISector Sector { get; }
-    }
-
-    public sealed class ActorTaskContext : IActorTaskContext
-    {
-        public ActorTaskContext(ISector sector)
-        {
-            Sector = sector ?? throw new ArgumentNullException(nameof(sector));
-        }
-
-        public ISector Sector { get; }
-    }
 }

@@ -58,7 +58,6 @@ namespace Zilon.Core.Tactics
         public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Added;
         public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Removed;
 
-
         private void DoAdded(params TSectorEntity[] entities)
         {
             var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);

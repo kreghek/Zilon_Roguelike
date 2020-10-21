@@ -35,7 +35,6 @@ namespace Zilon.Core.Specs.Contexts
 
         public IServiceProvider Register()
         {
-
             var serviceCollection = RegisterServices1();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -133,7 +132,6 @@ namespace Zilon.Core.Specs.Contexts
                 return tacticalActUsageService;
             });
         }
-
 
         private static void RegisterSchemeService(ServiceCollection serviceCollection)
         {

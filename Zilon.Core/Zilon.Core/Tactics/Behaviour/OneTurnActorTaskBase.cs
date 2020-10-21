@@ -7,7 +7,6 @@
     {
         protected OneTurnActorTaskBase(IActor actor, IActorTaskContext context) : base(actor, context)
         {
-
         }
 
         public override void Execute()
