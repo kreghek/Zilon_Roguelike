@@ -2,7 +2,6 @@
 
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
 {

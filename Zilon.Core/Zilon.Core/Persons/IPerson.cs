@@ -1,7 +1,4 @@
-﻿using System;
-using System.Drawing;
-
-using Zilon.Core.PersonModules;
+﻿using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Persons
 {
@@ -38,36 +35,5 @@ namespace Zilon.Core.Persons
         bool HasModule(string key);
 
         IFraction Fraction { get; }
-    }
-
-    public sealed class Fraction : IFraction
-    {
-        public Fraction(string name)
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
-
-        public string Name { get; }
-
-        public FractionRelation GetRelation(IFraction targetFraction)
-        {
-            if (this == Fractions.MonsterFraction && targetFraction != Fractions.MonsterFraction)
-            {
-                // Фракция монстров нападает на всех, кроме монстров.
-                // У монстров нет друзей.
-                return FractionRelation.Enemy;
-            }
-            else if (this != Fractions.MonsterFraction && targetFraction == Fractions.MonsterFraction)
-            {
-                // С монтсрами никто не дружит.
-                // Все фракции считают их врагами.
-                return FractionRelation.Enemy;
-            }
-            else
-            {
-                // Все фракции, кроме монстров, друг к другу относятся нейтрально.
-                return FractionRelation.Neutral;
-            }
-        }
     }
 }

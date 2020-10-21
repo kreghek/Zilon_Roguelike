@@ -1,5 +1,4 @@
-﻿using Zilon.Core.Persons;
-using Zilon.Core.Players;
+﻿using Zilon.Core.Players;
 
 namespace Zilon.Core.Scoring
 {

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
