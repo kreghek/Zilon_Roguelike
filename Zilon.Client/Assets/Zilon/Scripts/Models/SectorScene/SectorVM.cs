@@ -554,17 +554,15 @@ public class SectorVM : MonoBehaviour
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
 
-        var activeActor = _humanActorTaskSource.ActiveActor;
+        var activeActor = actor;
         var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
         survivalModule.Dead -= HumanPersonSurvival_Dead;
 
         _playerState.ActiveActor = null;
         _playerState.SelectedViewModel = null;
         _playerState.HoverViewModel = null;
-        _humanActorTaskSource.SwitchActiveActor(null);
 
         var actorInNewSector = e.Transition.SectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Person == actor.Person);
-        _humanActorTaskSource.SwitchActiveActor(actorInNewSector);
 
         var nextSectorNode = e.Transition.SectorNode;
         _humanPlayer.BindSectorNode(nextSectorNode);
@@ -698,7 +696,7 @@ public class SectorVM : MonoBehaviour
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
-        var activeActor = _humanActorTaskSource.ActiveActor;
+        var activeActor = _playerState.ActiveActor.Actor;
         var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
         survivalModule.Dead -= HumanPersonSurvival_Dead;
 

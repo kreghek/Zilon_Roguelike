@@ -71,11 +71,8 @@ public class PlayerPersonInitiator : MonoBehaviour
     private void SetActiveActor(ActorViewModel playerActorViewModel)
     {
         // Это нужно для UI, чтобы они реагировали на состояние текущего персонажа.
+        // И это нужно для команд. Команды берут актуивного актёра из источника команд.
         _playerState.ActiveActor = playerActorViewModel;
-
-        // Это нужно для команд. Команды берут актуивного актёра из источника команд.
-        // 0_о. И генерируют намерение для источника команд.
-        _humanActorTaskSource.SwitchActiveActor(_playerState.ActiveActor.Actor);
     }
 
     private ActorViewModel CreateHumanActorViewModel([NotNull] IActorManager actorManager,
