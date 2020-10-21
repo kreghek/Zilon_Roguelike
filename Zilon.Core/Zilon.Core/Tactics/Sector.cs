@@ -300,7 +300,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void HoldNodes(IGraphNode nextNode, IActor actor, IMap map)
+        private static void HoldNodes(IGraphNode nextNode, IActor actor, IMap map)
         {
             var actorNodes = GetActorNodes(actor.Person.PhysicalSize, nextNode, map);
 
@@ -310,7 +310,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ReleaseNodes(IActor actor, IMap map)
+        private static void ReleaseNodes(IActor actor, IMap map)
         {
             var actorNodes = GetActorNodes(actor.Person.PhysicalSize, actor.Node, map);
 

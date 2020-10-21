@@ -39,7 +39,6 @@ namespace Zilon.Bot.Players
                 default:
                     throw new NotSupportedException($"{actor.Person.GetType()} не поддерживается.");
             }
-
         }
     }
 }

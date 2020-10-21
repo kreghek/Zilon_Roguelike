@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -62,7 +61,7 @@ namespace Zilon.Core.Specs.Contexts
             return serviceCollection;
         }
 
-        private void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
+        private static void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
             serviceCollection.AddSingleton<IBiomeInitializer, BiomeInitializer>();

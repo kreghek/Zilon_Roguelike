@@ -40,20 +40,6 @@ namespace Zilon.Core.Persons
         IFraction Fraction { get; }
     }
 
-    public interface IFraction
-    {
-        string Name { get; }
-
-        FractionRelation GetRelation(IFraction targetFraction);
-    }
-
-    public enum FractionRelation
-    {
-        Undefined = 0,
-        Neutral,
-        Enemy
-    }
-
     public sealed class Fraction : IFraction
     {
         public Fraction(string name)
@@ -83,18 +69,5 @@ namespace Zilon.Core.Persons
                 return FractionRelation.Neutral;
             }
         }
-    }
-
-    public static class Fractions
-    {
-        static Fractions()
-        {
-            MonsterFraction = new Fraction("Monsters");
-            MainPersonFraction = new Fraction("Main Hero");
-        }
-
-        public static IFraction MonsterFraction { get; private set; }
-
-        public static IFraction MainPersonFraction { get; private set; }
     }
 }
