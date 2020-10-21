@@ -90,16 +90,16 @@ namespace Assets.Zilon.Scripts.Models.Modals
         {
             var currentItemViewModel = (PropItemVm)sender;
             TransferMachine.TransferProp(currentItemViewModel.Prop,
-                PropTransferMachineStores.Inventory,
-                PropTransferMachineStores.Container);
+                PropTransferMachineStore.Inventory,
+                PropTransferMachineStore.Container);
         }
 
         protected void ContainerPropItem_Click(object sender, EventArgs e)
         {
             var currentItemViewModel = (PropItemVm)sender;
             TransferMachine.TransferProp(currentItemViewModel.Prop,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
         }
 
         private void TakeAll()
@@ -108,8 +108,8 @@ namespace Assets.Zilon.Scripts.Models.Modals
             foreach (var prop in props)
             {
                 TransferMachine.TransferProp(prop,
-                    PropTransferMachineStores.Container,
-                    PropTransferMachineStores.Inventory);
+                    PropTransferMachineStore.Container,
+                    PropTransferMachineStore.Inventory);
             }
 
             _clientCommandExecutor.Push(_propTransferCommand);
