@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
@@ -37,8 +39,24 @@ namespace Zilon.TextClient
 
             var globeInitializer = scope.ServiceProvider.GetRequiredService<IGlobeInitializer>();
             var globe = await globeInitializer.CreateGlobeAsync("intro");
+            var player = scope.ServiceProvider.GetRequiredService<IPlayer>();
 
             var gameLoop = new GameLoop(globe);
+            var uiState = scope.ServiceProvider.GetRequiredService<ISectorUiState>();
+            var playerActor = (from sectorNode in globe.SectorNodes
+                               from actor in sectorNode.Sector.ActorManager.Items
+                               where actor.Person == player.MainPerson
+                               select actor).SingleOrDefault();
+            var playerActorSectorNode = (from sectorNode in globe.SectorNodes
+                                     from actor in sectorNode.Sector.ActorManager.Items
+                                     where actor.Person == player.MainPerson
+                                     select sectorNode).SingleOrDefault();
+
+            // This is code smells. It is not good settings
+            player.BindSectorNode(playerActorSectorNode);
+            uiState.TaskSource = (IHumanActorTaskSource<ISectorTaskSourceContext>)playerActor.TaskSource;
+
+            uiState.ActiveActor = new ActorViewModel { Actor = playerActor };
 
             // Play
 
@@ -49,12 +67,11 @@ namespace Zilon.TextClient
                 var command = Console.ReadLine();
                 if (command.StartsWith("m"))
                 {
-                    var taskSource = scope.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-                    var uiState = scope.ServiceProvider.GetRequiredService<ISectorUiState>();
-                    var player = scope.ServiceProvider.GetRequiredService<IPlayer>();
+                    var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
+                    
                     var moveCommand = scope.ServiceProvider.GetRequiredService<MoveCommand>();
 
-                    var nextMoveNode = player.SectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node).First();
+                    var nextMoveNode = playerActorSectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node).First();
                     uiState.SelectedViewModel = new NodeViewModel { Node = (HexNode)nextMoveNode };
 
                     moveCommand.Execute();
@@ -90,5 +107,11 @@ namespace Zilon.TextClient
     {
         public HexNode Node { get; set; }
         public object Item { get => Node; }
+    }
+
+    class ActorViewModel : IActorViewModel
+    {
+        public IActor Actor { get; set; }
+        public object Item { get => Actor; }
     }
 }
