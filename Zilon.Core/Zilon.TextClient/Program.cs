@@ -48,9 +48,9 @@ namespace Zilon.TextClient
                                where actor.Person == player.MainPerson
                                select actor).SingleOrDefault();
             var playerActorSectorNode = (from sectorNode in globe.SectorNodes
-                                     from actor in sectorNode.Sector.ActorManager.Items
-                                     where actor.Person == player.MainPerson
-                                     select sectorNode).SingleOrDefault();
+                                         from actor in sectorNode.Sector.ActorManager.Items
+                                         where actor.Person == player.MainPerson
+                                         select sectorNode).SingleOrDefault();
 
             // This is code smells. It is not good settings
             player.BindSectorNode(playerActorSectorNode);
@@ -68,7 +68,7 @@ namespace Zilon.TextClient
                 if (command.StartsWith("m"))
                 {
                     var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
-                    
+
                     var moveCommand = scope.ServiceProvider.GetRequiredService<MoveCommand>();
 
                     var nextMoveNode = playerActorSectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node).First();
