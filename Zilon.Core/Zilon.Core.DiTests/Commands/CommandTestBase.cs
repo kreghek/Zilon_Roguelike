@@ -85,7 +85,7 @@ namespace Zilon.Core.Tests.Commands
 
             var playerStateMock = new Mock<ISectorUiState>();
             playerStateMock.SetupProperty(x => x.ActiveActor, actorVm);
-            playerStateMock.SetupProperty(x => x.TaskSource, humanTaskSource);
+            playerStateMock.SetupGet(x => x.TaskSource).Returns(humanTaskSource);
             playerStateMock.SetupProperty(x => x.TacticalAct, simpleAct);
             var playerState = playerStateMock.Object;
 

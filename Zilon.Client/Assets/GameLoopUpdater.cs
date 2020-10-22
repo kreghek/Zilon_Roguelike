@@ -8,27 +8,38 @@ using JetBrains.Annotations;
 
 using UnityEngine;
 
-using Zenject;
-
-public class GameLoopUpdater : MonoBehaviour
+class GameLoopUpdater
 {
-    [NotNull] [Inject] private readonly GlobeStorage _globeStorage;
-    [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
+    [NotNull] private readonly GlobeStorage _globeStorage;
+    [NotNull] private readonly ICommandBlockerService _commandBlockerService;
 
     private CancellationTokenSource _cancellationTokenSource;
 
-    private void Start()
+    public bool IsStarted { get; private set; }
+
+    public GameLoopUpdater(GlobeStorage globeStorage, ICommandBlockerService commandBlockerService)
+    {
+        _globeStorage = globeStorage ?? throw new ArgumentNullException(nameof(globeStorage));
+        _commandBlockerService = commandBlockerService ?? throw new ArgumentNullException(nameof(commandBlockerService));
+    }
+
+    public void Start()
     {
         _cancellationTokenSource = new CancellationTokenSource();
 
         var cancelToken = _cancellationTokenSource.Token;
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-        StartGameLoopUpdate(cancelToken);
+        var updateTask = StartGameLoopUpdate(cancelToken);
+
+        updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnFaulted);
+        updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnCanceled);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+        IsStarted = true;
     }
 
-    private void OnDestroy()
+    public void Stop()
     {
         _cancellationTokenSource.Cancel();
     }
