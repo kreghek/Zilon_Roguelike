@@ -238,7 +238,15 @@ public class SectorVM : MonoBehaviour
         // таких сервисов, как ISectorUiState. Потому что есть много элементов UI,
         // которые зависят от значения ActiveActor.
         WindowCanvas.gameObject.SetActive(true);
+
+        if (!_gameLoopUpdater.IsStarted)
+        {
+            _gameLoopUpdater.Start();
+        }
     }
+
+    [Inject]
+    private readonly GameLoopUpdater _gameLoopUpdater;
 
     private void AddPlayerActorEventHandlers(ActorViewModel actorViewModel)
     {
@@ -279,31 +287,10 @@ public class SectorVM : MonoBehaviour
 
         var sectorNode = _humanPlayer.SectorNode;
 
-        //TODO эти операции лучше выполнять на однельной сцене генерации мира.
-        // Там же нужно записывать созданные мир в хранилище.
-
-        //if (sectorNode == null)
-        //{
-        //    var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
-        //    var biom = await _biomeInitializer.InitBiomeAsync(introLocationScheme);
-        //    sectorNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
-        //}
-        //else if (sectorNode.State == SectorNodeState.SchemeKnown)
-        //{
-        //    await _biomeInitializer.MaterializeLevelAsync(sectorNode);
-        //}
-
-        //_humanPlayer.BindSectorNode(sectorNode);
-        //await _sectorManager.CreateSectorAsync();
-
-        //sectorNode.Sector.ScoreManager = _scoreManager;
-
         _staticObjectManager = sectorNode.Sector.StaticObjectManager;
 
         _staticObjectManager.Added += StaticObjectManager_Added;
         _staticObjectManager.Removed += StaticObjectManager_Removed;
-
-        _playerState.TaskSource = _humanActorTaskSource;
 
         sectorNode.Sector.TrasitionUsed += Sector_HumanGroupExit;
     }
