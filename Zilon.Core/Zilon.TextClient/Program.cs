@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Zilon.Core.Client;
 using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 
 namespace Zilon.TextClient
@@ -26,6 +29,27 @@ namespace Zilon.TextClient
             // Create globe
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
             var globe = await globeInitializer.CreateGlobeAsync("intro");
+
+            var gameLoop = new GameLoop(globe);
+
+            // Play
+
+            gameLoop.StartProcessAsync();
+
+            do
+            {
+                var command = Console.ReadLine();
+                if (command.StartsWith("m"))
+                {
+                    var taskSource = serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+                    var uiState = serviceProvider.GetRequiredService<ISectorUiState>();
+                }
+
+                if (command.StartsWith("exit"))
+                {
+                    break;
+                }
+            } while (true);
 
             // Iterate globe
             var globeIterationCounter = 0L;
@@ -65,6 +89,24 @@ namespace Zilon.TextClient
             foreach (var fractionGroup in fractions)
             {
                 Console.WriteLine($"Fraction {fractionGroup.Key.Name}: {fractionGroup.Count()}");
+            }
+        }
+    }
+
+    class GameLoop
+    {
+        private readonly IGlobe _globe;
+
+        public GameLoop(IGlobe globe)
+        {
+            _globe = globe ?? throw new ArgumentNullException(nameof(globe));
+        }
+
+        public async Task StartProcessAsync()
+        {
+            while (true)
+            {
+                await _globe.UpdateAsync();
             }
         }
     }
