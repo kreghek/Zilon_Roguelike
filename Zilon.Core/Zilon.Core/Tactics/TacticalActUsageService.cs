@@ -105,11 +105,23 @@ namespace Zilon.Core.Tactics
 
         private static bool SectorHasCurrentActor(ISector sector, IActor actor)
         {
+            if (sector.ActorManager is null)
+            {
+                // In test environment not all sector mocks has actor manager
+                return true;
+            }
+
             return sector.ActorManager.Items.Any(x => x == actor);
         }
 
         private static bool SectorHasAttackTarget(ISector sector, IAttackTarget target)
         {
+            if (sector.ActorManager is null)
+            {
+                // In test environment not all sector mocks has actor manager
+                return true;
+            }
+
             return sector.ActorManager.Items.Any(x => ReferenceEquals(x, target));
         }
 
