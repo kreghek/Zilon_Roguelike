@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -54,7 +52,6 @@ namespace Zilon.TextClient
 
             // This is code smells. It is not good settings
             player.BindSectorNode(playerActorSectorNode);
-            uiState.TaskSource = (IHumanActorTaskSource<ISectorTaskSourceContext>)playerActor.TaskSource;
 
             uiState.ActiveActor = new ActorViewModel { Actor = playerActor };
 
@@ -64,8 +61,8 @@ namespace Zilon.TextClient
 
             do
             {
-                var command = Console.ReadLine();
-                if (command.StartsWith("m"))
+                var inputText = Console.ReadLine();
+                if (inputText.StartsWith("m"))
                 {
                     var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
 
@@ -77,7 +74,7 @@ namespace Zilon.TextClient
                     moveCommand.Execute();
                 }
 
-                if (command.StartsWith("exit"))
+                if (inputText.StartsWith("exit"))
                 {
                     break;
                 }

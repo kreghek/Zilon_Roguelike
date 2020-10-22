@@ -9,7 +9,7 @@ namespace Zilon.Core.Client
     {
         private IActorViewModel _activeActor;
 
-        /// <summary>Активный актёр.</summary>
+        /// <inheritdoc/>
         public IActorViewModel ActiveActor
         {
             get => _activeActor;
@@ -20,8 +20,8 @@ namespace Zilon.Core.Client
             }
         }
 
-        /// <summary>Пользовательский источник задач для актёров.</summary>
-        public IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource { get; set; }
+        /// <inheritdoc/>
+        public IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource { get => ActiveActor?.Actor?.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>; }
 
         public event EventHandler ActiveActorChanged;
 

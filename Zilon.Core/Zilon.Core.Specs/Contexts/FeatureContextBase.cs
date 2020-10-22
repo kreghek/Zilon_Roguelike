@@ -12,26 +12,18 @@ using Moq;
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
-using Zilon.Core.Commands;
-using Zilon.Core.Common;
-using Zilon.Core.CommonServices;
-using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
-using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Scoring;
 using Zilon.Core.Specs.Mocks;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.World;
@@ -55,13 +47,11 @@ namespace Zilon.Core.Specs.Contexts
 
             ServiceProvider = serviceProvider;
 
-            ConfigureServices(serviceProvider);
+            Configure(serviceProvider);
         }
 
-        private void ConfigureServices(IServiceProvider serviceProvider)
+        private void Configure(IServiceProvider serviceProvider)
         {
-            InitClientServices();
-
             ConfigureEventBus(serviceProvider);
 
             RegisterManager.ConfigureAuxServices(serviceProvider);
@@ -268,14 +258,6 @@ namespace Zilon.Core.Specs.Contexts
             var actor = new Actor(monsterPerson, taskSource, startNode);
 
             return actor;
-        }
-
-        private void InitClientServices()
-        {
-            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
-
-            playerState.TaskSource = humanTaskSource;
         }
 
         public class VisualEventInfo
