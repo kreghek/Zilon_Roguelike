@@ -125,6 +125,7 @@ Apply the tag EditorOnly to these objects so they get stripped from the build.
 
 * Bottom line: if a system/feature is only scripts, create a folder in /Scripts. If it has other types of assets, put that folder on the root and add sub-folders per asset type.
 Ex:
+```
 📁 Art
 ⸺📁 Characters
 ⸺⸺📁 PigChef
@@ -150,3 +151,4 @@ Ex:
 ⸺📁 Menus
 📁 Scripts
 ⸺📁 SceneManagementSystem
+```
