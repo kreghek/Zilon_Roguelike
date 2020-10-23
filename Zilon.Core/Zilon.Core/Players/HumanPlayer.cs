@@ -11,7 +11,7 @@ namespace Zilon.Core.Players
     /// <seealso cref="PlayerBase" />
     public class HumanPlayer : IPlayer
     {
-        public ISectorNode SectorNode { get => Globe.SectorNodes.Where(node => node.Sector.ActorManager.Items.Any(x => x.Person == MainPerson)).Single(); }
+        public ISectorNode SectorNode { get => Globe.SectorNodes.Single(node => node.Sector.ActorManager.Items.Any(x => x.Person == MainPerson)); }
 
         /// <summary>
         /// Ссылка на основного персонажа игрока.
