@@ -15,7 +15,7 @@ namespace Zilon.Core.Benchmarks.Move
 {
     class TestGlobe : IGlobe
     {
-        private TestMaterializedSectorNode _sectorNode;
+        private readonly TestMaterializedSectorNode _sectorNode;
 
         public TestGlobe(IPersonScheme personScheme, IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource)
         {

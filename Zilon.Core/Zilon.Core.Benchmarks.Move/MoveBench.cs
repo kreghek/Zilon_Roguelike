@@ -20,7 +20,7 @@ namespace Zilon.Core.Benchmarks.Move
     public class MoveBench
     {
         private ServiceProvider _serviceProvider;
-        private IGlobe globe;
+        private IGlobe _globe;
 
         [Benchmark(Description = "Move100")]
         public void Move100()
@@ -29,6 +29,11 @@ namespace Zilon.Core.Benchmarks.Move
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var moveCommand = _serviceProvider.GetRequiredService<MoveCommand>();
             var commandManger = _serviceProvider.GetRequiredService<ICommandManager>();
+
+            var gameLoop = new GameLoop(_globe);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            gameLoop.StartProcessAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             for (var i = 0; i < 100; i++)
             {
@@ -111,17 +116,16 @@ namespace Zilon.Core.Benchmarks.Move
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
             var humanPlayer = _serviceProvider.GetRequiredService<IPlayer>();
-            var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
             var humanActorTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            globe = new TestGlobe(personScheme, humanActorTaskSource);
+            _globe = new TestGlobe(personScheme, humanActorTaskSource);
 
-            IActor actor = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Single();
+            IActor actor = _globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Single();
             var person = actor.Person;
 
-            humanPlayer.BindPerson(globe, person);
+            humanPlayer.BindPerson(_globe, person);
 
             var actorViewModel = new TestActorViewModel
             {

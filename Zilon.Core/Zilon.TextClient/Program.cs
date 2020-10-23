@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -123,35 +122,5 @@ namespace Zilon.TextClient
 
             Console.WriteLine($"Position:{actor.Node}");
         }
-    }
-
-    class GameLoop
-    {
-        private readonly IGlobe _globe;
-
-        public GameLoop(IGlobe globe)
-        {
-            _globe = globe ?? throw new ArgumentNullException(nameof(globe));
-        }
-
-        public async Task StartProcessAsync()
-        {
-            while (true)
-            {
-                await _globe.UpdateAsync();
-            }
-        }
-    }
-
-    class NodeViewModel : IMapNodeViewModel
-    {
-        public HexNode Node { get; set; }
-        public object Item { get => Node; }
-    }
-
-    class ActorViewModel : IActorViewModel
-    {
-        public IActor Actor { get; set; }
-        public object Item { get => Actor; }
     }
 }
