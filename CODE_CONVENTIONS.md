@@ -1,9 +1,9 @@
-#CODE CONVENTIONS
+# CODE CONVENTIONS
 
-##Code
+## Code
 We used the [.NET standards](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-type-members ".NET standards") as a starting base, and the following are our own changes.
 
-###Wording
+### Wording
 * Use **descriptive** and **accurate** names, even if it makes them longer. Favor readability over brevity.
 * **Do not** use abbreviations.
 * Use **acronyms** when they are an accepted standard. Ex: UI, IO
@@ -20,9 +20,9 @@ TextMeshProUGUI _gameTitleText;
 
 * **Avoid** using numbers for names, if they are not part of an inherent list. Ex: `animator1`, `animator2`. Instead explain the difference between both properties -eg `playerAnimator`, `enemyAnimator`.
 
-###Capitalization
+### Capitalization
 
-####Definitions
+#### Definitions
 
 *camelCase*: First letter is lowercase. First letters of the following words are uppercase.
 *PascalCase*: The first letter of every word is uppercase. If a word is an acronym with two letters, both letters are capitalized. If a word is an acronym with more than two letters, only the first letter is capitalized.
@@ -38,7 +38,7 @@ TextMeshProUGUI _gameTitleText;
 * **Do not** use hardcoded "magic numbers" in your code. Ex: The player is moved by `xInput * 0.035f`. Why that number? Instead, store the number in a field with a clear name - and maybe a comment on why you chose that specific number. It may be `xInput * PERSON_SPEED`
 * For `using` directives (Ex: `using System;`), remove **all the unused** ones before committing code.
 
-###Formatting
+### Formatting
 * Use **4 spaces** per column to indent code, **not tabs**.
 * Logical units which are contained within each other need to be indented to indicate the hierarchical relationship. Ex:
 ```c#
@@ -51,7 +51,7 @@ public void MethodName()
 }
 ```
 
-###Comments
+### Comments
 **Important**: Don't be redundant. If you think anyone could understand what the code does by just looking at it, don't add a comment. Instead, name your variables, classes and methods so that they explain themselves!
 * Use inline comments to provide additional context over individual lines of code.
 * Write a summary above **every class** that describes the class' purpose. Optionally, include details about how the class works, especially if it's not particularly intuitive or readable. Ex:
@@ -72,9 +72,9 @@ public float CalculateBoundingBox(){ }
 * Use a comment beginning with `//TODO:` to indicate something that needs to be picked up later, so you don't forget about it. Note: This is not an invite to push broken functionality.
 * **Do not** use `#region` dividers, or "line separator" comments like `//--------`.
 
-##Scene/Hierarchy
+## Scene/Hierarchy
 
-###Organisation
+### Organisation
 
 * Use empty GameObjects on the root as separators to break up visually different logical sections. Ex: `Camera`, `Environment`, `Lighting`.
 Apply the tag EditorOnly to these objects so they get stripped from the build.
