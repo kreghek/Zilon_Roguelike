@@ -282,9 +282,6 @@ public class SectorVM : MonoBehaviour
             _globeStorage.AssignGlobe(globe);
         }
 
-        var sectorNode1 = _globeStorage.Globe.SectorNodes.Single(x => x.Sector.ActorManager.Items.Any(actor => actor.Person == _humanPlayer.MainPerson));
-        _humanPlayer.BindSectorNode(sectorNode1);
-
         var sectorNode = _humanPlayer.SectorNode;
 
         _staticObjectManager = sectorNode.Sector.StaticObjectManager;
@@ -548,11 +545,6 @@ public class SectorVM : MonoBehaviour
         _playerState.ActiveActor = null;
         _playerState.SelectedViewModel = null;
         _playerState.HoverViewModel = null;
-
-        var actorInNewSector = e.Transition.SectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Person == actor.Person);
-
-        var nextSectorNode = e.Transition.SectorNode;
-        _humanPlayer.BindSectorNode(nextSectorNode);
 
         StartLoadScene();
     }

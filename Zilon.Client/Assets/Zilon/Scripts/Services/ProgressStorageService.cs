@@ -67,7 +67,7 @@ namespace Assets.Zilon.Scripts.Services
 
             var person = storageDataObject.Restore(_schemeService, _survivalRandomSource, _propFactory);
 
-            _humanPlayer.MainPerson = person;
+            throw new NotImplementedException();
 
             return true;
         }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -51,7 +52,7 @@ namespace Zilon.TextClient
                                          select sectorNode).SingleOrDefault();
 
             // This is code smells. It is not good settings
-            player.BindSectorNode(playerActorSectorNode);
+            player.BindPerson(globe, playerActor.Person);
 
             uiState.ActiveActor = new ActorViewModel { Actor = playerActor };
 
@@ -61,17 +62,43 @@ namespace Zilon.TextClient
 
             do
             {
+                PrintState(uiState.ActiveActor.Actor);
+                Console.WriteLine("Input command:");
                 var inputText = Console.ReadLine();
                 if (inputText.StartsWith("m"))
                 {
+                    var components = inputText.Split(' ');
+                    var x = int.Parse(components[1]);
+                    var y = int.Parse(components[2]);
+                    var offsetCoords = new OffsetCoords(x, y);
+
+                    ISectorMap map = playerActorSectorNode.Sector.Map;
+
+                    var targetNode = map.Nodes.OfType<HexNode>().SingleOrDefault(node => node.OffsetCoords == offsetCoords);
+
                     var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
 
                     var moveCommand = scope.ServiceProvider.GetRequiredService<MoveCommand>();
 
-                    var nextMoveNode = playerActorSectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node).First();
-                    uiState.SelectedViewModel = new NodeViewModel { Node = (HexNode)nextMoveNode };
+                    uiState.SelectedViewModel = new NodeViewModel { Node = targetNode };
 
                     moveCommand.Execute();
+                }
+
+                if (inputText.StartsWith("look"))
+                {
+                    var nextMoveNodes = playerActorSectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node);
+                    Console.WriteLine("Nodes:");
+                    Console.WriteLine();
+                    foreach (var nextNode in nextMoveNodes)
+                    {
+                        Console.Write(nextNode);
+                        if (playerActorSectorNode.Sector.Map.Transitions.TryGetValue(nextNode, out var _))
+                        {
+                            Console.Write(" t");
+                        }
+                        Console.WriteLine();
+                    }
                 }
 
                 if (inputText.StartsWith("exit"))
@@ -80,35 +107,20 @@ namespace Zilon.TextClient
                 }
             } while (true);
         }
-    }
 
-    class GameLoop
-    {
-        private readonly IGlobe _globe;
-
-        public GameLoop(IGlobe globe)
+        private static void PrintState(IActor actor)
         {
-            _globe = globe ?? throw new ArgumentNullException(nameof(globe));
-        }
-
-        public async Task StartProcessAsync()
-        {
-            while (true)
+            Console.WriteLine(new string('=', 10));
+            if (actor.Person.GetModule<IEffectsModule>().Items.Any())
             {
-                await _globe.UpdateAsync();
+                Console.WriteLine("Effects:");
+                foreach (var effect in actor.Person.GetModule<IEffectsModule>().Items)
+                {
+                    Console.WriteLine(effect);
+                }
             }
+
+            Console.WriteLine($"Position:{actor.Node}");
         }
-    }
-
-    class NodeViewModel : IMapNodeViewModel
-    {
-        public HexNode Node { get; set; }
-        public object Item { get => Node; }
-    }
-
-    class ActorViewModel : IActorViewModel
-    {
-        public IActor Actor { get; set; }
-        public object Item { get => Actor; }
     }
 }

@@ -92,19 +92,7 @@ namespace Zilon.Core.Specs.Contexts
             var globeInitialzer = ServiceProvider.GetRequiredService<IGlobeInitializer>();
             var globe = await globeInitialzer.CreateGlobeAsync("intro").ConfigureAwait(false);
             Globe = globe;
-
-            var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
-
-            var sectorNode = globe.SectorNodes.First();
-
-            humanPlayer.BindSectorNode(sectorNode);
         }
-
-        //private class SquareGenerationOptionsSubScheme : ISectorSquareMapFactoryOptionsSubScheme
-        //{
-        //    public SchemeSectorMapGenerator MapGenerator { get => SchemeSectorMapGenerator.SquarePlane; }
-        //    public int Size { get; set; }
-        //}
 
         public ISector GetSector()
         {
@@ -153,7 +141,7 @@ namespace Zilon.Core.Specs.Contexts
             // Подготовка актёров
             var humanStartNode = sector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
             var humanActor = CreateHumanActor(personSid, humanStartNode, perkResolver);
-            humanPlayer.MainPerson = humanActor.Person;
+            humanPlayer.BindPerson(Globe, humanActor.Person);
 
             actorManager.Add(humanActor);
 

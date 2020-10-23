@@ -21,7 +21,12 @@ namespace Zilon.Core.World
             _personFactory = personFactory;
         }
 
-        public IEnumerable<IPerson> CreateStartPersonsInner()
+        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe)
+        {
+            return Task.FromResult(CreateStartPersonsInner());
+        }
+
+        private IEnumerable<IPerson> CreateStartPersonsInner()
         {
             for (var i = 0; i < 40; i++)
             {
@@ -37,11 +42,6 @@ namespace Zilon.Core.World
         {
             var startPerson = personFactory.Create(personSchemeSid, fraction);
             return startPerson;
-        }
-
-        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync()
-        {
-            return Task.FromResult(CreateStartPersonsInner());
         }
     }
 }

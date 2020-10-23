@@ -22,10 +22,10 @@ namespace Zilon.Core.World
             _player = player ?? throw new ArgumentNullException(nameof(player));
         }
 
-        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync()
+        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe)
         {
             var person = CreateStartPerson(PERSON_SCHEME_SID, _personFactory, Fractions.MainPersonFraction);
-            _player.MainPerson = person;
+            _player.BindPerson(globe, person);
             return Task.FromResult(new[] { person }.AsEnumerable());
         }
 

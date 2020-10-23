@@ -5,23 +5,22 @@ using BenchmarkDotNet.Attributes;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using Zilon.Core.Benchmark;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
-using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmarks.Move
 {
     public class MoveBench
     {
         private ServiceProvider _serviceProvider;
+        private IGlobe _globe;
 
         [Benchmark(Description = "Move100")]
         public void Move100()
@@ -30,6 +29,11 @@ namespace Zilon.Core.Benchmarks.Move
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var moveCommand = _serviceProvider.GetRequiredService<MoveCommand>();
             var commandManger = _serviceProvider.GetRequiredService<ICommandManager>();
+
+            var gameLoop = new GameLoop(_globe);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            gameLoop.StartProcessAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             for (var i = 0; i < 100; i++)
             {
@@ -112,47 +116,23 @@ namespace Zilon.Core.Benchmarks.Move
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
             var humanPlayer = _serviceProvider.GetRequiredService<IPlayer>();
-            var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
             var humanActorTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-
-            TestSectorSubScheme testSectorSubScheme = new TestSectorSubScheme
-            {
-                RegularMonsterSids = new[] { "rat" },
-                RegionMonsterCount = 0,
-
-                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
-                {
-                    RegionCount = 20,
-                    RegionSize = 20,
-                },
-
-                IsStart = true,
-
-                ChestDropTableSids = new[] { "survival", "default" },
-                RegionChestCountRatio = 9,
-                TotalChestCount = 0
-            };
-
-            var sectorNode = new TestMaterializedSectorNode(testSectorSubScheme);
-
-            humanPlayer.BindSectorNode(sectorNode);
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var playerActorStartNode = humanPlayer.SectorNode.Sector.Map.Regions
-                .SingleOrDefault(x => x.IsStart).Nodes
-                .First();
+            _globe = new TestGlobe(personScheme, humanActorTaskSource);
 
-            var survivalRandomSource = _serviceProvider.GetRequiredService<ISurvivalRandomSource>();
-            var playerActorVm = BenchHelper.CreateHumanActorVm(humanActorTaskSource,
-                schemeService,
-                survivalRandomSource,
-                personScheme,
-                actorManager,
-                playerActorStartNode);
+            IActor actor = _globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Single();
+            var person = actor.Person;
 
-            //Лучше централизовать переключение текущего актёра только в playerState
-            playerState.ActiveActor = playerActorVm;
+            humanPlayer.BindPerson(_globe, person);
+
+            var actorViewModel = new TestActorViewModel
+            {
+                Actor = actor
+            };
+
+            playerState.ActiveActor = actorViewModel;
         }
     }
 }
