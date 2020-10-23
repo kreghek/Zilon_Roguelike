@@ -9,7 +9,6 @@ using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
@@ -58,7 +57,9 @@ namespace Zilon.TextClient
 
             // Play
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             gameLoop.StartProcessAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             do
             {
@@ -75,8 +76,6 @@ namespace Zilon.TextClient
                     ISectorMap map = playerActorSectorNode.Sector.Map;
 
                     var targetNode = map.Nodes.OfType<HexNode>().SingleOrDefault(node => node.OffsetCoords == offsetCoords);
-
-                    var taskSource = scope.ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
 
                     var moveCommand = scope.ServiceProvider.GetRequiredService<MoveCommand>();
 

@@ -134,7 +134,6 @@ namespace Zilon.Core.Specs.Contexts
             var sector = humanPlayer.SectorNode.Sector;
 
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
-            var humanTaskSource = ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var actorManager = sector.ActorManager;
             var perkResolver = ServiceProvider.GetRequiredService<IPerkResolver>();
 
