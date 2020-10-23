@@ -5,23 +5,22 @@ using BenchmarkDotNet.Attributes;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using Zilon.Core.Benchmark;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
-using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmarks.Move
 {
     public class MoveBench
     {
         private ServiceProvider _serviceProvider;
+        private IGlobe globe;
 
         [Benchmark(Description = "Move100")]
         public void Move100()
@@ -115,44 +114,21 @@ namespace Zilon.Core.Benchmarks.Move
             var actorManager = _serviceProvider.GetRequiredService<IActorManager>();
             var humanActorTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
-            TestSectorSubScheme testSectorSubScheme = new TestSectorSubScheme
-            {
-                RegularMonsterSids = new[] { "rat" },
-                RegionMonsterCount = 0,
-
-                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
-                {
-                    RegionCount = 20,
-                    RegionSize = 20,
-                },
-
-                IsStart = true,
-
-                ChestDropTableSids = new[] { "survival", "default" },
-                RegionChestCountRatio = 9,
-                TotalChestCount = 0
-            };
-
-            var sectorNode = new TestMaterializedSectorNode(testSectorSubScheme);
-
-            humanPlayer.BindSectorNode(sectorNode);
-
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var playerActorStartNode = humanPlayer.SectorNode.Sector.Map.Regions
-                .SingleOrDefault(x => x.IsStart).Nodes
-                .First();
+            globe = new TestGlobe(personScheme, humanActorTaskSource);
 
-            var survivalRandomSource = _serviceProvider.GetRequiredService<ISurvivalRandomSource>();
-            var playerActorVm = BenchHelper.CreateHumanActorVm(humanActorTaskSource,
-                schemeService,
-                survivalRandomSource,
-                personScheme,
-                actorManager,
-                playerActorStartNode);
+            IActor actor = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Single();
+            var person = actor.Person;
 
-            //Лучше централизовать переключение текущего актёра только в playerState
-            playerState.ActiveActor = playerActorVm;
+            humanPlayer.BindPerson(globe, person);
+
+            var actorViewModel = new TestActorViewModel
+            {
+                Actor = actor
+            };
+
+            playerState.ActiveActor = actorViewModel;
         }
     }
 }

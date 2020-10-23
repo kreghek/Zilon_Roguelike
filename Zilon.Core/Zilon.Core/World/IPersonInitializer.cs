@@ -7,6 +7,6 @@ namespace Zilon.Core.World
 {
     public interface IPersonInitializer
     {
-        Task<IEnumerable<IPerson>> CreateStartPersonsAsync();
+        Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe);
     }
 }
