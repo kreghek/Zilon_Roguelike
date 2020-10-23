@@ -1,4 +1,4 @@
-Open Projects: Conventions
+CODE CONVENTIONS
 base on https://docs.google.com/document/d/1-eUWZ0lWREFu5iH-ggofwnixDDQqalOoT4Yc0NpWR3k/edit
 
 Code
