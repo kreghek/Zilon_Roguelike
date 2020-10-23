@@ -1,22 +1,25 @@
-CODE CONVENTIONS
-base on https://docs.google.com/document/d/1-eUWZ0lWREFu5iH-ggofwnixDDQqalOoT4Yc0NpWR3k/edit
+#CODE CONVENTIONS
 
-Code
-We used the .NET standards as a starting base, and the following are our own changes.
-Wording
-●	Use descriptive and accurate names, even if it makes them longer. Favor readability over brevity.
-●	Do not use abbreviations.
-●	Use acronyms when they are an accepted standard. Ex: UI, IO
-●	Method names should be verbs or verb phrases.
-●	Property names should be nouns, noun phrases or adjectives.
-●	Boolean properties should be affirmative phrases. You can prefix a Boolean property with “Is”, “Has”, “Can”. Ex: IsActive, CanJump.
-●	If multiple properties relate to the same item, use the item name as a prefix and add the property type, or role. Ex:
+##Code
+We used the [.NET standards](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-type-members ".NET standards") as a starting base, and the following are our own changes.
 
+###Wording
+* Use **descriptive** and **accurate** names, even if it makes them longer. Favor readability over brevity.
+* **Do not** use abbreviations.
+* Use **acronyms** when they are an accepted standard. Ex: UI, IO
+* Method names should be **verbs** or **verb phrases**.
+* Property names should be **nouns**, **noun phrases** or **adjectives**.
+* Boolean properties should be **affirmative** phrases. You can prefix a Boolean property with “Is”, “Has”, “Can”. Ex: IsActive, CanJump.
+* If **multiple properties** relate to the same item, use the item name as a prefix and add the property type, or role. Ex:
+
+```c#
 Color _gameTitleColor;
 String _gameTitleString;
 TextMeshProUGUI _gameTitleText;
+```
 
-●	Avoid using numbers for names, if they are not part of an inherent list. Ex: animator1, animator2. Instead explain the difference between both properties -eg playerAnimator, enemyAnimator 
+* **Avoid** using numbers for names, if they are not part of an inherent list. Ex: `animator1`, `animator2`. Instead explain the difference between both properties -eg `playerAnimator`, `enemyAnimator`.
+
 Capitalization
 Definitions
 camelCase: first letter is lowercase. First letters of the following words are uppercase.
@@ -138,3 +141,4 @@ Ex:
 📁 Scripts
 ⸺📁 SceneManagementSystem
 
+base on https://docs.google.com/document/d/1-eUWZ0lWREFu5iH-ggofwnixDDQqalOoT4Yc0NpWR3k/edit
