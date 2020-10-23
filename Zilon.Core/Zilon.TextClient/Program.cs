@@ -53,7 +53,7 @@ namespace Zilon.TextClient
                                          select sectorNode).SingleOrDefault();
 
             // This is code smells. It is not good settings
-            player.BindPerson(playerActorSectorNode);
+            player.BindPerson(globe, playerActor.Person);
 
             uiState.ActiveActor = new ActorViewModel { Actor = playerActor };
 

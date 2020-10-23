@@ -42,7 +42,7 @@ namespace Zilon.Core.World
 
             // Добавляем стартовых персонажей-пилигримов
 
-            var startPersons = await _personInitializer.CreateStartPersonsAsync().ConfigureAwait(false);
+            var startPersons = await _personInitializer.CreateStartPersonsAsync(globe).ConfigureAwait(false);
 
             var sector = startSectorNode.Sector;
             var personCounter = 0;
