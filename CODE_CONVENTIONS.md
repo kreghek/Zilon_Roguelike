@@ -72,40 +72,59 @@ public float CalculateBoundingBox(){ }
 * Use a comment beginning with `//TODO:` to indicate something that needs to be picked up later, so you don't forget about it. Note: This is not an invite to push broken functionality.
 * **Do not** use `#region` dividers, or "line separator" comments like `//--------`.
 
-Scene/Hierarchy
-Organisation
-●	Use empty GameObjects on the root as separators to break up visually different logical sections. Ex: --- Camera ---, --- Environment ---, --- Lighting --- …
+##Scene/Hierarchy
+
+###Organisation
+
+* Use empty GameObjects on the root as separators to break up visually different logical sections. Ex: `Camera`, `Environment`, `Lighting`.
 Apply the tag EditorOnly to these objects so they get stripped from the build.
-●	Use empty GameObjects as containers when useful, but don’t if they will only contain 1-2 objects.
-●	UI:
-○	Use the same Canvas when possible, only create multiple Canvases when Canvas properties change.
-○	Create a panel per screen (main menu, settings, pause...).
-○	Use panels as container to group parts that compose an element of the UI. Ex: a settings label and its options.
-Panels can also serve as a helper for elements that need to be anchored together. Ex: some energy/items UI in the bottom right part of the screen.
 
-Naming
-●	Don’t use spaces in names of GameObjects.
-●	Use PascalCase. Ex: MainCharacter, DoorTrigger
-●	Use underscores to join together two concepts when just using PascalCase would generate confusion. Ex: MainHall_ExitTrigger, BossMinion_AttackWaypoints.
-●	Prefabs: Rename instances if it makes sense. Ex: A Prefab Variant file is called Protagonist_Scene1Variant, but once you use it you could rename it just Protagonist.
+* Use empty GameObjects as containers.
+
+* UI:
+
+  * Use the same Canvas when possible, only create multiple Canvases when Canvas properties change.
+
+  * Create a panel per screen (main menu, settings, pause...).
+
+  * Use panels as container to group parts that compose an element of the UI. Ex: a settings label and its options.
+  Panels can also serve as a helper for elements that need to be anchored together. Ex: some energy/items UI in the bottom right part of the screen.
+
+### Naming
+
+* **Don't use spaces** in names of GameObjects.
+
+* Use **PascalCase**. Ex: `MainCharacter`, `DoorTrigger`.
+
+* Use **underscores** to join together two concepts when just using PascalCase would generate confusion. Ex: `MainHall_ExitTrigger`, `BossMinion_AttackWaypoints`.
+
+* Prefabs: Rename instances if it makes sense. Ex: A Prefab Variant file is called Protagonist_Scene1Variant, but once you use it you could rename it just Protagonist.
 
 
-Project files
-Naming
-●	Same rules as for the Scene/Hierarchy.
-●	Name objects so they naturally group together when they are in the same folder and are related.
-○	Generally, you start the name with the thing that the object belongs to. Ex: PlayerAnimationController, PlayerIdle, PlayerRun, etc.
-○	However, when it makes sense, you can name objects so that similar objects stay together even if they relate to different “owners” or if the adjective would group them differently. Ex: in a folder full of prop assets, you can use TableRound and TableRectangular so they stay close; instead of RectangularTable and RoundTable.
-●	Avoid filetypes in names. Ex: use ShinyMetal instead of ShinyMetalMaterial.
+## Project files
 
-Folders
-●	At the root level, put your assets in folders which identify areas/systems/locations of the game. In there, you can create sub-folders to separate different types of assets.
-●	Scenes always go on a root folder
-●	Scripts that don’t belong to a particular system go in a root folder called Scripts. You can create sub-folders in there to better categorise them.
-●	Bottom line: if a system/feature is only scripts, create a folder in /Scripts. If it has other types of assets, put that folder on the root and add sub-folders per asset type.
+### Naming
 
+* Same rules as for the Scene/Hierarchy.
+
+* Name objects so they naturally group together when they are in the same folder and are related.
+
+* Generally, you start the name with the thing that the object belongs to. Ex: `PlayerAnimationController`, `PlayerIdle`, `PlayerRun`, etc.
+
+* However, when it makes sense, you can name objects so that similar objects stay together even if they relate to different "owners" or if the adjective would group them differently. Ex: in a folder full of prop assets, you can use TableRound and TableRectangular so they stay close; instead of RectangularTable and RoundTable.
+
+* **Avoid** filetypes in names. Ex: use `ShinyMetal` instead of `ShinyMetalMaterial`.
+
+### Folders
+
+* At the root level, put your assets in folders which identify areas/systems/locations of the game. In there, you can create sub-folders to separate different types of assets.
+
+* Scenes always go on a root folder
+
+* Scripts that don't belong to a particular system go in a root folder called Scripts. You can create sub-folders in there to better categorise them.
+
+* Bottom line: if a system/feature is only scripts, create a folder in /Scripts. If it has other types of assets, put that folder on the root and add sub-folders per asset type.
 Ex:
-
 📁 Art
 ⸺📁 Characters
 ⸺⸺📁 PigChef
@@ -131,5 +150,3 @@ Ex:
 ⸺📁 Menus
 📁 Scripts
 ⸺📁 SceneManagementSystem
-
-base on https://docs.google.com/document/d/1-eUWZ0lWREFu5iH-ggofwnixDDQqalOoT4Yc0NpWR3k/edit
