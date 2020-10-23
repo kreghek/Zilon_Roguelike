@@ -5,6 +5,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Triggers
 {
@@ -15,14 +16,20 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния.
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
-            var hazardEffect = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>()
+            var effectsModule = actor.Person.GetModuleSafe<IEffectsModule>();
+            if (effectsModule is null)
+            {
+                return false;
+            }
+
+            var hazardEffect = effectsModule.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             if (hazardEffect == null)
             {

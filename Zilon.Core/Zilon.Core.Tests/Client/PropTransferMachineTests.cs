@@ -43,8 +43,8 @@ namespace Zilon.Core.Tests.Client
             // ACT
             var transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             transferMachine.Inventory.PropAdded[0].Should().BeOfType<Resource>();
@@ -82,8 +82,8 @@ namespace Zilon.Core.Tests.Client
             // ACT
             var transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             transferMachine.Inventory.PropAdded[0].Should().BeOfType<Equipment>();
@@ -120,8 +120,8 @@ namespace Zilon.Core.Tests.Client
             using var monitorContainer = transferMachine.Container.Monitor();
             var transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
 
 
@@ -161,8 +161,8 @@ namespace Zilon.Core.Tests.Client
             using var monitorContainer = transferMachine.Container.Monitor();
             var transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
@@ -198,8 +198,8 @@ namespace Zilon.Core.Tests.Client
             using var monitorContainer = transferMachine.Container.Monitor();
             var transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
@@ -237,8 +237,8 @@ namespace Zilon.Core.Tests.Client
             using var monitorContainer = transferMachine.Container.Monitor();
             var transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             monitorInventory.Should().Raise(nameof(PropTransferStore.Added));
@@ -278,8 +278,8 @@ namespace Zilon.Core.Tests.Client
             using var monitorContainer = transferMachine.Container.Monitor();
             var transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             monitorInventory.Should().Raise(nameof(PropTransferStore.Added));

@@ -12,14 +12,13 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class ActorCommandBase : TacticCommandBase
     {
-        protected ISectorManager SectorManager { get; }
         protected ISectorUiState PlayerState { get; }
 
         [ExcludeFromCodeCoverage]
-        protected ActorCommandBase(ISectorManager sectorManager,
-            ISectorUiState playerState)
+        protected ActorCommandBase(
+            ISectorUiState playerState
+            )
         {
-            SectorManager = sectorManager;
             PlayerState = playerState;
         }
 

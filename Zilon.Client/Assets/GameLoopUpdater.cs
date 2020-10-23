@@ -1,28 +1,64 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
 using Assets.Zilon.Scripts.Services;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
 
-using Zenject;
-
-using Zilon.Core.Tactics;
-
-public class GameLoopUpdater : MonoBehaviour
+class GameLoopUpdater
 {
-    [NotNull] [Inject] private readonly IGameLoop _gameLoop;
-    [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
+    [NotNull] private readonly GlobeStorage _globeStorage;
+    [NotNull] private readonly ICommandBlockerService _commandBlockerService;
 
-    void Start()
+    private CancellationTokenSource _cancellationTokenSource;
+
+    public bool IsStarted { get; private set; }
+
+    public GameLoopUpdater(GlobeStorage globeStorage, ICommandBlockerService commandBlockerService)
     {
-        StartGameLoopUpdate();
+        _globeStorage = globeStorage ?? throw new ArgumentNullException(nameof(globeStorage));
+        _commandBlockerService = commandBlockerService ?? throw new ArgumentNullException(nameof(commandBlockerService));
     }
 
-    private async Task StartGameLoopUpdate()
+    public void Start()
+    {
+        _cancellationTokenSource = new CancellationTokenSource();
+
+        var cancelToken = _cancellationTokenSource.Token;
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+        var updateTask = StartGameLoopUpdate(cancelToken);
+
+        updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnFaulted);
+        updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnCanceled);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+        IsStarted = true;
+    }
+
+    public void Stop()
+    {
+        _cancellationTokenSource.Cancel();
+    }
+
+    private async Task StartGameLoopUpdate(CancellationToken cancelToken)
     {
         while (true)
         {
-            await _gameLoop.UpdateAsync();
+            cancelToken.ThrowIfCancellationRequested();
+
+            try
+            {
+                await _globeStorage.Globe.UpdateAsync();
+            }
+            catch(Exception exception)
+            {
+                Debug.LogError(exception);
+                return;
+            }
             await _commandBlockerService.WaitBlockers();
         }
     }

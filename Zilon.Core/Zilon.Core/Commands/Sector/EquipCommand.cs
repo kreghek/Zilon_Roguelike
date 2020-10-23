@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -15,17 +16,19 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class EquipCommand : SpecialActorCommandBase
     {
+        private readonly IPlayer _player;
         private readonly IInventoryState _inventoryState;
 
         public int? SlotIndex { get; set; }
 
         [ExcludeFromCodeCoverage]
         public EquipCommand(
-            ISectorManager sectorManager,
+            IPlayer player,
             ISectorUiState playerState,
             IInventoryState inventoryState) :
-            base(sectorManager, playerState)
+            base(playerState)
         {
+            _player = player;
             _inventoryState = inventoryState;
         }
 
@@ -93,8 +96,10 @@ namespace Zilon.Core.Commands
 
             var equipment = GetInventorySelectedEquipment();
 
-            var intention = new Intention<EquipTask>(a => new EquipTask(a, equipment, SlotIndex.Value));
-            PlayerState.TaskSource.Intent(intention);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+
+            var intention = new Intention<EquipTask>(a => new EquipTask(a, taskContext, equipment, SlotIndex.Value));
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
 
         private Equipment GetInventorySelectedEquipment()

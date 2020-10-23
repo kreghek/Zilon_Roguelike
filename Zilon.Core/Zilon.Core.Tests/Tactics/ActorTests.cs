@@ -5,9 +5,9 @@ using NUnit.Framework;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tactics.Tests
@@ -30,10 +30,12 @@ namespace Zilon.Core.Tactics.Tests
             personMock.Setup(x => x.HasModule(It.IsAny<string>())).Returns(true);
             var person = personMock.Object;
 
-            var player = new Mock<IPlayer>().Object;
             var node = new Mock<IGraphNode>().Object;
 
-            var actor = new Actor(person, player, node);
+            var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
+            var taskSource = taskSourceMock.Object;
+
+            var actor = new Actor(person, taskSource, node);
 
             var testPropScheme = new TestPropScheme
             {

@@ -36,7 +36,9 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var nextNode = _path[0];
 
-            if (_map.IsPositionAvailableFor(nextNode, Actor))
+            var actorCanMove = !Actor.Person.CheckIsDead();
+
+            if (actorCanMove && _map.IsPositionAvailableFor(nextNode, Actor))
             {
                 ReleaseNodes(Actor);
                 Actor.MoveToNode(nextNode);
@@ -51,6 +53,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
             else
             {
+                // Это может произойти, если кто-то опередил текущего персонажа и занял узел первым.
                 IsComplete = true;
             }
         }
@@ -103,11 +106,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public override int Cost => _cost;
 
-        public MoveTask(IActor actor, IGraphNode targetNode, ISectorMap map) : this(actor, targetNode, map, 1000)
+        public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map) : this(actor, context, targetNode, map, 1000)
         {
         }
 
-        public MoveTask(IActor actor, IGraphNode targetNode, ISectorMap map, int cost) : base(actor)
+        public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map, int cost) : base(actor, context)
         {
             TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
             _map = map ?? throw new ArgumentNullException(nameof(map));

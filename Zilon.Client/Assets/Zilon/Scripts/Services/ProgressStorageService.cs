@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 using Newtonsoft.Json;
 
@@ -27,7 +28,7 @@ namespace Assets.Zilon.Scripts.Services
         private readonly IPropFactory _propFactory;
 
         [Inject]
-        private readonly HumanPlayer _humanPlayer;
+        private readonly IPlayer _humanPlayer;
 
         [Inject]
         private readonly IScoreManager _scoreManager;
@@ -66,30 +67,39 @@ namespace Assets.Zilon.Scripts.Services
 
             var person = storageDataObject.Restore(_schemeService, _survivalRandomSource, _propFactory);
 
-            _humanPlayer.MainPerson = person;
+            throw new NotImplementedException();
 
             return true;
         }
 
         public void SavePlayer()
         {
-            var storageData = HumanPlayerStorageData.Create(_humanPlayer);
-            SaveInner(storageData, "Player.txt");
+            //TODO Отключено после ввода Globe.
+            // Этот код перестал быть совместим. Поэтому отключен пока емля не закрутиться
+            // (не будет запущен рабочий билд с Globe)
+            //var storageData = HumanPlayerStorageData.Create(_humanPlayer);
+            //SaveInner(storageData, "Player.txt");
+            throw new NotImplementedException();
         }
 
         public bool LoadPlayer()
         {
-            var storageDataObject = LoadInner<HumanPlayerStorageData>("Player.txt");
-            if (storageDataObject == null)
-            {
-                return false;
-            }
+            //TODO Отключено после ввода Globe.
+            // Этот код перестал быть совместим. Поэтому отключен пока емля не закрутиться
+            // (не будет запущен рабочий билд с Globe)
 
-            storageDataObject.Restore(_humanPlayer);
+            //var storageDataObject = LoadInner<HumanPlayerStorageData>("Player.txt");
+            //if (storageDataObject == null)
+            //{
+            //    return false;
+            //}
 
-            LoadScores();
+            //storageDataObject.Restore(_humanPlayer);
 
-            return true;
+            //LoadScores();
+
+            //return true;
+            throw new NotImplementedException();
         }
 
         public void Destroy()

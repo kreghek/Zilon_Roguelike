@@ -1,15 +1,18 @@
 ﻿using Zilon.Core.Client;
-using Zilon.Core.Tactics;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
     public class NextTurnCommand : ActorCommandBase
     {
+        private readonly IPlayer _player;
+
         public NextTurnCommand(
-            ISectorManager sectorManager,
-            ISectorUiState playerState) : base(sectorManager, playerState)
+            IPlayer player,
+            ISectorUiState playerState) : base(playerState)
         {
+            _player = player;
         }
 
         public override bool CanExecute()
@@ -19,8 +22,10 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var intention = new Intention<IdleTask>(actor => new IdleTask(actor, 1000));
-            PlayerState.TaskSource.Intent(intention);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+
+            var intention = new Intention<IdleTask>(actor => new IdleTask(actor, taskContext, 1000));
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
     }
 }

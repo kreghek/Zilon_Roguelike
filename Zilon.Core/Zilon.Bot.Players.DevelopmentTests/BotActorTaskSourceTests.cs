@@ -9,10 +9,11 @@ using NUnit.Framework;
 using Zilon.Bot.Sdk;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
-using Zilon.Emulation.Common;
+using Zilon.Core.World;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
@@ -24,7 +25,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
         [TestCase("duncan")]
         [TestCase("")]
         [TestCase("monster")]
-        [Parallelizable(ParallelScope.All)]
         public async Task GetActorTasksTestAsync(string mode)
         {
             var serviceContainer = new ServiceCollection();
@@ -34,13 +34,20 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             var botSettings = new BotSettings { Mode = mode };
 
-            var autoPlayEngine = new AutoplayEngine<HumanBotActorTaskSource>(startUp, botSettings);
+            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
+            var player = serviceProvider.GetRequiredService<IPlayer>();
 
-            var startPerson = PersonCreateHelper.CreateStartPerson(serviceProvider);
+            var autoPlayEngine = new AutoplayEngine(
+                startUp,
+                botSettings,
+                globeInitializer);
 
-            PrintPersonBacklog(startPerson);
+            var globe = await autoPlayEngine.CreateGlobeAsync().ConfigureAwait(false);
+            var followedPerson = player.MainPerson;
 
-            await autoPlayEngine.StartAsync(startPerson, serviceProvider).ConfigureAwait(false);
+            PrintPersonBacklog(followedPerson);
+
+            await autoPlayEngine.StartAsync(globe, followedPerson).ConfigureAwait(false);
 
             PrintResult(serviceProvider);
         }

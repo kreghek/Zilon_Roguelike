@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
@@ -10,6 +12,8 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class SectorTransitionMoveCommand : ActorCommandBase
     {
+        private readonly IPlayer _player;
+
         /// <summary>
         /// Конструктор на создание команды перемещения.
         /// </summary>
@@ -21,10 +25,11 @@ namespace Zilon.Core.Commands
         /// Нужен для получения информации о текущем состоянии игрока. </param>
         [ExcludeFromCodeCoverage]
         public SectorTransitionMoveCommand(
-            ISectorManager sectorManager,
+            IPlayer player,
             ISectorUiState playerState) :
-            base(sectorManager, playerState)
+            base(playerState)
         {
+            _player = player;
         }
 
         /// <summary>
@@ -39,7 +44,7 @@ namespace Zilon.Core.Commands
             }
 
             var actorNode = CurrentActor.Node;
-            var map = SectorManager.CurrentSector.Map;
+            var map = _player.SectorNode.Sector.Map;
 
             var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
 
@@ -53,12 +58,9 @@ namespace Zilon.Core.Commands
         /// </summary>
         protected override void ExecuteTacticCommand()
         {
-            var actorNode = CurrentActor.Node;
-            var map = SectorManager.CurrentSector.Map;
-
-            var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
-
-            SectorManager.CurrentSector.UseTransition(detectedTransition);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var intention = new Intention<SectorTransitTask>(a => new SectorTransitTask(a, taskContext));
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
     }
 }

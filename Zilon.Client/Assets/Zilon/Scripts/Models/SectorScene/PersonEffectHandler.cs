@@ -14,7 +14,7 @@ public class PersonEffectHandler : MonoBehaviour
     [UsedImplicitly]
     [NotNull]
     [Inject]
-    private readonly HumanPlayer _player;
+    private readonly IPlayer _player;
 
     [Inject]
     private readonly DiContainer _diContainer;

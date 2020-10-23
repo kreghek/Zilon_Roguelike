@@ -12,9 +12,9 @@ using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
@@ -61,11 +61,15 @@ namespace Zilon.Core.Tests.MapGenerators
             var propContainerManager = propContainerManagerMock.Object;
             propContainerManagerMock.SetupGet(x => x.Items).Returns(System.Array.Empty<IStaticObject>());
 
+            var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
+            var taskSource = taskSourceMock.Object;
+
             var monsterFactory = new MonsterPersonFactory();
 
             var monsterGenerator = new MonsterGenerator(schemeService,
                 monsterFactory,
-                randomSource);
+                randomSource,
+                taskSource);
 
             var map = await SquareMapFactory.CreateAsync(20).ConfigureAwait(false);
 
@@ -89,7 +93,6 @@ namespace Zilon.Core.Tests.MapGenerators
 
             // ACT
             monsterGenerator.CreateMonsters(sector,
-                new Mock<IBotPlayer>().Object,
                 monsterRegions,
                 sectorScheme);
 

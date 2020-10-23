@@ -22,8 +22,10 @@ namespace Zilon.Core.Client
 
         /// <summary>
         /// Пользовательский источник задач для актёров.
+        /// Используется для упрощения доступа к источнику команд у текущего активного актёра.
         /// </summary>
-        IHumanActorTaskSource TaskSource { get; set; }
+        [Obsolete("Because we can gen TaskSource from ActiveActor")]
+        IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
 
         /// <summary>
         /// Выстреливает, когда изменяется активный персонаж игрока.

@@ -20,7 +20,7 @@ namespace Zilon.Core.Persons
         /// <inheritdoc/>
         public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
 
-        public MonsterPerson([NotNull] IMonsterScheme scheme) : base()
+        public MonsterPerson([NotNull] IMonsterScheme scheme) : base(Fractions.MonsterFraction)
         {
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
         }

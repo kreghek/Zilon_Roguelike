@@ -14,9 +14,14 @@ namespace Zilon.Core.Persons
         /// <inheritdoc/>
         public abstract PhysicalSize PhysicalSize { get; }
 
-        protected PersonBase()
+        /// <inheritdoc/>
+        public IFraction Fraction { get; }
+
+        protected PersonBase(IFraction fraction)
         {
             _modules = new Dictionary<string, IPersonModule>();
+
+            Fraction = fraction ?? throw new System.ArgumentNullException(nameof(fraction));
         }
 
         /// <inheritdoc/>

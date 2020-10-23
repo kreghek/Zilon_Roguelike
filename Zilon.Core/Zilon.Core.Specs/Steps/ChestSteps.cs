@@ -10,12 +10,12 @@ using Moq;
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Specs.Steps
@@ -31,11 +31,12 @@ namespace Zilon.Core.Specs.Steps
         public void GivenЕстьСундукIdВЯчейкеСоСлучайнымЛутом(int chestId, int chestPosX, int chestPosY, Table table)
         {
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
-            var sectorManager = Context.ServiceProvider.GetRequiredService<ISectorManager>();
-            var staticObjectManager = sectorManager.CurrentSector.StaticObjectManager;
+            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
+            var sector = player.SectorNode.Sector;
+            var staticObjectManager = sector.StaticObjectManager;
 
             var nodeCoords = new OffsetCoords(chestPosX, chestPosY);
-            var node = sectorManager.CurrentSector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
+            var node = sector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
 
             var dropProps = new List<IProp>();
             foreach (var tableRow in table.Rows)

@@ -510,7 +510,7 @@ namespace Zilon.Core.Tactics
             }
 
             // Логируем только урон по персонажу игрока.
-            if (targetActor != PlayerEventLogService.Actor)
+            if (targetActor.Person != PlayerEventLogService.Player.MainPerson)
             {
                 return;
             }

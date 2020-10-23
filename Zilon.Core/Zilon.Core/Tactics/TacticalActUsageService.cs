@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.Components;
@@ -18,7 +19,6 @@ namespace Zilon.Core.Tactics
     public sealed class TacticalActUsageService : ITacticalActUsageService
     {
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
-        private readonly ISectorManager _sectorManager;
         private readonly IActUsageHandlerSelector _actUsageHandlerSelector;
 
         /// <summary>Сервис для работы с прочностью экипировки.</summary>
@@ -29,7 +29,6 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="actUsageRandomSource">Источник рандома для выполнения действий.</param>
         /// <param name="perkResolver">Сервис для работы с прогрессом перков.</param>
-        /// <param name="sectorManager">Менеджер сектора.</param>
         /// <exception cref="System.ArgumentNullException">
         /// actUsageRandomSource
         /// or
@@ -39,24 +38,21 @@ namespace Zilon.Core.Tactics
         /// </exception>
         public TacticalActUsageService(
             ITacticalActUsageRandomSource actUsageRandomSource,
-            ISectorManager sectorManager,
             IActUsageHandlerSelector actUsageHandlerSelector)
         {
             _actUsageRandomSource = actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
-            _sectorManager = sectorManager ?? throw new ArgumentNullException(nameof(sectorManager));
             _actUsageHandlerSelector = actUsageHandlerSelector ?? throw new ArgumentNullException(nameof(actUsageHandlerSelector));
         }
 
         public TacticalActUsageService(
             ITacticalActUsageRandomSource actUsageRandomSource,
-            ISectorManager sectorManager,
             IActUsageHandlerSelector actUsageHandlerSelector,
-            IEquipmentDurableService equipmentDurableService) : this(actUsageRandomSource, sectorManager, actUsageHandlerSelector)
+            IEquipmentDurableService equipmentDurableService) : this(actUsageRandomSource, actUsageHandlerSelector)
         {
             EquipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
         }
 
-        public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
+        public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs, ISector sector)
         {
             if (actor is null)
             {
@@ -73,6 +69,14 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(usedActs));
             }
 
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
+            Debug.Assert(SectorHasCurrentActor(sector, actor), "Current actor must be in sector");
+            Debug.Assert(SectorHasAttackTarget(sector, target), "Target must be in sector");
+
             foreach (var act in usedActs.Primary)
             {
                 if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && actor == target)
@@ -80,7 +84,7 @@ namespace Zilon.Core.Tactics
                     throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
                 }
 
-                UseAct(actor, target, act);
+                UseAct(actor, target, act, sector.Map);
             }
 
             // Использование дополнительных действий.
@@ -95,8 +99,30 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                UseAct(actor, target, act);
+                UseAct(actor, target, act, sector.Map);
             }
+        }
+
+        private static bool SectorHasCurrentActor(ISector sector, IActor actor)
+        {
+            if (sector.ActorManager is null)
+            {
+                // In test environment not all sector mocks has actor manager
+                return true;
+            }
+
+            return sector.ActorManager.Items.Any(x => x == actor);
+        }
+
+        private static bool SectorHasAttackTarget(ISector sector, IAttackTarget target)
+        {
+            if (sector.ActorManager is null)
+            {
+                // In test environment not all sector mocks has actor manager
+                return true;
+            }
+
+            return sector.ActorManager.Items.Any(x => ReferenceEquals(x, target));
         }
 
         private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSize physicalSize, IGraphNode baseNode, IMap map)
@@ -113,7 +139,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
+        private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act, ISectorMap map)
         {
             bool isInDistance;
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 && actor == target)
@@ -122,7 +148,7 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                isInDistance = IsInDistance(actor, target, act);
+                isInDistance = IsInDistance(actor, target, act, map);
             }
 
             if (!isInDistance)
@@ -136,7 +162,7 @@ namespace Zilon.Core.Tactics
 
             var targetNode = target.Node;
 
-            var targetIsOnLine = _sectorManager.CurrentSector.Map.TargetIsOnLine(
+            var targetIsOnLine = map.TargetIsOnLine(
                 actor.Node,
                 targetNode);
 
@@ -167,15 +193,15 @@ namespace Zilon.Core.Tactics
             act.StartCooldownIfItIs();
         }
 
-        private bool IsInDistance(IActor actor, IAttackTarget target, ITacticalAct act)
+        private bool IsInDistance(IActor actor, IAttackTarget target, ITacticalAct act, ISectorMap map)
         {
-            var actorNodes = GetActorNodes(actor.PhysicalSize, actor.Node, _sectorManager.CurrentSector.Map);
-            var targetNodes = GetActorNodes(target.PhysicalSize, target.Node, _sectorManager.CurrentSector.Map);
+            var actorNodes = GetActorNodes(actor.PhysicalSize, actor.Node, map);
+            var targetNodes = GetActorNodes(target.PhysicalSize, target.Node, map);
             foreach (var node in actorNodes)
             {
                 foreach (var targetNode in targetNodes)
                 {
-                    var isInDistanceInNode = act.CheckDistance(node, targetNode, _sectorManager.CurrentSector.Map);
+                    var isInDistanceInNode = act.CheckDistance(node, targetNode, map);
                     if (isInDistanceInNode)
                     {
                         return true;

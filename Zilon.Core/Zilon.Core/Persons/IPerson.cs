@@ -33,5 +33,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         /// <returns>Возвращает true, если модуль указанного типа есть у объекта. Иначе, false.</returns>
         bool HasModule(string key);
+
+        IFraction Fraction { get; }
     }
 }

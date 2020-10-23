@@ -2,7 +2,6 @@
 
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -24,16 +23,9 @@ namespace Zilon.Core.Tactics
         /// </summary>
         IPerson Person { get; }
 
-        /// <summary>
-        /// Владелец актёра.
-        /// </summary>
-        /// <remarks>
-        /// 1. Опредляет возможность управлять актёром.
-        /// 2. Боты по этому полю определяют противников.
-        /// Может быть человек или бот.
-        /// Персонажи игрока могут быть под прямым и не прямым управлением.
-        /// </remarks>
-        IPlayer Owner { get; }
+        IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
+
+        void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.
@@ -105,8 +97,9 @@ namespace Zilon.Core.Tactics
         /// </remarks>
         ISectorFowData SectorFowData { get; }
 
-        int GameLoopCounter { get; }
-
-        void IncreaseGameLoopCounter(int value);
+        /// <summary>
+        /// Указывает, может ли актёр выполнять задачи.
+        /// </summary>
+        bool CanExecuteTasks { get; }
     }
 }

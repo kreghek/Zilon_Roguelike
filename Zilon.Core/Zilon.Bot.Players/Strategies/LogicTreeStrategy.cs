@@ -17,8 +17,9 @@ namespace Zilon.Bot.Players.Strategies
 
         public LogicTreeStrategy(IActor actor, LogicStateTree stateTree)
         {
-            Actor = actor;
-            _stateTree = stateTree;
+            Actor = actor ?? throw new ArgumentNullException(nameof(actor));
+            _stateTree = stateTree ?? throw new ArgumentNullException(nameof(stateTree));
+
             _strategyData = new LogicTreeStrategyData();
 
             CurrentState = _stateTree.StartState;
@@ -28,7 +29,7 @@ namespace Zilon.Bot.Players.Strategies
         public ILogicState CurrentState { get; private set; }
         public ILogicStrategyData StrategyData => _strategyData;
 
-        public IActorTask GetActorTask()
+        public IActorTask GetActorTask(ISectorTaskSourceContext context)
         {
             // Для текущего состояния проверяем каждый из переходов.
             // Если переход выстреливает, то генерируем задачу актёру.
@@ -44,7 +45,7 @@ namespace Zilon.Bot.Players.Strategies
             // После окончания всех проверок триггеров выполняется обновление состояния триггеров. Некоторые триггеры
             // могут иметь счётчики или логику, которая выполняется при каждой итерации (считай, каждый ход).
 
-            var transitionWasPerformed = SelectCurrentState(CurrentState, out var newState);
+            var transitionWasPerformed = SelectCurrentState(CurrentState, context, out var newState);
 
             if (transitionWasPerformed)
             {
@@ -57,14 +58,14 @@ namespace Zilon.Bot.Players.Strategies
                 ResetLogicStates(_stateTree);
             }
 
-            var actorTask = CurrentState.GetTask(Actor, _strategyData);
+            var actorTask = CurrentState.GetTask(Actor, context, _strategyData);
             var currentTriggers = _stateTree.Transitions[CurrentState].Select(x => x.Trigger);
             UpdateCurrentTriggers(currentTriggers);
 
             return actorTask;
         }
 
-        private bool SelectCurrentState(ILogicState currentState, out ILogicState newState)
+        private bool SelectCurrentState(ILogicState currentState, ISectorTaskSourceContext context, out ILogicState newState)
         {
             var transitionWasPerformed = false;
             newState = null;
@@ -75,7 +76,7 @@ namespace Zilon.Bot.Players.Strategies
             {
                 var trigger = transition.Trigger;
 
-                var isFired = trigger.Test(Actor, currentState, _strategyData);
+                var isFired = trigger.Test(Actor, context, currentState, _strategyData);
                 if (isFired)
                 {
                     newState = transition.NextState;

@@ -30,14 +30,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 .Returns(1);
             var decisionSource = decisionSourceMock.Object;
 
-            var task = new IdleTask(actor, decisionSource);
+            var contextMock = new Mock<IActorTaskContext>();
+            var context = contextMock.Object;
 
-
+            var task = new IdleTask(actor, context, decisionSource);
 
             // ACT
             task.Execute();
-
-
 
             // ASSERT
             task.IsComplete.Should().Be(true);

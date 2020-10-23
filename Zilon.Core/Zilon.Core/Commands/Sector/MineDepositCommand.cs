@@ -4,6 +4,7 @@ using System.Linq;
 using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
@@ -13,13 +14,15 @@ namespace Zilon.Core.Commands.Sector
 {
     public sealed class MineDepositCommand : ActorCommandBase
     {
+        private readonly IPlayer _player;
         private readonly IMineDepositMethodRandomSource _mineDepositMethodRandomSource;
 
         public MineDepositCommand(
-            ISectorManager sectorManager,
+            IPlayer player,
             ISectorUiState playerState,
-            IMineDepositMethodRandomSource mineDepositMethodRandomSource) : base(sectorManager, playerState)
+            IMineDepositMethodRandomSource mineDepositMethodRandomSource) : base(playerState)
         {
+            _player = player;
             _mineDepositMethodRandomSource = mineDepositMethodRandomSource;
         }
 
@@ -77,14 +80,14 @@ namespace Zilon.Core.Commands.Sector
                 else
                 {
                     var intetion = new Intention<MineTask>(actor => CreateTaskByInstrument(actor, targetStaticObject, equipedTool));
-                    PlayerState.TaskSource.IntentAsync(intetion).Wait();
+                    PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
                 }
             }
             else
             {
                 // Добыча руками, если никаких тегов инструмента не задано.
                 var intetion = new Intention<MineTask>(actor => CreateTaskByHands(actor, targetStaticObject));
-                PlayerState.TaskSource.IntentAsync(intetion).Wait();
+                PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
             }
         }
 
@@ -119,15 +122,17 @@ namespace Zilon.Core.Commands.Sector
         private MineTask CreateTaskByInstrument(IActor actor, IStaticObject staticObject, Equipment equipedTool)
         {
             var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool, _mineDepositMethodRandomSource);
-            var map = SectorManager.CurrentSector.Map;
-            return new MineTask(actor, staticObject, toolMineDepositMethod, map);
+
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            return new MineTask(actor, taskContext, staticObject, toolMineDepositMethod);
         }
 
         private MineTask CreateTaskByHands(IActor actor, IStaticObject staticObject)
         {
             var handMineDepositMethod = new HandMineDepositMethod(_mineDepositMethodRandomSource);
-            var map = SectorManager.CurrentSector.Map;
-            return new MineTask(actor, staticObject, handMineDepositMethod, map);
+
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            return new MineTask(actor, taskContext, staticObject, handMineDepositMethod);
         }
     }
 }

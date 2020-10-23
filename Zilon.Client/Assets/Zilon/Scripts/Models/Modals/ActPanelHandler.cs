@@ -51,7 +51,10 @@ public class ActPanelHandler : MonoBehaviour
 
     public void OnDestroy()
     {
-        _equipmentModule.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+        if (_equipmentModule != null)
+        {
+            _equipmentModule.EquipmentChanged -= EquipmentCarrierOnEquipmentChanged;
+        }
     }
 
     private void EquipmentCarrierOnEquipmentChanged(object sender, EquipmentChangedEventArgs e)

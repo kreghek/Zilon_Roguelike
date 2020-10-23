@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Tactics
 {
-    public class StaticObjectManager : SectorEntityManager<IStaticObject>, IStaticObjectManager
+    public class StaticObjectManager : SectorEntityManagerBase<IStaticObject>, IStaticObjectManager
     {
     }
 }

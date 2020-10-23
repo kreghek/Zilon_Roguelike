@@ -35,7 +35,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
-        public event EventHandler<SectorExitEventArgs> HumanGroupExit;
+        public event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
 
         /// <summary>
         /// Карта в основе сектора.
@@ -300,7 +300,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void HoldNodes(IGraphNode nextNode, IActor actor, IMap map)
+        private static void HoldNodes(IGraphNode nextNode, IActor actor, IMap map)
         {
             var actorNodes = GetActorNodes(actor.Person.PhysicalSize, nextNode, map);
 
@@ -310,7 +310,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ReleaseNodes(IActor actor, IMap map)
+        private static void ReleaseNodes(IActor actor, IMap map)
         {
             var actorNodes = GetActorNodes(actor.Person.PhysicalSize, actor.Node, map);
 
@@ -352,7 +352,7 @@ namespace Zilon.Core.Tactics
 
         private void ActorState_Dead(object sender, EventArgs e)
         {
-            var actor = ActorManager.Items.Single(x => x.Person.GetModuleSafe<ISurvivalModule>() == sender);
+            var actor = ActorManager.Items.Single(x => ReferenceEquals(x.Person.GetModuleSafe<ISurvivalModule>(), sender));
             ActorManager.Remove(actor);
 
             if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
@@ -413,15 +413,15 @@ namespace Zilon.Core.Tactics
             return schemes;
         }
 
-        private void DoActorExit([NotNull] RoomTransition roomTransition)
+        private void DoActorExit([NotNull] IActor actor, [NotNull] RoomTransition roomTransition)
         {
-            var e = new SectorExitEventArgs(roomTransition);
-            HumanGroupExit?.Invoke(this, e);
+            var e = new TransitionUsedEventArgs(actor, roomTransition);
+            TrasitionUsed?.Invoke(this, e);
         }
 
-        public void UseTransition(RoomTransition transition)
+        public void UseTransition(IActor actor, RoomTransition transition)
         {
-            DoActorExit(transition);
+            DoActorExit(actor, transition);
         }
     }
 }

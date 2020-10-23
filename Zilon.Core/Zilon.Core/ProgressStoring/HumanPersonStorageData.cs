@@ -121,7 +121,7 @@ namespace Zilon.Core.ProgressStoring
 
             RestoreEvolutionData(schemeService, storedPerson, evolutionData);
 
-            var person = new HumanPerson(personScheme);
+            var person = new HumanPerson(personScheme,/*Заглушка*/ null);
 
             //TODO Создать необходимые модули и заполнить их.
 

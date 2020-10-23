@@ -29,7 +29,7 @@ namespace Zilon.Core.Tests.Tactics
         private ITacticalActUsageRandomSource _actUsageRandomSource;
         private ITacticalAct _act;
         private IPerson _person;
-        private ISectorManager _sectorManager;
+        private ISector _sector;
 
         /// <summary>
         /// Тест проверяет, что при выстреле изымаются патроны из инвентаря.
@@ -43,7 +43,6 @@ namespace Zilon.Core.Tests.Tactics
 
             var actUsageService = new TacticalActUsageService(
                 _actUsageRandomSource,
-                _sectorManager,
                 handlerSelector);
 
             var personMock = new Mock<IPerson>();
@@ -92,7 +91,7 @@ namespace Zilon.Core.Tests.Tactics
 
             // ACT
             var usedActs = new UsedTacticalActs(new[] { shootAct });
-            actUsageService.UseOn(actor, monster, usedActs);
+            actUsageService.UseOn(actor, monster, usedActs, _sector);
 
             // ASSERT
             var bullets = inventory.CalcActualItems().Single(x => x.Scheme.Sid == "bullet-7-62") as Resource;
@@ -107,13 +106,12 @@ namespace Zilon.Core.Tests.Tactics
         {
             // ARRANGE
 
-            var sectorManager = CreateSectorManagerWithWall();
+            var sector = CreateSectorManagerWithWall();
 
             var handlerSelector = CreateEmptyHandlerSelector();
 
             var actUsageService = new TacticalActUsageService(
                 _actUsageRandomSource,
-                sectorManager,
                 handlerSelector);
 
             var actorMock = new Mock<IActor>();
@@ -129,7 +127,7 @@ namespace Zilon.Core.Tests.Tactics
 
             Action act = () =>
             {
-                actUsageService.UseOn(actor, monster, usedActs);
+                actUsageService.UseOn(actor, monster, usedActs, sector);
             };
 
             // ASSERT
@@ -148,7 +146,6 @@ namespace Zilon.Core.Tests.Tactics
 
             var actUsageService = new TacticalActUsageService(
                 _actUsageRandomSource,
-                _sectorManager,
                 handlerSelector);
 
             var actorMock = new Mock<IActor>();
@@ -166,7 +163,7 @@ namespace Zilon.Core.Tests.Tactics
             using var monitor = actor.Monitor();
 
             // ACT
-            actUsageService.UseOn(actor, monster, usedActs);
+            actUsageService.UseOn(actor, monster, usedActs, _sector);
 
             // ASSERT
             monitor.Should().Raise(nameof(IActor.UsedAct));
@@ -272,23 +269,14 @@ namespace Zilon.Core.Tests.Tactics
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             _act = actMock.Object;
 
-            var sectorManagerMock = new Mock<ISectorManager>();
-            var sectorManager = sectorManagerMock.Object;
-
             var map = await SquareMapFactory.CreateAsync(3).ConfigureAwait(false);
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);
-            var sector = sectorMock.Object;
-            sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
-
-            _sectorManager = sectorManager;
+            _sector = sectorMock.Object;
         }
 
-        private ISectorManager CreateSectorManagerWithWall()
+        private ISector CreateSectorManagerWithWall()
         {
-            var sectorManagerMock = new Mock<ISectorManager>();
-            var sectorManager = sectorManagerMock.Object;
-
             var mapMock = new Mock<ISectorMap>();
             mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
                 .Returns(false);
@@ -299,8 +287,8 @@ namespace Zilon.Core.Tests.Tactics
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);
             var sector = sectorMock.Object;
-            sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
-            return sectorManager;
+
+            return sector;
         }
 
         private static IActUsageHandlerSelector CreateEmptyHandlerSelector()

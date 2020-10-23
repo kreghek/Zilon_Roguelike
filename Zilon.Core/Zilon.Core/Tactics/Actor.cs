@@ -20,8 +20,6 @@ namespace Zilon.Core.Tactics
     {
         private readonly IPerkResolver _perkResolver;
 
-        private int _gameLoopCounter;
-
         /// <inheritdoc/>
         public event EventHandler Moved;
 
@@ -54,13 +52,14 @@ namespace Zilon.Core.Tactics
         public IPlayer Owner { get; }
         public ISectorFowData SectorFowData { get; }
         public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
-        public int GameLoopCounter { get => _gameLoopCounter; }
+        public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
+        public bool CanExecuteTasks { get => !Person.CheckIsDead(); }
 
         [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull] IPlayer owner, [NotNull] IGraphNode node)
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node)
         {
             Person = person ?? throw new ArgumentNullException(nameof(person));
-            Owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
             Node = node ?? throw new ArgumentNullException(nameof(node));
 
             if (SectorFowData == null)
@@ -69,14 +68,14 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public Actor([NotNull] IPerson person, [NotNull] IPlayer owner, [NotNull] IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node,
+            [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
         }
 
-        public Actor([NotNull] IPerson person, [NotNull] IPlayer owner, [NotNull] IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, owner, node)
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node,
+            [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
 
@@ -473,13 +472,9 @@ namespace Zilon.Core.Tactics
             DepositMined?.Invoke(this, e);
         }
 
-        public void IncreaseGameLoopCounter(int value)
+        public void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
-            _gameLoopCounter += value;
-            if (_gameLoopCounter >= 1000)
-            {
-                _gameLoopCounter -= 1000;
-            }
+            TaskSource = actorTaskSource;
         }
     }
 }

@@ -25,6 +25,8 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
 
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
+    [NotNull] [Inject] private readonly IPlayer _player;
+
     public ActorGraphicBase GraphicRoot { get; private set; }
 
     private readonly List<HitSfx> _effectList;
@@ -132,7 +134,7 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
 
     private void Survival_Dead(object sender, EventArgs e)
     {
-        var isHumanPerson = Actor.Owner is HumanPlayer;
+        var isHumanPerson = Actor.Person == _player.MainPerson;
         GraphicRoot.ProcessDeath(
             rootObject: gameObject,
             isRootRotting: !isHumanPerson

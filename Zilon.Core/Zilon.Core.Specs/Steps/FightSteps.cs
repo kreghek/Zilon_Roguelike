@@ -50,7 +50,7 @@ namespace Zilon.Core.Specs.Steps
                             .Returns(6);
                         var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-                        Context.SpecifyTacticalActUsageRandomSource(actUsageRandomSource);
+                        Context.RegisterServices.SpecifyTacticalActUsageRandomSource(actUsageRandomSource);
                     }
                     break;
 
@@ -69,7 +69,7 @@ namespace Zilon.Core.Specs.Steps
                             .Returns(1);
                         var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-                        Context.SpecifyTacticalActUsageRandomSource(actUsageRandomSource);
+                        Context.RegisterServices.SpecifyTacticalActUsageRandomSource(actUsageRandomSource);
                     }
                     break;
 

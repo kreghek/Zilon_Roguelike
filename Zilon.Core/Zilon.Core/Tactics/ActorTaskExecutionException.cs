@@ -8,17 +8,17 @@ namespace Zilon.Core.Tactics
     [Serializable]
     public class ActorTaskExecutionException : Exception
     {
-        public ActorTaskExecutionException(IActorTaskSource actorTaskSource)
+        public ActorTaskExecutionException(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             ActorTaskSource = actorTaskSource;
         }
 
-        public ActorTaskExecutionException(string message, IActorTaskSource actorTaskSource) : base(message)
+        public ActorTaskExecutionException(string message, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource) : base(message)
         {
             ActorTaskSource = actorTaskSource;
         }
 
-        public ActorTaskExecutionException(string message, IActorTaskSource actorTaskSource, Exception inner) : base(message, inner)
+        public ActorTaskExecutionException(string message, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource, Exception inner) : base(message, inner)
         {
             ActorTaskSource = actorTaskSource;
         }
@@ -27,6 +27,6 @@ namespace Zilon.Core.Tactics
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 
-        public IActorTaskSource ActorTaskSource { get; }
+        public IActorTaskSource<ISectorTaskSourceContext> ActorTaskSource { get; }
     }
 }

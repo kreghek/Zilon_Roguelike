@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
@@ -71,11 +72,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly DiContainer _container;
 
-    [NotNull] [Inject] private readonly IGameLoop _gameLoop;
-
     [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
-
-    [NotNull] [Inject] private readonly ISectorManager _sectorManager;
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
@@ -85,7 +82,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly IPropFactory _propFactory;
 
-    [NotNull] [Inject] private readonly HumanPlayer _humanPlayer;
+    [NotNull] [Inject] private readonly IPlayer _humanPlayer;
 
     //TODO Вернуть, когда будет придуман туториал
     //[NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
@@ -93,8 +90,6 @@ public class SectorVM : MonoBehaviour
     [NotNull] [Inject] private readonly IScoreManager _scoreManager;
 
     [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
-
-    [Inject] private readonly IHumanActorTaskSource _humanActorTaskSource;
 
     [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
@@ -129,6 +124,19 @@ public class SectorVM : MonoBehaviour
     [NotNull]
     [Inject(Id = "mine-deposit-command")]
     private readonly ICommand _mineDepositCommand;
+
+    [NotNull]
+    [Inject]
+    private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
+
+    [NotNull]
+    [Inject]
+    private readonly GlobeStorage _globeStorage;
+
+    [NotNull]
+    [Inject]
+    private readonly IGlobeInitializer _globeInitializer;
+
     public List<ActorViewModel> ActorViewModels { get; }
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
@@ -140,6 +148,11 @@ public class SectorVM : MonoBehaviour
         _staticObjectViewModels = new List<StaticObjectViewModel>();
     }
 
+    public void Start()
+    {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+    }
+
     // ReSharper restore NotNullMemberIsNotInitialized
     // ReSharper restore MemberCanBePrivate.Global
 #pragma warning restore 649
@@ -149,11 +162,19 @@ public class SectorVM : MonoBehaviour
     {
         if (!_commandBlockerService.HasBlockers)
         {
-            ExecuteCommands();
+            try
+            {
+                ExecuteCommands();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(exception);
+            }
         }
     }
 
     public bool CanIntent = true;
+    private TaskScheduler _taskScheduler;
 
     private void ExecuteCommands()
     {
@@ -203,11 +224,29 @@ public class SectorVM : MonoBehaviour
 
         FowManager.InitViewModels(nodeViewModels, ActorViewModels, _staticObjectViewModels);
 
-        _gameLoop.Updated += GameLoop_Updated;
+        //TODO Этот фрагмент нужно заменить следующим:
+        // Для сектора/мира добавить события на итерацию.
+        // Еще лучше - событие, когда актёр выполняет/начинает выполнять задачу.
+        // Не забыть отписываться.
+        //_gameLoop.Updated += GameLoop_Updated;
 
         //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
         _commandBlockerService.DropBlockers();
+
+        // Изначально канвас отключен.
+        // Эта операция нужна, чтобы Start у всяких панелей выполнялся после инициализации
+        // таких сервисов, как ISectorUiState. Потому что есть много элементов UI,
+        // которые зависят от значения ActiveActor.
+        WindowCanvas.gameObject.SetActive(true);
+
+        if (!_gameLoopUpdater.IsStarted)
+        {
+            _gameLoopUpdater.Start();
+        }
     }
+
+    [Inject]
+    private readonly GameLoopUpdater _gameLoopUpdater;
 
     private void AddPlayerActorEventHandlers(ActorViewModel actorViewModel)
     {
@@ -236,32 +275,21 @@ public class SectorVM : MonoBehaviour
 
     private async Task InitServicesAsync()
     {
+        //TODO эти операции лучше выполнять на однельной сцене генерации мира.
+        if (_globeStorage.Globe == null)
+        {
+            var globe = await _globeInitializer.CreateGlobeAsync("intro");
+            _globeStorage.AssignGlobe(globe);
+        }
+
         var sectorNode = _humanPlayer.SectorNode;
-
-        if (sectorNode == null)
-        {
-            var introLocationScheme = _schemeService.GetScheme<ILocationScheme>("intro");
-            var biom = await _biomeInitializer.InitBiomeAsync(introLocationScheme);
-            sectorNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
-        }
-        else if (sectorNode.State == SectorNodeState.SchemeKnown)
-        {
-            await _biomeInitializer.MaterializeLevelAsync(sectorNode);
-        }
-
-        _humanPlayer.BindSectorNode(sectorNode);
-        await _sectorManager.CreateSectorAsync();
-
-        sectorNode.Sector.ScoreManager = _scoreManager;
 
         _staticObjectManager = sectorNode.Sector.StaticObjectManager;
 
         _staticObjectManager.Added += StaticObjectManager_Added;
         _staticObjectManager.Removed += StaticObjectManager_Removed;
 
-        _playerState.TaskSource = _humanActorTaskSource;
-
-        _sectorManager.CurrentSector.HumanGroupExit += Sector_HumanGroupExit;
+        sectorNode.Sector.TrasitionUsed += Sector_HumanGroupExit;
     }
 
     private void StaticObjectManager_Removed(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
@@ -279,7 +307,7 @@ public class SectorVM : MonoBehaviour
         _staticObjectManager.Added -= StaticObjectManager_Added;
         _staticObjectManager.Removed -= StaticObjectManager_Removed;
 
-        _gameLoop.Updated -= GameLoop_Updated;
+        //_gameLoop.Updated -= GameLoop_Updated;
     }
 
     private List<MapNodeVM> InitNodeViewModels()
@@ -299,7 +327,7 @@ public class SectorVM : MonoBehaviour
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
             mapNodeVm.Neighbors = map.GetNext(node).Cast<HexNode>().ToArray();
-            mapNodeVm.LocaltionScheme = _sectorManager.CurrentSector.Scheme;
+            mapNodeVm.LocaltionScheme = _humanPlayer.SectorNode.Sector.Scheme;
 
             if (map.Transitions.ContainsKey(node))
             {
@@ -484,11 +512,25 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void Sector_HumanGroupExit(object sender, SectorExitEventArgs e)
+    private void Sector_HumanGroupExit(object sender, TransitionUsedEventArgs e)
+    {
+        Task.Factory.StartNew(() =>
+        {
+            try
+            {
+                HandleSectorTransitionInner(e);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(exception);
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Wait();
+    }
+
+    private void HandleSectorTransitionInner(TransitionUsedEventArgs e)
     {
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;
-        _humanPlayer.SectorNode.Sector.ActorManager.Remove(actor);
 
         // Отписываемся от событий в этом секторе
         UnscribeSectorDependentEvents();
@@ -496,23 +538,26 @@ public class SectorVM : MonoBehaviour
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
 
-        var activeActor = _humanActorTaskSource.ActiveActor;
+        var activeActor = actor;
         var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
         survivalModule.Dead -= HumanPersonSurvival_Dead;
 
         _playerState.ActiveActor = null;
         _playerState.SelectedViewModel = null;
         _playerState.HoverViewModel = null;
-        _humanActorTaskSource.SwitchActiveActor(null);
-
-        var nextSectorNode = e.Transition.SectorNode;
-        _humanPlayer.BindSectorNode(nextSectorNode);
 
         StartLoadScene();
     }
 
     private void UnscribeSectorDependentEvents()
     {
+        var persons = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is HumanPerson).ToArray();
+        foreach (var personActor in persons)
+        {
+            personActor.UsedAct -= ActorOnUsedAct;
+            personActor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
+        }
+
         var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
         foreach (var monsterActor in monsters)
         {
@@ -520,7 +565,7 @@ public class SectorVM : MonoBehaviour
             monsterActor.Person.GetModule<ISurvivalModule>().Dead -= Monster_Dead;
         }
 
-        _sectorManager.CurrentSector.HumanGroupExit -= Sector_HumanGroupExit;
+        _humanPlayer.SectorNode.Sector.TrasitionUsed -= Sector_HumanGroupExit;
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
@@ -630,7 +675,7 @@ public class SectorVM : MonoBehaviour
     private void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
-        var activeActor = _humanActorTaskSource.ActiveActor;
+        var activeActor = _playerState.ActiveActor.Actor;
         var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
         survivalModule.Dead -= HumanPersonSurvival_Dead;
 
