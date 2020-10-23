@@ -20,66 +20,57 @@ TextMeshProUGUI _gameTitleText;
 
 * **Avoid** using numbers for names, if they are not part of an inherent list. Ex: `animator1`, `animator2`. Instead explain the difference between both properties -eg `playerAnimator`, `enemyAnimator`.
 
-Capitalization
-Definitions
-camelCase: first letter is lowercase. First letters of the following words are uppercase.
-PascalCase: The first letter of every word is uppercase. If a word is an acronym with two letters, both letters are capitalized. If a word is an acronym with more than two letters, only the first letter is capitalized.
+###Capitalization
 
-●	Classes, methods, enums, namespaces, public fields/properties are written using PascalCase. Ex: ClassName, GetValue.
-●	Local variables, methods parameters use camelCase. Ex: previousValue, mainUI.
-●	Private fields/properties are camelCase, but start with an underscore. Ex: _inputReader.
-●	Constants are all-caps, and they use underscores to separate words. Ex: GRAVITY_AMOUNT.
+####Definitions
 
-Programming
-●	Keep fields and methods private, unless you need them to be public.
-●	If you want to expose fields in the Inspector without actually making the variable accessible to other classes, use the attribute [SerializeField] and private, instead of making them public.
-Note: Doing so, you might get the warning “Field is never assigned to, will always have its default value”. Assign the default value to the field with = default.
-●	Try to avoid the usage of Singletons. Explore usage of ScriptableObjects (1, 2) for a similar, centralised class that can be accessible from multiple objects.
-●	Do not use var when declaring a variable. Always write its type explicitly.
-●	Avoid using static variables. If you absolutely need them, make sure they are compatible with Fast Enter Play Mode as detailed here.
-●	Do not use hardcoded “magic numbers” in your code. Ex: The player is moved by xInput * 0.035f. Why that number? Instead, store the number in a field with a clear name - and maybe a comment on why you chose that specific number.
-●	For “using” directives (Ex: using System;), remove all the unused ones before committing code.
-Formatting
-●	Use 1 Tab per column to indent code, not spaces.
-●	Curly brackets: if they are empty, they should be on the same line. If not, they should be on their own line and aligned in the same column. Ex:
+*camelCase*: First letter is lowercase. First letters of the following words are uppercase.
+*PascalCase*: The first letter of every word is uppercase. If a word is an acronym with two letters, both letters are capitalized. If a word is an acronym with more than two letters, only the first letter is capitalized.
 
-public class EmptyBraces(){ };
-public class NonEmptyBraces
+* Classes, methods, enums, namespaces, public fields/properties are written using **PascalCase**. Ex: `ClassName`, `GetValue`.
+* Local variables, methods parameters use **camelCase**. Ex: `previousValue`, `mainUI`.
+* Private fields/properties are **camelCase**, but start with an **underscore**. Ex: `_inputReader`.
+* Constants are **all-caps**, and they use **underscores** to separate words. Ex: `GRAVITY_AMOUNT`.
+
+### Programming
+* Keep fields and methods **private**, unless you need them to be public.
+* **Avoid** using static variables.
+* **Do not** use hardcoded "magic numbers" in your code. Ex: The player is moved by `xInput * 0.035f`. Why that number? Instead, store the number in a field with a clear name - and maybe a comment on why you chose that specific number. It may be `xInput * PERSON_SPEED`
+* For `using` directives (Ex: `using System;`), remove **all the unused** ones before committing code.
+
+###Formatting
+* Use **4 spaces** per column to indent code, **not tabs**.
+* Logical units which are contained within each other need to be indented to indicate the hierarchical relationship. Ex:
+```c#
+public void MethodName()
 {
-//...
-}
-
-●	Logical units which are contained within each other need to be indented to indicate the hierarchical relationship. Ex:
-
-public void FunctionName()
-{
-    if(somethingHappened)
+    if(isSomeSwitcher)
     {
         //...
     }
 }
+```
 
-Comments
-●	Important: Don’t be redundant. If you think anyone could understand what the code does by just looking at it, don’t add a comment. Instead, name your variables, classes and methods so that they explain themselves!
-●	Use inline comments to provide additional context over individual lines of code.
-●	Write a summary above every class that describes the class' purpose. Optionally, include details about how the class works, especially if it's not particularly intuitive or readable. Ex:
-
+###Comments
+**Important**: Don't be redundant. If you think anyone could understand what the code does by just looking at it, don't add a comment. Instead, name your variables, classes and methods so that they explain themselves!
+* Use inline comments to provide additional context over individual lines of code.
+* Write a summary above **every class** that describes the class' purpose. Optionally, include details about how the class works, especially if it's not particularly intuitive or readable. Ex:
+```c#
 /// <summary>
 /// This class manages save data
 /// </summary>
+```
+**Tip**: IDEs usually auto-generate a summary when typing the “/” symbol 3 times.
+For more information on summaries, check the [official Microsoft specification](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments"official Microsoft specification").
 
-Tip: IDEs usually auto-generate a summary when typing the “/” symbol 3 times.
-
-For more information on summaries, check the official Microsoft specification.
-
-●	Write a comment before a method, to explain what it does, in case the name is not self-explanatory or you want to add important details. You can also use an inline summary. Ex:
-
+* Write a comment before a method, to explain what it does, in case the name is not self-explanatory or you want to add important details. You can also use an inline summary. Ex:
+```c#
 /// <summary> This function does this... </summary>
 public float CalculateBoundingBox(){ }
-  
-●	Use a comment beginning with //TODO: to indicate something that needs to be picked up later, so you don’t forget about it. Note: This is not an invite to push broken functionality.
-●	Do not use #region dividers, or “line separator” comments like //--------.
+```
 
+* Use a comment beginning with `//TODO:` to indicate something that needs to be picked up later, so you don't forget about it. Note: This is not an invite to push broken functionality.
+* **Do not** use `#region` dividers, or "line separator" comments like `//--------`.
 
 Scene/Hierarchy
 Organisation
