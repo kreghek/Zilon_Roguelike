@@ -148,12 +148,8 @@ namespace Zilon.Core.Specs.Contexts
             playerState.ActiveActor = humanActroViewModel;
         }
 
-        public void AddMonsterActor(string monsterSid, int monsterId, OffsetCoords startCoords)
+        public void AddMonsterActor(string monsterSid, int monsterId, ISector sector, OffsetCoords startCoords)
         {
-            var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
-
-            var sector = humanPlayer.SectorNode.Sector;
-
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var actorManager = sector.ActorManager;
 

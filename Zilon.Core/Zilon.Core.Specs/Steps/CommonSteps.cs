@@ -73,7 +73,8 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int monsterId, int x, int y)
         {
-            Context.AddMonsterActor(monsterSid, monsterId, new OffsetCoords(x, y));
+            var sector = Context.Globe.SectorNodes.First().Sector;
+            Context.AddMonsterActor(monsterSid, monsterId, sector, new OffsetCoords(x, y));
         }
 
         [UsedImplicitly]
