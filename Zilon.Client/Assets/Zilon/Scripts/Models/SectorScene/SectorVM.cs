@@ -307,7 +307,7 @@ public class SectorVM : MonoBehaviour
         _staticObjectManager.Added -= StaticObjectManager_Added;
         _staticObjectManager.Removed -= StaticObjectManager_Removed;
 
-        //_gameLoop.Updated -= GameLoop_Updated;
+        UnscribeSectorDependentEvents();
     }
 
     private List<MapNodeVM> InitNodeViewModels()
