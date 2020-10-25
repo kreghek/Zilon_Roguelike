@@ -91,6 +91,9 @@ namespace Zilon.Core.PersonGeneration
             var diseaseModule = new DiseaseModule();
             person.AddModule(diseaseModule);
 
+            var fowModule = new FowData();
+            person.AddModule(fowModule);
+
             person.PlayerEventLogService = PlayerEventLogService;
 
             return person;

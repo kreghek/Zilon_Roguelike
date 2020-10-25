@@ -292,11 +292,13 @@ namespace Zilon.Core.Tactics
 
         private void UpdateFowData(IActor actor)
         {
-            if (actor.SectorFowData is HumanSectorFowData)
+            var fowModule = actor.Person.GetModuleSafe<IFowData>();
+            if (fowModule != null)
             {
+                var fowData = fowModule.GetSectorFowData(this);
                 const int DISTANCE_OF_SIGN = 5;
                 var fowContext = new FowContext(Map, StaticObjectManager);
-                FowHelper.UpdateFowData(actor.SectorFowData, fowContext, actor.Node, DISTANCE_OF_SIGN);
+                FowHelper.UpdateFowData(fowData, fowContext, actor.Node, DISTANCE_OF_SIGN);
             }
         }
 

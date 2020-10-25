@@ -57,7 +57,8 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
         {
-            Context.AddHumanActor(personSid, new OffsetCoords(nodeX, nodeY));
+            var sectorToAdd = Context.Globe.SectorNodes.First().Sector;
+            Context.AddHumanActor(personSid, sectorToAdd, new OffsetCoords(nodeX, nodeY));
         }
 
         [UsedImplicitly]
@@ -72,7 +73,8 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int monsterId, int x, int y)
         {
-            Context.AddMonsterActor(monsterSid, monsterId, new OffsetCoords(x, y));
+            var sector = Context.Globe.SectorNodes.First().Sector;
+            Context.AddMonsterActor(monsterSid, monsterId, sector, new OffsetCoords(x, y));
         }
 
         [UsedImplicitly]

@@ -6,6 +6,9 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 
 public class FowManager : MonoBehaviour
@@ -15,6 +18,9 @@ public class FowManager : MonoBehaviour
 
     [Inject]
     private readonly ISectorUiState _sectorUiState;
+
+    [Inject]
+    private readonly IPlayer _player;
 
     private MapNodeVM[] _nodeViewModels;
     private IList<ActorViewModel> _actorViewModels;
@@ -64,9 +70,22 @@ public class FowManager : MonoBehaviour
             return;
         }
 
-        ProcessNodeFow(activeActor.SectorFowData);
-        ProcessActorFow(activeActor.SectorFowData);
-        ProcessContainerFow(activeActor.SectorFowData);
+        var fowData = activeActor.Person.GetModuleSafe<IFowData>();
+        if (fowData == null)
+        {
+            return;
+        }
+
+        var sector = _player.Globe.SectorNodes.SingleOrDefault(node => node.Sector.ActorManager.Items.Any(actor => actor.Person == _player.MainPerson))?.Sector;
+        if (sector == null)
+        {
+            return;
+        }
+
+        var sectorFowData = fowData.GetSectorFowData(sector);
+        ProcessNodeFow(sectorFowData);
+        ProcessActorFow(sectorFowData);
+        ProcessContainerFow(sectorFowData);
     }
 
     private void ProcessNodeFow(ISectorFowData sectorFowData)

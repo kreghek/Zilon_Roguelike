@@ -94,17 +94,15 @@ namespace Zilon.Core.Specs.Contexts
             Globe = globe;
         }
 
-        public ISector GetSector()
+        public ISector GetCurrentGlobeFirstSector()
         {
-            var player = ServiceProvider.GetRequiredService<IPlayer>();
-            return player.SectorNode.Sector;
+            var sector = Globe.SectorNodes.First().Sector;
+            return sector;
         }
 
         public void AddWall(int x1, int y1, int x2, int y2)
         {
-            var player = ServiceProvider.GetRequiredService<IPlayer>();
-
-            var map = player.SectorNode.Sector.Map;
+            var map = GetCurrentGlobeFirstSector().Map;
 
             map.RemoveEdge(x1, y1, x2, y2);
         }
@@ -127,11 +125,14 @@ namespace Zilon.Core.Specs.Contexts
             return equipment;
         }
 
-        public void AddHumanActor(string personSid, OffsetCoords startCoords)
+        public void AddHumanActor(string personSid, ISector sector, OffsetCoords startCoords)
         {
-            var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
 
-            var sector = humanPlayer.SectorNode.Sector;
+            var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
 
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
             var actorManager = sector.ActorManager;
@@ -150,11 +151,12 @@ namespace Zilon.Core.Specs.Contexts
             playerState.ActiveActor = humanActroViewModel;
         }
 
-        public void AddMonsterActor(string monsterSid, int monsterId, OffsetCoords startCoords)
+        public void AddMonsterActor(string monsterSid, int monsterId, ISector sector, OffsetCoords startCoords)
         {
-            var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
-
-            var sector = humanPlayer.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
 
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
             var actorManager = sector.ActorManager;
@@ -170,9 +172,7 @@ namespace Zilon.Core.Specs.Contexts
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
-            var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
-
-            var sector = humanPlayer.SectorNode.Sector;
+            var sector = GetCurrentGlobeFirstSector();
 
             var node = sector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
             var chest = new FixedPropChest(Array.Empty<IProp>());
@@ -209,7 +209,7 @@ namespace Zilon.Core.Specs.Contexts
         {
             var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
 
-            var sector = humanPlayer.SectorNode.Sector;
+            var sector = GetCurrentGlobeFirstSector();
 
             var actorManager = sector.ActorManager;
 
