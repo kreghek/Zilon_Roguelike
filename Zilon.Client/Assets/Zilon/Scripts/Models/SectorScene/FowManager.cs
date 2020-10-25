@@ -71,19 +71,21 @@ public class FowManager : MonoBehaviour
         }
 
         var fowData = activeActor.Person.GetModuleSafe<IFowData>();
-        Debug.Log(fowData);
-        if (fowData != null)
+        if (fowData == null)
         {
-            var sector = _player.Globe.SectorNodes.SingleOrDefault(node => node.Sector.ActorManager.Items.Any(actor => actor.Person == _player.MainPerson))?.Sector;
-            if (sector != null)
-            {
-                Debug.Log(sector);
-                var sectorFowData = fowData.GetSectorFowData(sector);
-                ProcessNodeFow(sectorFowData);
-                ProcessActorFow(sectorFowData);
-                ProcessContainerFow(sectorFowData);
-            }
+            return;
         }
+
+        var sector = _player.Globe.SectorNodes.SingleOrDefault(node => node.Sector.ActorManager.Items.Any(actor => actor.Person == _player.MainPerson))?.Sector;
+        if (sector == null)
+        {
+            return;
+        }
+
+        var sectorFowData = fowData.GetSectorFowData(sector);
+        ProcessNodeFow(sectorFowData);
+        ProcessActorFow(sectorFowData);
+        ProcessContainerFow(sectorFowData);
     }
 
     private void ProcessNodeFow(ISectorFowData sectorFowData)
