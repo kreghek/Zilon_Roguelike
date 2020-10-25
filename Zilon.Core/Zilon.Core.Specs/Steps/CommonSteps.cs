@@ -57,7 +57,8 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
         {
-            Context.AddHumanActor(personSid, new OffsetCoords(nodeX, nodeY));
+            var sectorToAdd = Context.Globe.SectorNodes.First().Sector;
+            Context.AddHumanActor(personSid, sectorToAdd, new OffsetCoords(nodeX, nodeY));
         }
 
         [UsedImplicitly]

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Persons
 {
@@ -36,6 +39,35 @@ namespace Zilon.Core.Persons
         public override string ToString()
         {
             return $"{Name}";
+        }
+    }
+
+    public interface IFowData : IPersonModule
+    {
+        ISectorFowData GetSectorFowData(ISector sector);
+    }
+
+    public class FowData : IFowData
+    {
+        private readonly IDictionary<ISector, ISectorFowData> _sectorFows;
+
+        public FowData()
+        {
+            _sectorFows = new Dictionary<ISector, ISectorFowData>();
+        }
+
+        public string Key { get => nameof(FowData); }
+        public bool IsActive { get; set; }
+
+        public ISectorFowData GetSectorFowData(ISector sector)
+        {
+            if (!_sectorFows.TryGetValue(sector, out var sectorFowData))
+            {
+                sectorFowData = new HumanSectorFowData();
+                _sectorFows[sector] = sectorFowData;
+            }
+
+            return sectorFowData;
         }
     }
 }

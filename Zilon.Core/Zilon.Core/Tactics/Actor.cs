@@ -50,7 +50,6 @@ namespace Zilon.Core.Tactics
         public IGraphNode Node { get; private set; }
 
         public IPlayer Owner { get; }
-        public ISectorFowData SectorFowData { get; }
         public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
         public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
         public bool CanExecuteTasks { get => !Person.CheckIsDead(); }
@@ -61,25 +60,12 @@ namespace Zilon.Core.Tactics
             Person = person ?? throw new ArgumentNullException(nameof(person));
             TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
             Node = node ?? throw new ArgumentNullException(nameof(node));
-
-            if (SectorFowData == null)
-            {
-                SectorFowData = new MonsterSectorFowData();
-            }
         }
 
         public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
-        }
-
-        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, taskSource, node)
-        {
-            _perkResolver = perkResolver;
-
-            SectorFowData = sectorFowData;
         }
 
         public bool CanBeDamaged()

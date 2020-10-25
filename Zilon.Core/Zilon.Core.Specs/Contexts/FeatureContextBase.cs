@@ -127,11 +127,9 @@ namespace Zilon.Core.Specs.Contexts
             return equipment;
         }
 
-        public void AddHumanActor(string personSid, OffsetCoords startCoords)
+        public void AddHumanActor(string personSid, ISector sector, OffsetCoords startCoords)
         {
             var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
-
-            var sector = humanPlayer.SectorNode.Sector;
 
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
             var actorManager = sector.ActorManager;
