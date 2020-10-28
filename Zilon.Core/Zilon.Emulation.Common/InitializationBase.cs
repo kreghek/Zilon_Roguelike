@@ -327,7 +327,7 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
             serviceCollection.AddSingleton<IPlayerEventLogService, PlayerEventLogService>();
             serviceCollection.AddSingleton<DeathReasonService>();
-            serviceCollection.AddSingleton<HumanPlayer>();
+            serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
         }
 
         protected abstract void RegisterBot(IServiceCollection serviceCollection);
