@@ -221,13 +221,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
-            container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
-            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
-            {
-                var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
-                factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
-                return factory;
-            });
+            RegisterPersonFactory(container);
             container.AddSingleton<IPersonPerkInitializator, PersonPerkInitializator>();
 
             container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();
@@ -240,6 +234,17 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IUserTimeProvider, UserTimeProvider>();
 
             container.AddSingleton<IDiseaseGenerator, DiseaseGenerator>();
+        }
+
+        private static void RegisterPersonFactory(IServiceCollection container)
+        {
+            container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
+            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
+            {
+                var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
+                factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+                return factory;
+            });
         }
 
         private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceProvider factory)
