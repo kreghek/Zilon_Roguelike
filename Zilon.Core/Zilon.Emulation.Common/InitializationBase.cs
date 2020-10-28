@@ -236,7 +236,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IDiseaseGenerator, DiseaseGenerator>();
         }
 
-        private static void RegisterPersonFactory(IServiceCollection container)
+        protected virtual void RegisterPersonFactory(IServiceCollection container)
         {
             container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
             container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
