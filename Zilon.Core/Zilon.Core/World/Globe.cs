@@ -75,9 +75,9 @@ namespace Zilon.Core.World
 
             ProcessTasks(_taskDict);
             _turnCounter++;
-            if (_turnCounter >= 1000)
+            if (_turnCounter >= GlobeMetrics.OneIterationLength)
             {
-                _turnCounter = 1000 - _turnCounter;
+                _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
 
                 foreach (var sectorNode in _sectorNodes)
                 {
