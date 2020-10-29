@@ -1,7 +1,11 @@
 name: Coverall report
 
 on:
-  pull_request
+  pull_request:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
   push:
     branches:
       - master
