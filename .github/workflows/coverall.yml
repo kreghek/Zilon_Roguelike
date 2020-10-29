@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - coverall
     tags:
       - 'v*.*.*'
 
@@ -26,4 +27,4 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./Zilon.Core/Zilon.Core.Tests/TestResults/coverage.info 
+        path-to-lcov: ./Zilon.Core/Zilon.Core.Tests/TestResults/coverage.info
