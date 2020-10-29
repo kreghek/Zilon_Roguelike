@@ -20,6 +20,8 @@ jobs:
       with:
         dotnet-version: '3.1.x'
     - name: Generate coverage report
+      env:
+        ZILON_LIV_SCHEME_CATALOG: /Zilon.Client/Assets/Resources/Schemes
       run: |
         cd ./Zilon.Core/Zilon.Core.Tests/
         dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
