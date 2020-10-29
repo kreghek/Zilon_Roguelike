@@ -1,10 +1,10 @@
-name: CI
+name: Coverall report
 
 on:
   push:
+    pull_request
     branches:
       - master
-      - coverall
     tags:
       - 'v*.*.*'
 
