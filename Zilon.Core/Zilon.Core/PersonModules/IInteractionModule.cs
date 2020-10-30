@@ -7,7 +7,7 @@ namespace Zilon.Core.PersonModules
     /// <summary>
     /// Module of advanced interation with world objects.
     /// </summary>
-    public interface IInteractionModule: IPersonModule
+    public interface IInteractionModule : IPersonModule
     {
         IReadOnlyCollection<IInteration> Interations { get; }
     }

@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Persons
 {
-    public interface ISpawnPerk: IPerk
+    public interface ISpawnPerk : IPerk
     {
         ITacticalActScheme TacticalAct { get; }
         IPersonScheme PersonScheme { get; }
