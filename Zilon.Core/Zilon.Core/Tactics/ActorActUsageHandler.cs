@@ -4,6 +4,8 @@ using System.Linq;
 
 using Zilon.Core.Components;
 using Zilon.Core.Diseases;
+using Zilon.Core.Graphs;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -13,6 +15,31 @@ using Zilon.Core.Tactics.ActorInteractionEvents;
 
 namespace Zilon.Core.Tactics
 {
+    public sealed class TerrainActUsageHandler : IActUsageHandler
+    {
+        private readonly IPersonFactory _personFactory;
+
+        public TerrainActUsageHandler(IPersonFactory personFactory)
+        {
+            _personFactory = personFactory;
+        }
+
+        public Type TargetType => typeof(IGraphNode);
+
+        public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll, IActUsageContext context)
+        {
+            if (tacticalActRoll.TacticalAct is ISpawnAct spawnAct)
+            {
+                var person = _personFactory.Create(spawnAct.PersonScheme.Sid, actor.Person.Fraction);
+                var sectorNode = context.Globe.SectorNodes.Single(x => x.Sector.Map.Nodes.Any(node => ReferenceEquals(node, target)));
+
+                var newActor = new Actor(person, actor.TaskSource, (IGraphNode)target);
+
+                sectorNode.Sector.ActorManager.Add(newActor);
+            }
+        }
+    }
+
     /// <summary>
     /// Обработчик действий, нацеленных на актёра.
     /// </summary>

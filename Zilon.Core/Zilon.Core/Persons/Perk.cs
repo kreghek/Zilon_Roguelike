@@ -38,4 +38,19 @@ namespace Zilon.Core.Persons
         /// </summary>
         public bool IsLevelPaid { get; internal set; }
     }
+
+    /// <summary>
+    /// Perk that give ability to spawn other persons.
+    /// </summary>
+    public sealed class SpawnPerk : Perk, ISpawnPerk
+    {
+        public SpawnPerk(IPersonScheme personScheme, ITacticalActScheme tacticalActScheme)
+        {
+            PersonScheme = personScheme;
+            TacticalAct = tacticalActScheme;
+        }
+
+        public IPersonScheme PersonScheme { get; }
+        public ITacticalActScheme TacticalAct { get; }
+    }
 }
