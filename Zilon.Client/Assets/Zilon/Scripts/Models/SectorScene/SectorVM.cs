@@ -541,6 +541,7 @@ public class SectorVM : MonoBehaviour
         var activeActor = actor;
         var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
         survivalModule.Dead -= HumanPersonSurvival_Dead;
+        activeActor.UsedAct -= ActorOnUsedAct;
 
         _playerState.ActiveActor = null;
         _playerState.SelectedViewModel = null;
@@ -551,18 +552,16 @@ public class SectorVM : MonoBehaviour
 
     private void UnscribeSectorDependentEvents()
     {
-        var persons = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is HumanPerson).ToArray();
-        foreach (var personActor in persons)
+        foreach (var sectorNode in _humanPlayer.Globe.SectorNodes)
         {
-            personActor.UsedAct -= ActorOnUsedAct;
-            personActor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
-        }
+            foreach (var actor in sectorNode.Sector.ActorManager.Items)
+            {
+                actor.UsedAct -= ActorOnUsedAct;
+                actor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
 
-        var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
-        foreach (var monsterActor in monsters)
-        {
-            monsterActor.UsedAct -= ActorOnUsedAct;
-            monsterActor.Person.GetModule<ISurvivalModule>().Dead -= Monster_Dead;
+                actor.UsedAct -= ActorOnUsedAct;
+                actor.Person.GetModule<ISurvivalModule>().Dead -= Monster_Dead;
+            }
         }
 
         _humanPlayer.SectorNode.Sector.TrasitionUsed -= Sector_HumanGroupExit;
