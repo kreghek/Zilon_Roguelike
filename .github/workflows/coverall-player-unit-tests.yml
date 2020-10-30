@@ -1,0 +1,38 @@
+name: Coverall report Player Unit Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+    - name: Generate coverage report
+      env:
+        ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+        DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      run: |
+        cd ./Zilon.Core/Zilon.Bot.Players.Tests/
+        dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+    - name: Publish coverage report to coveralls.io
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ./Zilon.Core/Zilon.Bot.Players.Tests/TestResults/coverage.info
