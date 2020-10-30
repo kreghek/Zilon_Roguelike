@@ -17,8 +17,16 @@ env:
 
 jobs:
 
-  build:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test_csproj:
+          - Zilon.Core.Tests
+          - Zilon.Bot.Players.Tests
+          - Zilon.Core.Specs
+          - Zilon.Core.DiTests
+          - Zilon.Bot.Players.DevelopmentTests
 
     steps:
     - uses: actions/checkout@v2
@@ -26,20 +34,27 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
-    - name: Generate coverage report
+    - name: Generate coverage report ${{ matrix.test_csproj }}
       env:
         ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
         DOTNET_CLI_TELEMETRY_OUTPUT: 1
       run: |
         cd ./Zilon.Core
-        dotnet test Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov
-        dotnet test Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:MergeWith=${{env.TEST_RESULT_PATH}}coverage.info
-        dotnet test Zilon.Core.Specs/Zilon.Core.Specs.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:MergeWith=${{env.TEST_RESULT_PATH}}coverage.info
-        dotnet test Zilon.Core.DiTests/Zilon.Core.DiTests.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:MergeWith=${{env.TEST_RESULT_PATH}}coverage.info
-        dotnet test Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:MergeWith=${{env.TEST_RESULT_PATH}}coverage.info
+        dotnet test ${{ matrix.test_csproj }}/${{ matrix.test_csproj }}.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
+        path-to-lcov: ${{env.TEST_RESULT_PATH}}coverage.info
+        parallel: true
+
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
