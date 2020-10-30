@@ -31,13 +31,10 @@ jobs:
       run: |
         cd ./Zilon.Core/Zilon.Core.Tests/
         dotnet test /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov
-      run: |
         cd ./Zilon.Core/Zilon.Bot.Players.Tests/
         dotnet test /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
-      run: |
         cd ./Zilon.Core/Zilon.Core.Specs/
         dotnet test /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
-      run: |
         cd ./Zilon.Core/Zilon.Core.DiTests/
         dotnet test /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
     - name: Publish coverage report to coveralls.io
