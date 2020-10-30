@@ -12,6 +12,9 @@ on:
     tags:
       - 'v*.*.*'
 
+env:
+  TEST_RESULT_PATH: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/
+
 jobs:
 
   build:
@@ -29,11 +32,12 @@ jobs:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
         DOTNET_CLI_TELEMETRY_OUTPUT: 1
       run: |
-        dotnet test Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov
-        dotnet test Zilon.Core/Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
-        dotnet test Zilon.Core/Zilon.Core.Specs/Zilon.Core.Specs.csproj /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
-        dotnet test Zilon.Core/Zilon.Core.DiTests/Zilon.Core.DiTests.csproj /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
-        dotnet test Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
+        cd ./Zilon.Core
+        dotnet test Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov
+        dotnet test Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:MergeWith=${{env.TEST_RESULT_PATH}}coverage.info
+        dotnet test Zilon.Core.Specs/Zilon.Core.Specs.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:MergeWith=${{env.TEST_RESULT_PATH}}coverage.info
+        dotnet test Zilon.Core.DiTests/Zilon.Core.DiTests.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:MergeWith=${{env.TEST_RESULT_PATH}}coverage.info
+        dotnet test Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:MergeWith=${{env.TEST_RESULT_PATH}}coverage.info
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@master
       with:
