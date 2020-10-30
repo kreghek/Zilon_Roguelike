@@ -29,14 +29,11 @@ jobs:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
         DOTNET_CLI_TELEMETRY_OUTPUT: 1
       run: |
-        cd ./Zilon.Core/Zilon.Core.Tests/
-        dotnet test /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov
-        cd ./Zilon.Core/Zilon.Bot.Players.Tests/
-        dotnet test /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
-        cd ./Zilon.Core/Zilon.Core.Specs/
-        dotnet test /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
-        cd ./Zilon.Core/Zilon.Core.DiTests/
-        dotnet test /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
+        dotnet test Zilon.Core/Zilon.Core.Tests/Zilon.Core.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov
+        dotnet test Zilon.Core/Zilon.Bot.Players.Tests/Zilon.Bot.Players.Tests.csproj /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
+        dotnet test Zilon.Core/Zilon.Core.Specs/Zilon.Core.Specs.csproj /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
+        dotnet test Zilon.Core/Zilon.Core.DiTests/Zilon.Core.DiTests.csproj /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
+        dotnet test Zilon.Core/Zilon.Bot.Players.DevelopmentTests/Zilon.Bot.Players.DevelopmentTests.csproj /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/ /p:CoverletOutputFormat=lcov /p:MergeWith=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/coverage.info
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@master
       with:
