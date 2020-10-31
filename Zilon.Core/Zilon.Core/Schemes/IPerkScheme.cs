@@ -2,6 +2,9 @@
 
 namespace Zilon.Core.Schemes
 {
+    /// <summary>
+    /// The perk scheme.
+    /// </summary>
     public interface IPerkScheme : IScheme
     {
         PerkConditionSubScheme[] BaseConditions { get; set; }
