@@ -27,6 +27,9 @@ jobs:
           - Zilon.Core.Specs
           - Zilon.Core.DiTests
           - Zilon.Bot.Players.DevelopmentTests
+        build_configuration:
+          - Debug
+          - Release
 
     steps:
     - uses: actions/checkout@v2
@@ -41,7 +44,7 @@ jobs:
         DOTNET_CLI_TELEMETRY_OUTPUT: 1
       run: |
         cd ./Zilon.Core
-        dotnet test ${{ matrix.test_csproj }}/${{ matrix.test_csproj }}.csproj /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:Exclude="[*Tests*]"
+        dotnet test ${{ matrix.test_csproj }}/${{ matrix.test_csproj }}.csproj -c ${{ matrix.build_configuration }} /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:Exclude="[*Tests*]"
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@master
       with:
