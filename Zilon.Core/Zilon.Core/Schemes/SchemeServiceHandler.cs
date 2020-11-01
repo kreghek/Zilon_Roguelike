@@ -74,7 +74,7 @@ namespace Zilon.Core.Schemes
             return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content, JsonSerializerSettings);
         }
 
-        public TSchemeImpl Get(string sid)
+        public TSchemeImpl GetItem(string sid)
         {
             try
             {
