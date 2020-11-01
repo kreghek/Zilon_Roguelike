@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -43,11 +41,11 @@ namespace Zilon.Core.MapGenerators
         {
             foreach (var node in map.Nodes)
             {
-                var currentNode = (HexNode)node;
+                HexNode currentNode = (HexNode)node;
                 var nodes = map.Nodes.Cast<HexNode>().ToArray();
-                var neighbors = HexNodeHelper.GetSpatialNeighbors(currentNode, nodes);
+                HexNode[] neighbors = HexNodeHelper.GetSpatialNeighbors(currentNode, nodes);
 
-                foreach (var neighbor in neighbors)
+                foreach (HexNode neighbor in neighbors)
                 {
                     var existsNeibors = map.GetNext(node);
                     if (!existsNeibors.Contains(neighbor))
@@ -68,10 +66,7 @@ namespace Zilon.Core.MapGenerators
             {
                 for (var col = startX; col < startX + mapSize; col++)
                 {
-                    var node = new HexNode(col, row)
-                    {
-                        Id = nodeIdCounter++
-                    };
+                    HexNode node = new HexNode(col, row) {Id = nodeIdCounter++};
 
                     map.AddNode(node);
                 }

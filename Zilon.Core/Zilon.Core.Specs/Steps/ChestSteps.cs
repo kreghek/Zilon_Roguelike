@@ -1,14 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
-using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
-
-using TechTalk.SpecFlow;
-
 using Zilon.Core.Client;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -16,7 +8,6 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Specs.Steps
 {
@@ -35,10 +26,10 @@ namespace Zilon.Core.Specs.Steps
             var sector = player.SectorNode.Sector;
             var staticObjectManager = sector.StaticObjectManager;
 
-            var nodeCoords = new OffsetCoords(chestPosX, chestPosY);
+            OffsetCoords nodeCoords = new OffsetCoords(chestPosX, chestPosY);
             var node = sector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
 
-            var dropProps = new List<IProp>();
+            List<IProp> dropProps = new List<IProp>();
             foreach (var tableRow in table.Rows)
             {
                 tableRow.TryGetValue("prop", out var propSchemeSid);
@@ -54,8 +45,8 @@ namespace Zilon.Core.Specs.Steps
                 .Returns(dropProps.ToArray());
             var dropResolver = dropResolverMock.Object;
 
-            var chest = new DropTablePropChest(System.Array.Empty<DropTableScheme>(), dropResolver);
-            var staticObject = new StaticObject(node, chest.Purpose, chestId);
+            DropTablePropChest chest = new DropTablePropChest(Array.Empty<DropTableScheme>(), dropResolver);
+            StaticObject staticObject = new StaticObject(node, chest.Purpose, chestId);
             staticObject.AddModule<IPropContainer>(chest);
 
             staticObjectManager.Add(staticObject);
@@ -65,19 +56,20 @@ namespace Zilon.Core.Specs.Steps
         public void ThenВВыбранномСундукеЛут(Table table)
         {
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
-            var selectedChest = (playerState.HoverViewModel as IContainerViewModel).StaticObject;
+            IStaticObject selectedChest = (playerState.HoverViewModel as IContainerViewModel).StaticObject;
 
             // lootProps будет изменяться
-            var lootProps = selectedChest.GetModule<IPropContainer>().Content.CalcActualItems().ToList();
+            List<IProp> lootProps = selectedChest.GetModule<IPropContainer>().Content.CalcActualItems().ToList();
 
             foreach (var tableRow in table.Rows)
             {
                 tableRow.TryGetValue("prop", out var expectedPropSid);
                 tableRow.TryGetValue("count", out var expectedResourceCount);
 
-                var factLootProps = lootProps.Where(x => x.Scheme.Sid == expectedPropSid);
-                var factLootResources = factLootProps.Cast<Resource>();
-                var factLootResource = factLootResources.FirstOrDefault(x => x.Count == int.Parse(expectedResourceCount));
+                IEnumerable<IProp> factLootProps = lootProps.Where(x => x.Scheme.Sid == expectedPropSid);
+                IEnumerable<Resource> factLootResources = factLootProps.Cast<Resource>();
+                Resource factLootResource =
+                    factLootResources.FirstOrDefault(x => x.Count == int.Parse(expectedResourceCount));
 
                 factLootResource.Should().NotBeNull();
                 factLootResource.Scheme.Sid.Should().Be(expectedPropSid);

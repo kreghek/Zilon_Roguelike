@@ -1,12 +1,12 @@
 ﻿namespace Zilon.Core.Common
 {
     /// <summary>
-    /// Вспомогательный класс для работы с матрицами.
+    ///     Вспомогательный класс для работы с матрицами.
     /// </summary>
     public static class MatrixHelper
     {
         /// <summary>
-        /// Поворот матрицы на 90 градусов по часовой.
+        ///     Поворот матрицы на 90 градусов по часовой.
         /// </summary>
         /// <typeparam name="T"> Тип элементов массива. </typeparam>
         /// <param name="sourceMatrix"> Исходная матрица. </param>
@@ -18,8 +18,8 @@
                 throw new System.ArgumentNullException(nameof(sourceMatrix));
             }
 
-            var n = sourceMatrix.GetUpperBound(0) - sourceMatrix.GetLowerBound(0) + 1;
-            var m = sourceMatrix.GetUpperBound(1) - sourceMatrix.GetLowerBound(1) + 1;
+            var n = (sourceMatrix.GetUpperBound(0) - sourceMatrix.GetLowerBound(0)) + 1;
+            var m = (sourceMatrix.GetUpperBound(1) - sourceMatrix.GetLowerBound(1)) + 1;
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
             // Отключаем это предупреждение, потому что на выходе нужен такой массив.
             // Кроме того, матрица не может быть jagged.
@@ -38,7 +38,7 @@
         }
 
         /// <summary>
-        /// Поворот матрицы на указанный угол.
+        ///     Поворот матрицы на указанный угол.
         /// </summary>
         /// <typeparam name="T"> Тип элементов массива. </typeparam>
         /// <param name="sourceMatrix"> Исходная матрица. </param>
@@ -46,7 +46,7 @@
         /// <returns> Возращает повёрнутую матрицу. </returns>
         public static T[,] Rotate<T>(T[,] sourceMatrix, MatrixRotation rotation)
         {
-            var resultMatrix = sourceMatrix;
+            T[,] resultMatrix = sourceMatrix;
             for (var i = 0; i < (int)rotation; i++)
             {
                 resultMatrix = RotateClockwise(resultMatrix);
@@ -56,13 +56,13 @@
         }
 
         /// <summary>
-        /// Растягивает матрицу.
+        ///     Растягивает матрицу.
         /// </summary>
         /// <param name="matrix"> Исходная матрица. </param>
         /// <param name="factor"> Фактор растягивания. Указывает, сколько ячеек будет создано в замен исходного значения. </param>
         /// <returns> Возвращает новую растянутую матрицу. </returns>
         /// <remarks>
-        /// <see cref="factor"/> должен быть больше или равен 1. Уменьшение матрица не реализовано.
+        ///     <see cref="factor" /> должен быть больше или равен 1. Уменьшение матрица не реализовано.
         /// </remarks>
         public static Matrix<bool> CreateScaledMatrix(Matrix<bool> matrix, int factor)
         {

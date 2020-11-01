@@ -1,11 +1,9 @@
-﻿using System;
-
-using Zilon.Core.Props;
+﻿using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics
 {
     /// <summary>
-    /// Класс для события.
+    ///     Класс для события.
     /// </summary>
     public class UsedPropEventArgs : EventArgs
     {

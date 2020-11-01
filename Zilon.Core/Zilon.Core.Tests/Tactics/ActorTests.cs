@@ -1,7 +1,4 @@
-﻿using Moq;
-
-using NUnit.Framework;
-
+﻿using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -16,7 +13,7 @@ namespace Zilon.Core.Tactics.Tests
     public class ActorTests
     {
         /// <summary>
-        /// Тест проверяет, что правило снижения токсикации снижает характеристику токсикации.
+        ///     Тест проверяет, что правило снижения токсикации снижает характеристику токсикации.
         /// </summary>
         [Test]
         public void UserProp_ComsumableWithDetoxication_ReduceIntoxication()
@@ -35,28 +32,30 @@ namespace Zilon.Core.Tactics.Tests
             var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
             var taskSource = taskSourceMock.Object;
 
-            var actor = new Actor(person, taskSource, node);
+            Actor actor = new Actor(person, taskSource, node);
 
-            var testPropScheme = new TestPropScheme
+            TestPropScheme testPropScheme = new TestPropScheme
             {
                 Use = new TestPropUseSubScheme
                 {
-                    CommonRules = new[] {
+                    CommonRules = new[]
+                    {
                         new ConsumeCommonRule(
                             ConsumeCommonRuleType.Intoxication,
-                            Components.PersonRuleLevel.Lesser,
-                            Components.PersonRuleDirection.Negative)
+                            PersonRuleLevel.Lesser,
+                            PersonRuleDirection.Negative)
                     }
                 }
             };
-            var testResource = new Resource(testPropScheme, 1);
+            Resource testResource = new Resource(testPropScheme, 1);
 
             // ACT
             actor.UseProp(testResource);
 
             // ASSERT
-            survivalModuleMock.Verify(x => x.DecreaseStat(It.Is<SurvivalStatType>(v => v == SurvivalStatType.Intoxication),
-                It.IsAny<int>()));
+            survivalModuleMock.Verify(x =>
+                x.DecreaseStat(It.Is<SurvivalStatType>(v => v == SurvivalStatType.Intoxication),
+                    It.IsAny<int>()));
         }
     }
 }

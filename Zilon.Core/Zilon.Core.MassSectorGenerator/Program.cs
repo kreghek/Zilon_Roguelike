@@ -1,13 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.CommonUtilities;
+﻿using Zilon.CommonUtilities;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -16,21 +7,21 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.MassSectorGenerator
 {
-    class Program
+    internal class Program
     {
-        private readonly static Random _random;
+        private static readonly Random _random;
 
         static Program()
         {
             _random = new Random();
         }
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var diceSeed = GetDiceSeed(args);
             var outputPath = GetOutputPath(args);
 
-            var startUp = new Startup(diceSeed);
+            Startup startUp = new Startup(diceSeed);
             var serviceContainer = new ServiceCollection();
 
             startUp.RegisterServices(serviceContainer);
@@ -39,10 +30,10 @@ namespace Zilon.Core.MassSectorGenerator
 
             var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
 
-            var sectorSchemeResult = GetSectorScheme(args, schemeService);
+            SectorSchemeResult sectorSchemeResult = GetSectorScheme(args, schemeService);
 
-            var biome = new Biome(sectorSchemeResult.Location);
-            var sectorNode = new SectorNode(biome, sectorSchemeResult.Sector);
+            Biome biome = new Biome(sectorSchemeResult.Location);
+            SectorNode sectorNode = new SectorNode(biome, sectorSchemeResult.Sector);
 
             var sectorFactory = serviceProvider.GetRequiredService<ISectorGenerator>();
             var sector = await sectorFactory.GenerateAsync(sectorNode).ConfigureAwait(false);
@@ -50,7 +41,7 @@ namespace Zilon.Core.MassSectorGenerator
 
             // Проверка
 
-            var sectorValidators = GetValidatorsInAssembly();
+            ISectorValidator[] sectorValidators = GetValidatorsInAssembly();
             var checkTask = CheckSectorAsync(sectorValidators, serviceProvider, sector);
 
             var saveTask = SaveMapAsImageAsync(outputPath, sector);
@@ -80,7 +71,8 @@ namespace Zilon.Core.MassSectorGenerator
             return Task.CompletedTask;
         }
 
-        private static Task CheckSectorAsync(ISectorValidator[] validators, IServiceProvider scopeContainer, ISector sector)
+        private static Task CheckSectorAsync(ISectorValidator[] validators, IServiceProvider scopeContainer,
+            ISector sector)
         {
             return Task.Run(() =>
             {
@@ -180,7 +172,7 @@ namespace Zilon.Core.MassSectorGenerator
 
                 Log.Info($"SCHEME: {locationScheme.Sid} - {sectorScheme.Sid}(index:{sectorSchemeIndex})");
 
-                var result = new SectorSchemeResult(locationScheme, sectorScheme);
+                SectorSchemeResult result = new SectorSchemeResult(locationScheme, sectorScheme);
 
                 return result;
             }
@@ -189,7 +181,7 @@ namespace Zilon.Core.MassSectorGenerator
                 // Если схемы заданы, то строим карту на их основе.
                 // Это будет использовано для отладки.
 
-                var locationScheme = schemeService.GetScheme<ILocationScheme>(locationSchemeSid);
+                ILocationScheme locationScheme = schemeService.GetScheme<ILocationScheme>(locationSchemeSid);
                 if (locationScheme == null)
                 {
                     throw new SectorGeneratorException($"Не найдена схема локации {locationSchemeSid}.");
@@ -201,7 +193,7 @@ namespace Zilon.Core.MassSectorGenerator
                     throw new SectorGeneratorException($"Не найдена схема сектора {sectorSchemeSid}.");
                 }
 
-                var result = new SectorSchemeResult(locationScheme, sectorScheme);
+                SectorSchemeResult result = new SectorSchemeResult(locationScheme, sectorScheme);
 
                 return result;
             }

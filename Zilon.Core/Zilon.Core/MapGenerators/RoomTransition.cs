@@ -3,16 +3,16 @@
 namespace Zilon.Core.MapGenerators
 {
     /// <summary>
-    /// Данные по переходу из данной комнаты.
+    ///     Данные по переходу из данной комнаты.
     /// </summary>
     /// <remarks>
-    /// Используется для обозначения переходов между секторами
-    /// или выхода из подземелья.
+    ///     Используется для обозначения переходов между секторами
+    ///     или выхода из подземелья.
     /// </remarks>
     public sealed class RoomTransition
     {
         /// <summary>
-        /// Создаение экземпляра перехода.
+        ///     Создаение экземпляра перехода.
         /// </summary>
         public RoomTransition(ISectorNode sectorNode)
         {
@@ -20,15 +20,15 @@ namespace Zilon.Core.MapGenerators
         }
 
         /// <summary>
-        /// Узел сектора в графе биома.
+        ///     Узел сектора в графе биома.
         /// </summary>
         public ISectorNode SectorNode { get; }
 
         /// <summary>
-        /// Вывод строкого представления перехода.
+        ///     Вывод строкого представления перехода.
         /// </summary>
         /// <returns>
-        /// <see cref="string" />, который представляет переход.
+        ///     <see cref="string" />, который представляет переход.
         /// </returns>
         public override string ToString()
         {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Zilon.Core
+﻿namespace Zilon.Core
 {
     public struct CubeCoords : IEquatable<CubeCoords>
     {
@@ -49,8 +46,8 @@ namespace Zilon.Core
 
         public int DistanceTo(CubeCoords cubeCoords)
         {
-            var a = this;
-            var b = cubeCoords;
+            CubeCoords a = this;
+            CubeCoords b = cubeCoords;
             var distance1 = Math.Max(Math.Abs(a.X - b.X), Math.Abs(a.Y - b.Y));
             var distance = Math.Max(distance1, Math.Abs(a.Z - b.Z));
 
@@ -74,9 +71,9 @@ namespace Zilon.Core
             unchecked
             {
                 var hashCode = -307843816;
-                hashCode = hashCode * -1521134295 + X.GetHashCode();
-                hashCode = hashCode * -1521134295 + Y.GetHashCode();
-                hashCode = hashCode * -1521134295 + Z.GetHashCode();
+                hashCode = (hashCode * -1521134295) + X.GetHashCode();
+                hashCode = (hashCode * -1521134295) + Y.GetHashCode();
+                hashCode = (hashCode * -1521134295) + Z.GetHashCode();
                 return hashCode;
             }
         }

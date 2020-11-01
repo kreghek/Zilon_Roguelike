@@ -3,8 +3,8 @@
 namespace Zilon.Core.Client.Windows
 {
     /// <summary>
-    /// Менеджер модальных окон.
-    /// Реализация на клиенте.
+    ///     Менеджер модальных окон.
+    ///     Реализация на клиенте.
     /// </summary>
     public interface ISectorModalManager : ICommonModalManager
     {

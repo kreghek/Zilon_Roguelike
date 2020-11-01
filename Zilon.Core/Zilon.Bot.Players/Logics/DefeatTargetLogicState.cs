@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.PersonModules;
+﻿using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -14,13 +10,13 @@ namespace Zilon.Bot.Players.Logics
     {
         private const int REFRESH_COUNTER_VALUE = 3;
 
-        private IAttackTarget _target;
-
-        private int _refreshCounter;
+        private readonly ITacticalActUsageService _actService;
 
         private MoveTask _moveTask;
 
-        private readonly ITacticalActUsageService _actService;
+        private int _refreshCounter;
+
+        private IAttackTarget _target;
 
         public DefeatTargetLogicState(ITacticalActUsageService actService)
         {
@@ -71,23 +67,24 @@ namespace Zilon.Bot.Players.Logics
                 throw new NotSupportedException();
             }
 
-            var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
+            IInventoryModule inventory = actor.Person.GetModuleSafe<IInventoryModule>();
 
-            var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().CalcCombatActs(), inventory);
+            ITacticalAct act =
+                SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().CalcCombatActs(), inventory);
 
             var isInDistance = act.CheckDistance(actor.Node, target.Node, map);
             var targetIsOnLine = map.TargetIsOnLine(actor.Node, target.Node);
 
-            var attackParams = new AttackParams
+            AttackParams attackParams = new AttackParams
             {
-                IsAvailable = isInDistance && targetIsOnLine,
-                TacticalAct = act
+                IsAvailable = isInDistance && targetIsOnLine, TacticalAct = act
             };
 
             return attackParams;
         }
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
         {
             if (_target == null)
             {
@@ -101,47 +98,40 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var attackParams = CheckAttackAvailability(actor, _target, context.Sector.Map);
+            AttackParams attackParams = CheckAttackAvailability(actor, _target, context.Sector.Map);
             if (attackParams.IsAvailable)
             {
-                var act = attackParams.TacticalAct;
+                ITacticalAct act = attackParams.TacticalAct;
 
-                var taskContext = new ActorTaskContext(context.Sector);
+                ActorTaskContext taskContext = new ActorTaskContext(context.Sector);
 
-                var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
+                AttackTask attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
                 return attackTask;
             }
-            else
+            // Маршрут до цели обновляем каждые 3 хода.
+            // Для оптимизации.
+            // Эффект потери цели.
+
+            if (_refreshCounter > 0 && _moveTask?.CanExecute() == true)
             {
-                // Маршрут до цели обновляем каждые 3 хода.
-                // Для оптимизации.
-                // Эффект потери цели.
-
-                if (_refreshCounter > 0 && _moveTask?.CanExecute() == true)
-                {
-                    _refreshCounter--;
-                    return _moveTask;
-                }
-                else
-                {
-                    var map = context.Sector.Map;
-                    _refreshCounter = REFRESH_COUNTER_VALUE;
-                    var targetIsOnLine = map.TargetIsOnLine(actor.Node, _target.Node);
-
-                    if (targetIsOnLine)
-                    {
-                        var taskContext = new ActorTaskContext(context.Sector);
-
-                        _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
-                        return _moveTask;
-                    }
-                    else
-                    {
-                        // Цел за пределами видимости. Считается потерянной.
-                        return null;
-                    }
-                }
+                _refreshCounter--;
+                return _moveTask;
             }
+
+            ISectorMap map = context.Sector.Map;
+            _refreshCounter = REFRESH_COUNTER_VALUE;
+            var targetIsOnLine = map.TargetIsOnLine(actor.Node, _target.Node);
+
+            if (targetIsOnLine)
+            {
+                ActorTaskContext taskContext = new ActorTaskContext(context.Sector);
+
+                _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
+                return _moveTask;
+            }
+
+            // Цел за пределами видимости. Считается потерянной.
+            return null;
         }
 
         protected override void ResetData()

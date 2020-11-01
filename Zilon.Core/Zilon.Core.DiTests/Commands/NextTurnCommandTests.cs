@@ -1,12 +1,4 @@
-﻿using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
-
-using NUnit.Framework;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -19,8 +11,8 @@ namespace Zilon.Core.Tests.Commands
     public class NextTurnCommandTests : CommandTestBase
     {
         /// <summary>
-        /// Тест проверяет, что можно выполнить выполнить следующий ход.
-        /// По идее, следующий ход можно вызвать всегда. То есть CanExecute всегда true.
+        ///     Тест проверяет, что можно выполнить выполнить следующий ход.
+        ///     По идее, следующий ход можно вызвать всегда. То есть CanExecute всегда true.
         /// </summary>
         [Test]
         public void CanExecuteTest()
@@ -36,14 +28,15 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        /// Тест проверяет, что при выполнении команды вызывается обновление состояния сектора.
+        ///     Тест проверяет, что при выполнении команды вызывается обновление состояния сектора.
         /// </summary>
         [Test]
         public void ExecuteTest()
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<NextTurnCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();

@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Linq;
-
-using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using TechTalk.SpecFlow;
-
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
@@ -27,7 +21,7 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"В инвентаре у актёра есть еда: (.*) количество: (.*)")]
         public void GivenВИнвентареУАктёраЕстьЕдаСыр(string propSid, int count)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
             Context.AddResourceToActor(propSid, count, actor);
         }
 
@@ -36,10 +30,10 @@ namespace Zilon.Core.Specs.Steps
         public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid,
             string provisionStat)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
             ConsumeCommonRuleType consumeRuleType;
-            var direction = PersonRuleDirection.Positive;
+            PersonRuleDirection direction = PersonRuleDirection.Positive;
 
             switch (provisionStat)
             {
@@ -74,13 +68,14 @@ namespace Zilon.Core.Specs.Steps
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
 
-            var propScheme = new TestPropScheme
+            TestPropScheme propScheme = new TestPropScheme
             {
                 Sid = propSid,
                 Use = new TestPropUseSubScheme
                 {
                     Consumable = true,
-                    CommonRules = new[] {
+                    CommonRules = new[]
+                    {
                         new ConsumeCommonRule(consumeRuleType, PersonRuleLevel.Lesser, direction)
                     }
                 }
@@ -92,8 +87,8 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Актёр значение (.*) равное (.*)")]
         public void GivenАктёрЗначениеСытостьРавное(string statName, int statValue)
         {
-            var actor = Context.GetActiveActor();
-            var survival = actor.Person.GetModule<ISurvivalModule>();
+            IActor actor = Context.GetActiveActor();
+            ISurvivalModule survival = actor.Person.GetModule<ISurvivalModule>();
 
             SurvivalStatType statType;
             switch (statName)
@@ -118,13 +113,13 @@ namespace Zilon.Core.Specs.Steps
         {
             var survivalRandomSource = Context.ServiceProvider.GetRequiredService<ISurvivalRandomSource>();
 
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
             GetEffectStatAndLevelByName(startEffect,
                 out SurvivalStatType stat,
                 out SurvivalStatHazardLevel level);
 
-            var effect = new SurvivalStatHazardEffect(stat, level, survivalRandomSource);
+            SurvivalStatHazardEffect effect = new SurvivalStatHazardEffect(stat, level, survivalRandomSource);
 
             actor.Person.GetModule<IEffectsModule>().Add(effect);
         }
@@ -132,12 +127,9 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Я перемещаю персонажа на (.*) клетку")]
         public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)
         {
-            var targetCoords = new[] {
-                new OffsetCoords(1, 0),
-                new OffsetCoords(0, 0)
-            };
+            OffsetCoords[] targetCoords = {new OffsetCoords(1, 0), new OffsetCoords(0, 0)};
 
-            for (var i = 0; i < moveCount; i++)
+            for (int i = 0; i < moveCount; i++)
             {
                 Context.MoveOnceActiveActor(targetCoords[i % 2]);
             }
@@ -152,7 +144,7 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Значение (сытость|вода) уменьшилось на (.*) и стало (.*)")]
         public void ThenЗначениеStatУменьшилосьНаRate(string stat, int hungerRate, int expectedValue)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
             switch (stat)
             {
@@ -170,9 +162,10 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [Then(@"Значение (сытость|вода) повысилось на (.*) и уменьшилось на (.*) за игровой цикл и стало (.*)")]
-        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate, int expectedValue)
+        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate,
+            int expectedValue)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
             switch (stat)
             {
@@ -192,7 +185,7 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Значение (сытость|вода) стало (.*)")]
         public void ThenЗначениеStatСтало(string stat, int expectedValue)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
             int? survivalStatValue;
             switch (stat)
@@ -215,7 +208,7 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Актёр под эффектом (.*)")]
         public void ThenАктёрПолучаетЭффектСлабыйГолод(string effectName)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
             GetEffectStatAndLevelByName(effectName,
                 out SurvivalStatType stat,
@@ -237,7 +230,8 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat, out SurvivalStatHazardLevel level)
+        private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat,
+            out SurvivalStatHazardLevel level)
         {
             switch (effectName)
             {
@@ -283,7 +277,7 @@ namespace Zilon.Core.Specs.Steps
 
         private int? GetSurvivalValue(IActor actor, SurvivalStatType type)
         {
-            var stat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == type);
+            SurvivalStat stat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == type);
             return stat?.Value;
         }
     }

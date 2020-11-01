@@ -1,12 +1,5 @@
-﻿using System.Linq;
-
-using BenchmarkDotNet.Attributes;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Core.MapGenerators;
+﻿using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
-using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmarks.CreateSector
@@ -34,7 +27,7 @@ namespace Zilon.Core.Benchmarks.CreateSector
         [IterationSetup]
         public void IterationSetup()
         {
-            var startUp = new Startup();
+            Startup startUp = new Startup();
             var serviceCollection = new ServiceCollection();
             startUp.RegisterServices(serviceCollection);
 

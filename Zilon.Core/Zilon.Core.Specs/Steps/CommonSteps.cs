@@ -1,26 +1,19 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-
-using FluentAssertions;
-
-using JetBrains.Annotations;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using TechTalk.SpecFlow;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.StaticObjectModules;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Specs.Steps
 {
@@ -29,8 +22,8 @@ namespace Zilon.Core.Specs.Steps
     public class CommonSteps : GenericStepsBase<CommonGameActionsContext>
     {
         /// <summary>
-        /// Количество миллисекунд, которые можно потратить на выполнение быстрой операции.
-        /// Эта константа нужна, чтобы задавать лимит по времени. Чтобы быстрее проваливать тесты, которые "подвисают".
+        ///     Количество миллисекунд, которые можно потратить на выполнение быстрой операции.
+        ///     Эта константа нужна, чтобы задавать лимит по времени. Чтобы быстрее проваливать тесты, которые "подвисают".
         /// </summary>
         private const int TEST_SHORT_OP_LIMIT_MS = 1000;
 
@@ -65,7 +58,7 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Актёр игрока имеет Hp: (.*)")]
         public void GivenАктёрИмеетHp(int startHp)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
             actor.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, startHp);
         }
 
@@ -81,7 +74,7 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Монстр Id:(.*) имеет Hp (.*)")]
         public void GivenМонстрIdИмеетHp(int monsterId, int monsterHp)
         {
-            var monster = Context.GetMonsterById(monsterId);
+            IActor monster = Context.GetMonsterById(monsterId);
 
             monster.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, monsterHp);
         }
@@ -90,7 +83,7 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьСундукВЯчейке(int id, int offsetX, int offsetY)
         {
-            var coords = new OffsetCoords(offsetX, offsetY);
+            OffsetCoords coords = new OffsetCoords(offsetX, offsetY);
             Context.AddChest(id, coords);
         }
 
@@ -133,7 +126,7 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
         public void GivenВИнвентареУАктёраЕстьРесурс(string propSid, int count)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
             Context.AddResourceToActor(propSid, count, actor);
         }
 
@@ -141,15 +134,17 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Следующая итерация сектора (\d+) раз")]
         public async Task WhenСледующаяИтерацияСектораAsync(int count)
         {
-            var globe = Context.Globe;
-            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            IGlobe globe = Context.Globe;
+            var humatTaskSource = Context.ServiceProvider
+                .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
-            var counter = count;
+            int counter = count;
 
             var survivalModule = playerState.ActiveActor?.Actor.Person?.GetModuleSafe<ISurvivalModule>();
-            while ((!humatTaskSource.CanIntent() && playerState.ActiveActor?.Actor != null && survivalModule?.IsDead == false) ||
-                (playerState.ActiveActor?.Actor == null && counter > 0))
+            while ((!humatTaskSource.CanIntent() && playerState.ActiveActor?.Actor != null &&
+                    survivalModule?.IsDead == false) ||
+                   (playerState.ActiveActor?.Actor == null && counter > 0))
             {
                 await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
                 counter--;
@@ -173,10 +168,7 @@ namespace Zilon.Core.Specs.Steps
 
             var container = staticObjectManager.Items.Single(x => x.Id == id);
 
-            var chestViewMdel = new TestContainerViewModel
-            {
-                StaticObject = container
-            };
+            TestContainerViewModel chestViewMdel = new TestContainerViewModel {StaticObject = container};
 
             playerState.HoverViewModel = chestViewMdel;
         }
@@ -188,13 +180,15 @@ namespace Zilon.Core.Specs.Steps
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
             var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
 
-            var actor = Context.GetActiveActor();
-            var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
+            IActor actor = Context.GetActiveActor();
+            IStaticObject container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
-            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(), container.GetModule<IPropContainer>().Content);
+            PropTransferMachine transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(),
+                container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
-            var equipment = container.GetModule<IPropContainer>().Content.CalcActualItems().Single(x => x.Scheme.Sid == equipmentSchemeSid);
+            IProp equipment = container.GetModule<IPropContainer>().Content.CalcActualItems()
+                .Single(x => x.Scheme.Sid == equipmentSchemeSid);
 
             transferMachine.TransferProp(equipment,
                 PropTransferMachineStore.Container,
@@ -211,13 +205,14 @@ namespace Zilon.Core.Specs.Steps
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
             var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
 
-            var actor = Context.GetActiveActor();
-            var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
+            IActor actor = Context.GetActiveActor();
+            IStaticObject container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
-            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(), container.GetModule<IPropContainer>().Content);
+            PropTransferMachine transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(),
+                container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
-            var resource = container.GetModule<IPropContainer>().Content.CalcActualItems()
+            Resource resource = container.GetModule<IPropContainer>().Content.CalcActualItems()
                 .OfType<Resource>()
                 .Single(x => x.Scheme.Sid == resourceSid);
 
@@ -255,11 +250,11 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"У актёра в инвентаре есть (.*)")]
         public void ThenУАктёраВИнвентареЕстьPistol(string equipmentSchemeSid)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
-            var inventoryModule = actor.Person.GetModule<IInventoryModule>();
-            var inventoryItems = inventoryModule.CalcActualItems();
-            var foundEquipment = inventoryItems.SingleOrDefault(x => x.Scheme.Sid == equipmentSchemeSid);
+            IInventoryModule inventoryModule = actor.Person.GetModule<IInventoryModule>();
+            IProp[] inventoryItems = inventoryModule.CalcActualItems();
+            IProp foundEquipment = inventoryItems.SingleOrDefault(x => x.Scheme.Sid == equipmentSchemeSid);
 
             foundEquipment.Should().NotBeNull();
         }
@@ -272,7 +267,8 @@ namespace Zilon.Core.Specs.Steps
             var containerManager = player.SectorNode.Sector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == id);
-            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
+            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems()
+                .SingleOrDefault(x => x.Scheme.Sid == propSid);
 
             prop.Should().BeNull();
         }
@@ -285,7 +281,8 @@ namespace Zilon.Core.Specs.Steps
             var containerManager = player.SectorNode.Sector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == containerId);
-            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);
+            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems()
+                .SingleOrDefault(x => x.Scheme.Sid == resourceSid);
 
             prop.Should().BeNull();
         }
@@ -293,13 +290,13 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
         public void ThenВИнвентареУАктёраЕстьРесурсPropSidКоличествоExpectedCount(string propSid, int expectedCount)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
-            var propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
-            var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
+            IProp[] propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            IProp testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
 
             testedProp.Should().BeOfType<Resource>();
-            var testedResouce = (Resource)testedProp;
+            Resource testedResouce = (Resource)testedProp;
 
             testedResouce.Count.Should().Be(expectedCount);
         }
@@ -308,10 +305,10 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
         public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
-            var propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
-            var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
+            IProp[] propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            IProp testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
 
             testedProp.Should().BeNull();
         }
@@ -320,8 +317,9 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Актёр игрока имеет запас hp (.*)")]
         public void ThenАктёрИмеетЗадасHp(int expectedHp)
         {
-            var actor = Context.GetActiveActor();
-            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
+            IActor actor = Context.GetActiveActor();
+            SurvivalStat hpStat = actor.Person.GetModule<ISurvivalModule>().Stats
+                .Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedHp);
         }
 
@@ -329,8 +327,9 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Монстр Id:(\d*) имеет Hp (\d*)")]
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
-            var monster = Context.GetMonsterById(monsterId);
-            var hpStat = monster.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
+            IActor monster = Context.GetMonsterById(monsterId);
+            SurvivalStat hpStat = monster.Person.GetModule<ISurvivalModule>().Stats
+                .Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedMonsterHp);
         }
 

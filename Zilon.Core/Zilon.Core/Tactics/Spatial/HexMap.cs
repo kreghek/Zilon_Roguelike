@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
@@ -65,7 +61,7 @@ namespace Zilon.Core.Tactics.Spatial
                 throw new ArgumentNullException(nameof(node));
             }
 
-            var hexNode = (HexNode)node;
+            HexNode hexNode = (HexNode)node;
             var offsetX = hexNode.OffsetCoords.X;
             var offsetY = hexNode.OffsetCoords.Y;
 
@@ -86,7 +82,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         protected HexNode GetByCoords(int x, int y)
         {
-            var segmentKey = new SegmentKey(0, 0);
+            SegmentKey segmentKey = new SegmentKey(0, 0);
             var segment = _segmentDict[segmentKey];
             try
             {
@@ -109,8 +105,8 @@ namespace Zilon.Core.Tactics.Spatial
                 throw new ArgumentNullException(nameof(node));
             }
 
-            var hexCurrent = (HexNode)node;
-            var offsetCoords = hexCurrent.OffsetCoords;
+            HexNode hexCurrent = (HexNode)node;
+            OffsetCoords offsetCoords = hexCurrent.OffsetCoords;
             var segmentX = offsetCoords.X / _segmentSize;
             if (offsetCoords.X < 0)
             {
@@ -126,25 +122,26 @@ namespace Zilon.Core.Tactics.Spatial
             var localOffsetX = NormalizeNeighborCoord(offsetCoords.X % _segmentSize);
             var localOffsetY = NormalizeNeighborCoord(offsetCoords.Y % _segmentSize);
 
-            var segmentKey = new SegmentKey(segmentX, segmentY);
+            SegmentKey segmentKey = new SegmentKey(segmentX, segmentY);
             var matrix = _segmentDict[segmentKey];
 
             return GetNextFromMatrix(localOffsetX, localOffsetY, segmentX, segmentY, matrix);
         }
 
-        private IEnumerable<IGraphNode> GetNextFromMatrix(int localOffsetX, int localOffsetY, int segmentX, int segmentY, IGraphNode[,] matrix)
+        private IEnumerable<IGraphNode> GetNextFromMatrix(int localOffsetX, int localOffsetY, int segmentX,
+            int segmentY, IGraphNode[,] matrix)
         {
-            var directions = HexHelper.GetOffsetClockwise();
-            var currentCubeCoords = HexHelper.ConvertToCube(localOffsetX, localOffsetY);
+            CubeCoords[] directions = HexHelper.GetOffsetClockwise();
+            CubeCoords currentCubeCoords = HexHelper.ConvertToCube(localOffsetX, localOffsetY);
 
             for (var i = 0; i < 6; i++)
             {
-                var dir = directions[i];
-                var neighborLocalCube = new CubeCoords(dir.X + currentCubeCoords.X,
+                CubeCoords dir = directions[i];
+                CubeCoords neighborLocalCube = new CubeCoords(dir.X + currentCubeCoords.X,
                     dir.Y + currentCubeCoords.Y,
                     dir.Z + currentCubeCoords.Z);
 
-                var neighborLocalOffset = HexHelper.ConvertToOffset(neighborLocalCube);
+                OffsetCoords neighborLocalOffset = HexHelper.ConvertToOffset(neighborLocalCube);
 
                 var neighborSegmentX = segmentX;
                 var neighborSegmentY = segmentY;
@@ -184,7 +181,7 @@ namespace Zilon.Core.Tactics.Spatial
         }
 
         /// <summary>
-        /// Проверяет, является ли данная ячейка доступной для текущего актёра.
+        ///     Проверяет, является ли данная ячейка доступной для текущего актёра.
         /// </summary>
         /// <param name="targetNode">Целевая ячейка.</param>
         /// <param name="actor">Проверяемый актёр.</param>
@@ -225,6 +222,7 @@ namespace Zilon.Core.Tactics.Spatial
                 {
                     file.Write($"{x,3}".PadRight(cellWidth, ' '));
                 }
+
                 file.WriteLine();
 
                 for (var y = 0; y < _segmentSize; y++)
@@ -250,9 +248,9 @@ namespace Zilon.Core.Tactics.Spatial
         private void CreateSegment(int segmentX, int segmentY)
         {
             //TODO Отказаться от многомерного массива. Вместо этого сделать одномерный и адресацию через смещение.
-            var matrix = new IGraphNode[_segmentSize, _segmentSize];
+            IGraphNode[,] matrix = new IGraphNode[_segmentSize, _segmentSize];
 
-            var key = new SegmentKey(segmentX, segmentY);
+            SegmentKey key = new SegmentKey(segmentX, segmentY);
             _segmentDict[key] = matrix;
         }
 
@@ -276,7 +274,7 @@ namespace Zilon.Core.Tactics.Spatial
         }
 
         /// <summary>
-        /// Distances the between.
+        ///     Distances the between.
         /// </summary>
         /// <param name="currentNode">The current node.</param>
         /// <param name="targetNode">The target node.</param>
@@ -293,11 +291,11 @@ namespace Zilon.Core.Tactics.Spatial
                 throw new ArgumentNullException(nameof(targetNode));
             }
 
-            var actorHexNode = (HexNode)currentNode;
-            var containerHexNode = (HexNode)targetNode;
+            HexNode actorHexNode = (HexNode)currentNode;
+            HexNode containerHexNode = (HexNode)targetNode;
 
-            var actorCoords = actorHexNode.CubeCoords;
-            var containerCoords = containerHexNode.CubeCoords;
+            CubeCoords actorCoords = actorHexNode.CubeCoords;
+            CubeCoords containerCoords = containerHexNode.CubeCoords;
 
             var distance = actorCoords.DistanceTo(containerCoords);
 
@@ -339,8 +337,8 @@ namespace Zilon.Core.Tactics.Spatial
                 unchecked
                 {
                     var hashCode = 1861411795;
-                    hashCode = hashCode * -1521134295 + X.GetHashCode();
-                    hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                    hashCode = (hashCode * -1521134295) + X.GetHashCode();
+                    hashCode = (hashCode * -1521134295) + Y.GetHashCode();
                     return hashCode;
                 }
             }

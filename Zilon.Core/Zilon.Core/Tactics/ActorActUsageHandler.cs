@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Diseases;
 using Zilon.Core.PersonModules;
@@ -14,41 +11,42 @@ using Zilon.Core.Tactics.ActorInteractionEvents;
 namespace Zilon.Core.Tactics
 {
     /// <summary>
-    /// Обработчик действий, нацеленных на актёра.
+    ///     Обработчик действий, нацеленных на актёра.
     /// </summary>
     public sealed class ActorActUsageHandler : IActUsageHandler
     {
-        private readonly IPerkResolver _perkResolver;
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
+        private readonly IPerkResolver _perkResolver;
+
+        public ActorActUsageHandler(IPerkResolver perkResolver, ITacticalActUsageRandomSource actUsageRandomSource)
+        {
+            _perkResolver = perkResolver ?? throw new ArgumentNullException(nameof(perkResolver));
+            _actUsageRandomSource =
+                actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
+        }
 
         /// <summary>
-        /// Шина событий возаимодействия актёров.
+        ///     Шина событий возаимодействия актёров.
         /// </summary>
         public IActorInteractionBus ActorInteractionBus { get; set; }
 
         /// <summary>
-        /// Сервис для работы с достижениями персонажа.
+        ///     Сервис для работы с достижениями персонажа.
         /// </summary>
         public IScoreManager ScoreManager { get; set; }
 
         /// <summary>
-        /// Сервис для логирования событий, связанных с персонажем игрока.
+        ///     Сервис для логирования событий, связанных с персонажем игрока.
         /// </summary>
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         /// <summary>Сервис для работы с прочностью экипировки.</summary>
         public IEquipmentDurableService EquipmentDurableService { get; set; }
 
-        public ActorActUsageHandler(IPerkResolver perkResolver, ITacticalActUsageRandomSource actUsageRandomSource)
-        {
-            _perkResolver = perkResolver ?? throw new ArgumentNullException(nameof(perkResolver));
-            _actUsageRandomSource = actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
-        }
+        /// <inheritdoc />
+        public Type TargetType => typeof(IActor);
 
-        /// <inheritdoc/>
-        public Type TargetType { get => typeof(IActor); }
-
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll)
         {
             if (actor is null)
@@ -70,7 +68,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Применяет действие на актёра.
+        ///     Применяет действие на актёра.
         /// </summary>
         /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
@@ -88,14 +86,14 @@ namespace Zilon.Core.Tactics
                     break;
 
                 default:
-                    var effect = tacticalActRoll.TacticalAct.Stats.Effect;
-                    var tacticalAct = tacticalActRoll.TacticalAct;
+                    TacticalActEffectType effect = tacticalActRoll.TacticalAct.Stats.Effect;
+                    ITacticalAct tacticalAct = tacticalActRoll.TacticalAct;
                     throw new ArgumentException($"Не определённый эффект {effect} действия {tacticalAct}.");
             }
         }
 
         /// <summary>
-        /// Производит попытку нанесения урона целевову актёру с учётом обороны и брони.
+        ///     Производит попытку нанесения урона целевову актёру с учётом обороны и брони.
         /// </summary>
         /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
@@ -104,16 +102,16 @@ namespace Zilon.Core.Tactics
         {
             var targetIsDeadLast = targetActor.Person.CheckIsDead();
 
-            var offenceType = tacticalActRoll.TacticalAct.Stats.Offence.Type;
+            OffenseType offenceType = tacticalActRoll.TacticalAct.Stats.Offence.Type;
             var usedDefences = GetCurrentDefences(targetActor, offenceType);
 
-            var prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
+            PersonDefenceItem prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
             var successToHitRoll = HitHelper.CalcSuccessToHit(prefferedDefenceItem);
             var factToHitRoll = _actUsageRandomSource.RollToHit(tacticalActRoll.TacticalAct.ToHit);
 
             if (factToHitRoll >= successToHitRoll)
             {
-                var damageEfficientCalcResult = CalcEfficient(targetActor, tacticalActRoll);
+                DamageEfficientCalc damageEfficientCalcResult = CalcEfficient(targetActor, tacticalActRoll);
                 var actEfficient = damageEfficientCalcResult.ResultEfficient;
 
                 ProcessSuccessfulAttackEvent(
@@ -172,7 +170,7 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var damagedEquipment = GetDamagedEquipment(targetActor);
+            Equipment damagedEquipment = GetDamagedEquipment(targetActor);
 
             // может быть null, если нет брони вообще
             if (damagedEquipment is null)
@@ -184,24 +182,25 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Лечит актёра.
+        ///     Лечит актёра.
         /// </summary>
         /// <param name="targetActor"> Цель использования действия. </param>
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
         private static void HealActor(IActor targetActor, TacticalActRoll tacticalActRoll)
         {
-            targetActor.Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
+            targetActor.Person.GetModuleSafe<ISurvivalModule>()
+                ?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
 
         /// <summary>
-        /// Расчитывает эффективность умения с учётом поглощения броней.
+        ///     Расчитывает эффективность умения с учётом поглощения броней.
         /// </summary>
         /// <param name="targetActor"> Целевой актёр. </param>
         /// <param name="tacticalActRoll"> Результат броска исходной эфективности действия. </param>
         /// <returns> Возвращает числовое значение эффективности действия. </returns>
         private DamageEfficientCalc CalcEfficient(IActor targetActor, TacticalActRoll tacticalActRoll)
         {
-            var damageEfficientCalcResult = new DamageEfficientCalc();
+            DamageEfficientCalc damageEfficientCalcResult = new DamageEfficientCalc();
 
             var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
             damageEfficientCalcResult.ActApRank = actApRank;
@@ -232,7 +231,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Возвращает ранг пробития действия.
+        ///     Возвращает ранг пробития действия.
         /// </summary>
         /// <param name="tacticalAct"></param>
         /// <returns></returns>
@@ -242,22 +241,22 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Возвращает ранг брони цели.
+        ///     Возвращает ранг брони цели.
         /// </summary>
         /// <param name="targetActor"> Актёр, для которого выбирается ранг брони. </param>
         /// <param name="usedTacticalAct"> Действие, от которого требуется броня. </param>
         /// <returns> Возвращает числовое значение ранга брони указанного типа. </returns>
         private static int? GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            PersonArmorItem[] actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
+            ImpactType actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             return preferredArmor?.ArmorRank;
         }
 
         /// <summary>
-        /// Возвращает результат спас-броска на броню.
+        ///     Возвращает результат спас-броска на броню.
         /// </summary>
         /// <returns></returns>
         private int RollArmorSave()
@@ -267,19 +266,19 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Рассчитывает успешный спас-бросок за броню цели.
+        ///     Рассчитывает успешный спас-бросок за броню цели.
         /// </summary>
         /// <param name="targetActor"> Целевой актёр, для которого проверяется спас-бросок за броню. </param>
         /// <param name="usedTacticalAct"> Действие, для которого будет проверятся спас-бросок за броню. </param>
         /// <returns> Величина успешного спас-броска за броню. </returns>
         /// <remarks>
-        /// При равных рангах броня пробивается на 4+.
-        /// За каждые два ранга превосходства действия над бронёй - увеличение на 1.
+        ///     При равных рангах броня пробивается на 4+.
+        ///     За каждые два ранга превосходства действия над бронёй - увеличение на 1.
         /// </remarks>
         private static int GetSuccessArmorSave(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            PersonArmorItem[] actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
+            ImpactType actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             if (preferredArmor == null)
@@ -331,16 +330,16 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Возвращает показатель поглощения брони цели.
-        /// Это величина, на которую будет снижен урон.
+        ///     Возвращает показатель поглощения брони цели.
+        ///     Это величина, на которую будет снижен урон.
         /// </summary>
         /// <param name="targetActor"> Целевой актёр, для которого проверяется поглощение урона. </param>
         /// <param name="usedTacticalAct"> Действие, которое будет использовано для нанесения урона. </param>
         /// <returns> Возвращает показатель поглощения брони цели. </returns>
         private static int GetArmorAbsorbtion(IActor targetActor, ITacticalAct usedTacticalAct)
         {
-            var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            PersonArmorItem[] actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
+            ImpactType actImpact = usedTacticalAct.Stats.Offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             if (preferredArmor == null)
@@ -366,12 +365,13 @@ namespace Zilon.Core.Tactics
                     return 10;
 
                 default:
-                    throw new InvalidOperationException($"Неизвестный уровень поглощения брони {preferredArmor.AbsorbtionLevel}.");
+                    throw new InvalidOperationException(
+                        $"Неизвестный уровень поглощения брони {preferredArmor.AbsorbtionLevel}.");
             }
         }
 
         /// <summary>
-        /// Расчёт эффективности умения с учётом поглащения бронёй.
+        ///     Расчёт эффективности умения с учётом поглащения бронёй.
         /// </summary>
         /// <param name="efficient"> Эффективность умения. </param>
         /// <param name="armorAbsorbtion"> Числовое значение поглощения брони. </param>
@@ -389,18 +389,18 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Извлечение всех оборон актёра, способных противостоять указанному типу урона.
-        /// Включая DivineDefence, противодействующий всем типам урона.
+        ///     Извлечение всех оборон актёра, способных противостоять указанному типу урона.
+        ///     Включая DivineDefence, противодействующий всем типам урона.
         /// </summary>
         /// <param name="targetActor"> Целевой актёр. </param>
         /// <param name="offenceType"> Тип урона. </param>
         /// <returns> Возвращает набор оборон. </returns>
         private static IEnumerable<PersonDefenceItem> GetCurrentDefences(IActor targetActor, OffenseType offenceType)
         {
-            var defenceType = HitHelper.GetDefence(offenceType);
+            DefenceType defenceType = HitHelper.GetDefence(offenceType);
 
             return targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Defences
-                            .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
+                .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
         }
 
         private void ProcessSuccessfulAttackEvent(
@@ -415,11 +415,11 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var damageEvent = new DamageActorInteractionEvent(actor, targetActor, damageEfficientCalcResult)
-            {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
-            };
+            DamageActorInteractionEvent damageEvent =
+                new DamageActorInteractionEvent(actor, targetActor, damageEfficientCalcResult)
+                {
+                    SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
+                };
             ActorInteractionBus.PushEvent(damageEvent);
         }
 
@@ -440,7 +440,7 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var evolutionData = actor.Person.GetModuleSafe<IEvolutionModule>();
+            IEvolutionModule evolutionData = actor.Person.GetModuleSafe<IEvolutionModule>();
 
             //TODO Такую же проверку добавить в CountActorDefeat (учёт убиства актёра).
             if (evolutionData is null)
@@ -448,13 +448,13 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var progress = new AttackActorJobProgress(targetActor, tacticalAct);
+            AttackActorJobProgress progress = new AttackActorJobProgress(targetActor, tacticalAct);
 
             _perkResolver.ApplyProgress(progress, evolutionData);
         }
 
         /// <summary>
-        /// Обработать инфицирование болезью.
+        ///     Обработать инфицирование болезью.
         /// </summary>
         /// <param name="sourceActor"> Актёр-источник заражения. </param>
         /// <param name="targetActor"> Актёр-цель заражения. </param>
@@ -515,7 +515,7 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var damageEvent = new PlayerDamagedEvent(tacticalAct, actor);
+            PlayerDamagedEvent damageEvent = new PlayerDamagedEvent(tacticalAct, actor);
             PlayerEventLogService.Log(damageEvent);
         }
 
@@ -540,13 +540,13 @@ namespace Zilon.Core.Tactics
                 }
             }
 
-            var rolledDamagedEquipment = _actUsageRandomSource.RollDamagedEquipment(armorEquipments);
+            Equipment rolledDamagedEquipment = _actUsageRandomSource.RollDamagedEquipment(armorEquipments);
 
             return rolledDamagedEquipment;
         }
 
         /// <summary>
-        /// Расчитывает убийство целевого актёра.
+        ///     Расчитывает убийство целевого актёра.
         /// </summary>
         /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
@@ -558,9 +558,9 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var evolutionData = actor.Person.GetModule<IEvolutionModule>();
+            IEvolutionModule evolutionData = actor.Person.GetModule<IEvolutionModule>();
 
-            var defeatProgress = new DefeatActorJobProgress(targetActor);
+            DefeatActorJobProgress defeatProgress = new DefeatActorJobProgress(targetActor);
 
             _perkResolver.ApplyProgress(defeatProgress, evolutionData);
         }
@@ -577,11 +577,11 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var interactEvent = new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem)
-            {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
-            };
+            DodgeActorInteractionEvent interactEvent =
+                new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem)
+                {
+                    SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
+                };
 
             ActorInteractionBus.PushEvent(interactEvent);
         }
@@ -593,10 +593,9 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var damageEvent = new PureMissActorInteractionEvent(actor, targetActor)
+            PureMissActorInteractionEvent damageEvent = new PureMissActorInteractionEvent(actor, targetActor)
             {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
+                SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
             };
 
             ActorInteractionBus.PushEvent(damageEvent);

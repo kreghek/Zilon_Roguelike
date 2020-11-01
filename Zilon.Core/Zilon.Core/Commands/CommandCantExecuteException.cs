@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Zilon.Core.Commands
+﻿namespace Zilon.Core.Commands
 {
     [Serializable]
     public class CommandCantExecuteException : Exception

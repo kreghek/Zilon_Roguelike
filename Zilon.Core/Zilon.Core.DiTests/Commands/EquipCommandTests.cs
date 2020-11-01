@@ -1,12 +1,4 @@
-﻿using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
-
-using NUnit.Framework;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Components;
 using Zilon.Core.Props;
@@ -24,7 +16,7 @@ namespace Zilon.Core.Tests.Commands
         private Mock<IInventoryState> _inventoryStateMock;
 
         /// <summary>
-        /// Тест проверяет, что можно использовать экипировку.
+        ///     Тест проверяет, что можно использовать экипировку.
         /// </summary>
         [Test]
         public void CanExecute_SelectEquipment_ReturnsTrue()
@@ -41,23 +33,25 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        /// Тест проверяет, что нельзя экипировать ресурс.
+        ///     Тест проверяет, что нельзя экипировать ресурс.
         /// </summary>
         [Test]
         public void CanExecute_SelectConsumableResource_ReturnsFalse()
         {
             // ARRANGE
-            var propScheme = new TestPropScheme
+            TestPropScheme propScheme = new TestPropScheme
             {
                 Use = new TestPropUseSubScheme
                 {
                     Consumable = true,
-                    CommonRules = new ConsumeCommonRule[] {
-                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser, PersonRuleDirection.Positive)
+                    CommonRules = new[]
+                    {
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser,
+                            PersonRuleDirection.Positive)
                     }
                 }
             };
-            var resource = new Resource(propScheme, 10);
+            Resource resource = new Resource(propScheme, 10);
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();
             equipmentViewModelMock.SetupGet(x => x.Prop).Returns(resource);
@@ -76,7 +70,7 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
+        ///     Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
         /// </summary>
         [Test]
         public void Execute_Intention()
@@ -85,7 +79,8 @@ namespace Zilon.Core.Tests.Commands
             var command = ServiceProvider.GetRequiredService<EquipCommand>();
             command.SlotIndex = 0;
 
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
@@ -96,16 +91,11 @@ namespace Zilon.Core.Tests.Commands
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
-            var propScheme = new TestPropScheme
+            TestPropScheme propScheme = new TestPropScheme
             {
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
-            var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
+            Equipment equipment = new Equipment(propScheme, new TacticalActScheme[0]);
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();
             equipmentViewModelMock.SetupGet(x => x.Prop).Returns(equipment);

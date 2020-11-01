@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -23,15 +19,13 @@ namespace Zilon.Core.PersonGeneration
         private const string BODY_DROP_SID = "start-armors";
         private const string OFF_WEAPON_DROP_SID = "start-off-weapons";
         private const string START_PROP_DROP_SID = "start-props";
+        private readonly IDice _dice;
+        private readonly IDropResolver _dropResolver;
+        private readonly IPersonPerkInitializator _personPerkInitializator;
+        private readonly IPropFactory _propFactory;
 
         private readonly ISchemeService _schemeService;
         private readonly ISurvivalRandomSource _survivalRandomSource;
-        private readonly IPropFactory _propFactory;
-        private readonly IDropResolver _dropResolver;
-        private readonly IPersonPerkInitializator _personPerkInitializator;
-        private readonly IDice _dice;
-
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public RandomHumanPersonFactory(
             ISchemeService schemeService,
@@ -42,56 +36,61 @@ namespace Zilon.Core.PersonGeneration
             IDice dice)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
-            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
+            _survivalRandomSource =
+                survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
             _propFactory = propFactory ?? throw new ArgumentNullException(nameof(propFactory));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
-            _personPerkInitializator = personPerkInitializator ?? throw new ArgumentNullException(nameof(personPerkInitializator));
+            _personPerkInitializator = personPerkInitializator ??
+                                       throw new ArgumentNullException(nameof(personPerkInitializator));
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
+
         public IPerson Create(string personSchemeSid, IFraction fraction)
         {
-            var personScheme = _schemeService.GetScheme<IPersonScheme>(personSchemeSid);
+            IPersonScheme personScheme = _schemeService.GetScheme<IPersonScheme>(personSchemeSid);
 
-            var person = new HumanPerson(personScheme, fraction);
+            HumanPerson person = new HumanPerson(personScheme, fraction);
 
-            var attributeModule = RollAndAddPersonAttributesToPerson(person);
+            IAttributesModule attributeModule = RollAndAddPersonAttributesToPerson(person);
 
-            var movingModule = new MovingModule(attributeModule);
+            MovingModule movingModule = new MovingModule(attributeModule);
             person.AddModule(movingModule);
 
-            var inventoryModule = new InventoryModule();
+            InventoryModule inventoryModule = new InventoryModule();
             person.AddModule(inventoryModule);
 
-            var equipmentModule = new EquipmentModule(personScheme.Slots);
+            EquipmentModule equipmentModule = new EquipmentModule(personScheme.Slots);
             person.AddModule(equipmentModule);
 
-            var effectsModule = new EffectsModule();
+            EffectsModule effectsModule = new EffectsModule();
             person.AddModule(effectsModule);
 
-            var evolutionModule = new EvolutionModule(_schemeService);
+            EvolutionModule evolutionModule = new EvolutionModule(_schemeService);
             person.AddModule(evolutionModule);
             RollTraitPerks(evolutionModule);
 
-            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, attributeModule, effectsModule, evolutionModule, equipmentModule)
-            {
-                PlayerEventLogService = PlayerEventLogService
-            };
+            HumanSurvivalModule survivalModule =
+                new HumanSurvivalModule(personScheme, _survivalRandomSource, attributeModule, effectsModule,
+                    evolutionModule, equipmentModule) {PlayerEventLogService = PlayerEventLogService};
             person.AddModule(survivalModule);
 
             RollStartEquipment(inventoryModule, person);
 
-            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
-            var combatActModule = new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
+            ITacticalActScheme defaultActScheme =
+                _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
+            CombatActModule combatActModule =
+                new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
             person.AddModule(combatActModule);
 
-            var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
+            CombatStatsModule combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
             person.AddModule(combatStatsModule);
 
-            var diseaseModule = new DiseaseModule();
+            DiseaseModule diseaseModule = new DiseaseModule();
             person.AddModule(diseaseModule);
 
-            var fowModule = new FowData();
+            FowData fowModule = new FowData();
             person.AddModule(fowModule);
 
             person.PlayerEventLogService = PlayerEventLogService;
@@ -101,14 +100,13 @@ namespace Zilon.Core.PersonGeneration
 
         private IAttributesModule RollAndAddPersonAttributesToPerson(IPerson person)
         {
-            var attributes = new[] {
-                RollAttribute(PersonAttributeType.PhysicalStrength),
-                RollAttribute(PersonAttributeType.Dexterity),
-                RollAttribute(PersonAttributeType.Perception),
-                RollAttribute(PersonAttributeType.Constitution)
+            PersonAttribute[] attributes = new[]
+            {
+                RollAttribute(PersonAttributeType.PhysicalStrength), RollAttribute(PersonAttributeType.Dexterity),
+                RollAttribute(PersonAttributeType.Perception), RollAttribute(PersonAttributeType.Constitution)
             };
 
-            var attributesModule = new AttributesModule(attributes);
+            AttributesModule attributesModule = new AttributesModule(attributes);
 
             person.AddModule(attributesModule);
 
@@ -128,27 +126,27 @@ namespace Zilon.Core.PersonGeneration
                 throw new ArgumentNullException(nameof(evolutionData));
             }
 
-            var rolledTraits = _personPerkInitializator.Generate();
+            IPerk[] rolledTraits = _personPerkInitializator.Generate();
             evolutionData.AddBuildInPerks(rolledTraits);
         }
 
         private void RollStartEquipment(IInventoryModule inventory, HumanPerson person)
         {
-            var headDropScheme = GetHeads();
+            IDropTableScheme headDropScheme = GetHeads();
             FillSlot(person, headDropScheme, HEAD_SLOT_INDEX);
 
-            var armorDropScheme = GetArmors();
+            IDropTableScheme armorDropScheme = GetArmors();
             FillSlot(person, armorDropScheme, BODY_SLOT_INDEX);
 
-            var mainWeaponDropScheme = GetMainWeapons();
+            IDropTableScheme mainWeaponDropScheme = GetMainWeapons();
             FillSlot(person, mainWeaponDropScheme, MAIN_HAND_SLOT_INDEX);
 
-            var offWeaponDropScheme = GetOffWeapons();
+            IDropTableScheme offWeaponDropScheme = GetOffWeapons();
             FillSlot(person, offWeaponDropScheme, OFF_HAND_SLOT_INDEX);
 
-            var startPropDropScheme = GetStartProps();
-            var startProps = _dropResolver.Resolve(new[] { startPropDropScheme });
-            foreach (var prop in startProps)
+            IDropTableScheme startPropDropScheme = GetStartProps();
+            IProp[] startProps = _dropResolver.Resolve(new[] {startPropDropScheme});
+            foreach (IProp prop in startProps)
             {
                 AddPropToInventory(inventory, prop);
             }
@@ -164,8 +162,8 @@ namespace Zilon.Core.PersonGeneration
 
         private void AddEquipment(IInventoryModule inventory, string sid)
         {
-            var scheme = _schemeService.GetScheme<IPropScheme>(sid);
-            var prop = _propFactory.CreateEquipment(scheme);
+            IPropScheme scheme = _schemeService.GetScheme<IPropScheme>(sid);
+            Equipment prop = _propFactory.CreateEquipment(scheme);
             AddPropToInventory(inventory, prop);
         }
 
@@ -177,12 +175,12 @@ namespace Zilon.Core.PersonGeneration
             // Остальные дропнутые предметы складываем просто в инвентарь.
             // Если текущий предмет невозможно экипировать, то его тоже помещаем в инвентарь.
 
-            var inventory = person.GetModule<IInventoryModule>();
-            var dropedProps = _dropResolver.Resolve(new[] { dropScheme });
+            IInventoryModule inventory = person.GetModule<IInventoryModule>();
+            IProp[] dropedProps = _dropResolver.Resolve(new[] {dropScheme});
             var usedEquipment = dropedProps.OfType<Equipment>().FirstOrDefault();
             if (usedEquipment != null)
             {
-                var equipmentModule = person.GetModule<IEquipmentModule>();
+                IEquipmentModule equipmentModule = person.GetModule<IEquipmentModule>();
                 var canBeEquiped = CanBeEquiped(equipmentModule, slotIndex, usedEquipment);
                 if (canBeEquiped)
                 {
@@ -195,7 +193,7 @@ namespace Zilon.Core.PersonGeneration
                 }
                 else
                 {
-                    foreach (var prop in dropedProps)
+                    foreach (IProp prop in dropedProps)
                     {
                         AddPropToInventory(inventory, prop);
                     }
@@ -203,7 +201,7 @@ namespace Zilon.Core.PersonGeneration
             }
             else
             {
-                foreach (var prop in dropedProps)
+                foreach (IProp prop in dropedProps)
                 {
                     AddPropToInventory(inventory, prop);
                 }
@@ -257,8 +255,8 @@ namespace Zilon.Core.PersonGeneration
         {
             try
             {
-                var resourceScheme = _schemeService.GetScheme<IPropScheme>(resourceSid);
-                var resource = _propFactory.CreateResource(resourceScheme, count);
+                IPropScheme resourceScheme = _schemeService.GetScheme<IPropScheme>(resourceSid);
+                Resource resource = _propFactory.CreateResource(resourceScheme, count);
                 inventory.Add(resource);
             }
             catch (KeyNotFoundException exception)

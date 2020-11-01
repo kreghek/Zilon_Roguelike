@@ -1,19 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class HumanActorTaskSource<TContext> : IHumanActorTaskSource<TContext> where TContext : ISectorTaskSourceContext
+    public class HumanActorTaskSource<TContext> : IHumanActorTaskSource<TContext>
+        where TContext : ISectorTaskSourceContext
     {
-        private readonly ISender<IActorTask> _actorTaskSender;
         private readonly IReceiver<IActorTask> _actorTaskReceiver;
+        private readonly ISender<IActorTask> _actorTaskSender;
         private bool _intentionWait;
 
         public HumanActorTaskSource()
         {
-            var spscChannel = new SpscChannel<IActorTask>();
+            SpscChannel<IActorTask> spscChannel = new SpscChannel<IActorTask>();
             _actorTaskSender = spscChannel;
             _actorTaskReceiver = spscChannel;
         }
@@ -27,12 +25,13 @@ namespace Zilon.Core.Tactics.Behaviour
                 // Текущая реализация не допускает переопределение задач.
                 // Поэтому каждое новое намерение будет складывать по новой задаче в очередь, пока выполняется текущая задача
                 // Текущая задача выполняется в основном игровом цикле, который накручивает счётчик итераций, чтобы выполнить предусловия задачи.
-                throw new InvalidOperationException("Попытка задать новое намерение, пока не выполнена текущая задача.");
+                throw new InvalidOperationException(
+                    "Попытка задать новое намерение, пока не выполнена текущая задача.");
             }
 
-            var currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
+            IIntention currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
 
-            var actorTask = currentIntention.CreateActorTask(activeActor);
+            IActorTask actorTask = currentIntention.CreateActorTask(activeActor);
 
             _intentionWait = true;
 

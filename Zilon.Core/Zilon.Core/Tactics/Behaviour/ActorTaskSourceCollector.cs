@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Zilon.Core.Tactics.Behaviour
+﻿namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
-    /// Базовая реализация сборщика источников команд.
+    ///     Базовая реализация сборщика источников команд.
     /// </summary>
     public sealed class ActorTaskSourceCollector : IActorTaskSourceCollector
     {
@@ -14,7 +12,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _actorTaskSources = actorTaskSources ?? throw new ArgumentNullException(nameof(actorTaskSources));
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IActorTaskSource<ISectorTaskSourceContext>[] GetCurrentTaskSources()
         {
             return _actorTaskSources;

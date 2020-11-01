@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Zilon.Bot.Players.NetCore.DependencyInjectionExtensions
+﻿namespace Zilon.Bot.Players.NetCore.DependencyInjectionExtensions
 {
     public static class IServiceCollectionExtensions
     {

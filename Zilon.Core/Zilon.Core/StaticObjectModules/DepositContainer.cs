@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Core.Props;
+﻿using Zilon.Core.Props;
 
 namespace Zilon.Core.StaticObjectModules
 {
@@ -13,6 +11,8 @@ namespace Zilon.Core.StaticObjectModules
             IsActive = false;
         }
 
+        public override bool IsMapBlock => true;
+
         private void Content_Removed(object sender, PropStoreEventArgs e)
         {
             if (!Content.CalcActualItems().Any())
@@ -20,7 +20,5 @@ namespace Zilon.Core.StaticObjectModules
                 IsActive = false;
             }
         }
-
-        public override bool IsMapBlock { get => true; }
     }
 }

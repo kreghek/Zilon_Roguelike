@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
-    /// Базовая реализация источника рандома при работе с элементами интерьера.
+    ///     Базовая реализация источника рандома при работе с элементами интерьера.
     /// </summary>
     public class InteriorObjectRandomSource : IInteriorObjectRandomSource
     {
@@ -17,7 +13,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         private readonly IDice _dice;
 
         /// <summary>
-        /// Кнструктор.
+        ///     Кнструктор.
         /// </summary>
         /// <param name="dice"> Кость, используемая, как источник рандома. </param>
         public InteriorObjectRandomSource(IDice dice)
@@ -26,7 +22,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         }
 
         /// <summary>
-        /// Случайный выбор координат для размещения элемента интерьера.
+        ///     Случайный выбор координат для размещения элемента интерьера.
         /// </summary>
         /// <param name="regionDraftCoords"> Координаты региона, среди которых можно выбирать позиции элементов интерьера. </param>
         /// <returns> Возвращает набор метаданных об элементах интерьера. </returns>
@@ -44,7 +40,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var coordsInCenter = GetAvailableCoords(regionDraftCoords).ToArray();
 
             // Выбираем все координаты, по которым может пройти персонаж размером 7.
-            var passableCoords = GetAllPassableSize7Coords(regionDraftCoords);
+            OffsetCoords[] passableCoords = GetAllPassableSize7Coords(regionDraftCoords);
 
             var openCoords = new List<OffsetCoords>(coordsInCenter);
             if (!openCoords.Any())
@@ -62,7 +58,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // декора перекрывает проход к какой-либо доступной ячейке).
                 for (var retryIndex = 0; retryIndex < RETRY_COUNT; retryIndex++)
                 {
-                    var isValid = TryRollInteriorCoord(openCoords.ToArray(), passableCoords, out var rolledCoord);
+                    var isValid = TryRollInteriorCoord(openCoords.ToArray(), passableCoords,
+                        out OffsetCoords rolledCoord);
 
                     // Вне зависимости от корректности rolledCoord
                     // убираем его из открытых координат.
@@ -75,7 +72,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                     if (isValid)
                     {
-                        var interiorMeta = new InteriorObjectMeta(rolledCoord);
+                        InteriorObjectMeta interiorMeta = new InteriorObjectMeta(rolledCoord);
                         resultMetaList.Add(interiorMeta);
                         break;
                     }
@@ -167,10 +164,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         {
             var coordHash = new HashSet<OffsetCoords>(regionDraftCoords);
 
-            var neighborCubeOffsets = HexHelper.GetOffsetClockwise();
-            foreach (var coords in regionDraftCoords)
+            CubeCoords[] neighborCubeOffsets = HexHelper.GetOffsetClockwise();
+            foreach (OffsetCoords coords in regionDraftCoords)
             {
-                var cube = HexHelper.ConvertToCube(coords);
+                CubeCoords cube = HexHelper.ConvertToCube(coords);
 
                 var isValid = HasAllHeighbors(coordHash, neighborCubeOffsets, cube);
 
@@ -181,15 +178,16 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
         }
 
-        ///<summary>
-        /// Для препятсвий выбираются только те узлы, для которых есть все соседи.
-        ///</summary> 
-        private static bool HasAllHeighbors(HashSet<OffsetCoords> coordHash, CubeCoords[] neighborCubeOffsets, CubeCoords cube)
+        /// <summary>
+        ///     Для препятсвий выбираются только те узлы, для которых есть все соседи.
+        /// </summary>
+        private static bool HasAllHeighbors(HashSet<OffsetCoords> coordHash, CubeCoords[] neighborCubeOffsets,
+            CubeCoords cube)
         {
-            foreach (var neighborCubeOffset in neighborCubeOffsets)
+            foreach (CubeCoords neighborCubeOffset in neighborCubeOffsets)
             {
-                var neighborCube = cube + neighborCubeOffset;
-                var neighborOffsetCoords = HexHelper.ConvertToOffset(neighborCube);
+                CubeCoords neighborCube = cube + neighborCubeOffset;
+                OffsetCoords neighborOffsetCoords = HexHelper.ConvertToOffset(neighborCube);
                 if (!coordHash.Contains(neighborOffsetCoords))
                 {
                     return false;

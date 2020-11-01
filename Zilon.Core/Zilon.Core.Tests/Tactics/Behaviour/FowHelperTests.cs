@@ -1,12 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.CoreTestsTemp.Tactics.Behaviour.TestCases;
@@ -18,7 +11,7 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
     public class FowHelperTests
     {
         /// <summary>
-        /// Тест проверяет, что на пустой карте данные тумана войны не пустые.
+        ///     Тест проверяет, что на пустой карте данные тумана войны не пустые.
         /// </summary>
         [Test]
         [TestCaseSource(typeof(FowHelperTestCaseDataSource), nameof(FowHelperTestCaseDataSource.TestCases))]
@@ -26,22 +19,23 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         {
             // ARRANGE
 
-            var map = new SectorHexMap(1000);
-            for (var i = 0; i < mapSize; i++)
+            SectorHexMap map = new SectorHexMap(1000);
+            for (int i = 0; i < mapSize; i++)
             {
-                for (var j = 0; j < mapSize; j++)
+                for (int j = 0; j < mapSize; j++)
                 {
-                    var hexNode = new HexNode(i, j);
+                    HexNode hexNode = new HexNode(i, j);
                     map.AddNode(hexNode);
                 }
             }
 
-            var nodeList = new List<SectorMapFowNode>();
+            List<SectorMapFowNode> nodeList = new List<SectorMapFowNode>();
             var fowDataMock = new Mock<ISectorFowData>();
             fowDataMock.Setup(x => x.AddNodes(It.IsAny<IEnumerable<SectorMapFowNode>>()))
                 .Callback<IEnumerable<SectorMapFowNode>>(nodes => nodeList.AddRange(nodes));
             fowDataMock.Setup(x => x.ChangeNodeState(It.IsAny<SectorMapFowNode>(), It.IsAny<SectorMapNodeFowState>()))
-                .Callback<SectorMapFowNode, SectorMapNodeFowState>((fowNode, targetState) => fowNode.ChangeState(targetState));
+                .Callback<SectorMapFowNode, SectorMapNodeFowState>((fowNode, targetState) =>
+                    fowNode.ChangeState(targetState));
             var fowData = fowDataMock.Object;
 
             var fowContextMock = new Mock<IFowContext>();
@@ -60,30 +54,32 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             FowHelper.UpdateFowData(fowData, fowContext, baseNode, radius);
 
             // ARRANGE
-            var factObservingNodes = nodeList.Where(x => x.State == SectorMapNodeFowState.Observing).Select(x => x.Node).ToArray();
+            IGraphNode[] factObservingNodes = nodeList.Where(x => x.State == SectorMapNodeFowState.Observing)
+                .Select(x => x.Node).ToArray();
             factObservingNodes.Should().BeEquivalentTo(expectedObservingNodes);
         }
 
         /// <summary>
-        /// Тест проверяет, что на пустой карте данные тумана войны не пустые.
+        ///     Тест проверяет, что на пустой карте данные тумана войны не пустые.
         /// </summary>
         [Test]
         [TestCaseSource(typeof(FowHelperTestCaseDataSource), nameof(FowHelperTestCaseDataSource.TestCases))]
-        public void UpdateFowData_RealHumanSectorFowData_ObseringNodesIsNotEmpty(int mapSize, int baseX, int baseY, int radius)
+        public void UpdateFowData_RealHumanSectorFowData_ObseringNodesIsNotEmpty(int mapSize, int baseX, int baseY,
+            int radius)
         {
             // ARRANGE
 
-            var map = new SectorHexMap(1000);
-            for (var i = 0; i < mapSize; i++)
+            SectorHexMap map = new SectorHexMap(1000);
+            for (int i = 0; i < mapSize; i++)
             {
-                for (var j = 0; j < mapSize; j++)
+                for (int j = 0; j < mapSize; j++)
                 {
-                    var hexNode = new HexNode(i, j);
+                    HexNode hexNode = new HexNode(i, j);
                     map.AddNode(hexNode);
                 }
             }
 
-            var fowData = new HumanSectorFowData();
+            HumanSectorFowData fowData = new HumanSectorFowData();
 
             var baseNode = map.HexNodes.Single(x => x.OffsetCoords.CompsEqual(baseX, baseY));
 

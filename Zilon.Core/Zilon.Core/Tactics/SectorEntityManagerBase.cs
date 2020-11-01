@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Zilon.Core.Tactics
+﻿namespace Zilon.Core.Tactics
 {
     /// <summary>
-    /// Базовая реализация менеджера сущностей сектора.
+    ///     Базовая реализация менеджера сущностей сектора.
     /// </summary>
     /// <typeparam name="TSectorEntity">
-    /// Тип сущности сектора.
-    /// Сейчас это либо <see cref="IActor">IActor</see> либо <see cref="IPropContainer">IPropContainer</see>.
+    ///     Тип сущности сектора.
+    ///     Сейчас это либо <see cref="IActor">IActor</see> либо <see cref="IPropContainer">IPropContainer</see>.
     /// </typeparam>
-    public abstract class SectorEntityManagerBase<TSectorEntity> : ISectorEntityManager<TSectorEntity> where TSectorEntity : class
+    public abstract class SectorEntityManagerBase<TSectorEntity> : ISectorEntityManager<TSectorEntity>
+        where TSectorEntity : class
     {
         private readonly List<TSectorEntity> _items;
-
-        public IEnumerable<TSectorEntity> Items => _items;
 
         protected SectorEntityManagerBase()
         {
             _items = new List<TSectorEntity>();
         }
+
+        public IEnumerable<TSectorEntity> Items => _items;
 
         public void Add(TSectorEntity entity)
         {
@@ -60,13 +57,15 @@ namespace Zilon.Core.Tactics
 
         private void DoAdded(params TSectorEntity[] entities)
         {
-            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
+            ManagerItemsChangedEventArgs<TSectorEntity>
+                args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
             Added?.Invoke(this, args);
         }
 
         private void DoRemoved(params TSectorEntity[] entities)
         {
-            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
+            ManagerItemsChangedEventArgs<TSectorEntity>
+                args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
             Removed?.Invoke(this, args);
         }
     }

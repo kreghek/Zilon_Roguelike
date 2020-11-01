@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
@@ -12,13 +6,12 @@ namespace Zilon.Core.Tactics
     public static class HitHelper
     {
         /// <summary>
-        /// Рассчитывает успешный бросок для прохода обороны.
+        ///     Рассчитывает успешный бросок для прохода обороны.
         /// </summary>
         /// <param name="defenceItem"> Проверяемая оборона. </param>
         /// <returns> Возвращает число, указывающее минимальный бросок на пробитие обороны. </returns>
         public static int CalcSuccessToHit([CanBeNull] PersonDefenceItem defenceItem)
         {
-
             // При броске в 1 - неудачная нападение, даже если нет обороны.
             // Приравнивается к обороне уровня None
             if (defenceItem == null)
@@ -32,7 +25,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Возвращает оборону с наиболее предпочтительными характеристиками. Фактически, самого высокого уровня.
+        ///     Возвращает оборону с наиболее предпочтительными характеристиками. Фактически, самого высокого уровня.
         /// </summary>
         /// <param name="currentDefences"> Текущие обороны. </param>
         /// <returns> Возвращает объект предпочтительной обороны. </returns>
@@ -50,19 +43,19 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Возвращает тип обороны, которая может быть использована для отражения указанного наступления.
+        ///     Возвращает тип обороны, которая может быть использована для отражения указанного наступления.
         /// </summary>
         /// <param name="offenceType"> Тип наступления. </param>
         /// <returns> Возвращает экземпляр типа обороны. </returns>
         public static DefenceType GetDefence(OffenseType offenceType)
         {
             var rawValue = (int)offenceType;
-            var defenceType = (DefenceType)rawValue;
+            DefenceType defenceType = (DefenceType)rawValue;
             return defenceType;
         }
 
         /// <summary>
-        /// Рассчитывает минимальное значение броска D6, необходимого для пробития указанной обороны.
+        ///     Рассчитывает минимальное значение броска D6, необходимого для пробития указанной обороны.
         /// </summary>
         /// <param name="level"> Уровень обороны, для которой вычисляется нижный порог броска D6. </param>
         /// <returns> Минимальный погод броска D6. </returns>

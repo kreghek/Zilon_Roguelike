@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 
-using NUnit.Framework;
-
 namespace Zilon.Core.Tests.Persons.TestCases
 {
-    static class SurvivalStatTestCasesSource
+    internal static class SurvivalStatTestCasesSource
     {
         public static IEnumerable ValueTestCases
         {

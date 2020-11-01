@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -27,9 +25,9 @@ namespace Zilon.Core.ProgressStoring
                 throw new System.ArgumentNullException(nameof(personDict));
             }
 
-            var storageData = new ActorStorageData();
+            ActorStorageData storageData = new ActorStorageData();
 
-            var hexNode = (HexNode)actor.Node;
+            HexNode hexNode = (HexNode)actor.Node;
             storageData.Coords = hexNode.OffsetCoords;
             storageData.PersonId = personDict[actor.Person];
 

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 
 namespace Zilon.Core.MapGenerators
 {
     public class SectorMapFactoryOptions : ISectorMapFactoryOptions
     {
-        public SectorMapFactoryOptions(ISectorMapFactoryOptionsSubScheme optionsSubScheme, IEnumerable<RoomTransition> transitions)
+        public SectorMapFactoryOptions(ISectorMapFactoryOptionsSubScheme optionsSubScheme,
+            IEnumerable<RoomTransition> transitions)
         {
             OptionsSubScheme = optionsSubScheme ?? throw new ArgumentNullException(nameof(optionsSubScheme));
             Transitions = transitions ?? throw new ArgumentNullException(nameof(transitions));

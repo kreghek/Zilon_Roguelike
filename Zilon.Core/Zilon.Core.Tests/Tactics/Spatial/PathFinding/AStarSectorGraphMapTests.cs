@@ -1,19 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.PathFinding;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 {
@@ -22,9 +13,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
     public class AStarSectorGraphMapTests
     {
         /// <summary>
-        /// Тест из спеки:
-        /// Перемещение актёра по узла каждый ход. На карте есть монстры и источник команд для них.
-        /// Даёт уверенность, что в изоляции поиск пути выполняется. Была ошибка, что не находил путь.
+        ///     Тест из спеки:
+        ///     Перемещение актёра по узла каждый ход. На карте есть монстры и источник команд для них.
+        ///     Даёт уверенность, что в изоляции поиск пути выполняется. Была ошибка, что не находил путь.
         /// </summary>
         [Test]
         public async Task Run_FromSpec()
@@ -39,11 +30,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             MapFiller.FillSquareMap(map, mapSize);
 
-            var mapRegion = new MapRegion(1, map.Nodes.ToArray())
+            MapRegion mapRegion = new MapRegion(1, map.Nodes.ToArray())
             {
-                IsStart = true,
-                IsOut = true,
-                ExitNodes = new[] { map.Nodes.Last() }
+                IsStart = true, IsOut = true, ExitNodes = new[] {map.Nodes.Last()}
             };
 
             map.Regions.Add(mapRegion);
@@ -52,7 +41,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             AddWall(map, 0, 0, 1, 0);
             AddWall(map, 1, 0, 0, 1);
 
-            var path = new List<IGraphNode>();
+            List<IGraphNode> path = new List<IGraphNode>();
 
             var startNode = map.Nodes.SelectByHexCoords(0, 0);
             var finishNode = map.Nodes.SelectByHexCoords(1, 0);

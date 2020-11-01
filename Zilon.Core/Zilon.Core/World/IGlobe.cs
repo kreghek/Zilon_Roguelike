@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Zilon.Core.World
+﻿namespace Zilon.Core.World
 {
     public interface IGlobe
     {
-        void AddSectorNode(ISectorNode sectorNode);
-
         IEnumerable<ISectorNode> SectorNodes { get; }
+        void AddSectorNode(ISectorNode sectorNode);
 
         Task UpdateAsync();
     }

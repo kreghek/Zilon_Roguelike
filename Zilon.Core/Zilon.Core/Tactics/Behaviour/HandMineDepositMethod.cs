@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-using Zilon.Core.StaticObjectModules;
+﻿using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -33,10 +30,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 return new SuccessMineDepositResult();
             }
-            else
-            {
-                return new FailureMineDepositResult();
-            }
+
+            return new FailureMineDepositResult();
         }
     }
 }

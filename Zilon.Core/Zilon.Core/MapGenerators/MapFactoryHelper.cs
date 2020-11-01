@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
     /// <summary>
-    /// Общий вспомогательный класс для фабрик карты.
+    ///     Общий вспомогательный класс для фабрик карты.
     /// </summary>
     public static class MapFactoryHelper
     {
         /// <summary>
-        /// Создание переходов на основе схемы.
+        ///     Создание переходов на основе схемы.
         /// </summary>
         /// <param name="sectorNode"> Схема сектора. </param>
         /// <returns> Набор объектов переходов. </returns>
@@ -48,8 +44,8 @@ namespace Zilon.Core.MapGenerators
                 {
                     if (matrix[x, y])
                     {
-                        var neighbors = HexHelper.GetNeighbors(x + 1, y + 1);
-                        foreach (var neightbor in neighbors)
+                        OffsetCoords[] neighbors = HexHelper.GetNeighbors(x + 1, y + 1);
+                        foreach (OffsetCoords neightbor in neighbors)
                         {
                             var resizedX = neightbor.X;
                             var resizedY = neightbor.Y;
@@ -74,8 +70,8 @@ namespace Zilon.Core.MapGenerators
                 return false;
             }
 
-            var neighbors = HexHelper.GetNeighbors(coords.X, coords.Y);
-            foreach (var neightbor in neighbors)
+            OffsetCoords[] neighbors = HexHelper.GetNeighbors(coords.X, coords.Y);
+            foreach (OffsetCoords neightbor in neighbors)
             {
                 if (!matrix.IsIn(neightbor.X, neightbor.Y))
                 {

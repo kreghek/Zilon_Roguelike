@@ -5,17 +5,17 @@ namespace Zilon.Core.Tactics.Behaviour
     public class IdleTask : ActorTaskBase
     {
         /// <summary>
-        /// Минимальное время простоя.
+        ///     Минимальное время простоя.
         /// </summary>
         private const int _idleMin = 2;
 
         /// <summary>
-        /// Максимальное время простоя.
+        ///     Максимальное время простоя.
         /// </summary>
         private const int _idleMax = 5;
 
         /// <summary>
-        /// Текущий счётчик простоя.
+        ///     Текущий счётчик простоя.
         /// </summary>
         private int _counter;
 

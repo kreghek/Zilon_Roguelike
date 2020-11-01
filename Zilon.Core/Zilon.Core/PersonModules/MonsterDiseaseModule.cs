@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Diseases;
+﻿using Zilon.Core.Diseases;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
     /// <summary>
-    /// Модуль болезней для монстров.
-    /// Значительно упрошен по сравнению с базовой реализацией.
-    /// Не рассчитывается прогресс болезни. Фактически, заюолевший монстр не получает штрафов и болеет всю жизнь.
-    /// Пока игрок не вырежет его.
+    ///     Модуль болезней для монстров.
+    ///     Значительно упрошен по сравнению с базовой реализацией.
+    ///     Не рассчитывается прогресс болезни. Фактически, заюолевший монстр не получает штрафов и болеет всю жизнь.
+    ///     Пока игрок не вырежет его.
     /// </summary>
     public class MonsterDiseaseModule : IDiseaseModule
     {
@@ -22,16 +19,16 @@ namespace Zilon.Core.PersonModules
             IsActive = true;
         }
 
-        /// <inheritdoc/>
-        public IEnumerable<IDiseaseProcess> Diseases { get => _diseases; }
+        /// <inheritdoc />
+        public IEnumerable<IDiseaseProcess> Diseases => _diseases;
 
-        /// <inheritdoc/>
-        public string Key { get => nameof(IDiseaseModule); }
+        /// <inheritdoc />
+        public string Key => nameof(IDiseaseModule);
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool IsActive { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void Infect(IDisease disease)
         {
             var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
@@ -43,7 +40,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void RemoveDisease(IDisease disease)
         {
             var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);

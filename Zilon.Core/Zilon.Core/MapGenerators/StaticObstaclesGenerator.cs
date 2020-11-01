@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Zilon.Core.MapGenerators.CellularAutomatonStyle;
+﻿using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.StaticObjectFactories;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
@@ -23,9 +20,13 @@ namespace Zilon.Core.MapGenerators
             IStaticObjectsGeneratorRandomSource staticObjectsGeneratorRandomSource)
         {
             _chestGenerator = chestGenerator ?? throw new ArgumentNullException(nameof(chestGenerator));
-            _interiorObjectRandomSource = interiorObjectRandomSource ?? throw new ArgumentNullException(nameof(interiorObjectRandomSource));
-            _staticObjectfactoryCollector = staticObjectfactoryCollector ?? throw new ArgumentNullException(nameof(staticObjectfactoryCollector));
-            _staticObjectsGeneratorRandomSource = staticObjectsGeneratorRandomSource ?? throw new ArgumentNullException(nameof(staticObjectsGeneratorRandomSource));
+            _interiorObjectRandomSource = interiorObjectRandomSource ??
+                                          throw new ArgumentNullException(nameof(interiorObjectRandomSource));
+            _staticObjectfactoryCollector = staticObjectfactoryCollector ??
+                                            throw new ArgumentNullException(nameof(staticObjectfactoryCollector));
+            _staticObjectsGeneratorRandomSource = staticObjectsGeneratorRandomSource ??
+                                                  throw new ArgumentNullException(
+                                                      nameof(staticObjectsGeneratorRandomSource));
         }
 
         public Task CreateAsync(IStaticObjectGenerationContext generationContext)
@@ -35,7 +36,7 @@ namespace Zilon.Core.MapGenerators
                 throw new ArgumentNullException(nameof(generationContext));
             }
 
-            var sector = generationContext.Sector;
+            ISector sector = generationContext.Sector;
 
             var exitNodes = sector.Map.Transitions.Keys.Cast<HexNode>().Select(x => x.OffsetCoords).ToArray();
 
@@ -44,19 +45,19 @@ namespace Zilon.Core.MapGenerators
             {
                 var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
                 var regionCoords = regionNodes.Select(x => x.OffsetCoords).Except(exitNodes).ToArray();
-                var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords);
+                InteriorObjectMeta[] interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords);
 
-                foreach (var interior in interiorMetas)
+                foreach (InteriorObjectMeta interior in interiorMetas)
                 {
                     var node = regionNodes.Single(x => x.OffsetCoords == interior.Coords);
-                    var resourceDepositData = generationContext.ResourceDepositData;
-                    var staticObject = CreateStaticObject(sector, node, resourceDepositData);
+                    IResourceDepositData resourceDepositData = generationContext.ResourceDepositData;
+                    IStaticObject staticObject = CreateStaticObject(sector, node, resourceDepositData);
 
                     sector.StaticObjectManager.Add(staticObject);
                 }
             }
 
-            var sectorSubScheme = generationContext.Scheme;
+            ISectorSubScheme sectorSubScheme = generationContext.Scheme;
             _chestGenerator.CreateChests(sector, sectorSubScheme, sector.Map.Regions);
 
             return Task.CompletedTask;
@@ -64,20 +65,20 @@ namespace Zilon.Core.MapGenerators
 
         private IStaticObject CreateStaticObject(ISector sector, HexNode node, IResourceDepositData resourceDepositData)
         {
-            var staticObjectPurpose = RollPurpose(resourceDepositData);
+            PropContainerPurpose staticObjectPurpose = RollPurpose(resourceDepositData);
 
-            var factory = SelectStaticObjectFactory(staticObjectPurpose);
+            IStaticObjectFactory factory = SelectStaticObjectFactory(staticObjectPurpose);
 
-            var staticObject = factory.Create(sector, node, default);
+            IStaticObject staticObject = factory.Create(sector, node, default);
 
             return staticObject;
         }
 
         private IStaticObjectFactory SelectStaticObjectFactory(PropContainerPurpose staticObjectPurpose)
         {
-            var factories = _staticObjectfactoryCollector.GetFactories();
+            IStaticObjectFactory[] factories = _staticObjectfactoryCollector.GetFactories();
 
-            foreach (var factory in factories)
+            foreach (IStaticObjectFactory factory in factories)
             {
                 if (factory.Purpose != staticObjectPurpose)
                 {
@@ -87,7 +88,8 @@ namespace Zilon.Core.MapGenerators
                 return factory;
             }
 
-            throw new InvalidOperationException($"Не обнаружена фабрика для статических объектов типа {staticObjectPurpose}");
+            throw new InvalidOperationException(
+                $"Не обнаружена фабрика для статических объектов типа {staticObjectPurpose}");
         }
 
         private PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)

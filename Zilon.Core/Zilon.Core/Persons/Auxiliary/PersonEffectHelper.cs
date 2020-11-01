@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.PersonModules;
+﻿using Zilon.Core.PersonModules;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Persons.Auxiliary
 {
     /// <summary>
-    /// Вспомогательный класс для работы с эффектами персонажа.
+    ///     Вспомогательный класс для работы с эффектами персонажа.
     /// </summary>
     public static class PersonEffectHelper
     {
         /// <summary>
-        /// Обновление эффекта модуля выживания.
+        ///     Обновление эффекта модуля выживания.
         /// </summary>
         /// <param name="currentEffects"> Текущий список эффектов. </param>
         /// <param name="stat"> Характеристика, на которую влияет эффект. </param>
-        /// <param name="keySegments"> Ключевые сегменты, которые были пересечены при изменении характеристики.
-        /// <param name="survivalRandomSource"> Источник рандома выживания. </param>
+        /// <param name="keySegments">
+        ///     Ключевые сегменты, которые были пересечены при изменении характеристики.
+        ///     <param name="survivalRandomSource"> Источник рандома выживания. </param>
         public static void UpdateSurvivalEffect(
             [NotNull] IEffectsModule currentEffects,
             [NotNull] SurvivalStat stat,
-            [NotNull][ItemNotNull] SurvivalStatKeySegment[] keySegments,
+            [NotNull] [ItemNotNull] SurvivalStatKeySegment[] keySegments,
             [NotNull] ISurvivalRandomSource survivalRandomSource,
             [NotNull] IPlayerEventLogService playerEventLogService)
         {
@@ -42,8 +36,8 @@ namespace Zilon.Core.Persons.Auxiliary
             // но пока не понятно, как по другому сделать отрезки.
             var currentSegment = currentSegments.FirstOrDefault();
 
-            var statType = stat.Type;
-            var currentTypeEffect = GetCurrentEffect(currentEffects, statType);
+            SurvivalStatType statType = stat.Type;
+            SurvivalStatHazardEffect currentTypeEffect = GetCurrentEffect(currentEffects, statType);
             if (currentTypeEffect != null)
             {
                 // Эффект уже существует. Изменим его уровень.
@@ -62,24 +56,22 @@ namespace Zilon.Core.Persons.Auxiliary
                 if (currentSegment != null)
                 {
                     // Создаём эффект
-                    var newEffect = new SurvivalStatHazardEffect(
-                    statType,
-                    currentSegment.Level,
-                    survivalRandomSource)
-                    {
-                        PlayerEventLogService = playerEventLogService
-                    };
+                    SurvivalStatHazardEffect newEffect = new SurvivalStatHazardEffect(
+                        statType,
+                        currentSegment.Level,
+                        survivalRandomSource) {PlayerEventLogService = playerEventLogService};
 
                     currentEffects.Add(newEffect);
                 }
             }
         }
 
-        private static SurvivalStatHazardEffect GetCurrentEffect(IEffectsModule currentEffects, SurvivalStatType statType)
+        private static SurvivalStatHazardEffect GetCurrentEffect(IEffectsModule currentEffects,
+            SurvivalStatType statType)
         {
             return currentEffects.Items
-                            .OfType<SurvivalStatHazardEffect>()
-                            .SingleOrDefault(x => x.Type == statType);
+                .OfType<SurvivalStatHazardEffect>()
+                .SingleOrDefault(x => x.Type == statType);
         }
 
         [ExcludeFromCodeCoverage]

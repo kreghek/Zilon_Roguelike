@@ -1,9 +1,5 @@
-﻿using System.Linq;
-
-using FluentAssertions;
-
-using NUnit.Framework;
-
+﻿using System;
+using System.Linq;
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
@@ -18,69 +14,62 @@ namespace Zilon.Core.Tests.Client
     public class PropTransferMachineTests
     {
         /// <summary>
-        /// Тест проверяет корректность переноса ресурса из сундука в инвентарь.
+        ///     Тест проверяет корректность переноса ресурса из сундука в инвентарь.
         /// </summary>
         [Test]
         public void TransferProp_Resources()
         {
             // ARRANGE
 
-            var resourceScheme = new TestPropScheme();
+            TestPropScheme resourceScheme = new TestPropScheme();
 
             // Инвентарь
-            var inventory = new InventoryModule();
+            InventoryModule inventory = new InventoryModule();
 
             // контейнер
-            var containerProps = new IProp[] {
-                new Resource(resourceScheme, 1)
-            };
+            IProp[] containerProps = {new Resource(resourceScheme, 1)};
 
-            var container = new FixedPropChest(containerProps);
+            FixedPropChest container = new FixedPropChest(containerProps);
 
             // трансферная машина
-            var transferMachine = new PropTransferMachine(inventory, container.Content);
+            PropTransferMachine transferMachine = new PropTransferMachine(inventory, container.Content);
 
             // ACT
-            var transferResource = new Resource(resourceScheme, 1);
+            Resource transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
                 PropTransferMachineStore.Container,
                 PropTransferMachineStore.Inventory);
 
             // ASSERT
             transferMachine.Inventory.PropAdded[0].Should().BeOfType<Resource>();
-            var invResource = (Resource)transferMachine.Inventory.PropAdded[0];
+            Resource invResource = (Resource)transferMachine.Inventory.PropAdded[0];
             invResource.Count.Should().Be(1);
         }
 
 
         /// <summary>
-        /// Тест проверяет корректность переноса ресурса из сундука в инвентарь.
+        ///     Тест проверяет корректность переноса ресурса из сундука в инвентарь.
         /// </summary>
         [Test]
         public void TransferProp_Equipment()
         {
             // ARRANGE
 
-            var equipmentScheme = new TestPropScheme
-            {
-                Equip = new TestPropEquipSubScheme()
-            };
+            TestPropScheme equipmentScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
 
             // Инвентарь
-            var inventory = new InventoryModule();
+            InventoryModule inventory = new InventoryModule();
 
             // контейнер
-            var containerProps = new IProp[] {
-                new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>())
-            };
+            IProp[] containerProps = {new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>())};
 
-            var container = new FixedPropChest(containerProps);
+            FixedPropChest container = new FixedPropChest(containerProps);
 
             // трансферная машина
-            var transferMachine = new PropTransferMachine(inventory, container.Content);
+            PropTransferMachine transferMachine = new PropTransferMachine(inventory, container.Content);
 
             // ACT
-            var transferResource = containerProps.First();
+            IProp transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
                 PropTransferMachineStore.Container,
                 PropTransferMachineStore.Inventory);
@@ -91,38 +80,34 @@ namespace Zilon.Core.Tests.Client
         }
 
         /// <summary>
-        /// Тест проверяет корректность отработчков событий при пененосе ресурса из сундука в инвентарь.
+        ///     Тест проверяет корректность отработчков событий при пененосе ресурса из сундука в инвентарь.
         /// </summary>
         [Test]
         public void TransferProp_Resources_StoreEventsRaised()
         {
             // ARRANGE
 
-            var resourceScheme = new TestPropScheme();
-            var resource = new Resource(resourceScheme, 1);
+            TestPropScheme resourceScheme = new TestPropScheme();
+            Resource resource = new Resource(resourceScheme, 1);
 
             // Инвентарь
-            var inventory = new InventoryModule();
+            InventoryModule inventory = new InventoryModule();
 
             // контейнер
-            var containerProps = new IProp[]
-            {
-                resource
-            };
+            IProp[] containerProps = {resource};
 
-            var container = new FixedPropChest(containerProps);
+            FixedPropChest container = new FixedPropChest(containerProps);
 
             // трансферная машина
-            var transferMachine = new PropTransferMachine(inventory, container.Content);
+            PropTransferMachine transferMachine = new PropTransferMachine(inventory, container.Content);
 
             // ACT
             using var monitorInventory = transferMachine.Inventory.Monitor();
             using var monitorContainer = transferMachine.Container.Monitor();
-            var transferResource = new Resource(resourceScheme, 1);
+            Resource transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
                 PropTransferMachineStore.Container,
                 PropTransferMachineStore.Inventory);
-
 
 
             // ASSERT
@@ -133,33 +118,31 @@ namespace Zilon.Core.Tests.Client
         }
 
         /// <summary>
-        /// Тест проверяет корректность отработчков событий при пененосе ресурса из сундука в инвентарь.
+        ///     Тест проверяет корректность отработчков событий при пененосе ресурса из сундука в инвентарь.
         /// </summary>
         [Test]
         public void TransferProp_InventoryHasResources_StoreEventsRaised()
         {
             // ARRANGE
 
-            var resourceScheme = new TestPropScheme();
+            TestPropScheme resourceScheme = new TestPropScheme();
 
             // Инвентарь
-            var inventory = new InventoryModule();
+            InventoryModule inventory = new InventoryModule();
             inventory.Add(new Resource(resourceScheme, 1));
 
             // контейнер
-            var containerProps = new IProp[] {
-                new Resource(resourceScheme, 1)
-            };
+            IProp[] containerProps = {new Resource(resourceScheme, 1)};
 
-            var container = new FixedPropChest(containerProps);
+            FixedPropChest container = new FixedPropChest(containerProps);
 
             // трансферная машина
-            var transferMachine = new PropTransferMachine(inventory, container.Content);
+            PropTransferMachine transferMachine = new PropTransferMachine(inventory, container.Content);
 
             // ACT
             using var monitorInventory = transferMachine.Inventory.Monitor();
             using var monitorContainer = transferMachine.Container.Monitor();
-            var transferResource = new Resource(resourceScheme, 1);
+            Resource transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
                 PropTransferMachineStore.Container,
                 PropTransferMachineStore.Inventory);
@@ -170,33 +153,31 @@ namespace Zilon.Core.Tests.Client
         }
 
         /// <summary>
-        /// Тест проверяет корректность отработчков событий при пененосе ресурса из сундука в инвентарь.
+        ///     Тест проверяет корректность отработчков событий при пененосе ресурса из сундука в инвентарь.
         /// </summary>
         [Test]
         public void TransferProp_ChangesResources_StoreEventsRaised()
         {
             // ARRANGE
 
-            var resourceScheme = new TestPropScheme();
+            TestPropScheme resourceScheme = new TestPropScheme();
 
             // Инвентарь
-            var inventory = new InventoryModule();
+            InventoryModule inventory = new InventoryModule();
             inventory.Add(new Resource(resourceScheme, 1));
 
             // контейнер
-            var containerProps = new IProp[] {
-                new Resource(resourceScheme, 2)
-            };
+            IProp[] containerProps = {new Resource(resourceScheme, 2)};
 
-            var container = new FixedPropChest(containerProps);
+            FixedPropChest container = new FixedPropChest(containerProps);
 
             // трансферная машина
-            var transferMachine = new PropTransferMachine(inventory, container.Content);
+            PropTransferMachine transferMachine = new PropTransferMachine(inventory, container.Content);
 
             // ACT
             using var monitorInventory = transferMachine.Inventory.Monitor();
             using var monitorContainer = transferMachine.Container.Monitor();
-            var transferResource = new Resource(resourceScheme, 1);
+            Resource transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
                 PropTransferMachineStore.Container,
                 PropTransferMachineStore.Inventory);
@@ -207,35 +188,30 @@ namespace Zilon.Core.Tests.Client
         }
 
         /// <summary>
-        /// Тест проверяет корректность отработчков событий при пененосе предмета экипировки из сундука в инвентарь.
+        ///     Тест проверяет корректность отработчков событий при пененосе предмета экипировки из сундука в инвентарь.
         /// </summary>
         [Test]
         public void TransferProp_Equipment_StoreEventsRaised()
         {
             // ARRANGE
 
-            var equipmentScheme = new TestPropScheme
-            {
-                Equip = new TestPropEquipSubScheme()
-            };
+            TestPropScheme equipmentScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
 
             // Инвентарь
-            var inventory = new InventoryModule();
+            InventoryModule inventory = new InventoryModule();
 
             // контейнер
-            var containerProps = new IProp[] {
-                new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>())
-            };
+            IProp[] containerProps = {new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>())};
 
-            var container = new FixedPropChest(containerProps);
+            FixedPropChest container = new FixedPropChest(containerProps);
 
             // трансферная машина
-            var transferMachine = new PropTransferMachine(inventory, container.Content);
+            PropTransferMachine transferMachine = new PropTransferMachine(inventory, container.Content);
 
             // ACT
             using var monitorInventory = transferMachine.Inventory.Monitor();
             using var monitorContainer = transferMachine.Container.Monitor();
-            var transferResource = containerProps.First();
+            IProp transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
                 PropTransferMachineStore.Container,
                 PropTransferMachineStore.Inventory);
@@ -246,37 +222,32 @@ namespace Zilon.Core.Tests.Client
         }
 
         /// <summary>
-        /// Тест проверяет корректность отработчков событий при пененосе предмета экипировки из сундука в инвентарь.
-        /// В инвентаре уже есть предмет с такой схемой.
+        ///     Тест проверяет корректность отработчков событий при пененосе предмета экипировки из сундука в инвентарь.
+        ///     В инвентаре уже есть предмет с такой схемой.
         /// </summary>
         [Test]
         public void TransferProp_InventoryHasEquipment_StoreEventsRaised()
         {
             // ARRANGE
 
-            var equipmentScheme = new TestPropScheme
-            {
-                Equip = new TestPropEquipSubScheme()
-            };
+            TestPropScheme equipmentScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
 
             // Инвентарь
-            var inventory = new InventoryModule();
-            inventory.Add(new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>()));
+            InventoryModule inventory = new InventoryModule();
+            inventory.Add(new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>()));
 
             // контейнер
-            var containerProps = new IProp[] {
-                new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>())
-            };
+            IProp[] containerProps = {new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>())};
 
-            var container = new FixedPropChest(containerProps);
+            FixedPropChest container = new FixedPropChest(containerProps);
 
             // трансферная машина
-            var transferMachine = new PropTransferMachine(inventory, container.Content);
+            PropTransferMachine transferMachine = new PropTransferMachine(inventory, container.Content);
 
             // ACT
             using var monitorInventory = transferMachine.Inventory.Monitor();
             using var monitorContainer = transferMachine.Container.Monitor();
-            var transferResource = containerProps.First();
+            IProp transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
                 PropTransferMachineStore.Container,
                 PropTransferMachineStore.Inventory);

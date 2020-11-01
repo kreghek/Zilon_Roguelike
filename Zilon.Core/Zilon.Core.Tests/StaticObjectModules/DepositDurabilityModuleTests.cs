@@ -1,7 +1,4 @@
-﻿using Moq;
-
-using NUnit.Framework;
-
+﻿using System.Diagnostics.CodeAnalysis;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tests.StaticObjectModules.TestCaseDataSources;
 
@@ -13,10 +10,10 @@ namespace Zilon.Core.Tests.StaticObjectModules
         [TestCaseSource(typeof(DepositDurabilityModuleTestCaseDataSource),
             nameof(DepositDurabilityModuleTestCaseDataSource.DestroyTestCases))]
         [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "<Pending>")]
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "<Pending>")]
         public void TakeDamageTest(int stockValue, int damagePerMineUnit, int[] damages)
         {
-            var currentStock = stockValue;
+            int currentStock = stockValue;
             var depositModuleMock = new Mock<IPropDepositModule>();
             depositModuleMock.SetupGet(x => x.Stock).Returns(() => (float)currentStock / stockValue);
             depositModuleMock.Setup(x => x.Mine()).Callback(() => currentStock--);
@@ -25,10 +22,11 @@ namespace Zilon.Core.Tests.StaticObjectModules
             var lifetimeModuleMock = new Mock<ILifetimeModule>();
             var lifetimeModule = lifetimeModuleMock.Object;
 
-            var durabilityModule = new DepositDurabilityModule(depositModule, lifetimeModule, damagePerMineUnit);
+            DepositDurabilityModule durabilityModule =
+                new DepositDurabilityModule(depositModule, lifetimeModule, damagePerMineUnit);
 
             // ACT
-            foreach (var damage in damages)
+            foreach (int damage in damages)
             {
                 durabilityModule.TakeDamage(damage);
             }

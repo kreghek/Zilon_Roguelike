@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-
-using FluentAssertions;
-
-using NUnit.Framework;
-
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
@@ -17,7 +10,7 @@ namespace Zilon.Core.Tests.MapGenerators
     public class SquareMapFactoryTests
     {
         /// <summary>
-        /// Тест проверяет, что для карты создаётся корректный набор ребёр между узлами.
+        ///     Тест проверяет, что для карты создаётся корректный набор ребёр между узлами.
         /// </summary>
         [Test]
         public async Task Create_FixedMap_EdgesAreCorrectAsync()
@@ -43,12 +36,11 @@ namespace Zilon.Core.Tests.MapGenerators
             AssertEdge(map, 6, 6, 5, 6);
             AssertEdge(map, 6, 6, 5, 5);
             AssertEdge(map, 6, 6, 6, 5);
-
         }
 
         /// <summary>
-        /// Тест проверяет, что генератор сеточных карт может работать с <see cref="HexMap"/>.
-        /// <see cref="HexMap"/> используется на клиенте.
+        ///     Тест проверяет, что генератор сеточных карт может работать с <see cref="HexMap" />.
+        ///     <see cref="HexMap" /> используется на клиенте.
         /// </summary>
         [Test]
         public void Create_HexMapType_NoExceptions()
@@ -75,7 +67,7 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             var node1 = map.Nodes.SelectByHexCoords(offsetX1, offsetY1);
             var node2 = map.Nodes.SelectByHexCoords(offsetX2, offsetY2);
-            var hasEdge = HasEdge(map, node1, node2);
+            bool hasEdge = HasEdge(map, node1, node2);
             hasEdge.Should().BeTrue();
         }
     }

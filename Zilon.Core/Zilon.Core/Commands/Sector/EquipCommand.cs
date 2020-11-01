@@ -1,25 +1,20 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
-using Zilon.Core.Tactics;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
     /// <summary>
-    /// Команда на назначение экипировки.
+    ///     Команда на назначение экипировки.
     /// </summary>
     public class EquipCommand : SpecialActorCommandBase
     {
-        private readonly IPlayer _player;
         private readonly IInventoryState _inventoryState;
-
-        public int? SlotIndex { get; set; }
+        private readonly IPlayer _player;
 
         [ExcludeFromCodeCoverage]
         public EquipCommand(
@@ -32,6 +27,8 @@ namespace Zilon.Core.Commands
             _inventoryState = inventoryState;
         }
 
+        public int? SlotIndex { get; set; }
+
         public override bool CanExecute()
         {
             if (_inventoryState.SelectedProp == null)
@@ -39,7 +36,7 @@ namespace Zilon.Core.Commands
                 return true;
             }
 
-            var equipment = GetInventorySelectedEquipment();
+            Equipment equipment = GetInventorySelectedEquipment();
             if (equipment is null && _inventoryState.SelectedProp != null)
             {
                 return false;
@@ -58,8 +55,8 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Для команды не указан слот.");
             }
 
-            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>();
-            var slot = equipmentCarrier.Slots[SlotIndex.Value];
+            IEquipmentModule equipmentCarrier = PlayerState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>();
+            PersonSlotSubScheme slot = equipmentCarrier.Slots[SlotIndex.Value];
 
             var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipment, slot);
             if (!canEquipInSlot)
@@ -94,17 +91,18 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Для команды не указан слот.");
             }
 
-            var equipment = GetInventorySelectedEquipment();
+            Equipment equipment = GetInventorySelectedEquipment();
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            ActorTaskContext taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
-            var intention = new Intention<EquipTask>(a => new EquipTask(a, taskContext, equipment, SlotIndex.Value));
+            Intention<EquipTask> intention =
+                new Intention<EquipTask>(a => new EquipTask(a, taskContext, equipment, SlotIndex.Value));
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
 
         private Equipment GetInventorySelectedEquipment()
         {
-            var propVieModel = _inventoryState.SelectedProp;
+            IPropItemViewModel propVieModel = _inventoryState.SelectedProp;
             if (propVieModel == null)
             {
                 return null;

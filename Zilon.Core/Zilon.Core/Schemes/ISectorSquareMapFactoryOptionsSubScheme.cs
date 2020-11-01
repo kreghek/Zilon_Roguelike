@@ -1,12 +1,12 @@
 ﻿namespace Zilon.Core.Schemes
 {
     /// <summary>
-    /// Схема параметров генерации карты в виде квадратной области.
+    ///     Схема параметров генерации карты в виде квадратной области.
     /// </summary>
     public interface ISectorSquareMapFactoryOptionsSubScheme : ISectorMapFactoryOptionsSubScheme
     {
         /// <summary>
-        /// Размер карты.
+        ///     Размер карты.
         /// </summary>
         int Size { get; }
     }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.CommonServices;
+﻿using Zilon.Core.CommonServices;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -11,9 +7,9 @@ namespace Zilon.Core.Tactics
 {
     public class DropResolver : IDropResolver
     {
+        private readonly IPropFactory _propFactory;
         private readonly IDropResolverRandomSource _randomSource;
         private readonly ISchemeService _schemeService;
-        private readonly IPropFactory _propFactory;
         private readonly IUserTimeProvider _userTimeProvider;
 
         public DropResolver(
@@ -31,13 +27,13 @@ namespace Zilon.Core.Tactics
         public IProp[] Resolve(IEnumerable<IDropTableScheme> dropTables)
         {
             var materializedDropTables = dropTables.ToArray();
-            var props = ResolveInner(materializedDropTables);
+            IProp[] props = ResolveInner(materializedDropTables);
             return props;
         }
 
         private IProp[] ResolveInner(IDropTableScheme[] dropTables)
         {
-            var modificators = GetModifiers();
+            IDropTableModificatorScheme[] modificators = GetModifiers();
             var rolledRecords = new List<IDropTableRecordSubScheme>();
 
             var openDropTables = new List<IDropTableScheme>(dropTables);
@@ -45,14 +41,14 @@ namespace Zilon.Core.Tactics
             {
                 var table = openDropTables[0];
                 var records = table.Records;
-                var recMods = GetModRecords(records, modificators);
+                DropTableModRecord[] recMods = GetModRecords(records, modificators);
 
                 var totalWeight = recMods.Sum(x => x.ModifiedWeight);
 
                 for (var rollIndex = 0; rollIndex < table.Rolls; rollIndex++)
                 {
                     var rolledWeight = _randomSource.RollWeight(totalWeight);
-                    var recMod = DropRoller.GetRecord(recMods, rolledWeight);
+                    DropTableModRecord recMod = DropRoller.GetRecord(recMods, rolledWeight);
 
                     if (recMod.Record.SchemeSid == null)
                     {
@@ -113,7 +109,8 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private static IDropTableModificatorScheme CreateEvilHourModifier(DateTime targetDate, float duration, DateTime currentDate)
+        private static IDropTableModificatorScheme CreateEvilHourModifier(DateTime targetDate, float duration,
+            DateTime currentDate)
         {
             var dateDiff = targetDate - currentDate;
 
@@ -121,9 +118,9 @@ namespace Zilon.Core.Tactics
             var ration = days / duration;
             var inversedRation = 1 - ration;
             var bonus = duration * inversedRation;
-            var mod = new DropTableModificatorScheme
+            DropTableModificatorScheme mod = new DropTableModificatorScheme
             {
-                PropSids = new[] { "evil-pumpkin" },
+                PropSids = new[] {"evil-pumpkin"},
                 //TODO Зачем вообще здесь -1. Бонус - это число, на которое нужно умножить.
                 WeightBonus = bonus - 1
             };
@@ -140,20 +137,16 @@ namespace Zilon.Core.Tactics
             {
                 if (record.SchemeSid == null)
                 {
-                    resultList.Add(new DropTableModRecord
-                    {
-                        Record = record,
-                        ModifiedWeight = record.Weight
-                    });
+                    resultList.Add(new DropTableModRecord {Record = record, ModifiedWeight = record.Weight});
                     continue;
                 }
 
-                var recordModificators = modificatorsArray.Where(x => x.PropSids == null || x.PropSids.Contains(record.SchemeSid));
+                var recordModificators =
+                    modificatorsArray.Where(x => x.PropSids == null || x.PropSids.Contains(record.SchemeSid));
                 var totalWeightMultiplier = recordModificators.Sum(x => x.WeightBonus) + 1;
                 resultList.Add(new DropTableModRecord
                 {
-                    Record = record,
-                    ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
+                    Record = record, ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
                 });
             }
 
@@ -164,23 +157,23 @@ namespace Zilon.Core.Tactics
         {
             try
             {
-                var scheme = _schemeService.GetScheme<IPropScheme>(record.SchemeSid);
-                var propClass = GetPropClass(scheme);
+                IPropScheme scheme = _schemeService.GetScheme<IPropScheme>(record.SchemeSid);
+                PropClass propClass = GetPropClass(scheme);
 
                 switch (propClass)
                 {
                     case PropClass.Equipment:
-                        var equipment = _propFactory.CreateEquipment(scheme);
+                        Equipment equipment = _propFactory.CreateEquipment(scheme);
                         return equipment;
 
                     case PropClass.Resource:
                         var rolledCount = _randomSource.RollResourceCount(record.MinCount, record.MaxCount);
-                        var resource = _propFactory.CreateResource(scheme, rolledCount);
+                        Resource resource = _propFactory.CreateResource(scheme, rolledCount);
                         return resource;
 
                     case PropClass.Concept:
 
-                        var propScheme = _schemeService.GetScheme<IPropScheme>("record.Concept");
+                        IPropScheme propScheme = _schemeService.GetScheme<IPropScheme>("record.Concept");
 
                         return new Concept(scheme, propScheme);
 

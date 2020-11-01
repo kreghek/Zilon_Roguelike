@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Diseases;
+﻿using Zilon.Core.Diseases;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.PersonModules
 {
     /// <summary>
-    /// Базовая реализация моделя болезней персонажа.
+    ///     Базовая реализация моделя болезней персонажа.
     /// </summary>
     public class DiseaseModule : IDiseaseModule
     {
@@ -21,12 +17,13 @@ namespace Zilon.Core.PersonModules
             IsActive = true;
         }
 
-        /// <inheritdoc/>
-        public IEnumerable<IDiseaseProcess> Diseases { get => _diseases; }
-        public string Key { get => nameof(IDiseaseModule); }
+        /// <inheritdoc />
+        public IEnumerable<IDiseaseProcess> Diseases => _diseases;
+
+        public string Key => nameof(IDiseaseModule);
         public bool IsActive { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void Infect(IDisease disease)
         {
             var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
@@ -38,7 +35,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void RemoveDisease(IDisease disease)
         {
             var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
@@ -73,8 +70,8 @@ namespace Zilon.Core.PersonModules
             // за каждый симптом.
             // Если для эффекта симптома указано несколько болезней, то эффект уходит только после удаления последней болезни.
 
-            var disease = diseaseProcess.Disease;
-            var symptoms = disease.GetSymptoms();
+            IDisease disease = diseaseProcess.Disease;
+            DiseaseSymptom[] symptoms = disease.GetSymptoms();
 
             var currentPower = diseaseProcess.CurrentPower;
 
@@ -100,7 +97,8 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void UpdatePowerDown(IEffectsModule personEffects, IDisease disease, DiseaseSymptom[] symptoms, float currentPower, float symptomPowerSegment)
+        private static void UpdatePowerDown(IEffectsModule personEffects, IDisease disease, DiseaseSymptom[] symptoms,
+            float currentPower, float symptomPowerSegment)
         {
             var activeSymptomCount = (int)Math.Floor(currentPower / symptomPowerSegment);
 
@@ -110,12 +108,13 @@ namespace Zilon.Core.PersonModules
 
             for (var i = symptomLowerIndex; i < symptoms.Length; i++)
             {
-                var currentSymptom = symptoms[i];
+                DiseaseSymptom currentSymptom = symptoms[i];
                 RemoveDiseaseEffectForSimptom(personEffects, disease, currentSymptom);
             }
         }
 
-        private static void RemoveDiseaseEffectForSimptom(IEffectsModule personEffects, IDisease disease, DiseaseSymptom symptom)
+        private static void RemoveDiseaseEffectForSimptom(IEffectsModule personEffects, IDisease disease,
+            DiseaseSymptom symptom)
         {
             var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
                 .SingleOrDefault(x => x.Symptom == symptom);
@@ -135,7 +134,8 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void UpdatePowerUp(IEffectsModule personEffects, IDisease disease, DiseaseSymptom[] symptoms, float currentPower, float symptomPowerSegment)
+        private static void UpdatePowerUp(IEffectsModule personEffects, IDisease disease, DiseaseSymptom[] symptoms,
+            float currentPower, float symptomPowerSegment)
         {
             if (currentPower <= 0.25f)
             {
@@ -152,12 +152,13 @@ namespace Zilon.Core.PersonModules
 
             for (var i = 0; i < activeSymptomCount; i++)
             {
-                var currentSymptom = symptoms[i];
+                DiseaseSymptom currentSymptom = symptoms[i];
                 AddDiseaseEffectForSymptom(personEffects, disease, currentSymptom);
             }
         }
 
-        private static void AddDiseaseEffectForSymptom(IEffectsModule personEffects, IDisease disease, DiseaseSymptom symptom)
+        private static void AddDiseaseEffectForSymptom(IEffectsModule personEffects, IDisease disease,
+            DiseaseSymptom symptom)
         {
             var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
                 .SingleOrDefault(x => x.Symptom == symptom);

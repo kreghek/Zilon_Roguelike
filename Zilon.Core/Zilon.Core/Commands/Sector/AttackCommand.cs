@@ -1,22 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Components;
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
+using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Commands
 {
     /// <inheritdoc />
     /// <summary>
-    /// Команда на перемещение взвода в указанный узел карты.
+    ///     Команда на перемещение взвода в указанный узел карты.
     /// </summary>
     public class AttackCommand : ActorCommandBase
     {
@@ -36,19 +35,19 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var map = _player.SectorNode.Sector.Map;
+            ISectorMap map = _player.SectorNode.Sector.Map;
 
-            var currentNode = PlayerState.ActiveActor.Actor.Node;
+            IGraphNode currentNode = PlayerState.ActiveActor.Actor.Node;
 
-            var target = GetTarget(PlayerState);
+            IAttackTarget target = GetTarget(PlayerState);
             if (target is null)
             {
                 return false;
             }
 
-            var targetNode = target.Node;
+            IGraphNode targetNode = target.Node;
 
-            var act = PlayerState.TacticalAct;
+            ITacticalAct act = PlayerState.TacticalAct;
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
                 ReferenceEquals(PlayerState.ActiveActor.Actor, target))
             {
@@ -57,46 +56,45 @@ namespace Zilon.Core.Commands
                 // Тогда эту проверку нужно будет доработать.
                 return true;
             }
-            else
+
+            // Проверка, что цель достаточно близка по дистации и видна.
+            if (act.Stats.Range == null)
             {
-                // Проверка, что цель достаточно близка по дистации и видна.
-                if (act.Stats.Range == null)
+                return false;
+            }
+
+            var isInDistance = act.CheckDistance(currentNode, targetNode, _player.SectorNode.Sector.Map);
+            if (!isInDistance)
+            {
+                return false;
+            }
+
+            var targetIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
+            if (!targetIsOnLine)
+            {
+                return false;
+            }
+
+            // Проверка наличия ресурсов для выполнения действия
+
+            if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
+            {
+                var hasPropResource = CheckPropResource(
+                    PlayerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>(),
+                    act.Constrains.PropResourceType,
+                    act.Constrains.PropResourceCount.Value);
+
+                if (!hasPropResource)
                 {
                     return false;
                 }
+            }
 
-                var isInDistance = act.CheckDistance(currentNode, targetNode, _player.SectorNode.Sector.Map);
-                if (!isInDistance)
-                {
-                    return false;
-                }
+            // Проверка КД
 
-                var targetIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
-                if (!targetIsOnLine)
-                {
-                    return false;
-                }
-
-                // Проверка наличия ресурсов для выполнения действия
-
-                if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
-                {
-                    var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>(),
-                        act.Constrains.PropResourceType,
-                        act.Constrains.PropResourceCount.Value);
-
-                    if (!hasPropResource)
-                    {
-                        return false;
-                    }
-                }
-
-                // Проверка КД
-
-                if (act.CurrentCooldown > 0)
-                {
-                    return false;
-                }
+            if (act.CurrentCooldown > 0)
+            {
+                return false;
             }
 
             return true;
@@ -104,9 +102,10 @@ namespace Zilon.Core.Commands
 
         private static IAttackTarget GetTarget(ISectorUiState sectorUiState)
         {
-            var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
-            var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
-            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()?.Value > 0;
+            IActorViewModel selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
+            IContainerViewModel selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
+            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()?.Value >
+                                0;
             if (!canTakeDamage)
             {
                 selectedStaticObjectViewModel = null;
@@ -117,13 +116,14 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var target = GetTarget(PlayerState);
+            IAttackTarget target = GetTarget(PlayerState);
 
-            var tacticalAct = PlayerState.TacticalAct;
+            ITacticalAct tacticalAct = PlayerState.TacticalAct;
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            ActorTaskContext taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
-            var intention = new Intention<AttackTask>(a => new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
+            Intention<AttackTask> intention = new Intention<AttackTask>(a =>
+                new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
 
@@ -131,9 +131,9 @@ namespace Zilon.Core.Commands
             string usedPropResourceType,
             int usedPropResourceCount)
         {
-            var props = inventory.CalcActualItems();
+            IProp[] props = inventory.CalcActualItems();
             var propResources = new List<Resource>();
-            foreach (var prop in props)
+            foreach (IProp prop in props)
             {
                 if (prop is Resource propResource)
                 {
@@ -163,7 +163,7 @@ namespace Zilon.Core.Commands
             IList<Resource> propResources,
             Resource propResource)
         {
-            var bulletData = propResource.Scheme.Bullet;
+            IPropBulletSubScheme bulletData = propResource.Scheme.Bullet;
             if (bulletData is null)
             {
                 return;
@@ -189,15 +189,15 @@ namespace Zilon.Core.Commands
 
         private static IActorViewModel GetCanExecuteActorViewModel(ISectorUiState sectorUiState)
         {
-            var hover = sectorUiState.HoverViewModel as IActorViewModel;
-            var selected = sectorUiState.SelectedViewModel as IActorViewModel;
+            IActorViewModel hover = sectorUiState.HoverViewModel as IActorViewModel;
+            IActorViewModel selected = sectorUiState.SelectedViewModel as IActorViewModel;
             return hover ?? selected;
         }
 
         private static IContainerViewModel GetCanExecuteStaticObjectViewModel(ISectorUiState sectorUiState)
         {
-            var hover = sectorUiState.HoverViewModel as IContainerViewModel;
-            var selected = sectorUiState.SelectedViewModel as IContainerViewModel;
+            IContainerViewModel hover = sectorUiState.HoverViewModel as IContainerViewModel;
+            IContainerViewModel selected = sectorUiState.SelectedViewModel as IContainerViewModel;
             return hover ?? selected;
         }
     }

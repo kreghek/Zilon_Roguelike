@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
     /// <summary>
-    /// Схема перка.
+    ///     Схема перка.
     /// </summary>
     public class PerkScheme : SchemeBase, IPerkScheme
     {
@@ -17,8 +15,7 @@ namespace Zilon.Core.Schemes
         public PropSet[] Sources { get; set; }
         public PerkLevelSubScheme[] Levels { get; set; }
 
-        [JsonProperty]
-        public bool IsBuildIn { get; private set; }
+        [JsonProperty] public bool IsBuildIn { get; private set; }
 
         public int Order { get; set; }
         public string IconSid { get; set; }

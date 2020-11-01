@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Props;
 
@@ -26,13 +22,46 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Выбирает значение эффективности действия по указанным характеристикам броска.
+        ///     Выбирает значение эффективности действия по указанным характеристикам броска.
         /// </summary>
         /// <param name="roll">Характеристики броска.</param>
         /// <returns>Возвращает случайное значение эффективности использования.</returns>
         public int RollEfficient(Roll roll)
         {
             return RollWithModifiers(roll);
+        }
+
+        /// <summary>Бросок проверки на защиту бронёй.</summary>
+        /// <returns>Возвращает результат броска D6.</returns>
+        public int RollArmorSave()
+        {
+            return RollD6();
+        }
+
+        /// <summary>Бросок проверки на использование дополнительных действий.</summary>
+        /// <returns>Возвращает результат броска D6.</returns>
+        /// <remarks>Используется для проверки удара вторым оружием.</remarks>
+        public int RollUseSecondaryAct()
+        {
+            return RollD6();
+        }
+
+        /// <summary>
+        ///     Выбирает среди надетых предметов случайный предмет,
+        ///     который был повреждён в результате действия.
+        /// </summary>
+        /// <param name="armorEquipments">Доступные предметы экипировки.</param>
+        /// <returns>Случайный экипированный предмет, который был повреждён.</returns>
+        public Equipment RollDamagedEquipment(IEnumerable<Equipment> armorEquipments)
+        {
+            var count = armorEquipments.Count();
+            if (count == 0)
+            {
+                return null;
+            }
+
+            var rollIndex = _dice.Roll(0, count - 1);
+            return armorEquipments.ElementAt(rollIndex);
         }
 
         private int RollWithModifiers(Roll roll)
@@ -56,39 +85,6 @@ namespace Zilon.Core.Tactics
             }
 
             return sum;
-        }
-
-        /// <summary>Бросок проверки на защиту бронёй.</summary>
-        /// <returns>Возвращает результат броска D6.</returns>
-        public int RollArmorSave()
-        {
-            return RollD6();
-        }
-
-        /// <summary>Бросок проверки на использование дополнительных действий.</summary>
-        /// <returns>Возвращает результат броска D6.</returns>
-        /// <remarks>Используется для проверки удара вторым оружием.</remarks>
-        public int RollUseSecondaryAct()
-        {
-            return RollD6();
-        }
-
-        /// <summary>
-        /// Выбирает среди надетых предметов случайный предмет,
-        /// который был повреждён в результате действия.
-        /// </summary>
-        /// <param name="armorEquipments">Доступные предметы экипировки.</param>
-        /// <returns>Случайный экипированный предмет, который был повреждён.</returns>
-        public Equipment RollDamagedEquipment(IEnumerable<Equipment> armorEquipments)
-        {
-            var count = armorEquipments.Count();
-            if (count == 0)
-            {
-                return null;
-            }
-
-            var rollIndex = _dice.Roll(0, count - 1);
-            return armorEquipments.ElementAt(rollIndex);
         }
 
 

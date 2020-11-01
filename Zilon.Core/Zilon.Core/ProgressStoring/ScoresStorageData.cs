@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.ProgressStoring
@@ -22,6 +20,7 @@ namespace Zilon.Core.ProgressStoring
 
         /// <summary>Посещённые места.</summary>
         public OffsetCoords[] Places { get; set; }
+
         public ScoreAchievements Achievements { get; set; }
 
         public static ScoresStorageData Create(Scores scores)
@@ -31,13 +30,16 @@ namespace Zilon.Core.ProgressStoring
                 throw new System.ArgumentNullException(nameof(scores));
             }
 
-            var storageData = new ScoresStorageData
+            ScoresStorageData storageData = new ScoresStorageData
             {
                 Achievements = scores.Achievements,
                 BaseScores = scores.BaseScores,
-                Frags = scores.Frags.Select(x => new ScoreSidCounterStorageData { Sid = x.Key.Sid, Value = x.Value }).ToArray(),
+                Frags = scores.Frags.Select(x => new ScoreSidCounterStorageData {Sid = x.Key.Sid, Value = x.Value})
+                    .ToArray(),
                 //storageData.Places = scores.Places.Select(x => new OffsetCoords(x.OffsetX, x.OffsetY)).ToArray();
-                PlaceTypes = scores.PlaceTypes.Select(x => new ScoreSidCounterStorageData { Sid = x.Key.Sid, Value = x.Value }).ToArray(),
+                PlaceTypes =
+                    scores.PlaceTypes.Select(x => new ScoreSidCounterStorageData {Sid = x.Key.Sid, Value = x.Value})
+                        .ToArray(),
                 TurnCounter = scores.TurnCounter,
                 Turns = scores.Turns
             };
@@ -47,12 +49,13 @@ namespace Zilon.Core.ProgressStoring
 
         public Scores Restore(ISchemeService schemeService)
         {
-            var scores = new Scores
+            Scores scores = new Scores
             {
                 Achievements = Achievements,
                 BaseScores = BaseScores,
                 Frags = Frags.ToDictionary(x => schemeService.GetScheme<IMonsterScheme>(x.Sid), x => x.Value),
-                PlaceTypes = PlaceTypes.ToDictionary(x => schemeService.GetScheme<ILocationScheme>(x.Sid), x => x.Value),
+                PlaceTypes =
+                    PlaceTypes.ToDictionary(x => schemeService.GetScheme<ILocationScheme>(x.Sid), x => x.Value),
                 TurnCounter = TurnCounter,
                 Turns = Turns
             };

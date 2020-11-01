@@ -3,17 +3,17 @@
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Информация о перке.
+    ///     Информация о перке.
     /// </summary>
     public interface IPerk : IJobExecutable
     {
         /// <summary>
-        /// Схема перка.
+        ///     Схема перка.
         /// </summary>
         IPerkScheme Scheme { get; }
 
         /// <summary>
-        /// Текущий уровень перка. Иначе - индекс схемы уровня.
+        ///     Текущий уровень перка. Иначе - индекс схемы уровня.
         /// </summary>
         PerkLevel CurrentLevel { get; set; }
     }

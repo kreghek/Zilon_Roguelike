@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Scoring
 {
     /// <summary>
-    /// Менеджер подсчёта очков.
+    ///     Менеджер подсчёта очков.
     /// </summary>
     public interface IScoreManager
     {
@@ -25,6 +23,8 @@ namespace Zilon.Core.Scoring
         /// <summary>Счётчик ходов по типам секторов.</summary>
         IDictionary<ILocationScheme, int> PlaceTypes { get; }
 
+        Scores Scores { get; set; }
+
         /// <summary>Засчитать убийство монстра.</summary>
         /// <param name="monster"> Монстр, убитый игроком. </param>
         void CountMonsterDefeat(MonsterPerson monster);
@@ -33,13 +33,11 @@ namespace Zilon.Core.Scoring
         void CountTurn(ILocationScheme locationScheme);
 
         /// <summary>
-        /// Засчитывает посещение победного узла.
+        ///     Засчитывает посещение победного узла.
         /// </summary>
         void CountHome();
 
         /// <summary> Обнуление текущих очков. </summary>
         void ResetScores();
-
-        Scores Scores { get; set; }
     }
 }

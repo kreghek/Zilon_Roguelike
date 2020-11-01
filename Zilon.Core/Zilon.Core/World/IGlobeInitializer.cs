@@ -1,9 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace Zilon.Core.World
+﻿namespace Zilon.Core.World
 {
     /// <summary>
-    /// Create and initialize globe.
+    ///     Create and initialize globe.
     /// </summary>
     public interface IGlobeInitializer
     {
