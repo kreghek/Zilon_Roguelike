@@ -66,11 +66,9 @@ jobs:
       - uses: actions/checkout@v2
       - run: git pull
       - name: Setup ReSharper Command Line Tools
-        uses: goit/setup-resharper@v1.0.0
-        with:
-          version: '2020.1'
-      - name: CleanUp
-        run: CleanUpCode Zilon.Core.sln
+        run: dotnet tool install -g JetBrains.ReSharper.GlobalTools
+      - name: Clean up code
+        run: jb cleanupcode Zilon.Core.sln
         working-directory: ${{env.working-directory}}
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
