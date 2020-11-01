@@ -28,5 +28,17 @@ namespace Zilon.Core.Tactics
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 
         public IActorTaskSource<ISectorTaskSourceContext> ActorTaskSource { get; }
+
+        public ActorTaskExecutionException()
+        {
+        }
+
+        public ActorTaskExecutionException(string message) : base(message)
+        {
+        }
+
+        public ActorTaskExecutionException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

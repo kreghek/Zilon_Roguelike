@@ -38,19 +38,24 @@ namespace Zilon.Core.Props
                 throw new ArgumentException("Не корректная схема.", nameof(propScheme));
             }
 
+            if (propScheme is null)
+            {
+                throw new ArgumentNullException(nameof(propScheme));
+            }
+
             if (acts != null)
             {
                 Acts = acts.ToArray();
             }
             else
             {
-                Acts = new ITacticalActScheme[0];
+                Acts = Array.Empty<ITacticalActScheme>();
             }
 
             Durable = new Stat(EQUIPMENT_DURABLE, 0, EQUIPMENT_DURABLE);
         }
 
-        public Equipment(IPropScheme propScheme) : this(propScheme, new ITacticalActScheme[0])
+        public Equipment(IPropScheme propScheme) : this(propScheme, Array.Empty<ITacticalActScheme>())
         {
         }
 
