@@ -19,14 +19,18 @@ jobs:
   buildCore:
     name: Build core libs
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        core_project:
+          - Zilon.Core
+          - Zilon.Bot.Players
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x'
-      - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
-      - run: dotnet publish Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
+      - run: dotnet publish Zilon.Core/${{ matrix.core_project }}/${{ matrix.core_project }}.csproj -c Release -f netstandard2.0 -o bin
       - uses: actions/upload-artifact@v1
         with:
           name: CoreLibs
@@ -55,7 +59,7 @@ jobs:
         run: |
           apt update && apt install -y git
           git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
-          cp -a temp/. ./Zilon.Client/Assets/Plugins/
+          cp -a temp/. ./${{ matrix.projectPath }}/Assets/Plugins/
       - name: Download core libs from artifatcs
         uses: actions/download-artifact@v2
         with:
