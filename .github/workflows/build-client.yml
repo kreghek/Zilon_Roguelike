@@ -6,7 +6,11 @@ on:
       - master
     tags:
       - 'v*.*.*'
-  push: { branches: [master] }
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -43,7 +47,7 @@ jobs:
         with:
           lfs: true
       - name: Copy plugins from repo to Assets/Plugins
-          run: |
+        run: |
           apt update && apt install -y git
           git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
           cp -a temp/. ./Zilon.Client/Assets/Plugins/
