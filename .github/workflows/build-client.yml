@@ -42,10 +42,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           lfs: true
-      - uses: actions/checkout@v2
-        with:
-          repository: kreghek/Zilon_Roguelike_Plugins
-          path: /Assets/Plugins
+      - name: Copy plugins from repo to Assets/Plugins
+          run: |
+          apt update && apt install -y git
+          git clone https://github.com/kreghek/Zilon_Roguelike_Plugins.git temp
+          cp -a temp/. ./Zilon.Client/Assets/Plugins/
       - name: Download core libs from artifatcs
         uses: actions/download-artifact@v2
         with:
