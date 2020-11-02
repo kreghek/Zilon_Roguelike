@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Components;
+﻿using System;
+using System.Collections.Generic;
+
+using Zilon.Core.Components;
 using Zilon.Core.Diseases;
 
 namespace Zilon.Core.Persons.Survival
@@ -6,7 +9,7 @@ namespace Zilon.Core.Persons.Survival
     public class DiseaseSymptomEffect : IPersonEffect
     {
         /// <summary>
-        ///     Болезни, которые провоцируют этот симптом.
+        /// Болезни, которые провоцируют этот симптом.
         /// </summary>
         private readonly List<IDisease> _diseases;
 
@@ -24,16 +27,9 @@ namespace Zilon.Core.Persons.Survival
             HoldDisease(disease);
         }
 
-        public IList<IDisease> Diseases => _diseases;
+        public IList<IDisease> Diseases { get => _diseases; }
 
         public DiseaseSymptom Symptom { get; }
-
-        public event EventHandler Changed;
-
-        public EffectRule[] GetRules()
-        {
-            return new[] {new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser)};
-        }
 
         public void HoldDisease(IDisease disease)
         {
@@ -50,6 +46,13 @@ namespace Zilon.Core.Persons.Survival
             _diseases.Remove(disease);
 
             Changed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler Changed;
+
+        public EffectRule[] GetRules()
+        {
+            return new[] { new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser) };
         }
     }
 }

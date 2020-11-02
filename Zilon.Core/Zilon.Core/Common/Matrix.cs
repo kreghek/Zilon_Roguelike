@@ -1,13 +1,15 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
-    ///     Матрица значений.
+    /// Матрица значений.
     /// </summary>
     /// <typeparam name="T"> Тип значений матрицы. </typeparam>
     public sealed class Matrix<T>
     {
         /// <summary>
-        ///     Конструктор матрицы значений.
+        /// Конструктор матрицы значений.
         /// </summary>
         /// <param name="items"> Двумерный массив, который будет лежать в оснвое матрицы. </param>
         /// <param name="width"> Ширина матрицы. Должна соответствовать входному массиву. </param>
@@ -23,7 +25,7 @@
         }
 
         /// <summary>
-        ///     Конструктор матрицы значений.
+        /// Конструктор матрицы значений.
         /// </summary>
         /// <param name="width"> Ширина матрицы. Должна соответствовать входному массиву. </param>
         /// <param name="height"> Высота матрицы. Должна соответствовать входному массиву. </param>
@@ -37,24 +39,30 @@
         }
 
         /// <summary>
-        ///     Элементы матрицы.
+        /// Элементы матрицы.
         /// </summary>
         public T[,] Items { get; }
 
         /// <summary>
-        ///     Ширина матрицы.
+        /// Ширина матрицы.
         /// </summary>
         public int Width { get; }
 
         /// <summary>
-        ///     Высота матрицы.
+        /// Высота матрицы.
         /// </summary>
         public int Height { get; }
 
         public T this[int x, int y]
         {
-            get => Items[x, y];
-            set => Items[x, y] = value;
+            get
+            {
+                return Items[x, y];
+            }
+            set
+            {
+                Items[x, y] = value;
+            }
         }
 
         public bool IsIn(int x, int y)

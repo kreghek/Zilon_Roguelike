@@ -1,12 +1,12 @@
 ﻿namespace Zilon.Core.Schemes
 {
     /// <summary>
-    ///     Схема предмета.
+    /// Схема предмета.
     /// </summary>
     public interface IPropScheme : IScheme, IMimicScheme
     {
         /// <summary>
-        ///     Теги предмета. Используются для описания и для некоторых правил.
+        /// Теги предмета. Используются для описания и для некоторых правил.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage(
             "Performance",
@@ -15,23 +15,23 @@
         string[] Tags { get; }
 
         /// <summary>
-        ///     Информация о крафте данного прдмета.
+        /// Информация о крафте данного прдмета.
         /// </summary>
         CraftSubScheme Craft { get; }
 
         /// <summary>
-        ///     Информация о том, как предмет можно экипировать.
+        /// Информация о том, как предмет можно экипировать.
         /// </summary>
         IPropEquipSubScheme Equip { get; }
 
         /// <summary>
-        ///     Информация о том, что будет, если предмет употребить
-        ///     (сьесть, выпить, использовать).
+        /// Информация о том, что будет, если предмет употребить
+        /// (сьесть, выпить, использовать).
         /// </summary>
         IPropUseSubScheme Use { get; }
 
         /// <summary>
-        ///     Информация о предмете, как он используется для выполнения действий.
+        /// Информация о предмете, как он используется для выполнения действий.
         /// </summary>
         IPropBulletSubScheme Bullet { get; }
     }

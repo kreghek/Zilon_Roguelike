@@ -1,17 +1,19 @@
-﻿namespace Zilon.Core.CommonServices.Dices
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
-    ///     Генератор случайных числе Парка-Миллера.
+    /// Генератор случайных числе Парка-Миллера.
     /// </summary>
     public class GaussDice : DiceBase, IDice
     {
         /// <summary>
-        ///     Погрешность.
+        /// Погрешность.
         /// </summary>
         private const double STDDEV = 0.25;
 
         /// <summary>
-        ///     Математическое ожидание.
+        /// Математическое ожидание.
         /// </summary>
         private const double MEAN = 0.5;
 
@@ -39,7 +41,6 @@
             {
                 x = NextGaussian(MEAN, STDDEV);
             } while (x < min || x > max);
-
             return x;
         }
 

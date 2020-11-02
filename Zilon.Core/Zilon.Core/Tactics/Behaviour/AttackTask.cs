@@ -1,27 +1,16 @@
-﻿using Zilon.Core.Components;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Props;
-using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class AttackTask : OneTurnActorTaskBase
     {
         private readonly ITacticalActUsageService _actService;
-
-        public AttackTask(IActor actor,
-            IActorTaskContext context,
-            IAttackTarget target,
-            ITacticalAct tacticalAct,
-            ITacticalActUsageService actService) :
-            base(actor, context)
-        {
-            _actService = actService;
-
-            Target = target;
-            TacticalAct = tacticalAct;
-        }
 
         public IAttackTarget Target { get; }
 
@@ -47,8 +36,21 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var availableSlotAct = GetUsedActs();
-            UsedTacticalActs usedActs = new UsedTacticalActs(new[] {TacticalAct}, availableSlotAct.Skip(1));
+            var usedActs = new UsedTacticalActs(new[] { TacticalAct }, availableSlotAct.Skip(1));
             _actService.UseOn(Actor, Target, usedActs, Context.Sector);
+        }
+
+        public AttackTask(IActor actor,
+            IActorTaskContext context,
+            IAttackTarget target,
+            ITacticalAct tacticalAct,
+            ITacticalActUsageService actService) :
+            base(actor, context)
+        {
+            _actService = actService;
+
+            Target = target;
+            TacticalAct = tacticalAct;
         }
 
         private IEnumerable<ITacticalAct> GetUsedActs()
@@ -60,10 +62,10 @@ namespace Zilon.Core.Tactics.Behaviour
             else
             {
                 var usedEquipmentActs = false;
-                PersonSlotSubScheme[] slots = Actor.Person.GetModule<IEquipmentModule>().Slots;
+                var slots = Actor.Person.GetModule<IEquipmentModule>().Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
-                    Equipment slotEquipment = Actor.Person.GetModule<IEquipmentModule>()[i];
+                    var slotEquipment = Actor.Person.GetModule<IEquipmentModule>()[i];
                     if (slotEquipment == null)
                     {
                         continue;
@@ -75,8 +77,8 @@ namespace Zilon.Core.Tactics.Behaviour
                     }
 
                     var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
-                        where act.Equipment == slotEquipment
-                        select act;
+                                        where act.Equipment == slotEquipment
+                                        select act;
 
                     var usedAct = equipmentActs.FirstOrDefault();
 

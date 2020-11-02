@@ -1,19 +1,29 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Linq;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Core;
+using Zilon.Core.Client;
+using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
+using Zilon.Core.Players;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.TextClient
 {
-    internal static class Program
+    static class Program
     {
-        private static async Task Main()
+        static async System.Threading.Tasks.Task Main()
         {
             var serviceContainer = new ServiceCollection();
-            StartUp startUp = new StartUp();
+            var startUp = new StartUp();
             startUp.RegisterServices(serviceContainer);
 
             serviceContainer.AddSingleton<IGlobeInitializer, GlobeInitializer>();
-            serviceContainer.AddSingleton<IGlobeExpander>(provider =>
-                (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
+            serviceContainer.AddSingleton<IGlobeExpander>(provider => (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
             serviceContainer.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceContainer.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
@@ -29,21 +39,21 @@ namespace Zilon.TextClient
             var globe = await globeInitializer.CreateGlobeAsync("intro");
             var player = scope.ServiceProvider.GetRequiredService<IPlayer>();
 
-            GameLoop gameLoop = new GameLoop(globe);
+            var gameLoop = new GameLoop(globe);
             var uiState = scope.ServiceProvider.GetRequiredService<ISectorUiState>();
             var playerActor = (from sectorNode in globe.SectorNodes
-                from actor in sectorNode.Sector.ActorManager.Items
-                where actor.Person == player.MainPerson
-                select actor).SingleOrDefault();
+                               from actor in sectorNode.Sector.ActorManager.Items
+                               where actor.Person == player.MainPerson
+                               select actor).SingleOrDefault();
             var playerActorSectorNode = (from sectorNode in globe.SectorNodes
-                from actor in sectorNode.Sector.ActorManager.Items
-                where actor.Person == player.MainPerson
-                select sectorNode).SingleOrDefault();
+                                         from actor in sectorNode.Sector.ActorManager.Items
+                                         where actor.Person == player.MainPerson
+                                         select sectorNode).SingleOrDefault();
 
             // This is code smells. It is not good settings
             player.BindPerson(globe, playerActor.Person);
 
-            uiState.ActiveActor = new ActorViewModel {Actor = playerActor};
+            uiState.ActiveActor = new ActorViewModel { Actor = playerActor };
 
             // Play
 
@@ -55,22 +65,21 @@ namespace Zilon.TextClient
             {
                 PrintState(uiState.ActiveActor.Actor);
                 Console.WriteLine("Input command:");
-                string inputText = Console.ReadLine();
+                var inputText = Console.ReadLine();
                 if (inputText.StartsWith("m"))
                 {
-                    string[] components = inputText.Split(' ');
-                    int x = int.Parse(components[1]);
-                    int y = int.Parse(components[2]);
+                    var components = inputText.Split(' ');
+                    var x = int.Parse(components[1]);
+                    var y = int.Parse(components[2]);
                     var offsetCoords = new OffsetCoords(x, y);
 
                     ISectorMap map = playerActorSectorNode.Sector.Map;
 
-                    var targetNode = map.Nodes.OfType<HexNode>()
-                        .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
+                    var targetNode = map.Nodes.OfType<HexNode>().SingleOrDefault(node => node.OffsetCoords == offsetCoords);
 
                     var moveCommand = scope.ServiceProvider.GetRequiredService<MoveCommand>();
 
-                    uiState.SelectedViewModel = new NodeViewModel {Node = targetNode};
+                    uiState.SelectedViewModel = new NodeViewModel { Node = targetNode };
 
                     moveCommand.Execute();
                 }
@@ -87,7 +96,6 @@ namespace Zilon.TextClient
                         {
                             Console.Write(" t");
                         }
-
                         Console.WriteLine();
                     }
                 }

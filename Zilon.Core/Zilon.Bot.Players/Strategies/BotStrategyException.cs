@@ -1,8 +1,14 @@
-﻿namespace Zilon.Bot.Players.Strategies
+﻿using System;
+using System.Collections.Generic;
+
+namespace Zilon.Bot.Players.Strategies
 {
+
     [Serializable]
     public class BotStrategyException : Exception
     {
+        public IEnumerable<LogicStateTrack> SelectionHistory { get; }
+
         public BotStrategyException() { }
         public BotStrategyException(string message) : base(message) { }
         public BotStrategyException(string message, Exception inner) : base(message, inner) { }
@@ -13,11 +19,7 @@
         }
 
         protected BotStrategyException(
-            System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext context) : base(info, context)
-        {
-        }
-
-        public IEnumerable<LogicStateTrack> SelectionHistory { get; }
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }

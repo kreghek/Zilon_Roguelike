@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Client
+﻿using System;
+
+namespace Zilon.Core.Client
 {
     public class UiStateBase : IUiState
     {
@@ -27,7 +29,7 @@
             }
         }
 
-        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel" />.</summary>
+        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel"/>.</summary>
         public event EventHandler HoverChanged;
     }
 }

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Graphs;
+﻿using System.Linq;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
@@ -10,8 +12,9 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class LootLogicState : LogicStateBase
     {
-        private MoveTask _moveTask;
         private IStaticObject _staticObject;
+
+        private MoveTask _moveTask;
 
         public IStaticObject FindContainer(IActor actor, IStaticObjectManager staticObjectManager, ISectorMap map)
         {
@@ -43,11 +46,10 @@ namespace Zilon.Bot.Players.Logics
             return nearbyContainer;
         }
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
-            ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
-            ISectorMap map = context.Sector.Map;
-            IStaticObjectManager staticObjectManager = context.Sector.StaticObjectManager;
+            var map = context.Sector.Map;
+            var staticObjectManager = context.Sector.StaticObjectManager;
             _staticObject = FindContainer(actor, staticObjectManager, map);
 
             if (_staticObject == null || !_staticObject.GetModule<IPropContainer>().Content.CalcActualItems().Any())
@@ -61,22 +63,23 @@ namespace Zilon.Bot.Players.Logics
             {
                 return TakeAllFromContainerTask(actor, _staticObject, context.Sector);
             }
-
-            MoveTask storedMoveTask = _moveTask;
-            MoveTask moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask, context.Sector);
-            _moveTask = moveTask;
-            return moveTask;
+            else
+            {
+                var storedMoveTask = _moveTask;
+                var moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask, context.Sector);
+                _moveTask = moveTask;
+                return moveTask;
+            }
         }
 
-        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask,
-            ISector sector)
+        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask, ISector sector)
         {
-            ISectorMap map = sector.Map;
+            var map = sector.Map;
 
-            MoveTask moveTask = storedMoveTask;
+            var moveTask = storedMoveTask;
             if (storedMoveTask == null)
             {
-                ActorTaskContext taskContext = new ActorTaskContext(sector);
+                var taskContext = new ActorTaskContext(sector);
                 moveTask = new MoveTask(actor, taskContext, containerMapNode, map);
             }
 
@@ -91,16 +94,16 @@ namespace Zilon.Bot.Players.Logics
 
         private static IActorTask TakeAllFromContainerTask(IActor actor, IStaticObject container, ISector sector)
         {
-            PropTransfer inventoryTransfer = new PropTransfer(actor.Person.GetModule<IInventoryModule>(),
-                container.GetModule<IPropContainer>().Content.CalcActualItems(),
-                System.Array.Empty<IProp>());
+            var inventoryTransfer = new PropTransfer(actor.Person.GetModule<IInventoryModule>(),
+                                container.GetModule<IPropContainer>().Content.CalcActualItems(),
+                                System.Array.Empty<IProp>());
 
-            PropTransfer containerTransfer = new PropTransfer(container.GetModule<IPropContainer>().Content,
+            var containerTransfer = new PropTransfer(container.GetModule<IPropContainer>().Content,
                 System.Array.Empty<IProp>(),
                 container.GetModule<IPropContainer>().Content.CalcActualItems());
 
-            ActorTaskContext taskContext = new ActorTaskContext(sector);
-            return new TransferPropsTask(actor, taskContext, new[] {inventoryTransfer, containerTransfer});
+            var taskContext = new ActorTaskContext(sector);
+            return new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer });
         }
 
         protected override void ResetData()

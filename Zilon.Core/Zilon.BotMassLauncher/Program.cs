@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Zilon.BotMassLauncher
 {
-    internal class Program
+    class Program
     {
         private static string _pathToEnv;
         private static int _launchCount;
@@ -22,7 +22,7 @@ namespace Zilon.BotMassLauncher
         private static CancellationToken _shutdownToken;
         private static CancellationTokenSource _shutdownTokenSource;
 
-        private static void Main(string[] args)
+        static void Main(string[] args)
         {
             Console.WriteLine("[x] START");
 
@@ -69,7 +69,7 @@ namespace Zilon.BotMassLauncher
             } while (_isInfinite);
 
 
-            Console.WriteLine("[x] COMPLETE");
+            Console.WriteLine($"[x] COMPLETE");
         }
 
         private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
@@ -82,9 +82,10 @@ namespace Zilon.BotMassLauncher
 
         private static void RunParallel(int maxDegreeOfParallelism)
         {
-            ParallelOptions parallelOptions = new ParallelOptions
+            var parallelOptions = new ParallelOptions
             {
-                MaxDegreeOfParallelism = maxDegreeOfParallelism, CancellationToken = _shutdownToken
+                MaxDegreeOfParallelism = maxDegreeOfParallelism,
+                CancellationToken = _shutdownToken
             };
 
             Parallel.For(0, _launchCount, parallelOptions, RunEnvironment);
@@ -92,7 +93,7 @@ namespace Zilon.BotMassLauncher
 
         private static void RunLinear()
         {
-            for (int i = 0; i < _launchCount; i++)
+            for (var i = 0; i < _launchCount; i++)
             {
                 RunEnvironment(i);
             }
@@ -100,37 +101,37 @@ namespace Zilon.BotMassLauncher
 
         private static void RunEnvironment(int iteration)
         {
-            string modeArg = string.Empty;
+            var modeArg = string.Empty;
             if (!string.IsNullOrEmpty(_botMode))
             {
                 modeArg = $" mode={_botMode}";
             }
 
-            string infiniteCounterPreffix = string.Empty;
+            var infiniteCounterPreffix = string.Empty;
             if (_isInfinite)
             {
-                infiniteCounterPreffix = _infiniteCounter + " ";
+                infiniteCounterPreffix = _infiniteCounter.ToString() + " ";
             }
 
             Console.WriteLine($"[x] {infiniteCounterPreffix}ITERATION {iteration} STARTED");
 
-            using (Process process = new Process())
+            using (var process = new Process())
             {
                 process.StartInfo = new ProcessStartInfo
                 {
                     FileName = _pathToEnv,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments =
-                        $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg} schemeCatalogPath={_schemeCatlogPath} output={_scorePath} botCatalog={_botCatalog} botAssembly={_botAssembly}",
+                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg} schemeCatalogPath={_schemeCatlogPath} output={_scorePath} botCatalog={_botCatalog} botAssembly={_botAssembly}",
+
                     RedirectStandardOutput = true,
                     RedirectStandardError = true
                 };
 
                 process.Start();
 
-                string output = process.StandardOutput.ReadToEnd();
-                string error = process.StandardError.ReadToEnd();
+                var output = process.StandardOutput.ReadToEnd();
+                var error = process.StandardError.ReadToEnd();
 
                 Console.WriteLine("[x]OUTPUT");
                 Console.WriteLine(output);
@@ -155,9 +156,9 @@ namespace Zilon.BotMassLauncher
                 return null;
             }
 
-            foreach (string arg in args)
+            foreach (var arg in args)
             {
-                string[] components = arg.Split(new[] {'='}, StringSplitOptions.RemoveEmptyEntries);
+                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
                 if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (components.Length >= 2)

@@ -1,11 +1,18 @@
-﻿using Zilon.Core.Graphs;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
     /// <summary>
-    ///     Реализация фабрики карты, онованной на комнатах.
+    /// Реализация фабрики карты, онованной на комнатах.
     /// </summary>
     /// <seealso cref="IMapFactory" />
     public class RoomMapFactory : IMapFactory
@@ -20,10 +27,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         /// <summary>
-        ///     Создание карты.
+        /// Создание карты.
         /// </summary>
         /// <returns>
-        ///     Возвращает экземпляр карты.
+        /// Возвращает экземпляр карты.
         /// </returns>
         public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
@@ -32,15 +39,14 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 throw new System.ArgumentNullException(nameof(generationOptions));
             }
 
-            ISectorRoomMapFactoryOptionsSubScheme roomFactoryOptions =
-                generationOptions.OptionsSubScheme as ISectorRoomMapFactoryOptionsSubScheme;
+            var roomFactoryOptions = generationOptions.OptionsSubScheme as ISectorRoomMapFactoryOptionsSubScheme;
 
             if (roomFactoryOptions is null)
             {
                 throw new System.ArgumentException("Не задана схема генерации в настройках", nameof(generationOptions));
             }
 
-            ISectorMap map = CreateMapInstance();
+            var map = CreateMapInstance();
 
             var edgeHash = new HashSet<string>();
 
@@ -63,7 +69,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             foreach (var room in rooms)
             {
                 var passableRoomNodes = room.Nodes;
-                MapRegion region = new MapRegion(regionIdCounter, passableRoomNodes.Cast<IGraphNode>().ToArray());
+                var region = new MapRegion(regionIdCounter, passableRoomNodes.Cast<IGraphNode>().ToArray());
                 regionIdCounter++;
                 map.Regions.Add(region);
 
@@ -76,8 +82,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 if (room.Transitions?.Any() == true)
                 {
                     region.ExitNodes = (from regionNode in region.Nodes
-                        where map.Transitions.Keys.Contains(regionNode)
-                        select regionNode).ToArray();
+                                        where map.Transitions.Keys.Contains(regionNode)
+                                        select regionNode).ToArray();
+
+                    continue;
                 }
             }
 

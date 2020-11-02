@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Common
+﻿using System.Threading.Tasks;
+
+namespace Zilon.Core.Common
 {
     public interface IReceiver<T>
     {

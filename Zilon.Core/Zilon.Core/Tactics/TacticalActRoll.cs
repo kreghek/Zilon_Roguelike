@@ -1,9 +1,11 @@
-﻿using Zilon.Core.Persons;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
 {
     /// <summary>
-    ///     Ресультат применения действия.
+    /// Ресультат применения действия.
     /// </summary>
     public sealed class TacticalActRoll
     {
@@ -15,12 +17,12 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        ///     Действие, которое было совершено.
+        /// Действие, которое было совершено.
         /// </summary>
         public ITacticalAct TacticalAct { get; }
 
         /// <summary>
-        ///     Эффективность действия.
+        /// Эффективность действия.
         /// </summary>
         public int Efficient { get; }
     }

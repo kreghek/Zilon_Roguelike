@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿using System;
+
+namespace Zilon.Core.Persons
 {
     public sealed class Fraction : IFraction
     {
@@ -17,16 +19,17 @@
                 // У монстров нет друзей.
                 return FractionRelation.Enemy;
             }
-
-            if (this != Fractions.MonsterFraction && targetFraction == Fractions.MonsterFraction)
+            else if (this != Fractions.MonsterFraction && targetFraction == Fractions.MonsterFraction)
             {
                 // С монтсрами никто не дружит.
                 // Все фракции считают их врагами.
                 return FractionRelation.Enemy;
             }
-
-            // Все фракции, кроме монстров, друг к другу относятся нейтрально.
-            return FractionRelation.Neutral;
+            else
+            {
+                // Все фракции, кроме монстров, друг к другу относятся нейтрально.
+                return FractionRelation.Neutral;
+            }
         }
     }
 }

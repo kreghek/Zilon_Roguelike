@@ -1,7 +1,10 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System;
+using System.Collections.Generic;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
-    ///     Класс для работы со схемами игрового мира.
+    /// Класс для работы со схемами игрового мира.
     /// </summary>
     public sealed class SchemeService : ISchemeService
     {
@@ -9,7 +12,7 @@
         private readonly ISchemeServiceHandlerFactory _schemeServiceHandlerFactory;
 
         /// <summary>
-        ///     Конструирует экземпляр сервиса схем <see cref="SchemeService" />.
+        /// Конструирует экземпляр сервиса схем <see cref="SchemeService"/>.
         /// </summary>
         /// <param name="schemeServiceHandlerFactory">Фабрика для создания обработчиков схем.</param>
         public SchemeService(ISchemeServiceHandlerFactory schemeServiceHandlerFactory)
@@ -26,6 +29,14 @@
             InitHandler<IPerkScheme, PerkScheme>();
             InitHandler<IMonsterScheme, MonsterScheme>();
             InitHandler<IDropTableModificatorScheme, DropTableModificatorScheme>();
+        }
+
+        private void InitHandler<TScheme, TSchemeImpl>() where TScheme : class, IScheme
+            where TSchemeImpl : class, TScheme
+        {
+            var handler = _schemeServiceHandlerFactory.Create<TSchemeImpl>();
+            _handlerDict.Add(typeof(TScheme), handler);
+            handler.LoadSchemes();
         }
 
         /// <summary>Извлечь схему по идентификатору.</summary>
@@ -47,8 +58,8 @@
                 throw new ArgumentException("Тип схемы должен быть интерфейсом, унаследованным от IScheme");
             }
 
-            ISchemeServiceHandler<TScheme> handler = GetHandler<TScheme>();
-            TScheme scheme = handler.GetItem(sid);
+            var handler = GetHandler<TScheme>();
+            var scheme = handler.GetItem(sid);
             return scheme;
         }
 
@@ -62,21 +73,12 @@
             var schemeType = typeof(TScheme);
             if (!schemeType.IsInterface)
             {
-                throw new ArgumentException(
-                    $"Тип схемы должен быть интерфейсом, унаследованным от {typeof(IScheme).Name}");
+                throw new ArgumentException($"Тип схемы должен быть интерфейсом, унаследованным от {typeof(IScheme).Name}");
             }
 
-            ISchemeServiceHandler<TScheme> handler = GetHandler<TScheme>();
-            TScheme[] allSchemes = handler.GetAll();
+            var handler = GetHandler<TScheme>();
+            var allSchemes = handler.GetAll();
             return allSchemes;
-        }
-
-        private void InitHandler<TScheme, TSchemeImpl>() where TScheme : class, IScheme
-            where TSchemeImpl : class, TScheme
-        {
-            ISchemeServiceHandler<TSchemeImpl> handler = _schemeServiceHandlerFactory.Create<TSchemeImpl>();
-            _handlerDict.Add(typeof(TScheme), handler);
-            handler.LoadSchemes();
         }
 
         private ISchemeServiceHandler<TScheme> GetHandler<TScheme>()
@@ -87,7 +89,7 @@
                 throw new ArgumentException("Указан неизвестный тип схемы.");
             }
 
-            ISchemeServiceHandler<TScheme> handler = (ISchemeServiceHandler<TScheme>)handlerObj;
+            var handler = (ISchemeServiceHandler<TScheme>)handlerObj;
             return handler;
         }
     }

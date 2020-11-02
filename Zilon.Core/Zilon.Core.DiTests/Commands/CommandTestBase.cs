@@ -1,5 +1,11 @@
 ﻿using System;
-using System.Threading.Tasks;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
@@ -11,6 +17,7 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
 
@@ -23,7 +30,7 @@ namespace Zilon.Core.Tests.Commands
         protected IServiceProvider ServiceProvider { get; set; }
 
         [SetUp]
-        public async Task SetUpAsync()
+        public async System.Threading.Tasks.Task SetUpAsync()
         {
             Container = new ServiceCollection();
 
@@ -42,18 +49,19 @@ namespace Zilon.Core.Tests.Commands
             var player = playerMock.Object;
             Container.AddSingleton(player);
 
-            ITacticalAct simpleAct = CreateSimpleAct();
-            ITacticalAct cooldownAct = CreateActWithCooldown();
-            ITacticalAct cooldownResolvedAct = CreateActWithResolvedCooldown();
+            var simpleAct = CreateSimpleAct();
+            var cooldownAct = CreateActWithCooldown();
+            var cooldownResolvedAct = CreateActWithResolvedCooldown();
 
             var combatActModuleMock = new Mock<ICombatActModule>();
             combatActModuleMock.Setup(x => x.CalcCombatActs())
-                .Returns(new[] {simpleAct, cooldownAct, cooldownResolvedAct});
+                .Returns(new[] { simpleAct, cooldownAct, cooldownResolvedAct });
             var combatActModule = combatActModuleMock.Object;
 
             var equipmentCarrierMock = new Mock<IEquipmentModule>();
-            equipmentCarrierMock.SetupGet(x => x.Slots)
-                .Returns(new[] {new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}});
+            equipmentCarrierMock.SetupGet(x => x.Slots).Returns(new[] { new PersonSlotSubScheme {
+                Types = EquipmentSlotTypes.Hand
+            } });
             var equipmentCarrier = equipmentCarrierMock.Object;
 
             var personMock = new Mock<IPerson>();
@@ -99,7 +107,7 @@ namespace Zilon.Core.Tests.Commands
         private static ITacticalAct CreateSimpleAct()
         {
             var actMock = new Mock<ITacticalAct>();
-            TestTacticalActStatsSubScheme actStatScheme = new TestTacticalActStatsSubScheme
+            var actStatScheme = new TestTacticalActStatsSubScheme
             {
                 Range = new Range<int>(1, 2)
             };
@@ -111,7 +119,7 @@ namespace Zilon.Core.Tests.Commands
         private static ITacticalAct CreateActWithCooldown()
         {
             var actMock = new Mock<ITacticalAct>();
-            TestTacticalActStatsSubScheme actStatScheme = new TestTacticalActStatsSubScheme
+            var actStatScheme = new TestTacticalActStatsSubScheme
             {
                 Range = new Range<int>(1, 2)
             };
@@ -124,7 +132,7 @@ namespace Zilon.Core.Tests.Commands
         private static ITacticalAct CreateActWithResolvedCooldown()
         {
             var actMock = new Mock<ITacticalAct>();
-            TestTacticalActStatsSubScheme actStatScheme = new TestTacticalActStatsSubScheme
+            var actStatScheme = new TestTacticalActStatsSubScheme
             {
                 Range = new Range<int>(1, 2)
             };

@@ -1,14 +1,17 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
     /// <summary>
-    ///     Вспомогательный класс для генератора комнат.
+    /// Вспомогательный класс для генератора комнат.
     /// </summary>
     public static class RoomHelper
     {
         /// <summary>
-        ///     Рассчитывает размер ячейки, в которую можно разместить любую комнату.
+        /// Рассчитывает размер ячейки, в которую можно разместить любую комнату.
         /// </summary>
         /// <param name="rooms"> Сгенерированные комнаты. </param>
         /// <returns> Размер ячейки комнаты. </returns>
@@ -21,7 +24,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         /// <summary>
-        ///     Возвращает ребро, соединяющее указанные узлы.
+        /// Возвращает ребро, соединяющее указанные узлы.
         /// </summary>
         /// <param name="edgeHash"> Хеш ребер карты. </param>
         /// <param name="node"> Искомый узел. </param>
@@ -55,7 +58,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         /// <summary>
-        ///     Создаёт на карте ребро, соединяющее два узла этой карты.
+        /// Создаёт на карте ребро, соединяющее два узла этой карты.
         /// </summary>
         /// <param name="targetMap"> Целевая карта, для которой нужно создать ребро. </param>
         /// <param name="edgeHash"> Хеш ребер карты. </param>
@@ -96,9 +99,9 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 throw new System.ArgumentNullException(nameof(room));
             }
 
-            HexNode[] neighbors = HexNodeHelper.GetSpatialNeighbors(node, room.Nodes);
+            var neighbors = HexNodeHelper.GetSpatialNeighbors(node, room.Nodes);
 
-            foreach (HexNode neighbor in neighbors)
+            foreach (var neighbor in neighbors)
             {
                 var isExists = IsExistsEdge(edgeHash, node, neighbor);
 
@@ -109,8 +112,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
         }
 
-        public static HexNode CreateCorridorNode(IMap map, HashSet<string> edgeHash, HexNode currentNode, int currentX,
-            int currentY)
+        public static HexNode CreateCorridorNode(IMap map, HashSet<string> edgeHash, HexNode currentNode, int currentX, int currentY)
         {
             if (map is null)
             {
@@ -118,7 +120,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             var node = map.Nodes.OfType<HexNode>()
-                .SingleOrDefault(x => x.OffsetCoords.X == currentX && x.OffsetCoords.Y == currentY);
+                                .SingleOrDefault(x => x.OffsetCoords.X == currentX && x.OffsetCoords.Y == currentY);
 
             if (node == null)
             {

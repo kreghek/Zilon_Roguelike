@@ -1,7 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Zilon.Core.Common;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
@@ -21,17 +26,17 @@ namespace Zilon.Core.Tests.MapGenerators
     public class MonsterGeneratorTests
     {
         /// <summary>
-        ///     Тест проверяет, что если всегда будет выпадать максимальная редкость (2),
-        ///     то слоты всех верхних уровней редкости будут заполнены (10 за редких, 1 чемпион).
+        /// Тест проверяет, что если всегда будет выпадать максимальная редкость (2),
+        /// то слоты всех верхних уровней редкости будут заполнены (10 за редких, 1 чемпион).
         /// </summary>
         [Test]
-        public async Task CreateMonsters_AlwaysMaxRarityRolls_MaxHighRarityMonstersAsync()
+        public async System.Threading.Tasks.Task CreateMonsters_AlwaysMaxRarityRolls_MaxHighRarityMonstersAsync()
         {
-            Dictionary<string, IMonsterScheme> schemeDict = new Dictionary<string, IMonsterScheme>
+            var schemeDict = new Dictionary<string, IMonsterScheme>
             {
-                {"regular", CreateMonsterScheme("regular")},
-                {"rare", CreateMonsterScheme("rare")},
-                {"champion", CreateMonsterScheme("champion")}
+                { "regular", CreateMonsterScheme("regular") },
+                { "rare", CreateMonsterScheme("rare") },
+                { "champion", CreateMonsterScheme("champion") }
             };
 
             var schemeServiceMock = new Mock<ISchemeService>();
@@ -39,14 +44,14 @@ namespace Zilon.Core.Tests.MapGenerators
                 .Returns<string>(sid => schemeDict[sid]);
             var schemeService = schemeServiceMock.Object;
 
-            LinearDice dice = new LinearDice(3121);
+            var dice = new LinearDice(3121);
             var randomSourceMock = new Mock<MonsterGeneratorRandomSource>(dice).As<IMonsterGeneratorRandomSource>();
             randomSourceMock.CallBase = true;
             randomSourceMock.Setup(x => x.RollRarity()).Returns(2);
             randomSourceMock.Setup(x => x.RollRegionCount(It.IsAny<int>(), It.IsAny<int>())).Returns(20);
             var randomSource = randomSourceMock.Object;
 
-            List<IActor> actorList = new List<IActor>();
+            var actorList = new List<IActor>();
             var actorManagerMock = new Mock<IActorManager>();
             actorManagerMock.Setup(x => x.Add(It.IsAny<IActor>())).Callback<IActor>(a => actorList.Add(a));
             actorManagerMock.SetupGet(x => x.Items).Returns(actorList);
@@ -54,14 +59,14 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var propContainerManagerMock = new Mock<IStaticObjectManager>();
             var propContainerManager = propContainerManagerMock.Object;
-            propContainerManagerMock.SetupGet(x => x.Items).Returns(Array.Empty<IStaticObject>());
+            propContainerManagerMock.SetupGet(x => x.Items).Returns(System.Array.Empty<IStaticObject>());
 
             var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
             var taskSource = taskSourceMock.Object;
 
-            MonsterPersonFactory monsterFactory = new MonsterPersonFactory();
+            var monsterFactory = new MonsterPersonFactory();
 
-            MonsterGenerator monsterGenerator = new MonsterGenerator(schemeService,
+            var monsterGenerator = new MonsterGenerator(schemeService,
                 monsterFactory,
                 randomSource,
                 taskSource);
@@ -69,19 +74,21 @@ namespace Zilon.Core.Tests.MapGenerators
             var map = await SquareMapFactory.CreateAsync(20).ConfigureAwait(false);
 
             var sectorMock = new Mock<ISector>();
-            Dictionary<IActor, IPatrolRoute> patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
+            var patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
             sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);
             sectorMock.SetupGet(x => x.ActorManager).Returns(actorManager);
             sectorMock.SetupGet(x => x.StaticObjectManager).Returns(propContainerManager);
             var sector = sectorMock.Object;
 
-            List<MapRegion> monsterRegions = new List<MapRegion> {new MapRegion(1, map.Nodes.ToArray())};
+            var monsterRegions = new List<MapRegion> {
+                new MapRegion(1, map.Nodes.ToArray())
+            };
 
-            TestSectorSubScheme sectorScheme = new TestSectorSubScheme
+            var sectorScheme = new TestSectorSubScheme
             {
-                RegularMonsterSids = new[] {"regular"},
-                RareMonsterSids = new[] {"rare"},
-                ChampionMonsterSids = new[] {"champion"}
+                RegularMonsterSids = new[] { "regular" },
+                RareMonsterSids = new[] { "rare" },
+                ChampionMonsterSids = new[] { "champion" }
             };
 
             // ACT
@@ -99,9 +106,13 @@ namespace Zilon.Core.Tests.MapGenerators
 
         private IMonsterScheme CreateMonsterScheme(string sid)
         {
-            TestMonsterScheme scheme = new TestMonsterScheme
+            var scheme = new TestMonsterScheme
             {
-                Sid = sid, PrimaryAct = new TestTacticalActStatsSubScheme {Efficient = new Roll(6, 1)}
+                Sid = sid,
+                PrimaryAct = new TestTacticalActStatsSubScheme
+                {
+                    Efficient = new Core.Common.Roll(6, 1)
+                }
             };
             return scheme;
         }

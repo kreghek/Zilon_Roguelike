@@ -1,16 +1,20 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MassSectorGenerator.SectorValidators
 {
     /// <summary>
-    ///     Валидатор контейнеров в секторе.
+    /// Валидатор контейнеров в секторе.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
         "CA1812:Avoid uninstantiated internal classes",
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
-    internal class ChestValidator : ISectorValidator
+    class ChestValidator : ISectorValidator
     {
         public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {
@@ -18,12 +22,12 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
             {
                 // Сундуки не должны генерироваться на узлы, которые являются препятствием.
                 // Сундуки не должны генерироваться на узлы с выходом.
-                IStaticObjectManager staticObjectManager = sector.StaticObjectManager;
+                var staticObjectManager = sector.StaticObjectManager;
                 var allContainers = staticObjectManager.Items;
                 var allContainerNodes = allContainers.Select(x => x.Node).ToArray();
                 foreach (var container in allContainers)
                 {
-                    HexNode hex = (HexNode)container.Node;
+                    var hex = (HexNode)container.Node;
 
                     ValidateTransitionOverlap(sector, container);
 
@@ -33,7 +37,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         }
 
         /// <summary>
-        ///     Проверяем, что сундук не на клетке с выходом.
+        /// Проверяем, что сундук не на клетке с выходом.
         /// </summary>
         private static void ValidateTransitionOverlap(ISector sector, IStaticObject container)
         {
@@ -46,7 +50,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         }
 
         /// <summary>
-        ///     Проверяем, что к сундуку есть подход.
+        /// Проверяем, что к сундуку есть подход.
         /// </summary>
         private static void ValidatePassability(
             HexNode currentContainerHex,
@@ -57,7 +61,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
             var hasFreeNeighbor = false;
             foreach (var neighborNode in neighborNodes)
             {
-                HexNode neighborHex = (HexNode)neighborNode;
+                var neighborHex = (HexNode)neighborNode;
 
                 var isContainer = allContainerNodes.Contains(neighborHex);
 

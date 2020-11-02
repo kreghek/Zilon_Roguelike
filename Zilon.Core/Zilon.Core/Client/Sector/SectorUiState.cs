@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client
@@ -7,7 +9,7 @@ namespace Zilon.Core.Client
     {
         private IActorViewModel _activeActor;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IActorViewModel ActiveActor
         {
             get => _activeActor;
@@ -18,13 +20,12 @@ namespace Zilon.Core.Client
             }
         }
 
-        /// <inheritdoc />
-        public IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource =>
-            ActiveActor?.Actor?.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>;
+        /// <inheritdoc/>
+        public IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource { get => ActiveActor?.Actor?.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>; }
 
         public event EventHandler ActiveActorChanged;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public ITacticalAct TacticalAct { get; set; }
     }
 }

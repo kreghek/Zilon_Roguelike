@@ -1,4 +1,13 @@
 ﻿using System;
+
+using FluentAssertions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
@@ -13,7 +22,7 @@ namespace Zilon.Core.Tests.Commands
     public class UseSelfCommandTests : CommandTestBase
     {
         /// <summary>
-        ///     Тест проверяет, что можно использовать предмет, если есть информация об использовании.
+        /// Тест проверяет, что можно использовать предмет, если есть информация об использовании.
         /// </summary>
         [Test]
         public void CanExecuteTest()
@@ -29,15 +38,14 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        ///     Тест проверяет, что при выполнении команды корректно фисируется намерение игрока использование предмета.
+        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока использование предмета.
         /// </summary>
         [Test]
         public void Execute_CanUse_UsageIntended()
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<UseSelfCommand>();
-            var humanTaskSourceMock =
-                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
@@ -48,22 +56,25 @@ namespace Zilon.Core.Tests.Commands
             var selectedProp = inventoryState.SelectedProp.Prop;
 
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
-                    CheckUsePropIntention(intention, playerState, selectedProp)
-                ),
-                It.IsAny<IActor>()));
+                CheckUsePropIntention(intention, playerState, selectedProp)
+            ),
+            It.IsAny<IActor>()));
         }
 
         private static bool CheckUsePropIntention(IIntention intention, ISectorUiState playerState, IProp usedProp)
         {
-            Intention<UsePropTask> usePropIntention = (Intention<UsePropTask>)intention;
+            var usePropIntention = (Intention<UsePropTask>)intention;
             var usePropTask = usePropIntention.TaskFactory(playerState.ActiveActor.Actor);
             return usePropTask.UsedProp == usedProp;
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
-            TestPropScheme propScheme = new TestPropScheme {Use = new TestPropUseSubScheme()};
-            Resource usableResource = new Resource(propScheme, 1);
+            var propScheme = new TestPropScheme
+            {
+                Use = new TestPropUseSubScheme()
+            };
+            var usableResource = new Resource(propScheme, 1);
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();
             equipmentViewModelMock.SetupGet(x => x.Prop).Returns(usableResource);

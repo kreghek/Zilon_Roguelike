@@ -1,4 +1,8 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Diseases;
 using Zilon.Core.Localization;
 
@@ -49,7 +53,7 @@ namespace Zilon.Core.MapGenerators
                         subject = _dice.RollFromList(DiseaseNames.Subject);
                     }
 
-                    DiseaseName diseaseName = new DiseaseName(primaryName, prefix, secondary, subject);
+                    var diseaseName = new DiseaseName(primaryName, prefix, secondary, subject);
 
                     // Проверяем, была ли уже такая болезнь.
 
@@ -64,7 +68,7 @@ namespace Zilon.Core.MapGenerators
 
                     var progressSpeed = RollDiseaseProgressSpeed();
 
-                    Disease disease = new Disease(diseaseName, rolledSymptoms, progressSpeed);
+                    var disease = new Disease(diseaseName, rolledSymptoms, progressSpeed);
 
                     _usedDiseases.Add(diseaseName);
 
@@ -74,8 +78,10 @@ namespace Zilon.Core.MapGenerators
                 // Не удалось сгенерировать уникальное имя. Значит вообще не генерируем болезнь.
                 return null;
             }
-
-            return null;
+            else
+            {
+                return null;
+            }
         }
 
         private IEnumerable<DiseaseSymptom> RolledSymptoms()

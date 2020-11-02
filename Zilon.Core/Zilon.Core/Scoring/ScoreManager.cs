@@ -1,11 +1,13 @@
-﻿using Zilon.Core.Persons;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Scoring
 {
     /// <summary>
-    ///     Реализация менеджера подсчёта очков.
+    /// Реализация менеджера подсчёта очков.
     /// </summary>
     /// <seealso cref="IScoreManager" />
     public class ScoreManager : IScoreManager
@@ -18,24 +20,20 @@ namespace Zilon.Core.Scoring
             Scores = new Scores();
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public int BaseScores { get => Scores.BaseScores; private set => Scores.BaseScores = value; }
 
-        /// <inheritdoc />
-        public IDictionary<IMonsterScheme, int> Frags => Scores.Frags;
+        /// <inheritdoc/>
+        public IDictionary<IMonsterScheme, int> Frags { get => Scores.Frags; }
 
-        /// <inheritdoc />
-        public IDictionary<ILocationScheme, int> PlaceTypes => Scores.PlaceTypes;
+        /// <inheritdoc/>
+        public IDictionary<ILocationScheme, int> PlaceTypes { get => Scores.PlaceTypes; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public int Turns { get => Scores.Turns; set => Scores.Turns = value; }
 
-        /// <inheritdoc />
-        public ScoreAchievements Achievements
-        {
-            get => Scores.Achievements;
-            private set => Scores.Achievements = value;
-        }
+        /// <inheritdoc/>
+        public ScoreAchievements Achievements { get => Scores.Achievements; private set => Scores.Achievements = value; }
 
         public void CountHome()
         {
@@ -52,7 +50,7 @@ namespace Zilon.Core.Scoring
                 throw new System.ArgumentNullException(nameof(monster));
             }
 
-            IMonsterScheme monsterScheme = monster.Scheme;
+            var monsterScheme = monster.Scheme;
 
             var score = monsterScheme.BaseScore;
             if (score == 0)

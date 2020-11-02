@@ -11,7 +11,7 @@ namespace Zilon.Core.ProgressStoring
                 throw new System.ArgumentNullException(nameof(humanPlayer));
             }
 
-            HumanPlayerStorageData storageData = new HumanPlayerStorageData();
+            var storageData = new HumanPlayerStorageData();
             return storageData;
         }
 

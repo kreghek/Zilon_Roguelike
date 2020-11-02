@@ -1,4 +1,6 @@
-﻿namespace Zilon.Bot.Players
+﻿using System;
+
+namespace Zilon.Bot.Players
 {
     public class LogicTransition
     {

@@ -1,12 +1,18 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+
+using Newtonsoft.Json;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Persons
 {
     public class AttackActorJobProgress : IJobProgress
     {
-        private readonly ITacticalAct _tacticalAct;
         private readonly IActor _targetActor;
+        private readonly ITacticalAct _tacticalAct;
 
         public AttackActorJobProgress(IActor targetActor, ITacticalAct tacticalAct)
         {
@@ -142,7 +148,7 @@ namespace Zilon.Core.Persons
 
         private static bool ActorHasTag(string tag, IActor targetActor)
         {
-            IMonsterScheme monsterPersonScheme = GetPersonScheme(targetActor);
+            var monsterPersonScheme = GetPersonScheme(targetActor);
 
             if (monsterPersonScheme is null)
             {
@@ -174,7 +180,7 @@ namespace Zilon.Core.Persons
 
         private static IMonsterScheme GetPersonScheme(IActor targetActor)
         {
-            MonsterPerson monsterPerson = targetActor.Person as MonsterPerson;
+            var monsterPerson = targetActor.Person as MonsterPerson;
             return monsterPerson?.Scheme;
         }
 

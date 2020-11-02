@@ -1,10 +1,12 @@
-﻿using Zilon.Core.Graphs;
+﻿using JetBrains.Annotations;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
-    ///     Намерение на перемещние актёра.
+    /// Намерение на перемещние актёра.
     /// </summary>
     public class MoveIntention : IIntention
     {
@@ -25,21 +27,23 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private MoveTask CreateTaskInner(IActor actor)
         {
-            ActorTaskContext taskContext = new ActorTaskContext(_sector);
+            var taskContext = new ActorTaskContext(_sector);
 
             return CreateMoveTask(actor, taskContext);
         }
 
         private MoveTask CreateMoveTask(IActor actor, ActorTaskContext taskContext)
         {
-            IMovingModule movingModule = actor.Person.GetModuleSafe<IMovingModule>();
+            var movingModule = actor.Person.GetModuleSafe<IMovingModule>();
             if (movingModule is null)
             {
                 return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map);
             }
-
-            var moveCost = movingModule.CalculateCost();
-            return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map, moveCost);
+            else
+            {
+                var moveCost = movingModule.CalculateCost();
+                return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map, moveCost);
+            }
         }
     }
 }

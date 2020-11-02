@@ -1,4 +1,9 @@
-﻿using Zilon.Core.Client;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
 using Zilon.Core.Players;
@@ -9,32 +14,29 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Commands
 {
     /// <summary>
-    ///     Команда на перемещение взвода в указанный узел карты.
+    /// Команда на перемещение взвода в указанный узел карты.
     /// </summary>
     public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
         private readonly IPlayer _player;
 
         /// <summary>
-        ///     Конструктор на создание команды перемещения.
+        /// Текущий путь, по которому будет перемещаться персонаж.
         /// </summary>
-        /// <param name="gameLoop">
-        ///     Игровой цикл.
-        ///     Нужен для того, чтобы команда выполнила обновление игрового цикла
-        ///     после завершения перемещения персонажа.
-        /// </param>
-        /// <param name="sectorManager">
-        ///     Менеджер сектора.
-        ///     Нужен для получения информации о секторе.
-        /// </param>
-        /// <param name="playerState">
-        ///     Состояние игрока.
-        ///     Нужен для получения информации о текущем состоянии игрока.
-        /// </param>
-        /// <param name="actorManager">
-        ///     Менеджер актёров.
-        ///     Нужен для отслеживания противников при автоперемещении.
-        /// </param>
+        public IList<IGraphNode> Path { get; }
+
+        /// <summary>
+        /// Конструктор на создание команды перемещения.
+        /// </summary>
+        /// <param name="gameLoop"> Игровой цикл.
+        /// Нужен для того, чтобы команда выполнила обновление игрового цикла
+        /// после завершения перемещения персонажа. </param>
+        /// <param name="sectorManager"> Менеджер сектора.
+        /// Нужен для получения информации о секторе. </param>
+        /// <param name="playerState"> Состояние игрока.
+        /// Нужен для получения информации о текущем состоянии игрока. </param>
+        /// <param name="actorManager"> Менеджер актёров.
+        /// Нужен для отслеживания противников при автоперемещении. </param>
         [ExcludeFromCodeCoverage]
         public MoveCommand(
             IPlayer player,
@@ -52,17 +54,12 @@ namespace Zilon.Core.Commands
         }
 
         /// <summary>
-        ///     Текущий путь, по которому будет перемещаться персонаж.
-        /// </summary>
-        public IList<IGraphNode> Path { get; }
-
-        /// <summary>
-        ///     Определяем, может ли команда выполниться.
+        /// Определяем, может ли команда выполниться.
         /// </summary>
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
         public override bool CanExecute()
         {
-            IMapNodeViewModel nodeViewModel = GetHoverNodeViewModel();
+            var nodeViewModel = GetHoverNodeViewModel();
             if (nodeViewModel == null)
             {
                 return false;
@@ -78,7 +75,7 @@ namespace Zilon.Core.Commands
         }
 
         /// <summary>
-        ///     Проверяет, может ли команда совершить очередное перемещение по уже найденному пути.
+        /// Проверяет, может ли команда совершить очередное перемещение по уже найденному пути.
         /// </summary>
         /// <returns> Возвращает true, если команду можно повторить. </returns>
         public bool CanRepeat()
@@ -88,24 +85,23 @@ namespace Zilon.Core.Commands
         }
 
         /// <summary>
-        ///     Выполнение команды на перемещение и обновление игрового цикла.
+        /// Выполнение команды на перемещение и обновление игрового цикла.
         /// </summary>
         protected override void ExecuteTacticCommand()
         {
-            IMapNodeViewModel selectedNodeVm = GetSelectedNodeViewModel();
+            var selectedNodeVm = GetSelectedNodeViewModel();
             if (selectedNodeVm == null)
             {
-                throw new InvalidOperationException(
-                    "Невозможно выполнить команду на перемещение, если не указан целевой узел.");
+                throw new InvalidOperationException("Невозможно выполнить команду на перемещение, если не указан целевой узел.");
             }
 
             CreatePath(selectedNodeVm);
 
-            HexNode targetNode = selectedNodeVm.Node;
+            var targetNode = selectedNodeVm.Node;
 
-            ISector currentSector = _player.SectorNode.Sector;
+            var currentSector = _player.SectorNode.Sector;
 
-            MoveIntention moveIntetion = new MoveIntention(targetNode, currentSector);
+            var moveIntetion = new MoveIntention(targetNode, currentSector);
             PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
         }
 
@@ -121,7 +117,7 @@ namespace Zilon.Core.Commands
 
         private bool CanExecuteForSelected()
         {
-            IMapNodeViewModel nodeViewModel = GetSelectedNodeViewModel();
+            var nodeViewModel = GetSelectedNodeViewModel();
             if (nodeViewModel is null)
             {
                 return false;
@@ -140,10 +136,10 @@ namespace Zilon.Core.Commands
 
         private void CreatePath(IMapNodeViewModel targetNode)
         {
-            IActor actor = PlayerState.ActiveActor.Actor;
-            IGraphNode startNode = actor.Node;
-            HexNode finishNode = targetNode.Node;
-            ISectorMap map = _player.SectorNode.Sector.Map;
+            var actor = PlayerState.ActiveActor.Actor;
+            var startNode = actor.Node;
+            var finishNode = targetNode.Node;
+            var map = _player.SectorNode.Sector.Map;
 
             Path.Clear();
 
@@ -152,10 +148,10 @@ namespace Zilon.Core.Commands
                 return;
             }
 
-            ActorPathFindingContext context = new ActorPathFindingContext(actor, map, finishNode);
+            var context = new ActorPathFindingContext(actor, map, finishNode);
 
-            AStar astar = new AStar(context, startNode, finishNode);
-            State resultState = astar.Run();
+            var astar = new AStar(context, startNode, finishNode);
+            var resultState = astar.Run();
             if (resultState != State.GoalFound)
             {
                 return;
@@ -175,7 +171,7 @@ namespace Zilon.Core.Commands
 
         private bool CheckEnemies()
         {
-            IActor actor = PlayerState.ActiveActor.Actor;
+            var actor = PlayerState.ActiveActor.Actor;
             var enemies = _player.SectorNode.Sector.ActorManager.Items
                 .Where(x => x != actor && x.Person.Fraction != actor.Person.Fraction).ToArray();
 

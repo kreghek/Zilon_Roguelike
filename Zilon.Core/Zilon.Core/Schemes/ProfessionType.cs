@@ -1,7 +1,9 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
-    ///     Доступные крафтовые компетенции.
+    /// Доступные крафтовые компетенции.
     /// </summary>
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum ProfessionType

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+
+using Zilon.Core.Common;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
 
@@ -6,8 +8,8 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public sealed class ToolMineDepositMethod : IMineDepositMethod
     {
-        private readonly IMineDepositMethodRandomSource _mineDepositMethodRandomSource;
         private readonly Equipment _tool;
+        private readonly IMineDepositMethodRandomSource _mineDepositMethodRandomSource;
 
         public ToolMineDepositMethod(Equipment tool, IMineDepositMethodRandomSource mineDepositMethodRandomSource)
         {
@@ -36,8 +38,10 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 return new SuccessMineDepositResult();
             }
-
-            return new FailureMineDepositResult();
+            else
+            {
+                return new FailureMineDepositResult();
+            }
         }
     }
 }

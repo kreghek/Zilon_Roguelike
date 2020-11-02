@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Common;
+﻿using NUnit.Framework;
+
+using Zilon.Core.Common;
 
 namespace Zilon.Core.Tests.Common
 {
@@ -7,18 +9,20 @@ namespace Zilon.Core.Tests.Common
     public class RangeExtensionsTests
     {
         /// <summary>
-        ///     This is the range being checked.
+        /// This is the range being checked.
         /// </summary>
         [TestCase(-2, 2, 1, ExpectedResult = 1)]
         [TestCase(-2, 2, -2, ExpectedResult = -2)]
         public int GetBounded_ValueInsideRange_ValueHaventBeCorrected(int min, int max, int value)
         {
             // ARRANGE
-            Range<int> range = new Range<int>(min, max);
+            var range = new Range<int>(min, max);
+
 
 
             // ACT
-            int factValue = range.GetBounded(value);
+            var factValue = range.GetBounded(value);
+
 
 
             // ASSERT
@@ -26,7 +30,7 @@ namespace Zilon.Core.Tests.Common
         }
 
         /// <summary>
-        ///     This is the range being checked.
+        /// This is the range being checked.
         /// </summary>
         [TestCase(-2, 2, 3, ExpectedResult = 2)]
         [TestCase(-2, 2, -3, ExpectedResult = -2)]
@@ -34,11 +38,13 @@ namespace Zilon.Core.Tests.Common
         public int ValueSetter_ValueOutsideRange_ValueShiftedIntoRange(int min, int max, int value)
         {
             // ARRANGE
-            Range<int> range = new Range<int>(min, max);
+            var range = new Range<int>(min, max);
+
 
 
             // ACT
-            int factValue = range.GetBounded(value);
+            var factValue = range.GetBounded(value);
+
 
 
             // ASSERT

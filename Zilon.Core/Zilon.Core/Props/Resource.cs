@@ -1,10 +1,15 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Props
 {
     public sealed class Resource : PropBase
     {
         private int _count;
+
+        public event EventHandler<EventArgs> Changed;
 
         [ExcludeFromCodeCoverage]
         public Resource(IPropScheme scheme, int count) : base(scheme)
@@ -18,7 +23,7 @@ namespace Zilon.Core.Props
         }
 
         /// <summary>
-        ///     Количество единиц ресурса.
+        /// Количество единиц ресурса.
         /// </summary>
         public int Count
         {
@@ -35,8 +40,6 @@ namespace Zilon.Core.Props
             }
         }
 
-        public event EventHandler<EventArgs> Changed;
-
         [ExcludeFromCodeCoverage]
         private void DoChange()
         {
@@ -44,13 +47,13 @@ namespace Zilon.Core.Props
         }
 
         /// <summary>
-        ///     Разделяет текущий сток ресурсов и формирует новый экземпляр с указанным количеством.
+        /// Разделяет текущий сток ресурсов и формирует новый экземпляр с указанным количеством.
         /// </summary>
         /// <param name="count"> Коичество единиц ресурса в новой куче. </param>
         /// <returns> Экземпляр отделённой кучи ресурсов. </returns>
         public Resource CreateHeap(int count)
         {
-            Resource resource2 = new Resource(Scheme, count);
+            var resource2 = new Resource(Scheme, count);
             Count -= count;
             return resource2;
         }

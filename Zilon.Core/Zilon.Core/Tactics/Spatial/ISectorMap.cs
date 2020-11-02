@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Graphs;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics.Spatial
@@ -8,7 +10,7 @@ namespace Zilon.Core.Tactics.Spatial
         Dictionary<IGraphNode, RoomTransition> Transitions { get; }
 
         /// <summary>
-        ///     Проверяет, доступен ли целевой узел из стартового узла.
+        /// Проверяет, доступен ли целевой узел из стартового узла.
         /// </summary>
         /// <param name="currentNode">Стартовый узел.</param>
         /// <param name="targetNode">Целевой проверяемый узел.</param>

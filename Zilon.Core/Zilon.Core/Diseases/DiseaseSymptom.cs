@@ -3,7 +3,7 @@
 namespace Zilon.Core.Diseases
 {
     /// <summary>
-    ///     Общее описание симптома.
+    /// Общее описание симптома.
     /// </summary>
     public class DiseaseSymptom
     {

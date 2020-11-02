@@ -1,6 +1,9 @@
 ﻿using System.Data;
 using System.Data.Common;
+using System.Data.SQLite;
 using System.IO;
+using System.Linq;
+
 using Zilon.Core.Scoring;
 
 namespace Zilon.BotEnvironment
@@ -17,8 +20,8 @@ namespace Zilon.BotEnvironment
         {
             var fragSum = scoreManager.Frags.Sum(x => x.Value);
 
-            string baseName = "BotScores.db3";
-            string dbPath = Path.Combine(scorePath, baseName);
+            var baseName = "BotScores.db3";
+            var dbPath = Path.Combine(scorePath, baseName);
             if (!File.Exists(dbPath))
             {
                 SQLiteConnection.CreateFile(dbPath);
@@ -36,8 +39,7 @@ namespace Zilon.BotEnvironment
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText =
-                        $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
+                    command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
                     VALUES ('{botName}', '{scoreFilePreffix}', '{mode}', {scoreManager.BaseScores}, {scoreManager.Turns}, {fragSum}, '{textSummary}')";
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
@@ -47,7 +49,7 @@ namespace Zilon.BotEnvironment
 
         private static void CreateScoresTableIfNotExists(DbConnection connection)
         {
-            using (DbCommand command = connection.CreateCommand())
+            using (var command = connection.CreateCommand())
             {
                 command.CommandText = @"CREATE TABLE IF NOT EXISTS [Scores](
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,7 +69,7 @@ namespace Zilon.BotEnvironment
 
         private static void CreatMeasuresViewIfNotExists(DbConnection connection)
         {
-            using (DbCommand command = connection.CreateCommand())
+            using (var command = connection.CreateCommand())
             {
                 command.CommandText = @"CREATE VIEW IF NOT EXISTS [v_Measures] ([Name]
                             ,[Preffix]

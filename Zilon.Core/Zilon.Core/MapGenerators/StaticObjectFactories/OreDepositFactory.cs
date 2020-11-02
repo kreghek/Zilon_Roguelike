@@ -8,12 +8,11 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
     {
         public OreDepositFactory(
             ISchemeService schemeService,
-            IDropResolver dropResolver) : base(toolTags: new[] {"pick-axe"}, dropTableSchemeSid: "ore-deposit",
-            PropContainerPurpose.OreDeposits, schemeService, dropResolver)
+            IDropResolver dropResolver) : base(toolTags: new[] { "pick-axe" }, dropTableSchemeSid: "ore-deposit", PropContainerPurpose.OreDeposits, schemeService, dropResolver)
         {
         }
 
-        protected override int ExhausingValue => 10;
-        protected override DepositMiningDifficulty Difficulty => DepositMiningDifficulty.Moderately;
+        protected override int ExhausingValue { get => 10; }
+        protected override DepositMiningDifficulty Difficulty { get => DepositMiningDifficulty.Moderately; }
     }
 }

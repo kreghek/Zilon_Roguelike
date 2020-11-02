@@ -52,28 +52,3 @@ jobs:
           add: "*.cs"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  # Set the job key. The key is displayed as the job name
-  # when a job name is not provided
-  resharper-core-lint:
-    # Name the Job
-    name: Lint core code base
-    # Set the type of machine to run on
-    runs-on: ubuntu-latest
-    env:
-      working-directory : ./Zilon.Core/
-
-    steps:
-      - uses: actions/checkout@v2
-      - run: git pull
-      - name: Setup ReSharper Command Line Tools
-        run: dotnet tool install -g JetBrains.ReSharper.GlobalTools
-      - name: Clean up code
-        run: jb cleanupcode Zilon.Core.sln
-        working-directory: ${{env.working-directory}}
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v5
-        with:
-          message: "[Bot] Automated ReSharper update"
-          add: "*.cs"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

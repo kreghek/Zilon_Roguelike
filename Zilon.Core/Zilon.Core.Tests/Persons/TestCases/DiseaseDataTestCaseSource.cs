@@ -1,4 +1,7 @@
 ﻿using System.Collections;
+
+using NUnit.Framework;
+
 using Zilon.Core.Diseases;
 
 namespace Zilon.Core.Tests.Persons.TestCases
@@ -14,15 +17,20 @@ namespace Zilon.Core.Tests.Persons.TestCases
             }
         }
 
-        private static DiseaseSymptom[] Single =>
-            new[] {new DiseaseSymptom {Rule = DiseaseSymptomType.BreathDownSpeed}};
-
-        private static DiseaseSymptom[] Multiple =>
-            new[]
-            {
-                new DiseaseSymptom {Rule = DiseaseSymptomType.BreathDownSpeed},
-                new DiseaseSymptom {Rule = DiseaseSymptomType.EnegryDownSpeed},
-                new DiseaseSymptom {Rule = DiseaseSymptomType.HealthLimit}
+        private static DiseaseSymptom[] Single
+        {
+            get => new[] {
+                new DiseaseSymptom { Rule = DiseaseSymptomType.BreathDownSpeed }
             };
+        }
+
+        private static DiseaseSymptom[] Multiple
+        {
+            get => new[] {
+                new DiseaseSymptom { Rule = DiseaseSymptomType.BreathDownSpeed },
+                new DiseaseSymptom { Rule = DiseaseSymptomType.EnegryDownSpeed },
+                new DiseaseSymptom { Rule = DiseaseSymptomType.HealthLimit },
+            };
+        }
     }
 }

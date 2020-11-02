@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics;
+﻿using NUnit.Framework;
+
+using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Tactics.Base;
 
 namespace Zilon.Core.Tests.Tactics
@@ -9,7 +11,7 @@ namespace Zilon.Core.Tests.Tactics
     {
         protected override ISectorEntityManager<IActor> CreateManager()
         {
-            ActorManager actorManager = new ActorManager();
+            var actorManager = new ActorManager();
             return actorManager;
         }
     }

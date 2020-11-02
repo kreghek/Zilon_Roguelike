@@ -1,4 +1,6 @@
-﻿namespace Zilon.Bot.Players.Strategies
+﻿using System;
+
+namespace Zilon.Bot.Players.Strategies
 {
     public sealed class LogicStateTrack
     {

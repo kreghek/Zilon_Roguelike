@@ -1,16 +1,17 @@
-﻿using Zilon.Core.World;
+﻿using Zilon.Core.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
     /// <summary>
-    ///     Селектор фабрики карт на основе одной единственной фабрики карт.
+    /// Селектор фабрики карт на основе одной единственной фабрики карт.
     /// </summary>
     public class SingleMapFactorySelector : IMapFactorySelector
     {
         private readonly IMapFactory _mapFactory;
 
         /// <summary>
-        ///     Конструктор селектора.
+        /// Конструктор селектора.
         /// </summary>
         /// <param name="mapFactory"> Фабрика карт, которая всегда будет возвращена при запросе. </param>
         public SingleMapFactorySelector(IMapFactory mapFactory)
@@ -18,7 +19,7 @@ namespace Zilon.Core.MapGenerators
             _mapFactory = mapFactory ?? throw new System.ArgumentNullException(nameof(mapFactory));
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IMapFactory GetMapFactory(ISectorNode sectorNode)
         {
             return _mapFactory;

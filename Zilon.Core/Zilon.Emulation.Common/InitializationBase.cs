@@ -1,4 +1,9 @@
-﻿using Zilon.Bot.Players;
+﻿using System;
+using System.Linq;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
@@ -22,6 +27,8 @@ namespace Zilon.Emulation.Common
 {
     public abstract class InitializationBase
     {
+        public int? DiceSeed { get; set; }
+
         protected InitializationBase()
         {
         }
@@ -30,8 +37,6 @@ namespace Zilon.Emulation.Common
         {
             DiceSeed = diceSeed;
         }
-
-        public int? DiceSeed { get; set; }
 
         public virtual void RegisterServices(IServiceCollection serviceCollection)
         {
@@ -66,11 +71,9 @@ namespace Zilon.Emulation.Common
                 var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
                 var monsterFactory = serviceProvider.GetRequiredService<IMonsterPersonFactory>();
                 var randomSource = serviceProvider.GetRequiredService<IMonsterGeneratorRandomSource>();
-                var actorTaskSource =
-                    serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+                var actorTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
 
-                MonsterGenerator generator =
-                    new MonsterGenerator(schemeService, monsterFactory, randomSource, actorTaskSource);
+                var generator = new MonsterGenerator(schemeService, monsterFactory, randomSource, actorTaskSource);
                 return generator;
             });
             serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
@@ -113,7 +116,7 @@ namespace Zilon.Emulation.Common
                 // Следует их объединить в одном месте.
                 var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
 
-                FileSchemeLocator schemeLocator = new FileSchemeLocator(schemePath);
+                var schemeLocator = new FileSchemeLocator(schemePath);
 
                 return schemeLocator;
             });
@@ -133,7 +136,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IResourceMaterializationMap, ResourceMaterializationMap>();
             RegisterMonsterGeneratorRandomSource(container);
             RegisterChestGeneratorRandomSource(container);
-            container.AddScoped<SectorFactory>(); // TOOD Костфль, чтобы не заполнять конструктор сервиса руками. 
+            container.AddScoped<SectorFactory>();  // TOOD Костфль, чтобы не заполнять конструктор сервиса руками. 
             container.AddScoped<ISectorFactory, SectorFactory>(serviceProvider =>
             {
                 var sectorFactory = serviceProvider.GetRequiredService<SectorFactory>();
@@ -145,8 +148,7 @@ namespace Zilon.Emulation.Common
             container.AddScoped<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
             container.AddScoped<IActorTaskSourceCollector, ActorTaskSourceCollector>(serviceProvider =>
             {
-                var monsterTaskSource =
-                    serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
                 return new ActorTaskSourceCollector(monsterTaskSource);
             });
         }
@@ -157,14 +159,14 @@ namespace Zilon.Emulation.Common
             {
                 var handlers = serviceProvider.GetServices<IActUsageHandler>();
                 var handlersArray = handlers.ToArray();
-                ActUsageHandlerSelector handlerSelector = new ActUsageHandlerSelector(handlersArray);
+                var handlerSelector = new ActUsageHandlerSelector(handlersArray);
                 return handlerSelector;
             });
             container.AddScoped<IActUsageHandler>(serviceProvider =>
             {
                 var perkResolver = serviceProvider.GetRequiredService<IPerkResolver>();
                 var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
-                ActorActUsageHandler handler = new ActorActUsageHandler(perkResolver, randomSource);
+                var handler = new ActorActUsageHandler(perkResolver, randomSource);
                 ConfigurateActorActUsageHandler(serviceProvider, handler);
                 return handler;
             });
@@ -174,8 +176,7 @@ namespace Zilon.Emulation.Common
                 var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
                 var actHandlerSelector = serviceProvider.GetRequiredService<IActUsageHandlerSelector>();
 
-                TacticalActUsageService tacticalActUsageService =
-                    new TacticalActUsageService(randomSource, actHandlerSelector);
+                var tacticalActUsageService = new TacticalActUsageService(randomSource, actHandlerSelector);
 
                 ConfigurateTacticalActUsageService(serviceProvider, tacticalActUsageService);
 
@@ -183,15 +184,13 @@ namespace Zilon.Emulation.Common
             });
         }
 
-        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider,
-            TacticalActUsageService tacticalActUsageService)
+        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider, TacticalActUsageService tacticalActUsageService)
         {
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
         }
 
-        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider,
-            ActorActUsageHandler handler)
+        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider, ActorActUsageHandler handler)
         {
             // Указание необязательных зависимостей
             handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
@@ -204,7 +203,7 @@ namespace Zilon.Emulation.Common
         }
 
         /// <summary>
-        ///     Подготовка дополнительных сервисов
+        /// Подготовка дополнительных сервисов
         /// </summary>
         private void RegisterAuxServices(IServiceCollection container)
         {
@@ -247,13 +246,13 @@ namespace Zilon.Emulation.Common
         {
             var localLinearDice = factory.GetRequiredService<LinearDice>();
             var localRoomSizeDice = factory.GetRequiredService<ExpDice>();
-            RoomGeneratorRandomSource randomSource = new RoomGeneratorRandomSource(localLinearDice, localRoomSizeDice);
+            var randomSource = new RoomGeneratorRandomSource(localLinearDice, localRoomSizeDice);
             return randomSource;
         }
 
         /// <summary>
-        ///     Создаёт кость и фиксирует зерно рандома.
-        ///     Если Зерно рандома не задано, то оно выбирается случайно.
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
         /// </summary>
         /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
         private LinearDice CreateRandomSeedAndLinearDice()
@@ -274,8 +273,8 @@ namespace Zilon.Emulation.Common
         }
 
         /// <summary>
-        ///     Создаёт кость и фиксирует зерно рандома.
-        ///     Если Зерно рандома не задано, то оно выбирается случайно.
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
         /// </summary>
         /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
         private GaussDice CreateRandomSeedAndGaussDice()
@@ -296,8 +295,8 @@ namespace Zilon.Emulation.Common
         }
 
         /// <summary>
-        ///     Создаёт кость и фиксирует зерно рандома.
-        ///     Если Зерно рандома не задано, то оно выбирается случайно.
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
         /// </summary>
         /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
         private ExpDice CreateRandomSeedAndExpDice()

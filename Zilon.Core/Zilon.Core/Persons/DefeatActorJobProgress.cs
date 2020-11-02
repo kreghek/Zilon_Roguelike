@@ -1,10 +1,12 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    ///     Прогресс работы по уничтожению цели.
+    /// Прогресс работы по уничтожению цели.
     /// </summary>
     public class DefeatActorJobProgress : IJobProgress
     {

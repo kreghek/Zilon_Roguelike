@@ -3,7 +3,7 @@
 namespace Zilon.Core.Schemes
 {
     /// <summary>
-    ///     The perk scheme.
+    /// The perk scheme.
     /// </summary>
     public interface IPerkScheme : IScheme
     {

@@ -9,8 +9,6 @@ namespace Zilon.Core.Tests.Common.Schemes
             RegionMonsterCount = 5;
         }
 
-        public SchemeSectorMapGenerator MapGenerator { get; }
-
         public string Sid { get; set; }
         public LocalizedStringSubScheme Name { get; set; }
         public LocalizedStringSubScheme Description { get; set; }
@@ -24,6 +22,7 @@ namespace Zilon.Core.Tests.Common.Schemes
         public bool IsStart { get; set; }
         public int RegionChestCountRatio { get; set; }
         public int MinRegionMonsterCount { get; }
+        public SchemeSectorMapGenerator MapGenerator { get; }
         public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; set; }
 
         public override string ToString()

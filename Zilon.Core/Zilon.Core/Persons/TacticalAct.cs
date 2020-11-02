@@ -1,11 +1,15 @@
-﻿using Zilon.Core.Common;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Common;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    ///     Тактическое действие актёров под управлением игрока.
+    /// Тактическое действие актёров под управлением игрока.
     /// </summary>
     public class TacticalAct : ITacticalAct
     {
@@ -30,34 +34,40 @@ namespace Zilon.Core.Persons
             CurrentCooldown = scheme.Constrains?.Cooldown != null ? 0 : (int?)null;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public ITacticalActStatsSubScheme Stats { get; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public ITacticalActScheme Scheme { get; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public Roll Efficient { get; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public Roll ToHit { get; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public Equipment Equipment { get; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public ITacticalActConstrainsSubScheme Constrains { get; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public int? CurrentCooldown { get; private set; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void StartCooldownIfItIs()
         {
             CurrentCooldown = Constrains?.Cooldown;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{Scheme} [{Equipment}]";
+        }
+
+        /// <inheritdoc/>
         public void UpdateCooldown()
         {
             if (CurrentCooldown is null)
@@ -70,12 +80,6 @@ namespace Zilon.Core.Persons
             {
                 CurrentCooldown--;
             }
-        }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"{Scheme} [{Equipment}]";
         }
     }
 }

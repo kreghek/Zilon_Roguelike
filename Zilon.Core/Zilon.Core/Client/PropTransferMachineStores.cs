@@ -1,17 +1,17 @@
 ﻿namespace Zilon.Core.Client
 {
     /// <summary>
-    ///     Перечисление источников при трансфере предметов.
+    /// Перечисление источников при трансфере предметов.
     /// </summary>
     public enum PropTransferMachineStore
     {
         /// <summary>
-        ///     Инвентарь персонажа.
+        /// Инвентарь персонажа.
         /// </summary>
         Inventory = 1,
 
         /// <summary>
-        ///     Контейнер.
+        /// Контейнер.
         /// </summary>
         Container
     }

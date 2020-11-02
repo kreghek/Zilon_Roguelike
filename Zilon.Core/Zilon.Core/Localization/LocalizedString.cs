@@ -1,14 +1,14 @@
 ﻿namespace Zilon.Core.Localization
 {
     /// <summary>
-    ///     Базовая реализация локализованной стоки.
+    /// Базовая реализация локализованной стоки.
     /// </summary>
     public class LocalizedString : ILocalizedString
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public string En { get; set; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public string Ru { get; set; }
     }
 }

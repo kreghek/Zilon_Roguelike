@@ -1,9 +1,13 @@
 ﻿using System;
-using Zilon.Core.Common;
-using Zilon.Core.Components;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Bot.Players.Logics.Tests
@@ -17,48 +21,46 @@ namespace Zilon.Bot.Players.Logics.Tests
         {
             // ARRANGE
 
-            ITacticalAct[] acts =
-            {
-                new TacticalAct(
-                    new TestTacticalActScheme
-                    {
-                        Sid = "default",
-                        Stats = new TestTacticalActStatsSubScheme
+            var acts = new ITacticalAct[] {
+                new TacticalAct(new TestTacticalActScheme{
+                    Sid = "default",
+                    Stats = new TestTacticalActStatsSubScheme{
+                        Effect = Core.Schemes.TacticalActEffectType.Damage,
+                        Efficient = new Core.Common.Roll(3,1),
+                        Offence = new TestTacticalActOffenceSubScheme
                         {
-                            Effect = TacticalActEffectType.Damage,
-                            Efficient = new Roll(3, 1),
-                            Offence = new TestTacticalActOffenceSubScheme
-                            {
-                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
-                            }
+                            ApRank = 1,
+                            Impact = Core.Common.ImpactType.Kinetic,
+                            Type = Core.Components.OffenseType.Tactical
                         }
-                    },
-                    new Roll(3, 1),
-                    new Roll(3, 3),
-                    null
+                    }
+                },
+                new Core.Common.Roll(3,1),
+                new Core.Common.Roll(3,3),
+                equipment: null
                 ),
-                new TacticalAct(
-                    new TestTacticalActScheme
-                    {
-                        Sid = "resource-required",
-                        Stats = new TestTacticalActStatsSubScheme
+                new TacticalAct(new TestTacticalActScheme{
+                    Sid = "resource-required",
+                    Stats = new TestTacticalActStatsSubScheme{
+                        Effect = Core.Schemes.TacticalActEffectType.Damage,
+                        Efficient = new Core.Common.Roll(3,3),
+                        Offence = new TestTacticalActOffenceSubScheme
                         {
-                            Effect = TacticalActEffectType.Damage,
-                            Efficient = new Roll(3, 3),
-                            Offence = new TestTacticalActOffenceSubScheme
-                            {
-                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
-                            }
-                        },
-                        Constrains = new TestTacticalActConstrainsSubScheme
-                        {
-                            PropResourceType = "resource", PropResourceCount = 1
+                            ApRank = 1,
+                            Impact = Core.Common.ImpactType.Kinetic,
+                            Type = Core.Components.OffenseType.Tactical
                         }
                     },
-                    new Roll(3, 1),
-                    new Roll(3, 3),
-                    null
-                )
+                    Constrains = new TestTacticalActConstrainsSubScheme
+                    {
+                        PropResourceType = "resource",
+                        PropResourceCount = 1
+                    }
+                },
+                new Core.Common.Roll(3,1),
+                new Core.Common.Roll(3,3),
+                equipment: null
+                ),
             };
 
             var inventoryMock = new Mock<IPropStore>();
@@ -66,7 +68,7 @@ namespace Zilon.Bot.Players.Logics.Tests
             var inventory = inventoryMock.Object;
 
             // ACT
-            ITacticalAct factAct = SelectActHelper.SelectBestAct(acts, inventory);
+            var factAct = SelectActHelper.SelectBestAct(acts, inventory);
 
             // ASSERT
             factAct.Scheme.Sid.Should().Be("default");
@@ -77,52 +79,50 @@ namespace Zilon.Bot.Players.Logics.Tests
         {
             // ARRANGE
 
-            ITacticalAct[] acts =
-            {
-                new TacticalAct(
-                    new TestTacticalActScheme
-                    {
-                        Sid = "default",
-                        Stats = new TestTacticalActStatsSubScheme
+            var acts = new ITacticalAct[] {
+                new TacticalAct(new TestTacticalActScheme{
+                    Sid = "default",
+                    Stats = new TestTacticalActStatsSubScheme{
+                        Effect = Core.Schemes.TacticalActEffectType.Damage,
+                        Efficient = new Core.Common.Roll(3,1),
+                        Offence = new TestTacticalActOffenceSubScheme
                         {
-                            Effect = TacticalActEffectType.Damage,
-                            Efficient = new Roll(3, 1),
-                            Offence = new TestTacticalActOffenceSubScheme
-                            {
-                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
-                            }
+                            ApRank = 1,
+                            Impact = Core.Common.ImpactType.Kinetic,
+                            Type = Core.Components.OffenseType.Tactical
                         }
-                    },
-                    new Roll(3, 1),
-                    new Roll(3, 3),
-                    null
+                    }
+                },
+                new Core.Common.Roll(3,1),
+                new Core.Common.Roll(3,3),
+                null
                 ),
-                new TacticalAct(
-                    new TestTacticalActScheme
-                    {
-                        Sid = "resource-required",
-                        Stats = new TestTacticalActStatsSubScheme
+                new TacticalAct(new TestTacticalActScheme{
+                    Sid = "resource-required",
+                    Stats = new TestTacticalActStatsSubScheme{
+                        Effect = Core.Schemes.TacticalActEffectType.Damage,
+                        Efficient = new Core.Common.Roll(3,3),
+                        Offence = new TestTacticalActOffenceSubScheme
                         {
-                            Effect = TacticalActEffectType.Damage,
-                            Efficient = new Roll(3, 3),
-                            Offence = new TestTacticalActOffenceSubScheme
-                            {
-                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
-                            }
-                        },
-                        Constrains = new TestTacticalActConstrainsSubScheme
-                        {
-                            PropResourceType = "resource", PropResourceCount = 1
+                            ApRank = 1,
+                            Impact = Core.Common.ImpactType.Kinetic,
+                            Type = Core.Components.OffenseType.Tactical
                         }
                     },
-                    new Roll(3, 1),
-                    new Roll(3, 3),
-                    null
-                )
+                    Constrains = new TestTacticalActConstrainsSubScheme
+                    {
+                        PropResourceType = "resource",
+                        PropResourceCount = 1
+                    }
+                },
+                new Core.Common.Roll(3,1),
+                new Core.Common.Roll(3,3),
+                null
+                ),
             };
 
             // ACT
-            ITacticalAct factAct = SelectActHelper.SelectBestAct(acts, null);
+            var factAct = SelectActHelper.SelectBestAct(acts, null);
 
             // ASSERT
             factAct.Scheme.Sid.Should().Be("default");

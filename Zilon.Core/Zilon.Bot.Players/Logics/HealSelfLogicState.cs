@@ -1,4 +1,6 @@
-﻿using Zilon.Bot.Players.Triggers;
+﻿using System.Linq;
+
+using Zilon.Bot.Players.Triggers;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -10,8 +12,7 @@ namespace Zilon.Bot.Players.Logics
 {
     public class HealSelfLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
-            ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
@@ -23,8 +24,7 @@ namespace Zilon.Bot.Players.Logics
                 throw new System.ArgumentNullException(nameof(context));
             }
 
-            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats
-                .SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             if (hpStat == null)
             {
                 Complete = true;
@@ -39,9 +39,9 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            IProp[] props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
-            Resource bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
+            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 ConsumeCommonRuleType.Health);
 
             if (bestResource == null)
@@ -50,7 +50,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            ActorTaskContext taskContext = new ActorTaskContext(context.Sector);
+            var taskContext = new ActorTaskContext(context.Sector);
             return new UsePropTask(actor, taskContext, bestResource);
         }
 

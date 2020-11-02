@@ -1,14 +1,18 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MassSectorGenerator.SectorValidators
 {
     /// <summary>
-    ///     Валидатор переходов из сектора.
+    /// Валидатор переходов из сектора.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
         "CA1812:Avoid uninstantiated internal classes",
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
-    internal class TransitionValidator : ISectorValidator
+    class TransitionValidator : ISectorValidator
     {
         public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {
@@ -39,7 +43,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
                     {
                         // Хоть один регион должен быть отмечен, как стартовый.
                         // Чтобы клиенты знали, где размещать персонажа после генерации.
-                        throw new SectorValidationException("Не задан стартовый регион.");
+                        throw new SectorValidationException($"Не задан стартовый регион.");
                     }
 
                     if (!hasTransitionInregionsNodes)
@@ -48,7 +52,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
                         //TODO Рассмотреть вариант упрощения
                         // В секторе уже есть информация об узлах с переходами.
                         // Выглядит, как дублирование.
-                        throw new SectorValidationException("Не указан ни один регион с узламы перехода.");
+                        throw new SectorValidationException($"Не указан ни один регион с узламы перехода.");
                     }
                 }
                 else

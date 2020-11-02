@@ -1,16 +1,20 @@
-﻿using Zilon.Core.Components;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.PersonModules
 {
     /// <summary>
-    ///     Базовая реализация набора навыков для боя.
+    /// Базовая реализация набора навыков для боя.
     /// </summary>
     public sealed class CombatStatsModule : ICombatStatsModule
     {
-        private readonly IEquipmentModule _equipmentModule;
         private readonly IEvolutionModule _evolutionModule;
+        private readonly IEquipmentModule _equipmentModule;
 
         public CombatStatsModule(IEvolutionModule evolutionModule, IEquipmentModule equipmentModule)
         {
@@ -23,21 +27,21 @@ namespace Zilon.Core.PersonModules
             _equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
         }
 
-        /// <summary>
-        ///     Навыки обороны против наступательных действий.
-        /// </summary>
-        public IPersonDefenceStats DefenceStats { get; set; }
-
-        /// <inheritdoc />
-        public string Key => nameof(ICombatStatsModule);
-
-        /// <inheritdoc />
-        public bool IsActive { get; set; }
-
         private void EquipmentModule_EquipmentChanged(object sender, EquipmentChangedEventArgs e)
         {
             CalcCombatStats();
         }
+
+        /// <summary>
+        /// Навыки обороны против наступательных действий.
+        /// </summary>
+        public IPersonDefenceStats DefenceStats { get; set; }
+
+        /// <inheritdoc/>
+        public string Key { get => nameof(ICombatStatsModule); }
+
+        /// <inheritdoc/>
+        public bool IsActive { get; set; }
 
         private void CalcCombatStats()
         {
@@ -59,7 +63,7 @@ namespace Zilon.Core.PersonModules
                     }
                 }
 
-                foreach (SkillStatItem statItem in _evolutionModule.Stats)
+                foreach (var statItem in _evolutionModule.Stats)
                 {
                     statItem.Value = (float)Math.Round(statItem.Value, 1);
                 }
@@ -69,7 +73,7 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <summary>
-        ///     Применение бонуса к характеристике навыка.
+        /// Применение бонуса к характеристике навыка.
         /// </summary>
         /// <param name="bonusValue"> Величина бонуса. </param>
         /// <param name="stat"> Характеристика навыка. </param>
@@ -84,7 +88,7 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <summary>
-        ///     Расчёт бонусов, которые дают перки.
+        /// Расчёт бонусов, которые дают перки.
         /// </summary>
         /// <param name="bonusDict"> Текущее состояние бонусов. </param>
         private void CalcPerkBonuses(Dictionary<SkillStatType, float> bonusDict)
@@ -111,7 +115,7 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <summary>
-        ///     Расчёт бонуса, который даёт правило перка.
+        /// Расчёт бонуса, который даёт правило перка.
         /// </summary>
         /// <param name="rule"> Правило перка. </param>
         /// <param name="bonusDict"> Текущее состояние бонусов. </param>
@@ -129,15 +133,19 @@ namespace Zilon.Core.PersonModules
 
                 case PersonRuleType.Undefined:
                     throw new InvalidOperationException("Undefined rule");
+
+                default:
+                    // Остальные правила обрабатываются в других модулях.
+                    break;
             }
         }
 
         /// <summary>
-        ///     Пересчёт показателей брони персонажа.
+        /// Пересчёт показателей брони персонажа.
         /// </summary>
         private void RecalculatePersonArmor()
         {
-            IEquipmentModule equipmentModule = _equipmentModule;
+            var equipmentModule = _equipmentModule;
 
             var equipmentArmors = new List<PersonArmorItem>();
             foreach (var equipment in equipmentModule)
@@ -165,7 +173,7 @@ namespace Zilon.Core.PersonModules
         {
             foreach (var propArmor in armors)
             {
-                PersonArmorItem personArmorItem = new PersonArmorItem(propArmor.Impact,
+                var personArmorItem = new PersonArmorItem(propArmor.Impact,
                     propArmor.AbsorbtionLevel,
                     propArmor.ArmorRank);
 
@@ -180,8 +188,8 @@ namespace Zilon.Core.PersonModules
             foreach (var armorGroup in armorGroups)
             {
                 var orderedArmors = from armor in armorGroup
-                    orderby armor.AbsorbtionLevel, armor.ArmorRank
-                    select armor;
+                                    orderby armor.AbsorbtionLevel, armor.ArmorRank
+                                    select armor;
 
                 float? rankRaw = null;
                 PersonRuleLevel? armorLevel = null;

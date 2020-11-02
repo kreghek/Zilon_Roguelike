@@ -1,8 +1,12 @@
-﻿using Zilon.Emulation.Common;
+﻿using System;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Emulation.Common;
 
 namespace Zilon.Core.Benchmarks.CreateSector
 {
-    internal class Startup : InitializationBase
+    class Startup : InitializationBase
     {
         public Startup() : base(123)
         {

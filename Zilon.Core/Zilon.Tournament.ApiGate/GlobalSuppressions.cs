@@ -3,8 +3,6 @@
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
 
-using System.Diagnostics.CodeAnalysis;
-
-[assembly: SuppressMessage("Style", "IDE0063:Use simple 'using' statement",
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0063:Use simple 'using' statement",
     Justification = "LGTM не может еще собирать под netcore3",
     Scope = "module")]

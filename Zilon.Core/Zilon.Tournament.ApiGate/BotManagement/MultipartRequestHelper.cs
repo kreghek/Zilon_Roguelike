@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+
 using Microsoft.Net.Http.Headers;
 
 namespace Zilon.Tournament.ApiGate.BotManagement
@@ -9,7 +10,7 @@ namespace Zilon.Tournament.ApiGate.BotManagement
         // The spec says 70 characters is a reasonable limit.
         public static string GetBoundary(MediaTypeHeaderValue contentType, int lengthLimit)
         {
-            string boundary = HeaderUtilities.RemoveQuotes(contentType.Boundary).ToString();
+            var boundary = HeaderUtilities.RemoveQuotes(contentType.Boundary).ToString();
             if (string.IsNullOrWhiteSpace(boundary))
             {
                 throw new InvalidDataException("Missing content-type boundary.");

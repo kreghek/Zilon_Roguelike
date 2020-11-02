@@ -1,4 +1,7 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System;
+using System.Linq;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -8,11 +11,13 @@ namespace Zilon.Core.PersonGeneration
     {
         public IPerson Create(IMonsterScheme monsterScheme)
         {
-            MonsterPerson monsterPerson = new MonsterPerson(monsterScheme);
+            var monsterPerson = new MonsterPerson(monsterScheme);
 
-            ITacticalAct[] Acts = new ITacticalAct[] {new MonsterTacticalAct(monsterScheme.PrimaryAct)};
+            var Acts = new ITacticalAct[] {
+                    new MonsterTacticalAct(monsterScheme.PrimaryAct)
+                };
 
-            MonsterCombatActModule combaActModule = new MonsterCombatActModule(Acts);
+            var combaActModule = new MonsterCombatActModule(Acts);
 
             monsterPerson.AddModule(combaActModule);
 
@@ -20,17 +25,17 @@ namespace Zilon.Core.PersonGeneration
                 .Select(x => new PersonDefenceItem(x.Type, x.Level))
                 .ToArray();
 
-            PersonDefenceStats defenceStats = new PersonDefenceStats(
-                defenses ?? Array.Empty<PersonDefenceItem>(),
-                Array.Empty<PersonArmorItem>());
+            var defenceStats = new PersonDefenceStats(
+                    defenses ?? Array.Empty<PersonDefenceItem>(),
+                    Array.Empty<PersonArmorItem>());
 
-            MonsterCombatStatsModule combatStatsModule = new MonsterCombatStatsModule(defenceStats);
+            var combatStatsModule = new MonsterCombatStatsModule(defenceStats);
             monsterPerson.AddModule(combatStatsModule);
 
-            MonsterSurvivalModule survivalModule = new MonsterSurvivalModule(monsterScheme);
+            var survivalModule = new MonsterSurvivalModule(monsterScheme);
             monsterPerson.AddModule(survivalModule);
 
-            MonsterDiseaseModule diseaseModule = new MonsterDiseaseModule();
+            var diseaseModule = new MonsterDiseaseModule();
             monsterPerson.AddModule(diseaseModule);
 
             return monsterPerson;

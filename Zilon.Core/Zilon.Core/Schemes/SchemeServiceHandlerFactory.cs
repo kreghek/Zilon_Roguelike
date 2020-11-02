@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Schemes
 {
     public sealed class SchemeServiceHandlerFactory : ISchemeServiceHandlerFactory
     {
@@ -13,7 +15,7 @@
         [ExcludeFromCodeCoverage]
         public ISchemeServiceHandler<TScheme> Create<TScheme>() where TScheme : class, IScheme
         {
-            SchemeServiceHandler<TScheme> handler = new SchemeServiceHandler<TScheme>(_schemeLocator);
+            var handler = new SchemeServiceHandler<TScheme>(_schemeLocator);
             return handler;
         }
     }

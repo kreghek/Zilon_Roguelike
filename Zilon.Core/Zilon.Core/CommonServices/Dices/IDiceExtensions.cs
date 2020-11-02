@@ -1,12 +1,15 @@
-﻿namespace Zilon.Core.CommonServices.Dices
+﻿using System;
+using System.Collections.Generic;
+
+namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
-    ///     Вспомогательные расширения сервиса для работы с игральной костью.
+    /// Вспомогательные расширения сервиса для работы с игральной костью.
     /// </summary>
     public static class DiceExtensions
     {
         /// <summary>
-        ///     Получение случайного числа в указаном диапазоне [min, max].
+        /// Получение случайного числа в указаном диапазоне [min, max].
         /// </summary>
         /// <param name="dice"> Используемая для броска кость. </param>
         /// <param name="min"> Минимальное значение. </param>
@@ -16,8 +19,7 @@
         {
             if (min > max)
             {
-                throw new ArgumentException($"Максимальное значение {max} не может быть меньше минимального {min}.",
-                    nameof(max));
+                throw new ArgumentException($"Максимальное значение {max} не может быть меньше минимального {min}.", nameof(max));
             }
 
             if (dice == null)
@@ -33,7 +35,7 @@
             var range = max - min;
             var roll = dice.Roll(range + 1);
 
-            return (roll - 1) + min;
+            return roll - 1 + min;
         }
 
         public static int RollD6(this IDice dice)
@@ -67,7 +69,7 @@
         }
 
         /// <summary>
-        ///     Выбирает случайное значение из списка.
+        /// Выбирает случайное значение из списка.
         /// </summary>
         /// <typeparam name="T"> Тип элементов списка. </typeparam>
         /// <param name="dice"> Кость, на основе которой делать случайный выбор. </param>
@@ -91,7 +93,7 @@
         }
 
         /// <summary>
-        ///     Выбирает случайное значение из списка.
+        /// Выбирает случайное значение из списка.
         /// </summary>
         /// <typeparam name="T"> Тип элементов списка. </typeparam>
         /// <param name="dice"> Кость, на основе которой делать случайный выбор. </param>
@@ -112,8 +114,7 @@
 
             if (list.Count < count)
             {
-                throw new ArgumentException("Требуемое количество должно быть не меньше размера списка.",
-                    nameof(count));
+                throw new ArgumentException("Требуемое количество должно быть не меньше размера списка.", nameof(count));
             }
 
             var openList = new List<T>(list);
@@ -129,7 +130,7 @@
         }
 
         /// <summary>
-        ///     Выбирает случайный индекс из набора.
+        /// Выбирает случайный индекс из набора.
         /// </summary>
         /// <typeparam name="T"> Тип элементов списка. </typeparam>
         /// <param name="dice"> Кость, на основе которой делать случайный выбор. </param>

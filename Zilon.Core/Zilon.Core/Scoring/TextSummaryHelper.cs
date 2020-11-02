@@ -1,14 +1,19 @@
-﻿using Zilon.Core.Tactics;
+﻿using System.Linq;
+using System.Text;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Scoring
 {
     /// <summary>
-    ///     Вспомогательный класс для работы текстовым представлением итогов игры.
+    /// Вспомогательный класс для работы текстовым представлением итогов игры.
     /// </summary>
     public static class TextSummaryHelper
     {
         /// <summary>
-        ///     Создать текстовое описание итогов игры.
+        /// Создать текстовое описание итогов игры.
         /// </summary>
         /// <param name="scores"> Объект, содержащий очки игры. </param>
         /// <param name="botName"> Имя бота, который играл. Не указывать, если выводятся очки игрока-человека. </param>
@@ -36,7 +41,7 @@ namespace Zilon.Core.Scoring
 
             summaryStringBuilder.AppendLine("=== You survived ===");
 
-            DetailedLifetime lifetime = ScoreCalculator.ConvertTurnsToDetailed(scores.Turns);
+            var lifetime = ScoreCalculator.ConvertTurnsToDetailed(scores.Turns);
 
             summaryStringBuilder.AppendLine($"{lifetime.Days} days {lifetime.Hours} hours");
 
@@ -49,8 +54,7 @@ namespace Zilon.Core.Scoring
 
             foreach (var placeType in scores.PlaceTypes)
             {
-                summaryStringBuilder.AppendLine(
-                    $"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");
+                summaryStringBuilder.AppendLine($"{placeType.Key.Name?.En ?? placeType.Key.Name?.Ru ?? placeType.Key.ToString()}: {placeType.Value} turns");
             }
 
             if (scores.Diseases.Any())
@@ -59,8 +63,7 @@ namespace Zilon.Core.Scoring
 
                 foreach (var disease in scores.Diseases)
                 {
-                    var name =
-                        $"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}";
+                    var name = $"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}";
                     summaryStringBuilder.AppendLine(name);
                 }
             }
@@ -68,22 +71,21 @@ namespace Zilon.Core.Scoring
             summaryStringBuilder.AppendLine("=== You killed ===");
             foreach (var frag in scores.Frags)
             {
-                summaryStringBuilder.AppendLine(
-                    $"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}");
+                summaryStringBuilder.AppendLine($"{frag.Key.Name?.En ?? frag.Key.Name?.Ru ?? frag.Key.ToString()}: {frag.Value}");
             }
 
             return summaryStringBuilder.ToString();
         }
 
         /// <summary>
-        ///     Создать текстовое описание итогов игры.
+        /// Создать текстовое описание итогов игры.
         /// </summary>
         /// <param name="scores"> Объект, содержащий очки игры. </param>
         /// <param name="botName"> Имя бота, который играл. Не указывать, если выводятся очки игрока-человека. </param>
         /// <returns> Возвращает текстовое представление итогов игры в виде строки. </returns>
         public static string CreateTextSummary([NotNull] Scores scores)
         {
-            return CreateTextSummary(scores, null);
+            return CreateTextSummary(scores, botName: null);
         }
     }
 }

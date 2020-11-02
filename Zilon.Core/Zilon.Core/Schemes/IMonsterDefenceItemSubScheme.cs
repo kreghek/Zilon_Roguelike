@@ -3,17 +3,17 @@
 namespace Zilon.Core.Schemes
 {
     /// <summary>
-    ///     Интерфейс подсхемы для одного типа обороны монстра.
+    /// Интерфейс подсхемы для одного типа обороны монстра.
     /// </summary>
     public interface IMonsterDefenceItemSubScheme : ISubScheme
     {
         /// <summary>
-        ///     Тип обороны.
+        /// Тип обороны.
         /// </summary>
         DefenceType Type { get; }
 
         /// <summary>
-        ///     Уровень обороны.
+        /// Уровень обороны.
         /// </summary>
         PersonRuleLevel Level { get; }
     }

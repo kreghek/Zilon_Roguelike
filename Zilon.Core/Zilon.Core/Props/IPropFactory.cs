@@ -3,19 +3,19 @@
 namespace Zilon.Core.Props
 {
     /// <summary>
-    ///     Фабрика предметов.
+    /// Фабрика предметов.
     /// </summary>
     public interface IPropFactory
     {
         /// <summary>
-        ///     Создаёт экипировку на основе схемы.
+        ///  Создаёт экипировку на основе схемы.
         /// </summary>
         /// <param name="scheme"> Схема экипировки. </param>
         /// <returns> Возвращает экземпляр созданной экипировки. </returns>
         Equipment CreateEquipment(IPropScheme scheme);
 
         /// <summary>
-        ///     Создаёт ресурс на основе схемы.
+        ///  Создаёт ресурс на основе схемы.
         /// </summary>
         /// <param name="scheme"> Схема ресурса. </param>
         /// <param name="count"> Количество ресурса. </param>

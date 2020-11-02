@@ -1,13 +1,25 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
-    ///     Класс для представления диапазона значений.
+    /// Класс для представления диапазона значений.
     /// </summary>
     /// <typeparam name="T"> Тип значений. </typeparam>
     public class Range<T> where T : IComparable
     {
         /// <summary>
-        ///     Конструктор.
+        /// Минимальное значение диапазона.
+        /// </summary>
+        public T Min { get; }
+
+        /// <summary>
+        /// Максимальное значение диапазона.
+        /// </summary>
+        public T Max { get; }
+
+        /// <summary>
+        /// Конструктор.
         /// </summary>
         /// <param name="min"> Минимальное значение диапазона. </param>
         /// <param name="max"> Максимальное значение диапазона. </param>
@@ -18,22 +30,12 @@
         }
 
         /// <summary>
-        ///     Минимальное значение диапазона.
-        /// </summary>
-        public T Min { get; }
-
-        /// <summary>
-        ///     Максимальное значение диапазона.
-        /// </summary>
-        public T Max { get; }
-
-        /// <summary>
-        ///     Проверяет вхождение указанного значения в диапазон.
+        /// Проверяет вхождение указанного значения в диапазон.
         /// </summary>
         /// <param name="value"> Проверяемое значение. </param>
         /// <returns>
-        ///     Возвращает true, если текущее значение входит в диапазон,
-        ///     включая крайние значения. Иначе - false.
+        /// Возвращает true, если текущее значение входит в диапазон,
+        /// включая крайние значения. Иначе - false.
         /// </returns>
         public bool Contains(T value)
         {

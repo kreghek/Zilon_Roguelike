@@ -1,4 +1,11 @@
 ﻿using System.Linq;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
@@ -13,8 +20,8 @@ namespace Zilon.Core.Tests.PersonModules
     public class HumanSurvivalModuleTests
     {
         /// <summary>
-        ///     Тест проверяет, что характеристика с изменённым DownPass корректно
-        ///     изменяется при указанных результатах броска кости.
+        /// Тест проверяет, что характеристика с изменённым DownPass корректно
+        /// изменяется при указанных результатах броска кости.
         /// </summary>
         [Test]
         [TestCaseSource(typeof(SurvivalDataTestCasesSource), nameof(SurvivalDataTestCasesSource.DownPassTestCases))]
@@ -33,15 +40,15 @@ namespace Zilon.Core.Tests.PersonModules
                 .Returns(downPassRoll);
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            SurvivalStat[] survivalStats =
-            {
-                new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE)
-                {
-                    Type = STAT_TYPE, Rate = STAT_RATE, DownPassRoll = statDownPass
+            var survivalStats = new[] {
+                new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE){
+                    Type = STAT_TYPE,
+                    Rate = STAT_RATE,
+                    DownPassRoll = statDownPass
                 }
             };
 
-            HumanSurvivalModule survivalData = new HumanSurvivalModule(survivalStats, survivalRandomSource);
+            var survivalData = new HumanSurvivalModule(survivalStats, survivalRandomSource);
 
             // ACT
             survivalData.Update();
@@ -51,7 +58,7 @@ namespace Zilon.Core.Tests.PersonModules
         }
 
         /// <summary>
-        ///     Тест проверяет, что при восстановлении Хп текущее значение не выходит за рамки максимального.
+        /// Тест проверяет, что при восстановлении Хп текущее значение не выходит за рамки максимального.
         /// </summary>
         [Test]
         public void RestoreHp_RestoreHp_HpNotGreaterThatMaxPersonHp()
@@ -62,41 +69,41 @@ namespace Zilon.Core.Tests.PersonModules
             const int restoreHpValue = 2;
             const int expectedHp = personHp;
 
-            IPersonScheme personScheme = CreatePersonScheme();
-            ISurvivalRandomSource survivalRandomSource = CreateSurvivalRandomSource();
+            var personScheme = CreatePersonScheme();
+            var survivalRandomSource = CreateSurvivalRandomSource();
 
             personScheme.Hp = personHp;
 
-            ISurvivalModule survivalData = CreateSurvivalData(personScheme, survivalRandomSource);
+            var survivalData = CreateSurvivalData(personScheme, survivalRandomSource);
 
-            SurvivalStat stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var stat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
             stat.Value = initialHp;
 
             // ACT
             survivalData.RestoreStat(SurvivalStatType.Health, restoreHpValue);
 
             // ASSERT
-            SurvivalStat factStat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var factStat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
             factStat.Value.Should().Be(expectedHp);
         }
 
         /// <summary>
-        ///     Проверяет, что при потере всего здоровья выстреливает событие смерти.
+        /// Проверяет, что при потере всего здоровья выстреливает событие смерти.
         /// </summary>
         [Test]
         public void TakeDamage_FatalDamage_FiresEvent()
         {
             // ARRANGE
 
-            IPersonScheme personScheme = CreatePersonScheme();
-            ISurvivalRandomSource survivalRandomSource = CreateSurvivalRandomSource();
+            var personScheme = CreatePersonScheme();
+            var survivalRandomSource = CreateSurvivalRandomSource();
 
             const int personHp = 1;
             const int damageValue = 2;
 
             personScheme.Hp = personHp;
 
-            ISurvivalModule survivalData = CreateSurvivalData(personScheme, survivalRandomSource);
+            var survivalData = CreateSurvivalData(personScheme, survivalRandomSource);
 
             // ACT
             using var monitor = survivalData.Monitor();
@@ -107,7 +114,7 @@ namespace Zilon.Core.Tests.PersonModules
         }
 
         /// <summary>
-        ///     Проверяет, что при конституции больше базового значения увеличивается запас ХП.
+        /// Проверяет, что при конституции больше базового значения увеличивается запас ХП.
         /// </summary>
         [Test]
         public void Constructor_ConstitutionAboveBase_HpIncreased()
@@ -119,8 +126,8 @@ namespace Zilon.Core.Tests.PersonModules
             const int CONSTITUTION_BASE = 10;
             const int CONSTITUTION_VALUE = CONSTITUTION_BASE + 1;
 
-            IPersonScheme personScheme = CreatePersonScheme();
-            ISurvivalRandomSource survivalRandomSource = CreateSurvivalRandomSource();
+            var personScheme = CreatePersonScheme();
+            var survivalRandomSource = CreateSurvivalRandomSource();
 
             personScheme.Hp = PERSON_HP;
 
@@ -130,15 +137,14 @@ namespace Zilon.Core.Tests.PersonModules
             var attributesModule = attributesModuleMock.Object;
 
             // ACT
-            HumanSurvivalModule survivalData =
-                new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
+            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
 
             // ASSERT
             survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_HP);
         }
 
         /// <summary>
-        ///     Проверяет, что при конституции ниже базового значения увеличивается запас ХП.
+        /// Проверяет, что при конституции ниже базового значения увеличивается запас ХП.
         /// </summary>
         [Test]
         public void Constructor_ConstitutionBelowBase_HpDecreased()
@@ -150,8 +156,8 @@ namespace Zilon.Core.Tests.PersonModules
             const int CONSTITUTION_BASE = 10;
             const int CONSTITUTION_VALUE = CONSTITUTION_BASE - 1;
 
-            IPersonScheme personScheme = CreatePersonScheme();
-            ISurvivalRandomSource survivalRandomSource = CreateSurvivalRandomSource();
+            var personScheme = CreatePersonScheme();
+            var survivalRandomSource = CreateSurvivalRandomSource();
 
             personScheme.Hp = PERSON_HP;
 
@@ -161,8 +167,7 @@ namespace Zilon.Core.Tests.PersonModules
             var attributesModule = attributesModuleMock.Object;
 
             // ACT
-            HumanSurvivalModule survivalData =
-                new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
+            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
 
             // ASSERT
             survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_HP);
@@ -170,18 +175,16 @@ namespace Zilon.Core.Tests.PersonModules
 
         public static IPersonScheme CreatePersonScheme()
         {
-            TestPersonScheme personScheme = new TestPersonScheme
+            var personScheme = new TestPersonScheme
             {
-                SurvivalStats = new[]
-                {
+                SurvivalStats = new[] {
                     new TestPersonSurvivalStatSubScheme
                     {
                         Type = PersonSurvivalStatType.Satiety,
                         MinValue = -100,
                         MaxValue = 100,
                         StartValue = 0,
-                        KeyPoints = new[]
-                        {
+                        KeyPoints = new []{
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Lesser,
@@ -196,18 +199,20 @@ namespace Zilon.Core.Tests.PersonModules
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Max, Start = 0, End = 0.12f
+                                Level = PersonSurvivalStatKeypointLevel.Max,
+                                Start = 0,
+                                End = 0.12f
                             }
                         }
                     },
+
                     new TestPersonSurvivalStatSubScheme
                     {
                         Type = PersonSurvivalStatType.Hydration,
                         MinValue = -100,
                         MaxValue = 100,
                         StartValue = 0,
-                        KeyPoints = new[]
-                        {
+                        KeyPoints = new []{
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Lesser,
@@ -222,7 +227,9 @@ namespace Zilon.Core.Tests.PersonModules
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Max, Start = 0, End = 0.12f
+                                Level = PersonSurvivalStatKeypointLevel.Max,
+                                Start = 0,
+                                End = 0.12f
                             }
                         }
                     }
@@ -238,14 +245,12 @@ namespace Zilon.Core.Tests.PersonModules
             return survivalRandomSourceMock.Object;
         }
 
-        private static ISurvivalModule CreateSurvivalData(IPersonScheme personScheme,
-            ISurvivalRandomSource survivalRandomSource)
+        private static ISurvivalModule CreateSurvivalData(IPersonScheme personScheme, ISurvivalRandomSource survivalRandomSource)
         {
             var attributesModuleMock = new Mock<IAttributesModule>();
             var attributesModule = attributesModuleMock.Object;
 
-            HumanSurvivalModule survivalData =
-                new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
+            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
             return survivalData;
         }
     }

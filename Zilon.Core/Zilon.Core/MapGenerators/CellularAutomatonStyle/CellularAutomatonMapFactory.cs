@@ -1,4 +1,12 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
@@ -7,7 +15,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
-    ///     Фабрика карты на основе клеточного автомата.
+    /// Фабрика карты на основе клеточного автомата.
     /// </summary>
     public sealed class CellularAutomatonMapFactory : IMapFactory
     {
@@ -19,7 +27,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         private readonly IDice _dice;
 
         /// <summary>
-        ///     Конструктор фабрики.
+        /// Конструктор фабрики.
         /// </summary>
         /// <param name="dice"> Кость для рандома. </param>
         public CellularAutomatonMapFactory(IDice dice)
@@ -27,7 +35,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _dice = dice;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
             if (generationOptions is null)
@@ -37,12 +45,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var transitions = generationOptions.Transitions;
 
-            ISectorCellularAutomataMapFactoryOptionsSubScheme cellularAutomatonOptions =
-                (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
+            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
             if (cellularAutomatonOptions == null)
             {
-                throw new ArgumentException(
-                    $"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
+                throw new ArgumentException($"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
             }
 
             var matrixWidth = cellularAutomatonOptions.MapWidth;
@@ -51,23 +57,22 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
 
             var targetRegionDraftCount = transitions.Count() + 1;
-            CreateMatrixResult createResult = CreateInner(
+            var createResult = CreateInner(
                 targetRegionDraftCount,
                 chanceToStartAlive,
                 matrixWidth,
                 matrixHeight);
 
             var matrix = createResult.Matrix;
-            RegionDraft[] draftRegions = createResult.Regions;
+            var draftRegions = createResult.Regions;
 
-            ISectorMap map = CreateSectorMap(matrix, draftRegions, transitions);
+            var map = CreateSectorMap(matrix, draftRegions, transitions);
 
             return Task.FromResult(map);
         }
 
         //TODO Придумать название метода получше
-        private CreateMatrixResult CreateInner(int targetRegionDraftCount, int chanceToStartAlive, int matrixWidth,
-            int matrixHeight)
+        private CreateMatrixResult CreateInner(int targetRegionDraftCount, int chanceToStartAlive, int matrixWidth, int matrixHeight)
         {
             var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
 
@@ -105,23 +110,23 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 {
                     try
                     {
-                        RegionDraft[] splittedDraftRegions =
-                            SplitRegionsForTransitions(draftRegions, targetRegionDraftCount);
+                        var splittedDraftRegions = SplitRegionsForTransitions(draftRegions, targetRegionDraftCount);
 
                         // Разделение успешно выполнено.
                         // Пропускаем карту дальше.
-                        CreateMatrixResult result = new CreateMatrixResult(matrixWithMargins, splittedDraftRegions);
+                        var result = new CreateMatrixResult(matrixWithMargins, splittedDraftRegions);
                         return result;
                     }
                     catch (CellularAutomatonException)
                     {
                         // Это означает, что при текущих стартовых данных невозможно создать подходящую карту.
                         // Запускаем следующую итерацю.
+                        continue;
                     }
                 }
                 else
                 {
-                    CreateMatrixResult result = new CreateMatrixResult(matrixWithMargins, draftRegions);
+                    var result = new CreateMatrixResult(matrixWithMargins, draftRegions);
                     return result;
                 }
             }
@@ -130,26 +135,25 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
         }
 
-        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions,
-            IEnumerable<RoomTransition> transitions)
+        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
         {
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
 
             var regionIdCounter = 1;
-            foreach (RegionDraft draftRegion in draftRegions)
+            foreach (var draftRegion in draftRegions)
             {
                 var regionNodeList = new List<IGraphNode>();
 
                 foreach (var coord in draftRegion.Coords)
                 {
-                    HexNode node = new HexNode(coord.X, coord.Y);
+                    var node = new HexNode(coord.X, coord.Y);
                     map.AddNode(node);
 
                     regionNodeList.Add(node);
                 }
 
-                MapRegion region = new MapRegion(regionIdCounter, regionNodeList.ToArray());
+                var region = new MapRegion(regionIdCounter, regionNodeList.ToArray());
 
                 map.Regions.Add(region);
 
@@ -194,8 +198,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     }
 
                     transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
-                        where map.Transitions.Keys.Contains(regionNode)
-                        select regionNode).ToArray();
+                                                  where map.Transitions.Keys.Contains(regionNode)
+                                                  select regionNode).ToArray();
                 }
             }
 
@@ -218,16 +222,16 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         }
 
         /// <summary>
-        ///     Метод отделяет от существующих регионов ячйки таким образом,
-        ///     чтобы суммарно на карте число регионов равнялось числу переходов + 1 (за стартовый).
-        ///     Сейчас все отщеплённые регионы в первую отщепляются от произвольных.
-        ///     Уже одноклеточные регионы не участвуют в расщеплении.
+        /// Метод отделяет от существующих регионов ячйки таким образом,
+        /// чтобы суммарно на карте число регионов равнялось числу переходов + 1 (за стартовый).
+        /// Сейчас все отщеплённые регионы в первую отщепляются от произвольных.
+        /// Уже одноклеточные регионы не участвуют в расщеплении.
         /// </summary>
         /// <param name="draftRegions"> Текущие регионы на карте. </param>
         /// <param name="targetRegionCount"> Целевое число регионов. </param>
         /// <returns> Возвращает новый массив черновиков регионов. </returns>
         private RegionDraft[] SplitRegionsForTransitions(
-            [NotNull] [ItemNotNull] RegionDraft[] draftRegions,
+            [NotNull, ItemNotNull] RegionDraft[] draftRegions,
             int targetRegionCount)
         {
             if (draftRegions == null)
@@ -237,8 +241,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             if (targetRegionCount <= 0)
             {
-                throw new ArgumentException("Целевое количество регионов должно быть больше 0.",
-                    nameof(targetRegionCount));
+                throw new ArgumentException("Целевое количество регионов должно быть больше 0.", nameof(targetRegionCount));
             }
 
             var regionCountDiff = targetRegionCount - draftRegions.Length;
@@ -249,8 +252,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
             var availableCoords = from region in availableSplitRegions
-                from coord in region.Coords.Skip(1)
-                select new RegionCoords(coord, region);
+                                  from coord in region.Coords.Skip(1)
+                                  select new RegionCoords(coord, region);
 
             if (availableCoords.Count() < regionCountDiff)
             {
@@ -259,8 +262,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Даже если делать по одной клетки на регион.
                 // В этом случае ничего сделать нельзя.
                 // Передаём проблему вызывающему коду.
-                throw new CellularAutomatonException(
-                    "Невозможно расщепить регионы на достаточное количество. Клеток меньше, чем требуется.");
+                throw new CellularAutomatonException("Невозможно расщепить регионы на достаточное количество. Клеток меньше, чем требуется.");
             }
 
             var openRegionCoords = new List<RegionCoords>(availableCoords);
@@ -278,7 +280,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var regionGroups = usedRegionCoords.GroupBy(x => x.Region)
                 .ToDictionary(x => x.Key, x => x.AsEnumerable());
 
-            foreach (RegionDraft draftRegion in draftRegions)
+            foreach (var draftRegion in draftRegions)
             {
                 if (regionGroups.TryGetValue(draftRegion, out var splittedRegionCoords))
                 {
@@ -288,12 +290,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                         .Except(splittedCoords)
                         .ToArray();
 
-                    RegionDraft recreatedRegionDraft = new RegionDraft(newCoordsOfCurrentRegion);
+                    var recreatedRegionDraft = new RegionDraft(newCoordsOfCurrentRegion);
                     newDraftRegionList.Add(recreatedRegionDraft);
 
                     foreach (var splittedCoord in splittedCoords)
                     {
-                        RegionDraft newRegionDraft = new RegionDraft(new[] {splittedCoord});
+                        var newRegionDraft = new RegionDraft(new[] { splittedCoord });
                         newDraftRegionList.Add(newRegionDraft);
                     }
                 }
@@ -307,7 +309,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         }
 
         /// <summary>
-        ///     Преобразовывет черновые регионы в узлы реальной карты.
+        /// Преобразовывет черновые регионы в узлы реальной карты.
         /// </summary>
         private static void MapDraftRegionsToSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, ISectorMap map)
         {
@@ -324,11 +326,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 {
                     if (cellMap[x, y])
                     {
-                        OffsetCoords offsetCoord = new OffsetCoords(x, y);
+                        var offsetCoord = new OffsetCoords(x, y);
 
                         if (!hashSet.Contains(offsetCoord))
                         {
-                            HexNode node = new HexNode(x, y);
+                            var node = new HexNode(x, y);
                             map.AddNode(node);
                         }
                     }
@@ -360,7 +362,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             {
                 var openNode = openNodes.First(x => MapFactoryHelper.IsAvailableFor7(matrix, x));
                 var regionCoords = FloodFillRegions(matrix, openNode);
-                RegionDraft region = new RegionDraft(regionCoords.ToArray());
+                var region = new RegionDraft(regionCoords.ToArray());
 
                 openNodes.RemoveAll(x => region.Contains(x));
 
@@ -393,10 +395,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // то прорываем тоннель.
                 if (nearbyOpenRegion != null
                     && currentOpenRegionCoord != null
-                    && currentUnitedRegionCoord != null)
+                     && currentUnitedRegionCoord != null)
                 {
-                    CubeCoords openCubeCoord = HexHelper.ConvertToCube(currentOpenRegionCoord.Value);
-                    CubeCoords unitedCubeCoord = HexHelper.ConvertToCube(currentUnitedRegionCoord.Value);
+                    var openCubeCoord = HexHelper.ConvertToCube(currentOpenRegionCoord.Value);
+                    var unitedCubeCoord = HexHelper.ConvertToCube(currentUnitedRegionCoord.Value);
 
                     DrawLineBetweenNodes(matrix, openCubeCoord, unitedCubeCoord);
 
@@ -408,29 +410,26 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return regions.ToArray();
         }
 
-        private static void DrawLineBetweenNodes(Matrix<bool> matrix, CubeCoords openCubeCoord,
-            CubeCoords unitedCubeCoord)
+        private static void DrawLineBetweenNodes(Matrix<bool> matrix, CubeCoords openCubeCoord, CubeCoords unitedCubeCoord)
         {
-            CubeCoords[] line = CubeCoordsHelper.CubeDrawLine(openCubeCoord, unitedCubeCoord);
-            foreach (CubeCoords lineItem in line)
+            var line = CubeCoordsHelper.CubeDrawLine(openCubeCoord, unitedCubeCoord);
+            foreach (var lineItem in line)
             {
-                OffsetCoords offsetCoords = HexHelper.ConvertToOffset(lineItem);
+                var offsetCoords = HexHelper.ConvertToOffset(lineItem);
                 matrix[offsetCoords.X, offsetCoords.Y] = true;
 
                 // Коридоры должны быть размером в Size7.
                 // Поэтому вокруг каждой точки прорываем соседей.
 
-                OffsetCoords[] neighborCoords = HexHelper.GetNeighbors(offsetCoords.X, offsetCoords.Y);
-                foreach (OffsetCoords coords in neighborCoords)
+                var neighborCoords = HexHelper.GetNeighbors(offsetCoords.X, offsetCoords.Y);
+                foreach (var coords in neighborCoords)
                 {
                     matrix[coords.X, coords.Y] = true;
                 }
             }
         }
 
-        private static void FindClosestNodesBetweenOpenAndUnited(List<RegionDraft> openRegions,
-            OffsetCoords[] unitedRegionCoords, out OffsetCoords? currentOpenRegionCoord,
-            out OffsetCoords? currentUnitedRegionCoord, out RegionDraft nearbyOpenRegion)
+        private static void FindClosestNodesBetweenOpenAndUnited(List<RegionDraft> openRegions, OffsetCoords[] unitedRegionCoords, out OffsetCoords? currentOpenRegionCoord, out OffsetCoords? currentUnitedRegionCoord, out RegionDraft nearbyOpenRegion)
         {
             var currentDistance = int.MaxValue;
             currentOpenRegionCoord = null;
@@ -440,11 +439,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             {
                 foreach (var openRegionCoord in currentOpenRegion.Coords)
                 {
-                    CubeCoords openCubeCoord = HexHelper.ConvertToCube(openRegionCoord);
+                    var openCubeCoord = HexHelper.ConvertToCube(openRegionCoord);
 
-                    foreach (OffsetCoords unitedRegionCoord in unitedRegionCoords)
+                    foreach (var unitedRegionCoord in unitedRegionCoords)
                     {
-                        CubeCoords unitedCubeCoord = HexHelper.ConvertToCube(unitedRegionCoord);
+                        var unitedCubeCoord = HexHelper.ConvertToCube(unitedRegionCoord);
                         var distance = openCubeCoord.DistanceTo(unitedCubeCoord);
 
                         if (distance < currentDistance)
@@ -515,15 +514,15 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         {
             var aliveCount = 0;
 
-            CubeCoords cubeCoords = HexHelper.ConvertToCube(x, y);
-            CubeCoords[] offsetsImplicit = HexHelper.GetOffsetClockwise();
-            CubeCoords[] offsetsDiagonal = HexHelper.GetDiagonalOffsetClockwise();
+            var cubeCoords = HexHelper.ConvertToCube(x, y);
+            var offsetsImplicit = HexHelper.GetOffsetClockwise();
+            var offsetsDiagonal = HexHelper.GetDiagonalOffsetClockwise();
             var offsets = offsetsImplicit.Union(offsetsDiagonal);
             foreach (var offset in offsets)
             {
-                CubeCoords neighbour = cubeCoords + offset;
+                var neighbour = cubeCoords + offset;
 
-                OffsetCoords offsetCoords = HexHelper.ConvertToOffset(neighbour);
+                var offsetCoords = HexHelper.ConvertToOffset(neighbour);
 
                 var nX = offsetCoords.X;
                 var nY = offsetCoords.Y;
