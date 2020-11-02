@@ -36,7 +36,6 @@ namespace Zilon.Core.ProgressStoring
                 Achievements = scores.Achievements,
                 BaseScores = scores.BaseScores,
                 Frags = scores.Frags.Select(x => new ScoreSidCounterStorageData { Sid = x.Key.Sid, Value = x.Value }).ToArray(),
-                //storageData.Places = scores.Places.Select(x => new OffsetCoords(x.OffsetX, x.OffsetY)).ToArray();
                 PlaceTypes = scores.PlaceTypes.Select(x => new ScoreSidCounterStorageData { Sid = x.Key.Sid, Value = x.Value }).ToArray(),
                 TurnCounter = scores.TurnCounter,
                 Turns = scores.Turns
