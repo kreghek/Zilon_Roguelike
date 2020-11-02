@@ -18,8 +18,13 @@ env:
 jobs:
   buildCore:
     name: Build core libs
-    runs-on: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
+    runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+        dotnet-version: '3.1.x'
       - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
       - run: dotnet publish Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
       - uses: actions/upload-artifact@v1
