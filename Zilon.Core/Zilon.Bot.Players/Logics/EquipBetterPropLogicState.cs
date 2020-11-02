@@ -34,7 +34,7 @@ namespace Zilon.Bot.Players.Logics
                         var targetEquipmentFromInventory = availableEquipments.First();
                         var targetSlotIndex = slotIndex;
 
-                        var taskContext = new ActorTaskContext(context.Sector);
+                        var taskContext = new ActorTaskContext(context.Sector, context.Globe);
                         return new EquipTask(actor, taskContext, targetEquipmentFromInventory, targetSlotIndex);
                     }
                 }

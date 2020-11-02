@@ -61,25 +61,25 @@ namespace Zilon.Bot.Players.Logics
             var distance = map.DistanceBetween(actor.Node, _staticObject.Node);
             if (distance <= 1)
             {
-                return TakeAllFromContainerTask(actor, _staticObject, context.Sector);
+                return TakeAllFromContainerTask(actor, _staticObject, context.Sector, context.Globe);
             }
             else
             {
                 var storedMoveTask = _moveTask;
-                var moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask, context.Sector);
+                var moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask, context.Sector, context.Globe);
                 _moveTask = moveTask;
                 return moveTask;
             }
         }
 
-        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask, ISector sector)
+        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask, ISector sector, Core.World.IGlobe globe)
         {
             var map = sector.Map;
 
             var moveTask = storedMoveTask;
             if (storedMoveTask == null)
             {
-                var taskContext = new ActorTaskContext(sector);
+                var taskContext = new ActorTaskContext(sector, globe);
                 moveTask = new MoveTask(actor, taskContext, containerMapNode, map);
             }
 
@@ -92,7 +92,7 @@ namespace Zilon.Bot.Players.Logics
             return moveTask;
         }
 
-        private static IActorTask TakeAllFromContainerTask(IActor actor, IStaticObject container, ISector sector)
+        private static IActorTask TakeAllFromContainerTask(IActor actor, IStaticObject container, ISector sector, Core.World.IGlobe globe)
         {
             var inventoryTransfer = new PropTransfer(actor.Person.GetModule<IInventoryModule>(),
                                 container.GetModule<IPropContainer>().Content.CalcActualItems(),
@@ -102,7 +102,7 @@ namespace Zilon.Bot.Players.Logics
                 System.Array.Empty<IProp>(),
                 container.GetModule<IPropContainer>().Content.CalcActualItems());
 
-            var taskContext = new ActorTaskContext(sector);
+            var taskContext = new ActorTaskContext(sector, globe);
             return new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer });
         }
 

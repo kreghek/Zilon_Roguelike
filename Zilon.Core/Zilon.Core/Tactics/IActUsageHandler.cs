@@ -28,4 +28,14 @@ namespace Zilon.Core.Tactics
     {
         IGlobe Globe { get; }
     }
+
+    public sealed class ActUsageContext : IActUsageContext
+    {
+        public ActUsageContext(IGlobe globe)
+        {
+            Globe = globe ?? throw new ArgumentNullException(nameof(globe));
+        }
+
+        public IGlobe Globe { get; }
+    }
 }

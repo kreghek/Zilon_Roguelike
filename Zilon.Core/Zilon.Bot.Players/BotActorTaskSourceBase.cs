@@ -80,7 +80,7 @@ namespace Zilon.Bot.Players
 
                 if (actorTask == null)
                 {
-                    var taskContext = new ActorTaskContext(context.Sector);
+                    var taskContext = new ActorTaskContext(context.Sector, context.Globe);
                     return Task.FromResult<IActorTask>(new IdleTask(actor, taskContext, 1));
                 }
 

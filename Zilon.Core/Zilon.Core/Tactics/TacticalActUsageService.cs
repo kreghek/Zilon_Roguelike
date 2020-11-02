@@ -9,6 +9,7 @@ using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics
 {
@@ -52,7 +53,7 @@ namespace Zilon.Core.Tactics
             EquipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
         }
 
-        public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs, ISector sector)
+        public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs, IGlobe globe)
         {
             if (actor is null)
             {
@@ -69,10 +70,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(usedActs));
             }
 
-            if (sector is null)
-            {
-                throw new ArgumentNullException(nameof(sector));
-            }
+            var sector = globe.SectorNodes.Single(x => x.Sector.ActorManager.Items.Any(a => a == actor)).Sector;
 
             Debug.Assert(SectorHasCurrentActor(sector, actor), "Current actor must be in sector");
             Debug.Assert(SectorHasAttackTarget(sector, target), "Target must be in sector");
@@ -84,7 +82,7 @@ namespace Zilon.Core.Tactics
                     throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
                 }
 
-                UseAct(actor, target, act, sector.Map);
+                UseAct(actor, target, act, globe);
             }
 
             // Использование дополнительных действий.
@@ -99,7 +97,7 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                UseAct(actor, target, act, sector.Map);
+                UseAct(actor, target, act, globe);
             }
         }
 
@@ -139,8 +137,10 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act, ISectorMap map)
+        private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act, IGlobe globe)
         {
+            var map = globe.SectorNodes.Single(x => x.Sector.ActorManager.Items.Any(a => a == actor)).Sector.Map;
+
             bool isInDistance;
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 && actor == target)
             {
@@ -182,7 +182,8 @@ namespace Zilon.Core.Tactics
             }
 
             var actHandler = _actUsageHandlerSelector.GetHandler(target);
-            actHandler.ProcessActUsage(actor, target, tacticalActRoll);
+            var context = new ActUsageContext(globe);
+            actHandler.ProcessActUsage(actor, target, tacticalActRoll, context);
 
             if (act.Equipment != null)
             {

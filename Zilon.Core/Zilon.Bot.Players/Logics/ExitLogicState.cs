@@ -16,6 +16,7 @@ namespace Zilon.Bot.Players.Logics
         {
             var sector = context.Sector;
             var map = sector.Map;
+            var globe = context.Globe;
 
             if (!strategyData.ExitNodes.Any())
             {
@@ -37,7 +38,7 @@ namespace Zilon.Bot.Players.Logics
                     .OrderBy(x => map.DistanceBetween(actor.Node, x))
                     .First();
 
-                _moveTask = CreateMoveTask(actor, nearbyExitNode, sector, map);
+                _moveTask = CreateMoveTask(actor, nearbyExitNode, sector, map, globe);
 
                 if (_moveTask == null)
                 {
@@ -53,7 +54,7 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private static MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode, ISector sector, ISectorMap map)
+        private static MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode, ISector sector, ISectorMap map, Core.World.IGlobe globe)
         {
             var targetNodeIsBlockedByObstacles = GetObstableInNode(sector, targetExitNode);
             Debug.Assert(!targetNodeIsBlockedByObstacles,
@@ -64,7 +65,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var context = new ActorTaskContext(sector);
+            var context = new ActorTaskContext(sector, globe);
 
             var moveTask = new MoveTask(actor, context, targetExitNode, map);
 

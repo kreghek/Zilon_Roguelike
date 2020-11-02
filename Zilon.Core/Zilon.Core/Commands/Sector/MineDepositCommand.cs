@@ -123,7 +123,7 @@ namespace Zilon.Core.Commands.Sector
         {
             var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool, _mineDepositMethodRandomSource);
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector, _player.Globe);
             return new MineTask(actor, taskContext, staticObject, toolMineDepositMethod);
         }
 
@@ -131,7 +131,7 @@ namespace Zilon.Core.Commands.Sector
         {
             var handMineDepositMethod = new HandMineDepositMethod(_mineDepositMethodRandomSource);
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector, _player.Globe);
             return new MineTask(actor, taskContext, staticObject, handMineDepositMethod);
         }
     }

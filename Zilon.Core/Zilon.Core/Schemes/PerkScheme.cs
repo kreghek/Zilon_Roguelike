@@ -23,4 +23,27 @@ namespace Zilon.Core.Schemes
         public int Order { get; set; }
         public string IconSid { get; set; }
     }
+
+    public class SpawnPerkScheme : SchemeBase, ISpawnPerkScheme
+    {
+        public PerkRuleSubScheme[] Rules { get; set; }
+        public JobSubScheme[] Jobs { get; set; }
+
+        public PerkConditionSubScheme[] BaseConditions { get; set; }
+        public PerkConditionSubScheme[] VisibleConditions { get; set; }
+        public PropSet[] Sources { get; set; }
+        public PerkLevelSubScheme[] Levels { get; set; }
+
+        [JsonProperty]
+        public bool IsBuildIn { get; private set; }
+
+        public int Order { get; set; }
+        public string IconSid { get; set; }
+
+        [JsonProperty]
+        public IPersonScheme PersonScheme { get; private set; }
+
+        [JsonProperty]
+        public ITacticalActScheme TacticalAct { get; private set; }
+    }
 }

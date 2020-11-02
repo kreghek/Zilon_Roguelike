@@ -121,7 +121,7 @@ namespace Zilon.Core.Commands
 
             var tacticalAct = PlayerState.TacticalAct;
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector, _player.Globe);
 
             var intention = new Intention<AttackTask>(a => new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);

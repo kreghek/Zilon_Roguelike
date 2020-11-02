@@ -126,7 +126,7 @@ namespace Zilon.Core.World
 
                 var taskSource = actor.TaskSource;
 
-                var context = new SectorTaskSourceContext(sector);
+                var context = new SectorTaskSourceContext(sector, this);
 
                 //TODO Это можно делать параллельно. Одновременно должны думать сразу все актёры.
                 // Делается легко, через Parallel.ForEach, но из-за этого часто заваливаются тесты и даже не видно причины отказа.

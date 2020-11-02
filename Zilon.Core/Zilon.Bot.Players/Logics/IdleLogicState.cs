@@ -18,7 +18,7 @@ namespace Zilon.Bot.Players.Logics
         {
             if (_idleTask == null)
             {
-                var taskContext = new ActorTaskContext(context.Sector);
+                var taskContext = new ActorTaskContext(context.Sector, context.Globe);
                 _idleTask = new IdleTask(actor, taskContext, _decisionSource);
             }
 

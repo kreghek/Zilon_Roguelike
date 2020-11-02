@@ -28,6 +28,21 @@ namespace Zilon.Core.Tactics
 
         public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll, IActUsageContext context)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            if (tacticalActRoll is null)
+            {
+                throw new ArgumentNullException(nameof(tacticalActRoll));
+            }
+
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (tacticalActRoll.TacticalAct is ISpawnAct spawnAct)
             {
                 var person = _personFactory.Create(spawnAct.PersonScheme.Sid, actor.Person.Fraction);
@@ -76,7 +91,7 @@ namespace Zilon.Core.Tactics
         public Type TargetType { get => typeof(IActor); }
 
         /// <inheritdoc/>
-        public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll)
+        public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll, IActUsageContext context)
         {
             if (actor is null)
             {

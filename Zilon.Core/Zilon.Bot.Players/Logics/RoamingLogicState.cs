@@ -13,7 +13,7 @@ namespace Zilon.Bot.Players.Logics
         {
         }
 
-        private MoveTask CreateBypassMoveTask(IActor actor, ISector sector)
+        private MoveTask CreateBypassMoveTask(IActor actor, ISector sector, Core.World.IGlobe globe)
         {
             var map = sector.Map;
             var availableNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
@@ -25,7 +25,7 @@ namespace Zilon.Bot.Players.Logics
 
                 if (map.IsPositionAvailableFor(targetNode, actor))
                 {
-                    var taskContext = new ActorTaskContext(sector);
+                    var taskContext = new ActorTaskContext(sector, globe);
                     var moveTask = new MoveTask(actor, taskContext, targetNode, map);
 
                     return moveTask;
@@ -39,7 +39,7 @@ namespace Zilon.Bot.Players.Logics
         {
             if (MoveTask == null)
             {
-                MoveTask = CreateBypassMoveTask(actor, context.Sector);
+                MoveTask = CreateBypassMoveTask(actor, context.Sector, context.Globe);
 
                 if (MoveTask != null)
                 {
@@ -50,7 +50,7 @@ namespace Zilon.Bot.Players.Logics
                     // Это может произойти, если актёр не выбрал следующий узел.
                     // Тогда переводим актёра в режим ожидания.
 
-                    var taskContext = new ActorTaskContext(context.Sector);
+                    var taskContext = new ActorTaskContext(context.Sector, context.Globe);
                     IdleTask = new IdleTask(actor, taskContext, DecisionSource);
                     return IdleTask;
                 }
@@ -64,7 +64,7 @@ namespace Zilon.Bot.Players.Logics
                     // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
                     if (!MoveTask.CanExecute())
                     {
-                        MoveTask = CreateBypassMoveTask(actor, context.Sector);
+                        MoveTask = CreateBypassMoveTask(actor, context.Sector, context.Globe);
                     }
 
                     if (MoveTask != null)
@@ -72,7 +72,7 @@ namespace Zilon.Bot.Players.Logics
                         return MoveTask;
                     }
 
-                    var taskContext = new ActorTaskContext(context.Sector);
+                    var taskContext = new ActorTaskContext(context.Sector, context.Globe);
                     IdleTask = new IdleTask(actor, taskContext, DecisionSource);
                     return IdleTask;
                 }

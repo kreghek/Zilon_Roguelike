@@ -106,7 +106,7 @@ namespace Zilon.Bot.Players.Logics
             {
                 var act = attackParams.TacticalAct;
 
-                var taskContext = new ActorTaskContext(context.Sector);
+                var taskContext = new ActorTaskContext(context.Sector, context.Globe);
 
                 var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
                 return attackTask;
@@ -130,7 +130,7 @@ namespace Zilon.Bot.Players.Logics
 
                     if (targetIsOnLine)
                     {
-                        var taskContext = new ActorTaskContext(context.Sector);
+                        var taskContext = new ActorTaskContext(context.Sector, context.Globe);
 
                         _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
                         return _moveTask;

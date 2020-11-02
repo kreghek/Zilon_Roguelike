@@ -101,7 +101,7 @@ namespace Zilon.Core.Commands
 
             var currentSector = _player.SectorNode.Sector;
 
-            var moveIntetion = new MoveIntention(targetNode, currentSector);
+            var moveIntetion = new MoveIntention(targetNode, currentSector, _player.Globe);
             PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
         }
 

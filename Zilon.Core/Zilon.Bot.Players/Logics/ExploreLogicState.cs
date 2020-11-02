@@ -22,7 +22,7 @@ namespace Zilon.Bot.Players.Logics
         {
             if (MoveTask == null)
             {
-                MoveTask = CreateBypassMoveTask(actor, strategyData, context.Sector);
+                MoveTask = CreateBypassMoveTask(actor, strategyData, context.Sector, context.Globe);
 
                 if (MoveTask != null)
                 {
@@ -33,7 +33,7 @@ namespace Zilon.Bot.Players.Logics
                     // Это может произойти, если актёр не выбрал следующий узел.
                     // Тогда переводим актёра в режим ожидания.
 
-                    var taskContext = new ActorTaskContext(context.Sector);
+                    var taskContext = new ActorTaskContext(context.Sector, context.Globe);
                     IdleTask = new IdleTask(actor, taskContext, DecisionSource);
                     return IdleTask;
                 }
@@ -47,7 +47,7 @@ namespace Zilon.Bot.Players.Logics
                     // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
                     if (!MoveTask.CanExecute())
                     {
-                        MoveTask = CreateBypassMoveTask(actor, strategyData, context.Sector);
+                        MoveTask = CreateBypassMoveTask(actor, strategyData, context.Sector, context.Globe);
                     }
 
                     if (MoveTask != null)
@@ -55,7 +55,7 @@ namespace Zilon.Bot.Players.Logics
                         return MoveTask;
                     }
 
-                    var taskContext = new ActorTaskContext(context.Sector);
+                    var taskContext = new ActorTaskContext(context.Sector, context.Globe);
                     IdleTask = new IdleTask(actor, taskContext, DecisionSource);
                     return IdleTask;
                 }
@@ -105,7 +105,7 @@ namespace Zilon.Bot.Players.Logics
             return frontNodes;
         }
 
-        private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData, ISector sector)
+        private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData, ISector sector, Core.World.IGlobe globe)
         {
             var map = sector.Map;
             IEnumerable<IGraphNode> availableNodes;
@@ -126,7 +126,7 @@ namespace Zilon.Bot.Players.Logics
 
                 if (map.IsPositionAvailableFor(targetNode, actor))
                 {
-                    var context = new ActorTaskContext(sector);
+                    var context = new ActorTaskContext(sector, globe);
                     var moveTask = new MoveTask(actor, context, targetNode, map);
 
                     return moveTask;

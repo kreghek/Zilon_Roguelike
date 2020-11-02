@@ -37,7 +37,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var availableSlotAct = GetUsedActs();
             var usedActs = new UsedTacticalActs(new[] { TacticalAct }, availableSlotAct.Skip(1));
-            _actService.UseOn(Actor, Target, usedActs, Context.Sector);
+            _actService.UseOn(Actor, Target, usedActs, Context.Globe);
         }
 
         public AttackTask(IActor actor,
