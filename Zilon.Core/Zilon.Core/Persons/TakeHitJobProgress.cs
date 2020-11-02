@@ -8,6 +8,11 @@ namespace Zilon.Core.Persons
     {
         public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
         {
+            if (currentJobs is null)
+            {
+                throw new System.ArgumentNullException(nameof(currentJobs));
+            }
+
             var modifiedJobs = new List<IJob>();
             foreach (var job in currentJobs)
             {

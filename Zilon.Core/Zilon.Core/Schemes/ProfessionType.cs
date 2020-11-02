@@ -6,7 +6,7 @@ namespace Zilon.Core.Schemes
     /// Доступные крафтовые компетенции.
     /// </summary>
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    public enum ProfessionTypes
+    public enum ProfessionType
     {
         Сarpenter,
         WoodProcessing,

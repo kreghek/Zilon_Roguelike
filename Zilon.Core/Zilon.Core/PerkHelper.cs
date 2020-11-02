@@ -9,6 +9,11 @@ namespace Zilon.Core
     {
         public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
         {
+            if (perkScheme is null)
+            {
+                throw new ArgumentNullException(nameof(perkScheme));
+            }
+
             if (level == null)
             {
                 return new PerkLevel(0, 0);
@@ -41,6 +46,11 @@ namespace Zilon.Core
         /// <param name="subLevel">Подуровень перка.</param>
         public static void ConvertTotalLevel(IPerkScheme perkScheme, int totalLevel, out int? level, out int? subLevel)
         {
+            if (perkScheme is null)
+            {
+                throw new ArgumentNullException(nameof(perkScheme));
+            }
+
             var levelRemains = totalLevel;
             var currentLevelPointer = 0;
             do
@@ -71,6 +81,11 @@ namespace Zilon.Core
         /// <returns></returns>
         public static int? ConvertLevel(IPerkScheme perkScheme, int? level, int subLevel)
         {
+            if (perkScheme is null)
+            {
+                throw new ArgumentNullException(nameof(perkScheme));
+            }
+
             if (level == null)
                 return null;
 

@@ -59,6 +59,11 @@ namespace Zilon.Core.PersonModules
         /// <inheritdoc/>
         public void PerkLevelUp(IPerk perk)
         {
+            if (perk is null)
+            {
+                throw new ArgumentNullException(nameof(perk));
+            }
+
             var activePerkIsValid = Perks.Contains(perk);
             if (!activePerkIsValid)
             {

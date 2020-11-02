@@ -15,7 +15,9 @@ namespace Zilon.Core.ProgressStoring
             return storageData;
         }
 
-        public void Restore(HumanPlayer humanPlayer)
+#pragma warning disable CA1801 // Review unused parameters
+        public static void Restore(HumanPlayer humanPlayer)
+#pragma warning restore CA1801 // Review unused parameters
         {
             // Здесь нужно восстанавливать позиуию игрока в графе узлов биома.
             // Еще не успел это сделать. Вернуться, когда будет готово сохранение биомов.

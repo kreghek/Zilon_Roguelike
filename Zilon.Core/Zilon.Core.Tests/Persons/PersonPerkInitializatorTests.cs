@@ -36,7 +36,7 @@ namespace Zilon.Core.Persons.Tests
 
             // ACT
 
-            var factPerks = perkInitializator.Get();
+            var factPerks = perkInitializator.Generate();
 
             // ASSERT
 

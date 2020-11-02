@@ -193,7 +193,7 @@ namespace Zilon.Core.Tactics
             act.StartCooldownIfItIs();
         }
 
-        private bool IsInDistance(IActor actor, IAttackTarget target, ITacticalAct act, ISectorMap map)
+        private static bool IsInDistance(IActor actor, IAttackTarget target, ITacticalAct act, ISectorMap map)
         {
             var actorNodes = GetActorNodes(actor.PhysicalSize, actor.Node, map);
             var targetNodes = GetActorNodes(target.PhysicalSize, target.Node, map);
@@ -243,7 +243,7 @@ namespace Zilon.Core.Tactics
             return roll;
         }
 
-        private int GetUseSuccessRoll()
+        private static int GetUseSuccessRoll()
         {
             // В будущем успех использования вторичных дейсвий будет зависить от действия, экипировки, перков.
             return 5;
