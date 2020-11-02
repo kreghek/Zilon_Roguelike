@@ -80,12 +80,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             {
                 InitStartAliveMatrix(matrix, chanceToStartAlive);
 
-                // Несколько шагов симуляции
-                for (var i = 0; i < SIMULATION_COUNT; i++)
-                {
-                    var newMap = DoSimulationStep(matrix);
-                    matrix = new Matrix<bool>(newMap.Items, matrix.Width, matrix.Height);
-                }
+                matrix = SimulateCellularAutomaton(matrix);
 
                 var resizedMatrix = MapFactoryHelper.ResizeMatrixTo7(matrix);
 
@@ -103,7 +98,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     continue;
                 }
 
-                // Обрабатываем ситуацию, когда на карте тегионов меньше, чем переходов.
+                // Обрабатываем ситуацию, когда на карте регионов оказалось меньше, чем переходов.
                 // На карте должно быть минимум столько регионов, сколько переходов.
                 // +1 - это регион старта.
                 if (draftRegions.Length < targetRegionDraftCount)
@@ -135,11 +130,82 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
         }
 
+        /// <summary>
+        /// Несколько шагов симуляции
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <returns></returns>
+        private static Matrix<bool> SimulateCellularAutomaton(Matrix<bool> matrix)
+        {
+            for (var i = 0; i < SIMULATION_COUNT; i++)
+            {
+                var newMap = DoSimulationStep(matrix);
+                matrix = new Matrix<bool>(newMap.Items, matrix.Width, matrix.Height);
+            }
+
+            return matrix;
+        }
+
         private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
         {
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
 
+            FillMapRegions(draftRegions, map);
+
+            MapDraftRegionsToSectorMap(matrix, draftRegions, map);
+
+            // Размещаем переходы и отмечаем стартовую комнату.
+            // Общее описание: стараемся размещать переходы в самых маленьких комнатах.
+            // Для этого сортируем все комнаты по размеру.
+            // Первую занимаем под старт.
+            // Последующие - это переходы.
+
+            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Length).ToArray();
+
+            if (regionOrderedBySize.Any())
+            {
+                CreateTransitionInSmallestRegion(transitions, map, regionOrderedBySize);
+            }
+
+            return map;
+        }
+
+        private static void CreateTransitionInSmallestRegion(IEnumerable<RoomTransition> transitions, ISectorMap map, MapRegion[] regionOrderedBySize)
+        {
+            var startRegion = regionOrderedBySize.First();
+            startRegion.IsStart = true;
+
+            var transitionArray = transitions.ToArray();
+            // Пропускаем 1, потому что 1 занять стартом.
+            var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
+
+            Debug.Assert(trasitionRegionDrafts.Length >= transitionArray.Length,
+                "Должно быть достаточно регионов для размещения всех переходов.");
+
+            for (var i = 0; i < transitionArray.Length; i++)
+            {
+                var transitionRegion = trasitionRegionDrafts[i];
+
+                var transition = transitionArray[i];
+
+                var transitionNode = transitionRegion.Nodes.First();
+
+                map.Transitions.Add(transitionNode, transition);
+
+                if (transition.SectorNode == null)
+                {
+                    transitionRegion.IsOut = true;
+                }
+
+                transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
+                                              where map.Transitions.Keys.Contains(regionNode)
+                                              select regionNode).ToArray();
+            }
+        }
+
+        private static void FillMapRegions(RegionDraft[] draftRegions, ISectorMap map)
+        {
             var regionIdCounter = 1;
             foreach (var draftRegion in draftRegions)
             {
@@ -159,51 +225,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                 regionIdCounter++;
             }
-
-            MapDraftRegionsToSectorMap(matrix, draftRegions, map);
-
-            // Размещаем переходы и отмечаем стартовую комнату.
-            // Общее описание: стараемся размещать переходы в самых маленьких комнатах.
-            // Для этого сортируем все комнаты по размеру.
-            // Первую занимаем под старт.
-            // Последующие - это переходы.
-
-            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Length).ToArray();
-
-            if (regionOrderedBySize.Any())
-            {
-                var startRegion = regionOrderedBySize.First();
-                startRegion.IsStart = true;
-
-                var transitionArray = transitions.ToArray();
-                // Пропускаем 1, потому что 1 занять стартом.
-                var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
-
-                Debug.Assert(trasitionRegionDrafts.Length >= transitionArray.Length,
-                    "Должно быть достаточно регионов для размещения всех переходов.");
-
-                for (var i = 0; i < transitionArray.Length; i++)
-                {
-                    var transitionRegion = trasitionRegionDrafts[i];
-
-                    var transition = transitionArray[i];
-
-                    var transitionNode = transitionRegion.Nodes.First();
-
-                    map.Transitions.Add(transitionNode, transition);
-
-                    if (transition.SectorNode == null)
-                    {
-                        transitionRegion.IsOut = true;
-                    }
-
-                    transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
-                                                  where map.Transitions.Keys.Contains(regionNode)
-                                                  select regionNode).ToArray();
-                }
-            }
-
-            return map;
         }
 
         private void InitStartAliveMatrix(Matrix<bool> matrix, int _chanceToStartAlive)
@@ -355,8 +376,58 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 throw new CellularAutomatonException("Ни одна из клеток не выжила.");
             }
 
-            // Разбиваем все проходимые (true) клетки на регионы
-            // через заливку.
+            var regions = CalculatePassableRegions(matrix, openNodes);
+
+            // Соединяем все регионы в единый граф.
+            var openRegions = new List<RegionDraft>(regions);
+            var unitedRegions = new List<RegionDraft>();
+
+            var startRegion = openRegions[0];
+            openRegions.RemoveAt(0);
+            unitedRegions.Add(startRegion);
+
+            while (openRegions.Any())
+            {
+                ConnectOpenRegionsToUnited(matrix, openRegions, unitedRegions);
+            }
+
+            return regions.ToArray();
+        }
+
+        private static void ConnectOpenRegionsToUnited(Matrix<bool> matrix, List<RegionDraft> openRegions, List<RegionDraft> unitedRegions)
+        {
+            var unitedRegionCoords = unitedRegions.SelectMany(x => x.Coords).ToArray();
+
+            // Ищем две самые ближние точки между объединённым регионом и 
+            // и всеми открытыми регионами.
+
+            FindClosestNodesBetweenOpenAndUnited(
+                openRegions,
+                unitedRegionCoords,
+                out OffsetCoords? currentOpenRegionCoord,
+                out OffsetCoords? currentUnitedRegionCoord,
+                out RegionDraft nearbyOpenRegion);
+
+            // Если координаты, которые нужно соединить, найдены,
+            // то прорываем тоннель.
+            if (nearbyOpenRegion != null
+                && currentOpenRegionCoord != null
+                 && currentUnitedRegionCoord != null)
+            {
+                var openCubeCoord = HexHelper.ConvertToCube(currentOpenRegionCoord.Value);
+                var unitedCubeCoord = HexHelper.ConvertToCube(currentUnitedRegionCoord.Value);
+
+                DrawLineBetweenNodes(matrix, openCubeCoord, unitedCubeCoord);
+
+                openRegions.Remove(nearbyOpenRegion);
+                unitedRegions.Add(nearbyOpenRegion);
+            }
+        }
+
+        // Разбиваем все проходимые (true) клетки на регионы
+        // через заливку.
+        private static List<RegionDraft> CalculatePassableRegions(Matrix<bool> matrix, List<OffsetCoords> openNodes)
+        {
             var regions = new List<RegionDraft>();
             while (openNodes.Any())
             {
@@ -369,45 +440,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 regions.Add(region);
             }
 
-            // Соединяем все регионы в единый граф.
-            var openRegions = new List<RegionDraft>(regions);
-            var unitedRegions = new List<RegionDraft>();
-
-            var startRegion = openRegions[0];
-            openRegions.RemoveAt(0);
-            unitedRegions.Add(startRegion);
-
-            while (openRegions.Any())
-            {
-                var unitedRegionCoords = unitedRegions.SelectMany(x => x.Coords).ToArray();
-
-                // Ищем две самые ближние точки между объединённым регионом и 
-                // и всеми открытыми регионами.
-
-                FindClosestNodesBetweenOpenAndUnited(
-                    openRegions,
-                    unitedRegionCoords,
-                    out OffsetCoords? currentOpenRegionCoord,
-                    out OffsetCoords? currentUnitedRegionCoord,
-                    out RegionDraft nearbyOpenRegion);
-
-                // Если координаты, которые нужно соединить, найдены,
-                // то прорываем тоннель.
-                if (nearbyOpenRegion != null
-                    && currentOpenRegionCoord != null
-                     && currentUnitedRegionCoord != null)
-                {
-                    var openCubeCoord = HexHelper.ConvertToCube(currentOpenRegionCoord.Value);
-                    var unitedCubeCoord = HexHelper.ConvertToCube(currentUnitedRegionCoord.Value);
-
-                    DrawLineBetweenNodes(matrix, openCubeCoord, unitedCubeCoord);
-
-                    openRegions.Remove(nearbyOpenRegion);
-                    unitedRegions.Add(nearbyOpenRegion);
-                }
-            }
-
-            return regions.ToArray();
+            return regions;
         }
 
         private static void DrawLineBetweenNodes(Matrix<bool> matrix, CubeCoords openCubeCoord, CubeCoords unitedCubeCoord)

@@ -155,21 +155,49 @@ namespace Zilon.Core.Tactics
 
             if (factToHitRoll >= successToHitRoll)
             {
-                var damageEfficientCalcResult = CalcEfficient(targetActor, tacticalActRoll);
-                var actEfficient = damageEfficientCalcResult.ResultEfficient;
+                ProcessSuccessfullHit(actor, targetActor, tacticalActRoll, targetIsDeadLast, successToHitRoll, factToHitRoll);
+            }
+            else
+            {
+                ProcessFailedHit(actor, targetActor, prefferedDefenceItem, successToHitRoll, factToHitRoll);
+            }
+        }
 
-                ProcessSuccessfulAttackEvent(
-                    actor,
+        private void ProcessFailedHit(IActor actor, IActor targetActor, PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll)
+        {
+            if (prefferedDefenceItem != null)
+            {
+                // Это промах, потому что целевой актёр увернулся.
+                ProcessAttackDodgeEvent(actor,
                     targetActor,
-                    damageEfficientCalcResult,
+                    prefferedDefenceItem,
                     successToHitRoll,
                     factToHitRoll);
+            }
+            else
+            {
+                // Это промах чистой воды.
+                ProcessPureMissEvent(actor,
+                    targetActor,
+                    successToHitRoll,
+                    factToHitRoll);
+            }
+        }
 
-                if (actEfficient <= 0)
-                {
-                    return;
-                }
+        private void ProcessSuccessfullHit(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll, bool targetIsDeadLast, int successToHitRoll, int factToHitRoll)
+        {
+            var damageEfficientCalcResult = CalcEfficient(targetActor, tacticalActRoll);
+            var actEfficient = damageEfficientCalcResult.ResultEfficient;
 
+            ProcessSuccessfulAttackEvent(
+                actor,
+                targetActor,
+                damageEfficientCalcResult,
+                successToHitRoll,
+                factToHitRoll);
+
+            if (actEfficient > 0)
+            {
                 targetActor.TakeDamage(actEfficient);
 
                 CountTargetActorAttack(actor, targetActor, tacticalActRoll.TacticalAct);
@@ -183,26 +211,6 @@ namespace Zilon.Core.Tactics
                 if (!targetIsDeadLast && targetActor.Person.CheckIsDead())
                 {
                     CountTargetActorDefeat(actor, targetActor);
-                }
-            }
-            else
-            {
-                if (prefferedDefenceItem != null)
-                {
-                    // Это промах, потому что целевой актёр увернулся.
-                    ProcessAttackDodgeEvent(actor,
-                        targetActor,
-                        prefferedDefenceItem,
-                        successToHitRoll,
-                        factToHitRoll);
-                }
-                else
-                {
-                    // Это промах чистой воды.
-                    ProcessPureMissEvent(actor,
-                        targetActor,
-                        successToHitRoll,
-                        factToHitRoll);
                 }
             }
         }
