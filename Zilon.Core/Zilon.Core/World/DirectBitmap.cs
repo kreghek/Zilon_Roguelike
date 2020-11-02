@@ -32,11 +32,11 @@ namespace Zilon.Core.World
             Bits[index] = col;
         }
 
-        public System.Drawing.Color GetPixel(int x, int y)
+        public Color GetPixel(int x, int y)
         {
             int index = x + y * Width;
             int col = Bits[index];
-            var result = System.Drawing.Color.FromArgb(col);
+            var result = Color.FromArgb(col);
 
             return result;
         }

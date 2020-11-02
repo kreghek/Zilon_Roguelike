@@ -59,7 +59,7 @@ namespace Zilon.Core.Schemes
             }
 
             var handler = GetHandler<TScheme>();
-            var scheme = handler.Get(sid);
+            var scheme = handler.GetItem(sid);
             return scheme;
         }
 

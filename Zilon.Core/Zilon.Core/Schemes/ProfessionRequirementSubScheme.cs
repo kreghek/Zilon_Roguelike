@@ -8,7 +8,7 @@
         /// <summary>
         /// Тип компетенции.
         /// </summary>
-        public ProfessionTypes Profession { get; set; }
+        public ProfessionType Profession { get; set; }
 
         /// <summary>
         /// Минимальный уровень владения.
