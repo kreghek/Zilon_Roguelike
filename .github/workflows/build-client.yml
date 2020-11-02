@@ -1,0 +1,69 @@
+name: Build Unity Client
+
+on:
+  pull_request:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+  push: { branches: [master] }
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+jobs:
+  buildCore:
+    name: Build core libs
+    runs-on: mcr.microsoft.com/dotnet/core/sdk:2.1-alpine
+    steps:
+      - run: dotnet publish Zilon.Core/Zilon.Core/Zilon.Core.csproj -c Release -f netstandard2.0 -o ../../bin
+      - run: dotnet publish Zilon.Core/Zilon.Bot.Players/Zilon.Bot.Players.csproj -c Release -f netstandard2.0 -o ../../bin
+      - uses: actions/upload-artifact@v1
+        with:
+          name: CoreLibs
+          path: bin
+    
+  buildForSomePlatforms:
+    name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - Zilon.Client
+        unityVersion:
+          - 2020.1.10f1
+        targetPlatform:
+          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows # Build a Windows standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: actions/checkout@v2
+        with:
+          repository: kreghek/Zilon_Roguelike_Plugins
+          path: /Assets/Plugins
+      - name: Download core libs from artifatcs
+        uses: actions/download-artifact@v2
+        with:
+          name: CoreLibs
+          path: ${{ matrix.projectPath }}/Assets/Plugins
+      - uses: actions/cache@v1.1.0
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-${{ matrix.projectPath }}-
+            Library-
+      - uses: webbertakken/unity-builder@v1.3
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+      - uses: actions/upload-artifact@v1
+        with:
+          name: Build
+          path: build
