@@ -172,7 +172,7 @@ namespace Zilon.Core.Tests.Schemes
             }
         }
 
-        private ISchemeService CreateSchemeService()
+        private static ISchemeService CreateSchemeService()
         {
             var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
 
@@ -195,7 +195,7 @@ namespace Zilon.Core.Tests.Schemes
             return schemeTypes;
         }
 
-        private void CheckDropTableScheme(IDropTableScheme dropTableScheme, ISchemeService schemeService)
+        private static void CheckDropTableScheme(IDropTableScheme dropTableScheme, ISchemeService schemeService)
         {
             Action act = () =>
             {

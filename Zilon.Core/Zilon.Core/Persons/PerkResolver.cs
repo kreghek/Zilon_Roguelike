@@ -8,6 +8,11 @@ namespace Zilon.Core.Persons
     {
         public void ApplyProgress(IJobProgress progress, IEvolutionModule evolutionData)
         {
+            if (progress is null)
+            {
+                throw new System.ArgumentNullException(nameof(progress));
+            }
+
             if (evolutionData == null)
             {
                 return;
@@ -52,7 +57,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private bool CheckLevelCap(IPerk perk)
+        private static bool CheckLevelCap(IPerk perk)
         {
             var currentLevel = perk.CurrentLevel;
             if (currentLevel == null)

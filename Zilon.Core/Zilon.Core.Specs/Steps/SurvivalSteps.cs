@@ -37,10 +37,18 @@ namespace Zilon.Core.Specs.Steps
             string provisionStat)
         {
             var actor = Context.GetActiveActor();
-
+            PersonRuleDirection direction;
             ConsumeCommonRuleType consumeRuleType;
-            var direction = PersonRuleDirection.Positive;
+            ParseProvisionStat(provisionStat, out direction, out consumeRuleType);
 
+            TestPropScheme propScheme = CreateTestPropScheme(propSid, direction, consumeRuleType);
+
+            FeatureContextBase.AddResourceToActor(propScheme, 1, actor);
+        }
+
+        private static void ParseProvisionStat(string provisionStat, out PersonRuleDirection direction, out ConsumeCommonRuleType consumeRuleType)
+        {
+            direction = PersonRuleDirection.Positive;
             switch (provisionStat)
             {
                 case "сытость":
@@ -73,8 +81,11 @@ namespace Zilon.Core.Specs.Steps
                 default:
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
+        }
 
-            var propScheme = new TestPropScheme
+        private static TestPropScheme CreateTestPropScheme(string propSid, PersonRuleDirection direction, ConsumeCommonRuleType consumeRuleType)
+        {
+            return new TestPropScheme
             {
                 Sid = propSid,
                 Use = new TestPropUseSubScheme
@@ -85,8 +96,6 @@ namespace Zilon.Core.Specs.Steps
                     }
                 }
             };
-
-            FeatureContextBase.AddResourceToActor(propScheme, 1, actor);
         }
 
         [Given(@"Актёр значение (.*) равное (.*)")]
@@ -281,7 +290,7 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private int? GetSurvivalValue(IActor actor, SurvivalStatType type)
+        private static int? GetSurvivalValue(IActor actor, SurvivalStatType type)
         {
             var stat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == type);
             return stat?.Value;

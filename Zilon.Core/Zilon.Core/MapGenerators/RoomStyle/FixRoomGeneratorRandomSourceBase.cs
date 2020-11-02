@@ -11,7 +11,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public abstract class FixRoomGeneratorRandomSourceBase : IRoomGeneratorRandomSource
     {
-        protected readonly List<Tuple<OffsetCoords, OffsetCoords>> Connections;
+        protected List<Tuple<OffsetCoords, OffsetCoords>> Connections { get; }
 
         protected FixRoomGeneratorRandomSourceBase()
         {
@@ -55,7 +55,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns> Возвращает набор элементов интерьера комнаты. </returns>
         public RoomInteriorObjectMeta[] RollInteriorObjects(int roomWidth, int roomHeight)
         {
-            return new RoomInteriorObjectMeta[0];
+            return Array.Empty<RoomInteriorObjectMeta>();
         }
 
         /// <summary>

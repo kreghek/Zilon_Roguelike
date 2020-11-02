@@ -128,7 +128,7 @@ namespace Zilon.Core.PersonGeneration
                 throw new ArgumentNullException(nameof(evolutionData));
             }
 
-            var rolledTraits = _personPerkInitializator.Get();
+            var rolledTraits = _personPerkInitializator.Generate();
             evolutionData.AddBuildInPerks(rolledTraits);
         }
 
