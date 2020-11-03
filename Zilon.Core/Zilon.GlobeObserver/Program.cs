@@ -18,7 +18,7 @@ namespace Zilon.GlobeObserver
             startUp.RegisterServices(serviceContainer);
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
-            var globe = await GenerateGlobeAsync(serviceProvider);
+            var globe = await GenerateGlobeAsync(serviceProvider).ConfigureAwait(false);
 
             // Iterate globe
             var globeIterationCounter = 0L;
