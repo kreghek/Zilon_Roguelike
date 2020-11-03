@@ -277,6 +277,7 @@ namespace Zilon.Core.PersonGeneration
                     MainHandEquipments = new StartDropTableScheme{
                         Records = new []{
                             new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="glaive", Weight = 1 },
                         }
                     },
                     OffHandEquipments = new StartDropTableScheme{
@@ -298,13 +299,15 @@ namespace Zilon.Core.PersonGeneration
                     HeadEquipments = new StartDropTableScheme{
                         Records = new []{
                             new StartDropTableRecordSubScheme{ SchemeSid="leather-helmet", Weight = 2 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="closed-leather-helmet", Weight = 2 },
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 }
                         }
                     },
                     MainHandEquipments = new StartDropTableScheme{
                         Records = new []{
-                             new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="battle-axe", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="club", Weight = 1 },
                         }
                     },
                     OffHandEquipments = new StartDropTableScheme{
@@ -313,7 +316,14 @@ namespace Zilon.Core.PersonGeneration
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
                         }
                     },
-                    InventoryProps = new StartDropTableScheme()
+                    InventoryProps = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid="medkit", MinCount = 1, MaxCount=1 , Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="packed-food", MinCount = 1, MaxCount=1, Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="water-bottle", MinCount = 1, MaxCount=1, Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 4 },
+                        }
+                    }
                 }
             };
         }
