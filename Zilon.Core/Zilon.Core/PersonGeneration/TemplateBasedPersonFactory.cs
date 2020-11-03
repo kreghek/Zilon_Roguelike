@@ -19,11 +19,6 @@ namespace Zilon.Core.PersonGeneration
         private const int BODY_SLOT_INDEX = 1;
         private const int MAIN_HAND_SLOT_INDEX = 2;
         private const int OFF_HAND_SLOT_INDEX = 3;
-        private const string HEAD_DROP_SID = "start-heads";
-        private const string MAIN_WEAPON_DROP_SID = "start-main-weapons";
-        private const string BODY_DROP_SID = "start-armors";
-        private const string OFF_WEAPON_DROP_SID = "start-off-weapons";
-        private const string START_PROP_DROP_SID = "start-props";
 
         private readonly ISchemeService _schemeService;
         private readonly ISurvivalRandomSource _survivalRandomSource;
