@@ -8,6 +8,7 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Windows;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -47,6 +48,10 @@ public class PlayerPersonInitiator : MonoBehaviour
     [NotNull]
     [Inject]
     private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
+
+    [NotNull]
+    [Inject]
+    private readonly ISectorModalManager _sectorModalManager;
 
     public ActorViewModel InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels, List<ActorViewModel> ActorViewModels)
     {
@@ -126,7 +131,7 @@ public class PlayerPersonInitiator : MonoBehaviour
 
     private void ShowCreatePersonModal(IPerson playerPerson)
     {
-        //_sectorModalManager.ShowCreatePersonModal(playerPerson);
+        _sectorModalManager.ShowCreatePersonModal(playerPerson);
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
