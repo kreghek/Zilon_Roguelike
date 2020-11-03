@@ -205,12 +205,12 @@ namespace Zilon.Core.PersonGeneration
                     Name = new LocalizedString{ Ru = "Горец", En = "Hightlander" },
                     BodyEquipments = new StartDropTableScheme(),
                     HeadEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="highlander-helmet", Weight = 1 }
                         }
                     },
                     MainHandEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="battle-axe", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="claw-sword", Weight = 1 },
@@ -218,7 +218,7 @@ namespace Zilon.Core.PersonGeneration
                     },
                     OffHandEquipments = new StartDropTableScheme(),
                     InventoryProps = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="medkit", MinCount = 1, MaxCount=1 , Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="packed-food", MinCount = 1, MaxCount=1, Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="water-bottle", MinCount = 1, MaxCount=1, Weight = 1 },
@@ -229,18 +229,18 @@ namespace Zilon.Core.PersonGeneration
                 new PersonTemplate{
                     Name = new LocalizedString{ Ru = "Самурай", En = "Samurai" },
                     BodyEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="leather-jacket", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
                         }
                     },
                     HeadEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 }
                         }
                     },
                     MainHandEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="bocken", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="dikatan", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="katana", Weight = 1 },
@@ -248,7 +248,7 @@ namespace Zilon.Core.PersonGeneration
                     },
                     OffHandEquipments = new StartDropTableScheme(),
                     InventoryProps = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="medkit", MinCount = 1, MaxCount=1 , Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="packed-food", MinCount = 1, MaxCount=1, Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="water-bottle", MinCount = 1, MaxCount=1, Weight = 1 },
@@ -259,24 +259,24 @@ namespace Zilon.Core.PersonGeneration
                 new PersonTemplate{
                     Name = new LocalizedString{ Ru = "Гвардеец", En = "Guardian" },
                     BodyEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="steel-armor", Weight = 2 },
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
                         }
                     },
                     HeadEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 }
                         }
                     },
                     MainHandEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="glaive", Weight = 1 },
                         }
                     },
                     OffHandEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="wooden-shield", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 2 },
                         }
@@ -286,33 +286,33 @@ namespace Zilon.Core.PersonGeneration
                 new PersonTemplate{
                     Name = new LocalizedString{ Ru = "Ополченец", En = "Militia" },
                     BodyEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="leather-jacket", Weight = 2 },
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
                         }
                     },
                     HeadEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="leather-helmet", Weight = 2 },
                             new StartDropTableRecordSubScheme{ SchemeSid="closed-leather-helmet", Weight = 2 },
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 }
                         }
                     },
                     MainHandEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="battle-axe", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="club", Weight = 1 },
                         }
                     },
                     OffHandEquipments = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="wooden-shield", Weight = 2 },
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
                         }
                     },
                     InventoryProps = new StartDropTableScheme{
-                        Records = new []{
+                        Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="medkit", MinCount = 1, MaxCount=1 , Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="packed-food", MinCount = 1, MaxCount=1, Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="water-bottle", MinCount = 1, MaxCount=1, Weight = 1 },
