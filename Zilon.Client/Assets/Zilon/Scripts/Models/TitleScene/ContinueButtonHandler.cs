@@ -20,7 +20,7 @@ public class ContinueButtonHandler : MonoBehaviour
     public Text ContinueText;
 
     [Inject] private readonly IScoreManager _scoreManager;
-    [Inject] private readonly HumanPlayer _humanPlayer;
+    [Inject] private readonly IPlayer _humanPlayer;
     [Inject] private readonly ProgressStorageService _progressStorageService;
 
     // Start is called before the first frame update

@@ -12,7 +12,7 @@ using Zilon.Core.Scoring;
 public class NewGameButtonHandler : MonoBehaviour
 {
     [Inject] private readonly IScoreManager _scoreManager;
-    [Inject] private readonly HumanPlayer _humanPlayer;
+    [Inject] private readonly IPlayer _humanPlayer;
 
     [Inject]
     ProgressStorageService _progressStorageService;
