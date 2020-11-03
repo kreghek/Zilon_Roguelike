@@ -56,6 +56,18 @@ namespace Zilon.Core.PersonModules
             var defaultAct = CreateTacticalAct(defaultActScheme, equipment: null, effects: effects, perks: perks);
             yield return defaultAct;
 
+            var equipmentActs = CalcActsFromEquipments(equipments, effects, perks);
+            foreach (var act in equipmentActs)
+            {
+                yield return act;
+            }
+        }
+
+        private static IEnumerable<ITacticalAct> CalcActsFromEquipments(
+            IEnumerable<Equipment> equipments,
+            IEffectsModule effects,
+            IEnumerable<IPerk> perks)
+        {
             if (equipments == null)
             {
                 yield break;

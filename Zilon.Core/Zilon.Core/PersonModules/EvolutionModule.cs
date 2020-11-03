@@ -99,15 +99,22 @@ namespace Zilon.Core.PersonModules
 
         private void UpdatePerks()
         {
+            var perks = GetPerks();
+
+            Perks = perks.ToArray();
+        }
+
+        private IList<IPerk> GetPerks()
+        {
             var schemes = _schemeService.GetSchemes<IPerkScheme>()
-                // Для развития годятся только те перки, которые не врождённые.
-                // Врождённые перки даются только при генерации персонажа.
-                .Where(x => !x.IsBuildIn)
-                // Защиита от схем, в которых забыли прописать уровни.
-                // По идее, такие перки либо должны быть врождёнными.
-                // Следовательно, если они не отсеяны выше, то это ошибка.
-                // Такие схемы лучше проверять в тестах на валидацию схем.
-                .Where(x => x.Levels != null);
+                            // Для развития годятся только те перки, которые не врождённые.
+                            // Врождённые перки даются только при генерации персонажа.
+                            .Where(x => !x.IsBuildIn)
+                            // Защиита от схем, в которых забыли прописать уровни.
+                            // По идее, такие перки либо должны быть врождёнными.
+                            // Следовательно, если они не отсеяны выше, то это ошибка.
+                            // Такие схемы лучше проверять в тестах на валидацию схем.
+                            .Where(x => x.Levels != null);
 
             var perks = new List<IPerk>(_buildInPerks);
             if (Perks != null)
@@ -136,7 +143,7 @@ namespace Zilon.Core.PersonModules
                 perks.Add(perk);
             }
 
-            Perks = perks.ToArray();
+            return perks;
         }
     }
 }

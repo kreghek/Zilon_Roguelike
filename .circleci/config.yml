@@ -379,9 +379,9 @@ workflows:
             - build
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
-#      - test_specflow:
-#          requires:
-#            - build
+      - test_specflow:
+          requires:
+            - build
       - test_bots:
           requires:
             - build
@@ -389,7 +389,7 @@ workflows:
             - test_di
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
-#            - test_specflow
+            - test_specflow
       - build_Win_x64:
           requires:
             - build
@@ -397,7 +397,7 @@ workflows:
             - test_di
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
-#            - test_specflow
+            - test_specflow
   release:
     jobs:
       - build:

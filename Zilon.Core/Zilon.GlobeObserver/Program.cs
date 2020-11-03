@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,22 +11,14 @@ namespace Zilon.GlobeObserver
 {
     static class Program
     {
-        static async System.Threading.Tasks.Task Main()
+        static async Task Main()
         {
             var serviceContainer = new ServiceCollection();
             var startUp = new StartUp();
             startUp.RegisterServices(serviceContainer);
 
-            serviceContainer.AddSingleton<IGlobeInitializer, GlobeInitializer>();
-            serviceContainer.AddSingleton<IGlobeExpander>(provider => (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
-            serviceContainer.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
-            serviceContainer.AddSingleton<IPersonInitializer, AutoPersonInitializer>();
-
             using var serviceProvider = serviceContainer.BuildServiceProvider();
-
-            // Create globe
-            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
-            var globe = await globeInitializer.CreateGlobeAsync("intro");
+            var globe = await GenerateGlobeAsync(serviceProvider).ConfigureAwait(false);
 
             // Iterate globe
             var globeIterationCounter = 0L;
@@ -35,7 +28,10 @@ namespace Zilon.GlobeObserver
                 var iterationCount = int.Parse(Console.ReadLine());
                 for (var i = 0; i < iterationCount; i++)
                 {
-                    await globe.UpdateAsync();
+                    for (var iterationPassIndex = 0; iterationPassIndex < GlobeMetrics.OneIterationLength; iterationPassIndex++)
+                    {
+                        await globe.UpdateAsync();
+                    }
 
                     globeIterationCounter++;
 
@@ -51,6 +47,15 @@ namespace Zilon.GlobeObserver
                 PrintReport(globe);
 
             } while (true);
+        }
+
+        private static async Task<IGlobe> GenerateGlobeAsync(ServiceProvider serviceProvider)
+        {
+            // Create globe
+            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
+            var globe = await globeInitializer.CreateGlobeAsync("intro");
+
+            return globe;
         }
 
         private static void PrintReport(IGlobe globe)

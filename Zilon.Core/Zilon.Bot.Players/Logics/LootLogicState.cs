@@ -16,7 +16,7 @@ namespace Zilon.Bot.Players.Logics
 
         private MoveTask _moveTask;
 
-        public IStaticObject FindContainer(IActor actor, IStaticObjectManager staticObjectManager, ISectorMap map)
+        public static IStaticObject FindContainer(IActor actor, IStaticObjectManager staticObjectManager, ISectorMap map)
         {
             if (actor is null)
             {
