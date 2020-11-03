@@ -243,7 +243,7 @@ namespace Zilon.Core.Tactics
             return roll;
         }
 
-        private int GetUseSuccessRoll()
+        private static int GetUseSuccessRoll()
         {
             // В будущем успех использования вторичных дейсвий будет зависить от действия, экипировки, перков.
             return 5;
