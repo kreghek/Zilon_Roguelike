@@ -100,9 +100,8 @@ namespace Zilon.Core.PersonModules
         private void UpdatePerks()
         {
             var perks = GetPerks();
-            var spawnPerks = GetAddedSpawnPerks();
 
-            Perks = perks.Union(spawnPerks.Cast<IPerk>()).ToArray();
+            Perks = perks.ToArray();
         }
 
         private IList<IPerk> GetPerks()
@@ -135,43 +134,6 @@ namespace Zilon.Core.PersonModules
                 var perk = new Perk
                 {
                     Scheme = perkScheme,
-                    CurrentLevel = null,
-                    CurrentJobs = perkScheme.Levels[0].Jobs
-                        .Select(x => (IJob)new PerkJob(x))
-                        .ToArray()
-                };
-
-                perks.Add(perk);
-            }
-
-            return perks;
-        }
-
-        private IList<IPerk> GetAddedSpawnPerks()
-        {
-            var schemes = _schemeService.GetSchemes<ISpawnPerkScheme>()
-                            // Для развития годятся только те перки, которые не врождённые.
-                            // Врождённые перки даются только при генерации персонажа.
-                            .Where(x => !x.IsBuildIn)
-                            // Защиита от схем, в которых забыли прописать уровни.
-                            // По идее, такие перки либо должны быть врождёнными.
-                            // Следовательно, если они не отсеяны выше, то это ошибка.
-                            // Такие схемы лучше проверять в тестах на валидацию схем.
-                            .Where(x => x.Levels != null);
-
-            var perks = new List<IPerk>();
-            foreach (var perkScheme in schemes)
-            {
-                var existingPerk = Perks?.SingleOrDefault(x => x.Scheme == perkScheme);
-                if (existingPerk != null)
-                {
-                    continue;
-                }
-
-                //TODO Сейчас можно качнуть только первый уровень перка. Должно быть полноценное развитие.
-                var perk = new SpawnPerk(perkScheme.PersonScheme, perkScheme.TacticalAct)
-                {
-                    //Scheme = perkScheme,
                     CurrentLevel = null,
                     CurrentJobs = perkScheme.Levels[0].Jobs
                         .Select(x => (IJob)new PerkJob(x))

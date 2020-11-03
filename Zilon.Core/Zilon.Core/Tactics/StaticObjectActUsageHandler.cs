@@ -11,7 +11,7 @@ namespace Zilon.Core.Tactics
         public Type TargetType { get => typeof(IStaticObject); }
 
         /// <inheritdoc/>
-        public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll, IActUsageContext context)
+        public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll)
         {
             if (tacticalActRoll is null)
             {

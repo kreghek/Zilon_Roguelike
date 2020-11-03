@@ -2,7 +2,6 @@
 
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
-using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -12,13 +11,11 @@ namespace Zilon.Core.Tactics.Behaviour
     public class MoveIntention : IIntention
     {
         private readonly ISector _sector;
-        private readonly IGlobe _globe;
 
-        public MoveIntention(IGraphNode targetNode, ISector sector, IGlobe globe)
+        public MoveIntention(IGraphNode targetNode, ISector sector)
         {
             TargetNode = targetNode ?? throw new System.ArgumentNullException(nameof(targetNode));
             _sector = sector ?? throw new System.ArgumentNullException(nameof(sector));
-            _globe = globe ?? throw new System.ArgumentNullException(nameof(globe));
         }
 
         public IGraphNode TargetNode { get; }
@@ -30,7 +27,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private MoveTask CreateTaskInner(IActor actor)
         {
-            var taskContext = new ActorTaskContext(_sector, _globe);
+            var taskContext = new ActorTaskContext(_sector);
 
             return CreateMoveTask(actor, taskContext);
         }

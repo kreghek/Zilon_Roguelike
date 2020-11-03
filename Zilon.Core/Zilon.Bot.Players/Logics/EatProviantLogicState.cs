@@ -64,7 +64,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var taskContxt = new ActorTaskContext(context.Sector, context.Globe);
+            var taskContxt = new ActorTaskContext(context.Sector);
             return new UsePropTask(actor, taskContxt, bestResource);
         }
     }

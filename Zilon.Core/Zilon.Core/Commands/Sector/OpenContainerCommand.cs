@@ -78,7 +78,7 @@ namespace Zilon.Core.Commands
         {
             var openMethod = new HandOpenContainerMethod();
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector, _player.Globe);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             return new OpenContainerTask(actor, taskContext, staticObject, openMethod);
         }

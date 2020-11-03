@@ -65,7 +65,7 @@ namespace Zilon.Core.Commands
             var propVm = _inventoryState.SelectedProp;
             var usableProp = propVm.Prop;
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector, _player.Globe);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             var intention = new Intention<UsePropTask>(actor => new UsePropTask(actor, taskContext, usableProp));
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);

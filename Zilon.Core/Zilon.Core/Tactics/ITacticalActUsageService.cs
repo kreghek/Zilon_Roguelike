@@ -1,9 +1,7 @@
-﻿using Zilon.Core.World;
-
-namespace Zilon.Core.Tactics
+﻿namespace Zilon.Core.Tactics
 {
     public interface ITacticalActUsageService
     {
-        void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs, IGlobe globe);
+        void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs, ISector sector);
     }
 }

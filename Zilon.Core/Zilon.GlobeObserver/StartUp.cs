@@ -6,7 +6,6 @@ using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
-using Zilon.Core.PersonGeneration;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 using Zilon.Emulation.Common;
@@ -37,11 +36,6 @@ namespace Zilon.GlobeObserver
             serviceCollection.AddSingleton<LogicStateTreePatterns>();
 
             serviceCollection.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanBotActorTaskSource<ISectorTaskSourceContext>>();
-        }
-
-        protected override void RegisterPersonFactory(IServiceCollection container)
-        {
-            container.AddSingleton<IPersonFactory, DemigodPersonFactory>();
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Zilon.Core.World;
-
 namespace Zilon.Core.Tactics
 {
     /// <summary>
@@ -21,21 +19,6 @@ namespace Zilon.Core.Tactics
         /// <param name="actor"> Актёр, совершивший действие. </param>
         /// <param name="target"> Цель применения действия. </param>
         /// <param name="tacticalActRoll"> Соверщенное действие и его эффективность. </param>
-        void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll, IActUsageContext context);
-    }
-
-    public interface IActUsageContext
-    {
-        IGlobe Globe { get; }
-    }
-
-    public sealed class ActUsageContext : IActUsageContext
-    {
-        public ActUsageContext(IGlobe globe)
-        {
-            Globe = globe ?? throw new ArgumentNullException(nameof(globe));
-        }
-
-        public IGlobe Globe { get; }
+        void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll);
     }
 }
