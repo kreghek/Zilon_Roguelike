@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Zilon.Core.World;
-
 namespace Zilon.Core.Tactics.Behaviour
 {
     public sealed class ActorTaskContext : IActorTaskContext
