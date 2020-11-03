@@ -2,6 +2,7 @@
 
 using JetBrains.Annotations;
 
+using Zilon.Core.Localization;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 
@@ -17,6 +18,11 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public string Name { get; }
+
+        /// <summary>
+        /// Temporary property to show template name.
+        /// </summary>
+        public ILocalizedString PersonEquipmentTemplate { get; set; }
 
         /// <inheritdoc/>
         public IPersonScheme Scheme { get; }

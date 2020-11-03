@@ -45,6 +45,15 @@ namespace Zilon.Core.Tactics
             {
                 var table = openDropTables[0];
                 var records = table.Records;
+                if (!records.Any())
+                {
+                    // Do not try to roll if drop table has no records.
+
+                    // Dont forget to remove empty drop table from open to avoid endless loop.
+                    openDropTables.RemoveAt(0);
+                    continue;
+                }
+
                 var recMods = GetModRecords(records, modificators);
 
                 var totalWeight = recMods.Sum(x => x.ModifiedWeight);
