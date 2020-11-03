@@ -163,7 +163,7 @@ namespace Zilon.Core.PersonGeneration
         }
 
         private sealed class PersonTemplate
-        { 
+        {
             public ILocalizedString Name { get; set; }
             public IDropTableScheme HeadEquipments { get; set; }
             public IDropTableScheme BodyEquipments { get; set; }
@@ -202,12 +202,12 @@ namespace Zilon.Core.PersonGeneration
                 new PersonTemplate{
                     Name = new LocalizedString{ Ru = "Горец", En = "Hightlander" },
                     BodyEquipments = new StartDropTableScheme(),
-                    HeadEquipments = new StartDropTableScheme{ 
-                        Records = new []{ 
+                    HeadEquipments = new StartDropTableScheme{
+                        Records = new []{
                             new StartDropTableRecordSubScheme{ SchemeSid="highlander-helmet", Weight = 1 }
                         }
                     },
-                    MainHandEquipments = new StartDropTableScheme{ 
+                    MainHandEquipments = new StartDropTableScheme{
                         Records = new []{
                             new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="axe", Weight = 1 },
