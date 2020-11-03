@@ -138,6 +138,8 @@ namespace Zilon.Core.PersonGeneration
             var templates = GetPersonTemplates();
             var rolledTemplate = _dice.RollFromList(templates);
 
+            person.PersonEquipmentTemplate = rolledTemplate.Name;
+
             var headDropScheme = rolledTemplate.HeadEquipments;
             FillSlot(person, headDropScheme, HEAD_SLOT_INDEX);
 
@@ -189,6 +191,11 @@ namespace Zilon.Core.PersonGeneration
 
         private sealed class StartDropTableRecordSubScheme : IDropTableRecordSubScheme
         {
+            public StartDropTableRecordSubScheme()
+            {
+                Weight = 1;
+            }
+
             public int MaxCount { get; set; }
             public int MinCount { get; set; }
             public string SchemeSid { get; set; }
@@ -210,7 +217,8 @@ namespace Zilon.Core.PersonGeneration
                     MainHandEquipments = new StartDropTableScheme{
                         Records = new []{
                             new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="axe", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="battle-axe", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="claw-sword", Weight = 1 },
                         }
                     },
                     OffHandEquipments = new StartDropTableScheme(),
@@ -218,9 +226,94 @@ namespace Zilon.Core.PersonGeneration
                         Records = new []{
                             new StartDropTableRecordSubScheme{ SchemeSid="medkit", MinCount = 1, MaxCount=1 , Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid="packed-food", MinCount = 1, MaxCount=1, Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="water-bottle", MinCount = 1, MaxCount=1, Weight = 1 },
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 4 },
                         }
                     }
+                },
+                new PersonTemplate{
+                    Name = new LocalizedString{ Ru = "Самурай", En = "Samurai" },
+                    BodyEquipments = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid="leather-jacket", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
+                        }
+                    },
+                    HeadEquipments = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 }
+                        }
+                    },
+                    MainHandEquipments = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid="bocken", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="dikatan", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="katana", Weight = 1 },
+                        }
+                    },
+                    OffHandEquipments = new StartDropTableScheme(),
+                    InventoryProps = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid="medkit", MinCount = 1, MaxCount=1 , Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="packed-food", MinCount = 1, MaxCount=1, Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="water-bottle", MinCount = 1, MaxCount=1, Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 4 },
+                        }
+                    }
+                },
+                new PersonTemplate{
+                    Name = new LocalizedString{ Ru = "Гвардеец", En = "Guardian" },
+                    BodyEquipments = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid="steel-armor", Weight = 2 },
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
+                        }
+                    },
+                    HeadEquipments = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 }
+                        }
+                    },
+                    MainHandEquipments = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
+                        }
+                    },
+                    OffHandEquipments = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid="wooden-shield", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 2 },
+                        }
+                    },
+                    InventoryProps = new StartDropTableScheme()
+                },
+                new PersonTemplate{
+                    Name = new LocalizedString{ Ru = "Ополченец", En = "Militia" },
+                    BodyEquipments = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid="leather-jacket", Weight = 2 },
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
+                        }
+                    },
+                    HeadEquipments = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid="leather-helmet", Weight = 2 },
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 }
+                        }
+                    },
+                    MainHandEquipments = new StartDropTableScheme{
+                        Records = new []{
+                             new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="battle-axe", Weight = 1 },
+                        }
+                    },
+                    OffHandEquipments = new StartDropTableScheme{
+                        Records = new []{
+                            new StartDropTableRecordSubScheme{ SchemeSid="wooden-shield", Weight = 2 },
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
+                        }
+                    },
+                    InventoryProps = new StartDropTableScheme()
                 }
             };
         }
@@ -272,31 +365,6 @@ namespace Zilon.Core.PersonGeneration
             Equipment equipment)
         {
             return EquipmentCarrierHelper.CanBeEquiped(equipmentModule, slotIndex, equipment);
-        }
-
-        private IDropTableScheme GetHeads()
-        {
-            return _schemeService.GetScheme<IDropTableScheme>(HEAD_DROP_SID);
-        }
-
-        private IDropTableScheme GetMainWeapons()
-        {
-            return _schemeService.GetScheme<IDropTableScheme>(MAIN_WEAPON_DROP_SID);
-        }
-
-        private IDropTableScheme GetArmors()
-        {
-            return _schemeService.GetScheme<IDropTableScheme>(BODY_DROP_SID);
-        }
-
-        private IDropTableScheme GetOffWeapons()
-        {
-            return _schemeService.GetScheme<IDropTableScheme>(OFF_WEAPON_DROP_SID);
-        }
-
-        private IDropTableScheme GetStartProps()
-        {
-            return _schemeService.GetScheme<IDropTableScheme>(START_PROP_DROP_SID);
         }
 
         private static void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
