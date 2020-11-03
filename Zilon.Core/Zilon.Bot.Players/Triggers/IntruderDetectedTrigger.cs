@@ -1,28 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Triggers
 {
-    public class IntruderDetectedTrigger: ILogicStateTrigger
+    public class IntruderDetectedTrigger : ILogicStateTrigger
     {
-        private readonly ISectorManager _sectorManager;
-        private readonly ISectorMap _map;
-
-        public IntruderDetectedTrigger(ISectorManager sectorManager)
-        {
-            _sectorManager = sectorManager ?? throw new System.ArgumentNullException(nameof(sectorManager));
-            _map = sectorManager.CurrentSector.Map;
-        }
-
-        private IActor[] CheckForIntruders(IActor actor)
+        private static IActor[] CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
         {
             var foundIntruders = new List<IActor>();
-            foreach (var target in _sectorManager.CurrentSector.ActorManager.Items)
+
+            foreach (var target in actorManager.Items)
             {
-                if (target.Owner == actor.Owner)
+                if (target.Person.Fraction == actor.Person.Fraction)
                 {
                     continue;
                 }
@@ -32,7 +26,7 @@ namespace Zilon.Bot.Players.Triggers
                     continue;
                 }
 
-                var isVisible = LogicHelper.CheckTargetVisible(_map, actor.Node, target.Node);
+                var isVisible = LogicHelper.CheckTargetVisible(map, actor.Node, target.Node);
                 if (!isVisible)
                 {
                     continue;
@@ -44,13 +38,36 @@ namespace Zilon.Bot.Players.Triggers
             return foundIntruders.ToArray();
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
+            if (actor is null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
+            if (context is null)
+            {
+                throw new System.ArgumentNullException(nameof(context));
+            }
+
+            if (currentState is null)
+            {
+                throw new System.ArgumentNullException(nameof(currentState));
+            }
+
+            if (strategyData is null)
+            {
+                throw new System.ArgumentNullException(nameof(strategyData));
+            }
+
+            var map = context.Sector.Map;
+            var actorManager = context.Sector.ActorManager;
+
             // На каждом шаге осматриваем окрестности
             // на предмет нарушителей.
-            var intruders = CheckForIntruders(actor);
+            var intruders = CheckForIntruders(actor, map, actorManager);
 
-            var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
+            var orderedIntruders = intruders.OrderBy(x => map.DistanceBetween(actor.Node, x.Node));
             var nearbyIntruder = orderedIntruders.FirstOrDefault();
 
             if (nearbyIntruder == null)

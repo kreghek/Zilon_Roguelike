@@ -9,6 +9,7 @@ Scenario Outline: Провальный удар двумя оружиями.
 	And Актёр игрока экипирован предметом <propSid2> в слот Index: <slotIndex2>
 	And Задаём броски для использования действий
 	When Актёр игрока атакует монстра Id:<monsterId>
+	And Жду 1000 единиц времени
 	# При нанесении урона будет взято среднее значение между максимальной и
 	# минимальной эффективностью действия. Для 1D6 это будет 3 (int от 3.5)
 	Then Монстр Id:<monsterId> имеет Hp <expectedMonsterHp>
@@ -26,6 +27,7 @@ Scenario Outline: Успешный удар двумя оружиями.
 	And Актёр игрока экипирован предметом <propSid2> в слот Index: <slotIndex2>
 	And Задаём броски для использования действий
 	When Актёр игрока атакует монстра Id:<monsterId>
+	And Жду 1000 единиц времени
 	# При нанесении урона будет взято среднее значение между максимальной и
 	# минимальной эффективностью действия. Для 1D6 это будет 3 (int от 3.5)
 	Then Монстр Id:<monsterId> имеет Hp <expectedMonsterHp>
@@ -41,6 +43,7 @@ Scenario Outline: Удары "руками".
 	And Есть монстр класса <monsterSid> Id:<monsterId> в ячейке (<monsterNodeX>, <monsterNodeY>)
 	And Монстр Id:<monsterId> имеет Hp <monsterHp>
 	When Актёр игрока атакует монстра Id:<monsterId>
+	And Жду 1000 единиц времени
 	# При нанесении урона будет взято среднее значение между максимальной и
 	# минимальной эффективностью действия. Для 1D3 это будет 1 (int от 1.5)
 	Then Монстр Id:<monsterId> имеет Hp <expectedMonsterHp>
@@ -57,6 +60,7 @@ Scenario Outline: При наличии только щита разрешены
 	And Есть монстр класса <monsterSid> Id:<monsterId> в ячейке (<monsterNodeX>, <monsterNodeY>)
 	And Монстр Id:<monsterId> имеет Hp <monsterHp>
 	When Актёр игрока атакует монстра Id:<monsterId>
+	And Жду 1000 единиц времени
 	# При нанесении урона будет взято среднее значение между максимальной и
 	# минимальной эффективностью действия. Для 1D3 это будет 1 (int от 1.5)
 	Then Монстр Id:<monsterId> имеет Hp <expectedMonsterHp>
@@ -74,6 +78,7 @@ Scenario Outline: Расход патронов при стрельбе.
 	And В инвентаре у актёра есть ресурс: <resourceSid> количество: <resourceCount>
 	And Есть монстр класса <monsterSid> Id:<monsterId> в ячейке (<monsterNodeX>, <monsterNodeY>)
 	When Актёр игрока атакует монстра Id:<monsterId>
+	And Жду 1000 единиц времени
 	Then В инвентаре у актёра есть ресурс: <resourceSid> количество: <expectedResourceCount>
 
 Examples: 
@@ -88,6 +93,7 @@ Scenario Outline: Промахи действий с определённым т
 	And Актёр игрока экипирован предметом <equipmentSid> в слот Index: 2
 	And В инвентаре у актёра есть ресурс: mana количество: 10
 	When Актёр игрока атакует монстра Id:<monsterId>
+	And Жду 1000 единиц времени
 	Then Монстр Id:<monsterId> успешно обороняется
 
 Examples: 

@@ -41,6 +41,5 @@
         /// Абстрактное описание. Для конкретных схем используется по-разному.
         /// </remarks>
         LocalizedStringSubScheme Description { get; }
-
     }
 }

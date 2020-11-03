@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 
@@ -14,9 +15,10 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly int _slotIndex;
 
         public EquipTask(IActor actor,
+            IActorTaskContext context,
             Equipment equipment,
             int slotIndex) :
-            base(actor)
+            base(actor, context)
         {
             _equipment = equipment;
             _slotIndex = slotIndex;
@@ -38,7 +40,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private void EquipPropToSlot()
         {
-            var equipmentCarrier = Actor.Person.EquipmentCarrier;
+            var equipmentCarrier = Actor.Person.GetModule<IEquipmentModule>();
 
             // Предмет может быть экипирован из инвентаря (и) или из другого слота (с).
             // Предмет может быть экипирован в пустой слот (0) и слот, в котором уже есть другой предмет (1).
@@ -61,10 +63,10 @@ namespace Zilon.Core.Tactics.Behaviour
                 // при (0) ничего не делаем
                 if (currentEquipment != null)
                 {
-                    Actor.Person.Inventory.Add(currentEquipment);
+                    Actor.Person.GetModule<IInventoryModule>().Add(currentEquipment);
                 }
 
-                Actor.Person.Inventory.Remove(_equipment);
+                Actor.Person.GetModule<IInventoryModule>().Remove(_equipment);
                 equipmentCarrier[_slotIndex] = _equipment;
             }
             else
@@ -91,13 +93,13 @@ namespace Zilon.Core.Tactics.Behaviour
         /// Ищем предмет в уже экипированных.
         /// </summary>
         /// <param name="equipment"> Целевой предмет. </param>
-        /// <param name="equipmentCarrier"> Объект для хранения экипировки. </param>
+        /// <param name="equipmentModule"> Объект для хранения экипировки. </param>
         /// <returns> Возвращает индекс слота, в котором находится указанный предмет. Или null, если предмет не найден. </returns>
-        private int? FindPropInEquiped(Equipment equipment, IEquipmentCarrier equipmentCarrier)
+        private static int? FindPropInEquiped(Equipment equipment, IEquipmentModule equipmentModule)
         {
-            for (var i = 0; i < equipmentCarrier.Count(); i++)
+            for (var i = 0; i < equipmentModule.Count(); i++)
             {
-                if (equipmentCarrier[i] == equipment)
+                if (equipmentModule[i] == equipment)
                 {
                     return i;
                 }

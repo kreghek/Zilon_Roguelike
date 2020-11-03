@@ -1,57 +1,82 @@
 ﻿using System;
+using System.Threading.Tasks;
+
+using Zilon.Core.Common;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class HumanActorTaskSource : IHumanActorTaskSource
+    public class HumanActorTaskSource<TContext> : IHumanActorTaskSource<TContext> where TContext : ISectorTaskSourceContext
     {
-        private IActorTask _currentTask;
-        private IIntention _currentIntention;
+        private readonly ISender<IActorTask> _actorTaskSender;
+        private readonly IReceiver<IActorTask> _actorTaskReceiver;
+        private bool _intentionWait;
 
-        public void SwitchActor(IActor currentActor)
+        public HumanActorTaskSource()
         {
-            CurrentActor = currentActor;
+            var spscChannel = new SpscChannel<IActorTask>();
+            _actorTaskSender = spscChannel;
+            _actorTaskReceiver = spscChannel;
         }
 
-        public IActor CurrentActor { get; private set; }
-
-
-        public void Intent(IIntention intention)
+        public async Task IntentAsync(IIntention intention, IActor activeActor)
         {
-            _currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
+            if (_intentionWait)
+            {
+                // Это может происходить, если в клиентском коде предварительно не выполнили проверку CanIntent().
+                // Проверка нужна, чтобы не допустить получение очереди задач.
+                // Текущая реализация не допускает переопределение задач.
+                // Поэтому каждое новое намерение будет складывать по новой задаче в очередь, пока выполняется текущая задача
+                // Текущая задача выполняется в основном игровом цикле, который накручивает счётчик итераций, чтобы выполнить предусловия задачи.
+                throw new InvalidOperationException("Попытка задать новое намерение, пока не выполнена текущая задача.");
+            }
+
+            var currentIntention = intention ?? throw new ArgumentNullException(nameof(intention));
+
+            var actorTask = currentIntention.CreateActorTask(activeActor);
+
+            _intentionWait = true;
+
+            await _actorTaskSender.SendAsync(actorTask).ConfigureAwait(false);
         }
 
-        public IActorTask[] GetActorTasks(IActor actor)
+        public async Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
         {
-            if (actor != CurrentActor)
-            {
-                return Array.Empty<IActorTask>();
-            }
+            // Тезисы:
+            // Этот источник команд ждёт, пока игрок не укажет задачу.
+            // Задача генерируется из намерения. Это значит, что ждать нужно, пока не будет задано намерение.
 
-            var currentTaskIsComplete = _currentTask?.IsComplete;
-            if (currentTaskIsComplete != null && !currentTaskIsComplete.Value && _currentIntention == null)
-            {
-                return new[] { _currentTask };
-            }
+            return await _actorTaskReceiver.ReceiveAsync().ConfigureAwait(false);
+        }
 
-            if (CurrentActor == null)
-            {
-                throw new InvalidOperationException("Не выбран текущий ключевой актёр.");
-            }
+        //TODO Избавиться от синхронного варианта.
+        // Сейчас он оставлен прото из-за тестов. Сложностей с удалением нет, кроме рутины.
+        [Obsolete("Использовать асинк-вариант вместо этого")]
+        public void Intent(IIntention intention, IActor activeActor)
+        {
+            IntentAsync(intention, activeActor).Wait();
+        }
 
-            if (_currentIntention == null)
-            {
-                return Array.Empty<IActorTask>();
-            }
+        public bool CanIntent()
+        {
+            return !_intentionWait;
+        }
 
-            _currentTask = _currentIntention.CreateActorTask(_currentTask, CurrentActor);
-            _currentIntention = null;
+        public void ProcessTaskExecuted(IActorTask actorTask)
+        {
+            // Пока ничего не делаем.
+            // Это задел для парного оружия.
+            // Парное оружие будет позволять выполнять удар вторым оружием,
+            // когда задача выполнена, но не закончена.
+        }
 
-            if (_currentTask != null)
-            {
-                return new[] { _currentTask };
-            }
+        public void ProcessTaskComplete(IActorTask actorTask)
+        {
+            _intentionWait = false;
+        }
 
-            return Array.Empty<IActorTask>();
+        public void CancelTask(IActorTask cencelledActorTask)
+        {
+            _intentionWait = false;
         }
     }
 }

@@ -5,7 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 
 using Zilon.Core.Client;
-using Zilon.Core.Persons;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.Client
             var resourceScheme = new TestPropScheme();
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             // контейнер
             var containerProps = new IProp[] {
@@ -43,8 +43,8 @@ namespace Zilon.Core.Tests.Client
             // ACT
             var transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             transferMachine.Inventory.PropAdded[0].Should().BeOfType<Resource>();
@@ -67,7 +67,7 @@ namespace Zilon.Core.Tests.Client
             };
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             // контейнер
             var containerProps = new IProp[] {
@@ -82,8 +82,8 @@ namespace Zilon.Core.Tests.Client
             // ACT
             var transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             transferMachine.Inventory.PropAdded[0].Should().BeOfType<Equipment>();
@@ -102,14 +102,14 @@ namespace Zilon.Core.Tests.Client
             var resource = new Resource(resourceScheme, 1);
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             // контейнер
             var containerProps = new IProp[]
             {
                 resource
             };
-            
+
             var container = new FixedPropChest(containerProps);
 
             // трансферная машина
@@ -120,8 +120,8 @@ namespace Zilon.Core.Tests.Client
             using var monitorContainer = transferMachine.Container.Monitor();
             var transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
 
 
@@ -143,7 +143,7 @@ namespace Zilon.Core.Tests.Client
             var resourceScheme = new TestPropScheme();
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
             inventory.Add(new Resource(resourceScheme, 1));
 
             // контейнер
@@ -161,8 +161,8 @@ namespace Zilon.Core.Tests.Client
             using var monitorContainer = transferMachine.Container.Monitor();
             var transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
@@ -180,7 +180,7 @@ namespace Zilon.Core.Tests.Client
             var resourceScheme = new TestPropScheme();
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
             inventory.Add(new Resource(resourceScheme, 1));
 
             // контейнер
@@ -198,8 +198,8 @@ namespace Zilon.Core.Tests.Client
             using var monitorContainer = transferMachine.Container.Monitor();
             var transferResource = new Resource(resourceScheme, 1);
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
@@ -220,7 +220,7 @@ namespace Zilon.Core.Tests.Client
             };
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
 
             // контейнер
             var containerProps = new IProp[] {
@@ -237,8 +237,8 @@ namespace Zilon.Core.Tests.Client
             using var monitorContainer = transferMachine.Container.Monitor();
             var transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             monitorInventory.Should().Raise(nameof(PropTransferStore.Added));
@@ -260,7 +260,7 @@ namespace Zilon.Core.Tests.Client
             };
 
             // Инвентарь
-            var inventory = new Inventory();
+            var inventory = new InventoryModule();
             inventory.Add(new Equipment(equipmentScheme, System.Array.Empty<ITacticalActScheme>()));
 
             // контейнер
@@ -278,8 +278,8 @@ namespace Zilon.Core.Tests.Client
             using var monitorContainer = transferMachine.Container.Monitor();
             var transferResource = containerProps.First();
             transferMachine.TransferProp(transferResource,
-                PropTransferMachineStores.Container,
-                PropTransferMachineStores.Inventory);
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
             // ASSERT
             monitorInventory.Should().Raise(nameof(PropTransferStore.Added));

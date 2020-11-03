@@ -2,7 +2,6 @@
 
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -24,16 +23,9 @@ namespace Zilon.Core.Tactics
         /// </summary>
         IPerson Person { get; }
 
-        /// <summary>
-        /// Владелец актёра.
-        /// </summary>
-        /// <remarks>
-        /// 1. Опредляет возможность управлять актёром.
-        /// 2. Боты по этому полю определяют противников.
-        /// Может быть человек или бот.
-        /// Персонажи игрока могут быть под прямым и не прямым управлением.
-        /// </remarks>
-        IPlayer Owner { get; }
+        IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
+
+        void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.
@@ -95,14 +87,8 @@ namespace Zilon.Core.Tactics
         void UseProp(IProp usedProp);
 
         /// <summary>
-        /// Данные о тумане войны актёра.
+        /// Указывает, может ли актёр выполнять задачи.
         /// </summary>
-        /// <remarks>
-        /// Актёр живёт только в рамках сектора. Если сектор уничтожается,
-        /// будет потеряна ссылка на актёра, а следовательно и на информацию о тумане войны.
-        /// Таким образом ненужные данные о тумане войны не будут оставать в памяти при смене секторов.
-        /// Но будут специфичны для каждого актёра. Например, для ботов.
-        /// </remarks>
-        ISectorFowData SectorFowData { get; }
+        bool CanExecuteTasks { get; }
     }
 }

@@ -25,7 +25,7 @@ namespace Zilon.Core.Persons
                 {
                     continue;
                 }
-                
+
                 job.Progress++;
                 modifiedJobs.Add(job);
             }

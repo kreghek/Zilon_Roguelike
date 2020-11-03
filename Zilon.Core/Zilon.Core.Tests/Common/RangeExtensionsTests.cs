@@ -4,7 +4,8 @@ using Zilon.Core.Common;
 
 namespace Zilon.Core.Tests.Common
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class RangeExtensionsTests
     {
         /// <summary>

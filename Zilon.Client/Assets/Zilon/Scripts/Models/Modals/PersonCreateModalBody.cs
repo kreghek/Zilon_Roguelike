@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 using Zenject;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 
@@ -32,7 +33,7 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
 
     public event EventHandler Closed;
 
-    public void Init(HumanPerson playerPerson)
+    public void Init(IPerson playerPerson)
     {
         var currentLanguage = _uiSettingService.CurrentLanguage;
 
@@ -41,7 +42,7 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
 
         DescriptionText.text += GetLocalizedBackstoryText(currentLanguage, "trait") + Environment.NewLine;
 
-        var buildInTraits = playerPerson.EvolutionData.Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
+        var buildInTraits = playerPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
         foreach (var startTrait in buildInTraits)
         {
             var traitName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, startTrait.Scheme.Name);
@@ -51,7 +52,7 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
         DescriptionText.text += Environment.NewLine + Environment.NewLine;
 
         DescriptionText.text += GetLocalizedBackstoryText(currentLanguage, "props") + Environment.NewLine;
-        foreach (var prop in playerPerson.EquipmentCarrier)
+        foreach (var prop in playerPerson.GetModule<IEquipmentModule>())
         {
             if (prop is null)
             {
@@ -62,7 +63,7 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
             DescriptionText.text += " - " + propName + Environment.NewLine;
         }
 
-        foreach (var prop in playerPerson.Inventory.CalcActualItems())
+        foreach (var prop in playerPerson.GetModule<IInventoryModule>().CalcActualItems())
         {
             var propName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, prop.Scheme.Name);
 
@@ -72,7 +73,7 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
             }
 
             DescriptionText.text += " - " + propName + Environment.NewLine;
-        }        
+        }
     }
 
     private string GetLocalizedBackstoryText(Language currentLanguage, string mainKey)
@@ -99,9 +100,12 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
 
     public void ApplyChanges()
     {
+        // Ничего не делаем при закрытии окна.
+        // Окно только читает данные. Ничего не изменяет.
     }
 
     public void CancelChanges()
     {
+        throw new NotImplementedException();
     }
 }

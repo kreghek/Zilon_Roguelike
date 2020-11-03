@@ -3,7 +3,7 @@
     /// <summary>
     /// Схема локации в провинции на глобальной карте.
     /// </summary>
-    public interface ILocationScheme: IScheme
+    public interface ILocationScheme : IScheme
     {
         /// <summary>
         /// Характеристики секторов по уровням.

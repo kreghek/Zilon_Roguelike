@@ -7,11 +7,14 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
+using NUnit.Framework;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
@@ -25,6 +28,81 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     [TestFixture]
     public class HumanActorTaskSourceTests
     {
+        /// <summary>
+        /// Тест проверяет получение задачи актёра после указания намерения.
+        /// </summary>
+        [Test]
+        // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
+        [Timeout(1000)]
+        public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask()
+        {
+            // ARRANGE
+
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+
+            var actorNode = map.Nodes.SelectByHexCoords(0, 0);
+
+            var actor = CreateActor(map, actorNode);
+
+            var taskMock = new Mock<IActorTask>();
+            var task = taskMock.Object;
+            var intentionMock = new Mock<IIntention>();
+            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
+            var intention = intentionMock.Object;
+
+            var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
+
+            var contextMock = new Mock<ISectorTaskSourceContext>();
+            var context = contextMock.Object;
+
+            // ACT
+
+            var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
+            await taskSource.IntentAsync(intention, actor).ConfigureAwait(false);
+            var factActorTask = await getActorTaskTask.ConfigureAwait(false);
+
+            // ASSERT
+            factActorTask.Should().Be(task);
+        }
+
+        /// <summary>
+        /// Тест проверяет получение задачи актёра после указания намерения.
+        /// </summary>
+        [Test]
+        // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
+        //[Timeout(1000)]
+        public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask2()
+        {
+            // ARRANGE
+
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+
+            var actorNode = map.Nodes.SelectByHexCoords(0, 0);
+
+            var actor = CreateActor(map, actorNode);
+
+            var taskMock = new Mock<IActorTask>();
+            var task = taskMock.Object;
+            var intentionMock = new Mock<IIntention>();
+            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
+            var intention = intentionMock.Object;
+
+            var contextMock = new Mock<ISectorTaskSourceContext>();
+            var context = contextMock.Object;
+
+            var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
+
+            // ACT
+
+            await taskSource.IntentAsync(intention, actor).ConfigureAwait(false);
+            var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
+            var factActorTask = await getActorTaskTask.ConfigureAwait(false);
+
+            // ASSERT
+            factActorTask.Should().Be(task);
+        }
+
+        /*
         /// <summary>
         /// Тест проверяет, чтобы всегда при выдачи задачи на перемещение генерировалась хотя бы одна задача.
         /// </summary>
@@ -53,7 +131,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             tasks.Should().NotBeNullOrEmpty();
             tasks[0].Should().BeOfType<MoveTask>();
         }
-
+        
         /// <summary>
         /// Тест проверяет, чтобы метод назначения задачи на перемещение проверял аргумент.
         /// Аргумент не должен быть null. Класс поведения не знает, как в этом случае поступать.
@@ -199,11 +277,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var attackIntention = new Intention<AttackTask>(a => new AttackTask(a, targetActor, tacticalAct: null, actService: usageService));
 
             // ACT
-            var tasks = SetHumanIntention(attackerActor, taskSource, attackIntention);
+            var task = SetHumanIntention(attackerActor, taskSource, attackIntention);
 
             // ASSERT
-            tasks.Should().NotBeNullOrEmpty();
-            tasks[0].Should().BeOfType<AttackTask>();
+            task.Should().NotBeNull();
+            task.Should().BeOfType<AttackTask>();
         }
 
         /// <summary>
@@ -230,12 +308,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var intention = new Intention<OpenContainerTask>(a => new OpenContainerTask(a, container, method, map));
 
             // ACT
-            var tasks = SetHumanIntention(actor, taskSource, intention);
+            var task = SetHumanIntention(actor, taskSource, intention);
 
             // ASSERT
-            tasks.Should().NotBeNullOrEmpty();
-            tasks[0].Should().BeOfType<OpenContainerTask>();
+            task.Should().NotBeNull();
+            task.Should().BeOfType<OpenContainerTask>();
         }
+        
 
         private static ITacticalActUsageService CreateTacticalActUsageService()
         {
@@ -267,14 +346,34 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             return actor;
         }
 
-        private static IActorTask[] SetHumanIntention(IActor actor,
+        private static IActorTask SetHumanIntention(IActor actor,
             IHumanActorTaskSource taskSource,
             IIntention intention)
         {
             taskSource.Intent(intention);
 
-            var tasks = taskSource.GetActorTasks(actor);
-            return tasks;
+            var task = taskSource.GetActorTask(actor);
+            return task;
+        }
+        */
+
+        private static IActor CreateActor(IMap map, IGraphNode startNode)
+        {
+            var playerMock = new Mock<IPlayer>();
+            var player = playerMock.Object;
+
+            var personMock = new Mock<IPerson>();
+            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
+            var person = personMock.Object;
+
+            var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
+            var taskSource = taskSourceMock.Object;
+
+            var actor = new Actor(person, taskSource, startNode);
+
+            map.HoldNode(startNode, actor);
+
+            return actor;
         }
     }
 }

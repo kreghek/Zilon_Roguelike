@@ -5,9 +5,8 @@
     /// </summary>
     public abstract class OneTurnActorTaskBase : ActorTaskBase
     {
-        protected OneTurnActorTaskBase(IActor actor) : base(actor)
+        protected OneTurnActorTaskBase(IActor actor, IActorTaskContext context) : base(actor, context)
         {
-
         }
 
         public override void Execute()

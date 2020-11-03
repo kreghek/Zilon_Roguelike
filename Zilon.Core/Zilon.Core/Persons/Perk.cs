@@ -5,7 +5,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Текущее состояние перка персонажа.
     /// </summary>
-    public class Perk: IPerk
+    public class Perk : IPerk
     {
         /// <summary>
         /// Схема перка.

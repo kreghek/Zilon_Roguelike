@@ -45,13 +45,13 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<OpenContainerCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
 
             // ASSERT
-            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()));
+            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>(), It.IsAny<IActor>()));
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)

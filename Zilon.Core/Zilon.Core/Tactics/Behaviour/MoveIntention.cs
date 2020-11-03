@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 
 using Zilon.Core.Graphs;
-using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -10,35 +10,40 @@ namespace Zilon.Core.Tactics.Behaviour
     /// </summary>
     public class MoveIntention : IIntention
     {
-        private readonly ISectorMap _map;
+        private readonly ISector _sector;
 
-        public MoveIntention(IGraphNode targetNode, ISectorMap map)
+        public MoveIntention(IGraphNode targetNode, ISector sector)
         {
-            TargetNode = targetNode;
-            _map = map;
+            TargetNode = targetNode ?? throw new System.ArgumentNullException(nameof(targetNode));
+            _sector = sector ?? throw new System.ArgumentNullException(nameof(sector));
         }
 
         public IGraphNode TargetNode { get; }
 
-        public IActorTask CreateActorTask([CanBeNull] IActorTask currentTask, [NotNull] IActor actor)
+        public IActorTask CreateActorTask([NotNull] IActor actor)
         {
-            var currentMoveTask = currentTask as MoveTask;
-            if (currentMoveTask == null)
-            {
-                return CreateTaskInner(actor);
-            }
-
-            if (currentMoveTask.TargetNode == TargetNode)
-            {
-                return currentMoveTask;
-            }
-
             return CreateTaskInner(actor);
         }
 
         private MoveTask CreateTaskInner(IActor actor)
         {
-            return new MoveTask(actor, TargetNode, _map);
+            var taskContext = new ActorTaskContext(_sector);
+
+            return CreateMoveTask(actor, taskContext);
+        }
+
+        private MoveTask CreateMoveTask(IActor actor, ActorTaskContext taskContext)
+        {
+            var movingModule = actor.Person.GetModuleSafe<IMovingModule>();
+            if (movingModule is null)
+            {
+                return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map);
+            }
+            else
+            {
+                var moveCost = movingModule.CalculateCost();
+                return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map, moveCost);
+            }
         }
     }
 }

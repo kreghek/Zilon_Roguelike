@@ -15,7 +15,7 @@ namespace Zilon.Core.Schemes
         /// <returns> Возвращает экземпляр схемы. </returns>
         /// <exception cref="KeyNotFoundException"> Выбрасывает исключение,
         /// если схема указанного типа не найдена по указанному идентификатору. </exception>
-        TScheme GetScheme<TScheme>(string sid) where TScheme: class, IScheme;
+        TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme;
 
         /// <summary>
         /// Извлечь все схемы укаканного типа.

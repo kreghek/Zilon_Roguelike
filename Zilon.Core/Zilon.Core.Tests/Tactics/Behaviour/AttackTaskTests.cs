@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -42,13 +43,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             });
             var tacticalAct = tacticalActMock.Object;
 
-            var actCarrierMock = new Mock<ITacticalActCarrier>();
-            actCarrierMock.SetupGet(x => x.Acts)
+            var combatActModuleMock = new Mock<ICombatActModule>();
+            combatActModuleMock.Setup(x => x.CalcCombatActs())
                 .Returns(new[] { tacticalAct });
-            var actCarrier = actCarrierMock.Object;
+            var combatActModule = combatActModuleMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.TacticalActCarrier).Returns(actCarrier);
+            personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
@@ -59,7 +60,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
             _actor = actorMock.Object;
 
-
             var targetMock = new Mock<IActor>();
             var targetNode = _testMap.Nodes.SelectByHexCoords(2, 0);
             targetMock.Setup(x => x.CanBeDamaged()).Returns(true);
@@ -69,9 +69,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var actServiceMock = new Mock<ITacticalActUsageService>();
             var actService = actServiceMock.Object;
 
+            var taskContextMock = new Mock<IActorTaskContext>();
+            var taskContext = taskContextMock.Object;
 
             // Создаём саму команду
-            _attackTask = new AttackTask(_actor, target, tacticalAct, actService);
+            _attackTask = new AttackTask(_actor, taskContext, target, tacticalAct, actService);
 
             Action act = () =>
             {

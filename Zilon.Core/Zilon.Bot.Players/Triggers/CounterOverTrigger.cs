@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Triggers
 {
@@ -19,7 +20,7 @@ namespace Zilon.Bot.Players.Triggers
             Counter = COUNTER_INITIAL_VALUE;
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
             return CounterIsOver;
         }

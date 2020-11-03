@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Zilon.Core.Components;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -21,29 +20,19 @@ namespace Zilon.Bot.Players.Logics
 
         private MoveTask _moveTask;
 
-        private readonly ISectorMap _map;
-        private readonly ISectorManager _sectorManager;
         private readonly ITacticalActUsageService _actService;
 
-        public DefeatTargetLogicState(ISectorManager sectorManager,
-                                      ITacticalActUsageService actService)
+        public DefeatTargetLogicState(ITacticalActUsageService actService)
         {
-            if (sectorManager is null)
-            {
-                throw new ArgumentNullException(nameof(sectorManager));
-            }
-
-            _map = sectorManager.CurrentSector.Map;
-            _sectorManager = sectorManager;
             _actService = actService ?? throw new ArgumentNullException(nameof(actService));
         }
 
-        private IAttackTarget GetTarget(IActor actor)
+        private IAttackTarget GetTarget(IActor actor, ISectorMap _map, IActorManager actorManager)
         {
             //TODO Убрать дублирование кода с IntruderDetectedTrigger
             // Этот фрагмент уже однажды был использован неправильно,
             // что привело к трудноуловимой ошибке.
-            var intruders = CheckForIntruders(actor);
+            var intruders = CheckForIntruders(actor, _map, actorManager);
 
             var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
             var nearbyIntruder = orderedIntruders.FirstOrDefault();
@@ -51,11 +40,11 @@ namespace Zilon.Bot.Players.Logics
             return nearbyIntruder;
         }
 
-        private IEnumerable<IActor> CheckForIntruders(IActor actor)
+        private IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
         {
-            foreach (var target in _sectorManager.CurrentSector.ActorManager.Items)
+            foreach (var target in actorManager.Items)
             {
-                if (target.Owner == actor.Owner)
+                if (target.Person.Fraction == actor.Person.Fraction)
                 {
                     continue;
                 }
@@ -65,7 +54,7 @@ namespace Zilon.Bot.Players.Logics
                     continue;
                 }
 
-                var isVisible = LogicHelper.CheckTargetVisible(_map, actor.Node, target.Node);
+                var isVisible = LogicHelper.CheckTargetVisible(map, actor.Node, target.Node);
                 if (!isVisible)
                 {
                     continue;
@@ -75,19 +64,19 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target)
+        private AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target, ISectorMap map)
         {
-            if (actor.Person.TacticalActCarrier == null)
+            if (actor.Person.GetModuleSafe<ICombatActModule>() is null)
             {
                 throw new NotSupportedException();
             }
 
-            var inventory = actor.Person.HasInventory ? actor.Person.Inventory : null;
+            var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
 
-            var act = SelectActHelper.SelectBestAct(actor.Person.TacticalActCarrier.Acts, inventory);
+            var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().CalcCombatActs(), inventory);
 
-            var isInDistance = act.CheckDistance(actor.Node, target.Node, _map);
-            var targetIsOnLine = _map.TargetIsOnLine(actor.Node, target.Node);
+            var isInDistance = act.CheckDistance(actor.Node, target.Node, map);
+            var targetIsOnLine = map.TargetIsOnLine(actor.Node, target.Node);
 
             var attackParams = new AttackParams
             {
@@ -98,11 +87,11 @@ namespace Zilon.Bot.Players.Logics
             return attackParams;
         }
 
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             if (_target == null)
             {
-                _target = GetTarget(actor);
+                _target = GetTarget(actor, context.Sector.Map, context.Sector.ActorManager);
             }
 
             var targetCanBeDamaged = _target.CanBeDamaged();
@@ -112,11 +101,14 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var attackParams = CheckAttackAvailability(actor, _target);
+            var attackParams = CheckAttackAvailability(actor, _target, context.Sector.Map);
             if (attackParams.IsAvailable)
             {
                 var act = attackParams.TacticalAct;
-                var attackTask = new AttackTask(actor, _target, act, _actService);
+
+                var taskContext = new ActorTaskContext(context.Sector);
+
+                var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
                 return attackTask;
             }
             else
@@ -132,12 +124,15 @@ namespace Zilon.Bot.Players.Logics
                 }
                 else
                 {
+                    var map = context.Sector.Map;
                     _refreshCounter = REFRESH_COUNTER_VALUE;
-                    var targetIsOnLine = _map.TargetIsOnLine(actor.Node, _target.Node);
+                    var targetIsOnLine = map.TargetIsOnLine(actor.Node, _target.Node);
 
                     if (targetIsOnLine)
                     {
-                        _moveTask = new MoveTask(actor, _target.Node, _map);
+                        var taskContext = new ActorTaskContext(context.Sector);
+
+                        _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
                         return _moveTask;
                     }
                     else

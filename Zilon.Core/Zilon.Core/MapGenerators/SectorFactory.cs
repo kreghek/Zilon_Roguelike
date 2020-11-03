@@ -2,6 +2,7 @@
 
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -22,6 +23,8 @@ namespace Zilon.Core.MapGenerators
             _equipmentDurableService = equipmentDurableService;
         }
 
+        public IScoreManager ScoreManager { get; set; }
+
         public ISector Create(ISectorMap map, ILocationScheme locationScheme)
         {
             var actorManager = new ActorManager();
@@ -34,7 +37,8 @@ namespace Zilon.Core.MapGenerators
                 _schemeService,
                 _equipmentDurableService)
             {
-                Scheme = locationScheme
+                Scheme = locationScheme,
+                ScoreManager = ScoreManager
             };
 
             return sector;

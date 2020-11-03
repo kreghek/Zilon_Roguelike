@@ -61,7 +61,7 @@ public class ContainerModalBody : ContainerModalBodyBase, IModalWindowHandler
 
     public void ApplyChanges()
     {
-        
+
     }
 
     public void CancelChanges()

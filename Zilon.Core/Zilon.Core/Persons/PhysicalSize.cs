@@ -1,7 +1,7 @@
 ﻿namespace Zilon.Core.Persons
 {
     public enum PhysicalSize
-    { 
+    {
         Undefined = 0,
 
         /// <summary>

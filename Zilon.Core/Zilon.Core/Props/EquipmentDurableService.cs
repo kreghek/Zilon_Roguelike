@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Props
@@ -7,7 +8,7 @@ namespace Zilon.Core.Props
     /// <summary>
     /// Реализация сервиса для работы с прочностью экипировки.
     /// </summary>
-    /// <seealso cref="Zilon.Core.Props.IEquipmentDurableService" />
+    /// <seealso cref="IEquipmentDurableService" />
     public sealed class EquipmentDurableService : IEquipmentDurableService
     {
         private const int SUCCESS_TURN_RESIST = 2;
@@ -32,13 +33,18 @@ namespace Zilon.Core.Props
         /// </returns>
         public bool CanBeRepaired(Equipment equipment)
         {
+            if (equipment is null)
+            {
+                throw new ArgumentNullException(nameof(equipment));
+            }
+
             return equipment.Durable.Range.Max > 1;
         }
 
         /// <summary>Восстановление прочности экипировки.</summary>
         /// <param name="repairResource">Ресурс, при помощи которого производится ремонт.</param>
         /// <param name="equipment">Целевая экипировка.</param>
-        /// <exception cref="System.ArgumentException">Указанная экипировка не может быть отремонтирована. - equipment</exception>
+        /// <exception cref="ArgumentException">Указанная экипировка не может быть отремонтирована. - equipment</exception>
         public void Repair(IProp repairResource, Equipment equipment)
         {
             if (!CanBeRepaired(equipment))
@@ -56,6 +62,11 @@ namespace Zilon.Core.Props
         /// <param name="equipment">Целевая экипировка.</param>
         public void UpdateByTurn(Equipment equipment, IPerson equipmentOwner)
         {
+            if (equipment is null)
+            {
+                throw new ArgumentNullException(nameof(equipment));
+            }
+
             var resistRoll = _randomSource.RollTurnResist(equipment);
             if (resistRoll < SUCCESS_TURN_RESIST)
             {
@@ -69,6 +80,11 @@ namespace Zilon.Core.Props
         /// <param name="equipment">Целевая экипировка.</param>
         public void UpdateByUse(Equipment equipment, IPerson equipmentOwner)
         {
+            if (equipment is null)
+            {
+                throw new ArgumentNullException(nameof(equipment));
+            }
+
             var resistRoll = _randomSource.RollUseResist(equipment);
             if (resistRoll < SUCCESS_USE_RESIST)
             {
@@ -82,7 +98,7 @@ namespace Zilon.Core.Props
         {
             if (equipment.Durable.Value <= 0)
             {
-                var equipmentCarrier = equipmentOwner.EquipmentCarrier;
+                var equipmentCarrier = equipmentOwner.GetModule<IEquipmentModule>();
                 if (equipmentCarrier == null)
                 {
                     return;

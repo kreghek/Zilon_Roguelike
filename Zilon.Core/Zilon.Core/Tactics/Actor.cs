@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -49,44 +50,32 @@ namespace Zilon.Core.Tactics
         public IGraphNode Node { get; private set; }
 
         public IPlayer Owner { get; }
-        public ISectorFowData SectorFowData { get; }
         public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
+        public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
+        public bool CanExecuteTasks { get => !Person.CheckIsDead(); }
 
         [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node)
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node)
         {
             Person = person ?? throw new ArgumentNullException(nameof(person));
-            Owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
             Node = node ?? throw new ArgumentNullException(nameof(node));
-
-            if (SectorFowData == null)
-            {
-                SectorFowData = new MonsterSectorFowData();
-            }
         }
 
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver) : this(person, owner, node)
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node,
+            [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
-        }
-
-        public Actor([NotNull] IPerson person, [NotNull]  IPlayer owner, [NotNull]  IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver, [CanBeNull] ISectorFowData sectorFowData) : this(person, owner, node)
-        {
-            _perkResolver = perkResolver;
-
-            SectorFowData = sectorFowData;
         }
 
         public bool CanBeDamaged()
         {
-            if (Person.Survival == null)
+            if (Person.GetModuleSafe<ISurvivalModule>() is null)
             {
                 return false;
             }
 
-            return !Person.Survival.IsDead;
+            return !Person.GetModule<ISurvivalModule>().IsDead;
         }
 
         public void MoveToNode(IGraphNode targetNode)
@@ -143,14 +132,14 @@ namespace Zilon.Core.Tactics
 
             }
 
-            if (useData.Consumable && Person.Inventory != null)
+            if (useData.Consumable && Person.GetModuleSafe<IInventoryModule>() != null)
             {
                 ConsumeResource(usedProp);
 
                 if (_perkResolver != null)
                 {
                     var consumeProgress = new ConsumeProviantJobProgress();
-                    _perkResolver.ApplyProgress(consumeProgress, Person.EvolutionData);
+                    _perkResolver.ApplyProgress(consumeProgress, Person.GetModule<IEvolutionModule>());
                 }
             }
 
@@ -215,26 +204,26 @@ namespace Zilon.Core.Tactics
             {
                 case Resource resource:
                     var removeResource = new Resource(resource.Scheme, 1);
-                    Person.Inventory.Remove(removeResource);
+                    Person.GetModule<IInventoryModule>().Remove(removeResource);
                     break;
 
                 case Equipment equipment:
-                    Person.Inventory.Remove(equipment);
+                    Person.GetModule<IInventoryModule>().Remove(equipment);
                     break;
             }
         }
 
         public void TakeDamage(int value)
         {
-            Person.Survival?.DecreaseStat(SurvivalStatType.Health, value);
+            Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health, value);
 
-            if (_perkResolver != null && Person.EvolutionData != null)
+            if (_perkResolver != null && Person.GetModuleSafe<IEvolutionModule>() != null)
             {
                 var takeDamageProgress = new TakeDamageJobProgress(value);
-                _perkResolver.ApplyProgress(takeDamageProgress, Person.EvolutionData);
+                _perkResolver.ApplyProgress(takeDamageProgress, Person.GetModule<IEvolutionModule>());
 
                 var takeHitProgress = new TakeHitJobProgress();
-                _perkResolver.ApplyProgress(takeHitProgress, Person.EvolutionData);
+                _perkResolver.ApplyProgress(takeHitProgress, Person.GetModule<IEvolutionModule>());
             }
 
             DoDamageTaken(value);
@@ -303,17 +292,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival?.RestoreStat(statType,
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
                         PropMetrics.SurvivalLesserRestoreValue + 1);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival?.RestoreStat(statType,
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
                         PropMetrics.SurvivalNormalRestoreValue + 1);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival?.RestoreStat(statType,
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
                         PropMetrics.SurvivalGrandRestoreValue + 1);
                     break;
 
@@ -333,17 +322,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival?.RestoreStat(SurvivalStatType.Health,
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Health,
                         PropMetrics.HpLesserRestoreValue);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival?.RestoreStat(SurvivalStatType.Health,
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Health,
                         PropMetrics.HpNormalRestoreValue);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival?.RestoreStat(SurvivalStatType.Health,
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Health,
                         PropMetrics.HpGrandRestoreValue);
                     break;
 
@@ -357,17 +346,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Intoxication,
                         PropMetrics.INTOXICATION_RISE_LESSER_VALUE + 1);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Intoxication,
                         PropMetrics.INTOXICATION_RISE_NORMAL_VALUE + 1);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival?.RestoreStat(SurvivalStatType.Intoxication,
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Intoxication,
                         PropMetrics.INTOXICATION_RISE_GRAND_VALUE + 1);
                     break;
 
@@ -397,17 +386,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival?.DecreaseStat(statType,
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
                         PropMetrics.SurvivalLesserRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival?.DecreaseStat(statType,
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
                         PropMetrics.SurvivalNormalRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival?.DecreaseStat(statType,
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
                         PropMetrics.SurvivalGrandRestoreValue - 1);
                     break;
 
@@ -427,17 +416,17 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.Survival?.DecreaseStat(SurvivalStatType.Health,
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
                         PropMetrics.HpLesserRestoreValue);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.Survival?.DecreaseStat(SurvivalStatType.Health,
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
                         PropMetrics.HpNormalRestoreValue);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.Survival?.DecreaseStat(SurvivalStatType.Health,
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
                         PropMetrics.HpGrandRestoreValue);
                     break;
 
@@ -467,6 +456,11 @@ namespace Zilon.Core.Tactics
         {
             var e = new MineDepositEventArgs(deposit, openResult);
             DepositMined?.Invoke(this, e);
+        }
+
+        public void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
+        {
+            TaskSource = actorTaskSource;
         }
     }
 }

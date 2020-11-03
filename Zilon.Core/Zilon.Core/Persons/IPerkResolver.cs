@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.PersonModules;
+
+namespace Zilon.Core.Persons
 {
     public interface IPerkResolver
     {
@@ -8,6 +10,6 @@
         /// <param name="progress"> Объект прогресса. </param>
         /// <param name="evolutionData"> Данные о развитии персонажа. </param>
         /// <returns> Возвращает true, если все работы выполнены. </returns>
-        void ApplyProgress(IJobProgress progress, IEvolutionData evolutionData);
+        void ApplyProgress(IJobProgress progress, IEvolutionModule evolutionData);
     }
 }

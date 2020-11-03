@@ -9,7 +9,6 @@ using Zenject;
 
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.Strategies;
-using Zilon.Core.Commands;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Assets.Zilon.Scripts.DependencyInjection
@@ -18,12 +17,12 @@ namespace Assets.Zilon.Scripts.DependencyInjection
     {
         public static void RegisterActorTaskSourcesServices(this DiContainer diContainer)
         {
-            diContainer.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
-            diContainer.Bind<IActorTaskSource>().WithId("monster").To<MonsterBotActorTaskSource>().AsSingle();
-            diContainer.Bind<IActorTaskSourceCollector>().FromMethod(context =>
+            diContainer.Bind<IHumanActorTaskSource<ISectorTaskSourceContext>>().To<HumanActorTaskSource<ISectorTaskSourceContext>>().AsSingle();
+            diContainer.Bind<IActorTaskSource<ISectorTaskSourceContext>>().To<MonsterBotActorTaskSource<ISectorTaskSourceContext>>().AsSingle();
+            diContainer.Bind<IActorTaskSourceCollector>().FromMethod(injectContext =>
             {
-                var botTaskSource = context.Container.ResolveId<IActorTaskSource>("monster");
-                var humanTaskSource = context.Container.Resolve<IHumanActorTaskSource>();
+                var botTaskSource = injectContext.Container.Resolve<IActorTaskSource<ISectorTaskSourceContext>>();
+                var humanTaskSource = injectContext.Container.Resolve<IHumanActorTaskSource<ISectorTaskSourceContext>>();
                 return new TaskSourceCollector(botTaskSource, humanTaskSource);
             }).AsSingle();
             diContainer.Bind<LogicStateTreePatterns>().AsSingle();

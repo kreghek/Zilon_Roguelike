@@ -1,7 +1,9 @@
-﻿namespace Zilon.Core.Persons
+﻿using Zilon.Core.PersonModules;
+
+namespace Zilon.Core.Persons
 {
     public interface ISurvivalStatEffect
     {
-        void Apply(ISurvivalData survivalData);
+        void Apply(ISurvivalModule survivalData);
     }
 }

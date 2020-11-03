@@ -4,5 +4,6 @@
     {
         void Execute();
         bool IsComplete { get; }
+        int Cost { get; }
     }
 }

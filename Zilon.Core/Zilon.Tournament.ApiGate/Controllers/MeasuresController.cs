@@ -12,7 +12,7 @@ namespace Zilon.Tournament.ApiGate.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MeasuresController: Controller
+    public class MeasuresController : Controller
     {
         [HttpGet]
         public ActionResult<IEnumerable<Measure>> Get()
@@ -93,7 +93,7 @@ namespace Zilon.Tournament.ApiGate.Controllers
                     }
                 }
 
-                
+
             }
 
             return resultList;

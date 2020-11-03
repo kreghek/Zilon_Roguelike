@@ -1,12 +1,16 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Zilon.Core.Graphs;
-using Moq;
-using Zilon.Core.StaticObjectModules;
+
 using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
+using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics.Tests
 {
@@ -57,8 +61,7 @@ namespace Zilon.Core.Tactics.Tests
             factTestModule.Should().BeOfType<DropTablePropChest>();
         }
 
-        [StaticObjectModule]
-        private interface ITestModule: IStaticObjectModule
+        private interface ITestModule : IStaticObjectModule
         {
         }
 
@@ -69,7 +72,7 @@ namespace Zilon.Core.Tactics.Tests
         }
 
         private interface IAdditionalInterface
-        { 
+        {
         }
     }
 }

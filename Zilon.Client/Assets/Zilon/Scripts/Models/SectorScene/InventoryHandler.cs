@@ -12,6 +12,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
@@ -49,7 +50,7 @@ public class InventoryHandler : MonoBehaviour
         StartUpControls();
 
         _actor = _playerState.ActiveActor.Actor;
-        var inventory = _actor.Person.Inventory;
+        var inventory = _actor.Person.GetModule<IInventoryModule>();
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 
         inventory.Added += Inventory_Added;
@@ -101,7 +102,7 @@ public class InventoryHandler : MonoBehaviour
 
     public void OnDestroy()
     {
-        var inventory = _actor.Person.Inventory;
+        var inventory = _actor.Person.GetModule<IInventoryModule>();
 
         inventory.Added -= Inventory_Added;
         inventory.Removed -= Inventory_Removed;
@@ -114,7 +115,7 @@ public class InventoryHandler : MonoBehaviour
     private void CreateSlots()
     {
         var actorViewModel = _playerState.ActiveActor;
-        var slots = actorViewModel.Actor.Person.EquipmentCarrier.Slots;
+        var slots = actorViewModel.Actor.Person.GetModule<IEquipmentModule>().Slots;
 
         for (var i = 0; i < slots.Length; i++)
         {
@@ -197,7 +198,7 @@ public class InventoryHandler : MonoBehaviour
 
     private void UpdateItemsParentObject()
     {
-        var inventory = _actor.Person.Inventory;
+        var inventory = _actor.Person.GetModule<IInventoryModule>();
         var inventoryProps = inventory.CalcActualItems();
         RecalcItemsObject(InventoryItemsParent, inventoryProps);
     }
@@ -336,6 +337,6 @@ public class InventoryHandler : MonoBehaviour
 
     public void ReadButton_Handler()
     {
-       // Эта кнопка не делает ничего, пока не будут введены свитки и книги
+        // Эта кнопка не делает ничего, пока не будут введены свитки и книги
     }
 }

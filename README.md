@@ -8,14 +8,19 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/kreghek/Zilon_Roguelike?branch=master)](https://bettercodehub.com/)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b4b300bf5efc3d73a268/maintainability)](https://codeclimate.com/github/kreghek/Zilon_Roguelike/maintainability)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kreghek_Zilon_Roguelike&metric=alert_status)](https://sonarcloud.io/dashboard?id=kreghek_Zilon_Roguelike)
+[![Coverage Status](https://coveralls.io/repos/github/kreghek/Zilon_Roguelike/badge.svg?branch=master)](https://coveralls.io/github/kreghek/Zilon_Roguelike?branch=master)
 
 ![Poster A3 horizontal](https://user-images.githubusercontent.com/2405499/58764985-41faf600-8598-11e9-9220-277923ca7f5b.png)
 
-Это рогалик про случайно-сгенерированного парня-скитальца, который ищет случайно-сгенерированный дом в случайно-сгенерированном мире. Проект в ранней стадии разработки. Делаем не спешно и в удовольствие, но регулярно и методично.
+This is rogue-like game about the randomly-generated guy-vagabond, which trying to find the randomly-generated home in the randomly-generated world. Project at early stage of development. Getting done slowly and with pleasure, but reguraly.
 
-[Группа проекта в VK](https://vk.com/last_imperial_vagabond)
+[Project group at VK](https://vk.com/last_imperial_vagabond)
 
-[Бортовой журнал развития проекта (на русском)](https://lastimperialvagabond.home.blog)
+[Logbook of the project (in russian)](https://lastimperialvagabond.home.blog)
 
 GamePlay Video
 [![Watch the GamePlay Video](https://img.youtube.com/vi/KJJ2ab35eFg/maxresdefault.jpg)](https://www.youtube.com/watch?v=KJJ2ab35eFg)
+
+## Contributing
+
+[Code conventions](/CODE_CONVENTIONS.md)

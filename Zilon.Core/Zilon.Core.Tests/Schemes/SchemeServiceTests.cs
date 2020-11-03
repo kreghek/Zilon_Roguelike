@@ -12,7 +12,8 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Schemes
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     [Category(TestCategories.REAL_RESOURCE)]
     public class SchemeServiceTests
     {
@@ -132,7 +133,8 @@ namespace Zilon.Core.Tests.Schemes
         //TODO Лучше сделать отдельное консольное приложение для валидации всех схем.
         [Test]
         [Category("validation")]
-        public void SchemeValidator() {
+        public void SchemeValidator()
+        {
             // ARRANGE
             var schemeService = CreateSchemeService();
 
@@ -170,7 +172,7 @@ namespace Zilon.Core.Tests.Schemes
             }
         }
 
-        private ISchemeService CreateSchemeService()
+        private static ISchemeService CreateSchemeService()
         {
             var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
 
@@ -193,7 +195,7 @@ namespace Zilon.Core.Tests.Schemes
             return schemeTypes;
         }
 
-        private void CheckDropTableScheme(IDropTableScheme dropTableScheme, ISchemeService schemeService)
+        private static void CheckDropTableScheme(IDropTableScheme dropTableScheme, ISchemeService schemeService)
         {
             Action act = () =>
             {

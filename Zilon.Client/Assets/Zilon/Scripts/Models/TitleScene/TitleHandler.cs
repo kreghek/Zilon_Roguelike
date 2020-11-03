@@ -10,7 +10,7 @@ using Zilon.Core.Scoring;
 public class TitleHandler : MonoBehaviour
 {
     [Inject] private readonly IScoreManager _scoreManager;
-    [Inject] private readonly HumanPlayer _humanPlayer;
+    [Inject] private readonly IPlayer _humanPlayer;
 
     public void Start()
     {

@@ -11,6 +11,7 @@ using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.MapGenerators.StaticObjectFactories;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -18,6 +19,7 @@ using Zilon.Core.Schemes;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
 
@@ -43,13 +45,38 @@ namespace Zilon.Emulation.Common
             RegisterPlayerServices(serviceCollection);
 
             RegisterSectorServices(serviceCollection);
+
+            RegisterGlobeInitializationServices(serviceCollection);
         }
 
         public abstract void ConfigureAux(IServiceProvider serviceFactory);
 
+        private static void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
+            serviceCollection.AddSingleton<IBiomeInitializer, BiomeInitializer>();
+            serviceCollection.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
+            serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
+            serviceCollection.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
+            serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider =>
+            {
+                return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
+            });
+        }
+
         protected virtual void RegisterMonsterGeneratorRandomSource(IServiceCollection serviceRegistry)
         {
-            serviceRegistry.AddScoped<IMonsterGenerator, MonsterGenerator>();
+            serviceRegistry.AddSingleton<IMonsterGenerator, MonsterGenerator>(serviceProvider =>
+            {
+                var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
+                var monsterFactory = serviceProvider.GetRequiredService<IMonsterPersonFactory>();
+                var randomSource = serviceProvider.GetRequiredService<IMonsterGeneratorRandomSource>();
+                var actorTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+
+                var generator = new MonsterGenerator(schemeService, monsterFactory, randomSource, actorTaskSource);
+                return generator;
+            });
+            serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
             serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
         }
 
@@ -76,7 +103,6 @@ namespace Zilon.Emulation.Common
         private void RegisterSectorServices(IServiceCollection serviceRegistry)
         {
             RegisterClientServices(serviceRegistry);
-            RegisterGameLoop(serviceRegistry);
             RegisterScopedSectorService(serviceRegistry);
             RegisterBot(serviceRegistry);
         }
@@ -105,13 +131,26 @@ namespace Zilon.Emulation.Common
             //TODO сделать генераторы независимыми от сектора.
             // Такое время жизни, потому что в зависимостях есть менеджеры.
             container.AddScoped<ISectorGenerator, SectorGenerator>();
+            container.AddSingleton<IBiomeInitializer, BiomeInitializer>();
+            container.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
             container.AddSingleton<IResourceMaterializationMap, ResourceMaterializationMap>();
             RegisterMonsterGeneratorRandomSource(container);
             RegisterChestGeneratorRandomSource(container);
-            container.AddScoped<ISectorFactory, SectorFactory>();
-            container.AddScoped<ISectorManager, InfiniteSectorManager>();
+            container.AddScoped<SectorFactory>();  // TOOD Костфль, чтобы не заполнять конструктор сервиса руками. 
+            container.AddScoped<ISectorFactory, SectorFactory>(serviceProvider =>
+            {
+                var sectorFactory = serviceProvider.GetRequiredService<SectorFactory>();
+                var scoreManager = serviceProvider.GetService<IScoreManager>();
+                sectorFactory.ScoreManager = scoreManager;
+                return sectorFactory;
+            });
             RegisterActUsageServices(container);
-            container.AddScoped<MonsterBotActorTaskSource>();
+            container.AddScoped<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+            container.AddScoped<IActorTaskSourceCollector, ActorTaskSourceCollector>(serviceProvider =>
+            {
+                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+                return new ActorTaskSourceCollector(monsterTaskSource);
+            });
         }
 
         private static void RegisterActUsageServices(IServiceCollection container)
@@ -136,9 +175,8 @@ namespace Zilon.Emulation.Common
             {
                 var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
                 var actHandlerSelector = serviceProvider.GetRequiredService<IActUsageHandlerSelector>();
-                var sectorManager = serviceProvider.GetRequiredService<ISectorManager>();
 
-                var tacticalActUsageService = new TacticalActUsageService(randomSource, sectorManager, actHandlerSelector);
+                var tacticalActUsageService = new TacticalActUsageService(randomSource, actHandlerSelector);
 
                 ConfigurateTacticalActUsageService(serviceProvider, tacticalActUsageService);
 
@@ -164,11 +202,6 @@ namespace Zilon.Emulation.Common
             handler.ScoreManager = serviceProvider.GetService<IScoreManager>();
         }
 
-        private static void RegisterGameLoop(IServiceCollection serviceRegistry)
-        {
-            serviceRegistry.AddScoped<IGameLoop, GameLoop>();
-        }
-
         /// <summary>
         /// Подготовка дополнительных сервисов
         /// </summary>
@@ -188,7 +221,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
-            container.AddSingleton<IHumanPersonFactory, RandomHumanPersonFactory>();
+            RegisterPersonFactory(container);
             container.AddSingleton<IPersonPerkInitializator, PersonPerkInitializator>();
 
             container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();
@@ -201,6 +234,17 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IUserTimeProvider, UserTimeProvider>();
 
             container.AddSingleton<IDiseaseGenerator, DiseaseGenerator>();
+        }
+
+        protected virtual void RegisterPersonFactory(IServiceCollection container)
+        {
+            container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
+            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
+            {
+                var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
+                factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+                return factory;
+            });
         }
 
         private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceProvider factory)
@@ -288,8 +332,7 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
             serviceCollection.AddSingleton<IPlayerEventLogService, PlayerEventLogService>();
             serviceCollection.AddSingleton<DeathReasonService>();
-            serviceCollection.AddSingleton<HumanPlayer>();
-            serviceCollection.AddSingleton<IBotPlayer, BotPlayer>();
+            serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
         }
 
         protected abstract void RegisterBot(IServiceCollection serviceCollection);

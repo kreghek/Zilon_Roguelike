@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         public override IEnumerable<IGraphNode> Nodes { get => _nodes; }
 
-        public override void AddEdge([NotNull] IGraphNode node1, [NotNull]  IGraphNode node2)
+        public override void AddEdge([NotNull] IGraphNode node1, [NotNull] IGraphNode node2)
         {
             if (node1 == null)
             {

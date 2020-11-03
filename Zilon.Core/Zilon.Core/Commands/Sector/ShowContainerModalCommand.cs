@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
+using Zilon.Core.PersonModules;
 using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Commands
@@ -23,21 +24,21 @@ namespace Zilon.Core.Commands
         {
             _playerState = playerState;
         }
-        
+
         public override void Execute()
         {
-            var inventory = _playerState.ActiveActor.Actor.Person.Inventory;
+            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
             var targetContainerViewModel = (IContainerViewModel)_playerState.HoverViewModel;
             var container = targetContainerViewModel.StaticObject;
             var containerContent = container.GetModule<IPropContainer>().Content;
             var transferMachine = new PropTransferMachine(inventory, containerContent);
-            
+
             ModalManager.ShowContainerModal(transferMachine);
         }
 
         public override bool CanExecute()
         {
-            var inventory = _playerState.ActiveActor.Actor.Person.Inventory;
+            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
 
             var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
             var container = targetContainerViewModel?.StaticObject;
