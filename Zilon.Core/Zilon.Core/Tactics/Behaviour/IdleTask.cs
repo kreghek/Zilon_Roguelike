@@ -19,6 +19,8 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </summary>
         private int _counter;
 
+        public override int Cost => 50;
+
         public IdleTask(IActor actor, IActorTaskContext context, IDecisionSource decisionSource) : base(actor, context)
         {
             if (actor is null)
