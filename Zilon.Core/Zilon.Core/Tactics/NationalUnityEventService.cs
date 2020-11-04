@@ -56,6 +56,20 @@ namespace Zilon.Core.Tactics
                     sector.ActorManager.Add(actor);
                 }
             }
+            else
+            {
+                var faction = _dice.RollFromList(new[] { Fractions.InterventionistFraction, Fractions.MilitiaFraction });
+                var count = _dice.Roll(2, 5);
+                for (var i = 0; i < count; i++)
+                {
+                    var person = _personFactory.Create("human-person", faction);
+                    var nodes = sector.Map.Nodes.ToArray();
+                    var startNode = _dice.RollFromList(nodes);
+
+                    var actor = new Actor(person, _actorTaskSource, startNode);
+                    sector.ActorManager.Add(actor);
+                }
+            }
         }
 
         public bool RollEventIsRaised()

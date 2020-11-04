@@ -146,7 +146,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private const int NATIONALUNITYCOUNTERSTARTVALUE = 1;
+        private const int NATIONALUNITYCOUNTERSTARTVALUE = 1000;
         private int _nationalUnityCounter = NATIONALUNITYCOUNTERSTARTVALUE;
 
         public NationalUnityEventService NationalUnityEventService { get; set; }
