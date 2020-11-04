@@ -6,6 +6,8 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.Scoring;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace Assets.Zilon.Scripts.DependencyInjection
@@ -30,7 +32,11 @@ namespace Assets.Zilon.Scripts.DependencyInjection
             diContainer.Bind<IChestGeneratorRandomSource>().To<ChestGeneratorRandomSource>().AsSingle();
             diContainer.Bind<IMonsterGenerator>().To<MonsterGenerator>().AsSingle();
             diContainer.Bind<IMonsterGeneratorRandomSource>().To<MonsterGeneratorRandomSource>().AsSingle();
-            diContainer.Bind<ISectorFactory>().To<SectorFactory>().AsSingle();
+            diContainer.Bind<NationalUnityEventService>().AsSingle();
+            diContainer.Bind<ISectorFactory>().To<SectorFactory>().AsSingle().OnInstantiated< SectorFactory>((context, service) => {
+                service.NationalUnityEventService = context.Container.Resolve<NationalUnityEventService>();
+                service.ScoreManager = context.Container.Resolve<IScoreManager>();
+            });
 
             diContainer.Bind<IStaticObstaclesGenerator>().To<StaticObstaclesGenerator>().AsSingle();
             diContainer.Bind<IStaticObjectsGeneratorRandomSource>().To<StaticObjectsGeneratorRandomSource>().AsSingle();

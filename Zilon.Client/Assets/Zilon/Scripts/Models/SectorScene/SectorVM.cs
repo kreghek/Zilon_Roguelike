@@ -273,6 +273,9 @@ public class SectorVM : MonoBehaviour
         }
     }
 
+    [Inject]
+    private NationalUnityEventService nationalUnityEventService;
+
     private async Task InitServicesAsync()
     {
         //TODO эти операции лучше выполнять на однельной сцене генерации мира.
@@ -280,6 +283,7 @@ public class SectorVM : MonoBehaviour
         {
             var globe = await _globeInitializer.CreateGlobeAsync("intro");
             _globeStorage.AssignGlobe(globe);
+            nationalUnityEventService.Globe = globe;
         }
 
         var sectorNode = _humanPlayer.SectorNode;
