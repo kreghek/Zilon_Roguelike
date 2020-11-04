@@ -15,7 +15,6 @@ using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 
 public class PlayerPersonInitiator : MonoBehaviour
 {
@@ -44,10 +43,6 @@ public class PlayerPersonInitiator : MonoBehaviour
     [NotNull]
     [Inject]
     private readonly IPropFactory _propFactory;
-
-    [NotNull]
-    [Inject]
-    private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
 
     [NotNull]
     [Inject]
@@ -80,6 +75,8 @@ public class PlayerPersonInitiator : MonoBehaviour
         _playerState.ActiveActor = playerActorViewModel;
     }
 
+    private static bool _showCreatingModalSwitcher;
+
     private ActorViewModel CreateHumanActorViewModel([NotNull] IActorManager actorManager,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
@@ -87,6 +84,7 @@ public class PlayerPersonInitiator : MonoBehaviour
 
         if (showCreationModal)
         {
+            _showCreatingModalSwitcher = true;
             ShowCreatePersonModal(_humanPlayer.MainPerson);
         }
 
@@ -126,7 +124,7 @@ public class PlayerPersonInitiator : MonoBehaviour
     private bool GetCreationModal()
     {
         // Считывать из настроек в клиентской части.
-        return true;
+        return !_showCreatingModalSwitcher;
     }
 
     private void ShowCreatePersonModal(IPerson playerPerson)

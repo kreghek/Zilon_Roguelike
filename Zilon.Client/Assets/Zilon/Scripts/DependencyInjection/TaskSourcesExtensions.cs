@@ -18,7 +18,7 @@ namespace Assets.Zilon.Scripts.DependencyInjection
         public static void RegisterActorTaskSourcesServices(this DiContainer diContainer)
         {
             diContainer.Bind<IHumanActorTaskSource<ISectorTaskSourceContext>>().To<HumanActorTaskSource<ISectorTaskSourceContext>>().AsSingle();
-            diContainer.Bind<IActorTaskSource<ISectorTaskSourceContext>>().To<MonsterBotActorTaskSource<ISectorTaskSourceContext>>().AsSingle();
+            diContainer.Bind<IActorTaskSource<ISectorTaskSourceContext>>().To<HumanBotActorTaskSource<ISectorTaskSourceContext>>().AsSingle();
             diContainer.Bind<IActorTaskSourceCollector>().FromMethod(injectContext =>
             {
                 var botTaskSource = injectContext.Container.Resolve<IActorTaskSource<ISectorTaskSourceContext>>();

@@ -30,6 +30,11 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
+            if (sector.ActorManager.Items.Any())
+            {
+                return;
+            }
+
             // Interventionists spawns first.
             // If globe has no interventionists then spawn they.
             // Next randomly spawns interventionists or militia.
