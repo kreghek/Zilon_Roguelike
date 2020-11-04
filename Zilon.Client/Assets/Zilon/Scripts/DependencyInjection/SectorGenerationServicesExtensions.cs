@@ -33,7 +33,8 @@ namespace Assets.Zilon.Scripts.DependencyInjection
             diContainer.Bind<IMonsterGenerator>().To<MonsterGenerator>().AsSingle();
             diContainer.Bind<IMonsterGeneratorRandomSource>().To<MonsterGeneratorRandomSource>().AsSingle();
             diContainer.Bind<NationalUnityEventService>().AsSingle();
-            diContainer.Bind<ISectorFactory>().To<SectorFactory>().AsSingle().OnInstantiated< SectorFactory>((context, service) => {
+            diContainer.Bind<ISectorFactory>().To<SectorFactory>().AsSingle().OnInstantiated<SectorFactory>((context, service) =>
+            {
                 service.NationalUnityEventService = context.Container.Resolve<NationalUnityEventService>();
                 service.ScoreManager = context.Container.Resolve<IScoreManager>();
             });
