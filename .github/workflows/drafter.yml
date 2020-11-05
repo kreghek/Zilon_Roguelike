@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - drafter
 
 jobs:
   update_release_draft:
