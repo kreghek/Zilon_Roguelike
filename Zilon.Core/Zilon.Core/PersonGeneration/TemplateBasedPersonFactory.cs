@@ -278,11 +278,6 @@ namespace Zilon.Core.PersonGeneration
                             new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
                         }
                     },
-                    HeadEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="gas-mask", Weight = 1 }
-                        }
-                    },
                     MainHandEquipments = new StartDropTableScheme{
                         Records = new IDropTableRecordSubScheme[]{
                             new StartDropTableRecordSubScheme{ SchemeSid="rough-sword", Weight = 1 },
