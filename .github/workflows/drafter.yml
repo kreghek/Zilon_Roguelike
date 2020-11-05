@@ -82,8 +82,9 @@ jobs:
         with:
           name: Last.Imperial.Vagabond.${{ matrix.targetPlatform }}
           path: build
-        outputs:
-          buildName: Last.Imperial.Vagabond.${{ matrix.targetPlatform }}
+      - id: random-number-generator
+        run: echo "::set-output name=buildName::Last.Imperial.Vagabond.${{ matrix.targetPlatform }}"
+        shell: bash
   uploadAssets:
     needs: [buildForSomePlatforms, update_release_draft]
     steps:
