@@ -8,13 +8,13 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
-using Zilon.Core.Client.Windows;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 public class PlayerPersonInitiator : MonoBehaviour
 {
@@ -46,7 +46,7 @@ public class PlayerPersonInitiator : MonoBehaviour
 
     [NotNull]
     [Inject]
-    private readonly ISectorModalManager _sectorModalManager;
+    private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
 
     public ActorViewModel InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels, List<ActorViewModel> ActorViewModels)
     {
@@ -75,8 +75,6 @@ public class PlayerPersonInitiator : MonoBehaviour
         _playerState.ActiveActor = playerActorViewModel;
     }
 
-    private static bool _showCreatingModalSwitcher;
-
     private ActorViewModel CreateHumanActorViewModel([NotNull] IActorManager actorManager,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
@@ -84,7 +82,6 @@ public class PlayerPersonInitiator : MonoBehaviour
 
         if (showCreationModal)
         {
-            _showCreatingModalSwitcher = true;
             ShowCreatePersonModal(_humanPlayer.MainPerson);
         }
 
@@ -124,12 +121,12 @@ public class PlayerPersonInitiator : MonoBehaviour
     private bool GetCreationModal()
     {
         // Считывать из настроек в клиентской части.
-        return !_showCreatingModalSwitcher;
+        return true;
     }
 
     private void ShowCreatePersonModal(IPerson playerPerson)
     {
-        _sectorModalManager.ShowCreatePersonModal(playerPerson);
+        //_sectorModalManager.ShowCreatePersonModal(playerPerson);
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.

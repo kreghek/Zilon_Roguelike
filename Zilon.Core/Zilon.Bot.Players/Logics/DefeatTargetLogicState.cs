@@ -44,8 +44,7 @@ namespace Zilon.Bot.Players.Logics
         {
             foreach (var target in actorManager.Items)
             {
-                if (target.Person.Fraction == actor.Person.Fraction ||
-                    (target.Person.Fraction == Fractions.MilitiaFraction && actor.Person.Fraction == Fractions.MainPersonFraction))
+                if (target.Person.Fraction == actor.Person.Fraction)
                 {
                     continue;
                 }
