@@ -26,7 +26,8 @@ version-resolver:
       - 'patch'
   default: patch
 include-labels:
-  - release-significant
+  - 'release-significant'
+prerelease: true
 template: |
   ## What's news
 
