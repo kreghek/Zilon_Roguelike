@@ -43,50 +43,33 @@ namespace Zilon.Core.Tactics
             var openDropTables = new List<IDropTableScheme>(dropTables);
             while (openDropTables.Any())
             {
-                try
-                {
-                    var table = openDropTables[0];
-                    var records = table.Records;
-                    if (!records.Any())
-                    {
-                        // Do not try to roll if drop table has no records.
+                var table = openDropTables[0];
+                var records = table.Records;
+                var recMods = GetModRecords(records, modificators);
 
-                        // Dont forget to remove empty drop table from open to avoid endless loop.
-                        openDropTables.RemoveAt(0);
+                var totalWeight = recMods.Sum(x => x.ModifiedWeight);
+
+                for (var rollIndex = 0; rollIndex < table.Rolls; rollIndex++)
+                {
+                    var rolledWeight = _randomSource.RollWeight(totalWeight);
+                    var recMod = DropRoller.GetRecord(recMods, rolledWeight);
+
+                    if (recMod.Record.SchemeSid == null)
+                    {
                         continue;
                     }
 
-                    var recMods = GetModRecords(records, modificators);
+                    rolledRecords.Add(recMod.Record);
 
-                    var totalWeight = recMods.Sum(x => x.ModifiedWeight);
-
-                    for (var rollIndex = 0; rollIndex < table.Rolls; rollIndex++)
+                    if (recMod.Record.Extra != null)
                     {
-                        var rolledWeight = _randomSource.RollWeight(totalWeight);
-                        var recMod = DropRoller.GetRecord(recMods, rolledWeight);
-
-                        if (recMod.Record.SchemeSid == null)
-                        {
-                            continue;
-                        }
-
-                        rolledRecords.Add(recMod.Record);
-
-                        if (recMod.Record.Extra != null)
-                        {
-                            //TODO Доделать учёт Rolls для экстра.
-                            // Сейчас все экстра гарантированно выпадают по разу.
-                            openDropTables.AddRange(recMod.Record.Extra);
-                        }
+                        //TODO Доделать учёт Rolls для экстра.
+                        // Сейчас все экстра гарантированно выпадают по разу.
+                        openDropTables.AddRange(recMod.Record.Extra);
                     }
+                }
 
-                    openDropTables.RemoveAt(0);
-                }
-                catch
-                {
-                    openDropTables.RemoveAt(0);
-                    //TODO FIX
-                }
+                openDropTables.RemoveAt(0);
             }
 
             var props = rolledRecords.Select(GenerateProp).ToArray();
