@@ -13,8 +13,9 @@ categories:
   - title: '🧰 Codebase improvements'
     label: 'code improvement'
 change-template: |
-  - **$TITLE** (#$NUMBER)
-    $BODY
+  ###$TITLE (#$NUMBER)
+  
+  $BODY
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
 version-resolver:
   major:
