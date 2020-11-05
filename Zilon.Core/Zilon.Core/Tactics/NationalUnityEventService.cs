@@ -66,11 +66,11 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                var faction = _dice.RollFromList(new[] 
+                var faction = _dice.RollFromList(new[]
                 {
                     Fractions.InterventionistFraction,
                     Fractions.MilitiaFraction,
-                    Fractions.TroublemakerFraction 
+                    Fractions.TroublemakerFraction
                 });
 
                 var count = _dice.Roll(2, 5);
