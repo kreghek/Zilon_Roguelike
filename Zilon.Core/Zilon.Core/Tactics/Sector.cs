@@ -118,38 +118,7 @@ namespace Zilon.Core.Tactics
             UpdateEquipments();
 
             UpdateActorCombatActs();
-
-            UpdateNationalUnityEvent();
         }
-
-        /// <summary>
-        /// Processing special event:
-        /// 1. There is counter.
-        /// 2. When counter is out the special service create group of interventionists or militia.
-        /// </summary>
-        private void UpdateNationalUnityEvent()
-        {
-            if (NationalUnityEventService is null)
-            {
-                return;
-            }
-
-            _nationalUnityCounter--;
-            if (_nationalUnityCounter <= 0)
-            {
-                if (NationalUnityEventService.RollEventIsRaised())
-                {
-                    NationalUnityEventService.RollAndCreateUnityGroupIntoSector(this);
-                }
-
-                _nationalUnityCounter = NATIONALUNITYCOUNTERSTARTVALUE;
-            }
-        }
-
-        private const int NATIONALUNITYCOUNTERSTARTVALUE = 1000;
-        private int _nationalUnityCounter = NATIONALUNITYCOUNTERSTARTVALUE;
-
-        public NationalUnityEventService NationalUnityEventService { get; set; }
 
         private void UpdateDiseases()
         {
