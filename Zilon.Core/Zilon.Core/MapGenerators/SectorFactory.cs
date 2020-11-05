@@ -25,6 +25,8 @@ namespace Zilon.Core.MapGenerators
 
         public IScoreManager ScoreManager { get; set; }
 
+        public NationalUnityEventService NationalUnityEventService { get; set; }
+
         public ISector Create(ISectorMap map, ILocationScheme locationScheme)
         {
             var actorManager = new ActorManager();
@@ -38,7 +40,8 @@ namespace Zilon.Core.MapGenerators
                 _equipmentDurableService)
             {
                 Scheme = locationScheme,
-                ScoreManager = ScoreManager
+                ScoreManager = ScoreManager,
+                NationalUnityEventService = NationalUnityEventService
             };
 
             return sector;

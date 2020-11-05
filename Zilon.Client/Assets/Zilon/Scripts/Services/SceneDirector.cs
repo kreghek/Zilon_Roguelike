@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Assets.Zilon.Scripts.Services;
 
@@ -76,25 +77,33 @@ public sealed class SceneDirector : MonoBehaviour
 
     private string GetDamageLog(Language currentLanguage, DamageActorInteractionEvent interactionEvent)
     {
-        string damageTemplate;
-        MonsterPerson logPerson;
-        if (interactionEvent.Actor == _sectorUiState.ActiveActor.Actor)
+        try
         {
-            damageTemplate = StaticPhrases.GetValue("log-player-damage-template", currentLanguage);
-            logPerson = interactionEvent.TargetActor.Person as MonsterPerson;
-        }
-        else
-        {
-            damageTemplate = StaticPhrases.GetValue("log-monster-damage-template", currentLanguage);
-            logPerson = interactionEvent.Actor.Person as MonsterPerson;
-        }
+            string damageTemplate;
+            MonsterPerson logPerson;
+            if (interactionEvent.Actor == _sectorUiState.ActiveActor.Actor)
+            {
+                damageTemplate = StaticPhrases.GetValue("log-player-damage-template", currentLanguage);
+                logPerson = interactionEvent.TargetActor.Person as MonsterPerson;
+            }
+            else
+            {
+                damageTemplate = StaticPhrases.GetValue("log-monster-damage-template", currentLanguage);
+                logPerson = interactionEvent.Actor.Person as MonsterPerson;
+            }
 
-        var logActorDisplayName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, logPerson.Scheme.Name);
-        var damageLog = string.Format(
-                damageTemplate,
-                logActorDisplayName,
-                interactionEvent.DamageEfficientCalcResult.ResultEfficient);
-        return damageLog;
+            var logActorDisplayName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, logPerson.Scheme.Name);
+            var damageLog = string.Format(
+                    damageTemplate,
+                    logActorDisplayName,
+                    interactionEvent.DamageEfficientCalcResult.ResultEfficient);
+            return damageLog;
+        }
+        catch (NullReferenceException)
+        {
+            //TODO Some error. Fix it after release
+            return string.Empty;
+        }
     }
 
     private void CreateDamageIndication(DamageActorInteractionEvent interactionEvent)

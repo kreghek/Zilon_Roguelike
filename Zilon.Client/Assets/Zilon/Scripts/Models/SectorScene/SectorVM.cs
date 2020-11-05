@@ -273,6 +273,9 @@ public class SectorVM : MonoBehaviour
         }
     }
 
+    [Inject]
+    private NationalUnityEventService nationalUnityEventService;
+
     private async Task InitServicesAsync()
     {
         //TODO эти операции лучше выполнять на однельной сцене генерации мира.
@@ -280,6 +283,7 @@ public class SectorVM : MonoBehaviour
         {
             var globe = await _globeInitializer.CreateGlobeAsync("intro");
             _globeStorage.AssignGlobe(globe);
+            nationalUnityEventService.Globe = globe;
         }
 
         var sectorNode = _humanPlayer.SectorNode;
@@ -387,6 +391,48 @@ public class SectorVM : MonoBehaviour
             fowController.Graphic = actorGraphic.gameObject;
             // Передаём коллайдер, чтобы в случае отключения графики скрытого актёра нельзя было выбрать.
             fowController.Collider = actorViewModel.GetComponent<Collider2D>();
+
+            ActorViewModels.Add(actorViewModel);
+        }
+
+        var humanActors = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is HumanPerson && x.Person != _humanPlayer.MainPerson).ToArray();
+        foreach (var actor in humanActors)
+        {
+            var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
+            var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
+            actorViewModel.PlayerState = _playerState;
+            var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
+            actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
+            actorViewModel.SetGraphicRoot(actorGraphic);
+
+            var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
+            graphicController.Actor = actor;
+            graphicController.Graphic = actorGraphic;
+
+            var actorNodeVm = NodeViewModels.Single(x => x.Node == actor.Node);
+            var actorPosition = actorNodeVm.transform.position + new Vector3(0, 0, -1);
+            actorViewModel.transform.position = actorPosition;
+            actorViewModel.Actor = actor;
+
+
+            actorViewModel.Selected += EnemyActorVm_OnSelected;
+            actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
+            actor.UsedAct += ActorOnUsedAct;
+            actor.Person.GetModule<ISurvivalModule>().Dead += Monster_Dead;
+
+
+
+            var fowController = actorViewModel.gameObject.AddComponent<FowActorController>();
+            // Контроллеру тумана войны скармливаем только графику.
+            // Потому что на основтой объект акёра завязаны блокировки (на перемещение, например).
+            // Если основной объект создаст блокировку и будет отключен,
+            // то он не сможет её снять в результате своих Update.
+            // Это создаст всеобщую неснимаемую блокировку.
+            fowController.Graphic = actorGraphic.gameObject;
+            // Передаём коллайдер, чтобы в случае отключения графики скрытого актёра нельзя было выбрать.
+            fowController.Collider = actorViewModel.GetComponent<Collider2D>();
+
+
 
             ActorViewModels.Add(actorViewModel);
         }

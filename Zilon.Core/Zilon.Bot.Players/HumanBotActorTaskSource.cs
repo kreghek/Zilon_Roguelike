@@ -2,6 +2,7 @@
 
 using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -26,10 +27,20 @@ namespace Zilon.Bot.Players
 
             if (_botSettings == null)
             {
-                return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot)
+                if (actor.Person is HumanPerson)
                 {
-                    WriteStateChanges = true
-                };
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot)
+                    {
+                        WriteStateChanges = true
+                    };
+                }
+                else
+                {
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster)
+                    {
+                        WriteStateChanges = true
+                    };
+                }
             }
 
             var normalizedMode = _botSettings.Mode?.Trim().ToUpperInvariant();
