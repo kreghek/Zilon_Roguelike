@@ -30,6 +30,7 @@ version-resolver:
 include-labels:
   - 'release-significant'
 prerelease: true
+sort-direction: ascending
 template: |
   ## What's news
 
