@@ -169,6 +169,10 @@ namespace Zilon.Core.PersonGeneration
             {
                 return GetMilitiaPersonTemplates();
             }
+            else if (fraction == Fractions.TroublemakerFraction)
+            {
+                return GetTroublemakerPersonTemplates();
+            }
             else
             {
                 return GetPersonTemplates();
@@ -259,6 +263,45 @@ namespace Zilon.Core.PersonGeneration
                 }
             };
         }
+
+        private static PersonTemplate[] GetTroublemakerPersonTemplates()
+        {
+            return new[] {
+                new PersonTemplate{
+                    Name = new LocalizedString{ Ru = "Смутьян", En = "Troblemaker" },
+                    BodyEquipments = new StartDropTableScheme{
+                        Records = new IDropTableRecordSubScheme[]{
+                            new StartDropTableRecordSubScheme{ SchemeSid="quilted-coat", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="scholar-robe", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="leather-jacket", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="master-robe", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
+                        }
+                    },
+                    MainHandEquipments = new StartDropTableScheme{
+                        Records = new IDropTableRecordSubScheme[]{
+                            new StartDropTableRecordSubScheme{ SchemeSid="rough-sword", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="tribal-spear", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="knight-sword", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="battle-axe", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="mace", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="club", Weight = 1 },
+                        }
+                    },
+                    OffHandEquipments = new StartDropTableScheme{
+                        Records = new IDropTableRecordSubScheme[]{
+                            new StartDropTableRecordSubScheme{ SchemeSid="wooden-shield", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="club", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid="mace", Weight = 1 },
+                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
+                        }
+                    },
+                }
+            };
+        }
+
         private static PersonTemplate[] GetMilitiaPersonTemplates()
         {
             return new[] {
