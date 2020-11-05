@@ -1,4 +1,3 @@
-version-template: '0.$MAJOR.$MINOR-alpha.$PATCH'
 name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
 categories:
