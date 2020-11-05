@@ -1,4 +1,4 @@
-name-template: 'v$RESOLVED_VERSION 🌈'
+name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
 categories:
   - title: '🚀 Features'
@@ -10,8 +10,8 @@ categories:
       - 'fix'
       - 'bugfix'
       - 'bug'
-  - title: '🧰 Maintenance'
-    label: 'chore'
+  - title: '🧰 Codebase improvements'
+    label: 'code improvement'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
 version-resolver:
@@ -25,7 +25,9 @@ version-resolver:
     labels:
       - 'patch'
   default: patch
+include-labels:
+  - release-significant
 template: |
-  ## Changes
+  ## What's news
 
   $CHANGES
