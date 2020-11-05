@@ -137,6 +137,10 @@ public class SectorVM : MonoBehaviour
     [Inject]
     private readonly IGlobeInitializer _globeInitializer;
 
+    [NotNull]
+    [Inject]
+    private readonly NationalUnityEventService _nationalUnityEventService;
+
     public List<ActorViewModel> ActorViewModels { get; }
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
@@ -158,7 +162,7 @@ public class SectorVM : MonoBehaviour
 #pragma warning restore 649
 
     // ReSharper disable once UnusedMember.Local
-    public async Task Update()
+    public void Update()
     {
         if (!_commandBlockerService.HasBlockers)
         {
@@ -273,9 +277,6 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    [Inject]
-    private NationalUnityEventService nationalUnityEventService;
-
     private async Task InitServicesAsync()
     {
         //TODO эти операции лучше выполнять на однельной сцене генерации мира.
@@ -283,7 +284,7 @@ public class SectorVM : MonoBehaviour
         {
             var globe = await _globeInitializer.CreateGlobeAsync("intro");
             _globeStorage.AssignGlobe(globe);
-            nationalUnityEventService.Globe = globe;
+            _nationalUnityEventService.Globe = globe;
         }
 
         var sectorNode = _humanPlayer.SectorNode;
@@ -420,8 +421,6 @@ public class SectorVM : MonoBehaviour
             actor.UsedAct += ActorOnUsedAct;
             actor.Person.GetModule<ISurvivalModule>().Dead += Monster_Dead;
 
-
-
             var fowController = actorViewModel.gameObject.AddComponent<FowActorController>();
             // Контроллеру тумана войны скармливаем только графику.
             // Потому что на основтой объект акёра завязаны блокировки (на перемещение, например).
@@ -431,8 +430,6 @@ public class SectorVM : MonoBehaviour
             fowController.Graphic = actorGraphic.gameObject;
             // Передаём коллайдер, чтобы в случае отключения графики скрытого актёра нельзя было выбрать.
             fowController.Collider = actorViewModel.GetComponent<Collider2D>();
-
-
 
             ActorViewModels.Add(actorViewModel);
         }
