@@ -45,7 +45,10 @@ namespace Zilon.Bot.Players.Logics
             foreach (var target in actorManager.Items)
             {
                 if (target.Person.Fraction == actor.Person.Fraction ||
-                    (target.Person.Fraction == Fractions.MilitiaFraction && actor.Person.Fraction == Fractions.MainPersonFraction))
+                    (target.Person.Fraction == Fractions.MilitiaFraction && actor.Person.Fraction == Fractions.MainPersonFraction ||
+                    target.Person.Fraction == Fractions.MainPersonFraction && actor.Person.Fraction == Fractions.MilitiaFraction ||
+                    target.Person.Fraction == Fractions.InterventionistFraction && actor.Person.Fraction == Fractions.TroublemakerFraction ||
+                    target.Person.Fraction == Fractions.TroublemakerFraction && actor.Person.Fraction == Fractions.InterventionistFraction))
                 {
                     continue;
                 }
