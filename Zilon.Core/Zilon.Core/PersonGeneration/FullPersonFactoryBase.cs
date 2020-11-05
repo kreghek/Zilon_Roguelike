@@ -29,7 +29,7 @@ namespace Zilon.Core.PersonGeneration
         protected static int HeadSlotIndex => 0;
 
         protected static int BodySlotIndex => 1;
-        
+
         protected static int MainHandSlotIndex => 2;
 
         protected static int OffHandSlotIndex => 3;

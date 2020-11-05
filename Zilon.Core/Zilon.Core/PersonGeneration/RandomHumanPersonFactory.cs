@@ -54,7 +54,7 @@ namespace Zilon.Core.PersonGeneration
             }
 
             AddDefaultProps(inventory);
-            
+
             AddEquipment(inventory, "pick-axe");
             AddEquipment(inventory, "shovel");
             AddEquipment(inventory, "shotgun");
