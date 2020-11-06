@@ -70,8 +70,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.Fow",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Versioner", "Versioner\Versioner.csproj", "{D7822B66-D8B4-47E2-AFE2-FBB718FB3E54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReleaseNotesGenerator", "ReleaseNotesGenerator\ReleaseNotesGenerator.csproj", "{E94E3C9A-23DD-446C-BFD5-AE4D4158B91B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,10 +160,6 @@ Global
 		{D7822B66-D8B4-47E2-AFE2-FBB718FB3E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7822B66-D8B4-47E2-AFE2-FBB718FB3E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7822B66-D8B4-47E2-AFE2-FBB718FB3E54}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E94E3C9A-23DD-446C-BFD5-AE4D4158B91B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E94E3C9A-23DD-446C-BFD5-AE4D4158B91B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E94E3C9A-23DD-446C-BFD5-AE4D4158B91B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E94E3C9A-23DD-446C-BFD5-AE4D4158B91B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -189,7 +183,6 @@ Global
 		{269BD69F-E372-42A5-8A15-43338AD5D051} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
 		{8E9A2932-C54F-44F1-BF81-837837541077} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
 		{D7822B66-D8B4-47E2-AFE2-FBB718FB3E54} = {F057B496-9EBB-49B9-8B3F-ECBF7B08CA18}
-		{E94E3C9A-23DD-446C-BFD5-AE4D4158B91B} = {F057B496-9EBB-49B9-8B3F-ECBF7B08CA18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}
