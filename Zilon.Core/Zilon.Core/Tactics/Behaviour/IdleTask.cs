@@ -7,19 +7,21 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <summary>
         /// Минимальное время простоя.
         /// </summary>
-        private const int IdleMin = 2;
+        private const int _idleMin = 2;
 
         /// <summary>
         /// Максимальное время простоя.
         /// </summary>
-        private const int IdleMax = 5;
+        private const int _idleMax = 5;
 
         /// <summary>
         /// Текущий счётчик простоя.
         /// </summary>
         private int _counter;
 
-        public IdleTask(IActor actor, IDecisionSource decisionSource) : base(actor)
+        public override int Cost => 50;
+
+        public IdleTask(IActor actor, IActorTaskContext context, IDecisionSource decisionSource) : base(actor, context)
         {
             if (actor is null)
             {
@@ -31,7 +33,17 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new System.ArgumentNullException(nameof(decisionSource));
             }
 
-            _counter = decisionSource.SelectIdleDuration(IdleMin, IdleMax);
+            _counter = decisionSource.SelectIdleDuration(_idleMin, _idleMax);
+        }
+
+        public IdleTask(IActor actor, IActorTaskContext context, int duration) : base(actor, context)
+        {
+            if (actor is null)
+            {
+                throw new System.ArgumentNullException(nameof(actor));
+            }
+
+            _counter = duration;
         }
 
         public override void Execute()
@@ -40,7 +52,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (_counter <= 0)
             {
-                _isComplete = true;
+                IsComplete = true;
             }
         }
     }

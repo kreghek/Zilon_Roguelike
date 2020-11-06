@@ -5,7 +5,7 @@ namespace Zilon.Core.Common
 {
     public static class StringExtensions
     {
-        public static string FirstCharToUpper(this string input)
+        public static string FirstCharToUpper(this string input, System.Globalization.CultureInfo invariantCulture)
         {
             if (input is null)
             {
@@ -15,7 +15,7 @@ namespace Zilon.Core.Common
             switch (input)
             {
                 case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
-                default: return input.First().ToString().ToUpper() + input.Substring(1);
+                default: return input.First().ToString().ToUpper(invariantCulture) + input.Substring(1);
             }
         }
     }

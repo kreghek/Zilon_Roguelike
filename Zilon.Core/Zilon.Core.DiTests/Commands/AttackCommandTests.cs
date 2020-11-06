@@ -44,7 +44,7 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<AttackCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             // ACT
@@ -55,7 +55,7 @@ namespace Zilon.Core.Tests.Commands
 
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
                 CheckAttackIntention(intention, playerState, target)
-            )));
+            ), It.IsAny<IActor>()));
         }
 
         private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
@@ -78,7 +78,7 @@ namespace Zilon.Core.Tests.Commands
             }
 
             var targetMock = new Mock<IActor>();
-            var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(2, 0);
+            var targetNode = testMap.Nodes.SelectByHexCoords(2, 0);
             targetMock.SetupGet(x => x.Node).Returns(targetNode);
             var target = targetMock.Object;
 

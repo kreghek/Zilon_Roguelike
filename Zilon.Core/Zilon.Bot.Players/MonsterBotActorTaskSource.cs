@@ -3,16 +3,16 @@
 using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public sealed class MonsterBotActorTaskSource : BotActorTaskSourceBase
+    public sealed class MonsterBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext> where TContext : class, ISectorTaskSourceContext
     {
         private readonly LogicStateTreePatterns _logicStateTreePatterns;
 
-        public MonsterBotActorTaskSource(IBotPlayer player, LogicStateTreePatterns logicStateTreePatterns) : base(player)
+        public MonsterBotActorTaskSource(LogicStateTreePatterns logicStateTreePatterns)
         {
             _logicStateTreePatterns = logicStateTreePatterns;
         }
@@ -35,13 +35,10 @@ namespace Zilon.Bot.Players
                     return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster);
 
                 case HumanPerson _:
-                case CitizenPerson _:
-                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Citizen);
 
                 default:
                     throw new NotSupportedException($"{actor.Person.GetType()} не поддерживается.");
             }
-
         }
     }
 }

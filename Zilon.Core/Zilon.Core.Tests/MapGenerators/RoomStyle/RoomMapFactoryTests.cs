@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 
 using NUnit.Framework;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -96,7 +97,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var hexNodes = map.Nodes.Cast<HexNode>().ToArray();
             foreach (var node in hexNodes)
             {
-                var sameNode = hexNodes.Where(x => x != node && x.OffsetX == node.OffsetX && x.OffsetY == node.OffsetY);
+                var sameNode = hexNodes.Where(x => x != node && x.OffsetCoords == node.OffsetCoords);
                 sameNode.Should().BeEmpty();
             }
         }

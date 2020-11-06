@@ -15,6 +15,6 @@ namespace Zilon.Core.Schemes
 
         [JsonProperty]
         public float End { get; private set; }
-        
+
     }
 }

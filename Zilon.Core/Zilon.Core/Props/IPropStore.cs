@@ -23,6 +23,13 @@ namespace Zilon.Core.Props
         void Add(IProp prop);
 
         /// <summary>
+        /// Проверяет, что предмет есть в хранилище.
+        /// </summary>
+        /// <param name="prop">Указанные предмет.</param>
+        /// <returns>true - если предмет есть.</returns>
+        bool Has(IProp prop);
+
+        /// <summary>
         /// Удаление предмета из хранилища.
         /// </summary>
         /// <param name="prop"> Целевой предмет. </param>

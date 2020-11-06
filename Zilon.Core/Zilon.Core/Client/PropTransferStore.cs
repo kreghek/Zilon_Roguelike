@@ -66,42 +66,14 @@ namespace Zilon.Core.Client
         {
             var result = new List<IProp>();
             var propStoreItems = PropStore.CalcActualItems();
+            ProcessCurrentProps(result, propStoreItems);
+            ProcessAddedProps(result);
 
-            foreach (var prop in propStoreItems)
-            {
-                switch (prop)
-                {
-                    case Resource resource:
-                        var removedResource = PropRemoved.OfType<Resource>()
-                            .SingleOrDefault(x => x.Scheme == resource.Scheme);
+            return result.ToArray();
+        }
 
-                        var addedResource = PropAdded.OfType<Resource>()
-                            .SingleOrDefault(x => x.Scheme == resource.Scheme);
-
-                        var addedCount = addedResource?.Count;
-                        var removedCount = removedResource?.Count;
-                        var remainsCount = resource.Count + addedCount.GetValueOrDefault() - removedCount.GetValueOrDefault();
-
-                        if (remainsCount > 0)
-                        {
-                            var remainsResource = new Resource(resource.Scheme, remainsCount);
-                            result.Add(remainsResource);
-                        }
-
-                        break;
-
-                    case Equipment _:
-                    case Concept _:
-                        var isRemoved = PropRemoved.Contains(prop);
-
-                        if (!isRemoved)
-                        {
-                            result.Add(prop);
-                        }
-                        break;
-                }
-            }
-
+        private void ProcessAddedProps(List<IProp> result)
+        {
             foreach (var prop in PropAdded)
             {
                 switch (prop)
@@ -123,8 +95,48 @@ namespace Zilon.Core.Client
                         throw new NotSupportedException();
                 }
             }
+        }
 
-            return result.ToArray();
+        private void ProcessCurrentProps(List<IProp> result, IProp[] propStoreItems)
+        {
+            foreach (var prop in propStoreItems)
+            {
+                switch (prop)
+                {
+                    case Resource resource:
+                        MergeResource(result, resource);
+                        break;
+
+                    case Equipment _:
+                    case Concept _:
+                        var isRemoved = PropRemoved.Contains(prop);
+
+                        if (!isRemoved)
+                        {
+                            result.Add(prop);
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void MergeResource(List<IProp> result, Resource resource)
+        {
+            var removedResource = PropRemoved.OfType<Resource>()
+                                        .SingleOrDefault(x => x.Scheme == resource.Scheme);
+
+            var addedResource = PropAdded.OfType<Resource>()
+                .SingleOrDefault(x => x.Scheme == resource.Scheme);
+
+            var addedCount = addedResource?.Count;
+            var removedCount = removedResource?.Count;
+            var remainsCount = resource.Count + addedCount.GetValueOrDefault() - removedCount.GetValueOrDefault();
+
+            if (remainsCount > 0)
+            {
+                var remainsResource = new Resource(resource.Scheme, remainsCount);
+                result.Add(remainsResource);
+            }
         }
 
         /// <summary>
@@ -207,7 +219,7 @@ namespace Zilon.Core.Client
             }
         }
 
-        private void TransferResource(Resource resource,
+        private static void TransferResource(Resource resource,
             IList<IProp> mainList,
             IList<IProp> oppositList)
         {
@@ -248,7 +260,7 @@ namespace Zilon.Core.Client
             }
         }
 
-        private void TransferNoCount(IProp prop,
+        private static void TransferNoCount(IProp prop,
             IList<IProp> bittenList,
             IList<IProp> oppositList)
         {
@@ -259,6 +271,13 @@ namespace Zilon.Core.Client
             }
 
             oppositList.Add(prop);
+        }
+
+        public bool Has(IProp prop)
+        {
+            //TODO Неправильная реализация
+            // Не учитывает списки добавленных и удалённых предметов.
+            return PropStore.Has(prop);
         }
     }
 }

@@ -120,7 +120,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             var node = map.Nodes.OfType<HexNode>()
-                                .SingleOrDefault(x => x.OffsetX == currentX && x.OffsetY == currentY);
+                                .SingleOrDefault(x => x.OffsetCoords.X == currentX && x.OffsetCoords.Y == currentY);
 
             if (node == null)
             {

@@ -6,6 +6,9 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 
 public class FowManager : MonoBehaviour
@@ -16,26 +19,26 @@ public class FowManager : MonoBehaviour
     [Inject]
     private readonly ISectorUiState _sectorUiState;
 
+    [Inject]
+    private readonly IPlayer _player;
+
     private MapNodeVM[] _nodeViewModels;
     private IList<ActorViewModel> _actorViewModels;
-    private IList<ContainerVm> _containerViewModels;
+    private IList<StaticObjectViewModel> _staticObjectViewModels;
 
-    public void Start()
+    public void Update()
     {
-        PrepareSlowUpdate();
-    }
-
-    public void FixedUpdate()
-    {
-        if (Time.fixedTime >= _fowUpdateCounter)
+        if (_fowUpdateCounter >= UPDATE_FOW_DELAY)
         {
             UpdateFowState();
-
-            _fowUpdateCounter = Time.fixedTime + UPDATE_FOW_DELAY;
+        }
+        else
+        {
+            _fowUpdateCounter += Time.deltaTime;
         }
     }
 
-    public void InitViewModels(IEnumerable<MapNodeVM> nodeViewModels, IList<ActorViewModel> actorViewModels, IList<ContainerVm> containerViewModels)
+    public void InitViewModels(IEnumerable<MapNodeVM> nodeViewModels, IList<ActorViewModel> actorViewModels, IList<StaticObjectViewModel> staticObjectViewModels)
     {
         if (nodeViewModels is null)
         {
@@ -47,21 +50,16 @@ public class FowManager : MonoBehaviour
             throw new System.ArgumentNullException(nameof(actorViewModels));
         }
 
-        if (containerViewModels is null)
+        if (staticObjectViewModels is null)
         {
-            throw new System.ArgumentNullException(nameof(containerViewModels));
+            throw new System.ArgumentNullException(nameof(staticObjectViewModels));
         }
 
         _nodeViewModels = nodeViewModels.ToArray();
 
         _actorViewModels = actorViewModels;
 
-        _containerViewModels = containerViewModels;
-    }
-
-    private void PrepareSlowUpdate()
-    {
-        _fowUpdateCounter = Time.fixedTime + UPDATE_FOW_DELAY;
+        _staticObjectViewModels = staticObjectViewModels;
     }
 
     private void UpdateFowState()
@@ -72,9 +70,22 @@ public class FowManager : MonoBehaviour
             return;
         }
 
-        ProcessNodeFow(activeActor.SectorFowData);
-        ProcessActorFow(activeActor.SectorFowData);
-        ProcessContainerFow(activeActor.SectorFowData);
+        var fowData = activeActor.Person.GetModuleSafe<IFowData>();
+        if (fowData == null)
+        {
+            return;
+        }
+
+        var sector = _player.Globe.SectorNodes.SingleOrDefault(node => node.Sector.ActorManager.Items.Any(actor => actor.Person == _player.MainPerson))?.Sector;
+        if (sector == null)
+        {
+            return;
+        }
+
+        var sectorFowData = fowData.GetSectorFowData(sector);
+        ProcessNodeFow(sectorFowData);
+        ProcessActorFow(sectorFowData);
+        ProcessContainerFow(sectorFowData);
     }
 
     private void ProcessNodeFow(ISectorFowData sectorFowData)
@@ -123,12 +134,12 @@ public class FowManager : MonoBehaviour
 
     private void ProcessContainerFow(ISectorFowData sectorFowData)
     {
-        if (_containerViewModels == null)
+        if (_staticObjectViewModels == null)
         {
             return;
         }
 
-        foreach (var containerViewModel in _containerViewModels.ToArray())
+        foreach (var containerViewModel in _staticObjectViewModels.ToArray())
         {
             var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == containerViewModel.Container.Node);
 

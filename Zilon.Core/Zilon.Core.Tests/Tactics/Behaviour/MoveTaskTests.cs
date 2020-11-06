@@ -17,7 +17,8 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class MoveTaskTests
     {
         /// <summary>
@@ -31,18 +32,21 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // ARRANGE
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var startNode = map.Nodes.Cast<HexNode>().SelectBy(3, 3);
-            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 5);
+            var startNode = map.Nodes.SelectByHexCoords(3, 3);
+            var finishNode = map.Nodes.SelectByHexCoords(1, 5);
 
             var expectedPath = new[] {
-                map.Nodes.Cast<HexNode>().SelectBy(2, 3),
-                map.Nodes.Cast<HexNode>().SelectBy(2, 4),
+                map.Nodes.SelectByHexCoords(2, 3),
+                map.Nodes.SelectByHexCoords(2, 4),
                 finishNode
             };
 
             var actor = CreateActor(map, startNode);
 
-            var task = new MoveTask(actor, finishNode, map);
+            var contextMock = new Mock<IActorTaskContext>();
+            var context = contextMock.Object;
+
+            var task = new MoveTask(actor, context, finishNode, map);
 
             // ACT
             for (var step = 1; step <= expectedPath.Length; step++)
@@ -72,19 +76,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
             var person = personMock.Object;
 
-            IGraphNode currentNode = startNode;
-            var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Node).Returns(() => currentNode);
-            actorMock.Setup(x => x.MoveToNode(It.IsAny<IGraphNode>()))
-                .Callback<IGraphNode>(node => currentNode = node);
-            // ReSharper disable once UnusedVariable
-            var actor = actorMock.Object;
+            var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
+            var taskSource = taskSourceMock.Object;
 
-            // Исправить и убрать отключение инспекции для actor.
-
-            var actor2 = new Actor(person, player, startNode);
-            map.HoldNode(startNode, actor2);
-            return actor2;
+            var actor = new Actor(person, taskSource, startNode);
+            map.HoldNode(startNode, actor);
+            return actor;
         }
 
         /// <summary>
@@ -105,10 +102,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var startNode = expectedPath.First();
             var finishNode = expectedPath.Last();
 
-
             var actor = CreateActor(map, (HexNode)startNode);
 
-            var task = new MoveTask(actor, finishNode, map);
+            var contextMock = new Mock<IActorTaskContext>();
+            var context = contextMock.Object;
+
+            var task = new MoveTask(actor, context, finishNode, map);
 
             // ACT
             for (var step = 1; step < expectedPath.Length; step++)
@@ -135,10 +134,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var startNode = expectedPath.First();
             var finishNode = expectedPath.Last();
 
-
             var actor = CreateActor(map, (HexNode)startNode);
 
-            var task = new MoveTask(actor, finishNode, map);
+            var contextMock = new Mock<IActorTaskContext>();
+            var context = contextMock.Object;
+
+            var task = new MoveTask(actor, context, finishNode, map);
 
             // ACT
             for (var step = 1; step < expectedPath.Length; step++)
@@ -153,10 +154,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         private static IGraphNode[] CreateExpectedPath(ISectorMap map)
         {
             return new IGraphNode[] {
-                map.Nodes.Cast<HexNode>().SelectBy(4,4),
-                map.Nodes.Cast<HexNode>().SelectBy(3,4),
-                map.Nodes.Cast<HexNode>().SelectBy(2,4),
-                map.Nodes.Cast<HexNode>().SelectBy(1,5),
+                map.Nodes.SelectByHexCoords(4,4),
+                map.Nodes.SelectByHexCoords(3,4),
+                map.Nodes.SelectByHexCoords(2,4),
+                map.Nodes.SelectByHexCoords(1,5),
             };
         }
     }

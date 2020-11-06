@@ -26,7 +26,7 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Для монстра Id:(\d+) задан маршрут")]
         public void GivenДляМонстраIdЗаданМаршрут(int monsterId, Table table)
         {
-            var sector = Context.GetSector();
+            var sector = Context.GetCurrentGlobeFirstSector();
 
             var patrolPoints = new List<IGraphNode>();
             foreach (var tableRow in table.Rows)
@@ -35,7 +35,7 @@ namespace Zilon.Core.Specs.Steps
                 tableRow.TryGetValue("y", out var routeY);
 
                 var routeNode = sector.Map.Nodes.Cast<HexNode>()
-                    .Single(node => node.OffsetX == int.Parse(routeX) && node.OffsetY == int.Parse(routeY));
+                    .Single(node => node.OffsetCoords.X == int.Parse(routeX) && node.OffsetCoords.Y == int.Parse(routeY));
 
                 patrolPoints.Add(routeNode);
             }

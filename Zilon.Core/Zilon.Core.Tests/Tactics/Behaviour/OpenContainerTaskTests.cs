@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics;
@@ -13,7 +13,8 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class OpenContainerTaskTests
     {
         /// <summary>
@@ -24,31 +25,35 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public async Task Execute_ValidLength_ActorOpenedContainerAsync()
         {
             // ARRANGE
-            var map = await SquareMapFactory.CreateAsync(10);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            var actorNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
+            var actorNode = map.Nodes.SelectByHexCoords(0, 0);
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             var actor = actorMock.Object;
 
-            var containerNode = map.Nodes.Cast<HexNode>().SelectBy(1, 0);
+            var containerNode = map.Nodes.SelectByHexCoords(1, 0);
 
             var container = CreateContainer(containerNode);
 
             var method = CreateMethod();
 
-            var task = new OpenContainerTask(actor, container, method, map);
+            var sectorMock = new Mock<ISector>();
+            sectorMock.SetupGet(x => x.Map).Returns(map);
+            var sector = sectorMock.Object;
 
+            var contextMock = new Mock<IActorTaskContext>();
+            contextMock.SetupGet(x => x.Sector).Returns(sector);
+            var context = contextMock.Object;
 
+            var task = new OpenContainerTask(actor, context, container, method);
 
             // ACT
             task.Execute();
 
-
-
             // ASSERT
-            actorMock.Verify(x => x.OpenContainer(It.IsAny<IPropContainer>(), It.IsAny<IOpenContainerMethod>()));
+            actorMock.Verify(x => x.OpenContainer(It.IsAny<IStaticObject>(), It.IsAny<IOpenContainerMethod>()));
         }
 
         /// <summary>
@@ -77,14 +82,18 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var method = CreateMethod();
 
-            var task = new OpenContainerTask(actor, container, method, map);
+            var sectorMock = new Mock<ISector>();
+            sectorMock.SetupGet(x => x.Map).Returns(map);
+            var sector = sectorMock.Object;
 
+            var contextMock = new Mock<IActorTaskContext>();
+            contextMock.SetupGet(x => x.Sector).Returns(sector);
+            var context = contextMock.Object;
 
+            var task = new OpenContainerTask(actor, context, container, method);
 
             // ACT
             task.Execute();
-
-
 
             // ASSERT
             mapMock.Verify(x => x.TargetIsOnLine(
@@ -100,9 +109,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             return method;
         }
 
-        private IPropContainer CreateContainer(IGraphNode containerNode)
+        private static IStaticObject CreateContainer(IGraphNode containerNode)
         {
-            var containerMock = new Mock<IPropContainer>();
+            var containerMock = new Mock<IStaticObject>();
             containerMock.SetupGet(x => x.Node).Returns(containerNode);
             var container = containerMock.Object;
             return container;

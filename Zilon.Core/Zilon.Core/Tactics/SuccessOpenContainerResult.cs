@@ -1,7 +1,6 @@
 ﻿namespace Zilon.Core.Tactics
 {
-    public class SuccessOpenContainerResult: OpenContainerResultBase
+    public sealed class SuccessOpenContainerResult : OpenContainerResultBase
     {
-
     }
 }

@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -44,25 +45,39 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<OpenContainerCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
 
             // ASSERT
-            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()));
+            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>(), It.IsAny<IActor>()));
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
-            var targetMock = new Mock<IPropContainer>();
-            var targetNode = testMap.Nodes.OfType<HexNode>().SelectBy(1, 0);
+            if (testMap is null)
+            {
+                throw new System.ArgumentNullException(nameof(testMap));
+            }
+
+            if (playerStateMock is null)
+            {
+                throw new System.ArgumentNullException(nameof(playerStateMock));
+            }
+
+            var targetMock = new Mock<IStaticObject>();
+            var targetNode = testMap.Nodes.SelectByHexCoords(1, 0);
             targetMock.SetupGet(x => x.Node).Returns(targetNode);
-            targetMock.SetupGet(x => x.Purpose).Returns(PropContainerPurpose.Trash);
+
+            var containerMock = new Mock<IPropContainer>();
+            containerMock.SetupGet(x => x.Purpose).Returns(PropContainerPurpose.Trash);
+            var container = containerMock.Object;
+            targetMock.Setup(x => x.GetModule<IPropContainer>(nameof(IPropContainer))).Returns(container);
             var target = targetMock.Object;
 
             var targetVmMock = new Mock<IContainerViewModel>();
-            targetVmMock.SetupProperty(x => x.Container, target);
+            targetVmMock.SetupProperty(x => x.StaticObject, target);
             var targetVm = targetVmMock.Object;
 
             playerStateMock.SetupProperty(x => x.HoverViewModel, targetVm);

@@ -1,10 +1,11 @@
 ﻿using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
     public interface ILogicStateTrigger
     {
-        bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData);
+        bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData);
 
         void Update();
 

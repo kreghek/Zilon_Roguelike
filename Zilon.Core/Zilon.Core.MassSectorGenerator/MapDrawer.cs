@@ -43,12 +43,12 @@ namespace Zilon.Core.MassSectorGenerator
 
                 foreach (var node in nodes)
                 {
-                    var coords = HexHelper.ConvertToWorld(node.OffsetX, node.OffsetY);
+                    var coords = HexHelper.ConvertToWorld(node.OffsetCoords);
 
                     var x = (coords[0] - info.LeftCoord) * CELLSIZE;
                     var y = (coords[1] - info.BottomCoord) * CELLSIZE;
 
-                    var cellBrush = !node.IsObstacle ? Brushes.White : Brushes.Gray;
+                    var cellBrush = Brushes.White;
 
                     graphics.FillEllipse(cellBrush, x + MARGIN, y + MARGIN, CELLSIZE, CELLSIZE);
                 }
@@ -101,16 +101,17 @@ namespace Zilon.Core.MassSectorGenerator
 
         private static ImageInfo GetImageInfo(IEnumerable<HexNode> nodes)
         {
-            var xAxisOrderedNode = nodes.OrderBy(x => x.OffsetX);
-            var yAxisOrderedNode = nodes.OrderBy(x => x.OffsetY);
+            var xAxisOrderedNode = nodes.OrderBy(x => x.OffsetCoords.X);
+            var yAxisOrderedNode = nodes.OrderBy(x => x.OffsetCoords.Y);
 
-            var info = new ImageInfo();
+            var info = new ImageInfo
+            {
+                LeftCoord = xAxisOrderedNode.First().OffsetCoords.X,
+                RightCoord = xAxisOrderedNode.Last().OffsetCoords.X,
 
-            info.LeftCoord = xAxisOrderedNode.First().OffsetX;
-            info.RightCoord = xAxisOrderedNode.Last().OffsetX;
-
-            info.BottomCoord = yAxisOrderedNode.First().OffsetY;
-            info.TopCoord = yAxisOrderedNode.Last().OffsetY;
+                BottomCoord = yAxisOrderedNode.First().OffsetCoords.Y,
+                TopCoord = yAxisOrderedNode.Last().OffsetCoords.Y
+            };
 
             return info;
         }

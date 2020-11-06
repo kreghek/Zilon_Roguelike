@@ -6,6 +6,7 @@ using System.Linq;
 using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -17,6 +18,8 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
+        private readonly IPlayer _player;
+
         /// <summary>
         /// Текущий путь, по которому будет перемещаться персонаж.
         /// </summary>
@@ -35,12 +38,19 @@ namespace Zilon.Core.Commands
         /// <param name="actorManager"> Менеджер актёров.
         /// Нужен для отслеживания противников при автоперемещении. </param>
         [ExcludeFromCodeCoverage]
-        public MoveCommand(IGameLoop gameLoop,
-            ISectorManager sectorManager,
+        public MoveCommand(
+            IPlayer player,
             ISectorUiState playerState) :
-            base(gameLoop, sectorManager, playerState)
+            base(playerState)
         {
+            if (playerState is null)
+            {
+                throw new ArgumentNullException(nameof(playerState));
+            }
+
             Path = new List<IGraphNode>();
+
+            _player = player ?? throw new ArgumentNullException(nameof(player));
         }
 
         /// <summary>
@@ -51,6 +61,11 @@ namespace Zilon.Core.Commands
         {
             var nodeViewModel = GetHoverNodeViewModel();
             if (nodeViewModel == null)
+            {
+                return false;
+            }
+
+            if (!CanExecuteForSelected())
             {
                 return false;
             }
@@ -83,10 +98,11 @@ namespace Zilon.Core.Commands
             CreatePath(selectedNodeVm);
 
             var targetNode = selectedNodeVm.Node;
-            var targetMap = SectorManager.CurrentSector.Map;
 
-            var moveIntetion = new MoveIntention(targetNode, targetMap);
-            PlayerState.TaskSource.Intent(moveIntetion);
+            var currentSector = _player.SectorNode.Sector;
+
+            var moveIntetion = new MoveIntention(targetNode, currentSector);
+            PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
         }
 
         private IMapNodeViewModel GetHoverNodeViewModel()
@@ -102,10 +118,17 @@ namespace Zilon.Core.Commands
         private bool CanExecuteForSelected()
         {
             var nodeViewModel = GetSelectedNodeViewModel();
-            if (nodeViewModel == null)
+            if (nodeViewModel is null)
             {
                 return false;
             }
+
+            if (PlayerState.ActiveActor?.Actor is null)
+            {
+                return false;
+            }
+
+            //test
 
             CreatePath(nodeViewModel);
             return Path.Any();
@@ -116,7 +139,7 @@ namespace Zilon.Core.Commands
             var actor = PlayerState.ActiveActor.Actor;
             var startNode = actor.Node;
             var finishNode = targetNode.Node;
-            var map = SectorManager.CurrentSector.Map;
+            var map = _player.SectorNode.Sector.Map;
 
             Path.Clear();
 
@@ -125,7 +148,7 @@ namespace Zilon.Core.Commands
                 return;
             }
 
-            var context = new ActorPathFindingContext(actor, map);
+            var context = new ActorPathFindingContext(actor, map, finishNode);
 
             var astar = new AStar(context, startNode, finishNode);
             var resultState = astar.Run();
@@ -149,8 +172,8 @@ namespace Zilon.Core.Commands
         private bool CheckEnemies()
         {
             var actor = PlayerState.ActiveActor.Actor;
-            var enemies = SectorManager.CurrentSector.ActorManager.Items
-                .Where(x => x != actor && x.Owner != actor.Owner).ToArray();
+            var enemies = _player.SectorNode.Sector.ActorManager.Items
+                .Where(x => x != actor && x.Person.Fraction != actor.Person.Fraction).ToArray();
 
             foreach (var enemyActor in enemies)
             {
@@ -161,7 +184,7 @@ namespace Zilon.Core.Commands
                     continue;
                 }
 
-                var isAvailable = SectorManager.CurrentSector.Map.TargetIsOnLine(
+                var isAvailable = _player.SectorNode.Sector.Map.TargetIsOnLine(
                     actor.Node,
                     enemyActor.Node);
 

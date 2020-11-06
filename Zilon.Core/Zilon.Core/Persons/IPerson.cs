@@ -1,4 +1,4 @@
-﻿using Zilon.Core.Props;
+﻿using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Persons
 {
@@ -15,49 +15,25 @@ namespace Zilon.Core.Persons
         PhysicalSize PhysicalSize { get; }
 
         /// <summary>
-        /// Носитель экипировки.
+        /// Получение модуля статического объекта.
         /// </summary>
-        IEquipmentCarrier EquipmentCarrier { get; }
+        /// <typeparam name="TPersonModule">Тип модуля.</typeparam>
+        /// <returns>Возвращает объект модуля.</returns>
+        TPersonModule GetModule<TPersonModule>(string key) where TPersonModule : IPersonModule;
 
         /// <summary>
-        /// Носитель тактических действий.
+        /// Добавление модуля статического объекта.
         /// </summary>
-        ITacticalActCarrier TacticalActCarrier { get; }
+        /// <typeparam name="TPersonModule">Тип модуля.</typeparam>
+        /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
+        void AddModule<TPersonModule>(TPersonModule sectorObjectModule) where TPersonModule : IPersonModule;
 
         /// <summary>
-        /// Данные о развитие персонажа.
+        /// Проверка наличия модуля статического объекта.
         /// </summary>
-        IEvolutionData EvolutionData { get; }
+        /// <returns>Возвращает true, если модуль указанного типа есть у объекта. Иначе, false.</returns>
+        bool HasModule(string key);
 
-        /// <summary>
-        /// Характеристики, используемые персонажем в бою.
-        /// </summary>
-        ICombatStats CombatStats { get; }
-
-        /// <summary>
-        /// Инвентарь персонажа.
-        /// </summary>
-        /// <remarks>
-        /// Для монстров равен null.
-        /// </remarks>
-        IPropStore Inventory { get; }
-
-        /// <summary>
-        /// Признак того, что персонаж может иметь инвентарь.
-        /// Для монстров - false.
-        /// </summary>
-        bool HasInventory { get; }
-
-        /// <summary>
-        /// Данные по выживанию персонажа.
-        /// </summary>
-        ISurvivalData Survival { get; }
-
-        EffectCollection Effects { get; }
-
-        /// <summary>
-        /// Модуль заболеваний персонажа.
-        /// </summary>
-        IDiseaseData DiseaseData { get; }
+        IFraction Fraction { get; }
     }
 }

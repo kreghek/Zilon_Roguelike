@@ -13,18 +13,18 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
 {
     public SpriteRenderer FloorSpriteRenderer;
     public SpriteRenderer FloorDecorRenderer;
-    public SpriteRenderer InteriorObjectSpriteRenderer;
     public GameObject[] Walls;
     public GameObject[] NextNodeMarkers;
     public SpriteRenderer LeftBottomRenderer;
     public SpriteRenderer RightBottomRenderer;
     public bool IsExit;
     public GameObject ExitMarker;
-    
+
     public HexNode Node { get; set; }
     public HexNode[] Neighbors { get; set; }
 
     public ILocationScheme LocaltionScheme { get; set; }
+    public object Item { get => Node; }
 
     public event EventHandler OnSelect;
     public event EventHandler MouseEnter;
@@ -72,13 +72,6 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
 
         ExitMarker.SetActive(IsExit);
 
-        if (Node.IsObstacle)
-        {
-            var selectedInteriorObjectSpriteIndex = UnityEngine.Random.Range(0, walls.InteriorObjectSprites.Length);
-            var selectedInteriorObjectSprite = walls.InteriorObjectSprites[selectedInteriorObjectSpriteIndex];
-            InteriorObjectSpriteRenderer.sprite = selectedInteriorObjectSprite;
-        }
-
         var hasFloorDecor = UnityEngine.Random.Range(0, 100) > 90;
         if (hasFloorDecor)
         {
@@ -86,7 +79,7 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
             FloorDecorRenderer.sprite = walls.FloorDecorSprites[decorIndex];
         }
 
-        transform.position = new Vector3(transform.position.x, transform.position.y, Node.OffsetY);
+        transform.position = new Vector3(transform.position.x, transform.position.y, Node.OffsetCoords.Y);
     }
 
 
@@ -163,6 +156,6 @@ public class MapNodeVM : MonoBehaviour, IMapNodeViewModel
             return string.Empty;
         }
 
-        return $"Id: {Node.Id} Position: ({Node.OffsetX}, {Node.OffsetY})";
+        return $"Id: {Node.Id} Position: ({Node.OffsetCoords})";
     }
 }

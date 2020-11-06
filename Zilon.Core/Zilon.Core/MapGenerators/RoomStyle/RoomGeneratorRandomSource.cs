@@ -2,6 +2,7 @@
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics.Spatial;
 
@@ -61,7 +62,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             if (roomWidth <= 2 || roomHeight <= 2)
             {
-                return new RoomInteriorObjectMeta[0];
+                return System.Array.Empty<RoomInteriorObjectMeta>();
             }
 
             const int PASS_PADDING = 1;

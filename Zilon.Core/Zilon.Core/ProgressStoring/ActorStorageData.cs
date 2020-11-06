@@ -30,7 +30,7 @@ namespace Zilon.Core.ProgressStoring
             var storageData = new ActorStorageData();
 
             var hexNode = (HexNode)actor.Node;
-            storageData.Coords = new OffsetCoords(hexNode.OffsetX, hexNode.OffsetY);
+            storageData.Coords = hexNode.OffsetCoords;
             storageData.PersonId = personDict[actor.Person];
 
             return storageData;

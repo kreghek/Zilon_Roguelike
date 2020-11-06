@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
 
 using Moq;
@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -18,7 +19,8 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class AttackTaskTests
     {
         private AttackTask _attackTask;
@@ -32,7 +34,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public async Task AttackTask_NoWall_NotThrowsInvalidOperationException()
         {
             // Подготовка. Два актёра через клетку. Радиус действия 1-2, достаёт.
-            _testMap = await SquareMapFactory.CreateAsync(3);
+            _testMap = await SquareMapFactory.CreateAsync(3).ConfigureAwait(false);
 
             var tacticalActMock = new Mock<ITacticalAct>();
             tacticalActMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme
@@ -41,26 +43,25 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             });
             var tacticalAct = tacticalActMock.Object;
 
-            var actCarrierMock = new Mock<ITacticalActCarrier>();
-            actCarrierMock.SetupGet(x => x.Acts)
+            var combatActModuleMock = new Mock<ICombatActModule>();
+            combatActModuleMock.Setup(x => x.CalcCombatActs())
                 .Returns(new[] { tacticalAct });
-            var actCarrier = actCarrierMock.Object;
+            var combatActModule = combatActModuleMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.TacticalActCarrier).Returns(actCarrier);
+            personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
-            var actorNode = _testMap.Nodes.OfType<HexNode>().SelectBy(0, 0);
+            var actorNode = _testMap.Nodes.SelectByHexCoords(0, 0);
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             actorMock.SetupGet(x => x.Person).Returns(person);
             actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
                 .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
             _actor = actorMock.Object;
 
-
             var targetMock = new Mock<IActor>();
-            var targetNode = _testMap.Nodes.OfType<HexNode>().SelectBy(2, 0);
+            var targetNode = _testMap.Nodes.SelectByHexCoords(2, 0);
             targetMock.Setup(x => x.CanBeDamaged()).Returns(true);
             targetMock.SetupGet(x => x.Node).Returns(targetNode);
             var target = targetMock.Object;
@@ -68,9 +69,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var actServiceMock = new Mock<ITacticalActUsageService>();
             var actService = actServiceMock.Object;
 
+            var taskContextMock = new Mock<IActorTaskContext>();
+            var taskContext = taskContextMock.Object;
 
             // Создаём саму команду
-            _attackTask = new AttackTask(_actor, target, tacticalAct, actService);
+            _attackTask = new AttackTask(_actor, taskContext, target, tacticalAct, actService);
 
             Action act = () =>
             {

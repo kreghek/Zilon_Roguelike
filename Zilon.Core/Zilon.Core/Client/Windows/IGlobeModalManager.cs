@@ -4,7 +4,7 @@
     /// Менеджер модальных окон.
     /// Реализация на клиенте.
     /// </summary>
-    public interface IGlobeModalManager: ICommonModalManager
+    public interface IGlobeModalManager : ICommonModalManager
     {
     }
 }

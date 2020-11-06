@@ -5,7 +5,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Информация о перке.
     /// </summary>
-    public interface IPerk: IJobExecutable
+    public interface IPerk : IJobExecutable
     {
         /// <summary>
         /// Схема перка.

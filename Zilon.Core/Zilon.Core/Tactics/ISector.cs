@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Zilon.Core.Diseases;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
@@ -27,7 +28,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
-        event EventHandler<SectorExitEventArgs> HumanGroupExit;
+        event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
 
         /// <summary>
         /// Карта в основе сектора.
@@ -44,11 +45,16 @@ namespace Zilon.Core.Tactics
 
         ILocationScheme Scheme { get; set; }
 
-        void UseTransition(RoomTransition transition);
+        /// <summary>
+        /// Вызывает актёр, когда хочет переёти из одного сектора в другой.
+        /// </summary>
+        /// <param name="actor"> Актёр, применивший переход. </param>
+        /// <param name="transition"> переход, который бы задействован. </param>
+        void UseTransition(IActor actor, RoomTransition transition);
 
         IActorManager ActorManager { get; }
 
-        IPropContainerManager PropContainerManager { get; }
+        IStaticObjectManager StaticObjectManager { get; }
 
         /// <summary>
         /// Текущие болезни в секторе.

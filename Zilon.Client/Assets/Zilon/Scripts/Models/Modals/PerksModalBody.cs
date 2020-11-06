@@ -2,12 +2,9 @@
 
 using Assets.Zilon.Scripts;
 
-using JetBrains.Annotations;
-
 using UnityEngine;
 
-using Zenject;
-
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 
@@ -32,7 +29,7 @@ public class PerksModalBody : MonoBehaviour, IModalWindowHandler
     public void Init(IActor actor)
     {
         _actor = actor;
-        var evolutionData = _actor.Person.EvolutionData;
+        var evolutionData = _actor.Person.GetModule<IEvolutionModule>();
         UpdatePerksInner(PerkItemsParent, evolutionData.Perks);
     }
 
@@ -74,11 +71,12 @@ public class PerksModalBody : MonoBehaviour, IModalWindowHandler
 
     public void ApplyChanges()
     {
-
+        // Ничего не делаем при закрытии окна.
+        // Окно только читает данные. Ничего не изменяет.
     }
 
     public void CancelChanges()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 }

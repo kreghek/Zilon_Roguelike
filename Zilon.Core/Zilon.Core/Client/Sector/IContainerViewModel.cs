@@ -2,8 +2,8 @@
 
 namespace Zilon.Core.Client
 {
-    public interface IContainerViewModel: ISelectableViewModel
+    public interface IContainerViewModel : ISelectableViewModel
     {
-        IPropContainer Container { get; set; }
+        IStaticObject StaticObject { get; set; }
     }
 }

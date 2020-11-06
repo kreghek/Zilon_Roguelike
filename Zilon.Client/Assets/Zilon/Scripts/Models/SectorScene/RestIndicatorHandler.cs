@@ -12,7 +12,7 @@ public class RestIndicatorHandler : MonoBehaviour
     public GameObject Icon;
 
     [Inject]
-    private readonly HumanPlayer _humanPlayer;
+    private readonly IPlayer _humanPlayer;
 
     [Inject]
     private readonly ISectorUiState _playerState;

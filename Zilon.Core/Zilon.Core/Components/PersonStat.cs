@@ -7,9 +7,9 @@ namespace Zilon.Core.Components
     /// </summary>
     public sealed class PersonStat
     {
-        public PersonStat(float baseValue): this(baseValue, 0)
+        public PersonStat(float baseValue) : this(baseValue, 0)
         {
-            
+
         }
 
         public PersonStat(float baseValue, float levelInc)

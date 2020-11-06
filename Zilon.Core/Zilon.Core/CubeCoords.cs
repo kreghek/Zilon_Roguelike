@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core
 {
-    public struct CubeCoords
+    public struct CubeCoords : IEquatable<CubeCoords>
     {
         public int X { get; }
         public int Y { get; }
@@ -59,10 +59,14 @@ namespace Zilon.Core
 
         public override bool Equals(object obj)
         {
-            return obj is CubeCoords coords &&
-                   X == coords.X &&
-                   Y == coords.Y &&
-                   Z == coords.Z;
+            return obj is CubeCoords coords && Equals(coords);
+        }
+
+        public bool Equals(CubeCoords other)
+        {
+            return X == other.X &&
+                   Y == other.Y &&
+                   Z == other.Z;
         }
 
         public override int GetHashCode()
@@ -75,6 +79,16 @@ namespace Zilon.Core
                 hashCode = hashCode * -1521134295 + Z.GetHashCode();
                 return hashCode;
             }
+        }
+
+        public static CubeCoords Multiply(CubeCoords left, CubeCoords right)
+        {
+            return new CubeCoords(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+        }
+
+        public static CubeCoords Add(CubeCoords left, CubeCoords right)
+        {
+            return left + right;
         }
     }
 }

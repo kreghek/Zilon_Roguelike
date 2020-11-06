@@ -13,18 +13,21 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Common;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-public class ActorViewModel : MonoBehaviour, IActorViewModel
+public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewModel
 {
     private const float MOVE_SPEED_Q = 1f;
     private const float END_MOVE_COUNTER = 0.3f;
 
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
-    public ActorGraphicBase GraphicRoot;
+    [NotNull] [Inject] private readonly IPlayer _player;
+
+    public ActorGraphicBase GraphicRoot { get; private set; }
 
     private readonly List<HitSfx> _effectList;
 
@@ -43,14 +46,21 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     public IActor Actor { get; set; }
 
     public ISectorUiState PlayerState { get; set; }
+    public object Item { get => Actor; }
+    public Vector3 Position { get => transform.position; }
+
+    public void SetGraphicRoot(ActorGraphicBase actorGraphic)
+    {
+        GraphicRoot = actorGraphic;
+    }
 
     [UsedImplicitly]
     public void Start()
     {
         Actor.Moved += Actor_Moved;
-        if (Actor.Person.Survival != null)
+        if (Actor.Person.GetModuleSafe<ISurvivalModule>() != null)
         {
-            Actor.Person.Survival.Dead += Survival_Dead;
+            Actor.Person.GetModule<ISurvivalModule>().Dead += Survival_Dead;
         }
 
         Actor.OpenedContainer += Actor_OpenedContainer;
@@ -61,9 +71,9 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     {
         Actor.Moved -= Actor_Moved;
 
-        if (Actor.Person.Survival != null)
+        if (Actor.Person.GetModuleSafe<ISurvivalModule>() != null)
         {
-            Actor.Person.Survival.Dead -= Survival_Dead;
+            Actor.Person.GetModule<ISurvivalModule>().Dead -= Survival_Dead;
         }
 
         Actor.OpenedContainer -= Actor_OpenedContainer;
@@ -84,8 +94,12 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
         if (_moveCounter >= END_MOVE_COUNTER)
         {
             _moveCounter = null;
-            _moveCommandBlocker.Release();
-            _moveCommandBlocker = null;
+
+            if (_moveCommandBlocker != null)
+            {
+                _moveCommandBlocker.Release();
+                _moveCommandBlocker = null;
+            }
         }
     }
 
@@ -120,7 +134,7 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
 
     private void Survival_Dead(object sender, EventArgs e)
     {
-        var isHumanPerson = Actor.Owner is HumanPlayer;
+        var isHumanPerson = Actor.Person == _player.MainPerson;
         GraphicRoot.ProcessDeath(
             rootObject: gameObject,
             isRootRotting: !isHumanPerson
@@ -138,17 +152,21 @@ public class ActorViewModel : MonoBehaviour, IActorViewModel
     {
         _moveCounter = 0;
         var actorHexNode = (HexNode)Actor.Node;
-        var worldPositionParts = HexHelper.ConvertToWorld(actorHexNode.OffsetX, actorHexNode.OffsetY);
-        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, actorHexNode.OffsetY - 0.26f);
-        _moveCommandBlocker = new MoveCommandBlocker();
-        _commandBlockerService.AddBlocker(_moveCommandBlocker);
+        var worldPositionParts = HexHelper.ConvertToWorld(actorHexNode.OffsetCoords);
+        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, actorHexNode.OffsetCoords.Y - 0.26f);
+
+        if (GraphicRoot.gameObject.activeSelf)
+        {
+            _moveCommandBlocker = new MoveCommandBlocker();
+            _commandBlockerService.AddBlocker(_moveCommandBlocker);
+        }
         GraphicRoot.ProcessMove(_targetPosition);
     }
 
     private void Actor_OpenedContainer(object sender, OpenContainerEventArgs e)
     {
         var containerNode = (HexNode)e.Container.Node;
-        var worldPositionParts = HexHelper.ConvertToWorld(containerNode.OffsetX, containerNode.OffsetY);
+        var worldPositionParts = HexHelper.ConvertToWorld(containerNode.OffsetCoords);
         var targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
 
         GraphicRoot.ProcessInteractive(targetPosition);

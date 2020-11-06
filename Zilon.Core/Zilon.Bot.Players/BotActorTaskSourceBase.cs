@@ -1,39 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Zilon.Bot.Sdk;
-using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public abstract class BotActorTaskSourceBase : ISectorActorTaskSource
+    public abstract class BotActorTaskSourceBase<TContext> : ISectorActorTaskSource<TContext> where TContext : class, ISectorTaskSourceContext
     {
-        private readonly IPlayer _player;
-
+        //TODO Есть риск утечки.
+        // Актёры могут быть удалены, но информация о них будет храниться здесь, предотвращая чистку.
+        // Рассмотреть варианты:
+        // 1. Периодическая чистка внутри самого источника команд. Тогда нужна зависимость от менеджера актёров.
+        // 2. В интерфейс добавить метод для обработки удаления актёра.
         private readonly Dictionary<IActor, ILogicStrategy> _actorStrategies;
 
-        public BotActorTaskSourceBase(IPlayer player)
+        protected BotActorTaskSourceBase()
         {
-            _player = player;
-
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
+        }
+
+        public void CancelTask(IActorTask cencelledActorTask)
+        {
+            // Этот метод был введен для HumanActorTaskSource.
+            // В этой реализации источника команд не используется.
         }
 
         public abstract void Configure(IBotSettings botSettings);
 
-        public IActorTask[] GetActorTasks(IActor actor)
+        public Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
-            // TODO Лучше сразу отдавать на обработку актёров текущего игрока.
-            if (actor.Owner != _player)
+            if (context is null)
             {
-                return System.Array.Empty<IActorTask>();
+                throw new ArgumentNullException(nameof(context));
             }
 
             // Основные компоненты:
@@ -60,7 +66,7 @@ namespace Zilon.Bot.Players
             // Если логика закончена, её нужно сменить. Если нет селектора, который указывает на следующую логику,
             // то выполнять переход на стартовую логику.
 
-            if (!actor.Person.CheckIsDead())
+            if (actor.CanExecuteTasks)
             {
                 if (!_actorStrategies.TryGetValue(actor, out var logicStrategy))
                 {
@@ -70,21 +76,38 @@ namespace Zilon.Bot.Players
                     _actorStrategies[actor] = logicStrategy;
                 }
 
-                var actorTask = logicStrategy.GetActorTask();
+                var actorTask = logicStrategy.GetActorTask(context);
 
                 if (actorTask == null)
                 {
-                    return System.Array.Empty<IActorTask>();
+                    var taskContext = new ActorTaskContext(context.Sector);
+                    return Task.FromResult<IActorTask>(new IdleTask(actor, taskContext, 1));
                 }
 
-                return new[] { actorTask };
+                return Task.FromResult(actorTask);
             }
             else
             {
                 _actorStrategies.Remove(actor);
             }
 
-            return System.Array.Empty<IActorTask>();
+            // Сюда попадаем в случае смерти персонажа.
+            // Когда мы пытаемся выполнить какую-то задачу, а персонаж при это был/стал мертв.
+            throw new InvalidOperationException("Произведена попытка получить задачу для мертвого персонажа.");
+        }
+
+        public void ProcessTaskComplete(IActorTask actorTask)
+        {
+            // Этот метод был введен для HumanActorTaskSource.
+            // В этой реализации источника команд не используется.
+        }
+
+        public void ProcessTaskExecuted(IActorTask actorTask)
+        {
+            // Этот метод был введен для HumanActorTaskSource.
+            // Нужен для того, чтобы сразу начать выполнение следующего действия, не дожидаясь окончания текущего.
+            // Например, при использовании парного оружия.
+            // Механика пока не реализована.
         }
 
         protected abstract ILogicStrategy GetLogicStrategy(IActor actor);

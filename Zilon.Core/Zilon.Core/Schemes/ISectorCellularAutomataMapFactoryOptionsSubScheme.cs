@@ -3,7 +3,7 @@
     /// <summary>
     /// Схема параметров генерации карты на основе клеточного автомата.
     /// </summary>
-    public interface ISectorCellularAutomataMapFactoryOptionsSubScheme: ISectorMapFactoryOptionsSubScheme
+    public interface ISectorCellularAutomataMapFactoryOptionsSubScheme : ISectorMapFactoryOptionsSubScheme
     {
         /// <summary>
         /// Ширина матрицы, на которой будет работать клеточный автомат.

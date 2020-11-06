@@ -1,14 +1,21 @@
 ﻿using Zenject;
 
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
+using Zilon.Core.Scoring;
 
 namespace Assets.Zilon.Scripts.DependencyInjection
 {
     public static class HumanPersonFactoryExtensions
     {
-        public static void RegisterHumanPersonFactory(this DiContainer diContainer)
+        public static void RegisterPersonFactory(this DiContainer diContainer)
         {
-            diContainer.Bind<IHumanPersonFactory>().To<RandomHumanPersonFactory>().AsSingle();
+            diContainer.Bind<IPersonFactory>().To<TemplateBasedPersonFactory>().AsSingle()
+                .OnInstantiated<TemplateBasedPersonFactory>((injectContext, service) =>
+                {
+                    service.PlayerEventLogService = injectContext.Container.Resolve<IPlayerEventLogService>();
+                });
+            diContainer.Bind<IMonsterPersonFactory>().To<MonsterPersonFactory>().AsSingle();
             diContainer.Bind<IPersonPerkInitializator>().To<PersonPerkInitializator>().AsSingle();
         }
     }

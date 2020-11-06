@@ -1,7 +1,8 @@
 ﻿using System;
+
 using BenchmarkDotNet.Running;
 
-namespace Zilon.Core.Benckmarks.Fow
+namespace Zilon.Core.Benchmarks.Fow
 {
     class Program
     {

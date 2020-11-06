@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Zilon.Core.CommonServices.Dices
 {
@@ -149,7 +148,7 @@ namespace Zilon.Core.CommonServices.Dices
                 throw new ArgumentNullException(nameof(list));
             }
 
-            var rollIndex = dice.Roll(0, list.Count());
+            var rollIndex = dice.Roll(0, list.Count);
             return rollIndex;
         }
     }

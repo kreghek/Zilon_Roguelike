@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
 using Zilon.Core.Client;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -11,15 +13,17 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class UseSelfCommand : ActorCommandBase
     {
+        private readonly IPlayer _player;
         private readonly IInventoryState _inventoryState;
 
         [ExcludeFromCodeCoverage]
-        public UseSelfCommand(IGameLoop gameLoop,
-            ISectorManager sectorManager,
+        public UseSelfCommand(
+            IPlayer player,
             ISectorUiState playerState,
             IInventoryState inventoryState) :
-            base(gameLoop, sectorManager, playerState)
+            base(playerState)
         {
+            _player = player;
             _inventoryState = inventoryState;
         }
 
@@ -46,7 +50,7 @@ namespace Zilon.Core.Commands
             // Отдыхать можно только есть в секторе не осталось монстров.
             if (prop.Scheme.Sid == "camp-tools")
             {
-                var enemiesInSector = SectorManager.CurrentSector.ActorManager.Items.Where(x => x != CurrentActor);
+                var enemiesInSector = _player.SectorNode.Sector.ActorManager.Items.Where(x => x != CurrentActor);
                 if (enemiesInSector.Any())
                 {
                     return false;
@@ -61,8 +65,10 @@ namespace Zilon.Core.Commands
             var propVm = _inventoryState.SelectedProp;
             var usableProp = propVm.Prop;
 
-            var intention = new Intention<UsePropTask>(a => new UsePropTask(a, usableProp));
-            PlayerState.TaskSource.Intent(intention);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+
+            var intention = new Intention<UsePropTask>(actor => new UsePropTask(actor, taskContext, usableProp));
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Assets.Zilon.Scripts.Services
 {
-    public class LogChangedEventArgs: EventArgs
+    public class LogChangedEventArgs : EventArgs
     {
         public LogChangedEventArgs(string message)
         {

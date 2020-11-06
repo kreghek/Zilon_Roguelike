@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     working_directory: /core-builds
@@ -12,6 +12,29 @@ jobs:
           root: bin
           paths:
             - ./*
+  sonar-scan:
+    working_directory: /sonar-analysis
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.1
+    steps:
+      - checkout
+      - run: |
+          wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
+          apt-get update
+          apt-get install -y software-properties-common
+          apt-get install -y apt-transport-https
+          add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
+          apt-get update
+          apt-get install -y adoptopenjdk-13-hotspot
+      - run: |
+          dotnet tool install --global dotnet-sonarscanner
+          echo 'export PATH="$PATH:/root/.dotnet/tools"' >> $BASH_ENV
+      - sonarcloud/run-scan:
+          project_key: kreghek_Zilon_Roguelike
+          organization: kreghek
+          pull_request_base: master
+      - run: dotnet build Zilon.Core/Zilon.Core.SonarScanner.sln -c Release
+      - sonarcloud/end-scan
   test_45:
     working_directory: /test45
     docker:
@@ -337,11 +360,15 @@ jobs:
       - run: msbuild Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/Zilon.Core.Benchmarks.CreateGlobe.csproj /t:Build /p:Configuration=Release
       - run: chmod u+x /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe
       - run: mono --debug /bench_create_globe/Zilon.Core/Zilon.Core.Benchmarks.CreateGlobe/bin/Release/Zilon.Core.Benchmarks.CreateGlobe.exe iteration_Count=1000 buildNumber=123 artifact_path="bench_create_globe/dotnetbenchmark-reports"
+orbs:
+  sonarcloud: ksmc/sonarcloud-dotnet@0.0.9
 workflows:
   version: 2
   commit:
     jobs:
       - build
+      - sonar-scan:
+          context: SonarCloud
       - test_45:
           requires:
             - build
@@ -353,9 +380,9 @@ workflows:
             - build
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
-#      - test_specflow:
-#          requires:
-#            - build
+      - test_specflow:
+          requires:
+            - build
       - test_bots:
           requires:
             - build
@@ -363,7 +390,7 @@ workflows:
             - test_di
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
-#            - test_specflow
+            - test_specflow
       - build_Win_x64:
           requires:
             - build
@@ -371,7 +398,7 @@ workflows:
             - test_di
 # Спеки на неработают под netcore3.1
 # Разобраться и восстановить позже
-#            - test_specflow
+            - test_specflow
   release:
     jobs:
       - build:

@@ -1,4 +1,5 @@
 ﻿using System;
+
 using FluentAssertions;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -44,7 +45,7 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<UseSelfCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
@@ -56,7 +57,8 @@ namespace Zilon.Core.Tests.Commands
 
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
                 CheckUsePropIntention(intention, playerState, selectedProp)
-            )));
+            ),
+            It.IsAny<IActor>()));
         }
 
         private static bool CheckUsePropIntention(IIntention intention, ISectorUiState playerState, IProp usedProp)

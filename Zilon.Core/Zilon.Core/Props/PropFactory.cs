@@ -18,6 +18,11 @@ namespace Zilon.Core.Props
 
         public Equipment CreateEquipment(IPropScheme scheme)
         {
+            if (scheme is null)
+            {
+                throw new ArgumentNullException(nameof(scheme));
+            }
+
             if (scheme.Equip == null)
             {
                 throw new ArgumentException("Не корректная схема.", nameof(scheme));
@@ -30,7 +35,7 @@ namespace Zilon.Core.Props
 
             var actSchemes = new List<ITacticalActScheme>();
             var actSchemeSids = scheme.Equip.ActSids;
-            
+
             foreach (var actSchemeSid in actSchemeSids)
             {
                 var actScheme = _schemeService.GetScheme<ITacticalActScheme>(actSchemeSid);

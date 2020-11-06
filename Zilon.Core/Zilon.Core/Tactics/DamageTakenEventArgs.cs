@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Zilon.Core.Tactics
 {
-    public sealed class DamageTakenEventArgs: EventArgs
+    public sealed class DamageTakenEventArgs : EventArgs
     {
         [ExcludeFromCodeCoverage]
         public DamageTakenEventArgs(int value)

@@ -5,5 +5,6 @@
     /// </summary>
     public interface ISelectableViewModel
     {
+        object Item { get; }
     }
 }

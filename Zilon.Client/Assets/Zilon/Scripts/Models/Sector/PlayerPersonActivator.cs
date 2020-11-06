@@ -8,19 +8,13 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
-using Zilon.Core.Graphs;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 
 public class PlayerPersonActivator : MonoBehaviour
 {
-    [NotNull] [Inject] private readonly HumanPlayer _humanPlayer;
-    [Inject] private readonly IHumanActorTaskSource _humanActorTaskSource;
-    [Inject] private readonly IHumanPersonFactory _humanPersonFactory;
+    [NotNull] [Inject] private readonly IPlayer _humanPlayer;
     [NotNull] [Inject] private readonly DiContainer _container;
-    [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     [NotNull] public ActorViewModel ActorPrefab;
@@ -30,20 +24,17 @@ public class PlayerPersonActivator : MonoBehaviour
     public SectorMapViewModel SectorMapViewModel;
     public Transform TargetObject;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members", 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members",
         Justification = "Неявно вызывается Unity.")]
     private void FixedUpdate()
     {
         if (SectorViewModel.IsInitialized)
         {
-            _humanPlayer.MainPerson = _humanPersonFactory.Create();
-
             var playerActorViewModel = SelectNodeAndCreateHumanPersonViewModelFromMainPerson();
 
             ActorsViewModel.ActorViewModels.Add(playerActorViewModel);
 
             _playerState.ActiveActor = playerActorViewModel;
-            _humanActorTaskSource.SwitchActor(playerActorViewModel.Actor);
 
             Destroy(gameObject);
         }
@@ -57,8 +48,6 @@ public class PlayerPersonActivator : MonoBehaviour
 
         var playerActorViewModel = CreateHumanActorViewModelFromMainPerson(
             SectorViewModel.Sector.ActorManager,
-            _perkResolver,
-            playerActorStartNode,
             SectorMapViewModel.NodeViewModels);
 
         return playerActorViewModel;
@@ -66,14 +55,9 @@ public class PlayerPersonActivator : MonoBehaviour
 
     private ActorViewModel CreateHumanActorViewModelFromMainPerson(
         [NotNull] IActorManager actorManager,
-        [NotNull] IPerkResolver perkResolver,
-        [NotNull] IGraphNode startNode,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        var fowData = new HumanSectorFowData();
-        var actor = new Actor(_humanPlayer.MainPerson, _humanPlayer, startNode, perkResolver, fowData);
-
-        FowHelper.UpdateFowData(actor.SectorFowData, SectorViewModel.Sector.Map, startNode, 5);
+        var actor = _humanPlayer.SectorNode.Sector.ActorManager.Items.Single(x => x.Person == _humanPlayer);
 
         actorManager.Add(actor);
 
@@ -85,7 +69,7 @@ public class PlayerPersonActivator : MonoBehaviour
 
         var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
         actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
-        actorViewModel.GraphicRoot = actorGraphic;
+        actorViewModel.SetGraphicRoot(actorGraphic);
 
         var graphicController = actorViewModel.gameObject.AddComponent<HumanActorGraphicController>();
         graphicController.Actor = actor;

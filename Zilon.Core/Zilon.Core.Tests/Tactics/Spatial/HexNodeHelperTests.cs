@@ -9,11 +9,15 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Spatial
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class HexNodeHelperTests
     {
+        /// <summary>
+        /// Тест проверяет, что корректно выбираются пространственные соседи указанного узла.
+        /// </summary>
         [Test]
-        public void GetNeighborsTest()
+        public void GetSpatialNeighborsTest()
         {
             // ARRANGE
 
@@ -41,17 +45,13 @@ namespace Zilon.Core.Tests.Tactics.Spatial
                 nodes.SelectBy(3, 2)
             };
 
-
             // ACT
             var factNeighbors = HexNodeHelper.GetSpatialNeighbors(testedNode, nodes.ToArray());
-
-
 
             // ASSERT
             for (var i = 0; i < 6; i++)
             {
-                factNeighbors[i].OffsetX.Should().Be(expectedNeighbors[i].OffsetX);
-                factNeighbors[i].OffsetY.Should().Be(expectedNeighbors[i].OffsetY);
+                factNeighbors[i].OffsetCoords.Should().Be(expectedNeighbors[i].OffsetCoords);
             }
 
             factNeighbors.Should().BeEquivalentTo<HexNode>(expectedNeighbors);

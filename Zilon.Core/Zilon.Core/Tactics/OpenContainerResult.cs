@@ -3,8 +3,7 @@
     /// <summary>
     /// Результат открытия контейнера.
     /// </summary>
-    public abstract class OpenContainerResultBase: IOpenContainerResult
+    public abstract class OpenContainerResultBase : IOpenContainerResult
     {
-        
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Client
 {
-    public class UiStateBase: IUiState
+    public class UiStateBase : IUiState
     {
         private ISelectableViewModel _hoverViewModel;
         private ISelectableViewModel _selectedViewModel;

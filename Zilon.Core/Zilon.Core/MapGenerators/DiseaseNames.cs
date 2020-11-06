@@ -78,10 +78,10 @@ namespace Zilon.Core.MapGenerators
                     new LocalizedString{
                         Ru = "Сверх"
                     },
-                    new LocalizedString{ 
+                    new LocalizedString{
                         Ru = "Квази"
                     },
-                    new LocalizedString{ 
+                    new LocalizedString{
                         Ru = "Псевдо"
                     },
                     new LocalizedString{
@@ -96,9 +96,10 @@ namespace Zilon.Core.MapGenerators
                 };
         }
 
-        public static ILocalizedString[] Secondary { 
-            get =>new[] { 
-                new LocalizedString{ 
+        public static ILocalizedString[] Secondary
+        {
+            get => new[] {
+                new LocalizedString{
                     Ru = "Атипичный"
                 },
                 new LocalizedString{
@@ -119,10 +120,10 @@ namespace Zilon.Core.MapGenerators
                 new LocalizedString{
                     Ru = "Бубонный"
                 },
-                new LocalizedString{ 
+                new LocalizedString{
                     Ru = "Общий"
                 },
-                new LocalizedString{ 
+                new LocalizedString{
                     Ru = "Кишечный"
                 },
                 new LocalizedString{
@@ -137,7 +138,8 @@ namespace Zilon.Core.MapGenerators
             };
         }
 
-        public static ILocalizedString[] Subject {
+        public static ILocalizedString[] Subject
+        {
             get => new[] {
                 new LocalizedString{
                     Ru = "Смерти"

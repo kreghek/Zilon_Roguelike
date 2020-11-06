@@ -6,7 +6,7 @@
     public static class MatrixExtensions
     {
         /// <summary>
-        /// Создаёт копию исходной матрицы матрицы с добавлением удиничных отступов по вертикали.
+        /// Создаёт копию исходной матрицы матрицы с добавлением единичных отступов по вертикали.
         /// Отступы заполняются значениеми по умолчанию.
         /// </summary>
         /// <param name="matrix"></param>
@@ -20,21 +20,31 @@
         /// </remarks>
         public static Matrix<T> CreateMatrixWithVerticalMargins<T>(this Matrix<T> matrix)
         {
+            return matrix.CreateMatrixWithMargins(1, 0);
+        }
+
+        /// <summary>
+        /// Создаёт копию исходной матрицы матрицы с добавлением единичных отступов.
+        /// Отступы заполняются значениеми по умолчанию.
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <returns> Возвращает новую матрицу с отступами. </returns>
+        public static Matrix<T> CreateMatrixWithMargins<T>(this Matrix<T> matrix, int vertical, int horizontal)
+        {
             if (matrix is null)
             {
                 throw new System.ArgumentNullException(nameof(matrix));
             }
 
-            const int MARGIN = 1;
-
-            var sumMargin = MARGIN * 2;
-            var marginMatrix = new Matrix<T>(matrix.Width + sumMargin, matrix.Height);
+            var sumVerticalMargin = vertical * 2;
+            var sumHorizontalMargin = horizontal * 2;
+            var marginMatrix = new Matrix<T>(matrix.Width + sumVerticalMargin, matrix.Height + sumHorizontalMargin);
 
             for (var x = 0; x < matrix.Width; x++)
             {
                 for (var y = 0; y < matrix.Height; y++)
                 {
-                    marginMatrix.Items[x + MARGIN, y] = matrix.Items[x, y];
+                    marginMatrix.Items[x + vertical, y + horizontal] = matrix.Items[x, y];
                 }
             }
 

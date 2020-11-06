@@ -41,35 +41,52 @@ namespace Zilon.Core.Tactics
             var rolledRecords = new List<IDropTableRecordSubScheme>();
 
             var openDropTables = new List<IDropTableScheme>(dropTables);
-            while(openDropTables.Any())
+            while (openDropTables.Any())
             {
-                var table = openDropTables[0];
-                var records = table.Records;
-                var recMods = GetModRecords(records, modificators);
-
-                var totalWeight = recMods.Sum(x => x.ModifiedWeight);
-
-                for (var rollIndex = 0; rollIndex < table.Rolls; rollIndex++)
+                try
                 {
-                    var rolledWeight = _randomSource.RollWeight(totalWeight);
-                    var recMod = DropRoller.GetRecord(recMods, rolledWeight);
-
-                    if (recMod.Record.SchemeSid == null)
+                    var table = openDropTables[0];
+                    var records = table.Records;
+                    if (!records.Any())
                     {
+                        // Do not try to roll if drop table has no records.
+
+                        // Dont forget to remove empty drop table from open to avoid endless loop.
+                        openDropTables.RemoveAt(0);
                         continue;
                     }
 
-                    rolledRecords.Add(recMod.Record);
+                    var recMods = GetModRecords(records, modificators);
 
-                    if (recMod.Record.Extra != null)
+                    var totalWeight = recMods.Sum(x => x.ModifiedWeight);
+
+                    for (var rollIndex = 0; rollIndex < table.Rolls; rollIndex++)
                     {
-                        //TODO Доделать учёт Rolls для экстра.
-                        // Сейчас все экстра гарантированно выпадают по разу.
-                        openDropTables.AddRange(recMod.Record.Extra);
-                    }
-                }
+                        var rolledWeight = _randomSource.RollWeight(totalWeight);
+                        var recMod = DropRoller.GetRecord(recMods, rolledWeight);
 
-                openDropTables.RemoveAt(0);
+                        if (recMod.Record.SchemeSid == null)
+                        {
+                            continue;
+                        }
+
+                        rolledRecords.Add(recMod.Record);
+
+                        if (recMod.Record.Extra != null)
+                        {
+                            //TODO Доделать учёт Rolls для экстра.
+                            // Сейчас все экстра гарантированно выпадают по разу.
+                            openDropTables.AddRange(recMod.Record.Extra);
+                        }
+                    }
+
+                    openDropTables.RemoveAt(0);
+                }
+                catch
+                {
+                    openDropTables.RemoveAt(0);
+                    //TODO FIX
+                }
             }
 
             var props = rolledRecords.Select(GenerateProp).ToArray();
@@ -130,7 +147,7 @@ namespace Zilon.Core.Tactics
             return mod;
         }
 
-        private DropTableModRecord[] GetModRecords(IEnumerable<IDropTableRecordSubScheme> records,
+        private static DropTableModRecord[] GetModRecords(IEnumerable<IDropTableRecordSubScheme> records,
             IEnumerable<IDropTableModificatorScheme> modificators)
         {
             var modificatorsArray = modificators.ToArray();
@@ -179,8 +196,6 @@ namespace Zilon.Core.Tactics
                         return resource;
 
                     case PropClass.Concept:
-
-                        throw new ArgumentException($"Пока концепты не поддерживаются.");
 
                         var propScheme = _schemeService.GetScheme<IPropScheme>("record.Concept");
 

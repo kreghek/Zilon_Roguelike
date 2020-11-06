@@ -10,26 +10,21 @@ namespace Zilon.Core.Specs.Mocks
 {
     public class TestEmptySectorGenerator : ISectorGenerator
     {
-        private readonly IActorManager _actorManager;
-        private readonly IPropContainerManager _propContainerManager;
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
         private readonly IMapFactory _mapFactory;
         private readonly IEquipmentDurableService _equipmentDurableService;
 
-        public TestEmptySectorGenerator(IActorManager actorManager,
-            IPropContainerManager propContainerManager,
+        public TestEmptySectorGenerator(
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IMapFactory mapFactory,
             IEquipmentDurableService equipmentDurableService)
         {
-            _actorManager = actorManager;
-            _propContainerManager = propContainerManager;
-            _dropResolver = dropResolver;
-            _schemeService = schemeService;
-            _mapFactory = mapFactory;
-            _equipmentDurableService = equipmentDurableService;
+            _dropResolver = dropResolver ?? throw new System.ArgumentNullException(nameof(dropResolver));
+            _schemeService = schemeService ?? throw new System.ArgumentNullException(nameof(schemeService));
+            _mapFactory = mapFactory ?? throw new System.ArgumentNullException(nameof(mapFactory));
+            _equipmentDurableService = equipmentDurableService ?? throw new System.ArgumentNullException(nameof(equipmentDurableService));
         }
 
         public async Task<ISector> GenerateAsync(ISectorNode sectorNode)
@@ -37,9 +32,13 @@ namespace Zilon.Core.Specs.Mocks
             var sectorFactoryOptions = new SectorMapFactoryOptions(sectorNode.SectorScheme.MapGeneratorOptions);
 
             var map = await _mapFactory.CreateAsync(sectorFactoryOptions);
+
+            var actorManager = new ActorManager();
+            var staticObjectManager = new StaticObjectManager();
+
             var sector = new Sector(map,
-                _actorManager,
-                _propContainerManager,
+                actorManager,
+                staticObjectManager,
                 _dropResolver,
                 _schemeService,
                 _equipmentDurableService);

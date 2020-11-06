@@ -8,7 +8,7 @@ using Zilon.Core.Commands;
 public class NonLogicSectorGameCursor : MonoBehaviour
 {
     public Sprite DefaultCursorSprite;
-    
+
     public SpriteRenderer SpriteRenderer;
 
     public void Start()

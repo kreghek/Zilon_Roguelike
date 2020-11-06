@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -10,71 +12,75 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class LootLogicState : LogicStateBase
     {
-        private IPropContainer _propContainer;
+        private IStaticObject _staticObject;
 
         private MoveTask _moveTask;
 
-        private readonly ISectorMap _map;
-        private readonly ISectorManager _sectorManager;
-
-        public LootLogicState(ISectorManager sectorManager)
-        {
-            if (sectorManager is null)
-            {
-                throw new System.ArgumentNullException(nameof(sectorManager));
-            }
-
-            _map = sectorManager.CurrentSector.Map;
-            _sectorManager = sectorManager;
-        }
-
-        public IPropContainer FindContainer(IActor actor)
+        public static IStaticObject FindContainer(IActor actor, IStaticObjectManager staticObjectManager, ISectorMap map)
         {
             if (actor is null)
             {
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
-            var foundContainers = LootHelper.FindAvailableContainers(_sectorManager.CurrentSector.PropContainerManager.Items,
-                actor.Node,
-                _map);
+            if (staticObjectManager is null)
+            {
+                throw new System.ArgumentNullException(nameof(staticObjectManager));
+            }
 
-            var orderedContainers = foundContainers.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
+            if (map is null)
+            {
+                throw new System.ArgumentNullException(nameof(map));
+            }
+
+            var containerStaticObjects = staticObjectManager.Items
+                .Where(x => x.HasModule<IPropContainer>());
+
+            var foundContainers = LootHelper.FindAvailableContainers(containerStaticObjects,
+                actor.Node,
+                map);
+
+            var orderedContainers = foundContainers.OrderBy(x => map.DistanceBetween(actor.Node, x.Node));
             var nearbyContainer = orderedContainers.FirstOrDefault();
 
             return nearbyContainer;
         }
 
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
-            _propContainer = FindContainer(actor);
+            var map = context.Sector.Map;
+            var staticObjectManager = context.Sector.StaticObjectManager;
+            _staticObject = FindContainer(actor, staticObjectManager, map);
 
-            if (_propContainer == null || !_propContainer.Content.CalcActualItems().Any())
+            if (_staticObject == null || !_staticObject.GetModule<IPropContainer>().Content.CalcActualItems().Any())
             {
                 Complete = true;
                 return null;
             }
 
-            var distance = _map.DistanceBetween(actor.Node, _propContainer.Node);
+            var distance = map.DistanceBetween(actor.Node, _staticObject.Node);
             if (distance <= 1)
             {
-                return TakeAllFromContainerTask(actor, _propContainer);
+                return TakeAllFromContainerTask(actor, _staticObject, context.Sector);
             }
             else
             {
                 var storedMoveTask = _moveTask;
-                var moveTask = MoveToContainerTask(actor, _propContainer.Node, storedMoveTask);
+                var moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask, context.Sector);
                 _moveTask = moveTask;
                 return moveTask;
             }
         }
 
-        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask)
+        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask, ISector sector)
         {
+            var map = sector.Map;
+
             var moveTask = storedMoveTask;
             if (storedMoveTask == null)
             {
-                moveTask = new MoveTask(actor, containerMapNode, _map);
+                var taskContext = new ActorTaskContext(sector);
+                moveTask = new MoveTask(actor, taskContext, containerMapNode, map);
             }
 
             if (moveTask.IsComplete || !moveTask.CanExecute())
@@ -86,22 +92,23 @@ namespace Zilon.Bot.Players.Logics
             return moveTask;
         }
 
-        private static IActorTask TakeAllFromContainerTask(IActor actor, IPropContainer container)
+        private static IActorTask TakeAllFromContainerTask(IActor actor, IStaticObject container, ISector sector)
         {
-            var inventoryTransfer = new PropTransfer(actor.Person.Inventory,
-                                container.Content.CalcActualItems(),
+            var inventoryTransfer = new PropTransfer(actor.Person.GetModule<IInventoryModule>(),
+                                container.GetModule<IPropContainer>().Content.CalcActualItems(),
                                 System.Array.Empty<IProp>());
 
-            var containerTransfer = new PropTransfer(container.Content,
+            var containerTransfer = new PropTransfer(container.GetModule<IPropContainer>().Content,
                 System.Array.Empty<IProp>(),
-                container.Content.CalcActualItems());
+                container.GetModule<IPropContainer>().Content.CalcActualItems());
 
-            return new TransferPropsTask(actor, new[] { inventoryTransfer, containerTransfer });
+            var taskContext = new ActorTaskContext(sector);
+            return new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer });
         }
 
         protected override void ResetData()
         {
-            _propContainer = null;
+            _staticObject = null;
             _moveTask = null;
         }
     }

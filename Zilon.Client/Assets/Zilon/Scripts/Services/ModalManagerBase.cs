@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Assets.Zilon.Scripts.Services
 {
-    public class ModalManagerBase: MonoBehaviour
+    public class ModalManagerBase : MonoBehaviour
     {
         [Inject]
         private readonly DiContainer _container;

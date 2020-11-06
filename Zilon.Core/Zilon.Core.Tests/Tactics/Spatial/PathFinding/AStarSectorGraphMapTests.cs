@@ -54,8 +54,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var path = new List<IGraphNode>();
 
-            var startNode = map.Nodes.Cast<HexNode>().SelectBy(0, 0);
-            var finishNode = map.Nodes.Cast<HexNode>().SelectBy(1, 0);
+            var startNode = map.Nodes.SelectByHexCoords(0, 0);
+            var finishNode = map.Nodes.SelectByHexCoords(1, 0);
 
             var contextMock = new Mock<IAstarContext>();
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))

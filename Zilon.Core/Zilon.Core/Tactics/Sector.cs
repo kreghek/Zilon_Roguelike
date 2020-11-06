@@ -8,11 +8,13 @@ using JetBrains.Annotations;
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
+using Zilon.Core.StaticObjectModules;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -33,7 +35,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
-        public event EventHandler<SectorExitEventArgs> HumanGroupExit;
+        public event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
 
         /// <summary>
         /// Карта в основе сектора.
@@ -61,19 +63,19 @@ namespace Zilon.Core.Tactics
 
         public ILocationScheme Scheme { get; set; }
         public IActorManager ActorManager { get; }
-        public IPropContainerManager PropContainerManager { get; }
+        public IStaticObjectManager StaticObjectManager { get; }
         public IEnumerable<IDisease> Diseases { get => _diseases; }
 
         [ExcludeFromCodeCoverage]
         public Sector(ISectorMap map,
             IActorManager actorManager,
-            IPropContainerManager propContainerManager,
+            IStaticObjectManager staticObjectManager,
             IDropResolver dropResolver,
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
             ActorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
-            PropContainerManager = propContainerManager ?? throw new ArgumentNullException(nameof(propContainerManager));
+            StaticObjectManager = staticObjectManager ?? throw new ArgumentNullException(nameof(staticObjectManager));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _equipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
@@ -82,8 +84,8 @@ namespace Zilon.Core.Tactics
 
             ActorManager.Added += ActorManager_Added;
             ActorManager.Removed += ActorManager_Remove;
-            PropContainerManager.Added += PropContainerManager_Added;
-            PropContainerManager.Removed += PropContainerManager_Remove;
+            StaticObjectManager.Added += StaticObjectManager_Added;
+            StaticObjectManager.Removed += StaticObjectManager_Remove;
 
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
 
@@ -115,32 +117,66 @@ namespace Zilon.Core.Tactics
 
             UpdateEquipments();
 
-            UpdateActorActs();
+            UpdateActorCombatActs();
+
+            UpdateNationalUnityEvent();
         }
+
+        /// <summary>
+        /// Processing special event:
+        /// 1. There is counter.
+        /// 2. When counter is out the special service create group of interventionists or militia.
+        /// </summary>
+        private void UpdateNationalUnityEvent()
+        {
+            if (NationalUnityEventService is null)
+            {
+                return;
+            }
+
+            _nationalUnityCounter--;
+            if (_nationalUnityCounter <= 0)
+            {
+                if (NationalUnityEventService.RollEventIsRaised())
+                {
+                    NationalUnityEventService.RollAndCreateUnityGroupIntoSector(this);
+                }
+
+                _nationalUnityCounter = NATIONALUNITYCOUNTERSTARTVALUE;
+            }
+        }
+
+        private const int NATIONALUNITYCOUNTERSTARTVALUE = 1000;
+        private int _nationalUnityCounter = NATIONALUNITYCOUNTERSTARTVALUE;
+
+        public NationalUnityEventService NationalUnityEventService { get; set; }
 
         private void UpdateDiseases()
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                if (actor.Person.DiseaseData is null)
+                if (actor.Person.GetModuleSafe<IDiseaseModule>() is null)
                 {
                     continue;
                 }
 
-                actor.Person.DiseaseData.Update(actor.Person.Effects);
+                actor.Person.GetModule<IDiseaseModule>().Update(actor.Person.GetModuleSafe<IEffectsModule>());
             }
         }
 
-        private void UpdateActorActs()
+        private void UpdateActorCombatActs()
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                if (actor.Person?.TacticalActCarrier?.Acts is null)
+                var combatActModule = actor.Person?.GetModuleSafe<ICombatActModule>();
+                if (combatActModule is null)
                 {
                     continue;
                 }
 
-                foreach (var act in actor.Person.TacticalActCarrier.Acts)
+                var combatActs = combatActModule.CalcCombatActs();
+
+                foreach (var act in combatActs)
                 {
                     act.UpdateCooldown();
                 }
@@ -159,9 +195,9 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                var effects = actor.Person.Effects;
+                var effects = actor.Person.GetModuleSafe<IEffectsModule>();
 
-                if (effects == null)
+                if (effects is null)
                 {
                     continue;
                 }
@@ -174,9 +210,9 @@ namespace Zilon.Core.Tactics
                 // Items изменяется. Они должны падать, если убрать ToArray и выполняться, если его вернуть.
                 foreach (var effect in effects.Items.ToArray())
                 {
-                    if (effect is ISurvivalStatEffect actorEffect && actor.Person.Survival != null)
+                    if (effect is ISurvivalStatEffect actorEffect && actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                     {
-                        actorEffect.Apply(actor.Person.Survival);
+                        actorEffect.Apply(actor.Person.GetModule<ISurvivalModule>());
                     }
                 }
             }
@@ -187,7 +223,7 @@ namespace Zilon.Core.Tactics
             var actors = ActorManager.Items.ToArray();
             foreach (var actor in actors)
             {
-                var survival = actor.Person.Survival;
+                var survival = actor.Person.GetModuleSafe<ISurvivalModule>();
                 if (survival == null)
                 {
                     continue;
@@ -202,8 +238,8 @@ namespace Zilon.Core.Tactics
             var actors = ActorManager.Items.ToArray();
             foreach (var actor in actors)
             {
-                var equipmentCarrier = actor.Person.EquipmentCarrier;
-                if (equipmentCarrier == null)
+                var equipmentCarrier = actor.Person.GetModuleSafe<IEquipmentModule>();
+                if (equipmentCarrier is null)
                 {
                     continue;
                 }
@@ -221,7 +257,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void PropContainerManager_Added(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+        private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
         {
             foreach (var container in e.Items)
             {
@@ -230,9 +266,9 @@ namespace Zilon.Core.Tactics
                     Map.HoldNode(container.Node, container);
                 }
 
-                if (container is ILootContainer)
+                if (container.GetModuleSafe<IPropContainer>() is ILootContainer lootContainer)
                 {
-                    container.ItemsRemoved += LootContainer_ItemsRemoved;
+                    lootContainer.ItemsRemoved += LootContainer_ItemsRemoved;
                 }
             }
         }
@@ -242,11 +278,12 @@ namespace Zilon.Core.Tactics
             var container = (IPropContainer)sender;
             if (!container.Content.CalcActualItems().Any())
             {
-                PropContainerManager.Remove(container);
+                var staticObject = StaticObjectManager.Items.Single(x => ReferenceEquals(x.GetModuleSafe<IPropContainer>(), container));
+                StaticObjectManager.Remove(staticObject);
             }
         }
 
-        private void PropContainerManager_Remove(object sender, ManagerItemsChangedEventArgs<IPropContainer> e)
+        private void StaticObjectManager_Remove(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
         {
             foreach (var container in e.Items)
             {
@@ -255,9 +292,9 @@ namespace Zilon.Core.Tactics
                     Map.ReleaseNode(container.Node, container);
                 }
 
-                if (container is ILootContainer)
+                if (container.GetModule<IPropContainer>() is ILootContainer lootContainer)
                 {
-                    container.ItemsRemoved -= LootContainer_ItemsRemoved;
+                    lootContainer.ItemsRemoved -= LootContainer_ItemsRemoved;
                 }
             }
         }
@@ -266,11 +303,66 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in e.Items)
             {
-                Map.HoldNode(actor.Node, actor);
+                HoldNodes(actor.Node, actor, Map);
 
-                if (actor.Person.Survival != null)
+                if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                 {
-                    actor.Person.Survival.Dead += ActorState_Dead;
+                    actor.Person.GetModule<ISurvivalModule>().Dead += ActorState_Dead;
+                }
+
+                actor.Moved += Actor_Moved;
+                UpdateFowData(actor);
+            }
+        }
+
+        private void Actor_Moved(object sender, EventArgs e)
+        {
+            var actor = (IActor)sender;
+            UpdateFowData(actor);
+        }
+
+        private void UpdateFowData(IActor actor)
+        {
+            var fowModule = actor.Person.GetModuleSafe<IFowData>();
+            if (fowModule != null)
+            {
+                var fowData = fowModule.GetSectorFowData(this);
+                const int DISTANCE_OF_SIGN = 5;
+                var fowContext = new FowContext(Map, StaticObjectManager);
+                FowHelper.UpdateFowData(fowData, fowContext, actor.Node, DISTANCE_OF_SIGN);
+            }
+        }
+
+        private static void HoldNodes(IGraphNode nextNode, IActor actor, IMap map)
+        {
+            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, nextNode, map);
+
+            foreach (var node in actorNodes)
+            {
+                map.HoldNode(node, actor);
+            }
+        }
+
+        private static void ReleaseNodes(IActor actor, IMap map)
+        {
+            var actorNodes = GetActorNodes(actor.Person.PhysicalSize, actor.Node, map);
+
+            foreach (var node in actorNodes)
+            {
+                map.ReleaseNode(node, actor);
+            }
+        }
+
+        private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSize physicalSize, IGraphNode baseNode, IMap map)
+        {
+            yield return baseNode;
+
+            if (physicalSize == PhysicalSize.Size7)
+            {
+                var neighbors = map.GetNext(baseNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
                 }
             }
         }
@@ -280,23 +372,25 @@ namespace Zilon.Core.Tactics
             // Когда актёры удалены из сектора, мы перестаём мониторить события на них.
             foreach (var actor in e.Items)
             {
-                Map.ReleaseNode(actor.Node, actor);
+                ReleaseNodes(actor, Map);
 
-                if (actor.Person.Survival != null)
+                if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                 {
-                    actor.Person.Survival.Dead -= ActorState_Dead;
+                    actor.Person.GetModule<ISurvivalModule>().Dead -= ActorState_Dead;
                 }
+
+                actor.Moved -= Actor_Moved;
             }
         }
 
         private void ActorState_Dead(object sender, EventArgs e)
         {
-            var actor = ActorManager.Items.Single(x => x.Person.Survival == sender);
+            var actor = ActorManager.Items.Single(x => ReferenceEquals(x.Person.GetModuleSafe<ISurvivalModule>(), sender));
             ActorManager.Remove(actor);
 
-            if (actor.Person.Survival != null)
+            if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
             {
-                actor.Person.Survival.Dead -= ActorState_Dead;
+                actor.Person.GetModule<ISurvivalModule>().Dead -= ActorState_Dead;
             }
 
             ProcessMonsterDeath(actor);
@@ -304,6 +398,11 @@ namespace Zilon.Core.Tactics
 
         private void ProcessMonsterDeath(IActor actor)
         {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
             if (!(actor.Person is MonsterPerson monsterPerson))
             {
                 return;
@@ -313,11 +412,14 @@ namespace Zilon.Core.Tactics
 
             var dropSchemes = GetMonsterDropTables(monsterScheme);
 
-            var loot = new DropTableLoot(actor.Node, dropSchemes, _dropResolver);
+            var loot = new DropTableLoot(dropSchemes, _dropResolver);
+
+            var staticObject = new StaticObject(actor.Node, loot.Purpose, default);
+            staticObject.AddModule<IPropContainer>(loot);
 
             if (loot.Content.CalcActualItems().Any())
             {
-                PropContainerManager.Add(loot);
+                StaticObjectManager.Add(staticObject);
             }
 
             if (ScoreManager != null)
@@ -344,15 +446,15 @@ namespace Zilon.Core.Tactics
             return schemes;
         }
 
-        private void DoActorExit([NotNull] RoomTransition roomTransition)
+        private void DoActorExit([NotNull] IActor actor, [NotNull] RoomTransition roomTransition)
         {
-            var e = new SectorExitEventArgs(roomTransition);
-            HumanGroupExit?.Invoke(this, e);
+            var e = new TransitionUsedEventArgs(actor, roomTransition);
+            TrasitionUsed?.Invoke(this, e);
         }
 
-        public void UseTransition(RoomTransition transition)
+        public void UseTransition(IActor actor, RoomTransition transition)
         {
-            DoActorExit(transition);
+            DoActorExit(actor, transition);
         }
     }
 }

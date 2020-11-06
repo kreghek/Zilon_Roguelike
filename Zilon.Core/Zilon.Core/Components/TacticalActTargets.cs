@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+
+using Newtonsoft.Json;
 
 namespace Zilon.Core.Components
 {
@@ -6,6 +8,7 @@ namespace Zilon.Core.Components
     /// Цели действия.
     /// </summary>
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    [Flags]
     public enum TacticalActTargets
     {
         /// <summary>

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+
 using JetBrains.Annotations;
 
 namespace Zilon.Core.Tactics
 {
-    public sealed class ArmorEventArgs: EventArgs
+    public sealed class ArmorEventArgs : EventArgs
     {
         [ExcludeFromCodeCoverage]
         public ArmorEventArgs(int armorRank, int successRoll, int factRoll)
@@ -19,13 +20,13 @@ namespace Zilon.Core.Tactics
         /// </summary>
         [PublicAPI]
         public int ArmorRank { get; }
-        
+
         /// <summary>
         /// Бросок, который нужен был для упешного использования брони.
         /// </summary>
         [PublicAPI]
         public int SuccessRoll { get; }
-        
+
         /// <summary>
         /// Фактический бросок.
         /// </summary>

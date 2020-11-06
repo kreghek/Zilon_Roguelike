@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -10,6 +11,7 @@ namespace Zilon.Core.Tactics.Behaviour
     public class MoveTask : ActorTaskBase
     {
         private readonly ISectorMap _map;
+        private readonly int _cost;
         private readonly List<IGraphNode> _path;
 
         public IGraphNode TargetNode { get; }
@@ -28,32 +30,65 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new TaskException("Актёр не достиг целевого узла при окончании пути.");
                 }
 
-                _isComplete = true;
+                IsComplete = true;
                 return;
             }
 
             var nextNode = _path[0];
 
-            if (!_map.IsPositionAvailableFor(nextNode, Actor))
+            var actorCanMove = !Actor.Person.CheckIsDead();
+
+            if (actorCanMove && _map.IsPositionAvailableFor(nextNode, Actor))
             {
-                throw new InvalidOperationException($"Попытка переместиться в заблокированную ячейку {nextNode}.");
+                ReleaseNodes(Actor);
+                Actor.MoveToNode(nextNode);
+                HoldNodes(nextNode, Actor);
+
+                _path.RemoveAt(0);
+
+                if (!_path.Any())
+                {
+                    IsComplete = true;
+                }
             }
-
-            _map.ReleaseNode(Actor.Node, Actor);
-            Actor.MoveToNode(nextNode);
-            _map.HoldNode(nextNode, Actor);
-
-            if (Actor.SectorFowData is HumanSectorFowData)
+            else
             {
-                const int DISTANCE_OF_SIGN = 5;
-                FowHelper.UpdateFowData(Actor.SectorFowData, _map, nextNode, DISTANCE_OF_SIGN);
+                // Это может произойти, если кто-то опередил текущего персонажа и занял узел первым.
+                IsComplete = true;
             }
+        }
 
-            _path.RemoveAt(0);
+        private void HoldNodes(IGraphNode nextNode, IActor actor)
+        {
+            var actorNodes = GetActorNodes(actor.Person, nextNode);
 
-            if (!_path.Any())
+            foreach (var node in actorNodes)
             {
-                _isComplete = true;
+                _map.HoldNode(node, actor);
+            }
+        }
+
+        private void ReleaseNodes(IActor actor)
+        {
+            var actorNodes = GetActorNodes(actor.Person, actor.Node);
+
+            foreach (var node in actorNodes)
+            {
+                _map.ReleaseNode(node, actor);
+            }
+        }
+
+        private IEnumerable<IGraphNode> GetActorNodes(IPerson person, IGraphNode baseNode)
+        {
+            yield return baseNode;
+
+            if (person.PhysicalSize == PhysicalSize.Size7)
+            {
+                var neighbors = _map.GetNext(baseNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
+                }
             }
         }
 
@@ -69,16 +104,22 @@ namespace Zilon.Core.Tactics.Behaviour
             return _map.IsPositionAvailableFor(nextNode, Actor);
         }
 
-        public MoveTask(IActor actor, IGraphNode targetNode, ISectorMap map) : base(actor)
+        public override int Cost => _cost;
+
+        public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map) : this(actor, context, targetNode, map, 1000)
+        {
+        }
+
+        public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map, int cost) : base(actor, context)
         {
             TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
             _map = map ?? throw new ArgumentNullException(nameof(map));
-
+            _cost = cost;
             if (actor.Node == targetNode)
             {
                 // Это может произойти, если источник команд выбрал целевую точку ту же, что и сам актёр
                 // в результате рандома.
-                _isComplete = true;
+                IsComplete = true;
 
                 _path = new List<IGraphNode>(0);
             }
@@ -90,7 +131,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (!_path.Any())
                 {
-                    _isComplete = true;
+                    IsComplete = true;
                 }
             }
         }

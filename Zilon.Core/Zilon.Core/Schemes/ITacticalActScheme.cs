@@ -3,7 +3,7 @@
     /// <summary>
     /// Схема действия.
     /// </summary>
-    public interface ITacticalActScheme: IScheme, IMimicScheme
+    public interface ITacticalActScheme : IScheme, IMimicScheme
     {
         /// <summary>
         /// Ограничения на использование действия.

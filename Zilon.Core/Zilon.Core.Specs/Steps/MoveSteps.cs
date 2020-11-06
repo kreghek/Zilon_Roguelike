@@ -66,7 +66,7 @@ namespace Zilon.Core.Specs.Steps
             var hexNode = (HexNode)node;
 
             var expectedOffsetCoords = new OffsetCoords(expectedOffsetX, expectedOffsetY);
-            var factOffsetCoords = new OffsetCoords(hexNode.OffsetX, hexNode.OffsetY);
+            var factOffsetCoords = hexNode.OffsetCoords;
             factOffsetCoords.Should().Be(expectedOffsetCoords);
         }
     }

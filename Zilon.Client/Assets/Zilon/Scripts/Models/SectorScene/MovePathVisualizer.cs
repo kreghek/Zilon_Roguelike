@@ -14,11 +14,13 @@ public class MovePathVisualizer : MonoBehaviour
 {
     public GameObject VisualizationItemPrefab;
 
-    [Inject(Id = "move-command")] private readonly ICommand _moveCommand;
-    [Inject] private readonly ISectorUiState _playerState;
+    [Inject(Id = "move-command")]
+    private readonly ICommand _moveCommand;
+    [Inject]
+    private readonly ISectorUiState _playerState;
     private IList<IGraphNode> _lastPath;
 
-    public void FixedUpdate()
+    public void Update()
     {
         var moveCommand = (MoveCommand)_moveCommand;
         var path = moveCommand.Path;
@@ -37,7 +39,7 @@ public class MovePathVisualizer : MonoBehaviour
                 foreach (var pathNode in _lastPath)
                 {
                     var hexPathNode = (HexNode)pathNode;
-                    var worldPosition = HexHelper.ConvertToWorld(hexPathNode.OffsetX, hexPathNode.OffsetY);
+                    var worldPosition = HexHelper.ConvertToWorld(hexPathNode.OffsetCoords);
 
                     var item = Instantiate(VisualizationItemPrefab, transform);
                     item.transform.position = new Vector3(worldPosition[0], worldPosition[1] / 2);

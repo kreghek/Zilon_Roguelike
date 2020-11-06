@@ -2,7 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -14,17 +16,19 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class EquipCommand : SpecialActorCommandBase
     {
+        private readonly IPlayer _player;
         private readonly IInventoryState _inventoryState;
 
         public int? SlotIndex { get; set; }
 
         [ExcludeFromCodeCoverage]
-        public EquipCommand(IGameLoop gameLoop,
-            ISectorManager sectorManager,
+        public EquipCommand(
+            IPlayer player,
             ISectorUiState playerState,
             IInventoryState inventoryState) :
-            base(gameLoop, sectorManager, playerState)
+            base(playerState)
         {
+            _player = player;
             _inventoryState = inventoryState;
         }
 
@@ -36,7 +40,7 @@ namespace Zilon.Core.Commands
             }
 
             var equipment = GetInventorySelectedEquipment();
-            if (equipment == null && _inventoryState.SelectedProp != null)
+            if (equipment is null && _inventoryState.SelectedProp != null)
             {
                 return false;
             }
@@ -44,7 +48,7 @@ namespace Zilon.Core.Commands
             // Сломанную экипировку нельзя надевать
             //TODO Тут есть замечание, что equipment не проверяется.
             // Реорганизовать этот код в более понятный.
-            if (equipment.Durable.Value <= 0)
+            if (equipment != null && equipment.Durable.Value <= 0)
             {
                 return false;
             }
@@ -54,7 +58,7 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Для команды не указан слот.");
             }
 
-            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.EquipmentCarrier;
+            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>();
             var slot = equipmentCarrier.Slots[SlotIndex.Value];
 
             var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipment, slot);
@@ -65,7 +69,6 @@ namespace Zilon.Core.Commands
 
             var canEquipDual = EquipmentCarrierHelper.CheckDualCompability(equipmentCarrier,
                 equipment,
-                slot,
                 SlotIndex.Value);
             if (!canEquipDual)
             {
@@ -74,9 +77,8 @@ namespace Zilon.Core.Commands
 
             var canEquipShield = EquipmentCarrierHelper.CheckShieldCompability(equipmentCarrier,
                 equipment,
-                slot,
                 SlotIndex.Value);
-            
+
             if (!canEquipShield)
             {
                 return false;
@@ -94,9 +96,10 @@ namespace Zilon.Core.Commands
 
             var equipment = GetInventorySelectedEquipment();
 
-            var intention = new Intention<EquipTask>(a => new EquipTask(a, equipment, SlotIndex.Value));
-            PlayerState.TaskSource.Intent(intention);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
+            var intention = new Intention<EquipTask>(a => new EquipTask(a, taskContext, equipment, SlotIndex.Value));
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
 
         private Equipment GetInventorySelectedEquipment()

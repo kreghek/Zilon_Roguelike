@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics
         /// Контейнер, который пытались открыть.
         /// </summary>
         [PublicAPI]
-        public IPropContainer Container { get; }
+        public IStaticObject Container { get; }
 
         /// <summary>
         /// Результат открытия. <see cref="SuccessOpenContainerResult">SuccessOpenContainerResult</see>, открытие прошло успешно.
@@ -23,9 +23,9 @@ namespace Zilon.Core.Tactics
         public IOpenContainerResult Result { get; }
 
         [ExcludeFromCodeCoverage]
-        public OpenContainerEventArgs(IPropContainer container, [NotNull] IOpenContainerResult result)
+        public OpenContainerEventArgs(IStaticObject container, [NotNull] IOpenContainerResult result)
         {
-            Container = container;
+            Container = container ?? throw new ArgumentNullException(nameof(container));
             Result = result ?? throw new ArgumentNullException(nameof(result));
         }
     }

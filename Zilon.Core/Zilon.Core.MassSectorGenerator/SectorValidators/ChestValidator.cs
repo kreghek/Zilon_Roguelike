@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -24,14 +22,12 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
             {
                 // Сундуки не должны генерироваться на узлы, которые являются препятствием.
                 // Сундуки не должны генерироваться на узлы с выходом.
-                var containerManager = scopeContainer.GetRequiredService<IPropContainerManager>();
-                var allContainers = containerManager.Items;
+                var staticObjectManager = sector.StaticObjectManager;
+                var allContainers = staticObjectManager.Items;
                 var allContainerNodes = allContainers.Select(x => x.Node).ToArray();
                 foreach (var container in allContainers)
                 {
                     var hex = (HexNode)container.Node;
-
-                    ValidateObstacleOverlap(hex);
 
                     ValidateTransitionOverlap(sector, container);
 
@@ -43,22 +39,11 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         /// <summary>
         /// Проверяем, что сундук не на клетке с выходом.
         /// </summary>
-        private static void ValidateTransitionOverlap(ISector sector, IPropContainer container)
+        private static void ValidateTransitionOverlap(ISector sector, IStaticObject container)
         {
             var transitionNodes = sector.Map.Transitions.Keys;
             var chestOnTransitionNode = transitionNodes.Contains(container.Node);
             if (chestOnTransitionNode)
-            {
-                throw new SectorValidationException();
-            }
-        }
-
-        /// <summary>
-        /// Проверяем, что сундук не стоит на препятствии.
-        /// </summary>
-        private static void ValidateObstacleOverlap(HexNode hex)
-        {
-            if (hex.IsObstacle)
             {
                 throw new SectorValidationException();
             }
@@ -78,10 +63,9 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
             {
                 var neighborHex = (HexNode)neighborNode;
 
-                var isObstacle = neighborHex.IsObstacle;
                 var isContainer = allContainerNodes.Contains(neighborHex);
 
-                if (!isObstacle && !isContainer)
+                if (!isContainer)
                 {
                     hasFreeNeighbor = true;
                     break;

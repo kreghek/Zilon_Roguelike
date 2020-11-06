@@ -34,8 +34,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var roomGenerator = new TestSnakeRoomGenerator();
             var mapFactory = new RoomMapFactory(roomGenerator);
 
-            var botPlayer = CreateBotPlayer();
-            var generator = CreateGenerator(botPlayer, mapFactory);
+            var generator = CreateGenerator(mapFactory);
             var sectorScheme = CreateSectorScheme();
             var sectorNode = CreateSectorNode(sectorScheme);
 
@@ -68,8 +67,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var roomGenerator = new RoomGenerator(randomSource);
             var mapFactory = new RoomMapFactory(roomGenerator);
 
-            var botPlayer = CreateBotPlayer();
-            var generator = CreateGenerator(botPlayer, mapFactory);
+            var generator = CreateGenerator(mapFactory);
             var sectorScheme = CreateSectorScheme();
 
             var sectorNode = CreateSectorNode(sectorScheme);
@@ -78,20 +76,17 @@ namespace Zilon.Core.Tests.MapGenerators
             await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
         }
 
-        private static ISectorGenerator CreateGenerator(IBotPlayer botPlayer,
+        private static ISectorGenerator CreateGenerator(
             IMapFactory mapFactory)
         {
-            var chestGeneratorMock = new Mock<IChestGenerator>();
-            var chestGenerator = chestGeneratorMock.Object;
+            var staticObstaclesGeneratorMock = new Mock<IStaticObstaclesGenerator>();
+            var staticObstaclesGenerator = staticObstaclesGeneratorMock.Object;
 
             var monsterGeneratorMock = new Mock<IMonsterGenerator>();
             var monsterGenerator = monsterGeneratorMock.Object;
 
             var sectorFactoryMock = new Mock<ISectorFactory>();
             var sectorFactory = sectorFactoryMock.Object;
-
-            var citizenGeneratorMock = new Mock<ICitizenGenerator>();
-            var citizenGenerator = citizenGeneratorMock.Object;
 
             var mapFactorySelectorMock = new Mock<IMapFactorySelector>();
             mapFactorySelectorMock.Setup(x => x.GetMapFactory(It.IsAny<ISectorNode>()))
@@ -106,19 +101,17 @@ namespace Zilon.Core.Tests.MapGenerators
             sectorFactoryMock.Setup(x => x.Create(It.IsAny<ISectorMap>(), It.IsAny<ILocationScheme>()))
                 .Returns(sector);
 
+            var resourceMaterializationMapMock = new Mock<IResourceMaterializationMap>();
+            resourceMaterializationMapMock.Setup(x => x.GetDepositData(It.IsAny<ISectorNode>()))
+                .Returns(new Mock<IResourceDepositData>().Object);
+            var sectorMaterializationService = resourceMaterializationMapMock.Object;
+
             return new SectorGenerator(mapFactorySelector,
                 sectorFactory,
                 monsterGenerator,
-                chestGenerator,
+                staticObstaclesGenerator,
                 diseaseGenerator,
-                botPlayer);
-        }
-
-        private static IBotPlayer CreateBotPlayer()
-        {
-            var botPlayerMock = new Mock<IBotPlayer>();
-            var botPlayer = botPlayerMock.Object;
-            return botPlayer;
+                sectorMaterializationService);
         }
 
         private static ISectorSubScheme CreateSectorScheme()
