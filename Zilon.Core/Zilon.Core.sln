@@ -72,7 +72,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GlobeObserver", "GlobeObser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.GlobeObserver", "Zilon.GlobeObserver\Zilon.GlobeObserver.csproj", "{A5564869-FEFE-4A4F-ABA0-1C6E0C53B5B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.TextClient", "Zilon.TextClient\Zilon.TextClient.csproj", "{17EF4DE9-8F84-46ED-9597-FF824672921A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.TextClient", "Zilon.TextClient\Zilon.TextClient.csproj", "{17EF4DE9-8F84-46ED-9597-FF824672921A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

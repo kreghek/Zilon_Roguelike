@@ -219,3 +219,4 @@ dotnet_naming_symbols.constants.applicable_kinds = field, local
 dotnet_naming_symbols.constants.required_modifiers = const
 
 dotnet_naming_style.constant_style.capitalization = all_upper
+dotnet_code_quality.ca1707.api_surface = public
