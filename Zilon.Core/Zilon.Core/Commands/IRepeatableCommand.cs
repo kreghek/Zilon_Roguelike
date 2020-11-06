@@ -3,7 +3,7 @@
     /// <summary>
     /// Повторяемая команда.
     /// </summary>
-    public interface IRepeatableCommand: ICommand
+    public interface IRepeatableCommand : ICommand
     {
         /// <summary>
         /// Метод определяет, может ли команда выполнить очередное повторение.

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+
 using NUnit.Framework;
 
 namespace Zilon.Core.Tests.Tactics.Spatial.TestCases
@@ -14,7 +15,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.TestCases
 
         public static IEnumerable TestCases
         {
-            get {
+            get
+            {
                 // см. матрицу из https://github.com/kreghek/Zilon_Roguelike/issues/45#issuecomment-447586671
 
                 yield return new TestCaseData(null, null, false);

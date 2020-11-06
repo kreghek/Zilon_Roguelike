@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class VisualProp: MonoBehaviour
+public class VisualProp : MonoBehaviour
 {
 
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// Схема предмета.
     /// </summary>
-    public interface IPropScheme: IScheme, IMimicScheme
+    public interface IPropScheme : IScheme, IMimicScheme
     {
         /// <summary>
         /// Теги предмета. Используются для описания и для некоторых правил.
@@ -29,7 +29,7 @@
         /// (сьесть, выпить, использовать).
         /// </summary>
         IPropUseSubScheme Use { get; }
-        
+
         /// <summary>
         /// Информация о предмете, как он используется для выполнения действий.
         /// </summary>

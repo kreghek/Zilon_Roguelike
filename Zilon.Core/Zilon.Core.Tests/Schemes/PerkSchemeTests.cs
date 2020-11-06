@@ -8,7 +8,8 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Schemes
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class PerkSchemeTests
     {
         /// <summary>

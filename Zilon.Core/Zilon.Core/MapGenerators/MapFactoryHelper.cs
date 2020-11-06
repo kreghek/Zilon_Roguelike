@@ -48,7 +48,7 @@ namespace Zilon.Core.MapGenerators
                 {
                     if (matrix[x, y])
                     {
-                         var neighbors = HexHelper.GetNeighbors(x + 1, y + 1);
+                        var neighbors = HexHelper.GetNeighbors(x + 1, y + 1);
                         foreach (var neightbor in neighbors)
                         {
                             var resizedX = neightbor.X;

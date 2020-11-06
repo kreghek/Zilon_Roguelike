@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using Assets.Zilon.Scripts.Services;
-
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -11,14 +9,12 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
-using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 
 public class PlayerPersonInitiator : MonoBehaviour
 {
@@ -34,34 +30,11 @@ public class PlayerPersonInitiator : MonoBehaviour
 
     [NotNull]
     [Inject]
-    private readonly ISectorManager _sectorManager;
-
-    [NotNull]
-    [Inject]
-    private readonly HumanPlayer _humanPlayer;
-
-    [NotNull]
-    [Inject]
-    private readonly IPerkResolver _perkResolver;
+    private readonly IPlayer _humanPlayer;
 
     [NotNull]
     [Inject]
     private readonly ISectorUiState _playerState;
-
-    [NotNull]
-    [Inject]
-    private readonly IHumanActorTaskSource _humanActorTaskSource;
-
-    [NotNull]
-    [Inject]
-    private readonly IHumanPersonFactory _humanPersonFactory;
-
-    [NotNull]
-    [Inject]
-    private readonly ProgressStorageService _progressStorageService;
-
-    [Inject]
-    private readonly IPlayerEventLogService _playerEventLogService;
 
     [NotNull]
     [Inject]
@@ -79,51 +52,43 @@ public class PlayerPersonInitiator : MonoBehaviour
     {
         var personScheme = _schemeService.GetScheme<IPersonScheme>("human-person");
 
-        var playerActorStartNode = _sectorManager.CurrentSector.Map.Regions
+        var playerActorStartNode = _humanPlayer.SectorNode.Sector.Map.Regions
             .Single(x => x.IsStart).Nodes
             .First();
 
         var playerActorViewModel = CreateHumanActorViewModel(
-            _humanPlayer,
             _humanPlayer.SectorNode.Sector.ActorManager,
-            _perkResolver,
-            playerActorStartNode,
             nodeViewModels);
 
-        //Лучше централизовать переключение текущего актёра только в playerState
-        _playerState.ActiveActor = playerActorViewModel;
-        _humanActorTaskSource.SwitchActor(_playerState.ActiveActor.Actor);
+        //Не забывать изменять активного персонажа в источнике команд.
+        SetActiveActor(playerActorViewModel);
 
         ActorViewModels.Add(playerActorViewModel);
 
         return playerActorViewModel;
     }
 
-    private ActorViewModel CreateHumanActorViewModel([NotNull] IPlayer player,
-       [NotNull] IActorManager actorManager,
-       [NotNull] IPerkResolver perkResolver,
-       [NotNull] IGraphNode startNode,
-       [NotNull] IEnumerable<MapNodeVM> nodeVMs)
+    private void SetActiveActor(ActorViewModel playerActorViewModel)
     {
-        if (_humanPlayer.MainPerson == null)
+        // Это нужно для UI, чтобы они реагировали на состояние текущего персонажа.
+        // И это нужно для команд. Команды берут актуивного актёра из источника команд.
+        _playerState.ActiveActor = playerActorViewModel;
+    }
+
+    private static bool _showCreatingModalSwitcher;
+
+    private ActorViewModel CreateHumanActorViewModel([NotNull] IActorManager actorManager,
+        [NotNull] IEnumerable<MapNodeVM> nodeVMs)
+    {
+        bool showCreationModal = GetCreationModal();
+
+        if (showCreationModal)
         {
-            if (!_progressStorageService.LoadPerson())
-            {
-                var playerPerson = _humanPersonFactory.Create();
-
-                _humanPlayer.MainPerson = playerPerson;
-
-                ShowCreatePersonModal(playerPerson);
-            }
+            _showCreatingModalSwitcher = true;
+            ShowCreatePersonModal(_humanPlayer.MainPerson);
         }
 
-        var fowData = new HumanSectorFowData();
-
-        var actor = new Actor(_humanPlayer.MainPerson, player, startNode, perkResolver, fowData);
-        _playerEventLogService.Actor = actor;
-        _humanPlayer.MainPerson.PlayerEventLogService = _playerEventLogService;
-
-        actorManager.Add(actor);
+        var actor = actorManager.Items.Single(x => x.Person == _humanPlayer.MainPerson);
 
         var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
@@ -141,15 +106,28 @@ public class PlayerPersonInitiator : MonoBehaviour
         actorViewModel.transform.position = actorPosition;
         actorViewModel.Actor = actor;
 
-        if (!actor.Person.Inventory.CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
-        {
-            AddResourceToCurrentPerson("camp-tools");
-        }
+        EnsurePlayerPersonHasCampTool(actor);
 
         return actorViewModel;
     }
 
-    private void ShowCreatePersonModal(HumanPerson playerPerson)
+    private void EnsurePlayerPersonHasCampTool(IActor actor)
+    {
+        if (actor.Person.GetModule<IInventoryModule>().CalcActualItems().Any(x => x.Scheme.Sid == "camp-tools"))
+        {
+            return;
+        }
+
+        AddResourceToCurrentPerson("camp-tools");
+    }
+
+    private bool GetCreationModal()
+    {
+        // Считывать из настроек в клиентской части.
+        return !_showCreatingModalSwitcher;
+    }
+
+    private void ShowCreatePersonModal(IPerson playerPerson)
     {
         _sectorModalManager.ShowCreatePersonModal(playerPerson);
     }
@@ -166,11 +144,11 @@ public class PlayerPersonInitiator : MonoBehaviour
     /// </remarks>
     public void AddResourceToCurrentPerson(string resourceSid, int count = 1)
     {
-        var inventory = (Inventory)_humanPlayer.MainPerson.Inventory;
+        var inventory = _humanPlayer.MainPerson.GetModule<IInventoryModule>();
         AddResource(inventory, resourceSid, count);
     }
 
-    private void AddResource(Inventory inventory, string resourceSid, int count)
+    private void AddResource(IInventoryModule inventory, string resourceSid, int count)
     {
         try
         {

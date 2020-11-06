@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Persons;
+﻿using System.Linq;
+
+using Zilon.Core.Persons;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Players
@@ -7,23 +9,35 @@ namespace Zilon.Core.Players
     /// Класс игрока. Содержат данные игрока, переходящие между глобальной и локальной картами.
     /// </summary>
     /// <seealso cref="PlayerBase" />
-    public class HumanPlayer : PlayerBase
+    public class HumanPlayer : IPlayer
     {
-        public ISectorNode SectorNode { get; private set; }
+        public ISectorNode SectorNode { get => Globe.SectorNodes.Single(node => node.Sector.ActorManager.Items.Any(x => x.Person == MainPerson)); }
 
         /// <summary>
         /// Ссылка на основного персонажа игрока.
         /// </summary>
-        public HumanPerson MainPerson { get; set; }
+        public IPerson MainPerson { get; private set; }
+        public IGlobe Globe { get; private set; }
 
-        public void BindSectorNode(ISectorNode sectorNode)
+        public void BindPerson(IGlobe globe, IPerson person)
         {
-            SectorNode = sectorNode;
+            if (globe is null)
+            {
+                throw new System.ArgumentNullException(nameof(globe));
+            }
+
+            if (person is null)
+            {
+                throw new System.ArgumentNullException(nameof(person));
+            }
+
+            Globe = globe;
+            MainPerson = person;
         }
 
         public void Reset()
         {
-            SectorNode = null;
+            Globe = null;
             MainPerson = null;
         }
     }

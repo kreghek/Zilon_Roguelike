@@ -3,12 +3,14 @@
 using Newtonsoft.Json;
 
 using NUnit.Framework;
+
 using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Schemes
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class MonsterSchemeTests
     {
         /// <summary>

@@ -6,7 +6,8 @@ using Moq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Tactics;
+using Zilon.Core.PersonModules;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
@@ -18,10 +19,11 @@ namespace Zilon.Core.Specs.Contexts
         {
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
             var moveCommand = ServiceProvider.GetRequiredService<MoveCommand>();
-            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
+            var player = ServiceProvider.GetRequiredService<IPlayer>();
 
-            var targetNode = sectorManager
-                .CurrentSector
+            var sector = player.SectorNode.Sector;
+
+            var targetNode = sector
                 .Map
                 .Nodes
                 .SelectByHexCoords(targetCoords.X, targetCoords.Y);
@@ -43,7 +45,7 @@ namespace Zilon.Core.Specs.Contexts
             var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
             var actor = GetActiveActor();
 
-            var selectedProp = actor.Person.Inventory.CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            var selectedProp = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
 
             var viewModel = new TestPropItemViewModel()
             {
@@ -57,9 +59,11 @@ namespace Zilon.Core.Specs.Contexts
         internal void ClickOnNode(int x, int y)
         {
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
-            var sectorManager = ServiceProvider.GetRequiredService<ISectorManager>();
+            var player = ServiceProvider.GetRequiredService<IPlayer>();
 
-            var map = sectorManager.CurrentSector.Map;
+            var sector = player.SectorNode.Sector;
+
+            var map = sector.Map;
             var selectedNode = map.Nodes.Cast<HexNode>().Single(n => n.OffsetCoords.X == x && n.OffsetCoords.Y == y);
 
             var nodeViewModelMock = new Mock<IMapNodeViewModel>();

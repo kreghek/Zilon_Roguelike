@@ -1,62 +1,58 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using Zilon.Bot.Players;
 using Zilon.Bot.Sdk;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
-using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
+using Zilon.Core.World;
 
 namespace Zilon.Emulation.Common
 {
-    public abstract class AutoplayEngineBase<T> where T : IPluggableActorTaskSource
+    public abstract class AutoplayEngineBase
     {
-        private const int ITERATION_LIMIT = 40_000;
-
-        private bool _changeSector;
+        private const int ITERATION_LIMIT = 40_000_000;
+        private readonly IGlobeInitializer _globeInitializer;
 
         protected IServiceScope ServiceScope { get; set; }
 
         protected BotSettings BotSettings { get; }
 
-        protected AutoplayEngineBase(BotSettings botSettings)
+        protected AutoplayEngineBase(BotSettings botSettings,
+            IGlobeInitializer globeInitializer)
         {
             BotSettings = botSettings;
+            _globeInitializer = globeInitializer;
         }
 
-        public async Task StartAsync(HumanPerson startPerson, IServiceProvider serviceProvider)
+        public async Task<IGlobe> CreateGlobeAsync()
         {
-            if (serviceProvider is null)
+            // Create globe
+            var globeInitializer = _globeInitializer;
+            var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
+            return globe;
+        }
+
+        public async Task StartAsync(IGlobe globe, IPerson followedPerson)
+        {
+            if (globe is null)
             {
-                throw new ArgumentNullException(nameof(serviceProvider));
+                throw new ArgumentNullException(nameof(globe));
             }
 
-            var humanActor = await CreateSectorAsync(startPerson, serviceProvider).ConfigureAwait(false);
-            var gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
-            var botActorTaskSource = serviceProvider.GetRequiredService<T>();
-            botActorTaskSource.Configure(BotSettings);
+            if (followedPerson is null)
+            {
+                throw new ArgumentNullException(nameof(followedPerson));
+            }
 
             var iterationCounter = 1;
-            while (!humanActor.Person.Survival.IsDead && iterationCounter <= ITERATION_LIMIT)
+            while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
             {
                 try
                 {
-                    gameLoop.Update();
-
-                    if (_changeSector)
-                    {
-                        humanActor = await CreateSectorAsync(startPerson, serviceProvider).ConfigureAwait(false);
-
-                        gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
-                        botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
-                        botActorTaskSource.Configure(BotSettings);
-
-                        _changeSector = false;
-                    }
+                    await globe.UpdateAsync().ConfigureAwait(false);
                 }
                 catch (ActorTaskExecutionException exception)
                 {
@@ -65,12 +61,14 @@ namespace Zilon.Emulation.Common
                 catch (AggregateException exception)
                 {
                     CatchException(exception.InnerException);
+                    throw;
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception exception)
 #pragma warning restore CA1031 // Do not catch general exception types
                 {
                     CatchException(exception);
+                    throw;
                 }
             }
 
@@ -83,77 +81,7 @@ namespace Zilon.Emulation.Common
 
         protected abstract void ProcessEnd();
 
-        private static IActor CreateHumanActor(HumanPlayer humanPlayer,
-            HumanPerson humanPerson,
-            ISectorManager sectorManager,
-            IPlayerEventLogService playerEventLogService)
-        {
-            var playerActorStartNode = sectorManager.CurrentSector.Map.Regions
-                .SingleOrDefault(x => x.IsStart)
-                .Nodes
-                .First();
-
-            humanPerson.PlayerEventLogService = playerEventLogService;
-            humanPlayer.MainPerson = humanPerson;
-
-            var actor = new Actor(humanPerson, humanPlayer, playerActorStartNode);
-
-            playerEventLogService.Actor = actor;
-
-            sectorManager.CurrentSector.ActorManager.Add(actor);
-
-            return actor;
-        }
-
-        private async Task<IActor> CreateSectorAsync(HumanPerson startPerson, IServiceProvider _globalServiceProvider)
-        {
-            if (ServiceScope != null)
-            {
-                ServiceScope.Dispose();
-                ServiceScope = null;
-            }
-
-            ServiceScope = _globalServiceProvider.CreateScope();
-
-            ConfigBotAux();
-
-            var humanPlayer = _globalServiceProvider.GetRequiredService<HumanPlayer>();
-            var scoreManager = _globalServiceProvider.GetRequiredService<IScoreManager>();
-
-            var gameLoop = ServiceScope.ServiceProvider.GetRequiredService<IGameLoop>();
-            var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
-            var botActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<T>();
-            var monsterActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<MonsterBotActorTaskSource>();
-            var playerEventLogService = ServiceScope.ServiceProvider.GetService<IPlayerEventLogService>();
-
-            await sectorManager.CreateSectorAsync().ConfigureAwait(false);
-
-            sectorManager.CurrentSector.ScoreManager = scoreManager;
-            sectorManager.CurrentSector.HumanGroupExit += CurrentSector_HumanGroupExit;
-
-            gameLoop.ActorTaskSources = new Core.Tactics.Behaviour.IActorTaskSource[] {
-                botActorTaskSource,
-                monsterActorTaskSource
-            };
-
-            var humanActor = CreateHumanActor(humanPlayer,
-                startPerson,
-                sectorManager,
-                playerEventLogService);
-
-            return humanActor;
-        }
-
         protected abstract void ConfigBotAux();
-
-        private void CurrentSector_HumanGroupExit(object sender, SectorExitEventArgs e)
-        {
-            ProcessSectorExit();
-            _changeSector = true;
-
-            var sectorManager = ServiceScope.ServiceProvider.GetRequiredService<ISectorManager>();
-            sectorManager.CurrentSector.HumanGroupExit -= CurrentSector_HumanGroupExit;
-        }
 
         protected abstract void ProcessSectorExit();
     }

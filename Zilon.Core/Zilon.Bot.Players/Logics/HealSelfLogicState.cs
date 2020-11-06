@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using Zilon.Bot.Players.Triggers;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -11,14 +12,19 @@ namespace Zilon.Bot.Players.Logics
 {
     public class HealSelfLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
-            var hpStat = actor.Person.Survival.Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            if (context is null)
+            {
+                throw new System.ArgumentNullException(nameof(context));
+            }
+
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             if (hpStat == null)
             {
                 Complete = true;
@@ -33,7 +39,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var props = actor.Person.Inventory.CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
             var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 ConsumeCommonRuleType.Health);
@@ -44,7 +50,8 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            return new UsePropTask(actor, bestResource);
+            var taskContext = new ActorTaskContext(context.Sector);
+            return new UsePropTask(actor, taskContext, bestResource);
         }
 
         protected override void ResetData()

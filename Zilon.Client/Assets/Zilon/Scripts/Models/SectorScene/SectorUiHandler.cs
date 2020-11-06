@@ -11,6 +11,8 @@ using Zenject;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
+using Zilon.Core.Players;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 
@@ -21,9 +23,9 @@ using Zilon.Core.Tactics;
 /// </summary>
 public class SectorUiHandler : MonoBehaviour
 {
-    [Inject] private readonly ISectorUiState _playerState;
+    [Inject] private readonly IPlayer _player;
 
-    [Inject] private readonly ISectorManager _sectorManager;
+    [Inject] private readonly ISectorUiState _playerState;
 
     [Inject] private readonly ICommandManager _clientCommandExecutor;
 
@@ -50,6 +52,8 @@ public class SectorUiHandler : MonoBehaviour
     public Button SectorTransitionMoveButton;
     public Button CityQuickExitButton;
     public Button OpenLootButton;
+
+    public SectorVM SectorVM;
 
     public void Update()
     {
@@ -96,8 +100,10 @@ public class SectorUiHandler : MonoBehaviour
 
     private bool GetIsInCity()
     {
-        return _sectorManager.CurrentSector?.Scheme.Sid == "city";
+        return CurrentSector?.Scheme.Sid == "city";
     }
+
+    private ISector CurrentSector => _player.SectorNode.Sector;
 
     private bool GetCanOpenLoot()
     {
@@ -118,7 +124,7 @@ public class SectorUiHandler : MonoBehaviour
 
     private IStaticObject GetContainerInNode(IGraphNode targetnNode)
     {
-        var staticObjectManager = _sectorManager.CurrentSector.StaticObjectManager;
+        var staticObjectManager = CurrentSector.StaticObjectManager;
         var containerStaticObjectInNode = staticObjectManager.Items
             .FirstOrDefault(x => x.Node == targetnNode && x.HasModule<IPropContainer>());
         return containerStaticObjectInNode;
@@ -198,7 +204,7 @@ public class SectorUiHandler : MonoBehaviour
         // Защита от бага.
         // Пользователь может нажать T и выполнить переход.
         // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
-        if (_playerState.ActiveActor?.Actor.Person.Survival.IsDead != false)
+        if (_playerState.ActiveActor?.Actor.Person.GetModule<ISurvivalModule>().IsDead != false)
         {
             return;
         }
@@ -211,7 +217,7 @@ public class SectorUiHandler : MonoBehaviour
         // Защита от бага.
         // Пользователь может нажать Q и выйти из сектора на глобальную карту.
         // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
-        if (_playerState.ActiveActor?.Actor.Person.Survival.IsDead != false)
+        if (_playerState.ActiveActor?.Actor.Person.GetModule<ISurvivalModule>().IsDead != false)
         {
             return;
         }

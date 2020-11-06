@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -12,17 +13,20 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class OpenContainerCommand : ActorCommandBase
     {
+        private readonly IPlayer _player;
+
         [ExcludeFromCodeCoverage]
-        public OpenContainerCommand(IGameLoop gameLoop,
-            ISectorManager sectorManager,
+        public OpenContainerCommand(
+            IPlayer player,
             ISectorUiState playerState) :
-            base(gameLoop, sectorManager, playerState)
+            base(playerState)
         {
+            _player = player;
         }
 
         public override bool CanExecute()
         {
-            var map = SectorManager.CurrentSector.Map;
+            var map = _player.SectorNode.Sector.Map;
 
             var currentNode = PlayerState.ActiveActor.Actor.Node;
 
@@ -67,13 +71,16 @@ namespace Zilon.Core.Commands
             }
 
             var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, staticObject));
-            PlayerState.TaskSource.Intent(intetion);
+            PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
         }
 
         private OpenContainerTask CreateTask(IActor actor, IStaticObject staticObject)
         {
             var openMethod = new HandOpenContainerMethod();
-            return new OpenContainerTask(actor, staticObject, openMethod, SectorManager.CurrentSector.Map);
+
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+
+            return new OpenContainerTask(actor, taskContext, staticObject, openMethod);
         }
 
         private IContainerViewModel GetSelectedNodeViewModel()

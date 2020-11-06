@@ -28,7 +28,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
-        event EventHandler<SectorExitEventArgs> HumanGroupExit;
+        event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
 
         /// <summary>
         /// Карта в основе сектора.
@@ -45,7 +45,12 @@ namespace Zilon.Core.Tactics
 
         ILocationScheme Scheme { get; set; }
 
-        void UseTransition(RoomTransition transition);
+        /// <summary>
+        /// Вызывает актёр, когда хочет переёти из одного сектора в другой.
+        /// </summary>
+        /// <param name="actor"> Актёр, применивший переход. </param>
+        /// <param name="transition"> переход, который бы задействован. </param>
+        void UseTransition(IActor actor, RoomTransition transition);
 
         IActorManager ActorManager { get; }
 

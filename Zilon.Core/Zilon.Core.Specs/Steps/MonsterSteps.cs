@@ -26,7 +26,7 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Для монстра Id:(\d+) задан маршрут")]
         public void GivenДляМонстраIdЗаданМаршрут(int monsterId, Table table)
         {
-            var sector = Context.GetSector();
+            var sector = Context.GetCurrentGlobeFirstSector();
 
             var patrolPoints = new List<IGraphNode>();
             foreach (var tableRow in table.Rows)

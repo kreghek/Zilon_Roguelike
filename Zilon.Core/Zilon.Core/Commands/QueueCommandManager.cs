@@ -23,7 +23,7 @@ namespace Zilon.Core.Commands
             {
                 return _queue.Dequeue();
             }
-            
+
             return null;
         }
 

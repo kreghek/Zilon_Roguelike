@@ -10,7 +10,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Аргументы события при использовании действия на цель.
     /// </summary>
-    public sealed class UsedActEventArgs: EventArgs
+    public sealed class UsedActEventArgs : EventArgs
     {
         /// <summary>
         /// Цель действия.

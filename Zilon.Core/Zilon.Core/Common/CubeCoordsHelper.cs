@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using JetBrains.Annotations;
 
 namespace Zilon.Core.Common
@@ -61,7 +62,7 @@ namespace Zilon.Core.Common
         /// <param name="b"> Конец линии. </param>
         /// <returns> Набор координат, составляющих линию. </returns>
         [NotNull, ItemNotNull]
-        public static CubeCoords[] CubeDrawLine([NotNull]CubeCoords a, [NotNull]CubeCoords b)
+        public static CubeCoords[] CubeDrawLine([NotNull] CubeCoords a, [NotNull] CubeCoords b)
         {
             var n = a.DistanceTo(b);
 

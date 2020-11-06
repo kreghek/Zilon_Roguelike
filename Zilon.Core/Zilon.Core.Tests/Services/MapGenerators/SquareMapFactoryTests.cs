@@ -12,7 +12,8 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class SquareMapFactoryTests
     {
         /// <summary>

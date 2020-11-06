@@ -6,7 +6,8 @@ using Zilon.Core.Components;
 
 namespace Zilon.Core.Tests.Components
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class PersonStatTests
     {
         /// <summary>
@@ -56,7 +57,7 @@ namespace Zilon.Core.Tests.Components
 
 
             // ACT
-            var factValue = personStat.GetActualValue(level, 
+            var factValue = personStat.GetActualValue(level,
                 rarityBonus: 0,
                 bonuses: bonuses);
 

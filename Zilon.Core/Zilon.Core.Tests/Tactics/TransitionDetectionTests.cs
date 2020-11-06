@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics;
@@ -12,7 +13,8 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class TransitionDetectionTests
     {
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -9,24 +10,13 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class ExitLogicState : LogicStateBase
     {
-        private readonly ISector _sector;
-        private readonly ISectorMap _map;
-
         private MoveTask _moveTask;
 
-        public ExitLogicState(ISectorManager sectorManager)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
-            if (sectorManager is null)
-            {
-                throw new System.ArgumentNullException(nameof(sectorManager));
-            }
+            var sector = context.Sector;
+            var map = sector.Map;
 
-            _sector = sectorManager.CurrentSector;
-            _map = sectorManager.CurrentSector.Map;
-        }
-
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
-        {
             if (!strategyData.ExitNodes.Any())
             {
                 Complete = true;
@@ -34,9 +24,9 @@ namespace Zilon.Bot.Players.Logics
             }
 
             var actorNode = actor.Node;
-            if (_map.Transitions.TryGetValue(actorNode, out var currentTransition))
+            if (map.Transitions.TryGetValue(actorNode, out var currentTransition))
             {
-                _sector.UseTransition(currentTransition);
+                sector.UseTransition(actor, currentTransition);
                 Complete = true;
                 return null;
             }
@@ -44,10 +34,10 @@ namespace Zilon.Bot.Players.Logics
             if (_moveTask == null || _moveTask.IsComplete || !_moveTask.CanExecute())
             {
                 var nearbyExitNode = strategyData.ExitNodes
-                    .OrderBy(x => _map.DistanceBetween(actor.Node, x))
+                    .OrderBy(x => map.DistanceBetween(actor.Node, x))
                     .First();
 
-                _moveTask = CreateMoveTask(actor, nearbyExitNode);
+                _moveTask = CreateMoveTask(actor, nearbyExitNode, sector, map);
 
                 if (_moveTask == null)
                 {
@@ -63,18 +53,20 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode)
+        private static MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode, ISector sector, ISectorMap map)
         {
-            var targetNodeIsBlockedByObstacles = GetObstableInNode(_sector, targetExitNode);
-            Debug.Assert(targetNodeIsBlockedByObstacles,
+            var targetNodeIsBlockedByObstacles = GetObstableInNode(sector, targetExitNode);
+            Debug.Assert(!targetNodeIsBlockedByObstacles,
                 "Узел с выходом не должен быть препятствием.");
 
-            if (!_map.IsPositionAvailableFor(targetExitNode, actor))
+            if (!map.IsPositionAvailableFor(targetExitNode, actor))
             {
                 return null;
             }
 
-            var moveTask = new MoveTask(actor, targetExitNode, _map);
+            var context = new ActorTaskContext(sector);
+
+            var moveTask = new MoveTask(actor, context, targetExitNode, map);
 
             return moveTask;
         }

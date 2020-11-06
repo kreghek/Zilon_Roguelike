@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
@@ -24,7 +25,7 @@ namespace Zilon.Core.MapGenerators
         public static IGraphNode FindNonBlockedNode(
             [NotNull] IGraphNode node,
             [NotNull] IMap map,
-            [NotNull] [ItemNotNull] IEnumerable<IGraphNode> availableNodes)
+            [NotNull][ItemNotNull] IEnumerable<IGraphNode> availableNodes)
         {
             var availableNodesArray = availableNodes as IGraphNode[] ?? availableNodes.ToArray();
             CheckArguments(node, map, availableNodesArray);

@@ -21,7 +21,7 @@ namespace Zilon.Core.Persons
             _schemeService = schemeService;
         }
 
-        public IPerk[] Get()
+        public IPerk[] Generate()
         {
             var allBuildInPerks = _schemeService.GetSchemes<IPerkScheme>().Where(x => x.IsBuildIn).ToArray();
 

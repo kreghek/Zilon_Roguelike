@@ -2,15 +2,16 @@
 
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
+using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
-    class AutoplayEngine<T> : AutoplayEngineBase<T> where T : IPluggableActorTaskSource
+    class AutoplayEngine : AutoplayEngineBase
     {
         private readonly Startup _startup;
 
-        public AutoplayEngine(Startup startup, BotSettings botSettings) : base(botSettings)
+        public AutoplayEngine(Startup startup, BotSettings botSettings, IGlobeInitializer globeInitializer) : base(botSettings, globeInitializer)
         {
             _startup = startup;
         }
@@ -29,7 +30,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
         protected override void CatchException(Exception exception)
         {
             Console.WriteLine(exception);
-            throw exception;
         }
 
         protected override void ProcessEnd()

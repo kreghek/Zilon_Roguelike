@@ -11,7 +11,8 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         [ExcludeFromCodeCoverage]
         public UsePropTask(IActor actor,
-            IProp usedProp) : base(actor)
+            IActorTaskContext context,
+            IProp usedProp) : base(actor, context)
         {
             UsedProp = usedProp;
         }

@@ -13,6 +13,7 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 
 public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
@@ -50,7 +51,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     private void CreateSlots()
     {
         var actorViewModel = _playerState.ActiveActor;
-        var slots = actorViewModel.Actor.Person.EquipmentCarrier.Slots;
+        var slots = actorViewModel.Actor.Person.GetModule<IEquipmentModule>().Slots;
 
         for (var i = 0; i < slots.Length; i++)
         {
@@ -78,7 +79,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
         ReadButton.SetActive(false);
 
         var actor = _playerState.ActiveActor.Actor;
-        var inventory = actor.Person.Inventory;
+        var inventory = actor.Person.GetModule<IInventoryModule>();
         UpdatePropsInner(InventoryItemsParent, inventory.CalcActualItems());
 
         inventory.Added += Inventory_Added;
@@ -89,7 +90,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     public void ApplyChanges()
     {
         var actor = _playerState.ActiveActor.Actor;
-        var inventory = actor.Person.Inventory;
+        var inventory = actor.Person.GetModule<IInventoryModule>();
         inventory.Added -= Inventory_Added;
         inventory.Removed -= Inventory_Removed;
         inventory.Changed -= Inventory_Changed;

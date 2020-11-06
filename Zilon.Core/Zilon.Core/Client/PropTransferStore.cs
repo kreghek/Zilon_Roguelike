@@ -219,7 +219,7 @@ namespace Zilon.Core.Client
             }
         }
 
-        private void TransferResource(Resource resource,
+        private static void TransferResource(Resource resource,
             IList<IProp> mainList,
             IList<IProp> oppositList)
         {
@@ -260,7 +260,7 @@ namespace Zilon.Core.Client
             }
         }
 
-        private void TransferNoCount(IProp prop,
+        private static void TransferNoCount(IProp prop,
             IList<IProp> bittenList,
             IList<IProp> oppositList)
         {
@@ -271,6 +271,13 @@ namespace Zilon.Core.Client
             }
 
             oppositList.Add(prop);
+        }
+
+        public bool Has(IProp prop)
+        {
+            //TODO Неправильная реализация
+            // Не учитывает списки добавленных и удалённых предметов.
+            return PropStore.Has(prop);
         }
     }
 }

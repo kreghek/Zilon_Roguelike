@@ -11,8 +11,9 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly PropTransfer[] _transfers;
 
         public TransferPropsTask(IActor actor,
+            IActorTaskContext context,
             IEnumerable<PropTransfer> transfers) :
-            base(actor)
+            base(actor, context)
         {
             _transfers = transfers.ToArray();
         }
@@ -25,12 +26,21 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 foreach (var prop in transfer.Added)
                 {
+                    // TODO Здесь может быть ошибка, если два персонажа одновременно начнут брать предметы.
+                    // Тогда предмет будет в обоих хранилищах.
                     propStore.Add(prop);
                 }
 
                 foreach (var prop in transfer.Removed)
                 {
-                    propStore.Remove(prop);
+                    if (transfer.PropStore.Has(prop))
+                    {
+                        propStore.Remove(prop);
+                    }
+                    else
+                    {
+                        // Значит кто-то уже взял предмет, пока выполнялась задача.
+                    }
                 }
             }
         }

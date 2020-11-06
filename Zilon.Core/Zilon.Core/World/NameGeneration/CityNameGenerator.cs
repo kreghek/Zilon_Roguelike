@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Common;
+﻿using System.Globalization;
+
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.World.NameGeneration
@@ -66,7 +68,8 @@ namespace Zilon.Core.World.NameGeneration
                 names = names6[rnd4] + names7[rnd3];
             }
 
-            return names.FirstCharToUpper();
+            // Culture en-US fixed, because algorithm focused on this culture.
+            return names.FirstCharToUpper(CultureInfo.GetCultureInfo("en-US"));
         }
     }
 }

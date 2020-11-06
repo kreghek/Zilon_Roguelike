@@ -34,8 +34,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var roomGenerator = new TestSnakeRoomGenerator();
             var mapFactory = new RoomMapFactory(roomGenerator);
 
-            var botPlayer = CreateBotPlayer();
-            var generator = CreateGenerator(botPlayer, mapFactory);
+            var generator = CreateGenerator(mapFactory);
             var sectorScheme = CreateSectorScheme();
             var sectorNode = CreateSectorNode(sectorScheme);
 
@@ -68,8 +67,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var roomGenerator = new RoomGenerator(randomSource);
             var mapFactory = new RoomMapFactory(roomGenerator);
 
-            var botPlayer = CreateBotPlayer();
-            var generator = CreateGenerator(botPlayer, mapFactory);
+            var generator = CreateGenerator(mapFactory);
             var sectorScheme = CreateSectorScheme();
 
             var sectorNode = CreateSectorNode(sectorScheme);
@@ -78,7 +76,7 @@ namespace Zilon.Core.Tests.MapGenerators
             await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
         }
 
-        private static ISectorGenerator CreateGenerator(IBotPlayer botPlayer,
+        private static ISectorGenerator CreateGenerator(
             IMapFactory mapFactory)
         {
             var staticObstaclesGeneratorMock = new Mock<IStaticObstaclesGenerator>();
@@ -113,15 +111,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 monsterGenerator,
                 staticObstaclesGenerator,
                 diseaseGenerator,
-                botPlayer,
                 sectorMaterializationService);
-        }
-
-        private static IBotPlayer CreateBotPlayer()
-        {
-            var botPlayerMock = new Mock<IBotPlayer>();
-            var botPlayer = botPlayerMock.Object;
-            return botPlayer;
         }
 
         private static ISectorSubScheme CreateSectorScheme()

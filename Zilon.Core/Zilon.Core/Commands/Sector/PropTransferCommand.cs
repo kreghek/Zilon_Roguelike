@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
-using Zilon.Core.Tactics;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
@@ -11,12 +11,15 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class PropTransferCommand : SpecialActorCommandBase
     {
+        private readonly IPlayer _player;
+
         [ExcludeFromCodeCoverage]
-        public PropTransferCommand(IGameLoop gameLoop,
-            ISectorManager sectorManager,
+        public PropTransferCommand(
+            IPlayer player,
             ISectorUiState playerState) :
-            base(gameLoop, sectorManager, playerState)
+            base(playerState)
         {
+            _player = player;
         }
 
         public PropTransferMachine TransferMachine { get; set; }
@@ -36,8 +39,10 @@ namespace Zilon.Core.Commands
                 TransferMachine.Container.PropAdded,
                 TransferMachine.Container.PropRemoved);
 
-            var intention = new Intention<TransferPropsTask>(a => new TransferPropsTask(a, new[] { inventoryTransfer, containerTransfer }));
-            PlayerState.TaskSource.Intent(intention);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+
+            var intention = new Intention<TransferPropsTask>(actor => new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer }));
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
     }
 }
