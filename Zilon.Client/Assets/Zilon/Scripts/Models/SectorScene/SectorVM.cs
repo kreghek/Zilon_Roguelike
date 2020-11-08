@@ -415,7 +415,6 @@ public class SectorVM : MonoBehaviour
             actorViewModel.transform.position = actorPosition;
             actorViewModel.Actor = actor;
 
-
             actorViewModel.Selected += EnemyActorVm_OnSelected;
             actorViewModel.MouseEnter += EnemyViewModel_MouseEnter;
             actor.UsedAct += ActorOnUsedAct;
