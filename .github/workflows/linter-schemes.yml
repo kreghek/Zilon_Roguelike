@@ -17,8 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: git pull
-      - run: npm install -g fixjson
-      - name: format schemes
+      - run: npm install fixjson
+      - name: format schemes json files
         run: fixjson --write --indent 2 /Zilon.Client/Assets/Resources/Schemes/**/*.json
         working-directory: ${{env.working-directory}}
       - name: Commit changes
