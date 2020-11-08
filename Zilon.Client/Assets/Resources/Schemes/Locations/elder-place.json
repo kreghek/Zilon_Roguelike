@@ -1,0 +1,31 @@
+{
+	"Name": {
+		"En": "Elder Place",
+		"Ru": "Древний храм"
+	},
+	"SectorLevels": [
+		{
+			"Sid": "intro",
+
+			"IsStart": true,
+			
+			"RegularMonsterSids": ["elder-slave", "dark-guardian"],
+			"RareMonsterSids": ["eternal-executor", "dark-seer"],
+			"ChampionMonsterSids": ["manticore"],
+			
+			"MapGeneratorOptions": {
+			    "MapGenerator": "Room",
+				"RegionCount": 20,
+				"RegionSize": 20,
+			},
+			
+			"RegionMonsterCount": 5,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
+		}
+	]
+}

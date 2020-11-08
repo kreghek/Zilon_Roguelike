@@ -1,0 +1,165 @@
+{
+	"Name": {
+		"En": "Genomass cave",
+		"Ru": "Пещера геномассы"
+	},
+	"SectorLevels": [
+		{
+			"Sid": "intro",
+			"Name":{
+				"En": "Enter",
+				"Ru": "Вход"
+			},
+			"IsStart": true,
+			
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": null,
+			"RegionMonsterCount": 5,
+			
+			"TransSectorSids": [{ "SectorLevelSid": "lvl2"}],
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGeneratorOptions":
+			{
+				"MapGenerator": "CellularAutomaton",
+				"MapWidth": 25,
+				"MapHeight": 25,
+				"ChanceToStartAlive": 30,
+			}
+		},
+		{
+			"Sid": "lvl2",
+			"Name":{
+				"En": "Level 2",
+				"Ru": "Уровень 2"
+			},
+		
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": null,
+			"RegionMonsterCount": 5,
+			
+			"TransSectorSids": [{ "SectorLevelSid": "lvl3"}, { "SectorLevelSid": "lvl4"}, { "SectorLevelSid": "lvl5"}, { "SectorLevelSid": "lvl6"}],
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGeneratorOptions":
+			{
+				"MapGenerator": "CellularAutomaton",
+				"MapWidth": 25,
+				"MapHeight": 25,
+				"ChanceToStartAlive": 45,
+			}
+		},
+		{
+			"Sid": "lvl3",
+			"Name":{
+				"En": "Level 3",
+				"Ru": "Уровень 3"
+			},
+			
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": ["infernal-genomass"],
+			"RegionMonsterCount": 5,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGeneratorOptions":
+			{
+				"MapGenerator": "CellularAutomaton",
+				"MapWidth": 25,
+				"MapHeight": 25,
+				"ChanceToStartAlive": 45,
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
+		},
+		{
+			"Sid": "lvl4",
+			"Name":{
+				"En": "Level 4",
+				"Ru": "Уровень 4"
+			},
+		
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": null,
+			"RegionMonsterCount": 5,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGeneratorOptions":
+			{
+				"MapGenerator": "CellularAutomaton",
+				"MapWidth": 25,
+				"MapHeight": 25,
+				"ChanceToStartAlive": 45,
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
+		},
+		{
+			"Sid": "lvl5",
+			"Name":{
+				"En": "Level 5",
+				"Ru": "Уровень 5"
+			},
+		
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": null,
+			"RegionMonsterCount": 5,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGeneratorOptions":
+			{
+				"MapGenerator": "CellularAutomaton",
+				"MapWidth": 25,
+				"MapHeight": 25,
+				"ChanceToStartAlive": 45,
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
+		},
+		{
+			"Sid": "lvl6",
+			"Name":{
+				"En": "Level 6",
+				"Ru": "Уровень 6"
+			},
+		
+			"RegularMonsterSids": ["genomass", "gemonass-slave"],
+			"RareMonsterSids": null,
+			"ChampionMonsterSids": null,
+			"RegionMonsterCount": 5,
+			
+			"TotalChestCount": 20,
+			"RegionChestCountRatio": 9,
+			"ChestDropTableSids": ["survival", "default"],
+			
+			"MapGeneratorOptions":
+			{
+				"MapGenerator": "CellularAutomaton",
+				"MapWidth": 25,
+				"MapHeight": 25,
+				"ChanceToStartAlive": 45,
+			},
+			
+			"TransSectorSids": [{ "SectorLevelSid": null}]
+		}
+	]
+}
