@@ -1,34 +1,42 @@
 {
-	"Name": {
-		"En": "Infinity",
-		"Ru": "Бесконечное подземелье"
-	},
-	"SectorLevels": [
-		{
-			"Sid": "infinity-dungeon",
-			"Name":{
-				"En": "Infinity",
-				"Ru": "Бесконечное подземелье"
-			},
-			"IsStart": true,
-			
-			"RegularMonsterSids": ["rat", "bat"],
-			"RareMonsterSids": null,
-			"ChampionMonsterSids": ["rat-mutant", "moon-rat"],
-			
-			"MapGeneratorOptions": {
-			    "MapGenerator": "Room",
-				"RegionCount": 10,
-				"RegionSize": 5,
-			},
-			
-			"RegionMonsterCount": 2,
-			
-			"TotalChestCount": 20,
-			"RegionChestCountRatio": 9,
-			"ChestDropTableSids": ["survival", "default"],
-			
-			"TransSectorSids": [{ "SectorLevelSid": null}]
-		}
-	]
+  "Name": {
+    "En": "Infinity",
+    "Ru": "Бесконечное подземелье"
+  },
+  "SectorLevels": [
+    {
+      "Sid": "infinity-dungeon",
+      "Name": {
+        "En": "Infinity",
+        "Ru": "Бесконечное подземелье"
+      },
+      "IsStart": true,
+      "RegularMonsterSids": [
+        "rat",
+        "bat"
+      ],
+      "RareMonsterSids": null,
+      "ChampionMonsterSids": [
+        "rat-mutant",
+        "moon-rat"
+      ],
+      "MapGeneratorOptions": {
+        "MapGenerator": "Room",
+        "RegionCount": 10,
+        "RegionSize": 5
+      },
+      "RegionMonsterCount": 2,
+      "TotalChestCount": 20,
+      "RegionChestCountRatio": 9,
+      "ChestDropTableSids": [
+        "survival",
+        "default"
+      ],
+      "TransSectorSids": [
+        {
+          "SectorLevelSid": null
+        }
+      ]
+    }
+  ]
 }
