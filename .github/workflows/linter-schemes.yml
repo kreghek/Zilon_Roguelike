@@ -17,17 +17,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: git pull
-      - run: dotnet tool install -g dotnet-format
-      - name: format client code
-        run: dotnet-format -f Zilon.Client/Assets/Zilon/Scripts -v d
-        working-directory: ${{env.working-directory}}
-      - name: format core code
-        run: dotnet-format -f Zilon.Core/ -v d
+      - run: npm install -g fixjson
+      - name: format schemes
+        run: fixjson --write --indent 2 /Zilon.Client/Assets/Resources/Schemes/**/*.json
         working-directory: ${{env.working-directory}}
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:
-          message: "[Bot] Automated dotnet-format update"
-          add: "*.cs"
+          message: "[Bot] Automated fixjson update"
+          add: "*.json"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
