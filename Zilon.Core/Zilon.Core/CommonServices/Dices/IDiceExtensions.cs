@@ -65,7 +65,7 @@ namespace Zilon.Core.CommonServices.Dices
                 throw new ArgumentNullException(nameof(dice));
             }
 
-            return dice.Roll(6);
+            return dice.Roll(3);
         }
 
         /// <summary>
