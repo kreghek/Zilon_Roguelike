@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.Localization;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -70,50 +68,6 @@ namespace Zilon.Core.PersonGeneration
             {
                 return GetPlayerPersonTemplates(schemeService);
             }
-        }
-
-        private sealed class PersonTemplate : IPersonTemplateScheme
-        {
-            public ILocalizedString Name { get; set; }
-            public IDropTableScheme HeadEquipments { get; set; }
-            public IDropTableScheme BodyEquipments { get; set; }
-            public IDropTableScheme MainHandEquipments { get; set; }
-            public IDropTableScheme OffHandEquipments { get; set; }
-            public IDropTableScheme InventoryProps { get; set; }
-            public string FractionSid { get; }
-            public string Sid { get; set; }
-            public bool Disabled { get; }
-            public LocalizedStringSubScheme Description { get; }
-            LocalizedStringSubScheme IScheme.Name { get; }
-        }
-
-        private sealed class StartDropTableScheme : IDropTableScheme
-        {
-            public StartDropTableScheme()
-            {
-                Records = Array.Empty<IDropTableRecordSubScheme>();
-            }
-
-            public IDropTableRecordSubScheme[] Records { get; set; }
-            public int Rolls { get => 1; }
-            public string Sid { get; set; }
-            public bool Disabled { get; }
-            public LocalizedStringSubScheme Name { get; }
-            public LocalizedStringSubScheme Description { get; }
-        }
-
-        private sealed class StartDropTableRecordSubScheme : IDropTableRecordSubScheme
-        {
-            public StartDropTableRecordSubScheme()
-            {
-                Weight = 1;
-            }
-
-            public int MaxCount { get; set; }
-            public int MinCount { get; set; }
-            public string SchemeSid { get; set; }
-            public int Weight { get; set; }
-            public IDropTableScheme[] Extra { get; set; }
         }
 
         private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
