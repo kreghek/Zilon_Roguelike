@@ -1,0 +1,91 @@
+{
+  "FractionSid": "troublemakers",
+  "Name": {
+    "Ru": "Смутьян",
+    "En": "Troublemaker"
+  },
+  "BodyEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "quilted-coat",
+        "Weight": 1
+      }
+	  {
+        "SchemeSid": "scholar-robe",
+        "Weight": 1
+      }
+	  {
+        "SchemeSid": "leather-jacket",
+        "Weight": 1
+      }
+	  {
+        "SchemeSid": "master-robe",
+        "Weight": 1
+      }
+	  {
+        "SchemeSid": null,
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "rough-sword",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "tribal-spear",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "knight-sword",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "short-sword",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "battle-axe",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "mace",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "club",
+        "Weight": 1
+      }
+    ]
+  },
+  "OffHandEquipments":{
+	"Records": [
+      {
+        "SchemeSid": "wooden-shield",
+        "Weight": 1
+      },
+	  {
+        "SchemeSid": "short-sword",
+        "Weight": 1
+      },
+	  {
+        "SchemeSid": "short-sword",
+        "Weight": 1
+      },
+	  {
+        "SchemeSid": "mace",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "club",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 1
+      }
+	}
+  }
+}

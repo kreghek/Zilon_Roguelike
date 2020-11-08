@@ -60,15 +60,15 @@ namespace Zilon.Core.PersonGeneration
             }
             else if (fraction == Fractions.MilitiaFraction)
             {
-                return GetMilitiaPersonTemplates();
+                return GetMilitiaPersonTemplates(schemeService);
             }
             else if (fraction == Fractions.TroublemakerFraction)
             {
-                return GetTroublemakerPersonTemplates();
+                return GetTroublemakerPersonTemplates(schemeService);
             }
             else
             {
-                return GetPersonTemplates();
+                return GetPlayerPersonTemplates(schemeService);
             }
         }
 
@@ -119,210 +119,21 @@ namespace Zilon.Core.PersonGeneration
         private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
         {
             return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "interventionists").ToArray();
-            /*return new[] {
-                new PersonTemplate{
-                    Name = new LocalizedString{ Ru = "Легкий интервент", En = "Light Interventionalist" },
-                    BodyEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="quilted-coat", Weight = 1 }
-                        }
-                    },
-                    HeadEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="gas-mask", Weight = 1 }
-                        }
-                    },
-                    MainHandEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="rough-sword", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="tribal-spear", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="knight-sword", Weight = 1 },
-                        }
-                    },
-                },
-                new PersonTemplate{
-                    Name = new LocalizedString{ Ru = "Тяжелый интервент", En = "Heavy Interventionalist" },
-                    BodyEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="steel-armor", Weight = 1 }
-                        }
-                    },
-                    HeadEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="gas-mask", Weight = 1 }
-                        }
-                    },
-                    MainHandEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="rough-sword", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="tribal-spear", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="knight-sword", Weight = 1 },
-                        }
-                    },
-                }
-            };*/
         }
 
-        private static PersonTemplate[] GetTroublemakerPersonTemplates()
+        private static IPersonTemplateScheme[] GetTroublemakerPersonTemplates(ISchemeService schemeService)
         {
-            return new[] {
-                new PersonTemplate{
-                    Name = new LocalizedString{ Ru = "Смутьян", En = "Troblemaker" },
-                    BodyEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="quilted-coat", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="scholar-robe", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="leather-jacket", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="master-robe", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
-                        }
-                    },
-                    MainHandEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="rough-sword", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="tribal-spear", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="knight-sword", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="battle-axe", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="mace", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="club", Weight = 1 },
-                        }
-                    },
-                    OffHandEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="wooden-shield", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="club", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="mace", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
-                        }
-                    },
-                }
-            };
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "troublemakers").ToArray();
         }
 
-        private static PersonTemplate[] GetMilitiaPersonTemplates()
+        private static IPersonTemplateScheme[] GetMilitiaPersonTemplates(ISchemeService schemeService)
         {
-            return new[] {
-                new PersonTemplate{
-                    Name = new LocalizedString{ Ru = "Легкий интервент", En = "Light Interventionalist" },
-                    BodyEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="quilted-coat", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="scholar-robe", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="leather-jacket", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="master-robe", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
-                        }
-                    },
-                    HeadEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="tactical-helmet", Weight = 1 }
-                        }
-                    },
-                    MainHandEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="battle-axe", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="club", Weight = 1 },
-                        }
-                    },
-                    OffHandEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="wooden-shield", Weight = 2 },
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
-                        }
-                    },
-                }
-            };
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "militia").ToArray();
         }
 
-        private static PersonTemplate[] GetPersonTemplates()
+        private static IPersonTemplateScheme[] GetPlayerPersonTemplates(ISchemeService schemeService)
         {
-            return new[] {
-                new PersonTemplate{
-                    Name = new LocalizedString{ Ru = "Горец", En = "Hightlander" },
-                    BodyEquipments = new StartDropTableScheme(),
-                    HeadEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="highlander-helmet", Weight = 1 }
-                        }
-                    },
-                    MainHandEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="battle-axe", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="claw-sword", Weight = 1 },
-                        }
-                    },
-                    OffHandEquipments = new StartDropTableScheme(),
-                    InventoryProps = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="med-kit", MinCount = 1, MaxCount=1 , Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="packed-food", MinCount = 1, MaxCount=1, Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="water-bottle", MinCount = 1, MaxCount=1, Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 4 },
-                        }
-                    }
-                },
-                new PersonTemplate{
-                    Name = new LocalizedString{ Ru = "Самурай", En = "Samurai" },
-                    BodyEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="leather-jacket", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
-                        }
-                    },
-                    HeadEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 }
-                        }
-                    },
-                    MainHandEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="bocken", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="dikatan", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="katana", Weight = 1 },
-                        }
-                    },
-                    OffHandEquipments = new StartDropTableScheme(),
-                    InventoryProps = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="med-kit", MinCount = 1, MaxCount=1 , Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="packed-food", MinCount = 1, MaxCount=1, Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="water-bottle", MinCount = 1, MaxCount=1, Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 4 },
-                        }
-                    }
-                },
-                new PersonTemplate{
-                    Name = new LocalizedString{ Ru = "Гвардеец", En = "Guardian" },
-                    BodyEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="steel-armor", Weight = 2 },
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 },
-                        }
-                    },
-                    HeadEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 1 }
-                        }
-                    },
-                    MainHandEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="short-sword", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid="glaive", Weight = 1 },
-                        }
-                    },
-                    OffHandEquipments = new StartDropTableScheme{
-                        Records = new IDropTableRecordSubScheme[]{
-                            new StartDropTableRecordSubScheme{ SchemeSid="wooden-shield", Weight = 1 },
-                            new StartDropTableRecordSubScheme{ SchemeSid=null, Weight = 2 },
-                        }
-                    },
-                    InventoryProps = new StartDropTableScheme()
-                }
-            };
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "player").ToArray();
         }
     }
 }
