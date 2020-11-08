@@ -29,6 +29,7 @@ namespace Zilon.Core.Schemes
             InitHandler<IPerkScheme, PerkScheme>();
             InitHandler<IMonsterScheme, MonsterScheme>();
             InitHandler<IDropTableModificatorScheme, DropTableModificatorScheme>();
+            InitHandler<IPersonTemplateScheme, PersonTemplateScheme>();
         }
 
         private void InitHandler<TScheme, TSchemeImpl>() where TScheme : class, IScheme

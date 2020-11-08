@@ -1,0 +1,71 @@
+{
+  "FractionSid": "militia",
+  "Name": {
+    "Ru": "Ополченец",
+    "En": "Militia"
+  },
+  "BodyEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "quilted-coat",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "scholar-robe",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "leather-jacket",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "master-robe",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 1
+      }
+    ]
+  },
+  "HeadEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "tactical-helmet",
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "short-sword",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "battle-axe",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "mace",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "club",
+        "Weight": 1
+      }
+    ]
+  },
+  "OffHandEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "wooden-shield",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 1
+      }
+    ]
+  }
+}

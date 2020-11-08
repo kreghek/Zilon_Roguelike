@@ -1,0 +1,39 @@
+{
+  "FractionSid": "interventionists",
+  "Name": {
+    "Ru": "Легкий интервент",
+    "En": "Light Interventionist"
+  },
+  "BodyEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "quilted-coat",
+        "Weight": 1
+      }
+    ]
+  },
+  "HeadEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "gas-mask",
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "rough-sword",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "tribal-spear",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "knight-sword",
+        "Weight": 1
+      }
+    ]
+  }
+}

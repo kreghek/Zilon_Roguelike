@@ -1,7 +1,7 @@
 {
   "Name": {
     "Ru": "Огненный шар",
-    "En":  "Fireball"
+    "En": "Fireball"
   },
   "Stats": {
     "Efficient": {
@@ -12,13 +12,13 @@
       "Min": 1,
       "Max": 5
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
       "Type": "Concentrated",
       "Impact": "Termal",
-	  "ApRank": 1
+      "ApRank": 1
     }
   },
   "Constrains": {

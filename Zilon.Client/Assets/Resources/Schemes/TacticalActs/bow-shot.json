@@ -1,7 +1,7 @@
 {
   "Name": {
     "Ru": "Выстрел",
-	"En": "Shot"
+    "En": "Shot"
   },
   "Stats": {
     "Efficient": {
@@ -12,13 +12,13 @@
       "Min": 1,
       "Max": 5
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
       "Type": "Tactical",
-      "Impact":  "Kinetic",
-	  "ApRank": 1
+      "Impact": "Kinetic",
+      "ApRank": 1
     }
   },
   "Constrains": {

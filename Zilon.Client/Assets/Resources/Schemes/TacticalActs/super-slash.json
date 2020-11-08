@@ -1,7 +1,7 @@
 {
   "Name": {
     "Ru": "Супер Рубящий удар",
-	"En": "Super Slash"
+    "En": "Super Slash"
   },
   "Stats": {
     "Efficient": {
@@ -12,17 +12,16 @@
       "Min": 1,
       "Max": 1
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
       "Type": "Tactical",
-      "Impact":  "Kinetic",
-	  "ApRank": 2
+      "Impact": "Kinetic",
+      "ApRank": 2
     }
   },
-  "Constrains":
-  {
+  "Constrains": {
     "Cooldown": 30
   }
 }

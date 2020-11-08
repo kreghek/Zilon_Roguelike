@@ -22,13 +22,13 @@
   },
   "DropTableSids": [
     "survival",
-	"champion-loot",
-	"default",
-	"default-evil-hour"
+    "champion-loot",
+    "default",
+    "default-evil-hour"
   ],
   "BaseScore": 75,
   "Tags": [
     "undead",
-	"rare"
+    "rare"
   ]
 }
