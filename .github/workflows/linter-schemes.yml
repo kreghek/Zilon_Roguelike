@@ -17,7 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: git pull
-      - run: npm install fixjson
+      # to fix error with permissions
+      # source: https://github.com/actions/virtual-environments/issues/599#issuecomment-605558600
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: npm install -g fixjson
       - name: format schemes json files
         run: fixjson --write --indent 2 /Zilon.Client/Assets/Resources/Schemes/**/*.json
         working-directory: ${{env.working-directory}}
