@@ -24,8 +24,7 @@ jobs:
           node-version: '12.x'
       - run: npm install -g fixjson
       - name: format schemes json files
-        run: fixjson --write --indent 2 /Zilon.Client/Assets/Resources/Schemes/**/*.json
-        working-directory: ${{env.working-directory}}
+        run: fixjson --write --indent 2 /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes/**/*.json
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:
