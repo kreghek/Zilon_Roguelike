@@ -1,22 +1,22 @@
 {
   "Name": {
     "Ru": "Боевые догмы",
-	"En": "Battle Dogmas"
+    "En": "Battle Dogmas"
   },
-  "Levels":[
+  "Levels": [
     {
-	  "Rules": [
-	    {
-		  "Type": "Damage",
-		  "Level": "Lesser"
-		}
-	  ],
-	  "Jobs": [
-	    {
-		  "Type": "Defeats",
-		  "Value": 50
-		}
-	  ]
-	}
+      "Rules": [
+        {
+          "Type": "Damage",
+          "Level": "Lesser"
+        }
+      ],
+      "Jobs": [
+        {
+          "Type": "Defeats",
+          "Value": 50
+        }
+      ]
+    }
   ]
 }

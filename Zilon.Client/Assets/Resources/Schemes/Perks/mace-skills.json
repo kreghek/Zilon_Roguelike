@@ -1,49 +1,49 @@
 {
   "Name": {
     "Ru": "Навыки владения булавами",
-	"En": "Mace Skills"
+    "En": "Mace Skills"
   },
-  "Levels":[
+  "Levels": [
     {
-	  "Rules": [
-	    {
-			"Type": "ToHit",
-			"Level": "Lesser",
-			"Params": "{\"WeaponTags\":[\"mace\"]}"
-		}
-	  ],
-	  "Jobs": [
-	    {
-		  "Type": "AttacksActor",
-		  "Value": 30,
-		  "Data":[
-			"{\"WeaponTags\":[\"mace\"]}"
-		  ]
-		}
-	  ]
-	},
-	{
-	  "Rules": [
-	    {
-			"Type": "Damage",
-			"Level": "Lesser",
-			"Params": "{\"WeaponTags\":[\"mace\"]}"
-		},
-		 {
-			"Type": "ToHit",
-			"Level": "Lesser",
-			"Params": "{\"WeaponTags\":[\"mace\"]}"
-		}
-	  ],
-	  "Jobs": [
-	    {
-		  "Type": "AttacksActor",
-		  "Value": 100,
-		  "Data":[
-			"{\"WeaponTags\":[\"mace\"]}"
-		  ]
-		}
-	  ]
-	}
+      "Rules": [
+        {
+          "Type": "ToHit",
+          "Level": "Lesser",
+          "Params": "{\"WeaponTags\":[\"mace\"]}"
+        }
+      ],
+      "Jobs": [
+        {
+          "Type": "AttacksActor",
+          "Value": 30,
+          "Data": [
+            "{\"WeaponTags\":[\"mace\"]}"
+          ]
+        }
+      ]
+    },
+    {
+      "Rules": [
+        {
+          "Type": "Damage",
+          "Level": "Lesser",
+          "Params": "{\"WeaponTags\":[\"mace\"]}"
+        },
+        {
+          "Type": "ToHit",
+          "Level": "Lesser",
+          "Params": "{\"WeaponTags\":[\"mace\"]}"
+        }
+      ],
+      "Jobs": [
+        {
+          "Type": "AttacksActor",
+          "Value": 100,
+          "Data": [
+            "{\"WeaponTags\":[\"mace\"]}"
+          ]
+        }
+      ]
+    }
   ]
 }

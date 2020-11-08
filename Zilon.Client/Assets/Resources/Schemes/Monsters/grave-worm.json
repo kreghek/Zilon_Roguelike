@@ -22,8 +22,8 @@
   },
   "DropTableSids": [
     "survival",
-	"default",
-	"default-evil-hour"
+    "default",
+    "default-evil-hour"
   ],
   "BaseScore": 30,
   "Tags": [

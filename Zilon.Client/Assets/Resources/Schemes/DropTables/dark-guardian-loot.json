@@ -1,15 +1,15 @@
 {
   "Rolls": 1,
   "Records": [
-	{
+    {
       "SchemeSid": "highlander-helmet",
       "Weight": 5
     },
-	{
+    {
       "SchemeSid": "wooden-shield",
       "Weight": 10
     },
-	{
+    {
       "SchemeSid": null,
       "Weight": 95
     }

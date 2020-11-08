@@ -1,50 +1,50 @@
 {
   "Name": {
     "Ru": "Здоровье",
-	"En": "Vitality"
+    "En": "Vitality"
   },
-  "Levels":[
+  "Levels": [
     {
-	  "Rules": [
-	    {
-		  "Type": "Health",
-		  "Level": "Lesser"
-		}
-	  ],
-	  "Jobs": [
-	    {
-		  "Type": "ConsumeProviant",
-		  "Value": 5
-		}
-	  ]
-	},
-	{
-	  "Rules": [
-	    {
-		  "Type": "Health",
-		  "Level": "Lesser"
-		}
-	  ],
-	  "Jobs": [
-	    {
-		  "Type": "ConsumeProviant",
-		  "Value": 5
-		}
-	  ]
-	},
-	{
-	  "Rules": [
-	    {
-		  "Type": "Health",
-		  "Level": "Lesser"
-		}
-	  ],
-	  "Jobs": [
-	    {
-		  "Type": "ConsumeProviant",
-		  "Value": 5
-		}
-	  ]
-	}
+      "Rules": [
+        {
+          "Type": "Health",
+          "Level": "Lesser"
+        }
+      ],
+      "Jobs": [
+        {
+          "Type": "ConsumeProviant",
+          "Value": 5
+        }
+      ]
+    },
+    {
+      "Rules": [
+        {
+          "Type": "Health",
+          "Level": "Lesser"
+        }
+      ],
+      "Jobs": [
+        {
+          "Type": "ConsumeProviant",
+          "Value": 5
+        }
+      ]
+    },
+    {
+      "Rules": [
+        {
+          "Type": "Health",
+          "Level": "Lesser"
+        }
+      ],
+      "Jobs": [
+        {
+          "Type": "ConsumeProviant",
+          "Value": 5
+        }
+      ]
+    }
   ]
 }
