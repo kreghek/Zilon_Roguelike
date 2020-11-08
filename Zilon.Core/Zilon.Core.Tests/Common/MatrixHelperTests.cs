@@ -30,10 +30,10 @@ namespace Zilon.Core.Tests.Common
             };
 
             // ACT
-            var fact = MatrixHelper.RotateClockwise(source);
+            var fact = MatrixHelper.RotateClockwise(new Matrix<int>(source, 3, 3));
 
             // ASSERT
-            fact.Should().BeEquivalentTo(expected);
+            fact.Items.Should().BeEquivalentTo(expected);
         }
     }
 }
