@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Schemes
 {
-    public interface IPersonTemplateScheme: IScheme
+    public interface IPersonTemplateScheme : IScheme
     {
         string FractionSid { get; }
         IDropTableScheme HeadEquipments { get; }

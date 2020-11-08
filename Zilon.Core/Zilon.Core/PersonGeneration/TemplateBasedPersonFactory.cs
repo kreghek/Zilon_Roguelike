@@ -72,7 +72,7 @@ namespace Zilon.Core.PersonGeneration
             }
         }
 
-        private sealed class PersonTemplate: IPersonTemplateScheme
+        private sealed class PersonTemplate : IPersonTemplateScheme
         {
             public ILocalizedString Name { get; set; }
             public IDropTableScheme HeadEquipments { get; set; }
