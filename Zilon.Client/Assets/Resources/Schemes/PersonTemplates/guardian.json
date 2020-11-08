@@ -6,19 +6,19 @@
   },
   "BodyEquipments": {
     "Records": [
-	  {
+      {
         "SchemeSid": "steel-armor",
         "Weight": 2
       },
-	  {
+      {
         "SchemeSid": "leather-jacket",
         "Weight": 2
       },
-	  {
+      {
         "SchemeSid": "quilted-coat",
         "Weight": 2
       },
-	  {
+      {
         "SchemeSid": null,
         "Weight": 1
       }
@@ -41,16 +41,15 @@
       {
         "SchemeSid": "club",
         "Weight": 1
-      }
-	  ,
+      },
       {
         "SchemeSid": "glaive",
         "Weight": 1
       }
     ]
   },
-  "OffHandEquipments":{
-	"Records": [
+  "OffHandEquipments": {
+    "Records": [
       {
         "SchemeSid": "wooden-shield",
         "Weight": 2
@@ -59,32 +58,32 @@
         "SchemeSid": null,
         "Weight": 1
       }
-	  ]
-	}
+    ]
+  },
   "InventoryProps": {
-	  "Records": [
-		{
-			"SchemeSid": "med-kit",
-			"MinCount": 1,
-			"MaxCount": 1,
-			"Weight": 1
-		},
-		{
-			"SchemeSid": "packed-food",
-			"MinCount": 1,
-			"MaxCount": 1,
-			"Weight": 1
-		},
-		{
-			"SchemeSid": "water-bottle",
-			"MinCount": 1,
-			"MaxCount": 1,
-			"Weight": 1
-		},
-		{
-			"SchemeSid": null,
-			"Weight": 4
-		},
-	  ]
-	}
+    "Records": [
+      {
+        "SchemeSid": "med-kit",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "packed-food",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "water-bottle",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 4
+      }
+    ]
+  }
 }
