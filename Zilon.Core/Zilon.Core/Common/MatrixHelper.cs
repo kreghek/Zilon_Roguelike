@@ -18,17 +18,14 @@
                 throw new System.ArgumentNullException(nameof(sourceMatrix));
             }
 
-            var n = sourceMatrix.GetUpperBound(0) - sourceMatrix.GetLowerBound(0) + 1;
-            var m = sourceMatrix.GetUpperBound(1) - sourceMatrix.GetLowerBound(1) + 1;
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-            // Отключаем это предупреждение, потому что на выходе нужен такой массив.
-            // Кроме того, матрица не может быть jagged.
-            T[,] ret = new T[m, n];
-#pragma warning restore CA1814 // Prefer jagged arrays over multidimensional
+            var n = sourceMatrix.Width;
+            var m = sourceMatrix.Height;
 
-            for (int i = 0; i < m; i++)
+            var ret = new Matrix<T>(m, n);
+
+            for (var i = 0; i < m; i++)
             {
-                for (int j = 0; j < n; j++)
+                for (var j = 0; j < n; j++)
                 {
                     ret[i, j] = sourceMatrix[n - j - 1, i];
                 }
