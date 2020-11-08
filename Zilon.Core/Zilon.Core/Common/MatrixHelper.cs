@@ -11,7 +11,7 @@
         /// <typeparam name="T"> Тип элементов массива. </typeparam>
         /// <param name="sourceMatrix"> Исходная матрица. </param>
         /// <returns> Возращает повёрнутую матрицу. </returns>
-        public static T[,] RotateClockwise<T>(T[,] sourceMatrix)
+        public static Matrix<T> RotateClockwise<T>(Matrix<T> sourceMatrix)
         {
             if (sourceMatrix is null)
             {
@@ -44,7 +44,7 @@
         /// <param name="sourceMatrix"> Исходная матрица. </param>
         /// <param name="rotation"> Угол поворота. </param>
         /// <returns> Возращает повёрнутую матрицу. </returns>
-        public static T[,] Rotate<T>(T[,] sourceMatrix, MatrixRotation rotation)
+        public static Matrix<T> Rotate<T>(Matrix<T> sourceMatrix, MatrixRotation rotation)
         {
             var resultMatrix = sourceMatrix;
             for (var i = 0; i < (int)rotation; i++)
