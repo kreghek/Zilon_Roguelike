@@ -207,8 +207,6 @@ namespace Zilon.Core.Specs.Contexts
 
         public IActor GetMonsterById(int id)
         {
-            var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
-
             var sector = GetCurrentGlobeFirstSector();
 
             var actorManager = sector.ActorManager;
