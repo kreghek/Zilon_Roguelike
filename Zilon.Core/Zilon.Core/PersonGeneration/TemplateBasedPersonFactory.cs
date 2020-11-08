@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Localization;
@@ -24,7 +25,7 @@ namespace Zilon.Core.PersonGeneration
 
         protected override void RollStartEquipment(IInventoryModule inventory, HumanPerson person)
         {
-            var templates = GetPersonTemplateByFraction(person.Fraction);
+            var templates = GetPersonTemplateByFraction(person.Fraction, SchemeService);
             var rolledTemplate = Dice.RollFromList(templates);
 
             person.PersonEquipmentTemplate = rolledTemplate.Name;
@@ -51,11 +52,11 @@ namespace Zilon.Core.PersonGeneration
             AddDefaultProps(inventory);
         }
 
-        private static PersonTemplate[] GetPersonTemplateByFraction(IFraction fraction)
+        private static IPersonTemplateScheme[] GetPersonTemplateByFraction(IFraction fraction, ISchemeService schemeService)
         {
             if (fraction == Fractions.InterventionistFraction)
             {
-                return GetInterventionalistsPersonTemplates();
+                return GetInterventionalistsPersonTemplates(schemeService);
             }
             else if (fraction == Fractions.MilitiaFraction)
             {
@@ -71,7 +72,7 @@ namespace Zilon.Core.PersonGeneration
             }
         }
 
-        private sealed class PersonTemplate
+        private sealed class PersonTemplate: IPersonTemplateScheme
         {
             public ILocalizedString Name { get; set; }
             public IDropTableScheme HeadEquipments { get; set; }
@@ -79,6 +80,11 @@ namespace Zilon.Core.PersonGeneration
             public IDropTableScheme MainHandEquipments { get; set; }
             public IDropTableScheme OffHandEquipments { get; set; }
             public IDropTableScheme InventoryProps { get; set; }
+            public string FractionSid { get; }
+            public string Sid { get; set; }
+            public bool Disabled { get; }
+            public LocalizedStringSubScheme Description { get; }
+            LocalizedStringSubScheme IScheme.Name { get; }
         }
 
         private sealed class StartDropTableScheme : IDropTableScheme
@@ -110,9 +116,10 @@ namespace Zilon.Core.PersonGeneration
             public IDropTableScheme[] Extra { get; set; }
         }
 
-        private static PersonTemplate[] GetInterventionalistsPersonTemplates()
+        private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
         {
-            return new[] {
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "interventionists").ToArray();
+            /*return new[] {
                 new PersonTemplate{
                     Name = new LocalizedString{ Ru = "Легкий интервент", En = "Light Interventionalist" },
                     BodyEquipments = new StartDropTableScheme{
@@ -153,7 +160,7 @@ namespace Zilon.Core.PersonGeneration
                         }
                     },
                 }
-            };
+            };*/
         }
 
         private static PersonTemplate[] GetTroublemakerPersonTemplates()

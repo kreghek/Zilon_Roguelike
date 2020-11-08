@@ -4,6 +4,6 @@
     {
         Undefined = 0,
         Neutral,
-        Enemy
+        Enmity
     }
 }
