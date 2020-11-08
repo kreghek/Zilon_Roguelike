@@ -59,6 +59,7 @@
         "SchemeSid": null,
         "Weight": 1
       }
+	  ]
 	}
   "InventoryProps": {
 	  "Records": [
@@ -85,5 +86,5 @@
 			"Weight": 4
 		},
 	  ]
-  }
+	}
 }
