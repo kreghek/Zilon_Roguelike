@@ -9,7 +9,7 @@ using Zilon.Core.CommonServices.Dices;
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     interface IMapRule
-    { 
+    {
         /// <summary>
         /// Name for debug
         /// </summary>
