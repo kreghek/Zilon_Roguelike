@@ -18,10 +18,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _dice = dice;
         }
 
-        public IEnumerable<RegionDraft> Generate(int matrixWidth, int matrixHeight, int fillProbability = 40, int totalIterations = 7)
+        public IEnumerable<RegionDraft> Generate(ref Matrix<bool> matrix, int fillProbability = 40, int totalIterations = 7)
         {
-            var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
-
             InitStartAliveMatrix(matrix, fillProbability);
 
             matrix = SimulateCellularAutomaton(matrix, totalIterations);
@@ -31,6 +29,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var matrixWithMargins = resizedMatrix.CreateMatrixWithMargins(2, 2);
 
             var draftRegions = RegionFinder.FindPassableRegionsFor(matrixWithMargins).ToArray();
+
+            matrix = matrixWithMargins;
 
             return draftRegions;
         }

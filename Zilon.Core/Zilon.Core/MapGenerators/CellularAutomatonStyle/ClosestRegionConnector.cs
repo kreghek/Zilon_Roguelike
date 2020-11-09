@@ -7,7 +7,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     class ClosestRegionConnector
     {
-        public static void Connect(Matrix<bool> matrix, IEnumerable<RegionDraft> regions)
+        public void Connect(Matrix<bool> matrix, IEnumerable<RegionDraft> regions)
         {
             // Соединяем все регионы в единый граф.
             var openRegions = new List<RegionDraft>(regions);
