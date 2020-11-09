@@ -1,0 +1,141 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Common;
+using Zilon.Core.CommonServices.Dices;
+
+namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
+{
+    class CellularAutomatonGenerator
+    {
+        private const int DEATH_LIMIT = 4;
+        private const int BIRTH_LIMIT = 6;
+
+        private readonly IDice _dice;
+
+        public CellularAutomatonGenerator(IDice dice)
+        {
+            _dice = dice;
+        }
+
+        public IEnumerable<RegionDraft> Generate(int matrixWidth, int matrixHeight, int fillProbability = 40, int totalIterations = 7)
+        {
+            var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
+
+            InitStartAliveMatrix(matrix, fillProbability);
+
+            matrix = SimulateCellularAutomaton(matrix, totalIterations);
+
+            var resizedMatrix = MapFactoryHelper.ResizeMatrixTo7(matrix);
+
+            var matrixWithMargins = resizedMatrix.CreateMatrixWithMargins(2, 2);
+
+            var draftRegions = RegionFinder.FindPassableRegionsFor(matrixWithMargins).ToArray();
+
+            return draftRegions;
+        }
+
+        private void InitStartAliveMatrix(Matrix<bool> matrix, int chanceToStartAlive)
+        {
+            for (var x = 0; x < matrix.Width; x++)
+            {
+                for (var y = 0; y < matrix.Height; y++)
+                {
+                    var blockRoll = _dice.Roll(100);
+                    if (blockRoll < chanceToStartAlive)
+                    {
+                        matrix.Items[x, y] = true;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Simulate live during <see cref="totalIterations"/>.
+        /// </summary>
+        private static Matrix<bool> SimulateCellularAutomaton(Matrix<bool> matrix, int totalIterations)
+        {
+            for (var i = 0; i < totalIterations; i++)
+            {
+                var newMap = DoSimulationStep(matrix);
+                matrix = new Matrix<bool>(newMap.Items, matrix.Width, matrix.Height);
+            }
+
+            return matrix;
+        }
+
+        private static Matrix<bool> DoSimulationStep(Matrix<bool> matrix)
+        {
+            var newCellMap = new Matrix<bool>(matrix.Width, matrix.Height);
+
+            for (var x = 0; x < matrix.Width; x++)
+            {
+                for (var y = 0; y < matrix.Height; y++)
+                {
+                    //TODO Use cutoffBigAreaFill
+                    // https://github.com/Chris3606/GoRogue/blob/8bf7beba7beb4e0fcf2972880ad6bd733827f8ad/GoRogue/MapGeneration/Generators/CellularAutomataAreaGenerator.cs#L48
+                    // There is implementation that use this parametr.
+                    // Try to adapt cutoffBigAreaFill for hex.
+                    var aliveCount = CountAliveNeighbours(matrix, x, y);
+
+                    if (matrix.Items[x, y])
+                    {
+                        if (aliveCount < DEATH_LIMIT)
+                        {
+                            newCellMap[x, y] = false;
+                        }
+                        else
+                        {
+                            newCellMap[x, y] = true;
+                        }
+                    } //Otherwise, if the cell is dead now, check if it has the right number of neighbours to be 'born'
+                    else
+                    {
+                        if (aliveCount > BIRTH_LIMIT)
+                        {
+                            newCellMap[x, y] = true;
+                        }
+                        else
+                        {
+                            newCellMap[x, y] = false;
+                        }
+                    }
+                }
+            }
+
+            return newCellMap;
+        }
+
+        private static int CountAliveNeighbours(Matrix<bool> matrix, int x, int y)
+        {
+            var aliveCount = 0;
+
+            var cubeCoords = HexHelper.ConvertToCube(x, y);
+            var offsetsImplicit = HexHelper.GetOffsetClockwise();
+            var offsetsDiagonal = HexHelper.GetDiagonalOffsetClockwise();
+            var offsets = offsetsImplicit.Union(offsetsDiagonal);
+            foreach (var offset in offsets)
+            {
+                var neighbour = cubeCoords + offset;
+
+                var offsetCoords = HexHelper.ConvertToOffset(neighbour);
+
+                var nX = offsetCoords.X;
+                var nY = offsetCoords.Y;
+
+                // Границу мертвым живым соседом.
+                // Сделано, чтобы углы не заполнялись.
+
+                if (nX >= 0 && nY >= 0 && nX < matrix.Width && nY < matrix.Height)
+                {
+                    if (matrix.Items[nX, nY])
+                    {
+                        aliveCount++;
+                    }
+                }
+            }
+
+            return aliveCount;
+        }
+    }
+}
