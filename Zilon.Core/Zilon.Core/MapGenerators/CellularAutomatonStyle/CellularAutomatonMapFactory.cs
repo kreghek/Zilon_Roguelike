@@ -48,7 +48,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var matrixWidth = cellularAutomatonOptions.MapWidth;
             var matrixHeight = cellularAutomatonOptions.MapHeight;
 
-            var chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
+            var fillProbability = cellularAutomatonOptions.ChanceToStartAlive;
 
             var cellularAutomatonGenerator = new CellularAutomatonGenerator(_dice);
             var connector = new ClosestRegionConnector();
@@ -65,7 +65,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             {
                 var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
 
-                var regions = cellularAutomatonGenerator.Generate(ref matrix, chanceToStartAlive);
+                var regions = cellularAutomatonGenerator.Generate(ref matrix, fillProbability);
 
                 try
                 {

@@ -35,14 +35,14 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return draftRegions;
         }
 
-        private void InitStartAliveMatrix(Matrix<bool> matrix, int chanceToStartAlive)
+        private void InitStartAliveMatrix(Matrix<bool> matrix, int fillProbability)
         {
             for (var x = 0; x < matrix.Width; x++)
             {
                 for (var y = 0; y < matrix.Height; y++)
                 {
                     var blockRoll = _dice.Roll(100);
-                    if (blockRoll < chanceToStartAlive)
+                    if (blockRoll < fillProbability)
                     {
                         matrix.Items[x, y] = true;
                     }
