@@ -59,7 +59,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var regionPostProcessors = new IRegionPostProcessor[]
             {
-                new Size7MapPostProcessor(mapRuleManager),
                 new SplitToTargetCountRegionPostProcessor(mapRuleManager, _dice)
             };
 
