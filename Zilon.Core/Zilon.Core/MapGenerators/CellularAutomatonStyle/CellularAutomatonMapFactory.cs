@@ -57,7 +57,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var rule = new RegionCountRule() { Count = transitions.Count() + 1 };
             mapRuleManager.AddRule(rule);
 
-            var regionPostProcessors = new IRegionPostProcessor[] 
+            var regionPostProcessors = new IRegionPostProcessor[]
             {
                 new Size7MapPostProcessor(mapRuleManager),
                 new SplitToTargetCountRegionPostProcessor(mapRuleManager, _dice)

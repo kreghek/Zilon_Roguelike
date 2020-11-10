@@ -47,7 +47,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         }
     }
 
-    class SplitToTargetCountRegionPostProcessor: IRegionPostProcessor
+    class SplitToTargetCountRegionPostProcessor : IRegionPostProcessor
     {
         private readonly IMapRuleManager _mapRuleManager;
         private readonly IDice _dice;
