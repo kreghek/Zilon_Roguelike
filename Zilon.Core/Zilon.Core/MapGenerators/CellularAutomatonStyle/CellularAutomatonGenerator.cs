@@ -80,25 +80,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                     if (matrix.Items[x, y])
                     {
-                        if (aliveCount < DEATH_LIMIT)
-                        {
-                            newCellMap[x, y] = false;
-                        }
-                        else
-                        {
-                            newCellMap[x, y] = true;
-                        }
-                    } //Otherwise, if the cell is dead now, check if it has the right number of neighbours to be 'born'
+                        newCellMap[x, y] = aliveCount >= DEATH_LIMIT;
+                    }
                     else
                     {
-                        if (aliveCount > BIRTH_LIMIT)
-                        {
-                            newCellMap[x, y] = true;
-                        }
-                        else
-                        {
-                            newCellMap[x, y] = false;
-                        }
+                        //Otherwise, if the cell is dead now, check if it has the right number of neighbours to be 'born'
+                        newCellMap[x, y] = aliveCount > BIRTH_LIMIT;
                     }
                 }
             }
@@ -126,12 +113,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Границу мертвым живым соседом.
                 // Сделано, чтобы углы не заполнялись.
 
-                if (nX >= 0 && nY >= 0 && nX < matrix.Width && nY < matrix.Height)
+                if (nX >= 0 && nY >= 0 && nX < matrix.Width && nY < matrix.Height && matrix.Items[nX, nY])
                 {
-                    if (matrix.Items[nX, nY])
-                    {
-                        aliveCount++;
-                    }
+                    aliveCount++;
                 }
             }
 
