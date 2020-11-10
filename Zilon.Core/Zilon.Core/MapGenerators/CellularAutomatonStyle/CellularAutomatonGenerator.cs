@@ -18,7 +18,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _dice = dice;
         }
 
-        public IEnumerable<RegionDraft> Generate(ref Matrix<bool> matrix, int fillProbability = 40, int totalIterations = 7)
+        public IEnumerable<RegionDraft> Generate(ref Matrix<bool> matrix, int fillProbability, int totalIterations)
         {
             InitStartAliveMatrix(matrix, fillProbability);
 
@@ -72,10 +72,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             {
                 for (var y = 0; y < matrix.Height; y++)
                 {
-                    //TODO Use cutoffBigAreaFill
-                    // https://github.com/Chris3606/GoRogue/blob/8bf7beba7beb4e0fcf2972880ad6bd733827f8ad/GoRogue/MapGeneration/Generators/CellularAutomataAreaGenerator.cs#L48
-                    // There is implementation that use this parametr.
-                    // Try to adapt cutoffBigAreaFill for hex.
                     var aliveCount = CountAliveNeighbours(matrix, x, y);
 
                     if (matrix.Items[x, y])
