@@ -57,9 +57,11 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var rule = new RegionCountRule() { Count = transitions.Count() + 1 };
             mapRuleManager.AddRule(rule);
 
-            var preprocessors = new SplitToTargetCountRegionPostProcessor[] {
-                    new SplitToTargetCountRegionPostProcessor(mapRuleManager, _dice)
-                };
+            var regionPostProcessors = new IRegionPostProcessor[] 
+            {
+                new Size7MapPostProcessor(mapRuleManager),
+                new SplitToTargetCountRegionPostProcessor(mapRuleManager, _dice)
+            };
 
             for (var retryIndex = 0; retryIndex < RETRY_MAX_COUNT; retryIndex++)
             {
@@ -69,9 +71,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                 try
                 {
-                    foreach (var preprocessor in preprocessors)
+                    foreach (var postProcessor in regionPostProcessors)
                     {
-                        regions = preprocessor.Process(regions);
+                        regions = postProcessor.Process(regions);
                     }
 
                     connector.Connect(matrix, regions);
