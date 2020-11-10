@@ -54,7 +54,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var connector = new ClosestRegionConnector();
 
             var mapRuleManager = new MapRuleManager();
-            var rule = new RegionCountRule() { Count = transitions.Count() + 1 };
+            var rule = new RegionCountRule { Count = transitions.Count() + 1 };
             mapRuleManager.AddRule(rule);
 
             var regionPostProcessors = new IRegionPostProcessor[]
