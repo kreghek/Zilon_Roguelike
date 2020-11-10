@@ -8,45 +8,6 @@ using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
-    interface IMapRule
-    {
-        /// <summary>
-        /// Name for debug
-        /// </summary>
-        string Name { get; }
-
-        string Description { get; }
-    }
-
-    class RegionCountRule : IRegionMinCountRule
-    {
-        public int Count { get; set; }
-        public string Name { get => "Minimum region count rule"; }
-        public string Description { get => "Rule allow to create map with regions to set each transition from map to other map in separated regions."; }
-    }
-
-    interface IMapRuleManager
-    {
-        T GetRuleOrNull<T>() where T : IMapRule;
-
-        void AddRule<T>(T rule) where T : IMapRule;
-    }
-
-    class MapRuleManager : IMapRuleManager
-    {
-        private readonly List<IMapRule> _list = new List<IMapRule>();
-
-        public void AddRule<T>(T rule) where T : IMapRule
-        {
-            _list.Add(rule);
-        }
-
-        public T GetRuleOrNull<T>() where T : IMapRule
-        {
-            return _list.OfType<T>().SingleOrDefault();
-        }
-    }
-
     class SplitToTargetCountRegionPostProcessor : IRegionPostProcessor
     {
         private readonly IMapRuleManager _mapRuleManager;
