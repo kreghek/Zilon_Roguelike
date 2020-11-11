@@ -66,7 +66,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             {
                 var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
 
-                var regions = cellularAutomatonGenerator.Generate(ref matrix, fillProbability);
+                var regions = cellularAutomatonGenerator.Generate(ref matrix, fillProbability, totalIterations: 7);
 
                 try
                 {
