@@ -51,7 +51,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var fillProbability = cellularAutomatonOptions.ChanceToStartAlive;
 
             var cellularAutomatonGenerator = new CellularAutomatonGenerator(_dice);
-            var connector = new ClosestRegionConnector();
 
             var mapRuleManager = new MapRuleManager();
             var rule = new RegionCountRule { Count = transitions.Count() + 1 };

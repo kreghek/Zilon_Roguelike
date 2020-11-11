@@ -8,7 +8,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// <summary>
     /// Connect closest map regions each with other.
     /// </summary>
-    class ClosestRegionConnector
+    static class ClosestRegionConnector
     {
         public static void Connect(Matrix<bool> matrix, IEnumerable<RegionDraft> regions)
         {
