@@ -6,6 +6,11 @@ using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
+    interface IMapPostProcessor
+    {
+        Matrix<bool> Process(Matrix<bool> matrix);
+    }
+
     class CellularAutomatonGenerator
     {
         private const int DEATH_LIMIT = 4;

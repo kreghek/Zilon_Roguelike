@@ -70,10 +70,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                 try
                 {
-                    foreach (var postProcessor in regionPostProcessors)
-                    {
-                        regions = postProcessor.Process(regions);
-                    }
+                    regions = PostProcess(regionPostProcessors, regions);
 
                     connector.Connect(matrix, regions);
 
@@ -91,6 +88,18 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             // If the cycle has ended, then no attempt has ended with a successful map building
             throw new InvalidOperationException("Failed to create a map within the maximum number of attempts.");
+        }
+
+        private static IEnumerable<RegionDraft> PostProcess(
+            IEnumerable<IRegionPostProcessor> regionPostProcessors,
+            IEnumerable<RegionDraft> regions)
+        {
+            foreach (var processor in regionPostProcessors)
+            {
+                regions = processor.Process(regions);
+            }
+
+            return regions;
         }
 
         private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
