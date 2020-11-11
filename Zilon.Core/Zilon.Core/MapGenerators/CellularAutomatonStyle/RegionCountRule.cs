@@ -1,5 +1,8 @@
 ﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
+    /// <summary>
+    /// Base implemenetation on min region count rule.
+    /// </summary>
     class RegionCountRule : IRegionMinCountRule
     {
         public int Count { get; set; }

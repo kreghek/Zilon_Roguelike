@@ -1,5 +1,8 @@
 ﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
+    /// <summary>
+    /// Map restriction. For example, min region count.
+    /// </summary>
     interface IMapRule
     {
         /// <summary>
@@ -7,6 +10,9 @@
         /// </summary>
         string Name { get; }
 
+        /// <summary>
+        /// Description for debugging.
+        /// </summary>
         string Description { get; }
     }
 }

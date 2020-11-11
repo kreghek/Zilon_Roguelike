@@ -6,6 +6,9 @@ using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
+    /// <summary>
+    /// Generate map using cellular automaton algorithm.
+    /// </summary>
     class CellularAutomatonGenerator
     {
         private const int DEATH_LIMIT = 4;
@@ -20,7 +23,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         public IEnumerable<RegionDraft> Generate(ref Matrix<bool> matrix, int fillProbability, int totalIterations)
         {
-            InitStartAliveMatrix(matrix, fillProbability);
+            InitiateMatrix(matrix, fillProbability);
 
             matrix = SimulateCellularAutomaton(matrix, totalIterations);
 
@@ -35,7 +38,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return draftRegions;
         }
 
-        private void InitStartAliveMatrix(Matrix<bool> matrix, int fillProbability)
+        private void InitiateMatrix(Matrix<bool> matrix, int fillProbability)
         {
             for (var x = 0; x < matrix.Width; x++)
             {

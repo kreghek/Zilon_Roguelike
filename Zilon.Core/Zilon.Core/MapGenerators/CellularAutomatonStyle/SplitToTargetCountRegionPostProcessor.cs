@@ -8,6 +8,9 @@ using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
+    /// <summary>
+    /// Try to split regions to smaller.
+    /// </summary>
     class SplitToTargetCountRegionPostProcessor : IRegionPostProcessor
     {
         private readonly IMapRuleManager _mapRuleManager;

@@ -5,9 +5,12 @@ using Zilon.Core.Common;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
+    /// <summary>
+    /// Connect closest map regions each with other.
+    /// </summary>
     class ClosestRegionConnector
     {
-        public void Connect(Matrix<bool> matrix, IEnumerable<RegionDraft> regions)
+        public static void Connect(Matrix<bool> matrix, IEnumerable<RegionDraft> regions)
         {
             // Соединяем все регионы в единый граф.
             var openRegions = new List<RegionDraft>(regions);

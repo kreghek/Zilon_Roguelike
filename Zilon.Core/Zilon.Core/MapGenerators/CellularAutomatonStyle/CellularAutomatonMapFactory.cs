@@ -72,7 +72,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 {
                     regions = PostProcess(regionPostProcessors, regions);
 
-                    connector.Connect(matrix, regions);
+                    ClosestRegionConnector.Connect(matrix, regions);
 
                     var map = CreateSectorMap(matrix, regions.ToArray(), transitions);
 
