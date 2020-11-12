@@ -37,12 +37,12 @@ namespace Zilon.Core.Specs.Steps
 
             var perkScheme = schemeService.GetScheme<IPerkScheme>(perkSid);
             var perk = new Perk
-            { 
+            {
                 Scheme = perkScheme
             };
 
             var actor = Context.GetActiveActor();
-            
+
             actor.Person.GetModule<IEvolutionModule>().AddBuildInPerks(new[] { perk });
         }
 
