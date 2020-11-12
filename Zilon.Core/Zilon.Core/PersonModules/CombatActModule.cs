@@ -128,9 +128,12 @@ namespace Zilon.Core.PersonModules
             {
                 if (perk.Scheme.IsBuildIn)
                 {
-                    foreach (var rule in perk.Scheme.Levels[0].Rules)
+                    if (perk.Scheme.Levels != null)
                     {
-                        GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
+                        foreach (var rule in perk.Scheme.Levels[0].Rules)
+                        {
+                            GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
+                        }
                     }
                 }
                 else

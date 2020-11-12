@@ -405,11 +405,15 @@ namespace Zilon.Core.PersonModules
                 if (archievedPerk.Scheme.IsBuildIn)
                 {
                     currentLevel = new PerkLevel(0, 0);
-
                 }
                 else
                 {
                     currentLevel = archievedPerk.CurrentLevel;
+                }
+
+                if (archievedPerk.Scheme.IsBuildIn && archievedPerk.Scheme.Levels is null)
+                {
+                    continue;
                 }
 
                 currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
