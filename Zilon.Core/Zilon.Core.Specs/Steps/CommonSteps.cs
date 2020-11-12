@@ -286,13 +286,6 @@ namespace Zilon.Core.Specs.Steps
                     counter--;
                 }
             }
-
-            while ((!humatTaskSource.CanIntent() && playerState.ActiveActor?.Actor != null && survivalModule?.IsDead == false) ||
-                (playerState.ActiveActor?.Actor == null && counter > 0))
-            {
-                await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
-                counter--;
-            }
         }
 
         [When(@"Я выполняю простой")]

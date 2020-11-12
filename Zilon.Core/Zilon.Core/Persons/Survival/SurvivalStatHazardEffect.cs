@@ -36,11 +36,14 @@ namespace Zilon.Core.Persons
             get => _level;
             set
             {
-                _level = value;
+                if (_level != value)
+                {
+                    _level = value;
 
-                _rules = CalcRules();
+                    _rules = CalcRules();
 
-                Changed?.Invoke(this, EventArgs.Empty);
+                    Changed?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 

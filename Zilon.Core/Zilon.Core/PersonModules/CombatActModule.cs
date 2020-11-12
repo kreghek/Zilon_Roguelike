@@ -126,19 +126,29 @@ namespace Zilon.Core.PersonModules
         {
             foreach (var perk in archievedPerks)
             {
-                var currentLevel = perk.CurrentLevel;
-                var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary];
-
-                if (currentLevelScheme.Rules == null)
+                if (perk.Scheme.IsBuildIn && perk.Scheme.Levels is null)
                 {
-                    continue;
-                }
-
-                for (var i = 0; i <= currentLevel.Sub; i++)
-                {
-                    foreach (var rule in currentLevelScheme.Rules)
+                    foreach (var rule in perk.Scheme.Levels[0].Rules)
                     {
                         GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
+                    }
+                }
+                else
+                {
+                    var currentLevel = perk.CurrentLevel;
+                    var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary];
+
+                    if (currentLevelScheme.Rules == null)
+                    {
+                        continue;
+                    }
+
+                    for (var i = 0; i <= currentLevel.Sub; i++)
+                    {
+                        foreach (var rule in currentLevelScheme.Rules)
+                        {
+                            GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
+                        }
                     }
                 }
             }

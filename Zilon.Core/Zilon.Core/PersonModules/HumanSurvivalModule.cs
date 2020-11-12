@@ -81,6 +81,11 @@ namespace Zilon.Core.PersonModules
                 _effectsModule.Removed += Effects_CollectionChanged;
                 _effectsModule.Changed += Effects_CollectionChanged;
             }
+
+            //if (_evolutionModule != null)
+            //{ 
+            //    _evolutionModule
+            //}
         }
 
         private void Effects_CollectionChanged(object sender, EffectEventArgs e)
@@ -406,9 +411,47 @@ namespace Zilon.Core.PersonModules
                 {
                     foreach (var rule in currentLevelScheme.Rules)
                     {
-                        if (rule.Type == PersonRuleType.Health)
+                        switch (rule.Type)
                         {
-                            BonusToHealth(rule.Level, PersonRuleDirection.Positive, ref bonusList);
+                            case PersonRuleType.Health:
+                                BonusToHealth(rule.Level, PersonRuleDirection.Positive, ref bonusList);
+                                break;
+
+                            case PersonRuleType.HealthIfNoBody:
+
+                                var equipmentModule = _equipmentModule;
+
+                                var requirementsCompleted = true;
+
+                                if (equipmentModule != null)
+                                {
+                                    // it is logically. If person can not have equipment, he has no body armor.
+
+                                    for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
+                                    {
+                                        if ((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0
+                                            && equipmentModule[slotIndex] != null)
+                                        {
+                                            requirementsCompleted = false;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (requirementsCompleted)
+                                {
+                                    BonusToHealth(rule.Level, rule.Direction, ref bonusList);
+                                }
+
+                                break;
+
+                            case PersonRuleType.HungerResistance:
+                                BonusToDownPass(SurvivalStatType.Satiety, rule.Level, rule.Direction, ref bonusList);
+                                break;
+
+                            case PersonRuleType.ThristResistance:
+                                BonusToDownPass(SurvivalStatType.Hydration, rule.Level, rule.Direction, ref bonusList);
+                                break;
                         }
                     }
                 }
