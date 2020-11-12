@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using Zilon.Core.Common;
+using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -10,6 +11,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly ISender<IActorTask> _actorTaskSender;
         private readonly IReceiver<IActorTask> _actorTaskReceiver;
         private bool _intentionWait;
+        private IActor _currentActorIntention;
 
         public HumanActorTaskSource()
         {
@@ -35,6 +37,7 @@ namespace Zilon.Core.Tactics.Behaviour
             var actorTask = currentIntention.CreateActorTask(activeActor);
 
             _intentionWait = true;
+            _currentActorIntention = activeActor;
 
             await _actorTaskSender.SendAsync(actorTask).ConfigureAwait(false);
         }
@@ -58,7 +61,12 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public bool CanIntent()
         {
-            return !_intentionWait;
+            return !_intentionWait && !CurrentActorSetAndIsDead();
+        }
+
+        private bool CurrentActorSetAndIsDead()
+        {
+            return (_currentActorIntention?.Person?.GetModuleSafe<ISurvivalModule>()?.IsDead).GetValueOrDefault();
         }
 
         public void ProcessTaskExecuted(IActorTask actorTask)
@@ -72,11 +80,13 @@ namespace Zilon.Core.Tactics.Behaviour
         public void ProcessTaskComplete(IActorTask actorTask)
         {
             _intentionWait = false;
+            _currentActorIntention = null;
         }
 
         public void CancelTask(IActorTask cencelledActorTask)
         {
             _intentionWait = false;
+            _currentActorIntention = null;
         }
     }
 }
