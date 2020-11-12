@@ -405,7 +405,7 @@ namespace Zilon.Core.PersonModules
                 if (archievedPerk.Scheme.IsBuildIn)
                 {
                     currentLevel = new PerkLevel(0, 0);
-                    
+
                 }
                 else
                 {
