@@ -399,8 +399,20 @@ namespace Zilon.Core.PersonModules
             var archievedPerks = _evolutionModule.GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
-                var currentLevel = archievedPerk.CurrentLevel;
-                var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
+                PerkLevel currentLevel;
+                PerkLevelSubScheme currentLevelScheme;
+
+                if (archievedPerk.Scheme.IsBuildIn)
+                {
+                    currentLevel = new PerkLevel(0, 0);
+                    
+                }
+                else
+                {
+                    currentLevel = archievedPerk.CurrentLevel;
+                }
+
+                currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
 
                 if (currentLevelScheme.Rules == null)
                 {

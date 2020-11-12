@@ -126,7 +126,7 @@ namespace Zilon.Core.PersonModules
         {
             foreach (var perk in archievedPerks)
             {
-                if (perk.Scheme.IsBuildIn && perk.Scheme.Levels is null)
+                if (perk.Scheme.IsBuildIn)
                 {
                     foreach (var rule in perk.Scheme.Levels[0].Rules)
                     {
