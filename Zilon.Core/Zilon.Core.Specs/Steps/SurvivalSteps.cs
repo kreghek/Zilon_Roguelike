@@ -131,17 +131,18 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Актёр имеет эффект (.*)")]
         public void GivenАктёрИмеетЭффектStartEffect(string startEffect)
         {
-            var survivalRandomSource = Context.ServiceProvider.GetRequiredService<ISurvivalRandomSource>();
-
             var actor = Context.GetActiveActor();
 
             GetEffectStatAndLevelByName(startEffect,
-                out SurvivalStatType stat,
-                out SurvivalStatHazardLevel level);
+                out SurvivalStatType statType,
+                out SurvivalStatHazardLevel effectLevel);
 
-            var effect = new SurvivalStatHazardEffect(stat, level, survivalRandomSource);
+            // Use single to control effect. If effect is incorrect there will be exception.
+            var targetStat = actor.Person.GetModuleSafe<ISurvivalModule>()?.Stats?.Single(x => x.Type == statType);
+            var keySegment = targetStat.KeySegments.Single(x => x.Level == effectLevel);
 
-            actor.Person.GetModule<IEffectsModule>().Add(effect);
+            var statValue = keySegment.Start;
+            targetStat.SetShare(statValue);
         }
 
         [When(@"Я перемещаю персонажа на (.*) клетку")]
