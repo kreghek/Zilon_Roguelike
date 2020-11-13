@@ -48,31 +48,29 @@
 ##Обезвоживание
 #| вода    | -100      | fake-water | вода          | 1         | -50           | Слабая жажда |
 
-#@survival @dev1
-#Scenario Outline: Употребление медикаментов для восстановления Hp.
-#	Given Есть карта размером 2
-#	And Есть актёр игрока класса captain в ячейке (0, 0)
-#	And Актёр игрока имеет Hp: <startHp>
-#	And В инвентаре у актёра есть еда: <propSid> количество: <propCount>
-#	When Актёр использует предмет <propSid> на себя
-#	Then Актёр игрока имеет запас hp <expectedHpValue>
-#	And Предмет <propSid> отсутствует в инвентаре актёра
-#
-#Examples: 
-#	| startHp | propSid | propCount | expectedHpValue |
-#	| 1       | med-kit | 1         | 5               |
+@survival @dev1
+Scenario Outline: Употребление медикаментов для восстановления Hp.
+	Given Есть карта размером 2
+	And Есть актёр игрока класса captain в ячейке (0, 0)
+	And Актёр игрока имеет Hp: <startHp>
+	And В инвентаре у актёра есть еда: <propSid> количество: 100
+	When Актёр использует предмет <propSid> на себя <propCount> раз
+	Then Актёр под эффектом <effect>
+
+Examples: 
+	| startHp | propSid | propCount | effect       |
+	| 1       | med-kit | 1         | Сильная рана |
 
 @survival @dev2
 Scenario Outline: Употребление медикаментов снижает сытость и воду.
 	Given Есть карта размером 2
 	And Есть актёр игрока класса human-person в ячейке (0, 0)
-	And Актёр игрока имеет Hp: 1
-	And В инвентаре у актёра есть еда: <prop> количество: 100
-	When Актёр использует предмет <prop> на себя <iterations> раз
+	And В инвентаре у актёра есть еда: <propSid> количество: 100
+	When Актёр использует предмет <propSid> на себя <iterations> раз
 	Then Актёр под эффектом <effect>
 
 	Examples: 
-	| iterations | effect                 | prop    |
+	| iterations | effect                 | propSid |
 	| 1          | Слабая токсикация      | med-kit |
 	| 2          | Сильная токсикация     | med-kit |
 	| 3          | Смертельная токсикация | med-kit |
