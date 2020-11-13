@@ -60,11 +60,11 @@
         {
           "Level": "Max",
           "Start": 0,
-          "End": 0.1
+          "End": 0.01
         },
         {
           "Level": "Strong",
-          "Start": 0.14,
+          "Start": 0.01,
           "End": 0.75
         },
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -7,13 +8,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 using TechTalk.SpecFlow;
 
+using Zilon.Core.Client;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
+using Zilon.Core.Common;
+using Zilon.Core.Commands;
 
 namespace Zilon.Core.Specs.Steps
 {
@@ -158,6 +164,59 @@ namespace Zilon.Core.Specs.Steps
             Context.UsePropByActiveActor(propSid);
         }
 
+        [When(@"Актёр использует предмет (.*) на себя (\d+) раз")]
+        public async Task WhenАctorUsePropNTimesAsync(string propSid, int times)
+        {
+            for (var i = 0; i < times; i++)
+            {
+                Context.UsePropByActiveActor(propSid);
+                await WaitForIteration(1).ConfigureAwait(false);
+            }
+        }
+
+        public async Task WaitForIteration(int timeUnitCount)
+        {
+            var globe = Context.Globe;
+            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
+
+            var counter = timeUnitCount;
+
+            var survivalModule = playerState.ActiveActor?.Actor.Person?.GetModuleSafe<ISurvivalModule>();
+
+            var isPlayerActor = playerState.ActiveActor?.Actor != null;
+            if (isPlayerActor)
+            {
+                while (counter > 0)
+                {
+                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+                    {
+                        if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
+                        {
+                            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+                            idleCommand.Execute();
+                        }
+
+                        await globe.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
+                    }
+
+                    counter--;
+                }
+            }
+            else
+            {
+                while (counter > 0)
+                {
+                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+                    {
+                        await globe.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
+                    }
+
+                    counter--;
+                }
+            }
+        }
+
         [Then(@"Значение (сытость|вода) уменьшилось на (.*) и стало (.*)")]
         public void ThenЗначениеStatУменьшилосьНаRate(string stat, int hungerRate, int expectedValue)
         {
@@ -283,6 +342,11 @@ namespace Zilon.Core.Specs.Steps
                 case "Обезвоживание":
                     level = SurvivalStatHazardLevel.Max;
                     stat = SurvivalStatType.Hydration;
+                    break;
+
+                case "Слабая токсикация":
+                    level = SurvivalStatHazardLevel.Lesser;
+                    stat = SurvivalStatType.Intoxication;
                     break;
 
                 default:

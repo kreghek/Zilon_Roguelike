@@ -62,44 +62,39 @@
 #	| startHp | propSid | propCount | expectedHpValue |
 #	| 1       | med-kit | 1         | 5               |
 
-#@survival @dev2
-#Scenario: Употребление медикаментов снижает сытость и воду.
-#	Given Есть карта размером 2
-#	And Есть актёр игрока класса captain в ячейке (0, 0)
-#	And Актёр игрока имеет Hp: 1
-#	And В инвентаре у актёра есть еда: med-kit количество: 1
-#	When Актёр использует предмет med-kit на себя
-#	Then Значение сытость уменьшилось на 70 и стало 80
-#	And Значение вода уменьшилось на 70 и стало 80
+@survival @dev2
+Scenario Outline: Употребление медикаментов снижает сытость и воду.
+	Given Есть карта размером 2
+	And Есть актёр игрока класса human-person в ячейке (0, 0)
+	And Актёр игрока имеет Hp: 1
+	And В инвентаре у актёра есть еда: med-kit количество: 100
+	When Актёр использует предмет med-kit на себя 1 раз
+	Then Актёр под эффектом Слабая токсикация
 
 @survival @dev1
 Scenario Outline: Наступление выживальных состояний (жажда/голод/утомление)
 	Given Есть карта размером 2
 	And Есть актёр игрока класса human-person в ячейке (0, 0)
-	And Актёр игрока экипирован предметом hydro-necklace в слот Index: 4
-	And Актёр игрока получает перк thrist-immunity
+	# special perk to exclude other hazard influence
+	And Актёр игрока получает перк <testPerk>
 	When Я жду <iterations> итераций
 	Then Актёр под эффектом <effect>
 
 	Examples: 
-	| iterations | stat    | effect        |
-	| 250        | сытость | Слабый голод  |
-	| 1000       | сытость | Голод         |
-	| 3300       | сытость | Голодание     |
-	| 150        | вода    | Слабая жажда  |
-	| 200        | вода    | Жажда         |
-	| 250        | вода    | Обезвоживание |
+	| iterations | stat    | effect        | testPerk        |
+	| 250        | сытость | Слабый голод  | thrist-immunity |
+	| 1000       | сытость | Голод         | thrist-immunity |
+	| 3300       | сытость | Голодание     | thrist-immunity |
+	| 268        | вода    | Слабая жажда  | hunger-immunity |
+	| 400        | вода    | Жажда         | hunger-immunity |
+	| 1288       | вода    | Обезвоживание | hunger-immunity |
 
 @survival @dev1
 Scenario Outline: Эффекты угроз выживания наносят урон актёру.
 	Given Есть карта размером 2
-	And Есть актёр игрока класса captain в ячейке (0, 0)
+	And Есть актёр игрока класса human-person в ячейке (0, 0)
 	And Актёр имеет эффект <startEffect>
-	When Я выполняю простой 
-	#TODO Fix waiting by idle person actor
-	And Жду 1000 единиц времени
-	And Я выполняю простой
-	And Жду 1000 единиц времени
+	When Я жду 1 итераций
 	Then Актёр игрока имеет запас hp <expectedHpValue>
 
 	Examples: 
