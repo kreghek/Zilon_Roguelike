@@ -355,7 +355,6 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-
                     survivalModule.RestoreStat(SurvivalStatType.Intoxication,
                         PropMetrics.INTOXICATION_RISE_LESSER_VALUE + 1);
                     break;
