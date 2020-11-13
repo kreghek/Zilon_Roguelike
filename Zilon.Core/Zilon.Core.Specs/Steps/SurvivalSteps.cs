@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
+using Zilon.Core.Commands;
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -18,8 +20,6 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tests.Common.Schemes;
 using Zilon.Core.World;
-using Zilon.Core.Common;
-using Zilon.Core.Commands;
 
 namespace Zilon.Core.Specs.Steps
 {
