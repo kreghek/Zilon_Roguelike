@@ -349,6 +349,16 @@ namespace Zilon.Core.Specs.Steps
                     stat = SurvivalStatType.Intoxication;
                     break;
 
+                case "Сильная токсикация":
+                    level = SurvivalStatHazardLevel.Strong;
+                    stat = SurvivalStatType.Intoxication;
+                    break;
+
+                case "Смертельная токсикация":
+                    level = SurvivalStatHazardLevel.Max;
+                    stat = SurvivalStatType.Intoxication;
+                    break;
+
                 default:
                     throw new NotSupportedException("Неизветный тип ожидаемого эффекта.");
             }
