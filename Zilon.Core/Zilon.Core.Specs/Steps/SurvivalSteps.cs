@@ -222,7 +222,7 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [Then(@"Актёр под эффектом (.*)")]
-        public void ThenАктёрПолучаетЭффектСлабыйГолод(string effectName)
+        public void ThenАктёрПодЭффектом(string effectName)
         {
             var actor = Context.GetActiveActor();
 
@@ -234,7 +234,7 @@ namespace Zilon.Core.Specs.Steps
             {
                 var effect = actor.Person.GetModule<IEffectsModule>().Items
                     .OfType<SurvivalStatHazardEffect>()
-                    .Single(x => x.Type == stat);
+                    .SingleOrDefault(x => x.Type == stat);
 
                 effect.Should().NotBeNull();
                 effect.Level.Should().Be(level);
