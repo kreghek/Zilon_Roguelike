@@ -1,9 +1,6 @@
 ﻿using System.Threading.Tasks;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics;
@@ -99,7 +96,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             mapMock.Verify(x => x.TargetIsOnLine(
                 It.Is<IGraphNode>(n => n == actorNode),
                 It.Is<IGraphNode>(n => n == containerNode))
-                );
+            );
         }
 
         private IOpenContainerMethod CreateMethod()

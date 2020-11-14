@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-
 using Zilon.Core.Client.Windows;
 
 namespace Zilon.Core.Commands
@@ -10,11 +9,6 @@ namespace Zilon.Core.Commands
     public abstract class ShowModalCommandBase : UiCommandBase
     {
         /// <summary>
-        /// Менеджер модальных окон.
-        /// </summary>
-        protected ISectorModalManager ModalManager { get; }
-
-        /// <summary>
         /// Создаёт экземпляр <see cref="ShowModalCommandBase"/>.
         /// </summary>
         /// <param name="modalManager"> Менеджер модальных окон. Реализация на клиенте. </param>
@@ -23,5 +17,10 @@ namespace Zilon.Core.Commands
         {
             ModalManager = modalManager;
         }
+
+        /// <summary>
+        /// Менеджер модальных окон.
+        /// </summary>
+        protected ISectorModalManager ModalManager { get; }
     }
 }

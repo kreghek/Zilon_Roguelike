@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Diseases;
 
 namespace Zilon.Core.Persons
@@ -33,7 +32,12 @@ namespace Zilon.Core.Persons
         /// влияние болезни,
         /// эффекты болезни (симптомы).
         /// </summary>
-        public float CurrentPower { get => CalcPowerByProgress(Value); }
+        public float CurrentPower => CalcPowerByProgress(Value);
+
+        public void Update()
+        {
+            Value += Disease.ProgressSpeed;
+        }
 
         private static float CalcPowerByProgress(float progress)
         {
@@ -50,11 +54,6 @@ namespace Zilon.Core.Persons
             }
 
             return (float)power;
-        }
-
-        public void Update()
-        {
-            Value += Disease.ProgressSpeed;
         }
     }
 }

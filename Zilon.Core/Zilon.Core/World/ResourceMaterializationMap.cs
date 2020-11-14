@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 
@@ -9,9 +8,9 @@ namespace Zilon.Core.World
     public sealed class ResourceMaterializationMap : IResourceMaterializationMap
     {
         private const float START_RESOURCE_SHARE = 0.10f;
+        private readonly IDice _dice;
 
         private readonly Dictionary<ISectorNode, IResourceDepositData> _map;
-        private readonly IDice _dice;
 
         public ResourceMaterializationMap(IDice dice)
         {
@@ -71,12 +70,13 @@ namespace Zilon.Core.World
             if (!items.Any() || newRoll > 3)
             {
                 var itemsNew = new List<ResourceDepositDataItem>(items);
-                var availableResources = new List<SectorResourceType> {
-                        SectorResourceType.CherryBrushes,
-                        SectorResourceType.Iron,
-                        SectorResourceType.Stones,
-                        SectorResourceType.WaterPuddles
-                    };
+                var availableResources = new List<SectorResourceType>
+                {
+                    SectorResourceType.CherryBrushes,
+                    SectorResourceType.Iron,
+                    SectorResourceType.Stones,
+                    SectorResourceType.WaterPuddles
+                };
 
                 foreach (var res in availableResources)
                 {
@@ -108,7 +108,7 @@ namespace Zilon.Core.World
                     }
                     else
                     {
-                        dict[item.ResourceType] = new List<float> { item.Share };
+                        dict[item.ResourceType] = new List<float> {item.Share};
                     }
                 }
             }
@@ -146,11 +146,12 @@ namespace Zilon.Core.World
 
         private static IResourceDepositData CreateStartResourceData()
         {
-            var items = new[] {
+            var items = new[]
+            {
                 new ResourceDepositDataItem(SectorResourceType.Iron, START_RESOURCE_SHARE),
                 new ResourceDepositDataItem(SectorResourceType.Stones, START_RESOURCE_SHARE),
                 new ResourceDepositDataItem(SectorResourceType.WaterPuddles, START_RESOURCE_SHARE),
-                new ResourceDepositDataItem(SectorResourceType.CherryBrushes, START_RESOURCE_SHARE),
+                new ResourceDepositDataItem(SectorResourceType.CherryBrushes, START_RESOURCE_SHARE)
             };
             var data = new ResourceDepositData(items);
             return data;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Zilon.Core.Localization;
 
 namespace Zilon.Core.Diseases
@@ -47,7 +46,8 @@ namespace Zilon.Core.Diseases
             return obj is DiseaseName name && Equals(name);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:ArithmeticExpressionsMustDeclarePrecedence",
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules",
+            "SA1407:ArithmeticExpressionsMustDeclarePrecedence",
             Justification = "Автогенерируемый код расчёта хэша. Так принято.")]
         public override int GetHashCode()
         {

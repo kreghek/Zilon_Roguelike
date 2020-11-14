@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
@@ -11,8 +10,8 @@ namespace Zilon.Core.MapGenerators
     public class SectorFactory : ISectorFactory
     {
         private readonly IDropResolver _dropResolver;
-        private readonly ISchemeService _schemeService;
         private readonly IEquipmentDurableService _equipmentDurableService;
+        private readonly ISchemeService _schemeService;
 
         public SectorFactory(IDropResolver dropResolver,
             ISchemeService schemeService,

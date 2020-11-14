@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tests.CommonServices.Dices
@@ -27,10 +24,8 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             var dice = diceMock.Object;
 
 
-
             // ACT
             var factRoll = dice.Roll(1, 3);
-
 
 
             // ASSERT
@@ -53,10 +48,8 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             var dice = diceMock.Object;
 
 
-
             // ACT
             var factRoll = dice.Roll(1, 3);
-
 
 
             // ASSERT
@@ -78,10 +71,8 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             var dice = diceMock.Object;
 
 
-
             // ACT
             var factRoll = dice.Roll(5, 10);
-
 
 
             // ASSERT
@@ -103,10 +94,8 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             var dice = diceMock.Object;
 
 
-
             // ACT
             var factRoll = dice.Roll(5, 5);
-
 
 
             // ASSERT

@@ -1,13 +1,8 @@
 ﻿using System.Linq;
-
 using FluentAssertions;
-
 using JetBrains.Annotations;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using TechTalk.SpecFlow;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
@@ -62,12 +57,10 @@ namespace Zilon.Core.Specs.Steps
 
             var actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
+                .First(x => x.Scheme.Sid == propSid);
 
-            var targetEquipmentVeiwModel = new TestPropItemViewModel
-            {
-                Prop = targetEquipment
-            };
+            var targetEquipmentVeiwModel = new TestPropItemViewModel {Prop = targetEquipment};
 
             inventoryState.SelectedProp = targetEquipmentVeiwModel;
 
@@ -113,12 +106,10 @@ namespace Zilon.Core.Specs.Steps
 
             var actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
+                .First(x => x.Scheme.Sid == propSid);
 
-            var targetEquipmentVeiwModel = new TestPropItemViewModel
-            {
-                Prop = targetEquipment
-            };
+            var targetEquipmentVeiwModel = new TestPropItemViewModel {Prop = targetEquipment};
 
             inventoryState.SelectedProp = targetEquipmentVeiwModel;
 
@@ -130,7 +121,8 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(expectedHp);
+            actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value
+                .Should().Be(expectedHp);
         }
 
         [Then(@"Максимальный запас здоровья персонажа игрока равен (\d+)")]

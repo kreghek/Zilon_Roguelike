@@ -11,15 +11,6 @@ namespace Zilon.Core.CommonServices.Dices
         private readonly Random _random;
 
         /// <summary>
-        /// Возвращает случайное число от [0..1).
-        /// </summary>
-        protected double GetNextDouble()
-        {
-            var next = _random.NextDouble();
-            return next;
-        }
-
-        /// <summary>
         /// Конструктор генератора.
         /// </summary>
         [ExcludeFromCodeCoverage]
@@ -40,6 +31,15 @@ namespace Zilon.Core.CommonServices.Dices
         protected DiceBase(int seed)
         {
             _random = new Random(seed);
+        }
+
+        /// <summary>
+        /// Возвращает случайное число от [0..1).
+        /// </summary>
+        protected double GetNextDouble()
+        {
+            var next = _random.NextDouble();
+            return next;
         }
     }
 }

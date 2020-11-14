@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 

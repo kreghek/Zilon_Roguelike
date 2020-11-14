@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.Tactics;
@@ -23,9 +22,13 @@ namespace Zilon.Core.MapGenerators
             IStaticObjectsGeneratorRandomSource staticObjectsGeneratorRandomSource)
         {
             _chestGenerator = chestGenerator ?? throw new ArgumentNullException(nameof(chestGenerator));
-            _interiorObjectRandomSource = interiorObjectRandomSource ?? throw new ArgumentNullException(nameof(interiorObjectRandomSource));
-            _staticObjectfactoryCollector = staticObjectfactoryCollector ?? throw new ArgumentNullException(nameof(staticObjectfactoryCollector));
-            _staticObjectsGeneratorRandomSource = staticObjectsGeneratorRandomSource ?? throw new ArgumentNullException(nameof(staticObjectsGeneratorRandomSource));
+            _interiorObjectRandomSource = interiorObjectRandomSource ??
+                                          throw new ArgumentNullException(nameof(interiorObjectRandomSource));
+            _staticObjectfactoryCollector = staticObjectfactoryCollector ??
+                                            throw new ArgumentNullException(nameof(staticObjectfactoryCollector));
+            _staticObjectsGeneratorRandomSource = staticObjectsGeneratorRandomSource ??
+                                                  throw new ArgumentNullException(
+                                                      nameof(staticObjectsGeneratorRandomSource));
         }
 
         public Task CreateAsync(IStaticObjectGenerationContext generationContext)
@@ -87,7 +90,8 @@ namespace Zilon.Core.MapGenerators
                 return factory;
             }
 
-            throw new InvalidOperationException($"Не обнаружена фабрика для статических объектов типа {staticObjectPurpose}");
+            throw new InvalidOperationException(
+                $"Не обнаружена фабрика для статических объектов типа {staticObjectPurpose}");
         }
 
         private PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)

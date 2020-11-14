@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
@@ -13,9 +10,9 @@ namespace Zilon.Core.Tests.Props
     [TestFixture]
     public class PropStoreBaseTests
     {
-        private TestPropScheme _resourceScheme;
-        private TestPropScheme _equipmentScheme;
         private TestPropScheme _conceptScheme;
+        private TestPropScheme _equipmentScheme;
+        private TestPropScheme _resourceScheme;
 
         /// <summary>
         /// Тест проверяет, что при добавлении экипировки она помещается в контейнер.
@@ -226,7 +223,6 @@ namespace Zilon.Core.Tests.Props
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Added));
-
             }
         }
 
@@ -248,7 +244,6 @@ namespace Zilon.Core.Tests.Props
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Added));
-
             }
         }
 
@@ -272,7 +267,6 @@ namespace Zilon.Core.Tests.Props
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Added));
-
             }
         }
 
@@ -295,7 +289,6 @@ namespace Zilon.Core.Tests.Props
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Removed));
-
             }
         }
 
@@ -319,7 +312,6 @@ namespace Zilon.Core.Tests.Props
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Removed));
-
             }
         }
 
@@ -346,7 +338,6 @@ namespace Zilon.Core.Tests.Props
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Changed));
-
             }
         }
 
@@ -371,7 +362,6 @@ namespace Zilon.Core.Tests.Props
 
                 // ASSERT
                 monitor.Should().Raise(nameof(IPropStore.Removed));
-
             }
 
             // ASSERT
@@ -385,38 +375,24 @@ namespace Zilon.Core.Tests.Props
             _equipmentScheme = new TestPropScheme
             {
                 Sid = "equipment",
-                Name = new LocalizedStringSubScheme
-                {
-                    Ru = "Тестовая экипировка"
-                },
+                Name = new LocalizedStringSubScheme {Ru = "Тестовая экипировка"},
                 Equip = new TestPropEquipSubScheme()
             };
 
             _resourceScheme = new TestPropScheme
             {
-                Sid = "resource",
-                Name = new LocalizedStringSubScheme
-                {
-                    Ru = "Тестовый ресурс"
-                },
+                Sid = "resource", Name = new LocalizedStringSubScheme {Ru = "Тестовый ресурс"}
             };
 
             _conceptScheme = new TestPropScheme
             {
-                Sid = "concept",
-                Name = new LocalizedStringSubScheme
-                {
-                    Ru = "Тестовый чертёж"
-                },
+                Sid = "concept", Name = new LocalizedStringSubScheme {Ru = "Тестовый чертёж"}
             };
         }
 
         private static PropStoreBase CreatePropStore()
         {
-            var propStoreMock = new Mock<PropStoreBase>
-            {
-                CallBase = true
-            };
+            var propStoreMock = new Mock<PropStoreBase> {CallBase = true};
 
             var propStore = propStoreMock.Object;
             return propStore;

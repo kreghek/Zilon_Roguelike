@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.World

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -24,16 +23,20 @@ namespace Zilon.Core.Scoring
         public int BaseScores { get => Scores.BaseScores; private set => Scores.BaseScores = value; }
 
         /// <inheritdoc/>
-        public IDictionary<IMonsterScheme, int> Frags { get => Scores.Frags; }
+        public IDictionary<IMonsterScheme, int> Frags => Scores.Frags;
 
         /// <inheritdoc/>
-        public IDictionary<ILocationScheme, int> PlaceTypes { get => Scores.PlaceTypes; }
+        public IDictionary<ILocationScheme, int> PlaceTypes => Scores.PlaceTypes;
 
         /// <inheritdoc/>
         public int Turns { get => Scores.Turns; set => Scores.Turns = value; }
 
         /// <inheritdoc/>
-        public ScoreAchievements Achievements { get => Scores.Achievements; private set => Scores.Achievements = value; }
+        public ScoreAchievements Achievements
+        {
+            get => Scores.Achievements;
+            private set => Scores.Achievements = value;
+        }
 
         public void CountHome()
         {

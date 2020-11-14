@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
@@ -108,7 +107,6 @@ namespace Zilon.Core.MassSectorGenerator
             {
                 LeftCoord = xAxisOrderedNode.First().OffsetCoords.X,
                 RightCoord = xAxisOrderedNode.Last().OffsetCoords.X,
-
                 BottomCoord = yAxisOrderedNode.First().OffsetCoords.Y,
                 TopCoord = yAxisOrderedNode.Last().OffsetCoords.Y
             };

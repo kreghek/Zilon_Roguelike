@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
@@ -26,11 +24,51 @@ namespace Zilon.Core.Tactics
     /// <seealso cref="ISector" />
     public class Sector : ISector
     {
-        private readonly IDropResolver _dropResolver;
-        private readonly ISchemeService _schemeService;
-        private readonly IEquipmentDurableService _equipmentDurableService;
+        private const int NATIONALUNITYCOUNTERSTARTVALUE = 1000;
 
         private readonly List<IDisease> _diseases;
+        private readonly IDropResolver _dropResolver;
+        private readonly IEquipmentDurableService _equipmentDurableService;
+        private readonly ISchemeService _schemeService;
+        private int _nationalUnityCounter = NATIONALUNITYCOUNTERSTARTVALUE;
+
+        [ExcludeFromCodeCoverage]
+        public Sector(ISectorMap map,
+            IActorManager actorManager,
+            IStaticObjectManager staticObjectManager,
+            IDropResolver dropResolver,
+            ISchemeService schemeService,
+            IEquipmentDurableService equipmentDurableService)
+        {
+            ActorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
+            StaticObjectManager = staticObjectManager ?? throw new ArgumentNullException(nameof(staticObjectManager));
+            _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
+            _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
+            _equipmentDurableService = equipmentDurableService ??
+                                       throw new ArgumentNullException(nameof(equipmentDurableService));
+
+            _diseases = new List<IDisease>();
+
+            ActorManager.Added += ActorManager_Added;
+            ActorManager.Removed += ActorManager_Remove;
+            StaticObjectManager.Added += StaticObjectManager_Added;
+            StaticObjectManager.Removed += StaticObjectManager_Remove;
+
+            Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
+
+            PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
+        }
+
+        /// <summary>
+        /// Стартовые узлы.
+        /// Набор узлов, где могут располагаться актёры игрока
+        /// на начало прохождения сектора.
+        /// </summary>
+        public IGraphNode[] StartNodes { get; set; }
+
+        public string Sid { get; set; }
+
+        public NationalUnityEventService NationalUnityEventService { get; set; }
 
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
@@ -48,49 +86,14 @@ namespace Zilon.Core.Tactics
         public Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
 
         /// <summary>
-        /// Стартовые узлы.
-        /// Набор узлов, где могут располагаться актёры игрока
-        /// на начало прохождения сектора.
-        /// </summary>
-        public IGraphNode[] StartNodes { get; set; }
-
-        /// <summary>
         /// Менеджер работы с очками.
         /// </summary>
         public IScoreManager ScoreManager { get; set; }
 
-        public string Sid { get; set; }
-
         public ILocationScheme Scheme { get; set; }
         public IActorManager ActorManager { get; }
         public IStaticObjectManager StaticObjectManager { get; }
-        public IEnumerable<IDisease> Diseases { get => _diseases; }
-
-        [ExcludeFromCodeCoverage]
-        public Sector(ISectorMap map,
-            IActorManager actorManager,
-            IStaticObjectManager staticObjectManager,
-            IDropResolver dropResolver,
-            ISchemeService schemeService,
-            IEquipmentDurableService equipmentDurableService)
-        {
-            ActorManager = actorManager ?? throw new ArgumentNullException(nameof(actorManager));
-            StaticObjectManager = staticObjectManager ?? throw new ArgumentNullException(nameof(staticObjectManager));
-            _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
-            _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
-            _equipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
-
-            _diseases = new List<IDisease>();
-
-            ActorManager.Added += ActorManager_Added;
-            ActorManager.Removed += ActorManager_Remove;
-            StaticObjectManager.Added += StaticObjectManager_Added;
-            StaticObjectManager.Removed += StaticObjectManager_Remove;
-
-            Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
-
-            PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
-        }
+        public IEnumerable<IDisease> Diseases => _diseases;
 
         public void AddDisease(IDisease disease)
         {
@@ -122,6 +125,11 @@ namespace Zilon.Core.Tactics
             UpdateNationalUnityEvent();
         }
 
+        public void UseTransition(IActor actor, RoomTransition transition)
+        {
+            DoActorExit(actor, transition);
+        }
+
         /// <summary>
         /// Processing special event:
         /// 1. There is counter.
@@ -145,11 +153,6 @@ namespace Zilon.Core.Tactics
                 _nationalUnityCounter = NATIONALUNITYCOUNTERSTARTVALUE;
             }
         }
-
-        private const int NATIONALUNITYCOUNTERSTARTVALUE = 1000;
-        private int _nationalUnityCounter = NATIONALUNITYCOUNTERSTARTVALUE;
-
-        public NationalUnityEventService NationalUnityEventService { get; set; }
 
         private void UpdateDiseases()
         {
@@ -210,7 +213,8 @@ namespace Zilon.Core.Tactics
                 // Items изменяется. Они должны падать, если убрать ToArray и выполняться, если его вернуть.
                 foreach (var effect in effects.Items.ToArray())
                 {
-                    if (effect is ISurvivalStatEffect actorEffect && actor.Person.GetModuleSafe<ISurvivalModule>() != null)
+                    if (effect is ISurvivalStatEffect actorEffect &&
+                        actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                     {
                         actorEffect.Apply(actor.Person.GetModule<ISurvivalModule>());
                     }
@@ -278,7 +282,9 @@ namespace Zilon.Core.Tactics
             var container = (IPropContainer)sender;
             if (!container.Content.CalcActualItems().Any())
             {
-                var staticObject = StaticObjectManager.Items.Single(x => ReferenceEquals(x.GetModuleSafe<IPropContainer>(), container));
+                var staticObject =
+                    StaticObjectManager.Items.Single(x =>
+                        ReferenceEquals(x.GetModuleSafe<IPropContainer>(), container));
                 StaticObjectManager.Remove(staticObject);
             }
         }
@@ -385,7 +391,8 @@ namespace Zilon.Core.Tactics
 
         private void ActorState_Dead(object sender, EventArgs e)
         {
-            var actor = ActorManager.Items.Single(x => ReferenceEquals(x.Person.GetModuleSafe<ISurvivalModule>(), sender));
+            var actor = ActorManager.Items.Single(x =>
+                ReferenceEquals(x.Person.GetModuleSafe<ISurvivalModule>(), sender));
             ActorManager.Remove(actor);
 
             if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
@@ -450,11 +457,6 @@ namespace Zilon.Core.Tactics
         {
             var e = new TransitionUsedEventArgs(actor, roomTransition);
             TrasitionUsed?.Invoke(this, e);
-        }
-
-        public void UseTransition(IActor actor, RoomTransition transition)
-        {
-            DoActorExit(actor, transition);
         }
     }
 }

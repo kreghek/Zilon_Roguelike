@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
@@ -19,6 +17,24 @@ namespace Zilon.Core.Tactics
     public sealed class Actor : IActor
     {
         private readonly IPerkResolver _perkResolver;
+
+        [ExcludeFromCodeCoverage]
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
+            [NotNull] IGraphNode node)
+        {
+            Person = person ?? throw new ArgumentNullException(nameof(person));
+            TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
+            Node = node ?? throw new ArgumentNullException(nameof(node));
+        }
+
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
+            [NotNull] IGraphNode node,
+            [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
+        {
+            _perkResolver = perkResolver;
+        }
+
+        public IPlayer Owner { get; }
 
         /// <inheritdoc/>
         public event EventHandler Moved;
@@ -49,24 +65,9 @@ namespace Zilon.Core.Tactics
         /// </summary>
         public IGraphNode Node { get; private set; }
 
-        public IPlayer Owner { get; }
-        public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
+        public PhysicalSize PhysicalSize => Person.PhysicalSize;
         public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
-        public bool CanExecuteTasks { get => !Person.CheckIsDead(); }
-
-        [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node)
-        {
-            Person = person ?? throw new ArgumentNullException(nameof(person));
-            TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
-            Node = node ?? throw new ArgumentNullException(nameof(node));
-        }
-
-        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
-        {
-            _perkResolver = perkResolver;
-        }
+        public bool CanExecuteTasks => !Person.CheckIsDead();
 
         public bool CanBeDamaged()
         {
@@ -129,7 +130,6 @@ namespace Zilon.Core.Tactics
                         ProcessNegativeRule(rule.Type, rule.Level);
                         break;
                 }
-
             }
 
             if (useData.Consumable && Person.GetModuleSafe<IInventoryModule>() != null)
@@ -144,6 +144,44 @@ namespace Zilon.Core.Tactics
             }
 
             UsedProp?.Invoke(this, new UsedPropEventArgs(usedProp));
+        }
+
+        public void TakeDamage(int value)
+        {
+            Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health, value);
+
+            if (_perkResolver != null && Person.GetModuleSafe<IEvolutionModule>() != null)
+            {
+                var takeDamageProgress = new TakeDamageJobProgress(value);
+                _perkResolver.ApplyProgress(takeDamageProgress, Person.GetModule<IEvolutionModule>());
+
+                var takeHitProgress = new TakeHitJobProgress();
+                _perkResolver.ApplyProgress(takeHitProgress, Person.GetModule<IEvolutionModule>());
+            }
+
+            DoDamageTaken(value);
+        }
+
+        public void MineDeposit(IStaticObject deposit, IMineDepositMethod method)
+        {
+            if (deposit is null)
+            {
+                throw new ArgumentNullException(nameof(deposit));
+            }
+
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            var openResult = method?.TryMine(deposit.GetModule<IPropDepositModule>());
+
+            DoMineDeposit(deposit, openResult);
+        }
+
+        public void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
+        {
+            TaskSource = actorTaskSource;
         }
 
         private void ProcessNegativeRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
@@ -211,22 +249,6 @@ namespace Zilon.Core.Tactics
                     Person.GetModule<IInventoryModule>().Remove(equipment);
                     break;
             }
-        }
-
-        public void TakeDamage(int value)
-        {
-            Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health, value);
-
-            if (_perkResolver != null && Person.GetModuleSafe<IEvolutionModule>() != null)
-            {
-                var takeDamageProgress = new TakeDamageJobProgress(value);
-                _perkResolver.ApplyProgress(takeDamageProgress, Person.GetModule<IEvolutionModule>());
-
-                var takeHitProgress = new TakeHitJobProgress();
-                _perkResolver.ApplyProgress(takeHitProgress, Person.GetModule<IEvolutionModule>());
-            }
-
-            DoDamageTaken(value);
         }
 
         [ExcludeFromCodeCoverage]
@@ -444,32 +466,10 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        public void MineDeposit(IStaticObject deposit, IMineDepositMethod method)
-        {
-            if (deposit is null)
-            {
-                throw new ArgumentNullException(nameof(deposit));
-            }
-
-            if (method is null)
-            {
-                throw new ArgumentNullException(nameof(method));
-            }
-
-            var openResult = method?.TryMine(deposit.GetModule<IPropDepositModule>());
-
-            DoMineDeposit(deposit, openResult);
-        }
-
         private void DoMineDeposit(IStaticObject deposit, IMineDepositResult openResult)
         {
             var e = new MineDepositEventArgs(deposit, openResult);
             DepositMined?.Invoke(this, e);
-        }
-
-        public void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
-        {
-            TaskSource = actorTaskSource;
         }
     }
 }

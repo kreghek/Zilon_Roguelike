@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Persons
@@ -7,6 +6,13 @@ namespace Zilon.Core.Persons
     public abstract class PersonBase : IPerson
     {
         private readonly IDictionary<string, IPersonModule> _modules;
+
+        protected PersonBase(IFraction fraction)
+        {
+            _modules = new Dictionary<string, IPersonModule>();
+
+            Fraction = fraction ?? throw new System.ArgumentNullException(nameof(fraction));
+        }
 
         /// <inheritdoc/>
         public abstract int Id { get; set; }
@@ -16,13 +22,6 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc/>
         public IFraction Fraction { get; }
-
-        protected PersonBase(IFraction fraction)
-        {
-            _modules = new Dictionary<string, IPersonModule>();
-
-            Fraction = fraction ?? throw new System.ArgumentNullException(nameof(fraction));
-        }
 
         /// <inheritdoc/>
         public TPersonModule GetModule<TPersonModule>(string key) where TPersonModule : IPersonModule

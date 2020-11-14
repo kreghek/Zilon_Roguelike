@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
@@ -17,6 +16,11 @@ namespace Zilon.Core.PersonModules
         /// Текущие характеристики.
         /// </summary>
         SurvivalStat[] Stats { get; }
+
+        /// <summary>
+        /// Признак того, что персонаж мёртв.
+        /// </summary>
+        bool IsDead { get; }
 
         /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
         void ResetStats();
@@ -46,11 +50,6 @@ namespace Zilon.Core.PersonModules
         /// <param name="type"> Тип характеритсики, которая будет произведено влияние. </param>
         /// <param name="value"> Целевое значение запаса характеристики. </param>
         void SetStatForce(SurvivalStatType type, int value);
-
-        /// <summary>
-        /// Признак того, что персонаж мёртв.
-        /// </summary>
-        bool IsDead { get; }
 
         /// <summary>
         /// Происходит, если персонаж умирает.

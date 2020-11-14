@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
@@ -11,10 +9,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// <summary>
     /// Try to split regions to smaller.
     /// </summary>
-    class SplitToTargetCountRegionPostProcessor : IRegionPostProcessor
+    internal class SplitToTargetCountRegionPostProcessor : IRegionPostProcessor
     {
-        private readonly IMapRuleManager _mapRuleManager;
         private readonly IDice _dice;
+        private readonly IMapRuleManager _mapRuleManager;
 
         public SplitToTargetCountRegionPostProcessor(IMapRuleManager mapRuleManager, IDice dice)
         {
@@ -44,7 +42,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// <param name="targetRegionCount"> Целевое число регионов. </param>
         /// <returns> Возвращает новый массив черновиков регионов. </returns>
         private RegionDraft[] SplitRegionsForTransitions(
-            [NotNull, ItemNotNull] RegionDraft[] draftRegions,
+            [NotNull] [ItemNotNull] RegionDraft[] draftRegions,
             int targetRegionCount)
         {
             if (draftRegions == null)
@@ -54,7 +52,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             if (targetRegionCount <= 0)
             {
-                throw new ArgumentException("Целевое количество регионов должно быть больше 0.", nameof(targetRegionCount));
+                throw new ArgumentException("Целевое количество регионов должно быть больше 0.",
+                    nameof(targetRegionCount));
             }
 
             var regionCountDiff = targetRegionCount - draftRegions.Length;
@@ -65,8 +64,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
             var availableCoords = from region in availableSplitRegions
-                                  from coord in region.Coords.Skip(1)
-                                  select new RegionCoords(coord, region);
+                from coord in region.Coords.Skip(1)
+                select new RegionCoords(coord, region);
 
             if (availableCoords.Count() < regionCountDiff)
             {
@@ -75,7 +74,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Даже если делать по одной клетки на регион.
                 // В этом случае ничего сделать нельзя.
                 // Передаём проблему вызывающему коду.
-                throw new CellularAutomatonException("Невозможно расщепить регионы на достаточное количество. Клеток меньше, чем требуется.");
+                throw new CellularAutomatonException(
+                    "Невозможно расщепить регионы на достаточное количество. Клеток меньше, чем требуется.");
             }
 
             var openRegionCoords = new List<RegionCoords>(availableCoords);
@@ -108,7 +108,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                     foreach (var splittedCoord in splittedCoords)
                     {
-                        var newRegionDraft = new RegionDraft(new[] { splittedCoord });
+                        var newRegionDraft = new RegionDraft(new[] {splittedCoord});
                         newDraftRegionList.Add(newRegionDraft);
                     }
                 }

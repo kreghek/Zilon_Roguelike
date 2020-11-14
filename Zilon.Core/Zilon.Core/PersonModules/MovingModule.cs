@@ -15,7 +15,7 @@ namespace Zilon.Core.PersonModules
             _attributesModule = attributesModule;
         }
 
-        public string Key { get => nameof(IMovingModule); }
+        public string Key => nameof(IMovingModule);
         public bool IsActive { get; set; }
 
         public int CalculateCost()

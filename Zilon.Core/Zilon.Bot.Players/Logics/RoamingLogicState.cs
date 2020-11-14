@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -35,7 +34,8 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
         {
             if (MoveTask == null)
             {
@@ -45,43 +45,36 @@ namespace Zilon.Bot.Players.Logics
                 {
                     return MoveTask;
                 }
-                else
-                {
-                    // Это может произойти, если актёр не выбрал следующий узел.
-                    // Тогда переводим актёра в режим ожидания.
+                // Это может произойти, если актёр не выбрал следующий узел.
+                // Тогда переводим актёра в режим ожидания.
 
-                    var taskContext = new ActorTaskContext(context.Sector);
-                    IdleTask = new IdleTask(actor, taskContext, DecisionSource);
-                    return IdleTask;
-                }
+                var taskContext = new ActorTaskContext(context.Sector);
+                IdleTask = new IdleTask(actor, taskContext, DecisionSource);
+                return IdleTask;
             }
-            else
+
+            if (!MoveTask.IsComplete)
             {
-                if (!MoveTask.IsComplete)
+                // Если команда на перемещение к целевой точке патруля не закончена,
+                // тогда продолжаем её.
+                // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
+                if (!MoveTask.CanExecute())
                 {
-                    // Если команда на перемещение к целевой точке патруля не закончена,
-                    // тогда продолжаем её.
-                    // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
-                    if (!MoveTask.CanExecute())
-                    {
-                        MoveTask = CreateBypassMoveTask(actor, context.Sector);
-                    }
-
-                    if (MoveTask != null)
-                    {
-                        return MoveTask;
-                    }
-
-                    var taskContext = new ActorTaskContext(context.Sector);
-                    IdleTask = new IdleTask(actor, taskContext, DecisionSource);
-                    return IdleTask;
+                    MoveTask = CreateBypassMoveTask(actor, context.Sector);
                 }
-                else
+
+                if (MoveTask != null)
                 {
-                    Complete = true;
-                    return null;
+                    return MoveTask;
                 }
+
+                var taskContext = new ActorTaskContext(context.Sector);
+                IdleTask = new IdleTask(actor, taskContext, DecisionSource);
+                return IdleTask;
             }
+
+            Complete = true;
+            return null;
         }
     }
 }

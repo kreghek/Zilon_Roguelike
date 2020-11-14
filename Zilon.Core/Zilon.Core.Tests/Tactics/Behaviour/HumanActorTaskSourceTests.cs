@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
 using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics.Spatial;
 
@@ -32,7 +30,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает целевые комнаты для соединения.
         /// </returns>
-        [NotNull, ItemNotNull]
+        [NotNull]
+        [ItemNotNull]
         public Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms)
         {
             var openRooms = new List<Room>(availableRooms);
@@ -227,7 +226,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
         {
             var index = _dice.Roll(0, openTransitions.Count() - 1);
-            return new[] { openTransitions.ElementAt(index) };
+            return new[] {openTransitions.ElementAt(index)};
         }
     }
 }

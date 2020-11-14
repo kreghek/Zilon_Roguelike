@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
-    public class SchemeServiceHandler<TSchemeImpl> : ISchemeServiceHandler<TSchemeImpl> where TSchemeImpl : class, IScheme
+    public class SchemeServiceHandler<TSchemeImpl> : ISchemeServiceHandler<TSchemeImpl>
+        where TSchemeImpl : class, IScheme
     {
         private const string SchemePostfix = "Scheme";
 
         private readonly Dictionary<string, TSchemeImpl> _dict;
-        private readonly ISchemeLocator _locator;
         private readonly string _directory;
-
-        public JsonSerializerSettings JsonSerializerSettings { get; set; }
+        private readonly ISchemeLocator _locator;
 
         public SchemeServiceHandler(ISchemeLocator locator)
         {
@@ -33,6 +31,8 @@ namespace Zilon.Core.Schemes
 
             _dict = new Dictionary<string, TSchemeImpl>();
         }
+
+        public JsonSerializerSettings JsonSerializerSettings { get; set; }
 
         public void LoadSchemes()
         {
@@ -63,17 +63,6 @@ namespace Zilon.Core.Schemes
             }
         }
 
-        private TSchemeImpl ParseSchemeFromFile(SchemeFile file)
-        {
-            // Если явно указаны настройки десериализации, то используем их.
-            if (JsonSerializerSettings == null)
-            {
-                return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content);
-            }
-
-            return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content, JsonSerializerSettings);
-        }
-
         public TSchemeImpl GetItem(string sid)
         {
             try
@@ -89,6 +78,17 @@ namespace Zilon.Core.Schemes
         public TSchemeImpl[] GetAll()
         {
             return _dict.Values.ToArray();
+        }
+
+        private TSchemeImpl ParseSchemeFromFile(SchemeFile file)
+        {
+            // Если явно указаны настройки десериализации, то используем их.
+            if (JsonSerializerSettings == null)
+            {
+                return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content);
+            }
+
+            return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content, JsonSerializerSettings);
         }
 
         private static string CalcDirectory()

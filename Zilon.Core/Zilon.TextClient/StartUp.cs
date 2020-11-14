@@ -1,7 +1,5 @@
 ﻿using System;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
@@ -24,7 +22,9 @@ namespace Zilon.TextClient
             serviceCollection.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
             serviceCollection.AddSingleton<LogicStateTreePatterns>();
 
-            serviceCollection.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanActorTaskSource<ISectorTaskSourceContext>>();
+            serviceCollection
+                .AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanActorTaskSource<ISectorTaskSourceContext>
+                >();
         }
     }
 }

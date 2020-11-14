@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Zilon.BotMassLauncher
 {
-    class Program
+    internal class Program
     {
         private static string _pathToEnv;
         private static int _launchCount;
@@ -22,7 +22,7 @@ namespace Zilon.BotMassLauncher
         private static CancellationToken _shutdownToken;
         private static CancellationTokenSource _shutdownTokenSource;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("[x] START");
 
@@ -69,7 +69,7 @@ namespace Zilon.BotMassLauncher
             } while (_isInfinite);
 
 
-            Console.WriteLine($"[x] COMPLETE");
+            Console.WriteLine("[x] COMPLETE");
         }
 
         private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
@@ -84,8 +84,7 @@ namespace Zilon.BotMassLauncher
         {
             var parallelOptions = new ParallelOptions
             {
-                MaxDegreeOfParallelism = maxDegreeOfParallelism,
-                CancellationToken = _shutdownToken
+                MaxDegreeOfParallelism = maxDegreeOfParallelism, CancellationToken = _shutdownToken
             };
 
             Parallel.For(0, _launchCount, parallelOptions, RunEnvironment);
@@ -110,7 +109,7 @@ namespace Zilon.BotMassLauncher
             var infiniteCounterPreffix = string.Empty;
             if (_isInfinite)
             {
-                infiniteCounterPreffix = _infiniteCounter.ToString() + " ";
+                infiniteCounterPreffix = _infiniteCounter + " ";
             }
 
             Console.WriteLine($"[x] {infiniteCounterPreffix}ITERATION {iteration} STARTED");
@@ -122,8 +121,8 @@ namespace Zilon.BotMassLauncher
                     FileName = _pathToEnv,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments = $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg} schemeCatalogPath={_schemeCatlogPath} output={_scorePath} botCatalog={_botCatalog} botAssembly={_botAssembly}",
-
+                    Arguments =
+                        $"serverrun ScorePreffix=\"{_scorePreffix}\"{modeArg} schemeCatalogPath={_schemeCatlogPath} output={_scorePath} botCatalog={_botCatalog} botAssembly={_botAssembly}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true
                 };
@@ -158,7 +157,7 @@ namespace Zilon.BotMassLauncher
 
             foreach (var arg in args)
             {
-                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                var components = arg.Split(new[] {'='}, StringSplitOptions.RemoveEmptyEntries);
                 if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (components.Length >= 2)

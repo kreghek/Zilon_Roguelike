@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
@@ -12,6 +10,13 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public sealed class UsedActEventArgs : EventArgs
     {
+        [ExcludeFromCodeCoverage]
+        public UsedActEventArgs([NotNull] IAttackTarget target, [NotNull] ITacticalAct tacticalAct)
+        {
+            Target = target ?? throw new ArgumentNullException(nameof(target));
+            TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
+        }
+
         /// <summary>
         /// Цель действия.
         /// </summary>
@@ -23,12 +28,5 @@ namespace Zilon.Core.Tactics
         /// </summary>
         [PublicAPI]
         public ITacticalAct TacticalAct { get; }
-
-        [ExcludeFromCodeCoverage]
-        public UsedActEventArgs([NotNull] IAttackTarget target, [NotNull] ITacticalAct tacticalAct)
-        {
-            Target = target ?? throw new ArgumentNullException(nameof(target));
-            TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
-        }
     }
 }

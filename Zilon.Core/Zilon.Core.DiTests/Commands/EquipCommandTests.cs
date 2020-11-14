@@ -1,11 +1,7 @@
 ﻿using FluentAssertions;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Components;
@@ -52,8 +48,10 @@ namespace Zilon.Core.Tests.Commands
                 Use = new TestPropUseSubScheme
                 {
                     Consumable = true,
-                    CommonRules = new ConsumeCommonRule[] {
-                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser, PersonRuleDirection.Positive)
+                    CommonRules = new[]
+                    {
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser,
+                            PersonRuleDirection.Positive)
                     }
                 }
             };
@@ -85,7 +83,8 @@ namespace Zilon.Core.Tests.Commands
             var command = ServiceProvider.GetRequiredService<EquipCommand>();
             command.SlotIndex = 0;
 
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
@@ -98,12 +97,7 @@ namespace Zilon.Core.Tests.Commands
         {
             var propScheme = new TestPropScheme
             {
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
             var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
 

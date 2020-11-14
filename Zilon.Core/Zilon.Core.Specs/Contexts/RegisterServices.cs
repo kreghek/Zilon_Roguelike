@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Moq;
-
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
@@ -189,25 +186,33 @@ namespace Zilon.Core.Specs.Contexts
         private static void RegisterPlayerServices(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
-            serviceCollection.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanBotActorTaskSource<ISectorTaskSourceContext>>();
-            serviceCollection.AddSingleton<IHumanActorTaskSource<ISectorTaskSourceContext>, HumanActorTaskSource<ISectorTaskSourceContext>>();
+            serviceCollection
+                .AddSingleton<IActorTaskSource<ISectorTaskSourceContext>,
+                    HumanBotActorTaskSource<ISectorTaskSourceContext>>();
+            serviceCollection
+                .AddSingleton<IHumanActorTaskSource<ISectorTaskSourceContext>,
+                    HumanActorTaskSource<ISectorTaskSourceContext>>();
             serviceCollection.AddSingleton<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
             serviceCollection.AddSingleton<IActorTaskSourceCollector>(serviceProvider =>
             {
-                var humanTaskSource = serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+                var humanTaskSource =
+                    serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+                var monsterTaskSource =
+                    serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
                 return new ActorTaskSourceCollector(humanTaskSource, monsterTaskSource);
             });
             RegisterManager.RegisterBot(serviceCollection);
         }
 
-        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider, TacticalActUsageService tacticalActUsageService)
+        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider,
+            TacticalActUsageService tacticalActUsageService)
         {
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
         }
 
-        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider, ActorActUsageHandler handler)
+        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider,
+            ActorActUsageHandler handler)
         {
             // Указание необязательных зависимостей
             handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
@@ -226,9 +231,11 @@ namespace Zilon.Core.Specs.Contexts
                 return _specificActUsageRandomSource;
             }
 
-            var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
+            var actUsageRandomSourceMock =
+                new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
-                .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);  // Всегда берётся среднее значение среди всех бросков
+                .Returns<Roll
+                >(roll => roll.Dice / 2 * roll.Count); // Всегда берётся среднее значение среди всех бросков
             actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
                 .Returns(4);
             actUsageRandomSourceMock.Setup(x => x.RollArmorSave())

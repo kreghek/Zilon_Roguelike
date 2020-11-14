@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 
@@ -38,10 +37,7 @@ namespace Zilon.Core.Persons
                 var rolledTraitScheme = _dice.RollFromList(openTraitSchemeList);
                 openTraitSchemeList.Remove(rolledTraitScheme);
 
-                var traitPerk = new Perk
-                {
-                    Scheme = rolledTraitScheme
-                };
+                var traitPerk = new Perk {Scheme = rolledTraitScheme};
 
                 traitList.Add(traitPerk);
             }

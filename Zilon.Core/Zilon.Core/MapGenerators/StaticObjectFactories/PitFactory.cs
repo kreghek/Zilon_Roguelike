@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -7,7 +6,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
     public sealed class PitFactory : IStaticObjectFactory
     {
-        public PropContainerPurpose Purpose { get => PropContainerPurpose.Pit; }
+        public PropContainerPurpose Purpose => PropContainerPurpose.Pit;
 
         public IStaticObject Create(ISector sector, HexNode node, int id)
         {

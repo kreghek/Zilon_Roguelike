@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using FluentAssertions;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Moq;
-
 using TechTalk.SpecFlow;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
+using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Specs.Contexts;
@@ -36,41 +32,45 @@ namespace Zilon.Core.Specs.Steps
             switch (ScenarioContext.Current.ScenarioInfo.Title)
             {
                 case "Успешный удар двумя оружиями.":
-                    {
-                        var dice = Context.ServiceProvider.GetRequiredService<IDice>();
+                {
+                    var dice = Context.ServiceProvider.GetRequiredService<IDice>();
 
-                        var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
-                        actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
-                            .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);  // Всегда берётся среднее значение среди всех бросков
-                        actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
-                            .Returns(4);
-                        actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
-                            .Returns(4);
-                        actUsageRandomSourceMock.Setup(x => x.RollUseSecondaryAct())
-                            .Returns(6);
-                        var actUsageRandomSource = actUsageRandomSourceMock.Object;
+                    var actUsageRandomSourceMock =
+                        new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
+                    actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
+                        .Returns<Roll
+                        >(roll => roll.Dice / 2 * roll.Count); // Всегда берётся среднее значение среди всех бросков
+                    actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
+                        .Returns(4);
+                    actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
+                        .Returns(4);
+                    actUsageRandomSourceMock.Setup(x => x.RollUseSecondaryAct())
+                        .Returns(6);
+                    var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-                        Context.RegisterServices.SpecifyTacticalActUsageRandomSource(actUsageRandomSource);
-                    }
+                    Context.RegisterServices.SpecifyTacticalActUsageRandomSource(actUsageRandomSource);
+                }
                     break;
 
                 case "Провальный удар двумя оружиями.":
-                    {
-                        var dice = Context.ServiceProvider.GetRequiredService<IDice>();
+                {
+                    var dice = Context.ServiceProvider.GetRequiredService<IDice>();
 
-                        var actUsageRandomSourceMock = new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
-                        actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
-                            .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);  // Всегда берётся среднее значение среди всех бросков
-                        actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
-                            .Returns(4);
-                        actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
-                            .Returns(4);
-                        actUsageRandomSourceMock.Setup(x => x.RollUseSecondaryAct())
-                            .Returns(1);
-                        var actUsageRandomSource = actUsageRandomSourceMock.Object;
+                    var actUsageRandomSourceMock =
+                        new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
+                    actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
+                        .Returns<Roll
+                        >(roll => roll.Dice / 2 * roll.Count); // Всегда берётся среднее значение среди всех бросков
+                    actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
+                        .Returns(4);
+                    actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
+                        .Returns(4);
+                    actUsageRandomSourceMock.Setup(x => x.RollUseSecondaryAct())
+                        .Returns(1);
+                    var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
-                        Context.RegisterServices.SpecifyTacticalActUsageRandomSource(actUsageRandomSource);
-                    }
+                    Context.RegisterServices.SpecifyTacticalActUsageRandomSource(actUsageRandomSource);
+                }
                     break;
 
                 default:
@@ -86,10 +86,7 @@ namespace Zilon.Core.Specs.Steps
 
             var monster = Context.GetMonsterById(monsterId);
 
-            var monsterViewModel = new TestActorViewModel
-            {
-                Actor = monster
-            };
+            var monsterViewModel = new TestActorViewModel {Actor = monster};
 
             playerState.SelectedViewModel = monsterViewModel;
             playerState.TacticalAct = GetUsedActs(playerState.ActiveActor.Actor).First();
@@ -115,14 +112,14 @@ namespace Zilon.Core.Specs.Steps
                         continue;
                     }
 
-                    if ((slots[i].Types & Components.EquipmentSlotTypes.Hand) == 0)
+                    if ((slots[i].Types & EquipmentSlotTypes.Hand) == 0)
                     {
                         continue;
                     }
 
                     var equipmentActs = from act in actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
-                                        where act.Equipment == slotEquipment
-                                        select act;
+                        where act.Equipment == slotEquipment
+                        select act;
 
                     var usedAct = equipmentActs.FirstOrDefault();
 

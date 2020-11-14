@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 
@@ -9,7 +8,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// <summary>
     /// Generate map using cellular automaton algorithm.
     /// </summary>
-    class CellularAutomatonGenerator
+    internal class CellularAutomatonGenerator
     {
         private const int DEATH_LIMIT = 4;
         private const int BIRTH_LIMIT = 6;

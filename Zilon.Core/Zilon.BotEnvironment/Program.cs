@@ -5,9 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Bot.Sdk;
 using Zilon.CommonUtilities;
 using Zilon.Core.Persons;
@@ -18,14 +16,14 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
-    class Program
+    internal class Program
     {
         private const string SERVER_RUN_ARG = "ServerRun";
         private const string SCORE_PREFFIX_ARG = "ScorePreffix";
         private const string BOT_MODE_ARG = "Mode";
         private static Startup _startUp;
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var scoreFilePreffix = ArgumentHelper.GetProgramArgument(args, SCORE_PREFFIX_ARG);
 
@@ -34,10 +32,7 @@ namespace Zilon.BotEnvironment
             _startUp = new Startup();
             _startUp.RegisterServices(serviceCollection);
 
-            var botSettings = new BotSettings
-            {
-                Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG)
-            };
+            var botSettings = new BotSettings {Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG)};
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
             LoadBotAssembly("cdt", "Zilon.Bot.Players.NetCore.dll", serviceCollection, serviceProvider);
@@ -75,14 +70,16 @@ namespace Zilon.BotEnvironment
 
             // Регистрируем сервис источника команд.
             var botActorTaskSourceType = GetBotActorTaskSource(registerManager);
-            serviceRegistry.AddScoped(typeof(IPluggableActorTaskSource<ISectorTaskSourceContext>), botActorTaskSourceType);
-            serviceRegistry.AddScoped<IActorTaskSource<ISectorTaskSourceContext>>(factory => factory.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>());
+            serviceRegistry.AddScoped(typeof(IPluggableActorTaskSource<ISectorTaskSourceContext>),
+                botActorTaskSourceType);
+            serviceRegistry.AddScoped<IActorTaskSource<ISectorTaskSourceContext>>(factory =>
+                factory.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>());
 
             var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);
-            registerAuxMethod.Invoke(null, new object[] { serviceRegistry });
+            registerAuxMethod.Invoke(null, new object[] {serviceRegistry});
 
             var configAuxMethod = GetMethodByAttribute<ConfigureAuxServicesAttribute>(registerManager);
-            configAuxMethod.Invoke(null, new object[] { serviceFactory });
+            configAuxMethod.Invoke(null, new object[] {serviceFactory});
         }
 
         private static IEnumerable<Type> GetTypesWithHelpAttribute<TAttribute>(Assembly assembly)
@@ -111,7 +108,8 @@ namespace Zilon.BotEnvironment
             return null;
         }
 
-        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType) where TAttribute : Attribute
+        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType)
+            where TAttribute : Attribute
         {
             var methods = registerManagerType.GetMethods();
             foreach (var method in methods)

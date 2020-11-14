@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Props;
 
 namespace Zilon.Core.Client
@@ -11,6 +10,18 @@ namespace Zilon.Core.Client
     /// </summary>
     public class PropTransferStore : IPropStore
     {
+        /// <summary>
+        /// Конструктор для хранилища-трансфера.
+        /// </summary>
+        /// <param name="propStore"> Реальное хранилище предметов. </param>
+        public PropTransferStore(IPropStore propStore)
+        {
+            PropStore = propStore;
+
+            PropAdded = new List<IProp>();
+            PropRemoved = new List<IProp>();
+        }
+
         /// <summary>
         /// Список добавленых в хранилище предметов по сравнению с базовым хранилищем.
         /// </summary>
@@ -48,18 +59,6 @@ namespace Zilon.Core.Client
         public event EventHandler<PropStoreEventArgs> Changed;
 
         /// <summary>
-        /// Конструктор для хранилища-трансфера.
-        /// </summary>
-        /// <param name="propStore"> Реальное хранилище предметов. </param>
-        public PropTransferStore(IPropStore propStore)
-        {
-            PropStore = propStore;
-
-            PropAdded = new List<IProp>();
-            PropRemoved = new List<IProp>();
-        }
-
-        /// <summary>
         /// Предметы в хранилище.
         /// </summary>
         public IProp[] CalcActualItems()
@@ -70,73 +69,6 @@ namespace Zilon.Core.Client
             ProcessAddedProps(result);
 
             return result.ToArray();
-        }
-
-        private void ProcessAddedProps(List<IProp> result)
-        {
-            foreach (var prop in PropAdded)
-            {
-                switch (prop)
-                {
-                    case Resource _:
-                        var existsResource = result.SingleOrDefault(x => x.Scheme == prop.Scheme);
-                        if (existsResource == null)
-                        {
-                            result.Add(prop);
-                        }
-                        break;
-
-                    case Equipment _:
-                    case Concept _:
-                        result.Add(prop);
-                        break;
-
-                    default:
-                        throw new NotSupportedException();
-                }
-            }
-        }
-
-        private void ProcessCurrentProps(List<IProp> result, IProp[] propStoreItems)
-        {
-            foreach (var prop in propStoreItems)
-            {
-                switch (prop)
-                {
-                    case Resource resource:
-                        MergeResource(result, resource);
-                        break;
-
-                    case Equipment _:
-                    case Concept _:
-                        var isRemoved = PropRemoved.Contains(prop);
-
-                        if (!isRemoved)
-                        {
-                            result.Add(prop);
-                        }
-                        break;
-                }
-            }
-        }
-
-        private void MergeResource(List<IProp> result, Resource resource)
-        {
-            var removedResource = PropRemoved.OfType<Resource>()
-                                        .SingleOrDefault(x => x.Scheme == resource.Scheme);
-
-            var addedResource = PropAdded.OfType<Resource>()
-                .SingleOrDefault(x => x.Scheme == resource.Scheme);
-
-            var addedCount = addedResource?.Count;
-            var removedCount = removedResource?.Count;
-            var remainsCount = resource.Count + addedCount.GetValueOrDefault() - removedCount.GetValueOrDefault();
-
-            if (remainsCount > 0)
-            {
-                var remainsResource = new Resource(resource.Scheme, remainsCount);
-                result.Add(remainsResource);
-            }
         }
 
         /// <summary>
@@ -219,6 +151,82 @@ namespace Zilon.Core.Client
             }
         }
 
+        public bool Has(IProp prop)
+        {
+            //TODO Неправильная реализация
+            // Не учитывает списки добавленных и удалённых предметов.
+            return PropStore.Has(prop);
+        }
+
+        private void ProcessAddedProps(List<IProp> result)
+        {
+            foreach (var prop in PropAdded)
+            {
+                switch (prop)
+                {
+                    case Resource _:
+                        var existsResource = result.SingleOrDefault(x => x.Scheme == prop.Scheme);
+                        if (existsResource == null)
+                        {
+                            result.Add(prop);
+                        }
+
+                        break;
+
+                    case Equipment _:
+                    case Concept _:
+                        result.Add(prop);
+                        break;
+
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+        }
+
+        private void ProcessCurrentProps(List<IProp> result, IProp[] propStoreItems)
+        {
+            foreach (var prop in propStoreItems)
+            {
+                switch (prop)
+                {
+                    case Resource resource:
+                        MergeResource(result, resource);
+                        break;
+
+                    case Equipment _:
+                    case Concept _:
+                        var isRemoved = PropRemoved.Contains(prop);
+
+                        if (!isRemoved)
+                        {
+                            result.Add(prop);
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        private void MergeResource(List<IProp> result, Resource resource)
+        {
+            var removedResource = PropRemoved.OfType<Resource>()
+                .SingleOrDefault(x => x.Scheme == resource.Scheme);
+
+            var addedResource = PropAdded.OfType<Resource>()
+                .SingleOrDefault(x => x.Scheme == resource.Scheme);
+
+            var addedCount = addedResource?.Count;
+            var removedCount = removedResource?.Count;
+            var remainsCount = resource.Count + addedCount.GetValueOrDefault() - removedCount.GetValueOrDefault();
+
+            if (remainsCount > 0)
+            {
+                var remainsResource = new Resource(resource.Scheme, remainsCount);
+                result.Add(remainsResource);
+            }
+        }
+
         private static void TransferResource(Resource resource,
             IList<IProp> mainList,
             IList<IProp> oppositList)
@@ -229,7 +237,6 @@ namespace Zilon.Core.Client
                 var remains = oppositResource.Count - resource.Count;
                 if (remains > 0)
                 {
-                    return;
                 }
                 else
                 {
@@ -271,13 +278,6 @@ namespace Zilon.Core.Client
             }
 
             oppositList.Add(prop);
-        }
-
-        public bool Has(IProp prop)
-        {
-            //TODO Неправильная реализация
-            // Не учитывает списки добавленных и удалённых предметов.
-            return PropStore.Has(prop);
         }
     }
 }

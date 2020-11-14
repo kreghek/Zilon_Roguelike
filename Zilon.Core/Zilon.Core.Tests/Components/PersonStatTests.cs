@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
-
 using NUnit.Framework;
-
 using Zilon.Core.Components;
 
 namespace Zilon.Core.Tests.Components
@@ -25,10 +23,8 @@ namespace Zilon.Core.Tests.Components
             var personStat = new PersonStat(baseValue, incrementValue);
 
 
-
             // ACT
-            var factValue = personStat.GetActualValue(level, rarityBonus: 0);
-
+            var factValue = personStat.GetActualValue(level, 0);
 
 
             // ASSERT
@@ -50,17 +46,13 @@ namespace Zilon.Core.Tests.Components
 
             var personStat = new PersonStat(baseValue, incrementValue);
 
-            var bonuses = new[] {
-                new PersonStat(bonusValue)
-            };
-
+            var bonuses = new[] {new PersonStat(bonusValue)};
 
 
             // ACT
             var factValue = personStat.GetActualValue(level,
-                rarityBonus: 0,
-                bonuses: bonuses);
-
+                0,
+                bonuses);
 
 
             // ASSERT

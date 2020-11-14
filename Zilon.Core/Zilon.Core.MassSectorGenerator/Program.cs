@@ -4,9 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.CommonUtilities;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
@@ -16,16 +14,16 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.MassSectorGenerator
 {
-    class Program
+    internal class Program
     {
-        private readonly static Random _random;
+        private static readonly Random _random;
 
         static Program()
         {
             _random = new Random();
         }
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var diceSeed = GetDiceSeed(args);
             var outputPath = GetOutputPath(args);
@@ -80,7 +78,8 @@ namespace Zilon.Core.MassSectorGenerator
             return Task.CompletedTask;
         }
 
-        private static Task CheckSectorAsync(ISectorValidator[] validators, IServiceProvider scopeContainer, ISector sector)
+        private static Task CheckSectorAsync(ISectorValidator[] validators, IServiceProvider scopeContainer,
+            ISector sector)
         {
             return Task.Run(() =>
             {

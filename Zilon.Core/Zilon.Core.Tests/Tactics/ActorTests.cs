@@ -1,7 +1,6 @@
 ﻿using Moq;
-
 using NUnit.Framework;
-
+using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -41,11 +40,12 @@ namespace Zilon.Core.Tactics.Tests
             {
                 Use = new TestPropUseSubScheme
                 {
-                    CommonRules = new[] {
+                    CommonRules = new[]
+                    {
                         new ConsumeCommonRule(
                             ConsumeCommonRuleType.Intoxication,
-                            Components.PersonRuleLevel.Lesser,
-                            Components.PersonRuleDirection.Negative)
+                            PersonRuleLevel.Lesser,
+                            PersonRuleDirection.Negative)
                     }
                 }
             };
@@ -55,8 +55,9 @@ namespace Zilon.Core.Tactics.Tests
             actor.UseProp(testResource);
 
             // ASSERT
-            survivalModuleMock.Verify(x => x.DecreaseStat(It.Is<SurvivalStatType>(v => v == SurvivalStatType.Intoxication),
-                It.IsAny<int>()));
+            survivalModuleMock.Verify(x =>
+                x.DecreaseStat(It.Is<SurvivalStatType>(v => v == SurvivalStatType.Intoxication),
+                    It.IsAny<int>()));
         }
     }
 }

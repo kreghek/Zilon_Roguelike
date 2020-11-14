@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -10,7 +9,8 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class EquipBetterPropLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
         {
             var inventory = actor.Person.GetModule<IInventoryModule>();
             var currentInventoryProps = inventory.CalcActualItems();

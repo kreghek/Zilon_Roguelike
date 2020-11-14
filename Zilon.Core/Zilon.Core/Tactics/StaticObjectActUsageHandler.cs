@@ -8,7 +8,7 @@ namespace Zilon.Core.Tactics
     public sealed class StaticObjectActUsageHandler : IActUsageHandler
     {
         /// <inheritdoc/>
-        public Type TargetType { get => typeof(IStaticObject); }
+        public Type TargetType => typeof(IStaticObject);
 
         /// <inheritdoc/>
         public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll)

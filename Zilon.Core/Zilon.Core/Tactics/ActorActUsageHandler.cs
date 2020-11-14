@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Components;
 using Zilon.Core.Diseases;
 using Zilon.Core.PersonModules;
@@ -18,8 +17,15 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public sealed class ActorActUsageHandler : IActUsageHandler
     {
-        private readonly IPerkResolver _perkResolver;
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
+        private readonly IPerkResolver _perkResolver;
+
+        public ActorActUsageHandler(IPerkResolver perkResolver, ITacticalActUsageRandomSource actUsageRandomSource)
+        {
+            _perkResolver = perkResolver ?? throw new ArgumentNullException(nameof(perkResolver));
+            _actUsageRandomSource =
+                actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
+        }
 
         /// <summary>
         /// Шина событий возаимодействия актёров.
@@ -39,14 +45,8 @@ namespace Zilon.Core.Tactics
         /// <summary>Сервис для работы с прочностью экипировки.</summary>
         public IEquipmentDurableService EquipmentDurableService { get; set; }
 
-        public ActorActUsageHandler(IPerkResolver perkResolver, ITacticalActUsageRandomSource actUsageRandomSource)
-        {
-            _perkResolver = perkResolver ?? throw new ArgumentNullException(nameof(perkResolver));
-            _actUsageRandomSource = actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
-        }
-
         /// <inheritdoc/>
-        public Type TargetType { get => typeof(IActor); }
+        public Type TargetType => typeof(IActor);
 
         /// <inheritdoc/>
         public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll)
@@ -113,7 +113,8 @@ namespace Zilon.Core.Tactics
 
             if (factToHitRoll >= successToHitRoll)
             {
-                ProcessSuccessfullHit(actor, targetActor, tacticalActRoll, targetIsDeadLast, successToHitRoll, factToHitRoll);
+                ProcessSuccessfullHit(actor, targetActor, tacticalActRoll, targetIsDeadLast, successToHitRoll,
+                    factToHitRoll);
             }
             else
             {
@@ -121,7 +122,8 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessFailedHit(IActor actor, IActor targetActor, PersonDefenceItem prefferedDefenceItem, int successToHitRoll, int factToHitRoll)
+        private void ProcessFailedHit(IActor actor, IActor targetActor, PersonDefenceItem prefferedDefenceItem,
+            int successToHitRoll, int factToHitRoll)
         {
             if (prefferedDefenceItem != null)
             {
@@ -142,7 +144,8 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessSuccessfullHit(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll, bool targetIsDeadLast, int successToHitRoll, int factToHitRoll)
+        private void ProcessSuccessfullHit(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll,
+            bool targetIsDeadLast, int successToHitRoll, int factToHitRoll)
         {
             var damageEfficientCalcResult = CalcEfficient(targetActor, tacticalActRoll);
             var actEfficient = damageEfficientCalcResult.ResultEfficient;
@@ -198,7 +201,8 @@ namespace Zilon.Core.Tactics
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
         private static void HealActor(IActor targetActor, TacticalActRoll tacticalActRoll)
         {
-            targetActor.Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
+            targetActor.Person.GetModuleSafe<ISurvivalModule>()
+                ?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
 
         /// <summary>
@@ -374,7 +378,8 @@ namespace Zilon.Core.Tactics
                     return 10;
 
                 default:
-                    throw new InvalidOperationException($"Неизвестный уровень поглощения брони {preferredArmor.AbsorbtionLevel}.");
+                    throw new InvalidOperationException(
+                        $"Неизвестный уровень поглощения брони {preferredArmor.AbsorbtionLevel}.");
             }
         }
 
@@ -408,7 +413,7 @@ namespace Zilon.Core.Tactics
             var defenceType = HitHelper.GetDefence(offenceType);
 
             return targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Defences
-                            .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
+                .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
         }
 
         private void ProcessSuccessfulAttackEvent(
@@ -425,8 +430,7 @@ namespace Zilon.Core.Tactics
 
             var damageEvent = new DamageActorInteractionEvent(actor, targetActor, damageEfficientCalcResult)
             {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
+                SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
             };
             ActorInteractionBus.PushEvent(damageEvent);
         }
@@ -587,8 +591,7 @@ namespace Zilon.Core.Tactics
 
             var interactEvent = new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem)
             {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
+                SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
             };
 
             ActorInteractionBus.PushEvent(interactEvent);
@@ -603,8 +606,7 @@ namespace Zilon.Core.Tactics
 
             var damageEvent = new PureMissActorInteractionEvent(actor, targetActor)
             {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
+                SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
             };
 
             ActorInteractionBus.PushEvent(damageEvent);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -37,7 +36,10 @@ namespace Zilon.Core.MapGenerators
             if (purposeList.Count < 100)
             {
                 var diff = 100 - purposeList.Count;
-                var everywherePurpose = new[] { PropContainerPurpose.Puddle, PropContainerPurpose.Pit, PropContainerPurpose.TrashHeap };
+                var everywherePurpose = new[]
+                {
+                    PropContainerPurpose.Puddle, PropContainerPurpose.Pit, PropContainerPurpose.TrashHeap
+                };
                 var diffShare = (int)Math.Ceiling(diff / 2f);
                 foreach (var purpose in everywherePurpose)
                 {

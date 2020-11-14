@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.CommonServices;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -11,9 +10,9 @@ namespace Zilon.Core.Tactics
 {
     public class DropResolver : IDropResolver
     {
+        private readonly IPropFactory _propFactory;
         private readonly IDropResolverRandomSource _randomSource;
         private readonly ISchemeService _schemeService;
-        private readonly IPropFactory _propFactory;
         private readonly IUserTimeProvider _userTimeProvider;
 
         public DropResolver(
@@ -130,7 +129,8 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private static IDropTableModificatorScheme CreateEvilHourModifier(DateTime targetDate, float duration, DateTime currentDate)
+        private static IDropTableModificatorScheme CreateEvilHourModifier(DateTime targetDate, float duration,
+            DateTime currentDate)
         {
             var dateDiff = targetDate - currentDate;
 
@@ -140,7 +140,7 @@ namespace Zilon.Core.Tactics
             var bonus = duration * inversedRation;
             var mod = new DropTableModificatorScheme
             {
-                PropSids = new[] { "evil-pumpkin" },
+                PropSids = new[] {"evil-pumpkin"},
                 //TODO Зачем вообще здесь -1. Бонус - это число, на которое нужно умножить.
                 WeightBonus = bonus - 1
             };
@@ -157,20 +157,16 @@ namespace Zilon.Core.Tactics
             {
                 if (record.SchemeSid == null)
                 {
-                    resultList.Add(new DropTableModRecord
-                    {
-                        Record = record,
-                        ModifiedWeight = record.Weight
-                    });
+                    resultList.Add(new DropTableModRecord {Record = record, ModifiedWeight = record.Weight});
                     continue;
                 }
 
-                var recordModificators = modificatorsArray.Where(x => x.PropSids == null || x.PropSids.Contains(record.SchemeSid));
+                var recordModificators =
+                    modificatorsArray.Where(x => x.PropSids == null || x.PropSids.Contains(record.SchemeSid));
                 var totalWeightMultiplier = recordModificators.Sum(x => x.WeightBonus) + 1;
                 resultList.Add(new DropTableModRecord
                 {
-                    Record = record,
-                    ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
+                    Record = record, ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
                 });
             }
 

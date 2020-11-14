@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics

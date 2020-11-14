@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
@@ -39,10 +38,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var transitions = generationOptions.Transitions;
 
-            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
+            var cellularAutomatonOptions =
+                (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
             if (cellularAutomatonOptions == null)
             {
-                throw new ArgumentException($"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
+                throw new ArgumentException(
+                    $"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
             }
 
             var matrixWidth = cellularAutomatonOptions.MapWidth;
@@ -53,7 +54,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var cellularAutomatonGenerator = new CellularAutomatonGenerator(_dice);
 
             var mapRuleManager = new MapRuleManager();
-            var rule = new RegionCountRule { Count = transitions.Count() + 1 };
+            var rule = new RegionCountRule {Count = transitions.Count() + 1};
             mapRuleManager.AddRule(rule);
 
             var regionPostProcessors = new IRegionPostProcessor[]
@@ -65,7 +66,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             {
                 var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
 
-                var regions = cellularAutomatonGenerator.Generate(ref matrix, fillProbability, totalIterations: 7);
+                var regions = cellularAutomatonGenerator.Generate(ref matrix, fillProbability, 7);
 
                 try
                 {
@@ -81,7 +82,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 {
                     // This means that with the current starting data it is not possible to create a suitable map.
                     // Start the next iteration.
-                    continue;
                 }
             }
 
@@ -101,7 +101,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return regions;
         }
 
-        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
+        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions,
+            IEnumerable<RoomTransition> transitions)
         {
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
@@ -126,7 +127,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return map;
         }
 
-        private static void CreateTransitionInSmallestRegion(IEnumerable<RoomTransition> transitions, ISectorMap map, MapRegion[] regionOrderedBySize)
+        private static void CreateTransitionInSmallestRegion(IEnumerable<RoomTransition> transitions, ISectorMap map,
+            MapRegion[] regionOrderedBySize)
         {
             var startRegion = regionOrderedBySize.First();
             startRegion.IsStart = true;
@@ -154,8 +156,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 }
 
                 transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
-                                              where map.Transitions.Keys.Contains(regionNode)
-                                              select regionNode).ToArray();
+                    where map.Transitions.Keys.Contains(regionNode)
+                    select regionNode).ToArray();
             }
         }
 

@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using JetBrains.Annotations;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Moq;
-
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
@@ -32,12 +28,6 @@ namespace Zilon.Core.Specs.Contexts
 {
     public abstract class FeatureContextBase
     {
-        public IServiceProvider ServiceProvider { get; }
-
-        public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
-        public RegisterServices RegisterServices { get; private set; }
-        public IGlobe Globe { get; private set; }
-
         protected FeatureContextBase()
         {
             RaisedActorInteractionEvents = new List<IActorInteractionEvent>();
@@ -49,6 +39,12 @@ namespace Zilon.Core.Specs.Contexts
 
             Configure(serviceProvider);
         }
+
+        public IServiceProvider ServiceProvider { get; }
+
+        public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
+        public RegisterServices RegisterServices { get; }
+        public IGlobe Globe { get; private set; }
 
         private void Configure(IServiceProvider serviceProvider)
         {
@@ -79,9 +75,7 @@ namespace Zilon.Core.Specs.Contexts
 
                 var mapRegion = new MapRegion(1, map.Nodes.ToArray())
                 {
-                    IsStart = true,
-                    IsOut = true,
-                    ExitNodes = new[] { map.Nodes.Last() }
+                    IsStart = true, IsOut = true, ExitNodes = new[] {map.Nodes.Last()}
                 };
 
                 map.Regions.Add(mapRegion);

@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
-
 using NUnit.Framework;
-
 using Zilon.Core.Common;
 using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
@@ -24,10 +22,8 @@ namespace Zilon.Core.Tests.Common
             var expectedCubeCoords = new CubeCoords(cubeX, cubeY, cubeZ);
 
 
-
             // ACT
             var factCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
-
 
 
             // ASSERT
@@ -44,10 +40,8 @@ namespace Zilon.Core.Tests.Common
             var expectedOffset = new OffsetCoords(offsetX, offsetY);
 
 
-
             // ACT
             var factOffsetCoords = HexHelper.ConvertToOffset(cubeCoords);
-
 
 
             // ASSERT

@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Client;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -33,7 +30,6 @@ namespace Zilon.Core.Tests.Client
             var propTransferStore = new PropTransferStore(realStore);
 
 
-
             // ACT
             propTransferStore.Add(testedResource);
 
@@ -58,9 +54,7 @@ namespace Zilon.Core.Tests.Client
 
             var testedScheme = new PropScheme();
 
-            var props = new IProp[] {
-                new Resource(testedScheme, inventoryCount)
-            };
+            var props = new IProp[] {new Resource(testedScheme, inventoryCount)};
 
             var realStore = CreateContainer(props);
 
@@ -68,7 +62,6 @@ namespace Zilon.Core.Tests.Client
             var testedResource = new Resource(testedScheme, expectedCount);
 
             var propTransferStore = new PropTransferStore(realStore);
-
 
 
             // ACT
@@ -94,9 +87,7 @@ namespace Zilon.Core.Tests.Client
 
             var testedScheme = new PropScheme();
 
-            var props = new IProp[] {
-                new Resource(testedScheme, inventoryCount)
-            };
+            var props = new IProp[] {new Resource(testedScheme, inventoryCount)};
 
             var realStore = CreateContainer(props);
 
@@ -106,19 +97,17 @@ namespace Zilon.Core.Tests.Client
             var propTransferStore = new PropTransferStore(realStore);
 
 
-
             // ACT
             propTransferStore.Add(testedResource);
 
 
             // ASSERT
             var factProps = propTransferStore.CalcActualItems();
-            factProps.Length.Should().Be(1);  // В инвентаре только один стак ресурсов.
+            factProps.Length.Should().Be(1); // В инвентаре только один стак ресурсов.
             factProps[0].Should().BeOfType<Resource>();
             factProps[0].Scheme.Should().Be(testedScheme);
             ((Resource)factProps[0]).Count.Should().Be(expectedCount);
         }
-
 
 
         private static IPropStore CreateContainer(IProp[] props)

@@ -17,7 +17,7 @@ namespace Zilon.Core.PersonModules
         public IPersonDefenceStats DefenceStats { get; }
 
         /// <inheritdoc/>
-        public string Key { get => nameof(ICombatStatsModule); }
+        public string Key => nameof(ICombatStatsModule);
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-
 using FluentAssertions;
-
 using NUnit.Framework;
-
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tests.CommonServices.Dices
@@ -37,6 +34,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
                 {
                     seq[i] = dice.Roll(n);
                 }
+
                 var gr = seq.GroupBy(x => x);
                 var freq = gr.ToDictionary(x => x.Key, x => x.Count()).OrderBy(x => x.Key);
                 foreach (var fr in freq)

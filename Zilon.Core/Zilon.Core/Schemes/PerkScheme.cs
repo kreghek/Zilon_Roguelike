@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-
 using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
@@ -17,8 +16,7 @@ namespace Zilon.Core.Schemes
         public PropSet[] Sources { get; set; }
         public PerkLevelSubScheme[] Levels { get; set; }
 
-        [JsonProperty]
-        public bool IsBuildIn { get; private set; }
+        [JsonProperty] public bool IsBuildIn { get; private set; }
 
         public int Order { get; set; }
         public string IconSid { get; set; }

@@ -1,9 +1,6 @@
 ﻿using System;
-
 using FluentAssertions;
-
 using NUnit.Framework;
-
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
@@ -27,23 +24,14 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var scheme = new TestPropScheme
             {
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
-            var slotSchemes = new[] {
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                }
-            };
+            var slotSchemes = new[] {new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}};
 
             var tacticalActScheme = new TestTacticalActScheme();
 
-            var equipment = new Equipment(scheme, new[] { tacticalActScheme });
+            var equipment = new Equipment(scheme, new[] {tacticalActScheme});
 
             const int changedSlot = 0;
 
@@ -66,36 +54,22 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var pistolScheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Ranged, PropTags.Equipment.Weapon },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Ranged, PropTags.Equipment.Weapon},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
             var pistol2Scheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Ranged, PropTags.Equipment.Weapon },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Ranged, PropTags.Equipment.Weapon},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
-            var slotSchemes = new[] {
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                }
-            };
+            var slotSchemes = new[] {new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}};
 
             var tacticalActScheme = new TestTacticalActScheme();
 
-            var pistol1 = new Equipment(pistolScheme, new[] { tacticalActScheme });
-            var pistol2 = new Equipment(pistol2Scheme, new[] { tacticalActScheme });
+            var pistol1 = new Equipment(pistolScheme, new[] {tacticalActScheme});
+            var pistol2 = new Equipment(pistol2Scheme, new[] {tacticalActScheme});
 
             const int changedSlot = 0;
 
@@ -121,34 +95,23 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var scheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Weapon },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Weapon},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
-            var slotSchemes = new[] {
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                },
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                }
+            var slotSchemes = new[]
+            {
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
             };
 
             var tacticalActScheme = new TestTacticalActScheme
             {
-                Stats = new TestTacticalActStatsSubScheme
-                {
-                    Range = new Range<int>(1, 1)
-                }
+                Stats = new TestTacticalActStatsSubScheme {Range = new Range<int>(1, 1)}
             };
 
-            var swordEquipment1 = new Equipment(scheme, new[] { tacticalActScheme });
-            var swordEquipment2 = new Equipment(scheme, new[] { tacticalActScheme });
+            var swordEquipment1 = new Equipment(scheme, new[] {tacticalActScheme});
+            var swordEquipment2 = new Equipment(scheme, new[] {tacticalActScheme});
 
             const int swordSlot1 = 0;
             const int swordSlot2 = 1;
@@ -181,34 +144,23 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var scheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Ranged, PropTags.Equipment.Weapon },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Ranged, PropTags.Equipment.Weapon},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
-            var slotSchemes = new[] {
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                },
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                }
+            var slotSchemes = new[]
+            {
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
             };
 
             var tacticalActScheme = new TestTacticalActScheme
             {
-                Stats = new TestTacticalActStatsSubScheme
-                {
-                    Range = new Range<int>(1, 6)
-                }
+                Stats = new TestTacticalActStatsSubScheme {Range = new Range<int>(1, 6)}
             };
 
-            var pistolEquipment1 = new Equipment(scheme, new[] { tacticalActScheme });
-            var pistolEquipment2 = new Equipment(scheme, new[] { tacticalActScheme });
+            var pistolEquipment1 = new Equipment(scheme, new[] {tacticalActScheme});
+            var pistolEquipment2 = new Equipment(scheme, new[] {tacticalActScheme});
 
             const int pistolSlot1 = 0;
             const int pistolSlot2 = 1;
@@ -239,34 +191,23 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var scheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Shield },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Shield},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
-            var slotSchemes = new[] {
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                },
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                }
+            var slotSchemes = new[]
+            {
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
             };
 
             var tacticalActScheme = new TestTacticalActScheme
             {
-                Stats = new TestTacticalActStatsSubScheme
-                {
-                    Range = new Range<int>(1, 6)
-                }
+                Stats = new TestTacticalActStatsSubScheme {Range = new Range<int>(1, 6)}
             };
 
-            var shieldEquipment1 = new Equipment(scheme, new[] { tacticalActScheme });
-            var shieldEquipment2 = new Equipment(scheme, new[] { tacticalActScheme });
+            var shieldEquipment1 = new Equipment(scheme, new[] {tacticalActScheme});
+            var shieldEquipment2 = new Equipment(scheme, new[] {tacticalActScheme});
 
             const int shieldSlot1 = 0;
             const int shieldSlot2 = 1;
@@ -293,45 +234,29 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var swordScheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Weapon },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Weapon},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
             var shieldScheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Shield },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Shield},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
-            var slotSchemes = new[] {
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                },
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                }
+            var slotSchemes = new[]
+            {
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
             };
 
             var tacticalActScheme = new TestTacticalActScheme
             {
-                Stats = new TestTacticalActStatsSubScheme
-                {
-                    Range = new Range<int>(1, 1)
-                }
+                Stats = new TestTacticalActStatsSubScheme {Range = new Range<int>(1, 1)}
             };
 
-            var swordEquipment1 = new Equipment(swordScheme, new[] { tacticalActScheme });
-            var sheildEquipment2 = new Equipment(shieldScheme, new[] { tacticalActScheme });
+            var swordEquipment1 = new Equipment(swordScheme, new[] {tacticalActScheme});
+            var sheildEquipment2 = new Equipment(shieldScheme, new[] {tacticalActScheme});
 
             const int swordSlot1 = 0;
             const int swordSlot2 = 1;
@@ -360,45 +285,29 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var pistolScheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Weapon, PropTags.Equipment.Ranged },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Weapon, PropTags.Equipment.Ranged},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
             var shieldScheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Shield },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Shield},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
-            var slotSchemes = new[] {
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                },
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                }
+            var slotSchemes = new[]
+            {
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
             };
 
             var tacticalActScheme = new TestTacticalActScheme
             {
-                Stats = new TestTacticalActStatsSubScheme
-                {
-                    Range = new Range<int>(1, 1)
-                }
+                Stats = new TestTacticalActStatsSubScheme {Range = new Range<int>(1, 1)}
             };
 
-            var pistolEquipment1 = new Equipment(pistolScheme, new[] { tacticalActScheme });
-            var sheildEquipment2 = new Equipment(shieldScheme, new[] { tacticalActScheme });
+            var pistolEquipment1 = new Equipment(pistolScheme, new[] {tacticalActScheme});
+            var sheildEquipment2 = new Equipment(shieldScheme, new[] {tacticalActScheme});
 
             const int swordSlot1 = 0;
             const int swordSlot2 = 1;
@@ -427,45 +336,29 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var pistolScheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Weapon, PropTags.Equipment.Ranged },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Weapon, PropTags.Equipment.Ranged},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
             var shieldScheme = new TestPropScheme
             {
-                Tags = new[] { PropTags.Equipment.Shield },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[] {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
+                Tags = new[] {PropTags.Equipment.Shield},
+                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
             };
 
-            var slotSchemes = new[] {
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                },
-                new PersonSlotSubScheme{
-                    Types = EquipmentSlotTypes.Hand
-                }
+            var slotSchemes = new[]
+            {
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
+                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
             };
 
             var tacticalActScheme = new TestTacticalActScheme
             {
-                Stats = new TestTacticalActStatsSubScheme
-                {
-                    Range = new Range<int>(1, 1)
-                }
+                Stats = new TestTacticalActStatsSubScheme {Range = new Range<int>(1, 1)}
             };
 
-            var pistolEquipment1 = new Equipment(pistolScheme, new[] { tacticalActScheme });
-            var sheildEquipment2 = new Equipment(shieldScheme, new[] { tacticalActScheme });
+            var pistolEquipment1 = new Equipment(pistolScheme, new[] {tacticalActScheme});
+            var sheildEquipment2 = new Equipment(shieldScheme, new[] {tacticalActScheme});
 
             // Смена слотов относительно предыдузего теста
             const int swordSlot1 = 1;
@@ -499,7 +392,6 @@ namespace Zilon.Core.Tests.Persons
 
             for (var i = 0; i < 2; i++)
             {
-
                 Equipment equipment1 = null;
                 Equipment equipment2 = null;
 
@@ -526,13 +418,10 @@ namespace Zilon.Core.Tests.Persons
                     }
                 }
 
-                var slotSchemes = new[] {
-                    new PersonSlotSubScheme{
-                        Types = EquipmentSlotTypes.Hand
-                    },
-                    new PersonSlotSubScheme{
-                        Types = EquipmentSlotTypes.Hand
-                    }
+                var slotSchemes = new[]
+                {
+                    new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
+                    new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
                 };
 
                 var slotIndex1 = i == 0 ? 0 : 1;
@@ -574,39 +463,24 @@ namespace Zilon.Core.Tests.Persons
                 case EquipmentCarrierTestsCaseSource.Axe:
                     return new TestPropScheme
                     {
-                        Tags = new[] { PropTags.Equipment.Weapon },
-                        Equip = new TestPropEquipSubScheme
-                        {
-                            SlotTypes = new[] {
-                                    EquipmentSlotTypes.Hand
-                            }
-                        }
+                        Tags = new[] {PropTags.Equipment.Weapon},
+                        Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
                     };
 
                 case EquipmentCarrierTestsCaseSource.WoodenShield:
                 case EquipmentCarrierTestsCaseSource.SteelShield:
                     return new TestPropScheme
                     {
-                        Tags = new[] { PropTags.Equipment.Shield },
-                        Equip = new TestPropEquipSubScheme
-                        {
-                            SlotTypes = new[] {
-                                    EquipmentSlotTypes.Hand
-                            }
-                        }
+                        Tags = new[] {PropTags.Equipment.Shield},
+                        Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
                     };
 
                 case EquipmentCarrierTestsCaseSource.Colt:
                 case EquipmentCarrierTestsCaseSource.Magnum:
                     return new TestPropScheme
                     {
-                        Tags = new[] { PropTags.Equipment.Weapon, PropTags.Equipment.Ranged },
-                        Equip = new TestPropEquipSubScheme
-                        {
-                            SlotTypes = new[] {
-                                    EquipmentSlotTypes.Hand
-                            }
-                        }
+                        Tags = new[] {PropTags.Equipment.Weapon, PropTags.Equipment.Ranged},
+                        Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
                     };
 
                 default:

@@ -1,11 +1,7 @@
 ﻿using System;
-
 using FluentAssertions;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using TechTalk.SpecFlow;
-
 using Zilon.Core.Commands;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics.Spatial;

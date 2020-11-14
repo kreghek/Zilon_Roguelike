@@ -1,11 +1,7 @@
 ﻿using System.Linq;
-
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
@@ -40,11 +36,11 @@ namespace Zilon.Core.Tests.PersonModules
                 .Returns(downPassRoll);
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            var survivalStats = new[] {
-                new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE){
-                    Type = STAT_TYPE,
-                    Rate = STAT_RATE,
-                    DownPassRoll = statDownPass
+            var survivalStats = new[]
+            {
+                new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE)
+                {
+                    Type = STAT_TYPE, Rate = STAT_RATE, DownPassRoll = statDownPass
                 }
             };
 
@@ -177,14 +173,16 @@ namespace Zilon.Core.Tests.PersonModules
         {
             var personScheme = new TestPersonScheme
             {
-                SurvivalStats = new[] {
+                SurvivalStats = new[]
+                {
                     new TestPersonSurvivalStatSubScheme
                     {
                         Type = PersonSurvivalStatType.Satiety,
                         MinValue = -100,
                         MaxValue = 100,
                         StartValue = 0,
-                        KeyPoints = new []{
+                        KeyPoints = new[]
+                        {
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Lesser,
@@ -199,20 +197,18 @@ namespace Zilon.Core.Tests.PersonModules
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Max,
-                                Start = 0,
-                                End = 0.12f
+                                Level = PersonSurvivalStatKeypointLevel.Max, Start = 0, End = 0.12f
                             }
                         }
                     },
-
                     new TestPersonSurvivalStatSubScheme
                     {
                         Type = PersonSurvivalStatType.Hydration,
                         MinValue = -100,
                         MaxValue = 100,
                         StartValue = 0,
-                        KeyPoints = new []{
+                        KeyPoints = new[]
+                        {
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
                                 Level = PersonSurvivalStatKeypointLevel.Lesser,
@@ -227,9 +223,7 @@ namespace Zilon.Core.Tests.PersonModules
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Max,
-                                Start = 0,
-                                End = 0.12f
+                                Level = PersonSurvivalStatKeypointLevel.Max, Start = 0, End = 0.12f
                             }
                         }
                     }
@@ -245,7 +239,8 @@ namespace Zilon.Core.Tests.PersonModules
             return survivalRandomSourceMock.Object;
         }
 
-        private static ISurvivalModule CreateSurvivalData(IPersonScheme personScheme, ISurvivalRandomSource survivalRandomSource)
+        private static ISurvivalModule CreateSurvivalData(IPersonScheme personScheme,
+            ISurvivalRandomSource survivalRandomSource)
         {
             var attributesModuleMock = new Mock<IAttributesModule>();
             var attributesModule = attributesModuleMock.Object;

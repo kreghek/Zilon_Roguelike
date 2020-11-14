@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests

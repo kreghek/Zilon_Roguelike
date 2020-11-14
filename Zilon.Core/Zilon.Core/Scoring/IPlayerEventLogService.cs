@@ -7,13 +7,13 @@ namespace Zilon.Core.Scoring
     /// </summary>
     public interface IPlayerEventLogService
     {
+        IPlayer Player { get; }
+
         /// <summary>
         /// Зафиксировать событие.
         /// </summary>
         /// <param name="playerEvent"></param>
         void Log(IPlayerEvent playerEvent);
-
-        IPlayer Player { get; }
 
         /// <summary>
         /// Вернуть последнее зарегистрированние событие.

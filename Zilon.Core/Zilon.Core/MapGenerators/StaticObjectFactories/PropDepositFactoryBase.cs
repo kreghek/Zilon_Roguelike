@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
@@ -9,10 +8,10 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
     public abstract class PropDepositFactoryBase : IStaticObjectFactory
     {
-        private readonly string[] _toolTags;
+        private readonly IDropResolver _dropResolver;
         private readonly string _dropTableSchemeSid;
         private readonly ISchemeService _schemeService;
-        private readonly IDropResolver _dropResolver;
+        private readonly string[] _toolTags;
 
         protected PropDepositFactoryBase(
             string[] toolTags,
@@ -28,11 +27,11 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             Purpose = propContainerPurpose;
         }
 
-        public PropContainerPurpose Purpose { get; }
-
         protected abstract int ExhausingValue { get; }
 
         protected abstract DepositMiningDifficulty Difficulty { get; }
+
+        public PropContainerPurpose Purpose { get; }
 
         public IStaticObject Create(ISector sector, HexNode node, int id)
         {
@@ -49,7 +48,8 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             staticObject.AddModule(containerModule);
 
             var dropScheme = _schemeService.GetScheme<IDropTableScheme>(_dropTableSchemeSid);
-            var depositModule = new PropDepositModule(containerModule, dropScheme, _dropResolver, _toolTags, ExhausingValue, Difficulty);
+            var depositModule = new PropDepositModule(containerModule, dropScheme, _dropResolver, _toolTags,
+                ExhausingValue, Difficulty);
             staticObject.AddModule(depositModule);
 
             var lifetimeModule = new DepositLifetimeModule(sector.StaticObjectManager, staticObject);

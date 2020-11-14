@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -112,7 +111,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
         }
 
-        public static HexNode CreateCorridorNode(IMap map, HashSet<string> edgeHash, HexNode currentNode, int currentX, int currentY)
+        public static HexNode CreateCorridorNode(IMap map, HashSet<string> edgeHash, HexNode currentNode, int currentX,
+            int currentY)
         {
             if (map is null)
             {
@@ -120,7 +120,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             var node = map.Nodes.OfType<HexNode>()
-                                .SingleOrDefault(x => x.OffsetCoords.X == currentX && x.OffsetCoords.Y == currentY);
+                .SingleOrDefault(x => x.OffsetCoords.X == currentX && x.OffsetCoords.Y == currentY);
 
             if (node == null)
             {

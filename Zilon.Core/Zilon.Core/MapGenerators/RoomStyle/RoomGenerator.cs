@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -61,11 +59,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             {
                 var rolledPosition = roomMatrixCoords[i];
 
-                var room = new Room
-                {
-                    PositionX = rolledPosition.X,
-                    PositionY = rolledPosition.Y
-                };
+                var room = new Room {PositionX = rolledPosition.X, PositionY = rolledPosition.Y};
 
                 roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
 

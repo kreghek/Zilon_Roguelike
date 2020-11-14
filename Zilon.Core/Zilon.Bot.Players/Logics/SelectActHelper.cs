@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 
@@ -32,7 +30,8 @@ namespace Zilon.Bot.Players.Logics
             return availableActs.First();
         }
 
-        private static bool TacticalActIsAvailableByConstrains(ITacticalAct tacticalAct, [CanBeNull] IPropStore propStore)
+        private static bool TacticalActIsAvailableByConstrains(ITacticalAct tacticalAct,
+            [CanBeNull] IPropStore propStore)
         {
             if (tacticalAct.Constrains is null)
             {

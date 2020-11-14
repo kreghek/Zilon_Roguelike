@@ -9,7 +9,6 @@ namespace Zilon.Core.Components
     {
         public PersonStat(float baseValue) : this(baseValue, 0)
         {
-
         }
 
         public PersonStat(float baseValue, float levelInc)
@@ -50,7 +49,7 @@ namespace Zilon.Core.Components
         /// <returns> Возвращает актуальное значение характеритсики. </returns>
         public float GetActualValue(int level, float rarityBonus)
         {
-            return GetActualValue(level, rarityBonus, bonuses: null);
+            return GetActualValue(level, rarityBonus, null);
         }
 
         private static float CalcBonusValue(int level, PersonStat[] bonuses)

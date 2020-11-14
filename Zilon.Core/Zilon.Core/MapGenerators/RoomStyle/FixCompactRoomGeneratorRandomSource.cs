@@ -16,14 +16,14 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                         Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
                             new OffsetCoords(x, y),
                             new OffsetCoords(x, y - 1))
-                            );
+                        );
                     }
                     else
                     {
                         Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
                             new OffsetCoords(x, y),
                             new OffsetCoords(x - 1, y))
-                            );
+                        );
                     }
                 }
             }

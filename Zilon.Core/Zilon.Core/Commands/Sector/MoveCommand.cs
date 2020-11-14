@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
 using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
@@ -19,11 +18,6 @@ namespace Zilon.Core.Commands
     public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
         private readonly IPlayer _player;
-
-        /// <summary>
-        /// Текущий путь, по которому будет перемещаться персонаж.
-        /// </summary>
-        public IList<IGraphNode> Path { get; }
 
         /// <summary>
         /// Конструктор на создание команды перемещения.
@@ -52,6 +46,11 @@ namespace Zilon.Core.Commands
 
             _player = player ?? throw new ArgumentNullException(nameof(player));
         }
+
+        /// <summary>
+        /// Текущий путь, по которому будет перемещаться персонаж.
+        /// </summary>
+        public IList<IGraphNode> Path { get; }
 
         /// <summary>
         /// Определяем, может ли команда выполниться.
@@ -92,7 +91,8 @@ namespace Zilon.Core.Commands
             var selectedNodeVm = GetSelectedNodeViewModel();
             if (selectedNodeVm == null)
             {
-                throw new InvalidOperationException("Невозможно выполнить команду на перемещение, если не указан целевой узел.");
+                throw new InvalidOperationException(
+                    "Невозможно выполнить команду на перемещение, если не указан целевой узел.");
             }
 
             CreatePath(selectedNodeVm);

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -14,12 +12,9 @@ namespace Zilon.Core.PersonModules
         /// <summary>
         /// Текущие слоты экипировки.
         /// </summary>
-        [NotNull] [ItemNotNull] PersonSlotSubScheme[] Slots { get; }
-
-        /// <summary>
-        /// Выстреливает, когда экипировка изменяется.
-        /// </summary>
-        event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
+        [NotNull]
+        [ItemNotNull]
+        PersonSlotSubScheme[] Slots { get; }
 
         /// <summary>
         /// Экипировка персонажа.
@@ -33,5 +28,10 @@ namespace Zilon.Core.PersonModules
         /// </remarks>
         [CanBeNull]
         Equipment this[int index] { get; set; }
+
+        /// <summary>
+        /// Выстреливает, когда экипировка изменяется.
+        /// </summary>
+        event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
     }
 }

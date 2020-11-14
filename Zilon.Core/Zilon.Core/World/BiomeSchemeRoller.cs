@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 
@@ -7,8 +6,8 @@ namespace Zilon.Core.World
 {
     public class BiomeSchemeRoller : IBiomeSchemeRoller
     {
-        private readonly ISchemeService _schemeService;
         private readonly IDice _dice;
+        private readonly ISchemeService _schemeService;
 
         public BiomeSchemeRoller(ISchemeService schemeService, IDice dice)
         {
@@ -19,15 +18,9 @@ namespace Zilon.Core.World
         public ILocationScheme Roll()
         {
             var locationSchemeSids = new[]
-                {
-                "rat-hole",
-                "rat-kingdom",
-                "demon-dungeon",
-                "demon-lair",
-                "crypt",
-                "elder-place",
-                "genomass-cave"
-                };
+            {
+                "rat-hole", "rat-kingdom", "demon-dungeon", "demon-lair", "crypt", "elder-place", "genomass-cave"
+            };
 
             var rolledLocationSchemeSid = _dice.RollFromList(locationSchemeSids);
             var rolledLocationScheme = _schemeService.GetScheme<ILocationScheme>(rolledLocationSchemeSid);

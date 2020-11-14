@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
@@ -20,7 +19,7 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <inheritdoc/>
-        public string Key { get => nameof(ICombatActModule); }
+        public string Key => nameof(ICombatActModule);
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }

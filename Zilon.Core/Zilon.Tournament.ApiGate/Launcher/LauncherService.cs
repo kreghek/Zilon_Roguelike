@@ -4,10 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-
 using Newtonsoft.Json;
 
 namespace Zilon.Tournament.ApiGate.Launcher
@@ -20,6 +18,7 @@ namespace Zilon.Tournament.ApiGate.Launcher
         {
             _logger = logger;
         }
+
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogDebug("Launcher Service is starting");
@@ -45,7 +44,8 @@ namespace Zilon.Tournament.ApiGate.Launcher
                                     FileName = $"{appPath}Zilon.BotMassLauncher.exe",
                                     UseShellExecute = false,
                                     CreateNoWindow = true,
-                                    Arguments = $"parallel=10 mode={mode} botCatalog={botInfo.Catalog} botAssembly={botInfo.Assembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
+                                    Arguments =
+                                        $"parallel=10 mode={mode} botCatalog={botInfo.Catalog} botAssembly={botInfo.Assembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
                                     RedirectStandardOutput = true,
                                     RedirectStandardError = true
                                 };
@@ -89,9 +89,7 @@ namespace Zilon.Tournament.ApiGate.Launcher
 
                 var botInfo = new BotInfo
                 {
-                    Catalog = di.Name,
-                    Assembly = botSettings.AssemblyName,
-                    Modes = botSettings.Modes
+                    Catalog = di.Name, Assembly = botSettings.AssemblyName, Modes = botSettings.Modes
                 };
 
                 botList.Add(botInfo);

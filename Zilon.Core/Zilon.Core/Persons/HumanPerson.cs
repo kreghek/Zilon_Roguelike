@@ -1,7 +1,5 @@
 ﻿using System;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Localization;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
@@ -13,6 +11,13 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class HumanPerson : PersonBase
     {
+        public HumanPerson([NotNull] IPersonScheme scheme, IFraction fraction) : base(fraction)
+        {
+            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
+
+            Name = scheme.Sid;
+        }
+
         /// <inheritdoc/>
         public override int Id { get; set; }
 
@@ -29,14 +34,7 @@ namespace Zilon.Core.Persons
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
-        public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
-
-        public HumanPerson([NotNull] IPersonScheme scheme, IFraction fraction) : base(fraction)
-        {
-            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
-
-            Name = scheme.Sid;
-        }
+        public override PhysicalSize PhysicalSize => PhysicalSize.Size1;
 
         /// <inheritdoc/>
         public override string ToString()

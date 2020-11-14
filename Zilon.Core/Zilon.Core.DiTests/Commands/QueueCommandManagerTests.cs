@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Commands;
 
 namespace Zilon.Core.Tests.Commands
@@ -100,15 +97,12 @@ namespace Zilon.Core.Tests.Commands
 
         private static ICommand[] GetOneCommand()
         {
-            return new[] { CreateFakeCommand() };
+            return new[] {CreateFakeCommand()};
         }
 
         private static ICommand[] GetTwoCommands()
         {
-            return new[] {
-                CreateFakeCommand(),
-                CreateFakeCommand()
-            };
+            return new[] {CreateFakeCommand(), CreateFakeCommand()};
         }
 
         private static ICommand CreateFakeCommand()

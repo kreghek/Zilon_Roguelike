@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
 using FluentAssertions;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Moq;
-
 using TechTalk.SpecFlow;
-
 using Zilon.Core.Client;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -54,7 +50,7 @@ namespace Zilon.Core.Specs.Steps
                 .Returns(dropProps.ToArray());
             var dropResolver = dropResolverMock.Object;
 
-            var chest = new DropTablePropChest(System.Array.Empty<DropTableScheme>(), dropResolver);
+            var chest = new DropTablePropChest(Array.Empty<DropTableScheme>(), dropResolver);
             var staticObject = new StaticObject(node, chest.Purpose, chestId);
             staticObject.AddModule<IPropContainer>(chest);
 
@@ -77,7 +73,8 @@ namespace Zilon.Core.Specs.Steps
 
                 var factLootProps = lootProps.Where(x => x.Scheme.Sid == expectedPropSid);
                 var factLootResources = factLootProps.Cast<Resource>();
-                var factLootResource = factLootResources.FirstOrDefault(x => x.Count == int.Parse(expectedResourceCount));
+                var factLootResource =
+                    factLootResources.FirstOrDefault(x => x.Count == int.Parse(expectedResourceCount));
 
                 factLootResource.Should().NotBeNull();
                 factLootResource.Scheme.Sid.Should().Be(expectedPropSid);

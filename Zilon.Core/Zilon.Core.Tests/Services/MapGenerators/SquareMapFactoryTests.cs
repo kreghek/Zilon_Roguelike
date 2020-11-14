@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 using FluentAssertions;
-
 using NUnit.Framework;
-
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
@@ -43,7 +40,6 @@ namespace Zilon.Core.Tests.MapGenerators
             AssertEdge(map, 6, 6, 5, 6);
             AssertEdge(map, 6, 6, 5, 5);
             AssertEdge(map, 6, 6, 6, 5);
-
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using JetBrains.Annotations;
 
 namespace Zilon.Core.Props
@@ -11,16 +10,16 @@ namespace Zilon.Core.Props
     /// </summary>
     public abstract class PropStoreBase : IPropStore
     {
+        protected PropStoreBase()
+        {
+            Items = new HashSet<IProp>();
+        }
+
         protected HashSet<IProp> Items { get; }
 
         public event EventHandler<PropStoreEventArgs> Added;
         public event EventHandler<PropStoreEventArgs> Removed;
         public event EventHandler<PropStoreEventArgs> Changed;
-
-        protected PropStoreBase()
-        {
-            Items = new HashSet<IProp>();
-        }
 
         public virtual IProp[] CalcActualItems()
         {
@@ -63,6 +62,23 @@ namespace Zilon.Core.Props
             }
         }
 
+        public bool Has(IProp prop)
+        {
+            switch (prop)
+            {
+                case Equipment equipment:
+                    return HasEquipment(equipment);
+
+                case Resource resource:
+                    return HasResource(resource);
+
+                case Concept concept:
+                    return HasConcept(concept);
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
         private void DoRemovedProp(IProp prop)
         {
             DoEventInner(Removed, prop);
@@ -86,7 +102,7 @@ namespace Zilon.Core.Props
                 throw new ArgumentNullException(nameof(prop));
             }
 
-            @event?.Invoke(this, new PropStoreEventArgs(new[] { prop }));
+            @event?.Invoke(this, new PropStoreEventArgs(prop));
         }
 
         private void RemoveEquipment(Equipment equipment)
@@ -142,7 +158,8 @@ namespace Zilon.Core.Props
 
             if (currentResource.Count < resource.Count)
             {
-                throw new InvalidOperationException($"Попытка удалить {resource.Count} ресурсов {resource.Scheme} больше чем есть в инвентаре.");
+                throw new InvalidOperationException(
+                    $"Попытка удалить {resource.Count} ресурсов {resource.Scheme} больше чем есть в инвентаре.");
             }
 
             if (currentResource.Count == resource.Count)
@@ -154,23 +171,6 @@ namespace Zilon.Core.Props
             {
                 currentResource.Count -= resource.Count;
                 DoChangedProp(currentResource);
-            }
-        }
-
-        public bool Has(IProp prop)
-        {
-            switch (prop)
-            {
-                case Equipment equipment:
-                    return HasEquipment(equipment);
-
-                case Resource resource:
-                    return HasResource(resource);
-
-                case Concept concept:
-                    return HasConcept(concept);
-                default:
-                    throw new InvalidOperationException();
             }
         }
 

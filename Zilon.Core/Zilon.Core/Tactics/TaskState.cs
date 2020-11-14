@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics
@@ -21,15 +20,16 @@ namespace Zilon.Core.Tactics
         public IActorTask Task { get; }
         public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
         public int Counter { get; private set; }
+
+        public bool TaskIsExecuting => Counter == _valueToExecute;
+
+        public bool TaskComplete => Counter <= 0;
+
+        public IActor Actor { get; }
+
         public void UpdateCounter()
         {
             Counter--;
         }
-
-        public bool TaskIsExecuting { get => Counter == _valueToExecute; }
-
-        public bool TaskComplete { get => Counter <= 0; }
-
-        public IActor Actor { get; }
     }
 }

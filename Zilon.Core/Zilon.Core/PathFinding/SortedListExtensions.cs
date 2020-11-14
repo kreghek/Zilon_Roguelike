@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
-
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.PathFinding
 {
     /// <summary>
-	/// Extension methods to make the System.Collections.Generic.SortedList easier to use.
-	/// </summary>
-	internal static class SortedListExtensions
+    /// Extension methods to make the System.Collections.Generic.SortedList easier to use.
+    /// </summary>
+    internal static class SortedListExtensions
     {
         /// <summary>
         /// Checks if the SortedList is empty.

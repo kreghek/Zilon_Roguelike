@@ -1,11 +1,7 @@
 ﻿using FluentAssertions;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
@@ -41,7 +37,8 @@ namespace Zilon.Core.Tests.Commands
         public void ExecuteTest()
         {
             var command = ServiceProvider.GetRequiredService<PropTransferCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             var transferMachine = ServiceProvider.GetRequiredService<PropTransferMachine>();
             command.TransferMachine = transferMachine;

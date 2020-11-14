@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 
@@ -132,7 +131,8 @@ namespace Zilon.Core.Tactics.Spatial
             return GetNextFromMatrix(localOffsetX, localOffsetY, segmentX, segmentY, matrix);
         }
 
-        private IEnumerable<IGraphNode> GetNextFromMatrix(int localOffsetX, int localOffsetY, int segmentX, int segmentY, IGraphNode[,] matrix)
+        private IEnumerable<IGraphNode> GetNextFromMatrix(int localOffsetX, int localOffsetY, int segmentX,
+            int segmentY, IGraphNode[,] matrix)
         {
             var directions = HexHelper.GetOffsetClockwise();
             var currentCubeCoords = HexHelper.ConvertToCube(localOffsetX, localOffsetY);
@@ -225,6 +225,7 @@ namespace Zilon.Core.Tactics.Spatial
                 {
                     file.Write($"{x,3}".PadRight(cellWidth, ' '));
                 }
+
                 file.WriteLine();
 
                 for (var y = 0; y < _segmentSize; y++)

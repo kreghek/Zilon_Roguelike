@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -7,11 +6,12 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
-    class AutoplayEngine : AutoplayEngineBase
+    internal class AutoplayEngine : AutoplayEngineBase
     {
         private readonly Startup _startup;
 
-        public AutoplayEngine(Startup startup, BotSettings botSettings, IGlobeInitializer globeInitializer) : base(botSettings, globeInitializer)
+        public AutoplayEngine(Startup startup, BotSettings botSettings, IGlobeInitializer globeInitializer) : base(
+            botSettings, globeInitializer)
         {
             _startup = startup;
         }

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Benchmarks.Fow
 {
-    class TestFowContext : IFowContext
+    internal class TestFowContext : IFowContext
     {
         private readonly ISectorMap _sectorMap;
 

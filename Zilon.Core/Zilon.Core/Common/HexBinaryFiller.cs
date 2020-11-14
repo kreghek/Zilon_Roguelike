@@ -27,10 +27,7 @@ namespace Zilon.Core.Common
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new HashSet<OffsetCoords>
-            {
-                point
-            };
+            var openPoints = new HashSet<OffsetCoords> {point};
 
             while (openPoints.Count > 0)
             {
@@ -92,10 +89,7 @@ namespace Zilon.Core.Common
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new HashSet<OffsetCoords>
-            {
-                point
-            };
+            var openPoints = new HashSet<OffsetCoords> {point};
 
             while (openPoints.Count > 0)
             {
@@ -170,12 +164,12 @@ namespace Zilon.Core.Common
 
         private static bool IsInBounds(OffsetCoords coords, int width, int height)
         {
-            if (!ValueInRange(value: coords.X, min: 0, max: width - 1))
+            if (!ValueInRange(coords.X, 0, width - 1))
             {
                 return false;
             }
 
-            if (!ValueInRange(value: coords.Y, min: 0, max: height - 1))
+            if (!ValueInRange(coords.Y, 0, height - 1))
             {
                 return false;
             }

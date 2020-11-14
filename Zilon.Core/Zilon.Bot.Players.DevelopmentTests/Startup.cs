@@ -1,7 +1,5 @@
 ﻿using System;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
@@ -12,7 +10,7 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
-    class Startup : InitializationBase
+    internal class Startup : InitializationBase
     {
         public override void ConfigureAux(IServiceProvider serviceProvider)
         {
@@ -27,7 +25,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             container.AddSingleton<HumanBotActorTaskSource<ISectorTaskSourceContext>>();
             container.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>>(serviceProvider =>
-            serviceProvider.GetRequiredService<HumanBotActorTaskSource<ISectorTaskSourceContext>>());
+                serviceProvider.GetRequiredService<HumanBotActorTaskSource<ISectorTaskSourceContext>>());
 
             container.AddSingleton<IPlayer, HumanPlayer>();
             container.AddSingleton<IScoreManager, ScoreManager>();

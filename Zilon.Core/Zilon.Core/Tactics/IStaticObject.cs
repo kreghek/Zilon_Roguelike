@@ -17,26 +17,6 @@ namespace Zilon.Core.Tactics
         int Id { get; }
 
         /// <summary>
-        /// Получение модуля статического объекта.
-        /// </summary>
-        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
-        /// <returns>Возвращает объект модуля.</returns>
-        TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule;
-
-        /// <summary>
-        /// Добавление модуля статического объекта.
-        /// </summary>
-        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
-        /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
-        void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IStaticObjectModule;
-
-        /// <summary>
-        /// Проверка наличия модуля статического объекта.
-        /// </summary>
-        /// <returns>Возвращает true, если модуль указанного типа есть у объекта. Иначе, false.</returns>
-        bool HasModule(string key);
-
-        /// <summary>
         /// Блокер проходимости карты.
         /// </summary>
         /// <remarks>
@@ -57,5 +37,26 @@ namespace Zilon.Core.Tactics
         /// По сути - определяет внешний вид и действие по умолчанию.
         /// </summary>
         PropContainerPurpose Purpose { get; }
+
+        /// <summary>
+        /// Получение модуля статического объекта.
+        /// </summary>
+        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
+        /// <returns>Возвращает объект модуля.</returns>
+        TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule;
+
+        /// <summary>
+        /// Добавление модуля статического объекта.
+        /// </summary>
+        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
+        /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
+        void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule)
+            where TStaticObjectModule : IStaticObjectModule;
+
+        /// <summary>
+        /// Проверка наличия модуля статического объекта.
+        /// </summary>
+        /// <returns>Возвращает true, если модуль указанного типа есть у объекта. Иначе, false.</returns>
+        bool HasModule(string key);
     }
 }

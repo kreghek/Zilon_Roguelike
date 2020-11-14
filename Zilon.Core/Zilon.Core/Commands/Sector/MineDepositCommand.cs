@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-
 using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
@@ -14,8 +13,8 @@ namespace Zilon.Core.Commands.Sector
 {
     public sealed class MineDepositCommand : ActorCommandBase
     {
-        private readonly IPlayer _player;
         private readonly IMineDepositMethodRandomSource _mineDepositMethodRandomSource;
+        private readonly IPlayer _player;
 
         public MineDepositCommand(
             IPlayer player,
@@ -29,7 +28,8 @@ namespace Zilon.Core.Commands.Sector
         public override bool CanExecute()
         {
             var selectedViewModel = PlayerState.SelectedViewModel ?? PlayerState.HoverViewModel;
-            var targetDeposit = (selectedViewModel as IContainerViewModel)?.StaticObject.GetModuleSafe<IPropDepositModule>();
+            var targetDeposit = (selectedViewModel as IContainerViewModel)?.StaticObject
+                .GetModuleSafe<IPropDepositModule>();
 
             if (targetDeposit is null)
             {
@@ -53,13 +53,11 @@ namespace Zilon.Core.Commands.Sector
 
                 return true;
             }
-            else
-            {
-                // Если для добычи не указаны теги, то предполагается,
-                // что добывать можно "руками".
-                // То есть никакого инструмента не требуется.
-                return true;
-            }
+
+            // Если для добычи не указаны теги, то предполагается,
+            // что добывать можно "руками".
+            // То есть никакого инструмента не требуется.
+            return true;
         }
 
         protected override void ExecuteTacticCommand()
@@ -77,11 +75,10 @@ namespace Zilon.Core.Commands.Sector
                 {
                     throw new InvalidOperationException("Попытка добычи без инструмента.");
                 }
-                else
-                {
-                    var intetion = new Intention<MineTask>(actor => CreateTaskByInstrument(actor, targetStaticObject, equipedTool));
-                    PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
-                }
+
+                var intetion = new Intention<MineTask>(actor =>
+                    CreateTaskByInstrument(actor, targetStaticObject, equipedTool));
+                PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
             }
             else
             {

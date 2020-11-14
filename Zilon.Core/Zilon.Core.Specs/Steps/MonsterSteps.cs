@@ -1,12 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using FluentAssertions;
-
 using JetBrains.Annotations;
-
 using TechTalk.SpecFlow;
-
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.Specs.Contexts;
@@ -35,7 +31,8 @@ namespace Zilon.Core.Specs.Steps
                 tableRow.TryGetValue("y", out var routeY);
 
                 var routeNode = sector.Map.Nodes.Cast<HexNode>()
-                    .Single(node => node.OffsetCoords.X == int.Parse(routeX) && node.OffsetCoords.Y == int.Parse(routeY));
+                    .Single(node =>
+                        node.OffsetCoords.X == int.Parse(routeX) && node.OffsetCoords.Y == int.Parse(routeY));
 
                 patrolPoints.Add(routeNode);
             }

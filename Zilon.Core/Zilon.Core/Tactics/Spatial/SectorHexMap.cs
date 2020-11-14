@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
@@ -20,19 +19,13 @@ namespace Zilon.Core.Tactics.Spatial
             Transitions = new Dictionary<IGraphNode, RoomTransition>();
         }
 
-        /// <inheritdoc/>
-        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
-
         /// <summary>
         /// Узлы карты, приведённые к <see cref="HexNode"/>.
         /// </summary>
-        public IEnumerable<HexNode> HexNodes
-        {
-            get
-            {
-                return Nodes.Cast<HexNode>();
-            }
-        }
+        public IEnumerable<HexNode> HexNodes => Nodes.Cast<HexNode>();
+
+        /// <inheritdoc/>
+        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
 
         /// <summary>
         /// Проверяет, доступен ли целевой узел из стартового узла.

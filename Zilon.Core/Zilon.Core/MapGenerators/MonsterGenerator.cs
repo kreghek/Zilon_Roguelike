@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonGeneration;
@@ -20,10 +19,10 @@ namespace Zilon.Core.MapGenerators
     /// <seealso cref="IMonsterGenerator" />
     public class MonsterGenerator : IMonsterGenerator
     {
-        private readonly ISchemeService _schemeService;
-        private readonly IMonsterPersonFactory _monsterFactory;
-        private readonly IMonsterGeneratorRandomSource _generatorRandomSource;
         private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
+        private readonly IMonsterGeneratorRandomSource _generatorRandomSource;
+        private readonly IMonsterPersonFactory _monsterFactory;
+        private readonly ISchemeService _schemeService;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="MonsterGenerator"/>.
@@ -37,7 +36,8 @@ namespace Zilon.Core.MapGenerators
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _monsterFactory = monsterFactory ?? throw new ArgumentNullException(nameof(monsterFactory));
-            _generatorRandomSource = generatorRandomSource ?? throw new ArgumentNullException(nameof(generatorRandomSource));
+            _generatorRandomSource =
+                generatorRandomSource ?? throw new ArgumentNullException(nameof(generatorRandomSource));
             _actorTaskSource = actorTaskSource;
         }
 
@@ -76,7 +76,39 @@ namespace Zilon.Core.MapGenerators
             RollInfections(sector, resultMonsterActors);
         }
 
-        private void CreateMonstersForRegion(ISector sector, ISectorSubScheme sectorScheme, List<IActor> resultMonsterActors, MapRegion region, int[] rarityCounter)
+        public void CreateMonsters(ISector sector, IEnumerable<MapRegion> monsterRegions,
+            IEnumerable<MonsterPerson> monsterPersons)
+        {
+            if (sector == null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
+            if (monsterRegions == null)
+            {
+                throw new ArgumentNullException(nameof(monsterRegions));
+            }
+
+            if (monsterPersons == null)
+            {
+                throw new ArgumentNullException(nameof(monsterPersons));
+            }
+
+            var freeNodes = new List<IGraphNode>(monsterRegions.SelectMany(x => x.Nodes));
+
+            foreach (var monsterPerson in monsterPersons)
+            {
+                var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
+
+                var monsterNode = freeNodes[rollIndex];
+                var monster = CreateMonster(sector.ActorManager, monsterPerson, monsterNode, _actorTaskSource);
+
+                freeNodes.Remove(monster.Node);
+            }
+        }
+
+        private void CreateMonstersForRegion(ISector sector, ISectorSubScheme sectorScheme,
+            List<IActor> resultMonsterActors, MapRegion region, int[] rarityCounter)
         {
             var regionNodes = region.Nodes.OfType<HexNode>();
             var staticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
@@ -106,9 +138,10 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private IActor RollRarityAndCreateMonster(ISector sector, ISectorSubScheme sectorScheme, IGraphNode monsterNode, int[] rarityCounter)
+        private IActor RollRarityAndCreateMonster(ISector sector, ISectorSubScheme sectorScheme, IGraphNode monsterNode,
+            int[] rarityCounter)
         {
-            var rarityMaxCounter = new[] { -1, 10, 1 };
+            var rarityMaxCounter = new[] {-1, 10, 1};
 
             var currentRarity = GetMonsterRarity(rarityCounter, rarityMaxCounter);
             var availableSchemeSids = GetAvailableSchemeSids(sectorScheme, currentRarity);
@@ -162,13 +195,13 @@ namespace Zilon.Core.MapGenerators
 
                 case 1:
                     availableSchemeSids = sectorScheme.RareMonsterSids ??
-                        sectorScheme.RegularMonsterSids;
+                                          sectorScheme.RegularMonsterSids;
                     break;
 
                 case 2:
                     availableSchemeSids = sectorScheme.ChampionMonsterSids ??
-                        sectorScheme.RareMonsterSids ??
-                        sectorScheme.RegularMonsterSids;
+                                          sectorScheme.RareMonsterSids ??
+                                          sectorScheme.RegularMonsterSids;
                     break;
 
                 default:
@@ -218,49 +251,21 @@ namespace Zilon.Core.MapGenerators
             return currentRarity;
         }
 
-        private static IActor CreateMonster(IActorManager actorManager, MonsterPerson person, IGraphNode startNode, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
+        private static IActor CreateMonster(IActorManager actorManager, MonsterPerson person, IGraphNode startNode,
+            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             var actor = new Actor(person, actorTaskSource, startNode);
             actorManager.Add(actor);
             return actor;
         }
 
-        private IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
+        private IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode,
+            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             var person = _monsterFactory.Create(monsterScheme);
             var actor = new Actor(person, actorTaskSource, startNode);
             actorManager.Add(actor);
             return actor;
-        }
-
-        public void CreateMonsters(ISector sector, IEnumerable<MapRegion> monsterRegions, IEnumerable<MonsterPerson> monsterPersons)
-        {
-            if (sector == null)
-            {
-                throw new ArgumentNullException(nameof(sector));
-            }
-
-            if (monsterRegions == null)
-            {
-                throw new ArgumentNullException(nameof(monsterRegions));
-            }
-
-            if (monsterPersons == null)
-            {
-                throw new ArgumentNullException(nameof(monsterPersons));
-            }
-
-            var freeNodes = new List<IGraphNode>(monsterRegions.SelectMany(x => x.Nodes));
-
-            foreach (var monsterPerson in monsterPersons)
-            {
-                var rollIndex = _generatorRandomSource.RollNodeIndex(freeNodes.Count);
-
-                var monsterNode = freeNodes[rollIndex];
-                var monster = CreateMonster(sector.ActorManager, monsterPerson, monsterNode, _actorTaskSource);
-
-                freeNodes.Remove(monster.Node);
-            }
         }
     }
 }

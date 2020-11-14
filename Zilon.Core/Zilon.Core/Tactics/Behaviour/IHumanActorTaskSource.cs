@@ -2,7 +2,8 @@
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public interface IHumanActorTaskSource<TContext> : IActorTaskSource<TContext> where TContext : ISectorTaskSourceContext
+    public interface IHumanActorTaskSource<TContext> : IActorTaskSource<TContext>
+        where TContext : ISectorTaskSourceContext
     {
         Task IntentAsync(IIntention intention, IActor activeActor);
 

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-
 using NUnit.Framework;
 
 namespace Zilon.Core.Common.Tests
@@ -24,7 +23,7 @@ namespace Zilon.Core.Common.Tests
             var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));
 
             // ASSERT
-            regions.Should().BeEquivalentTo(new[] { new OffsetCoords(4, 4) });
+            regions.Should().BeEquivalentTo(new[] {new OffsetCoords(4, 4)});
         }
 
         [Test]
@@ -39,7 +38,7 @@ namespace Zilon.Core.Common.Tests
             var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));
 
             // ASSERT
-            regions.Should().BeEquivalentTo(new[] { new OffsetCoords(4, 4), new OffsetCoords(5, 4) });
+            regions.Should().BeEquivalentTo(new[] {new OffsetCoords(4, 4), new OffsetCoords(5, 4)});
         }
 
         [Test]
@@ -54,7 +53,7 @@ namespace Zilon.Core.Common.Tests
             var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));
 
             // ASSERT
-            regions.Should().BeEquivalentTo(new[] { new OffsetCoords(4, 4) });
+            regions.Should().BeEquivalentTo(new[] {new OffsetCoords(4, 4)});
         }
 
         private static void PlaceArea(int x, int y, Matrix<bool> matrix)

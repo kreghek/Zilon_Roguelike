@@ -55,14 +55,8 @@ namespace Zilon.Core.Common
 
         public T this[int x, int y]
         {
-            get
-            {
-                return Items[x, y];
-            }
-            set
-            {
-                Items[x, y] = value;
-            }
+            get => Items[x, y];
+            set => Items[x, y] = value;
         }
 
         public bool IsIn(int x, int y)

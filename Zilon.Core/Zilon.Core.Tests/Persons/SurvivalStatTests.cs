@@ -1,6 +1,4 @@
-﻿
-using NUnit.Framework;
-
+﻿using NUnit.Framework;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Tests.Persons.TestCases;
 
@@ -20,7 +18,6 @@ namespace Zilon.Core.Tests.Persons
         {
             // ARRANGE
             var survivalStat = new SurvivalStat(startValue, min, max);
-
 
 
             // ACT
@@ -43,7 +40,6 @@ namespace Zilon.Core.Tests.Persons
             var survivalStat = new SurvivalStat(startValue, min, max);
 
 
-
             // ACT
             survivalStat.ChangeStatRange(newMin, newMax);
 
@@ -51,6 +47,5 @@ namespace Zilon.Core.Tests.Persons
             // ASSERT
             return survivalStat.Value;
         }
-
     }
 }

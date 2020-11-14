@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -13,8 +12,8 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public sealed class CombatStatsModule : ICombatStatsModule
     {
-        private readonly IEvolutionModule _evolutionModule;
         private readonly IEquipmentModule _equipmentModule;
+        private readonly IEvolutionModule _evolutionModule;
 
         public CombatStatsModule(IEvolutionModule evolutionModule, IEquipmentModule equipmentModule)
         {
@@ -27,21 +26,21 @@ namespace Zilon.Core.PersonModules
             _equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
         }
 
-        private void EquipmentModule_EquipmentChanged(object sender, EquipmentChangedEventArgs e)
-        {
-            CalcCombatStats();
-        }
-
         /// <summary>
         /// Навыки обороны против наступательных действий.
         /// </summary>
         public IPersonDefenceStats DefenceStats { get; set; }
 
         /// <inheritdoc/>
-        public string Key { get => nameof(ICombatStatsModule); }
+        public string Key => nameof(ICombatStatsModule);
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }
+
+        private void EquipmentModule_EquipmentChanged(object sender, EquipmentChangedEventArgs e)
+        {
+            CalcCombatStats();
+        }
 
         private void CalcCombatStats()
         {
@@ -144,10 +143,6 @@ namespace Zilon.Core.PersonModules
 
                 case PersonRuleType.Undefined:
                     throw new InvalidOperationException("Undefined rule");
-
-                default:
-                    // Остальные правила обрабатываются в других модулях.
-                    break;
             }
         }
 
@@ -199,8 +194,8 @@ namespace Zilon.Core.PersonModules
             foreach (var armorGroup in armorGroups)
             {
                 var orderedArmors = from armor in armorGroup
-                                    orderby armor.AbsorbtionLevel, armor.ArmorRank
-                                    select armor;
+                    orderby armor.AbsorbtionLevel, armor.ArmorRank
+                    select armor;
 
                 float? rankRaw = null;
                 PersonRuleLevel? armorLevel = null;

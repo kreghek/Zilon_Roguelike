@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -25,6 +24,19 @@ namespace Zilon.Core.StaticObjectModules
         bool IsOpened { get; }
 
         /// <summary>
+        /// Назначение сундука.
+        /// </summary>
+        PropContainerPurpose Purpose { get; }
+
+        /// <summary>
+        /// Блокер проходимости карты.
+        /// </summary>
+        /// <remarks>
+        /// Это значение задаётся, если контейнер должен блокировать проходимость.
+        /// </remarks>
+        bool IsMapBlock { get; }
+
+        /// <summary>
         /// Событие выстреливает, когда сундук открывается.
         /// </summary>
         /// <remarks>
@@ -46,18 +58,5 @@ namespace Zilon.Core.StaticObjectModules
         /// Открытие контейнера.
         /// </summary>
         void Open();
-
-        /// <summary>
-        /// Назначение сундука.
-        /// </summary>
-        PropContainerPurpose Purpose { get; }
-
-        /// <summary>
-        /// Блокер проходимости карты.
-        /// </summary>
-        /// <remarks>
-        /// Это значение задаётся, если контейнер должен блокировать проходимость.
-        /// </remarks>
-        bool IsMapBlock { get; }
     }
 }

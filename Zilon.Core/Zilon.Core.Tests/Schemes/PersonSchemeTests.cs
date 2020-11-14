@@ -1,11 +1,7 @@
 ﻿using System.IO;
-
 using FluentAssertions;
-
 using Newtonsoft.Json;
-
 using NUnit.Framework;
-
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 
@@ -33,10 +29,8 @@ namespace Zilon.Core.Tests.Schemes
             }
 
 
-
             // ACT
             var factPersonScheme = JsonConvert.DeserializeObject<PersonScheme>(sourceText);
-
 
 
             // ASSERT
@@ -48,22 +42,20 @@ namespace Zilon.Core.Tests.Schemes
             factPersonScheme.SurvivalStats[0].MaxValue.Should().Be(500);
             factPersonScheme.SurvivalStats[0].StartValue.Should().Be(250);
 
-            var expectedKeySegments = new[] {
-                new TestPersonSurvivalStatKeySegmentSubScheme{
-                    Level = PersonSurvivalStatKeypointLevel.Max,
-                    Start = 0,
-                    End = 0.14f
+            var expectedKeySegments = new[]
+            {
+                new TestPersonSurvivalStatKeySegmentSubScheme
+                {
+                    Level = PersonSurvivalStatKeypointLevel.Max, Start = 0, End = 0.14f
                 },
-                new TestPersonSurvivalStatKeySegmentSubScheme{
-                    Level = PersonSurvivalStatKeypointLevel.Strong,
-                    Start = 0.14f,
-                    End = 0.75f
+                new TestPersonSurvivalStatKeySegmentSubScheme
+                {
+                    Level = PersonSurvivalStatKeypointLevel.Strong, Start = 0.14f, End = 0.75f
                 },
-                new TestPersonSurvivalStatKeySegmentSubScheme{
-                    Level = PersonSurvivalStatKeypointLevel.Lesser,
-                    Start = 0.75f,
-                    End = 0.86f
-                },
+                new TestPersonSurvivalStatKeySegmentSubScheme
+                {
+                    Level = PersonSurvivalStatKeypointLevel.Lesser, Start = 0.75f, End = 0.86f
+                }
             };
             factPersonScheme.SurvivalStats[0].KeyPoints.Should().BeEquivalentTo(expectedKeySegments);
         }

@@ -37,8 +37,7 @@ namespace Zilon.Core.Schemes
         [JsonProperty]
         public int RegionMonsterCount { get; private set; }
 
-        [JsonProperty]
-        public int MinRegionMonsterCount { get; private set; }
+        [JsonProperty] public int MinRegionMonsterCount { get; private set; }
 
         /// <summary>
         /// Количество сундуков в секторе.

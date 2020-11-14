@@ -1,13 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.PathFinding;
@@ -41,9 +37,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var mapRegion = new MapRegion(1, map.Nodes.ToArray())
             {
-                IsStart = true,
-                IsOut = true,
-                ExitNodes = new[] { map.Nodes.Last() }
+                IsStart = true, IsOut = true, ExitNodes = new[] {map.Nodes.Last()}
             };
 
             map.Regions.Add(mapRegion);

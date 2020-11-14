@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Common;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
@@ -8,7 +7,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// <summary>
     /// Connect closest map regions each with other.
     /// </summary>
-    static class ClosestRegionConnector
+    internal static class ClosestRegionConnector
     {
         public static void Connect(Matrix<bool> matrix, IEnumerable<RegionDraft> regions)
         {
@@ -26,7 +25,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
         }
 
-        private static void ConnectOpenRegionsToUnited(Matrix<bool> matrix, List<RegionDraft> openRegions, List<RegionDraft> unitedRegions)
+        private static void ConnectOpenRegionsToUnited(Matrix<bool> matrix, List<RegionDraft> openRegions,
+            List<RegionDraft> unitedRegions)
         {
             var unitedRegionCoords = unitedRegions.SelectMany(x => x.Coords).ToArray();
 
@@ -44,7 +44,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             // то прорываем тоннель.
             if (nearbyOpenRegion != null
                 && currentOpenRegionCoord != null
-                 && currentUnitedRegionCoord != null)
+                && currentUnitedRegionCoord != null)
             {
                 var openCubeCoord = HexHelper.ConvertToCube(currentOpenRegionCoord.Value);
                 var unitedCubeCoord = HexHelper.ConvertToCube(currentUnitedRegionCoord.Value);
@@ -56,7 +56,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
         }
 
-        private static void FindClosestNodesBetweenOpenAndUnited(List<RegionDraft> openRegions, OffsetCoords[] unitedRegionCoords, out OffsetCoords? currentOpenRegionCoord, out OffsetCoords? currentUnitedRegionCoord, out RegionDraft nearbyOpenRegion)
+        private static void FindClosestNodesBetweenOpenAndUnited(List<RegionDraft> openRegions,
+            OffsetCoords[] unitedRegionCoords, out OffsetCoords? currentOpenRegionCoord,
+            out OffsetCoords? currentUnitedRegionCoord, out RegionDraft nearbyOpenRegion)
         {
             var currentDistance = int.MaxValue;
             currentOpenRegionCoord = null;
@@ -85,7 +87,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
         }
 
-        private static void DrawLineBetweenNodes(Matrix<bool> matrix, CubeCoords openCubeCoord, CubeCoords unitedCubeCoord)
+        private static void DrawLineBetweenNodes(Matrix<bool> matrix, CubeCoords openCubeCoord,
+            CubeCoords unitedCubeCoord)
         {
             var line = CubeCoordsHelper.CubeDrawLine(openCubeCoord, unitedCubeCoord);
             foreach (var lineItem in line)

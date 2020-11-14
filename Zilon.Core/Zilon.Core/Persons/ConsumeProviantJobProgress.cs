@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons

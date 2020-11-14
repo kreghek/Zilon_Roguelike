@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
@@ -26,7 +25,8 @@ namespace Zilon.Core.PersonModules
 
         /// <summary>Признак того, что персонаж мёртв.</summary>
         public bool IsDead { get; private set; }
-        public string Key { get => nameof(ISurvivalModule); }
+
+        public string Key => nameof(ISurvivalModule);
         public bool IsActive { get; set; }
 
         /// <summary>Происходит, если персонаж умирает.</summary>
@@ -66,16 +66,6 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        /// <summary>
-        /// Invokes the stat changed event with the given parameters
-        /// </summary>
-        /// <param name="caller">The object performing the call</param>
-        /// <param name="args">The <see cref="SurvivalStatChangedEventArgs"/> instance containing the event data.</param>
-        public void InvokeStatChangedEvent(SurvivalModuleBase caller, SurvivalStatChangedEventArgs args)
-        {
-            StatChanged?.Invoke(caller, args);
-        }
-
         /// <summary>Форсированно установить запас здоровья.</summary>
         /// <param name="type">Тип характеритсики, которая будет произведено влияние.</param>
         /// <param name="value">Целевое значение запаса характеристики.</param>
@@ -86,6 +76,19 @@ namespace Zilon.Core.PersonModules
             {
                 stat.Value = value;
             }
+        }
+
+        public abstract void ResetStats();
+        public abstract void Update();
+
+        /// <summary>
+        /// Invokes the stat changed event with the given parameters
+        /// </summary>
+        /// <param name="caller">The object performing the call</param>
+        /// <param name="args">The <see cref="SurvivalStatChangedEventArgs"/> instance containing the event data.</param>
+        public void InvokeStatChangedEvent(SurvivalModuleBase caller, SurvivalStatChangedEventArgs args)
+        {
+            StatChanged?.Invoke(caller, args);
         }
 
         private static void ValidateStatChangeValue(int value)
@@ -174,8 +177,5 @@ namespace Zilon.Core.PersonModules
         {
             Dead?.Invoke(this, new EventArgs());
         }
-
-        public abstract void ResetStats();
-        public abstract void Update();
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 
@@ -23,8 +22,8 @@ namespace Zilon.Core.World
 
     public class BiomeInitializer : IBiomeInitializer, IGlobeExpander
     {
-        private readonly ISectorGenerator _sectorGenerator;
         private readonly IBiomeSchemeRoller _biomeSchemeRoller;
+        private readonly ISectorGenerator _sectorGenerator;
 
         public BiomeInitializer(ISectorGenerator sectorGenerator, IBiomeSchemeRoller biomeSchemeRoller)
         {
@@ -65,6 +64,11 @@ namespace Zilon.Core.World
             sectorNode.MaterializeSector(sector);
         }
 
+        public Task ExpandAsync(ISectorNode sectorNode)
+        {
+            return MaterializeLevelAsync(sectorNode);
+        }
+
         private SectorNode RollAndBindBiome()
         {
             var rolledLocationScheme = _biomeSchemeRoller.Roll();
@@ -103,7 +107,8 @@ namespace Zilon.Core.World
         private void CreateNextSectorNodes(ISectorNode sectorNode, IBiome biom)
         {
             var nextSectorLevels = biom.LocationScheme.SectorLevels
-                    .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid).Contains(x.Sid));
+                .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid)
+                    .Contains(x.Sid));
 
             foreach (var nextSectorLevelScheme in nextSectorLevels)
             {
@@ -128,11 +133,6 @@ namespace Zilon.Core.World
 
                 nextBiom.AddEdge(sectorNode, nextSectorNode);
             }
-        }
-
-        public Task ExpandAsync(ISectorNode sectorNode)
-        {
-            return MaterializeLevelAsync(sectorNode);
         }
     }
 }

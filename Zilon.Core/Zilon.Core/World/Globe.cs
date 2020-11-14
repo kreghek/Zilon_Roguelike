@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -14,14 +13,12 @@ namespace Zilon.Core.World
     /// </summary>
     public sealed class Globe : IGlobe
     {
-        private int _turnCounter;
+        private readonly IGlobeTransitionHandler _globeTransitionHandler;
 
         private readonly IList<ISectorNode> _sectorNodes;
 
         private readonly ConcurrentDictionary<IActor, TaskState> _taskDict;
-        private readonly IGlobeTransitionHandler _globeTransitionHandler;
-
-        public IEnumerable<ISectorNode> SectorNodes { get => _sectorNodes; }
+        private int _turnCounter;
 
         public Globe(IGlobeTransitionHandler globeTransitionHandler)
         {
@@ -29,8 +26,11 @@ namespace Zilon.Core.World
 
             _sectorNodes = new List<ISectorNode>();
 
-            _globeTransitionHandler = globeTransitionHandler ?? throw new ArgumentNullException(nameof(globeTransitionHandler));
+            _globeTransitionHandler =
+                globeTransitionHandler ?? throw new ArgumentNullException(nameof(globeTransitionHandler));
         }
+
+        public IEnumerable<ISectorNode> SectorNodes => _sectorNodes;
 
         public void AddSectorNode(ISectorNode sectorNode)
         {
@@ -42,6 +42,25 @@ namespace Zilon.Core.World
             _sectorNodes.Add(sectorNode);
             sectorNode.Sector.TrasitionUsed += Sector_TrasitionUsed;
             sectorNode.Sector.ActorManager.Removed += ActorManager_Removed;
+        }
+
+        public async Task UpdateAsync()
+        {
+            var actorsWithoutTasks = GetActorsWithoutTasks();
+
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
+
+            ProcessTasks(_taskDict);
+            _turnCounter++;
+            if (_turnCounter >= GlobeMetrics.OneIterationLength)
+            {
+                _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
+
+                foreach (var sectorNode in _sectorNodes)
+                {
+                    sectorNode.Sector.Update();
+                }
+            }
         }
 
         private void ActorManager_Removed(object sender, ManagerItemsChangedEventArgs<IActor> e)
@@ -65,25 +84,6 @@ namespace Zilon.Core.World
         {
             var sector = (ISector)sender;
             await _globeTransitionHandler.ProcessAsync(this, sector, e.Actor, e.Transition).ConfigureAwait(false);
-        }
-
-        public async Task UpdateAsync()
-        {
-            var actorsWithoutTasks = GetActorsWithoutTasks();
-
-            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
-
-            ProcessTasks(_taskDict);
-            _turnCounter++;
-            if (_turnCounter >= GlobeMetrics.OneIterationLength)
-            {
-                _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
-
-                foreach (var sectorNode in _sectorNodes)
-                {
-                    sectorNode.Sector.Update();
-                }
-            }
         }
 
         private IEnumerable<ActorInSector> GetActorsWithoutTasks()
@@ -111,7 +111,7 @@ namespace Zilon.Core.World
                         continue;
                     }
 
-                    yield return new ActorInSector { Actor = actor, Sector = sector };
+                    yield return new ActorInSector {Actor = actor, Sector = sector};
                 }
             }
         }

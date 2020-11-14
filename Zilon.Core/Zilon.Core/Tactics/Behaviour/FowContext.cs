@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
@@ -55,7 +54,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
             foreach (var linePoint in line)
             {
-                var staticObjects = _staticObjectManager.Items.Where(x => (x.Node as HexNode).CubeCoords == linePoint).ToArray();
+                var staticObjects = _staticObjectManager.Items.Where(x => (x.Node as HexNode).CubeCoords == linePoint)
+                    .ToArray();
                 foreach (var staticObject in staticObjects)
                 {
                     if (staticObject.IsSightBlock)

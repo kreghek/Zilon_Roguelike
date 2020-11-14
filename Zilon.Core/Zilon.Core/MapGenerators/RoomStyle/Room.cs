@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
@@ -9,6 +8,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     /// </summary>
     public class Room
     {
+        public Room()
+        {
+            Nodes = new List<HexNode>();
+            Transitions = new List<RoomTransition>();
+        }
+
         /// <summary>
         /// Координата X в матрице комнат.
         /// </summary>
@@ -48,12 +53,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// Признак того, что комната является стартовой в секторе.
         /// </summary>
         public bool IsStart { get; set; }
-
-        public Room()
-        {
-            Nodes = new List<HexNode>();
-            Transitions = new List<RoomTransition>();
-        }
 
         public override string ToString()
         {

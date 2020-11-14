@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;

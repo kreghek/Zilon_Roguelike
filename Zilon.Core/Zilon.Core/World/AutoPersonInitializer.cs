@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 
@@ -10,9 +9,9 @@ namespace Zilon.Core.World
     {
         private const string PERSON_SCHEME_SID = "human-person";
         private const string START_FACTION_NAME = "Pilgrims";
+        private readonly IPersonFactory _personFactory;
 
         private readonly IFraction _pilgrimFraction;
-        private readonly IPersonFactory _personFactory;
 
         public AutoPersonInitializer(IPersonFactory personFactory)
         {
@@ -38,7 +37,8 @@ namespace Zilon.Core.World
         /// Создаёт персонажа.
         /// </summary>
         /// <returns> Возвращает созданного персонажа. </returns>
-        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory, IFraction fraction)
+        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory,
+            IFraction fraction)
         {
             var startPerson = personFactory.Create(personSchemeSid, fraction);
             return startPerson;

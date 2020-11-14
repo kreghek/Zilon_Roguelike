@@ -1,12 +1,12 @@
 ﻿using System;
-
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
     public static class IPersonExtensions
     {
-        public static TPersonModule GetModuleSafe<TPersonModule>(this IPerson source) where TPersonModule : IPersonModule
+        public static TPersonModule GetModuleSafe<TPersonModule>(this IPerson source)
+            where TPersonModule : IPersonModule
         {
             if (source is null)
             {

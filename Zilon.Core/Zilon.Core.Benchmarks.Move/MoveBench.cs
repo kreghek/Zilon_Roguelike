@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-
 using BenchmarkDotNet.Attributes;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Players;
@@ -19,8 +16,8 @@ namespace Zilon.Core.Benchmarks.Move
 {
     public class MoveBench
     {
-        private ServiceProvider _serviceProvider;
         private IGlobe _globe;
+        private ServiceProvider _serviceProvider;
 
         [Benchmark(Description = "Move100")]
         public void Move100()
@@ -41,10 +38,7 @@ namespace Zilon.Core.Benchmarks.Move
                 var nextNodes = player.SectorNode.Sector.Map.GetNext(currentActorNode);
                 var moveTargetNode = (HexNode)nextNodes.First();
 
-                playerState.SelectedViewModel = new TestNodeViewModel
-                {
-                    Node = moveTargetNode
-                };
+                playerState.SelectedViewModel = new TestNodeViewModel {Node = moveTargetNode};
 
                 commandManger.Push(moveCommand);
 
@@ -80,10 +74,7 @@ namespace Zilon.Core.Benchmarks.Move
                 var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sector.Map.Nodes.Cast<HexNode>());
                 var moveTargetNode = nextNodes.First();
 
-                playerState.SelectedViewModel = new TestNodeViewModel
-                {
-                    Node = moveTargetNode
-                };
+                playerState.SelectedViewModel = new TestNodeViewModel {Node = moveTargetNode};
 
                 commandManger.Push(moveCommand);
 
@@ -116,7 +107,8 @@ namespace Zilon.Core.Benchmarks.Move
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
             var humanPlayer = _serviceProvider.GetRequiredService<IPlayer>();
-            var humanActorTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var humanActorTaskSource =
+                _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
@@ -127,10 +119,7 @@ namespace Zilon.Core.Benchmarks.Move
 
             humanPlayer.BindPerson(_globe, person);
 
-            var actorViewModel = new TestActorViewModel
-            {
-                Actor = actor
-            };
+            var actorViewModel = new TestActorViewModel {Actor = actor};
 
             playerState.ActiveActor = actorViewModel;
         }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -11,13 +9,13 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public abstract class FixRoomGeneratorRandomSourceBase : IRoomGeneratorRandomSource
     {
-        protected List<Tuple<OffsetCoords, OffsetCoords>> Connections { get; }
-
         protected FixRoomGeneratorRandomSourceBase()
         {
             // 20 комнат - это 6х6 матрица
             Connections = new List<Tuple<OffsetCoords, OffsetCoords>>(20);
         }
+
+        protected List<Tuple<OffsetCoords, OffsetCoords>> Connections { get; }
 
         /// <summary>
         /// Выбирает комнаты, с которыми есть соединение.
@@ -28,7 +26,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает целевые комнаты для соединения.
         /// </returns>
-        [NotNull, ItemNotNull]
+        [NotNull]
+        [ItemNotNull]
         public Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms)
         {
             if (!availableRooms.Any())
@@ -37,14 +36,14 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             var currentConnection = Connections.Single(x =>
-                        x.Item1.X == currentRoom.PositionX &&
-                        x.Item1.Y == currentRoom.PositionY);
+                x.Item1.X == currentRoom.PositionX &&
+                x.Item1.Y == currentRoom.PositionY);
 
             var connectedRoom = availableRooms.Single(x =>
                 x.PositionX == currentConnection.Item2.X &&
                 x.PositionY == currentConnection.Item2.Y);
 
-            return new[] { connectedRoom };
+            return new[] {connectedRoom};
         }
 
         /// <summary>
@@ -84,8 +83,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             foreach (var currentRoom in rooms)
             {
                 var currentConnection = Connections.SingleOrDefault(x =>
-                        x.Item1.X == currentRoom.PositionX &&
-                        x.Item1.Y == currentRoom.PositionY);
+                    x.Item1.X == currentRoom.PositionX &&
+                    x.Item1.Y == currentRoom.PositionY);
 
                 if (currentConnection == null)
                 {
@@ -98,7 +97,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                 if (connectedRoom != null)
                 {
-                    result.Add(currentRoom, new[] { connectedRoom });
+                    result.Add(currentRoom, new[] {connectedRoom});
                 }
             }
 
@@ -123,7 +122,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
         public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
         {
-            return new[] { openTransitions.First() };
+            return new[] {openTransitions.First()};
         }
 
         /// <summary>

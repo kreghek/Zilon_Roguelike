@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Common;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -62,12 +60,6 @@ namespace Zilon.Core.Persons
         }
 
         /// <inheritdoc/>
-        public override string ToString()
-        {
-            return $"{Scheme} [{Equipment}]";
-        }
-
-        /// <inheritdoc/>
         public void UpdateCooldown()
         {
             if (CurrentCooldown is null)
@@ -80,6 +72,12 @@ namespace Zilon.Core.Persons
             {
                 CurrentCooldown--;
             }
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{Scheme} [{Equipment}]";
         }
     }
 }

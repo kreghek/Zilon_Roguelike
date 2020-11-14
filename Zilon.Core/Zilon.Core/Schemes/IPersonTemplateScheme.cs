@@ -34,7 +34,6 @@ namespace Zilon.Core.Schemes
         [JsonConverter(typeof(ConcreteTypeConverter<DropTableScheme>))]
         public IDropTableScheme InventoryProps { get; private set; }
 
-        [JsonProperty]
-        public string FractionSid { get; private set; }
+        [JsonProperty] public string FractionSid { get; private set; }
     }
 }

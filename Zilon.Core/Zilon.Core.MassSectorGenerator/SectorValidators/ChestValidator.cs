@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -14,7 +13,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
         "CA1812:Avoid uninstantiated internal classes",
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
-    class ChestValidator : ISectorValidator
+    internal class ChestValidator : ISectorValidator
     {
         public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {

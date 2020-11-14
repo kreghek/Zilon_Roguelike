@@ -2,9 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -41,7 +39,7 @@ namespace Zilon.Core.PersonModules
         /// Конструирует экземпляр модуля работы с экипировкой типа <see cref="EquipmentCarrierBase"/>.
         /// </summary>
         /// <param name="slots">Набор слотов, на основе которого создаётся модель работы с экипировкой.</param>
-        protected EquipmentModuleBase([NotNull][ItemNotNull] IEnumerable<PersonSlotSubScheme> slots)
+        protected EquipmentModuleBase([NotNull] [ItemNotNull] IEnumerable<PersonSlotSubScheme> slots)
         {
             if (slots == null)
             {
@@ -84,7 +82,7 @@ namespace Zilon.Core.PersonModules
         public abstract PersonSlotSubScheme[] Slots { get; protected set; }
 
         /// <inheritdoc/>
-        public string Key { get => nameof(IEquipmentModule); }
+        public string Key => nameof(IEquipmentModule);
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }
@@ -100,9 +98,15 @@ namespace Zilon.Core.PersonModules
         /// <returns>
         /// Энумератор, который может быть использован для перебора текущей экипировки.
         /// </returns>
-        public IEnumerator<Equipment> GetEnumerator() => _equipment.AsEnumerable().GetEnumerator();
+        public IEnumerator<Equipment> GetEnumerator()
+        {
+            return _equipment.AsEnumerable().GetEnumerator();
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => _equipment.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _equipment.GetEnumerator();
+        }
 
         /// <summary>
         /// Проверяет возможность установки предмета в указанный слот экипировки.

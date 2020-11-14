@@ -1,16 +1,12 @@
 ﻿using System;
-
 using FluentAssertions;
-
 using NUnit.Framework;
-
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
-
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
     public class EquipmentTests
@@ -37,7 +33,6 @@ namespace Zilon.Core.Tests.Persons
                 // ReSharper disable once UnusedVariable
                 var equipment = new Equipment(scheme, acts);
             };
-
 
 
             // ASSERT

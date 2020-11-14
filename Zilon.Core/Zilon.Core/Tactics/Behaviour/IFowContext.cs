@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Behaviour

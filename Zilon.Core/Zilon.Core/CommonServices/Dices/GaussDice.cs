@@ -41,6 +41,7 @@ namespace Zilon.Core.CommonServices.Dices
             {
                 x = NextGaussian(MEAN, STDDEV);
             } while (x < min || x > max);
+
             return x;
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Persons

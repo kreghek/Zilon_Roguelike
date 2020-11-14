@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-
 using Zilon.Core.Common;
 
 namespace Zilon.Core.Tests.Common
@@ -19,10 +18,8 @@ namespace Zilon.Core.Tests.Common
             var range = new Range<int>(min, max);
 
 
-
             // ACT
             var factValue = range.GetBounded(value);
-
 
 
             // ASSERT
@@ -41,10 +38,8 @@ namespace Zilon.Core.Tests.Common
             var range = new Range<int>(min, max);
 
 
-
             // ACT
             var factValue = range.GetBounded(value);
-
 
 
             // ASSERT

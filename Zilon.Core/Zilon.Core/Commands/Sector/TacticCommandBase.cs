@@ -14,7 +14,8 @@ namespace Zilon.Core.Commands
             var canExecute = CanExecute();
             if (!canExecute)
             {
-                throw new InvalidOperationException("Попытка выполнить команду, которую нельзя выполнять в данный момент.");
+                throw new InvalidOperationException(
+                    "Попытка выполнить команду, которую нельзя выполнять в данный момент.");
             }
 
             ExecuteTacticCommand();

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tactics

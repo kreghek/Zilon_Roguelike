@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Common;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
@@ -9,7 +8,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// <summary>
     /// Find isolated regions in matrix of bool.
     /// </summary>
-    static class RegionFinder
+    internal static class RegionFinder
     {
         /// <summary>
         /// Find all passable (true) regions.

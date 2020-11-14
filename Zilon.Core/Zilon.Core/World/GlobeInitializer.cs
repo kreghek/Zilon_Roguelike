@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -10,11 +10,11 @@ namespace Zilon.Core.World
 {
     public sealed class GlobeInitializer : IGlobeInitializer
     {
+        private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
         private readonly IBiomeInitializer _biomeInitializer;
         private readonly IGlobeTransitionHandler _globeTransitionHandler;
-        private readonly ISchemeService _schemeService;
-        private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
         private readonly IPersonInitializer _personInitializer;
+        private readonly ISchemeService _schemeService;
 
         public GlobeInitializer(
             IBiomeInitializer biomeInitializer,
@@ -63,7 +63,7 @@ namespace Zilon.Core.World
 
         private static IActor CreateActor(
             IPerson humanPerson,
-            Graphs.IGraphNode startNode,
+            IGraphNode startNode,
             IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             var actor = new Actor(humanPerson, actorTaskSource, startNode);

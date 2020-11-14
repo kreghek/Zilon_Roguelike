@@ -1,12 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.CoreTestsTemp.Tactics.Behaviour.TestCases;
@@ -41,7 +37,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             fowDataMock.Setup(x => x.AddNodes(It.IsAny<IEnumerable<SectorMapFowNode>>()))
                 .Callback<IEnumerable<SectorMapFowNode>>(nodes => nodeList.AddRange(nodes));
             fowDataMock.Setup(x => x.ChangeNodeState(It.IsAny<SectorMapFowNode>(), It.IsAny<SectorMapNodeFowState>()))
-                .Callback<SectorMapFowNode, SectorMapNodeFowState>((fowNode, targetState) => fowNode.ChangeState(targetState));
+                .Callback<SectorMapFowNode, SectorMapNodeFowState>((fowNode, targetState) =>
+                    fowNode.ChangeState(targetState));
             var fowData = fowDataMock.Object;
 
             var fowContextMock = new Mock<IFowContext>();
@@ -60,7 +57,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             FowHelper.UpdateFowData(fowData, fowContext, baseNode, radius);
 
             // ARRANGE
-            var factObservingNodes = nodeList.Where(x => x.State == SectorMapNodeFowState.Observing).Select(x => x.Node).ToArray();
+            var factObservingNodes = nodeList.Where(x => x.State == SectorMapNodeFowState.Observing).Select(x => x.Node)
+                .ToArray();
             factObservingNodes.Should().BeEquivalentTo(expectedObservingNodes);
         }
 
@@ -69,7 +67,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// </summary>
         [Test]
         [TestCaseSource(typeof(FowHelperTestCaseDataSource), nameof(FowHelperTestCaseDataSource.TestCases))]
-        public void UpdateFowData_RealHumanSectorFowData_ObseringNodesIsNotEmpty(int mapSize, int baseX, int baseY, int radius)
+        public void UpdateFowData_RealHumanSectorFowData_ObseringNodesIsNotEmpty(int mapSize, int baseX, int baseY,
+            int radius)
         {
             // ARRANGE
 

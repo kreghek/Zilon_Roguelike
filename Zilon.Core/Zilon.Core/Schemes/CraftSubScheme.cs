@@ -8,9 +8,9 @@ namespace Zilon.Core.Schemes
     public sealed class CraftSubScheme : SubSchemeBase
     {
         /// <summary>
-		/// Ресурсы (черновики), которые требуются для прототипирования.
-		/// </summary>
-		public PropSet[] PrototypeSources { get; set; }
+        /// Ресурсы (черновики), которые требуются для прототипирования.
+        /// </summary>
+        public PropSet[] PrototypeSources { get; set; }
 
         /// <summary>
         /// Инструменты, требуемые для создания предмета.

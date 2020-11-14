@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 

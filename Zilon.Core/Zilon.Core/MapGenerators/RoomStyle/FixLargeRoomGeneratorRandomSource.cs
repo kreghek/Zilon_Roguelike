@@ -21,7 +21,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                     Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
                         current,
                         mirror)
-                        );
+                    );
                 }
             }
         }

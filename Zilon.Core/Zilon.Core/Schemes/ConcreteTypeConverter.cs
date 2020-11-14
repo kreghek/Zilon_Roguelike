@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
@@ -12,7 +11,8 @@ namespace Zilon.Core.Schemes
             return true;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
             if (serializer is null)
             {

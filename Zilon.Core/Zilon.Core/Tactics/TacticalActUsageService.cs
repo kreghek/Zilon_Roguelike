@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
@@ -18,11 +17,8 @@ namespace Zilon.Core.Tactics
     /// <seealso cref="ITacticalActUsageService" />
     public sealed class TacticalActUsageService : ITacticalActUsageService
     {
-        private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
         private readonly IActUsageHandlerSelector _actUsageHandlerSelector;
-
-        /// <summary>Сервис для работы с прочностью экипировки.</summary>
-        public IEquipmentDurableService EquipmentDurableService { get; set; }
+        private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
 
         /// <summary>
         /// Конструирует экземпляр службы <see cref="TacticalActUsageService"/>.
@@ -40,8 +36,10 @@ namespace Zilon.Core.Tactics
             ITacticalActUsageRandomSource actUsageRandomSource,
             IActUsageHandlerSelector actUsageHandlerSelector)
         {
-            _actUsageRandomSource = actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
-            _actUsageHandlerSelector = actUsageHandlerSelector ?? throw new ArgumentNullException(nameof(actUsageHandlerSelector));
+            _actUsageRandomSource =
+                actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
+            _actUsageHandlerSelector = actUsageHandlerSelector ??
+                                       throw new ArgumentNullException(nameof(actUsageHandlerSelector));
         }
 
         public TacticalActUsageService(
@@ -49,8 +47,12 @@ namespace Zilon.Core.Tactics
             IActUsageHandlerSelector actUsageHandlerSelector,
             IEquipmentDurableService equipmentDurableService) : this(actUsageRandomSource, actUsageHandlerSelector)
         {
-            EquipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
+            EquipmentDurableService = equipmentDurableService ??
+                                      throw new ArgumentNullException(nameof(equipmentDurableService));
         }
+
+        /// <summary>Сервис для работы с прочностью экипировки.</summary>
+        public IEquipmentDurableService EquipmentDurableService { get; set; }
 
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs, ISector sector)
         {
@@ -215,9 +217,9 @@ namespace Zilon.Core.Tactics
         private static void RemovePropResource(IActor actor, ITacticalAct act)
         {
             var propResources = from prop in actor.Person.GetModule<IInventoryModule>().CalcActualItems()
-                                where prop is Resource
-                                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
-                                select prop;
+                where prop is Resource
+                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
+                select prop;
 
             if (propResources.FirstOrDefault() is Resource propResource)
             {
@@ -228,12 +230,14 @@ namespace Zilon.Core.Tactics
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Не хватает ресурса {propResource} для использования действия {act}.");
+                    throw new InvalidOperationException(
+                        $"Не хватает ресурса {propResource} для использования действия {act}.");
                 }
             }
             else
             {
-                throw new InvalidOperationException($"Не хватает ресурса {act.Constrains?.PropResourceType} для использования действия {act}.");
+                throw new InvalidOperationException(
+                    $"Не хватает ресурса {act.Constrains?.PropResourceType} для использования действия {act}.");
             }
         }
 

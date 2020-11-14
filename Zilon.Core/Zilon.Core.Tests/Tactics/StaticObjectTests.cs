@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -68,7 +64,7 @@ namespace Zilon.Core.Tactics.Tests
         private sealed class TestModule : IAdditionalInterface, ITestModule
         {
             public bool IsActive { get; set; }
-            public string Key { get => nameof(ITestModule); }
+            public string Key => nameof(ITestModule);
         }
 
         private interface IAdditionalInterface

@@ -66,23 +66,6 @@ namespace Zilon.Core.Common
         public Range<int> Range { get; private set; }
 
         /// <summary>
-        /// Изменение текущего диапазона характеристики.
-        /// </summary>
-        /// <param name="min">The minimum.</param>
-        /// <param name="max">The maximum.</param>
-        public virtual void ChangeStatRange(int min, int max)
-        {
-            if (min >= max)
-            {
-                Range = new Range<int>(min, min);
-                Value = Range.Min;
-                return;
-            }
-
-            Range = new Range<int>(min, max);
-        }
-
-        /// <summary>
         /// Значение в долях. Значение [0..1] в текущем диапазоне.
         /// </summary>
         public float ValueShare
@@ -97,6 +80,23 @@ namespace Zilon.Core.Common
                     Changed?.Invoke(this, new EventArgs());
                 }
             }
+        }
+
+        /// <summary>
+        /// Изменение текущего диапазона характеристики.
+        /// </summary>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        public virtual void ChangeStatRange(int min, int max)
+        {
+            if (min >= max)
+            {
+                Range = new Range<int>(min, min);
+                Value = Range.Min;
+                return;
+            }
+
+            Range = new Range<int>(min, max);
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -17,7 +16,8 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <param name="fowContext">Контекст тумана войны.</param>
         /// <param name="baseNode">Опорный узел.</param>
         /// <param name="radius">Радиус обзора персонажа.</param>
-        public static void UpdateFowData(ISectorFowData fowData, IFowContext fowContext, IGraphNode baseNode, int radius)
+        public static void UpdateFowData(ISectorFowData fowData, IFowContext fowContext, IGraphNode baseNode,
+            int radius)
         {
             if (fowData is null)
             {
@@ -62,7 +62,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 if (fowNode == null)
                 {
                     fowNode = new SectorMapFowNode(observingNode);
-                    fowData.AddNodes(new[] { fowNode });
+                    fowData.AddNodes(new[] {fowNode});
                 }
 
                 fowData.ChangeNodeState(fowNode, SectorMapNodeFowState.Observing);
@@ -79,16 +79,17 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private static IGraphNode[] GetObservingNodes(IFowContext fowContext, IGraphNode baseNode, int radius)
         {
-            var border = new List<IGraphNode> { baseNode };
+            var border = new List<IGraphNode> {baseNode};
 
-            var resultList = new List<IGraphNode> { baseNode };
+            var resultList = new List<IGraphNode> {baseNode};
 
             // Шаги заливки
             for (var stepIndex = 1; stepIndex <= radius; stepIndex++)
             {
                 var newBorder = GetNextForBorder(border, resultList, fowContext);
 
-                var visibleBorder = newBorder.AsParallel().Where(x => fowContext.IsTargetVisible(x, baseNode)).ToArray();
+                var visibleBorder = newBorder.AsParallel().Where(x => fowContext.IsTargetVisible(x, baseNode))
+                    .ToArray();
 
                 border.Clear();
                 border.AddRange(visibleBorder);
@@ -98,7 +99,8 @@ namespace Zilon.Core.Tactics.Behaviour
             return resultList.ToArray();
         }
 
-        private static IGraphNode[] GetNextForBorder(IEnumerable<IGraphNode> border, IEnumerable<IGraphNode> result, IFowContext fowContext)
+        private static IGraphNode[] GetNextForBorder(IEnumerable<IGraphNode> border, IEnumerable<IGraphNode> result,
+            IFowContext fowContext)
         {
             var borderTotal = new List<IGraphNode>();
 

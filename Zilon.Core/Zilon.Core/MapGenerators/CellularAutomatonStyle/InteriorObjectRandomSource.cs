@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 
@@ -184,7 +183,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         ///<summary>
         /// Для препятсвий выбираются только те узлы, для которых есть все соседи.
         ///</summary> 
-        private static bool HasAllHeighbors(HashSet<OffsetCoords> coordHash, CubeCoords[] neighborCubeOffsets, CubeCoords cube)
+        private static bool HasAllHeighbors(HashSet<OffsetCoords> coordHash, CubeCoords[] neighborCubeOffsets,
+            CubeCoords cube)
         {
             foreach (var neighborCubeOffset in neighborCubeOffsets)
             {

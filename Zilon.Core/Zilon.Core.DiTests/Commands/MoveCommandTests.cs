@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
@@ -48,7 +45,8 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<MoveCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             // ACT
@@ -64,7 +62,7 @@ namespace Zilon.Core.Tests.Commands
         /// Тест проверяет, что автоперемещение работает, если в зоне видимости нет монстров.
         /// </summary>
         [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
             Justification = "Naming convention for tests")]
         public void CanRepeate_NoMonsters_ReturnsTrue()
         {
@@ -82,7 +80,7 @@ namespace Zilon.Core.Tests.Commands
         /// Тест проверяет, что автоперемещение не работает, если в зоне видимости монстр.
         /// </summary>
         [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
             Justification = "Naming convention for tests")]
         public void CanRepeate_MonsterInSign_ReturnsFalse()
         {
@@ -114,7 +112,7 @@ namespace Zilon.Core.Tests.Commands
         /// Тест проверяет, что автоперемещение работает, если монстр далеко.
         /// </summary>
         [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
             Justification = "Naming convention for tests")]
         public void CanRepeate_MonsterNotInSign_ReturnsTrue()
         {
@@ -146,12 +144,12 @@ namespace Zilon.Core.Tests.Commands
         {
             if (testMap is null)
             {
-                throw new System.ArgumentNullException(nameof(testMap));
+                throw new ArgumentNullException(nameof(testMap));
             }
 
             if (playerStateMock is null)
             {
-                throw new System.ArgumentNullException(nameof(playerStateMock));
+                throw new ArgumentNullException(nameof(playerStateMock));
             }
 
             var targetNode = testMap.Nodes.SelectByHexCoords(1, 0);
@@ -164,7 +162,7 @@ namespace Zilon.Core.Tests.Commands
 
             Container.AddSingleton<MoveCommand>();
 
-            _actorList = new List<IActor> { playerStateMock.Object.ActiveActor.Actor };
+            _actorList = new List<IActor> {playerStateMock.Object.ActiveActor.Actor};
             var actorManagerMock = new Mock<IActorManager>();
             actorManagerMock.Setup(x => x.Items).Returns(_actorList);
             var actorManager = actorManagerMock.Object;

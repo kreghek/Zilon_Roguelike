@@ -31,10 +31,8 @@ namespace Zilon.Core.Common
             {
                 return await task.ConfigureAwait(false);
             }
-            else
-            {
-                throw new TimeoutException();
-            }
+
+            throw new TimeoutException();
         }
 
         /// <summary>

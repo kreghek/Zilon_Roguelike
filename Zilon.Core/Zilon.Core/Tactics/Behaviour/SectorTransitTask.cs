@@ -1,10 +1,9 @@
 ﻿using System;
-
 using JetBrains.Annotations;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    class SectorTransitTask : ActorTaskBase
+    internal class SectorTransitTask : ActorTaskBase
     {
         public SectorTransitTask([NotNull] IActor actor, IActorTaskContext context) : base(actor, context)
         {
@@ -15,7 +14,7 @@ namespace Zilon.Core.Tactics.Behaviour
         public override void Execute()
         {
             var actorNode = Actor.Node;
-            var transition = TransitionDetection.Detect(Context.Sector.Map.Transitions, new[] { actorNode });
+            var transition = TransitionDetection.Detect(Context.Sector.Map.Transitions, new[] {actorNode});
             if (transition != null)
             {
                 Context.Sector.UseTransition(Actor, transition);

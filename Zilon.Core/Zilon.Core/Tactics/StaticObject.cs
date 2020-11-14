@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.StaticObjectModules;
@@ -30,17 +29,19 @@ namespace Zilon.Core.Tactics
         public IGraphNode Node { get; }
 
         /// <inheritdoc/>
-        public bool IsMapBlock { get => GetIsMapBlock(); }
+        public bool IsMapBlock => GetIsMapBlock();
 
         /// <inheritdoc/>
-        public bool IsSightBlock { get => false; }
+        public bool IsSightBlock => false;
 
         /// <inheritdoc/>
         public PropContainerPurpose Purpose { get; }
-        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
+
+        public PhysicalSize PhysicalSize => PhysicalSize.Size1;
 
         /// <inheritdoc/>
-        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IStaticObjectModule
+        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule)
+            where TStaticObjectModule : IStaticObjectModule
         {
             _modules.Add(sectorObjectModule.Key, sectorObjectModule);
         }
@@ -52,7 +53,8 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc/>
-        public TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule
+        public TStaticObjectModule GetModule<TStaticObjectModule>(string key)
+            where TStaticObjectModule : IStaticObjectModule
         {
             return (TStaticObjectModule)_modules[key];
         }

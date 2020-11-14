@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.PathFinding
@@ -20,11 +19,6 @@ namespace Zilon.Core.PathFinding
     public sealed class AStar
     {
         /// <summary>
-        /// The open list.
-        /// </summary>
-        private readonly SortedList<int, IGraphNode> _openList;
-
-        /// <summary>
         /// The closed list.
         /// </summary>
         private readonly HashSet<IGraphNode> _closedList;
@@ -33,14 +27,14 @@ namespace Zilon.Core.PathFinding
         private readonly Dictionary<IGraphNode, AStarData> _dataDict;
 
         /// <summary>
+        /// The open list.
+        /// </summary>
+        private readonly SortedList<int, IGraphNode> _openList;
+
+        /// <summary>
         /// The goal node.
         /// </summary>
         private IGraphNode _goal;
-
-        /// <summary>
-        /// Gets the current node that the AStar algorithm is at.
-        /// </summary>
-        public IGraphNode CurrentNode { get; private set; }
 
         /// <summary>
         /// Creates a new AStar algorithm instance with the provided start and goal nodes.
@@ -68,6 +62,11 @@ namespace Zilon.Core.PathFinding
 
             Reset(start, goal);
         }
+
+        /// <summary>
+        /// Gets the current node that the AStar algorithm is at.
+        /// </summary>
+        public IGraphNode CurrentNode { get; private set; }
 
         /// <summary>
         /// Resets the AStar algorithm with the newly specified start node and goal node.
@@ -215,6 +214,4 @@ namespace Zilon.Core.PathFinding
             return path.ToArray();
         }
     }
-
-
 }

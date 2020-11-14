@@ -4,7 +4,6 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
-
     /// <summary>
     /// Интерфейс тактического действия.
     /// </summary>

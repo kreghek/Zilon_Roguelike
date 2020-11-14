@@ -1,13 +1,12 @@
 ﻿using System;
-
 using JetBrains.Annotations;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class MineTask : OneTurnActorTaskBase
     {
-        private readonly IStaticObject _staticObject;
         private readonly IMineDepositMethod _method;
+        private readonly IStaticObject _staticObject;
 
         public MineTask([NotNull] IActor actor,
             [NotNull] IActorTaskContext context,

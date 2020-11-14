@@ -3,7 +3,7 @@
     /// <summary>
     /// Map restriction. For example, min region count.
     /// </summary>
-    interface IMapRule
+    internal interface IMapRule
     {
         /// <summary>
         /// Name for debug

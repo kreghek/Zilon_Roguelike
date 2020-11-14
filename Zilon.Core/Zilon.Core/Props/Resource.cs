@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Props
@@ -8,8 +7,6 @@ namespace Zilon.Core.Props
     public sealed class Resource : PropBase
     {
         private int _count;
-
-        public event EventHandler<EventArgs> Changed;
 
         [ExcludeFromCodeCoverage]
         public Resource(IPropScheme scheme, int count) : base(scheme)
@@ -39,6 +36,8 @@ namespace Zilon.Core.Props
                 DoChange();
             }
         }
+
+        public event EventHandler<EventArgs> Changed;
 
         [ExcludeFromCodeCoverage]
         private void DoChange()

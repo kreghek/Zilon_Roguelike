@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.Spatial
 {
@@ -59,18 +59,17 @@ namespace Zilon.Core.Tactics.Spatial
         private bool IsNodeAvailableForActor(IMap map, IGraphNode testedNeighbor)
         {
             var actorSize = Actor.Person.PhysicalSize;
-            if (actorSize == Persons.PhysicalSize.Size1)
+            if (actorSize == PhysicalSize.Size1)
             {
                 return IsNodeAvailableForSmallActor(map, testedNeighbor);
             }
-            else if (actorSize == Persons.PhysicalSize.Size7)
+
+            if (actorSize == PhysicalSize.Size7)
             {
                 return IsNodeAvailableForNormalActor(map, testedNeighbor);
             }
-            else
-            {
-                throw new InvalidOperationException($"Размер {actorSize} не обрабатывается.");
-            }
+
+            throw new InvalidOperationException($"Размер {actorSize} не обрабатывается.");
         }
 
         private bool IsNodeAvailableForSmallActor(IMap map, IGraphNode testedNeighbor)

@@ -1,11 +1,7 @@
 ﻿using System;
-
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 
@@ -28,7 +24,7 @@ namespace Zilon.Core.Tactics.Tests
             testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
-            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] { testHandler });
+            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] {testHandler});
 
             var targetObject = new Test1();
 
@@ -54,7 +50,7 @@ namespace Zilon.Core.Tactics.Tests
             testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
-            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] { testHandler });
+            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] {testHandler});
 
             var targetObject = new Test2();
 
@@ -80,7 +76,7 @@ namespace Zilon.Core.Tactics.Tests
             testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
-            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] { testHandler });
+            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] {testHandler});
 
             var targetObject = new NotHandleTarget();
 

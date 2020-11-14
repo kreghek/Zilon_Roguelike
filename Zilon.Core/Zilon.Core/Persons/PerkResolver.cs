@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Persons

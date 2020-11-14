@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Tactics.Base;
 

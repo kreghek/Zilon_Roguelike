@@ -1,5 +1,4 @@
 ﻿using JetBrains.Annotations;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 
@@ -39,11 +38,9 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map);
             }
-            else
-            {
-                var moveCost = movingModule.CalculateCost();
-                return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map, moveCost);
-            }
+
+            var moveCost = movingModule.CalculateCost();
+            return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map, moveCost);
         }
     }
 }

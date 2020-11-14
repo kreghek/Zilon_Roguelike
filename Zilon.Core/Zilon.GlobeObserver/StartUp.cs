@@ -1,7 +1,5 @@
 ﻿using System;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
@@ -19,7 +17,8 @@ namespace Zilon.GlobeObserver
             base.RegisterServices(serviceCollection);
 
             serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
-            serviceCollection.AddSingleton<IGlobeExpander>(provider => (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
+            serviceCollection.AddSingleton<IGlobeExpander>(provider =>
+                (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
             serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceCollection.AddSingleton<IPersonInitializer, AutoPersonInitializer>();
         }
@@ -35,7 +34,9 @@ namespace Zilon.GlobeObserver
             serviceCollection.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
             serviceCollection.AddSingleton<LogicStateTreePatterns>();
 
-            serviceCollection.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanBotActorTaskSource<ISectorTaskSourceContext>>();
+            serviceCollection
+                .AddSingleton<IActorTaskSource<ISectorTaskSourceContext>,
+                    HumanBotActorTaskSource<ISectorTaskSourceContext>>();
         }
     }
 }

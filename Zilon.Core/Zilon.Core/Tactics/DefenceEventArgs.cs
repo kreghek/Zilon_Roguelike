@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
@@ -17,7 +15,8 @@ namespace Zilon.Core.Tactics
             int successToHitRoll,
             int factToHitRoll)
         {
-            PrefferedDefenceItem = prefferedDefenceItem ?? throw new ArgumentNullException(nameof(prefferedDefenceItem));
+            PrefferedDefenceItem =
+                prefferedDefenceItem ?? throw new ArgumentNullException(nameof(prefferedDefenceItem));
             SuccessToHitRoll = successToHitRoll;
             FactToHitRoll = factToHitRoll;
         }

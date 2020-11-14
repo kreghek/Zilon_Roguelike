@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
 using Zilon.Core.Client;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
@@ -57,46 +56,45 @@ namespace Zilon.Core.Commands
                 // Тогда эту проверку нужно будет доработать.
                 return true;
             }
-            else
+
+            // Проверка, что цель достаточно близка по дистации и видна.
+            if (act.Stats.Range == null)
             {
-                // Проверка, что цель достаточно близка по дистации и видна.
-                if (act.Stats.Range == null)
+                return false;
+            }
+
+            var isInDistance = act.CheckDistance(currentNode, targetNode, _player.SectorNode.Sector.Map);
+            if (!isInDistance)
+            {
+                return false;
+            }
+
+            var targetIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
+            if (!targetIsOnLine)
+            {
+                return false;
+            }
+
+            // Проверка наличия ресурсов для выполнения действия
+
+            if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
+            {
+                var hasPropResource = CheckPropResource(
+                    PlayerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>(),
+                    act.Constrains.PropResourceType,
+                    act.Constrains.PropResourceCount.Value);
+
+                if (!hasPropResource)
                 {
                     return false;
                 }
+            }
 
-                var isInDistance = act.CheckDistance(currentNode, targetNode, _player.SectorNode.Sector.Map);
-                if (!isInDistance)
-                {
-                    return false;
-                }
+            // Проверка КД
 
-                var targetIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
-                if (!targetIsOnLine)
-                {
-                    return false;
-                }
-
-                // Проверка наличия ресурсов для выполнения действия
-
-                if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
-                {
-                    var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>(),
-                        act.Constrains.PropResourceType,
-                        act.Constrains.PropResourceCount.Value);
-
-                    if (!hasPropResource)
-                    {
-                        return false;
-                    }
-                }
-
-                // Проверка КД
-
-                if (act.CurrentCooldown > 0)
-                {
-                    return false;
-                }
+            if (act.CurrentCooldown > 0)
+            {
+                return false;
             }
 
             return true;
@@ -106,7 +104,8 @@ namespace Zilon.Core.Commands
         {
             var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
             var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
-            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()?.Value > 0;
+            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()?.Value >
+                                0;
             if (!canTakeDamage)
             {
                 selectedStaticObjectViewModel = null;
@@ -123,7 +122,8 @@ namespace Zilon.Core.Commands
 
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
-            var intention = new Intention<AttackTask>(a => new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
+            var intention = new Intention<AttackTask>(a =>
+                new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
 

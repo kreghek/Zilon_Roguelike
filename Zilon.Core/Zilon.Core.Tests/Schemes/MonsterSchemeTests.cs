@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
-
 using Newtonsoft.Json;
-
 using NUnit.Framework;
-
 using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
@@ -50,10 +47,8 @@ namespace Zilon.Core.Tests.Schemes
 ";
 
 
-
             // ACT
             var factPerkScheme = JsonConvert.DeserializeObject<MonsterScheme>(sourceText);
-
 
 
             // ASSERT

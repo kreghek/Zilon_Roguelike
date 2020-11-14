@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
@@ -35,12 +34,14 @@ namespace Zilon.Core.StaticObjectModules
         public bool IsActive { get; set; }
 
         /// <inheritdoc/>
-        public string Key { get => nameof(IPropContainer); }
+        public string Key => nameof(IPropContainer);
 
         /// <inheritdoc/>
         public event EventHandler Opened;
+
         /// <inheritdoc/>
         public event EventHandler<PropStoreEventArgs> ItemsAdded;
+
         /// <inheritdoc/>
         public event EventHandler<PropStoreEventArgs> ItemsRemoved;
 

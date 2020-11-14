@@ -1,11 +1,8 @@
 ﻿using System;
-
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
@@ -30,7 +27,7 @@ namespace Zilon.Core.Tests.Commands
         protected IServiceProvider ServiceProvider { get; set; }
 
         [SetUp]
-        public async System.Threading.Tasks.Task SetUpAsync()
+        public async Task SetUpAsync()
         {
             Container = new ServiceCollection();
 
@@ -55,13 +52,12 @@ namespace Zilon.Core.Tests.Commands
 
             var combatActModuleMock = new Mock<ICombatActModule>();
             combatActModuleMock.Setup(x => x.CalcCombatActs())
-                .Returns(new[] { simpleAct, cooldownAct, cooldownResolvedAct });
+                .Returns(new[] {simpleAct, cooldownAct, cooldownResolvedAct});
             var combatActModule = combatActModuleMock.Object;
 
             var equipmentCarrierMock = new Mock<IEquipmentModule>();
-            equipmentCarrierMock.SetupGet(x => x.Slots).Returns(new[] { new PersonSlotSubScheme {
-                Types = EquipmentSlotTypes.Hand
-            } });
+            equipmentCarrierMock.SetupGet(x => x.Slots)
+                .Returns(new[] {new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}});
             var equipmentCarrier = equipmentCarrierMock.Object;
 
             var personMock = new Mock<IPerson>();
@@ -107,10 +103,7 @@ namespace Zilon.Core.Tests.Commands
         private static ITacticalAct CreateSimpleAct()
         {
             var actMock = new Mock<ITacticalAct>();
-            var actStatScheme = new TestTacticalActStatsSubScheme
-            {
-                Range = new Range<int>(1, 2)
-            };
+            var actStatScheme = new TestTacticalActStatsSubScheme {Range = new Range<int>(1, 2)};
             actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
             var act = actMock.Object;
             return act;
@@ -119,10 +112,7 @@ namespace Zilon.Core.Tests.Commands
         private static ITacticalAct CreateActWithCooldown()
         {
             var actMock = new Mock<ITacticalAct>();
-            var actStatScheme = new TestTacticalActStatsSubScheme
-            {
-                Range = new Range<int>(1, 2)
-            };
+            var actStatScheme = new TestTacticalActStatsSubScheme {Range = new Range<int>(1, 2)};
             actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
             actMock.SetupGet(x => x.CurrentCooldown).Returns(1);
             var act = actMock.Object;
@@ -132,10 +122,7 @@ namespace Zilon.Core.Tests.Commands
         private static ITacticalAct CreateActWithResolvedCooldown()
         {
             var actMock = new Mock<ITacticalAct>();
-            var actStatScheme = new TestTacticalActStatsSubScheme
-            {
-                Range = new Range<int>(1, 2)
-            };
+            var actStatScheme = new TestTacticalActStatsSubScheme {Range = new Range<int>(1, 2)};
             actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
             actMock.SetupGet(x => x.CurrentCooldown).Returns(0);
             var act = actMock.Object;

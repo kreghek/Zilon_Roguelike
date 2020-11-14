@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public abstract class BotActorTaskSourceBase<TContext> : ISectorActorTaskSource<TContext> where TContext : class, ISectorTaskSourceContext
+    public abstract class BotActorTaskSourceBase<TContext> : ISectorActorTaskSource<TContext>
+        where TContext : class, ISectorTaskSourceContext
     {
         //TODO Есть риск утечки.
         // Актёры могут быть удалены, но информация о них будет храниться здесь, предотвращая чистку.
@@ -86,10 +86,8 @@ namespace Zilon.Bot.Players
 
                 return Task.FromResult(actorTask);
             }
-            else
-            {
-                _actorStrategies.Remove(actor);
-            }
+
+            _actorStrategies.Remove(actor);
 
             // Сюда попадаем в случае смерти персонажа.
             // Когда мы пытаемся выполнить какую-то задачу, а персонаж при это был/стал мертв.

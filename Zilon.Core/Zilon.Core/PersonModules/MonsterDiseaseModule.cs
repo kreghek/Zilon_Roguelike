@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Diseases;
 using Zilon.Core.Persons;
 
@@ -23,10 +22,10 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <inheritdoc/>
-        public IEnumerable<IDiseaseProcess> Diseases { get => _diseases; }
+        public IEnumerable<IDiseaseProcess> Diseases => _diseases;
 
         /// <inheritdoc/>
-        public string Key { get => nameof(IDiseaseModule); }
+        public string Key => nameof(IDiseaseModule);
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }

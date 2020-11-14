@@ -23,7 +23,7 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <inheritdoc/>
-        public string Key { get => nameof(IAttributesModule); }
+        public string Key => nameof(IAttributesModule);
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }

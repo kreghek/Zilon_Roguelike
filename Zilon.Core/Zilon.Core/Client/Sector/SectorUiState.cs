@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -21,7 +20,8 @@ namespace Zilon.Core.Client
         }
 
         /// <inheritdoc/>
-        public IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource { get => ActiveActor?.Actor?.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>; }
+        public IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource =>
+            ActiveActor?.Actor?.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>;
 
         public event EventHandler ActiveActorChanged;
 

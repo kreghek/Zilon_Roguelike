@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -16,10 +15,8 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class EquipCommand : SpecialActorCommandBase
     {
-        private readonly IPlayer _player;
         private readonly IInventoryState _inventoryState;
-
-        public int? SlotIndex { get; set; }
+        private readonly IPlayer _player;
 
         [ExcludeFromCodeCoverage]
         public EquipCommand(
@@ -31,6 +28,8 @@ namespace Zilon.Core.Commands
             _player = player;
             _inventoryState = inventoryState;
         }
+
+        public int? SlotIndex { get; set; }
 
         public override bool CanExecute()
         {

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
@@ -13,10 +12,11 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 
         public TestSnakeRoomGenerator()
         {
-            _rolledOffsetCoords = new[] {
-                new OffsetCoords(0, 0),new OffsetCoords(1, 0), new OffsetCoords(2, 0), new OffsetCoords(3, 0),
+            _rolledOffsetCoords = new[]
+            {
+                new OffsetCoords(0, 0), new OffsetCoords(1, 0), new OffsetCoords(2, 0), new OffsetCoords(3, 0),
                 new OffsetCoords(3, 1), new OffsetCoords(2, 1), new OffsetCoords(1, 1), new OffsetCoords(0, 1),
-                new OffsetCoords(0, 2),new OffsetCoords(1, 2)
+                new OffsetCoords(0, 2), new OffsetCoords(1, 2)
             };
         }
 
@@ -29,11 +29,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 
             for (var i = 0; i < _rolledOffsetCoords.Length; i++)
             {
-                var room = new Room
-                {
-                    PositionX = _rolledOffsetCoords[i].X,
-                    PositionY = _rolledOffsetCoords[i].Y
-                };
+                var room = new Room {PositionX = _rolledOffsetCoords[i].X, PositionY = _rolledOffsetCoords[i].Y};
 
                 var rolledSize = new Size(3, 3);
 
@@ -41,7 +37,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 room.Height = rolledSize.Height + 2;
 
                 rooms.Add(room);
-
             }
 
             return rooms;

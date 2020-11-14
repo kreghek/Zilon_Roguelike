@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Localization;
 using Zilon.Core.Persons;
 using Zilon.Core.Scoring;
@@ -39,7 +38,8 @@ namespace Zilon.Core.ScoreResultGenerating
             }
         }
 
-        private static string GetSurvivalEffectName(SurvivalEffectDamageEvent survivalEffectDamageEvent, Language language)
+        private static string GetSurvivalEffectName(SurvivalEffectDamageEvent survivalEffectDamageEvent,
+            Language language)
         {
             switch (survivalEffectDamageEvent.Effect.Type)
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Common
@@ -38,10 +37,8 @@ namespace Zilon.Core.Common
                 foundIndex = list.FindIndex(0, currentIndex, predicate);
                 return list[foundIndex];
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
     }
 }

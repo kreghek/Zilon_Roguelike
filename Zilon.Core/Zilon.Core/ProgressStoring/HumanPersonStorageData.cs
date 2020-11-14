@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -26,16 +25,13 @@ namespace Zilon.Core.ProgressStoring
 
             var storageData = new HumanPersonStorageData
             {
-                Survival = humanPerson.GetModule<ISurvivalModule>().Stats.Select(x => new HumanSurvivalStatStorageData
-                {
-                    Type = x.Type,
-                    Value = x.ValueShare
-                }).ToArray(),
-
+                Survival =
+                    humanPerson.GetModule<ISurvivalModule>().Stats.Select(x =>
+                        new HumanSurvivalStatStorageData {Type = x.Type, Value = x.ValueShare}).ToArray(),
                 Equipments = humanPerson.GetModule<IEquipmentModule>().Select(CreateEquipmentStorageData).ToArray(),
-
-                Inventory = humanPerson.GetModule<IInventoryModule>().CalcActualItems().Select(CreatePropStorageData).ToArray(),
-
+                Inventory =
+                    humanPerson.GetModule<IInventoryModule>().CalcActualItems().Select(CreatePropStorageData)
+                        .ToArray(),
                 Perks = humanPerson.GetModule<IEvolutionModule>().Perks.Select(CreatePerkStorageData).ToArray()
             };
 
@@ -71,10 +67,7 @@ namespace Zilon.Core.ProgressStoring
 
         private static PropStorageData CreatePropStorageData(IProp prop)
         {
-            var storageData = new PropStorageData
-            {
-                Sid = prop.Scheme.Sid
-            };
+            var storageData = new PropStorageData {Sid = prop.Scheme.Sid};
 
             switch (prop)
             {
@@ -121,7 +114,7 @@ namespace Zilon.Core.ProgressStoring
 
             RestoreEvolutionData(schemeService, storedPerson, evolutionData);
 
-            var person = new HumanPerson(personScheme,/*Заглушка*/ null);
+            var person = new HumanPerson(personScheme, /*Заглушка*/ null);
 
             //TODO Создать необходимые модули и заполнить их.
 
@@ -188,10 +181,7 @@ namespace Zilon.Core.ProgressStoring
             {
                 var perkScheme = schemeService.GetScheme<IPerkScheme>(storedPerk.Sid);
 
-                var perk = new Perk
-                {
-                    Scheme = perkScheme
-                };
+                var perk = new Perk {Scheme = perkScheme};
 
                 if (storedPerk.Level != null)
                 {
@@ -203,12 +193,17 @@ namespace Zilon.Core.ProgressStoring
 
                 perk.CurrentJobs = currentLevelScheme.Jobs.Select(job => new PerkJob(job)
                 {
-                    IsComplete = storedPerk.Jobs.Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope).IsComplete,
-                    Progress = storedPerk.Jobs.Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope).Progress,
+                    IsComplete =
+                        storedPerk.Jobs
+                            .Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope)
+                            .IsComplete,
+                    Progress = storedPerk.Jobs
+                        .Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope).Progress
                 }).ToArray();
 
                 perksFromSave.Add(perk);
             }
+
             evolutionData.SetPerksForced(perksFromSave);
         }
     }

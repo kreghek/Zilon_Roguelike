@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 using FluentAssertions;
-
 using JetBrains.Annotations;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using TechTalk.SpecFlow;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -144,7 +139,8 @@ namespace Zilon.Core.Specs.Steps
         public async Task WhenСледующаяИтерацияСектораAsync(int count)
         {
             var globe = Context.Globe;
-            var humanTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var humanTaskSource = Context.ServiceProvider
+                .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var counter = count;
@@ -174,7 +170,9 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private static bool IsPlayerPersonCanIntent([NotNull] IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource, [CanBeNull] ISurvivalModule survivalModule)
+        private static bool IsPlayerPersonCanIntent(
+            [NotNull] IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource,
+            [CanBeNull] ISurvivalModule survivalModule)
         {
             if (humanTaskSource is null)
             {
@@ -201,10 +199,7 @@ namespace Zilon.Core.Specs.Steps
 
             var container = staticObjectManager.Items.Single(x => x.Id == id);
 
-            var chestViewMdel = new TestContainerViewModel
-            {
-                StaticObject = container
-            };
+            var chestViewMdel = new TestContainerViewModel {StaticObject = container};
 
             playerState.HoverViewModel = chestViewMdel;
         }
@@ -219,10 +214,12 @@ namespace Zilon.Core.Specs.Steps
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
-            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(), container.GetModule<IPropContainer>().Content);
+            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(),
+                container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
-            var equipment = container.GetModule<IPropContainer>().Content.CalcActualItems().Single(x => x.Scheme.Sid == equipmentSchemeSid);
+            var equipment = container.GetModule<IPropContainer>().Content.CalcActualItems()
+                .Single(x => x.Scheme.Sid == equipmentSchemeSid);
 
             transferMachine.TransferProp(equipment,
                 PropTransferMachineStore.Container,
@@ -242,7 +239,8 @@ namespace Zilon.Core.Specs.Steps
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
-            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(), container.GetModule<IPropContainer>().Content);
+            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(),
+                container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
             var resource = container.GetModule<IPropContainer>().Content.CalcActualItems()
@@ -276,7 +274,8 @@ namespace Zilon.Core.Specs.Steps
         public async Task WhenЯЖдуЕдиницВремениAsync(int timeUnitCount)
         {
             var globe = Context.Globe;
-            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var humatTaskSource = Context.ServiceProvider
+                .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var counter = timeUnitCount;
@@ -343,7 +342,8 @@ namespace Zilon.Core.Specs.Steps
             var containerManager = player.SectorNode.Sector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == id);
-            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
+            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems()
+                .SingleOrDefault(x => x.Scheme.Sid == propSid);
 
             prop.Should().BeNull();
         }
@@ -356,7 +356,8 @@ namespace Zilon.Core.Specs.Steps
             var containerManager = player.SectorNode.Sector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == containerId);
-            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);
+            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems()
+                .SingleOrDefault(x => x.Scheme.Sid == resourceSid);
 
             prop.Should().BeNull();
         }
@@ -401,7 +402,8 @@ namespace Zilon.Core.Specs.Steps
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
             var monster = Context.GetMonsterById(monsterId);
-            var hpStat = monster.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
+            var hpStat = monster.Person.GetModule<ISurvivalModule>().Stats
+                .Single(x => x.Type == SurvivalStatType.Health);
             hpStat.Value.Should().Be(expectedMonsterHp);
         }
 

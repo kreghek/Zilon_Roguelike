@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-
 using NUnit.Framework;
 
 namespace Zilon.CoreTestsTemp.Tactics.Behaviour.TestCases

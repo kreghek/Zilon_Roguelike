@@ -1,12 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Tests.Tactics.Base
@@ -33,17 +29,16 @@ namespace Zilon.Core.Tests.Tactics.Base
             var manager = CreateManager();
 
 
-
             // ACT
             using (var monitor = manager.Monitor())
             {
                 manager.Add(entity);
 
 
-
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
-                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>((e) => e.Items.Length == 1 && e.Items[0] == entity);
+                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
+                        e.Items.Length == 1 && e.Items[0] == entity);
             }
         }
 
@@ -67,17 +62,16 @@ namespace Zilon.Core.Tests.Tactics.Base
             var manager = CreateManager();
 
 
-
             // ACT
             using (var monitor = manager.Monitor())
             {
                 manager.Add(entityList);
 
 
-
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
-                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e => CheckEventArgs(e, entityCount, entityList));
+                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
+                        CheckEventArgs(e, entityCount, entityList));
             }
         }
 
@@ -95,17 +89,16 @@ namespace Zilon.Core.Tests.Tactics.Base
             manager.Add(entity);
 
 
-
             // ACT
             using (var monitor = manager.Monitor())
             {
                 manager.Remove(entity);
 
 
-
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
-                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>((e) => e.Items.Length == 1 && e.Items[0] == entity);
+                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
+                        e.Items.Length == 1 && e.Items[0] == entity);
             }
         }
 
@@ -130,17 +123,16 @@ namespace Zilon.Core.Tests.Tactics.Base
             manager.Add(entityList);
 
 
-
             // ACT
             using (var monitor = manager.Monitor())
             {
                 manager.Remove(entityList);
 
 
-
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
-                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e => CheckEventArgs(e, entityCount, entityList));
+                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
+                        CheckEventArgs(e, entityCount, entityList));
             }
         }
 
@@ -151,7 +143,8 @@ namespace Zilon.Core.Tests.Tactics.Base
         /// <returns> Возвращает экземпляр конкретного менеджера сущностей сектора. </returns>
         protected abstract ISectorEntityManager<TSectorEntity> CreateManager();
 
-        private bool CheckEventArgs(ManagerItemsChangedEventArgs<TSectorEntity> e, int actorCount, IList<TSectorEntity> actorList)
+        private bool CheckEventArgs(ManagerItemsChangedEventArgs<TSectorEntity> e, int actorCount,
+            IList<TSectorEntity> actorList)
         {
             var isCountEquals = e.Items.Length == actorCount;
             var actorsInEventItems = actorList.All(actor => e.Items.Contains(actor));

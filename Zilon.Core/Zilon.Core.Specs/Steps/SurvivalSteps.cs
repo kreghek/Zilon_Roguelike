@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 using FluentAssertions;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using TechTalk.SpecFlow;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -52,7 +48,8 @@ namespace Zilon.Core.Specs.Steps
             FeatureContextBase.AddResourceToActor(propScheme, 1, actor);
         }
 
-        private static void ParseProvisionStat(string provisionStat, out PersonRuleDirection direction, out ConsumeCommonRuleType consumeRuleType)
+        private static void ParseProvisionStat(string provisionStat, out PersonRuleDirection direction,
+            out ConsumeCommonRuleType consumeRuleType)
         {
             direction = PersonRuleDirection.Positive;
             switch (provisionStat)
@@ -89,7 +86,8 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private static TestPropScheme CreateTestPropScheme(string propSid, PersonRuleDirection direction, ConsumeCommonRuleType consumeRuleType)
+        private static TestPropScheme CreateTestPropScheme(string propSid, PersonRuleDirection direction,
+            ConsumeCommonRuleType consumeRuleType)
         {
             return new TestPropScheme
             {
@@ -97,7 +95,8 @@ namespace Zilon.Core.Specs.Steps
                 Use = new TestPropUseSubScheme
                 {
                     Consumable = true,
-                    CommonRules = new[] {
+                    CommonRules = new[]
+                    {
                         new ConsumeCommonRule(consumeRuleType, PersonRuleLevel.Lesser, direction)
                     }
                 }
@@ -148,10 +147,7 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Я перемещаю персонажа на (.*) клетку")]
         public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)
         {
-            var targetCoords = new[] {
-                new OffsetCoords(1, 0),
-                new OffsetCoords(0, 0)
-            };
+            var targetCoords = new[] {new OffsetCoords(1, 0), new OffsetCoords(0, 0)};
 
             for (var i = 0; i < moveCount; i++)
             {
@@ -178,7 +174,8 @@ namespace Zilon.Core.Specs.Steps
         public async Task WaitForIteration(int timeUnitCount)
         {
             var globe = Context.Globe;
-            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var humatTaskSource = Context.ServiceProvider
+                .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var counter = timeUnitCount;
@@ -239,7 +236,8 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [Then(@"Значение (сытость|вода) повысилось на (.*) и уменьшилось на (.*) за игровой цикл и стало (.*)")]
-        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate, int expectedValue)
+        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate,
+            int expectedValue)
         {
             var actor = Context.GetActiveActor();
 
@@ -306,7 +304,8 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat, out SurvivalStatHazardLevel level)
+        private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat,
+            out SurvivalStatHazardLevel level)
         {
             switch (effectName)
             {

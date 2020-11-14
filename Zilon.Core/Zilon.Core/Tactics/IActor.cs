@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -24,6 +23,11 @@ namespace Zilon.Core.Tactics
         IPerson Person { get; }
 
         IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
+
+        /// <summary>
+        /// Указывает, может ли актёр выполнять задачи.
+        /// </summary>
+        bool CanExecuteTasks { get; }
 
         void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
 
@@ -85,10 +89,5 @@ namespace Zilon.Core.Tactics
         void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
 
         void UseProp(IProp usedProp);
-
-        /// <summary>
-        /// Указывает, может ли актёр выполнять задачи.
-        /// </summary>
-        bool CanExecuteTasks { get; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Tests.Common.Schemes
 {
-    using Zilon.Core.Schemes;
+    using Core.Schemes;
 
     public class TestMonsterScheme : SchemeBase, IMonsterScheme
     {

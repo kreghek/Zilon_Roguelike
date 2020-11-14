@@ -22,12 +22,12 @@ namespace Zilon.Core.PersonGeneration
             IDropResolver dropResolver,
             IPersonPerkInitializator personPerkInitializator,
             IDice dice) : base(
-                schemeService,
-                survivalRandomSource,
-                propFactory,
-                dropResolver,
-                personPerkInitializator,
-                dice)
+            schemeService,
+            survivalRandomSource,
+            propFactory,
+            dropResolver,
+            personPerkInitializator,
+            dice)
         {
         }
 
@@ -46,7 +46,7 @@ namespace Zilon.Core.PersonGeneration
             FillSlot(person, offWeaponDropScheme, OffHandSlotIndex);
 
             var startPropDropScheme = GetStartProps();
-            var startProps = DropResolver.Resolve(new[] { startPropDropScheme });
+            var startProps = DropResolver.Resolve(new[] {startPropDropScheme});
             foreach (var prop in startProps)
             {
                 AddPropToInventory(inventory, prop);

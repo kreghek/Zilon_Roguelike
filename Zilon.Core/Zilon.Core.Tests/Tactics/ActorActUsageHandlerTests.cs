@@ -1,11 +1,7 @@
 ﻿using System;
-
 using JetBrains.Annotations;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
@@ -60,7 +56,7 @@ namespace Zilon.Core.Tests.Tactics
             perkResolverMock.Verify(x => x.ApplyProgress(
                 It.Is<IJobProgress>(progress => CheckDefeateProgress(progress, monster)),
                 It.IsAny<IEvolutionModule>()
-                ), Times.Once);
+            ), Times.Once);
         }
 
         /// <summary>
@@ -90,17 +86,14 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             var actor = actorMock.Object;
 
-            var defences = new[] { new PersonDefenceItem(defenceType, defenceLevel) };
+            var defences = new[] {new PersonDefenceItem(defenceType, defenceLevel)};
             var monsterMock = CreateMonsterMock(defences);
             var monster = monsterMock.Object;
 
             // Настройка дествия
             var actScheme = new TestTacticalActStatsSubScheme
             {
-                Offence = new TestTacticalActOffenceSubScheme
-                {
-                    Type = offenceType
-                }
+                Offence = new TestTacticalActOffenceSubScheme {Type = offenceType}
             };
 
             var actMock = new Mock<ITacticalAct>();
@@ -140,7 +133,7 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             var actor = actorMock.Object;
 
-            var armors = new[] { new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Normal, 10) };
+            var armors = new[] {new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Normal, 10)};
             var monsterMock = CreateMonsterMock(armors: armors);
             var monster = monsterMock.Object;
 
@@ -149,9 +142,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = offenceType,
-                    ApRank = 20,
-                    Impact = ImpactType.Kinetic
+                    Type = offenceType, ApRank = 20, Impact = ImpactType.Kinetic
                 }
             };
 
@@ -198,14 +189,13 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             actorMock.SetupGet(x => x.Person).Returns(person);
             actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
-                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
+                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null,
+                    (target1, act1) => new UsedActEventArgs(target1, act1));
             var actor = actorMock.Object;
 
             var actStatScheme = new TestTacticalActStatsSubScheme
             {
-                Effect = TacticalActEffectType.Heal,
-                Efficient = new Roll(6, 1),
-                Targets = TacticalActTargets.Self
+                Effect = TacticalActEffectType.Heal, Efficient = new Roll(6, 1), Targets = TacticalActTargets.Self
             };
 
             var tacticalActMock = new Mock<ITacticalAct>();
@@ -218,8 +208,9 @@ namespace Zilon.Core.Tests.Tactics
             actUsageService.ProcessActUsage(actor, actor, usedActs);
 
             // ASSERT
-            survivalModuleMock.Verify(x => x.RestoreStat(It.Is<SurvivalStatType>(type => type == SurvivalStatType.Health),
-                It.Is<int>(v => v == HEAL_EFFICIENT)));
+            survivalModuleMock.Verify(x =>
+                x.RestoreStat(It.Is<SurvivalStatType>(type => type == SurvivalStatType.Health),
+                    It.Is<int>(v => v == HEAL_EFFICIENT)));
         }
 
         /// <summary>
@@ -232,8 +223,8 @@ namespace Zilon.Core.Tests.Tactics
             const OffenseType offenceType = OffenseType.Tactical;
             const int fakeToHitDiceRoll = 2; // успех в ToHit 2+
             const int fakeArmorSaveDiceRoll = 6; // успех в ArmorSave 4+ при раных рангах
-            const int fakeActEfficientRoll = 3;  // эффективность пробрасывается D3, максимальный бросок
-            const int expectedActEfficient = fakeActEfficientRoll - 1;  // -1 даёт текущая броня
+            const int fakeActEfficientRoll = 3; // эффективность пробрасывается D3, максимальный бросок
+            const int expectedActEfficient = fakeActEfficientRoll - 1; // -1 даёт текущая броня
 
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(fakeToHitDiceRoll);
@@ -250,7 +241,7 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             var actor = actorMock.Object;
 
-            var armors = new[] { new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Lesser, 10) };
+            var armors = new[] {new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Lesser, 10)};
             var monsterMock = CreateMonsterMock(armors: armors);
             var monster = monsterMock.Object;
 
@@ -259,9 +250,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = offenceType,
-                    ApRank = 10,
-                    Impact = ImpactType.Kinetic
+                    Type = offenceType, ApRank = 10, Impact = ImpactType.Kinetic
                 }
             };
 
@@ -293,7 +282,7 @@ namespace Zilon.Core.Tests.Tactics
                 .Setup(x => x.DecreaseStat(
                     It.Is<SurvivalStatType>(s => s == SurvivalStatType.Health),
                     It.IsAny<int>())
-                    )
+                )
                 .Callback(() => monsterIsDead = true);
             var monsterSurvival = monsterSurvivalDataMock.Object;
             monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
@@ -301,7 +290,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
-            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>())).Returns(monsterCombatStats);
+            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>()))
+                .Returns(monsterCombatStats);
 
             var monsterPerson = monsterPersonMock.Object;
             monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
@@ -334,7 +324,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
-            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>())).Returns(monsterCombatStats);
+            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>()))
+                .Returns(monsterCombatStats);
 
             var monsterPerson = monsterPersonMock.Object;
             monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
@@ -366,9 +357,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic,
-                    ApRank = 10
+                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
                 }
             };
 

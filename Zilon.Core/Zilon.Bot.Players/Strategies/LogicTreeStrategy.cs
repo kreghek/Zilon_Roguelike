@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -13,8 +12,6 @@ namespace Zilon.Bot.Players.Strategies
 
         private readonly LogicTreeStrategyData _strategyData;
 
-        public bool WriteStateChanges { get; set; }
-
         public LogicTreeStrategy(IActor actor, LogicStateTree stateTree)
         {
             Actor = actor ?? throw new ArgumentNullException(nameof(actor));
@@ -24,6 +21,8 @@ namespace Zilon.Bot.Players.Strategies
 
             CurrentState = _stateTree.StartState;
         }
+
+        public bool WriteStateChanges { get; set; }
 
         public IActor Actor { get; }
         public ILogicState CurrentState { get; private set; }
@@ -65,7 +64,8 @@ namespace Zilon.Bot.Players.Strategies
             return actorTask;
         }
 
-        private bool SelectCurrentState(ILogicState currentState, ISectorTaskSourceContext context, out ILogicState newState)
+        private bool SelectCurrentState(ILogicState currentState, ISectorTaskSourceContext context,
+            out ILogicState newState)
         {
             var transitionWasPerformed = false;
             newState = null;

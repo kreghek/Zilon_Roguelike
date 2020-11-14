@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
@@ -14,13 +13,13 @@ namespace Zilon.Bot.Players.Logics
     {
         private const int REFRESH_COUNTER_VALUE = 3;
 
-        private IAttackTarget _target;
-
-        private int _refreshCounter;
+        private readonly ITacticalActUsageService _actService;
 
         private MoveTask _moveTask;
 
-        private readonly ITacticalActUsageService _actService;
+        private int _refreshCounter;
+
+        private IAttackTarget _target;
 
         public DefeatTargetLogicState(ITacticalActUsageService actService)
         {
@@ -45,10 +44,14 @@ namespace Zilon.Bot.Players.Logics
             foreach (var target in actorManager.Items)
             {
                 if (target.Person.Fraction == actor.Person.Fraction ||
-                    (target.Person.Fraction == Fractions.MilitiaFraction && actor.Person.Fraction == Fractions.MainPersonFraction ||
-                    target.Person.Fraction == Fractions.MainPersonFraction && actor.Person.Fraction == Fractions.MilitiaFraction ||
-                    target.Person.Fraction == Fractions.InterventionistFraction && actor.Person.Fraction == Fractions.TroublemakerFraction ||
-                    target.Person.Fraction == Fractions.TroublemakerFraction && actor.Person.Fraction == Fractions.InterventionistFraction))
+                    (target.Person.Fraction == Fractions.MilitiaFraction &&
+                     actor.Person.Fraction == Fractions.MainPersonFraction ||
+                     target.Person.Fraction == Fractions.MainPersonFraction &&
+                     actor.Person.Fraction == Fractions.MilitiaFraction ||
+                     target.Person.Fraction == Fractions.InterventionistFraction &&
+                     actor.Person.Fraction == Fractions.TroublemakerFraction ||
+                     target.Person.Fraction == Fractions.TroublemakerFraction &&
+                     actor.Person.Fraction == Fractions.InterventionistFraction))
                 {
                     continue;
                 }
@@ -77,21 +80,19 @@ namespace Zilon.Bot.Players.Logics
 
             var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
 
-            var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().CalcCombatActs(), inventory);
+            var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().CalcCombatActs(),
+                inventory);
 
             var isInDistance = act.CheckDistance(actor.Node, target.Node, map);
             var targetIsOnLine = map.TargetIsOnLine(actor.Node, target.Node);
 
-            var attackParams = new AttackParams
-            {
-                IsAvailable = isInDistance && targetIsOnLine,
-                TacticalAct = act
-            };
+            var attackParams = new AttackParams {IsAvailable = isInDistance && targetIsOnLine, TacticalAct = act};
 
             return attackParams;
         }
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
         {
             if (_target == null)
             {
@@ -115,37 +116,30 @@ namespace Zilon.Bot.Players.Logics
                 var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
                 return attackTask;
             }
-            else
+            // Маршрут до цели обновляем каждые 3 хода.
+            // Для оптимизации.
+            // Эффект потери цели.
+
+            if (_refreshCounter > 0 && _moveTask?.CanExecute() == true)
             {
-                // Маршрут до цели обновляем каждые 3 хода.
-                // Для оптимизации.
-                // Эффект потери цели.
-
-                if (_refreshCounter > 0 && _moveTask?.CanExecute() == true)
-                {
-                    _refreshCounter--;
-                    return _moveTask;
-                }
-                else
-                {
-                    var map = context.Sector.Map;
-                    _refreshCounter = REFRESH_COUNTER_VALUE;
-                    var targetIsOnLine = map.TargetIsOnLine(actor.Node, _target.Node);
-
-                    if (targetIsOnLine)
-                    {
-                        var taskContext = new ActorTaskContext(context.Sector);
-
-                        _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
-                        return _moveTask;
-                    }
-                    else
-                    {
-                        // Цел за пределами видимости. Считается потерянной.
-                        return null;
-                    }
-                }
+                _refreshCounter--;
+                return _moveTask;
             }
+
+            var map = context.Sector.Map;
+            _refreshCounter = REFRESH_COUNTER_VALUE;
+            var targetIsOnLine = map.TargetIsOnLine(actor.Node, _target.Node);
+
+            if (targetIsOnLine)
+            {
+                var taskContext = new ActorTaskContext(context.Sector);
+
+                _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
+                return _moveTask;
+            }
+
+            // Цел за пределами видимости. Считается потерянной.
+            return null;
         }
 
         protected override void ResetData()

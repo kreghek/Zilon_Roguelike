@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using NUnit.Framework;
-
 using Zilon.Bot.Sdk;
+using Zilon.Core.Localization;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -32,7 +30,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             startUp.RegisterServices(serviceContainer);
             var serviceProvider = serviceContainer.BuildServiceProvider();
 
-            var botSettings = new BotSettings { Mode = mode };
+            var botSettings = new BotSettings {Mode = mode};
 
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
             var player = serviceProvider.GetRequiredService<IPlayer>();
@@ -55,7 +53,8 @@ namespace Zilon.Bot.Players.DevelopmentTests
         private static void PrintPersonBacklog(IPerson humanPerson)
         {
             Console.WriteLine("Build In Traits:");
-            var buildinTraits = humanPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
+            var buildinTraits = humanPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn)
+                .ToArray();
             foreach (var buildInTrait in buildinTraits)
             {
                 Console.WriteLine(buildInTrait.Scheme.Name.En);
@@ -117,7 +116,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             {
                 var deathReason = deathReasonService.GetDeathReasonSummary(
                     lastEvent,
-                    Core.Localization.Language.En);
+                    Language.En);
 
                 Console.WriteLine($"Death Reason: {deathReason}");
             }

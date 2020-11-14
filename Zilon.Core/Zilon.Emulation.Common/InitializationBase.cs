@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.CommonServices;
@@ -27,8 +25,6 @@ namespace Zilon.Emulation.Common
 {
     public abstract class InitializationBase
     {
-        public int? DiceSeed { get; set; }
-
         protected InitializationBase()
         {
         }
@@ -37,6 +33,8 @@ namespace Zilon.Emulation.Common
         {
             DiceSeed = diceSeed;
         }
+
+        public int? DiceSeed { get; set; }
 
         public virtual void RegisterServices(IServiceCollection serviceCollection)
         {
@@ -71,7 +69,8 @@ namespace Zilon.Emulation.Common
                 var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
                 var monsterFactory = serviceProvider.GetRequiredService<IMonsterPersonFactory>();
                 var randomSource = serviceProvider.GetRequiredService<IMonsterGeneratorRandomSource>();
-                var actorTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+                var actorTaskSource =
+                    serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
 
                 var generator = new MonsterGenerator(schemeService, monsterFactory, randomSource, actorTaskSource);
                 return generator;
@@ -136,7 +135,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IResourceMaterializationMap, ResourceMaterializationMap>();
             RegisterMonsterGeneratorRandomSource(container);
             RegisterChestGeneratorRandomSource(container);
-            container.AddScoped<SectorFactory>();  // TOOD Костфль, чтобы не заполнять конструктор сервиса руками. 
+            container.AddScoped<SectorFactory>(); // TOOD Костфль, чтобы не заполнять конструктор сервиса руками. 
             container.AddScoped<ISectorFactory, SectorFactory>(serviceProvider =>
             {
                 var sectorFactory = serviceProvider.GetRequiredService<SectorFactory>();
@@ -148,7 +147,8 @@ namespace Zilon.Emulation.Common
             container.AddScoped<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
             container.AddScoped<IActorTaskSourceCollector, ActorTaskSourceCollector>(serviceProvider =>
             {
-                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+                var monsterTaskSource =
+                    serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
                 return new ActorTaskSourceCollector(monsterTaskSource);
             });
         }
@@ -184,13 +184,15 @@ namespace Zilon.Emulation.Common
             });
         }
 
-        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider, TacticalActUsageService tacticalActUsageService)
+        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider,
+            TacticalActUsageService tacticalActUsageService)
         {
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
         }
 
-        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider, ActorActUsageHandler handler)
+        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider,
+            ActorActUsageHandler handler)
         {
             // Указание необязательных зависимостей
             handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();

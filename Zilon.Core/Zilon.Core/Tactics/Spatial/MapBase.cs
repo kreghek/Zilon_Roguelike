@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.Spatial
 {
@@ -14,6 +14,13 @@ namespace Zilon.Core.Tactics.Spatial
     {
         private readonly IDictionary<IGraphNode, IList<IPassMapBlocker>> _nodeBlockers;
 
+        protected MapBase()
+        {
+            Regions = new List<MapRegion>();
+
+            _nodeBlockers = new Dictionary<IGraphNode, IList<IPassMapBlocker>>();
+        }
+
         /// <summary>
         /// Регионы карты.
         /// </summary>
@@ -23,13 +30,6 @@ namespace Zilon.Core.Tactics.Spatial
         /// Список узлов карты.
         /// </summary>
         public abstract IEnumerable<IGraphNode> Nodes { get; }
-
-        protected MapBase()
-        {
-            Regions = new List<MapRegion>();
-
-            _nodeBlockers = new Dictionary<IGraphNode, IList<IPassMapBlocker>>();
-        }
 
         /// <summary>
         /// Проверяет, является ли данная ячейка доступной для текущего актёра.
@@ -70,35 +70,6 @@ namespace Zilon.Core.Tactics.Spatial
             return true;
         }
 
-        private IEnumerable<IGraphNode> GetActorTestTargetNodes(IActor actor, IGraphNode baseTargetNode)
-        {
-            yield return baseTargetNode;
-
-            if (actor.Person.PhysicalSize == Persons.PhysicalSize.Size7)
-            {
-                var neighbors = GetNext(baseTargetNode);
-                foreach (var neighbor in neighbors)
-                {
-                    yield return neighbor;
-                }
-            }
-        }
-
-        private bool IsNodeAvailableForActor(IGraphNode targetNode, IActor actor)
-        {
-            if (!_nodeBlockers.TryGetValue(targetNode, out IList<IPassMapBlocker> blockers))
-            {
-                return true;
-            }
-
-            if (blockers.All(x => x == actor))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         /// <summary>
         /// Указывает, что узел карты освобождён одним из блоков.
         /// </summary>
@@ -118,7 +89,8 @@ namespace Zilon.Core.Tactics.Spatial
 
             if (!blockers.Contains(blocker))
             {
-                throw new InvalidOperationException($"Попытка освободить узел {node}, который не заблокирован блокировщиком {blocker}.");
+                throw new InvalidOperationException(
+                    $"Попытка освободить узел {node}, который не заблокирован блокировщиком {blocker}.");
             }
 
             blockers.Remove(blocker);
@@ -223,5 +195,34 @@ namespace Zilon.Core.Tactics.Spatial
 
         /// <inheritdoc/>
         public abstract int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode);
+
+        private IEnumerable<IGraphNode> GetActorTestTargetNodes(IActor actor, IGraphNode baseTargetNode)
+        {
+            yield return baseTargetNode;
+
+            if (actor.Person.PhysicalSize == PhysicalSize.Size7)
+            {
+                var neighbors = GetNext(baseTargetNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
+                }
+            }
+        }
+
+        private bool IsNodeAvailableForActor(IGraphNode targetNode, IActor actor)
+        {
+            if (!_nodeBlockers.TryGetValue(targetNode, out IList<IPassMapBlocker> blockers))
+            {
+                return true;
+            }
+
+            if (blockers.All(x => x == actor))
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

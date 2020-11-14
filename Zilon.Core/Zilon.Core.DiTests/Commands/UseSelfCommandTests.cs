@@ -1,13 +1,8 @@
 ﻿using System;
-
 using FluentAssertions;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
@@ -45,7 +40,8 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<UseSelfCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
@@ -56,9 +52,9 @@ namespace Zilon.Core.Tests.Commands
             var selectedProp = inventoryState.SelectedProp.Prop;
 
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
-                CheckUsePropIntention(intention, playerState, selectedProp)
-            ),
-            It.IsAny<IActor>()));
+                    CheckUsePropIntention(intention, playerState, selectedProp)
+                ),
+                It.IsAny<IActor>()));
         }
 
         private static bool CheckUsePropIntention(IIntention intention, ISectorUiState playerState, IProp usedProp)
@@ -70,10 +66,7 @@ namespace Zilon.Core.Tests.Commands
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
-            var propScheme = new TestPropScheme
-            {
-                Use = new TestPropUseSubScheme()
-            };
+            var propScheme = new TestPropScheme {Use = new TestPropUseSubScheme()};
             var usableResource = new Resource(propScheme, 1);
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();

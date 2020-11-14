@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
 using JetBrains.Annotations;
-
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
 {
     public class GraphMap : MapBase
     {
-        private readonly IList<IGraphNode> _nodes;
         private readonly IList<IGraphEdge> _edges;
+        private readonly IList<IGraphNode> _nodes;
 
         [ExcludeFromCodeCoverage]
         public GraphMap()
@@ -21,7 +19,7 @@ namespace Zilon.Core.Tactics.Spatial
             _nodes = new List<IGraphNode>();
         }
 
-        public override IEnumerable<IGraphNode> Nodes { get => _nodes; }
+        public override IEnumerable<IGraphNode> Nodes => _nodes;
 
         public override void AddEdge([NotNull] IGraphNode node1, [NotNull] IGraphNode node2)
         {
@@ -66,8 +64,8 @@ namespace Zilon.Core.Tactics.Spatial
             var neighbors = HexNodeHelper.GetSpatialNeighbors(hexCurrent, hexNodes);
 
             var currentEdges = from edge in _edges
-                               where edge.Nodes.Contains(node)
-                               select edge;
+                where edge.Nodes.Contains(node)
+                select edge;
             var currentEdgeArray = currentEdges.ToArray();
 
             foreach (var testedNeighbor in neighbors)
@@ -85,9 +83,9 @@ namespace Zilon.Core.Tactics.Spatial
         public override void RemoveEdge(IGraphNode node1, IGraphNode node2)
         {
             var currentEdge = (from edge in _edges
-                               where edge.Nodes.Contains(node1)
-                               where edge.Nodes.Contains(node2)
-                               select edge).Single();
+                where edge.Nodes.Contains(node1)
+                where edge.Nodes.Contains(node2)
+                select edge).Single();
 
             _edges.Remove(currentEdge);
         }

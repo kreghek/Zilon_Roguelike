@@ -28,10 +28,7 @@ namespace Zilon.Core.Common
         public static float[] ConvertToWorld(int offsetX, int offsetY)
         {
             var rowOffset = offsetY % 2 == 0 ? 0 : 0.5f;
-            return new[] {
-                offsetX + rowOffset,
-                offsetY * 3f / 4
-            };
+            return new[] {offsetX + rowOffset, offsetY * 3f / 4};
         }
 
         public static float[] ConvertToWorld(OffsetCoords coords)
@@ -51,7 +48,7 @@ namespace Zilon.Core.Common
             var offsets = new[]
             {
                 new CubeCoords(-1, +1, 0), new CubeCoords(-1, 0, +1), new CubeCoords(0, -1, +1),
-                new CubeCoords(+1, -1, 0),new CubeCoords(+1, 0, -1),new CubeCoords(0, +1, -1)
+                new CubeCoords(+1, -1, 0), new CubeCoords(+1, 0, -1), new CubeCoords(0, +1, -1)
             };
 
             return offsets;
@@ -101,7 +98,7 @@ namespace Zilon.Core.Common
             var offsets = new[]
             {
                 new CubeCoords(-1, +2, -1), new CubeCoords(-2, +1, +1), new CubeCoords(-1, -1, +2),
-                new CubeCoords(+1, -2, +1),new CubeCoords(+2, -1, -1),new CubeCoords(+1, +1, -2)
+                new CubeCoords(+1, -2, +1), new CubeCoords(+2, -1, -1), new CubeCoords(+1, +1, -2)
             };
 
             return offsets;

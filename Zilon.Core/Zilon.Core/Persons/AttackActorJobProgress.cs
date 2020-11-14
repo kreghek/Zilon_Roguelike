@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
 using Newtonsoft.Json;
-
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
@@ -11,8 +9,8 @@ namespace Zilon.Core.Persons
 {
     public class AttackActorJobProgress : IJobProgress
     {
-        private readonly IActor _targetActor;
         private readonly ITacticalAct _tacticalAct;
+        private readonly IActor _targetActor;
 
         public AttackActorJobProgress(IActor targetActor, ITacticalAct tacticalAct)
         {

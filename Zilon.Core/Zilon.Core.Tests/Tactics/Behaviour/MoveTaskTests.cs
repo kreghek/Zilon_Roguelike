@@ -1,11 +1,8 @@
 ﻿using System.Linq;
-
+using System.Threading.Tasks;
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
@@ -27,7 +24,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// когда актёр достиг цели, должна отмечаться, как заверщённая.
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task ExecuteTest_OpenGridMap_ActorReachPointAndTaskCompleteAsync()
+        public async Task ExecuteTest_OpenGridMap_ActorReachPointAndTaskCompleteAsync()
         {
             // ARRANGE
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
@@ -35,11 +32,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var startNode = map.Nodes.SelectByHexCoords(3, 3);
             var finishNode = map.Nodes.SelectByHexCoords(1, 5);
 
-            var expectedPath = new[] {
-                map.Nodes.SelectByHexCoords(2, 3),
-                map.Nodes.SelectByHexCoords(2, 4),
-                finishNode
-            };
+            var expectedPath = new[] {map.Nodes.SelectByHexCoords(2, 3), map.Nodes.SelectByHexCoords(2, 4), finishNode};
 
             var actor = CreateActor(map, startNode);
 
@@ -89,7 +82,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Актёр должен идти по пути, огибажщем стены.
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task ExecuteTest_MapWithWalls_ActorAvoidWallsAsync()
+        public async Task ExecuteTest_MapWithWalls_ActorAvoidWallsAsync()
         {
             // ARRANGE
 
@@ -123,7 +116,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет, что задача заканчивается, когда актёр доходит до крайнего узла найденного маршрута.
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task ExecuteTest_FindingPathAndMove_IsCompleteTrueAsync()
+        public async Task ExecuteTest_FindingPathAndMove_IsCompleteTrueAsync()
         {
             // ARRANGE
 
@@ -153,11 +146,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
         private static IGraphNode[] CreateExpectedPath(ISectorMap map)
         {
-            return new IGraphNode[] {
-                map.Nodes.SelectByHexCoords(4,4),
-                map.Nodes.SelectByHexCoords(3,4),
-                map.Nodes.SelectByHexCoords(2,4),
-                map.Nodes.SelectByHexCoords(1,5),
+            return new IGraphNode[]
+            {
+                map.Nodes.SelectByHexCoords(4, 4), map.Nodes.SelectByHexCoords(3, 4),
+                map.Nodes.SelectByHexCoords(2, 4), map.Nodes.SelectByHexCoords(1, 5)
             };
         }
     }

@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -17,7 +16,8 @@ namespace Zilon.Core.PersonGeneration
             IPropFactory propFactory,
             IDropResolver dropResolver,
             IPersonPerkInitializator personPerkInitializator,
-            IDice dice) : base(schemeService, survivalRandomSource, propFactory, dropResolver, personPerkInitializator, dice)
+            IDice dice) : base(schemeService, survivalRandomSource, propFactory, dropResolver, personPerkInitializator,
+            dice)
         {
         }
 
@@ -41,7 +41,7 @@ namespace Zilon.Core.PersonGeneration
             FillSlot(person, offWeaponDropScheme, OffHandSlotIndex);
 
             var startPropDropScheme = rolledTemplate.InventoryProps;
-            var startProps = DropResolver.Resolve(new[] { startPropDropScheme });
+            var startProps = DropResolver.Resolve(new[] {startPropDropScheme});
             foreach (var prop in startProps)
             {
                 AddPropToInventory(inventory, prop);
@@ -50,34 +50,37 @@ namespace Zilon.Core.PersonGeneration
             AddDefaultProps(inventory);
         }
 
-        private static IPersonTemplateScheme[] GetPersonTemplateByFraction(IFraction fraction, ISchemeService schemeService)
+        private static IPersonTemplateScheme[] GetPersonTemplateByFraction(IFraction fraction,
+            ISchemeService schemeService)
         {
             if (fraction == Fractions.InterventionistFraction)
             {
                 return GetInterventionalistsPersonTemplates(schemeService);
             }
-            else if (fraction == Fractions.MilitiaFraction)
+
+            if (fraction == Fractions.MilitiaFraction)
             {
                 return GetMilitiaPersonTemplates(schemeService);
             }
-            else if (fraction == Fractions.TroublemakerFraction)
+
+            if (fraction == Fractions.TroublemakerFraction)
             {
                 return GetTroublemakerPersonTemplates(schemeService);
             }
-            else
-            {
-                return GetPlayerPersonTemplates(schemeService);
-            }
+
+            return GetPlayerPersonTemplates(schemeService);
         }
 
         private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "interventionists").ToArray();
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "interventionists")
+                .ToArray();
         }
 
         private static IPersonTemplateScheme[] GetTroublemakerPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "troublemakers").ToArray();
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "troublemakers")
+                .ToArray();
         }
 
         private static IPersonTemplateScheme[] GetMilitiaPersonTemplates(ISchemeService schemeService)

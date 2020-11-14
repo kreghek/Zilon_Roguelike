@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -7,11 +6,12 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.TextClient
 {
-    class AutoplayEngine : AutoplayEngineBase
+    internal class AutoplayEngine : AutoplayEngineBase
     {
         private readonly StartUp _startup;
 
-        public AutoplayEngine(StartUp startup, BotSettings botSettings, IGlobeInitializer globeInitializer) : base(botSettings, globeInitializer)
+        public AutoplayEngine(StartUp startup, BotSettings botSettings, IGlobeInitializer globeInitializer) : base(
+            botSettings, globeInitializer)
         {
             _startup = startup;
         }

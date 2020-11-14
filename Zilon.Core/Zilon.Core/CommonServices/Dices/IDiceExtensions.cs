@@ -19,7 +19,8 @@ namespace Zilon.Core.CommonServices.Dices
         {
             if (min > max)
             {
-                throw new ArgumentException($"Максимальное значение {max} не может быть меньше минимального {min}.", nameof(max));
+                throw new ArgumentException($"Максимальное значение {max} не может быть меньше минимального {min}.",
+                    nameof(max));
             }
 
             if (dice == null)
@@ -114,7 +115,8 @@ namespace Zilon.Core.CommonServices.Dices
 
             if (list.Count < count)
             {
-                throw new ArgumentException("Требуемое количество должно быть не меньше размера списка.", nameof(count));
+                throw new ArgumentException("Требуемое количество должно быть не меньше размера списка.",
+                    nameof(count));
             }
 
             var openList = new List<T>(list);

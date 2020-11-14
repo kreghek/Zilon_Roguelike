@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using FluentAssertions;
-
 using NUnit.Framework;
-
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common;
 
@@ -40,7 +37,8 @@ namespace Zilon.Core.Tests.Schemes
                     var method = typeof(SchemeService).GetMethod(nameof(ISchemeService.GetSchemes));
                     if (method == null)
                     {
-                        throw new InvalidOperationException($"Для класса {nameof(SchemeService)} не найден метод {nameof(ISchemeService.GetSchemes)}.");
+                        throw new InvalidOperationException(
+                            $"Для класса {nameof(SchemeService)} не найден метод {nameof(ISchemeService.GetSchemes)}.");
                     }
 
                     var generic = method.MakeGenericMethod(schemeType);
@@ -50,7 +48,6 @@ namespace Zilon.Core.Tests.Schemes
 
                 actList.Add(act);
             }
-
 
 
             // ASSERT
@@ -83,10 +80,12 @@ namespace Zilon.Core.Tests.Schemes
                     var method = typeof(SchemeService).GetMethod(nameof(SchemeService.GetScheme));
                     if (method == null)
                     {
-                        throw new InvalidOperationException($"Для класса {nameof(SchemeService)} не найден метод {nameof(ISchemeService.GetScheme)}.");
+                        throw new InvalidOperationException(
+                            $"Для класса {nameof(SchemeService)} не найден метод {nameof(ISchemeService.GetScheme)}.");
                     }
+
                     var generic = method.MakeGenericMethod(schemeType);
-                    var scheme = generic.Invoke(schemeService, new object[] { "test" });
+                    var scheme = generic.Invoke(schemeService, new object[] {"test"});
                     Console.WriteLine(scheme);
                 };
 
@@ -114,13 +113,11 @@ namespace Zilon.Core.Tests.Schemes
             // ARRANGE
 
 
-
             // ACT
             Action createService = () =>
             {
                 CreateSchemeService();
             };
-
 
 
             // ASSERT
@@ -164,7 +161,6 @@ namespace Zilon.Core.Tests.Schemes
             var dropTables = schemeService.GetSchemes<IDropTableScheme>();
 
 
-
             // ASSERT
             foreach (var dropTable in dropTables)
             {
@@ -191,7 +187,7 @@ namespace Zilon.Core.Tests.Schemes
             var allTypes = assembly.GetTypes();
             var schemeTypes = allTypes
                 .Where(x => typeof(IScheme).IsAssignableFrom(x) &&
-                x.IsInterface && x != typeof(IScheme)).ToArray();
+                            x.IsInterface && x != typeof(IScheme)).ToArray();
             return schemeTypes;
         }
 

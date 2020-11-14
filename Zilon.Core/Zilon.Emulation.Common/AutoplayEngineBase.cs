@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Bot.Sdk;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -16,16 +14,16 @@ namespace Zilon.Emulation.Common
         private const int ITERATION_LIMIT = 40_000_000;
         private readonly IGlobeInitializer _globeInitializer;
 
-        protected IServiceScope ServiceScope { get; set; }
-
-        protected BotSettings BotSettings { get; }
-
         protected AutoplayEngineBase(BotSettings botSettings,
             IGlobeInitializer globeInitializer)
         {
             BotSettings = botSettings;
             _globeInitializer = globeInitializer;
         }
+
+        protected IServiceScope ServiceScope { get; set; }
+
+        protected BotSettings BotSettings { get; }
 
         public async Task<IGlobe> CreateGlobeAsync()
         {
@@ -64,12 +62,6 @@ namespace Zilon.Emulation.Common
                     throw;
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch (Exception exception)
-#pragma warning restore CA1031 // Do not catch general exception types
-                {
-                    CatchException(exception);
-                    throw;
-                }
             }
 
             ProcessEnd();

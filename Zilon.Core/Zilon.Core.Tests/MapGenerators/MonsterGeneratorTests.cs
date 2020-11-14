@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using FluentAssertions;
-
 using Moq;
-
 using NUnit.Framework;
-
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
@@ -30,13 +29,13 @@ namespace Zilon.Core.Tests.MapGenerators
         /// то слоты всех верхних уровней редкости будут заполнены (10 за редких, 1 чемпион).
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task CreateMonsters_AlwaysMaxRarityRolls_MaxHighRarityMonstersAsync()
+        public async Task CreateMonsters_AlwaysMaxRarityRolls_MaxHighRarityMonstersAsync()
         {
             var schemeDict = new Dictionary<string, IMonsterScheme>
             {
-                { "regular", CreateMonsterScheme("regular") },
-                { "rare", CreateMonsterScheme("rare") },
-                { "champion", CreateMonsterScheme("champion") }
+                {"regular", CreateMonsterScheme("regular")},
+                {"rare", CreateMonsterScheme("rare")},
+                {"champion", CreateMonsterScheme("champion")}
             };
 
             var schemeServiceMock = new Mock<ISchemeService>();
@@ -59,7 +58,7 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var propContainerManagerMock = new Mock<IStaticObjectManager>();
             var propContainerManager = propContainerManagerMock.Object;
-            propContainerManagerMock.SetupGet(x => x.Items).Returns(System.Array.Empty<IStaticObject>());
+            propContainerManagerMock.SetupGet(x => x.Items).Returns(Array.Empty<IStaticObject>());
 
             var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
             var taskSource = taskSourceMock.Object;
@@ -80,15 +79,13 @@ namespace Zilon.Core.Tests.MapGenerators
             sectorMock.SetupGet(x => x.StaticObjectManager).Returns(propContainerManager);
             var sector = sectorMock.Object;
 
-            var monsterRegions = new List<MapRegion> {
-                new MapRegion(1, map.Nodes.ToArray())
-            };
+            var monsterRegions = new List<MapRegion> {new MapRegion(1, map.Nodes.ToArray())};
 
             var sectorScheme = new TestSectorSubScheme
             {
-                RegularMonsterSids = new[] { "regular" },
-                RareMonsterSids = new[] { "rare" },
-                ChampionMonsterSids = new[] { "champion" }
+                RegularMonsterSids = new[] {"regular"},
+                RareMonsterSids = new[] {"rare"},
+                ChampionMonsterSids = new[] {"champion"}
             };
 
             // ACT
@@ -108,11 +105,7 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             var scheme = new TestMonsterScheme
             {
-                Sid = sid,
-                PrimaryAct = new TestTacticalActStatsSubScheme
-                {
-                    Efficient = new Core.Common.Roll(6, 1)
-                }
+                Sid = sid, PrimaryAct = new TestTacticalActStatsSubScheme {Efficient = new Roll(6, 1)}
             };
             return scheme;
         }

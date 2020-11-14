@@ -1,7 +1,6 @@
-﻿using Moq;
-
+﻿using System.Diagnostics.CodeAnalysis;
+using Moq;
 using NUnit.Framework;
-
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tests.StaticObjectModules.TestCaseDataSources;
 
@@ -13,7 +12,7 @@ namespace Zilon.Core.Tests.StaticObjectModules
         [TestCaseSource(typeof(DepositDurabilityModuleTestCaseDataSource),
             nameof(DepositDurabilityModuleTestCaseDataSource.DestroyTestCases))]
         [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "<Pending>")]
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "<Pending>")]
         public void TakeDamageTest(int stockValue, int damagePerMineUnit, int[] damages)
         {
             var currentStock = stockValue;
