@@ -141,7 +141,7 @@ namespace Zilon.Core.Specs.Steps
             var targetStat = actor.Person.GetModuleSafe<ISurvivalModule>()?.Stats?.Single(x => x.Type == statType);
             var keySegment = targetStat.KeySegments.Single(x => x.Level == effectLevel);
 
-            var statValue = keySegment.Start;
+            var statValue = keySegment.End;
             targetStat.SetShare(statValue);
         }
 
@@ -358,6 +358,11 @@ namespace Zilon.Core.Specs.Steps
                 case "Смертельная токсикация":
                     level = SurvivalStatHazardLevel.Max;
                     stat = SurvivalStatType.Intoxication;
+                    break;
+
+                case "Слабая рана":
+                    level = SurvivalStatHazardLevel.Lesser;
+                    stat = SurvivalStatType.Health;
                     break;
 
                 default:

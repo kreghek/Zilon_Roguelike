@@ -98,17 +98,13 @@ Scenario Outline: Эффекты угроз выживания наносят у
 	Given Есть карта размером 2
 	And Есть актёр игрока класса human-person в ячейке (0, 0)
 	And Актёр имеет эффект <startEffect>
-	When Я жду 1 итераций
-	Then Актёр игрока имеет запас hp <expectedHpValue>
+	When Я жду <waitIterations> итераций
+	Then Актёр под эффектом <effect>
 
 	Examples: 
-	| startEffect   | moveDistance | expectedHpValue |
-	| Голодание     | 1            | 119             |
-	| Обезвоживание | 1            | 119             |
-	| Слабый голод  | 1            | 120             |
-	| Голод         | 1            | 120             |
-	| Слабая жажда  | 1            | 120             |
-	| Жажда         | 1            | 120             |
+	| startEffect   | waitIterations | effect      |
+	| Голодание     | 3              | Слабая рана |
+	| Обезвоживание | 3              | Слабая рана |
 
 @survival @dev1
 Scenario Outline: Угрозы выживания (имеются изначально) снижают эффективность тактических действий у актёра игрока.
