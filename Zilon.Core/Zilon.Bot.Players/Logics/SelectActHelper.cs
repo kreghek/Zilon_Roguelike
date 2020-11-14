@@ -1,4 +1,9 @@
-﻿using Zilon.Core.Persons;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 
 namespace Zilon.Bot.Players.Logics
@@ -6,7 +11,7 @@ namespace Zilon.Bot.Players.Logics
     public static class SelectActHelper
     {
         /// <summary>
-        ///     Выбирает лучшее действие из указанных.
+        /// Выбирает лучшее действие из указанных.
         /// </summary>
         /// <param name="acts"> Все возможные действия. </param>
         /// <param name="propStore"> Хранилище, в котором искать ресурсы. </param>
@@ -27,8 +32,7 @@ namespace Zilon.Bot.Players.Logics
             return availableActs.First();
         }
 
-        private static bool TacticalActIsAvailableByConstrains(ITacticalAct tacticalAct,
-            [CanBeNull] IPropStore propStore)
+        private static bool TacticalActIsAvailableByConstrains(ITacticalAct tacticalAct, [CanBeNull] IPropStore propStore)
         {
             if (tacticalAct.Constrains is null)
             {
@@ -66,11 +70,11 @@ namespace Zilon.Bot.Players.Logics
             string usedPropResourceType,
             int usedPropResourceCount)
         {
-            IProp[] props = inventory.CalcActualItems();
+            var props = inventory.CalcActualItems();
             var propResources = new List<Resource>();
-            foreach (IProp prop in props)
+            foreach (var prop in props)
             {
-                Resource propResource = prop as Resource;
+                var propResource = prop as Resource;
                 if (propResource == null)
                 {
                     continue;

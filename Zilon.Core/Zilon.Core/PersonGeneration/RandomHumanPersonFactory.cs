@@ -22,32 +22,32 @@ namespace Zilon.Core.PersonGeneration
             IDropResolver dropResolver,
             IPersonPerkInitializator personPerkInitializator,
             IDice dice) : base(
-            schemeService,
-            survivalRandomSource,
-            propFactory,
-            dropResolver,
-            personPerkInitializator,
-            dice)
+                schemeService,
+                survivalRandomSource,
+                propFactory,
+                dropResolver,
+                personPerkInitializator,
+                dice)
         {
         }
 
         protected override void RollStartEquipment(IInventoryModule inventory, HumanPerson person)
         {
-            IDropTableScheme headDropScheme = GetHeads();
+            var headDropScheme = GetHeads();
             FillSlot(person, headDropScheme, HeadSlotIndex);
 
-            IDropTableScheme armorDropScheme = GetArmors();
+            var armorDropScheme = GetArmors();
             FillSlot(person, armorDropScheme, BodySlotIndex);
 
-            IDropTableScheme mainWeaponDropScheme = GetMainWeapons();
+            var mainWeaponDropScheme = GetMainWeapons();
             FillSlot(person, mainWeaponDropScheme, MainHandSlotIndex);
 
-            IDropTableScheme offWeaponDropScheme = GetOffWeapons();
+            var offWeaponDropScheme = GetOffWeapons();
             FillSlot(person, offWeaponDropScheme, OffHandSlotIndex);
 
-            IDropTableScheme startPropDropScheme = GetStartProps();
-            IProp[] startProps = DropResolver.Resolve(new[] {startPropDropScheme});
-            foreach (IProp prop in startProps)
+            var startPropDropScheme = GetStartProps();
+            var startProps = DropResolver.Resolve(new[] { startPropDropScheme });
+            foreach (var prop in startProps)
             {
                 AddPropToInventory(inventory, prop);
             }

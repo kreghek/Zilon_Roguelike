@@ -1,11 +1,14 @@
-﻿using Zilon.Core.Persons;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
     /// <summary>
-    ///     Реализация модуля боевых действий для монстра.
-    ///     Для монстров список действий фиксирован в зависимости от типа монстра.
-    ///     В отличии от базовой реализации действия не рассчитываются в зависимости от экипировки.
+    /// Реализация модуля боевых действий для монстра.
+    /// Для монстров список действий фиксирован в зависимости от типа монстра.
+    /// В отличии от базовой реализации действия не рассчитываются в зависимости от экипировки.
     /// </summary>
     public sealed class MonsterCombatActModule : ICombatActModule
     {
@@ -16,13 +19,13 @@ namespace Zilon.Core.PersonModules
             _acts = acts.ToArray();
         }
 
-        /// <inheritdoc />
-        public string Key => nameof(ICombatActModule);
+        /// <inheritdoc/>
+        public string Key { get => nameof(ICombatActModule); }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool IsActive { get; set; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IEnumerable<ITacticalAct> CalcCombatActs()
         {
             return _acts;

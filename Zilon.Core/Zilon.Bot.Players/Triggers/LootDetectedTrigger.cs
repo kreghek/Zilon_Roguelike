@@ -1,4 +1,6 @@
-﻿using Zilon.Core.StaticObjectModules;
+﻿using System.Linq;
+
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -12,8 +14,7 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния.
         }
 
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
-            ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
@@ -35,8 +36,8 @@ namespace Zilon.Bot.Players.Triggers
                 throw new System.ArgumentNullException(nameof(strategyData));
             }
 
-            IStaticObjectManager staticObjectManager = context.Sector.StaticObjectManager;
-            ISectorMap map = context.Sector.Map;
+            var staticObjectManager = context.Sector.StaticObjectManager;
+            var map = context.Sector.Map;
 
             var containers = staticObjectManager.Items.Where(x => x.HasModule<IPropContainer>());
             var foundContainers = LootHelper.FindAvailableContainers(containers,

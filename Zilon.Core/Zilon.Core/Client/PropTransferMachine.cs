@@ -1,17 +1,19 @@
-﻿using Zilon.Core.Props;
+﻿using System;
+
+using Zilon.Core.Props;
 
 namespace Zilon.Core.Client
 {
     /// <summary>
-    ///     Машина состояний трансфера предметов.
+    /// Машина состояний трансфера предметов.
     /// </summary>
     /// <remarks>
-    ///     Используется для трансфтера предметов между инвентарём и контейнером.
+    /// Используется для трансфтера предметов между инвентарём и контейнером.
     /// </remarks>
     public sealed class PropTransferMachine
     {
         /// <summary>
-        ///     Конструктор машины состояний.
+        /// Конструктор машины состояний.
         /// </summary>
         /// <param name="inventory"> Инвентарь персонажа. </param>
         /// <param name="container"> Контейнер, между которым будет произведён трансфер. </param>
@@ -22,17 +24,17 @@ namespace Zilon.Core.Client
         }
 
         /// <summary>
-        ///     Состояние трансфера предметов в инвентаре персонажа.
+        /// Состояние трансфера предметов в инвентаре персонажа.
         /// </summary>
         public PropTransferStore Inventory { get; }
 
         /// <summary>
-        ///     Состояние трансфера предметов в контейнере.
+        /// Состояние трансфера предметов в контейнере.
         /// </summary>
         public PropTransferStore Container { get; }
 
         /// <summary>
-        ///     Перенос предмета между указанными хранилищами.
+        /// Перенос предмета между указанными хранилищами.
         /// </summary>
         /// <param name="prop"> Предмет, который будет перенесён. </param>
         /// <param name="sourceStoreType"> Хранилище-источник. </param>
@@ -41,10 +43,10 @@ namespace Zilon.Core.Client
             PropTransferMachineStore sourceStoreType,
             PropTransferMachineStore distStoreType)
         {
-            IPropStore sourceStore = GetStore(sourceStoreType);
+            var sourceStore = GetStore(sourceStoreType);
             sourceStore.Remove(prop);
 
-            IPropStore distStore = GetStore(distStoreType);
+            var distStore = GetStore(distStoreType);
             distStore.Add(prop);
         }
 

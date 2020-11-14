@@ -1,5 +1,11 @@
 ﻿using System.IO;
-using System.Reflection;
+
+using FluentAssertions;
+
+using Newtonsoft.Json;
+
+using NUnit.Framework;
+
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 
@@ -10,14 +16,14 @@ namespace Zilon.Core.Tests.Schemes
     public class PersonSchemeTests
     {
         /// <summary>
-        ///     Тест проверяет, что работы корректно десериализуется.
+        /// Тест проверяет, что работы корректно десериализуется.
         /// </summary>
         [Test]
         public void Deserialization_SurvivalStats_ValueRangeAndKeyPointsAreCorrect()
         {
             // ARRANGE
-            Assembly assembly = GetType().Assembly;
-            string resourceName = "Zilon.Core.Tests.Schemes.human-person.json";
+            var assembly = GetType().Assembly;
+            var resourceName = "Zilon.Core.Tests.Schemes.human-person.json";
 
             string sourceText;
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
@@ -27,8 +33,10 @@ namespace Zilon.Core.Tests.Schemes
             }
 
 
+
             // ACT
             var factPersonScheme = JsonConvert.DeserializeObject<PersonScheme>(sourceText);
+
 
 
             // ASSERT
@@ -40,20 +48,22 @@ namespace Zilon.Core.Tests.Schemes
             factPersonScheme.SurvivalStats[0].MaxValue.Should().Be(500);
             factPersonScheme.SurvivalStats[0].StartValue.Should().Be(250);
 
-            TestPersonSurvivalStatKeySegmentSubScheme[] expectedKeySegments =
-            {
-                new TestPersonSurvivalStatKeySegmentSubScheme
-                {
-                    Level = PersonSurvivalStatKeypointLevel.Max, Start = 0, End = 0.14f
+            var expectedKeySegments = new[] {
+                new TestPersonSurvivalStatKeySegmentSubScheme{
+                    Level = PersonSurvivalStatKeypointLevel.Max,
+                    Start = 0,
+                    End = 0.14f
                 },
-                new TestPersonSurvivalStatKeySegmentSubScheme
-                {
-                    Level = PersonSurvivalStatKeypointLevel.Strong, Start = 0.14f, End = 0.75f
+                new TestPersonSurvivalStatKeySegmentSubScheme{
+                    Level = PersonSurvivalStatKeypointLevel.Strong,
+                    Start = 0.14f,
+                    End = 0.75f
                 },
-                new TestPersonSurvivalStatKeySegmentSubScheme
-                {
-                    Level = PersonSurvivalStatKeypointLevel.Lesser, Start = 0.75f, End = 0.86f
-                }
+                new TestPersonSurvivalStatKeySegmentSubScheme{
+                    Level = PersonSurvivalStatKeypointLevel.Lesser,
+                    Start = 0.75f,
+                    End = 0.86f
+                },
             };
             factPersonScheme.SurvivalStats[0].KeyPoints.Should().BeEquivalentTo(expectedKeySegments);
         }

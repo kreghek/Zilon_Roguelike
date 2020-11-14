@@ -1,4 +1,9 @@
-﻿using Zilon.Core.Components;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+
+using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -8,34 +13,35 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tactics
 {
     /// <summary>
-    ///     Базовая реализация сервиса для работы с действиями персонажа.
+    /// Базовая реализация сервиса для работы с действиями персонажа.
     /// </summary>
     /// <seealso cref="ITacticalActUsageService" />
     public sealed class TacticalActUsageService : ITacticalActUsageService
     {
-        private readonly IActUsageHandlerSelector _actUsageHandlerSelector;
         private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
+        private readonly IActUsageHandlerSelector _actUsageHandlerSelector;
+
+        /// <summary>Сервис для работы с прочностью экипировки.</summary>
+        public IEquipmentDurableService EquipmentDurableService { get; set; }
 
         /// <summary>
-        ///     Конструирует экземпляр службы <see cref="TacticalActUsageService" />.
+        /// Конструирует экземпляр службы <see cref="TacticalActUsageService"/>.
         /// </summary>
         /// <param name="actUsageRandomSource">Источник рандома для выполнения действий.</param>
         /// <param name="perkResolver">Сервис для работы с прогрессом перков.</param>
         /// <exception cref="System.ArgumentNullException">
-        ///     actUsageRandomSource
-        ///     or
-        ///     perkResolver
-        ///     or
-        ///     sectorManager
+        /// actUsageRandomSource
+        /// or
+        /// perkResolver
+        /// or
+        /// sectorManager
         /// </exception>
         public TacticalActUsageService(
             ITacticalActUsageRandomSource actUsageRandomSource,
             IActUsageHandlerSelector actUsageHandlerSelector)
         {
-            _actUsageRandomSource =
-                actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
-            _actUsageHandlerSelector = actUsageHandlerSelector ??
-                                       throw new ArgumentNullException(nameof(actUsageHandlerSelector));
+            _actUsageRandomSource = actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
+            _actUsageHandlerSelector = actUsageHandlerSelector ?? throw new ArgumentNullException(nameof(actUsageHandlerSelector));
         }
 
         public TacticalActUsageService(
@@ -43,12 +49,8 @@ namespace Zilon.Core.Tactics
             IActUsageHandlerSelector actUsageHandlerSelector,
             IEquipmentDurableService equipmentDurableService) : this(actUsageRandomSource, actUsageHandlerSelector)
         {
-            EquipmentDurableService = equipmentDurableService ??
-                                      throw new ArgumentNullException(nameof(equipmentDurableService));
+            EquipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
         }
-
-        /// <summary>Сервис для работы с прочностью экипировки.</summary>
-        public IEquipmentDurableService EquipmentDurableService { get; set; }
 
         public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs, ISector sector)
         {
@@ -158,7 +160,7 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            IGraphNode targetNode = target.Node;
+            var targetNode = target.Node;
 
             var targetIsOnLine = map.TargetIsOnLine(
                 actor.Node,
@@ -171,7 +173,7 @@ namespace Zilon.Core.Tactics
 
             actor.UseAct(target, act);
 
-            TacticalActRoll tacticalActRoll = GetActEfficient(act);
+            var tacticalActRoll = GetActEfficient(act);
 
             // Изъятие патронов
             if (act.Constrains?.PropResourceType != null)
@@ -179,7 +181,7 @@ namespace Zilon.Core.Tactics
                 RemovePropResource(actor, act);
             }
 
-            IActUsageHandler actHandler = _actUsageHandlerSelector.GetHandler(target);
+            var actHandler = _actUsageHandlerSelector.GetHandler(target);
             actHandler.ProcessActUsage(actor, target, tacticalActRoll);
 
             if (act.Equipment != null)
@@ -213,27 +215,25 @@ namespace Zilon.Core.Tactics
         private static void RemovePropResource(IActor actor, ITacticalAct act)
         {
             var propResources = from prop in actor.Person.GetModule<IInventoryModule>().CalcActualItems()
-                where prop is Resource
-                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
-                select prop;
+                                where prop is Resource
+                                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
+                                select prop;
 
             if (propResources.FirstOrDefault() is Resource propResource)
             {
                 if (propResource.Count >= act.Constrains.PropResourceCount)
                 {
-                    Resource usedResource = new Resource(propResource.Scheme, act.Constrains.PropResourceCount.Value);
+                    var usedResource = new Resource(propResource.Scheme, act.Constrains.PropResourceCount.Value);
                     actor.Person.GetModule<IInventoryModule>().Remove(usedResource);
                 }
                 else
                 {
-                    throw new InvalidOperationException(
-                        $"Не хватает ресурса {propResource} для использования действия {act}.");
+                    throw new InvalidOperationException($"Не хватает ресурса {propResource} для использования действия {act}.");
                 }
             }
             else
             {
-                throw new InvalidOperationException(
-                    $"Не хватает ресурса {act.Constrains?.PropResourceType} для использования действия {act}.");
+                throw new InvalidOperationException($"Не хватает ресурса {act.Constrains?.PropResourceType} для использования действия {act}.");
             }
         }
 
@@ -250,7 +250,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        ///     Возвращает случайное значение эффективность действия.
+        /// Возвращает случайное значение эффективность действия.
         /// </summary>
         /// <param name="act"> Соверщённое действие. </param>
         /// <returns> Возвращает выпавшее значение эффективности. </returns>
@@ -258,7 +258,7 @@ namespace Zilon.Core.Tactics
         {
             var rolledEfficient = _actUsageRandomSource.RollEfficient(act.Efficient);
 
-            TacticalActRoll roll = new TacticalActRoll(act, rolledEfficient);
+            var roll = new TacticalActRoll(act, rolledEfficient);
 
             return roll;
         }

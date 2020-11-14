@@ -5,7 +5,7 @@ namespace Zilon.Core.Persons
     public interface IPerkResolver
     {
         /// <summary>
-        ///     Применяет прогресс к текущим работам.
+        /// Применяет прогресс к текущим работам.
         /// </summary>
         /// <param name="progress"> Объект прогресса. </param>
         /// <param name="evolutionData"> Данные о развитии персонажа. </param>

@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Props
 {
@@ -34,19 +38,19 @@ namespace Zilon.Core.Props
 
             foreach (var actSchemeSid in actSchemeSids)
             {
-                ITacticalActScheme actScheme = _schemeService.GetScheme<ITacticalActScheme>(actSchemeSid);
+                var actScheme = _schemeService.GetScheme<ITacticalActScheme>(actSchemeSid);
 
                 actSchemes.Add(actScheme);
             }
 
-            Equipment equipment = new Equipment(scheme, actSchemes);
+            var equipment = new Equipment(scheme, actSchemes);
 
             return equipment;
         }
 
         public Resource CreateResource(IPropScheme scheme, int count)
         {
-            Resource resource = new Resource(scheme, count);
+            var resource = new Resource(scheme, count);
 
             return resource;
         }

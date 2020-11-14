@@ -1,10 +1,11 @@
-﻿using Zilon.Core.PersonModules;
-using Zilon.Core.Props;
+﻿using System;
+
+using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    ///     Вспомогательный класс для работы с экипировкой персонажа.
+    /// Вспомогательный класс для работы с экипировкой персонажа.
     /// </summary>
     public static class PersonEquipmentHelper
     {
@@ -12,8 +13,8 @@ namespace Zilon.Core.Persons
         /// <param name="person">Пресонаж, у которого снимается предмет.</param>
         /// <param name="slotIndex">Индекс слота, из которого снимается предмет.</param>
         /// <exception cref="System.InvalidOperationException">
-        ///     Происходит, если обнаружена попытка обнулить слот {slotIndex},
-        ///     в котором нет экипировки.
+        /// Происходит, если обнаружена попытка обнулить слот {slotIndex},
+        /// в котором нет экипировки.
         /// </exception>
         public static void UnequipProp(this IPerson person, int slotIndex)
         {
@@ -22,9 +23,9 @@ namespace Zilon.Core.Persons
                 throw new ArgumentNullException(nameof(person));
             }
 
-            IEquipmentModule equipmentCarrier = person.GetModule<IEquipmentModule>();
+            var equipmentCarrier = person.GetModule<IEquipmentModule>();
 
-            Equipment currentEquipment = equipmentCarrier[slotIndex];
+            var currentEquipment = equipmentCarrier[slotIndex];
 
             if (currentEquipment == null)
             {

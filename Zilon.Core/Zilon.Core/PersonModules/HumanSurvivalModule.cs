@@ -1,9 +1,14 @@
-﻿using Zilon.Core.Components;
-using Zilon.Core.Diseases;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Auxiliary;
 using Zilon.Core.Persons.Survival;
-using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 
@@ -11,12 +16,14 @@ namespace Zilon.Core.PersonModules
 {
     public sealed class HumanSurvivalModule : SurvivalModuleBase
     {
-        private readonly IAttributesModule _attributesModule;
-        private readonly IEffectsModule _effectsModule;
-        private readonly IEquipmentModule _equipmentModule;
-        private readonly IEvolutionModule _evolutionModule;
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
+        private readonly IAttributesModule _attributesModule;
+        private readonly IEffectsModule _effectsModule;
+        private readonly IEvolutionModule _evolutionModule;
+        private readonly IEquipmentModule _equipmentModule;
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource,
@@ -34,7 +41,7 @@ namespace Zilon.Core.PersonModules
 
             RegisterModuleEventHandlers();
 
-            foreach (SurvivalStat stat in Stats)
+            foreach (var stat in Stats)
             {
                 stat.Changed += Stat_Changed;
             }
@@ -45,23 +52,21 @@ namespace Zilon.Core.PersonModules
         public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource,
             [NotNull] IAttributesModule attributesModule) : this(
-            personScheme,
-            randomSource,
-            attributesModule,
-            null,
-            null,
-            null)
+                personScheme,
+                randomSource,
+                attributesModule,
+                effectsModule: null,
+                evolutionModule: null,
+                equipmentModule: null)
         {
         }
 
         public HumanSurvivalModule([NotNull] IEnumerable<SurvivalStat> personStats,
             [NotNull] ISurvivalRandomSource randomSource) : base(
-            personStats)
+                personStats)
         {
             _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
         }
-
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         private void RegisterModuleEventHandlers()
         {
@@ -103,8 +108,7 @@ namespace Zilon.Core.PersonModules
             ApplySurvivalBonuses(bonusList);
         }
 
-        private static IEnumerable<SurvivalStat> GetStats([NotNull] IPersonScheme personScheme,
-            [NotNull] IAttributesModule attributesModule)
+        private static IEnumerable<SurvivalStat> GetStats([NotNull] IPersonScheme personScheme, [NotNull] IAttributesModule attributesModule)
         {
             if (personScheme is null)
             {
@@ -119,8 +123,7 @@ namespace Zilon.Core.PersonModules
             return GetStatsIterator(personScheme, attributesModule).Where(x => x != null);
         }
 
-        private static IEnumerable<SurvivalStat> GetStatsIterator([NotNull] IPersonScheme personScheme,
-            IAttributesModule attributesModule)
+        private static IEnumerable<SurvivalStat> GetStatsIterator([NotNull] IPersonScheme personScheme, IAttributesModule attributesModule)
         {
             // Устанавливаем характеристики выживания персонажа
             yield return SetHitPointsStat(personScheme, attributesModule);
@@ -151,14 +154,19 @@ namespace Zilon.Core.PersonModules
 
         private static SurvivalStat CreateUselessStat(SurvivalStatType statType)
         {
-            SurvivalStat stat = new SurvivalStat(100, 0, 100) {Type = statType, Rate = 1, DownPassRoll = 0};
+            var stat = new SurvivalStat(100, 0, 100)
+            {
+                Type = statType,
+                Rate = 1,
+                DownPassRoll = 0
+            };
 
             return stat;
         }
 
         private void Stat_Changed(object sender, EventArgs e)
         {
-            SurvivalStat stat = (SurvivalStat)sender;
+            var stat = (SurvivalStat)sender;
 
             if (stat.KeySegments is null)
             {
@@ -182,7 +190,7 @@ namespace Zilon.Core.PersonModules
             SurvivalStatType statType,
             PersonSurvivalStatType schemeStatType)
         {
-            SurvivalStat stat = CreateStat(statType, schemeStatType, survivalStats);
+            var stat = CreateStat(statType, schemeStatType, survivalStats);
             return stat ?? null;
         }
 
@@ -193,14 +201,17 @@ namespace Zilon.Core.PersonModules
             // В схеме храним базовые ХП.
             // Конституция добавяет или снижает ХП.
             var totalHp = personScheme.Hp + constitutionHpBonus;
-            HpSurvivalStat hpStat = new HpSurvivalStat(totalHp, 0, totalHp) {Type = SurvivalStatType.Health};
+            var hpStat = new HpSurvivalStat(totalHp, 0, totalHp)
+            {
+                Type = SurvivalStatType.Health
+            };
 
             return hpStat;
         }
 
         private static int GetConstitutionHpBonus(IAttributesModule attributesModule)
         {
-            PersonAttribute constitutionAttribute = attributesModule.GetAttribute(PersonAttributeType.Constitution);
+            var constitutionAttribute = attributesModule.GetAttribute(PersonAttributeType.Constitution);
             int constitutionHpBonus;
             if (constitutionAttribute is null)
             {
@@ -213,13 +224,11 @@ namespace Zilon.Core.PersonModules
 
                 if (constitutionAttribute.Value > 10)
                 {
-                    constitutionHpBonus = ((int)constitutionAttribute.Value - BASE_CONSTITUTION) *
-                                          CONSTITUTION_HP_INFLUENCE;
+                    constitutionHpBonus = ((int)constitutionAttribute.Value - BASE_CONSTITUTION) * CONSTITUTION_HP_INFLUENCE;
                 }
                 else
                 {
-                    constitutionHpBonus = -(BASE_CONSTITUTION - (int)constitutionAttribute.Value) *
-                                          CONSTITUTION_HP_INFLUENCE;
+                    constitutionHpBonus = -(BASE_CONSTITUTION - (int)constitutionAttribute.Value) * CONSTITUTION_HP_INFLUENCE;
                 }
             }
 
@@ -229,7 +238,7 @@ namespace Zilon.Core.PersonModules
         /// <summary>Обновление состояния данных о выживании.</summary>
         public override void Update()
         {
-            foreach (SurvivalStat stat in Stats)
+            foreach (var stat in Stats)
             {
                 if (stat.Rate == 0)
                 {
@@ -260,15 +269,12 @@ namespace Zilon.Core.PersonModules
             var keySegmentList = new List<SurvivalStatKeySegment>();
             if (statScheme.KeyPoints != null)
             {
-                AddKeyPointFromScheme(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max,
-                    statScheme.KeyPoints, keySegmentList);
-                AddKeyPointFromScheme(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong,
-                    statScheme.KeyPoints, keySegmentList);
-                AddKeyPointFromScheme(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser,
-                    statScheme.KeyPoints, keySegmentList);
+                AddKeyPointFromScheme(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max, statScheme.KeyPoints, keySegmentList);
+                AddKeyPointFromScheme(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong, statScheme.KeyPoints, keySegmentList);
+                AddKeyPointFromScheme(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser, statScheme.KeyPoints, keySegmentList);
             }
 
-            SurvivalStat stat = new SurvivalStat(statScheme.StartValue, statScheme.MinValue, statScheme.MaxValue)
+            var stat = new SurvivalStat(statScheme.StartValue, statScheme.MinValue, statScheme.MaxValue)
             {
                 Type = type,
                 Rate = 1,
@@ -285,21 +291,19 @@ namespace Zilon.Core.PersonModules
             IPersonSurvivalStatKeySegmentSubScheme[] keyPoints,
             List<SurvivalStatKeySegment> keyPointList)
         {
-            IPersonSurvivalStatKeySegmentSubScheme schemeKeySegment =
-                GetKeyPointSchemeValue(schemeSegmentLevel, keyPoints);
+            var schemeKeySegment = GetKeyPointSchemeValue(schemeSegmentLevel, keyPoints);
             if (schemeKeySegment == null)
             {
                 return;
             }
 
-            SurvivalStatKeySegment keySegment =
-                new SurvivalStatKeySegment(schemeKeySegment.Start, schemeKeySegment.End, segmentLevel);
+            var keySegment = new SurvivalStatKeySegment(schemeKeySegment.Start, schemeKeySegment.End, segmentLevel);
             keyPointList.Add(keySegment);
         }
 
         private void DoStatChanged(SurvivalStat stat)
         {
-            SurvivalStatChangedEventArgs args = new SurvivalStatChangedEventArgs(stat);
+            var args = new SurvivalStatChangedEventArgs(stat);
             InvokeStatChangedEvent(this, args);
         }
 
@@ -315,7 +319,7 @@ namespace Zilon.Core.PersonModules
             var totalHp = _personScheme.Hp + constitutionBonus;
             Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health)?.ChangeStatRange(0, totalHp);
 
-            foreach (SurvivalStat stat in Stats)
+            foreach (var stat in Stats)
             {
                 stat.DownPassRoll = SurvivalStat.DEFAULT_DOWN_PASS_VALUE;
             }
@@ -328,7 +332,7 @@ namespace Zilon.Core.PersonModules
             return keyPoints.SingleOrDefault(x => x.Level == level);
         }
 
-        private void FillSurvivalBonusesFromEffects([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEffects([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_effectsModule is null)
             {
@@ -343,34 +347,29 @@ namespace Zilon.Core.PersonModules
 
                         switch (diseaseSymptomEffect.Symptom.Rule)
                         {
-                            case DiseaseSymptomType.HealthLimit:
+                            case Diseases.DiseaseSymptomType.HealthLimit:
                                 BonusToHealth(PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
                                 break;
 
-                            case DiseaseSymptomType.HungerSpeed:
-                                BonusToDownPass(SurvivalStatType.Satiety, PersonRuleLevel.Lesser,
-                                    PersonRuleDirection.Negative, ref bonusList);
+                            case Diseases.DiseaseSymptomType.HungerSpeed:
+                                BonusToDownPass(SurvivalStatType.Satiety, PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
                                 break;
 
-                            case DiseaseSymptomType.ThirstSpeed:
-                                BonusToDownPass(SurvivalStatType.Hydration, PersonRuleLevel.Lesser,
-                                    PersonRuleDirection.Negative, ref bonusList);
+                            case Diseases.DiseaseSymptomType.ThirstSpeed:
+                                BonusToDownPass(SurvivalStatType.Hydration, PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
                                 break;
 
-                            case DiseaseSymptomType.BreathDownSpeed:
-                                BonusToDownPass(SurvivalStatType.Breath, PersonRuleLevel.Lesser,
-                                    PersonRuleDirection.Negative, ref bonusList);
+                            case Diseases.DiseaseSymptomType.BreathDownSpeed:
+                                BonusToDownPass(SurvivalStatType.Breath, PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
                                 break;
 
-                            case DiseaseSymptomType.EnegryDownSpeed:
-                                BonusToDownPass(SurvivalStatType.Energy, PersonRuleLevel.Lesser,
-                                    PersonRuleDirection.Negative, ref bonusList);
+                            case Diseases.DiseaseSymptomType.EnegryDownSpeed:
+                                BonusToDownPass(SurvivalStatType.Energy, PersonRuleLevel.Lesser, PersonRuleDirection.Negative, ref bonusList);
                                 break;
 
-                            case DiseaseSymptomType.Undefined:
+                            case Diseases.DiseaseSymptomType.Undefined:
                             default:
-                                throw new InvalidOperationException(
-                                    $"Неизвестное правило эффекта {diseaseSymptomEffect.Symptom.Rule}");
+                                throw new InvalidOperationException($"Неизвестное правило эффекта {diseaseSymptomEffect.Symptom.Rule}");
                         }
 
                         break;
@@ -386,7 +385,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromPerks([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromPerks([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_evolutionModule is null)
             {
@@ -422,7 +421,7 @@ namespace Zilon.Core.PersonModules
 
                 for (var i = 0; i <= currentLevel.Sub; i++)
                 {
-                    foreach (PerkRuleSubScheme rule in currentLevelScheme.Rules)
+                    foreach (var rule in currentLevelScheme.Rules)
                     {
                         bonusList = ProcessRule(bonusList, rule);
                     }
@@ -440,7 +439,7 @@ namespace Zilon.Core.PersonModules
 
                 case PersonRuleType.HealthIfNoBody:
 
-                    IEquipmentModule equipmentModule = _equipmentModule;
+                    var equipmentModule = _equipmentModule;
 
                     var requirementsCompleted = true;
 
@@ -505,39 +504,38 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromEquipments([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEquipments([NotNull, ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_equipmentModule is null)
             {
                 return;
             }
 
-            IEquipmentModule equipmentModule = _equipmentModule;
+            var equipmentModule = _equipmentModule;
 
             for (var i = 0; i < equipmentModule.Count(); i++)
             {
-                Equipment equipment = equipmentModule[i];
+                var equipment = equipmentModule[i];
                 if (equipment == null)
                 {
                     continue;
                 }
 
-                PersonRule[] rules = equipment.Scheme.Equip.Rules;
+                var rules = equipment.Scheme.Equip.Rules;
 
                 if (rules == null)
                 {
                     continue;
                 }
 
-                foreach (PersonRule rule in rules)
+                foreach (var rule in rules)
                 {
                     bonusList = ProcessRuleAndChangeBonusList(bonusList, equipmentModule, rule);
                 }
             }
         }
 
-        private List<SurvivalStatBonus> ProcessRuleAndChangeBonusList(List<SurvivalStatBonus> bonusList,
-            IEquipmentModule equipmentModule, PersonRule rule)
+        private List<SurvivalStatBonus> ProcessRuleAndChangeBonusList(List<SurvivalStatBonus> bonusList, IEquipmentModule equipmentModule, PersonRule rule)
         {
             switch (rule.Type)
             {
@@ -582,14 +580,12 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <summary>
-        ///     Помещает в список бонус на ХП.
+        /// Помещает в список бонус на ХП.
         /// </summary>
         /// <param name="level"> Уровень бонуса. </param>
         /// <param name="direction"> Направление бонуса. </param>
-        /// <param name="bonuses">
-        ///     Аккумулирующий список бонусов.
-        ///     Отмечен ref, чтобы показать, что изменяется внутри метода.
-        /// </param>
+        /// <param name="bonuses"> Аккумулирующий список бонусов.
+        /// Отмечен ref, чтобы показать, что изменяется внутри метода. </param>
         private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction,
             ref List<SurvivalStatBonus> bonuses)
         {
@@ -634,7 +630,6 @@ namespace Zilon.Core.PersonModules
                     currentBonus = new SurvivalStatBonus(HP_STAT_TYPE);
                     bonuses.Add(currentBonus);
                 }
-
                 currentBonus.ValueBonus += bonus;
             }
         }
@@ -674,7 +669,10 @@ namespace Zilon.Core.PersonModules
                     break;
             }
 
-            SurvivalStatBonus currentBonus = new SurvivalStatBonus(statType) {DownPassBonus = currentBonusValue};
+            var currentBonus = new SurvivalStatBonus(statType)
+            {
+                DownPassBonus = currentBonusValue
+            };
 
             bonuses.Add(currentBonus);
         }

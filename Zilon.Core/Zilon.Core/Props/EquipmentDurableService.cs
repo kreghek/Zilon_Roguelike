@@ -1,10 +1,12 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Props
 {
     /// <summary>
-    ///     Реализация сервиса для работы с прочностью экипировки.
+    /// Реализация сервиса для работы с прочностью экипировки.
     /// </summary>
     /// <seealso cref="IEquipmentDurableService" />
     public sealed class EquipmentDurableService : IEquipmentDurableService
@@ -16,7 +18,7 @@ namespace Zilon.Core.Props
         private readonly IEquipmentDurableServiceRandomSource _randomSource;
 
         /// <summary>
-        ///     Создаёт экземпляр <see cref="EquipmentDurableService" />.
+        /// Создаёт экземпляр <see cref="EquipmentDurableService"/>.
         /// </summary>
         /// <param name="randomSource">Источник рандома для сервиса.</param>
         public EquipmentDurableService(IEquipmentDurableServiceRandomSource randomSource)
@@ -27,7 +29,7 @@ namespace Zilon.Core.Props
         /// <summary>Определяет, может ли экипировка быть отремонтирована.</summary>
         /// <param name="equipment">Целевая экипировка.</param>
         /// <returns>
-        ///     <c>true</c> если ремонт возможет; Иначе, <c>false</c> (не подлежит восстановлению, на утилизацию).
+        ///   <c>true</c> если ремонт возможет; Иначе, <c>false</c> (не подлежит восстановлению, на утилизацию).
         /// </returns>
         public bool CanBeRepaired(Equipment equipment)
         {
@@ -96,7 +98,7 @@ namespace Zilon.Core.Props
         {
             if (equipment.Durable.Value <= 0)
             {
-                IEquipmentModule equipmentCarrier = equipmentOwner.GetModule<IEquipmentModule>();
+                var equipmentCarrier = equipmentOwner.GetModule<IEquipmentModule>();
                 if (equipmentCarrier == null)
                 {
                     return;
@@ -105,7 +107,7 @@ namespace Zilon.Core.Props
                 int? slotIndex = null;
                 for (var i = 0; i < equipmentCarrier.Slots.Length; i++)
                 {
-                    Equipment prop = equipmentCarrier[i];
+                    var prop = equipmentCarrier[i];
                     if (prop == equipment)
                     {
                         slotIndex = i;

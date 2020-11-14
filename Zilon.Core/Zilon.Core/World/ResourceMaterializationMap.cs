@@ -1,4 +1,7 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.World
@@ -6,9 +9,9 @@ namespace Zilon.Core.World
     public sealed class ResourceMaterializationMap : IResourceMaterializationMap
     {
         private const float START_RESOURCE_SHARE = 0.10f;
-        private readonly IDice _dice;
 
         private readonly Dictionary<ISectorNode, IResourceDepositData> _map;
+        private readonly IDice _dice;
 
         public ResourceMaterializationMap(IDice dice)
         {
@@ -35,7 +38,7 @@ namespace Zilon.Core.World
 
             if (!_map.Any())
             {
-                IResourceDepositData data = CreateStartResourceData();
+                var data = CreateStartResourceData();
 
                 _map[sectorNode] = data;
 
@@ -43,7 +46,7 @@ namespace Zilon.Core.World
             }
             else
             {
-                IResourceDepositData data = CalcCurrentResouceData(sectorNode);
+                var data = CalcCurrentResouceData(sectorNode);
 
                 _map[sectorNode] = data;
 
@@ -54,10 +57,10 @@ namespace Zilon.Core.World
         private IResourceDepositData CalcCurrentResouceData(ISectorNode sectorNode)
         {
             var neighborNodes = sectorNode.Biome.GetNext(sectorNode);
-            ResourceDepositDataItem[] items = CalcAverageResourceByNeightbors(neighborNodes);
+            var items = CalcAverageResourceByNeightbors(neighborNodes);
             items = AddNewResourceIfNeed(items);
 
-            ResourceDepositData data = new ResourceDepositData(items);
+            var data = new ResourceDepositData(items);
             return data;
         }
 
@@ -68,13 +71,12 @@ namespace Zilon.Core.World
             if (!items.Any() || newRoll > 3)
             {
                 var itemsNew = new List<ResourceDepositDataItem>(items);
-                var availableResources = new List<SectorResourceType>
-                {
-                    SectorResourceType.CherryBrushes,
-                    SectorResourceType.Iron,
-                    SectorResourceType.Stones,
-                    SectorResourceType.WaterPuddles
-                };
+                var availableResources = new List<SectorResourceType> {
+                        SectorResourceType.CherryBrushes,
+                        SectorResourceType.Iron,
+                        SectorResourceType.Stones,
+                        SectorResourceType.WaterPuddles
+                    };
 
                 foreach (var res in availableResources)
                 {
@@ -106,7 +108,7 @@ namespace Zilon.Core.World
                     }
                     else
                     {
-                        dict[item.ResourceType] = new List<float> {item.Share};
+                        dict[item.ResourceType] = new List<float> { item.Share };
                     }
                 }
             }
@@ -144,14 +146,13 @@ namespace Zilon.Core.World
 
         private static IResourceDepositData CreateStartResourceData()
         {
-            ResourceDepositDataItem[] items = new[]
-            {
+            var items = new[] {
                 new ResourceDepositDataItem(SectorResourceType.Iron, START_RESOURCE_SHARE),
                 new ResourceDepositDataItem(SectorResourceType.Stones, START_RESOURCE_SHARE),
                 new ResourceDepositDataItem(SectorResourceType.WaterPuddles, START_RESOURCE_SHARE),
-                new ResourceDepositDataItem(SectorResourceType.CherryBrushes, START_RESOURCE_SHARE)
+                new ResourceDepositDataItem(SectorResourceType.CherryBrushes, START_RESOURCE_SHARE),
             };
-            ResourceDepositData data = new ResourceDepositData(items);
+            var data = new ResourceDepositData(items);
             return data;
         }
 

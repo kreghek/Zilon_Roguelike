@@ -1,4 +1,6 @@
-﻿using Zilon.Bot.Players.Strategies;
+﻿using System;
+
+using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
@@ -6,8 +8,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public sealed class MonsterBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext>
-        where TContext : class, ISectorTaskSourceContext
+    public sealed class MonsterBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext> where TContext : class, ISectorTaskSourceContext
     {
         private readonly LogicStateTreePatterns _logicStateTreePatterns;
 

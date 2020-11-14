@@ -3,20 +3,20 @@
 namespace Zilon.Core.Scoring
 {
     /// <summary>
-    ///     Сервис для логирования событий, связанных с персонажем игрока
+    /// Сервис для логирования событий, связанных с персонажем игрока
     /// </summary>
     public interface IPlayerEventLogService
     {
-        IPlayer Player { get; }
-
         /// <summary>
-        ///     Зафиксировать событие.
+        /// Зафиксировать событие.
         /// </summary>
         /// <param name="playerEvent"></param>
         void Log(IPlayerEvent playerEvent);
 
+        IPlayer Player { get; }
+
         /// <summary>
-        ///     Вернуть последнее зарегистрированние событие.
+        /// Вернуть последнее зарегистрированние событие.
         /// </summary>
         /// <returns></returns>
         IPlayerEvent GetPlayerEvent();

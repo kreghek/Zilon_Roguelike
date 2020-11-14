@@ -1,17 +1,21 @@
-﻿using Zilon.Core.MapGenerators;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.World
 {
     /// <summary>
-    ///     Интерфейс расширителя мира.
-    ///     Каждый раз, когда кто-нибудь доходит до края мира, мир будет расширяться.
+    /// Интерфейс расширителя мира.
+    /// Каждый раз, когда кто-нибудь доходит до края мира, мир будет расширяться.
     /// </summary>
     public interface IGlobeExpander
     {
         /// <summary>
-        ///     Расширение мира в указанной узл.
-        ///     В результате указанный узел будет материализован и иметь переходы в новые нематериализованные узлы.
+        /// Расширение мира в указанной узл.
+        /// В результате указанный узел будет материализован и иметь переходы в новые нематериализованные узлы.
         /// </summary>
         /// <param name="sectorNode"> Узел расширения. </param>
         Task ExpandAsync(ISectorNode sectorNode);
@@ -19,8 +23,8 @@ namespace Zilon.Core.World
 
     public class BiomeInitializer : IBiomeInitializer, IGlobeExpander
     {
-        private readonly IBiomeSchemeRoller _biomeSchemeRoller;
         private readonly ISectorGenerator _sectorGenerator;
+        private readonly IBiomeSchemeRoller _biomeSchemeRoller;
 
         public BiomeInitializer(ISectorGenerator sectorGenerator, IBiomeSchemeRoller biomeSchemeRoller)
         {
@@ -30,7 +34,7 @@ namespace Zilon.Core.World
 
         public async Task<IBiome> InitBiomeAsync(ILocationScheme locationScheme)
         {
-            Biome biom = new Biome(locationScheme);
+            var biom = new Biome(locationScheme);
 
             await CreateStartSectorAsync(biom).ConfigureAwait(false);
 
@@ -49,7 +53,7 @@ namespace Zilon.Core.World
                 throw new InvalidOperationException();
             }
 
-            IBiome biom = sectorNode.Biome;
+            var biom = sectorNode.Biome;
 
             // Важно генерировать соседние узлы до начала генерации сектора,
             // чтобы знать переходы из сектора.
@@ -61,20 +65,15 @@ namespace Zilon.Core.World
             sectorNode.MaterializeSector(sector);
         }
 
-        public Task ExpandAsync(ISectorNode sectorNode)
-        {
-            return MaterializeLevelAsync(sectorNode);
-        }
-
         private SectorNode RollAndBindBiome()
         {
-            ILocationScheme rolledLocationScheme = _biomeSchemeRoller.Roll();
+            var rolledLocationScheme = _biomeSchemeRoller.Roll();
 
-            Biome biome = new Biome(rolledLocationScheme);
+            var biome = new Biome(rolledLocationScheme);
 
             var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
 
-            SectorNode newBiomeSector = new SectorNode(biome, startSectorScheme);
+            var newBiomeSector = new SectorNode(biome, startSectorScheme);
 
             return newBiomeSector;
         }
@@ -87,7 +86,7 @@ namespace Zilon.Core.World
 
         private async Task CreateAndAddSectorByScheme(IBiome biome, ISectorSubScheme startSectorScheme)
         {
-            SectorNode sectorNode = new SectorNode(biome, startSectorScheme);
+            var sectorNode = new SectorNode(biome, startSectorScheme);
 
             // Важно генерировать соседние узлы до начала генерации сектора,
             // чтобы знать переходы из сектора.
@@ -104,12 +103,11 @@ namespace Zilon.Core.World
         private void CreateNextSectorNodes(ISectorNode sectorNode, IBiome biom)
         {
             var nextSectorLevels = biom.LocationScheme.SectorLevels
-                .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid)
-                    .Contains(x.Sid));
+                    .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid).Contains(x.Sid));
 
             foreach (var nextSectorLevelScheme in nextSectorLevels)
             {
-                SectorNode nextSectorNode = new SectorNode(biom, nextSectorLevelScheme);
+                var nextSectorNode = new SectorNode(biom, nextSectorLevelScheme);
 
                 biom.AddNode(nextSectorNode);
 
@@ -120,16 +118,21 @@ namespace Zilon.Core.World
             // Генерируем новый биом, стартовый узел и организуем связь с текущим узлом.
             if (sectorNode.SectorScheme.TransSectorSids.Any(x => x.SectorLevelSid is null))
             {
-                SectorNode nextSectorNode = RollAndBindBiome();
+                var nextSectorNode = RollAndBindBiome();
 
                 // Организуем связь между двумя биомами.
 
                 biom.AddEdge(sectorNode, nextSectorNode);
 
-                IBiome nextBiom = nextSectorNode.Biome;
+                var nextBiom = nextSectorNode.Biome;
 
                 nextBiom.AddEdge(sectorNode, nextSectorNode);
             }
+        }
+
+        public Task ExpandAsync(ISectorNode sectorNode)
+        {
+            return MaterializeLevelAsync(sectorNode);
         }
     }
 }

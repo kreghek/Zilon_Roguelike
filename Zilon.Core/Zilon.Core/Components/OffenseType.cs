@@ -1,14 +1,19 @@
-﻿namespace Zilon.Core.Components
+﻿using JetBrains.Annotations;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace Zilon.Core.Components
 {
     [PublicAPI]
     [JsonConverter(typeof(StringEnumConverter))]
     public enum OffenseType
     {
         /// <summary>
-        ///     Неопределённое.
+        /// Неопределённое.
         /// </summary>
         /// <remarks>
-        ///     Если выбрано, то, скорее всего, ошибка.
+        /// Если выбрано, то, скорее всего, ошибка.
         /// </remarks>
         Undefined,
 
@@ -20,7 +25,7 @@
         Rapid = 60,
 
         /// <summary>
-        ///     Божественный. Бонусы других классов защиты не дают явного бонуса. Кроме божественной защиты.
+        /// Божественный. Бонусы других классов защиты не дают явного бонуса. Кроме божественной защиты.
         /// </summary>
         Divine = 100
     }

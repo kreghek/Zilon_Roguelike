@@ -1,4 +1,11 @@
 ﻿using System.Collections.Generic;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
@@ -15,8 +22,8 @@ namespace Zilon.Core.Tests.Tactics
         private Mock<ISurvivalModule> _survivalDataMock;
 
         /// <summary>
-        ///     Тест проверяет, что при обновлении состояния сектора у актёра игрока в сектора падают
-        ///     значения характеристик выживания.
+        /// Тест проверяет, что при обновлении состояния сектора у актёра игрока в сектора падают
+        /// значения характеристик выживания.
         /// </summary>
         [Test]
         public void Update_PlayerActorWithSurvival_SurvivalStatsDecremented()
@@ -25,7 +32,7 @@ namespace Zilon.Core.Tests.Tactics
             var mapMock = new Mock<ISectorMap>();
             var map = mapMock.Object;
 
-            List<IActor> innerActorList = new List<IActor>();
+            var innerActorList = new List<IActor>();
             var actorManagerMock = new Mock<IActorManager>();
             actorManagerMock.SetupGet(x => x.Items).Returns(innerActorList);
             var actorManager = actorManagerMock.Object;
@@ -42,7 +49,7 @@ namespace Zilon.Core.Tests.Tactics
             var equipmentDurableServiceMock = new Mock<IEquipmentDurableService>();
             var equipmentDurableService = equipmentDurableServiceMock.Object;
 
-            Sector sector = new Sector(map,
+            var sector = new Sector(map,
                 actorManager,
                 propContainerManager,
                 dropResolver,
@@ -60,7 +67,7 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         /// <summary>
-        ///     Тест проверяет, что если для сектора не заданы узлы выхода, то событие выхода не срабатывает.
+        /// Тест проверяет, что если для сектора не заданы узлы выхода, то событие выхода не срабатывает.
         /// </summary>
         [Test]
         public void Update_NoExits_EventNotRaised()
@@ -69,7 +76,7 @@ namespace Zilon.Core.Tests.Tactics
             var mapMock = new Mock<ISectorMap>();
             var map = mapMock.Object;
 
-            List<IActor> innerActorList = new List<IActor>();
+            var innerActorList = new List<IActor>();
             var actorManagerMock = new Mock<IActorManager>();
             actorManagerMock.SetupGet(x => x.Items).Returns(innerActorList);
             var actorManager = actorManagerMock.Object;
@@ -86,7 +93,7 @@ namespace Zilon.Core.Tests.Tactics
             var equipmentDurableServiceMock = new Mock<IEquipmentDurableService>();
             var equipmentDurableService = equipmentDurableServiceMock.Object;
 
-            Sector sector = new Sector(map,
+            var sector = new Sector(map,
                 actorManager,
                 propContainerManager,
                 dropResolver,
@@ -113,13 +120,18 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Person).Returns(person);
 
             _survivalDataMock = new Mock<ISurvivalModule>();
-            SurvivalStat[] survivalStats = {new SurvivalStat(0, -10, 10) {Type = SurvivalStatType.Satiety, Rate = 1}};
+            var survivalStats = new[] {
+                new SurvivalStat(0,-10,10){
+                    Type = SurvivalStatType.Satiety,
+                    Rate = 1
+                }
+            };
             _survivalDataMock.Setup(x => x.Stats).Returns(survivalStats);
             var survivalData = _survivalDataMock.Object;
             personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalData);
             personMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule)))).Returns(true);
 
-            EffectsModule effectCollection = new EffectsModule();
+            var effectCollection = new EffectsModule();
             personMock.Setup(x => x.GetModule<IEffectsModule>(It.IsAny<string>())).Returns(effectCollection);
 
             return actorMock;

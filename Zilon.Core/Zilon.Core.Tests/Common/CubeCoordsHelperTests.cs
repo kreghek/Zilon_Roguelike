@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+
+using FluentAssertions;
+
+using NUnit.Framework;
+
 using Zilon.Core.Common;
 using Zilon.Core.Tests.Common.TestCases;
 
@@ -10,7 +14,7 @@ namespace Zilon.Core.Tests.Common
     public class CubeCoordsHelperTests
     {
         /// <summary>
-        ///     Тест проверяет, что при произвольных входных данных строится непрерывная линия.
+        /// Тест проверяет, что при произвольных входных данных строится непрерывная линия.
         /// </summary>
         [Test]
         [TestCaseSource(typeof(CubeCoordsHelperTestCases), nameof(CubeCoordsHelperTestCases.TestCases))]
@@ -18,32 +22,32 @@ namespace Zilon.Core.Tests.Common
         {
             // ARRANGE
 
-            CubeCoords startCubeCoords = HexHelper.ConvertToCube(sOffsetX, sOffsetY);
-            CubeCoords finishCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
+            var startCubeCoords = HexHelper.ConvertToCube(sOffsetX, sOffsetY);
+            var finishCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
 
             // ACT
-            CubeCoords[] line = CubeCoordsHelper.CubeDrawLine(startCubeCoords, finishCubeCoords);
+            var line = CubeCoordsHelper.CubeDrawLine(startCubeCoords, finishCubeCoords);
 
             // ASSERT
-            CubeCoords[] neibourOffsets = HexHelper.GetOffsetClockwise();
+            var neibourOffsets = HexHelper.GetOffsetClockwise();
 
-            foreach (CubeCoords coord in line)
+            foreach (var coord in line)
             {
-                IEnumerable<CubeCoords> sameCoords = line.Where(x => x == coord);
+                var sameCoords = line.Where(x => x == coord);
                 sameCoords.Count().Should().Be(1);
 
                 if (line.Count() > 1)
                 {
                     // Проверяем, что у каждой точки линии есть соседи,
                     // т.е. нет изолированных разорванных точк.
-                    bool hasNeighbor = false;
+                    var hasNeighbor = false;
 
-                    foreach (CubeCoords neibourOffset in neibourOffsets)
+                    foreach (var neibourOffset in neibourOffsets)
                     {
-                        CubeCoords neighborCoord = coord + neibourOffset;
-                        IEnumerable<CubeCoords> foundCoords = line.Where(x => x == neighborCoord);
+                        var neighborCoord = coord + neibourOffset;
+                        var foundCoords = line.Where(x => x == neighborCoord);
 
-                        bool hasNeighborInThisDirection = foundCoords.Any();
+                        var hasNeighborInThisDirection = foundCoords.Any();
 
                         if (hasNeighborInThisDirection)
                         {
@@ -57,7 +61,7 @@ namespace Zilon.Core.Tests.Common
         }
 
         /// <summary>
-        ///     Тест проверяет, что нет различий, с какой стороны строить линию. От начала до конца или наоборот.
+        /// Тест проверяет, что нет различий, с какой стороны строить линию. От начала до конца или наоборот.
         /// </summary>
         [Test]
         [TestCaseSource(typeof(CubeCoordsHelperTestCases), nameof(CubeCoordsHelperTestCases.TestCases))]
@@ -65,18 +69,18 @@ namespace Zilon.Core.Tests.Common
         {
             // ARRANGE
 
-            CubeCoords startCubeCoords = HexHelper.ConvertToCube(sOffsetX, sOffsetY);
-            CubeCoords finishCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
+            var startCubeCoords = HexHelper.ConvertToCube(sOffsetX, sOffsetY);
+            var finishCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
 
             // ACT
-            CubeCoords[] line = CubeCoordsHelper.CubeDrawLine(startCubeCoords, finishCubeCoords);
-            CubeCoords[] reverseLine = CubeCoordsHelper.CubeDrawLine(finishCubeCoords, startCubeCoords);
+            var line = CubeCoordsHelper.CubeDrawLine(startCubeCoords, finishCubeCoords);
+            var reverseLine = CubeCoordsHelper.CubeDrawLine(finishCubeCoords, startCubeCoords);
 
             // ASSERT
             for (int i = 0; i < line.Length; i++)
             {
-                CubeCoords linePoint = line[i];
-                CubeCoords reversePoint = reverseLine[reverseLine.Length - i - 1];
+                var linePoint = line[i];
+                var reversePoint = reverseLine[reverseLine.Length - i - 1];
 
                 reversePoint.Should().Be(linePoint);
             }

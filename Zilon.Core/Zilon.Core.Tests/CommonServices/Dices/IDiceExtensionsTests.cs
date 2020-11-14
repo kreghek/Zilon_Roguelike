@@ -1,4 +1,10 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tests.CommonServices.Dices
 {
@@ -7,7 +13,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
     public class DiceExtensionsTests
     {
         /// <summary>
-        ///     Тест проверяет, что при минимальном броске будет минимальное значение диапазона.
+        ///  Тест проверяет, что при минимальном броске будет минимальное значение диапазона.
         /// </summary>
         [Test]
         public void Roll_1to3_Returns1()
@@ -21,8 +27,10 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             var dice = diceMock.Object;
 
 
+
             // ACT
             var factRoll = dice.Roll(1, 3);
+
 
 
             // ASSERT
@@ -30,7 +38,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
         }
 
         /// <summary>
-        ///     Тест проверяет, что при максимальном броске будет максимальное значение диапазона.
+        ///  Тест проверяет, что при максимальном броске будет максимальное значение диапазона.
         /// </summary>
         [Test]
         public void Roll_1to3_Returns3()
@@ -45,8 +53,10 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             var dice = diceMock.Object;
 
 
+
             // ACT
             var factRoll = dice.Roll(1, 3);
+
 
 
             // ASSERT
@@ -54,7 +64,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
         }
 
         /// <summary>
-        ///     Тест проверяет, что при максимальном броске будет максимальное значение диапазона.
+        ///  Тест проверяет, что при максимальном броске будет максимальное значение диапазона.
         /// </summary>
         [Test]
         public void Roll_5to10_Returns10()
@@ -68,8 +78,10 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             var dice = diceMock.Object;
 
 
+
             // ACT
             var factRoll = dice.Roll(5, 10);
+
 
 
             // ASSERT
@@ -77,7 +89,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
         }
 
         /// <summary>
-        ///     Тест проверяет, что при одинаковых мин и макс корректно возвращается мин.
+        ///  Тест проверяет, что при одинаковых мин и макс корректно возвращается мин.
         /// </summary>
         [Test]
         public void Roll_5to5_Returns5()
@@ -91,8 +103,10 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             var dice = diceMock.Object;
 
 
+
             // ACT
             var factRoll = dice.Roll(5, 5);
+
 
 
             // ASSERT

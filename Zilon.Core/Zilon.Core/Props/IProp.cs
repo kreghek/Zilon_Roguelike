@@ -3,12 +3,12 @@
 namespace Zilon.Core.Props
 {
     /// <summary>
-    ///     Интерфейс предмета.
+    /// Интерфейс предмета.
     /// </summary>
     public interface IProp
     {
         /// <summary>
-        ///     Схема предмета.
+        /// Схема предмета.
         /// </summary>
         IPropScheme Scheme { get; }
     }

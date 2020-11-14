@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using System;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     public sealed class Intention<TActorTask> : IIntention where TActorTask : IActorTask
     {

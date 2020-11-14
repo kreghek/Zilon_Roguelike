@@ -4,7 +4,7 @@ using Zilon.Core.Tactics.Behaviour;
 namespace Zilon.Bot.Players.Triggers
 {
     /// <summary>
-    ///     Триггер, определяющий, что текущее состояние дошло до логического завершения.
+    /// Триггер, определяющий, что текущее состояние дошло до логического завершения.
     /// </summary>
     public sealed class LogicOverTrigger : ILogicStateTrigger
     {
@@ -13,8 +13,7 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния.
         }
 
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
-            ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
             if (currentState is null)
             {

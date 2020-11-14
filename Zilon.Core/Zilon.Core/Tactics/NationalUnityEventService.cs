@@ -1,4 +1,7 @@
-﻿using Zilon.Core.CommonServices;
+﻿using System;
+using System.Linq;
+
+using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
@@ -9,9 +12,9 @@ namespace Zilon.Core.Tactics
 {
     public class NationalUnityEventService
     {
-        private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
-        private readonly IDice _dice;
         private readonly IPersonFactory _personFactory;
+        private readonly IDice _dice;
+        private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
         private readonly IUserTimeProvider _userTimeProvider;
 
         public NationalUnityEventService(
@@ -53,11 +56,11 @@ namespace Zilon.Core.Tactics
                 var count = _dice.Roll(2, 5);
                 for (var i = 0; i < count; i++)
                 {
-                    IPerson person = _personFactory.Create("human-person", Fractions.InterventionistFraction);
+                    var person = _personFactory.Create("human-person", Fractions.InterventionistFraction);
                     var nodes = sector.Map.Nodes.ToArray();
                     var startNode = _dice.RollFromList(nodes);
 
-                    Actor actor = new Actor(person, _actorTaskSource, startNode);
+                    var actor = new Actor(person, _actorTaskSource, startNode);
                     sector.ActorManager.Add(actor);
                 }
             }
@@ -65,17 +68,19 @@ namespace Zilon.Core.Tactics
             {
                 var faction = _dice.RollFromList(new[]
                 {
-                    Fractions.InterventionistFraction, Fractions.MilitiaFraction, Fractions.TroublemakerFraction
+                    Fractions.InterventionistFraction,
+                    Fractions.MilitiaFraction,
+                    Fractions.TroublemakerFraction
                 });
 
                 var count = _dice.Roll(2, 5);
                 for (var i = 0; i < count; i++)
                 {
-                    IPerson person = _personFactory.Create("human-person", faction);
+                    var person = _personFactory.Create("human-person", faction);
                     var nodes = sector.Map.Nodes.ToArray();
                     var startNode = _dice.RollFromList(nodes);
 
-                    Actor actor = new Actor(person, _actorTaskSource, startNode);
+                    var actor = new Actor(person, _actorTaskSource, startNode);
                     sector.ActorManager.Add(actor);
                 }
             }
@@ -102,8 +107,7 @@ namespace Zilon.Core.Tactics
             const double EVENT_BONUS_MIN_PROBABILITY = 50;
             const double EVENT_BONUS_PROBABILITY_DIFF = EVENT_BONUS_MIN_PROBABILITY - EVENT_BONUS_MAX_PROBABILITY;
             var dateDistanceNormalized = Math.Min(dateDistance, EVENT_BONUS_DURATION);
-            var eventRaiseRollValue = EVENT_BONUS_MAX_PROBABILITY +
-                                      ((EVENT_BONUS_PROBABILITY_DIFF * dateDistanceNormalized) / EVENT_BONUS_DURATION);
+            var eventRaiseRollValue = EVENT_BONUS_MAX_PROBABILITY + EVENT_BONUS_PROBABILITY_DIFF * dateDistanceNormalized / EVENT_BONUS_DURATION;
 
             return _dice.Roll(100) > eventRaiseRollValue;
         }

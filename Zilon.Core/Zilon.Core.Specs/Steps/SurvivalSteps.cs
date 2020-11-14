@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
+using FluentAssertions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using TechTalk.SpecFlow;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics;
@@ -26,7 +33,7 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"В инвентаре у актёра есть еда: (.*) количество: (.*)")]
         public void GivenВИнвентареУАктёраЕстьЕдаСыр(string propSid, int count)
         {
-            IActor actor = Context.GetActiveActor();
+            var actor = Context.GetActiveActor();
             Context.AddResourceToActor(propSid, count, actor);
         }
 
@@ -35,7 +42,7 @@ namespace Zilon.Core.Specs.Steps
         public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid,
             string provisionStat)
         {
-            IActor actor = Context.GetActiveActor();
+            var actor = Context.GetActiveActor();
             PersonRuleDirection direction;
             ConsumeCommonRuleType consumeRuleType;
             ParseProvisionStat(provisionStat, out direction, out consumeRuleType);
@@ -45,8 +52,7 @@ namespace Zilon.Core.Specs.Steps
             FeatureContextBase.AddResourceToActor(propScheme, 1, actor);
         }
 
-        private static void ParseProvisionStat(string provisionStat, out PersonRuleDirection direction,
-            out ConsumeCommonRuleType consumeRuleType)
+        private static void ParseProvisionStat(string provisionStat, out PersonRuleDirection direction, out ConsumeCommonRuleType consumeRuleType)
         {
             direction = PersonRuleDirection.Positive;
             switch (provisionStat)
@@ -83,8 +89,7 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private static TestPropScheme CreateTestPropScheme(string propSid, PersonRuleDirection direction,
-            ConsumeCommonRuleType consumeRuleType)
+        private static TestPropScheme CreateTestPropScheme(string propSid, PersonRuleDirection direction, ConsumeCommonRuleType consumeRuleType)
         {
             return new TestPropScheme
             {
@@ -92,8 +97,7 @@ namespace Zilon.Core.Specs.Steps
                 Use = new TestPropUseSubScheme
                 {
                     Consumable = true,
-                    CommonRules = new[]
-                    {
+                    CommonRules = new[] {
                         new ConsumeCommonRule(consumeRuleType, PersonRuleLevel.Lesser, direction)
                     }
                 }
@@ -103,8 +107,8 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Актёр значение (.*) равное (.*)")]
         public void GivenАктёрЗначениеСытостьРавное(string statName, int statValue)
         {
-            IActor actor = Context.GetActiveActor();
-            ISurvivalModule survival = actor.Person.GetModule<ISurvivalModule>();
+            var actor = Context.GetActiveActor();
+            var survival = actor.Person.GetModule<ISurvivalModule>();
 
             SurvivalStatType statType;
             switch (statName)
@@ -127,27 +131,29 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Актёр имеет эффект (.*)")]
         public void GivenАктёрИмеетЭффектStartEffect(string startEffect)
         {
-            IActor actor = Context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             GetEffectStatAndLevelByName(startEffect,
                 out SurvivalStatType statType,
                 out SurvivalStatHazardLevel effectLevel);
 
             // Use single to control effect. If effect is incorrect there will be exception.
-            SurvivalStat targetStat =
-                actor.Person.GetModuleSafe<ISurvivalModule>()?.Stats?.Single(x => x.Type == statType);
-            SurvivalStatKeySegment keySegment = targetStat.KeySegments.Single(x => x.Level == effectLevel);
+            var targetStat = actor.Person.GetModuleSafe<ISurvivalModule>()?.Stats?.Single(x => x.Type == statType);
+            var keySegment = targetStat.KeySegments.Single(x => x.Level == effectLevel);
 
-            float statValue = keySegment.End;
+            var statValue = keySegment.End;
             targetStat.SetShare(statValue);
         }
 
         [When(@"Я перемещаю персонажа на (.*) клетку")]
         public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)
         {
-            OffsetCoords[] targetCoords = {new OffsetCoords(1, 0), new OffsetCoords(0, 0)};
+            var targetCoords = new[] {
+                new OffsetCoords(1, 0),
+                new OffsetCoords(0, 0)
+            };
 
-            for (int i = 0; i < moveCount; i++)
+            for (var i = 0; i < moveCount; i++)
             {
                 Context.MoveOnceActiveActor(targetCoords[i % 2]);
             }
@@ -162,7 +168,7 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Актёр использует предмет (.*) на себя (\d+) раз")]
         public async Task WhenАctorUsePropNTimesAsync(string propSid, int times)
         {
-            for (int i = 0; i < times; i++)
+            for (var i = 0; i < times; i++)
             {
                 Context.UsePropByActiveActor(propSid);
                 await WaitForIteration(1).ConfigureAwait(false);
@@ -171,12 +177,11 @@ namespace Zilon.Core.Specs.Steps
 
         public async Task WaitForIteration(int timeUnitCount)
         {
-            IGlobe globe = Context.Globe;
-            var humatTaskSource = Context.ServiceProvider
-                .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var globe = Context.Globe;
+            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
-            int counter = timeUnitCount;
+            var counter = timeUnitCount;
 
             var survivalModule = playerState.ActiveActor?.Actor.Person?.GetModuleSafe<ISurvivalModule>();
 
@@ -185,7 +190,7 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (counter > 0)
                 {
-                    for (int i = 0; i < GlobeMetrics.OneIterationLength; i++)
+                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
                         if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
                         {
@@ -203,7 +208,7 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (counter > 0)
                 {
-                    for (int i = 0; i < GlobeMetrics.OneIterationLength; i++)
+                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
                         await globe.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
                     }
@@ -216,7 +221,7 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Значение (сытость|вода) уменьшилось на (.*) и стало (.*)")]
         public void ThenЗначениеStatУменьшилосьНаRate(string stat, int hungerRate, int expectedValue)
         {
-            IActor actor = Context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             switch (stat)
             {
@@ -234,10 +239,9 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [Then(@"Значение (сытость|вода) повысилось на (.*) и уменьшилось на (.*) за игровой цикл и стало (.*)")]
-        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate,
-            int expectedValue)
+        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate, int expectedValue)
         {
-            IActor actor = Context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             switch (stat)
             {
@@ -257,7 +261,7 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Значение (сытость|вода) стало (.*)")]
         public void ThenЗначениеStatСтало(string stat, int expectedValue)
         {
-            IActor actor = Context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             int? survivalStatValue;
             switch (stat)
@@ -280,7 +284,7 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Актёр под эффектом (.*)")]
         public void ThenАктёрПодЭффектом(string effectName)
         {
-            IActor actor = Context.GetActiveActor();
+            var actor = Context.GetActiveActor();
 
             GetEffectStatAndLevelByName(effectName,
                 out SurvivalStatType stat,
@@ -302,8 +306,7 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat,
-            out SurvivalStatHazardLevel level)
+        private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat, out SurvivalStatHazardLevel level)
         {
             switch (effectName)
             {
@@ -379,7 +382,7 @@ namespace Zilon.Core.Specs.Steps
 
         private static int? GetSurvivalValue(IActor actor, SurvivalStatType type)
         {
-            SurvivalStat stat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == type);
+            var stat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == type);
             return stat?.Value;
         }
     }

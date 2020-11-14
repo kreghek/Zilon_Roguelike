@@ -1,11 +1,17 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Common;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Props
 {
     /// <inheritdoc />
     /// <summary>
-    ///     Экипировка персонажа.
+    /// Экипировка персонажа.
     /// </summary>
     public class Equipment : PropBase
     {
@@ -15,13 +21,13 @@ namespace Zilon.Core.Props
 
         /// <inheritdoc />
         /// <summary>
-        ///     Конструктор.
+        /// Конструктор.
         /// </summary>
         /// <param name="propScheme"> Схема экипировки. </param>
         /// <param name="acts"> Действия, которые может дать эта экипировка. </param>
         /// <exception cref="T:System.ArgumentException">
-        ///     Выбрасывает, если на вход подана схема,
-        ///     не содержащая характеристики экипировки <see cref="P:Zilon.Core.Schemes.PropScheme.Equip" />.
+        /// Выбрасывает, если на вход подана схема,
+        /// не содержащая характеристики экипировки <see cref="P:Zilon.Core.Schemes.PropScheme.Equip" />.
         /// </exception>
         public Equipment(IPropScheme propScheme,
             IEnumerable<ITacticalActScheme> acts) :

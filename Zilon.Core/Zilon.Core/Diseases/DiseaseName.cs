@@ -1,9 +1,12 @@
-﻿using Zilon.Core.Localization;
+﻿using System;
+using System.Collections.Generic;
+
+using Zilon.Core.Localization;
 
 namespace Zilon.Core.Diseases
 {
     /// <summary>
-    ///     Структура для хранения имёни болезни.
+    /// Структура для хранения имёни болезни.
     /// </summary>
     public struct DiseaseName : IEquatable<DiseaseName>
     {
@@ -20,22 +23,22 @@ namespace Zilon.Core.Diseases
         }
 
         /// <summary>
-        ///     Основное наименование. Обяхательно есть, не null.
+        /// Основное наименование. Обяхательно есть, не null.
         /// </summary>
         public ILocalizedString Primary { get; }
 
         /// <summary>
-        ///     Префикс основного наименования. Необязательный. Слитно ставится перед основным наименованием.
+        /// Префикс основного наименования. Необязательный. Слитно ставится перед основным наименованием.
         /// </summary>
         public ILocalizedString PrimaryPrefix { get; }
 
         /// <summary>
-        ///     Вторичное имя болезни. Необязательное. Ставится перед основным наименованием с префиксом.
+        /// Вторичное имя болезни. Необязательное. Ставится перед основным наименованием с префиксом.
         /// </summary>
         public ILocalizedString Secondary { get; set; }
 
         /// <summary>
-        ///     Субъект болезни. Необязательный. Ставится после основного наименования.
+        /// Субъект болезни. Необязательный. Ставится после основного наименования.
         /// </summary>
         public ILocalizedString Subject { get; }
 
@@ -44,15 +47,14 @@ namespace Zilon.Core.Diseases
             return obj is DiseaseName name && Equals(name);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules",
-            "SA1407:ArithmeticExpressionsMustDeclarePrecedence",
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:ArithmeticExpressionsMustDeclarePrecedence",
             Justification = "Автогенерируемый код расчёта хэша. Так принято.")]
         public override int GetHashCode()
         {
             var hashCode = -2010629649;
-            hashCode = (hashCode * -1521134295) + EqualityComparer<ILocalizedString>.Default.GetHashCode(Primary);
-            hashCode = (hashCode * -1521134295) + EqualityComparer<ILocalizedString>.Default.GetHashCode(PrimaryPrefix);
-            hashCode = (hashCode * -1521134295) + EqualityComparer<ILocalizedString>.Default.GetHashCode(Secondary);
+            hashCode = hashCode * -1521134295 + EqualityComparer<ILocalizedString>.Default.GetHashCode(Primary);
+            hashCode = hashCode * -1521134295 + EqualityComparer<ILocalizedString>.Default.GetHashCode(PrimaryPrefix);
+            hashCode = hashCode * -1521134295 + EqualityComparer<ILocalizedString>.Default.GetHashCode(Secondary);
             return hashCode;
         }
 

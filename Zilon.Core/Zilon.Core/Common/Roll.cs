@@ -1,10 +1,15 @@
-﻿namespace Zilon.Core.Common
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Common
 {
     public class Roll
     {
         [ExcludeFromCodeCoverage]
         public Roll(int dice, int count) : this(dice, count, null)
         {
+
         }
 
         [JsonConstructor]

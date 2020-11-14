@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Persons.Survival;
+﻿
+using NUnit.Framework;
+
+using Zilon.Core.Persons.Survival;
 using Zilon.Core.Tests.Persons.TestCases;
 
 namespace Zilon.Core.Tests.Persons
@@ -8,15 +11,16 @@ namespace Zilon.Core.Tests.Persons
     public class SurvivalStatTests
     {
         /// <summary>
-        ///     Тест проверяет, что после добавление/вычитания целого значения
-        ///     получается ожидаемый результат.
+        /// Тест проверяет, что после добавление/вычитания целого значения
+        /// получается ожидаемый результат.
         /// </summary>
         [Test]
         [TestCaseSource(typeof(SurvivalStatTestCasesSource), nameof(SurvivalStatTestCasesSource.ValueTestCases))]
         public int Value_IncrementDecrementValue_ExpectedResults(int startValue, int min, int max, int diffValue)
         {
             // ARRANGE
-            SurvivalStat survivalStat = new SurvivalStat(startValue, min, max);
+            var survivalStat = new SurvivalStat(startValue, min, max);
+
 
 
             // ACT
@@ -28,7 +32,7 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
-        ///     Тест проверяет, что после изменения диапазона текущее значение изменяется пропорционально.
+        /// Тест проверяет, что после изменения диапазона текущее значение изменяется пропорционально.
         /// </summary>
         [Test]
         [TestCaseSource(typeof(SurvivalStatTestCasesSource), nameof(SurvivalStatTestCasesSource.RangeTestCases))]
@@ -36,7 +40,8 @@ namespace Zilon.Core.Tests.Persons
             int newMin, int newMax)
         {
             // ARRANGE
-            SurvivalStat survivalStat = new SurvivalStat(startValue, min, max);
+            var survivalStat = new SurvivalStat(startValue, min, max);
+
 
 
             // ACT
@@ -46,5 +51,6 @@ namespace Zilon.Core.Tests.Persons
             // ASSERT
             return survivalStat.Value;
         }
+
     }
 }

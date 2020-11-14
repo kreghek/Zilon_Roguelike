@@ -1,18 +1,23 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+using System.Collections.Generic;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
-    ///     Вспомогательный класс для работы с кубическими координатами.
+    /// Вспомогательный класс для работы с кубическими координатами.
     /// </summary>
     /// <remarks>
-    ///     Алгоритмы реализованы на основе статей:
-    ///     https://habr.com/post/319644/
-    ///     https://www.redblobgames.com/grids/hexagons/
+    /// Алгоритмы реализованы на основе статей:
+    /// https://habr.com/post/319644/
+    /// https://www.redblobgames.com/grids/hexagons/
     /// </remarks>
     public static class CubeCoordsHelper
     {
         private static float Lerp(int a, int b, float t)
         {
-            return a + ((b - a) * t);
+            return a + (b - a) * t;
         }
 
         private static void LerpCube(CubeCoords a, CubeCoords b, float t, out float x, out float y, out float z)
@@ -45,19 +50,18 @@
                 rz = -rx - ry;
             }
 
-            CubeCoords cube = new CubeCoords((int)rx, (int)ry, (int)rz);
+            var cube = new CubeCoords((int)rx, (int)ry, (int)rz);
 
             return cube;
         }
 
         /// <summary>
-        ///     Рисует линию в кубических координатах.
+        /// Рисует линию в кубических координатах.
         /// </summary>
         /// <param name="a"> Начало линии. </param>
         /// <param name="b"> Конец линии. </param>
         /// <returns> Набор координат, составляющих линию. </returns>
-        [NotNull]
-        [ItemNotNull]
+        [NotNull, ItemNotNull]
         public static CubeCoords[] CubeDrawLine([NotNull] CubeCoords a, [NotNull] CubeCoords b)
         {
             var n = a.DistanceTo(b);
@@ -75,7 +79,7 @@
                 // t принимает значения 0..1.
                 // Мы делим 1 на количество шагов n.
                 // И  берём i-тый шаг.
-                var t = (1.0f / n) * i;
+                var t = 1.0f / n * i;
 
                 AddPointToList(a, b, list, t);
             }
@@ -84,7 +88,7 @@
         }
 
         /// <summary>
-        ///     Рассчитывает интерполяцией и добавляет в общий список ячейку шестигранного поля.
+        /// Рассчитывает интерполяцией и добавляет в общий список ячейку шестигранного поля.
         /// </summary>
         /// <param name="a">Начальное значение. В t=0.0.</param>
         /// <param name="b">Конечное значение. В t=1.0.</param>
@@ -93,7 +97,7 @@
         private static void AddPointToList(CubeCoords a, CubeCoords b, List<CubeCoords> list, float t)
         {
             LerpCube(a, b, t, out float cubeX, out float cubeY, out float cubeZ);
-            CubeCoords point = RoundCube(cubeX, cubeY, cubeZ);
+            var point = RoundCube(cubeX, cubeY, cubeZ);
             list.Add(point);
         }
     }

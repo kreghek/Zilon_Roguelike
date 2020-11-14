@@ -1,11 +1,16 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
-    ///     Базовый класс для всех задач актёра.
+    /// Базовый класс для всех задач актёра.
     /// </summary>
     /// <remarks>
-    ///     ОБЯЗАТЕЛЬНО все задачи актёров наследовать от этого класса.
-    ///     Во избежание ситуации, когда можно забыть инициировать актёра.
+    /// ОБЯЗАТЕЛЬНО все задачи актёров наследовать от этого класса.
+    /// Во избежание ситуации, когда можно забыть инициировать актёра.
     /// </remarks>
     public abstract class ActorTaskBase : IActorTask
     {
@@ -18,11 +23,11 @@
 
         protected IActor Actor { get; }
 
-        protected IActorTaskContext Context { get; }
-
         public virtual bool IsComplete { get; protected set; }
 
-        public virtual int Cost => 1000;
+        public virtual int Cost { get => 1000; }
+
+        protected IActorTaskContext Context { get; }
 
         public abstract void Execute();
     }

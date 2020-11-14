@@ -1,19 +1,21 @@
-﻿using Zilon.Core.Localization;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Localization;
 
 namespace Zilon.Core.Schemes
 {
     /// <summary>
-    ///     Локализованная на разные языки строка.
+    /// Локализованная на разные языки строка.
     /// </summary>
     public sealed class LocalizedStringSubScheme : ILocalizedString
     {
         /// <summary>
-        ///     Английский вариант.
+        /// Английский вариант.
         /// </summary>
         public string En { get; set; }
 
         /// <summary>
-        ///     Русский вариант.
+        /// Русский вариант.
         /// </summary>
         public string Ru { get; set; }
 

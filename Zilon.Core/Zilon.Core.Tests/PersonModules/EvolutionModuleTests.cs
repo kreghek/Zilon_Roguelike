@@ -1,6 +1,10 @@
-﻿using System;
+﻿using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
-using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.PersonModules
@@ -10,7 +14,7 @@ namespace Zilon.Core.Tests.PersonModules
     public class EvolutionModuleTests
     {
         /// <summary>
-        ///     Тест проверяет, что при получении следующего уровня перка, текущий уровень не сбрасывается.
+        /// Тест проверяет, что при получении следующего уровня перка, текущий уровень не сбрасывается.
         /// </summary>
         [Test]
         public void PerkLevelUpTest()
@@ -18,21 +22,21 @@ namespace Zilon.Core.Tests.PersonModules
             // ARRANGE
             var schemeServiceMock = new Mock<ISchemeService>();
             schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>())
-                .Returns(new IPerkScheme[]
-                {
-                    new PerkScheme
-                    {
-                        Levels = new[]
-                        {
-                            new PerkLevelSubScheme {MaxValue = 2, Jobs = Array.Empty<IJobSubScheme>()}
+                .Returns(new IPerkScheme[] {
+                    new PerkScheme{
+                        Levels = new[]{
+                            new PerkLevelSubScheme{
+                                MaxValue = 2,
+                                Jobs = System.Array.Empty<IJobSubScheme>()
+                            }
                         }
                     }
                 });
             var schemeService = schemeServiceMock.Object;
 
-            EvolutionModule evolutionData = new EvolutionModule(schemeService);
+            var evolutionData = new EvolutionModule(schemeService);
 
-            IPerk perk = evolutionData.Perks[0];
+            var perk = evolutionData.Perks[0];
 
             evolutionData.PerkLevelUp(perk);
 

@@ -1,7 +1,7 @@
 ﻿namespace Zilon.Core.PersonModules
 {
     /// <summary>
-    ///     Объект для предоставления инфорации о состоянии атрибута персонажа.
+    /// Объект для предоставления инфорации о состоянии атрибута персонажа.
     /// </summary>
     public sealed class PersonAttribute
     {

@@ -1,23 +1,35 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+using NUnit.Framework;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
     /// <summary>
-    ///     Тест проверяет, что источник намерений генерирует задачу после указания целевого узла.
-    ///     По окончанию задачи на перемещение должен выдавать пустые задачи.
+    /// Тест проверяет, что источник намерений генерирует задачу после указания целевого узла.
+    /// По окончанию задачи на перемещение должен выдавать пустые задачи.
     /// </summary>
     [TestFixture]
     public class HumanActorTaskSourceTests
     {
         /// <summary>
-        ///     Тест проверяет получение задачи актёра после указания намерения.
+        /// Тест проверяет получение задачи актёра после указания намерения.
         /// </summary>
         [Test]
         // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
@@ -30,7 +42,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var actorNode = map.Nodes.SelectByHexCoords(0, 0);
 
-            IActor actor = CreateActor(map, actorNode);
+            var actor = CreateActor(map, actorNode);
 
             var taskMock = new Mock<IActorTask>();
             var task = taskMock.Object;
@@ -38,8 +50,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
             var intention = intentionMock.Object;
 
-            HumanActorTaskSource<ISectorTaskSourceContext> taskSource =
-                new HumanActorTaskSource<ISectorTaskSourceContext>();
+            var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
 
             var contextMock = new Mock<ISectorTaskSourceContext>();
             var context = contextMock.Object;
@@ -55,7 +66,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         }
 
         /// <summary>
-        ///     Тест проверяет получение задачи актёра после указания намерения.
+        /// Тест проверяет получение задачи актёра после указания намерения.
         /// </summary>
         [Test]
         // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
@@ -68,7 +79,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var actorNode = map.Nodes.SelectByHexCoords(0, 0);
 
-            IActor actor = CreateActor(map, actorNode);
+            var actor = CreateActor(map, actorNode);
 
             var taskMock = new Mock<IActorTask>();
             var task = taskMock.Object;
@@ -79,8 +90,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var contextMock = new Mock<ISectorTaskSourceContext>();
             var context = contextMock.Object;
 
-            HumanActorTaskSource<ISectorTaskSourceContext> taskSource =
-                new HumanActorTaskSource<ISectorTaskSourceContext>();
+            var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
 
             // ACT
 
@@ -359,7 +369,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
             var taskSource = taskSourceMock.Object;
 
-            Actor actor = new Actor(person, taskSource, startNode);
+            var actor = new Actor(person, taskSource, startNode);
 
             map.HoldNode(startNode, actor);
 

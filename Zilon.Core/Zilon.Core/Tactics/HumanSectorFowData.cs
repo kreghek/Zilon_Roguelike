@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics
 {
@@ -11,11 +15,10 @@ namespace Zilon.Core.Tactics
         public HumanSectorFowData()
         {
             _nodes = new Dictionary<IGraphNode, SectorMapFowNode>();
-            _sectorNodeHash = new Dictionary<SectorMapNodeFowState, List<SectorMapFowNode>>
-            {
-                {SectorMapNodeFowState.TerraIncognita, new List<SectorMapFowNode>()},
-                {SectorMapNodeFowState.Explored, new List<SectorMapFowNode>()},
-                {SectorMapNodeFowState.Observing, new List<SectorMapFowNode>()}
+            _sectorNodeHash = new Dictionary<SectorMapNodeFowState, List<SectorMapFowNode>> {
+                { SectorMapNodeFowState.TerraIncognita, new List<SectorMapFowNode>() },
+                { SectorMapNodeFowState.Explored, new List<SectorMapFowNode>() },
+                { SectorMapNodeFowState.Observing, new List<SectorMapFowNode>() }
             };
         }
 
@@ -31,8 +34,7 @@ namespace Zilon.Core.Tactics
             var overlapedNodes = nodes.Where(x => Nodes.Contains(x));
             if (overlapedNodes.Any())
             {
-                throw new InvalidOperationException(
-                    $"Добавляются узлы тумана войны, перекрывающие существующик узлы {string.Join(",", overlapedNodes.Select(x => x.Node))}.");
+                throw new InvalidOperationException($"Добавляются узлы тумана войны, перекрывающие существующик узлы {string.Join(",", overlapedNodes.Select(x => x.Node))}.");
             }
 
             foreach (var node in nodes)

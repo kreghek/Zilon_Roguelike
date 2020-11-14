@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics
+﻿using System;
+
+namespace Zilon.Core.Tactics
 {
     public sealed class ActorInteractionBus : IActorInteractionBus
     {
@@ -6,7 +8,7 @@
 
         public void PushEvent(IActorInteractionEvent interactionEvent)
         {
-            NewActorInteractionEventArgs eventArgs = new NewActorInteractionEventArgs(interactionEvent);
+            var eventArgs = new NewActorInteractionEventArgs(interactionEvent);
             NewEvent?.Invoke(this, eventArgs);
         }
     }

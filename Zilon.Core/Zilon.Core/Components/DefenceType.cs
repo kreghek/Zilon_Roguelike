@@ -1,14 +1,19 @@
-﻿namespace Zilon.Core.Components
+﻿using JetBrains.Annotations;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace Zilon.Core.Components
 {
     [JsonConverter(typeof(StringEnumConverter))]
     [PublicAPI]
     public enum DefenceType
     {
         /// <summary>
-        ///     Неопределённое.
+        /// Неопределённое.
         /// </summary>
         /// <remarks>
-        ///     Если выбрано, то, скорее всего, ошибка.
+        /// Если выбрано, то, скорее всего, ошибка.
         /// </remarks>
         Undefined,
 
@@ -20,7 +25,7 @@
         RapidDefence = 60,
 
         /// <summary>
-        ///     Даёт бонус против всех типов наступления. Кроме божественного.
+        /// Даёт бонус против всех типов наступления. Кроме божественного.
         /// </summary>
         DivineDefence = 100
     }

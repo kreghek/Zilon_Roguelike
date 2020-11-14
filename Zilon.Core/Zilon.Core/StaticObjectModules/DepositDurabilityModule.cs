@@ -1,23 +1,21 @@
-﻿namespace Zilon.Core.StaticObjectModules
+﻿using System;
+
+namespace Zilon.Core.StaticObjectModules
 {
     public sealed class DepositDurabilityModule : IDurabilityModule
     {
-        private readonly int _damagePerMineUnit;
-        private readonly ILifetimeModule _lifetimeModule;
         private readonly IPropDepositModule _propDepositModule;
+        private readonly ILifetimeModule _lifetimeModule;
+        private readonly int _damagePerMineUnit;
         private int _mineDamageCounter;
 
         /// <summary>
-        ///     Constructor.
+        /// Constructor.
         /// </summary>
         /// <param name="propDepositModule"> Prop Deposit module from static object. </param>
         /// <param name="lifetimeModule"> Lifetime module from static object. </param>
-        /// <param name="damagePerMineUnit">
-        ///     Required damage to mine one time. Example, if this value is 10 and actor hit multiple
-        ///     times sum on 10, this be like one mine action.
-        /// </param>
-        public DepositDurabilityModule(IPropDepositModule propDepositModule, ILifetimeModule lifetimeModule,
-            int damagePerMineUnit)
+        /// <param name="damagePerMineUnit"> Required damage to mine one time. Example, if this value is 10 and actor hit multiple times sum on 10, this be like one mine action. </param>
+        public DepositDurabilityModule(IPropDepositModule propDepositModule, ILifetimeModule lifetimeModule, int damagePerMineUnit)
         {
             IsActive = true;
             _propDepositModule = propDepositModule;
@@ -26,8 +24,8 @@
             _mineDamageCounter = _damagePerMineUnit;
         }
 
-        public float Value => _propDepositModule.Stock;
-        public string Key => nameof(IDurabilityModule);
+        public float Value { get => _propDepositModule.Stock; }
+        public string Key { get => nameof(IDurabilityModule); }
         public bool IsActive { get; set; }
 
         public void TakeDamage(int damageValue)

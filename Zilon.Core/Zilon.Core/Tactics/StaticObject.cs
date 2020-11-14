@@ -1,11 +1,14 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+using System.Collections.Generic;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics
 {
     /// <summary>
-    ///     Базовая реализация статического объекта в секторе.
+    /// Базовая реализация статического объекта в секторе.
     /// </summary>
     public sealed class StaticObject : IStaticObject
     {
@@ -20,44 +23,41 @@ namespace Zilon.Core.Tactics
             Purpose = purpose;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public int Id { get; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IGraphNode Node { get; }
 
-        /// <inheritdoc />
-        public bool IsMapBlock => GetIsMapBlock();
+        /// <inheritdoc/>
+        public bool IsMapBlock { get => GetIsMapBlock(); }
 
-        /// <inheritdoc />
-        public bool IsSightBlock => false;
+        /// <inheritdoc/>
+        public bool IsSightBlock { get => false; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public PropContainerPurpose Purpose { get; }
+        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
 
-        public PhysicalSize PhysicalSize => PhysicalSize.Size1;
-
-        /// <inheritdoc />
-        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule)
-            where TStaticObjectModule : IStaticObjectModule
+        /// <inheritdoc/>
+        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IStaticObjectModule
         {
             _modules.Add(sectorObjectModule.Key, sectorObjectModule);
         }
 
         public bool CanBeDamaged()
         {
-            IDurabilityModule durabilityModule = this.GetModuleSafe<IDurabilityModule>();
+            var durabilityModule = this.GetModuleSafe<IDurabilityModule>();
             return durabilityModule != null && durabilityModule.Value > 0;
         }
 
-        /// <inheritdoc />
-        public TStaticObjectModule GetModule<TStaticObjectModule>(string key)
-            where TStaticObjectModule : IStaticObjectModule
+        /// <inheritdoc/>
+        public TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule
         {
             return (TStaticObjectModule)_modules[key];
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool HasModule(string key)
         {
             return _modules.ContainsKey(key);
@@ -65,7 +65,7 @@ namespace Zilon.Core.Tactics
 
         public void TakeDamage(int value)
         {
-            IDurabilityModule durabilityModule = this.GetModuleSafe<IDurabilityModule>();
+            var durabilityModule = this.GetModuleSafe<IDurabilityModule>();
             if (durabilityModule is null)
             {
                 throw new InvalidOperationException("Attempt to damage object with no durability module.");
@@ -74,10 +74,10 @@ namespace Zilon.Core.Tactics
             durabilityModule.TakeDamage(value);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         private bool GetIsMapBlock()
         {
-            IPropContainer propContainer = this.GetModuleSafe<IPropContainer>();
+            var propContainer = this.GetModuleSafe<IPropContainer>();
             return (propContainer?.IsMapBlock).GetValueOrDefault(true);
         }
     }

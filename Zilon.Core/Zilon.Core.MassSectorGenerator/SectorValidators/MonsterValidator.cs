@@ -1,25 +1,30 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MassSectorGenerator.SectorValidators
 {
     /// <summary>
-    ///     Валидатор корректности расстановки моснтров в секторе.
+    /// Валидатор корректности расстановки моснтров в секторе.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
         "CA1812:Avoid uninstantiated internal classes",
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
-    internal class MonsterValidator : ISectorValidator
+    class MonsterValidator : ISectorValidator
     {
         public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {
             return Task.Run(() =>
             {
-                IStaticObjectManager staticObjectManager = sector.StaticObjectManager;
+                var staticObjectManager = sector.StaticObjectManager;
                 var allStaticObjects = staticObjectManager.Items;
 
                 // Монстры не должны генерироваться на узлах с препятствием.
                 // Монстры не должны генерироваться на узлах с сундуками.
-                IActorManager actorManager = sector.ActorManager;
+                var actorManager = sector.ActorManager;
                 var allMonsters = actorManager.Items;
                 var staticObjectNodes = allStaticObjects.Select(x => x.Node);
                 foreach (var actor in allMonsters)

@@ -20,20 +20,19 @@ namespace Zilon.Bot.Players.Triggers
             Counter = COUNTER_INITIAL_VALUE;
         }
 
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
-            ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
             return CounterIsOver;
-        }
-
-        public void Update()
-        {
-            CounterDown();
         }
 
         private void CounterDown()
         {
             Counter--;
+        }
+
+        public void Update()
+        {
+            CounterDown();
         }
     }
 }

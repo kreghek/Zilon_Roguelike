@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Common;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 
@@ -17,21 +20,27 @@ namespace Zilon.Core.Tactics.Spatial
             Transitions = new Dictionary<IGraphNode, RoomTransition>();
         }
 
-        /// <summary>
-        ///     Узлы карты, приведённые к <see cref="HexNode" />.
-        /// </summary>
-        public IEnumerable<HexNode> HexNodes => Nodes.Cast<HexNode>();
-
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
 
         /// <summary>
-        ///     Проверяет, доступен ли целевой узел из стартового узла.
+        /// Узлы карты, приведённые к <see cref="HexNode"/>.
+        /// </summary>
+        public IEnumerable<HexNode> HexNodes
+        {
+            get
+            {
+                return Nodes.Cast<HexNode>();
+            }
+        }
+
+        /// <summary>
+        /// Проверяет, доступен ли целевой узел из стартового узла.
         /// </summary>
         /// <param name="currentNode">Стартовый узел.</param>
         /// <param name="targetNode">Целевой проверяемый узел.</param>
         /// <returns>
-        ///     Возвращает true, если узел доступен. Иначе, false.
+        /// Возвращает true, если узел доступен. Иначе, false.
         /// </returns>
         public bool TargetIsOnLine(IGraphNode currentNode, IGraphNode targetNode)
         {
@@ -45,27 +54,27 @@ namespace Zilon.Core.Tactics.Spatial
                 throw new System.ArgumentNullException(nameof(targetNode));
             }
 
-            HexNode targetHexNode = (HexNode)targetNode;
-            HexNode currentHexNode = (HexNode)currentNode;
+            var targetHexNode = (HexNode)targetNode;
+            var currentHexNode = (HexNode)currentNode;
 
-            CubeCoords[] line = CubeCoordsHelper.CubeDrawLine(currentHexNode.CubeCoords, targetHexNode.CubeCoords);
+            var line = CubeCoordsHelper.CubeDrawLine(currentHexNode.CubeCoords, targetHexNode.CubeCoords);
 
             for (var i = 1; i < line.Length; i++)
             {
-                CubeCoords prevPoint = line[i - 1];
-                CubeCoords testPoint = line[i];
+                var prevPoint = line[i - 1];
+                var testPoint = line[i];
 
-                OffsetCoords prevOffsetCoords = HexHelper.ConvertToOffset(prevPoint);
-                OffsetCoords testOffsetCoords = HexHelper.ConvertToOffset(testPoint);
+                var prevOffsetCoords = HexHelper.ConvertToOffset(prevPoint);
+                var testOffsetCoords = HexHelper.ConvertToOffset(testPoint);
 
-                HexNode prevNode = GetByCoords(prevOffsetCoords.X, prevOffsetCoords.Y);
+                var prevNode = GetByCoords(prevOffsetCoords.X, prevOffsetCoords.Y);
 
                 if (prevNode == null)
                 {
                     return false;
                 }
 
-                HexNode testNode = GetByCoords(testOffsetCoords.X, testOffsetCoords.Y);
+                var testNode = GetByCoords(testOffsetCoords.X, testOffsetCoords.Y);
 
                 if (testNode == null)
                 {

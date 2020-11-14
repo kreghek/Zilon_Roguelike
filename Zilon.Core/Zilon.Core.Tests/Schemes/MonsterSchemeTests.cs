@@ -1,4 +1,10 @@
-﻿using Zilon.Core.Components;
+﻿using FluentAssertions;
+
+using Newtonsoft.Json;
+
+using NUnit.Framework;
+
+using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Schemes
@@ -8,13 +14,13 @@ namespace Zilon.Core.Tests.Schemes
     public class MonsterSchemeTests
     {
         /// <summary>
-        ///     Тест проверяет, что монстр корректно десериализуется.
+        /// Тест проверяет, что монстр корректно десериализуется.
         /// </summary>
         [Test]
         public void Deserialization_Defences_TypeAndValueAreCorrect()
         {
             // ARRANGE
-            string sourceText = @"
+            var sourceText = @"
     {
       ""Hp"": 5,
       ""PrimaryAct"": {
@@ -44,8 +50,10 @@ namespace Zilon.Core.Tests.Schemes
 ";
 
 
+
             // ACT
             var factPerkScheme = JsonConvert.DeserializeObject<MonsterScheme>(sourceText);
+
 
 
             // ASSERT

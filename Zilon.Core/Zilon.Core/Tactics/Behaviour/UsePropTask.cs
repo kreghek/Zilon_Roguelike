@@ -1,9 +1,11 @@
-﻿using Zilon.Core.Props;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
-    ///     Задача на использование предмета инвентаря.
+    /// Задача на использование предмета инвентаря.
     /// </summary>
     public sealed class UsePropTask : OneTurnActorTaskBase
     {

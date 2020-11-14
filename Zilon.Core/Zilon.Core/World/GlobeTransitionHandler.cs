@@ -1,4 +1,9 @@
-﻿using Zilon.Core.MapGenerators;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.World
@@ -44,7 +49,7 @@ namespace Zilon.Core.World
 
         private async Task ProcessInnerAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
         {
-            ISectorNode sectorNode = transition.SectorNode;
+            var sectorNode = transition.SectorNode;
 
             //TODO Разобраться с этим кодом.
             // https://blog.cdemi.io/async-waiting-inside-c-sharp-locks/
@@ -72,9 +77,9 @@ namespace Zilon.Core.World
                     Console.WriteLine(actor);
                 }
 
-                ISector nextSector = sectorNode.Sector;
+                var nextSector = sectorNode.Sector;
                 var nodeForTransition = nextSector.Map.Transitions.First(x => x.Value.SectorNode.Sector == sector).Key;
-                Actor actorInNewSector = new Actor(actor.Person, actor.TaskSource, nodeForTransition);
+                var actorInNewSector = new Actor(actor.Person, actor.TaskSource, nodeForTransition);
                 nextSector.ActorManager.Add(actorInNewSector);
             }
             finally

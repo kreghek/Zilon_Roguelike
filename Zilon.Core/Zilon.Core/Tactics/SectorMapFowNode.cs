@@ -3,7 +3,7 @@
 namespace Zilon.Core.Tactics
 {
     /// <summary>
-    ///     Данные о тумане войны для одного узла карты сектора.
+    /// Данные о тумане войны для одного узла карты сектора.
     /// </summary>
     public sealed class SectorMapFowNode
     {

@@ -1,4 +1,10 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tests.MapGenerators
@@ -15,11 +21,13 @@ namespace Zilon.Core.Tests.MapGenerators
             diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns<int>(n => n);
             var dice = diceMock.Object;
 
-            ChestGeneratorRandomSource random = new ChestGeneratorRandomSource(dice);
+            var random = new ChestGeneratorRandomSource(dice);
+
 
 
             // ACT
-            int factRolled = random.RollChestCount(3);
+            var factRolled = random.RollChestCount(3);
+
 
 
             // ASSERT
