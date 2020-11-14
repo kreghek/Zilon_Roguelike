@@ -49,11 +49,24 @@ namespace Zilon.Core.PersonModules
         public event EventHandler<PerkEventArgs> PerkLeveledUp;
 
         /// <inheritdoc/>
+        public event EventHandler<PerkEventArgs> PerkAdded;
+
+        /// <inheritdoc/>
         public void AddBuildInPerks(IEnumerable<IPerk> perks)
         {
+            if (perks is null)
+            {
+                throw new ArgumentNullException(nameof(perks));
+            }
+
             _buildInPerks.AddRange(perks);
 
             UpdatePerks();
+
+            foreach (var perk in perks)
+            {
+                PerkAdded?.Invoke(this, new PerkEventArgs(perk));
+            }
         }
 
         /// <inheritdoc/>

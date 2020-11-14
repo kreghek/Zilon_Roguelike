@@ -109,7 +109,7 @@ namespace Zilon.Core.PersonModules
             var efficientModifierValue = 0;
             var efficientRollUnmodified = scheme.Stats.Efficient;
             CalcSurvivalHazardOnTacticalAct(effects, ref toHitModifierValue, ref efficientModifierValue);
-            CalcPerkBonusesOnTacticalAct(perks, equipment, ref toHitModifierValue, ref efficientModifierValue);
+            CalcPerksBonusesOnTacticalAct(perks, equipment, ref toHitModifierValue, ref efficientModifierValue);
 
             var toHitRoll = CreateTacticalActRoll(6, 1, toHitModifierValue);
             var efficientRoll = CreateTacticalActRoll(efficientRollUnmodified.Dice,
@@ -119,28 +119,45 @@ namespace Zilon.Core.PersonModules
             return new TacticalAct(scheme, efficientRoll, toHitRoll, equipment);
         }
 
-        private static void CalcPerkBonusesOnTacticalAct([NotNull, ItemNotNull] IEnumerable<IPerk> archievedPerks,
+        private static void CalcPerksBonusesOnTacticalAct([NotNull, ItemNotNull] IEnumerable<IPerk> archievedPerks,
             [NotNull] Equipment equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
             foreach (var perk in archievedPerks)
             {
-                var currentLevel = perk.CurrentLevel;
-                var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary];
-
-                if (currentLevelScheme.Rules == null)
+                if (perk.Scheme.IsBuildIn)
                 {
-                    continue;
-                }
-
-                for (var i = 0; i <= currentLevel.Sub; i++)
-                {
-                    foreach (var rule in currentLevelScheme.Rules)
+                    if (perk.Scheme.Levels != null)
                     {
-                        GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
+                        var rules = perk.Scheme.Levels[0].Rules;
+                        ProcessRulesBonuses(equipment, ref toHitModifierValue, ref efficientModifierValue, rules);
                     }
                 }
+                else
+                {
+                    var currentLevel = perk.CurrentLevel;
+                    var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary];
+
+                    if (currentLevelScheme.Rules == null)
+                    {
+                        continue;
+                    }
+
+                    for (var i = 0; i <= currentLevel.Sub; i++)
+                    {
+                        var rules = currentLevelScheme.Rules;
+                        ProcessRulesBonuses(equipment, ref toHitModifierValue, ref efficientModifierValue, rules);
+                    }
+                }
+            }
+        }
+
+        private static void ProcessRulesBonuses(Equipment equipment, ref int toHitModifierValue, ref int efficientModifierValue, PerkRuleSubScheme[] rules)
+        {
+            foreach (var rule in rules)
+            {
+                GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
             }
         }
 

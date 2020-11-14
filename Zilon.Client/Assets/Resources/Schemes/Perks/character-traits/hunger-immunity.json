@@ -1,0 +1,19 @@
+{
+  "Name": {
+    "Ru": "Неуязвимость к голоду",
+	"En": "Hunger immunity"
+  },
+  
+  "IsBuildIn": true,
+  
+  "Levels": [
+    {
+      "Rules": [
+        {
+          "Type": "HungerResistance",
+          "Level": "Absolute"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Aux" ],
+    "Rules": [
+	  {
+	    "Type": "ThristResistance",
+		"Level": "Absolute"
+	  }
+	]
+  },
+  "Name": {
+    "En": "Hydro necklace",
+    "Ru": "Гидро-ожерелье"
+  }
+}

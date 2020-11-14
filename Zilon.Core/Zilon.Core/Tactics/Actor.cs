@@ -319,21 +319,24 @@ namespace Zilon.Core.Tactics
 
         private void RestoreHp(PersonRuleLevel level)
         {
+            var survivalModule = Person.GetModuleSafe<ISurvivalModule>();
+            if (survivalModule is null)
+            {
+                return;
+            }
+
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Health,
-                        PropMetrics.HpLesserRestoreValue);
+                    survivalModule.RestoreStat(SurvivalStatType.Health, PropMetrics.HpLesserRestoreValue);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Health,
-                        PropMetrics.HpNormalRestoreValue);
+                    survivalModule.RestoreStat(SurvivalStatType.Health, PropMetrics.HpNormalRestoreValue);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Health,
-                        PropMetrics.HpGrandRestoreValue);
+                    survivalModule.RestoreStat(SurvivalStatType.Health, PropMetrics.HpGrandRestoreValue);
                     break;
 
                 default:
@@ -343,20 +346,26 @@ namespace Zilon.Core.Tactics
 
         private void RiseIntoxicationLevel(PersonRuleLevel level)
         {
+            var survivalModule = Person.GetModuleSafe<ISurvivalModule>();
+            if (survivalModule is null)
+            {
+                return;
+            }
+
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Intoxication,
+                    survivalModule.RestoreStat(SurvivalStatType.Intoxication,
                         PropMetrics.INTOXICATION_RISE_LESSER_VALUE + 1);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Intoxication,
+                    survivalModule.RestoreStat(SurvivalStatType.Intoxication,
                         PropMetrics.INTOXICATION_RISE_NORMAL_VALUE + 1);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(SurvivalStatType.Intoxication,
+                    survivalModule.RestoreStat(SurvivalStatType.Intoxication,
                         PropMetrics.INTOXICATION_RISE_GRAND_VALUE + 1);
                     break;
 

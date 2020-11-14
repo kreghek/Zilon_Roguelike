@@ -72,23 +72,24 @@ namespace Zilon.Core.PersonModules
         {
             if (_equipmentModule != null)
             {
-                _equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
+                _equipmentModule.EquipmentChanged += OtherModule_StateChanged;
             }
 
             if (_effectsModule != null)
             {
-                _effectsModule.Added += Effects_CollectionChanged;
-                _effectsModule.Removed += Effects_CollectionChanged;
-                _effectsModule.Changed += Effects_CollectionChanged;
+                _effectsModule.Added += OtherModule_StateChanged;
+                _effectsModule.Removed += OtherModule_StateChanged;
+                _effectsModule.Changed += OtherModule_StateChanged;
+            }
+
+            if (_evolutionModule != null)
+            {
+                _evolutionModule.PerkAdded += OtherModule_StateChanged;
+                _evolutionModule.PerkLeveledUp += OtherModule_StateChanged;
             }
         }
 
-        private void Effects_CollectionChanged(object sender, EffectEventArgs e)
-        {
-            CalcSurvivalStats();
-        }
-
-        private void EquipmentModule_EquipmentChanged(object sender, EquipmentChangedEventArgs e)
+        private void OtherModule_StateChanged(object sender, EventArgs e)
         {
             CalcSurvivalStats();
         }
@@ -394,8 +395,24 @@ namespace Zilon.Core.PersonModules
             var archievedPerks = _evolutionModule.GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
-                var currentLevel = archievedPerk.CurrentLevel;
-                var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
+                PerkLevel currentLevel;
+                PerkLevelSubScheme currentLevelScheme;
+
+                if (archievedPerk.Scheme.IsBuildIn)
+                {
+                    currentLevel = new PerkLevel(0, 0);
+                }
+                else
+                {
+                    currentLevel = archievedPerk.CurrentLevel;
+                }
+
+                if (archievedPerk.Scheme.IsBuildIn && archievedPerk.Scheme.Levels is null)
+                {
+                    continue;
+                }
+
+                currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
 
                 if (currentLevelScheme.Rules == null)
                 {
@@ -406,13 +423,70 @@ namespace Zilon.Core.PersonModules
                 {
                     foreach (var rule in currentLevelScheme.Rules)
                     {
-                        if (rule.Type == PersonRuleType.Health)
-                        {
-                            BonusToHealth(rule.Level, PersonRuleDirection.Positive, ref bonusList);
-                        }
+                        bonusList = ProcessRule(bonusList, rule);
                     }
                 }
             }
+        }
+
+        private List<SurvivalStatBonus> ProcessRule(List<SurvivalStatBonus> bonusList, PerkRuleSubScheme rule)
+        {
+            switch (rule.Type)
+            {
+                case PersonRuleType.Health:
+                    BonusToHealth(rule.Level, PersonRuleDirection.Positive, ref bonusList);
+                    break;
+
+                case PersonRuleType.HealthIfNoBody:
+
+                    var equipmentModule = _equipmentModule;
+
+                    var requirementsCompleted = true;
+
+                    if (equipmentModule != null)
+                    {
+                        // it is logically. If person can not have equipment, he has no body armor.
+
+                        for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
+                        {
+                            if ((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0
+                                && equipmentModule[slotIndex] != null)
+                            {
+                                requirementsCompleted = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (requirementsCompleted)
+                    {
+                        BonusToHealth(rule.Level, rule.Direction, ref bonusList);
+                    }
+
+                    break;
+
+                case PersonRuleType.HungerResistance:
+                    BonusToDownPass(SurvivalStatType.Satiety, rule.Level, rule.Direction, ref bonusList);
+                    break;
+
+                case PersonRuleType.ThristResistance:
+                    BonusToDownPass(SurvivalStatType.Hydration, rule.Level, rule.Direction, ref bonusList);
+                    break;
+                case PersonRuleType.Undefined:
+                    // Look like error.
+                    throw new InvalidOperationException($"{PersonRuleType.Undefined} is not valid.");
+                case PersonRuleType.Melee:
+                case PersonRuleType.Ballistic:
+                case PersonRuleType.Damage:
+                case PersonRuleType.ToHit:
+                    // This perk rules not implemented yet.
+                    break;
+                default:
+                    // Look like forgotten functiollity.
+                    throw new InvalidOperationException($"{rule.Type} is not known type.");
+            }
+
+            return bonusList;
         }
 
         private void ApplySurvivalBonuses(IEnumerable<SurvivalStatBonus> bonuses)
@@ -515,8 +589,8 @@ namespace Zilon.Core.PersonModules
         private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction,
             ref List<SurvivalStatBonus> bonuses)
         {
-            const SurvivalStatType hpStatType = SurvivalStatType.Health;
-            var hpStat = Stats.SingleOrDefault(x => x.Type == hpStatType);
+            const SurvivalStatType HP_STAT_TYPE = SurvivalStatType.Health;
+            var hpStat = Stats.SingleOrDefault(x => x.Type == HP_STAT_TYPE);
             if (hpStat != null)
             {
                 var bonus = 0;
@@ -550,10 +624,10 @@ namespace Zilon.Core.PersonModules
                     bonus *= -1;
                 }
 
-                var currentBonus = bonuses.SingleOrDefault(x => x.SurvivalStatType == hpStatType);
+                var currentBonus = bonuses.SingleOrDefault(x => x.SurvivalStatType == HP_STAT_TYPE);
                 if (currentBonus == null)
                 {
-                    currentBonus = new SurvivalStatBonus(hpStatType);
+                    currentBonus = new SurvivalStatBonus(HP_STAT_TYPE);
                     bonuses.Add(currentBonus);
                 }
                 currentBonus.ValueBonus += bonus;
