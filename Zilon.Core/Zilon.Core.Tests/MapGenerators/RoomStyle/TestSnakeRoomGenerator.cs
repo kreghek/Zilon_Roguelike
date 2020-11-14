@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
@@ -29,7 +30,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 
             for (var i = 0; i < _rolledOffsetCoords.Length; i++)
             {
-                var room = new Room {PositionX = _rolledOffsetCoords[i].X, PositionY = _rolledOffsetCoords[i].Y};
+                var room = new Room { PositionX = _rolledOffsetCoords[i].X, PositionY = _rolledOffsetCoords[i].Y };
 
                 var rolledSize = new Size(3, 3);
 

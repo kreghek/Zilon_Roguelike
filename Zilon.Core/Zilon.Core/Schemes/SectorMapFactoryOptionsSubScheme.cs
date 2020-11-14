@@ -1,4 +1,5 @@
 ﻿using JsonSubTypes;
+
 using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes

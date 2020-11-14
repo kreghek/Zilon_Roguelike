@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using JetBrains.Annotations;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using Moq;
+
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
@@ -75,7 +79,9 @@ namespace Zilon.Core.Specs.Contexts
 
                 var mapRegion = new MapRegion(1, map.Nodes.ToArray())
                 {
-                    IsStart = true, IsOut = true, ExitNodes = new[] {map.Nodes.Last()}
+                    IsStart = true,
+                    IsOut = true,
+                    ExitNodes = new[] { map.Nodes.Last() }
                 };
 
                 map.Regions.Add(mapRegion);

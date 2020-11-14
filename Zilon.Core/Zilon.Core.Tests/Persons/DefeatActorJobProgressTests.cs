@@ -1,6 +1,9 @@
 ﻿using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -28,7 +31,7 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            progress.ApplyToJobs(new[] {job});
+            progress.ApplyToJobs(new[] { job });
 
 
             // ASSERT
@@ -55,7 +58,7 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            progress.ApplyToJobs(new[] {testedJob, otherJob});
+            progress.ApplyToJobs(new[] { testedJob, otherJob });
 
 
             // ASSERT
@@ -78,7 +81,7 @@ namespace Zilon.Core.Tests.Persons
 
 
             // ACT
-            var changedJobs = progress.ApplyToJobs(new[] {job});
+            var changedJobs = progress.ApplyToJobs(new[] { job });
 
 
             // ASSERT
@@ -99,7 +102,7 @@ namespace Zilon.Core.Tests.Persons
         {
             var jobMock = new Mock<IJob>();
             jobMock.SetupProperty(x => x.Progress, startProgress);
-            jobMock.SetupGet(x => x.Scheme).Returns(new TestJobSubScheme {Type = type, Value = 10});
+            jobMock.SetupGet(x => x.Scheme).Returns(new TestJobSubScheme { Type = type, Value = 10 });
             var job = jobMock.Object;
             return job;
         }

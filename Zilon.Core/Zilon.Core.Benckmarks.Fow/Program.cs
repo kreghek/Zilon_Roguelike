@@ -1,4 +1,5 @@
 ﻿using System;
+
 using BenchmarkDotNet.Running;
 
 namespace Zilon.Core.Benchmarks.Fow

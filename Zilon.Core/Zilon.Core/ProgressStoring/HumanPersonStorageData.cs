@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -27,7 +28,7 @@ namespace Zilon.Core.ProgressStoring
             {
                 Survival =
                     humanPerson.GetModule<ISurvivalModule>().Stats.Select(x =>
-                        new HumanSurvivalStatStorageData {Type = x.Type, Value = x.ValueShare}).ToArray(),
+                        new HumanSurvivalStatStorageData { Type = x.Type, Value = x.ValueShare }).ToArray(),
                 Equipments = humanPerson.GetModule<IEquipmentModule>().Select(CreateEquipmentStorageData).ToArray(),
                 Inventory =
                     humanPerson.GetModule<IInventoryModule>().CalcActualItems().Select(CreatePropStorageData)
@@ -67,7 +68,7 @@ namespace Zilon.Core.ProgressStoring
 
         private static PropStorageData CreatePropStorageData(IProp prop)
         {
-            var storageData = new PropStorageData {Sid = prop.Scheme.Sid};
+            var storageData = new PropStorageData { Sid = prop.Scheme.Sid };
 
             switch (prop)
             {
@@ -181,7 +182,7 @@ namespace Zilon.Core.ProgressStoring
             {
                 var perkScheme = schemeService.GetScheme<IPerkScheme>(storedPerk.Sid);
 
-                var perk = new Perk {Scheme = perkScheme};
+                var perk = new Perk { Scheme = perkScheme };
 
                 if (storedPerk.Level != null)
                 {

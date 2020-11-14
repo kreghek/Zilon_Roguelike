@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
@@ -102,7 +103,7 @@ namespace Zilon.Bot.Players.Logics
                 container.GetModule<IPropContainer>().Content.CalcActualItems());
 
             var taskContext = new ActorTaskContext(sector);
-            return new TransferPropsTask(actor, taskContext, new[] {inventoryTransfer, containerTransfer});
+            return new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer });
         }
 
         protected override void ResetData()

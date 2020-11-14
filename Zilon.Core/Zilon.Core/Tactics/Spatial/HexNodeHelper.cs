@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Common;
 
 namespace Zilon.Core.Tactics.Spatial

@@ -1,8 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
@@ -32,7 +36,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var startNode = map.Nodes.SelectByHexCoords(3, 3);
             var finishNode = map.Nodes.SelectByHexCoords(1, 5);
 
-            var expectedPath = new[] {map.Nodes.SelectByHexCoords(2, 3), map.Nodes.SelectByHexCoords(2, 4), finishNode};
+            var expectedPath = new[] { map.Nodes.SelectByHexCoords(2, 3), map.Nodes.SelectByHexCoords(2, 4), finishNode };
 
             var actor = CreateActor(map, startNode);
 

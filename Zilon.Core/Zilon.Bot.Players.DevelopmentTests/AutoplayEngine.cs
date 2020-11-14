@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;

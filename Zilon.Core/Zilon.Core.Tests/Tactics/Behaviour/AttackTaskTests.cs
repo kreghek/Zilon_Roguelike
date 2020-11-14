@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Common;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.PersonModules;
@@ -41,7 +45,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var combatActModuleMock = new Mock<ICombatActModule>();
             combatActModuleMock.Setup(x => x.CalcCombatActs())
-                .Returns(new[] {tacticalAct});
+                .Returns(new[] { tacticalAct });
             var combatActModule = combatActModuleMock.Object;
 
             var personMock = new Mock<IPerson>();

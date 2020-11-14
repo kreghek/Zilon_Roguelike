@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+
 using Newtonsoft.Json;
 
 namespace Zilon.Core.Components

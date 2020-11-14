@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
@@ -34,7 +35,9 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
 
             var mapRegion = new MapRegion(1, map.Nodes.ToArray())
             {
-                IsStart = true, IsOut = true, ExitNodes = new[] {map.Nodes.Last()}
+                IsStart = true,
+                IsOut = true,
+                ExitNodes = new[] { map.Nodes.Last() }
             };
 
             map.Regions.Add(mapRegion);
@@ -51,7 +54,7 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         {
             var factory = new SquareMapFactory();
 
-            var squaregenerationOptionsSubScheme = new SquareGenerationOptionsSubScheme {Size = mapSize};
+            var squaregenerationOptionsSubScheme = new SquareGenerationOptionsSubScheme { Size = mapSize };
             var generationOptions = new SectorMapFactoryOptions(squaregenerationOptionsSubScheme);
 
             return await factory.CreateAsync(generationOptions).ConfigureAwait(false);

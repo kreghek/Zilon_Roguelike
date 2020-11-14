@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -113,10 +117,11 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             return new TestSectorSubScheme
             {
-                RegularMonsterSids = new[] {"rat"},
+                RegularMonsterSids = new[] { "rat" },
                 MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
                 {
-                    RegionCount = 20, RegionSize = 20
+                    RegionCount = 20,
+                    RegionSize = 20
                 }
             };
         }

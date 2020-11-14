@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
+
 using NUnit.Framework;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -105,7 +108,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             {
                 MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
                 {
-                    RegionCount = 20, RegionSize = 20
+                    RegionCount = 20,
+                    RegionSize = 20
                 }
             };
         }

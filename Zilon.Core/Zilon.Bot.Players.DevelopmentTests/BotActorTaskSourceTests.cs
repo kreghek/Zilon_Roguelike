@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using NUnit.Framework;
+
 using Zilon.Bot.Sdk;
 using Zilon.Core.Localization;
 using Zilon.Core.PersonModules;
@@ -30,7 +33,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             startUp.RegisterServices(serviceContainer);
             var serviceProvider = serviceContainer.BuildServiceProvider();
 
-            var botSettings = new BotSettings {Mode = mode};
+            var botSettings = new BotSettings { Mode = mode };
 
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
             var player = serviceProvider.GetRequiredService<IPlayer>();

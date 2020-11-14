@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+
 using JetBrains.Annotations;
 
 namespace Zilon.Core.Schemes
@@ -42,7 +43,7 @@ namespace Zilon.Core.Schemes
                 var serialized = File.ReadAllText(filePath);
                 string fileFolder = GetRelativePath(path, filePath, sid);
 
-                var schemeFile = new SchemeFile {Sid = sid, Path = fileFolder, Content = serialized};
+                var schemeFile = new SchemeFile { Sid = sid, Path = fileFolder, Content = serialized };
 
                 result.Add(schemeFile);
             }

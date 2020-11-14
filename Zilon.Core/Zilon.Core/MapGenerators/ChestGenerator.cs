@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
@@ -92,9 +93,9 @@ namespace Zilon.Core.MapGenerators
 
             var map = sector.Map;
             var availableNodes = from node in region.Nodes
-                where !map.Transitions.Keys.Contains(node)
-                where map.IsPositionAvailableForContainer(node)
-                select node;
+                                 where !map.Transitions.Keys.Contains(node)
+                                 where map.IsPositionAvailableForContainer(node)
+                                 select node;
 
             var openNodes = new List<IGraphNode>(availableNodes);
             for (var i = 0; i < rolledCount; i++)
@@ -228,7 +229,7 @@ namespace Zilon.Core.MapGenerators
 
         private IDropTableScheme[] GetTreasuresDropTable()
         {
-            return new[] {_schemeService.GetScheme<IDropTableScheme>("treasures")};
+            return new[] { _schemeService.GetScheme<IDropTableScheme>("treasures") };
         }
 
         private IDropTableScheme[] GetTrashDropTables(ISectorSubScheme sectorSubScheme)

@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
@@ -79,13 +83,13 @@ namespace Zilon.Core.Tests.MapGenerators
             sectorMock.SetupGet(x => x.StaticObjectManager).Returns(propContainerManager);
             var sector = sectorMock.Object;
 
-            var monsterRegions = new List<MapRegion> {new MapRegion(1, map.Nodes.ToArray())};
+            var monsterRegions = new List<MapRegion> { new MapRegion(1, map.Nodes.ToArray()) };
 
             var sectorScheme = new TestSectorSubScheme
             {
-                RegularMonsterSids = new[] {"regular"},
-                RareMonsterSids = new[] {"rare"},
-                ChampionMonsterSids = new[] {"champion"}
+                RegularMonsterSids = new[] { "regular" },
+                RareMonsterSids = new[] { "rare" },
+                ChampionMonsterSids = new[] { "champion" }
             };
 
             // ACT
@@ -105,7 +109,8 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             var scheme = new TestMonsterScheme
             {
-                Sid = sid, PrimaryAct = new TestTacticalActStatsSubScheme {Efficient = new Roll(6, 1)}
+                Sid = sid,
+                PrimaryAct = new TestTacticalActStatsSubScheme { Efficient = new Roll(6, 1) }
             };
             return scheme;
         }

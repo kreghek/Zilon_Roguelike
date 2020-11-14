@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
 using FluentAssertions;
+
 using NUnit.Framework;
+
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common;
 
@@ -85,7 +88,7 @@ namespace Zilon.Core.Tests.Schemes
                     }
 
                     var generic = method.MakeGenericMethod(schemeType);
-                    var scheme = generic.Invoke(schemeService, new object[] {"test"});
+                    var scheme = generic.Invoke(schemeService, new object[] { "test" });
                     Console.WriteLine(scheme);
                 };
 

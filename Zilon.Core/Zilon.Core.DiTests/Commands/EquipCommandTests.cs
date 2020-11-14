@@ -1,7 +1,11 @@
 ﻿using FluentAssertions;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Components;
@@ -97,7 +101,7 @@ namespace Zilon.Core.Tests.Commands
         {
             var propScheme = new TestPropScheme
             {
-                Equip = new TestPropEquipSubScheme {SlotTypes = new[] {EquipmentSlotTypes.Hand}}
+                Equip = new TestPropEquipSubScheme { SlotTypes = new[] { EquipmentSlotTypes.Hand } }
             };
             var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
 

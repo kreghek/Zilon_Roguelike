@@ -1,7 +1,11 @@
 ﻿using System;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tests.Common.Schemes;
@@ -19,7 +23,7 @@ namespace Zilon.Core.Tests.Persons
         public void Constructor_DefaultParams_NoException()
         {
             // ARRANGE
-            var monsterScheme = new TestMonsterScheme {PrimaryAct = new TestTacticalActStatsSubScheme()};
+            var monsterScheme = new TestMonsterScheme { PrimaryAct = new TestTacticalActStatsSubScheme() };
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
@@ -72,7 +76,7 @@ namespace Zilon.Core.Tests.Persons
 
         private static MonsterPerson CreateMonster()
         {
-            var monsterScheme = new TestMonsterScheme {PrimaryAct = new TestTacticalActStatsSubScheme()};
+            var monsterScheme = new TestMonsterScheme { PrimaryAct = new TestTacticalActStatsSubScheme() };
 
             var monster = new MonsterPerson(monsterScheme);
             return monster;

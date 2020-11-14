@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
+
 using FluentAssertions;
+
 using NUnit.Framework;
+
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
@@ -29,7 +32,7 @@ namespace Zilon.Core.Tests.Client
             var inventory = new InventoryModule();
 
             // контейнер
-            var containerProps = new IProp[] {new Resource(resourceScheme, 1)};
+            var containerProps = new IProp[] { new Resource(resourceScheme, 1) };
 
             var container = new FixedPropChest(containerProps);
 
@@ -57,13 +60,13 @@ namespace Zilon.Core.Tests.Client
         {
             // ARRANGE
 
-            var equipmentScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
+            var equipmentScheme = new TestPropScheme { Equip = new TestPropEquipSubScheme() };
 
             // Инвентарь
             var inventory = new InventoryModule();
 
             // контейнер
-            var containerProps = new IProp[] {new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>())};
+            var containerProps = new IProp[] { new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>()) };
 
             var container = new FixedPropChest(containerProps);
 
@@ -96,7 +99,7 @@ namespace Zilon.Core.Tests.Client
             var inventory = new InventoryModule();
 
             // контейнер
-            var containerProps = new IProp[] {resource};
+            var containerProps = new IProp[] { resource };
 
             var container = new FixedPropChest(containerProps);
 
@@ -134,7 +137,7 @@ namespace Zilon.Core.Tests.Client
             inventory.Add(new Resource(resourceScheme, 1));
 
             // контейнер
-            var containerProps = new IProp[] {new Resource(resourceScheme, 1)};
+            var containerProps = new IProp[] { new Resource(resourceScheme, 1) };
 
             var container = new FixedPropChest(containerProps);
 
@@ -169,7 +172,7 @@ namespace Zilon.Core.Tests.Client
             inventory.Add(new Resource(resourceScheme, 1));
 
             // контейнер
-            var containerProps = new IProp[] {new Resource(resourceScheme, 2)};
+            var containerProps = new IProp[] { new Resource(resourceScheme, 2) };
 
             var container = new FixedPropChest(containerProps);
 
@@ -197,13 +200,13 @@ namespace Zilon.Core.Tests.Client
         {
             // ARRANGE
 
-            var equipmentScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
+            var equipmentScheme = new TestPropScheme { Equip = new TestPropEquipSubScheme() };
 
             // Инвентарь
             var inventory = new InventoryModule();
 
             // контейнер
-            var containerProps = new IProp[] {new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>())};
+            var containerProps = new IProp[] { new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>()) };
 
             var container = new FixedPropChest(containerProps);
 
@@ -232,14 +235,14 @@ namespace Zilon.Core.Tests.Client
         {
             // ARRANGE
 
-            var equipmentScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
+            var equipmentScheme = new TestPropScheme { Equip = new TestPropEquipSubScheme() };
 
             // Инвентарь
             var inventory = new InventoryModule();
             inventory.Add(new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>()));
 
             // контейнер
-            var containerProps = new IProp[] {new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>())};
+            var containerProps = new IProp[] { new Equipment(equipmentScheme, Array.Empty<ITacticalActScheme>()) };
 
             var container = new FixedPropChest(containerProps);
 

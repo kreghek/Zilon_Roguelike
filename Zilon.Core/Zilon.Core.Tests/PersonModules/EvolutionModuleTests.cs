@@ -1,7 +1,11 @@
 ﻿using System;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Schemes;
 

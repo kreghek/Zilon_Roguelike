@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
@@ -217,9 +218,9 @@ namespace Zilon.Core.Tactics
         private static void RemovePropResource(IActor actor, ITacticalAct act)
         {
             var propResources = from prop in actor.Person.GetModule<IInventoryModule>().CalcActualItems()
-                where prop is Resource
-                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
-                select prop;
+                                where prop is Resource
+                                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
+                                select prop;
 
             if (propResources.FirstOrDefault() is Resource propResource)
             {

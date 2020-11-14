@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+
 using Zilon.Bot.Players.Logics;
 using Zilon.Bot.Players.Triggers;
 
@@ -74,10 +75,10 @@ namespace Zilon.Bot.Players.Strategies
                 tree.StartState = roamingLogic;
 
                 tree.Transitions.Add(roamingLogic,
-                    new[] {new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)});
+                    new[] { new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic) });
 
                 tree.Transitions.Add(roamingIdleLogic,
-                    new[] {new LogicTransition(_factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)});
+                    new[] { new LogicTransition(_factory.CreateTrigger<CounterOverTrigger>(), roamingLogic) });
 
                 Debug.Assert(ValidateTree(tree),
                     "Все используемые логики должны быть добавлены в Transitions, как ключи.");

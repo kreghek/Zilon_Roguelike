@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -21,12 +22,12 @@ namespace Zilon.Core.Benchmarks.Move
         {
             TestSectorSubScheme testSectorSubScheme = new TestSectorSubScheme
             {
-                RegularMonsterSids = new[] {"rat"},
+                RegularMonsterSids = new[] { "rat" },
                 RegionMonsterCount = 0,
                 MapGeneratorOptions =
-                    new TestSectorRoomMapFactoryOptionsSubScheme {RegionCount = 20, RegionSize = 20},
+                    new TestSectorRoomMapFactoryOptionsSubScheme { RegionCount = 20, RegionSize = 20 },
                 IsStart = true,
-                ChestDropTableSids = new[] {"survival", "default"},
+                ChestDropTableSids = new[] { "survival", "default" },
                 RegionChestCountRatio = 9,
                 TotalChestCount = 0
             };
@@ -45,7 +46,7 @@ namespace Zilon.Core.Benchmarks.Move
             _sectorNode.Sector.ActorManager.Add(actor);
         }
 
-        public IEnumerable<ISectorNode> SectorNodes => new[] {_sectorNode};
+        public IEnumerable<ISectorNode> SectorNodes => new[] { _sectorNode };
 
         public void AddSectorNode(ISectorNode sectorNode)
         {

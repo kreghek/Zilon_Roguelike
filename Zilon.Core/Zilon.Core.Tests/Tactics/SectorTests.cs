@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
@@ -116,7 +120,7 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Person).Returns(person);
 
             _survivalDataMock = new Mock<ISurvivalModule>();
-            var survivalStats = new[] {new SurvivalStat(0, -10, 10) {Type = SurvivalStatType.Satiety, Rate = 1}};
+            var survivalStats = new[] { new SurvivalStat(0, -10, 10) { Type = SurvivalStatType.Satiety, Rate = 1 } };
             _survivalDataMock.Setup(x => x.Stats).Returns(survivalStats);
             var survivalData = _survivalDataMock.Object;
             personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalData);

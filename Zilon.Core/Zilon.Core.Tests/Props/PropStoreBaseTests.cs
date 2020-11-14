@@ -1,6 +1,9 @@
 ﻿using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
@@ -375,24 +378,26 @@ namespace Zilon.Core.Tests.Props
             _equipmentScheme = new TestPropScheme
             {
                 Sid = "equipment",
-                Name = new LocalizedStringSubScheme {Ru = "Тестовая экипировка"},
+                Name = new LocalizedStringSubScheme { Ru = "Тестовая экипировка" },
                 Equip = new TestPropEquipSubScheme()
             };
 
             _resourceScheme = new TestPropScheme
             {
-                Sid = "resource", Name = new LocalizedStringSubScheme {Ru = "Тестовый ресурс"}
+                Sid = "resource",
+                Name = new LocalizedStringSubScheme { Ru = "Тестовый ресурс" }
             };
 
             _conceptScheme = new TestPropScheme
             {
-                Sid = "concept", Name = new LocalizedStringSubScheme {Ru = "Тестовый чертёж"}
+                Sid = "concept",
+                Name = new LocalizedStringSubScheme { Ru = "Тестовый чертёж" }
             };
         }
 
         private static PropStoreBase CreatePropStore()
         {
-            var propStoreMock = new Mock<PropStoreBase> {CallBase = true};
+            var propStoreMock = new Mock<PropStoreBase> { CallBase = true };
 
             var propStore = propStoreMock.Object;
             return propStore;

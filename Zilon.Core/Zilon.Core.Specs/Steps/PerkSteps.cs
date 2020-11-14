@@ -1,7 +1,11 @@
 ﻿using System.Linq;
+
 using FluentAssertions;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using TechTalk.SpecFlow;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -32,11 +36,11 @@ namespace Zilon.Core.Specs.Steps
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
 
             var perkScheme = schemeService.GetScheme<IPerkScheme>(perkSid);
-            var perk = new Perk {Scheme = perkScheme};
+            var perk = new Perk { Scheme = perkScheme };
 
             var actor = Context.GetActiveActor();
 
-            actor.Person.GetModule<IEvolutionModule>().AddBuildInPerks(new[] {perk});
+            actor.Person.GetModule<IEvolutionModule>().AddBuildInPerks(new[] { perk });
         }
 
         [Then(@"Перк (.+) должен быть прокачен")]

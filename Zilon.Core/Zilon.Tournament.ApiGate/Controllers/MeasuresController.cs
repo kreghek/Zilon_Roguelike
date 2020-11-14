@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.IO;
+
 using Microsoft.AspNetCore.Mvc;
+
 using Zilon.Tournament.ApiGate.Models;
 
 namespace Zilon.Tournament.ApiGate.Controllers
@@ -95,7 +97,7 @@ namespace Zilon.Tournament.ApiGate.Controllers
         {
             var value = GetValue(reader, fieldName);
             var lastValue = GetValue(diffReader, fieldName);
-            return new MeasureValue {TotalValue = value, LastValue = lastValue};
+            return new MeasureValue { TotalValue = value, LastValue = lastValue };
         }
 
         private static double GetValue(DbDataReader diffReader, string fieldName)

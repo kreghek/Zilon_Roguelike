@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Zilon.Core.Diseases;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;

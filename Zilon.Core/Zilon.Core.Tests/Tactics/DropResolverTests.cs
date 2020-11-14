@@ -1,7 +1,11 @@
 ﻿using System;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.CommonServices;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -31,7 +35,7 @@ namespace Zilon.Core.Tests.Tactics
             const int PUMPKIN_WEIGHT_BONUS = 5;
             const int EXPECTED_WEIGHT = PUMPKIN_WEIGHT * PUMPKIN_WEIGHT_BONUS;
 
-            var testPropScheme = new TestPropScheme {Sid = testPropSchemeSid, Equip = new TestPropEquipSubScheme()};
+            var testPropScheme = new TestPropScheme { Sid = testPropSchemeSid, Equip = new TestPropEquipSubScheme() };
 
             var randomSourceMock = new Mock<IDropResolverRandomSource>();
             randomSourceMock.Setup(x => x.RollWeight(It.IsAny<int>()))
@@ -56,13 +60,13 @@ namespace Zilon.Core.Tests.Tactics
 
             var resolver = new DropResolver(randomSource, schemeService, propFactory, userTimeProvider);
 
-            var testDropTableRecord = new TestDropTableRecordSubScheme {SchemeSid = testPropSchemeSid, Weight = 1};
+            var testDropTableRecord = new TestDropTableRecordSubScheme { SchemeSid = testPropSchemeSid, Weight = 1 };
 
             var testDropTable =
                 new TestDropTableScheme(1, testDropTableRecord, TestDropTableRecordSubScheme.CreateEmpty(1));
 
             // ACT
-            var factProps = resolver.Resolve(new[] {testDropTable});
+            var factProps = resolver.Resolve(new[] { testDropTable });
 
             // ASSERT
             factProps[0].Scheme.Should().BeSameAs(testPropScheme);
@@ -75,7 +79,7 @@ namespace Zilon.Core.Tests.Tactics
 
             const string testPropSchemeSid = "test-resource";
 
-            var testResourceScheme = new PropScheme {Sid = testPropSchemeSid};
+            var testResourceScheme = new PropScheme { Sid = testPropSchemeSid };
 
             var randomSourceMock = new Mock<IDropResolverRandomSource>();
             randomSourceMock.Setup(x => x.RollWeight(It.IsAny<int>()))
@@ -98,13 +102,16 @@ namespace Zilon.Core.Tests.Tactics
 
             var testDropTableRecord = new TestDropTableRecordSubScheme
             {
-                SchemeSid = testPropSchemeSid, Weight = 1, MinCount = 1, MaxCount = 1
+                SchemeSid = testPropSchemeSid,
+                Weight = 1,
+                MinCount = 1,
+                MaxCount = 1
             };
 
             var testDropTable = new TestDropTableScheme(1, testDropTableRecord);
 
             // ACT
-            var factProps = resolver.Resolve(new[] {testDropTable});
+            var factProps = resolver.Resolve(new[] { testDropTable });
 
             // ASSERT
             factProps.Length.Should().Be(1);
@@ -124,9 +131,9 @@ namespace Zilon.Core.Tests.Tactics
             const string testPropSchemeSid = "test-prop";
             const string testExtraSchemeSid = "test-extra";
 
-            var testPropScheme = new TestPropScheme {Sid = testPropSchemeSid, Equip = new TestPropEquipSubScheme()};
+            var testPropScheme = new TestPropScheme { Sid = testPropSchemeSid, Equip = new TestPropEquipSubScheme() };
 
-            var testExtraScheme = new TestPropScheme {Sid = testExtraSchemeSid};
+            var testExtraScheme = new TestPropScheme { Sid = testExtraSchemeSid };
 
             var randomSourceMock = new Mock<IDropResolverRandomSource>();
             randomSourceMock.Setup(x => x.RollWeight(It.IsAny<int>()))
@@ -168,7 +175,7 @@ namespace Zilon.Core.Tests.Tactics
             var testDropTable = new TestDropTableScheme(1, testDropTableRecord);
 
             // ACT
-            var factProps = resolver.Resolve(new[] {testDropTable});
+            var factProps = resolver.Resolve(new[] { testDropTable });
 
             // ASSERT
             factProps.Length.Should().Be(2);

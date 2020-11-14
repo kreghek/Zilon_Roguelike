@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
@@ -36,10 +37,10 @@ namespace Zilon.Core.ProgressStoring
                 Achievements = scores.Achievements,
                 BaseScores = scores.BaseScores,
                 Frags =
-                    scores.Frags.Select(x => new ScoreSidCounterStorageData {Sid = x.Key.Sid, Value = x.Value})
+                    scores.Frags.Select(x => new ScoreSidCounterStorageData { Sid = x.Key.Sid, Value = x.Value })
                         .ToArray(),
                 PlaceTypes =
-                    scores.PlaceTypes.Select(x => new ScoreSidCounterStorageData {Sid = x.Key.Sid, Value = x.Value})
+                    scores.PlaceTypes.Select(x => new ScoreSidCounterStorageData { Sid = x.Key.Sid, Value = x.Value })
                         .ToArray(),
                 TurnCounter = scores.TurnCounter,
                 Turns = scores.Turns

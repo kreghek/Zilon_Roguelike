@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using Zilon.Bot.Sdk;
 using Zilon.CommonUtilities;
 using Zilon.Core.Persons;
@@ -32,7 +34,7 @@ namespace Zilon.BotEnvironment
             _startUp = new Startup();
             _startUp.RegisterServices(serviceCollection);
 
-            var botSettings = new BotSettings {Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG)};
+            var botSettings = new BotSettings { Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG) };
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
             LoadBotAssembly("cdt", "Zilon.Bot.Players.NetCore.dll", serviceCollection, serviceProvider);
@@ -76,10 +78,10 @@ namespace Zilon.BotEnvironment
                 factory.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>());
 
             var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);
-            registerAuxMethod.Invoke(null, new object[] {serviceRegistry});
+            registerAuxMethod.Invoke(null, new object[] { serviceRegistry });
 
             var configAuxMethod = GetMethodByAttribute<ConfigureAuxServicesAttribute>(registerManager);
-            configAuxMethod.Invoke(null, new object[] {serviceFactory});
+            configAuxMethod.Invoke(null, new object[] { serviceFactory });
         }
 
         private static IEnumerable<Type> GetTypesWithHelpAttribute<TAttribute>(Assembly assembly)

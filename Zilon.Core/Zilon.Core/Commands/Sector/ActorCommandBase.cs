@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 

@@ -27,7 +27,7 @@ namespace Zilon.Core.Common
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new HashSet<OffsetCoords> {point};
+            var openPoints = new HashSet<OffsetCoords> { point };
 
             while (openPoints.Count > 0)
             {
@@ -89,7 +89,7 @@ namespace Zilon.Core.Common
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new HashSet<OffsetCoords> {point};
+            var openPoints = new HashSet<OffsetCoords> { point };
 
             while (openPoints.Count > 0)
             {

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using TechTalk.SpecFlow;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -147,7 +151,7 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Я перемещаю персонажа на (.*) клетку")]
         public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)
         {
-            var targetCoords = new[] {new OffsetCoords(1, 0), new OffsetCoords(0, 0)};
+            var targetCoords = new[] { new OffsetCoords(1, 0), new OffsetCoords(0, 0) };
 
             for (var i = 0; i < moveCount; i++)
             {

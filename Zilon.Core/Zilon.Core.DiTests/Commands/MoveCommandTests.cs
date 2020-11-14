@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+
 using FluentAssertions;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
@@ -162,7 +167,7 @@ namespace Zilon.Core.Tests.Commands
 
             Container.AddSingleton<MoveCommand>();
 
-            _actorList = new List<IActor> {playerStateMock.Object.ActiveActor.Actor};
+            _actorList = new List<IActor> { playerStateMock.Object.ActiveActor.Actor };
             var actorManagerMock = new Mock<IActorManager>();
             actorManagerMock.Setup(x => x.Items).Returns(_actorList);
             var actorManager = actorManagerMock.Object;

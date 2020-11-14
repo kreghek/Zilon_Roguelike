@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using Newtonsoft.Json;
+
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.LogicCalculations;
@@ -100,7 +103,7 @@ namespace Zilon.Core.PersonModules
         private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
             [NotNull] Equipment equipment,
             [NotNull] IEffectsModule effects,
-            [NotNull] [ItemNotNull] IEnumerable<IPerk> perks)
+            [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
             var efficientModifierValue = 0;
@@ -116,7 +119,7 @@ namespace Zilon.Core.PersonModules
             return new TacticalAct(scheme, efficientRoll, toHitRoll, equipment);
         }
 
-        private static void CalcPerksBonusesOnTacticalAct([NotNull] [ItemNotNull] IEnumerable<IPerk> archievedPerks,
+        private static void CalcPerksBonusesOnTacticalAct([NotNull][ItemNotNull] IEnumerable<IPerk> archievedPerks,
             [NotNull] Equipment equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)

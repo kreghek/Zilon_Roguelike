@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics;
@@ -30,9 +34,9 @@ namespace Zilon.Core.Tests.Tactics
 
             var transition = new RoomTransition(sectorNode);
 
-            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition> {{actorNode, transition}};
+            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition> { { actorNode, transition } };
 
-            var testedNodes = new[] {actorNode};
+            var testedNodes = new[] { actorNode };
 
             var expectedTransition = transition;
 
@@ -65,9 +69,9 @@ namespace Zilon.Core.Tests.Tactics
 
             var transition = new RoomTransition(sectorNode);
 
-            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition> {{transitionNode, transition}};
+            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition> { { transitionNode, transition } };
 
-            var testedNodes = new[] {actorNode};
+            var testedNodes = new[] { actorNode };
 
             RoomTransition expectedTransition = null;
 

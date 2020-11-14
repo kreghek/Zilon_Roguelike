@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+
 using Zilon.Core.Client;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
@@ -41,7 +42,7 @@ namespace Zilon.Core.Commands
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             var intention = new Intention<TransferPropsTask>(actor =>
-                new TransferPropsTask(actor, taskContext, new[] {inventoryTransfer, containerTransfer}));
+                new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer }));
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
     }

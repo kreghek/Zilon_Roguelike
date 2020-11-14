@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Components;
 using Zilon.Core.Diseases;
 using Zilon.Core.Persons;
@@ -155,7 +157,7 @@ namespace Zilon.Core.PersonModules
 
         private static SurvivalStat CreateUselessStat(SurvivalStatType statType)
         {
-            var stat = new SurvivalStat(100, 0, 100) {Type = statType, Rate = 1, DownPassRoll = 0};
+            var stat = new SurvivalStat(100, 0, 100) { Type = statType, Rate = 1, DownPassRoll = 0 };
 
             return stat;
         }
@@ -197,7 +199,7 @@ namespace Zilon.Core.PersonModules
             // В схеме храним базовые ХП.
             // Конституция добавяет или снижает ХП.
             var totalHp = personScheme.Hp + constitutionHpBonus;
-            var hpStat = new HpSurvivalStat(totalHp, 0, totalHp) {Type = SurvivalStatType.Health};
+            var hpStat = new HpSurvivalStat(totalHp, 0, totalHp) { Type = SurvivalStatType.Health };
 
             return hpStat;
         }
@@ -330,7 +332,7 @@ namespace Zilon.Core.PersonModules
             return keyPoints.SingleOrDefault(x => x.Level == level);
         }
 
-        private void FillSurvivalBonusesFromEffects([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEffects([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_effectsModule is null)
             {
@@ -388,7 +390,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromPerks([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromPerks([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_evolutionModule is null)
             {
@@ -507,7 +509,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromEquipments([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEquipments([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_equipmentModule is null)
             {
@@ -674,7 +676,7 @@ namespace Zilon.Core.PersonModules
                     break;
             }
 
-            var currentBonus = new SurvivalStatBonus(statType) {DownPassBonus = currentBonusValue};
+            var currentBonus = new SurvivalStatBonus(statType) { DownPassBonus = currentBonusValue };
 
             bonuses.Add(currentBonus);
         }

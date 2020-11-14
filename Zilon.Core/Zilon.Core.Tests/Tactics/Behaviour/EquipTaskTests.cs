@@ -1,7 +1,11 @@
 ﻿using System;
+
 using FluentAssertions;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -34,7 +38,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
             const int testedSlotIndex = 0;
-            var propScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
+            var propScheme = new TestPropScheme { Equip = new TestPropEquipSubScheme() };
             var testedEquipmentProp = new Equipment(propScheme, Array.Empty<ITacticalActScheme>());
 
             var actorMock = new Mock<IActor>();
@@ -77,7 +81,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
             const int testedSlotIndex = 0;
-            var propScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
+            var propScheme = new TestPropScheme { Equip = new TestPropEquipSubScheme() };
             var testedEquipmentProp = new Equipment(propScheme, Array.Empty<ITacticalActScheme>());
             var equipedEquipmentProp = new Equipment(propScheme, Array.Empty<ITacticalActScheme>());
 
@@ -88,8 +92,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            var initEquipments = new[] {equipedEquipmentProp};
-            var equipmentCarrierMock = new Mock<EquipmentModuleBase>(new object[] {initEquipments})
+            var initEquipments = new[] { equipedEquipmentProp };
+            var equipmentCarrierMock = new Mock<EquipmentModuleBase>(new object[] { initEquipments })
                 .As<IEquipmentModule>();
             equipmentCarrierMock.CallBase = true;
             var equipmentModule = equipmentCarrierMock.Object;
@@ -122,7 +126,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
             const int testedSlotIndex = 0;
-            var propScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
+            var propScheme = new TestPropScheme { Equip = new TestPropEquipSubScheme() };
             var testedEquipmentProp = new Equipment(propScheme, Array.Empty<ITacticalActScheme>());
 
             var actorMock = new Mock<IActor>();
@@ -132,8 +136,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            var equipmentsInit = new[] {null, testedEquipmentProp};
-            var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[] {equipmentsInit})
+            var equipmentsInit = new[] { null, testedEquipmentProp };
+            var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[] { equipmentsInit })
                 .As<IEquipmentModule>();
             equipmentModuleMock.CallBase = true;
             var equipmentModule = equipmentModuleMock.Object;
@@ -166,7 +170,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
             const int testedSlotIndex = 0;
-            var propScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
+            var propScheme = new TestPropScheme { Equip = new TestPropEquipSubScheme() };
             var testedEquipmentProp = new Equipment(propScheme, Array.Empty<ITacticalActScheme>(), name: "tested");
             var equipedEquipmentProp = new Equipment(propScheme, Array.Empty<ITacticalActScheme>(), name: "equiped");
 
@@ -177,8 +181,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            var equipmentsInit = new[] {equipedEquipmentProp, testedEquipmentProp};
-            var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[] {equipmentsInit})
+            var equipmentsInit = new[] { equipedEquipmentProp, testedEquipmentProp };
+            var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[] { equipmentsInit })
                 .As<IEquipmentModule>();
             equipmentModuleMock.CallBase = true;
             var equipmentModule = equipmentModuleMock.Object;

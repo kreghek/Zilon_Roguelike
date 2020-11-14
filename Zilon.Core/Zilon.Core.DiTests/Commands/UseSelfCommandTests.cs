@@ -1,8 +1,13 @@
 ﻿using System;
+
 using FluentAssertions;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
@@ -66,7 +71,7 @@ namespace Zilon.Core.Tests.Commands
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
-            var propScheme = new TestPropScheme {Use = new TestPropUseSubScheme()};
+            var propScheme = new TestPropScheme { Use = new TestPropUseSubScheme() };
             var usableResource = new Resource(propScheme, 1);
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();

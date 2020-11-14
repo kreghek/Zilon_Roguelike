@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
+
 using BenchmarkDotNet.Attributes;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Players;
@@ -38,7 +41,7 @@ namespace Zilon.Core.Benchmarks.Move
                 var nextNodes = player.SectorNode.Sector.Map.GetNext(currentActorNode);
                 var moveTargetNode = (HexNode)nextNodes.First();
 
-                playerState.SelectedViewModel = new TestNodeViewModel {Node = moveTargetNode};
+                playerState.SelectedViewModel = new TestNodeViewModel { Node = moveTargetNode };
 
                 commandManger.Push(moveCommand);
 
@@ -74,7 +77,7 @@ namespace Zilon.Core.Benchmarks.Move
                 var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sector.Map.Nodes.Cast<HexNode>());
                 var moveTargetNode = nextNodes.First();
 
-                playerState.SelectedViewModel = new TestNodeViewModel {Node = moveTargetNode};
+                playerState.SelectedViewModel = new TestNodeViewModel { Node = moveTargetNode };
 
                 commandManger.Push(moveCommand);
 
@@ -119,7 +122,7 @@ namespace Zilon.Core.Benchmarks.Move
 
             humanPlayer.BindPerson(_globe, person);
 
-            var actorViewModel = new TestActorViewModel {Actor = actor};
+            var actorViewModel = new TestActorViewModel { Actor = actor };
 
             playerState.ActiveActor = actorViewModel;
         }

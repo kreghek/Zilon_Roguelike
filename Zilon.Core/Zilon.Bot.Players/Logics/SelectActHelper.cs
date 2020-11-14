@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 

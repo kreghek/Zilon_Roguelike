@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 
@@ -108,7 +109,7 @@ namespace Zilon.Core.World
                     }
                     else
                     {
-                        dict[item.ResourceType] = new List<float> {item.Share};
+                        dict[item.ResourceType] = new List<float> { item.Share };
                     }
                 }
             }

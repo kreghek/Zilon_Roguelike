@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
@@ -67,7 +68,7 @@ namespace Zilon.Core.MapGenerators
             {
                 for (var col = startX; col < startX + mapSize; col++)
                 {
-                    var node = new HexNode(col, row) {Id = nodeIdCounter++};
+                    var node = new HexNode(col, row) { Id = nodeIdCounter++ };
 
                     map.AddNode(node);
                 }

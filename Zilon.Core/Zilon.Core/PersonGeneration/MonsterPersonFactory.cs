@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -12,7 +13,7 @@ namespace Zilon.Core.PersonGeneration
         {
             var monsterPerson = new MonsterPerson(monsterScheme);
 
-            var Acts = new ITacticalAct[] {new MonsterTacticalAct(monsterScheme.PrimaryAct)};
+            var Acts = new ITacticalAct[] { new MonsterTacticalAct(monsterScheme.PrimaryAct) };
 
             var combaActModule = new MonsterCombatActModule(Acts);
 

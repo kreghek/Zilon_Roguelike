@@ -5,8 +5,11 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
@@ -79,7 +82,7 @@ namespace Zilon.Core.World.Tests
             var nextNodes1 = currentNode.Biome.GetNext(currentNode)
                 .OfType<SectorNode>()
                 .Where(x => x.State != SectorNodeState.SectorMaterialized)
-                .Select(x => new NodeInfo {Current = x, Parent = introNode, ParentResource = currentResource});
+                .Select(x => new NodeInfo { Current = x, Parent = introNode, ParentResource = currentResource });
             openList.AddRange(nextNodes1);
 
             while (iteration < ITERATION_MAX)
@@ -96,7 +99,7 @@ namespace Zilon.Core.World.Tests
                 var nextNodes2 = nextNode.Current.Biome.GetNext(nextNode.Current)
                     .OfType<SectorNode>()
                     .Where(x => x.State != SectorNodeState.SectorMaterialized)
-                    .Select(x => new NodeInfo {Current = x, Parent = nextNode.Current, ParentResource = nextResource});
+                    .Select(x => new NodeInfo { Current = x, Parent = nextNode.Current, ParentResource = nextResource });
                 openList.AddRange(nextNodes2);
 
                 iteration++;

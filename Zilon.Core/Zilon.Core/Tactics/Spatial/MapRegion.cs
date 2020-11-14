@@ -1,5 +1,7 @@
 ﻿using System;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
@@ -16,7 +18,7 @@ namespace Zilon.Core.Tactics.Spatial
     /// </remarks>
     public class MapRegion
     {
-        public MapRegion(int id, [NotNull] [ItemNotNull] IGraphNode[] nodes)
+        public MapRegion(int id, [NotNull][ItemNotNull] IGraphNode[] nodes)
         {
             Id = id;
             Nodes = nodes ?? throw new ArgumentNullException(nameof(nodes));

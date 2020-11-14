@@ -1,5 +1,7 @@
 ﻿using System;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons

@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using FluentAssertions;
+
 using JetBrains.Annotations;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using TechTalk.SpecFlow;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -199,7 +204,7 @@ namespace Zilon.Core.Specs.Steps
 
             var container = staticObjectManager.Items.Single(x => x.Id == id);
 
-            var chestViewMdel = new TestContainerViewModel {StaticObject = container};
+            var chestViewMdel = new TestContainerViewModel { StaticObject = container };
 
             playerState.HoverViewModel = chestViewMdel;
         }

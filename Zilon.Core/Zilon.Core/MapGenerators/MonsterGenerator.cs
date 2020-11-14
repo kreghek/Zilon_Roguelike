@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonGeneration;
@@ -141,7 +142,7 @@ namespace Zilon.Core.MapGenerators
         private IActor RollRarityAndCreateMonster(ISector sector, ISectorSubScheme sectorScheme, IGraphNode monsterNode,
             int[] rarityCounter)
         {
-            var rarityMaxCounter = new[] {-1, 10, 1};
+            var rarityMaxCounter = new[] { -1, 10, 1 };
 
             var currentRarity = GetMonsterRarity(rarityCounter, rarityMaxCounter);
             var availableSchemeSids = GetAvailableSchemeSids(sectorScheme, currentRarity);

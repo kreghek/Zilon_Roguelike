@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+
 using NUnit.Framework;
+
 using Zilon.Core.Components;
 
 namespace Zilon.Core.Tests.Components
@@ -46,7 +48,7 @@ namespace Zilon.Core.Tests.Components
 
             var personStat = new PersonStat(baseValue, incrementValue);
 
-            var bonuses = new[] {new PersonStat(bonusValue)};
+            var bonuses = new[] { new PersonStat(bonusValue) };
 
 
             // ACT

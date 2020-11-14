@@ -1,7 +1,11 @@
 ﻿using System;
+
 using JetBrains.Annotations;
+
 using Moq;
+
 using NUnit.Framework;
+
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
@@ -86,14 +90,14 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             var actor = actorMock.Object;
 
-            var defences = new[] {new PersonDefenceItem(defenceType, defenceLevel)};
+            var defences = new[] { new PersonDefenceItem(defenceType, defenceLevel) };
             var monsterMock = CreateMonsterMock(defences);
             var monster = monsterMock.Object;
 
             // Настройка дествия
             var actScheme = new TestTacticalActStatsSubScheme
             {
-                Offence = new TestTacticalActOffenceSubScheme {Type = offenceType}
+                Offence = new TestTacticalActOffenceSubScheme { Type = offenceType }
             };
 
             var actMock = new Mock<ITacticalAct>();
@@ -133,7 +137,7 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             var actor = actorMock.Object;
 
-            var armors = new[] {new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Normal, 10)};
+            var armors = new[] { new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Normal, 10) };
             var monsterMock = CreateMonsterMock(armors: armors);
             var monster = monsterMock.Object;
 
@@ -142,7 +146,9 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = offenceType, ApRank = 20, Impact = ImpactType.Kinetic
+                    Type = offenceType,
+                    ApRank = 20,
+                    Impact = ImpactType.Kinetic
                 }
             };
 
@@ -195,7 +201,9 @@ namespace Zilon.Core.Tests.Tactics
 
             var actStatScheme = new TestTacticalActStatsSubScheme
             {
-                Effect = TacticalActEffectType.Heal, Efficient = new Roll(6, 1), Targets = TacticalActTargets.Self
+                Effect = TacticalActEffectType.Heal,
+                Efficient = new Roll(6, 1),
+                Targets = TacticalActTargets.Self
             };
 
             var tacticalActMock = new Mock<ITacticalAct>();
@@ -241,7 +249,7 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             var actor = actorMock.Object;
 
-            var armors = new[] {new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Lesser, 10)};
+            var armors = new[] { new PersonArmorItem(ImpactType.Kinetic, PersonRuleLevel.Lesser, 10) };
             var monsterMock = CreateMonsterMock(armors: armors);
             var monster = monsterMock.Object;
 
@@ -250,7 +258,9 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = offenceType, ApRank = 10, Impact = ImpactType.Kinetic
+                    Type = offenceType,
+                    ApRank = 10,
+                    Impact = ImpactType.Kinetic
                 }
             };
 
@@ -357,7 +367,9 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
+                    Type = OffenseType.Tactical,
+                    Impact = ImpactType.Kinetic,
+                    ApRank = 10
                 }
             };
 
