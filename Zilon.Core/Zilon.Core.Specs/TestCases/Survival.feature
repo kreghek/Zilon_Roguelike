@@ -52,14 +52,14 @@
 Scenario Outline: Употребление медикаментов для восстановления Hp.
 	Given Есть карта размером 2
 	And Есть актёр игрока класса captain в ячейке (0, 0)
-	And Актёр игрока имеет Hp: <startHp>
+	And Актёр имеет эффект <startEffect>
 	And В инвентаре у актёра есть еда: <propSid> количество: 100
 	When Актёр использует предмет <propSid> на себя <propCount> раз
 	Then Актёр под эффектом <effect>
 
 Examples: 
-	| startHp | propSid | propCount | effect       |
-	| 1       | med-kit | 1         | Сильная рана |
+	| startEffect      | propSid | propCount | effect       |
+	| Смертельная рана | med-kit | 1         | Сильная рана |
 
 @survival @dev2
 Scenario Outline: Употребление медикаментов снижает сытость и воду.

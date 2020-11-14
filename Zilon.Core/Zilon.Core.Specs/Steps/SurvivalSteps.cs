@@ -365,6 +365,16 @@ namespace Zilon.Core.Specs.Steps
                     stat = SurvivalStatType.Health;
                     break;
 
+                case "Сильная рана":
+                    level = SurvivalStatHazardLevel.Strong;
+                    stat = SurvivalStatType.Health;
+                    break;
+
+                case "Смертельная рана":
+                    level = SurvivalStatHazardLevel.Max;
+                    stat = SurvivalStatType.Health;
+                    break;
+
                 default:
                     throw new NotSupportedException("Неизветный тип ожидаемого эффекта.");
             }
