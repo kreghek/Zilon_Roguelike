@@ -427,51 +427,58 @@ namespace Zilon.Core.PersonModules
                 {
                     foreach (var rule in currentLevelScheme.Rules)
                     {
-                        switch (rule.Type)
-                        {
-                            case PersonRuleType.Health:
-                                BonusToHealth(rule.Level, PersonRuleDirection.Positive, ref bonusList);
-                                break;
-
-                            case PersonRuleType.HealthIfNoBody:
-
-                                var equipmentModule = _equipmentModule;
-
-                                var requirementsCompleted = true;
-
-                                if (equipmentModule != null)
-                                {
-                                    // it is logically. If person can not have equipment, he has no body armor.
-
-                                    for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
-                                    {
-                                        if ((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0
-                                            && equipmentModule[slotIndex] != null)
-                                        {
-                                            requirementsCompleted = false;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if (requirementsCompleted)
-                                {
-                                    BonusToHealth(rule.Level, rule.Direction, ref bonusList);
-                                }
-
-                                break;
-
-                            case PersonRuleType.HungerResistance:
-                                BonusToDownPass(SurvivalStatType.Satiety, rule.Level, rule.Direction, ref bonusList);
-                                break;
-
-                            case PersonRuleType.ThristResistance:
-                                BonusToDownPass(SurvivalStatType.Hydration, rule.Level, rule.Direction, ref bonusList);
-                                break;
-                        }
+                        bonusList = ProcessRule(bonusList, rule);
                     }
                 }
             }
+        }
+
+        private List<SurvivalStatBonus> ProcessRule(List<SurvivalStatBonus> bonusList, PerkRuleSubScheme rule)
+        {
+            switch (rule.Type)
+            {
+                case PersonRuleType.Health:
+                    BonusToHealth(rule.Level, PersonRuleDirection.Positive, ref bonusList);
+                    break;
+
+                case PersonRuleType.HealthIfNoBody:
+
+                    var equipmentModule = _equipmentModule;
+
+                    var requirementsCompleted = true;
+
+                    if (equipmentModule != null)
+                    {
+                        // it is logically. If person can not have equipment, he has no body armor.
+
+                        for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
+                        {
+                            if ((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0
+                                && equipmentModule[slotIndex] != null)
+                            {
+                                requirementsCompleted = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (requirementsCompleted)
+                    {
+                        BonusToHealth(rule.Level, rule.Direction, ref bonusList);
+                    }
+
+                    break;
+
+                case PersonRuleType.HungerResistance:
+                    BonusToDownPass(SurvivalStatType.Satiety, rule.Level, rule.Direction, ref bonusList);
+                    break;
+
+                case PersonRuleType.ThristResistance:
+                    BonusToDownPass(SurvivalStatType.Hydration, rule.Level, rule.Direction, ref bonusList);
+                    break;
+            }
+
+            return bonusList;
         }
 
         private void ApplySurvivalBonuses(IEnumerable<SurvivalStatBonus> bonuses)
@@ -574,8 +581,8 @@ namespace Zilon.Core.PersonModules
         private void BonusToHealth(PersonRuleLevel level, PersonRuleDirection direction,
             ref List<SurvivalStatBonus> bonuses)
         {
-            const SurvivalStatType hpStatType = SurvivalStatType.Health;
-            var hpStat = Stats.SingleOrDefault(x => x.Type == hpStatType);
+            const SurvivalStatType HP_STAT_TYPE = SurvivalStatType.Health;
+            var hpStat = Stats.SingleOrDefault(x => x.Type == HP_STAT_TYPE);
             if (hpStat != null)
             {
                 var bonus = 0;
@@ -609,10 +616,10 @@ namespace Zilon.Core.PersonModules
                     bonus *= -1;
                 }
 
-                var currentBonus = bonuses.SingleOrDefault(x => x.SurvivalStatType == hpStatType);
+                var currentBonus = bonuses.SingleOrDefault(x => x.SurvivalStatType == HP_STAT_TYPE);
                 if (currentBonus == null)
                 {
-                    currentBonus = new SurvivalStatBonus(hpStatType);
+                    currentBonus = new SurvivalStatBonus(HP_STAT_TYPE);
                     bonuses.Add(currentBonus);
                 }
                 currentBonus.ValueBonus += bonus;
