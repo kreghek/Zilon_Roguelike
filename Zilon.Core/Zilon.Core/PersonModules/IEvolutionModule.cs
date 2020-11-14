@@ -41,5 +41,10 @@ namespace Zilon.Core.PersonModules
         /// Выстреливает, когда один из перков повышается на уровень.
         /// </summary>
         event EventHandler<PerkEventArgs> PerkLeveledUp;
+
+        /// <summary>
+        /// Выстреливает, когда появляется новый перк.
+        /// </summary>
+        event EventHandler<PerkEventArgs> PerkAdded;
     }
 }

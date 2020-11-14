@@ -72,28 +72,24 @@ namespace Zilon.Core.PersonModules
         {
             if (_equipmentModule != null)
             {
-                _equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
+                _equipmentModule.EquipmentChanged += OtherModule_StateChanged;
             }
 
             if (_effectsModule != null)
             {
-                _effectsModule.Added += Effects_CollectionChanged;
-                _effectsModule.Removed += Effects_CollectionChanged;
-                _effectsModule.Changed += Effects_CollectionChanged;
+                _effectsModule.Added += OtherModule_StateChanged;
+                _effectsModule.Removed += OtherModule_StateChanged;
+                _effectsModule.Changed += OtherModule_StateChanged;
             }
 
-            //if (_evolutionModule != null)
-            //{ 
-            //    _evolutionModule
-            //}
+            if (_evolutionModule != null)
+            {
+                _evolutionModule.PerkAdded += OtherModule_StateChanged;
+                _evolutionModule.PerkLeveledUp += OtherModule_StateChanged;
+            }
         }
 
-        private void Effects_CollectionChanged(object sender, EffectEventArgs e)
-        {
-            CalcSurvivalStats();
-        }
-
-        private void EquipmentModule_EquipmentChanged(object sender, EquipmentChangedEventArgs e)
+        private void OtherModule_StateChanged(object sender, EventArgs e)
         {
             CalcSurvivalStats();
         }
