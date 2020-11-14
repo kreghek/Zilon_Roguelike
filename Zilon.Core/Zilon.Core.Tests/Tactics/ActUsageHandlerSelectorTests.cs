@@ -108,7 +108,7 @@ namespace Zilon.Core.Tactics.Tests
         {
             public IGraphNode Node { get; }
 
-            public PhysicalSize PhysicalSize { get; }
+            public PhysicalSizePattern PhysicalSize { get; }
 
             public bool CanBeDamaged()
             {
@@ -129,7 +129,7 @@ namespace Zilon.Core.Tactics.Tests
         {
             public IGraphNode Node { get; }
 
-            public PhysicalSize PhysicalSize { get; }
+            public PhysicalSizePattern PhysicalSize { get; }
 
             public bool CanBeDamaged()
             {

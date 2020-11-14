@@ -38,7 +38,7 @@ namespace Zilon.Core.Tactics
         /// <inheritdoc/>
         public PropContainerPurpose Purpose { get; }
 
-        public PhysicalSize PhysicalSize => PhysicalSize.Size1;
+        public PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
 
         /// <inheritdoc/>
         public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule)

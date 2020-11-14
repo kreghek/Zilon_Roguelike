@@ -365,11 +365,11 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSize physicalSize, IGraphNode baseNode, IMap map)
+        private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSizePattern physicalSize, IGraphNode baseNode, IMap map)
         {
             yield return baseNode;
 
-            if (physicalSize == PhysicalSize.Size7)
+            if (physicalSize == PhysicalSizePattern.Size7)
             {
                 var neighbors = map.GetNext(baseNode);
                 foreach (var neighbor in neighbors)

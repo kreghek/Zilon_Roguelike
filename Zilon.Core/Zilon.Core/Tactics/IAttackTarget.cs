@@ -13,7 +13,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         IGraphNode Node { get; }
 
-        PhysicalSize PhysicalSize { get; }
+        PhysicalSizePattern PhysicalSize { get; }
 
         /// <summary>
         /// Принятие урона.

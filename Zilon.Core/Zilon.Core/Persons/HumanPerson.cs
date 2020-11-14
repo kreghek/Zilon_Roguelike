@@ -36,7 +36,7 @@ namespace Zilon.Core.Persons
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
-        public override PhysicalSize PhysicalSize => PhysicalSize.Size1;
+        public override PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
 
         /// <inheritdoc/>
         public override string ToString()

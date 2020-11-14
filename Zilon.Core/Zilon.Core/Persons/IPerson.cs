@@ -12,7 +12,7 @@ namespace Zilon.Core.Persons
     {
         int Id { get; set; }
 
-        PhysicalSize PhysicalSize { get; }
+        PhysicalSizePattern PhysicalSize { get; }
 
         IFraction Fraction { get; }
 
