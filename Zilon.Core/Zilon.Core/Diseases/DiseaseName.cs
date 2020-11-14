@@ -53,9 +53,9 @@ namespace Zilon.Core.Diseases
         public override int GetHashCode()
         {
             var hashCode = -2010629649;
-            hashCode = hashCode * -1521134295 + EqualityComparer<ILocalizedString>.Default.GetHashCode(Primary);
-            hashCode = hashCode * -1521134295 + EqualityComparer<ILocalizedString>.Default.GetHashCode(PrimaryPrefix);
-            hashCode = hashCode * -1521134295 + EqualityComparer<ILocalizedString>.Default.GetHashCode(Secondary);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<ILocalizedString>.Default.GetHashCode(Primary);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<ILocalizedString>.Default.GetHashCode(PrimaryPrefix);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<ILocalizedString>.Default.GetHashCode(Secondary);
             return hashCode;
         }
 

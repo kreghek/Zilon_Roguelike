@@ -14,7 +14,9 @@ namespace Zilon.Bot.Players.Logics
             _decisionSource = decisionSource;
         }
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+        public override IActorTask GetTask(
+            IActor actor,
+            ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
             if (_idleTask == null)

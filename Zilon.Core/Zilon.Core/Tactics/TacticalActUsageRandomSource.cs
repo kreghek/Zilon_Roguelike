@@ -91,7 +91,6 @@ namespace Zilon.Core.Tactics
             return sum;
         }
 
-
         private int RollD6()
         {
             var roll = _dice.Roll(6);

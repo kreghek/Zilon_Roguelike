@@ -13,8 +13,11 @@ namespace Zilon.Core.ProgressStoring
     public class HumanPersonStorageData
     {
         public HumanSurvivalStatStorageData[] Survival { get; set; }
+
         public PropStorageData[] Equipments { get; set; }
+
         public PropStorageData[] Inventory { get; set; }
+
         public PerkStorageData[] Perks { get; set; }
 
         public static HumanPersonStorageData Create(HumanPerson humanPerson)
@@ -86,7 +89,8 @@ namespace Zilon.Core.ProgressStoring
             return storageData;
         }
 
-        public HumanPerson Restore(ISchemeService schemeService,
+        public HumanPerson Restore(
+            ISchemeService schemeService,
             ISurvivalRandomSource survivalRandomSource,
             IPropFactory propFactory)
         {
@@ -167,13 +171,15 @@ namespace Zilon.Core.ProgressStoring
                 equipment.Durable.Value = storedEquipment.Durable;
 
                 person.GetModule<IEquipmentModule>()[i] = equipment;
+
                 //TODO Уменьшать прочность согласно сохранённым данным
             }
 
             return person;
         }
 
-        private static void RestoreEvolutionData(ISchemeService schemeService,
+        private static void RestoreEvolutionData(
+            ISchemeService schemeService,
             HumanPersonStorageData storedPerson,
             EvolutionModule evolutionData)
         {
@@ -196,10 +202,10 @@ namespace Zilon.Core.ProgressStoring
                 {
                     IsComplete =
                         storedPerk.Jobs
-                            .Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope)
+                            .Single(storedJob => (storedJob.Type == job.Type) && (storedJob.Scope == job.Scope))
                             .IsComplete,
                     Progress = storedPerk.Jobs
-                        .Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope).Progress
+                        .Single(storedJob => (storedJob.Type == job.Type) && (storedJob.Scope == job.Scope)).Progress
                 }).ToArray();
 
                 perksFromSave.Add(perk);

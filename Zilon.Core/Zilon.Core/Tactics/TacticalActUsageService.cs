@@ -55,7 +55,11 @@ namespace Zilon.Core.Tactics
         /// <summary>Сервис для работы с прочностью экипировки.</summary>
         public IEquipmentDurableService EquipmentDurableService { get; set; }
 
-        public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs, ISector sector)
+        public void UseOn(
+            IActor actor,
+            IAttackTarget target,
+            UsedTacticalActs usedActs,
+            ISector sector)
         {
             if (actor is null)
             {
@@ -82,7 +86,7 @@ namespace Zilon.Core.Tactics
 
             foreach (var act in usedActs.Primary)
             {
-                if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && actor == target)
+                if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && (actor == target))
                 {
                     throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
                 }
@@ -142,10 +146,14 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act, ISectorMap map)
+        private void UseAct(
+            IActor actor,
+            IAttackTarget target,
+            ITacticalAct act,
+            ISectorMap map)
         {
             bool isInDistance;
-            if ((act.Stats.Targets & TacticalActTargets.Self) > 0 && actor == target)
+            if (((act.Stats.Targets & TacticalActTargets.Self) > 0) && (actor == target))
             {
                 isInDistance = true;
             }
@@ -196,7 +204,11 @@ namespace Zilon.Core.Tactics
             act.StartCooldownIfItIs();
         }
 
-        private static bool IsInDistance(IActor actor, IAttackTarget target, ITacticalAct act, ISectorMap map)
+        private static bool IsInDistance(
+            IActor actor,
+            IAttackTarget target,
+            ITacticalAct act,
+            ISectorMap map)
         {
             var actorNodes = GetActorNodes(actor.PhysicalSize, actor.Node, map);
             var targetNodes = GetActorNodes(target.PhysicalSize, target.Node, map);
@@ -218,9 +230,9 @@ namespace Zilon.Core.Tactics
         private static void RemovePropResource(IActor actor, ITacticalAct act)
         {
             var propResources = from prop in actor.Person.GetModule<IInventoryModule>().CalcActualItems()
-                                where prop is Resource
-                                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
-                                select prop;
+                where prop is Resource
+                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
+                select prop;
 
             if (propResources.FirstOrDefault() is Resource propResource)
             {

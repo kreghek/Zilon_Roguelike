@@ -384,14 +384,12 @@ namespace Zilon.Core.Tests.Props
 
             _resourceScheme = new TestPropScheme
             {
-                Sid = "resource",
-                Name = new LocalizedStringSubScheme { Ru = "Тестовый ресурс" }
+                Sid = "resource", Name = new LocalizedStringSubScheme { Ru = "Тестовый ресурс" }
             };
 
             _conceptScheme = new TestPropScheme
             {
-                Sid = "concept",
-                Name = new LocalizedStringSubScheme { Ru = "Тестовый чертёж" }
+                Sid = "concept", Name = new LocalizedStringSubScheme { Ru = "Тестовый чертёж" }
             };
         }
 

@@ -74,7 +74,7 @@ namespace Zilon.Core.CommonServices.Dices
             do
             {
                 x = GetNext();
-            } while (x < min || x > max);
+            } while ((x < min) || (x > max));
 
             return x;
         }
@@ -85,7 +85,11 @@ namespace Zilon.Core.CommonServices.Dices
             return next;
         }
 
-        private static double MapToInterval(double x, double sourceMin, double sourceMax, double targetMin,
+        private static double MapToInterval(
+            double x,
+            double sourceMin,
+            double sourceMax,
+            double targetMin,
             double targetMax)
         {
             var targetDiff = targetMax - targetMin;

@@ -61,12 +61,12 @@ namespace Zilon.Core.Common
 
         public bool IsIn(int x, int y)
         {
-            if (x >= Width || y >= Height)
+            if ((x >= Width) || (y >= Height))
             {
                 return false;
             }
 
-            if (x < 0 || y < 0)
+            if ((x < 0) || (y < 0))
             {
                 return false;
             }

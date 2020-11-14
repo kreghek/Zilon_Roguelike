@@ -13,6 +13,7 @@ namespace Zilon.Bot.Players.Triggers
         }
 
         public int Counter { get; private set; }
+
         public bool CounterIsOver => Counter <= 0;
 
         public void Reset()
@@ -20,7 +21,10 @@ namespace Zilon.Bot.Players.Triggers
             Counter = COUNTER_INITIAL_VALUE;
         }
 
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+        public bool Test(
+            IActor actor,
+            ISectorTaskSourceContext context,
+            ILogicState currentState,
             ILogicStrategyData strategyData)
         {
             return CounterIsOver;

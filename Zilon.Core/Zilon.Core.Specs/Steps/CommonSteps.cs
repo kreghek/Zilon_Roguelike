@@ -50,7 +50,11 @@ namespace Zilon.Core.Specs.Steps
 
         [UsedImplicitly]
         [Given(@"Между ячейками \((.*), (.*)\) и \((.*), (.*)\) есть стена")]
-        public void GivenМеждуЯчейкамиИЕстьСтена(int x1, int y1, int x2, int y2)
+        public void GivenМеждуЯчейкамиИЕстьСтена(
+            int x1,
+            int y1,
+            int x2,
+            int y2)
         {
             Context.AddWall(x1, y1, x2, y2);
         }
@@ -73,7 +77,11 @@ namespace Zilon.Core.Specs.Steps
 
         [UsedImplicitly]
         [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
-        public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int monsterId, int x, int y)
+        public void GivenЕстьМонстрКлассаRatВЯчейке(
+            string monsterSid,
+            int monsterId,
+            int x,
+            int y)
         {
             var sector = Context.Globe.SectorNodes.First().Sector;
             Context.AddMonsterActor(monsterSid, monsterId, sector, new OffsetCoords(x, y));
@@ -159,7 +167,7 @@ namespace Zilon.Core.Specs.Steps
             var testHasPlayerPerson = playerState.ActiveActor?.Actor != null;
             if (testHasPlayerPerson)
             {
-                while (IsPlayerPersonCanIntent(humanTaskSource, survivalModule) && counter > 0)
+                while (IsPlayerPersonCanIntent(humanTaskSource, survivalModule) && (counter > 0))
                 {
                     await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
                     counter--;
@@ -184,7 +192,7 @@ namespace Zilon.Core.Specs.Steps
                 throw new ArgumentNullException(nameof(humanTaskSource));
             }
 
-            return !humanTaskSource.CanIntent() && survivalModule?.IsDead == false;
+            return !humanTaskSource.CanIntent() && (survivalModule?.IsDead == false);
         }
 
         [UsedImplicitly]
@@ -294,7 +302,7 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
+                        if (humatTaskSource.CanIntent() && (survivalModule?.IsDead == false))
                         {
                             WhenЯВыполняюПростой();
                         }

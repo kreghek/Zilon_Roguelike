@@ -10,7 +10,8 @@ namespace Zilon.Core.Persons
     public class EquipmentChangedEventArgs : EventArgs
     {
         [ExcludeFromCodeCoverage]
-        public EquipmentChangedEventArgs(Equipment equipment,
+        public EquipmentChangedEventArgs(
+            Equipment equipment,
             Equipment oldEquipment,
             int slotIndex)
         {

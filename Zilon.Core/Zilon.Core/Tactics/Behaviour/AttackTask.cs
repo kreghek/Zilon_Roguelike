@@ -12,7 +12,8 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly ITacticalActUsageService _actService;
 
-        public AttackTask(IActor actor,
+        public AttackTask(
+            IActor actor,
             IActorTaskContext context,
             IAttackTarget target,
             ITacticalAct tacticalAct,
@@ -77,8 +78,8 @@ namespace Zilon.Core.Tactics.Behaviour
                     }
 
                     var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
-                                        where act.Equipment == slotEquipment
-                                        select act;
+                        where act.Equipment == slotEquipment
+                        select act;
 
                     var usedAct = equipmentActs.FirstOrDefault();
 

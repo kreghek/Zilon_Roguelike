@@ -43,7 +43,7 @@ namespace Zilon.Core.Benchmarks.Fow
 
             _fowData = new HumanSectorFowData();
 
-            _baseNode = map.HexNodes.Single(x => x.OffsetCoords.X == baseX && x.OffsetCoords.Y == baseY);
+            _baseNode = map.HexNodes.Single(x => (x.OffsetCoords.X == baseX) && (x.OffsetCoords.Y == baseY));
 
             _fowContextMock = new TestFowContext(map);
         }

@@ -17,12 +17,17 @@ namespace Zilon.Core.Persons
         }
 
         public ITacticalActStatsSubScheme Stats { get; }
+
         public Roll Efficient { get; }
+
         public Roll ToHit { get; }
+
         public Equipment Equipment => null;
+
         public ITacticalActConstrainsSubScheme Constrains => null;
 
         public ITacticalActScheme Scheme { get; }
+
         public int? CurrentCooldown { get; }
 
         public void StartCooldownIfItIs()

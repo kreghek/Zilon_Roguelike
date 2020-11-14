@@ -14,6 +14,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
         }
 
         protected override int ExhausingValue => 10;
+
         protected override DepositMiningDifficulty Difficulty => DepositMiningDifficulty.Moderately;
     }
 }

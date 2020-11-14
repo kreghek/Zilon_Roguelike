@@ -49,7 +49,7 @@ namespace Zilon.Core.Commands
             var targetNode = target.Node;
 
             var act = PlayerState.TacticalAct;
-            if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
+            if (((act.Stats.Targets & TacticalActTargets.Self) > 0) &&
                 ReferenceEquals(PlayerState.ActiveActor.Actor, target))
             {
                 // Лечить можно только самого себя.
@@ -78,7 +78,7 @@ namespace Zilon.Core.Commands
 
             // Проверка наличия ресурсов для выполнения действия
 
-            if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
+            if ((act.Constrains?.PropResourceType != null) && (act.Constrains?.PropResourceCount != null))
             {
                 var hasPropResource = CheckPropResource(
                     PlayerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>(),
@@ -128,7 +128,8 @@ namespace Zilon.Core.Commands
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
 
-        private static bool CheckPropResource(IPropStore inventory,
+        private static bool CheckPropResource(
+            IPropStore inventory,
             string usedPropResourceType,
             int usedPropResourceCount)
         {
@@ -155,7 +156,7 @@ namespace Zilon.Core.Commands
 
             var preferredPropResource = propResources.FirstOrDefault();
 
-            return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
+            return (preferredPropResource != null) && (preferredPropResource.Count >= usedPropResourceCount);
         }
 
         private static void AddResourceOfUsageToList(

@@ -6,6 +6,7 @@ namespace Zilon.Core.Tests.Common
     public class TestContainerViewModel : IContainerViewModel
     {
         public IStaticObject StaticObject { get; set; }
+
         public object Item => StaticObject;
     }
 }

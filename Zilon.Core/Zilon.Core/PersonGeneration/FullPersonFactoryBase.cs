@@ -78,8 +78,7 @@ namespace Zilon.Core.PersonGeneration
 
             var survivalModule =
                 new HumanSurvivalModule(personScheme, _survivalRandomSource, attributeModule, effectsModule,
-                    evolutionModule, equipmentModule)
-                { PlayerEventLogService = PlayerEventLogService };
+                    evolutionModule, equipmentModule) { PlayerEventLogService = PlayerEventLogService };
             person.AddModule(survivalModule);
 
             RollStartEquipment(inventoryModule, person);

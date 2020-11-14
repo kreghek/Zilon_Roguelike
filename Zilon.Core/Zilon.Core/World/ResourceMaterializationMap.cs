@@ -68,7 +68,7 @@ namespace Zilon.Core.World
         {
             var newRoll = _dice.RollD6();
 
-            if (!items.Any() || newRoll > 3)
+            if (!items.Any() || (newRoll > 3))
             {
                 var itemsNew = new List<ResourceDepositDataItem>(items);
                 var availableResources = new List<SectorResourceType>

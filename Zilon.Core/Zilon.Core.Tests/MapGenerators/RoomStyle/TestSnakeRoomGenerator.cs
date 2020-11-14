@@ -21,7 +21,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             };
         }
 
-        public override IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
+        public override IEnumerable<Room> GenerateRoomsInGrid(
+            int roomCount,
             int roomMinSize,
             int roomMaxSize,
             IEnumerable<RoomTransition> availableTransitions)
@@ -66,8 +67,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             {
                 for (var y = 0; y < room.Height; y++)
                 {
-                    var nodeX = x + room.PositionX * 20;
-                    var nodeY = y + room.PositionY * 20;
+                    var nodeX = x + (room.PositionX * 20);
+                    var nodeY = y + (room.PositionY * 20);
                     var node = new HexNode(nodeX, nodeY);
                     room.Nodes.Add(node);
                     map.AddNode(node);

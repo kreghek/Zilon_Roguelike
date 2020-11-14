@@ -6,6 +6,7 @@ namespace Zilon.Core.Tests.Common
     public sealed class TestNodeViewModel : IMapNodeViewModel
     {
         public HexNode Node { get; set; }
+
         public object Item => Node;
     }
 }

@@ -18,6 +18,7 @@ namespace Zilon.Core.Scoring
         /// <param name="scores"> Объект, содержащий очки игры. </param>
         /// <param name="botName"> Имя бота, который играл. Не указывать, если выводятся очки игрока-человека. </param>
         /// <returns> Возвращает текстовое представление итогов игры в виде строки. </returns>
+
         //TODO Вместо botName передавать объект BotInfo. Так будет более очевидно.
         public static string CreateTextSummary([NotNull] Scores scores, [CanBeNull] string botName)
         {

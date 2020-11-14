@@ -45,7 +45,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             {
                 for (var x = 0; x < 5; x++)
                 {
-                    result[x + y * 5] = new OffsetCoords(x, y);
+                    result[x + (y * 5)] = new OffsetCoords(x, y);
                 }
             }
 

@@ -28,6 +28,7 @@ namespace Zilon.Core.Tests.Tactics
 
             // Сейчас в коде генерация модификаторов строго завязана на этот символьныи иденфтикатор.
             const string testPropSchemeSid = "evil-pumpkin";
+
             // Максимальный пик дропа должен быть 2 ноября любого года. 2019 выбран произвольно.
             var evilHourDate = new DateTime(2019, 11, 2);
 
@@ -102,10 +103,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var testDropTableRecord = new TestDropTableRecordSubScheme
             {
-                SchemeSid = testPropSchemeSid,
-                Weight = 1,
-                MinCount = 1,
-                MaxCount = 1
+                SchemeSid = testPropSchemeSid, Weight = 1, MinCount = 1, MaxCount = 1
             };
 
             var testDropTable = new TestDropTableScheme(1, testDropTableRecord);

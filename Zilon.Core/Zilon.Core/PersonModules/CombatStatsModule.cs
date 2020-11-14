@@ -195,8 +195,8 @@ namespace Zilon.Core.PersonModules
             foreach (var armorGroup in armorGroups)
             {
                 var orderedArmors = from armor in armorGroup
-                                    orderby armor.AbsorbtionLevel, armor.ArmorRank
-                                    select armor;
+                    orderby armor.AbsorbtionLevel, armor.ArmorRank
+                    select armor;
 
                 float? rankRaw = null;
                 PersonRuleLevel? armorLevel = null;
@@ -265,7 +265,8 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void AddStatToDict(Dictionary<SkillStatType, float> bonusDict,
+        private static void AddStatToDict(
+            Dictionary<SkillStatType, float> bonusDict,
             SkillStatType targetStatType,
             PersonRuleLevel level,
             PersonRuleDirection direction)

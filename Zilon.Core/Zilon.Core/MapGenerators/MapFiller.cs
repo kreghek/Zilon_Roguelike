@@ -21,7 +21,8 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        public static void FillSquareMap(IMap map,
+        public static void FillSquareMap(
+            IMap map,
             int startX,
             int startY,
             int mapSize)
@@ -58,7 +59,8 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private static void CreateNodes(IMap map,
+        private static void CreateNodes(
+            IMap map,
             int startX,
             int startY,
             int mapSize)

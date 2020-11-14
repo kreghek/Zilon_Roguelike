@@ -37,9 +37,9 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             var schemeDict = new Dictionary<string, IMonsterScheme>
             {
-                {"regular", CreateMonsterScheme("regular")},
-                {"rare", CreateMonsterScheme("rare")},
-                {"champion", CreateMonsterScheme("champion")}
+                { "regular", CreateMonsterScheme("regular") },
+                { "rare", CreateMonsterScheme("rare") },
+                { "champion", CreateMonsterScheme("champion") }
             };
 
             var schemeServiceMock = new Mock<ISchemeService>();
@@ -109,8 +109,7 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             var scheme = new TestMonsterScheme
             {
-                Sid = sid,
-                PrimaryAct = new TestTacticalActStatsSubScheme { Efficient = new Roll(6, 1) }
+                Sid = sid, PrimaryAct = new TestTacticalActStatsSubScheme { Efficient = new Roll(6, 1) }
             };
             return scheme;
         }

@@ -32,17 +32,15 @@ namespace Zilon.Core.Tests.Tactics.Base
 
             var manager = CreateManager();
 
-
             // ACT
             using (var monitor = manager.Monitor())
             {
                 manager.Add(entity);
 
-
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
                     .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
-                        e.Items.Length == 1 && e.Items[0] == entity);
+                        (e.Items.Length == 1) && (e.Items[0] == entity));
             }
         }
 
@@ -65,12 +63,10 @@ namespace Zilon.Core.Tests.Tactics.Base
 
             var manager = CreateManager();
 
-
             // ACT
             using (var monitor = manager.Monitor())
             {
                 manager.Add(entityList);
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
@@ -92,17 +88,15 @@ namespace Zilon.Core.Tests.Tactics.Base
             var manager = CreateManager();
             manager.Add(entity);
 
-
             // ACT
             using (var monitor = manager.Monitor())
             {
                 manager.Remove(entity);
 
-
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
                     .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
-                        e.Items.Length == 1 && e.Items[0] == entity);
+                        (e.Items.Length == 1) && (e.Items[0] == entity));
             }
         }
 
@@ -126,12 +120,10 @@ namespace Zilon.Core.Tests.Tactics.Base
             var manager = CreateManager();
             manager.Add(entityList);
 
-
             // ACT
             using (var monitor = manager.Monitor())
             {
                 manager.Remove(entityList);
-
 
                 // ASSERT
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
@@ -140,14 +132,15 @@ namespace Zilon.Core.Tests.Tactics.Base
             }
         }
 
-
         /// <summary>
         /// Создание тестируемого менеджера сущностей сектора. В конкретных тестах будет реализовываться.
         /// </summary>
         /// <returns> Возвращает экземпляр конкретного менеджера сущностей сектора. </returns>
         protected abstract ISectorEntityManager<TSectorEntity> CreateManager();
 
-        private bool CheckEventArgs(ManagerItemsChangedEventArgs<TSectorEntity> e, int actorCount,
+        private bool CheckEventArgs(
+            ManagerItemsChangedEventArgs<TSectorEntity> e,
+            int actorCount,
             IList<TSectorEntity> actorList)
         {
             var isCountEquals = e.Items.Length == actorCount;

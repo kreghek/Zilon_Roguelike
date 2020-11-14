@@ -102,7 +102,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return regions;
         }
 
-        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions,
+        private static ISectorMap CreateSectorMap(
+            Matrix<bool> matrix,
+            RegionDraft[] draftRegions,
             IEnumerable<RoomTransition> transitions)
         {
             // Создание графа карты сектора на основе карты клеточного автомата.
@@ -128,13 +130,16 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return map;
         }
 
-        private static void CreateTransitionInSmallestRegion(IEnumerable<RoomTransition> transitions, ISectorMap map,
+        private static void CreateTransitionInSmallestRegion(
+            IEnumerable<RoomTransition> transitions,
+            ISectorMap map,
             MapRegion[] regionOrderedBySize)
         {
             var startRegion = regionOrderedBySize.First();
             startRegion.IsStart = true;
 
             var transitionArray = transitions.ToArray();
+
             // Пропускаем 1, потому что 1 занять стартом.
             var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
 
@@ -157,8 +162,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 }
 
                 transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
-                                              where map.Transitions.Keys.Contains(regionNode)
-                                              select regionNode).ToArray();
+                    where map.Transitions.Keys.Contains(regionNode)
+                    select regionNode).ToArray();
             }
         }
 

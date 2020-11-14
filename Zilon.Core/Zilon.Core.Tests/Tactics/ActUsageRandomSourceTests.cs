@@ -34,10 +34,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var service = new TacticalActUsageRandomSource(dice);
 
-
             // ACT
             var factRoll = service.RollEfficient(roll);
-
 
             // ASSERT
             factRoll.Should().Be(expectedRoll);
@@ -64,10 +62,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var service = new TacticalActUsageRandomSource(dice);
 
-
             // ACT
             var factRoll = service.RollEfficient(roll);
-
 
             // ASSERT
             factRoll.Should().Be(expectedRoll);

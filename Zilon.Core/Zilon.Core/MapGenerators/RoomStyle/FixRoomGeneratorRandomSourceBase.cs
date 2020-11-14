@@ -38,12 +38,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             var currentConnection = Connections.Single(x =>
-                x.Item1.X == currentRoom.PositionX &&
-                x.Item1.Y == currentRoom.PositionY);
+                (x.Item1.X == currentRoom.PositionX) &&
+                (x.Item1.Y == currentRoom.PositionY));
 
             var connectedRoom = availableRooms.Single(x =>
-                x.PositionX == currentConnection.Item2.X &&
-                x.PositionY == currentConnection.Item2.Y);
+                (x.PositionX == currentConnection.Item2.X) &&
+                (x.PositionY == currentConnection.Item2.Y));
 
             return new[] { connectedRoom };
         }
@@ -85,8 +85,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             foreach (var currentRoom in rooms)
             {
                 var currentConnection = Connections.SingleOrDefault(x =>
-                    x.Item1.X == currentRoom.PositionX &&
-                    x.Item1.Y == currentRoom.PositionY);
+                    (x.Item1.X == currentRoom.PositionX) &&
+                    (x.Item1.Y == currentRoom.PositionY));
 
                 if (currentConnection == null)
                 {
@@ -94,8 +94,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 }
 
                 var connectedRoom = rooms.SingleOrDefault(x =>
-                    x.PositionX == currentConnection.Item2.X &&
-                    x.PositionY == currentConnection.Item2.Y);
+                    (x.PositionX == currentConnection.Item2.X) &&
+                    (x.PositionY == currentConnection.Item2.Y));
 
                 if (connectedRoom != null)
                 {

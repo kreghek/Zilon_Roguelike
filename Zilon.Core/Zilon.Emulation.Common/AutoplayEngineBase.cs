@@ -16,7 +16,8 @@ namespace Zilon.Emulation.Common
         private const int ITERATION_LIMIT = 40_000_000;
         private readonly IGlobeInitializer _globeInitializer;
 
-        protected AutoplayEngineBase(BotSettings botSettings,
+        protected AutoplayEngineBase(
+            BotSettings botSettings,
             IGlobeInitializer globeInitializer)
         {
             BotSettings = botSettings;
@@ -48,7 +49,7 @@ namespace Zilon.Emulation.Common
             }
 
             var iterationCounter = 1;
-            while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
+            while (!followedPerson.GetModule<ISurvivalModule>().IsDead && (iterationCounter <= ITERATION_LIMIT))
             {
                 try
                 {

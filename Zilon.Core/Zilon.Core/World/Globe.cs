@@ -146,6 +146,7 @@ namespace Zilon.Core.World
         private static void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
         {
             var states = taskDict.Values;
+
             // Все актёры еще раз сортируются, чтобы зафиксировать поведение для тестов.
             // Может быть ситуация, когда найдено одновременно два актёра без задач (в самом начале теста, например).
             // В этом случае порядок элементов, полученных из states, не фиксирован.
@@ -203,6 +204,7 @@ namespace Zilon.Core.World
         private sealed class ActorInSector
         {
             public ISector Sector { get; set; }
+
             public IActor Actor { get; set; }
         }
     }

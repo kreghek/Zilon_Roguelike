@@ -15,7 +15,11 @@ namespace Zilon.Core.Common
         /// <param name="y1">Начальная точка отрезка 2.</param>
         /// <param name="y2">Конечная точка отрезка 2.</param>
         /// <returns>Возвращает true, если отрезки пересекаются. Иначе, позращает false.</returns>
-        public static bool IsIntersects(float x1, float x2, float y1, float y2)
+        public static bool IsIntersects(
+            float x1,
+            float x2,
+            float y1,
+            float y2)
         {
             if (x1 > x2)
             {
@@ -29,7 +33,7 @@ namespace Zilon.Core.Common
                     nameof(y1));
             }
 
-            return x2 >= y1 && y2 >= x1;
+            return (x2 >= y1) && (y2 >= x1);
         }
     }
 }

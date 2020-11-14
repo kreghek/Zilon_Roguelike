@@ -132,8 +132,12 @@ namespace Zilon.Core.Tactics.Spatial
             return GetNextFromMatrix(localOffsetX, localOffsetY, segmentX, segmentY, matrix);
         }
 
-        private IEnumerable<IGraphNode> GetNextFromMatrix(int localOffsetX, int localOffsetY, int segmentX,
-            int segmentY, IGraphNode[,] matrix)
+        private IEnumerable<IGraphNode> GetNextFromMatrix(
+            int localOffsetX,
+            int localOffsetY,
+            int segmentX,
+            int segmentY,
+            IGraphNode[,] matrix)
         {
             var directions = HexHelper.GetOffsetClockwise();
             var currentCubeCoords = HexHelper.ConvertToCube(localOffsetX, localOffsetY);
@@ -169,8 +173,8 @@ namespace Zilon.Core.Tactics.Spatial
                 }
 
                 IGraphNode currentNeibour;
-                if (neighborSegmentX == segmentX &&
-                    neighborSegmentY == segmentY)
+                if ((neighborSegmentX == segmentX) &&
+                    (neighborSegmentY == segmentY))
                 {
                     currentNeibour = matrix[neighborLocalOffset.X, neighborLocalOffset.Y];
 
@@ -332,8 +336,8 @@ namespace Zilon.Core.Tactics.Spatial
 
             public bool Equals(SegmentKey other)
             {
-                return X == other.X &&
-                       Y == other.Y;
+                return (X == other.X) &&
+                       (Y == other.Y);
             }
 
             public override int GetHashCode()
@@ -341,8 +345,8 @@ namespace Zilon.Core.Tactics.Spatial
                 unchecked
                 {
                     var hashCode = 1861411795;
-                    hashCode = hashCode * -1521134295 + X.GetHashCode();
-                    hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                    hashCode = (hashCode * -1521134295) + X.GetHashCode();
+                    hashCode = (hashCode * -1521134295) + Y.GetHashCode();
                     return hashCode;
                 }
             }

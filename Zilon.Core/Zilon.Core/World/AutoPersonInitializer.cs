@@ -38,7 +38,9 @@ namespace Zilon.Core.World
         /// Создаёт персонажа.
         /// </summary>
         /// <returns> Возвращает созданного персонажа. </returns>
-        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory,
+        private static IPerson CreateStartPerson(
+            string personSchemeSid,
+            IPersonFactory personFactory,
             IFraction fraction)
         {
             var startPerson = personFactory.Create(personSchemeSid, fraction);

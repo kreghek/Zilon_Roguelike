@@ -13,12 +13,21 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly ISectorMap _map;
         private readonly List<IGraphNode> _path;
 
-        public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map) : this(actor,
+        public MoveTask(
+            IActor actor,
+            IActorTaskContext context,
+            IGraphNode targetNode,
+            ISectorMap map) : this(actor,
             context, targetNode, map, 1000)
         {
         }
 
-        public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map, int cost) :
+        public MoveTask(
+            IActor actor,
+            IActorTaskContext context,
+            IGraphNode targetNode,
+            ISectorMap map,
+            int cost) :
             base(actor, context)
         {
             TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));

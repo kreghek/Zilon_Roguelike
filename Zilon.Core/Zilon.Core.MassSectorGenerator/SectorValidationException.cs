@@ -9,7 +9,9 @@ namespace Zilon.Core.MassSectorGenerator
     public class SectorValidationException : Exception
     {
         public SectorValidationException() { }
+
         public SectorValidationException(string message) : base(message) { }
+
         public SectorValidationException(string message, Exception inner) : base(message, inner) { }
 
         protected SectorValidationException(

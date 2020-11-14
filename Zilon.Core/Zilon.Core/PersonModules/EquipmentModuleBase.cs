@@ -41,7 +41,7 @@ namespace Zilon.Core.PersonModules
         /// Конструирует экземпляр модуля работы с экипировкой типа <see cref="EquipmentCarrierBase"/>.
         /// </summary>
         /// <param name="slots">Набор слотов, на основе которого создаётся модель работы с экипировкой.</param>
-        protected EquipmentModuleBase([NotNull][ItemNotNull] IEnumerable<PersonSlotSubScheme> slots)
+        protected EquipmentModuleBase([NotNull] [ItemNotNull] IEnumerable<PersonSlotSubScheme> slots)
         {
             if (slots == null)
             {
@@ -145,7 +145,8 @@ namespace Zilon.Core.PersonModules
         /// <param name="slotIndex">Индекс слота, в котором произошли изменения.</param>
         /// <param name="oldEquipment">Старая экипировка, которая была до изменнеия слота.</param>
         /// <param name="equipment">Текущая экипировка.</param>
-        protected virtual void DoEquipmentChanged(int slotIndex,
+        protected virtual void DoEquipmentChanged(
+            int slotIndex,
             Equipment oldEquipment,
             Equipment equipment)
         {

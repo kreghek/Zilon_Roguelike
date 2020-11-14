@@ -154,7 +154,11 @@ namespace Zilon.Core.Tactics.Spatial
         /// Передача списка для результатов сделана для оптимизации - не нужно каждый раз создавать список
         /// и выделять под него память в зависимости от найденного пути.
         /// </remarks>
-        public void FindPath(IGraphNode start, IGraphNode end, IAstarContext context, List<IGraphNode> outputPath)
+        public void FindPath(
+            IGraphNode start,
+            IGraphNode end,
+            IAstarContext context,
+            List<IGraphNode> outputPath)
         {
             if (start is null)
             {

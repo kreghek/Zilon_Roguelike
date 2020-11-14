@@ -18,11 +18,17 @@ namespace Zilon.Core.Tests.Common.Schemes
         }
 
         public TacticalActEffectType Effect { get; set; }
+
         public Roll Efficient { get; set; }
+
         public int HitCount { get; }
+
         public bool IsMelee { get; }
+
         public ITacticalActOffenceSubScheme Offence { get; set; }
+
         public Range<int> Range { get; set; }
+
         public TacticalActTargets Targets { get; set; }
     }
 }

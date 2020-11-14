@@ -70,7 +70,12 @@ namespace Zilon.Core.Tests.MapGenerators
             return neighbors.Contains(neighbor);
         }
 
-        private void AssertEdge(IMap map, int offsetX1, int offsetY1, int offsetX2, int offsetY2)
+        private void AssertEdge(
+            IMap map,
+            int offsetX1,
+            int offsetY1,
+            int offsetX2,
+            int offsetY2)
         {
             var node1 = map.Nodes.SelectByHexCoords(offsetX1, offsetY1);
             var node2 = map.Nodes.SelectByHexCoords(offsetX2, offsetY2);

@@ -18,7 +18,9 @@ namespace Zilon.Bot.Players.Logics
         {
         }
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+        public override IActorTask GetTask(
+            IActor actor,
+            ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
             if (MoveTask == null)
@@ -29,6 +31,7 @@ namespace Zilon.Bot.Players.Logics
                 {
                     return MoveTask;
                 }
+
                 // Это может произойти, если актёр не выбрал следующий узел.
                 // Тогда переводим актёра в режим ожидания.
 
@@ -61,7 +64,9 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
-        private IEnumerable<IGraphNode> WriteObservedNodes(IActor actor, ILogicStrategyData strategyData,
+        private IEnumerable<IGraphNode> WriteObservedNodes(
+            IActor actor,
+            ILogicStrategyData strategyData,
             ISectorMap map)
         {
             var observeNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);

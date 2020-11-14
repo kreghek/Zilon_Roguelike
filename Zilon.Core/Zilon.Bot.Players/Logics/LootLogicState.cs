@@ -15,7 +15,9 @@ namespace Zilon.Bot.Players.Logics
         private MoveTask _moveTask;
         private IStaticObject _staticObject;
 
-        public static IStaticObject FindContainer(IActor actor, IStaticObjectManager staticObjectManager,
+        public static IStaticObject FindContainer(
+            IActor actor,
+            IStaticObjectManager staticObjectManager,
             ISectorMap map)
         {
             if (actor is null)
@@ -46,14 +48,16 @@ namespace Zilon.Bot.Players.Logics
             return nearbyContainer;
         }
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+        public override IActorTask GetTask(
+            IActor actor,
+            ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
             var map = context.Sector.Map;
             var staticObjectManager = context.Sector.StaticObjectManager;
             _staticObject = FindContainer(actor, staticObjectManager, map);
 
-            if (_staticObject == null || !_staticObject.GetModule<IPropContainer>().Content.CalcActualItems().Any())
+            if ((_staticObject == null) || !_staticObject.GetModule<IPropContainer>().Content.CalcActualItems().Any())
             {
                 Complete = true;
                 return null;
@@ -71,7 +75,10 @@ namespace Zilon.Bot.Players.Logics
             return moveTask;
         }
 
-        private MoveTask MoveToContainerTask(IActor actor, IGraphNode containerMapNode, MoveTask storedMoveTask,
+        private MoveTask MoveToContainerTask(
+            IActor actor,
+            IGraphNode containerMapNode,
+            MoveTask storedMoveTask,
             ISector sector)
         {
             var map = sector.Map;

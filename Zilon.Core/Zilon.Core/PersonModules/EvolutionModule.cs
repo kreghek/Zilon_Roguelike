@@ -26,8 +26,8 @@ namespace Zilon.Core.PersonModules
 
             Stats = new[]
             {
-                new SkillStatItem {Stat = SkillStatType.Ballistic, Value = 10},
-                new SkillStatItem {Stat = SkillStatType.Melee, Value = 10}
+                new SkillStatItem { Stat = SkillStatType.Ballistic, Value = 10 },
+                new SkillStatItem { Stat = SkillStatType.Melee, Value = 10 }
             };
 
             UpdatePerks();
@@ -120,9 +120,11 @@ namespace Zilon.Core.PersonModules
         private IList<IPerk> GetPerks()
         {
             var schemes = _schemeService.GetSchemes<IPerkScheme>()
+
                 // Для развития годятся только те перки, которые не врождённые.
                 // Врождённые перки даются только при генерации персонажа.
                 .Where(x => !x.IsBuildIn)
+
                 // Защиита от схем, в которых забыли прописать уровни.
                 // По идее, такие перки либо должны быть врождёнными.
                 // Следовательно, если они не отсеяны выше, то это ошибка.

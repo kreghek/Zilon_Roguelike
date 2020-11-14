@@ -20,7 +20,8 @@ namespace Zilon.Core.MapGenerators
         private readonly IDropResolver _dropResolver;
         private readonly ISchemeService _schemeService;
 
-        public ChestGenerator(ISchemeService schemeService,
+        public ChestGenerator(
+            ISchemeService schemeService,
             IDropResolver dropResolver,
             IChestGeneratorRandomSource chestGeneratorRandomSource)
         {
@@ -93,9 +94,9 @@ namespace Zilon.Core.MapGenerators
 
             var map = sector.Map;
             var availableNodes = from node in region.Nodes
-                                 where !map.Transitions.Keys.Contains(node)
-                                 where map.IsPositionAvailableForContainer(node)
-                                 select node;
+                where !map.Transitions.Keys.Contains(node)
+                where map.IsPositionAvailableForContainer(node)
+                select node;
 
             var openNodes = new List<IGraphNode>(availableNodes);
             for (var i = 0; i < rolledCount; i++)
@@ -112,7 +113,10 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private void CreateChest(List<IGraphNode> openNodes, ISector sector, IDropTableScheme[] trashDropTables,
+        private void CreateChest(
+            List<IGraphNode> openNodes,
+            ISector sector,
+            IDropTableScheme[] trashDropTables,
             IDropTableScheme[] treasuresDropTable)
         {
             // Выбрать из коллекции доступных узлов
@@ -145,8 +149,10 @@ namespace Zilon.Core.MapGenerators
             sector.StaticObjectManager.Add(staticObject);
         }
 
-        private IStaticObject CreateChestStaticObject(IDropTableScheme[] trashDropTables,
-            IDropTableScheme[] treasuresDropTable, IGraphNode containerNode)
+        private IStaticObject CreateChestStaticObject(
+            IDropTableScheme[] trashDropTables,
+            IDropTableScheme[] treasuresDropTable,
+            IGraphNode containerNode)
         {
             var containerPurpose = _chestGeneratorRandomSource.RollPurpose();
             var container = CreateContainerModuleByPurpose(trashDropTables,
@@ -158,8 +164,10 @@ namespace Zilon.Core.MapGenerators
             return staticObject;
         }
 
-        private IPropContainer CreateContainerModuleByPurpose(IDropTableScheme[] trashDropTables,
-            IDropTableScheme[] treasuresDropTable, PropContainerPurpose containerPurpose)
+        private IPropContainer CreateContainerModuleByPurpose(
+            IDropTableScheme[] trashDropTables,
+            IDropTableScheme[] treasuresDropTable,
+            PropContainerPurpose containerPurpose)
         {
             IPropContainer container;
             switch (containerPurpose)

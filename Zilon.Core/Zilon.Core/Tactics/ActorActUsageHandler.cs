@@ -123,8 +123,12 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessFailedHit(IActor actor, IActor targetActor, PersonDefenceItem prefferedDefenceItem,
-            int successToHitRoll, int factToHitRoll)
+        private void ProcessFailedHit(
+            IActor actor,
+            IActor targetActor,
+            PersonDefenceItem prefferedDefenceItem,
+            int successToHitRoll,
+            int factToHitRoll)
         {
             if (prefferedDefenceItem != null)
             {
@@ -145,8 +149,13 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessSuccessfullHit(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll,
-            bool targetIsDeadLast, int successToHitRoll, int factToHitRoll)
+        private void ProcessSuccessfullHit(
+            IActor actor,
+            IActor targetActor,
+            TacticalActRoll tacticalActRoll,
+            bool targetIsDeadLast,
+            int successToHitRoll,
+            int factToHitRoll)
         {
             var damageEfficientCalcResult = CalcEfficient(targetActor, tacticalActRoll);
             var actEfficient = damageEfficientCalcResult.ResultEfficient;
@@ -224,7 +233,7 @@ namespace Zilon.Core.Tactics
             var actEfficientArmorBlocked = tacticalActRoll.Efficient;
             var rankDiff = actApRank - armorRank;
 
-            if (armorRank != null && rankDiff < 10)
+            if ((armorRank != null) && (rankDiff < 10))
             {
                 var factArmorSaveRoll = RollArmorSave();
                 damageEfficientCalcResult.FactArmorSaveRoll = factArmorSaveRoll;
@@ -414,7 +423,7 @@ namespace Zilon.Core.Tactics
             var defenceType = HitHelper.GetDefence(offenceType);
 
             return targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Defences
-                .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
+                .Where(x => (x.Type == defenceType) || (x.Type == DefenceType.DivineDefence));
         }
 
         private void ProcessSuccessfulAttackEvent(
@@ -431,8 +440,7 @@ namespace Zilon.Core.Tactics
 
             var damageEvent = new DamageActorInteractionEvent(actor, targetActor, damageEfficientCalcResult)
             {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
+                SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
             };
             ActorInteractionBus.PushEvent(damageEvent);
         }
@@ -593,14 +601,17 @@ namespace Zilon.Core.Tactics
 
             var interactEvent = new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem)
             {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
+                SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
             };
 
             ActorInteractionBus.PushEvent(interactEvent);
         }
 
-        private void ProcessPureMissEvent(IActor actor, IActor targetActor, int successToHitRoll, int factToHitRoll)
+        private void ProcessPureMissEvent(
+            IActor actor,
+            IActor targetActor,
+            int successToHitRoll,
+            int factToHitRoll)
         {
             if (ActorInteractionBus == null)
             {
@@ -609,8 +620,7 @@ namespace Zilon.Core.Tactics
 
             var damageEvent = new PureMissActorInteractionEvent(actor, targetActor)
             {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
+                SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
             };
 
             ActorInteractionBus.PushEvent(damageEvent);

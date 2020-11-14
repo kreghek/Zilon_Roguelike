@@ -10,8 +10,10 @@ namespace Zilon.Bot.Players
 {
     public static class LootHelper
     {
-        public static IEnumerable<IStaticObject> FindAvailableContainers(IEnumerable<IStaticObject> containers,
-            IGraphNode observeNode, ISectorMap map)
+        public static IEnumerable<IStaticObject> FindAvailableContainers(
+            IEnumerable<IStaticObject> containers,
+            IGraphNode observeNode,
+            ISectorMap map)
         {
             if (containers is null)
             {

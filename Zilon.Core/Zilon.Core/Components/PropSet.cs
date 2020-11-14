@@ -9,6 +9,7 @@ namespace Zilon.Core.Components
     public sealed class PropSet
     {
         public string PropSid { get; set; }
+
         public int Count { get; set; }
     }
 }

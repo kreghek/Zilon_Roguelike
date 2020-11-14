@@ -36,7 +36,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var startNode = map.Nodes.SelectByHexCoords(3, 3);
             var finishNode = map.Nodes.SelectByHexCoords(1, 5);
 
-            var expectedPath = new[] { map.Nodes.SelectByHexCoords(2, 3), map.Nodes.SelectByHexCoords(2, 4), finishNode };
+            var expectedPath = new[]
+            {
+                map.Nodes.SelectByHexCoords(2, 3), map.Nodes.SelectByHexCoords(2, 4), finishNode
+            };
 
             var actor = CreateActor(map, startNode);
 
@@ -53,7 +56,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 // ASSERT
                 var expectedIsComplete = step >= 3;
                 task.IsComplete.Should().Be(expectedIsComplete);
-
 
                 actor.Node.Should().Be(expectedPath[step - 1]);
             }

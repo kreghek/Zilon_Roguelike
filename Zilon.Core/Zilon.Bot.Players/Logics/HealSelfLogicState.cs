@@ -12,7 +12,9 @@ namespace Zilon.Bot.Players.Logics
 {
     public class HealSelfLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+        public override IActorTask GetTask(
+            IActor actor,
+            ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
             if (actor is null)

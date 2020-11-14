@@ -18,7 +18,11 @@ namespace Zilon.Core.Tests.Common
         /// </summary>
         [Test]
         [TestCaseSource(typeof(CubeCoordsHelperTestCases), nameof(CubeCoordsHelperTestCases.TestCases))]
-        public void CubeDrawLine_DifferentPoints_LineIsSolid(int sOffsetX, int sOffsetY, int offsetX, int offsetY)
+        public void CubeDrawLine_DifferentPoints_LineIsSolid(
+            int sOffsetX,
+            int sOffsetY,
+            int offsetX,
+            int offsetY)
         {
             // ARRANGE
 
@@ -65,7 +69,11 @@ namespace Zilon.Core.Tests.Common
         /// </summary>
         [Test]
         [TestCaseSource(typeof(CubeCoordsHelperTestCases), nameof(CubeCoordsHelperTestCases.TestCases))]
-        public void CubeDrawLine_DifferentPoints_ReverseEquals(int sOffsetX, int sOffsetY, int offsetX, int offsetY)
+        public void CubeDrawLine_DifferentPoints_ReverseEquals(
+            int sOffsetX,
+            int sOffsetY,
+            int offsetX,
+            int offsetY)
         {
             // ARRANGE
 

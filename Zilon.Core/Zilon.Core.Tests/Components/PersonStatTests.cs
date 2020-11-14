@@ -24,10 +24,8 @@ namespace Zilon.Core.Tests.Components
 
             var personStat = new PersonStat(baseValue, incrementValue);
 
-
             // ACT
             var factValue = personStat.GetActualValue(level, 0);
-
 
             // ASSERT
             factValue.Should().Be(expectedValue);
@@ -50,12 +48,10 @@ namespace Zilon.Core.Tests.Components
 
             var bonuses = new[] { new PersonStat(bonusValue) };
 
-
             // ACT
             var factValue = personStat.GetActualValue(level,
                 0,
                 bonuses);
-
 
             // ASSERT
             factValue.Should().Be(expectedValue);

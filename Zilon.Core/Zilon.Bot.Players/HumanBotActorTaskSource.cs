@@ -55,7 +55,10 @@ namespace Zilon.Bot.Players
                     };
 
                 case "JOE":
-                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.JoeHumanBot) { WriteStateChanges = true };
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.JoeHumanBot)
+                    {
+                        WriteStateChanges = true
+                    };
 
                 case "DUNCAN":
                     return new LogicTreeStrategy(actor, _logicStateTreePatterns.DuncanHumanBot)

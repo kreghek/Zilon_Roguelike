@@ -12,7 +12,9 @@ namespace Zilon.Bot.Players.Logics
 {
     public class EatProviantLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+        public override IActorTask GetTask(
+            IActor actor,
+            ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
             if (actor is null)
@@ -46,7 +48,10 @@ namespace Zilon.Bot.Players.Logics
             // Внутреннего состояния нет.
         }
 
-        private UsePropTask CheckHazard(IActor actor, ISectorTaskSourceContext context, SurvivalStatType hazardType,
+        private UsePropTask CheckHazard(
+            IActor actor,
+            ISectorTaskSourceContext context,
+            SurvivalStatType hazardType,
             ConsumeCommonRuleType resourceType)
         {
             var hazardEffect = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>()

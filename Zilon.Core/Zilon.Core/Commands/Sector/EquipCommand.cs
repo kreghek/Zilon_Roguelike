@@ -40,7 +40,7 @@ namespace Zilon.Core.Commands
             }
 
             var equipment = GetInventorySelectedEquipment();
-            if (equipment is null && _inventoryState.SelectedProp != null)
+            if (equipment is null && (_inventoryState.SelectedProp != null))
             {
                 return false;
             }
@@ -48,7 +48,7 @@ namespace Zilon.Core.Commands
             // Сломанную экипировку нельзя надевать
             //TODO Тут есть замечание, что equipment не проверяется.
             // Реорганизовать этот код в более понятный.
-            if (equipment != null && equipment.Durable.Value <= 0)
+            if ((equipment != null) && (equipment.Durable.Value <= 0))
             {
                 return false;
             }

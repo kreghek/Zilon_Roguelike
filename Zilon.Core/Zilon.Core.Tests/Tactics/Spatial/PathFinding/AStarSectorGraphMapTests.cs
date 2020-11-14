@@ -41,9 +41,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var mapRegion = new MapRegion(1, map.Nodes.ToArray())
             {
-                IsStart = true,
-                IsOut = true,
-                ExitNodes = new[] { map.Nodes.Last() }
+                IsStart = true, IsOut = true, ExitNodes = new[] { map.Nodes.Last() }
             };
 
             map.Regions.Add(mapRegion);
@@ -73,7 +71,12 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             path.Should().NotBeEmpty();
         }
 
-        public static void AddWall(ISectorMap map, int x1, int y1, int x2, int y2)
+        public static void AddWall(
+            ISectorMap map,
+            int x1,
+            int y1,
+            int x2,
+            int y2)
         {
             map.RemoveEdge(x1, y1, x2, y2);
         }

@@ -61,7 +61,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>Возвращает набор элементов интерьера комнаты.</returns>
         public RoomInteriorObjectMeta[] RollInteriorObjects(int roomWidth, int roomHeight)
         {
-            if (roomWidth <= 2 || roomHeight <= 2)
+            if ((roomWidth <= 2) || (roomHeight <= 2))
             {
                 return System.Array.Empty<RoomInteriorObjectMeta>();
             }
@@ -153,11 +153,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 var room = roomsNotInGraph.First();
                 roomsInGraph.Add(room, 0);
                 roomsNotInGraph.Remove(room);
+
                 // для каждой комнаты выбираем произвольную другую комнату
                 // и проводим к ней коридор
 
                 var availableRooms = roomsInGraph
-                    .Where(x => x.Key != room && x.Value < maxNeighbors)
+                    .Where(x => (x.Key != room) && (x.Value < maxNeighbors))
                     .Select(x => x.Key)
                     .ToArray();
 

@@ -17,7 +17,10 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <param name="fowContext">Контекст тумана войны.</param>
         /// <param name="baseNode">Опорный узел.</param>
         /// <param name="radius">Радиус обзора персонажа.</param>
-        public static void UpdateFowData(ISectorFowData fowData, IFowContext fowContext, IGraphNode baseNode,
+        public static void UpdateFowData(
+            ISectorFowData fowData,
+            IFowContext fowContext,
+            IGraphNode baseNode,
             int radius)
         {
             if (fowData is null)
@@ -100,7 +103,9 @@ namespace Zilon.Core.Tactics.Behaviour
             return resultList.ToArray();
         }
 
-        private static IGraphNode[] GetNextForBorder(IEnumerable<IGraphNode> border, IEnumerable<IGraphNode> result,
+        private static IGraphNode[] GetNextForBorder(
+            IEnumerable<IGraphNode> border,
+            IEnumerable<IGraphNode> result,
             IFowContext fowContext)
         {
             var borderTotal = new List<IGraphNode>();

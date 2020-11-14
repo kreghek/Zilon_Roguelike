@@ -51,7 +51,6 @@ namespace Zilon.Core.Tests.Client
             invResource.Count.Should().Be(1);
         }
 
-
         /// <summary>
         /// Тест проверяет корректность переноса ресурса из сундука в инвентарь.
         /// </summary>
@@ -113,7 +112,6 @@ namespace Zilon.Core.Tests.Client
             transferMachine.TransferProp(transferResource,
                 PropTransferMachineStore.Container,
                 PropTransferMachineStore.Inventory);
-
 
             // ASSERT
             monitorInventory.Should().Raise(nameof(PropTransferStore.Added))

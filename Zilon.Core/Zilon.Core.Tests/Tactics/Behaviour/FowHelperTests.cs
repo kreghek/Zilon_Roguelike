@@ -22,7 +22,11 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// </summary>
         [Test]
         [TestCaseSource(typeof(FowHelperTestCaseDataSource), nameof(FowHelperTestCaseDataSource.TestCases))]
-        public void UpdateFowData_SquareMap_ObseringNodesIsNotEmpty(int mapSize, int baseX, int baseY, int radius)
+        public void UpdateFowData_SquareMap_ObseringNodesIsNotEmpty(
+            int mapSize,
+            int baseX,
+            int baseY,
+            int radius)
         {
             // ARRANGE
 
@@ -71,7 +75,10 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
         /// </summary>
         [Test]
         [TestCaseSource(typeof(FowHelperTestCaseDataSource), nameof(FowHelperTestCaseDataSource.TestCases))]
-        public void UpdateFowData_RealHumanSectorFowData_ObseringNodesIsNotEmpty(int mapSize, int baseX, int baseY,
+        public void UpdateFowData_RealHumanSectorFowData_ObseringNodesIsNotEmpty(
+            int mapSize,
+            int baseX,
+            int baseY,
             int radius)
         {
             // ARRANGE

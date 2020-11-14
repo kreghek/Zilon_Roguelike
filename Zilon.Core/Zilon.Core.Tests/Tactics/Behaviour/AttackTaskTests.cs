@@ -82,7 +82,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 _attackTask.Execute();
             };
 
-
             // ASSERT
             act.Should().NotThrow<InvalidOperationException>();
         }

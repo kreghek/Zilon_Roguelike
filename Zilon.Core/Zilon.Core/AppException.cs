@@ -13,6 +13,7 @@ namespace Zilon.Core
         public AppException() { }
 
         public AppException(string message) : base(message) { }
+
         public AppException(string message, Exception inner) : base(message, inner) { }
 
         protected AppException(

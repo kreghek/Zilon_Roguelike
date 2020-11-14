@@ -100,7 +100,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return regionDraftCoords;
         }
 
-        private bool TryRollInteriorCoord(OffsetCoords[] openCoords,
+        private bool TryRollInteriorCoord(
+            OffsetCoords[] openCoords,
             IEnumerable<OffsetCoords> passableRegionCoords,
             out OffsetCoords rolledCoords)
         {
@@ -184,7 +185,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         ///<summary>
         /// Для препятсвий выбираются только те узлы, для которых есть все соседи.
         ///</summary> 
-        private static bool HasAllHeighbors(HashSet<OffsetCoords> coordHash, CubeCoords[] neighborCubeOffsets,
+        private static bool HasAllHeighbors(
+            HashSet<OffsetCoords> coordHash,
+            CubeCoords[] neighborCubeOffsets,
             CubeCoords cube)
         {
             foreach (var neighborCubeOffset in neighborCubeOffsets)

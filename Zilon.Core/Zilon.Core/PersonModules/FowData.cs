@@ -14,6 +14,7 @@ namespace Zilon.Core.PersonModules
         }
 
         public string Key => nameof(IFowData);
+
         public bool IsActive { get; set; }
 
         public ISectorFowData GetSectorFowData(ISector sector)

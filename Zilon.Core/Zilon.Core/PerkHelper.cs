@@ -44,7 +44,11 @@ namespace Zilon.Core
         /// <param name="totalLevel">Суммарный уровень.</param>
         /// <param name="level">Уровень перка.</param>
         /// <param name="subLevel">Подуровень перка.</param>
-        public static void ConvertTotalLevel(IPerkScheme perkScheme, int totalLevel, out int? level, out int? subLevel)
+        public static void ConvertTotalLevel(
+            IPerkScheme perkScheme,
+            int totalLevel,
+            out int? level,
+            out int? subLevel)
         {
             if (perkScheme is null)
             {

@@ -60,23 +60,19 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic,
-                    ApRank = 10
+                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
                 }
             };
 
             var actConstrainsSubScheme = new TestTacticalActConstrainsSubScheme
             {
-                PropResourceType = "7-62",
-                PropResourceCount = 1
+                PropResourceType = "7-62", PropResourceCount = 1
             };
 
             var inventory = new InventoryModule();
             var bulletScheme = new TestPropScheme
             {
-                Sid = "bullet-7-62",
-                Bullet = new TestPropBulletSubScheme { Caliber = "7-62" }
+                Sid = "bullet-7-62", Bullet = new TestPropBulletSubScheme { Caliber = "7-62" }
             };
             inventory.Add(new Resource(bulletScheme, 10));
             personMock.Setup(x => x.GetModule<IInventoryModule>(It.IsAny<string>())).Returns(inventory);
@@ -167,7 +163,8 @@ namespace Zilon.Core.Tests.Tactics
             monitor.Should().Raise(nameof(IActor.UsedAct));
         }
 
-        private static Mock<IActor> CreateMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,
+        private static Mock<IActor> CreateMonsterMock(
+            [CanBeNull] PersonDefenceItem[] defences = null,
             [CanBeNull] PersonArmorItem[] armors = null)
         {
             var monsterMock = new Mock<IActor>();
@@ -199,7 +196,8 @@ namespace Zilon.Core.Tests.Tactics
             return monsterMock;
         }
 
-        private static Mock<IActor> CreateOnHitMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,
+        private static Mock<IActor> CreateOnHitMonsterMock(
+            [CanBeNull] PersonDefenceItem[] defences = null,
             [CanBeNull] PersonArmorItem[] armors = null)
         {
             var monsterMock = new Mock<IActor>();
@@ -259,9 +257,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic,
-                    ApRank = 10
+                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
                 }
             };
 

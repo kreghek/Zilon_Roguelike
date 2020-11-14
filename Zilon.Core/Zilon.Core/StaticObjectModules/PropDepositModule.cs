@@ -15,7 +15,8 @@ namespace Zilon.Core.StaticObjectModules
         private readonly string[] _toolTags;
         private int _exhaustingCounter;
 
-        public PropDepositModule(IPropContainer propContainer,
+        public PropDepositModule(
+            IPropContainer propContainer,
             IDropTableScheme dropTableScheme,
             IDropResolver dropResolver,
             string[] toolTags,
@@ -51,6 +52,7 @@ namespace Zilon.Core.StaticObjectModules
         public string Key => nameof(IPropDepositModule);
 
         public DepositMiningDifficulty Difficulty { get; }
+
         public float Stock => (float)_exhaustingCounter / _exhaustingValue;
 
         /// <inheritdoc/>

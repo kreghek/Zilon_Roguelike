@@ -13,6 +13,7 @@ namespace Zilon.Core.Players
         ISectorNode SectorNode { get; }
 
         IPerson MainPerson { get; }
+
         void BindPerson(IGlobe globe, IPerson person);
 
         void Reset();

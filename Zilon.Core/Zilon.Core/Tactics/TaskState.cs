@@ -19,7 +19,9 @@ namespace Zilon.Core.Tactics
         }
 
         public IActorTask Task { get; }
+
         public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
+
         public int Counter { get; private set; }
 
         public bool TaskIsExecuting => Counter == _valueToExecute;

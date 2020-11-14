@@ -17,10 +17,16 @@ namespace Zilon.Core.Common
     {
         private static float Lerp(int a, int b, float t)
         {
-            return a + (b - a) * t;
+            return a + ((b - a) * t);
         }
 
-        private static void LerpCube(CubeCoords a, CubeCoords b, float t, out float x, out float y, out float z)
+        private static void LerpCube(
+            CubeCoords a,
+            CubeCoords b,
+            float t,
+            out float x,
+            out float y,
+            out float z)
         {
             x = Lerp(a.X, b.X, t);
             y = Lerp(a.Y, b.Y, t);
@@ -37,7 +43,7 @@ namespace Zilon.Core.Common
             var yDiff = Math.Abs(ry - y);
             var zDiff = Math.Abs(rz - z);
 
-            if (xDiff > yDiff && xDiff > zDiff)
+            if ((xDiff > yDiff) && (xDiff > zDiff))
             {
                 rx = -ry - rz;
             }
@@ -80,7 +86,7 @@ namespace Zilon.Core.Common
                 // t принимает значения 0..1.
                 // Мы делим 1 на количество шагов n.
                 // И  берём i-тый шаг.
-                var t = 1.0f / n * i;
+                var t = (1.0f / n) * i;
 
                 AddPointToList(a, b, list, t);
             }
@@ -95,7 +101,11 @@ namespace Zilon.Core.Common
         /// <param name="b">Конечное значение. В t=1.0.</param>
         /// <param name="list">Существующий список координат.</param>
         /// <param name="t">Параметр интерполяции.</param>
-        private static void AddPointToList(CubeCoords a, CubeCoords b, List<CubeCoords> list, float t)
+        private static void AddPointToList(
+            CubeCoords a,
+            CubeCoords b,
+            List<CubeCoords> list,
+            float t)
         {
             LerpCube(a, b, t, out float cubeX, out float cubeY, out float cubeZ);
             var point = RoundCube(cubeX, cubeY, cubeZ);

@@ -52,7 +52,6 @@ namespace Zilon.Core.Tests.Schemes
                 actList.Add(act);
             }
 
-
             // ASSERT
             foreach (var act in actList)
             {
@@ -95,7 +94,6 @@ namespace Zilon.Core.Tests.Schemes
                 actList.Add(act);
             }
 
-
             // ASSERT
             foreach (var act in actList)
             {
@@ -115,13 +113,11 @@ namespace Zilon.Core.Tests.Schemes
         {
             // ARRANGE
 
-
             // ACT
             Action createService = () =>
             {
                 CreateSchemeService();
             };
-
 
             // ASSERT
             createService.Should().NotThrow();
@@ -130,6 +126,7 @@ namespace Zilon.Core.Tests.Schemes
         /// <summary>
         /// Тест проверяет, что все схемы согласованы.
         /// </summary>
+
         //TODO Лучше сделать отдельное консольное приложение для валидации всех схем.
         [Test]
         [Category("validation")]
@@ -163,7 +160,6 @@ namespace Zilon.Core.Tests.Schemes
             var schemeService = CreateSchemeService();
             var dropTables = schemeService.GetSchemes<IDropTableScheme>();
 
-
             // ASSERT
             foreach (var dropTable in dropTables)
             {
@@ -190,7 +186,7 @@ namespace Zilon.Core.Tests.Schemes
             var allTypes = assembly.GetTypes();
             var schemeTypes = allTypes
                 .Where(x => typeof(IScheme).IsAssignableFrom(x) &&
-                            x.IsInterface && x != typeof(IScheme)).ToArray();
+                            x.IsInterface && (x != typeof(IScheme))).ToArray();
             return schemeTypes;
         }
 

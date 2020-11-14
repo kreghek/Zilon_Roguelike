@@ -35,7 +35,9 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+        public override IActorTask GetTask(
+            IActor actor,
+            ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
             if (MoveTask == null)
@@ -46,6 +48,7 @@ namespace Zilon.Bot.Players.Logics
                 {
                     return MoveTask;
                 }
+
                 // Это может произойти, если актёр не выбрал следующий узел.
                 // Тогда переводим актёра в режим ожидания.
 

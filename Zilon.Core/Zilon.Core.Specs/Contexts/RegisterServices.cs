@@ -207,14 +207,16 @@ namespace Zilon.Core.Specs.Contexts
             RegisterManager.RegisterBot(serviceCollection);
         }
 
-        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider,
+        private static void ConfigurateTacticalActUsageService(
+            IServiceProvider serviceProvider,
             TacticalActUsageService tacticalActUsageService)
         {
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
         }
 
-        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider,
+        private static void ConfigurateActorActUsageHandler(
+            IServiceProvider serviceProvider,
             ActorActUsageHandler handler)
         {
             // Указание необязательных зависимостей
@@ -238,7 +240,7 @@ namespace Zilon.Core.Specs.Contexts
                 new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
                 .Returns<Roll
-                >(roll => roll.Dice / 2 * roll.Count); // Всегда берётся среднее значение среди всех бросков
+                >(roll => (roll.Dice / 2) * roll.Count); // Всегда берётся среднее значение среди всех бросков
             actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
                 .Returns(4);
             actUsageRandomSourceMock.Setup(x => x.RollArmorSave())

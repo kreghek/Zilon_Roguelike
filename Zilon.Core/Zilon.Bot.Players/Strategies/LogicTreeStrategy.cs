@@ -26,7 +26,9 @@ namespace Zilon.Bot.Players.Strategies
         public bool WriteStateChanges { get; set; }
 
         public IActor Actor { get; }
+
         public ILogicState CurrentState { get; private set; }
+
         public ILogicStrategyData StrategyData => _strategyData;
 
         public IActorTask GetActorTask(ISectorTaskSourceContext context)
@@ -65,7 +67,9 @@ namespace Zilon.Bot.Players.Strategies
             return actorTask;
         }
 
-        private bool SelectCurrentState(ILogicState currentState, ISectorTaskSourceContext context,
+        private bool SelectCurrentState(
+            ILogicState currentState,
+            ISectorTaskSourceContext context,
             out ILogicState newState)
         {
             var transitionWasPerformed = false;

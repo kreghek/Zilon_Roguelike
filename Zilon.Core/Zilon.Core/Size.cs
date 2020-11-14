@@ -9,6 +9,7 @@
         }
 
         public int Width { get; }
+
         public int Height { get; }
 
         public override string ToString()

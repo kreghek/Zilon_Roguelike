@@ -38,7 +38,7 @@ namespace Zilon.Core.Components
         {
             var bonusValue = CalcBonusValue(level, bonuses);
 
-            return (Base + LevelInc * (level - 1)) * (1 + rarityBonus) + bonusValue;
+            return ((Base + (LevelInc * (level - 1))) * (1 + rarityBonus)) + bonusValue;
         }
 
         /// <summary>

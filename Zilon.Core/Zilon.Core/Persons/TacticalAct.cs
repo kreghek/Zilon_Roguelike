@@ -14,7 +14,8 @@ namespace Zilon.Core.Persons
     public class TacticalAct : ITacticalAct
     {
         [ExcludeFromCodeCoverage]
-        public TacticalAct([NotNull] ITacticalActScheme scheme,
+        public TacticalAct(
+            [NotNull] ITacticalActScheme scheme,
             [NotNull] Roll efficient,
             [NotNull] Roll toHit,
             [CanBeNull] Equipment equipment)

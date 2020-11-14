@@ -104,8 +104,8 @@ namespace Zilon.Core.Tests.Persons
 
             var slotSchemes = new[]
             {
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand },
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand }
             };
 
             var tacticalActScheme = new TestTacticalActScheme
@@ -153,8 +153,8 @@ namespace Zilon.Core.Tests.Persons
 
             var slotSchemes = new[]
             {
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand },
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand }
             };
 
             var tacticalActScheme = new TestTacticalActScheme
@@ -200,8 +200,8 @@ namespace Zilon.Core.Tests.Persons
 
             var slotSchemes = new[]
             {
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand },
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand }
             };
 
             var tacticalActScheme = new TestTacticalActScheme
@@ -249,8 +249,8 @@ namespace Zilon.Core.Tests.Persons
 
             var slotSchemes = new[]
             {
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand },
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand }
             };
 
             var tacticalActScheme = new TestTacticalActScheme
@@ -266,14 +266,12 @@ namespace Zilon.Core.Tests.Persons
 
             var carrier = new EquipmentModule(slotSchemes);
 
-
             // ACT
             Action act = () =>
             {
                 carrier[swordSlot1] = swordEquipment1;
                 carrier[swordSlot2] = sheildEquipment2;
             };
-
 
             // ASSERT
             act.Should().NotThrow<Exception>();
@@ -300,8 +298,8 @@ namespace Zilon.Core.Tests.Persons
 
             var slotSchemes = new[]
             {
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand },
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand }
             };
 
             var tacticalActScheme = new TestTacticalActScheme
@@ -317,14 +315,12 @@ namespace Zilon.Core.Tests.Persons
 
             var carrier = new EquipmentModule(slotSchemes);
 
-
             // ACT
             Action act = () =>
             {
                 carrier[swordSlot1] = pistolEquipment1;
                 carrier[swordSlot2] = sheildEquipment2;
             };
-
 
             // ASSERT
             act.Should().NotThrow<Exception>();
@@ -351,8 +347,8 @@ namespace Zilon.Core.Tests.Persons
 
             var slotSchemes = new[]
             {
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
-                new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand },
+                new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand }
             };
 
             var tacticalActScheme = new TestTacticalActScheme
@@ -369,14 +365,12 @@ namespace Zilon.Core.Tests.Persons
 
             var carrier = new EquipmentModule(slotSchemes);
 
-
             // ACT
             Action act = () =>
             {
                 carrier[swordSlot1] = pistolEquipment1;
                 carrier[swordSlot2] = sheildEquipment2;
             };
-
 
             // ASSERT
             act.Should().NotThrow<Exception>();
@@ -387,7 +381,8 @@ namespace Zilon.Core.Tests.Persons
         /// </summary>
         [Test]
         [TestCaseSource(typeof(EquipmentCarrierTestsCaseSource), nameof(EquipmentCarrierTestsCaseSource.TestCases))]
-        public void SetEquipment_PropCombinationInTwoSlots_ExpectedExceptionGeneration(string propSid1,
+        public void SetEquipment_PropCombinationInTwoSlots_ExpectedExceptionGeneration(
+            string propSid1,
             string propSid2,
             bool expectException)
         {
@@ -423,8 +418,8 @@ namespace Zilon.Core.Tests.Persons
 
                 var slotSchemes = new[]
                 {
-                    new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand},
-                    new PersonSlotSubScheme {Types = EquipmentSlotTypes.Hand}
+                    new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand },
+                    new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand }
                 };
 
                 var slotIndex1 = i == 0 ? 0 : 1;
@@ -432,14 +427,12 @@ namespace Zilon.Core.Tests.Persons
 
                 var carrier = new EquipmentModule(slotSchemes);
 
-
                 // ACT
                 Action act = () =>
                 {
                     carrier[slotIndex1] = equipment1;
                     carrier[slotIndex2] = equipment2;
                 };
-
 
                 // ASSERT
                 if (expectException)

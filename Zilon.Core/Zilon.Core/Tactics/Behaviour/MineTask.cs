@@ -9,7 +9,8 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly IMineDepositMethod _method;
         private readonly IStaticObject _staticObject;
 
-        public MineTask([NotNull] IActor actor,
+        public MineTask(
+            [NotNull] IActor actor,
             [NotNull] IActorTaskContext context,
             [NotNull] IStaticObject staticObject,
             [NotNull] IMineDepositMethod method) : base(actor, context)

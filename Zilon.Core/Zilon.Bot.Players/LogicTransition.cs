@@ -11,6 +11,7 @@ namespace Zilon.Bot.Players
         }
 
         public ILogicStateTrigger Trigger { get; }
+
         public ILogicState NextState { get; }
 
         public override string ToString()

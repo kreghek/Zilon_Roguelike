@@ -12,7 +12,8 @@ namespace Zilon.Core.Tactics.Behaviour
     /// </summary>
     public class PropTransfer
     {
-        public PropTransfer([NotNull] IPropStore propStore,
+        public PropTransfer(
+            [NotNull] IPropStore propStore,
             [NotNull] IEnumerable<IProp> added,
             [NotNull] IEnumerable<IProp> removed)
         {

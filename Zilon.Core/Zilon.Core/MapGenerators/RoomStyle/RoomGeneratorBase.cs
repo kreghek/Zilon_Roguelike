@@ -37,7 +37,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает набор созданных комнат.
         /// </returns>
-        public abstract IEnumerable<Room> GenerateRoomsInGrid(int roomCount, int roomMinSize, int roomMaxSize,
+        public abstract IEnumerable<Room> GenerateRoomsInGrid(
+            int roomCount,
+            int roomMinSize,
+            int roomMaxSize,
             IEnumerable<RoomTransition> availableTransitions);
 
         /// <summary>
@@ -47,7 +50,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="room"> Комната, которую соединяем. </param>
         /// <param name="selectedRoom"> Целевая комната для соединения. </param>
         /// <param name="edgeHash"> Хэш рёбер (для оптимизации). </param>
-        protected static void ConnectRoomsWithCorridor(IMap map, Room room, Room selectedRoom, HashSet<string> edgeHash)
+        protected static void ConnectRoomsWithCorridor(
+            IMap map,
+            Room room,
+            Room selectedRoom,
+            HashSet<string> edgeHash)
         {
             if (room is null)
             {

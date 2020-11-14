@@ -59,8 +59,11 @@ namespace Zilon.BotEnvironment
             }
         }
 
-        private static void LoadBotAssembly(string botDirectory, string assemblyName,
-            IServiceCollection serviceRegistry, IServiceProvider serviceFactory)
+        private static void LoadBotAssembly(
+            string botDirectory,
+            string assemblyName,
+            IServiceCollection serviceRegistry,
+            IServiceProvider serviceFactory)
         {
             var directory = Thread.GetDomain().BaseDirectory;
             var dllPath = Path.Combine(directory, "bots", botDirectory, assemblyName);

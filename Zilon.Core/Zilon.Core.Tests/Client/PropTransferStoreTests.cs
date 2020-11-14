@@ -32,10 +32,8 @@ namespace Zilon.Core.Tests.Client
 
             var propTransferStore = new PropTransferStore(realStore);
 
-
             // ACT
             propTransferStore.Add(testedResource);
-
 
             // ASSERT
             var factProps = propTransferStore.CalcActualItems();
@@ -61,15 +59,12 @@ namespace Zilon.Core.Tests.Client
 
             var realStore = CreateContainer(props);
 
-
             var testedResource = new Resource(testedScheme, expectedCount);
 
             var propTransferStore = new PropTransferStore(realStore);
 
-
             // ACT
             propTransferStore.Remove(testedResource);
-
 
             // ASSERT
             var factProps = propTransferStore.CalcActualItems();
@@ -94,15 +89,12 @@ namespace Zilon.Core.Tests.Client
 
             var realStore = CreateContainer(props);
 
-
             var testedResource = new Resource(testedScheme, testedCount);
 
             var propTransferStore = new PropTransferStore(realStore);
 
-
             // ACT
             propTransferStore.Add(testedResource);
-
 
             // ASSERT
             var factProps = propTransferStore.CalcActualItems();
@@ -111,7 +103,6 @@ namespace Zilon.Core.Tests.Client
             factProps[0].Scheme.Should().Be(testedScheme);
             ((Resource)factProps[0]).Count.Should().Be(expectedCount);
         }
-
 
         private static IPropStore CreateContainer(IProp[] props)
         {

@@ -39,7 +39,8 @@ namespace Zilon.Core.ScoreResultGenerating
             }
         }
 
-        private static string GetSurvivalEffectName(SurvivalEffectDamageEvent survivalEffectDamageEvent,
+        private static string GetSurvivalEffectName(
+            SurvivalEffectDamageEvent survivalEffectDamageEvent,
             Language language)
         {
             switch (survivalEffectDamageEvent.Effect.Type)

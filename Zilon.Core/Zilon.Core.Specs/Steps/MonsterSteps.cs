@@ -36,7 +36,7 @@ namespace Zilon.Core.Specs.Steps
 
                 var routeNode = sector.Map.Nodes.Cast<HexNode>()
                     .Single(node =>
-                        node.OffsetCoords.X == int.Parse(routeX) && node.OffsetCoords.Y == int.Parse(routeY));
+                        (node.OffsetCoords.X == int.Parse(routeX)) && (node.OffsetCoords.Y == int.Parse(routeY)));
 
                 patrolPoints.Add(routeNode);
             }
@@ -49,7 +49,11 @@ namespace Zilon.Core.Specs.Steps
 
         [Then(@"Монстр Id:(\d+) стоит в узле \((\d+), (\d+)\)")]
         [Then(@"Монстр Id:(\d+)\s(не)\sстоит в узле \((\d+), (\d+)\)")]
-        public void ThenМонстрIdСтоитВУзле(int monsterId, string isNot, int offsetX, int offsetY)
+        public void ThenМонстрIdСтоитВУзле(
+            int monsterId,
+            string isNot,
+            int offsetX,
+            int offsetY)
         {
             var monster = Context.GetMonsterById(monsterId);
             var node = (HexNode)monster.Node;

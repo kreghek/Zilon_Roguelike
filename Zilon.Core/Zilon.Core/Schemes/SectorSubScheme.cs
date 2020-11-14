@@ -53,7 +53,6 @@ namespace Zilon.Core.Schemes
             Justification = "Используется для десериализации")]
         public string[] ChestDropTableSids { get; private set; }
 
-
         /// <summary>
         /// Символьный идентфиикатор сектора.
         /// </summary>

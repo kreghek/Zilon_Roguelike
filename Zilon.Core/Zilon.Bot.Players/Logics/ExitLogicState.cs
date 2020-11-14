@@ -12,7 +12,9 @@ namespace Zilon.Bot.Players.Logics
     {
         private MoveTask _moveTask;
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+        public override IActorTask GetTask(
+            IActor actor,
+            ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
             var sector = context.Sector;
@@ -32,7 +34,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            if (_moveTask == null || _moveTask.IsComplete || !_moveTask.CanExecute())
+            if ((_moveTask == null) || _moveTask.IsComplete || !_moveTask.CanExecute())
             {
                 var nearbyExitNode = strategyData.ExitNodes
                     .OrderBy(x => map.DistanceBetween(actor.Node, x))
@@ -52,7 +54,11 @@ namespace Zilon.Bot.Players.Logics
             return _moveTask;
         }
 
-        private static MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode, ISector sector, ISectorMap map)
+        private static MoveTask CreateMoveTask(
+            IActor actor,
+            IGraphNode targetExitNode,
+            ISector sector,
+            ISectorMap map)
         {
             var targetNodeIsBlockedByObstacles = GetObstableInNode(sector, targetExitNode);
             Debug.Assert(!targetNodeIsBlockedByObstacles,
@@ -73,7 +79,7 @@ namespace Zilon.Bot.Players.Logics
         private static bool GetObstableInNode(ISector sector, IGraphNode node)
         {
             var staticObstaclesInTargetNode =
-                sector.StaticObjectManager.Items.Where(x => x.Node == node && x.IsMapBlock);
+                sector.StaticObjectManager.Items.Where(x => (x.Node == node) && x.IsMapBlock);
             var targetNodeIsBlockedByObstacles = staticObstaclesInTargetNode.Any();
             return targetNodeIsBlockedByObstacles;
         }

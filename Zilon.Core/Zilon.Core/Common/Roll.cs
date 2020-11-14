@@ -21,7 +21,9 @@ namespace Zilon.Core.Common
         }
 
         public int Dice { get; }
+
         public int Count { get; }
+
         public RollModifiers Modifiers { get; }
     }
 }

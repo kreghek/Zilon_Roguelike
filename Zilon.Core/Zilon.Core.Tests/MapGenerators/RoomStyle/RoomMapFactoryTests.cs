@@ -97,7 +97,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var hexNodes = map.Nodes.Cast<HexNode>().ToArray();
             foreach (var node in hexNodes)
             {
-                var sameNode = hexNodes.Where(x => x != node && x.OffsetCoords == node.OffsetCoords);
+                var sameNode = hexNodes.Where(x => (x != node) && (x.OffsetCoords == node.OffsetCoords));
                 sameNode.Should().BeEmpty();
             }
         }
@@ -108,8 +108,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             {
                 MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
                 {
-                    RegionCount = 20,
-                    RegionSize = 20
+                    RegionCount = 20, RegionSize = 20
                 }
             };
         }

@@ -40,6 +40,7 @@ namespace Zilon.Core.PersonModules
         }
 
         public string Key => nameof(ICombatActModule);
+
         public bool IsActive { get; set; }
 
         public IEnumerable<ITacticalAct> CalcCombatActs()
@@ -48,7 +49,8 @@ namespace Zilon.Core.PersonModules
             return CalcActs(_defaultActScheme, _equipmentModule, _effectsModule, perks);
         }
 
-        private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
+        private static IEnumerable<ITacticalAct> CalcActs(
+            ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment> equipments,
             IEffectsModule effects,
             IEnumerable<IPerk> perks)
@@ -100,10 +102,11 @@ namespace Zilon.Core.PersonModules
             return perks;
         }
 
-        private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
+        private static ITacticalAct CreateTacticalAct(
+            [NotNull] ITacticalActScheme scheme,
             [NotNull] Equipment equipment,
             [NotNull] IEffectsModule effects,
-            [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
+            [NotNull] [ItemNotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
             var efficientModifierValue = 0;
@@ -119,7 +122,8 @@ namespace Zilon.Core.PersonModules
             return new TacticalAct(scheme, efficientRoll, toHitRoll, equipment);
         }
 
-        private static void CalcPerksBonusesOnTacticalAct([NotNull][ItemNotNull] IEnumerable<IPerk> archievedPerks,
+        private static void CalcPerksBonusesOnTacticalAct(
+            [NotNull] [ItemNotNull] IEnumerable<IPerk> archievedPerks,
             [NotNull] Equipment equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
@@ -153,8 +157,11 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void ProcessRulesBonuses(Equipment equipment, ref int toHitModifierValue,
-            ref int efficientModifierValue, PerkRuleSubScheme[] rules)
+        private static void ProcessRulesBonuses(
+            Equipment equipment,
+            ref int toHitModifierValue,
+            ref int efficientModifierValue,
+            PerkRuleSubScheme[] rules)
         {
             foreach (var rule in rules)
             {
@@ -162,8 +169,11 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void GetRuleModifierValue(PerkRuleSubScheme rule, Equipment equipment,
-            ref int toHitModifierValue, ref int efficientModifierValue)
+        private static void GetRuleModifierValue(
+            PerkRuleSubScheme rule,
+            Equipment equipment,
+            ref int toHitModifierValue,
+            ref int efficientModifierValue)
         {
             switch (rule.Type)
             {
@@ -180,7 +190,9 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static int GetRollModifierByPerkRule(Equipment equipment, int efficientModifierValue,
+        private static int GetRollModifierByPerkRule(
+            Equipment equipment,
+            int efficientModifierValue,
             PerkRuleSubScheme rule)
         {
             if (string.IsNullOrWhiteSpace(rule.Params))
@@ -190,7 +202,7 @@ namespace Zilon.Core.PersonModules
             else
             {
                 var damagePerkParams = JsonConvert.DeserializeObject<DamagePerkParams>(rule.Params);
-                if (damagePerkParams.WeaponTags != null && equipment != null)
+                if ((damagePerkParams.WeaponTags != null) && (equipment != null))
                 {
                     var hasAllTags = true;
                     foreach (var requiredTag in damagePerkParams.WeaponTags)
@@ -213,7 +225,8 @@ namespace Zilon.Core.PersonModules
             return efficientModifierValue;
         }
 
-        private static void CalcSurvivalHazardOnTacticalAct(IEffectsModule effects,
+        private static void CalcSurvivalHazardOnTacticalAct(
+            IEffectsModule effects,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {

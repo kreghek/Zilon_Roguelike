@@ -12,8 +12,11 @@ namespace Zilon.Core.Tactics.ActorInteractionEvents
         }
 
         public IActor TargetActor { get; }
+
         public PersonDefenceItem PersonDefenceItem { get; }
+
         public int SuccessToHitRoll { get; internal set; }
+
         public int FactToHitRoll { get; internal set; }
     }
 }

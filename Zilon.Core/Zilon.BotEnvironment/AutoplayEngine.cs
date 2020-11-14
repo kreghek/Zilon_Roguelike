@@ -29,7 +29,8 @@ namespace Zilon.BotEnvironment
         private int _botExceptionCount;
         private int _envExceptionCount;
 
-        public AutoplayEngine(Startup startup,
+        public AutoplayEngine(
+            Startup startup,
             BotSettings botSettings,
             string scoreFilePreffix,
             IGlobeInitializer globeInitializer
@@ -87,7 +88,10 @@ namespace Zilon.BotEnvironment
             WriteScores(ServiceScope.ServiceProvider, scoreManager, mode, _scoreFilePreffix);
         }
 
-        private void WriteScores(IServiceProvider serviceFactory, IScoreManager scoreManager, string mode,
+        private void WriteScores(
+            IServiceProvider serviceFactory,
+            IScoreManager scoreManager,
+            string mode,
             string scoreFilePreffix)
         {
             var summaryText = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);

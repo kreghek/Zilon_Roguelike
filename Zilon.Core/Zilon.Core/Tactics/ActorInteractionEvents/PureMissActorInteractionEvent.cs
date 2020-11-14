@@ -10,6 +10,7 @@
         public IActor TargetActor { get; }
 
         public int SuccessToHitRoll { get; internal set; }
+
         public int FactToHitRoll { get; internal set; }
     }
 }

@@ -12,6 +12,7 @@
         }
 
         public PersonAttributeType Type { get; }
+
         public float Value { get; }
     }
 }

@@ -13,6 +13,7 @@ namespace Zilon.Core.PersonModules
         }
 
         public string Key => nameof(IInventoryModule);
+
         public bool IsActive { get; set; }
     }
 }

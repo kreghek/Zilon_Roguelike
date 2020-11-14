@@ -15,15 +15,17 @@ namespace Zilon.Core.Tests.Persons
         /// </summary>
         [Test]
         [TestCaseSource(typeof(SurvivalStatTestCasesSource), nameof(SurvivalStatTestCasesSource.ValueTestCases))]
-        public int Value_IncrementDecrementValue_ExpectedResults(int startValue, int min, int max, int diffValue)
+        public int Value_IncrementDecrementValue_ExpectedResults(
+            int startValue,
+            int min,
+            int max,
+            int diffValue)
         {
             // ARRANGE
             var survivalStat = new SurvivalStat(startValue, min, max);
 
-
             // ACT
             survivalStat.Value += diffValue;
-
 
             // ASSERT
             return survivalStat.Value;
@@ -34,16 +36,18 @@ namespace Zilon.Core.Tests.Persons
         /// </summary>
         [Test]
         [TestCaseSource(typeof(SurvivalStatTestCasesSource), nameof(SurvivalStatTestCasesSource.RangeTestCases))]
-        public int Value_IncrementDecrementRange_ExpectedResults(int startValue, int min, int max,
-            int newMin, int newMax)
+        public int Value_IncrementDecrementRange_ExpectedResults(
+            int startValue,
+            int min,
+            int max,
+            int newMin,
+            int newMax)
         {
             // ARRANGE
             var survivalStat = new SurvivalStat(startValue, min, max);
 
-
             // ACT
             survivalStat.ChangeStatRange(newMin, newMax);
-
 
             // ASSERT
             return survivalStat.Value;

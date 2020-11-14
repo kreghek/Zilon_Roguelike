@@ -5,7 +5,10 @@ namespace Zilon.Bot.Players
 {
     public interface ILogicStateTrigger
     {
-        bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+        bool Test(
+            IActor actor,
+            ISectorTaskSourceContext context,
+            ILogicState currentState,
             ILogicStrategyData strategyData);
 
         void Update();

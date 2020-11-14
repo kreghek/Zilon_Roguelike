@@ -148,7 +148,7 @@ namespace Zilon.Core.Common
             var neighbours = HexHelper.GetNeighbors(testCoords.X, testCoords.Y);
             foreach (var neighbour in neighbours)
             {
-                if (neighbour.X >= matrix.Width || neighbour.Y >= matrix.Height)
+                if ((neighbour.X >= matrix.Width) || (neighbour.Y >= matrix.Height))
                 {
                     return false;
                 }
@@ -179,7 +179,7 @@ namespace Zilon.Core.Common
 
         private static bool ValueInRange(int value, int min, int max)
         {
-            return min <= value && value <= max;
+            return (min <= value) && (value <= max);
         }
     }
 }

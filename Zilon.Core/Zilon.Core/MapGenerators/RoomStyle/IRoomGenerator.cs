@@ -32,7 +32,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="roomMinSize"> Минимальный размер комнаты. </param>
         /// <param name="roomMaxSize"> Максимальный размер комнаты. </param>
         /// <returns> Возвращает набор созданных комнат. </returns>
-        IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
+        IEnumerable<Room> GenerateRoomsInGrid(
+            int roomCount,
             int roomMinSize,
             int roomMaxSize,
             IEnumerable<RoomTransition> availableTransitions);

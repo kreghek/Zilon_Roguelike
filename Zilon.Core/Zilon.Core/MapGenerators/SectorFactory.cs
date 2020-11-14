@@ -14,7 +14,8 @@ namespace Zilon.Core.MapGenerators
         private readonly IEquipmentDurableService _equipmentDurableService;
         private readonly ISchemeService _schemeService;
 
-        public SectorFactory(IDropResolver dropResolver,
+        public SectorFactory(
+            IDropResolver dropResolver,
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {

@@ -30,7 +30,8 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="schemeService"> Сервис схем. </param>
         /// <param name="generatorRandomSource"> Источник рандома для генератора. </param>
-        public MonsterGenerator(ISchemeService schemeService,
+        public MonsterGenerator(
+            ISchemeService schemeService,
             IMonsterPersonFactory monsterFactory,
             IMonsterGeneratorRandomSource generatorRandomSource,
             IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
@@ -46,7 +47,8 @@ namespace Zilon.Core.MapGenerators
         /// <param name="sector">Целевой сектор.</param>
         /// <param name="monsterRegions">Регионы сектора, где могут быть монстры.</param>
         /// <param name="sectorScheme">Схема сектора. Отсюда берутся параметры генерации монстров.</param>
-        public void CreateMonsters(ISector sector,
+        public void CreateMonsters(
+            ISector sector,
             IEnumerable<MapRegion> monsterRegions,
             ISectorSubScheme sectorScheme)
         {
@@ -77,7 +79,9 @@ namespace Zilon.Core.MapGenerators
             RollInfections(sector, resultMonsterActors);
         }
 
-        public void CreateMonsters(ISector sector, IEnumerable<MapRegion> monsterRegions,
+        public void CreateMonsters(
+            ISector sector,
+            IEnumerable<MapRegion> monsterRegions,
             IEnumerable<MonsterPerson> monsterPersons)
         {
             if (sector == null)
@@ -108,8 +112,12 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private void CreateMonstersForRegion(ISector sector, ISectorSubScheme sectorScheme,
-            List<IActor> resultMonsterActors, MapRegion region, int[] rarityCounter)
+        private void CreateMonstersForRegion(
+            ISector sector,
+            ISectorSubScheme sectorScheme,
+            List<IActor> resultMonsterActors,
+            MapRegion region,
+            int[] rarityCounter)
         {
             var regionNodes = region.Nodes.OfType<HexNode>();
             var staticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
@@ -139,7 +147,10 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private IActor RollRarityAndCreateMonster(ISector sector, ISectorSubScheme sectorScheme, IGraphNode monsterNode,
+        private IActor RollRarityAndCreateMonster(
+            ISector sector,
+            ISectorSubScheme sectorScheme,
+            IGraphNode monsterNode,
             int[] rarityCounter)
         {
             var rarityMaxCounter = new[] { -1, 10, 1 };
@@ -252,7 +263,10 @@ namespace Zilon.Core.MapGenerators
             return currentRarity;
         }
 
-        private static IActor CreateMonster(IActorManager actorManager, MonsterPerson person, IGraphNode startNode,
+        private static IActor CreateMonster(
+            IActorManager actorManager,
+            MonsterPerson person,
+            IGraphNode startNode,
             IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             var actor = new Actor(person, actorTaskSource, startNode);
@@ -260,7 +274,10 @@ namespace Zilon.Core.MapGenerators
             return actor;
         }
 
-        private IActor CreateMonster(IActorManager actorManager, IMonsterScheme monsterScheme, IGraphNode startNode,
+        private IActor CreateMonster(
+            IActorManager actorManager,
+            IMonsterScheme monsterScheme,
+            IGraphNode startNode,
             IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             var person = _monsterFactory.Create(monsterScheme);

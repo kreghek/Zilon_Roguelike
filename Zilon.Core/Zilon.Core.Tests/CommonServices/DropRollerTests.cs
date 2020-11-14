@@ -30,12 +30,11 @@ namespace Zilon.Core.Tests.CommonServices
 
             var roll = 16;
 
-            var recMods = records.Select(x => new DropTableModRecord { Record = x, ModifiedWeight = x.Weight }).ToArray();
-
+            var recMods = records.Select(x => new DropTableModRecord { Record = x, ModifiedWeight = x.Weight })
+                .ToArray();
 
             // ACT
             var recordMod = DropRoller.GetRecord(recMods, roll);
-
 
             // ASSERT
             recordMod.Record.SchemeSid.Should().Be("trophy1");

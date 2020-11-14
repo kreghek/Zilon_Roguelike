@@ -35,7 +35,8 @@ namespace Zilon.Core.Tactics
         private int _nationalUnityCounter = NATIONALUNITYCOUNTERSTARTVALUE;
 
         [ExcludeFromCodeCoverage]
-        public Sector(ISectorMap map,
+        public Sector(
+            ISectorMap map,
             IActorManager actorManager,
             IStaticObjectManager staticObjectManager,
             IDropResolver dropResolver,
@@ -93,8 +94,11 @@ namespace Zilon.Core.Tactics
         public IScoreManager ScoreManager { get; set; }
 
         public ILocationScheme Scheme { get; set; }
+
         public IActorManager ActorManager { get; }
+
         public IStaticObjectManager StaticObjectManager { get; }
+
         public IEnumerable<IDisease> Diseases => _diseases;
 
         public void AddDisease(IDisease disease)
@@ -216,7 +220,7 @@ namespace Zilon.Core.Tactics
                 foreach (var effect in effects.Items.ToArray())
                 {
                     if (effect is ISurvivalStatEffect actorEffect &&
-                        actor.Person.GetModuleSafe<ISurvivalModule>() != null)
+                        (actor.Person.GetModuleSafe<ISurvivalModule>() != null))
                     {
                         actorEffect.Apply(actor.Person.GetModule<ISurvivalModule>());
                     }

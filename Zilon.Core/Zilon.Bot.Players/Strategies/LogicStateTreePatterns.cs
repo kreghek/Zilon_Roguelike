@@ -121,6 +121,7 @@ namespace Zilon.Bot.Players.Strategies
                 tree.Transitions.Add(fightLogic, new[]
                 {
                     new LogicTransition(_factory.CreateTrigger<LowHpAndHasResourceTrigger>(), healSelfLogic),
+
                     //new LogicTransition(Factory.CreateTrigger<IntruderDetectedTrigger>(), fightLogic),
                     // После победы над текущим противником отдыхаем
                     new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), fightIdleLogic)
@@ -206,7 +207,6 @@ namespace Zilon.Bot.Players.Strategies
                 var lootLogic = _factory.CreateLogic<LootLogicState>();
                 var equipLogic = _factory.CreateLogic<EquipBetterPropLogicState>();
                 var exitLogic = _factory.CreateLogic<ExitLogicState>();
-
 
                 tree.StartState = exploreLogic;
 

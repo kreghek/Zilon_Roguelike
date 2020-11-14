@@ -6,6 +6,7 @@
     internal class RegionCountRule : IRegionMinCountRule
     {
         public int Count { get; set; }
+
         public string Name => "Minimum region count rule";
 
         public string Description =>

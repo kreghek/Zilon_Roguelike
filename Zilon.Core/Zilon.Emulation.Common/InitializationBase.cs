@@ -186,14 +186,16 @@ namespace Zilon.Emulation.Common
             });
         }
 
-        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider,
+        private static void ConfigurateTacticalActUsageService(
+            IServiceProvider serviceProvider,
             TacticalActUsageService tacticalActUsageService)
         {
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
         }
 
-        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider,
+        private static void ConfigurateActorActUsageHandler(
+            IServiceProvider serviceProvider,
             ActorActUsageHandler handler)
         {
             // Указание необязательных зависимостей

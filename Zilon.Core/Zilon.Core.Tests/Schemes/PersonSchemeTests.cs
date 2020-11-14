@@ -32,10 +32,8 @@ namespace Zilon.Core.Tests.Schemes
                 sourceText = reader.ReadToEnd();
             }
 
-
             // ACT
             var factPersonScheme = JsonConvert.DeserializeObject<PersonScheme>(sourceText);
-
 
             // ASSERT
 

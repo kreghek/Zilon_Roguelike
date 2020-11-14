@@ -10,7 +10,10 @@ namespace Zilon.Bot.Players.Triggers
 {
     public class IntruderDetectedTrigger : ILogicStateTrigger
     {
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+        public bool Test(
+            IActor actor,
+            ISectorTaskSourceContext context,
+            ILogicState currentState,
             ILogicStrategyData strategyData)
         {
             if (actor is null)

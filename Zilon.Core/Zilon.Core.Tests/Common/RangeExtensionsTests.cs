@@ -18,10 +18,8 @@ namespace Zilon.Core.Tests.Common
             // ARRANGE
             var range = new Range<int>(min, max);
 
-
             // ACT
             var factValue = range.GetBounded(value);
-
 
             // ASSERT
             return factValue;
@@ -38,10 +36,8 @@ namespace Zilon.Core.Tests.Common
             // ARRANGE
             var range = new Range<int>(min, max);
 
-
             // ACT
             var factValue = range.GetBounded(value);
-
 
             // ASSERT
             return factValue;

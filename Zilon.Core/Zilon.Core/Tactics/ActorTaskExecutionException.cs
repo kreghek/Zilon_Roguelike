@@ -18,7 +18,9 @@ namespace Zilon.Core.Tactics
             ActorTaskSource = actorTaskSource;
         }
 
-        public ActorTaskExecutionException(string message, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource,
+        public ActorTaskExecutionException(
+            string message,
+            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource,
             Exception inner) : base(message, inner)
         {
             ActorTaskSource = actorTaskSource;

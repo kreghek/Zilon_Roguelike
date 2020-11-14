@@ -14,7 +14,8 @@ namespace Zilon.Core.ProgressStoring
 
         public OffsetCoords Coords { get; set; }
 
-        public static ActorStorageData Create(IActor actor,
+        public static ActorStorageData Create(
+            IActor actor,
             IDictionary<IPerson, string> personDict)
         {
             if (actor is null)

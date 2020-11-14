@@ -10,7 +10,8 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly PropTransfer[] _transfers;
 
-        public TransferPropsTask(IActor actor,
+        public TransferPropsTask(
+            IActor actor,
             IActorTaskContext context,
             IEnumerable<PropTransfer> transfers) :
             base(actor, context)

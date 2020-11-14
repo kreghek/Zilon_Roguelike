@@ -5,10 +5,15 @@ namespace Zilon.Core.Schemes
     public interface IPersonTemplateScheme : IScheme
     {
         string FractionSid { get; }
+
         IDropTableScheme HeadEquipments { get; }
+
         IDropTableScheme BodyEquipments { get; }
+
         IDropTableScheme MainHandEquipments { get; }
+
         IDropTableScheme OffHandEquipments { get; }
+
         IDropTableScheme InventoryProps { get; }
     }
 

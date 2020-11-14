@@ -28,12 +28,12 @@ namespace Zilon.Tournament.ApiGate.BotManagement
         public static bool IsMultipartContentType(string contentType)
         {
             return !string.IsNullOrEmpty(contentType)
-                   && contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
+                   && (contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
         public static bool HasFormDataContentDisposition(ContentDispositionHeaderValue contentDisposition)
         {
-            return contentDisposition != null
+            return (contentDisposition != null)
                    && contentDisposition.DispositionType.Equals("form-data")
                    && string.IsNullOrEmpty(contentDisposition.FileName.ToString())
                    && string.IsNullOrEmpty(contentDisposition.FileNameStar.ToString());
@@ -41,7 +41,7 @@ namespace Zilon.Tournament.ApiGate.BotManagement
 
         public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
         {
-            return contentDisposition != null
+            return (contentDisposition != null)
                    && contentDisposition.DispositionType.Equals("form-data")
                    && (!string.IsNullOrEmpty(contentDisposition.FileName.ToString())
                        || !string.IsNullOrEmpty(contentDisposition.FileNameStar.ToString()));

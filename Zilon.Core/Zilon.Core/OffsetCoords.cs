@@ -5,6 +5,7 @@ namespace Zilon.Core
     public struct OffsetCoords : IEquatable<OffsetCoords>
     {
         public int X { get; }
+
         public int Y { get; }
 
         public OffsetCoords(int x, int y)
@@ -23,15 +24,15 @@ namespace Zilon.Core
             unchecked
             {
                 var hashCode = 1861411795;
-                hashCode = hashCode * -1521134295 + X.GetHashCode();
-                hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                hashCode = (hashCode * -1521134295) + X.GetHashCode();
+                hashCode = (hashCode * -1521134295) + Y.GetHashCode();
                 return hashCode;
             }
         }
 
         public bool Equals(OffsetCoords other)
         {
-            return X == other.X && Y == other.Y;
+            return (X == other.X) && (Y == other.Y);
         }
 
         public override bool Equals(object obj)

@@ -29,7 +29,6 @@ namespace Zilon.Core.Persons.Survival
         /// </summary>
         public SurvivalStatType Type { get; set; }
 
-
         /// <summary>
         /// Скорость снижения характеристики за ход.
         /// </summary>

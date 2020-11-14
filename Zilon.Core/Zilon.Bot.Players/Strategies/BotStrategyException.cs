@@ -7,7 +7,9 @@ namespace Zilon.Bot.Players.Strategies
     public class BotStrategyException : Exception
     {
         public BotStrategyException() { }
+
         public BotStrategyException(string message) : base(message) { }
+
         public BotStrategyException(string message, Exception inner) : base(message, inner) { }
 
         public BotStrategyException(IEnumerable<LogicStateTrack> selectionHistory)

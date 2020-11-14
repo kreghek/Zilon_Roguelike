@@ -13,6 +13,7 @@ namespace Zilon.Bot.Players.Strategies
         }
 
         public HashSet<IGraphNode> ObserverdNodes { get; }
+
         public HashSet<IGraphNode> ExitNodes { get; }
     }
 }

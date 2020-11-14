@@ -68,6 +68,7 @@ namespace Zilon.Core.Tactics.Tests
         private sealed class TestModule : IAdditionalInterface, ITestModule
         {
             public bool IsActive { get; set; }
+
             public string Key => nameof(ITestModule);
         }
 

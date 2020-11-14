@@ -13,7 +13,8 @@ namespace Zilon.Core.Tactics
     public sealed class DefenceEventArgs : EventArgs
     {
         [ExcludeFromCodeCoverage]
-        public DefenceEventArgs([NotNull] PersonDefenceItem prefferedDefenceItem,
+        public DefenceEventArgs(
+            [NotNull] PersonDefenceItem prefferedDefenceItem,
             int successToHitRoll,
             int factToHitRoll)
         {

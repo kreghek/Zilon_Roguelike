@@ -19,7 +19,9 @@ namespace Zilon.Core.Props
         protected HashSet<IProp> Items { get; }
 
         public event EventHandler<PropStoreEventArgs> Added;
+
         public event EventHandler<PropStoreEventArgs> Removed;
+
         public event EventHandler<PropStoreEventArgs> Changed;
 
         public virtual IProp[] CalcActualItems()
@@ -95,7 +97,8 @@ namespace Zilon.Core.Props
             DoEventInner(Changed, prop);
         }
 
-        private void DoEventInner([CanBeNull] EventHandler<PropStoreEventArgs> @event,
+        private void DoEventInner(
+            [CanBeNull] EventHandler<PropStoreEventArgs> @event,
             [CanBeNull] IProp prop)
         {
             if (prop == null)
@@ -182,7 +185,8 @@ namespace Zilon.Core.Props
 
         private bool HasResource(Resource resource)
         {
-            return Items.OfType<Resource>().Any(x => x.Scheme.Sid == resource.Scheme.Sid && x.Count >= resource.Count);
+            return Items.OfType<Resource>()
+                .Any(x => (x.Scheme.Sid == resource.Scheme.Sid) && (x.Count >= resource.Count));
         }
 
         private bool HasEquipment(Equipment equipment)

@@ -36,7 +36,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает набор созданных комнат.
         /// </returns>
-        public override IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
+        public override IEnumerable<Room> GenerateRoomsInGrid(
+            int roomCount,
             int roomMinSize,
             int roomMaxSize,
             IEnumerable<RoomTransition> availableTransitions)
@@ -138,14 +139,18 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
         }
 
-        private void CreateOneRoomNodes(ISectorMap map, HashSet<string> edgeHash, Room room, Size cellSize)
+        private void CreateOneRoomNodes(
+            ISectorMap map,
+            HashSet<string> edgeHash,
+            Room room,
+            Size cellSize)
         {
             for (var x = 0; x < room.Width; x++)
             {
                 for (var y = 0; y < room.Height; y++)
                 {
-                    var nodeX = x + room.PositionX * cellSize.Width;
-                    var nodeY = y + room.PositionY * cellSize.Height;
+                    var nodeX = x + (room.PositionX * cellSize.Width);
+                    var nodeY = y + (room.PositionY * cellSize.Height);
 
                     var node = new HexNode(nodeX, nodeY);
 

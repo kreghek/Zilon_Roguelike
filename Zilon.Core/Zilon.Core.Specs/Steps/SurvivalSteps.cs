@@ -39,7 +39,8 @@ namespace Zilon.Core.Specs.Steps
 
         [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((сытость|вода|хп)\)")]
         [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((\-сытость|\-вода|\-хп)\)")]
-        public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(string propSid,
+        public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(
+            string propSid,
             string provisionStat)
         {
             var actor = Context.GetActiveActor();
@@ -52,7 +53,9 @@ namespace Zilon.Core.Specs.Steps
             FeatureContextBase.AddResourceToActor(propScheme, 1, actor);
         }
 
-        private static void ParseProvisionStat(string provisionStat, out PersonRuleDirection direction,
+        private static void ParseProvisionStat(
+            string provisionStat,
+            out PersonRuleDirection direction,
             out ConsumeCommonRuleType consumeRuleType)
         {
             direction = PersonRuleDirection.Positive;
@@ -90,7 +93,9 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private static TestPropScheme CreateTestPropScheme(string propSid, PersonRuleDirection direction,
+        private static TestPropScheme CreateTestPropScheme(
+            string propSid,
+            PersonRuleDirection direction,
             ConsumeCommonRuleType consumeRuleType)
         {
             return new TestPropScheme
@@ -193,7 +198,7 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
+                        if (humatTaskSource.CanIntent() && (survivalModule?.IsDead == false))
                         {
                             var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
                             idleCommand.Execute();
@@ -240,7 +245,10 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [Then(@"Значение (сытость|вода) повысилось на (.*) и уменьшилось на (.*) за игровой цикл и стало (.*)")]
-        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(string stat, int satietyValue, int hungerRate,
+        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(
+            string stat,
+            int satietyValue,
+            int hungerRate,
             int expectedValue)
         {
             var actor = Context.GetActiveActor();
@@ -308,7 +316,9 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private static void GetEffectStatAndLevelByName(string effectName, out SurvivalStatType stat,
+        private static void GetEffectStatAndLevelByName(
+            string effectName,
+            out SurvivalStatType stat,
             out SurvivalStatHazardLevel level)
         {
             switch (effectName)

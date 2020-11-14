@@ -47,7 +47,9 @@ namespace Zilon.Core.Specs.Contexts
         public IServiceProvider ServiceProvider { get; }
 
         public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
+
         public RegisterServices RegisterServices { get; }
+
         public IGlobe Globe { get; private set; }
 
         private void Configure(IServiceProvider serviceProvider)
@@ -79,9 +81,7 @@ namespace Zilon.Core.Specs.Contexts
 
                 var mapRegion = new MapRegion(1, map.Nodes.ToArray())
                 {
-                    IsStart = true,
-                    IsOut = true,
-                    ExitNodes = new[] { map.Nodes.Last() }
+                    IsStart = true, IsOut = true, ExitNodes = new[] { map.Nodes.Last() }
                 };
 
                 map.Regions.Add(mapRegion);
@@ -100,7 +100,11 @@ namespace Zilon.Core.Specs.Contexts
             return sector;
         }
 
-        public void AddWall(int x1, int y1, int x2, int y2)
+        public void AddWall(
+            int x1,
+            int y1,
+            int x2,
+            int y2)
         {
             var map = GetCurrentGlobeFirstSector().Map;
 
@@ -151,7 +155,11 @@ namespace Zilon.Core.Specs.Contexts
             playerState.ActiveActor = humanActroViewModel;
         }
 
-        public void AddMonsterActor(string monsterSid, int monsterId, ISector sector, OffsetCoords startCoords)
+        public void AddMonsterActor(
+            string monsterSid,
+            int monsterId,
+            ISector sector,
+            OffsetCoords startCoords)
         {
             if (sector is null)
             {
@@ -212,12 +220,13 @@ namespace Zilon.Core.Specs.Contexts
             var actorManager = sector.ActorManager;
 
             var monster = actorManager.Items
-                .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
+                .SingleOrDefault(x => x.Person is MonsterPerson && (x.Person.Id == id));
 
             return monster;
         }
 
-        private IActor CreateHumanActor([NotNull] string personSchemeSid,
+        private IActor CreateHumanActor(
+            [NotNull] string personSchemeSid,
             [NotNull] IGraphNode startNode,
             [NotNull] IPerkResolver perkResolver)
         {
@@ -231,7 +240,8 @@ namespace Zilon.Core.Specs.Contexts
             return actor;
         }
 
-        private IActor CreateMonsterActor([NotNull] IMonsterScheme monsterScheme,
+        private IActor CreateMonsterActor(
+            [NotNull] IMonsterScheme monsterScheme,
             [NotNull] IGraphNode startNode)
         {
             var monsterFactory = ServiceProvider.GetRequiredService<IMonsterPersonFactory>();

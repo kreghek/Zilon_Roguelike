@@ -29,10 +29,8 @@ namespace Zilon.Core.Tests.Persons
             var job = CreateJob(startProgress, JobType.Defeats);
             var progress = CreateJobProgress(actor);
 
-
             // ACT
             progress.ApplyToJobs(new[] { job });
-
 
             // ASSERT
             job.Progress.Should().Be(expectedProgress);
@@ -56,10 +54,8 @@ namespace Zilon.Core.Tests.Persons
 
             var progress = CreateJobProgress(actor);
 
-
             // ACT
             progress.ApplyToJobs(new[] { testedJob, otherJob });
-
 
             // ASSERT
             testedJob.Progress.Should().Be(expectedProgress);
@@ -79,16 +75,13 @@ namespace Zilon.Core.Tests.Persons
             var job = CreateJob(startProgress, JobType.Defeats);
             var progress = CreateJobProgress(actor);
 
-
             // ACT
             var changedJobs = progress.ApplyToJobs(new[] { job });
-
 
             // ASSERT
             changedJobs.Should().HaveCount(1);
             changedJobs[0].Should().Be(job);
         }
-
 
         private static IActor CreateActor()
         {
@@ -96,7 +89,6 @@ namespace Zilon.Core.Tests.Persons
             var actor = actorMock.Object;
             return actor;
         }
-
 
         private static IJob CreateJob(int startProgress, JobType type)
         {

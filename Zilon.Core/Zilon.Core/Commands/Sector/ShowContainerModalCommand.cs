@@ -44,7 +44,7 @@ namespace Zilon.Core.Commands
             var container = targetContainerViewModel?.StaticObject;
             var containerContent = container?.GetModule<IPropContainer>().Content;
 
-            return inventory != null && containerContent != null;
+            return (inventory != null) && (containerContent != null);
         }
     }
 }

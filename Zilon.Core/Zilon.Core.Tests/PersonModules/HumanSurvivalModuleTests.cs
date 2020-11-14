@@ -243,7 +243,8 @@ namespace Zilon.Core.Tests.PersonModules
             return survivalRandomSourceMock.Object;
         }
 
-        private static ISurvivalModule CreateSurvivalData(IPersonScheme personScheme,
+        private static ISurvivalModule CreateSurvivalData(
+            IPersonScheme personScheme,
             ISurvivalRandomSource survivalRandomSource)
         {
             var attributesModuleMock = new Mock<IAttributesModule>();

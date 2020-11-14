@@ -51,7 +51,8 @@ namespace Zilon.Core.PersonGeneration
             AddDefaultProps(inventory);
         }
 
-        private static IPersonTemplateScheme[] GetPersonTemplateByFraction(IFraction fraction,
+        private static IPersonTemplateScheme[] GetPersonTemplateByFraction(
+            IFraction fraction,
             ISchemeService schemeService)
         {
             if (fraction == Fractions.InterventionistFraction)

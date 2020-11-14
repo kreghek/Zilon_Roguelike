@@ -9,13 +9,17 @@ namespace Zilon.Core.MapGenerators
     public interface IStaticObjectGenerationContext
     {
         ISector Sector { get; }
+
         ISectorSubScheme Scheme { get; }
+
         IResourceDepositData ResourceDepositData { get; }
     }
 
     public sealed class StaticObjectGenerationContext : IStaticObjectGenerationContext
     {
-        public StaticObjectGenerationContext(ISector sector, ISectorSubScheme scheme,
+        public StaticObjectGenerationContext(
+            ISector sector,
+            ISectorSubScheme scheme,
             IResourceDepositData resourceDepositData)
         {
             Sector = sector ?? throw new ArgumentNullException(nameof(sector));
@@ -24,7 +28,9 @@ namespace Zilon.Core.MapGenerators
         }
 
         public ISector Sector { get; }
+
         public ISectorSubScheme Scheme { get; }
+
         public IResourceDepositData ResourceDepositData { get; }
     }
 }

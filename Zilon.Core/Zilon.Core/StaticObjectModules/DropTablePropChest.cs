@@ -11,7 +11,8 @@ namespace Zilon.Core.StaticObjectModules
     public class DropTablePropChest : ChestBase
     {
         [ExcludeFromCodeCoverage]
-        public DropTablePropChest(IDropTableScheme[] dropTables,
+        public DropTablePropChest(
+            IDropTableScheme[] dropTables,
             IDropResolver dropResolver) : base(new DropTableChestStore(dropTables, dropResolver))
         {
         }

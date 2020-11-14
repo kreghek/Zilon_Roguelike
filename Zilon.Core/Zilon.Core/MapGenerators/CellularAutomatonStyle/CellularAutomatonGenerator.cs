@@ -112,7 +112,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // Границу мертвым живым соседом.
                 // Сделано, чтобы углы не заполнялись.
 
-                if (nX >= 0 && nY >= 0 && nX < matrix.Width && nY < matrix.Height && matrix.Items[nX, nY])
+                if ((nX >= 0) && (nY >= 0) && (nX < matrix.Width) && (nY < matrix.Height) && matrix.Items[nX, nY])
                 {
                     aliveCount++;
                 }

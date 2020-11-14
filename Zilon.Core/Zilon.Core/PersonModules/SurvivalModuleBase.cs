@@ -28,6 +28,7 @@ namespace Zilon.Core.PersonModules
         public bool IsDead { get; private set; }
 
         public string Key => nameof(ISurvivalModule);
+
         public bool IsActive { get; set; }
 
         /// <summary>Происходит, если персонаж умирает.</summary>
@@ -80,6 +81,7 @@ namespace Zilon.Core.PersonModules
         }
 
         public abstract void ResetStats();
+
         public abstract void Update();
 
         /// <summary>

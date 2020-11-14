@@ -32,6 +32,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет получение задачи актёра после указания намерения.
         /// </summary>
         [Test]
+
         // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
         [Timeout(1000)]
         public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask()
@@ -69,6 +70,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет получение задачи актёра после указания намерения.
         /// </summary>
         [Test]
+
         // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
         //[Timeout(1000)]
         public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask2()

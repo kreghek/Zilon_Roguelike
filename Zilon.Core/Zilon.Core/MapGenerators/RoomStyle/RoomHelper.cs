@@ -64,7 +64,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <param name="edgeHash"> Хеш ребер карты. </param>
         /// <param name="node"> Исходное ребро карты. </param>
         /// <param name="neighbor"> Соседнее ребро карты, с которым будет соединено исходное. </param>
-        public static void AddEdgeToMap(IMap targetMap, HashSet<string> edgeHash, HexNode node, HexNode neighbor)
+        public static void AddEdgeToMap(
+            IMap targetMap,
+            HashSet<string> edgeHash,
+            HexNode node,
+            HexNode neighbor)
         {
             if (targetMap is null)
             {
@@ -92,7 +96,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             targetMap.AddEdge(node, neighbor);
         }
 
-        public static void AddAllNeighborToMap(IMap map, HashSet<string> edgeHash, Room room, HexNode node)
+        public static void AddAllNeighborToMap(
+            IMap map,
+            HashSet<string> edgeHash,
+            Room room,
+            HexNode node)
         {
             if (room is null)
             {
@@ -112,7 +120,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
         }
 
-        public static HexNode CreateCorridorNode(IMap map, HashSet<string> edgeHash, HexNode currentNode, int currentX,
+        public static HexNode CreateCorridorNode(
+            IMap map,
+            HashSet<string> edgeHash,
+            HexNode currentNode,
+            int currentX,
             int currentY)
         {
             if (map is null)
@@ -121,7 +133,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             var node = map.Nodes.OfType<HexNode>()
-                .SingleOrDefault(x => x.OffsetCoords.X == currentX && x.OffsetCoords.Y == currentY);
+                .SingleOrDefault(x => (x.OffsetCoords.X == currentX) && (x.OffsetCoords.Y == currentY));
 
             if (node == null)
             {

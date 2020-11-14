@@ -80,7 +80,9 @@ namespace Zilon.Core.MassSectorGenerator
             return Task.CompletedTask;
         }
 
-        private static Task CheckSectorAsync(ISectorValidator[] validators, IServiceProvider scopeContainer,
+        private static Task CheckSectorAsync(
+            ISectorValidator[] validators,
+            IServiceProvider scopeContainer,
             ISector sector)
         {
             return Task.Run(() =>
@@ -170,7 +172,7 @@ namespace Zilon.Core.MassSectorGenerator
                 // Это используется на билд-сервере, чтобы случайно проверить несколько схем.
 
                 var locationSchemes = schemeService.GetSchemes<ILocationScheme>()
-                    .Where(x => x.SectorLevels != null && x.SectorLevels.Any())
+                    .Where(x => (x.SectorLevels != null) && x.SectorLevels.Any())
                     .ToArray();
                 var locationSchemeIndex = _random.Next(0, locationSchemes.Length);
                 var locationScheme = locationSchemes[locationSchemeIndex];

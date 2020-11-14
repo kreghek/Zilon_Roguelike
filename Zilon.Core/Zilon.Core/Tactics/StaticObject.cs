@@ -50,7 +50,7 @@ namespace Zilon.Core.Tactics
         public bool CanBeDamaged()
         {
             var durabilityModule = this.GetModuleSafe<IDurabilityModule>();
-            return durabilityModule != null && durabilityModule.Value > 0;
+            return (durabilityModule != null) && (durabilityModule.Value > 0);
         }
 
         /// <inheritdoc/>

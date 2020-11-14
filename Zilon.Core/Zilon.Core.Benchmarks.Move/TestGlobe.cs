@@ -17,7 +17,8 @@ namespace Zilon.Core.Benchmarks.Move
     {
         private readonly TestMaterializedSectorNode _sectorNode;
 
-        public TestGlobe(IPersonScheme personScheme,
+        public TestGlobe(
+            IPersonScheme personScheme,
             IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource)
         {
             TestSectorSubScheme testSectorSubScheme = new TestSectorSubScheme
@@ -35,7 +36,6 @@ namespace Zilon.Core.Benchmarks.Move
             _sectorNode = new TestMaterializedSectorNode(testSectorSubScheme);
 
             var person = new HumanPerson(personScheme, Fractions.MainPersonFraction);
-
 
             var playerActorStartNode = _sectorNode.Sector.Map.Regions
                 .SingleOrDefault(x => x.IsStart).Nodes

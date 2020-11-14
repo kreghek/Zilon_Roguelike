@@ -39,7 +39,8 @@ namespace Zilon.Core.Client
         /// <param name="prop"> Предмет, который будет перенесён. </param>
         /// <param name="sourceStoreType"> Хранилище-источник. </param>
         /// <param name="distStoreType"> Хранилище-назначение. </param>
-        public void TransferProp(IProp prop,
+        public void TransferProp(
+            IProp prop,
             PropTransferMachineStore sourceStoreType,
             PropTransferMachineStore distStoreType)
         {

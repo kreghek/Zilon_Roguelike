@@ -29,14 +29,12 @@ namespace Zilon.Core.Tests.Persons
 
             var acts = new TacticalActScheme[0];
 
-
             // ACT
             Action act = () =>
             {
                 // ReSharper disable once UnusedVariable
                 var equipment = new Equipment(scheme, acts);
             };
-
 
             // ASSERT
             act.Should().Throw<ArgumentException>();

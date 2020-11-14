@@ -30,7 +30,6 @@ namespace Zilon.Core.World.NameGeneration
             var assembly = this.GetType().Assembly;
             var resourceName = "Zilon.Core.World.NameGeneration.names.json";
 
-
             using (var stream = assembly.GetManifestResourceStream(resourceName))
             using (var reader = new StreamReader(stream))
             using (JsonReader jreader = new JsonTextReader(reader))
@@ -167,7 +166,11 @@ namespace Zilon.Core.World.NameGeneration
         /// <param name="sex">The sex of the names, if null sex is randomised</param>
         /// <param name="initials">Should the middle names have initials, if null this will be randomised</param>
         /// <returns>List of strings of names</returns>
-        public List<string> RandomNames(int number, int maxMiddleNames, Sex? sex, bool? initials)
+        public List<string> RandomNames(
+            int number,
+            int maxMiddleNames,
+            Sex? sex,
+            bool? initials)
         {
             List<string> names = new List<string>(number);
 
@@ -175,7 +178,7 @@ namespace Zilon.Core.World.NameGeneration
             {
                 Sex s = sex != null ? sex.Value : (Sex)_dice.Roll(0, 2 - 1);
                 bool init = initials != null ? (bool)initials : (_dice.Roll(0, 2 - 1) != 0);
-                int middle = _dice.Roll(0, maxMiddleNames + 1 - 1);
+                int middle = _dice.Roll(0, (maxMiddleNames + 1) - 1);
 
                 names.Add(Generate(s, middle, init));
             }

@@ -40,7 +40,7 @@ namespace Zilon.Core.CommonServices.Dices
             do
             {
                 x = NextGaussian(MEAN, STDDEV);
-            } while (x < min || x > max);
+            } while ((x < min) || (x > max));
 
             return x;
         }

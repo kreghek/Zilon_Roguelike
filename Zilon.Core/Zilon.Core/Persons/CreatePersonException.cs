@@ -6,7 +6,9 @@ namespace Zilon.Core.Persons
     public class CreatePersonException : Exception
     {
         public CreatePersonException() { }
+
         public CreatePersonException(string message) : base(message) { }
+
         public CreatePersonException(string message, Exception inner) : base(message, inner) { }
 
         protected CreatePersonException(

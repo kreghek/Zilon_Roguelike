@@ -21,12 +21,10 @@ namespace Zilon.Core.Tests
             const int expectedLevel = 1;
             const int expectedSubLevel = 2;
 
-
             // ACT
             PerkHelper.ConvertTotalLevel(_perkScheme, testedTotalLevel,
                 out int? factLevel,
                 out int? factSubLevel);
-
 
             // ASSERT
             factLevel.Should().Be(expectedLevel);
@@ -41,12 +39,10 @@ namespace Zilon.Core.Tests
             const int expectedLevel = 2;
             const int expectedSubLevel = 1;
 
-
             // ACT
             PerkHelper.ConvertTotalLevel(_perkScheme, testedTotalLevel,
                 out int? factLevel,
                 out int? factSubLevel);
-
 
             // ASSERT
             factLevel.Should().Be(expectedLevel);
@@ -60,8 +56,8 @@ namespace Zilon.Core.Tests
             {
                 Levels = new[]
                 {
-                    new PerkLevelSubScheme {MaxValue = 5}, new PerkLevelSubScheme {MaxValue = 2},
-                    new PerkLevelSubScheme {MaxValue = 3}
+                    new PerkLevelSubScheme { MaxValue = 5 }, new PerkLevelSubScheme { MaxValue = 2 },
+                    new PerkLevelSubScheme { MaxValue = 3 }
                 }
             };
         }

@@ -14,7 +14,8 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly IOpenContainerMethod _method;
         private readonly IStaticObject _staticObject;
 
-        public OpenContainerTask([NotNull] IActor actor,
+        public OpenContainerTask(
+            [NotNull] IActor actor,
             [NotNull] IActorTaskContext context,
             [NotNull] IStaticObject staticObject,
             [NotNull] IOpenContainerMethod method) : base(actor, context)

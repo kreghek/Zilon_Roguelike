@@ -44,15 +44,15 @@ namespace Zilon.Bot.Players.Logics
         {
             foreach (var target in actorManager.Items)
             {
-                if (target.Person.Fraction == actor.Person.Fraction ||
-                    (target.Person.Fraction == Fractions.MilitiaFraction &&
-                     actor.Person.Fraction == Fractions.MainPersonFraction ||
-                     target.Person.Fraction == Fractions.MainPersonFraction &&
-                     actor.Person.Fraction == Fractions.MilitiaFraction ||
-                     target.Person.Fraction == Fractions.InterventionistFraction &&
-                     actor.Person.Fraction == Fractions.TroublemakerFraction ||
-                     target.Person.Fraction == Fractions.TroublemakerFraction &&
-                     actor.Person.Fraction == Fractions.InterventionistFraction))
+                if ((target.Person.Fraction == actor.Person.Fraction) ||
+                    (((target.Person.Fraction == Fractions.MilitiaFraction) &&
+                      (actor.Person.Fraction == Fractions.MainPersonFraction)) ||
+                     ((target.Person.Fraction == Fractions.MainPersonFraction) &&
+                      (actor.Person.Fraction == Fractions.MilitiaFraction)) ||
+                     ((target.Person.Fraction == Fractions.InterventionistFraction) &&
+                      (actor.Person.Fraction == Fractions.TroublemakerFraction)) ||
+                     ((target.Person.Fraction == Fractions.TroublemakerFraction) &&
+                      (actor.Person.Fraction == Fractions.InterventionistFraction))))
                 {
                     continue;
                 }
@@ -92,7 +92,9 @@ namespace Zilon.Bot.Players.Logics
             return attackParams;
         }
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+        public override IActorTask GetTask(
+            IActor actor,
+            ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
             if (_target == null)
@@ -117,11 +119,12 @@ namespace Zilon.Bot.Players.Logics
                 var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
                 return attackTask;
             }
+
             // Маршрут до цели обновляем каждые 3 хода.
             // Для оптимизации.
             // Эффект потери цели.
 
-            if (_refreshCounter > 0 && _moveTask?.CanExecute() == true)
+            if ((_refreshCounter > 0) && (_moveTask?.CanExecute() == true))
             {
                 _refreshCounter--;
                 return _moveTask;
@@ -153,6 +156,7 @@ namespace Zilon.Bot.Players.Logics
         private class AttackParams
         {
             public bool IsAvailable { get; set; }
+
             public ITacticalAct TacticalAct { get; set; }
         }
     }

@@ -16,7 +16,9 @@ namespace Zilon.Core.PersonModules
         }
 
         public IEnumerable<IPersonEffect> Items => _items;
+
         public string Key => nameof(IEffectsModule);
+
         public bool IsActive { get; set; }
 
         public void Add(IPersonEffect effect)
@@ -45,7 +47,9 @@ namespace Zilon.Core.PersonModules
         }
 
         public event EventHandler<EffectEventArgs> Added;
+
         public event EventHandler<EffectEventArgs> Removed;
+
         public event EventHandler<EffectEventArgs> Changed;
 
         private void Effect_Changed(object sender, EventArgs e)

@@ -59,7 +59,6 @@ namespace Zilon.Core.Tactics.Spatial
             return list.ToArray();
         }
 
-
         /// <summary>
         /// Ищет ближайший узел карты в сетке шестиугольников без учёта рёбер.
         /// </summary>
@@ -95,7 +94,7 @@ namespace Zilon.Core.Tactics.Spatial
                     return target;
                 }
 
-                if (minDistance == -1 || distance < minDistance)
+                if ((minDistance == -1) || (distance < minDistance))
                 {
                     minDistance = distance;
                     nearbyNode = target;

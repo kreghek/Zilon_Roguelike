@@ -21,7 +21,9 @@ namespace Zilon.Core.Tactics
         private readonly IPerkResolver _perkResolver;
 
         [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
+        public Actor(
+            [NotNull] IPerson person,
+            [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
             [NotNull] IGraphNode node)
         {
             Person = person ?? throw new ArgumentNullException(nameof(person));
@@ -29,7 +31,9 @@ namespace Zilon.Core.Tactics
             Node = node ?? throw new ArgumentNullException(nameof(node));
         }
 
-        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
+        public Actor(
+            [NotNull] IPerson person,
+            [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
             [NotNull] IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
         {
@@ -68,7 +72,9 @@ namespace Zilon.Core.Tactics
         public IGraphNode Node { get; private set; }
 
         public PhysicalSize PhysicalSize => Person.PhysicalSize;
+
         public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
+
         public bool CanExecuteTasks => !Person.CheckIsDead();
 
         public bool CanBeDamaged()
@@ -134,7 +140,7 @@ namespace Zilon.Core.Tactics
                 }
             }
 
-            if (useData.Consumable && Person.GetModuleSafe<IInventoryModule>() != null)
+            if (useData.Consumable && (Person.GetModuleSafe<IInventoryModule>() != null))
             {
                 ConsumeResource(usedProp);
 
@@ -152,7 +158,7 @@ namespace Zilon.Core.Tactics
         {
             Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health, value);
 
-            if (_perkResolver != null && Person.GetModuleSafe<IEvolutionModule>() != null)
+            if ((_perkResolver != null) && (Person.GetModuleSafe<IEvolutionModule>() != null))
             {
                 var takeDamageProgress = new TakeDamageJobProgress(value);
                 _perkResolver.ApplyProgress(takeDamageProgress, Person.GetModule<IEvolutionModule>());
@@ -258,7 +264,6 @@ namespace Zilon.Core.Tactics
         {
             DamageTaken?.Invoke(this, new DamageTakenEventArgs(value));
         }
-
 
         [ExcludeFromCodeCoverage]
         private void DoOpenContainer(IStaticObject container, IOpenContainerResult openResult)

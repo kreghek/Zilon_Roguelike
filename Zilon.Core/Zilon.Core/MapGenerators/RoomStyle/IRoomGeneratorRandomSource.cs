@@ -50,6 +50,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors);
 
         IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions);
+
         HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes);
 
         /// <summary>

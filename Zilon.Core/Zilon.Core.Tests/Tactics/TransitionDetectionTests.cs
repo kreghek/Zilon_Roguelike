@@ -40,10 +40,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var expectedTransition = transition;
 
-
             // ACT
             var factTransition = TransitionDetection.Detect(testedTrasitions, testedNodes);
-
 
             // ASSERT
             factTransition.Should().Be(expectedTransition);
@@ -75,10 +73,8 @@ namespace Zilon.Core.Tests.Tactics
 
             RoomTransition expectedTransition = null;
 
-
             // ACT
             var factTransition = TransitionDetection.Detect(testedTrasitions, testedNodes);
-
 
             // ASSERT
             factTransition.Should().Be(expectedTransition);

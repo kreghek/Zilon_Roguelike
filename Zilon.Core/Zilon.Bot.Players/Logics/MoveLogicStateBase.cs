@@ -13,6 +13,7 @@ namespace Zilon.Bot.Players.Logics
         }
 
         protected MoveTask MoveTask { get; set; }
+
         protected IdleTask IdleTask { get; set; }
 
         protected IDecisionSource DecisionSource { get; }

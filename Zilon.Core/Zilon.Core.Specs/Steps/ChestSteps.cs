@@ -29,7 +29,11 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\) со случайным лутом")]
-        public void GivenЕстьСундукIdВЯчейкеСоСлучайнымЛутом(int chestId, int chestPosX, int chestPosY, Table table)
+        public void GivenЕстьСундукIdВЯчейкеСоСлучайнымЛутом(
+            int chestId,
+            int chestPosX,
+            int chestPosY,
+            Table table)
         {
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
             var player = Context.ServiceProvider.GetRequiredService<IPlayer>();

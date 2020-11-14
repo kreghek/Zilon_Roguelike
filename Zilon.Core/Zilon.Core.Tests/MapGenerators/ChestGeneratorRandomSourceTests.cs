@@ -23,10 +23,8 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var random = new ChestGeneratorRandomSource(dice);
 
-
             // ACT
             var factRolled = random.RollChestCount(3);
-
 
             // ASSERT
             factRolled.Should().Be(3);

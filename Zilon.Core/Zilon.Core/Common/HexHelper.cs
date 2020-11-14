@@ -6,7 +6,7 @@ namespace Zilon.Core.Common
     {
         public static CubeCoords ConvertToCube(int offsetX, int offsetY)
         {
-            var x = offsetX - (offsetY - (offsetY & 1)) / 2;
+            var x = offsetX - ((offsetY - (offsetY & 1)) / 2);
             var z = offsetY;
             var y = -x - z;
 
@@ -20,7 +20,7 @@ namespace Zilon.Core.Common
 
         public static OffsetCoords ConvertToOffset(CubeCoords cube)
         {
-            var col = cube.X + (cube.Z - (cube.Z & 1)) / 2;
+            var col = cube.X + ((cube.Z - (cube.Z & 1)) / 2);
             var row = cube.Z;
             return new OffsetCoords(col, row);
         }
@@ -28,7 +28,7 @@ namespace Zilon.Core.Common
         public static float[] ConvertToWorld(int offsetX, int offsetY)
         {
             var rowOffset = offsetY % 2 == 0 ? 0 : 0.5f;
-            return new[] { offsetX + rowOffset, offsetY * 3f / 4 };
+            return new[] { offsetX + rowOffset, (offsetY * 3f) / 4 };
         }
 
         public static float[] ConvertToWorld(OffsetCoords coords)

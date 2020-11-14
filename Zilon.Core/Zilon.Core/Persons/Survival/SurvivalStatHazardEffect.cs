@@ -15,7 +15,8 @@ namespace Zilon.Core.Persons
         private SurvivalStatHazardLevel _level;
         private EffectRule[] _rules;
 
-        public SurvivalStatHazardEffect(SurvivalStatType type,
+        public SurvivalStatHazardEffect(
+            SurvivalStatType type,
             SurvivalStatHazardLevel level,
             [NotNull] ISurvivalRandomSource survivalRandomSource)
         {
@@ -66,7 +67,7 @@ namespace Zilon.Core.Persons
                 throw new ArgumentNullException(nameof(survivalData));
             }
 
-            if (Level == SurvivalStatHazardLevel.Max && Type != SurvivalStatType.Health)
+            if ((Level == SurvivalStatHazardLevel.Max) && (Type != SurvivalStatType.Health))
             {
                 var roll = _survivalRandomSource.RollMaxHazardDamage();
                 var successRoll = GetSuccessHazardDamageRoll();

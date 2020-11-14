@@ -44,7 +44,7 @@ namespace Zilon.Core.Common
                     return Range.Min;
                 }
 
-                var result = Math.Round((Range.Max - Range.Min) * ValueShare + Range.Min);
+                var result = Math.Round(((Range.Max - Range.Min) * ValueShare) + Range.Min);
                 return (int)result;
             }
             set

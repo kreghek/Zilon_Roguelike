@@ -77,6 +77,7 @@ namespace Zilon.Core.MassSectorGenerator
                 for (var i = 0; i <= height; i++)
                 {
                     var ratio = 3f / 4;
+
                     // Приводим к float, чтобы избежать переполнения при умножении int.
                     // Здесь от float мы всё равно не избавимся из-за ratio.
                     // https://lgtm.com/rules/1506096756023/
@@ -118,8 +119,11 @@ namespace Zilon.Core.MassSectorGenerator
         private sealed class ImageInfo
         {
             public int LeftCoord { get; set; }
+
             public int RightCoord { get; set; }
+
             public int TopCoord { get; set; }
+
             public int BottomCoord { get; set; }
         }
     }

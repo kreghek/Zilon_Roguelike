@@ -30,7 +30,6 @@ namespace Zilon.Core.Benchmarks.CreateSector
             await sectorGenerator.GenerateAsync(tesSectorNode).ConfigureAwait(false);
         }
 
-
         [IterationSetup]
         public void IterationSetup()
         {

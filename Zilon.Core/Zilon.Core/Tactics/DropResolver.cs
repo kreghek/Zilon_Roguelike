@@ -85,6 +85,7 @@ namespace Zilon.Core.Tactics
                 catch
                 {
                     openDropTables.RemoveAt(0);
+
                     //TODO FIX
                 }
             }
@@ -108,11 +109,12 @@ namespace Zilon.Core.Tactics
             const float POST_DAY_COUNT = 2.0f;
 
             var currentDate = _userTimeProvider.GetCurrentTime();
+
             // Основано на хелловине
             var evilHour = new DateTime(currentDate.Year, 11, 2);
             var evilHourStart = evilHour.AddDays(-PRE_DAY_COUNT);
             var evilHourEnd = evilHour.AddDays(POST_DAY_COUNT);
-            if (evilHourStart <= currentDate && currentDate <= evilHourEnd)
+            if ((evilHourStart <= currentDate) && (currentDate <= evilHourEnd))
             {
                 IDropTableModificatorScheme mod;
                 if (currentDate <= evilHour)
@@ -130,7 +132,9 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private static IDropTableModificatorScheme CreateEvilHourModifier(DateTime targetDate, float duration,
+        private static IDropTableModificatorScheme CreateEvilHourModifier(
+            DateTime targetDate,
+            float duration,
             DateTime currentDate)
         {
             var dateDiff = targetDate - currentDate;
@@ -142,13 +146,15 @@ namespace Zilon.Core.Tactics
             var mod = new DropTableModificatorScheme
             {
                 PropSids = new[] { "evil-pumpkin" },
+
                 //TODO Зачем вообще здесь -1. Бонус - это число, на которое нужно умножить.
                 WeightBonus = bonus - 1
             };
             return mod;
         }
 
-        private static DropTableModRecord[] GetModRecords(IEnumerable<IDropTableRecordSubScheme> records,
+        private static DropTableModRecord[] GetModRecords(
+            IEnumerable<IDropTableRecordSubScheme> records,
             IEnumerable<IDropTableModificatorScheme> modificators)
         {
             var modificatorsArray = modificators.ToArray();
@@ -163,12 +169,11 @@ namespace Zilon.Core.Tactics
                 }
 
                 var recordModificators =
-                    modificatorsArray.Where(x => x.PropSids == null || x.PropSids.Contains(record.SchemeSid));
+                    modificatorsArray.Where(x => (x.PropSids == null) || x.PropSids.Contains(record.SchemeSid));
                 var totalWeightMultiplier = recordModificators.Sum(x => x.WeightBonus) + 1;
                 resultList.Add(new DropTableModRecord
                 {
-                    Record = record,
-                    ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
+                    Record = record, ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
                 });
             }
 

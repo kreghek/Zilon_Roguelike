@@ -108,7 +108,6 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
                 map.Nodes.SelectByHexCoords(4, 3), map.Nodes.SelectByHexCoords(5, 3)
             };
 
-
             var context = CreatePathFindingContext(map);
 
             var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
@@ -134,6 +133,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         {
             var hexMap = new HexMap(10);
             hexMap.AddNode(new HexNode(0, 0));
+
             // Узел 1, 0 отсутствует, т.к. занят препятсвием.
             hexMap.AddNode(new HexNode(2, 0));
 

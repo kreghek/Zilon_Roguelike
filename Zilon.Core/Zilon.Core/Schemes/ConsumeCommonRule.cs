@@ -21,7 +21,8 @@ namespace Zilon.Core.Schemes
         /// <param name="level">Уровень влияния правила.</param>
         /// <param name="direction">Направление влияния (бонус/штраф).</param>
         [JsonConstructor]
-        public ConsumeCommonRule(ConsumeCommonRuleType type,
+        public ConsumeCommonRule(
+            ConsumeCommonRuleType type,
             PersonRuleLevel level,
             PersonRuleDirection direction = PersonRuleDirection.Positive)
         {

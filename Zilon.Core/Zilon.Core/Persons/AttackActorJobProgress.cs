@@ -59,7 +59,7 @@ namespace Zilon.Core.Persons
 
                     var jobData = JsonConvert.DeserializeObject<AttackActorJobData>(dataItem);
 
-                    Debug.Assert(jobData.MonsterTags != null || jobData.WeaponTags != null,
+                    Debug.Assert((jobData.MonsterTags != null) || (jobData.WeaponTags != null),
                         "В данных работ должны быть указаны теги, на основе которых фильтруются работы.");
 
                     if (jobData.WeaponTags != null)

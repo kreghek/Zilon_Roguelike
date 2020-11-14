@@ -99,7 +99,8 @@ namespace Zilon.Core.World.Tests
                 var nextNodes2 = nextNode.Current.Biome.GetNext(nextNode.Current)
                     .OfType<SectorNode>()
                     .Where(x => x.State != SectorNodeState.SectorMaterialized)
-                    .Select(x => new NodeInfo { Current = x, Parent = nextNode.Current, ParentResource = nextResource });
+                    .Select(x =>
+                        new NodeInfo { Current = x, Parent = nextNode.Current, ParentResource = nextResource });
                 openList.AddRange(nextNodes2);
 
                 iteration++;
@@ -108,8 +109,11 @@ namespace Zilon.Core.World.Tests
             Console.Write(resultStringBuilder.ToString());
         }
 
-        private static string GetVisualString(ISectorNode currentNode, ISectorNode nextNode,
-            IResourceDepositData currentResource, IResourceDepositData nextResource)
+        private static string GetVisualString(
+            ISectorNode currentNode,
+            ISectorNode nextNode,
+            IResourceDepositData currentResource,
+            IResourceDepositData nextResource)
         {
             var str = new StringBuilder(
                 $"    {currentNode.GetHashCode()}{ResourceToString(currentResource)}-->{nextNode.GetHashCode()}{ResourceToString(nextResource)};");
@@ -134,10 +138,10 @@ namespace Zilon.Core.World.Tests
             var totalColor = new Color();
             var colorDict = new Dictionary<SectorResourceType, Color>
             {
-                {SectorResourceType.Iron, Color.Maroon},
-                {SectorResourceType.Stones, Color.Silver},
-                {SectorResourceType.WaterPuddles, Color.Aqua},
-                {SectorResourceType.CherryBrushes, Color.Green}
+                { SectorResourceType.Iron, Color.Maroon },
+                { SectorResourceType.Stones, Color.Silver },
+                { SectorResourceType.WaterPuddles, Color.Aqua },
+                { SectorResourceType.CherryBrushes, Color.Green }
             };
 
             foreach (var item in currentResource.Items)
@@ -159,10 +163,10 @@ namespace Zilon.Core.World.Tests
             {
                 var colorDict = new Dictionary<SectorResourceType, string>
                 {
-                    {SectorResourceType.Iron, "i"},
-                    {SectorResourceType.Stones, "s"},
-                    {SectorResourceType.WaterPuddles, "w"},
-                    {SectorResourceType.CherryBrushes, "b"}
+                    { SectorResourceType.Iron, "i" },
+                    { SectorResourceType.Stones, "s" },
+                    { SectorResourceType.WaterPuddles, "w" },
+                    { SectorResourceType.CherryBrushes, "b" }
                 };
 
                 var sb = new StringBuilder();
@@ -194,13 +198,13 @@ namespace Zilon.Core.World.Tests
                             IsStart = true,
                             TransSectorSids = new[]
                             {
-                                new TestSectorTransitionSubScheme {SectorLevelSid = "intro-2"}
+                                new TestSectorTransitionSubScheme { SectorLevelSid = "intro-2" }
                             }
                         },
                         new TestSectorSubScheme
                         {
                             Sid = "intro-2",
-                            TransSectorSids = new[] {new TestSectorTransitionSubScheme()}
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
                         }
                     }
                 },
@@ -215,12 +219,13 @@ namespace Zilon.Core.World.Tests
                             IsStart = true,
                             TransSectorSids = new[]
                             {
-                                new TestSectorTransitionSubScheme {SectorLevelSid = "d1-2"}
+                                new TestSectorTransitionSubScheme { SectorLevelSid = "d1-2" }
                             }
                         },
                         new TestSectorSubScheme
                         {
-                            Sid = "d1-2", TransSectorSids = new[] {new TestSectorTransitionSubScheme()}
+                            Sid = "d1-2",
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
                         }
                     }
                 },
@@ -233,7 +238,7 @@ namespace Zilon.Core.World.Tests
                         {
                             Sid = "d2-1",
                             IsStart = true,
-                            TransSectorSids = new[] {new TestSectorTransitionSubScheme()}
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
                         }
                     }
                 },
@@ -248,8 +253,8 @@ namespace Zilon.Core.World.Tests
                             IsStart = true,
                             TransSectorSids = new[]
                             {
-                                new TestSectorTransitionSubScheme {SectorLevelSid = "d3-3"},
-                                new TestSectorTransitionSubScheme {SectorLevelSid = "d3-4"}
+                                new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" },
+                                new TestSectorTransitionSubScheme { SectorLevelSid = "d3-4" }
                             }
                         },
                         new TestSectorSubScheme
@@ -257,7 +262,7 @@ namespace Zilon.Core.World.Tests
                             Sid = "d3-3",
                             TransSectorSids = new[]
                             {
-                                new TestSectorTransitionSubScheme {SectorLevelSid = "d3-2"}
+                                new TestSectorTransitionSubScheme { SectorLevelSid = "d3-2" }
                             }
                         },
                         new TestSectorSubScheme
@@ -265,12 +270,13 @@ namespace Zilon.Core.World.Tests
                             Sid = "d3-4",
                             TransSectorSids = new[]
                             {
-                                new TestSectorTransitionSubScheme {SectorLevelSid = "d3-3"}
+                                new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" }
                             }
                         },
                         new TestSectorSubScheme
                         {
-                            Sid = "d3-2", TransSectorSids = new[] {new TestSectorTransitionSubScheme()}
+                            Sid = "d3-2",
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
                         }
                     }
                 }
