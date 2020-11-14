@@ -108,8 +108,8 @@ Scenario Outline: Эффекты угроз выживания наносят у
 
 @survival @dev1
 Scenario Outline: Угрозы выживания (имеются изначально) снижают эффективность тактических действий у актёра игрока.
-	Given Есть карта размером <mapSize>
-	And Есть актёр игрока класса <personSid> в ячейке (<actorNodeX>, <actorNodeY>)
+	Given Есть карта размером 2
+	And Есть актёр игрока класса human-person в ячейке (0, 0)
 	And В инвентаре у актёра игрока есть предмет: <equipmentSid>
 	And Актёр имеет эффект <startEffect>
 	When Экипирую предмет <equipmentSid> в слот Index: <slotIndex>
@@ -117,10 +117,10 @@ Scenario Outline: Угрозы выживания (имеются изначал
 	Then Тактическое умение <tacticalActSid> имеет дебафф на эффективность
 
 Examples: 
-| mapSize | personSid | actorNodeX | actorNodeY | startEffect   | equipmentSid | slotIndex | tacticalActSid |
-| 2       | captain   | 0          | 0          | Слабый голод  | short-sword  | 2         | slash          |
-| 2       | captain   | 0          | 0          | Голод         | short-sword  | 2         | slash          |
-| 2       | captain   | 0          | 0          | Голодание     | short-sword  | 2         | slash          |
-| 2       | captain   | 0          | 0          | Слабая жажда  | short-sword  | 2         | slash          |
-| 2       | captain   | 0          | 0          | Жажда         | short-sword  | 2         | slash          |
-| 2       | captain   | 0          | 0          | Обезвоживание | short-sword  | 2         | slash          |
+| startEffect   | equipmentSid | slotIndex | tacticalActSid |
+| Слабый голод  | short-sword  | 2         | slash          |
+| Голод         | short-sword  | 2         | slash          |
+| Голодание     | short-sword  | 2         | slash          |
+| Слабая жажда  | short-sword  | 2         | slash          |
+| Жажда         | short-sword  | 2         | slash          |
+| Обезвоживание | short-sword  | 2         | slash          |
