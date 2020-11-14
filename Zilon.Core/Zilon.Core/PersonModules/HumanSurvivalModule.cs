@@ -338,7 +338,7 @@ namespace Zilon.Core.PersonModules
             return keyPoints.SingleOrDefault(x => x.Level == level);
         }
 
-        private void FillSurvivalBonusesFromEffects([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEffects([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_effectsModule is null)
             {
@@ -396,7 +396,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromPerks([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromPerks([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_evolutionModule is null)
             {
@@ -515,7 +515,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromEquipments([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEquipments([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_equipmentModule is null)
             {

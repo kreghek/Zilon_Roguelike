@@ -162,8 +162,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 }
 
                 transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
-                    where map.Transitions.Keys.Contains(regionNode)
-                    select regionNode).ToArray();
+                                              where map.Transitions.Keys.Contains(regionNode)
+                                              select regionNode).ToArray();
             }
         }
 

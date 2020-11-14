@@ -44,13 +44,13 @@ namespace Zilon.TextClient
             var gameLoop = new GameLoop(globe);
             var uiState = scope.ServiceProvider.GetRequiredService<ISectorUiState>();
             var playerActor = (from sectorNode in globe.SectorNodes
-                from actor in sectorNode.Sector.ActorManager.Items
-                where actor.Person == player.MainPerson
-                select actor).SingleOrDefault();
+                               from actor in sectorNode.Sector.ActorManager.Items
+                               where actor.Person == player.MainPerson
+                               select actor).SingleOrDefault();
             var playerActorSectorNode = (from sectorNode in globe.SectorNodes
-                from actor in sectorNode.Sector.ActorManager.Items
-                where actor.Person == player.MainPerson
-                select sectorNode).SingleOrDefault();
+                                         from actor in sectorNode.Sector.ActorManager.Items
+                                         where actor.Person == player.MainPerson
+                                         select sectorNode).SingleOrDefault();
 
             // This is code smells. It is not good settings
             player.BindPerson(globe, playerActor.Person);

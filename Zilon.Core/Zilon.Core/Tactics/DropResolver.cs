@@ -173,7 +173,8 @@ namespace Zilon.Core.Tactics
                 var totalWeightMultiplier = recordModificators.Sum(x => x.WeightBonus) + 1;
                 resultList.Add(new DropTableModRecord
                 {
-                    Record = record, ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
+                    Record = record,
+                    ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
                 });
             }
 

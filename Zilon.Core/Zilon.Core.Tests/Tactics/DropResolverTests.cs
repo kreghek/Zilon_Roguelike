@@ -103,7 +103,10 @@ namespace Zilon.Core.Tests.Tactics
 
             var testDropTableRecord = new TestDropTableRecordSubScheme
             {
-                SchemeSid = testPropSchemeSid, Weight = 1, MinCount = 1, MaxCount = 1
+                SchemeSid = testPropSchemeSid,
+                Weight = 1,
+                MinCount = 1,
+                MaxCount = 1
             };
 
             var testDropTable = new TestDropTableScheme(1, testDropTableRecord);

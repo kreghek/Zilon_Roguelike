@@ -41,7 +41,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var mapRegion = new MapRegion(1, map.Nodes.ToArray())
             {
-                IsStart = true, IsOut = true, ExitNodes = new[] { map.Nodes.Last() }
+                IsStart = true,
+                IsOut = true,
+                ExitNodes = new[] { map.Nodes.Last() }
             };
 
             map.Regions.Add(mapRegion);
