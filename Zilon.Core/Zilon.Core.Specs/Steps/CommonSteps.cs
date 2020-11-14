@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -21,6 +22,7 @@ using Zilon.Core.Specs.Contexts;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Specs.Steps
 {
@@ -142,18 +144,44 @@ namespace Zilon.Core.Specs.Steps
         public async Task WhenСледующаяИтерацияСектораAsync(int count)
         {
             var globe = Context.Globe;
-            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var humanTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var counter = count;
 
             var survivalModule = playerState.ActiveActor?.Actor.Person?.GetModuleSafe<ISurvivalModule>();
-            while ((!humatTaskSource.CanIntent() && playerState.ActiveActor?.Actor != null && survivalModule?.IsDead == false) ||
-                (playerState.ActiveActor?.Actor == null && counter > 0))
+
+            // Do iteration while:
+            // 1. Player actor is set in playerState and wait until he can set intention.
+            // 2. Player actor is not set. It means test runs without player person. Just wait for counter.
+
+            var testHasPlayerPerson = playerState.ActiveActor?.Actor != null;
+            if (testHasPlayerPerson)
             {
-                await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
-                counter--;
+                while (IsPlayerPersonCanIntent(humanTaskSource, survivalModule) && counter > 0)
+                {
+                    await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    counter--;
+                }
             }
+            else
+            {
+                while (counter > 0)
+                {
+                    await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    counter--;
+                }
+            }
+        }
+
+        private static bool IsPlayerPersonCanIntent([NotNull] IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource, [CanBeNull] ISurvivalModule survivalModule)
+        {
+            if (humanTaskSource is null)
+            {
+                throw new ArgumentNullException(nameof(humanTaskSource));
+            }
+
+            return !humanTaskSource.CanIntent() && survivalModule?.IsDead == false;
         }
 
         [UsedImplicitly]
@@ -242,6 +270,49 @@ namespace Zilon.Core.Specs.Steps
         public Task WhenЖдуЕдиницВремениAsync(int timeUnitCount)
         {
             return WhenСледующаяИтерацияСектораAsync(timeUnitCount);
+        }
+
+        [When(@"Я жду (.*) итераций")]
+        public async Task WhenЯЖдуЕдиницВремениAsync(int timeUnitCount)
+        {
+            var globe = Context.Globe;
+            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
+
+            var counter = timeUnitCount;
+
+            var survivalModule = playerState.ActiveActor?.Actor.Person?.GetModuleSafe<ISurvivalModule>();
+
+            var isPlayerActor = playerState.ActiveActor?.Actor != null;
+            if (isPlayerActor)
+            {
+                while (counter > 0)
+                {
+                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+                    {
+                        if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
+                        {
+                            WhenЯВыполняюПростой();
+                        }
+
+                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    }
+
+                    counter--;
+                }
+            }
+            else
+            {
+                while (counter > 0)
+                {
+                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+                    {
+                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    }
+
+                    counter--;
+                }
+            }
         }
 
         [When(@"Я выполняю простой")]

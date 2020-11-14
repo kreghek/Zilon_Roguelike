@@ -163,7 +163,7 @@ namespace Zilon.Core.Specs.Contexts
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(6);
+            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(1);
             survivalRandomSourceMock.Setup(x => x.RollMaxHazardDamage()).Returns(6);
 
             return survivalRandomSource;

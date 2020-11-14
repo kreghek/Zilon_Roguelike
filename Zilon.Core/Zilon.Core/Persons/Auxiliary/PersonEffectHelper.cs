@@ -63,9 +63,9 @@ namespace Zilon.Core.Persons.Auxiliary
                 {
                     // Создаём эффект
                     var newEffect = new SurvivalStatHazardEffect(
-                    statType,
-                    currentSegment.Level,
-                    survivalRandomSource)
+                        statType,
+                        currentSegment.Level,
+                        survivalRandomSource)
                     {
                         PlayerEventLogService = playerEventLogService
                     };
