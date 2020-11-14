@@ -481,6 +481,9 @@ namespace Zilon.Core.PersonModules
                 case PersonRuleType.ToHit:
                     // This perk rules not implemented yet.
                     break;
+                default:
+                    // Look like forgotten functiollity.
+                    throw new InvalidOperationException($"{rule.Type} is not known type.");
             }
 
             return bonusList;
