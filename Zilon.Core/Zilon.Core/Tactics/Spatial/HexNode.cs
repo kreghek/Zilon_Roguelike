@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial

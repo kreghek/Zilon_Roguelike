@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-using JetBrains.Annotations;
-
-namespace Zilon.Core.Tactics
+﻿namespace Zilon.Core.Tactics
 {
     /// <summary>
     /// Аргументы события на добычу залежей.

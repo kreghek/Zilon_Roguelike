@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Структура для работы с данными работы по атаке актёра.

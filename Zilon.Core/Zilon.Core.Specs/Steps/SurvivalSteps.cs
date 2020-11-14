@@ -2,15 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using TechTalk.SpecFlow;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;

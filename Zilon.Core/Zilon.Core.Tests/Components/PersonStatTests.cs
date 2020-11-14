@@ -1,8 +1,4 @@
-﻿using FluentAssertions;
-
-using NUnit.Framework;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 
 namespace Zilon.Core.Tests.Components
 {

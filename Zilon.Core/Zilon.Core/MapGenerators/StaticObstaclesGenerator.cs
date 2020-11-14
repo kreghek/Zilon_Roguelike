@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Zilon.Core.MapGenerators.CellularAutomatonStyle;
+﻿using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;

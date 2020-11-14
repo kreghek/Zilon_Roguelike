@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -53,10 +51,10 @@ namespace Zilon.Core.Persons
                 var targetSlotEquipment = equipmentModule[slotIndex];
                 var currentEquipments = equipmentModule.Where(x => x != null);
                 var currentWeapons = from currentEquipment in currentEquipments
-                                     where currentEquipment != targetSlotEquipment
-                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? System.Array.Empty<string>()
-                                     where currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
-                                     select currentEquipment;
+                    where currentEquipment != targetSlotEquipment
+                    let currentEqupmentTags = currentEquipment.Scheme.Tags ?? System.Array.Empty<string>()
+                    where currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
+                    select currentEquipment;
 
                 var hasWeapon = currentWeapons.Any();
 
@@ -74,12 +72,12 @@ namespace Zilon.Core.Persons
                 var targetSlotEquipment = equipmentModule[slotIndex];
                 var currentEquipments = equipmentModule.Where(x => x != null);
                 var currentWeapons = from currentEquipment in currentEquipments
-                                     where currentEquipment != targetSlotEquipment
-                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? System.Array.Empty<string>()
-                                     let currentEqupmentHasWeapon = currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
-                                     let currentEqupmentHasRanged = currentEqupmentTags.Any(x => x == PropTags.Equipment.Ranged)
-                                     where currentEqupmentHasWeapon && currentEqupmentHasRanged
-                                     select currentEquipment;
+                    where currentEquipment != targetSlotEquipment
+                    let currentEqupmentTags = currentEquipment.Scheme.Tags ?? System.Array.Empty<string>()
+                    let currentEqupmentHasWeapon = currentEqupmentTags.Any(x => x == PropTags.Equipment.Weapon)
+                    let currentEqupmentHasRanged = currentEqupmentTags.Any(x => x == PropTags.Equipment.Ranged)
+                    where currentEqupmentHasWeapon && currentEqupmentHasRanged
+                    select currentEquipment;
 
                 var hasWeapon = currentWeapons.Any();
 
@@ -115,10 +113,10 @@ namespace Zilon.Core.Persons
                 var targetSlotEquipment = equipmentCarrier[slotIndex];
                 var currentEquipments = equipmentCarrier.Where(x => x != null);
                 var currentSheilds = from currentEquipment in currentEquipments
-                                     where currentEquipment != targetSlotEquipment
-                                     let currentEqupmentTags = currentEquipment.Scheme.Tags ?? System.Array.Empty<string>()
-                                     where currentEqupmentTags.Any(x => x == PropTags.Equipment.Shield)
-                                     select currentEquipment;
+                    where currentEquipment != targetSlotEquipment
+                    let currentEqupmentTags = currentEquipment.Scheme.Tags ?? System.Array.Empty<string>()
+                    where currentEqupmentTags.Any(x => x == PropTags.Equipment.Shield)
+                    select currentEquipment;
 
                 var hasShields = currentSheilds.Any();
                 if (hasShields)

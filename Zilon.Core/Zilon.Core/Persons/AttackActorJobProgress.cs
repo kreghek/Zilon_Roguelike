@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-
-using Newtonsoft.Json;
-
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Persons

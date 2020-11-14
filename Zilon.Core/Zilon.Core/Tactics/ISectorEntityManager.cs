@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Zilon.Core.Tactics
+﻿namespace Zilon.Core.Tactics
 {
     /// <summary>
     /// Общий интерфейс для всех менеджеров сущностей сектора

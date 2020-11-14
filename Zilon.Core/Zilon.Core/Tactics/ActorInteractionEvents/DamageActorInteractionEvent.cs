@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.Tactics.ActorInteractionEvents
+﻿namespace Zilon.Core.Tactics.ActorInteractionEvents
 {
     public sealed class DamageActorInteractionEvent : ActorInteractionEventBase
     {

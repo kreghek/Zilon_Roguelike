@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using Zilon.Bot.Sdk;
+﻿using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 

@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-using JetBrains.Annotations;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
 
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
@@ -25,7 +18,6 @@ using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Specs.Contexts

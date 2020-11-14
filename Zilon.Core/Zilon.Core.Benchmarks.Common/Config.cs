@@ -1,14 +1,4 @@
-﻿using System.Linq;
-
-using BenchmarkDotNet.Analysers;
-using BenchmarkDotNet.Columns;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Environments;
-using BenchmarkDotNet.Exporters.Json;
-using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Loggers;
-
-namespace Zilon.Core.Benchmark
+﻿namespace Zilon.Core.Benchmark
 {
     public class Config : ManualConfig
     {

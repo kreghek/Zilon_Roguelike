@@ -1,9 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
-
-namespace Zilon.Core.World
+﻿namespace Zilon.Core.World
 {
     public class DirectBitmap : IDisposable
     {

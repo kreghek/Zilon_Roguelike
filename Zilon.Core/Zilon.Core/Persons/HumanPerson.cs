@@ -1,8 +1,4 @@
-﻿using System;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Localization;
+﻿using Zilon.Core.Localization;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 

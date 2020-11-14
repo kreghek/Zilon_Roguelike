@@ -1,8 +1,4 @@
-﻿using System;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 

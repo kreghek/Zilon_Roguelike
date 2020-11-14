@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.Persons.Survival
+﻿namespace Zilon.Core.Persons.Survival
 {
     /// <summary>
     /// Ключевой сегмент характеристики выживания.

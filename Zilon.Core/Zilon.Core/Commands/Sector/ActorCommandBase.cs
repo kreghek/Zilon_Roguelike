@@ -1,8 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands

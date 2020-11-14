@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.Common
+﻿namespace Zilon.Core.Common
 {
     /// <summary>
     ///  Вспомогательный класс для диапазонов.

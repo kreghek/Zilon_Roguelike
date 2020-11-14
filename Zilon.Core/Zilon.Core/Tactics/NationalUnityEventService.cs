@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-using Zilon.Core.CommonServices;
+﻿using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;

@@ -1,12 +1,5 @@
-﻿using System.Linq;
-
-using BenchmarkDotNet.Attributes;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Core.MapGenerators;
+﻿using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
-using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmarks.CreateSector

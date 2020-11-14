@@ -1,7 +1,5 @@
 ﻿namespace Zilon.Core.Schemes
 {
-    using Newtonsoft.Json;
-
     /// <summary>
     /// Схема монстра.
     /// </summary>

@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Характристики обороны персонажа против наступательных действий.
@@ -25,6 +23,6 @@ namespace Zilon.Core.Persons
         /// Установка показаний брони для характеристик персонажа.
         /// </summary>
         /// <param name="armors"> Набор элементов брони. </param>
-        void SetArmors([NotNull][ItemNotNull] PersonArmorItem[] armors);
+        void SetArmors([NotNull] [ItemNotNull] PersonArmorItem[] armors);
     }
 }

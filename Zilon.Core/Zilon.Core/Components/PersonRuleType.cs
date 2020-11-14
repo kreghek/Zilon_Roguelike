@@ -1,9 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace Zilon.Core.Components
+﻿namespace Zilon.Core.Components
 {
     /// <summary>
     /// Тип правила персонажа.

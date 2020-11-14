@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 
-using NUnit.Framework;
-
 namespace Zilon.Core.Tests.StaticObjectModules.TestCaseDataSources
 {
     public static class DepositDurabilityModuleTestCaseDataSource

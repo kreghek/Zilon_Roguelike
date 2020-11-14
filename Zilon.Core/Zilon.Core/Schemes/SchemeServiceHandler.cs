@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Newtonsoft.Json;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
     public class SchemeServiceHandler<TSchemeImpl> : ISchemeServiceHandler<TSchemeImpl>
         where TSchemeImpl : class, IScheme

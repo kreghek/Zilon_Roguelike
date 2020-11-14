@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Diseases;
+﻿using Zilon.Core.Diseases;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics

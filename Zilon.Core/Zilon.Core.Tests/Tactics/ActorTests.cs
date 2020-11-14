@@ -1,8 +1,4 @@
-﻿using Moq;
-
-using NUnit.Framework;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;

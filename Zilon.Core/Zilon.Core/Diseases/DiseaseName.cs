@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Zilon.Core.Localization;
+﻿using Zilon.Core.Localization;
 
 namespace Zilon.Core.Diseases
 {

@@ -1,8 +1,4 @@
-﻿using System;
-
-using Newtonsoft.Json;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
     public class ConcreteTypeConverter<TConcrete> : JsonConverter
     {

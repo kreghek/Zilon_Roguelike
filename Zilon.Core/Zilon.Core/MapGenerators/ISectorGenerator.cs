@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-
-using Zilon.Core.Schemes;
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators

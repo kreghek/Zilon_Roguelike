@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.StaticObjectModules
+﻿namespace Zilon.Core.StaticObjectModules
 {
     public sealed class DepositDurabilityModule : IDurabilityModule
     {

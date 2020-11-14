@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Bot.Players.Strategies;
+﻿using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;

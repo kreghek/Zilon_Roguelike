@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -33,8 +29,7 @@ namespace Zilon.Core.ProgressStoring
                     humanPerson.GetModule<ISurvivalModule>().Stats.Select(x =>
                         new HumanSurvivalStatStorageData
                         {
-                            Type = x.Type,
-                            Value = x.ValueShare
+                            Type = x.Type, Value = x.ValueShare
                         }).ToArray(),
                 Equipments = humanPerson.GetModule<IEquipmentModule>().Select(CreateEquipmentStorageData).ToArray(),
                 Inventory =

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Подсхема для хранения ограничений на использование действия.

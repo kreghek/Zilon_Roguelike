@@ -1,8 +1,4 @@
-﻿using System;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Core.PersonGeneration;
+﻿using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 
 namespace Zilon.Emulation.Common

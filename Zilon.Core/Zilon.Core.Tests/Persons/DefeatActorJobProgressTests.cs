@@ -1,10 +1,4 @@
-﻿using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common.Schemes;
@@ -105,8 +99,7 @@ namespace Zilon.Core.Tests.Persons
             jobMock.SetupProperty(x => x.Progress, startProgress);
             jobMock.SetupGet(x => x.Scheme).Returns(new TestJobSubScheme
             {
-                Type = type,
-                Value = 10
+                Type = type, Value = 10
             });
             var job = jobMock.Object;
             return job;

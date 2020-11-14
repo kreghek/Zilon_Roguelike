@@ -1,12 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Bot.Players;
-using Zilon.Bot.Sdk;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;

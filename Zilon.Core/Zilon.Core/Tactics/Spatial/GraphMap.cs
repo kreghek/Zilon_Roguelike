@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
 {
@@ -66,8 +59,8 @@ namespace Zilon.Core.Tactics.Spatial
             var neighbors = HexNodeHelper.GetSpatialNeighbors(hexCurrent, hexNodes);
 
             var currentEdges = from edge in _edges
-                               where edge.Nodes.Contains(node)
-                               select edge;
+                where edge.Nodes.Contains(node)
+                select edge;
             var currentEdgeArray = currentEdges.ToArray();
 
             foreach (var testedNeighbor in neighbors)
@@ -85,9 +78,9 @@ namespace Zilon.Core.Tactics.Spatial
         public override void RemoveEdge(IGraphNode node1, IGraphNode node2)
         {
             var currentEdge = (from edge in _edges
-                               where edge.Nodes.Contains(node1)
-                               where edge.Nodes.Contains(node2)
-                               select edge).Single();
+                where edge.Nodes.Contains(node1)
+                where edge.Nodes.Contains(node2)
+                select edge).Single();
 
             _edges.Remove(currentEdge);
         }

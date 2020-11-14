@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
@@ -59,8 +55,8 @@ namespace Zilon.Core.World
             // Выбираем все другие узлы, которые указаны в выбранных ребрах.
 
             var currentEdges = from edge in _edges
-                               where edge.Nodes.Contains(node)
-                               select edge;
+                where edge.Nodes.Contains(node)
+                select edge;
 
             var currentEdgeArray = currentEdges.ToArray();
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.CommonServices
+﻿namespace Zilon.Core.CommonServices
 {
     /// <summary>
     /// Базовая реализация сервиса для работы с локальным пользорвательским временем.

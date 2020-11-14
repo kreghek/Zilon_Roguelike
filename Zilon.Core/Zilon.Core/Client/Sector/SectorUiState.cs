@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client

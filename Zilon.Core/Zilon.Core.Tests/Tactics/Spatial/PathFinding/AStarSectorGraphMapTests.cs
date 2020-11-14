@@ -1,19 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.PathFinding;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 {

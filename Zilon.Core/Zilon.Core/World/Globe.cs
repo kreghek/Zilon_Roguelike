@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.World
@@ -114,8 +108,7 @@ namespace Zilon.Core.World
 
                     yield return new ActorInSector
                     {
-                        Actor = actor,
-                        Sector = sector
+                        Actor = actor, Sector = sector
                     };
                 }
             }

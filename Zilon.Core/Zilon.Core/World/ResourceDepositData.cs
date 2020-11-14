@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Zilon.Core.World
+﻿namespace Zilon.Core.World
 {
     public sealed class ResourceDepositData : IResourceDepositData
     {

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 
 namespace Zilon.Core.World
 {

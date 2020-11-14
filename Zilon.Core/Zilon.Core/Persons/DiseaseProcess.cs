@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Core.Diseases;
+﻿using Zilon.Core.Diseases;
 
 namespace Zilon.Core.Persons
 {

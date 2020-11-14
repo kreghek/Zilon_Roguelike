@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons

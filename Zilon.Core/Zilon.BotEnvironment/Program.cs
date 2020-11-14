@@ -6,15 +6,10 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Bot.Sdk;
 using Zilon.CommonUtilities;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
-using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {

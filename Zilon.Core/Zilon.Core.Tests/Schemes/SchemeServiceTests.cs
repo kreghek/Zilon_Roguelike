@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using FluentAssertions;
-
-using NUnit.Framework;
-
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common;
 

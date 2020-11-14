@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Zilon.Core.PathFinding
+﻿namespace Zilon.Core.PathFinding
 {
     /// <summary>
     /// System.Collections.Generic.SortedList by default does not allow duplicate items.

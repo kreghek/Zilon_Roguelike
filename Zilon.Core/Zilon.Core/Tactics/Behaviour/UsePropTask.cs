@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Zilon.Core.Props;
+﻿using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics.Behaviour
 {

@@ -1,11 +1,5 @@
 ﻿using System;
 
-using JetBrains.Annotations;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
@@ -155,9 +149,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = offenceType,
-                    ApRank = 20,
-                    Impact = ImpactType.Kinetic
+                    Type = offenceType, ApRank = 20, Impact = ImpactType.Kinetic
                 }
             };
 
@@ -210,9 +202,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var actStatScheme = new TestTacticalActStatsSubScheme
             {
-                Effect = TacticalActEffectType.Heal,
-                Efficient = new Roll(6, 1),
-                Targets = TacticalActTargets.Self
+                Effect = TacticalActEffectType.Heal, Efficient = new Roll(6, 1), Targets = TacticalActTargets.Self
             };
 
             var tacticalActMock = new Mock<ITacticalAct>();
@@ -270,9 +260,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = offenceType,
-                    ApRank = 10,
-                    Impact = ImpactType.Kinetic
+                    Type = offenceType, ApRank = 10, Impact = ImpactType.Kinetic
                 }
             };
 
@@ -381,9 +369,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic,
-                    ApRank = 10
+                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
                 }
             };
 

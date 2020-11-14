@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-namespace Zilon.Core.Props
+﻿namespace Zilon.Core.Props
 {
     /// <summary>
     /// Базовый класс для всех хранилищ предметов.

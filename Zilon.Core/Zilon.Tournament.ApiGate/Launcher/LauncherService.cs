@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-using Newtonsoft.Json;
-
 namespace Zilon.Tournament.ApiGate.Launcher
 {
     public class LauncherService : BackgroundService
@@ -91,9 +89,7 @@ namespace Zilon.Tournament.ApiGate.Launcher
 
                 var botInfo = new BotInfo
                 {
-                    Catalog = di.Name,
-                    Assembly = botSettings.AssemblyName,
-                    Modes = botSettings.Modes
+                    Catalog = di.Name, Assembly = botSettings.AssemblyName, Modes = botSettings.Modes
                 };
 
                 botList.Add(botInfo);

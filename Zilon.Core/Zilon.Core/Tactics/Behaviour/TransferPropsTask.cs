@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Zilon.Core.Tactics.Behaviour
+﻿namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Задача на перемещение предметов относительно указанного хранилища.

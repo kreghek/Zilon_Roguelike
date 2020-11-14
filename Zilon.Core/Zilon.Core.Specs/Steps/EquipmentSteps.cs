@@ -1,13 +1,5 @@
 ﻿using System.Linq;
 
-using FluentAssertions;
-
-using JetBrains.Annotations;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using TechTalk.SpecFlow;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;

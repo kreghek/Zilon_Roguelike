@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.Props
+﻿namespace Zilon.Core.Props
 {
     /// <summary>
     /// Интерфейс хранилища предметов.

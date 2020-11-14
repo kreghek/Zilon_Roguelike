@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Bot.Players;
+﻿using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;

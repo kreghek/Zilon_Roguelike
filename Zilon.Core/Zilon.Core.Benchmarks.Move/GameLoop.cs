@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using Zilon.Core.World;
+﻿using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmarks.Move
 {

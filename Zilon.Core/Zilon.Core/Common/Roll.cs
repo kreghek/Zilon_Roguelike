@@ -1,8 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Newtonsoft.Json;
-
-namespace Zilon.Core.Common
+﻿namespace Zilon.Core.Common
 {
     public class Roll
     {

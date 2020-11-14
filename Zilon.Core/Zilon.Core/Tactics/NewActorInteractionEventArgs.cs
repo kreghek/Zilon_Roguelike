@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.Tactics
+﻿namespace Zilon.Core.Tactics
 {
     public sealed class NewActorInteractionEventArgs : EventArgs
     {

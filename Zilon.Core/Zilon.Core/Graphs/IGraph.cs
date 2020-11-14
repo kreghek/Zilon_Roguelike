@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Zilon.Core.Graphs
+﻿namespace Zilon.Core.Graphs
 {
     /// <summary>
     /// Граф.

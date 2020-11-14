@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using Zilon.Core.PersonGeneration;
+﻿using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.World

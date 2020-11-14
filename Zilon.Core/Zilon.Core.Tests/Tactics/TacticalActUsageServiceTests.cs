@@ -2,14 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using FluentAssertions;
-
-using JetBrains.Annotations;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
@@ -60,16 +52,13 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic,
-                    ApRank = 10
+                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
                 }
             };
 
             var actConstrainsSubScheme = new TestTacticalActConstrainsSubScheme
             {
-                PropResourceType = "7-62",
-                PropResourceCount = 1
+                PropResourceType = "7-62", PropResourceCount = 1
             };
 
             var inventory = new InventoryModule();
@@ -273,9 +262,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic,
-                    ApRank = 10
+                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
                 }
             };
 

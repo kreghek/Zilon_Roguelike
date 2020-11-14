@@ -1,6 +1,4 @@
-﻿using NUnit.Framework;
-
-using Zilon.Core.Persons.Survival;
+﻿using Zilon.Core.Persons.Survival;
 using Zilon.Core.Tests.Persons.TestCases;
 
 namespace Zilon.Core.Tests.Persons

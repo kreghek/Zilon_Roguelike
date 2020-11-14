@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.Tactics
+﻿namespace Zilon.Core.Tactics
 {
     [Flags]
     public enum ScoreAchievements

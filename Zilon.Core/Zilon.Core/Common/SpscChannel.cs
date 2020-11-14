@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Zilon.Core.Common
+﻿namespace Zilon.Core.Common
 {
     public sealed class SpscChannel<T> : ISender<T>, IReceiver<T>, IDisposable
     {

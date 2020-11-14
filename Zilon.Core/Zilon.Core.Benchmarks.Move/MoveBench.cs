@@ -1,11 +1,4 @@
-﻿using System;
-using System.Linq;
-
-using BenchmarkDotNet.Attributes;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;

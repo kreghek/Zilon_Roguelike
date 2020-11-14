@@ -1,9 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands

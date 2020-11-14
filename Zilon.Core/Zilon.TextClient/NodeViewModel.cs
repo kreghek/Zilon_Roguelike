@@ -1,7 +1,4 @@
-﻿using Zilon.Core.Client;
-using Zilon.Core.Tactics.Spatial;
-
-namespace Zilon.TextClient
+﻿namespace Zilon.TextClient
 {
     internal class NodeViewModel : IMapNodeViewModel
     {
