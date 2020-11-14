@@ -1,9 +1,9 @@
 ﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
-    /// Require minimum region count on map.
+    ///     Require minimum region count on map.
     /// </summary>
-    interface IRegionMinCountRule : IMapRule
+    internal interface IRegionMinCountRule : IMapRule
     {
         int Count { get; set; }
     }

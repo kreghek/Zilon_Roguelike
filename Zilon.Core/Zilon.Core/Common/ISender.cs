@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Zilon.Core.Common
+﻿namespace Zilon.Core.Common
 {
     public interface ISender<in T>
     {

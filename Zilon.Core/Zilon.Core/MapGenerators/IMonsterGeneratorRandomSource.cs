@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.MapGenerators
 {
     /// <summary>
-    /// Источник рандома для генератора монстров в секторе.
+    ///     Источник рандома для генератора монстров в секторе.
     /// </summary>
     public interface IMonsterGeneratorRandomSource
     {
@@ -15,8 +13,10 @@ namespace Zilon.Core.MapGenerators
         int RollRarity();
 
         /// <summary> Выбирает случайную схему монстра среди доступных. </summary>
-        /// <param name="availableMonsterSchemes"> Доступные схемы монстров.
-        /// Расчитываются исходя из схемы сектора и выбранной редкости. </param>
+        /// <param name="availableMonsterSchemes">
+        ///     Доступные схемы монстров.
+        ///     Расчитываются исходя из схемы сектора и выбранной редкости.
+        /// </param>
         /// <returns> Возвращает схему монстра. </returns>
         IMonsterScheme RollMonsterScheme(IEnumerable<IMonsterScheme> availableMonsterSchemes);
 
@@ -32,7 +32,7 @@ namespace Zilon.Core.MapGenerators
         int RollNodeIndex(int count);
 
         /// <summary>
-        /// Выбирает количество монстров, инфицированных в этом секторе.
+        ///     Выбирает количество монстров, инфицированных в этом секторе.
         /// </summary>
         /// <returns></returns>
         IEnumerable<IPerson> RollInfectedMonsters(IEnumerable<IPerson> monsters, float diseasePower);

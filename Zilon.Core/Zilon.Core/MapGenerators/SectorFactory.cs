@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Core.Props;
+﻿using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
@@ -11,8 +9,8 @@ namespace Zilon.Core.MapGenerators
     public class SectorFactory : ISectorFactory
     {
         private readonly IDropResolver _dropResolver;
-        private readonly ISchemeService _schemeService;
         private readonly IEquipmentDurableService _equipmentDurableService;
+        private readonly ISchemeService _schemeService;
 
         public SectorFactory(IDropResolver dropResolver,
             ISchemeService schemeService,
@@ -29,10 +27,10 @@ namespace Zilon.Core.MapGenerators
 
         public ISector Create(ISectorMap map, ILocationScheme locationScheme)
         {
-            var actorManager = new ActorManager();
-            var propContainerManager = new StaticObjectManager();
+            ActorManager actorManager = new ActorManager();
+            StaticObjectManager propContainerManager = new StaticObjectManager();
 
-            var sector = new Sector(map,
+            Sector sector = new Sector(map,
                 actorManager,
                 propContainerManager,
                 _dropResolver,

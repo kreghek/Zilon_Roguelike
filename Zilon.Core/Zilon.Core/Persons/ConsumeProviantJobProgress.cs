@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Прогресс работы по уничтожению цели.
+    ///     Прогресс работы по уничтожению цели.
     /// </summary>
     public class ConsumeProviantJobProgress : IJobProgress
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
         {
             if (currentJobs is null)

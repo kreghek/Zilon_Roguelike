@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.World
 {
     /// <summary>
-    /// Биом, как совокупность нескольких секторов.
+    ///     Биом, как совокупность нескольких секторов.
     /// </summary>
     public sealed class Biome : IBiome
     {
-        private readonly IList<SectorNode> _nodes;
         private readonly IList<IGraphEdge> _edges;
-
-        public ILocationScheme LocationScheme { get; }
+        private readonly IList<SectorNode> _nodes;
 
         public Biome(ILocationScheme locationScheme)
         {
@@ -26,13 +20,15 @@ namespace Zilon.Core.World
             _edges = new List<IGraphEdge>();
         }
 
-        public IEnumerable<SectorNode> Sectors { get => _nodes.OfType<SectorNode>(); }
+        public ILocationScheme LocationScheme { get; }
 
-        public IEnumerable<IGraphNode> Nodes { get => _nodes; }
+        public IEnumerable<SectorNode> Sectors => _nodes.OfType<SectorNode>();
+
+        public IEnumerable<IGraphNode> Nodes => _nodes;
 
         public void AddEdge(IGraphNode node1, IGraphNode node2)
         {
-            var edge = new Edge(node1, node2);
+            Edge edge = new Edge(node1, node2);
             _edges.Add(edge);
         }
 
@@ -43,7 +39,7 @@ namespace Zilon.Core.World
                 throw new ArgumentNullException(nameof(node));
             }
 
-            var sectorNode = node as SectorNode;
+            SectorNode sectorNode = node as SectorNode;
             if (sectorNode is null)
             {
                 throw new ArgumentException("Узел должен быть сектором", nameof(node));
@@ -59,8 +55,8 @@ namespace Zilon.Core.World
             // Выбираем все другие узлы, которые указаны в выбранных ребрах.
 
             var currentEdges = from edge in _edges
-                               where edge.Nodes.Contains(node)
-                               select edge;
+                where edge.Nodes.Contains(node)
+                select edge;
 
             var currentEdgeArray = currentEdges.ToArray();
 

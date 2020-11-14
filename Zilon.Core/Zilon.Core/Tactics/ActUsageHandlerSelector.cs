@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Zilon.Core.Tactics
+﻿namespace Zilon.Core.Tactics
 {
     /// <summary>
-    /// Реализация селектора обработчиков действий.
+    ///     Реализация селектора обработчиков действий.
     /// </summary>
     public sealed class ActUsageHandlerSelector : IActUsageHandlerSelector
     {
@@ -14,7 +12,7 @@ namespace Zilon.Core.Tactics
             _actUsageHandlers = actUsageHandlers;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IActUsageHandler GetHandler(IAttackTarget attackTarget)
         {
             if (attackTarget is null)
@@ -22,7 +20,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(attackTarget));
             }
 
-            foreach (var handler in _actUsageHandlers)
+            foreach (IActUsageHandler handler in _actUsageHandlers)
             {
                 if (handler.TargetType.IsInstanceOfType(attackTarget))
                 {

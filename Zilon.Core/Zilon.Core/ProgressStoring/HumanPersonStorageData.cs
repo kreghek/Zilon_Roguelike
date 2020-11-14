@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -24,18 +20,15 @@ namespace Zilon.Core.ProgressStoring
                 throw new ArgumentNullException(nameof(humanPerson));
             }
 
-            var storageData = new HumanPersonStorageData
+            HumanPersonStorageData storageData = new HumanPersonStorageData
             {
-                Survival = humanPerson.GetModule<ISurvivalModule>().Stats.Select(x => new HumanSurvivalStatStorageData
-                {
-                    Type = x.Type,
-                    Value = x.ValueShare
-                }).ToArray(),
-
+                Survival =
+                    humanPerson.GetModule<ISurvivalModule>().Stats.Select(x =>
+                        new HumanSurvivalStatStorageData {Type = x.Type, Value = x.ValueShare}).ToArray(),
                 Equipments = humanPerson.GetModule<IEquipmentModule>().Select(CreateEquipmentStorageData).ToArray(),
-
-                Inventory = humanPerson.GetModule<IInventoryModule>().CalcActualItems().Select(CreatePropStorageData).ToArray(),
-
+                Inventory =
+                    humanPerson.GetModule<IInventoryModule>().CalcActualItems().Select(CreatePropStorageData)
+                        .ToArray(),
                 Perks = humanPerson.GetModule<IEvolutionModule>().Perks.Select(CreatePerkStorageData).ToArray()
             };
 
@@ -71,10 +64,7 @@ namespace Zilon.Core.ProgressStoring
 
         private static PropStorageData CreatePropStorageData(IProp prop)
         {
-            var storageData = new PropStorageData
-            {
-                Sid = prop.Scheme.Sid
-            };
+            PropStorageData storageData = new PropStorageData {Sid = prop.Scheme.Sid};
 
             switch (prop)
             {
@@ -111,21 +101,21 @@ namespace Zilon.Core.ProgressStoring
                 throw new ArgumentNullException(nameof(propFactory));
             }
 
-            var storedPerson = this;
+            HumanPersonStorageData storedPerson = this;
 
-            var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
+            IPersonScheme personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            var inventory = new InventoryModule();
+            InventoryModule inventory = new InventoryModule();
 
-            var evolutionData = new EvolutionModule(schemeService);
+            EvolutionModule evolutionData = new EvolutionModule(schemeService);
 
             RestoreEvolutionData(schemeService, storedPerson, evolutionData);
 
-            var person = new HumanPerson(personScheme,/*Заглушка*/ null);
+            HumanPerson person = new HumanPerson(personScheme, /*Заглушка*/ null);
 
             //TODO Создать необходимые модули и заполнить их.
 
-            foreach (var survivalStoredItem in storedPerson.Survival)
+            foreach (HumanSurvivalStatStorageData survivalStoredItem in storedPerson.Survival)
             {
                 var normalizedValueShare = RangeHelper.NormalizeShare(survivalStoredItem.Value);
 
@@ -134,9 +124,9 @@ namespace Zilon.Core.ProgressStoring
                 stat.SetShare(normalizedValueShare);
             }
 
-            foreach (var storedProp in storedPerson.Inventory)
+            foreach (PropStorageData storedProp in storedPerson.Inventory)
             {
-                var propScheme = schemeService.GetScheme<IPropScheme>(storedProp.Sid);
+                IPropScheme propScheme = schemeService.GetScheme<IPropScheme>(storedProp.Sid);
                 IProp prop;
                 switch (storedProp.Type)
                 {
@@ -145,7 +135,7 @@ namespace Zilon.Core.ProgressStoring
                         break;
 
                     case PropType.Equipment:
-                        var equipment = propFactory.CreateEquipment(propScheme);
+                        Equipment equipment = propFactory.CreateEquipment(propScheme);
                         equipment.Durable.Value = storedProp.Durable;
                         prop = equipment;
 
@@ -160,16 +150,16 @@ namespace Zilon.Core.ProgressStoring
 
             for (var i = 0; i < storedPerson.Equipments.Length; i++)
             {
-                var storedEquipment = storedPerson.Equipments[i];
+                PropStorageData storedEquipment = storedPerson.Equipments[i];
 
                 if (storedEquipment == null)
                 {
                     continue;
                 }
 
-                var equipmentScheme = schemeService.GetScheme<IPropScheme>(storedEquipment.Sid);
+                IPropScheme equipmentScheme = schemeService.GetScheme<IPropScheme>(storedEquipment.Sid);
 
-                var equipment = propFactory.CreateEquipment(equipmentScheme);
+                Equipment equipment = propFactory.CreateEquipment(equipmentScheme);
                 equipment.Durable.Value = storedEquipment.Durable;
 
                 person.GetModule<IEquipmentModule>()[i] = equipment;
@@ -184,14 +174,11 @@ namespace Zilon.Core.ProgressStoring
             EvolutionModule evolutionData)
         {
             var perksFromSave = new List<IPerk>();
-            foreach (var storedPerk in storedPerson.Perks)
+            foreach (PerkStorageData storedPerk in storedPerson.Perks)
             {
-                var perkScheme = schemeService.GetScheme<IPerkScheme>(storedPerk.Sid);
+                IPerkScheme perkScheme = schemeService.GetScheme<IPerkScheme>(storedPerk.Sid);
 
-                var perk = new Perk
-                {
-                    Scheme = perkScheme
-                };
+                Perk perk = new Perk {Scheme = perkScheme};
 
                 if (storedPerk.Level != null)
                 {
@@ -199,16 +186,21 @@ namespace Zilon.Core.ProgressStoring
                 }
 
                 // TODO Доработать, когда будет доработана прокачка больше, чем на один лвл
-                var currentLevelScheme = perkScheme.Levels[0];
+                PerkLevelSubScheme currentLevelScheme = perkScheme.Levels[0];
 
                 perk.CurrentJobs = currentLevelScheme.Jobs.Select(job => new PerkJob(job)
                 {
-                    IsComplete = storedPerk.Jobs.Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope).IsComplete,
-                    Progress = storedPerk.Jobs.Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope).Progress,
+                    IsComplete =
+                        storedPerk.Jobs
+                            .Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope)
+                            .IsComplete,
+                    Progress = storedPerk.Jobs
+                        .Single(storedJob => storedJob.Type == job.Type && storedJob.Scope == job.Scope).Progress
                 }).ToArray();
 
                 perksFromSave.Add(perk);
             }
+
             evolutionData.SetPerksForced(perksFromSave);
         }
     }

@@ -1,11 +1,8 @@
-﻿using Zilon.Core.Client;
-using Zilon.Core.Tactics;
-
-namespace Zilon.TextClient
+﻿namespace Zilon.TextClient
 {
-    class ActorViewModel : IActorViewModel
+    internal class ActorViewModel : IActorViewModel
     {
         public IActor Actor { get; set; }
-        public object Item { get => Actor; }
+        public object Item => Actor;
     }
 }

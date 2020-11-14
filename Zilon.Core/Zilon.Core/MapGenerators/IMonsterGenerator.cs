@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -8,10 +6,10 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.MapGenerators
 {
     /// <summary>
-    /// Интерфейс для генератора монстров.
+    ///     Интерфейс для генератора монстров.
     /// </summary>
     /// <remarks>
-    /// Сейчас используется процедурным генератором сектора.
+    ///     Сейчас используется процедурным генератором сектора.
     /// </remarks>
     public interface IMonsterGenerator
     {
@@ -24,7 +22,7 @@ namespace Zilon.Core.MapGenerators
             ISectorSubScheme sectorScheme);
 
         /// <summary>
-        ///  Создаёт монстров в секторе по указанным персонажам. Используется для генерации монстров в диком секторе.
+        ///     Создаёт монстров в секторе по указанным персонажам. Используется для генерации монстров в диком секторе.
         /// </summary>
         /// <param name="sector"> Целевой сектор. </param>
         /// <param name="monsterPlayer"> Бот, управляющий монстрами. По сути, команда монстров. </param>

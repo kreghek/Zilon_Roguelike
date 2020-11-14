@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Zilon.Core.Common
+﻿namespace Zilon.Core.Common
 {
     /// <summary>
-    /// Вспомогательный класс для работы с заливкой
-    /// в поле шестиугольников.
+    ///     Вспомогательный класс для работы с заливкой
+    ///     в поле шестиугольников.
     /// </summary>
     public static class HexBinaryFiller
     {
         /// <summary>
-        /// Выполняет заливку области в поле шестиугольников.
+        ///     Выполняет заливку области в поле шестиугольников.
         /// </summary>
         /// <param name="matrix"> Поле шестиугольников. Будут заливаться ячейки со сзначением <b>true</b>. </param>
         /// <param name="point"> Точка, с которой начинается заливка. Должна указывать на ячейку со значением <b>true</b>. </param>
@@ -27,10 +23,7 @@ namespace Zilon.Core.Common
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new HashSet<OffsetCoords>
-            {
-                point
-            };
+            var openPoints = new HashSet<OffsetCoords> {point};
 
             while (openPoints.Count > 0)
             {
@@ -56,14 +49,14 @@ namespace Zilon.Core.Common
                 regionPoints.Add(currentCell);
                 snapshotCellmap[currentCell.X, currentCell.Y] = false;
 
-                var cubeCoords = HexHelper.ConvertToCube(currentCell);
-                var clockwiseOffsets = HexHelper.GetOffsetClockwise();
+                CubeCoords cubeCoords = HexHelper.ConvertToCube(currentCell);
+                CubeCoords[] clockwiseOffsets = HexHelper.GetOffsetClockwise();
 
-                foreach (var offset in clockwiseOffsets)
+                foreach (CubeCoords offset in clockwiseOffsets)
                 {
-                    var neighbourCubeCoords = cubeCoords + offset;
+                    CubeCoords neighbourCubeCoords = cubeCoords + offset;
 
-                    var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
+                    OffsetCoords neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
 
                     if (!openPoints.Contains(neighbourCoords))
                     {
@@ -76,7 +69,7 @@ namespace Zilon.Core.Common
         }
 
         /// <summary>
-        /// Выполняет заливку области в поле шестиугольников с учётом размера в 7 узлов.
+        ///     Выполняет заливку области в поле шестиугольников с учётом размера в 7 узлов.
         /// </summary>
         /// <param name="matrix"> Поле шестиугольников. Будут заливаться ячейки со сзначением <b>true</b>. </param>
         /// <param name="point"> Точка, с которой начинается заливка. Должна указывать на ячейку со значением <b>true</b>. </param>
@@ -92,10 +85,7 @@ namespace Zilon.Core.Common
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new HashSet<OffsetCoords>
-            {
-                point
-            };
+            var openPoints = new HashSet<OffsetCoords> {point};
 
             while (openPoints.Count > 0)
             {
@@ -121,14 +111,14 @@ namespace Zilon.Core.Common
                 regionPoints.Add(currentCell);
                 snapshotCellmap[currentCell.X, currentCell.Y] = false;
 
-                var cubeCoords = HexHelper.ConvertToCube(currentCell);
-                var clockwiseOffsets = HexHelper.GetOffsetClockwise();
+                CubeCoords cubeCoords = HexHelper.ConvertToCube(currentCell);
+                CubeCoords[] clockwiseOffsets = HexHelper.GetOffsetClockwise();
 
-                foreach (var offset in clockwiseOffsets)
+                foreach (CubeCoords offset in clockwiseOffsets)
                 {
-                    var neighbourCubeCoords = cubeCoords + offset;
+                    CubeCoords neighbourCubeCoords = cubeCoords + offset;
 
-                    var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
+                    OffsetCoords neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
 
                     if (!openPoints.Contains(neighbourCoords))
                     {
@@ -151,8 +141,8 @@ namespace Zilon.Core.Common
                 return false;
             }
 
-            var neighbours = HexHelper.GetNeighbors(testCoords.X, testCoords.Y);
-            foreach (var neighbour in neighbours)
+            OffsetCoords[] neighbours = HexHelper.GetNeighbors(testCoords.X, testCoords.Y);
+            foreach (OffsetCoords neighbour in neighbours)
             {
                 if (neighbour.X >= matrix.Width || neighbour.Y >= matrix.Height)
                 {
@@ -170,12 +160,12 @@ namespace Zilon.Core.Common
 
         private static bool IsInBounds(OffsetCoords coords, int width, int height)
         {
-            if (!ValueInRange(value: coords.X, min: 0, max: width - 1))
+            if (!ValueInRange(coords.X, 0, width - 1))
             {
                 return false;
             }
 
-            if (!ValueInRange(value: coords.Y, min: 0, max: height - 1))
+            if (!ValueInRange(coords.Y, 0, height - 1))
             {
                 return false;
             }

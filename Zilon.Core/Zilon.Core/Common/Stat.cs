@@ -1,21 +1,19 @@
-﻿using System;
-
-namespace Zilon.Core.Common
+﻿namespace Zilon.Core.Common
 {
     /// <summary>
-    /// Общая характеристика.
+    ///     Общая характеристика.
     /// </summary>
     /// <remarks>
-    /// Используется:
-    /// - в модуле выживания для хп, голода и жажды.
-    /// - как прочность предмета.
+    ///     Используется:
+    ///     - в модуле выживания для хп, голода и жажды.
+    ///     - как прочность предмета.
     /// </remarks>
     public class Stat
     {
         private float _valueShare;
 
         /// <summary>
-        /// Конструирует объект статы.
+        ///     Конструирует объект статы.
         /// </summary>
         /// <param name="startValue"> Начальное значение. Должно быть в диапазоне [min, max]. </param>
         /// <param name="min"> Минимальное значение статы. </param>
@@ -28,7 +26,7 @@ namespace Zilon.Core.Common
         }
 
         /// <summary>
-        /// Текущее значение.
+        ///     Текущее значение.
         /// </summary>
         public int Value
         {
@@ -44,7 +42,7 @@ namespace Zilon.Core.Common
                     return Range.Min;
                 }
 
-                var result = Math.Round((Range.Max - Range.Min) * ValueShare + Range.Min);
+                var result = Math.Round(((Range.Max - Range.Min) * ValueShare) + Range.Min);
                 return (int)result;
             }
             set
@@ -61,29 +59,12 @@ namespace Zilon.Core.Common
         }
 
         /// <summary>
-        /// Минимальное/максимальное значение.
+        ///     Минимальное/максимальное значение.
         /// </summary>
         public Range<int> Range { get; private set; }
 
         /// <summary>
-        /// Изменение текущего диапазона характеристики.
-        /// </summary>
-        /// <param name="min">The minimum.</param>
-        /// <param name="max">The maximum.</param>
-        public virtual void ChangeStatRange(int min, int max)
-        {
-            if (min >= max)
-            {
-                Range = new Range<int>(min, min);
-                Value = Range.Min;
-                return;
-            }
-
-            Range = new Range<int>(min, max);
-        }
-
-        /// <summary>
-        /// Значение в долях. Значение [0..1] в текущем диапазоне.
+        ///     Значение в долях. Значение [0..1] в текущем диапазоне.
         /// </summary>
         public float ValueShare
         {
@@ -100,7 +81,24 @@ namespace Zilon.Core.Common
         }
 
         /// <summary>
-        /// Устанавливает текущее значение в долях.
+        ///     Изменение текущего диапазона характеристики.
+        /// </summary>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        public virtual void ChangeStatRange(int min, int max)
+        {
+            if (min >= max)
+            {
+                Range = new Range<int>(min, min);
+                Value = Range.Min;
+                return;
+            }
+
+            Range = new Range<int>(min, max);
+        }
+
+        /// <summary>
+        ///     Устанавливает текущее значение в долях.
         /// </summary>
         /// <param name="value"> Значение в диапазоне [0..1]. </param>
         public void SetShare(float value)
@@ -119,7 +117,7 @@ namespace Zilon.Core.Common
         }
 
         /// <summary>
-        /// Выстреливает каждый раз, когда значение характеристики изменяется.
+        ///     Выстреливает каждый раз, когда значение характеристики изменяется.
         /// </summary>
         public event EventHandler Changed;
     }

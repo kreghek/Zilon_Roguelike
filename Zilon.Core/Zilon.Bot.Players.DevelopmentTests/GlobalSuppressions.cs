@@ -5,4 +5,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>", Scope = "member", Target = "~M:Zilon.Bot.Players.DevelopmentTests.BotActorTaskSourceTests.PrintPersonBacklog(Zilon.Core.Persons.IPerson)")]
+[assembly:
+    SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>",
+        Scope = "member",
+        Target =
+            "~M:Zilon.Bot.Players.DevelopmentTests.BotActorTaskSourceTests.PrintPersonBacklog(Zilon.Core.Persons.IPerson)")]

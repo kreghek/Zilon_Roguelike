@@ -1,8 +1,4 @@
-﻿using System;
-
-using JetBrains.Annotations;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
     public class PerkEventArgs : EventArgs
     {
@@ -11,7 +7,6 @@ namespace Zilon.Core.Persons
             Perk = perk;
         }
 
-        [PublicAPI]
-        public IPerk Perk { get; }
+        [PublicAPI] public IPerk Perk { get; }
     }
 }

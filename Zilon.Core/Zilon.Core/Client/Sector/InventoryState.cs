@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Zilon.Core.Client
+﻿namespace Zilon.Core.Client
 {
     public class InventoryState : IInventoryState
     {

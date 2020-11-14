@@ -1,19 +1,9 @@
-﻿using System.Linq;
-
-using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
-
-using NUnit.Framework;
-
+﻿using System;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Commands
 {
@@ -21,7 +11,7 @@ namespace Zilon.Core.Tests.Commands
     public class AttackCommandTests : CommandTestBase
     {
         /// <summary>
-        /// Тест проверяет, что можно атаковать, если не мешают стены.
+        ///     Тест проверяет, что можно атаковать, если не мешают стены.
         /// </summary>
         [Test]
         public void CanExecuteTest()
@@ -37,21 +27,22 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
+        ///     Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
         /// </summary>
         [Test]
         public void Execute_CanAttack_AttackIntended()
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<AttackCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             // ACT
             command.Execute();
 
             // ASSERT
-            var target = ((IActorViewModel)playerState.SelectedViewModel).Actor;
+            IActor target = ((IActorViewModel)playerState.SelectedViewModel).Actor;
 
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
                 CheckAttackIntention(intention, playerState, target)
@@ -60,7 +51,7 @@ namespace Zilon.Core.Tests.Commands
 
         private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
         {
-            var attackIntention = (Intention<AttackTask>)intention;
+            Intention<AttackTask> attackIntention = (Intention<AttackTask>)intention;
             var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
             return attackTask.Target == target;
         }
@@ -69,12 +60,12 @@ namespace Zilon.Core.Tests.Commands
         {
             if (testMap is null)
             {
-                throw new System.ArgumentNullException(nameof(testMap));
+                throw new ArgumentNullException(nameof(testMap));
             }
 
             if (playerStateMock is null)
             {
-                throw new System.ArgumentNullException(nameof(playerStateMock));
+                throw new ArgumentNullException(nameof(playerStateMock));
             }
 
             var targetMock = new Mock<IActor>();

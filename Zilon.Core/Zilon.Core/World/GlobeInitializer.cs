@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-
+﻿using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -10,11 +8,11 @@ namespace Zilon.Core.World
 {
     public sealed class GlobeInitializer : IGlobeInitializer
     {
+        private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
         private readonly IBiomeInitializer _biomeInitializer;
         private readonly IGlobeTransitionHandler _globeTransitionHandler;
-        private readonly ISchemeService _schemeService;
-        private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
         private readonly IPersonInitializer _personInitializer;
+        private readonly ISchemeService _schemeService;
 
         public GlobeInitializer(
             IBiomeInitializer biomeInitializer,
@@ -32,9 +30,9 @@ namespace Zilon.Core.World
 
         public async Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid)
         {
-            var globe = new Globe(_globeTransitionHandler);
+            Globe globe = new Globe(_globeTransitionHandler);
 
-            var startLocation = _schemeService.GetScheme<ILocationScheme>(startLocationSchemeSid);
+            ILocationScheme startLocation = _schemeService.GetScheme<ILocationScheme>(startLocationSchemeSid);
             var startBiom = await _biomeInitializer.InitBiomeAsync(startLocation).ConfigureAwait(false);
             var startSectorNode = startBiom.Sectors.First(x => x.State == SectorNodeState.SectorMaterialized);
 
@@ -52,7 +50,7 @@ namespace Zilon.Core.World
                     .Nodes
                     .Skip(personCounter)
                     .First();
-                var actor = CreateActor(person, startNode, _actorTaskSource);
+                IActor actor = CreateActor(person, startNode, _actorTaskSource);
 
                 sector.ActorManager.Add(actor);
                 personCounter++;
@@ -63,10 +61,10 @@ namespace Zilon.Core.World
 
         private static IActor CreateActor(
             IPerson humanPerson,
-            Graphs.IGraphNode startNode,
+            IGraphNode startNode,
             IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
-            var actor = new Actor(humanPerson, actorTaskSource, startNode);
+            Actor actor = new Actor(humanPerson, actorTaskSource, startNode);
 
             return actor;
         }

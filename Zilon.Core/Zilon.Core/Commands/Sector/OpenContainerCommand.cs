@@ -1,15 +1,14 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
+using Zilon.Core.Graphs;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Commands
 {
     /// <summary>
-    /// Команда открытие контейнера.
+    ///     Команда открытие контейнера.
     /// </summary>
     public class OpenContainerCommand : ActorCommandBase
     {
@@ -26,20 +25,20 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var map = _player.SectorNode.Sector.Map;
+            ISectorMap map = _player.SectorNode.Sector.Map;
 
-            var currentNode = PlayerState.ActiveActor.Actor.Node;
+            IGraphNode currentNode = PlayerState.ActiveActor.Actor.Node;
 
-            var targetContainerViewModel = GetSelectedNodeViewModel();
+            IContainerViewModel targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
             {
                 return false;
             }
 
-            var container = targetContainerViewModel.StaticObject;
+            IStaticObject container = targetContainerViewModel.StaticObject;
             var requiredDistance = 1;
 
-            var targetNode = container.Node;
+            IGraphNode targetNode = container.Node;
 
             var distance = map.DistanceBetween(currentNode, targetNode);
             if (distance > requiredDistance)
@@ -58,27 +57,29 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            var targetContainerViewModel = GetSelectedNodeViewModel();
+            IContainerViewModel targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
             {
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевой контейнер не выбран.");
             }
 
-            var staticObject = targetContainerViewModel.StaticObject;
+            IStaticObject staticObject = targetContainerViewModel.StaticObject;
             if (staticObject == null)
             {
-                throw new InvalidOperationException("Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
+                throw new InvalidOperationException(
+                    "Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
             }
 
-            var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, staticObject));
+            Intention<OpenContainerTask> intetion =
+                new Intention<OpenContainerTask>(actor => CreateTask(actor, staticObject));
             PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
         }
 
         private OpenContainerTask CreateTask(IActor actor, IStaticObject staticObject)
         {
-            var openMethod = new HandOpenContainerMethod();
+            HandOpenContainerMethod openMethod = new HandOpenContainerMethod();
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            ActorTaskContext taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             return new OpenContainerTask(actor, taskContext, staticObject, openMethod);
         }

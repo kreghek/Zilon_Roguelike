@@ -1,10 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
-using FluentAssertions;
-
-using NUnit.Framework;
-
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tests.CommonServices.Dices
@@ -16,7 +12,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
         protected abstract IDice CreateDice(int seed);
 
         /// <summary>
-        /// Тест проверяет, что при разных зернах генерации не происходит ошибки получения случайного числа.
+        ///     Тест проверяет, что при разных зернах генерации не происходит ошибки получения случайного числа.
         /// </summary>
         /// <param name="seed"> Зерно рандомизации для кости. </param>
         /// <param name="n"> Количество граней у кости. </param>
@@ -27,19 +23,21 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             [Values(1, 10, 100, 1000)] int count)
         {
             // ARRANGE
-            var dice = CreateDice(seed);
+            IDice dice = CreateDice(seed);
 
             // ACT
-            var seq = new int[count];
+            int[] seq = new int[count];
             Action act = () =>
             {
-                for (var i = 0; i < seq.Length; i++)
+                for (int i = 0; i < seq.Length; i++)
                 {
                     seq[i] = dice.Roll(n);
                 }
-                var gr = seq.GroupBy(x => x);
-                var freq = gr.ToDictionary(x => x.Key, x => x.Count()).OrderBy(x => x.Key);
-                foreach (var fr in freq)
+
+                IEnumerable<IGrouping<int, int>> gr = seq.GroupBy(x => x);
+                IOrderedEnumerable<KeyValuePair<int, int>> freq = gr.ToDictionary(x => x.Key, x => x.Count())
+                    .OrderBy(x => x.Key);
+                foreach (KeyValuePair<int, int> fr in freq)
                 {
                     Console.WriteLine(fr.Key + "\t" + fr.Value);
                 }

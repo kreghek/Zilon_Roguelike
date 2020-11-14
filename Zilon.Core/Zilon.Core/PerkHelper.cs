@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core
@@ -22,7 +20,7 @@ namespace Zilon.Core
             var currentLevel = level.Primary;
             var currentSubLevel = level.Sub;
 
-            var currentLevelScheme = perkScheme.Levels[currentLevel];
+            PerkLevelSubScheme currentLevelScheme = perkScheme.Levels[currentLevel];
 
             if (currentSubLevel + 1 > currentLevelScheme.MaxValue)
             {
@@ -38,7 +36,7 @@ namespace Zilon.Core
         }
 
         /// <summary>
-        /// Преобразование суммарного уровня в уровень/подуровень для конкретной схемы перка.
+        ///     Преобразование суммарного уровня в уровень/подуровень для конкретной схемы перка.
         /// </summary>
         /// <param name="perkScheme">Схема.</param>
         /// <param name="totalLevel">Суммарный уровень.</param>
@@ -62,7 +60,7 @@ namespace Zilon.Core
                     return;
                 }
 
-                var levelScheme = perkScheme.Levels[currentLevelPointer];
+                PerkLevelSubScheme levelScheme = perkScheme.Levels[currentLevelPointer];
                 level = currentLevelPointer + 1;
                 subLevel = Math.Min(levelRemains, levelScheme.MaxValue);
                 currentLevelPointer++;
@@ -73,7 +71,7 @@ namespace Zilon.Core
         }
 
         /// <summary>
-        /// Преобразование уровня/подуровня в суммарный уровень.
+        ///     Преобразование уровня/подуровня в суммарный уровень.
         /// </summary>
         /// <param name="perkScheme">Схема.</param>
         /// <param name="level">Уровень перка.</param>
@@ -87,7 +85,9 @@ namespace Zilon.Core
             }
 
             if (level == null)
+            {
                 return null;
+            }
 
             var sum = 0;
             for (var i = 0; i <= level; i++)

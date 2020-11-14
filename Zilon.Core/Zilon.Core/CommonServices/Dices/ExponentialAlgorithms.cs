@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Zilon.Core.CommonServices.Dices
+﻿namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
-    /// Вспомогательный класс для группировки алгоритмов.
+    ///     Вспомогательный класс для группировки алгоритмов.
     /// </summary>
     public static class ExponentialAlgorithms
     {

@@ -1,11 +1,4 @@
 ﻿using System;
-
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 
@@ -16,8 +9,8 @@ namespace Zilon.Core.Tactics.Tests
     public class ActUsageHandlerSelectorTests
     {
         /// <summary>
-        /// Тест проверяет, что селектор корректно возвращает обработчик,
-        /// если целевой объект напрямую реализует тестовый интерфейс.
+        ///     Тест проверяет, что селектор корректно возвращает обработчик,
+        ///     если целевой объект напрямую реализует тестовый интерфейс.
         /// </summary>
         [Test]
         public void GetHandler_TargetDirectlyImplementTargetInterfact_ReturnsHandler()
@@ -28,13 +21,13 @@ namespace Zilon.Core.Tactics.Tests
             testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
-            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] { testHandler });
+            ActUsageHandlerSelector selector = new ActUsageHandlerSelector(new IActUsageHandler[] {testHandler});
 
-            var targetObject = new Test1();
+            Test1 targetObject = new Test1();
 
             // ACT
 
-            var factHandler = selector.GetHandler(targetObject);
+            IActUsageHandler factHandler = selector.GetHandler(targetObject);
 
             // ASSERT
 
@@ -42,8 +35,8 @@ namespace Zilon.Core.Tactics.Tests
         }
 
         /// <summary>
-        /// Тест проверяет, что селектор корректно возвращает обработчик,
-        /// если целевой объект унаследован от базового класса, который реализует целевой интерфейс.
+        ///     Тест проверяет, что селектор корректно возвращает обработчик,
+        ///     если целевой объект унаследован от базового класса, который реализует целевой интерфейс.
         /// </summary>
         [Test]
         public void GetHandler_TargetInheritedByBase_ReturnsHandler()
@@ -54,13 +47,13 @@ namespace Zilon.Core.Tactics.Tests
             testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
-            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] { testHandler });
+            ActUsageHandlerSelector selector = new ActUsageHandlerSelector(new IActUsageHandler[] {testHandler});
 
-            var targetObject = new Test2();
+            Test2 targetObject = new Test2();
 
             // ACT
 
-            var factHandler = selector.GetHandler(targetObject);
+            IActUsageHandler factHandler = selector.GetHandler(targetObject);
 
             // ASSERT
 
@@ -68,8 +61,8 @@ namespace Zilon.Core.Tactics.Tests
         }
 
         /// <summary>
-        /// Тест проверяет, что селектор возвращает null (НЕ во),
-        /// если тип целевого объекта не приводится к целевому типу обработчика.
+        ///     Тест проверяет, что селектор возвращает null (НЕ во),
+        ///     если тип целевого объекта не приводится к целевому типу обработчика.
         /// </summary>
         [Test]
         public void GetHandler_IsNotHandleTarget_ThrowsExceptionHandlerNotFound()
@@ -80,9 +73,9 @@ namespace Zilon.Core.Tactics.Tests
             testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
-            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] { testHandler });
+            ActUsageHandlerSelector selector = new ActUsageHandlerSelector(new IActUsageHandler[] {testHandler});
 
-            var targetObject = new NotHandleTarget();
+            NotHandleTarget targetObject = new NotHandleTarget();
 
             // ACT
             Action act = () =>

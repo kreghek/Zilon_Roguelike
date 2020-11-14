@@ -1,16 +1,13 @@
-﻿using System;
-using System.Linq;
-
-namespace Zilon.CommonUtilities
+﻿namespace Zilon.CommonUtilities
 {
     /// <summary>
-    /// Вспомогательный класс для работы с аргументами командной строки
-    /// в консольном приложении.
+    ///     Вспомогательный класс для работы с аргументами командной строки
+    ///     в консольном приложении.
     /// </summary>
     public static class ArgumentHelper
     {
         /// <summary>
-        /// Проверяет, присутствует ли аргумент.
+        ///     Проверяет, присутствует ли аргумент.
         /// </summary>
         /// <param name="args"> Все агрументы приложения. </param>
         /// <param name="testArg"> Проверяемый аргумент. Без учёта регистра. </param>
@@ -21,7 +18,7 @@ namespace Zilon.CommonUtilities
         }
 
         /// <summary>
-        /// Возвращает значение аргумента.
+        ///     Возвращает значение аргумента.
         /// </summary>
         /// <param name="args"> Все агрументы приложения. </param>
         /// <param name="testArg"> Аргумент, значение которого требуется извлечь. Без учёта регистра. </param>
@@ -30,7 +27,7 @@ namespace Zilon.CommonUtilities
         {
             foreach (var arg in args)
             {
-                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                var components = arg.Split(new[] {'='}, StringSplitOptions.RemoveEmptyEntries);
                 if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (components.Length >= 2)

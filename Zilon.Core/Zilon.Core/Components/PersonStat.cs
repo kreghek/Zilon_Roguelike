@@ -1,15 +1,12 @@
-﻿using System.Linq;
-
-namespace Zilon.Core.Components
+﻿namespace Zilon.Core.Components
 {
     /// <summary>
-    /// Структура для хранения характеристики.
+    ///     Структура для хранения характеристики.
     /// </summary>
     public sealed class PersonStat
     {
         public PersonStat(float baseValue) : this(baseValue, 0)
         {
-
         }
 
         public PersonStat(float baseValue, float levelInc)
@@ -19,17 +16,17 @@ namespace Zilon.Core.Components
         }
 
         /// <summary>
-        /// Базовое значение.
+        ///     Базовое значение.
         /// </summary>
         public float Base { get; }
 
         /// <summary>
-        /// Показатель увеличения характеристики в зависимости от уровня.
+        ///     Показатель увеличения характеристики в зависимости от уровня.
         /// </summary>
         public float LevelInc { get; }
 
         /// <summary>
-        /// Расчёт текущего значения характеристики.
+        ///     Расчёт текущего значения характеристики.
         /// </summary>
         /// <param name="level"> Актуальный уровень. </param>
         /// <param name="rarityBonus"> Бонус за редкость персонажа. </param>
@@ -39,18 +36,18 @@ namespace Zilon.Core.Components
         {
             var bonusValue = CalcBonusValue(level, bonuses);
 
-            return (Base + LevelInc * (level - 1)) * (1 + rarityBonus) + bonusValue;
+            return ((Base + (LevelInc * (level - 1))) * (1 + rarityBonus)) + bonusValue;
         }
 
         /// <summary>
-        /// Расчёт текущего значения характеристики.
+        ///     Расчёт текущего значения характеристики.
         /// </summary>
         /// <param name="level"> Актуальный уровень. </param>
         /// <param name="rarityBonus"> Бонус за редкость персонажа. </param>
         /// <returns> Возвращает актуальное значение характеритсики. </returns>
         public float GetActualValue(int level, float rarityBonus)
         {
-            return GetActualValue(level, rarityBonus, bonuses: null);
+            return GetActualValue(level, rarityBonus, null);
         }
 
         private static float CalcBonusValue(int level, PersonStat[] bonuses)

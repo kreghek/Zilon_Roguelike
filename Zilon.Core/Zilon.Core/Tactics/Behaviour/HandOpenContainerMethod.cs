@@ -3,7 +3,7 @@
 namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
-    /// Метод вскрытия контейнеров - руками, без использования чего-либо.
+    ///     Метод вскрытия контейнеров - руками, без использования чего-либо.
     /// </summary>
     public class HandOpenContainerMethod : IOpenContainerMethod
     {

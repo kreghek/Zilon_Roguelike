@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Scoring;
 
@@ -11,11 +6,9 @@ namespace Zilon.Core.Persons
 {
     public class SurvivalStatHazardEffect : IPersonEffect, ISurvivalStatEffect
     {
+        private readonly ISurvivalRandomSource _survivalRandomSource;
         private SurvivalStatHazardLevel _level;
         private EffectRule[] _rules;
-        private readonly ISurvivalRandomSource _survivalRandomSource;
-
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public SurvivalStatHazardEffect(SurvivalStatType type,
             SurvivalStatHazardLevel level,
@@ -24,10 +17,13 @@ namespace Zilon.Core.Persons
             Type = type;
             Level = level;
 
-            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
+            _survivalRandomSource =
+                survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
 
             _rules = CalcRules();
         }
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public SurvivalStatType Type { get; }
 
@@ -55,7 +51,7 @@ namespace Zilon.Core.Persons
         public event EventHandler Changed;
 
         /// <summary>
-        /// Применяет эффект к указанным данным.
+        ///     Применяет эффект к указанным данным.
         /// </summary>
         /// <param name="survivalData"> Данные, на коорые влияет эффект. </param>
         public void Apply(ISurvivalModule survivalData)
@@ -84,7 +80,7 @@ namespace Zilon.Core.Persons
                 return;
             }
 
-            var playerEvent = new SurvivalEffectDamageEvent(this);
+            SurvivalEffectDamageEvent playerEvent = new SurvivalEffectDamageEvent(this);
             PlayerEventLogService.Log(playerEvent);
         }
 

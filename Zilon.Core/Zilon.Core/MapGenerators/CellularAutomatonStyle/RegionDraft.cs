@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
+﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
-    /// Черновик региона карты.
-    /// Промежуточная структура, которая используется для заливки
-    /// кластеров в фабрике карт на основе клеточных автоматов.
+    ///     Черновик региона карты.
+    ///     Промежуточная структура, которая используется для заливки
+    ///     кластеров в фабрике карт на основе клеточных автоматов.
     /// </summary>
     internal sealed class RegionDraft
     {
         private readonly HashSet<OffsetCoords> _coords;
 
         /// <summary>
-        /// Конструктор черновика региона карты.
+        ///     Конструктор черновика региона карты.
         /// </summary>
         /// <param name="coords"></param>
         public RegionDraft(IEnumerable<OffsetCoords> coords)
@@ -27,9 +24,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         }
 
         /// <summary>
-        /// Координаты, которые входя в черновик региона.
+        ///     Координаты, которые входя в черновик региона.
         /// </summary>
-        public IEnumerable<OffsetCoords> Coords { get => _coords; }
+        public IEnumerable<OffsetCoords> Coords => _coords;
 
         public bool Contains(OffsetCoords coords)
         {

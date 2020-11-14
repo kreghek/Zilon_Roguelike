@@ -1,12 +1,11 @@
-﻿using System;
-
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
 
 namespace Zilon.Core.StaticObjectModules
 {
     public static class IStaticObjectExtensions
     {
-        public static TStaticObjectModule GetModuleSafe<TStaticObjectModule>(this IStaticObject source) where TStaticObjectModule : IStaticObjectModule
+        public static TStaticObjectModule GetModuleSafe<TStaticObjectModule>(this IStaticObject source)
+            where TStaticObjectModule : IStaticObjectModule
         {
             if (source is null)
             {
@@ -21,7 +20,8 @@ namespace Zilon.Core.StaticObjectModules
             return source.GetModule<TStaticObjectModule>();
         }
 
-        public static TStaticObjectModule GetModule<TStaticObjectModule>(this IStaticObject staticObject) where TStaticObjectModule : IStaticObjectModule
+        public static TStaticObjectModule GetModule<TStaticObjectModule>(this IStaticObject staticObject)
+            where TStaticObjectModule : IStaticObjectModule
         {
             if (staticObject is null)
             {
@@ -31,8 +31,9 @@ namespace Zilon.Core.StaticObjectModules
             return staticObject.GetModule<TStaticObjectModule>(typeof(TStaticObjectModule).Name);
         }
 
-        /// <inheritdoc/>
-        public static bool HasModule<TStaticObjectModule>(this IStaticObject staticObject) where TStaticObjectModule : IStaticObjectModule
+        /// <inheritdoc />
+        public static bool HasModule<TStaticObjectModule>(this IStaticObject staticObject)
+            where TStaticObjectModule : IStaticObjectModule
         {
             if (staticObject is null)
             {

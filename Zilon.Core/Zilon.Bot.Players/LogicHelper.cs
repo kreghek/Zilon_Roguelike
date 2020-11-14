@@ -6,7 +6,7 @@ namespace Zilon.Bot.Players
     public static class LogicHelper
     {
         /// <summary>
-        /// Радиус обхора персонажа.
+        ///     Радиус обхора персонажа.
         /// </summary>
         private const int SIGN_RANGE = 5;
 

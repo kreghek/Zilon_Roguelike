@@ -1,11 +1,4 @@
 ﻿using System.Collections.Generic;
-
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -19,39 +12,33 @@ namespace Zilon.Core.Tests.Tactics
     public class DropTablePropChestTests
     {
         /// <summary>
-        /// Тест проверяет генерацию предметов в контейнере,
-        /// если по таблице дропа гарантированно должен выпасть указанный предмет.
+        ///     Тест проверяет генерацию предметов в контейнере,
+        ///     если по таблице дропа гарантированно должен выпасть указанный предмет.
         /// </summary>
         [Test]
         public void DropTablePropContainerTest()
         {
             // ARRANGE
 
-            var dropTableRecord = new TestDropTableRecordSubScheme
+            TestDropTableRecordSubScheme dropTableRecord = new TestDropTableRecordSubScheme
             {
-                SchemeSid = "test-prop",
-                Weight = 1,
-                MinCount = 1,
-                MaxCount = 1
+                SchemeSid = "test-prop", Weight = 1, MinCount = 1, MaxCount = 1
             };
 
-            var dropTable = new TestDropTableScheme(1, dropTableRecord);
+            TestDropTableScheme dropTable = new TestDropTableScheme(1, dropTableRecord);
 
-            var testPropScheme = new PropScheme
-            {
-                Sid = "test-prop"
-            };
+            PropScheme testPropScheme = new PropScheme {Sid = "test-prop"};
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.Resolve(It.IsAny<IEnumerable<IDropTableScheme>>()))
-                .Returns(new IProp[] { new Resource(testPropScheme, 1) });
+                .Returns(new IProp[] {new Resource(testPropScheme, 1)});
             var dropResolver = dropResolverMock.Object;
 
-            var container = new DropTablePropChest(new IDropTableScheme[] { dropTable },
+            DropTablePropChest container = new DropTablePropChest(new IDropTableScheme[] {dropTable},
                 dropResolver);
 
             // ACT
-            var factProps = container.Content.CalcActualItems();
+            IProp[] factProps = container.Content.CalcActualItems();
 
             // ASSERT
             factProps.Length.Should().Be(1);

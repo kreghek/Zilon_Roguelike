@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
     /// <summary>
-    /// Генератор карты с комнатами.
+    ///     Генератор карты с комнатами.
     /// </summary>
     public sealed class RoomGenerator : RoomGeneratorBase
     {
         private readonly IRoomGeneratorRandomSource _randomSource;
 
         /// <summary>
-        /// Конструктор генератора.
+        ///     Конструктор генератора.
         /// </summary>
         /// <param name="randomSource"> Источник рандома для генератора. </param>
         [ExcludeFromCodeCoverage]
@@ -27,14 +20,14 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         /// <summary>
-        /// Генерация комнат.
+        ///     Генерация комнат.
         /// </summary>
         /// <param name="roomCount">Количество комнат, которые будут сгенерированы.</param>
         /// <param name="roomMinSize">Минимальный размер комнаты.</param>
         /// <param name="roomMaxSize">Максимальный размер комнаты.</param>
         /// <param name="availableTransitions"> Информация о переходах из данного сектора. </param>
         /// <returns>
-        /// Возвращает набор созданных комнат.
+        ///     Возвращает набор созданных комнат.
         /// </returns>
         public override IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
             int roomMinSize,
@@ -43,7 +36,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             // На 20 комнат будет матрица 6х6.
             var roomGridSize = (int)Math.Ceiling(Math.Log(roomCount, 2)) + 1;
-            var roomGrid = new RoomMatrix(roomGridSize);
+            RoomMatrix roomGrid = new RoomMatrix(roomGridSize);
 
             var rooms = new List<Room>(roomCount);
 
@@ -55,21 +48,17 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             var startAssigned = false;
 
-            var rolledRoomSizeList = _randomSource.RollRoomSize(roomMinSize, roomMaxSize, roomCount);
+            Size[] rolledRoomSizeList = _randomSource.RollRoomSize(roomMinSize, roomMaxSize, roomCount);
 
             for (var i = 0; i < roomCount; i++)
             {
                 var rolledPosition = roomMatrixCoords[i];
 
-                var room = new Room
-                {
-                    PositionX = rolledPosition.X,
-                    PositionY = rolledPosition.Y
-                };
+                Room room = new Room {PositionX = rolledPosition.X, PositionY = rolledPosition.Y};
 
                 roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
 
-                var rolledSize = rolledRoomSizeList[i];
+                Size rolledSize = rolledRoomSizeList[i];
 
                 room.Width = rolledSize?.Width ?? 0;
                 room.Height = rolledSize?.Height ?? 0;
@@ -94,7 +83,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         /// <summary>
-        /// Создаёт узлы комнат на карте.
+        ///     Создаёт узлы комнат на карте.
         /// </summary>
         /// <param name="map">Карта, в рамках которой происходит генерация.</param>
         /// <param name="rooms">Комнаты, для которых создаются узлы графа карты.</param>
@@ -116,7 +105,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 throw new ArgumentNullException(nameof(edgeHash));
             }
 
-            var cellSize = RoomHelper.CalcCellSize(rooms);
+            Size cellSize = RoomHelper.CalcCellSize(rooms);
 
             foreach (var room in rooms)
             {
@@ -125,7 +114,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         /// <summary>
-        /// Соединяет комнаты коридорами.
+        ///     Соединяет комнаты коридорами.
         /// </summary>
         /// <param name="map">Карта, в рамках которой происходит генерация.</param>
         /// <param name="rooms">Существующие комнаты.</param>
@@ -148,10 +137,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             {
                 for (var y = 0; y < room.Height; y++)
                 {
-                    var nodeX = x + room.PositionX * cellSize.Width;
-                    var nodeY = y + room.PositionY * cellSize.Height;
+                    var nodeX = x + (room.PositionX * cellSize.Width);
+                    var nodeY = y + (room.PositionY * cellSize.Height);
 
-                    var node = new HexNode(nodeX, nodeY);
+                    HexNode node = new HexNode(nodeX, nodeY);
 
                     room.Nodes.Add(node);
                     map.AddNode(node);
@@ -173,7 +162,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 var openRoomNodes = new List<HexNode>(availableNodes);
                 foreach (var transition in room.Transitions)
                 {
-                    var transitionNode = _randomSource.RollTransitionNode(openRoomNodes);
+                    HexNode transitionNode = _randomSource.RollTransitionNode(openRoomNodes);
                     map.Transitions.Add(transitionNode, transition);
                     openRoomNodes.Remove(transitionNode);
                 }

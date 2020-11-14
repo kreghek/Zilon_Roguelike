@@ -1,15 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
-using FluentAssertions;
-
-using JetBrains.Annotations;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
@@ -26,22 +17,22 @@ namespace Zilon.Core.Tests.Tactics
     [TestFixture]
     public class TacticalActUsageServiceTests
     {
-        private ITacticalActUsageRandomSource _actUsageRandomSource;
         private ITacticalAct _act;
+        private ITacticalActUsageRandomSource _actUsageRandomSource;
         private IPerson _person;
         private ISector _sector;
 
         /// <summary>
-        /// Тест проверяет, что при выстреле изымаются патроны из инвентаря.
+        ///     Тест проверяет, что при выстреле изымаются патроны из инвентаря.
         /// </summary>
         [Test]
         public void UseOn_DecreaseBullets_BulletRemovedFromInventory()
         {
             // ARRANGE
 
-            var handlerSelector = CreateEmptyHandlerSelector();
+            IActUsageHandlerSelector handlerSelector = CreateEmptyHandlerSelector();
 
-            var actUsageService = new TacticalActUsageService(
+            TacticalActUsageService actUsageService = new TacticalActUsageService(
                 _actUsageRandomSource,
                 handlerSelector);
 
@@ -56,30 +47,23 @@ namespace Zilon.Core.Tests.Tactics
             var monsterMock = CreateOnHitMonsterMock();
             var monster = monsterMock.Object;
 
-            var actStatsSubScheme = new TestTacticalActStatsSubScheme
+            TestTacticalActStatsSubScheme actStatsSubScheme = new TestTacticalActStatsSubScheme
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic,
-                    ApRank = 10
+                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
                 }
             };
 
-            var actConstrainsSubScheme = new TestTacticalActConstrainsSubScheme
+            TestTacticalActConstrainsSubScheme actConstrainsSubScheme = new TestTacticalActConstrainsSubScheme
             {
-                PropResourceType = "7-62",
-                PropResourceCount = 1
+                PropResourceType = "7-62", PropResourceCount = 1
             };
 
-            var inventory = new InventoryModule();
-            var bulletScheme = new TestPropScheme
+            InventoryModule inventory = new InventoryModule();
+            TestPropScheme bulletScheme = new TestPropScheme
             {
-                Sid = "bullet-7-62",
-                Bullet = new TestPropBulletSubScheme
-                {
-                    Caliber = "7-62"
-                }
+                Sid = "bullet-7-62", Bullet = new TestPropBulletSubScheme {Caliber = "7-62"}
             };
             inventory.Add(new Resource(bulletScheme, 10));
             personMock.Setup(x => x.GetModule<IInventoryModule>(It.IsAny<string>())).Returns(inventory);
@@ -90,27 +74,27 @@ namespace Zilon.Core.Tests.Tactics
             var shootAct = actMock.Object;
 
             // ACT
-            var usedActs = new UsedTacticalActs(new[] { shootAct });
+            UsedTacticalActs usedActs = new UsedTacticalActs(new[] {shootAct});
             actUsageService.UseOn(actor, monster, usedActs, _sector);
 
             // ASSERT
-            var bullets = inventory.CalcActualItems().Single(x => x.Scheme.Sid == "bullet-7-62") as Resource;
+            Resource bullets = inventory.CalcActualItems().Single(x => x.Scheme.Sid == "bullet-7-62") as Resource;
             bullets.Count.Should().Be(9);
         }
 
         /// <summary>
-        /// Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
+        ///     Тест проверяет, что при атаке сквозь стены выбрасывается исключение.
         /// </summary>
         [Test]
         public void UseOn_Wall_ThrowsUsageThroughtWallException()
         {
             // ARRANGE
 
-            var sector = CreateSectorManagerWithWall();
+            ISector sector = CreateSectorManagerWithWall();
 
-            var handlerSelector = CreateEmptyHandlerSelector();
+            IActUsageHandlerSelector handlerSelector = CreateEmptyHandlerSelector();
 
-            var actUsageService = new TacticalActUsageService(
+            TacticalActUsageService actUsageService = new TacticalActUsageService(
                 _actUsageRandomSource,
                 handlerSelector);
 
@@ -123,7 +107,7 @@ namespace Zilon.Core.Tests.Tactics
             var monster = monsterMock.Object;
 
             // ACT
-            var usedActs = new UsedTacticalActs(new[] { _act });
+            UsedTacticalActs usedActs = new UsedTacticalActs(new[] {_act});
 
             Action act = () =>
             {
@@ -135,16 +119,16 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         /// <summary>
-        /// Тест проверяет, что при атаке вызывается событие использования действия у актёра..
+        ///     Тест проверяет, что при атаке вызывается событие использования действия у актёра..
         /// </summary>
         [Test]
         public void UseOn_Attack_RaiseUsedAct()
         {
             // ARRANGE
 
-            var handlerSelector = CreateEmptyHandlerSelector();
+            IActUsageHandlerSelector handlerSelector = CreateEmptyHandlerSelector();
 
-            var actUsageService = new TacticalActUsageService(
+            TacticalActUsageService actUsageService = new TacticalActUsageService(
                 _actUsageRandomSource,
                 handlerSelector);
 
@@ -152,13 +136,14 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             actorMock.SetupGet(x => x.Person).Returns(_person);
             actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
-                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
+                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null,
+                    (target1, act1) => new UsedActEventArgs(target1, act1));
             var actor = actorMock.Object;
 
             var monsterMock = CreateMonsterMock();
             var monster = monsterMock.Object;
 
-            var usedActs = new UsedTacticalActs(new[] { _act });
+            UsedTacticalActs usedActs = new UsedTacticalActs(new[] {_act});
 
             using var monitor = actor.Monitor();
 
@@ -184,7 +169,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
-            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>())).Returns(monsterCombatStats);
+            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>()))
+                .Returns(monsterCombatStats);
 
             var monsterPerson = monsterPersonMock.Object;
             monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
@@ -208,21 +194,22 @@ namespace Zilon.Core.Tests.Tactics
 
             var monsterPersonMock = new Mock<IPerson>();
 
-            var monsterIsDead = false;
+            bool monsterIsDead = false;
             var monsterSurvivalDataMock = new Mock<ISurvivalModule>();
             monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(() => monsterIsDead);
             monsterSurvivalDataMock
                 .Setup(x => x.DecreaseStat(
                     It.Is<SurvivalStatType>(s => s == SurvivalStatType.Health),
                     It.IsAny<int>())
-                    )
+                )
                 .Callback(() => monsterIsDead = true);
             var monsterSurvival = monsterSurvivalDataMock.Object;
             monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
 
             var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
-            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>())).Returns(monsterCombatStats);
+            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>()))
+                .Returns(monsterCombatStats);
 
             var monsterPerson = monsterPersonMock.Object;
             monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
@@ -255,13 +242,11 @@ namespace Zilon.Core.Tests.Tactics
             var evolutionModule = evolutionModuleMock.Object;
             personMock.Setup(x => x.GetModule<IEvolutionModule>(It.IsAny<string>())).Returns(evolutionModule);
 
-            var actScheme = new TestTacticalActStatsSubScheme
+            TestTacticalActStatsSubScheme actScheme = new TestTacticalActStatsSubScheme
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic,
-                    ApRank = 10
+                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
                 }
             };
 

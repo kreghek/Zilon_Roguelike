@@ -1,10 +1,7 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Zilon.Core.CommonServices.Dices
+﻿namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
-    /// Игральная кость, работающая по экпонециальному закону.
+    ///     Игральная кость, работающая по экпонециальному закону.
     /// </summary>
     public class ExpDice : IDice
     {
@@ -14,7 +11,7 @@ namespace Zilon.Core.CommonServices.Dices
         private readonly Random _random;
 
         /// <summary>
-        /// Конструктор генератора.
+        ///     Конструктор генератора.
         /// </summary>
         [ExcludeFromCodeCoverage]
         public ExpDice()
@@ -23,12 +20,12 @@ namespace Zilon.Core.CommonServices.Dices
         }
 
         /// <summary>
-        /// Конструктор кости.
+        ///     Конструктор кости.
         /// </summary>
         /// <param name="seed"> Зерно рандомизации. </param>
         /// <remarks>
-        /// При одном и том же зерне рандомизации будет генерироваться
-        /// одна и та же последовательность случайных чисел.
+        ///     При одном и том же зерне рандомизации будет генерироваться
+        ///     одна и та же последовательность случайных чисел.
         /// </remarks>
         [ExcludeFromCodeCoverage]
         public ExpDice(int seed)
@@ -75,6 +72,7 @@ namespace Zilon.Core.CommonServices.Dices
             {
                 x = GetNext();
             } while (x < min || x > max);
+
             return x;
         }
 
@@ -84,7 +82,8 @@ namespace Zilon.Core.CommonServices.Dices
             return next;
         }
 
-        private static double MapToInterval(double x, double sourceMin, double sourceMax, double targetMin, double targetMax)
+        private static double MapToInterval(double x, double sourceMin, double sourceMax, double targetMin,
+            double targetMax)
         {
             var targetDiff = targetMax - targetMin;
             var sourceDiff = sourceMax - sourceMin;

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
-
 using Zilon.Tournament.ApiGate.BotManagement;
 
 namespace Zilon.Tournament.ApiGate.Controllers
@@ -21,27 +18,27 @@ namespace Zilon.Tournament.ApiGate.Controllers
         [HttpPost("upload")]
         public async Task<IActionResult> UploadBotAsync()
         {
-            var appPath = Environment.GetEnvironmentVariable("APP_PATH");
-            var botRootCatalog = Path.Combine(appPath, "bots");
+            string? appPath = Environment.GetEnvironmentVariable("APP_PATH");
+            string botRootCatalog = Path.Combine(appPath, "bots");
 
             if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
                 return BadRequest($"Expected a multipart request, but got {Request.ContentType}");
             }
 
-            var boundary = MultipartRequestHelper.GetBoundary(
+            string boundary = MultipartRequestHelper.GetBoundary(
                 MediaTypeHeaderValue.Parse(Request.ContentType),
                 DefaultFormOptions.MultipartBoundaryLengthLimit);
-            var reader = new MultipartReader(boundary, HttpContext.Request.Body);
+            MultipartReader reader = new MultipartReader(boundary, HttpContext.Request.Body);
 
-            var section = await reader.ReadNextSectionAsync();
+            MultipartSection section = await reader.ReadNextSectionAsync();
             while (section != null)
             {
-                var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(
+                bool hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(
                     section.ContentDisposition,
-                    out var contentDisposition);
+                    out ContentDispositionHeaderValue contentDisposition);
 
-                var fileName = contentDisposition.FileName.ToString();
+                string fileName = contentDisposition.FileName.ToString();
                 if (!IsValidFileName(fileName))
                 {
                     throw new ArgumentException($"Имя имя '{fileName}' не является корректным именем файла.");
@@ -51,12 +48,12 @@ namespace Zilon.Tournament.ApiGate.Controllers
                 {
                     if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
                     {
-                        using (var copyStream = new MemoryStream())
+                        using (MemoryStream copyStream = new MemoryStream())
                         {
                             await section.Body.CopyToAsync(copyStream);
 
                             copyStream.Seek(0, SeekOrigin.Begin);
-                            using (var targetStream = System.IO.File.Create(botRootCatalog))
+                            using (FileStream targetStream = System.IO.File.Create(botRootCatalog))
                             {
                                 await copyStream.CopyToAsync(targetStream).ConfigureAwait(false);
                             }
@@ -72,9 +69,9 @@ namespace Zilon.Tournament.ApiGate.Controllers
 
         private static bool IsValidFileName(string fileName)
         {
-            var invalidChars = Path.GetInvalidFileNameChars();
-            var invalidCharIndex = fileName.IndexOfAny(invalidChars);
-            var hasInvalidChars = invalidCharIndex >= 0;
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+            int invalidCharIndex = fileName.IndexOfAny(invalidChars);
+            bool hasInvalidChars = invalidCharIndex >= 0;
             return !hasInvalidChars;
         }
     }

@@ -1,20 +1,18 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Props;
+﻿using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics
 {
     /// <summary>
-    /// Хранилище, контент которого генерируется по таблице дропа.
+    ///     Хранилище, контент которого генерируется по таблице дропа.
     /// </summary>
     public sealed class DropTableChestStore : PropStoreBase
     {
-        private readonly IEnumerable<IDropTableScheme> _dropTables;
         private readonly IDropResolver _dropResolver;
+        private readonly IEnumerable<IDropTableScheme> _dropTables;
 
         /// <summary>
-        /// Внутренний ключ, указывающий, что разрешение контента уже произведено.
+        ///     Внутренний ключ, указывающий, что разрешение контента уже произведено.
         /// </summary>
         private bool _contentResolved;
 
@@ -31,7 +29,7 @@ namespace Zilon.Core.Tactics
                 return base.CalcActualItems();
             }
 
-            var props = GenerateProps();
+            IProp[] props = GenerateProps();
             AddToContent(props);
             _contentResolved = true;
 
@@ -40,7 +38,7 @@ namespace Zilon.Core.Tactics
 
         private void AddToContent(IProp[] props)
         {
-            foreach (var prop in props)
+            foreach (IProp prop in props)
             {
                 Add(prop);
             }
@@ -48,7 +46,7 @@ namespace Zilon.Core.Tactics
 
         private IProp[] GenerateProps()
         {
-            var props = _dropResolver.Resolve(_dropTables);
+            IProp[] props = _dropResolver.Resolve(_dropTables);
             return props;
         }
     }

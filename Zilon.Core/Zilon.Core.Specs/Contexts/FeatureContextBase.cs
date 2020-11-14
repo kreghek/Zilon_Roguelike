@@ -1,14 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-using JetBrains.Annotations;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
-
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
@@ -25,30 +17,29 @@ using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Specs.Contexts
 {
     public abstract class FeatureContextBase
     {
-        public IServiceProvider ServiceProvider { get; }
-
-        public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
-        public RegisterServices RegisterServices { get; private set; }
-        public IGlobe Globe { get; private set; }
-
         protected FeatureContextBase()
         {
             RaisedActorInteractionEvents = new List<IActorInteractionEvent>();
 
             RegisterServices = new RegisterServices();
-            var serviceProvider = RegisterServices.Register();
+            IServiceProvider serviceProvider = RegisterServices.Register();
 
             ServiceProvider = serviceProvider;
 
             Configure(serviceProvider);
         }
+
+        public IServiceProvider ServiceProvider { get; }
+
+        public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
+        public RegisterServices RegisterServices { get; }
+        public IGlobe Globe { get; private set; }
 
         private void Configure(IServiceProvider serviceProvider)
         {
@@ -70,18 +61,16 @@ namespace Zilon.Core.Specs.Contexts
 
         public async Task CreateGlobeAsync(int startMapSize)
         {
-            var mapFactory = (FuncMapFactory)ServiceProvider.GetRequiredService<IMapFactory>();
+            FuncMapFactory mapFactory = (FuncMapFactory)ServiceProvider.GetRequiredService<IMapFactory>();
             mapFactory.SetFunc(() =>
             {
                 ISectorMap map = new SectorGraphMap<HexNode, HexMapNodeDistanceCalculator>();
 
                 MapFiller.FillSquareMap(map, startMapSize);
 
-                var mapRegion = new MapRegion(1, map.Nodes.ToArray())
+                MapRegion mapRegion = new MapRegion(1, map.Nodes.ToArray())
                 {
-                    IsStart = true,
-                    IsOut = true,
-                    ExitNodes = new[] { map.Nodes.Last() }
+                    IsStart = true, IsOut = true, ExitNodes = new[] {map.Nodes.Last()}
                 };
 
                 map.Regions.Add(mapRegion);
@@ -102,7 +91,7 @@ namespace Zilon.Core.Specs.Contexts
 
         public void AddWall(int x1, int y1, int x2, int y2)
         {
-            var map = GetCurrentGlobeFirstSector().Map;
+            ISectorMap map = GetCurrentGlobeFirstSector().Map;
 
             map.RemoveEdge(x1, y1, x2, y2);
         }
@@ -135,12 +124,12 @@ namespace Zilon.Core.Specs.Contexts
             var humanPlayer = ServiceProvider.GetRequiredService<IPlayer>();
 
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
-            var actorManager = sector.ActorManager;
+            IActorManager actorManager = sector.ActorManager;
             var perkResolver = ServiceProvider.GetRequiredService<IPerkResolver>();
 
             // Подготовка актёров
             var humanStartNode = sector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
-            var humanActor = CreateHumanActor(personSid, humanStartNode, perkResolver);
+            IActor humanActor = CreateHumanActor(personSid, humanStartNode, perkResolver);
             humanPlayer.BindPerson(Globe, humanActor.Person);
 
             actorManager.Add(humanActor);
@@ -159,12 +148,12 @@ namespace Zilon.Core.Specs.Contexts
             }
 
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
-            var actorManager = sector.ActorManager;
+            IActorManager actorManager = sector.ActorManager;
 
             var monsterScheme = schemeService.GetScheme<IMonsterScheme>(monsterSid);
             var monsterStartNode = sector.Map.Nodes.SelectByHexCoords(startCoords.X, startCoords.Y);
 
-            var monster = CreateMonsterActor(monsterScheme, monsterStartNode);
+            IActor monster = CreateMonsterActor(monsterScheme, monsterStartNode);
             monster.Person.Id = monsterId;
 
             actorManager.Add(monster);
@@ -172,11 +161,11 @@ namespace Zilon.Core.Specs.Contexts
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
-            var sector = GetCurrentGlobeFirstSector();
+            ISector sector = GetCurrentGlobeFirstSector();
 
             var node = sector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
-            var chest = new FixedPropChest(Array.Empty<IProp>());
-            var staticObject = new StaticObject(node, chest.Purpose, id);
+            FixedPropChest chest = new FixedPropChest(Array.Empty<IProp>());
+            StaticObject staticObject = new StaticObject(node, chest.Purpose, id);
             staticObject.AddModule<IPropContainer>(chest);
 
             sector.StaticObjectManager.Add(staticObject);
@@ -200,16 +189,16 @@ namespace Zilon.Core.Specs.Contexts
                 throw new ArgumentNullException(nameof(actor));
             }
 
-            var resource = new Resource(resourceScheme, count);
+            Resource resource = new Resource(resourceScheme, count);
 
             actor.Person.GetModule<IInventoryModule>().Add(resource);
         }
 
         public IActor GetMonsterById(int id)
         {
-            var sector = GetCurrentGlobeFirstSector();
+            ISector sector = GetCurrentGlobeFirstSector();
 
-            var actorManager = sector.ActorManager;
+            IActorManager actorManager = sector.ActorManager;
 
             var monster = actorManager.Items
                 .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
@@ -226,7 +215,7 @@ namespace Zilon.Core.Specs.Contexts
 
             var person = personFactory.Create(personSchemeSid, Fractions.MainPersonFraction);
 
-            var actor = new Actor(person, humanTaskSource, startNode, perkResolver);
+            Actor actor = new Actor(person, humanTaskSource, startNode, perkResolver);
 
             return actor;
         }
@@ -240,7 +229,7 @@ namespace Zilon.Core.Specs.Contexts
 
             var monsterPerson = monsterFactory.Create(monsterScheme);
 
-            var actor = new Actor(monsterPerson, taskSource, startNode);
+            Actor actor = new Actor(monsterPerson, taskSource, startNode);
 
             return actor;
         }

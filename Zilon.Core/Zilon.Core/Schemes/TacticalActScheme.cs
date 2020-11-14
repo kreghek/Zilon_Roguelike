@@ -1,25 +1,21 @@
-﻿using System;
-
-using Newtonsoft.Json;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
     /// <summary>
-    /// Схема действия.
+    ///     Схема действия.
     /// </summary>
     public class TacticalActScheme : SchemeBase, ITacticalActScheme
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<TacticalActStatsSubScheme>))]
         public ITacticalActStatsSubScheme Stats { get; private set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<TacticalActConstrainsSubScheme>))]
         public ITacticalActConstrainsSubScheme Constrains { get; private set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         public string IsMimicFor { get; private set; }
     }

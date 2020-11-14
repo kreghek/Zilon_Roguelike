@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -15,47 +14,52 @@ namespace Zilon.Core.Specs.Mocks
         public TestEmptyPersonFactory(ISchemeService schemeService, ISurvivalRandomSource survivalRandomSource)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
-            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
+            _survivalRandomSource =
+                survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
         }
 
         public IPerson Create(string personSchemeSid, IFraction fraction)
         {
-            var personScheme = _schemeService.GetScheme<IPersonScheme>(personSchemeSid);
+            IPersonScheme personScheme = _schemeService.GetScheme<IPersonScheme>(personSchemeSid);
 
-            var person = new HumanPerson(personScheme, fraction);
+            HumanPerson person = new HumanPerson(personScheme, fraction);
 
-            var attributes = new[] {
+            PersonAttribute[] attributes =
+            {
                 new PersonAttribute(PersonAttributeType.PhysicalStrength, 10),
                 new PersonAttribute(PersonAttributeType.Dexterity, 10),
                 new PersonAttribute(PersonAttributeType.Perception, 10),
                 new PersonAttribute(PersonAttributeType.Constitution, 10)
             };
-            var attributesModule = new AttributesModule(attributes);
+            AttributesModule attributesModule = new AttributesModule(attributes);
             person.AddModule(attributesModule);
 
-            var inventoryModule = new InventoryModule();
+            InventoryModule inventoryModule = new InventoryModule();
             person.AddModule(inventoryModule);
 
-            var equipmentModule = new EquipmentModule(personScheme.Slots);
+            EquipmentModule equipmentModule = new EquipmentModule(personScheme.Slots);
             person.AddModule(equipmentModule);
 
-            var effectsModule = new EffectsModule();
+            EffectsModule effectsModule = new EffectsModule();
             person.AddModule(effectsModule);
 
-            var evolutionModule = new EvolutionModule(_schemeService);
+            EvolutionModule evolutionModule = new EvolutionModule(_schemeService);
             person.AddModule(evolutionModule);
 
-            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, attributesModule, effectsModule, evolutionModule, equipmentModule);
+            HumanSurvivalModule survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource,
+                attributesModule, effectsModule, evolutionModule, equipmentModule);
             person.AddModule(survivalModule);
 
-            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
-            var combatActModule = new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
+            ITacticalActScheme defaultActScheme =
+                _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
+            CombatActModule combatActModule =
+                new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
             person.AddModule(combatActModule);
 
-            var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
+            CombatStatsModule combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
             person.AddModule(combatStatsModule);
 
-            var diseaseModule = new DiseaseModule();
+            DiseaseModule diseaseModule = new DiseaseModule();
             person.AddModule(diseaseModule);
 
             return person;

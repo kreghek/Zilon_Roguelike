@@ -1,11 +1,4 @@
 ﻿using System.Collections.Generic;
-
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics;
@@ -18,8 +11,8 @@ namespace Zilon.Core.Tests.Tactics
     public class TransitionDetectionTests
     {
         /// <summary>
-        /// Проверяет, что если указанный узел попадает в единственный переход, то будет
-        /// возвращён этот переход.
+        ///     Проверяет, что если указанный узел попадает в единственный переход, то будет
+        ///     возвращён этот переход.
         /// </summary>
         [Test]
         public void DetectTest_OneInSingleTransition_ReturnsThisTransition()
@@ -32,22 +25,18 @@ namespace Zilon.Core.Tests.Tactics
             var sectorNodeMock = new Mock<ISectorNode>();
             var sectorNode = sectorNodeMock.Object;
 
-            var transition = new RoomTransition(sectorNode);
+            RoomTransition transition = new RoomTransition(sectorNode);
 
-            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition>
-            {
-                { actorNode, transition }
-            };
+            Dictionary<IGraphNode, RoomTransition> testedTrasitions =
+                new Dictionary<IGraphNode, RoomTransition> {{actorNode, transition}};
 
-            var testedNodes = new[] { actorNode };
+            var testedNodes = new[] {actorNode};
 
-            var expectedTransition = transition;
-
+            RoomTransition expectedTransition = transition;
 
 
             // ACT
-            var factTransition = TransitionDetection.Detect(testedTrasitions, testedNodes);
-
+            RoomTransition factTransition = TransitionDetection.Detect(testedTrasitions, testedNodes);
 
 
             // ASSERT
@@ -55,8 +44,8 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         /// <summary>
-        /// Проверяет, что если указанный узел попадает в единственный переход, то будет
-        /// возвращён этот переход.
+        ///     Проверяет, что если указанный узел попадает в единственный переход, то будет
+        ///     возвращён этот переход.
         /// </summary>
         [Test]
         public void DetectTest_OneInOutOfSingleTransition_ReturnsNull()
@@ -72,22 +61,18 @@ namespace Zilon.Core.Tests.Tactics
             var sectorNodeMock = new Mock<ISectorNode>();
             var sectorNode = sectorNodeMock.Object;
 
-            var transition = new RoomTransition(sectorNode);
+            RoomTransition transition = new RoomTransition(sectorNode);
 
-            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition>
-            {
-                { transitionNode, transition }
-            };
+            Dictionary<IGraphNode, RoomTransition> testedTrasitions =
+                new Dictionary<IGraphNode, RoomTransition> {{transitionNode, transition}};
 
-            var testedNodes = new[] { actorNode };
+            var testedNodes = new[] {actorNode};
 
             RoomTransition expectedTransition = null;
 
 
-
             // ACT
-            var factTransition = TransitionDetection.Detect(testedTrasitions, testedNodes);
-
+            RoomTransition factTransition = TransitionDetection.Detect(testedTrasitions, testedNodes);
 
 
             // ASSERT

@@ -1,9 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Zilon.Core.CommonServices.Dices
+﻿namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
-    /// Игральная кость, работающая по экпонециальному закону.
+    ///     Игральная кость, работающая по экпонециальному закону.
     /// </summary>
     public sealed class InversedExpDice : ExpDice
     {
@@ -19,7 +17,7 @@ namespace Zilon.Core.CommonServices.Dices
 
         protected override int ProcessedRoll(int roll, int n)
         {
-            var inversedRoll = n - roll + 1;
+            var inversedRoll = (n - roll) + 1;
             return inversedRoll;
         }
     }

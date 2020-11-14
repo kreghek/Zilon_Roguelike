@@ -1,17 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MassSectorGenerator
 {
     /// <summary>
-    /// Валидатор сектора.
+    ///     Валидатор сектора.
     /// </summary>
     public interface ISectorValidator
     {
         /// <summary>
-        /// Выполнение валидации.
+        ///     Выполнение валидации.
         /// </summary>
         /// <param name="sector"> Проверяемый сектор. </param>
         /// <param name="scopeContainer"> Контейнер с зависимостями. </param>

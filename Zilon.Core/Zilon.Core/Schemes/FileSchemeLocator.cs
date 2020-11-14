@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-
-using JetBrains.Annotations;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
     public class FileSchemeLocator : ISchemeLocator
     {
-        private readonly string _schemeCatalog;
-
         private const string schemeCatalogEnvVariable = "ZILON_LIV_SCHEME_CATALOG";
+        private readonly string _schemeCatalog;
 
         [ExcludeFromCodeCoverage]
         public FileSchemeLocator([NotNull] string schemeCatalog)
@@ -24,18 +16,6 @@ namespace Zilon.Core.Schemes
             {
                 throw new System.ArgumentException($"Директория каталога {schemeLocatorFullPath} не найдена.");
             }
-        }
-
-        [ExcludeFromCodeCoverage]
-        public static FileSchemeLocator CreateFromEnvVariable()
-        {
-            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
-            if (string.IsNullOrWhiteSpace(schemeCatalogFromEnvVariable))
-            {
-                throw new InvalidOperationException($"Переменная окружения {schemeCatalogEnvVariable} не задана.");
-            }
-
-            return new FileSchemeLocator(schemeCatalogFromEnvVariable);
         }
 
         public SchemeFile[] GetAll(string directory)
@@ -56,17 +36,24 @@ namespace Zilon.Core.Schemes
                 var serialized = File.ReadAllText(filePath);
                 string fileFolder = GetRelativePath(path, filePath, sid);
 
-                var schemeFile = new SchemeFile
-                {
-                    Sid = sid,
-                    Path = fileFolder,
-                    Content = serialized
-                };
+                SchemeFile schemeFile = new SchemeFile {Sid = sid, Path = fileFolder, Content = serialized};
 
                 result.Add(schemeFile);
             }
 
             return result.ToArray();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public static FileSchemeLocator CreateFromEnvVariable()
+        {
+            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
+            if (string.IsNullOrWhiteSpace(schemeCatalogFromEnvVariable))
+            {
+                throw new InvalidOperationException($"Переменная окружения {schemeCatalogEnvVariable} не задана.");
+            }
+
+            return new FileSchemeLocator(schemeCatalogFromEnvVariable);
         }
 
         private static string GetRelativePath(string path, string filePath, string sid)

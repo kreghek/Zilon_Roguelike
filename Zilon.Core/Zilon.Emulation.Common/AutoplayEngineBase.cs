@@ -1,10 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Bot.Sdk;
-using Zilon.Core.PersonModules;
+﻿using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -16,10 +10,6 @@ namespace Zilon.Emulation.Common
         private const int ITERATION_LIMIT = 40_000_000;
         private readonly IGlobeInitializer _globeInitializer;
 
-        protected IServiceScope ServiceScope { get; set; }
-
-        protected BotSettings BotSettings { get; }
-
         protected AutoplayEngineBase(BotSettings botSettings,
             IGlobeInitializer globeInitializer)
         {
@@ -27,10 +17,14 @@ namespace Zilon.Emulation.Common
             _globeInitializer = globeInitializer;
         }
 
+        protected IServiceScope ServiceScope { get; set; }
+
+        protected BotSettings BotSettings { get; }
+
         public async Task<IGlobe> CreateGlobeAsync()
         {
             // Create globe
-            var globeInitializer = _globeInitializer;
+            IGlobeInitializer globeInitializer = _globeInitializer;
             var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
             return globe;
         }
@@ -64,12 +58,6 @@ namespace Zilon.Emulation.Common
                     throw;
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch (Exception exception)
-#pragma warning restore CA1031 // Do not catch general exception types
-                {
-                    CatchException(exception);
-                    throw;
-                }
             }
 
             ProcessEnd();

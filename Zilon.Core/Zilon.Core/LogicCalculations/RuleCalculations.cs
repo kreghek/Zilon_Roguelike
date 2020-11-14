@@ -1,16 +1,14 @@
-﻿using System;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 
 namespace Zilon.Core.LogicCalculations
 {
     /// <summary>
-    /// Вспомогательный класс для объединения всех вычислений, связанных с правилами.
+    ///     Вспомогательный класс для объединения всех вычислений, связанных с правилами.
     /// </summary>
     public static class RuleCalculations
     {
         /// <summary>
-        /// Расчёт нового модификатора эффективности в зависимости от правила.
+        ///     Расчёт нового модификатора эффективности в зависимости от правила.
         /// </summary>
         /// <param name="currentModifierValue"> Текущие значение модификатора. </param>
         /// <param name="level"> Уровень правила. </param>

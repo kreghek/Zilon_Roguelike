@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.PersonModules
@@ -19,14 +15,15 @@ namespace Zilon.Core.PersonModules
         public SurvivalStat[] Stats { get; }
 
         /// <summary>
-        /// Событие, которое происходит, если значение характеристики
-        /// пересекает ключевое значение (мин/макс/четверти/0).
+        ///     Событие, которое происходит, если значение характеристики
+        ///     пересекает ключевое значение (мин/макс/четверти/0).
         /// </summary>
         public event EventHandler<SurvivalStatChangedEventArgs> StatChanged;
 
         /// <summary>Признак того, что персонаж мёртв.</summary>
         public bool IsDead { get; private set; }
-        public string Key { get => nameof(ISurvivalModule); }
+
+        public string Key => nameof(ISurvivalModule);
         public bool IsActive { get; set; }
 
         /// <summary>Происходит, если персонаж умирает.</summary>
@@ -66,16 +63,6 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        /// <summary>
-        /// Invokes the stat changed event with the given parameters
-        /// </summary>
-        /// <param name="caller">The object performing the call</param>
-        /// <param name="args">The <see cref="SurvivalStatChangedEventArgs"/> instance containing the event data.</param>
-        public void InvokeStatChangedEvent(SurvivalModuleBase caller, SurvivalStatChangedEventArgs args)
-        {
-            StatChanged?.Invoke(caller, args);
-        }
-
         /// <summary>Форсированно установить запас здоровья.</summary>
         /// <param name="type">Тип характеритсики, которая будет произведено влияние.</param>
         /// <param name="value">Целевое значение запаса характеристики.</param>
@@ -86,6 +73,19 @@ namespace Zilon.Core.PersonModules
             {
                 stat.Value = value;
             }
+        }
+
+        public abstract void ResetStats();
+        public abstract void Update();
+
+        /// <summary>
+        ///     Invokes the stat changed event with the given parameters
+        /// </summary>
+        /// <param name="caller">The object performing the call</param>
+        /// <param name="args">The <see cref="SurvivalStatChangedEventArgs" /> instance containing the event data.</param>
+        public void InvokeStatChangedEvent(SurvivalModuleBase caller, SurvivalStatChangedEventArgs args)
+        {
+            StatChanged?.Invoke(caller, args);
         }
 
         private static void ValidateStatChangeValue(int value)
@@ -115,7 +115,7 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <summary>
-        /// Индивидуально обрабатывает характеристику, если это здоровье.
+        ///     Индивидуально обрабатывает характеристику, если это здоровье.
         /// </summary>
         /// <param name="stat"> Обрабатываемая характеристика. </param>
         private void ProcessIfHealth(SurvivalStat stat, int value)
@@ -141,8 +141,8 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <summary>
-        /// Если персонаж получает урон, то выставляетс счётчик раны.
-        /// Когда счтётчик раны снижается до 0, восстанавливается 1 здоровья.
+        ///     Если персонаж получает урон, то выставляетс счётчик раны.
+        ///     Когда счтётчик раны снижается до 0, восстанавливается 1 здоровья.
         /// </summary>
         private void SetWoundCounter()
         {
@@ -174,8 +174,5 @@ namespace Zilon.Core.PersonModules
         {
             Dead?.Invoke(this, new EventArgs());
         }
-
-        public abstract void ResetStats();
-        public abstract void Update();
     }
 }

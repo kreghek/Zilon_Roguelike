@@ -1,12 +1,12 @@
 ﻿namespace Zilon.Core.Common
 {
     /// <summary>
-    /// Вспомогательный класс для работы с матрицами.
+    ///     Вспомогательный класс для работы с матрицами.
     /// </summary>
     public static class MatrixHelper
     {
         /// <summary>
-        /// Поворот матрицы на 90 градусов по часовой.
+        ///     Поворот матрицы на 90 градусов по часовой.
         /// </summary>
         /// <typeparam name="T"> Тип элементов массива. </typeparam>
         /// <param name="sourceMatrix"> Исходная матрица. </param>
@@ -21,7 +21,7 @@
             var n = sourceMatrix.Width;
             var m = sourceMatrix.Height;
 
-            var ret = new Matrix<T>(m, n);
+            Matrix<T> ret = new Matrix<T>(m, n);
 
             for (var i = 0; i < m; i++)
             {
@@ -35,7 +35,7 @@
         }
 
         /// <summary>
-        /// Поворот матрицы на указанный угол.
+        ///     Поворот матрицы на указанный угол.
         /// </summary>
         /// <typeparam name="T"> Тип элементов массива. </typeparam>
         /// <param name="sourceMatrix"> Исходная матрица. </param>
@@ -43,7 +43,7 @@
         /// <returns> Возращает повёрнутую матрицу. </returns>
         public static Matrix<T> Rotate<T>(Matrix<T> sourceMatrix, MatrixRotation rotation)
         {
-            var resultMatrix = sourceMatrix;
+            Matrix<T> resultMatrix = sourceMatrix;
             for (var i = 0; i < (int)rotation; i++)
             {
                 resultMatrix = RotateClockwise(resultMatrix);
@@ -53,13 +53,13 @@
         }
 
         /// <summary>
-        /// Растягивает матрицу.
+        ///     Растягивает матрицу.
         /// </summary>
         /// <param name="matrix"> Исходная матрица. </param>
         /// <param name="factor"> Фактор растягивания. Указывает, сколько ячеек будет создано в замен исходного значения. </param>
         /// <returns> Возвращает новую растянутую матрицу. </returns>
         /// <remarks>
-        /// <see cref="factor"/> должен быть больше или равен 1. Уменьшение матрица не реализовано.
+        ///     <see cref="factor" /> должен быть больше или равен 1. Уменьшение матрица не реализовано.
         /// </remarks>
         public static Matrix<bool> CreateScaledMatrix(Matrix<bool> matrix, int factor)
         {

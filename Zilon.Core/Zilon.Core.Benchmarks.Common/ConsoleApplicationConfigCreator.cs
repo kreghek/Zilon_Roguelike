@@ -4,12 +4,12 @@ using Zilon.Core.Benchmark;
 namespace Zilon.Core.Benchmarks.Common
 {
     /// <summary>
-    /// Вспомогательный класс для создания общего конфига бенчей
+    ///     Вспомогательный класс для создания общего конфига бенчей
     /// </summary>
     public static class ConsoleApplicationConfigCreator
     {
         /// <summary>
-        /// Создаёт кастомный конфиг бенчей на основе аргументов командной строки.
+        ///     Создаёт кастомный конфиг бенчей на основе аргументов командной строки.
         /// </summary>
         /// <param name="args"> Аргументы командной строки. </param>
         /// <returns> Возвращает объект конфигурации. </returns>
@@ -22,7 +22,7 @@ namespace Zilon.Core.Benchmarks.Common
             var monoPath = ArgumentHelper.GetProgramArgument(args, "MONO_PATH");
             var artifactPath = ArgumentHelper.GetProgramArgument(args, "ARTIFACT_PATH");
 
-            var config = new Config(buildNumber, iterationCount, monoName, monoPath, artifactPath);
+            Config config = new Config(buildNumber, iterationCount, monoName, monoPath, artifactPath);
 
             return config;
         }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
 
@@ -11,10 +7,43 @@ namespace Zilon.Core.Tactics.Behaviour
     public class MoveTask : ActorTaskBase
     {
         private readonly ISectorMap _map;
-        private readonly int _cost;
         private readonly List<IGraphNode> _path;
 
+        public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map) : this(actor,
+            context, targetNode, map, 1000)
+        {
+        }
+
+        public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map, int cost) :
+            base(actor, context)
+        {
+            TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
+            _map = map ?? throw new ArgumentNullException(nameof(map));
+            Cost = cost;
+            if (actor.Node == targetNode)
+            {
+                // Это может произойти, если источник команд выбрал целевую точку ту же, что и сам актёр
+                // в результате рандома.
+                IsComplete = true;
+
+                _path = new List<IGraphNode>(0);
+            }
+            else
+            {
+                _path = new List<IGraphNode>();
+
+                CreatePath();
+
+                if (!_path.Any())
+                {
+                    IsComplete = true;
+                }
+            }
+        }
+
         public IGraphNode TargetNode { get; }
+
+        public override int Cost { get; }
 
         public override void Execute()
         {
@@ -104,44 +133,12 @@ namespace Zilon.Core.Tactics.Behaviour
             return _map.IsPositionAvailableFor(nextNode, Actor);
         }
 
-        public override int Cost => _cost;
-
-        public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map) : this(actor, context, targetNode, map, 1000)
-        {
-        }
-
-        public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map, int cost) : base(actor, context)
-        {
-            TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
-            _map = map ?? throw new ArgumentNullException(nameof(map));
-            _cost = cost;
-            if (actor.Node == targetNode)
-            {
-                // Это может произойти, если источник команд выбрал целевую точку ту же, что и сам актёр
-                // в результате рандома.
-                IsComplete = true;
-
-                _path = new List<IGraphNode>(0);
-            }
-            else
-            {
-                _path = new List<IGraphNode>();
-
-                CreatePath();
-
-                if (!_path.Any())
-                {
-                    IsComplete = true;
-                }
-            }
-        }
-
         private void CreatePath()
         {
-            var context = new ActorPathFindingContext(Actor, _map, TargetNode);
+            ActorPathFindingContext context = new ActorPathFindingContext(Actor, _map, TargetNode);
 
-            var startNode = Actor.Node;
-            var finishNode = TargetNode;
+            IGraphNode startNode = Actor.Node;
+            IGraphNode finishNode = TargetNode;
 
             _path.Clear();
 

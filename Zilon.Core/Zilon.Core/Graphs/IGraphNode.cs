@@ -1,7 +1,7 @@
 ﻿namespace Zilon.Core.Graphs
 {
     /// <summary>
-    /// Интерфейс узла графа.
+    ///     Интерфейс узла графа.
     /// </summary>
     public interface IGraphNode
     {

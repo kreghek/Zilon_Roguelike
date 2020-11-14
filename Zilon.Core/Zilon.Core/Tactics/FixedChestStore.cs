@@ -3,7 +3,7 @@
 namespace Zilon.Core.Tactics
 {
     /// <summary>
-    /// Хранилище для сундуков.
+    ///     Хранилище для сундуков.
     /// </summary>
     public sealed class FixedChestStore : PropStoreBase
     {

@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Moq;
-
-using NUnit.Framework;
-
+﻿using System;
+using System.Collections.Generic;
 using Zilon.Core.Diseases;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -22,15 +18,17 @@ namespace Zilon.Core.Tests.PersonModules
         {
             if (symptoms is null)
             {
-                throw new System.ArgumentNullException(nameof(symptoms));
+                throw new ArgumentNullException(nameof(symptoms));
             }
 
             // ARRANGE
-            var effectList = new List<IPersonEffect>();
+            List<IPersonEffect> effectList = new List<IPersonEffect>();
 
             var effectCollectionMock = new Mock<IEffectsModule>();
-            effectCollectionMock.Setup(x => x.Add(It.IsAny<IPersonEffect>())).Callback<IPersonEffect>(x => effectList.Add(x));
-            effectCollectionMock.Setup(x => x.Remove(It.IsAny<IPersonEffect>())).Callback<IPersonEffect>(x => effectList.Remove(x));
+            effectCollectionMock.Setup(x => x.Add(It.IsAny<IPersonEffect>()))
+                .Callback<IPersonEffect>(x => effectList.Add(x));
+            effectCollectionMock.Setup(x => x.Remove(It.IsAny<IPersonEffect>()))
+                .Callback<IPersonEffect>(x => effectList.Remove(x));
             effectCollectionMock.SetupGet(x => x.Items).Returns(effectList);
             var effectCollection = effectCollectionMock.Object;
 
@@ -41,21 +39,23 @@ namespace Zilon.Core.Tests.PersonModules
                 .Returns(0.001f);
             var disease = diseaseMock.Object;
 
-            var diseaseData = new DiseaseModule();
+            DiseaseModule diseaseData = new DiseaseModule();
 
             diseaseData.Infect(disease);
 
             // ACT
 
-            for (var i = 0; i < 1000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 diseaseData.Update(effectCollection);
             }
 
             // ARRANGE
-            var exceptedTimes = symptoms.Length;
-            effectCollectionMock.Verify(x => x.Add(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))), Times.Exactly(exceptedTimes));
-            effectCollectionMock.Verify(x => x.Remove(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))), Times.Exactly(exceptedTimes));
+            int exceptedTimes = symptoms.Length;
+            effectCollectionMock.Verify(x => x.Add(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))),
+                Times.Exactly(exceptedTimes));
+            effectCollectionMock.Verify(x => x.Remove(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))),
+                Times.Exactly(exceptedTimes));
         }
 
         private static bool IsDeaseSymptom(IPersonEffect x)

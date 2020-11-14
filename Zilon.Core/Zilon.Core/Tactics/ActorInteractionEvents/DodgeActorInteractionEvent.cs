@@ -4,7 +4,8 @@ namespace Zilon.Core.Tactics.ActorInteractionEvents
 {
     public class DodgeActorInteractionEvent : ActorInteractionEventBase
     {
-        public DodgeActorInteractionEvent(IActor actor, IActor targetActor, PersonDefenceItem personDefenceItem) : base(actor)
+        public DodgeActorInteractionEvent(IActor actor, IActor targetActor, PersonDefenceItem personDefenceItem) :
+            base(actor)
         {
             TargetActor = targetActor ?? throw new System.ArgumentNullException(nameof(targetActor));
             PersonDefenceItem = personDefenceItem ?? throw new System.ArgumentNullException(nameof(personDefenceItem));

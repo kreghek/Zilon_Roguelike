@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
-    /// Generate map using cellular automaton algorithm.
+    ///     Generate map using cellular automaton algorithm.
     /// </summary>
-    class CellularAutomatonGenerator
+    internal class CellularAutomatonGenerator
     {
         private const int DEATH_LIMIT = 4;
         private const int BIRTH_LIMIT = 6;
@@ -54,7 +51,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         }
 
         /// <summary>
-        /// Simulate live during <see cref="totalIterations"/>.
+        ///     Simulate live during <see cref="totalIterations" />.
         /// </summary>
         private static Matrix<bool> SimulateCellularAutomaton(Matrix<bool> matrix, int totalIterations)
         {
@@ -96,15 +93,15 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         {
             var aliveCount = 0;
 
-            var cubeCoords = HexHelper.ConvertToCube(x, y);
-            var offsetsImplicit = HexHelper.GetOffsetClockwise();
-            var offsetsDiagonal = HexHelper.GetDiagonalOffsetClockwise();
+            CubeCoords cubeCoords = HexHelper.ConvertToCube(x, y);
+            CubeCoords[] offsetsImplicit = HexHelper.GetOffsetClockwise();
+            CubeCoords[] offsetsDiagonal = HexHelper.GetDiagonalOffsetClockwise();
             var offsets = offsetsImplicit.Union(offsetsDiagonal);
             foreach (var offset in offsets)
             {
-                var neighbour = cubeCoords + offset;
+                CubeCoords neighbour = cubeCoords + offset;
 
-                var offsetCoords = HexHelper.ConvertToOffset(neighbour);
+                OffsetCoords offsetCoords = HexHelper.ConvertToOffset(neighbour);
 
                 var nX = offsetCoords.X;
                 var nY = offsetCoords.Y;

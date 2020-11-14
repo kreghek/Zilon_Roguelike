@@ -1,20 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MassSectorGenerator.SectorValidators
 {
     /// <summary>
-    /// Валидатор проходимости карты сектора.
+    ///     Валидатор проходимости карты сектора.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
         "CA1812:Avoid uninstantiated internal classes",
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
-    class PassMapValidator : ISectorValidator
+    internal class PassMapValidator : ISectorValidator
     {
         public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {
@@ -26,7 +22,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
 
             return Task.Run(() =>
             {
-                var staticObjectManager = sector.StaticObjectManager;
+                IStaticObjectManager staticObjectManager = sector.StaticObjectManager;
                 var containerNodes = staticObjectManager.Items.Select(x => x.Node);
 
                 var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>().ToArray();

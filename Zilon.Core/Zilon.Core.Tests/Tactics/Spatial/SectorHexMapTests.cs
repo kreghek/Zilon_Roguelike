@@ -1,9 +1,4 @@
-﻿using FluentAssertions;
-
-using NUnit.Framework;
-
-using Zilon.Core.MapGenerators;
-using Zilon.Core.Tests.Common;
+﻿using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics.Spatial.Tests
 {
@@ -12,50 +7,50 @@ namespace Zilon.Core.Tactics.Spatial.Tests
     public class SectorHexMapTests
     {
         /// <summary>
-        /// Тест проверяет, что на пустой карте целевой узел находится на линии видимости.
+        ///     Тест проверяет, что на пустой карте целевой узел находится на линии видимости.
         /// </summary>
         [Test]
         public void TargetIsOnLine_EmptyMap_HasLine()
         {
             // ARRANGE
-            var map = new SectorHexMap();
+            SectorHexMap map = new SectorHexMap();
             MapFiller.FillSquareMap(map, 3);
 
             var startMap = map.HexNodes.SelectBy(0, 0);
             var targetMap = map.HexNodes.SelectBy(2, 1);
 
             // ACT
-            var fact = map.TargetIsOnLine(startMap, targetMap);
+            bool fact = map.TargetIsOnLine(startMap, targetMap);
 
             // ASSERT
             fact.Should().BeTrue();
         }
 
         /// <summary>
-        /// Тест проверяет, что на карте с узлами, не выстроенными в одну цепочку,
-        /// видимости не будет.
+        ///     Тест проверяет, что на карте с узлами, не выстроенными в одну цепочку,
+        ///     видимости не будет.
         /// </summary>
         /// <remarks>
-        /// Эмулируем разные комнаты.
+        ///     Эмулируем разные комнаты.
         /// </remarks>
         [Test]
         public void TargetIsOnLine_MapWithGap_HasLine()
         {
             // ARRANGE
-            var map = new SectorHexMap();
+            SectorHexMap map = new SectorHexMap();
             MapFiller.FillSquareMap(map,
-                mapSize: 2);
+                2);
 
             MapFiller.FillSquareMap(map,
-                startX: 3,
-                startY: 0,
-                mapSize: 2);
+                3,
+                0,
+                2);
 
             var startMap = map.HexNodes.SelectBy(0, 0);
             var targetMap = map.HexNodes.SelectBy(4, 0);
 
             // ACT
-            var fact = map.TargetIsOnLine(startMap, targetMap);
+            bool fact = map.TargetIsOnLine(startMap, targetMap);
 
             // ASSERT
             fact.Should().BeFalse();

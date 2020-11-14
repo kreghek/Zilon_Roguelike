@@ -1,18 +1,11 @@
 ﻿using System.Linq;
-
-using FluentAssertions;
-
-using JetBrains.Annotations;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using TechTalk.SpecFlow;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Specs.Contexts;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Specs.Steps
@@ -29,9 +22,9 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"В инвентаре у актёра игрока есть предмет: (.*)")]
         public void GivenВИнвентареУАктёраИгрокаЕстьПредметPropSid(string propSid)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
-            var equipment = Context.CreateEquipment(propSid);
+            Equipment equipment = Context.CreateEquipment(propSid);
 
             actor.Person.GetModule<IInventoryModule>().Add(equipment);
         }
@@ -45,9 +38,9 @@ namespace Zilon.Core.Specs.Steps
                 return;
             }
 
-            var equipment = Context.CreateEquipment(propSid);
+            Equipment equipment = Context.CreateEquipment(propSid);
 
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
             actor.Person.GetModule<IEquipmentModule>()[slotIndex] = equipment;
         }
 
@@ -60,14 +53,12 @@ namespace Zilon.Core.Specs.Steps
 
             equipCommand.SlotIndex = slotIndex;
 
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            IProp targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
+                .First(x => x.Scheme.Sid == propSid);
 
-            var targetEquipmentVeiwModel = new TestPropItemViewModel
-            {
-                Prop = targetEquipment
-            };
+            TestPropItemViewModel targetEquipmentVeiwModel = new TestPropItemViewModel {Prop = targetEquipment};
 
             inventoryState.SelectedProp = targetEquipmentVeiwModel;
 
@@ -90,7 +81,7 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"В слоте Index: (\d+) актёра игрока есть (.+)")]
         public void ThenВСлотеIndexSlotIndexАктёраИгрокаЕстьPropSid(int slotIndex, string propSid)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
             actor.Person.GetModule<IEquipmentModule>()[slotIndex].Scheme.Sid.Should().Be(propSid);
         }
@@ -98,7 +89,7 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"В слоте Index: (\d+) актёра игрока ничего нет")]
         public void ThenВСлотеIndexSlotIndexАктёраИгрокаЕстьPropSid(int slotIndex)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
             actor.Person.GetModule<IEquipmentModule>()[slotIndex].Should().BeNull();
         }
@@ -111,14 +102,12 @@ namespace Zilon.Core.Specs.Steps
 
             equipCommand.SlotIndex = slotIndex;
 
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            IProp targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
+                .First(x => x.Scheme.Sid == propSid);
 
-            var targetEquipmentVeiwModel = new TestPropItemViewModel
-            {
-                Prop = targetEquipment
-            };
+            TestPropItemViewModel targetEquipmentVeiwModel = new TestPropItemViewModel {Prop = targetEquipment};
 
             inventoryState.SelectedProp = targetEquipmentVeiwModel;
 
@@ -128,15 +117,16 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Текущий запас здоровья персонажа игрока равен (\d+)")]
         public void ThenЗдоровьеПерсонажаИгрокаРавно(int expectedHp)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
-            actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(expectedHp);
+            actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value
+                .Should().Be(expectedHp);
         }
 
         [Then(@"Максимальный запас здоровья персонажа игрока равен (\d+)")]
         public void ThenМаксимальноеЗдоровьеПерсонажаИгрокаРавно(int expectedMaxHp)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
             actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health)
                 .Range.Max

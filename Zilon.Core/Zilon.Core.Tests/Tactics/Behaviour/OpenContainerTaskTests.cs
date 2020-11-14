@@ -1,15 +1,9 @@
 ﻿using System.Threading.Tasks;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
@@ -18,8 +12,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     public class OpenContainerTaskTests
     {
         /// <summary>
-        /// Тест проверяет, что при расстоянии до контейнера в 1 клетку задача вызывает метод актёра
-        /// на открытие контейнера.
+        ///     Тест проверяет, что при расстоянии до контейнера в 1 клетку задача вызывает метод актёра
+        ///     на открытие контейнера.
         /// </summary>
         [Test]
         public async Task Execute_ValidLength_ActorOpenedContainerAsync()
@@ -35,9 +29,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var containerNode = map.Nodes.SelectByHexCoords(1, 0);
 
-            var container = CreateContainer(containerNode);
+            IStaticObject container = CreateContainer(containerNode);
 
-            var method = CreateMethod();
+            IOpenContainerMethod method = CreateMethod();
 
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);
@@ -47,7 +41,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             contextMock.SetupGet(x => x.Sector).Returns(sector);
             var context = contextMock.Object;
 
-            var task = new OpenContainerTask(actor, context, container, method);
+            OpenContainerTask task = new OpenContainerTask(actor, context, container, method);
 
             // ACT
             task.Execute();
@@ -57,7 +51,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         }
 
         /// <summary>
-        /// Тест проверяет, что задача выполняет проверку доступности сундука.
+        ///     Тест проверяет, что задача выполняет проверку доступности сундука.
         /// </summary>
         [Test]
         public void Execute_CheckWalls_MapTargetIsOnLineInvoked()
@@ -78,9 +72,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var containerNodeMock = new Mock<IGraphNode>();
             var containerNode = containerNodeMock.Object;
 
-            var container = CreateContainer(containerNode);
+            IStaticObject container = CreateContainer(containerNode);
 
-            var method = CreateMethod();
+            IOpenContainerMethod method = CreateMethod();
 
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map).Returns(map);
@@ -90,7 +84,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             contextMock.SetupGet(x => x.Sector).Returns(sector);
             var context = contextMock.Object;
 
-            var task = new OpenContainerTask(actor, context, container, method);
+            OpenContainerTask task = new OpenContainerTask(actor, context, container, method);
 
             // ACT
             task.Execute();
@@ -99,7 +93,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             mapMock.Verify(x => x.TargetIsOnLine(
                 It.Is<IGraphNode>(n => n == actorNode),
                 It.Is<IGraphNode>(n => n == containerNode))
-                );
+            );
         }
 
         private IOpenContainerMethod CreateMethod()
