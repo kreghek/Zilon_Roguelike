@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core
 {
     public struct CubeCoords : IEquatable<CubeCoords>
     {

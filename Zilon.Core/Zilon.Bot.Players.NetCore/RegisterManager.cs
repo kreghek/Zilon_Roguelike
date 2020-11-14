@@ -1,4 +1,11 @@
-﻿using Zilon.Bot.Players.Strategies;
+﻿using System;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
+using Zilon.Bot.Players.Strategies;
+using Zilon.Bot.Sdk;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.NetCore
 {

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System;
+
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics.Behaviour

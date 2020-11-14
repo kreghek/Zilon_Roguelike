@@ -1,4 +1,11 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
@@ -18,7 +25,7 @@ namespace Zilon.Core.MapGenerators
         public static IGraphNode FindNonBlockedNode(
             [NotNull] IGraphNode node,
             [NotNull] IMap map,
-            [NotNull] [ItemNotNull] IEnumerable<IGraphNode> availableNodes)
+            [NotNull][ItemNotNull] IEnumerable<IGraphNode> availableNodes)
         {
             var availableNodesArray = availableNodes as IGraphNode[] ?? availableNodes.ToArray();
             CheckArguments(node, map, availableNodesArray);
@@ -38,8 +45,8 @@ namespace Zilon.Core.MapGenerators
 
                 var neighborsArray = neighbors as IGraphNode[] ?? neighbors.ToArray();
                 var corridorNodes = from neighbor in neighborsArray
-                    where !availableNodesArray.Contains(neighbor)
-                    select neighbor;
+                                    where !availableNodesArray.Contains(neighbor)
+                                    select neighbor;
 
                 if (!corridorNodes.Any())
                 {

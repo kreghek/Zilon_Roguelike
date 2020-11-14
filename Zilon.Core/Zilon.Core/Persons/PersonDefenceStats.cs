@@ -1,10 +1,14 @@
-﻿namespace Zilon.Core.Persons
+﻿using System;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core.Persons
 {
     public class PersonDefenceStats : IPersonDefenceStats
     {
         public PersonDefenceStats(
-            [NotNull] [ItemNotNull] PersonDefenceItem[] defences,
-            [NotNull] [ItemNotNull] PersonArmorItem[] armors)
+            [NotNull][ItemNotNull] PersonDefenceItem[] defences,
+            [NotNull][ItemNotNull] PersonArmorItem[] armors)
         {
             Defences = defences ?? throw new ArgumentNullException(nameof(defences));
             Armors = armors ?? throw new ArgumentNullException(nameof(armors));

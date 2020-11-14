@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Tactics
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Zilon.Core.Tactics
 {
     /// <summary>
     /// Базовая реализация менеджера сущностей сектора.

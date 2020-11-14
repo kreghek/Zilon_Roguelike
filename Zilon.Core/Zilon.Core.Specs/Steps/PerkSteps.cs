@@ -1,5 +1,11 @@
 ﻿using System.Linq;
 
+using FluentAssertions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using TechTalk.SpecFlow;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;

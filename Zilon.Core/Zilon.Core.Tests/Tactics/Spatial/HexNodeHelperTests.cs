@@ -1,6 +1,11 @@
 ﻿using System.Collections.Generic;
 
+using FluentAssertions;
+
+using NUnit.Framework;
+
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Spatial
 {

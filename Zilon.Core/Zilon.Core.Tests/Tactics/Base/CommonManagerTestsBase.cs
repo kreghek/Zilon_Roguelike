@@ -1,6 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Tests.Tactics.Base

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.StaticObjectModules

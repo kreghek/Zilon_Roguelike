@@ -1,4 +1,9 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+using System.Collections.Generic;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
     /// Вспомогательный класс для работы с кубическими координатами.

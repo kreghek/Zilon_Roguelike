@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+
+using Zilon.Core.Common;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
 

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Common
+﻿using System.Linq;
+
+namespace Zilon.Core.Common
 {
     public static class HexHelper
     {

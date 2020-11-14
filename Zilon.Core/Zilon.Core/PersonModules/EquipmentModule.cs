@@ -1,4 +1,9 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+using System.Collections.Generic;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -6,7 +11,7 @@ namespace Zilon.Core.PersonModules
 {
     public class EquipmentModule : EquipmentModuleBase
     {
-        public EquipmentModule([NotNull] [ItemNotNull] IEnumerable<PersonSlotSubScheme> slots) : base(slots)
+        public EquipmentModule([NotNull][ItemNotNull] IEnumerable<PersonSlotSubScheme> slots) : base(slots)
         {
         }
 

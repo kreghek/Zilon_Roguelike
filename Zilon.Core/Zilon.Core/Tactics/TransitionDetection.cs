@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Graphs;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using System.Threading.Tasks;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     public interface IHumanActorTaskSource<TContext> : IActorTaskSource<TContext>
         where TContext : ISectorTaskSourceContext

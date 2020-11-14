@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Common;
+﻿using NUnit.Framework;
+
+using Zilon.Core.Common;
 
 namespace Zilon.Core.Tests.Common
 {

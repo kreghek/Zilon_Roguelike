@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Graphs;
+﻿using System.Linq;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;

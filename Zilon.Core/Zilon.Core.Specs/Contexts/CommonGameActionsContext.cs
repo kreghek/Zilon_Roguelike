@@ -1,5 +1,9 @@
 ﻿using System.Linq;
 
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;

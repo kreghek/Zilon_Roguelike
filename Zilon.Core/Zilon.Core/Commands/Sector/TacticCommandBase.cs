@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Commands
+﻿using System;
+
+namespace Zilon.Core.Commands
 {
     /// <summary>
     /// Базовая команда для команд, связанных с изменением тактической обстановки в бою.

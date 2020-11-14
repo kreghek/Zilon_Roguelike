@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using JetBrains.Annotations;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Интерфейс для указания намерений игрока.

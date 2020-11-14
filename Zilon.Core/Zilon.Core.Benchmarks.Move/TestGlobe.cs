@@ -1,4 +1,9 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -26,7 +31,8 @@ namespace Zilon.Core.Benchmarks.Move
                 MapGeneratorOptions =
                     new TestSectorRoomMapFactoryOptionsSubScheme
                     {
-                        RegionCount = 20, RegionSize = 20
+                        RegionCount = 20,
+                        RegionSize = 20
                     },
                 IsStart = true,
                 ChestDropTableSids = new[]

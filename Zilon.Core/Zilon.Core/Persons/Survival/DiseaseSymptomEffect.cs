@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Components;
+﻿using System;
+using System.Collections.Generic;
+
+using Zilon.Core.Components;
 using Zilon.Core.Diseases;
 
 namespace Zilon.Core.Persons.Survival

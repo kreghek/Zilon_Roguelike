@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Common.Tests
+﻿using FluentAssertions;
+
+using NUnit.Framework;
+
+namespace Zilon.Core.Common.Tests
 {
     /// <summary>
     /// Тесты проверяют корректность работы заливки размером в 7.

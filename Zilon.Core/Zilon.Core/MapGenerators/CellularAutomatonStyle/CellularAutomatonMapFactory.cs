@@ -1,4 +1,10 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
@@ -159,8 +165,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 }
 
                 transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
-                    where map.Transitions.Keys.Contains(regionNode)
-                    select regionNode).ToArray();
+                                              where map.Transitions.Keys.Contains(regionNode)
+                                              select regionNode).ToArray();
             }
         }
 

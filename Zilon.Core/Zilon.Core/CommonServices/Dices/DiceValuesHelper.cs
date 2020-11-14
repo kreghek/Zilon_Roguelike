@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.CommonServices.Dices
+﻿using System;
+
+namespace Zilon.Core.CommonServices.Dices
 {
     internal static class DiceValuesHelper
     {

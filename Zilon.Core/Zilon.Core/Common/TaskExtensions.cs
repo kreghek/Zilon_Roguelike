@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+using System.Threading.Tasks;
+
+namespace Zilon.Core.Common
 {
     public static class TaskExtensions
     {

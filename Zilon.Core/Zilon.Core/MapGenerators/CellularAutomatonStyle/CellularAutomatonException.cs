@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
+﻿using System;
+
+namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
     ///  Контроллируемое исключение, выбрасываемое при работе с клеточным автоматом.

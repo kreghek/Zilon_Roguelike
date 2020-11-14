@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Commands
+﻿using System;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core.Commands
 {
     [PublicAPI]
     public interface ICommandManager

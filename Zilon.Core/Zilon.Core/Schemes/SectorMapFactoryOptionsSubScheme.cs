@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Schemes
+﻿using JsonSubTypes;
+
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     [JsonConverter(typeof(JsonSubtypes), nameof(MapGenerator))]
     [JsonSubtypes.KnownSubType(

@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.PersonModules;
 using Zilon.Core.StaticObjectModules;

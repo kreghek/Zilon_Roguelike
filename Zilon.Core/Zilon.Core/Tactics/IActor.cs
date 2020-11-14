@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;

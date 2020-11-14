@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics
+﻿using System;
+
+namespace Zilon.Core.Tactics
 {
     /// <summary>
     /// Обработчик действий, нацеленных на статический объект.

@@ -1,4 +1,7 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System.Globalization;
+
+using Zilon.Core.Common;
+using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.World.NameGeneration
 {

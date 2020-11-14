@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Props;
+﻿using System;
+using System.Linq;
+
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.StaticObjectModules

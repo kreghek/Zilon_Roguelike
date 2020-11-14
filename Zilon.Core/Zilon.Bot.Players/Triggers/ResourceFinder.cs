@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Components;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Components;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -19,7 +22,8 @@ namespace Zilon.Bot.Players.Triggers
                 {
                     yield return new ResourceSelection
                     {
-                        Resource = resource, Rule = rule
+                        Resource = resource,
+                        Rule = rule
                     };
                 }
             }

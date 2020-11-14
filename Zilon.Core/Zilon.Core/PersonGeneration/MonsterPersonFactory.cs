@@ -1,4 +1,7 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System;
+using System.Linq;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 

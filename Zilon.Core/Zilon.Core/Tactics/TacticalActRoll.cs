@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Persons;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
 {

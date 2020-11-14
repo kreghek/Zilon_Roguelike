@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Components
+﻿using JetBrains.Annotations;
+
+namespace Zilon.Core.Components
 {
     [PublicAPI]
     public enum RollEffectType

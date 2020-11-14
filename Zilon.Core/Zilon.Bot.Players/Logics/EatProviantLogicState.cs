@@ -1,4 +1,6 @@
-﻿using Zilon.Bot.Players.Triggers;
+﻿using System.Linq;
+
+using Zilon.Bot.Players.Triggers;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;

@@ -1,5 +1,9 @@
 ﻿using System.Linq;
 
+using FluentAssertions;
+
+using NUnit.Framework;
+
 using Zilon.Core.CommonServices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -27,9 +31,10 @@ namespace Zilon.Core.Tests.CommonServices
             var roll = 16;
 
             var recMods = records.Select(x => new DropTableModRecord
-                {
-                    Record = x, ModifiedWeight = x.Weight
-                })
+            {
+                Record = x,
+                ModifiedWeight = x.Weight
+            })
                 .ToArray();
 
             // ACT

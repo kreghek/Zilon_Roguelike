@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Localization;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Localization;
 
 namespace Zilon.Core.Schemes
 {

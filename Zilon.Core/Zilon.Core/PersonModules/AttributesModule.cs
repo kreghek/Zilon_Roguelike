@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.PersonModules
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Zilon.Core.PersonModules
 {
     /// <summary>
     /// Базовая реализация модуля атрибутов.

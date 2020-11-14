@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.CommonServices.Dices
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
     /// Игральная кость, работающая по экпонециальному закону.

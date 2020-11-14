@@ -1,4 +1,7 @@
-﻿using Zilon.Bot.Players.Logics;
+﻿using System;
+using System.Diagnostics;
+
+using Zilon.Bot.Players.Logics;
 using Zilon.Bot.Players.Triggers;
 
 namespace Zilon.Bot.Players.Strategies

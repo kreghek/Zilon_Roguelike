@@ -1,4 +1,6 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System.Linq;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;

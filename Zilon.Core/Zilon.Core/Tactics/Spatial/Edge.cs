@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
 {

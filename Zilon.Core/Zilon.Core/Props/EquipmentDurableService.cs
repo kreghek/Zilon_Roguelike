@@ -1,4 +1,6 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Props

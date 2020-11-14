@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Функиональное назначение инструментов.

@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Linq;
 
+using FluentAssertions;
+
+using NUnit.Framework;
+
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;

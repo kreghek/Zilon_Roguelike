@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.PersonModules
+﻿using System;
+
+namespace Zilon.Core.PersonModules
 {
     public class MovingModule : IMovingModule
     {

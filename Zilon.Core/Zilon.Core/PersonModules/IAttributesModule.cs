@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.PersonModules
+﻿using System.Collections.Generic;
+
+namespace Zilon.Core.PersonModules
 {
     /// <summary>
     /// Модуль для работы с атрибутами персонажа: сила, ловкость, интеллект.

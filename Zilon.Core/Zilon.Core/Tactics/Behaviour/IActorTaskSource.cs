@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using System.Threading.Tasks;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Источник задач для актёров (управление пользователя или AI).

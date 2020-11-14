@@ -1,4 +1,9 @@
-﻿namespace Zilon.Core.Commands
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+namespace Zilon.Core.Commands
 {
     public class QueueCommandManager : ICommandManager
     {

@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Components;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -191,8 +195,8 @@ namespace Zilon.Core.PersonModules
             foreach (var armorGroup in armorGroups)
             {
                 var orderedArmors = from armor in armorGroup
-                    orderby armor.AbsorbtionLevel, armor.ArmorRank
-                    select armor;
+                                    orderby armor.AbsorbtionLevel, armor.ArmorRank
+                                    select armor;
 
                 float? rankRaw = null;
                 PersonRuleLevel? armorLevel = null;

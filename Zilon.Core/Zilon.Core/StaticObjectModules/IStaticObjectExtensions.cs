@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.StaticObjectModules
 {

@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -116,7 +123,8 @@ namespace Zilon.Core.Tests.MapGenerators
                 },
                 MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
                 {
-                    RegionCount = 20, RegionSize = 20
+                    RegionCount = 20,
+                    RegionSize = 20
                 }
             };
         }

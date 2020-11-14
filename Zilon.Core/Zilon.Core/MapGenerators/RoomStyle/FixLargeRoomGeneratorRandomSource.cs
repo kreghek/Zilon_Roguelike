@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.MapGenerators.RoomStyle
+﻿using System;
+using System.Collections.Generic;
+
+namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public class FixLargeRoomGeneratorRandomSource : FixRoomGeneratorRandomSourceBase, IRoomGeneratorRandomSource
     {

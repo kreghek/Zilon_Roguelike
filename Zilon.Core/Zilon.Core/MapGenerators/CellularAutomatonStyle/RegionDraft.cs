@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
+﻿using System;
+using System.Collections.Generic;
+
+namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
     /// Черновик региона карты.

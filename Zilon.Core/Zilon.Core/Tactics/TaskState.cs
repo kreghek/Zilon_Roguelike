@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics.Behaviour;
+﻿using System;
+
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Tactics
 {

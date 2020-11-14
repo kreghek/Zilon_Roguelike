@@ -1,4 +1,9 @@
-﻿namespace Zilon.Core
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core
 {
     [ExcludeFromCodeCoverage]
     [Serializable]

@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Linq;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
 
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;

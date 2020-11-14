@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Common
+﻿using JetBrains.Annotations;
+
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
     /// Тип воздействия.

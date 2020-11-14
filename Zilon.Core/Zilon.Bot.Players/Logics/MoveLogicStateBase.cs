@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics.Behaviour;
+﻿using System;
+
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Bot.Players.Logics

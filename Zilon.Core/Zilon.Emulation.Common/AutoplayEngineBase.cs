@@ -1,4 +1,10 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System;
+using System.Threading.Tasks;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Bot.Sdk;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;

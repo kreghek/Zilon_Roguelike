@@ -1,4 +1,8 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -85,7 +89,8 @@ namespace Zilon.Bot.Players.Logics
 
             var attackParams = new AttackParams
             {
-                IsAvailable = isInDistance && targetIsOnLine, TacticalAct = act
+                IsAvailable = isInDistance && targetIsOnLine,
+                TacticalAct = act
             };
 
             return attackParams;

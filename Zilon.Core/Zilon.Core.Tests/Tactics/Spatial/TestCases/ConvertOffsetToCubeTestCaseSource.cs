@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 
+using NUnit.Framework;
+
 namespace Zilon.Core.Tests.Tactics.Spatial.TestCases
 {
     public static class ConvertOffsetToCubeTestCaseSource

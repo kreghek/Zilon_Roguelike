@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 
+using NUnit.Framework;
+
 using Zilon.Core.Diseases;
 
 namespace Zilon.Core.Tests.Persons.TestCases

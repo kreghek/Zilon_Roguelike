@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Persons;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.MapGenerators

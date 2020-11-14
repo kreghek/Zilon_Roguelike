@@ -1,4 +1,5 @@
-﻿using Zilon.Core.World;
+﻿using Zilon.Core.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {

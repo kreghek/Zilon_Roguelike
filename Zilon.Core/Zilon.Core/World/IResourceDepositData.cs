@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.World
+﻿using System.Collections.Generic;
+
+namespace Zilon.Core.World
 {
     public interface IResourceDepositData
     {

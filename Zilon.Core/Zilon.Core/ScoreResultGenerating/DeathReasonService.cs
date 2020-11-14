@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Localization;
+﻿using System;
+
+using Zilon.Core.Localization;
 using Zilon.Core.Persons;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;

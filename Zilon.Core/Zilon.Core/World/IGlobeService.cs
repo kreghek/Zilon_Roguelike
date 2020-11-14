@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.World
+﻿using System.Threading.Tasks;
+
+namespace Zilon.Core.World
 {
     public interface IGlobeService
     {

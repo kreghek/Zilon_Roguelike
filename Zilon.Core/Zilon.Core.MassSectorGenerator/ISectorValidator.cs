@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+using System.Threading.Tasks;
+
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MassSectorGenerator
 {

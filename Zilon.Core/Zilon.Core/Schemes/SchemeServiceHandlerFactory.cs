@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Schemes
 {
     public sealed class SchemeServiceHandlerFactory : ISchemeServiceHandlerFactory
     {

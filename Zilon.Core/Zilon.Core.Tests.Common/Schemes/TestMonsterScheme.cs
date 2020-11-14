@@ -1,7 +1,7 @@
-﻿using Zilon.Core.Schemes;
-
-namespace Zilon.Core.Tests.Common.Schemes
+﻿namespace Zilon.Core.Tests.Common.Schemes
 {
+    using Core.Schemes;
+
     public class TestMonsterScheme : SchemeBase, IMonsterScheme
     {
         public int BaseScore { get; set; }

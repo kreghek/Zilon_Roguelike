@@ -2,6 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.DependencyInjection;
+
+using NUnit.Framework;
+
+using Zilon.Bot.Sdk;
 using Zilon.Core.Localization;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;

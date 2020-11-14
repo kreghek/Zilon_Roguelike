@@ -1,5 +1,11 @@
 ﻿using System.Collections.Generic;
 
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -23,7 +29,10 @@ namespace Zilon.Core.Tests.Tactics
 
             var dropTableRecord = new TestDropTableRecordSubScheme
             {
-                SchemeSid = "test-prop", Weight = 1, MinCount = 1, MaxCount = 1
+                SchemeSid = "test-prop",
+                Weight = 1,
+                MinCount = 1,
+                MaxCount = 1
             };
 
             var dropTable = new TestDropTableScheme(1, dropTableRecord);
