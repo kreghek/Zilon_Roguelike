@@ -472,6 +472,15 @@ namespace Zilon.Core.PersonModules
                 case PersonRuleType.ThristResistance:
                     BonusToDownPass(SurvivalStatType.Hydration, rule.Level, rule.Direction, ref bonusList);
                     break;
+                case PersonRuleType.Undefined:
+                    // Look like error.
+                    throw new InvalidOperationException($"{PersonRuleType.Undefined} is not valid.");
+                case PersonRuleType.Melee:
+                case PersonRuleType.Ballistic:
+                case PersonRuleType.Damage:
+                case PersonRuleType.ToHit:
+                    // This perk rules not implemented yet.
+                    break;
             }
 
             return bonusList;
