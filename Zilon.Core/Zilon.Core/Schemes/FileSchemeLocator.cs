@@ -45,9 +45,7 @@ namespace Zilon.Core.Schemes
 
                 var schemeFile = new SchemeFile
                 {
-                    Sid = sid,
-                    Path = fileFolder,
-                    Content = serialized
+                    Sid = sid, Path = fileFolder, Content = serialized
                 };
 
                 result.Add(schemeFile);

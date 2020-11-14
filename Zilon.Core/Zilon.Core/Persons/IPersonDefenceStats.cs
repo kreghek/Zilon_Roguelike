@@ -25,6 +25,6 @@ namespace Zilon.Core.Persons
         /// Установка показаний брони для характеристик персонажа.
         /// </summary>
         /// <param name="armors"> Набор элементов брони. </param>
-        void SetArmors([NotNull][ItemNotNull] PersonArmorItem[] armors);
+        void SetArmors([NotNull] [ItemNotNull] PersonArmorItem[] armors);
     }
 }

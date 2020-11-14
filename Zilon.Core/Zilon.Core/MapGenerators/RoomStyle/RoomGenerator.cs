@@ -64,8 +64,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                 var room = new Room
                 {
-                    PositionX = rolledPosition.X,
-                    PositionY = rolledPosition.Y
+                    PositionX = rolledPosition.X, PositionY = rolledPosition.Y
                 };
 
                 roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
