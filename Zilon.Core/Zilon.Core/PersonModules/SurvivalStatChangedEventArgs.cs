@@ -1,14 +1,19 @@
-﻿using Zilon.Core.Persons.Survival;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.PersonModules
 {
     /// <summary>
-    ///     Аргументы события при изменения характеристики.
+    /// Аргументы события при изменения характеристики.
     /// </summary>
     public class SurvivalStatChangedEventArgs : EventArgs
     {
         /// <summary>
-        ///     Конструктор.
+        /// Конструктор.
         /// </summary>
         /// <param name="stat">Характеристика, которая была изменена.</param>
         [ExcludeFromCodeCoverage]
@@ -18,7 +23,7 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <summary>
-        ///     Характеристика, которая изменялась.
+        /// Характеристика, которая изменялась.
         /// </summary>
         public SurvivalStat Stat { get; }
     }

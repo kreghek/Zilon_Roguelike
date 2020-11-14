@@ -1,13 +1,17 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
-    ///     Вспомогательный класс для работы с заливкой
-    ///     в поле шестиугольников.
+    /// Вспомогательный класс для работы с заливкой
+    /// в поле шестиугольников.
     /// </summary>
     public static class HexBinaryFiller
     {
         /// <summary>
-        ///     Выполняет заливку области в поле шестиугольников.
+        /// Выполняет заливку области в поле шестиугольников.
         /// </summary>
         /// <param name="matrix"> Поле шестиугольников. Будут заливаться ячейки со сзначением <b>true</b>. </param>
         /// <param name="point"> Точка, с которой начинается заливка. Должна указывать на ячейку со значением <b>true</b>. </param>
@@ -23,7 +27,10 @@
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new HashSet<OffsetCoords> {point};
+            var openPoints = new HashSet<OffsetCoords>
+            {
+                point
+            };
 
             while (openPoints.Count > 0)
             {
@@ -49,14 +56,14 @@
                 regionPoints.Add(currentCell);
                 snapshotCellmap[currentCell.X, currentCell.Y] = false;
 
-                CubeCoords cubeCoords = HexHelper.ConvertToCube(currentCell);
-                CubeCoords[] clockwiseOffsets = HexHelper.GetOffsetClockwise();
+                var cubeCoords = HexHelper.ConvertToCube(currentCell);
+                var clockwiseOffsets = HexHelper.GetOffsetClockwise();
 
-                foreach (CubeCoords offset in clockwiseOffsets)
+                foreach (var offset in clockwiseOffsets)
                 {
-                    CubeCoords neighbourCubeCoords = cubeCoords + offset;
+                    var neighbourCubeCoords = cubeCoords + offset;
 
-                    OffsetCoords neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
+                    var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
 
                     if (!openPoints.Contains(neighbourCoords))
                     {
@@ -69,7 +76,7 @@
         }
 
         /// <summary>
-        ///     Выполняет заливку области в поле шестиугольников с учётом размера в 7 узлов.
+        /// Выполняет заливку области в поле шестиугольников с учётом размера в 7 узлов.
         /// </summary>
         /// <param name="matrix"> Поле шестиугольников. Будут заливаться ячейки со сзначением <b>true</b>. </param>
         /// <param name="point"> Точка, с которой начинается заливка. Должна указывать на ячейку со значением <b>true</b>. </param>
@@ -85,7 +92,10 @@
 
             var regionPoints = new List<OffsetCoords>();
 
-            var openPoints = new HashSet<OffsetCoords> {point};
+            var openPoints = new HashSet<OffsetCoords>
+            {
+                point
+            };
 
             while (openPoints.Count > 0)
             {
@@ -111,14 +121,14 @@
                 regionPoints.Add(currentCell);
                 snapshotCellmap[currentCell.X, currentCell.Y] = false;
 
-                CubeCoords cubeCoords = HexHelper.ConvertToCube(currentCell);
-                CubeCoords[] clockwiseOffsets = HexHelper.GetOffsetClockwise();
+                var cubeCoords = HexHelper.ConvertToCube(currentCell);
+                var clockwiseOffsets = HexHelper.GetOffsetClockwise();
 
-                foreach (CubeCoords offset in clockwiseOffsets)
+                foreach (var offset in clockwiseOffsets)
                 {
-                    CubeCoords neighbourCubeCoords = cubeCoords + offset;
+                    var neighbourCubeCoords = cubeCoords + offset;
 
-                    OffsetCoords neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
+                    var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
 
                     if (!openPoints.Contains(neighbourCoords))
                     {
@@ -141,8 +151,8 @@
                 return false;
             }
 
-            OffsetCoords[] neighbours = HexHelper.GetNeighbors(testCoords.X, testCoords.Y);
-            foreach (OffsetCoords neighbour in neighbours)
+            var neighbours = HexHelper.GetNeighbors(testCoords.X, testCoords.Y);
+            foreach (var neighbour in neighbours)
             {
                 if (neighbour.X >= matrix.Width || neighbour.Y >= matrix.Height)
                 {
@@ -160,12 +170,12 @@
 
         private static bool IsInBounds(OffsetCoords coords, int width, int height)
         {
-            if (!ValueInRange(coords.X, 0, width - 1))
+            if (!ValueInRange(value: coords.X, min: 0, max: width - 1))
             {
                 return false;
             }
 
-            if (!ValueInRange(coords.Y, 0, height - 1))
+            if (!ValueInRange(value: coords.Y, min: 0, max: height - 1))
             {
                 return false;
             }

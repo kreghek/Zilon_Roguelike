@@ -1,11 +1,13 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+using System.Collections.Generic;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
-using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.Spatial
 {
     /// <summary>
-    ///     Базовая реализация контекста поиска пути.
+    /// Базовая реализация контекста поиска пути.
     /// </summary>
     public class ActorPathFindingContext : IAstarContext
     {
@@ -33,7 +35,7 @@ namespace Zilon.Core.Tactics.Spatial
         }
 
         /// <summary>
-        ///     Возвращает доступные соседние узлы карты с учётом обхода соседей по часовой стрелке.
+        /// Возвращает доступные соседние узлы карты с учётом обхода соседей по часовой стрелке.
         /// </summary>
         /// <param name="current"> Текущий узел. </param>
         /// <param name="map"> Карта, на которой проводится проверка. </param>
@@ -56,18 +58,19 @@ namespace Zilon.Core.Tactics.Spatial
 
         private bool IsNodeAvailableForActor(IMap map, IGraphNode testedNeighbor)
         {
-            PhysicalSize actorSize = Actor.Person.PhysicalSize;
-            if (actorSize == PhysicalSize.Size1)
+            var actorSize = Actor.Person.PhysicalSize;
+            if (actorSize == Persons.PhysicalSize.Size1)
             {
                 return IsNodeAvailableForSmallActor(map, testedNeighbor);
             }
-
-            if (actorSize == PhysicalSize.Size7)
+            else if (actorSize == Persons.PhysicalSize.Size7)
             {
                 return IsNodeAvailableForNormalActor(map, testedNeighbor);
             }
-
-            throw new InvalidOperationException($"Размер {actorSize} не обрабатывается.");
+            else
+            {
+                throw new InvalidOperationException($"Размер {actorSize} не обрабатывается.");
+            }
         }
 
         private bool IsNodeAvailableForSmallActor(IMap map, IGraphNode testedNeighbor)

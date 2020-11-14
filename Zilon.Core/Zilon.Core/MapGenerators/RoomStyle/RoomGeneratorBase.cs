@@ -1,15 +1,18 @@
-﻿using Zilon.Core.Common;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
     /// <summary>
-    ///     Базовый генератор карты с комнатами.
+    /// Базовый генератор карты с комнатами.
     /// </summary>
     public abstract class RoomGeneratorBase : IRoomGenerator
     {
         /// <summary>
-        ///     Соединяет комнаты коридорами.
+        /// Соединяет комнаты коридорами.
         /// </summary>
         /// <param name="map">Карта, в рамках которой происходит генерация.</param>
         /// <param name="rooms">Существующие комнаты.</param>
@@ -17,7 +20,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public abstract void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash);
 
         /// <summary>
-        ///     Создаёт узлы комнат на карте.
+        /// Создаёт узлы комнат на карте.
         /// </summary>
         /// <param name="map">Карта, в рамках которой происходит генерация.</param>
         /// <param name="rooms">Комнаты, для которых создаются узлы графа карты.</param>
@@ -25,20 +28,19 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public abstract void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash);
 
         /// <summary>
-        ///     Генерация комнат.
+        /// Генерация комнат.
         /// </summary>
         /// <param name="roomCount">Количество комнат, которые будут сгенерированы.</param>
         /// <param name="roomMinSize">Минимальный размер комнаты.</param>
         /// <param name="roomMaxSize">Максимальный размер комнаты.</param>
         /// <param name="availableTransitions"> Информация о переходах из данного сектора. </param>
         /// <returns>
-        ///     Возвращает набор созданных комнат.
+        /// Возвращает набор созданных комнат.
         /// </returns>
-        public abstract IEnumerable<Room> GenerateRoomsInGrid(int roomCount, int roomMinSize, int roomMaxSize,
-            IEnumerable<RoomTransition> availableTransitions);
+        public abstract IEnumerable<Room> GenerateRoomsInGrid(int roomCount, int roomMinSize, int roomMaxSize, IEnumerable<RoomTransition> availableTransitions);
 
         /// <summary>
-        ///     Соединяет две комнаты коридором.
+        /// Соединяет две комнаты коридором.
         /// </summary>
         /// <param name="map"> Карта, над которой идёт работа. </param>
         /// <param name="room"> Комната, которую соединяем. </param>
@@ -56,14 +58,14 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 throw new System.ArgumentNullException(nameof(selectedRoom));
             }
 
-            HexNode currentNode = GetRoomCenterNode(room);
-            HexNode targetNode = GetRoomCenterNode(selectedRoom);
+            var currentNode = GetRoomCenterNode(room);
+            var targetNode = GetRoomCenterNode(selectedRoom);
 
-            CubeCoords[] points = CubeCoordsHelper.CubeDrawLine(currentNode.CubeCoords, targetNode.CubeCoords);
+            var points = CubeCoordsHelper.CubeDrawLine(currentNode.CubeCoords, targetNode.CubeCoords);
 
-            foreach (CubeCoords point in points)
+            foreach (var point in points)
             {
-                OffsetCoords offsetCoords = HexHelper.ConvertToOffset(point);
+                var offsetCoords = HexHelper.ConvertToOffset(point);
 
                 // Это происходит, потому что если при нулевом Х для обеих комнат
                 // попытаться отрисовать линию коридора, то она будет змейкой заходить за 0.
@@ -71,8 +73,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 offsetCoords = new OffsetCoords(offsetCoords.X < 0 ? 0 : offsetCoords.X,
                     offsetCoords.Y < 0 ? 0 : offsetCoords.Y);
 
-                HexNode node =
-                    RoomHelper.CreateCorridorNode(map, edgeHash, currentNode, offsetCoords.X, offsetCoords.Y);
+                var node = RoomHelper.CreateCorridorNode(map, edgeHash, currentNode, offsetCoords.X, offsetCoords.Y);
                 currentNode = node;
             }
         }

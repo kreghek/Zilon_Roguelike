@@ -1,4 +1,9 @@
-﻿using System;
+﻿using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -10,29 +15,32 @@ using Zilon.Core.Tests.Common.Schemes;
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
     /// <summary>
-    ///     Тесты на команду экипировки предмета в указанный слот.
+    /// Тесты на команду экипировки предмета в указанный слот.
     /// </summary>
     /// <remarks>
-    ///     Предмет может быть экипирован из инвентаря (и) или из другого слота (с).
-    ///     Предмет может быть экипирован в пустой слот (0) и слот, в котором уже есть другой предмет (1).
-    ///     (и)                                           (с)
-    ///     (0) изымаем предмет из инвентаря                 меняем предметы в слотах местами
-    ///     (1) изымаем из инвентаря, а текущий в инвентярь  меняем предметы в слотах местами
+    ///Предмет может быть экипирован из инвентаря (и) или из другого слота (с).
+    /// Предмет может быть экипирован в пустой слот (0) и слот, в котором уже есть другой предмет (1).
+    ///       (и)                                           (с)
+    /// (0) изымаем предмет из инвентаря                 меняем предметы в слотах местами
+    /// (1) изымаем из инвентаря, а текущий в инвентярь  меняем предметы в слотах местами
     /// </remarks>
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
     public class EquipTaskTests
     {
         /// <summary>
-        ///     Тест проверяет, что предмет успешно экипируется в пустой подходящий слой (и0).
+        /// Тест проверяет, что предмет успешно экипируется в пустой подходящий слой (и0).
         /// </summary>
         [Test]
         public void EquipTask_EmptySlotAndFromInventory_PropEquipedInSlot()
         {
             // ARRANGE
             const int testedSlotIndex = 0;
-            TestPropScheme propScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
-            Equipment testedEquipmentProp = new Equipment(propScheme, Array.Empty<ITacticalActScheme>());
+            var propScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme()
+            };
+            var testedEquipmentProp = new Equipment(propScheme, System.Array.Empty<ITacticalActScheme>());
 
             var actorMock = new Mock<IActor>();
             var actor = actorMock.Object;
@@ -54,29 +62,31 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var contextMock = new Mock<IActorTaskContext>();
             var context = contextMock.Object;
 
-            EquipTask task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
+            var task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
 
             // ACT
             task.Execute();
 
             // ASSERT
             equipmentModule[0].Should().BeSameAs(testedEquipmentProp);
-            inventoryMock.Verify(x => x.Remove(It.Is<IProp>(equipment => equipment == testedEquipmentProp)),
-                Times.Once);
+            inventoryMock.Verify(x => x.Remove(It.Is<IProp>(equipment => equipment == testedEquipmentProp)), Times.Once);
             inventoryMock.Verify(x => x.Add(It.IsAny<IProp>()), Times.Never);
         }
 
         /// <summary>
-        ///     Тест проверяет, что предмет успешно экипируется в пустой подходящий слой (и1).
+        /// Тест проверяет, что предмет успешно экипируется в пустой подходящий слой (и1).
         /// </summary>
         [Test]
         public void EquipTask_EquipedSlotAndFromInventory_PropEquipedInSlot()
         {
             // ARRANGE
             const int testedSlotIndex = 0;
-            TestPropScheme propScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
-            Equipment testedEquipmentProp = new Equipment(propScheme, Array.Empty<ITacticalActScheme>());
-            Equipment equipedEquipmentProp = new Equipment(propScheme, Array.Empty<ITacticalActScheme>());
+            var propScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme()
+            };
+            var testedEquipmentProp = new Equipment(propScheme, System.Array.Empty<ITacticalActScheme>());
+            var equipedEquipmentProp = new Equipment(propScheme, System.Array.Empty<ITacticalActScheme>());
 
             var actorMock = new Mock<IActor>();
             var actor = actorMock.Object;
@@ -85,8 +95,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            Equipment[] initEquipments = {equipedEquipmentProp};
-            var equipmentCarrierMock = new Mock<EquipmentModuleBase>(new object[] {initEquipments})
+            var initEquipments = new Equipment[] { equipedEquipmentProp };
+            var equipmentCarrierMock = new Mock<EquipmentModuleBase>(new object[] { initEquipments })
                 .As<IEquipmentModule>();
             equipmentCarrierMock.CallBase = true;
             var equipmentModule = equipmentCarrierMock.Object;
@@ -99,28 +109,30 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var contextMock = new Mock<IActorTaskContext>();
             var context = contextMock.Object;
 
-            EquipTask task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
+            var task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
 
             // ACT
             task.Execute();
 
             // ASSERT
             equipmentModule[0].Should().BeSameAs(testedEquipmentProp);
-            inventoryMock.Verify(x => x.Remove(It.Is<IProp>(equipment => equipment == testedEquipmentProp)),
-                Times.Once);
+            inventoryMock.Verify(x => x.Remove(It.Is<IProp>(equipment => equipment == testedEquipmentProp)), Times.Once);
             inventoryMock.Verify(x => x.Add(It.Is<IProp>(equipment => equipment == equipedEquipmentProp)), Times.Once);
         }
 
         /// <summary>
-        ///     Тест проверяет, что предмет успешно экипируется в пустой подходящий слой (и1).
+        /// Тест проверяет, что предмет успешно экипируется в пустой подходящий слой (и1).
         /// </summary>
         [Test]
         public void EquipTask_EmptySlotAndFromSlot_PropEquipedInSlot()
         {
             // ARRANGE
             const int testedSlotIndex = 0;
-            TestPropScheme propScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
-            Equipment testedEquipmentProp = new Equipment(propScheme, Array.Empty<ITacticalActScheme>());
+            var propScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme()
+            };
+            var testedEquipmentProp = new Equipment(propScheme, System.Array.Empty<ITacticalActScheme>());
 
             var actorMock = new Mock<IActor>();
             var actor = actorMock.Object;
@@ -129,8 +141,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            Equipment[] equipmentsInit = {null, testedEquipmentProp};
-            var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[] {equipmentsInit})
+            var equipmentsInit = new Equipment[] { null, testedEquipmentProp };
+            var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[] { equipmentsInit })
                 .As<IEquipmentModule>();
             equipmentModuleMock.CallBase = true;
             var equipmentModule = equipmentModuleMock.Object;
@@ -143,7 +155,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var contextMock = new Mock<IActorTaskContext>();
             var context = contextMock.Object;
 
-            EquipTask task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
+            var task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
 
             // ACT
             task.Execute();
@@ -156,18 +168,19 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         }
 
         /// <summary>
-        ///     Тест проверяет, что предмет успешно экипируется в пустой подходящий слой (и1).
+        /// Тест проверяет, что предмет успешно экипируется в пустой подходящий слой (и1).
         /// </summary>
         [Test]
         public void EquipTask_EquipedSlotAndFromSlot_PropEquipedInSlot()
         {
             // ARRANGE
             const int testedSlotIndex = 0;
-            TestPropScheme propScheme = new TestPropScheme {Equip = new TestPropEquipSubScheme()};
-            Equipment testedEquipmentProp =
-                new Equipment(propScheme, Array.Empty<ITacticalActScheme>(), name: "tested");
-            Equipment equipedEquipmentProp =
-                new Equipment(propScheme, Array.Empty<ITacticalActScheme>(), name: "equiped");
+            var propScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme()
+            };
+            var testedEquipmentProp = new Equipment(propScheme, System.Array.Empty<ITacticalActScheme>(), name: "tested");
+            var equipedEquipmentProp = new Equipment(propScheme, System.Array.Empty<ITacticalActScheme>(), name: "equiped");
 
             var actorMock = new Mock<IActor>();
             var actor = actorMock.Object;
@@ -176,9 +189,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var person = personMock.Object;
             actorMock.SetupGet(x => x.Person).Returns(person);
 
-            Equipment[] equipmentsInit = {equipedEquipmentProp, testedEquipmentProp};
-            var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[] {equipmentsInit})
-                .As<IEquipmentModule>();
+            var equipmentsInit = new Equipment[] { equipedEquipmentProp, testedEquipmentProp };
+            var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[] { equipmentsInit })
+               .As<IEquipmentModule>();
             equipmentModuleMock.CallBase = true;
             var equipmentModule = equipmentModuleMock.Object;
             personMock.Setup(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentModule);
@@ -190,7 +203,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var contextMock = new Mock<IActorTaskContext>();
             var context = contextMock.Object;
 
-            EquipTask task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
+            var task = new EquipTask(actor, context, testedEquipmentProp, testedSlotIndex);
 
             // ACT
             task.Execute();

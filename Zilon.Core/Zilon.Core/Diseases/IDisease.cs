@@ -1,23 +1,23 @@
 ﻿namespace Zilon.Core.Diseases
 {
     /// <summary>
-    ///     Интерфейс болезни, поразившей персонажа.
+    /// Интерфейс болезни, поразившей персонажа.
     /// </summary>
     public interface IDisease
     {
         /// <summary>
-        ///     Наименование болезни.
+        /// Наименование болезни.
         /// </summary>
         DiseaseName Name { get; }
 
         /// <summary>
-        ///     Скорость протекания болезни.
-        /// </summary>
-        float ProgressSpeed { get; }
-
-        /// <summary>
-        ///     Симптомы болезни.
+        /// Симптомы болезни.
         /// </summary>
         DiseaseSymptom[] GetSymptoms();
+
+        /// <summary>
+        /// Скорость протекания болезни.
+        /// </summary>
+        float ProgressSpeed { get; }
     }
 }

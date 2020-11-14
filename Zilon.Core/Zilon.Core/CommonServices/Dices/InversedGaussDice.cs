@@ -1,7 +1,9 @@
-﻿namespace Zilon.Core.CommonServices.Dices
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
-    ///     Генератор случайных числе Парка-Миллера.
+    /// Генератор случайных числе Парка-Миллера.
     /// </summary>
     public sealed class InversedGaussDice : GaussDice
     {

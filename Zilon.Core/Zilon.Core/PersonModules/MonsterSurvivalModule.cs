@@ -1,11 +1,15 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.PersonModules
 {
     /// <summary>
-    ///     Базовая реализация данных о выживании для монстров.
+    /// Базовая реализация данных о выживании для монстров.
     /// </summary>
     public sealed class MonsterSurvivalModule : SurvivalModuleBase
     {
@@ -24,11 +28,15 @@ namespace Zilon.Core.PersonModules
                 throw new ArgumentNullException(nameof(monsterScheme));
             }
 
-            return new[] {new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp) {Type = SurvivalStatType.Health}};
+            return new[] {
+                new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp){
+                    Type = SurvivalStatType.Health
+                }
+            };
         }
 
         /// <summary>
-        ///     Обновление состояния данных о выживании.
+        /// Обновление состояния данных о выживании.
         /// </summary>
         public override void Update()
         {

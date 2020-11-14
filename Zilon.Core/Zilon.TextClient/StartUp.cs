@@ -1,5 +1,12 @@
 ﻿using System;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
+using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
+using Zilon.Bot.Players.Strategies;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Emulation.Common;
 
 namespace Zilon.TextClient
@@ -17,9 +24,7 @@ namespace Zilon.TextClient
             serviceCollection.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
             serviceCollection.AddSingleton<LogicStateTreePatterns>();
 
-            serviceCollection
-                .AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanActorTaskSource<ISectorTaskSourceContext>
-                >();
+            serviceCollection.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanActorTaskSource<ISectorTaskSourceContext>>();
         }
     }
 }

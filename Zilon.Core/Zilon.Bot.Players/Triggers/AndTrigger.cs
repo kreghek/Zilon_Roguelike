@@ -14,16 +14,15 @@ namespace Zilon.Bot.Players.Triggers
 
         public void Reset()
         {
-            foreach (ILogicStateTrigger trigger in _triggers)
+            foreach (var trigger in _triggers)
             {
                 trigger.Reset();
             }
         }
 
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
-            ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
-            foreach (ILogicStateTrigger trigger in _triggers)
+            foreach (var trigger in _triggers)
             {
                 if (!trigger.Test(actor, context, currentState, strategyData))
                 {
@@ -36,7 +35,7 @@ namespace Zilon.Bot.Players.Triggers
 
         public void Update()
         {
-            foreach (ILogicStateTrigger trigger in _triggers)
+            foreach (var trigger in _triggers)
             {
                 trigger.Update();
             }

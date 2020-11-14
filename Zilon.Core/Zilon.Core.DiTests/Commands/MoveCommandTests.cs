@@ -1,6 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+
+using FluentAssertions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
@@ -8,6 +15,7 @@ using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Commands
 {
@@ -17,7 +25,7 @@ namespace Zilon.Core.Tests.Commands
         private List<IActor> _actorList;
 
         /// <summary>
-        ///     Тест проверяет, что можно перемещаться в пустые узлы карты.
+        /// Тест проверяет, что можно перемещаться в пустые узлы карты.
         /// </summary>
         [Test]
         public void CanExecuteTest()
@@ -33,31 +41,30 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        ///     Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
+        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
         /// </summary>
         [Test]
         public void ExecuteTest()
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<MoveCommand>();
-            var humanTaskSourceMock =
-                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             // ACT
             command.Execute();
 
             // ASSERT
-            HexNode target = ((IMapNodeViewModel)playerState.HoverViewModel).Node;
+            var target = ((IMapNodeViewModel)playerState.HoverViewModel).Node;
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<MoveIntention>(intention => intention.TargetNode == target),
                 It.IsAny<IActor>()));
         }
 
         /// <summary>
-        ///     Тест проверяет, что автоперемещение работает, если в зоне видимости нет монстров.
+        /// Тест проверяет, что автоперемещение работает, если в зоне видимости нет монстров.
         /// </summary>
         [Test]
-        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
             Justification = "Naming convention for tests")]
         public void CanRepeate_NoMonsters_ReturnsTrue()
         {
@@ -72,10 +79,10 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        ///     Тест проверяет, что автоперемещение не работает, если в зоне видимости монстр.
+        /// Тест проверяет, что автоперемещение не работает, если в зоне видимости монстр.
         /// </summary>
         [Test]
-        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
             Justification = "Naming convention for tests")]
         public void CanRepeate_MonsterInSign_ReturnsFalse()
         {
@@ -104,10 +111,10 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        ///     Тест проверяет, что автоперемещение работает, если монстр далеко.
+        /// Тест проверяет, что автоперемещение работает, если монстр далеко.
         /// </summary>
         [Test]
-        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
             Justification = "Naming convention for tests")]
         public void CanRepeate_MonsterNotInSign_ReturnsTrue()
         {
@@ -139,12 +146,12 @@ namespace Zilon.Core.Tests.Commands
         {
             if (testMap is null)
             {
-                throw new ArgumentNullException(nameof(testMap));
+                throw new System.ArgumentNullException(nameof(testMap));
             }
 
             if (playerStateMock is null)
             {
-                throw new ArgumentNullException(nameof(playerStateMock));
+                throw new System.ArgumentNullException(nameof(playerStateMock));
             }
 
             var targetNode = testMap.Nodes.SelectByHexCoords(1, 0);
@@ -157,7 +164,7 @@ namespace Zilon.Core.Tests.Commands
 
             Container.AddSingleton<MoveCommand>();
 
-            _actorList = new List<IActor> {playerStateMock.Object.ActiveActor.Actor};
+            _actorList = new List<IActor> { playerStateMock.Object.ActiveActor.Actor };
             var actorManagerMock = new Mock<IActorManager>();
             actorManagerMock.Setup(x => x.Items).Returns(_actorList);
             var actorManager = actorManagerMock.Object;

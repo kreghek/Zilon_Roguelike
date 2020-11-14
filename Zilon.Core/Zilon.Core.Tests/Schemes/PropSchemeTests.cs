@@ -1,4 +1,10 @@
-﻿using Zilon.Core.Common;
+﻿using FluentAssertions;
+
+using Newtonsoft.Json;
+
+using NUnit.Framework;
+
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
@@ -9,14 +15,14 @@ namespace Zilon.Core.Tests.Schemes
     public class PropSchemeTests
     {
         /// <summary>
-        ///     Тест проверяет, что показания брони корректно десериализуется.
+        /// Тест проверяет, что показания брони корректно десериализуется.
         /// </summary>
         [Test]
         public void Deserialization_ArmorsInProp_ArmorIsCorrect()
         {
             // ARRANGE
 
-            string sourceText = @"{
+            var sourceText = @"{
 ""Equip"": {
   ""SlotTypes"": [ ""Body"" ],
   ""Armors"": [
@@ -34,8 +40,10 @@ namespace Zilon.Core.Tests.Schemes
 ";
 
 
+
             // ACT
             var factPropScheme = JsonConvert.DeserializeObject<PropScheme>(sourceText);
+
 
 
             // ASSERT
@@ -45,14 +53,14 @@ namespace Zilon.Core.Tests.Schemes
         }
 
         /// <summary>
-        ///     Тест проверяет, что работы корректно десериализуется.
+        /// Тест проверяет, что работы корректно десериализуется.
         /// </summary>
         [Test]
         public void Deserialization_TagsEquip()
         {
             // ARRANGE
 
-            string sourceText = @"{
+            var sourceText = @"{
   ""Tags"": [ ""weapon"", ""ranged"" ],
   ""Equip"": {
                 ""ActSids"": [
@@ -67,8 +75,10 @@ namespace Zilon.Core.Tests.Schemes
 ";
 
 
+
             // ACT
             var factPropScheme = JsonConvert.DeserializeObject<PropScheme>(sourceText);
+
 
 
             // ASSERT

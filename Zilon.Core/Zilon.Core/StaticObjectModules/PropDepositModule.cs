@@ -1,4 +1,5 @@
-﻿using Zilon.Core.Props;
+﻿using System;
+
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
@@ -6,13 +7,16 @@ namespace Zilon.Core.StaticObjectModules
 {
     public class PropDepositModule : IPropDepositModule
     {
-        private readonly IDropResolver _dropResolver;
+        private readonly IPropContainer _propContainer;
         private readonly IDropTableScheme _dropTableScheme;
+        private readonly IDropResolver _dropResolver;
+        private readonly string[] _toolTags;
 
         private readonly int _exhaustingValue;
-        private readonly IPropContainer _propContainer;
-        private readonly string[] _toolTags;
         private int _exhaustingCounter;
+
+        /// <inheritdoc/>
+        public event EventHandler Mined;
 
         public PropDepositModule(IPropContainer propContainer,
             IDropTableScheme dropTableScheme,
@@ -31,28 +35,24 @@ namespace Zilon.Core.StaticObjectModules
             Difficulty = depositMiningDifficulty;
         }
 
-        /// <inheritdoc />
-        public event EventHandler Mined;
-
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public string[] GetToolTags()
         {
             return _toolTags;
         }
 
-        /// <inheritdoc />
-        public bool IsExhausted => Stock <= 0;
+        /// <inheritdoc/>
+        public bool IsExhausted { get => Stock <= 0; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool IsActive { get; set; }
 
-        /// <inheritdoc />
-        public string Key => nameof(IPropDepositModule);
-
+        /// <inheritdoc/>
+        public string Key { get => nameof(IPropDepositModule); }
         public DepositMiningDifficulty Difficulty { get; }
-        public float Stock => (float)_exhaustingCounter / _exhaustingValue;
+        public float Stock { get => (float)_exhaustingCounter / _exhaustingValue; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void Mine()
         {
             if (_exhaustingCounter <= 0)
@@ -60,8 +60,8 @@ namespace Zilon.Core.StaticObjectModules
                 throw new InvalidOperationException("Попытка выполнить добычу в исчерпанных залежах");
             }
 
-            IProp[] props = _dropResolver.Resolve(new[] {_dropTableScheme});
-            foreach (IProp prop in props)
+            var props = _dropResolver.Resolve(new[] { _dropTableScheme });
+            foreach (var prop in props)
             {
                 _propContainer.Content.Add(prop);
                 _propContainer.IsActive = true;

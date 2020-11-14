@@ -1,9 +1,12 @@
 ﻿using System;
+
+using Microsoft.Extensions.DependencyInjection;
+
 using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
-    internal class Startup : InitializationBase
+    class Startup : InitializationBase
     {
         public override void ConfigureAux(IServiceProvider serviceFactory)
         {

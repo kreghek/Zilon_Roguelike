@@ -1,18 +1,20 @@
-﻿namespace Zilon.Core.Tactics
+﻿using System;
+
+namespace Zilon.Core.Tactics
 {
     /// <summary>
-    ///     Обработчик применения действия по типу цели.
+    /// Обработчик применения действия по типу цели.
     /// </summary>
     public interface IActUsageHandler
     {
         /// <summary>
-        ///     Тип цели, которую может принять обработчик.
-        ///     Либо <see cref="IActor" />, либо <see cref="IStaticObject" />
+        /// Тип цели, которую может принять обработчик.
+        /// Либо <see cref="IActor"/>, либо <see cref="IStaticObject"/>
         /// </summary>
         Type TargetType { get; }
 
         /// <summary>
-        ///     Обработать применение действия к цели.
+        /// Обработать применение действия к цели.
         /// </summary>
         /// <param name="actor"> Актёр, совершивший действие. </param>
         /// <param name="target"> Цель применения действия. </param>

@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.Tactics
+﻿using System;
+using System.Runtime.Serialization;
+
+namespace Zilon.Core.Tactics
 {
     [Serializable]
     public class UsageThroughtWallException : ActUsageException

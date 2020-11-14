@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+using System.Collections.Generic;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {

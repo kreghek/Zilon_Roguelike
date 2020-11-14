@@ -1,14 +1,16 @@
-﻿using Zilon.Core.Graphs;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.PathFinding
 {
     /// <summary>
-    ///     Extension methods to make the System.Collections.Generic.SortedList easier to use.
-    /// </summary>
-    internal static class SortedListExtensions
+	/// Extension methods to make the System.Collections.Generic.SortedList easier to use.
+	/// </summary>
+	internal static class SortedListExtensions
     {
         /// <summary>
-        ///     Checks if the SortedList is empty.
+        /// Checks if the SortedList is empty.
         /// </summary>
         /// <param name="sortedList">SortedList to check if it is empty.</param>
         /// <returns>True if sortedList is empty, false if it still has elements.</returns>
@@ -18,7 +20,7 @@ namespace Zilon.Core.PathFinding
         }
 
         /// <summary>
-        ///     Adds a INode to the SortedList.
+        /// Adds a INode to the SortedList.
         /// </summary>
         /// <param name="sortedList">SortedList to add the node to.</param>
         /// <param name="node">Node to add to the sortedList.</param>
@@ -29,7 +31,7 @@ namespace Zilon.Core.PathFinding
         }
 
         /// <summary>
-        ///     Removes the node from the sorted list with the smallest TotalCost and returns that node.
+        /// Removes the node from the sorted list with the smallest TotalCost and returns that node.
         /// </summary>
         /// <param name="sortedList">SortedList to remove and return the smallest TotalCost node.</param>
         /// <returns>Node with the smallest TotalCost.</returns>

@@ -1,17 +1,19 @@
-﻿using Zilon.Core.Props;
+﻿using System;
+using System.Linq;
+
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.StaticObjectModules
 {
     /// <summary>
-    ///     Модуль времени жизни для залежей.
+    /// Модуль времени жизни для залежей.
     /// </summary>
     public class DepositLifetimeModule : ILifetimeModule
     {
-        private readonly IPropContainer _containerModule;
-        private readonly IPropDepositModule _depositModule;
-        private readonly IStaticObject _parentStaticObject;
         private readonly IStaticObjectManager _staticObjectManager;
+        private readonly IStaticObject _parentStaticObject;
+        private readonly IPropDepositModule _depositModule;
+        private readonly IPropContainer _containerModule;
 
         public DepositLifetimeModule(IStaticObjectManager staticObjectManager, IStaticObject parentStaticObject)
         {
@@ -25,29 +27,12 @@ namespace Zilon.Core.StaticObjectModules
             _containerModule.ItemsRemoved += ContainerModule_ItemsRemoved;
         }
 
-        /// <inheritdoc />
-        public string Key => nameof(ILifetimeModule);
-
-        /// <inheritdoc />
-        public bool IsActive { get; set; }
-
-        /// <inheritdoc />
-        public event EventHandler Destroyed;
-
-        public void Destroy()
-        {
-            _depositModule.Mined -= DepositModule_Mined;
-            _containerModule.ItemsRemoved -= ContainerModule_ItemsRemoved;
-            _staticObjectManager.Remove(_parentStaticObject);
-            DoDestroyed();
-        }
-
         private void DepositModule_Mined(object sender, EventArgs e)
         {
             CheckAndDestroy();
         }
 
-        private void ContainerModule_ItemsRemoved(object sender, PropStoreEventArgs e)
+        private void ContainerModule_ItemsRemoved(object sender, Props.PropStoreEventArgs e)
         {
             CheckAndDestroy();
         }
@@ -58,6 +43,23 @@ namespace Zilon.Core.StaticObjectModules
             {
                 Destroy();
             }
+        }
+
+        /// <inheritdoc/>
+        public string Key { get => nameof(ILifetimeModule); }
+
+        /// <inheritdoc/>
+        public bool IsActive { get; set; }
+
+        /// <inheritdoc/>
+        public event EventHandler Destroyed;
+
+        public void Destroy()
+        {
+            _depositModule.Mined -= DepositModule_Mined;
+            _containerModule.ItemsRemoved -= ContainerModule_ItemsRemoved;
+            _staticObjectManager.Remove(_parentStaticObject);
+            DoDestroyed();
         }
 
         private void DoDestroyed()

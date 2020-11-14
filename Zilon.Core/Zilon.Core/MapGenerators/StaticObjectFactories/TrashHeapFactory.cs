@@ -8,12 +8,11 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
     {
         public TrashHeapFactory(
             ISchemeService schemeService,
-            IDropResolver dropResolver) : base(toolTags: new[] {"shovel"}, dropTableSchemeSid: "trash-heap",
-            PropContainerPurpose.TrashHeap, schemeService, dropResolver)
+            IDropResolver dropResolver) : base(toolTags: new[] { "shovel" }, dropTableSchemeSid: "trash-heap", PropContainerPurpose.TrashHeap, schemeService, dropResolver)
         {
         }
 
-        protected override int ExhausingValue => 3;
-        protected override DepositMiningDifficulty Difficulty => DepositMiningDifficulty.Easy;
+        protected override int ExhausingValue { get => 3; }
+        protected override DepositMiningDifficulty Difficulty { get => DepositMiningDifficulty.Easy; }
     }
 }

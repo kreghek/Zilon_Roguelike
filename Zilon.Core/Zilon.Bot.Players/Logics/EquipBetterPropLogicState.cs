@@ -1,7 +1,8 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System.Linq;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
-using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -9,19 +10,18 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class EquipBetterPropLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
-            ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
-            IInventoryModule inventory = actor.Person.GetModule<IInventoryModule>();
-            IProp[] currentInventoryProps = inventory.CalcActualItems();
+            var inventory = actor.Person.GetModule<IInventoryModule>();
+            var currentInventoryProps = inventory.CalcActualItems();
             var currentInventoryEquipments = currentInventoryProps.OfType<Equipment>().ToArray();
 
-            IEquipmentModule equipmentCarrier = actor.Person.GetModule<IEquipmentModule>();
+            var equipmentCarrier = actor.Person.GetModule<IEquipmentModule>();
 
             for (var slotIndex = 0; slotIndex < equipmentCarrier.Slots.Length; slotIndex++)
             {
-                PersonSlotSubScheme slot = actor.Person.GetModule<IEquipmentModule>().Slots[slotIndex];
-                Equipment equiped = actor.Person.GetModule<IEquipmentModule>()[slotIndex];
+                var slot = actor.Person.GetModule<IEquipmentModule>().Slots[slotIndex];
+                var equiped = actor.Person.GetModule<IEquipmentModule>()[slotIndex];
                 if (equiped == null)
                 {
                     var availableEquipments = currentInventoryEquipments
@@ -34,7 +34,7 @@ namespace Zilon.Bot.Players.Logics
                         var targetEquipmentFromInventory = availableEquipments.First();
                         var targetSlotIndex = slotIndex;
 
-                        ActorTaskContext taskContext = new ActorTaskContext(context.Sector);
+                        var taskContext = new ActorTaskContext(context.Sector);
                         return new EquipTask(actor, taskContext, targetEquipmentFromInventory, targetSlotIndex);
                     }
                 }

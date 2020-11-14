@@ -5,7 +5,7 @@ using Zilon.Core.MapGenerators.RoomStyle;
 namespace Zilon.Emulation.Common
 {
     /// <summary>
-    ///     Реализация селектора фабрик на основе переключения по типу фабрики.
+    /// Реализация селектора фабрик на основе переключения по типу фабрики.
     /// </summary>
     public sealed class SwitchMapFactorySelector : SwitchMapFactorySelectorBase
     {

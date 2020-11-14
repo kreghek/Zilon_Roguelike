@@ -1,5 +1,11 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Persons;
@@ -7,6 +13,7 @@ using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour
 {
@@ -15,12 +22,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     public class MoveTaskTests
     {
         /// <summary>
-        ///     Тест проверяет, то задача на перемещение за несколько итераций
-        ///     перемещает актёра в целевой узел. В конце, на последней итерации,
-        ///     когда актёр достиг цели, должна отмечаться, как заверщённая.
+        /// Тест проверяет, то задача на перемещение за несколько итераций
+        /// перемещает актёра в целевой узел. В конце, на последней итерации,
+        /// когда актёр достиг цели, должна отмечаться, как заверщённая.
         /// </summary>
         [Test]
-        public async Task ExecuteTest_OpenGridMap_ActorReachPointAndTaskCompleteAsync()
+        public async System.Threading.Tasks.Task ExecuteTest_OpenGridMap_ActorReachPointAndTaskCompleteAsync()
         {
             // ARRANGE
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
@@ -28,22 +35,26 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var startNode = map.Nodes.SelectByHexCoords(3, 3);
             var finishNode = map.Nodes.SelectByHexCoords(1, 5);
 
-            var expectedPath = new[] {map.Nodes.SelectByHexCoords(2, 3), map.Nodes.SelectByHexCoords(2, 4), finishNode};
+            var expectedPath = new[] {
+                map.Nodes.SelectByHexCoords(2, 3),
+                map.Nodes.SelectByHexCoords(2, 4),
+                finishNode
+            };
 
-            IActor actor = CreateActor(map, startNode);
+            var actor = CreateActor(map, startNode);
 
             var contextMock = new Mock<IActorTaskContext>();
             var context = contextMock.Object;
 
-            MoveTask task = new MoveTask(actor, context, finishNode, map);
+            var task = new MoveTask(actor, context, finishNode, map);
 
             // ACT
-            for (int step = 1; step <= expectedPath.Length; step++)
+            for (var step = 1; step <= expectedPath.Length; step++)
             {
                 task.Execute();
 
                 // ASSERT
-                bool expectedIsComplete = step >= 3;
+                var expectedIsComplete = step >= 3;
                 task.IsComplete.Should().Be(expectedIsComplete);
 
 
@@ -68,17 +79,17 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
             var taskSource = taskSourceMock.Object;
 
-            Actor actor = new Actor(person, taskSource, startNode);
+            var actor = new Actor(person, taskSource, startNode);
             map.HoldNode(startNode, actor);
             return actor;
         }
 
         /// <summary>
-        ///     Тест проверяет, что задача на перемещение учитывает стены.
-        ///     Актёр должен идти по пути, огибажщем стены.
+        /// Тест проверяет, что задача на перемещение учитывает стены.
+        /// Актёр должен идти по пути, огибажщем стены.
         /// </summary>
         [Test]
-        public async Task ExecuteTest_MapWithWalls_ActorAvoidWallsAsync()
+        public async System.Threading.Tasks.Task ExecuteTest_MapWithWalls_ActorAvoidWallsAsync()
         {
             // ARRANGE
 
@@ -86,20 +97,20 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             map.RemoveEdge(3, 3, 3, 4);
             map.RemoveEdge(3, 3, 2, 3);
 
-            IGraphNode[] expectedPath = CreateExpectedPath(map);
+            var expectedPath = CreateExpectedPath(map);
 
-            IGraphNode startNode = expectedPath.First();
-            IGraphNode finishNode = expectedPath.Last();
+            var startNode = expectedPath.First();
+            var finishNode = expectedPath.Last();
 
-            IActor actor = CreateActor(map, (HexNode)startNode);
+            var actor = CreateActor(map, (HexNode)startNode);
 
             var contextMock = new Mock<IActorTaskContext>();
             var context = contextMock.Object;
 
-            MoveTask task = new MoveTask(actor, context, finishNode, map);
+            var task = new MoveTask(actor, context, finishNode, map);
 
             // ACT
-            for (int step = 1; step < expectedPath.Length; step++)
+            for (var step = 1; step < expectedPath.Length; step++)
             {
                 task.Execute();
 
@@ -109,29 +120,29 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         }
 
         /// <summary>
-        ///     Тест проверяет, что задача заканчивается, когда актёр доходит до крайнего узла найденного маршрута.
+        /// Тест проверяет, что задача заканчивается, когда актёр доходит до крайнего узла найденного маршрута.
         /// </summary>
         [Test]
-        public async Task ExecuteTest_FindingPathAndMove_IsCompleteTrueAsync()
+        public async System.Threading.Tasks.Task ExecuteTest_FindingPathAndMove_IsCompleteTrueAsync()
         {
             // ARRANGE
 
             var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
-            IGraphNode[] expectedPath = CreateExpectedPath(map);
+            var expectedPath = CreateExpectedPath(map);
 
-            IGraphNode startNode = expectedPath.First();
-            IGraphNode finishNode = expectedPath.Last();
+            var startNode = expectedPath.First();
+            var finishNode = expectedPath.Last();
 
-            IActor actor = CreateActor(map, (HexNode)startNode);
+            var actor = CreateActor(map, (HexNode)startNode);
 
             var contextMock = new Mock<IActorTaskContext>();
             var context = contextMock.Object;
 
-            MoveTask task = new MoveTask(actor, context, finishNode, map);
+            var task = new MoveTask(actor, context, finishNode, map);
 
             // ACT
-            for (int step = 1; step < expectedPath.Length; step++)
+            for (var step = 1; step < expectedPath.Length; step++)
             {
                 task.Execute();
             }
@@ -142,10 +153,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
         private static IGraphNode[] CreateExpectedPath(ISectorMap map)
         {
-            return new IGraphNode[]
-            {
-                map.Nodes.SelectByHexCoords(4, 4), map.Nodes.SelectByHexCoords(3, 4),
-                map.Nodes.SelectByHexCoords(2, 4), map.Nodes.SelectByHexCoords(1, 5)
+            return new IGraphNode[] {
+                map.Nodes.SelectByHexCoords(4,4),
+                map.Nodes.SelectByHexCoords(3,4),
+                map.Nodes.SelectByHexCoords(2,4),
+                map.Nodes.SelectByHexCoords(1,5),
             };
         }
     }

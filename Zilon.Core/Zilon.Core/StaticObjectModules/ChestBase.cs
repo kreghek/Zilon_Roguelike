@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Props;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.StaticObjectModules
@@ -16,41 +19,39 @@ namespace Zilon.Core.StaticObjectModules
             IsActive = true;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IPropStore Content { get; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool IsOpened { get; private set; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public PropContainerPurpose Purpose { get; set; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public abstract bool IsMapBlock { get; }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool IsActive { get; set; }
 
-        /// <inheritdoc />
-        public string Key => nameof(IPropContainer);
+        /// <inheritdoc/>
+        public string Key { get => nameof(IPropContainer); }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public event EventHandler Opened;
-
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public event EventHandler<PropStoreEventArgs> ItemsAdded;
-
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public event EventHandler<PropStoreEventArgs> ItemsRemoved;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void Open()
         {
             IsOpened = true;
             DoSetIsOpened();
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         private void DoSetIsOpened()
         {
             Opened?.Invoke(this, EventArgs.Empty);

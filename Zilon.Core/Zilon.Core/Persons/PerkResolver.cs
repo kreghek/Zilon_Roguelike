@@ -1,5 +1,6 @@
-﻿using Zilon.Core.PersonModules;
-using Zilon.Core.Schemes;
+﻿using System.Linq;
+
+using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Persons
 {
@@ -17,7 +18,7 @@ namespace Zilon.Core.Persons
                 return;
             }
 
-            foreach (IPerk perk in evolutionData.Perks)
+            foreach (var perk in evolutionData.Perks)
             {
                 if (perk.CurrentJobs is null)
                 {
@@ -34,9 +35,9 @@ namespace Zilon.Core.Persons
                     continue;
                 }
 
-                IJob[] affectedJobs = progress.ApplyToJobs(perk.CurrentJobs);
+                var affectedJobs = progress.ApplyToJobs(perk.CurrentJobs);
 
-                foreach (IJob job in affectedJobs)
+                foreach (var job in affectedJobs)
                 {
                     // Опеределяем, какие из прогрессировавших работ завершены.
                     // И фиксируем их состояние завершения.
@@ -58,15 +59,15 @@ namespace Zilon.Core.Persons
 
         private static bool CheckLevelCap(IPerk perk)
         {
-            PerkLevel currentLevel = perk.CurrentLevel;
+            var currentLevel = perk.CurrentLevel;
             if (currentLevel == null)
             {
                 return false;
             }
 
-            PerkLevel nextLevel = PerkHelper.GetNextLevel(perk.Scheme, currentLevel);
+            var nextLevel = PerkHelper.GetNextLevel(perk.Scheme, currentLevel);
 
-            PerkLevelSubScheme[] perkLevels = perk.Scheme.Levels;
+            var perkLevels = perk.Scheme.Levels;
             var maxLevel = perkLevels.Length - 1;
             var nextLevelOutOfRange = nextLevel.Primary > maxLevel;
 

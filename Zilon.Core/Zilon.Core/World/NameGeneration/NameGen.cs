@@ -1,19 +1,47 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
+using Newtonsoft.Json;
+
+using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.World.NameGeneration
 {
     /// <summary>
-    ///     RandomName class, used to generate a random name.
+    /// RandomName class, used to generate a random name.
     /// </summary>
     public class RandomName
     {
+        /// <summary>
+        /// Class for holding the lists of names from names.json
+        /// </summary>
+        private class NameList
+        {
+            [JsonProperty(PropertyName = "boys")]
+            public string[] Boys { get; set; }
+
+            [JsonProperty(PropertyName = "girls")]
+            public string[] Girls { get; set; }
+
+            [JsonProperty(PropertyName = "last")]
+            public string[] Last { get; set; }
+
+            public NameList()
+            {
+                Boys = System.Array.Empty<string>();
+                Girls = System.Array.Empty<string>();
+                Last = System.Array.Empty<string>();
+            }
+        }
+
         private readonly IDice _dice;
+        private readonly List<string> _male;
         private readonly List<string> _female;
         private readonly List<string> _last;
-        private readonly List<string> _male;
 
         /// <summary>
-        ///     Initialises a new instance of the RandomName class.
+        /// Initialises a new instance of the RandomName class.
         /// </summary>
         public RandomName(IDice dice)
         {
@@ -38,7 +66,7 @@ namespace Zilon.Core.World.NameGeneration
         }
 
         /// <summary>
-        ///     Returns a new random name
+        /// Returns a new random name
         /// </summary>
         /// <param name="sex">The sex of the person to be named. true for male, false for female</param>
         /// <returns>The random name as a string</returns>
@@ -48,7 +76,7 @@ namespace Zilon.Core.World.NameGeneration
         }
 
         /// <summary>
-        ///     Returns a new random name
+        /// Returns a new random name
         /// </summary>
         /// <param name="sex">The sex of the person to be named. true for male, false for female</param>
         /// <param name="middle">How many middle names do generate</param>
@@ -59,7 +87,7 @@ namespace Zilon.Core.World.NameGeneration
         }
 
         /// <summary>
-        ///     Returns a new random name
+        /// Returns a new random name
         /// </summary>
         /// <param name="sex">The sex of the person to be named. true for male, false for female</param>
         /// <param name="isInital">Should the middle names be initials or not?</param>
@@ -70,7 +98,7 @@ namespace Zilon.Core.World.NameGeneration
         }
 
         /// <summary>
-        ///     Returns a new random name
+        /// Returns a new random name
         /// </summary>
         /// <param name="sex">The sex of the person to be named. true for male, false for female</param>
         /// <param name="middle">How many middle names do generate</param>
@@ -78,12 +106,7 @@ namespace Zilon.Core.World.NameGeneration
         /// <returns>The random name as a string</returns>
         public string Generate(Sex sex, int middle, bool isInital)
         {
-            var first = sex == Sex.Male
-                ? _male[_dice.Roll(0, _male.Count - 1)]
-                : _female[
-                    _dice.Roll(0,
-                        _female.Count -
-                        1)]; // determines if we should select a name from male or female, and randomly picks
+            var first = sex == Sex.Male ? _male[_dice.Roll(0, _male.Count - 1)] : _female[_dice.Roll(0, _female.Count - 1)]; // determines if we should select a name from male or female, and randomly picks
             var last = _last[_dice.Roll(0, _last.Count - 1)]; // gets the last name
 
             List<string> middles = new List<string>();
@@ -92,17 +115,11 @@ namespace Zilon.Core.World.NameGeneration
             {
                 if (isInital)
                 {
-                    middles.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[_dice.Roll(0, 25 - 1)]
-                                    .ToString(System.Globalization.CultureInfo.InvariantCulture) +
-                                "."); // randomly selects an uppercase letter to use as the inital and appends a dot
+                    middles.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[_dice.Roll(0, 25 - 1)].ToString(System.Globalization.CultureInfo.InvariantCulture) + "."); // randomly selects an uppercase letter to use as the inital and appends a dot
                 }
                 else
                 {
-                    middles.Add(sex == Sex.Male
-                        ? _male[_dice.Roll(0, _male.Count - 1)]
-                        : _female[
-                            _dice.Roll(0,
-                                _female.Count - 1)]); // randomly selects a name that fits with the sex of the person
+                    middles.Add(sex == Sex.Male ? _male[_dice.Roll(0, _male.Count - 1)] : _female[_dice.Roll(0, _female.Count - 1)]); // randomly selects a name that fits with the sex of the person
                 }
             }
 
@@ -112,14 +129,13 @@ namespace Zilon.Core.World.NameGeneration
             {
                 b.Append(m + " ");
             }
-
             b.Append(last);
 
             return b.ToString();
         }
 
         /// <summary>
-        ///     Generates a list of random names
+        /// Generates a list of random names
         /// </summary>
         /// <param name="number">The number of names to be generated</param>
         /// <param name="maxMiddleNames">The maximum number of middle names</param>
@@ -130,7 +146,7 @@ namespace Zilon.Core.World.NameGeneration
         }
 
         /// <summary>
-        ///     Generates a list of random names
+        /// Generates a list of random names
         /// </summary>
         /// <param name="number">The number of names to be generated</param>
         /// <param name="maxMiddleNames">The maximum number of middle names</param>
@@ -142,7 +158,7 @@ namespace Zilon.Core.World.NameGeneration
         }
 
         /// <summary>
-        ///     Generates a list of random names
+        /// Generates a list of random names
         /// </summary>
         /// <param name="number">The number of names to be generated</param>
         /// <param name="maxMiddleNames">The maximum number of middle names</param>
@@ -154,7 +170,7 @@ namespace Zilon.Core.World.NameGeneration
         }
 
         /// <summary>
-        ///     Generates a list of random names
+        /// Generates a list of random names
         /// </summary>
         /// <param name="number">The number of names to be generated</param>
         /// <param name="maxMiddleNames">The maximum number of middle names</param>
@@ -168,32 +184,13 @@ namespace Zilon.Core.World.NameGeneration
             for (int i = 0; i < number; i++)
             {
                 Sex s = sex != null ? sex.Value : (Sex)_dice.Roll(0, 2 - 1);
-                bool init = initials != null ? (bool)initials : _dice.Roll(0, 2 - 1) != 0;
-                int middle = _dice.Roll(0, (maxMiddleNames + 1) - 1);
+                bool init = initials != null ? (bool)initials : (_dice.Roll(0, 2 - 1) != 0);
+                int middle = _dice.Roll(0, maxMiddleNames + 1 - 1);
 
                 names.Add(Generate(s, middle, init));
             }
 
             return names;
-        }
-
-        /// <summary>
-        ///     Class for holding the lists of names from names.json
-        /// </summary>
-        private class NameList
-        {
-            public NameList()
-            {
-                Boys = System.Array.Empty<string>();
-                Girls = System.Array.Empty<string>();
-                Last = System.Array.Empty<string>();
-            }
-
-            [JsonProperty(PropertyName = "boys")] public string[] Boys { get; set; }
-
-            [JsonProperty(PropertyName = "girls")] public string[] Girls { get; set; }
-
-            [JsonProperty(PropertyName = "last")] public string[] Last { get; set; }
         }
     }
 }

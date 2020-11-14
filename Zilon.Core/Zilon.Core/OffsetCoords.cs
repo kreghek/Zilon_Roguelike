@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core
+﻿using System;
+
+namespace Zilon.Core
 {
     public struct OffsetCoords : IEquatable<OffsetCoords>
     {
@@ -21,8 +23,8 @@
             unchecked
             {
                 var hashCode = 1861411795;
-                hashCode = (hashCode * -1521134295) + X.GetHashCode();
-                hashCode = (hashCode * -1521134295) + Y.GetHashCode();
+                hashCode = hashCode * -1521134295 + X.GetHashCode();
+                hashCode = hashCode * -1521134295 + Y.GetHashCode();
                 return hashCode;
             }
         }

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Diseases;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Diseases;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics
@@ -28,12 +30,12 @@ namespace Zilon.Core.Tactics
         public int Turns { get; set; }
 
         /// <summary>
-        ///     Различные достижения, полученные заигровую сессию.
+        /// Различные достижения, полученные заигровую сессию.
         /// </summary>
         public ScoreAchievements Achievements { get; set; }
 
         /// <summary>
-        ///     Болезни, которыми был инфицирован персонаж.
+        /// Болезни, которыми был инфицирован персонаж.
         /// </summary>
         public IList<IDisease> Diseases { get; }
     }

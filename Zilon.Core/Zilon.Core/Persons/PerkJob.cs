@@ -1,18 +1,14 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    ///     Состояние конкретной работы перка.
+    /// Состояние конкретной работы перка.
     /// </summary>
     public class PerkJob : IJob
     {
-        [ExcludeFromCodeCoverage]
-        public PerkJob(IJobSubScheme scheme)
-        {
-            Scheme = scheme;
-        }
-
         /// <inheritdoc />
         public IJobSubScheme Scheme { get; }
 
@@ -21,5 +17,11 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc />
         public bool IsComplete { get; set; }
+
+        [ExcludeFromCodeCoverage]
+        public PerkJob(IJobSubScheme scheme)
+        {
+            Scheme = scheme;
+        }
     }
 }

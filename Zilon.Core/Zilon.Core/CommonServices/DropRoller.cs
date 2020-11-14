@@ -1,14 +1,16 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.CommonServices
 {
     /// <summary>
-    ///     Вспомогательный сервис для выборки записей из таблицы дропа по броску.
+    /// Вспомогательный сервис для выборки записей из таблицы дропа по броску.
     /// </summary>
     public static class DropRoller
     {
         /// <summary>
-        ///     Возвращает запись таблицы дропа по указанному значению броска.
+        /// Возвращает запись таблицы дропа по указанному значению броска.
         /// </summary>
         /// <param name="records"> Записи таблицы дропа с учётом модификаторов. </param>
         /// <param name="roll"> Бросок куба. </param>
@@ -17,8 +19,7 @@ namespace Zilon.Core.CommonServices
         {
             if (roll == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(roll),
-                    "Результат выбора записи в таблице дропа не может быть 0.");
+                throw new ArgumentOutOfRangeException(nameof(roll), "Результат выбора записи в таблице дропа не может быть 0.");
             }
 
             if (records == null)
@@ -28,9 +29,9 @@ namespace Zilon.Core.CommonServices
 
             var pointer = 1;
 
-            foreach (DropTableModRecord record in records)
+            foreach (var record in records)
             {
-                if (roll >= pointer && roll <= (pointer + record.ModifiedWeight) - 1)
+                if (roll >= pointer && roll <= pointer + record.ModifiedWeight - 1)
                 {
                     return record;
                 }
@@ -38,8 +39,7 @@ namespace Zilon.Core.CommonServices
                 pointer += record.ModifiedWeight;
             }
 
-            throw new ArgumentOutOfRangeException(nameof(roll),
-                "Результат выбора записи в таблице дропа больше, чем суммарный вес таблицы дропа.");
+            throw new ArgumentOutOfRangeException(nameof(roll), "Результат выбора записи в таблице дропа больше, чем суммарный вес таблицы дропа.");
         }
     }
 }

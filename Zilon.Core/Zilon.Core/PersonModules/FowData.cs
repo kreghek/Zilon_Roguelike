@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Tactics;
 
 namespace Zilon.Core.PersonModules
 {
@@ -11,7 +13,7 @@ namespace Zilon.Core.PersonModules
             _sectorFows = new Dictionary<ISector, ISectorFowData>();
         }
 
-        public string Key => nameof(IFowData);
+        public string Key { get => nameof(IFowData); }
         public bool IsActive { get; set; }
 
         public ISectorFowData GetSectorFowData(ISector sector)

@@ -1,14 +1,18 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Common;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
-    ///     Find isolated regions in matrix of bool.
+    /// Find isolated regions in matrix of bool.
     /// </summary>
-    internal static class RegionFinder
+    static class RegionFinder
     {
         /// <summary>
-        ///     Find all passable (true) regions.
+        /// Find all passable (true) regions.
         /// </summary>
         public static IEnumerable<RegionDraft> FindPassableRegionsFor(Matrix<bool> matrix)
         {
@@ -20,7 +24,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             {
                 var openNode = openNodes.First(x => MapFactoryHelper.IsAvailableFor7(matrix, x));
                 var regionCoords = FloodFillRegions(matrix, openNode);
-                RegionDraft region = new RegionDraft(regionCoords.ToArray());
+                var region = new RegionDraft(regionCoords.ToArray());
 
                 openNodes.RemoveAll(x => region.Contains(x));
 

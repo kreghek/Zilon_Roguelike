@@ -1,4 +1,9 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
@@ -15,56 +20,53 @@ namespace Zilon.Core.Tactics
     {
         private readonly IPerkResolver _perkResolver;
 
+        /// <inheritdoc/>
+        public event EventHandler Moved;
+
+        /// <inheritdoc/>
+        public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+
+        /// <inheritdoc/>
+        public event EventHandler<MineDepositEventArgs> DepositMined;
+
+        /// <inheritdoc/>
+        public event EventHandler<UsedActEventArgs> UsedAct;
+
+        /// <inheritdoc/>
+        public event EventHandler<DamageTakenEventArgs> DamageTaken;
+
+        /// <inheritdoc/>
+        public event EventHandler<UsedPropEventArgs> UsedProp;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Песонаж, который лежит в основе актёра.
+        /// </summary>
+        public IPerson Person { get; }
+
+        /// <summary>
+        /// Текущий узел карты, в котором находится актёр.
+        /// </summary>
+        public IGraphNode Node { get; private set; }
+
+        public IPlayer Owner { get; }
+        public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
+        public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
+        public bool CanExecuteTasks { get => !Person.CheckIsDead(); }
+
         [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
-            [NotNull] IGraphNode node)
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node)
         {
             Person = person ?? throw new ArgumentNullException(nameof(person));
             TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
             Node = node ?? throw new ArgumentNullException(nameof(node));
         }
 
-        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
-            [NotNull] IGraphNode node,
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node,
             [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
         }
-
-        public IPlayer Owner { get; }
-
-        /// <inheritdoc />
-        public event EventHandler Moved;
-
-        /// <inheritdoc />
-        public event EventHandler<OpenContainerEventArgs> OpenedContainer;
-
-        /// <inheritdoc />
-        public event EventHandler<MineDepositEventArgs> DepositMined;
-
-        /// <inheritdoc />
-        public event EventHandler<UsedActEventArgs> UsedAct;
-
-        /// <inheritdoc />
-        public event EventHandler<DamageTakenEventArgs> DamageTaken;
-
-        /// <inheritdoc />
-        public event EventHandler<UsedPropEventArgs> UsedProp;
-
-        /// <inheritdoc />
-        /// <summary>
-        ///     Песонаж, который лежит в основе актёра.
-        /// </summary>
-        public IPerson Person { get; }
-
-        /// <summary>
-        ///     Текущий узел карты, в котором находится актёр.
-        /// </summary>
-        public IGraphNode Node { get; private set; }
-
-        public PhysicalSize PhysicalSize => Person.PhysicalSize;
-        public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
-        public bool CanExecuteTasks => !Person.CheckIsDead();
 
         public bool CanBeDamaged()
         {
@@ -94,7 +96,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(method));
             }
 
-            IOpenContainerResult openResult = method?.TryOpen(container.GetModule<IPropContainer>());
+            var openResult = method?.TryOpen(container.GetModule<IPropContainer>());
 
             DoOpenContainer(container, openResult);
         }
@@ -111,9 +113,9 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(usedProp));
             }
 
-            IPropUseSubScheme useData = usedProp.Scheme.Use;
+            var useData = usedProp.Scheme.Use;
 
-            foreach (ConsumeCommonRule rule in useData.CommonRules)
+            foreach (var rule in useData.CommonRules)
             {
                 switch (rule.Direction)
                 {
@@ -127,6 +129,7 @@ namespace Zilon.Core.Tactics
                         ProcessNegativeRule(rule.Type, rule.Level);
                         break;
                 }
+
             }
 
             if (useData.Consumable && Person.GetModuleSafe<IInventoryModule>() != null)
@@ -135,50 +138,12 @@ namespace Zilon.Core.Tactics
 
                 if (_perkResolver != null)
                 {
-                    ConsumeProviantJobProgress consumeProgress = new ConsumeProviantJobProgress();
+                    var consumeProgress = new ConsumeProviantJobProgress();
                     _perkResolver.ApplyProgress(consumeProgress, Person.GetModule<IEvolutionModule>());
                 }
             }
 
             UsedProp?.Invoke(this, new UsedPropEventArgs(usedProp));
-        }
-
-        public void TakeDamage(int value)
-        {
-            Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health, value);
-
-            if (_perkResolver != null && Person.GetModuleSafe<IEvolutionModule>() != null)
-            {
-                TakeDamageJobProgress takeDamageProgress = new TakeDamageJobProgress(value);
-                _perkResolver.ApplyProgress(takeDamageProgress, Person.GetModule<IEvolutionModule>());
-
-                TakeHitJobProgress takeHitProgress = new TakeHitJobProgress();
-                _perkResolver.ApplyProgress(takeHitProgress, Person.GetModule<IEvolutionModule>());
-            }
-
-            DoDamageTaken(value);
-        }
-
-        public void MineDeposit(IStaticObject deposit, IMineDepositMethod method)
-        {
-            if (deposit is null)
-            {
-                throw new ArgumentNullException(nameof(deposit));
-            }
-
-            if (method is null)
-            {
-                throw new ArgumentNullException(nameof(method));
-            }
-
-            IMineDepositResult openResult = method?.TryMine(deposit.GetModule<IPropDepositModule>());
-
-            DoMineDeposit(deposit, openResult);
-        }
-
-        public void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
-        {
-            TaskSource = actorTaskSource;
         }
 
         private void ProcessNegativeRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
@@ -238,7 +203,7 @@ namespace Zilon.Core.Tactics
             switch (usedProp)
             {
                 case Resource resource:
-                    Resource removeResource = new Resource(resource.Scheme, 1);
+                    var removeResource = new Resource(resource.Scheme, 1);
                     Person.GetModule<IInventoryModule>().Remove(removeResource);
                     break;
 
@@ -246,6 +211,22 @@ namespace Zilon.Core.Tactics
                     Person.GetModule<IInventoryModule>().Remove(equipment);
                     break;
             }
+        }
+
+        public void TakeDamage(int value)
+        {
+            Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health, value);
+
+            if (_perkResolver != null && Person.GetModuleSafe<IEvolutionModule>() != null)
+            {
+                var takeDamageProgress = new TakeDamageJobProgress(value);
+                _perkResolver.ApplyProgress(takeDamageProgress, Person.GetModule<IEvolutionModule>());
+
+                var takeHitProgress = new TakeHitJobProgress();
+                _perkResolver.ApplyProgress(takeHitProgress, Person.GetModule<IEvolutionModule>());
+            }
+
+            DoDamageTaken(value);
         }
 
         [ExcludeFromCodeCoverage]
@@ -258,14 +239,14 @@ namespace Zilon.Core.Tactics
         [ExcludeFromCodeCoverage]
         private void DoOpenContainer(IStaticObject container, IOpenContainerResult openResult)
         {
-            OpenContainerEventArgs e = new OpenContainerEventArgs(container, openResult);
+            var e = new OpenContainerEventArgs(container, openResult);
             OpenedContainer?.Invoke(this, e);
         }
 
         [ExcludeFromCodeCoverage]
         private void DoUseAct(IAttackTarget target, ITacticalAct tacticalAct)
         {
-            UsedActEventArgs args = new UsedActEventArgs(target, tacticalAct);
+            var args = new UsedActEventArgs(target, tacticalAct);
             UsedAct?.Invoke(this, args);
         }
 
@@ -276,9 +257,9 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        ///     Метод введён специально для повышения уровня интоксикации.
-        ///     Так как глупо выглядит ResToreStat для повышения интоксикации.
-        ///     Просто семантически более удобная обёртка.
+        /// Метод введён специально для повышения уровня интоксикации.
+        /// Так как глупо выглядит ResToreStat для повышения интоксикации.
+        /// Просто семантически более удобная обёртка.
         /// </summary>
         /// <param name="statType"> Характеристика, повышаемая методом. </param>
         /// <param name="level"> Уровень увеличения. </param>
@@ -338,7 +319,7 @@ namespace Zilon.Core.Tactics
 
         private void RestoreHp(PersonRuleLevel level)
         {
-            ISurvivalModule survivalModule = Person.GetModuleSafe<ISurvivalModule>();
+            var survivalModule = Person.GetModuleSafe<ISurvivalModule>();
             if (survivalModule is null)
             {
                 return;
@@ -365,7 +346,7 @@ namespace Zilon.Core.Tactics
 
         private void RiseIntoxicationLevel(PersonRuleLevel level)
         {
-            ISurvivalModule survivalModule = Person.GetModuleSafe<ISurvivalModule>();
+            var survivalModule = Person.GetModuleSafe<ISurvivalModule>();
             if (survivalModule is null)
             {
                 return;
@@ -463,10 +444,32 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        public void MineDeposit(IStaticObject deposit, IMineDepositMethod method)
+        {
+            if (deposit is null)
+            {
+                throw new ArgumentNullException(nameof(deposit));
+            }
+
+            if (method is null)
+            {
+                throw new ArgumentNullException(nameof(method));
+            }
+
+            var openResult = method?.TryMine(deposit.GetModule<IPropDepositModule>());
+
+            DoMineDeposit(deposit, openResult);
+        }
+
         private void DoMineDeposit(IStaticObject deposit, IMineDepositResult openResult)
         {
-            MineDepositEventArgs e = new MineDepositEventArgs(deposit, openResult);
+            var e = new MineDepositEventArgs(deposit, openResult);
             DepositMined?.Invoke(this, e);
+        }
+
+        public void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
+        {
+            TaskSource = actorTaskSource;
         }
     }
 }

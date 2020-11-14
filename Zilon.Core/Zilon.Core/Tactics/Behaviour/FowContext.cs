@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
@@ -41,18 +45,17 @@ namespace Zilon.Core.Tactics.Behaviour
         }
 
         /// <summary>
-        ///     Метод првоеряет, нет ли на пути просмотра объектов, закрывающих видимость.
+        /// Метод првоеряет, нет ли на пути просмотра объектов, закрывающих видимость.
         /// </summary>
         private bool IsBlockedByObstacle(IGraphNode baseNode, IGraphNode targetNode)
         {
-            CubeCoords baseCubeCoords = ((HexNode)baseNode).CubeCoords;
-            CubeCoords targetCubeCoords = ((HexNode)targetNode).CubeCoords;
-            CubeCoords[] line = CubeCoordsHelper.CubeDrawLine(baseCubeCoords, targetCubeCoords);
+            var baseCubeCoords = ((HexNode)baseNode).CubeCoords;
+            var targetCubeCoords = ((HexNode)targetNode).CubeCoords;
+            var line = CubeCoordsHelper.CubeDrawLine(baseCubeCoords, targetCubeCoords);
 
-            foreach (CubeCoords linePoint in line)
+            foreach (var linePoint in line)
             {
-                var staticObjects = _staticObjectManager.Items.Where(x => (x.Node as HexNode).CubeCoords == linePoint)
-                    .ToArray();
+                var staticObjects = _staticObjectManager.Items.Where(x => (x.Node as HexNode).CubeCoords == linePoint).ToArray();
                 foreach (var staticObject in staticObjects)
                 {
                     if (staticObject.IsSightBlock)

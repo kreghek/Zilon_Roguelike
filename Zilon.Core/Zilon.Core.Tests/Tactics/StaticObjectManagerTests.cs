@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics;
+﻿using NUnit.Framework;
+
+using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Tactics.Base;
 
 namespace Zilon.Core.Tests.Tactics
@@ -7,10 +9,10 @@ namespace Zilon.Core.Tests.Tactics
     [Parallelizable(ParallelScope.All)]
     public class StaticObjectManagerTests : CommonManagerTestsBase<IStaticObject>
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override ISectorEntityManager<IStaticObject> CreateManager()
         {
-            StaticObjectManager staticObjectManager = new StaticObjectManager();
+            var staticObjectManager = new StaticObjectManager();
             return staticObjectManager;
         }
     }

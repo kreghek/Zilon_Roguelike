@@ -1,14 +1,16 @@
-﻿namespace Zilon.Core.Tactics
+﻿using System;
+
+namespace Zilon.Core.Tactics
 {
     /// <summary>
-    ///     Обработчик действий, нацеленных на статический объект.
+    /// Обработчик действий, нацеленных на статический объект.
     /// </summary>
     public sealed class StaticObjectActUsageHandler : IActUsageHandler
     {
-        /// <inheritdoc />
-        public Type TargetType => typeof(IStaticObject);
+        /// <inheritdoc/>
+        public Type TargetType { get => typeof(IStaticObject); }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll)
         {
             if (tacticalActRoll is null)
@@ -20,7 +22,7 @@
         }
 
         /// <summary>
-        ///     Применяет действие на предмет, на который можно подействовать (сундук/дверь/камень).
+        /// Применяет действие на предмет, на который можно подействовать (сундук/дверь/камень).
         /// </summary>
         /// <param name="target"> Цель использования действия. </param>
         /// <param name="tacticalActRoll"> Эффективность действия. </param>

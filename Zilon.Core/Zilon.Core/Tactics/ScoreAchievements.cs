@@ -1,9 +1,11 @@
-﻿namespace Zilon.Core.Tactics
+﻿using System;
+
+namespace Zilon.Core.Tactics
 {
     [Flags]
     public enum ScoreAchievements
     {
         Nothing = 0,
-        HomeFound = 1
+        HomeFound = 1,
     }
 }

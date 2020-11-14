@@ -1,23 +1,25 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
-    ///     Тип действия.
+    /// Тип действия.
     /// </summary>
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum TacticalActEffectType
     {
         /// <summary>
-        ///     Не определено.
+        /// Не определено.
         /// </summary>
         Undefined,
 
         /// <summary>
-        ///     Наносит урон.
+        /// Наносит урон.
         /// </summary>
         Damage = 1 << 0,
 
         /// <summary>
-        ///     Восстановление.
+        /// Восстановление.
         /// </summary>
         Heal = 1 << 1
     }

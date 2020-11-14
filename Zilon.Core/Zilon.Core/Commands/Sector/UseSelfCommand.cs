@@ -1,17 +1,20 @@
-﻿using Zilon.Core.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+using Zilon.Core.Client;
 using Zilon.Core.Players;
-using Zilon.Core.Props;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
     /// <summary>
-    ///     Команда на использование предмета.
+    /// Команда на использование предмета.
     /// </summary>
     public class UseSelfCommand : ActorCommandBase
     {
-        private readonly IInventoryState _inventoryState;
         private readonly IPlayer _player;
+        private readonly IInventoryState _inventoryState;
 
         [ExcludeFromCodeCoverage]
         public UseSelfCommand(
@@ -26,13 +29,13 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            IPropItemViewModel propVm = _inventoryState.SelectedProp;
+            var propVm = _inventoryState.SelectedProp;
             if (propVm == null)
             {
                 return false;
             }
 
-            IProp prop = propVm.Prop;
+            var prop = propVm.Prop;
             if (prop == null)
             {
                 throw new AppException("Для модели представления не задан предмет.");
@@ -59,13 +62,12 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            IPropItemViewModel propVm = _inventoryState.SelectedProp;
-            IProp usableProp = propVm.Prop;
+            var propVm = _inventoryState.SelectedProp;
+            var usableProp = propVm.Prop;
 
-            ActorTaskContext taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
-            Intention<UsePropTask> intention =
-                new Intention<UsePropTask>(actor => new UsePropTask(actor, taskContext, usableProp));
+            var intention = new Intention<UsePropTask>(actor => new UsePropTask(actor, taskContext, usableProp));
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
     }

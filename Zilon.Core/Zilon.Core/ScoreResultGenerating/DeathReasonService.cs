@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Localization;
+﻿using System;
+
+using Zilon.Core.Localization;
 using Zilon.Core.Persons;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
@@ -37,8 +39,7 @@ namespace Zilon.Core.ScoreResultGenerating
             }
         }
 
-        private static string GetSurvivalEffectName(SurvivalEffectDamageEvent survivalEffectDamageEvent,
-            Language language)
+        private static string GetSurvivalEffectName(SurvivalEffectDamageEvent survivalEffectDamageEvent, Language language)
         {
             switch (survivalEffectDamageEvent.Effect.Type)
             {
@@ -82,7 +83,7 @@ namespace Zilon.Core.ScoreResultGenerating
 
         private static string GetActorName(PlayerDamagedEvent playerDamagedEvent, Language language)
         {
-            MonsterPerson monsterPerson = playerDamagedEvent?.Damager?.Person as MonsterPerson;
+            var monsterPerson = playerDamagedEvent?.Damager?.Person as MonsterPerson;
 
             if (monsterPerson == null)
             {

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System.Linq;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -14,15 +16,14 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния.
         }
 
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
-            ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
-            IEffectsModule effectsModule = actor.Person.GetModuleSafe<IEffectsModule>();
+            var effectsModule = actor.Person.GetModuleSafe<IEffectsModule>();
             if (effectsModule is null)
             {
                 return false;
@@ -37,9 +38,9 @@ namespace Zilon.Bot.Players.Triggers
 
             //
 
-            IProp[] props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
-            Resource bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
+            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 ConsumeCommonRuleType.Satiety);
 
             if (bestResource == null)

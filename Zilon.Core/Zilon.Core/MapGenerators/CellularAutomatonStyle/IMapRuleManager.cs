@@ -1,9 +1,9 @@
 ﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
-    ///     Service to collect rules and pass they to other services.
+    /// Service to collect rules and pass they to other services.
     /// </summary>
-    internal interface IMapRuleManager
+    interface IMapRuleManager
     {
         T GetRuleOrNull<T>() where T : IMapRule;
 

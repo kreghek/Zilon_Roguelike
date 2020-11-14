@@ -1,4 +1,12 @@
-﻿using Zilon.Core.Client;
+﻿using FluentAssertions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics;
@@ -11,7 +19,7 @@ namespace Zilon.Core.Tests.Commands
     public class PropTrasferCommandTests : CommandTestBase
     {
         /// <summary>
-        ///     Тест проверяет, что можно использовать экипировку.
+        /// Тест проверяет, что можно использовать экипировку.
         /// </summary>
         [Test]
         public void CanExecuteTest()
@@ -27,14 +35,13 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        ///     Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
+        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
         /// </summary>
         [Test]
         public void ExecuteTest()
         {
             var command = ServiceProvider.GetRequiredService<PropTransferCommand>();
-            var humanTaskSourceMock =
-                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             var transferMachine = ServiceProvider.GetRequiredService<PropTransferMachine>();
             command.TransferMachine = transferMachine;
@@ -48,9 +55,9 @@ namespace Zilon.Core.Tests.Commands
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
-            IPropStore inventory = CreateStore();
-            IPropStore container = CreateStore();
-            PropTransferMachine transferMachine = new PropTransferMachine(inventory, container);
+            var inventory = CreateStore();
+            var container = CreateStore();
+            var transferMachine = new PropTransferMachine(inventory, container);
 
             Container.AddSingleton(factory => transferMachine);
             Container.AddSingleton<PropTransferCommand>();

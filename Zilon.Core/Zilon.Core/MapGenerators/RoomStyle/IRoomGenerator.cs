@@ -1,14 +1,16 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
     /// <summary>
-    ///     Генератор комнат.
+    /// Генератор комнат.
     /// </summary>
     public interface IRoomGenerator
     {
         /// <summary>
-        ///     Соединяет комнаты коридорами.
+        /// Соединяет комнаты коридорами.
         /// </summary>
         /// <param name="map"> Карта, в рамках которой происходит генерация. </param>
         /// <param name="rooms"> Существующие комнаты. </param>
@@ -16,7 +18,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash);
 
         /// <summary>
-        ///     Создаёт узлы комнат на карте.
+        /// Создаёт узлы комнат на карте.
         /// </summary>
         /// <param name="map"> Карта, в рамках которой происходит генерация. </param>
         /// <param name="rooms"> Комнаты, для которых создаются узлы графа карты. </param>
@@ -24,7 +26,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash);
 
         /// <summary>
-        ///     Генерация комнат.
+        /// Генерация комнат.
         /// </summary>
         /// <param name="roomCount"> Количество комнат, которые будут сгенерированы. </param>
         /// <param name="roomMinSize"> Минимальный размер комнаты. </param>

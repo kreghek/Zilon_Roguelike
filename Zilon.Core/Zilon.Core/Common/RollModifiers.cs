@@ -1,7 +1,9 @@
-﻿namespace Zilon.Core.Common
+﻿using Newtonsoft.Json;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
-    ///     Модификаторы броска куба.
+    /// Модификаторы броска куба.
     /// </summary>
     public class RollModifiers
     {
