@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using NUnit.Framework;
-
-using Zilon.Bot.Sdk;
+using Zilon.Core.Localization;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -28,16 +23,16 @@ namespace Zilon.Bot.Players.DevelopmentTests
         public async Task GetActorTasksTestAsync(string mode)
         {
             var serviceContainer = new ServiceCollection();
-            var startUp = new Startup();
+            Startup startUp = new Startup();
             startUp.RegisterServices(serviceContainer);
             var serviceProvider = serviceContainer.BuildServiceProvider();
 
-            var botSettings = new BotSettings { Mode = mode };
+            var botSettings = new BotSettings {Mode = mode};
 
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
             var player = serviceProvider.GetRequiredService<IPlayer>();
 
-            var autoPlayEngine = new AutoplayEngine(
+            AutoplayEngine autoPlayEngine = new AutoplayEngine(
                 startUp,
                 botSettings,
                 globeInitializer);
@@ -55,8 +50,9 @@ namespace Zilon.Bot.Players.DevelopmentTests
         private static void PrintPersonBacklog(IPerson humanPerson)
         {
             Console.WriteLine("Build In Traits:");
-            var buildinTraits = humanPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
-            foreach (var buildInTrait in buildinTraits)
+            IPerk[] buildinTraits = humanPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn)
+                .ToArray();
+            foreach (IPerk buildInTrait in buildinTraits)
             {
                 Console.WriteLine(buildInTrait.Scheme.Name.En);
             }
@@ -74,8 +70,8 @@ namespace Zilon.Bot.Players.DevelopmentTests
             }
 
             Console.WriteLine("Start Inventory:");
-            var inventoryProps = humanPerson.GetModule<IInventoryModule>().CalcActualItems().ToArray();
-            foreach (var prop in inventoryProps)
+            IProp[] inventoryProps = humanPerson.GetModule<IInventoryModule>().CalcActualItems().ToArray();
+            foreach (IProp prop in inventoryProps)
             {
                 switch (prop)
                 {
@@ -106,7 +102,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             Console.WriteLine($"Scores: {scoreManager.BaseScores}");
 
-            var scoreDetails = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
+            string scoreDetails = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
             Console.WriteLine($"Details:  {scoreDetails}");
 
             var playerEventLogService = serviceProvider.GetRequiredService<IPlayerEventLogService>();
@@ -117,7 +113,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             {
                 var deathReason = deathReasonService.GetDeathReasonSummary(
                     lastEvent,
-                    Core.Localization.Language.En);
+                    Language.En);
 
                 Console.WriteLine($"Death Reason: {deathReason}");
             }

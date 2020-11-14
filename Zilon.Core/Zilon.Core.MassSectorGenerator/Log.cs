@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.MassSectorGenerator
+﻿namespace Zilon.Core.MassSectorGenerator
 {
     public static class Log
     {

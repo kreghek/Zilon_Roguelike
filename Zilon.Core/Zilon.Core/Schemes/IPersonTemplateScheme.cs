@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
     public interface IPersonTemplateScheme : IScheme
     {
@@ -34,7 +32,6 @@ namespace Zilon.Core.Schemes
         [JsonConverter(typeof(ConcreteTypeConverter<DropTableScheme>))]
         public IDropTableScheme InventoryProps { get; private set; }
 
-        [JsonProperty]
-        public string FractionSid { get; private set; }
+        [JsonProperty] public string FractionSid { get; private set; }
     }
 }

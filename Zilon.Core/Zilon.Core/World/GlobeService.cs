@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Zilon.Core.World
+﻿namespace Zilon.Core.World
 {
     public sealed class GlobeService : IGlobeService
     {

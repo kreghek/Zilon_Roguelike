@@ -1,11 +1,4 @@
 ﻿using System;
-
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.CommonServices;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -19,7 +12,7 @@ namespace Zilon.Core.Tests.Tactics
     public class DropResolverTests
     {
         /// <summary>
-        /// Тест проверяет, что во время злого часа срабатывает бонус на выброс злой тыквы.
+        ///     Тест проверяет, что во время злого часа срабатывает бонус на выброс злой тыквы.
         /// </summary>
         [Test]
         public void Resolve_EvilPumpkinHour_EvipPumpkinChanceIncleased()
@@ -29,16 +22,15 @@ namespace Zilon.Core.Tests.Tactics
             // Сейчас в коде генерация модификаторов строго завязана на этот символьныи иденфтикатор.
             const string testPropSchemeSid = "evil-pumpkin";
             // Максимальный пик дропа должен быть 2 ноября любого года. 2019 выбран произвольно.
-            var evilHourDate = new DateTime(2019, 11, 2);
+            DateTime evilHourDate = new DateTime(2019, 11, 2);
 
             const int PUMPKIN_WEIGHT = 1;
             const int PUMPKIN_WEIGHT_BONUS = 5;
             const int EXPECTED_WEIGHT = PUMPKIN_WEIGHT * PUMPKIN_WEIGHT_BONUS;
 
-            var testPropScheme = new TestPropScheme
+            TestPropScheme testPropScheme = new TestPropScheme
             {
-                Sid = testPropSchemeSid,
-                Equip = new TestPropEquipSubScheme()
+                Sid = testPropSchemeSid, Equip = new TestPropEquipSubScheme()
             };
 
             var randomSourceMock = new Mock<IDropResolverRandomSource>();
@@ -62,18 +54,18 @@ namespace Zilon.Core.Tests.Tactics
             userTimeProviderMock.Setup(x => x.GetCurrentTime()).Returns(evilHourDate);
             var userTimeProvider = userTimeProviderMock.Object;
 
-            var resolver = new DropResolver(randomSource, schemeService, propFactory, userTimeProvider);
+            DropResolver resolver = new DropResolver(randomSource, schemeService, propFactory, userTimeProvider);
 
-            var testDropTableRecord = new TestDropTableRecordSubScheme
+            TestDropTableRecordSubScheme testDropTableRecord = new TestDropTableRecordSubScheme
             {
-                SchemeSid = testPropSchemeSid,
-                Weight = 1
+                SchemeSid = testPropSchemeSid, Weight = 1
             };
 
-            var testDropTable = new TestDropTableScheme(1, testDropTableRecord, TestDropTableRecordSubScheme.CreateEmpty(1));
+            TestDropTableScheme testDropTable =
+                new TestDropTableScheme(1, testDropTableRecord, TestDropTableRecordSubScheme.CreateEmpty(1));
 
             // ACT
-            var factProps = resolver.Resolve(new[] { testDropTable });
+            IProp[] factProps = resolver.Resolve(new[] {testDropTable});
 
             // ASSERT
             factProps[0].Scheme.Should().BeSameAs(testPropScheme);
@@ -86,10 +78,7 @@ namespace Zilon.Core.Tests.Tactics
 
             const string testPropSchemeSid = "test-resource";
 
-            var testResourceScheme = new PropScheme
-            {
-                Sid = testPropSchemeSid
-            };
+            PropScheme testResourceScheme = new PropScheme {Sid = testPropSchemeSid};
 
             var randomSourceMock = new Mock<IDropResolverRandomSource>();
             randomSourceMock.Setup(x => x.RollWeight(It.IsAny<int>()))
@@ -108,20 +97,18 @@ namespace Zilon.Core.Tests.Tactics
                 .Returns<IPropScheme, int>((scheme, count) => new Resource(scheme, count));
             var propFactory = propFactoryMock.Object;
 
-            var resolver = new DropResolver(randomSource, schemeService, propFactory, CreateEmptyUserTimeProvider());
+            DropResolver resolver =
+                new DropResolver(randomSource, schemeService, propFactory, CreateEmptyUserTimeProvider());
 
-            var testDropTableRecord = new TestDropTableRecordSubScheme
+            TestDropTableRecordSubScheme testDropTableRecord = new TestDropTableRecordSubScheme
             {
-                SchemeSid = testPropSchemeSid,
-                Weight = 1,
-                MinCount = 1,
-                MaxCount = 1
+                SchemeSid = testPropSchemeSid, Weight = 1, MinCount = 1, MaxCount = 1
             };
 
-            var testDropTable = new TestDropTableScheme(1, testDropTableRecord);
+            TestDropTableScheme testDropTable = new TestDropTableScheme(1, testDropTableRecord);
 
             // ACT
-            var factProps = resolver.Resolve(new[] { testDropTable });
+            IProp[] factProps = resolver.Resolve(new[] {testDropTable});
 
             // ASSERT
             factProps.Length.Should().Be(1);
@@ -130,8 +117,8 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         /// <summary>
-        /// Тест проверяет, что если для записи таблицы дропа задан дополнительный дроп,
-        /// то он тоже выпадает.
+        ///     Тест проверяет, что если для записи таблицы дропа задан дополнительный дроп,
+        ///     то он тоже выпадает.
         /// </summary>
         [Test]
         public void Resolve_ExtraDropInScheme_ReturnsExtraDrop()
@@ -141,16 +128,12 @@ namespace Zilon.Core.Tests.Tactics
             const string testPropSchemeSid = "test-prop";
             const string testExtraSchemeSid = "test-extra";
 
-            var testPropScheme = new TestPropScheme
+            TestPropScheme testPropScheme = new TestPropScheme
             {
-                Sid = testPropSchemeSid,
-                Equip = new TestPropEquipSubScheme()
+                Sid = testPropSchemeSid, Equip = new TestPropEquipSubScheme()
             };
 
-            var testExtraScheme = new TestPropScheme
-            {
-                Sid = testExtraSchemeSid
-            };
+            TestPropScheme testExtraScheme = new TestPropScheme {Sid = testExtraSchemeSid};
 
             var randomSourceMock = new Mock<IDropResolverRandomSource>();
             randomSourceMock.Setup(x => x.RollWeight(It.IsAny<int>()))
@@ -173,26 +156,27 @@ namespace Zilon.Core.Tests.Tactics
                 .Returns<IPropScheme, int>((scheme, count) => new Resource(scheme, count));
             var propFactory = propFactoryMock.Object;
 
-            var resolver = new DropResolver(randomSource, schemeService, propFactory, CreateEmptyUserTimeProvider());
+            DropResolver resolver =
+                new DropResolver(randomSource, schemeService, propFactory, CreateEmptyUserTimeProvider());
 
-            var testDropTableRecord = new TestDropTableRecordSubScheme
+            TestDropTableRecordSubScheme testDropTableRecord = new TestDropTableRecordSubScheme
             {
                 SchemeSid = testPropSchemeSid,
                 Weight = 1,
-                Extra = new IDropTableScheme[] {
-                    new TestDropTableScheme(1, new TestDropTableRecordSubScheme{
-                        SchemeSid = testExtraSchemeSid,
-                        Weight = 1,
-                        MinCount = 1,
-                        MaxCount = 1
-                    })
+                Extra = new IDropTableScheme[]
+                {
+                    new TestDropTableScheme(1,
+                        new TestDropTableRecordSubScheme
+                        {
+                            SchemeSid = testExtraSchemeSid, Weight = 1, MinCount = 1, MaxCount = 1
+                        })
                 }
             };
 
-            var testDropTable = new TestDropTableScheme(1, testDropTableRecord);
+            TestDropTableScheme testDropTable = new TestDropTableScheme(1, testDropTableRecord);
 
             // ACT
-            var factProps = resolver.Resolve(new[] { testDropTable });
+            IProp[] factProps = resolver.Resolve(new[] {testDropTable});
 
             // ASSERT
             factProps.Length.Should().Be(2);

@@ -1,8 +1,4 @@
-﻿using FluentAssertions;
-
-using NUnit.Framework;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 
 namespace Zilon.Core.Tests.Components
 {
@@ -11,7 +7,7 @@ namespace Zilon.Core.Tests.Components
     public class PersonStatTests
     {
         /// <summary>
-        /// Тест проверяет, что характеристика на первом уровне при отсутствии бонусов равна базовой.
+        ///     Тест проверяет, что характеристика на первом уровне при отсутствии бонусов равна базовой.
         /// </summary>
         [Test]
         public void GetActualValue_1LvlWithoutBonuses_ReturnBaseValue()
@@ -22,13 +18,11 @@ namespace Zilon.Core.Tests.Components
             const int level = 1;
             const int expectedValue = baseValue;
 
-            var personStat = new PersonStat(baseValue, incrementValue);
-
+            PersonStat personStat = new PersonStat(baseValue, incrementValue);
 
 
             // ACT
-            var factValue = personStat.GetActualValue(level, rarityBonus: 0);
-
+            float factValue = personStat.GetActualValue(level, 0);
 
 
             // ASSERT
@@ -36,7 +30,7 @@ namespace Zilon.Core.Tests.Components
         }
 
         /// <summary>
-        /// Тест проверяет, что характеристика на первом уровне + бонус равна базовому значению + бонус.
+        ///     Тест проверяет, что характеристика на первом уровне + бонус равна базовому значению + бонус.
         /// </summary>
         [Test]
         public void GetActualValue_1LvlWithBonuses_ReturnBaseValuePlusBonuses()
@@ -48,19 +42,15 @@ namespace Zilon.Core.Tests.Components
             const int level = 1;
             const int expectedValue = baseValue + bonusValue;
 
-            var personStat = new PersonStat(baseValue, incrementValue);
+            PersonStat personStat = new PersonStat(baseValue, incrementValue);
 
-            var bonuses = new[] {
-                new PersonStat(bonusValue)
-            };
-
+            PersonStat[] bonuses = {new PersonStat(bonusValue)};
 
 
             // ACT
-            var factValue = personStat.GetActualValue(level,
-                rarityBonus: 0,
-                bonuses: bonuses);
-
+            float factValue = personStat.GetActualValue(level,
+                0,
+                bonuses);
 
 
             // ASSERT

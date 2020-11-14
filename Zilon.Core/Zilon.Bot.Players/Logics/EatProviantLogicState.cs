@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Bot.Players.Triggers;
+﻿using Zilon.Bot.Players.Triggers;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -12,7 +10,8 @@ namespace Zilon.Bot.Players.Logics
 {
     public class EatProviantLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
@@ -24,13 +23,15 @@ namespace Zilon.Bot.Players.Logics
                 throw new System.ArgumentNullException(nameof(context));
             }
 
-            var eatFoodTask = CheckHazard(actor, context, SurvivalStatType.Satiety, ConsumeCommonRuleType.Satiety);
+            UsePropTask eatFoodTask =
+                CheckHazard(actor, context, SurvivalStatType.Satiety, ConsumeCommonRuleType.Satiety);
             if (eatFoodTask != null)
             {
                 return eatFoodTask;
             }
 
-            var drinkWaterTask = CheckHazard(actor, context, SurvivalStatType.Hydration, ConsumeCommonRuleType.Thirst);
+            UsePropTask drinkWaterTask =
+                CheckHazard(actor, context, SurvivalStatType.Hydration, ConsumeCommonRuleType.Thirst);
             if (drinkWaterTask != null)
             {
                 return drinkWaterTask;
@@ -45,7 +46,8 @@ namespace Zilon.Bot.Players.Logics
             // Внутреннего состояния нет.
         }
 
-        private UsePropTask CheckHazard(IActor actor, ISectorTaskSourceContext context, SurvivalStatType hazardType, ConsumeCommonRuleType resourceType)
+        private UsePropTask CheckHazard(IActor actor, ISectorTaskSourceContext context, SurvivalStatType hazardType,
+            ConsumeCommonRuleType resourceType)
         {
             var hazardEffect = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == hazardType);
@@ -54,9 +56,9 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            IProp[] props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
-            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
+            Resource bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 resourceType);
 
             if (bestResource == null)
@@ -64,7 +66,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var taskContxt = new ActorTaskContext(context.Sector);
+            ActorTaskContext taskContxt = new ActorTaskContext(context.Sector);
             return new UsePropTask(actor, taskContxt, bestResource);
         }
     }

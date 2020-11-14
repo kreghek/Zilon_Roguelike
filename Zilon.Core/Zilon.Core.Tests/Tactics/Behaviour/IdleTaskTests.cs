@@ -1,10 +1,4 @@
-﻿using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 
@@ -15,7 +9,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     public class IdleTaskTests
     {
         /// <summary>
-        /// Тест проверяет, что задача на простой на 1 итерацию заканчивается сразу после первой итерации.
+        ///     Тест проверяет, что задача на простой на 1 итерацию заканчивается сразу после первой итерации.
         /// </summary>
         [Test]
         public void ExecuteTest()
@@ -33,7 +27,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var contextMock = new Mock<IActorTaskContext>();
             var context = contextMock.Object;
 
-            var task = new IdleTask(actor, context, decisionSource);
+            IdleTask task = new IdleTask(actor, context, decisionSource);
 
             // ACT
             task.Execute();

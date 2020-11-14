@@ -1,15 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Newtonsoft.Json;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
     /// <summary>
-    /// Запись в схеме таблицы дропа.
+    ///     Запись в схеме таблицы дропа.
     /// </summary>
     /// <remarks>
-    /// Содержит информацию о том, какой продемет может выпасть,
-    /// количество/качество и с какой вероятностью.
+    ///     Содержит информацию о том, какой продемет может выпасть,
+    ///     количество/качество и с какой вероятностью.
     /// </remarks>
     public sealed class DropTableRecordSubScheme : SubSchemeBase, IDropTableRecordSubScheme
     {
@@ -28,41 +24,42 @@ namespace Zilon.Core.Schemes
 
             if (weight <= 0)
             {
-                throw new System.ArgumentNullException(nameof(weight), "Вес записи в таблице дропа должен быть положительным.");
+                throw new System.ArgumentNullException(nameof(weight),
+                    "Вес записи в таблице дропа должен быть положительным.");
             }
 
             Weight = weight;
         }
 
         /// <summary>
-        /// Схема предмета.
+        ///     Схема предмета.
         /// </summary>
         [JsonProperty]
         public string SchemeSid { get; private set; }
 
         /// <summary>
-        /// Вес записи в таблице дропа.
+        ///     Вес записи в таблице дропа.
         /// </summary>
         /// <remarks>
-        /// Чем выше, тем веротянее будет выбрана данная запись при разрешении дропа.
+        ///     Чем выше, тем веротянее будет выбрана данная запись при разрешении дропа.
         /// </remarks>
         [JsonProperty]
         public int Weight { get; private set; }
 
         /// <summary>
-        /// Минимальное количество ресурса.
+        ///     Минимальное количество ресурса.
         /// </summary>
         [JsonProperty]
         public int MinCount { get; private set; }
 
         /// <summary>
-        /// Максимальное количество ресурса.
+        ///     Максимальное количество ресурса.
         /// </summary>
         [JsonProperty]
         public int MaxCount { get; private set; }
 
         /// <summary>
-        /// Дополнительный дроп.
+        ///     Дополнительный дроп.
         /// </summary>
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<DropTableScheme[]>))]

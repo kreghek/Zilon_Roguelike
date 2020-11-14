@@ -1,9 +1,7 @@
-﻿using JetBrains.Annotations;
-
-namespace Zilon.Core.Components
+﻿namespace Zilon.Core.Components
 {
     /// <summary>
-    /// Набор ресурсов. Используется для крафта, диалогов, прокачки перков.
+    ///     Набор ресурсов. Используется для крафта, диалогов, прокачки перков.
     /// </summary>
     [PublicAPI]
     public sealed class PropSet

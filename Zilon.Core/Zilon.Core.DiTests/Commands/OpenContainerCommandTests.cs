@@ -1,20 +1,10 @@
-﻿using System.Linq;
-
-using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
-
-using NUnit.Framework;
-
+﻿using System;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Commands
 {
@@ -22,7 +12,7 @@ namespace Zilon.Core.Tests.Commands
     public class OpenContainerCommandTests : CommandTestBase
     {
         /// <summary>
-        /// Тест проверяет, что можно атаковать, если не мешают стены.
+        ///     Тест проверяет, что можно атаковать, если не мешают стены.
         /// </summary>
         [Test]
         public void CanExecuteTest()
@@ -38,14 +28,15 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
+        ///     Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
         /// </summary>
         [Test]
         public void ExecuteTest()
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<OpenContainerCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
@@ -58,12 +49,12 @@ namespace Zilon.Core.Tests.Commands
         {
             if (testMap is null)
             {
-                throw new System.ArgumentNullException(nameof(testMap));
+                throw new ArgumentNullException(nameof(testMap));
             }
 
             if (playerStateMock is null)
             {
-                throw new System.ArgumentNullException(nameof(playerStateMock));
+                throw new ArgumentNullException(nameof(playerStateMock));
             }
 
             var targetMock = new Mock<IStaticObject>();

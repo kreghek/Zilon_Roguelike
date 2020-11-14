@@ -1,14 +1,12 @@
-﻿using Newtonsoft.Json;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
     /// <summary>
-    /// Реализация схемы сектора.
+    ///     Реализация схемы сектора.
     /// </summary>
     public sealed class SectorSubScheme : SubSchemeBase, ISectorSubScheme
     {
         /// <summary>
-        /// Идентфиикаторы обычных монстров, встречаемых в секторе.
+        ///     Идентфиикаторы обычных монстров, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
@@ -16,7 +14,7 @@ namespace Zilon.Core.Schemes
         public string[] RegularMonsterSids { get; private set; }
 
         /// <summary>
-        /// Идентификаторы редких монстров, встречаемых в секторе.
+        ///     Идентификаторы редких монстров, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
@@ -24,7 +22,7 @@ namespace Zilon.Core.Schemes
         public string[] RareMonsterSids { get; private set; }
 
         /// <summary>
-        /// Идентификаторы боссов, встречаемых в секторе.
+        ///     Идентификаторы боссов, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
@@ -32,22 +30,21 @@ namespace Zilon.Core.Schemes
         public string[] ChampionMonsterSids { get; private set; }
 
         /// <summary>
-        /// Количество монстров в секторе.
+        ///     Количество монстров в секторе.
         /// </summary>
         [JsonProperty]
         public int RegionMonsterCount { get; private set; }
 
-        [JsonProperty]
-        public int MinRegionMonsterCount { get; private set; }
+        [JsonProperty] public int MinRegionMonsterCount { get; private set; }
 
         /// <summary>
-        /// Количество сундуков в секторе.
+        ///     Количество сундуков в секторе.
         /// </summary>
         [JsonProperty]
         public int TotalChestCount { get; private set; }
 
         /// <summary>
-        /// Таблицы дропа для сундуков.
+        ///     Таблицы дропа для сундуков.
         /// </summary>
         [JsonProperty]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
@@ -56,30 +53,30 @@ namespace Zilon.Core.Schemes
 
 
         /// <summary>
-        /// Символьный идентфиикатор сектора.
+        ///     Символьный идентфиикатор сектора.
         /// </summary>
         /// <remarks>
-        /// Нужен для перехода из сектора в сектор.
+        ///     Нужен для перехода из сектора в сектор.
         /// </remarks>
         [JsonProperty]
         public string Sid { get; private set; }
 
         /// <summary>
-        /// Наименование сектора.
+        ///     Наименование сектора.
         /// </summary>
         [JsonProperty]
         public LocalizedStringSubScheme Name { get; private set; }
 
         /// <summary>
-        /// Описание сектора.
+        ///     Описание сектора.
         /// </summary>
         [JsonProperty]
         public LocalizedStringSubScheme Description { get; private set; }
 
         /// <summary>
-        /// Идентфикаторы связанных секторов в рамках текущей локации.
+        ///     Идентфикаторы связанных секторов в рамках текущей локации.
         /// </summary>
-        /// <seealso cref="Sid"/>
+        /// <seealso cref="Sid" />
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<SectorTransitionSubScheme[]>))]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
@@ -87,14 +84,14 @@ namespace Zilon.Core.Schemes
         public ISectorTransitionSubScheme[] TransSectorSids { get; private set; }
 
         /// <summary>
-        /// Индикатор того, что сектор является стартовым при входе из локации.
+        ///     Индикатор того, что сектор является стартовым при входе из локации.
         /// </summary>
         [JsonProperty]
         public bool IsStart { get; private set; }
 
         /// <summary>
-        /// Коэффициент максимального количества сундуков в регионе сектора (комнате)
-        /// в зависимости от размера региона.
+        ///     Коэффициент максимального количества сундуков в регионе сектора (комнате)
+        ///     в зависимости от размера региона.
         /// </summary>
         [JsonProperty]
         public int RegionChestCountRatio { get; private set; }

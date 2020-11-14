@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
-using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -25,18 +17,18 @@ namespace Zilon.Core.Tests.MapGenerators
     public class SectorProceduralGeneratorTests
     {
         /// <summary>
-        /// Тест проверяет, что для различных карт в виде змейки генерация работает без ошибок.
+        ///     Тест проверяет, что для различных карт в виде змейки генерация работает без ошибок.
         /// </summary>
         [Test]
         public void Create_DifferentMaps_NoExceptions()
         {
             // ARRANGE
-            var roomGenerator = new TestSnakeRoomGenerator();
-            var mapFactory = new RoomMapFactory(roomGenerator);
+            TestSnakeRoomGenerator roomGenerator = new TestSnakeRoomGenerator();
+            RoomMapFactory mapFactory = new RoomMapFactory(roomGenerator);
 
-            var generator = CreateGenerator(mapFactory);
-            var sectorScheme = CreateSectorScheme();
-            var sectorNode = CreateSectorNode(sectorScheme);
+            ISectorGenerator generator = CreateGenerator(mapFactory);
+            ISectorSubScheme sectorScheme = CreateSectorScheme();
+            ISectorNode sectorNode = CreateSectorNode(sectorScheme);
 
             // ACT
             Func<Task> act = async () =>
@@ -49,7 +41,7 @@ namespace Zilon.Core.Tests.MapGenerators
         }
 
         /// <summary>
-        /// Тест проверяет, что для различных карт генератор сектора работает без ошибок.
+        ///     Тест проверяет, что для различных карт генератор сектора работает без ошибок.
         /// </summary>
         [Test]
         [TestCase(1)]
@@ -57,20 +49,19 @@ namespace Zilon.Core.Tests.MapGenerators
         [TestCase(3257)]
         [TestCase(636)]
         [TestCase(100000)]
-
         public async Task Create_DifferentMapsRealDice_NoExceptions(int diceSeed)
         {
             // ARRANGE
-            var linearDice = new LinearDice(diceSeed);
-            var gaussDice = new GaussDice(diceSeed);
-            var randomSource = new RoomGeneratorRandomSource(linearDice, gaussDice);
-            var roomGenerator = new RoomGenerator(randomSource);
-            var mapFactory = new RoomMapFactory(roomGenerator);
+            LinearDice linearDice = new LinearDice(diceSeed);
+            GaussDice gaussDice = new GaussDice(diceSeed);
+            RoomGeneratorRandomSource randomSource = new RoomGeneratorRandomSource(linearDice, gaussDice);
+            RoomGenerator roomGenerator = new RoomGenerator(randomSource);
+            RoomMapFactory mapFactory = new RoomMapFactory(roomGenerator);
 
-            var generator = CreateGenerator(mapFactory);
-            var sectorScheme = CreateSectorScheme();
+            ISectorGenerator generator = CreateGenerator(mapFactory);
+            ISectorSubScheme sectorScheme = CreateSectorScheme();
 
-            var sectorNode = CreateSectorNode(sectorScheme);
+            ISectorNode sectorNode = CreateSectorNode(sectorScheme);
 
             // ACT
             await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
@@ -118,11 +109,10 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             return new TestSectorSubScheme
             {
-                RegularMonsterSids = new[] { "rat" },
+                RegularMonsterSids = new[] {"rat"},
                 MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
                 {
-                    RegionCount = 20,
-                    RegionSize = 20,
+                    RegionCount = 20, RegionSize = 20
                 }
             };
         }

@@ -1,17 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 
 namespace Zilon.Core.Persons.Survival
 {
     /// <summary>
-    /// Расширения для работы с сегментами характеристик выживания.
+    ///     Расширения для работы с сегментами характеристик выживания.
     /// </summary>
     public static class SurvivalStatKeySegmentExtensions
     {
         /// <summary>
-        /// Рассчёт ключевых сегментов, которые были пересечены при изменении характеристики.
+        ///     Рассчёт ключевых сегментов, которые были пересечены при изменении характеристики.
         /// </summary>
         /// <param name="survivalStatKeySegments"> Ключевые сегменты характеристики. </param>
         /// <param name="startStatValueShare"> Начальное значение характеристики выживания. </param>

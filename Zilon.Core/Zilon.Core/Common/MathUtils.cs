@@ -1,7 +1,7 @@
 ﻿namespace Zilon.Core.Common
 {
     /// <summary>
-    /// Вспомогательный класс для математических операций.
+    ///     Вспомогательный класс для математических операций.
     /// </summary>
     public static class MathUtils
     {

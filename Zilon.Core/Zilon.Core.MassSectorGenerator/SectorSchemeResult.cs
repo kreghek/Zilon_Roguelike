@@ -1,11 +1,9 @@
-﻿using System;
-
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 
 namespace Zilon.Core.MassSectorGenerator
 {
     /// <summary>
-    /// Результат выбора сектора. Используется масс-генератором при выборе случайной локации и сектора.
+    ///     Результат выбора сектора. Используется масс-генератором при выборе случайной локации и сектора.
     /// </summary>
     public sealed class SectorSchemeResult
     {

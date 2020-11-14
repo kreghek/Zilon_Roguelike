@@ -1,12 +1,6 @@
-﻿using System;
-using System.Linq;
-
-using BenchmarkDotNet.Attributes;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -19,8 +13,8 @@ namespace Zilon.Core.Benchmarks.Move
 {
     public class MoveBench
     {
-        private ServiceProvider _serviceProvider;
         private IGlobe _globe;
+        private ServiceProvider _serviceProvider;
 
         [Benchmark(Description = "Move100")]
         public void Move100()
@@ -30,7 +24,7 @@ namespace Zilon.Core.Benchmarks.Move
             var moveCommand = _serviceProvider.GetRequiredService<MoveCommand>();
             var commandManger = _serviceProvider.GetRequiredService<ICommandManager>();
 
-            var gameLoop = new GameLoop(_globe);
+            GameLoop gameLoop = new GameLoop(_globe);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             gameLoop.StartProcessAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -39,12 +33,9 @@ namespace Zilon.Core.Benchmarks.Move
             {
                 var currentActorNode = playerState.ActiveActor.Actor.Node;
                 var nextNodes = player.SectorNode.Sector.Map.GetNext(currentActorNode);
-                var moveTargetNode = (HexNode)nextNodes.First();
+                HexNode moveTargetNode = (HexNode)nextNodes.First();
 
-                playerState.SelectedViewModel = new TestNodeViewModel
-                {
-                    Node = moveTargetNode
-                };
+                playerState.SelectedViewModel = new TestNodeViewModel {Node = moveTargetNode};
 
                 commandManger.Push(moveCommand);
 
@@ -76,14 +67,12 @@ namespace Zilon.Core.Benchmarks.Move
             var sector = player.SectorNode.Sector;
             for (var i = 0; i < 1; i++)
             {
-                var currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
-                var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sector.Map.Nodes.Cast<HexNode>());
+                HexNode currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
+                HexNode[] nextNodes =
+                    HexNodeHelper.GetSpatialNeighbors(currentActorNode, sector.Map.Nodes.Cast<HexNode>());
                 var moveTargetNode = nextNodes.First();
 
-                playerState.SelectedViewModel = new TestNodeViewModel
-                {
-                    Node = moveTargetNode
-                };
+                playerState.SelectedViewModel = new TestNodeViewModel {Node = moveTargetNode};
 
                 commandManger.Push(moveCommand);
 
@@ -107,7 +96,7 @@ namespace Zilon.Core.Benchmarks.Move
         [IterationSetup]
         public void IterationSetup()
         {
-            var startUp = new Startup();
+            Startup startUp = new Startup();
             var serviceCollection = new ServiceCollection();
             startUp.RegisterServices(serviceCollection);
 
@@ -116,21 +105,19 @@ namespace Zilon.Core.Benchmarks.Move
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
             var humanPlayer = _serviceProvider.GetRequiredService<IPlayer>();
-            var humanActorTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var humanActorTaskSource =
+                _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
             var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
             _globe = new TestGlobe(personScheme, humanActorTaskSource);
 
             IActor actor = _globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Single();
-            var person = actor.Person;
+            IPerson person = actor.Person;
 
             humanPlayer.BindPerson(_globe, person);
 
-            var actorViewModel = new TestActorViewModel
-            {
-                Actor = actor
-            };
+            TestActorViewModel actorViewModel = new TestActorViewModel {Actor = actor};
 
             playerState.ActiveActor = actorViewModel;
         }

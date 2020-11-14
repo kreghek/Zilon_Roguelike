@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 
 namespace Zilon.Core.Tactics.Spatial
 {
     /// <summary>
-    /// Вспомогательный класс для работы с узлами в поле шестигранников.
+    ///     Вспомогательный класс для работы с узлами в поле шестигранников.
     /// </summary>
     public static class HexNodeHelper
     {
         /// <summary>
-        /// Возвращает географически соседние узлы. Т.е. не учитывается, соединены ли узлы рёбрами.
+        ///     Возвращает географически соседние узлы. Т.е. не учитывается, соединены ли узлы рёбрами.
         /// </summary>
         /// <param name="currentNode"></param>
         /// <param name="nodes"></param>
@@ -29,16 +25,16 @@ namespace Zilon.Core.Tactics.Spatial
                 throw new ArgumentNullException(nameof(nodes));
             }
 
-            var currentCubeCoords = currentNode.CubeCoords;
+            CubeCoords currentCubeCoords = currentNode.CubeCoords;
 
-            var directions = HexHelper.GetOffsetClockwise();
+            CubeCoords[] directions = HexHelper.GetOffsetClockwise();
 
             var neighborCoords = new List<CubeCoords>();
 
             for (var i = 0; i < 6; i++)
             {
-                var dir = directions[i];
-                var pos = dir + currentCubeCoords;
+                CubeCoords dir = directions[i];
+                CubeCoords pos = dir + currentCubeCoords;
 
                 neighborCoords.Add(pos);
             }
@@ -61,7 +57,7 @@ namespace Zilon.Core.Tactics.Spatial
 
 
         /// <summary>
-        /// Ищет ближайший узел карты в сетке шестиугольников без учёта рёбер.
+        ///     Ищет ближайший узел карты в сетке шестиугольников без учёта рёбер.
         /// </summary>
         /// <param name="node"> Опорный узел. </param>
         /// <param name="targets"> Целевые узлы, среди которых будет поиск. </param>

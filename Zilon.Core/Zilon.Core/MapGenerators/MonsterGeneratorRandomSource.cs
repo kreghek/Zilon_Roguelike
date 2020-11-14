@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -40,8 +36,10 @@ namespace Zilon.Core.MapGenerators
         }
 
         /// <summary>Выбирает случайную схему монстра среди доступных.</summary>
-        /// <param name="availableMonsterSchemes">Доступные схемы монстров.
-        /// Расчитываются исходя из схемы сектора и выбранной редкости.</param>
+        /// <param name="availableMonsterSchemes">
+        ///     Доступные схемы монстров.
+        ///     Расчитываются исходя из схемы сектора и выбранной редкости.
+        /// </param>
         /// <returns>Возвращает схему монстра.</returns>
         public IMonsterScheme RollMonsterScheme(IEnumerable<IMonsterScheme> availableMonsterSchemes)
         {
@@ -51,7 +49,7 @@ namespace Zilon.Core.MapGenerators
         }
 
         /// <summary>
-        /// Выбирает слуяайный индекс узла, в который будет размещён монстр.
+        ///     Выбирает слуяайный индекс узла, в который будет размещён монстр.
         /// </summary>
         /// <param name="count">Количество узлов в коллекции доступных узлов.</param>
         /// <returns>Индекс узла карты.</returns>
@@ -71,7 +69,7 @@ namespace Zilon.Core.MapGenerators
         /// <param name="regionMinCount">Минимальное количество монстров в секторе.</param>
         /// <param name="regionMaxCount">Максимальное количество монстров в секторе.</param>
         /// <returns>
-        /// Возвращает слуяайное количество монстров в секторе от 0 до указанного максимального числа.
+        ///     Возвращает слуяайное количество монстров в секторе от 0 до указанного максимального числа.
         /// </returns>
         public int RollRegionCount(int regionMinCount, int regionMaxCount)
         {

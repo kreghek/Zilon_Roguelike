@@ -1,13 +1,10 @@
-﻿using System.Threading.Tasks;
-
-using Zilon.Core.Schemes;
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
     /// <summary>
-    /// Генератор секторов разного типа.
+    ///     Генератор секторов разного типа.
     /// </summary>
     public interface ISectorGenerator
     {

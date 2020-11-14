@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -12,10 +9,11 @@ namespace Zilon.Bot.Players.Logics
     {
         private MoveTask _moveTask;
 
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
         {
-            var sector = context.Sector;
-            var map = sector.Map;
+            ISector sector = context.Sector;
+            ISectorMap map = sector.Map;
 
             if (!strategyData.ExitNodes.Any())
             {
@@ -23,7 +21,7 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var actorNode = actor.Node;
+            IGraphNode actorNode = actor.Node;
             if (map.Transitions.TryGetValue(actorNode, out var currentTransition))
             {
                 sector.UseTransition(actor, currentTransition);
@@ -47,10 +45,8 @@ namespace Zilon.Bot.Players.Logics
 
                 return _moveTask;
             }
-            else
-            {
-                return _moveTask;
-            }
+
+            return _moveTask;
         }
 
         private static MoveTask CreateMoveTask(IActor actor, IGraphNode targetExitNode, ISector sector, ISectorMap map)
@@ -64,16 +60,17 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var context = new ActorTaskContext(sector);
+            ActorTaskContext context = new ActorTaskContext(sector);
 
-            var moveTask = new MoveTask(actor, context, targetExitNode, map);
+            MoveTask moveTask = new MoveTask(actor, context, targetExitNode, map);
 
             return moveTask;
         }
 
         private static bool GetObstableInNode(ISector sector, IGraphNode node)
         {
-            var staticObstaclesInTargetNode = sector.StaticObjectManager.Items.Where(x => x.Node == node && x.IsMapBlock);
+            var staticObstaclesInTargetNode =
+                sector.StaticObjectManager.Items.Where(x => x.Node == node && x.IsMapBlock);
             var targetNodeIsBlockedByObstacles = staticObstaclesInTargetNode.Any();
             return targetNodeIsBlockedByObstacles;
         }

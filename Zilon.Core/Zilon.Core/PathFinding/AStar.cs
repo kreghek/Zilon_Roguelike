@@ -1,31 +1,24 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 
 namespace Zilon.Core.PathFinding
 {
     /// <summary>
-    /// Interface to setup and run the AStar algorithm.
+    ///     Interface to setup and run the AStar algorithm.
     /// </summary>
     /// <remarks>
-    /// https://ru.wikipedia.org/wiki/A*
-    /// Общий алгоритм такой:
-    /// 1. В начале в список открытых узлов помещается стартовый узел.
-    /// 2. Из открытого списка выбирается первый узел, которого нет в списке закрытых.
-    /// Первый выбранный будет наиболее дешёвый, т.к. открытый список сортируется.
-    /// 3. Получаем всех соседей узла и размещаем из в открытый список. Соседи должны отсутствовать в закрытом списке.
-    /// 4. Для каждого соседа запоминаем, как мы к нему пришли.
-    /// 5. В конце по отметаким, как пришли восстанавливаем весь путь.
+    ///     https://ru.wikipedia.org/wiki/A*
+    ///     Общий алгоритм такой:
+    ///     1. В начале в список открытых узлов помещается стартовый узел.
+    ///     2. Из открытого списка выбирается первый узел, которого нет в списке закрытых.
+    ///     Первый выбранный будет наиболее дешёвый, т.к. открытый список сортируется.
+    ///     3. Получаем всех соседей узла и размещаем из в открытый список. Соседи должны отсутствовать в закрытом списке.
+    ///     4. Для каждого соседа запоминаем, как мы к нему пришли.
+    ///     5. В конце по отметаким, как пришли восстанавливаем весь путь.
     /// </remarks>
     public sealed class AStar
     {
         /// <summary>
-        /// The open list.
-        /// </summary>
-        private readonly SortedList<int, IGraphNode> _openList;
-
-        /// <summary>
-        /// The closed list.
+        ///     The closed list.
         /// </summary>
         private readonly HashSet<IGraphNode> _closedList;
 
@@ -33,17 +26,17 @@ namespace Zilon.Core.PathFinding
         private readonly Dictionary<IGraphNode, AStarData> _dataDict;
 
         /// <summary>
-        /// The goal node.
+        ///     The open list.
+        /// </summary>
+        private readonly SortedList<int, IGraphNode> _openList;
+
+        /// <summary>
+        ///     The goal node.
         /// </summary>
         private IGraphNode _goal;
 
         /// <summary>
-        /// Gets the current node that the AStar algorithm is at.
-        /// </summary>
-        public IGraphNode CurrentNode { get; private set; }
-
-        /// <summary>
-        /// Creates a new AStar algorithm instance with the provided start and goal nodes.
+        ///     Creates a new AStar algorithm instance with the provided start and goal nodes.
         /// </summary>
         /// <param name="context"> Контекст выполнения поиска (способности персонажа, служебная информация). </param>
         /// <param name="start">The starting node for the AStar algorithm.</param>
@@ -70,7 +63,12 @@ namespace Zilon.Core.PathFinding
         }
 
         /// <summary>
-        /// Resets the AStar algorithm with the newly specified start node and goal node.
+        ///     Gets the current node that the AStar algorithm is at.
+        /// </summary>
+        public IGraphNode CurrentNode { get; private set; }
+
+        /// <summary>
+        ///     Resets the AStar algorithm with the newly specified start node and goal node.
         /// </summary>
         /// <param name="start">The starting node for the AStar algorithm.</param>
         /// <param name="goal">The goal node for the AStar algorithm.</param>
@@ -83,12 +81,12 @@ namespace Zilon.Core.PathFinding
             CurrentNode = start;
             _goal = goal;
 
-            var currentData = GetData(CurrentNode);
+            AStarData currentData = GetData(CurrentNode);
             _openList.AddWithData(CurrentNode, currentData);
         }
 
         /// <summary>
-        /// Steps the AStar algorithm forward until it either fails or finds the goal node.
+        ///     Steps the AStar algorithm forward until it either fails or finds the goal node.
         /// </summary>
         /// <returns>Returns the state the algorithm finished in, Failed or GoalFound.</returns>
         public State Run()
@@ -96,7 +94,7 @@ namespace Zilon.Core.PathFinding
             // Continue searching until either failure or the goal node has been found.
             while (true)
             {
-                var state = Step();
+                State state = Step();
                 if (state != State.Searching)
                 {
                     return state;
@@ -105,7 +103,7 @@ namespace Zilon.Core.PathFinding
         }
 
         /// <summary>
-        /// Moves the AStar algorithm forward one step.
+        ///     Moves the AStar algorithm forward one step.
         /// </summary>
         /// <returns>Returns the state the alorithm is in after the step, either Failed, GoalFound or still Searching.</returns>
         private State Step()
@@ -134,7 +132,7 @@ namespace Zilon.Core.PathFinding
             // Remove from the open list and place on the closed list 
             // since this node is now being searched.
 
-            var currentData = GetData(CurrentNode);
+            AStarData currentData = GetData(CurrentNode);
 
             _openList.Remove(currentData.TotalCost);
 
@@ -161,7 +159,7 @@ namespace Zilon.Core.PathFinding
                     continue;
                 }
 
-                var childData = GetData(child);
+                AStarData childData = GetData(child);
                 currentData = GetData(CurrentNode);
 
                 childData.Parent = CurrentNode;
@@ -189,8 +187,8 @@ namespace Zilon.Core.PathFinding
         }
 
         /// <summary>
-        /// Gets the path of the last solution of the AStar algorithm.
-        /// Will return a partial path if the algorithm has not finished yet.
+        ///     Gets the path of the last solution of the AStar algorithm.
+        ///     Will return a partial path if the algorithm has not finished yet.
         /// </summary>
         /// <returns>Returns empty if the algorithm has never been run.</returns>
         public IGraphNode[] GetPath()
@@ -200,13 +198,13 @@ namespace Zilon.Core.PathFinding
                 return System.Array.Empty<IGraphNode>();
             }
 
-            var next = CurrentNode;
+            IGraphNode next = CurrentNode;
             var path = new List<IGraphNode>();
             while (next != null)
             {
                 path.Add(next);
 
-                var nextData = GetData(next);
+                AStarData nextData = GetData(next);
 
                 next = nextData.Parent;
             }
@@ -215,6 +213,4 @@ namespace Zilon.Core.PathFinding
             return path.ToArray();
         }
     }
-
-
 }

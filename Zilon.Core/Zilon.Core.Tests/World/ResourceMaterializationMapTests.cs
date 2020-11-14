@@ -5,18 +5,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common.Schemes;
-using Zilon.Core.World;
 
 namespace Zilon.Core.World.Tests
 {
@@ -25,7 +19,7 @@ namespace Zilon.Core.World.Tests
     {
         [Test]
         [Category("development")]
-        public async System.Threading.Tasks.Task GetDepositDataTestAsync()
+        public async Task GetDepositDataTestAsync()
         {
             var sectorGeneratorMock = new Mock<ISectorGenerator>();
             sectorGeneratorMock.Setup(x => x.GenerateAsync(It.IsAny<ISectorNode>()))
@@ -40,9 +34,9 @@ namespace Zilon.Core.World.Tests
                 });
 
             var sectorGenerator = sectorGeneratorMock.Object;
-            var locationSchemes = CreateBiomSchemes();
+            ILocationScheme[] locationSchemes = CreateBiomSchemes();
 
-            var schemeRoundCounter = 0;
+            int schemeRoundCounter = 0;
             var rollerMock = new Mock<IBiomeSchemeRoller>();
             rollerMock.Setup(x => x.Roll()).Returns(() =>
             {
@@ -52,53 +46,54 @@ namespace Zilon.Core.World.Tests
                     schemeRoundCounter = 0;
                 }
 
-                var scheme = locationSchemes[schemeRoundCounter];
+                ILocationScheme scheme = locationSchemes[schemeRoundCounter];
 
                 return scheme;
             });
             var roller = rollerMock.Object;
 
-            var introScheme = locationSchemes.Single(x => x.Sid == "intro");
+            ILocationScheme introScheme = locationSchemes.Single(x => x.Sid == "intro");
 
-            var biomService = new BiomeInitializer(sectorGenerator, roller);
+            BiomeInitializer biomService = new BiomeInitializer(sectorGenerator, roller);
 
-            var dice = new LinearDice();
-            var resourceMaterializationMap = new ResourceMaterializationMap(dice);
+            LinearDice dice = new LinearDice();
+            ResourceMaterializationMap resourceMaterializationMap = new ResourceMaterializationMap(dice);
 
-            var resultStringBuilder = new StringBuilder();
+            StringBuilder resultStringBuilder = new StringBuilder();
             resultStringBuilder.AppendLine("graph TD;");
 
             // ACT
 
             var biom = await biomService.InitBiomeAsync(introScheme).ConfigureAwait(false);
             var introNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
-            var currentResource = resourceMaterializationMap.GetDepositData(introNode);
+            IResourceDepositData currentResource = resourceMaterializationMap.GetDepositData(introNode);
             ISectorNode currentNode = introNode;
 
-            var iteration = 0;
+            int iteration = 0;
             const int ITERATION_MAX = 100;
 
-            var openList = new List<NodeInfo>();
+            List<NodeInfo> openList = new List<NodeInfo>();
             var nextNodes1 = currentNode.Biome.GetNext(currentNode)
-                    .OfType<SectorNode>()
-                    .Where(x => x.State != SectorNodeState.SectorMaterialized)
-                    .Select(x => new NodeInfo { Current = x, Parent = introNode, ParentResource = currentResource });
+                .OfType<SectorNode>()
+                .Where(x => x.State != SectorNodeState.SectorMaterialized)
+                .Select(x => new NodeInfo {Current = x, Parent = introNode, ParentResource = currentResource});
             openList.AddRange(nextNodes1);
 
             while (iteration < ITERATION_MAX)
             {
-                var nextNode = openList[0];
+                NodeInfo nextNode = openList[0];
                 openList.RemoveAt(0);
 
                 await biomService.MaterializeLevelAsync(nextNode.Current).ConfigureAwait(false);
-                var nextResource = resourceMaterializationMap.GetDepositData(nextNode.Current);
+                IResourceDepositData nextResource = resourceMaterializationMap.GetDepositData(nextNode.Current);
 
-                resultStringBuilder.AppendLine(GetVisualString(nextNode.Parent, nextNode.Current, nextNode.ParentResource, nextResource));
+                resultStringBuilder.AppendLine(GetVisualString(nextNode.Parent, nextNode.Current,
+                    nextNode.ParentResource, nextResource));
 
                 var nextNodes2 = nextNode.Current.Biome.GetNext(nextNode.Current)
                     .OfType<SectorNode>()
                     .Where(x => x.State != SectorNodeState.SectorMaterialized)
-                    .Select(x => new NodeInfo { Current = x, Parent = nextNode.Current, ParentResource = nextResource });
+                    .Select(x => new NodeInfo {Current = x, Parent = nextNode.Current, ParentResource = nextResource});
                 openList.AddRange(nextNodes2);
 
                 iteration++;
@@ -107,26 +102,22 @@ namespace Zilon.Core.World.Tests
             Console.Write(resultStringBuilder.ToString());
         }
 
-        private class NodeInfo
+        private static string GetVisualString(ISectorNode currentNode, ISectorNode nextNode,
+            IResourceDepositData currentResource, IResourceDepositData nextResource)
         {
-            public ISectorNode Parent;
-            public ISectorNode Current;
-            public IResourceDepositData ParentResource;
-        }
-
-        private static string GetVisualString(ISectorNode currentNode, ISectorNode nextNode, IResourceDepositData currentResource, IResourceDepositData nextResource)
-        {
-            var str = new StringBuilder($"    {currentNode.GetHashCode()}{ResourceToString(currentResource)}-->{nextNode.GetHashCode()}{ResourceToString(nextResource)};");
+            StringBuilder str =
+                new StringBuilder(
+                    $"    {currentNode.GetHashCode()}{ResourceToString(currentResource)}-->{nextNode.GetHashCode()}{ResourceToString(nextResource)};");
 
             if (currentResource.Items.Any())
             {
-                var currentResColor = ResourceToStyle(currentResource);
+                Color currentResColor = ResourceToStyle(currentResource);
                 str.AppendLine($"    style {currentNode.GetHashCode()} fill:{ColorTranslator.ToHtml(currentResColor)}");
             }
 
             if (nextResource.Items.Any())
             {
-                var nextResColor = ResourceToStyle(nextResource);
+                Color nextResColor = ResourceToStyle(nextResource);
                 str.AppendLine($"    style {nextNode.GetHashCode()} fill:{ColorTranslator.ToHtml(nextResColor)}");
             }
 
@@ -135,20 +126,21 @@ namespace Zilon.Core.World.Tests
 
         private static Color ResourceToStyle(IResourceDepositData currentResource)
         {
-            var totalColor = new Color();
-            var colorDict = new Dictionary<SectorResourceType, Color> {
-                { SectorResourceType.Iron, Color.Maroon },
-                { SectorResourceType.Stones, Color.Silver },
-                { SectorResourceType.WaterPuddles, Color.Aqua },
-                { SectorResourceType.CherryBrushes, Color.Green }
+            Color totalColor = new Color();
+            Dictionary<SectorResourceType, Color> colorDict = new Dictionary<SectorResourceType, Color>
+            {
+                {SectorResourceType.Iron, Color.Maroon},
+                {SectorResourceType.Stones, Color.Silver},
+                {SectorResourceType.WaterPuddles, Color.Aqua},
+                {SectorResourceType.CherryBrushes, Color.Green}
             };
 
             foreach (var item in currentResource.Items)
             {
-                var resColor = colorDict[item.ResourceType];
-                var r = MathUtils.Lerp(totalColor.R, resColor.R, item.Share);
-                var g = MathUtils.Lerp(totalColor.G, resColor.G, item.Share);
-                var b = MathUtils.Lerp(totalColor.B, resColor.B, item.Share);
+                Color resColor = colorDict[item.ResourceType];
+                float r = MathUtils.Lerp(totalColor.R, resColor.R, item.Share);
+                float g = MathUtils.Lerp(totalColor.G, resColor.G, item.Share);
+                float b = MathUtils.Lerp(totalColor.B, resColor.B, item.Share);
 
                 totalColor = Color.FromArgb((int)r, (int)g, (int)b);
             }
@@ -160,100 +152,131 @@ namespace Zilon.Core.World.Tests
         {
             if (currentResource.Items.Any())
             {
-                var colorDict = new Dictionary<SectorResourceType, string> {
-                    { SectorResourceType.Iron, "i" },
-                    { SectorResourceType.Stones, "s" },
-                    { SectorResourceType.WaterPuddles, "w" },
-                    { SectorResourceType.CherryBrushes, "b" }
+                Dictionary<SectorResourceType, string> colorDict = new Dictionary<SectorResourceType, string>
+                {
+                    {SectorResourceType.Iron, "i"},
+                    {SectorResourceType.Stones, "s"},
+                    {SectorResourceType.WaterPuddles, "w"},
+                    {SectorResourceType.CherryBrushes, "b"}
                 };
 
-                var sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
                 foreach (var item in currentResource.Items)
                 {
-                    var resColor = colorDict[item.ResourceType];
+                    string resColor = colorDict[item.ResourceType];
 
                     sb.Append($"{resColor}-{Math.Round(item.Share, 2).ToString(CultureInfo.InvariantCulture)} ");
                 }
 
                 return $"[{sb.ToString().Trim()}]";
             }
-            else
-            {
-                return string.Empty;
-            }
+
+            return string.Empty;
         }
 
         private static ILocationScheme[] CreateBiomSchemes()
         {
-            return new ILocationScheme[] {
-                new TestLocationScheme{
+            return new ILocationScheme[]
+            {
+                new TestLocationScheme
+                {
                     Sid = "intro",
-                    SectorLevels = new []{
-                        new TestSectorSubScheme{
+                    SectorLevels = new[]
+                    {
+                        new TestSectorSubScheme
+                        {
                             Sid = "intro-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "intro-2" } }
+                            TransSectorSids = new[]
+                            {
+                                new TestSectorTransitionSubScheme {SectorLevelSid = "intro-2"}
+                            }
                         },
-                        new TestSectorSubScheme{
+                        new TestSectorSubScheme
+                        {
                             Sid = "intro-2",
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
+                            TransSectorSids = new[] {new TestSectorTransitionSubScheme()}
                         }
                     }
                 },
-
-                new TestLocationScheme{
+                new TestLocationScheme
+                {
                     Sid = "d1",
-                    SectorLevels = new []{
-                        new TestSectorSubScheme{
+                    SectorLevels = new[]
+                    {
+                        new TestSectorSubScheme
+                        {
                             Sid = "d1-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d1-2" } }
+                            TransSectorSids = new[]
+                            {
+                                new TestSectorTransitionSubScheme {SectorLevelSid = "d1-2"}
+                            }
                         },
-                        new TestSectorSubScheme{
-                            Sid = "d1-2",
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
+                        new TestSectorSubScheme
+                        {
+                            Sid = "d1-2", TransSectorSids = new[] {new TestSectorTransitionSubScheme()}
                         }
                     }
                 },
-
-                new TestLocationScheme{
+                new TestLocationScheme
+                {
                     Sid = "d2",
-                    SectorLevels = new []{
-                        new TestSectorSubScheme{
+                    SectorLevels = new[]
+                    {
+                        new TestSectorSubScheme
+                        {
                             Sid = "d2-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
+                            TransSectorSids = new[] {new TestSectorTransitionSubScheme()}
                         }
                     }
                 },
-
-                new TestLocationScheme{
+                new TestLocationScheme
+                {
                     Sid = "d3",
-                    SectorLevels = new []{
-                        new TestSectorSubScheme{
+                    SectorLevels = new[]
+                    {
+                        new TestSectorSubScheme
+                        {
                             Sid = "d3-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" },
-                                new TestSectorTransitionSubScheme { SectorLevelSid ="d3-4" } }
+                            TransSectorSids = new[]
+                            {
+                                new TestSectorTransitionSubScheme {SectorLevelSid = "d3-3"},
+                                new TestSectorTransitionSubScheme {SectorLevelSid = "d3-4"}
+                            }
                         },
-
-                        new TestSectorSubScheme{
+                        new TestSectorSubScheme
+                        {
                             Sid = "d3-3",
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d3-2" } }
+                            TransSectorSids = new[]
+                            {
+                                new TestSectorTransitionSubScheme {SectorLevelSid = "d3-2"}
+                            }
                         },
-
-                        new TestSectorSubScheme{
+                        new TestSectorSubScheme
+                        {
                             Sid = "d3-4",
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" } }
+                            TransSectorSids = new[]
+                            {
+                                new TestSectorTransitionSubScheme {SectorLevelSid = "d3-3"}
+                            }
                         },
-
-                        new TestSectorSubScheme{
-                            Sid = "d3-2",
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
+                        new TestSectorSubScheme
+                        {
+                            Sid = "d3-2", TransSectorSids = new[] {new TestSectorTransitionSubScheme()}
                         }
                     }
                 }
             };
+        }
+
+        private class NodeInfo
+        {
+            public ISectorNode Current;
+            public ISectorNode Parent;
+            public IResourceDepositData ParentResource;
         }
     }
 }

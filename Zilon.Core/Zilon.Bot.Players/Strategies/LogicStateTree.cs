@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Zilon.Bot.Players.Strategies
+﻿namespace Zilon.Bot.Players.Strategies
 {
     public class LogicStateTree
     {

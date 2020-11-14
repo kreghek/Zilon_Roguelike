@@ -1,15 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-
-using FluentAssertions;
-
-using JetBrains.Annotations;
-
-using TechTalk.SpecFlow;
-
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.Specs.Contexts;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
@@ -26,23 +19,24 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Для монстра Id:(\d+) задан маршрут")]
         public void GivenДляМонстраIdЗаданМаршрут(int monsterId, Table table)
         {
-            var sector = Context.GetCurrentGlobeFirstSector();
+            ISector sector = Context.GetCurrentGlobeFirstSector();
 
-            var patrolPoints = new List<IGraphNode>();
+            List<IGraphNode> patrolPoints = new List<IGraphNode>();
             foreach (var tableRow in table.Rows)
             {
                 tableRow.TryGetValue("x", out var routeX);
                 tableRow.TryGetValue("y", out var routeY);
 
                 var routeNode = sector.Map.Nodes.Cast<HexNode>()
-                    .Single(node => node.OffsetCoords.X == int.Parse(routeX) && node.OffsetCoords.Y == int.Parse(routeY));
+                    .Single(node =>
+                        node.OffsetCoords.X == int.Parse(routeX) && node.OffsetCoords.Y == int.Parse(routeY));
 
                 patrolPoints.Add(routeNode);
             }
 
-            var route = new PatrolRoute(patrolPoints.ToArray());
+            PatrolRoute route = new PatrolRoute(patrolPoints.ToArray());
 
-            var monster = Context.GetMonsterById(monsterId);
+            IActor monster = Context.GetMonsterById(monsterId);
             sector.PatrolRoutes[monster] = route;
         }
 
@@ -50,10 +44,10 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Монстр Id:(\d+)\s(не)\sстоит в узле \((\d+), (\d+)\)")]
         public void ThenМонстрIdСтоитВУзле(int monsterId, string isNot, int offsetX, int offsetY)
         {
-            var monster = Context.GetMonsterById(monsterId);
-            var node = (HexNode)monster.Node;
-            var cubeCoords = node.CubeCoords;
-            var offsetCoords = HexHelper.ConvertToOffset(cubeCoords);
+            IActor monster = Context.GetMonsterById(monsterId);
+            HexNode node = (HexNode)monster.Node;
+            CubeCoords cubeCoords = node.CubeCoords;
+            OffsetCoords offsetCoords = HexHelper.ConvertToOffset(cubeCoords);
 
             if (string.IsNullOrWhiteSpace(isNot))
             {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -27,7 +24,7 @@ namespace Zilon.Core.MapGenerators
             foreach (var resourceDepositDataItem in resourceDepositData.Items)
             {
                 var count = (int)Math.Round(resourceDepositDataItem.Share * 100);
-                var purpose = GetPurposeByResourceType(resourceDepositDataItem.ResourceType);
+                PropContainerPurpose purpose = GetPurposeByResourceType(resourceDepositDataItem.ResourceType);
                 for (var i = 0; i < count; i++)
                 {
                     purposeList.Add(purpose);
@@ -37,9 +34,12 @@ namespace Zilon.Core.MapGenerators
             if (purposeList.Count < 100)
             {
                 var diff = 100 - purposeList.Count;
-                var everywherePurpose = new[] { PropContainerPurpose.Puddle, PropContainerPurpose.Pit, PropContainerPurpose.TrashHeap };
+                PropContainerPurpose[] everywherePurpose = new[]
+                {
+                    PropContainerPurpose.Puddle, PropContainerPurpose.Pit, PropContainerPurpose.TrashHeap
+                };
                 var diffShare = (int)Math.Ceiling(diff / 2f);
-                foreach (var purpose in everywherePurpose)
+                foreach (PropContainerPurpose purpose in everywherePurpose)
                 {
                     for (var i = 0; i < diffShare; i++)
                     {

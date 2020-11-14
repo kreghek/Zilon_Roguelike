@@ -4,8 +4,8 @@
     {
         public int GetDistance(HexNode currentNode, HexNode targetNode)
         {
-            var currentCoords = currentNode.CubeCoords;
-            var targetCoords = targetNode.CubeCoords;
+            CubeCoords currentCoords = currentNode.CubeCoords;
+            CubeCoords targetCoords = targetNode.CubeCoords;
             var distance = currentCoords.DistanceTo(targetCoords);
 
             return distance;

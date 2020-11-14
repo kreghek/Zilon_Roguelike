@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
@@ -15,8 +12,8 @@ namespace Zilon.Core.PersonModules
             IsActive = true;
         }
 
-        public IEnumerable<IPersonEffect> Items { get => _items; }
-        public string Key { get => nameof(IEffectsModule); }
+        public IEnumerable<IPersonEffect> Items => _items;
+        public string Key => nameof(IEffectsModule);
         public bool IsActive { get; set; }
 
         public void Add(IPersonEffect effect)
@@ -44,32 +41,32 @@ namespace Zilon.Core.PersonModules
             DoRemoved(effect);
         }
 
+        public event EventHandler<EffectEventArgs> Added;
+        public event EventHandler<EffectEventArgs> Removed;
+        public event EventHandler<EffectEventArgs> Changed;
+
         private void Effect_Changed(object sender, EventArgs e)
         {
-            var effect = (IPersonEffect)sender;
+            IPersonEffect effect = (IPersonEffect)sender;
             DoChanged(effect);
         }
 
         private void DoAdd(IPersonEffect effect)
         {
-            var args = new EffectEventArgs(effect);
+            EffectEventArgs args = new EffectEventArgs(effect);
             Added?.Invoke(this, args);
         }
 
         private void DoChanged(IPersonEffect effect)
         {
-            var args = new EffectEventArgs(effect);
+            EffectEventArgs args = new EffectEventArgs(effect);
             Changed?.Invoke(this, args);
         }
 
         private void DoRemoved(IPersonEffect effect)
         {
-            var args = new EffectEventArgs(effect);
+            EffectEventArgs args = new EffectEventArgs(effect);
             Removed?.Invoke(this, args);
         }
-
-        public event EventHandler<EffectEventArgs> Added;
-        public event EventHandler<EffectEventArgs> Removed;
-        public event EventHandler<EffectEventArgs> Changed;
     }
 }

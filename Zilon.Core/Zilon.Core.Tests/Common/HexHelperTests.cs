@@ -1,8 +1,4 @@
-﻿using FluentAssertions;
-
-using NUnit.Framework;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
 namespace Zilon.Core.Tests.Common
@@ -12,8 +8,8 @@ namespace Zilon.Core.Tests.Common
     public class HexHelperTests
     {
         /// <summary>
-        /// Тест проверяет корректность преобразования координат смещения
-        /// в кубические координаты для сетки шестигранников.
+        ///     Тест проверяет корректность преобразования координат смещения
+        ///     в кубические координаты для сетки шестигранников.
         /// </summary>
         [Test]
         [TestCaseSource(typeof(ConvertOffsetToCubeTestCaseSource),
@@ -21,13 +17,11 @@ namespace Zilon.Core.Tests.Common
         public void ConvertToCubeTest(int offsetX, int offsetY, int cubeX, int cubeY, int cubeZ)
         {
             // ARRANGE
-            var expectedCubeCoords = new CubeCoords(cubeX, cubeY, cubeZ);
-
+            CubeCoords expectedCubeCoords = new CubeCoords(cubeX, cubeY, cubeZ);
 
 
             // ACT
-            var factCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
-
+            CubeCoords factCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
 
 
             // ASSERT
@@ -40,14 +34,12 @@ namespace Zilon.Core.Tests.Common
         public void ConvertToOffsetTest(int offsetX, int offsetY, int cubeX, int cubeY, int cubeZ)
         {
             // ARRANGE
-            var cubeCoords = new CubeCoords(cubeX, cubeY, cubeZ);
-            var expectedOffset = new OffsetCoords(offsetX, offsetY);
-
+            CubeCoords cubeCoords = new CubeCoords(cubeX, cubeY, cubeZ);
+            OffsetCoords expectedOffset = new OffsetCoords(offsetX, offsetY);
 
 
             // ACT
-            var factOffsetCoords = HexHelper.ConvertToOffset(cubeCoords);
-
+            OffsetCoords factOffsetCoords = HexHelper.ConvertToOffset(cubeCoords);
 
 
             // ASSERT
@@ -64,7 +56,7 @@ namespace Zilon.Core.Tests.Common
 
 
             // ACT
-            var factCubeCoords = HexHelper.ConvertToWorld(offsetX, offsetY);
+            float[] factCubeCoords = HexHelper.ConvertToWorld(offsetX, offsetY);
 
 
             // ASSERT

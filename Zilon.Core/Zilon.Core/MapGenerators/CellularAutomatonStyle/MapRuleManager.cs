@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
+﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
-    /// Base implementation of rule managers.
+    ///     Base implementation of rule managers.
     /// </summary>
-    class MapRuleManager : IMapRuleManager
+    internal class MapRuleManager : IMapRuleManager
     {
         private readonly List<IMapRule> _list = new List<IMapRule>();
 

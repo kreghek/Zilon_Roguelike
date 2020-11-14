@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Zilon.Core.PersonModules
+﻿namespace Zilon.Core.PersonModules
 {
     /// <summary>
-    /// Базовая реализация модуля атрибутов.
+    ///     Базовая реализация модуля атрибутов.
     /// </summary>
     public sealed class AttributesModule : IAttributesModule
     {
@@ -22,10 +19,10 @@ namespace Zilon.Core.PersonModules
             _attributes = attributes.ToArray();
         }
 
-        /// <inheritdoc/>
-        public string Key { get => nameof(IAttributesModule); }
+        /// <inheritdoc />
+        public string Key => nameof(IAttributesModule);
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool IsActive { get; set; }
 
         public PersonAttribute GetAttribute(PersonAttributeType personAttributeType)
@@ -33,7 +30,7 @@ namespace Zilon.Core.PersonModules
             return _attributes.SingleOrDefault(x => x.Type == personAttributeType);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IEnumerable<PersonAttribute> GetAttributes()
         {
             return _attributes;

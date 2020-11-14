@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
-    /// Задача на перемещение предметов относительно указанного хранилища.
+    ///     Задача на перемещение предметов относительно указанного хранилища.
     /// </summary>
     public class TransferPropsTask : OneTurnActorTaskBase
     {
@@ -20,26 +19,22 @@ namespace Zilon.Core.Tactics.Behaviour
 
         protected override void ExecuteTask()
         {
-            foreach (var transfer in _transfers)
+            foreach (PropTransfer transfer in _transfers)
             {
-                var propStore = transfer.PropStore;
+                IPropStore propStore = transfer.PropStore;
 
-                foreach (var prop in transfer.Added)
+                foreach (IProp prop in transfer.Added)
                 {
                     // TODO Здесь может быть ошибка, если два персонажа одновременно начнут брать предметы.
                     // Тогда предмет будет в обоих хранилищах.
                     propStore.Add(prop);
                 }
 
-                foreach (var prop in transfer.Removed)
+                foreach (IProp prop in transfer.Removed)
                 {
                     if (transfer.PropStore.Has(prop))
                     {
                         propStore.Remove(prop);
-                    }
-                    else
-                    {
-                        // Значит кто-то уже взял предмет, пока выполнялась задача.
                     }
                 }
             }

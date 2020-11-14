@@ -1,10 +1,9 @@
-﻿using System;
-
-namespace Zilon.Core.Tactics.ActorInteractionEvents
+﻿namespace Zilon.Core.Tactics.ActorInteractionEvents
 {
     public sealed class DamageActorInteractionEvent : ActorInteractionEventBase
     {
-        public DamageActorInteractionEvent(IActor actor, IActor targetActor, DamageEfficientCalc damageEfficientCalcResult) : base(actor)
+        public DamageActorInteractionEvent(IActor actor, IActor targetActor,
+            DamageEfficientCalc damageEfficientCalcResult) : base(actor)
         {
             TargetActor = targetActor ?? throw new ArgumentNullException(nameof(targetActor));
             DamageEfficientCalcResult = damageEfficientCalcResult;

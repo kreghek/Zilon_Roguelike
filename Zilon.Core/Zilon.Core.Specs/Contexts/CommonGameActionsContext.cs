@@ -1,13 +1,10 @@
 ﻿using System.Linq;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
+using Zilon.Core.Props;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 
@@ -28,10 +25,7 @@ namespace Zilon.Core.Specs.Contexts
                 .Nodes
                 .SelectByHexCoords(targetCoords.X, targetCoords.Y);
 
-            var nodeViewModel = new TestNodeViewModel
-            {
-                Node = targetNode
-            };
+            TestNodeViewModel nodeViewModel = new TestNodeViewModel {Node = targetNode};
 
             playerState.HoverViewModel = nodeViewModel;
             playerState.SelectedViewModel = nodeViewModel;
@@ -43,14 +37,12 @@ namespace Zilon.Core.Specs.Contexts
         {
             var useSelfCommand = ServiceProvider.GetRequiredService<UseSelfCommand>();
             var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
-            var actor = GetActiveActor();
+            IActor actor = GetActiveActor();
 
-            var selectedProp = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            IProp selectedProp = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
+                .First(x => x.Scheme.Sid == propSid);
 
-            var viewModel = new TestPropItemViewModel()
-            {
-                Prop = selectedProp
-            };
+            TestPropItemViewModel viewModel = new TestPropItemViewModel {Prop = selectedProp};
             inventoryState.SelectedProp = viewModel;
 
             useSelfCommand.Execute();

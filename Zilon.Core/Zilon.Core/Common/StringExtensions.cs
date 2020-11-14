@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Zilon.Core.Common
+﻿namespace Zilon.Core.Common
 {
     public static class StringExtensions
     {

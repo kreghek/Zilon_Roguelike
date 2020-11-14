@@ -1,21 +1,19 @@
-﻿using Newtonsoft.Json;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
     /// <summary>
-    /// Общее правило, срабатывающее при использовании предмета.
+    ///     Общее правило, срабатывающее при использовании предмета.
     /// </summary>
     /// <remarks>
-    /// Сейчас используется при:
-    /// - Поглощении провинта.
-    /// - Поглощении медикаментов.
+    ///     Сейчас используется при:
+    ///     - Поглощении провинта.
+    ///     - Поглощении медикаментов.
     /// </remarks>
     public sealed class ConsumeCommonRule
     {
         /// <summary>
-        /// Конструирует объект правила.
+        ///     Конструирует объект правила.
         /// </summary>
         /// <param name="type">Тип правила.</param>
         /// <param name="level">Уровень влияния правила.</param>

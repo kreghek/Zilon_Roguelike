@@ -1,12 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.Components;
 
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Элемент характеристик брони персонажа.
+    ///     Элемент характеристик брони персонажа.
     /// </summary>
     public class PersonArmorItem
     {
@@ -19,17 +17,17 @@ namespace Zilon.Core.Persons
         }
 
         /// <summary>
-        /// Тип воздействия, которое выдерживает броня.
+        ///     Тип воздействия, которое выдерживает броня.
         /// </summary>
         public ImpactType Impact { get; }
 
         /// <summary>
-        /// Уровень поглощения урона бронёй.
+        ///     Уровень поглощения урона бронёй.
         /// </summary>
         public PersonRuleLevel AbsorbtionLevel { get; }
 
         /// <summary>
-        /// Ранг брони.
+        ///     Ранг брони.
         /// </summary>
         public int ArmorRank { get; }
     }

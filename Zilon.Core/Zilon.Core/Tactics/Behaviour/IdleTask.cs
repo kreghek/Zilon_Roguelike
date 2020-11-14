@@ -5,21 +5,19 @@ namespace Zilon.Core.Tactics.Behaviour
     public class IdleTask : ActorTaskBase
     {
         /// <summary>
-        /// Минимальное время простоя.
+        ///     Минимальное время простоя.
         /// </summary>
         private const int _idleMin = 2;
 
         /// <summary>
-        /// Максимальное время простоя.
+        ///     Максимальное время простоя.
         /// </summary>
         private const int _idleMax = 5;
 
         /// <summary>
-        /// Текущий счётчик простоя.
+        ///     Текущий счётчик простоя.
         /// </summary>
         private int _counter;
-
-        public override int Cost => 500;
 
         public IdleTask(IActor actor, IActorTaskContext context, IDecisionSource decisionSource) : base(actor, context)
         {
@@ -45,6 +43,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
             _counter = duration;
         }
+
+        public override int Cost => 500;
 
         public override void Execute()
         {

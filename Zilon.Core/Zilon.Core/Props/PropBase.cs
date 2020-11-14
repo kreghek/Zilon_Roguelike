@@ -3,12 +3,12 @@
 namespace Zilon.Core.Props
 {
     /// <summary>
-    /// Базовый класс для всех предметов.
+    ///     Базовый класс для всех предметов.
     /// </summary>
     public abstract class PropBase : IProp
     {
         /// <summary>
-        /// Конструктор.
+        ///     Конструктор.
         /// </summary>
         /// <param name="scheme"> Схема предмета. </param>
         protected PropBase(IPropScheme scheme)
@@ -17,7 +17,7 @@ namespace Zilon.Core.Props
         }
 
         /// <summary>
-        /// Схема предмета.
+        ///     Схема предмета.
         /// </summary>
         public IPropScheme Scheme { get; }
 

@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace Zilon.Core.CommonServices.Dices
+﻿namespace Zilon.Core.CommonServices.Dices
 {
     internal static class DiceValuesHelper
     {
         /// <summary>
-        /// Преобразует выброшенное дробное значение из диапазона [0..1]
-        /// в грань n-гранной кости.
+        ///     Преобразует выброшенное дробное значение из диапазона [0..1]
+        ///     в грань n-гранной кости.
         /// </summary>
         /// <param name="rawValue"> Сырое значение в диапазоне [0..1]. </param>
         /// <param name="n"> Количество граней целевой кости. </param>
@@ -17,7 +15,7 @@ namespace Zilon.Core.CommonServices.Dices
         }
 
         /// <summary>
-        /// Возвращает случайное число в диапазоне [0..1).
+        ///     Возвращает случайное число в диапазоне [0..1).
         /// </summary>
         public static double GetNextDouble(Random random)
         {

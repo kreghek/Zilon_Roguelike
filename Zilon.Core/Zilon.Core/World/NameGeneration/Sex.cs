@@ -1,22 +1,22 @@
 ﻿namespace Zilon.Core.World.NameGeneration
 {
     /// <summary>
-    /// Пол, используемый для генерации имени.
+    ///     Пол, используемый для генерации имени.
     /// </summary>
     public enum Sex
     {
         /// <summary>
-        /// Не определено.
+        ///     Не определено.
         /// </summary>
         Undefined,
 
         /// <summary>
-        /// Мужской пол.
+        ///     Мужской пол.
         /// </summary>
         Male,
 
         /// <summary>
-        /// Женский пол.
+        ///     Женский пол.
         /// </summary>
         Female
     }

@@ -1,13 +1,8 @@
 ﻿using System;
-
-using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using TechTalk.SpecFlow;
-
 using Zilon.Core.Commands;
+using Zilon.Core.Graphs;
 using Zilon.Core.Specs.Contexts;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Specs.Steps
@@ -59,14 +54,14 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"Актёр находится в ячейке \((.*), (.*)\)")]
         public void ThenАктёрНаходитсяВЯчейке(int expectedOffsetX, int expectedOffsetY)
         {
-            var actor = Context.GetActiveActor();
+            IActor actor = Context.GetActiveActor();
 
-            var node = actor.Node;
+            IGraphNode node = actor.Node;
 
-            var hexNode = (HexNode)node;
+            HexNode hexNode = (HexNode)node;
 
-            var expectedOffsetCoords = new OffsetCoords(expectedOffsetX, expectedOffsetY);
-            var factOffsetCoords = hexNode.OffsetCoords;
+            OffsetCoords expectedOffsetCoords = new OffsetCoords(expectedOffsetX, expectedOffsetY);
+            OffsetCoords factOffsetCoords = hexNode.OffsetCoords;
             factOffsetCoords.Should().Be(expectedOffsetCoords);
         }
     }

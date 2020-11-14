@@ -1,43 +1,39 @@
-﻿using JetBrains.Annotations;
-
-using Newtonsoft.Json;
-
-namespace Zilon.Core.Common
+﻿namespace Zilon.Core.Common
 {
     /// <summary>
-    /// Тип воздействия.
+    ///     Тип воздействия.
     /// </summary>
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [PublicAPI]
     public enum ImpactType
     {
         /// <summary>
-        /// Не опеределено
+        ///     Не опеределено
         /// </summary>
         Undefined,
 
         /// <summary>
-        /// Кинетическое.
+        ///     Кинетическое.
         /// </summary>
         Kinetic,
 
         /// <summary>
-        /// Взрывное.
+        ///     Взрывное.
         /// </summary>
         Explosion,
 
         /// <summary>
-        /// Псионическое.
+        ///     Псионическое.
         /// </summary>
         Psy,
 
         /// <summary>
-        /// Кислотное.
+        ///     Кислотное.
         /// </summary>
         Acid,
 
         /// <summary>
-        /// Термальное.
+        ///     Термальное.
         /// </summary>
         Termal
     }

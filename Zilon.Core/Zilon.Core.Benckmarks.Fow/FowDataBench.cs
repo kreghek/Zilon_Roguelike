@@ -1,8 +1,4 @@
-﻿using System.Linq;
-
-using BenchmarkDotNet.Attributes;
-
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
@@ -10,10 +6,10 @@ namespace Zilon.Core.Benchmarks.Fow
 {
     public class FowDataBench
     {
-        private int _radius;
-        private HumanSectorFowData _fowData;
         private HexNode _baseNode;
         private TestFowContext _fowContextMock;
+        private HumanSectorFowData _fowData;
+        private int _radius;
 
         [Benchmark(Description = "Calc fow Empty room")]
         public void CalcFow()
@@ -31,12 +27,12 @@ namespace Zilon.Core.Benchmarks.Fow
 
             // ARRANGE
 
-            var map = new SectorHexMap(1000);
+            SectorHexMap map = new SectorHexMap(1000);
             for (var i = 0; i < mapSize; i++)
             {
                 for (var j = 0; j < mapSize; j++)
                 {
-                    var hexNode = new HexNode(i, j);
+                    HexNode hexNode = new HexNode(i, j);
                     map.AddNode(hexNode);
                 }
             }

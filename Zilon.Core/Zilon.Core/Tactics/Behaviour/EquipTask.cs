@@ -1,13 +1,11 @@
-﻿using System.Linq;
-
-using Zilon.Core.PersonModules;
+﻿using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
-    /// Задача на назначение экипировки в указанный слот.
+    ///     Задача на назначение экипировки в указанный слот.
     /// </summary>
     public class EquipTask : OneTurnActorTaskBase
     {
@@ -40,7 +38,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private void EquipPropToSlot()
         {
-            var equipmentCarrier = Actor.Person.GetModule<IEquipmentModule>();
+            IEquipmentModule equipmentCarrier = Actor.Person.GetModule<IEquipmentModule>();
 
             // Предмет может быть экипирован из инвентаря (и) или из другого слота (с).
             // Предмет может быть экипирован в пустой слот (0) и слот, в котором уже есть другой предмет (1).
@@ -50,7 +48,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
 
             // проверяем, есть ли в текущем слоте предмет (0)/(1).
-            var currentEquipment = equipmentCarrier[_slotIndex];
+            Equipment currentEquipment = equipmentCarrier[_slotIndex];
 
             // проверяем, из инвентаря или из слота экипируем (и)/(с)
             var currentEquipedSlotIndex = FindPropInEquiped(_equipment, equipmentCarrier);
@@ -90,7 +88,7 @@ namespace Zilon.Core.Tactics.Behaviour
         }
 
         /// <summary>
-        /// Ищем предмет в уже экипированных.
+        ///     Ищем предмет в уже экипированных.
         /// </summary>
         /// <param name="equipment"> Целевой предмет. </param>
         /// <param name="equipmentModule"> Объект для хранения экипировки. </param>

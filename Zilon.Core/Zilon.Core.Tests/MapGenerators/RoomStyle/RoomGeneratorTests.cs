@@ -1,13 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.Tactics.Spatial;
@@ -20,22 +12,22 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
     public class RoomGeneratorTests
     {
         /// <summary>
-        /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим лучшие случаи (см бенчи).
+        ///     Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим лучшие случаи (см бенчи).
         /// </summary>
         [Test]
         [Category("integration")]
         public void GenerateRoomsInGrid_WithFixCompact_NotThrowsExceptions()
         {
             // ARRANGE
-            var random = new FixCompactRoomGeneratorRandomSource();
-            var generator = new RoomGenerator(random);
-            var graphMap = new SectorHexMap();
+            FixCompactRoomGeneratorRandomSource random = new FixCompactRoomGeneratorRandomSource();
+            RoomGenerator generator = new RoomGenerator(random);
+            SectorHexMap graphMap = new SectorHexMap();
 
             // ACT
             Action act = () =>
             {
                 var rooms = generator.GenerateRoomsInGrid(20, 2, 20, Array.Empty<RoomTransition>());
-                var edgeHash = new HashSet<string>();
+                HashSet<string> edgeHash = new HashSet<string>();
                 generator.CreateRoomNodes(graphMap, rooms, edgeHash);
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
             };
@@ -45,22 +37,22 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         }
 
         /// <summary>
-        /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим худшие случаи (см бенчи).
+        ///     Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим худшие случаи (см бенчи).
         /// </summary>
         [Test]
         [Category("integration")]
         public void GenerateRoomsInGrid_WithFixLarge_NotThrowsExceptions()
         {
             // ARRANGE
-            var random = new FixLargeRoomGeneratorRandomSource();
-            var generator = new RoomGenerator(random);
-            var graphMap = new SectorHexMap();
+            FixLargeRoomGeneratorRandomSource random = new FixLargeRoomGeneratorRandomSource();
+            RoomGenerator generator = new RoomGenerator(random);
+            SectorHexMap graphMap = new SectorHexMap();
 
             // ACT
             Action act = () =>
             {
                 var rooms = generator.GenerateRoomsInGrid(20, 2, 20, Array.Empty<RoomTransition>());
-                var edgeHash = new HashSet<string>();
+                HashSet<string> edgeHash = new HashSet<string>();
                 generator.CreateRoomNodes(graphMap, rooms, edgeHash);
                 generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
             };
@@ -70,8 +62,8 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         }
 
         /// <summary>
-        /// Тест проверяет, что если в схеме сектора обозначены переходы,
-        /// то они генерируются в комнате.
+        ///     Тест проверяет, что если в схеме сектора обозначены переходы,
+        ///     то они генерируются в комнате.
         /// </summary>
         [Test]
         public void GenerateRoomsInGrid_Transitions()
@@ -79,21 +71,21 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             // ARRANGE
             var sectorNodeMock = new Mock<ISectorNode>();
             var sectorNode = sectorNodeMock.Object;
-            var transition = new RoomTransition(sectorNode);
-            var availableTransitions = new[] { transition };
+            RoomTransition transition = new RoomTransition(sectorNode);
+            RoomTransition[] availableTransitions = {transition};
 
             var randomMock = new Mock<IRoomGeneratorRandomSource>();
             randomMock.Setup(x => x.RollRoomMatrixPositions(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(new[] { new OffsetCoords(0, 0) });
+                .Returns(new[] {new OffsetCoords(0, 0)});
             randomMock.Setup(x => x.RollTransitions(It.IsAny<IEnumerable<RoomTransition>>()))
-                .Returns(new[] { transition });
+                .Returns(new[] {transition});
             randomMock.Setup(x => x.RollRoomSize(It.IsAny<int>(), It.IsAny<int>(), It.IsIn<int>(1)))
-                .Returns<int, int, int>((min, max, count) => { return new[] { new Size(0, 0) }; });
+                .Returns<int, int, int>((min, max, count) => { return new[] {new Size(0, 0)}; });
             var random = randomMock.Object;
 
-            var generator = new RoomGenerator(random);
+            RoomGenerator generator = new RoomGenerator(random);
 
-            var expectedTransitions = new[] { transition };
+            RoomTransition[] expectedTransitions = {transition};
 
             // ACT
             var factRooms = generator.GenerateRoomsInGrid(1, 1, 1, availableTransitions);

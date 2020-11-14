@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Zilon.Core.Common
+﻿namespace Zilon.Core.Common
 {
     public sealed class SpscChannel<T> : ISender<T>, IReceiver<T>, IDisposable
     {
-        private readonly SemaphoreSlim _semaphore;
         private readonly IProducerConsumerCollection<TaskCompletionSource<T>> _receivers;
+        private readonly SemaphoreSlim _semaphore;
         private readonly IProducerConsumerCollection<T> _values;
 
         public SpscChannel()
@@ -16,27 +11,6 @@ namespace Zilon.Core.Common
             _semaphore = new SemaphoreSlim(1);
             _receivers = new ConcurrentQueue<TaskCompletionSource<T>>();
             _values = new ConcurrentQueue<T>();
-        }
-
-        public async Task SendAsync(T obj)
-        {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
-
-            try
-            {
-                if (_receivers.TryTake(out var receiver))
-                {
-                    receiver.SetResult(obj);
-                }
-                else
-                {
-                    _values.TryAdd(obj);
-                }
-            }
-            finally
-            {
-                _semaphore.Release();
-            }
         }
 
         public async Task<T> ReceiveAsync()
@@ -61,6 +35,27 @@ namespace Zilon.Core.Common
             }
 
             return await source.Task.ConfigureAwait(false);
+        }
+
+        public async Task SendAsync(T obj)
+        {
+            await _semaphore.WaitAsync().ConfigureAwait(false);
+
+            try
+            {
+                if (_receivers.TryTake(out var receiver))
+                {
+                    receiver.SetResult(obj);
+                }
+                else
+                {
+                    _values.TryAdd(obj);
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         public void Dispose()

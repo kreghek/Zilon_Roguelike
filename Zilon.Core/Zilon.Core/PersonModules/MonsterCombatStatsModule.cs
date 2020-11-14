@@ -3,8 +3,8 @@
 namespace Zilon.Core.PersonModules
 {
     /// <summary>
-    /// Реализация модуля боевых характеристик для монстров.
-    /// В отличии от базовой реализации, характристики монстров фиксированы, а не рассчитываются исходя из экипировки.
+    ///     Реализация модуля боевых характеристик для монстров.
+    ///     В отличии от базовой реализации, характристики монстров фиксированы, а не рассчитываются исходя из экипировки.
     /// </summary>
     public sealed class MonsterCombatStatsModule : ICombatStatsModule
     {
@@ -13,13 +13,13 @@ namespace Zilon.Core.PersonModules
             DefenceStats = defenceStats;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IPersonDefenceStats DefenceStats { get; }
 
-        /// <inheritdoc/>
-        public string Key { get => nameof(ICombatStatsModule); }
+        /// <inheritdoc />
+        public string Key => nameof(ICombatStatsModule);
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool IsActive { get; set; }
     }
 }

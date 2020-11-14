@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MassSectorGenerator
@@ -15,7 +11,7 @@ namespace Zilon.Core.MassSectorGenerator
 
         public static Bitmap DrawNodes(IEnumerable<HexNode> nodes)
         {
-            var info = GetImageInfo(nodes);
+            ImageInfo info = GetImageInfo(nodes);
 
             var bitmap = CreateBitmap(info);
 
@@ -104,11 +100,10 @@ namespace Zilon.Core.MassSectorGenerator
             var xAxisOrderedNode = nodes.OrderBy(x => x.OffsetCoords.X);
             var yAxisOrderedNode = nodes.OrderBy(x => x.OffsetCoords.Y);
 
-            var info = new ImageInfo
+            ImageInfo info = new ImageInfo
             {
                 LeftCoord = xAxisOrderedNode.First().OffsetCoords.X,
                 RightCoord = xAxisOrderedNode.Last().OffsetCoords.X,
-
                 BottomCoord = yAxisOrderedNode.First().OffsetCoords.Y,
                 TopCoord = yAxisOrderedNode.Last().OffsetCoords.Y
             };
