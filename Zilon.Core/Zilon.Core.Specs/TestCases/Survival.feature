@@ -7,46 +7,21 @@
 	Мне нужно, чтобы при употреблении провинта разного типа (еда/вода)
 	сбрасывались соответствующие угрозы выживания при насыщении персонажа
 
-#@survival @dev1
-#Scenario Outline: Восстановление параметров провиантом
-#	Given Есть карта размером 2
-#	And Есть актёр игрока класса human-person в ячейке (0, 0)
-#	And В инвентаре у актёра есть еда: <propSid> количество: 1
-#	When Актёр использует предмет <propSid> на себя
-#	Then Значение <stat> повысилось на <propValue> и уменьшилось на 1 за игровой цикл и стало <expectedStatValue>
-#	And Предмет <propSid> отсутствует в инвентаре актёра
-#
-#
-#Examples: 
-#	| propSid      | stat    | propValue | expectedStatValue |
-#	| kalin-cheese | сытость | 70        | 220               |
-#	| water-bottle | вода    | 150       | 299               |
+@survival @dev1 @dev2
+Scenario Outline: Снятие угроз выживания
+	Given Есть карта размером 2
+	And Есть актёр игрока класса human-person в ячейке (0, 0)
+	And Актёр имеет эффект <startEffect>
+	And В инвентаре у актёра есть еда: <propSid> количество: 100
+	When Актёр использует предмет <propSid> на себя 1 раз
+	Then Актёр под эффектом <effect>
 
-#@survival @dev1 @dev2
-#Scenario Outline: Снятие угроз выживания
-#	Given Есть карта размером 2
-#	And Есть актёр игрока класса human-person в ячейке (0, 0)
-#	And Актёр значение <stat> равное <statValue>
-#	And В инвентаре у актёра есть фейковый провиант <propSid> (<provisionStat>)
-#	When Актёр использует предмет <propSid> на себя
-#	Then Актёр под эффектом <effect>
-#
-#Examples: 
-#| stat    | statValue | propSid    | provisionStat | propCount | expectedValue | effect       |
-##Слабый голод 
-#| сытость | 0         | fake-food  | сытость       | 1         | 50            | нет          |
-#| сытость | 0         | fake-food  | -сытость      | 1         | -50           | Голод        |
-##Голод
-#| сытость | -50       | fake-food  | сытость       | 1         | 0             | нет          |
-#| сытость | -50       | fake-food  | -сытость      | 1         | 0             | Голодание    |
-##Голодание
-#| сытость | -100      | fake-food  | сытость       | 1         | -50           | Слабый голод |
-##Слабая жажда
-#| вода    | 0         | fake-water | вода          | 1         | 50            | нет          |
-##Жажда
-#| вода    | -50       | fake-water | вода          | 1         | 0             | нет          |
-##Обезвоживание
-#| вода    | -100      | fake-water | вода          | 1         | -50           | Слабая жажда |
+Examples: 
+| startEffect  | propSid      | effect       |
+| Слабый голод | packed-food  | нет          |
+| Слабая жажда | water-bottle | нет          |
+| Голод        | packed-food  | Слабый голод |
+| Жажда        | water-bottle | нет          |
 
 @survival @dev1
 Scenario Outline: Употребление медикаментов для восстановления Hp.
