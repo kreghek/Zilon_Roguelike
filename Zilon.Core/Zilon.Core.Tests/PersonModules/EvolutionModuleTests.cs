@@ -30,7 +30,10 @@ namespace Zilon.Core.Tests.PersonModules
                     {
                         Levels = new[]
                         {
-                            new PerkLevelSubScheme { MaxValue = 2, Jobs = Array.Empty<IJobSubScheme>() }
+                            new PerkLevelSubScheme
+                            {
+                                MaxValue = 2, Jobs = Array.Empty<IJobSubScheme>()
+                            }
                         }
                     }
                 });

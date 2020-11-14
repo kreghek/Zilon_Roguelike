@@ -153,7 +153,10 @@ namespace Zilon.Core.MapGenerators
             IGraphNode monsterNode,
             int[] rarityCounter)
         {
-            var rarityMaxCounter = new[] { -1, 10, 1 };
+            var rarityMaxCounter = new[]
+            {
+                -1, 10, 1
+            };
 
             var currentRarity = GetMonsterRarity(rarityCounter, rarityMaxCounter);
             var availableSchemeSids = GetAvailableSchemeSids(sectorScheme, currentRarity);

@@ -28,7 +28,10 @@ namespace Zilon.Core.Common
         public static float[] ConvertToWorld(int offsetX, int offsetY)
         {
             var rowOffset = offsetY % 2 == 0 ? 0 : 0.5f;
-            return new[] { offsetX + rowOffset, (offsetY * 3f) / 4 };
+            return new[]
+            {
+                offsetX + rowOffset, (offsetY * 3f) / 4
+            };
         }
 
         public static float[] ConvertToWorld(OffsetCoords coords)

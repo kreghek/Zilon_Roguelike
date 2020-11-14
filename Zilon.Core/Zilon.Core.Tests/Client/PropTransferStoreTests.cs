@@ -55,7 +55,10 @@ namespace Zilon.Core.Tests.Client
 
             var testedScheme = new PropScheme();
 
-            var props = new IProp[] { new Resource(testedScheme, inventoryCount) };
+            var props = new IProp[]
+            {
+                new Resource(testedScheme, inventoryCount)
+            };
 
             var realStore = CreateContainer(props);
 
@@ -85,7 +88,10 @@ namespace Zilon.Core.Tests.Client
 
             var testedScheme = new PropScheme();
 
-            var props = new IProp[] { new Resource(testedScheme, inventoryCount) };
+            var props = new IProp[]
+            {
+                new Resource(testedScheme, inventoryCount)
+            };
 
             var realStore = CreateContainer(props);
 

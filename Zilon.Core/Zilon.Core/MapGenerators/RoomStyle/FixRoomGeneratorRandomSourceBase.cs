@@ -45,7 +45,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 (x.PositionX == currentConnection.Item2.X) &&
                 (x.PositionY == currentConnection.Item2.Y));
 
-            return new[] { connectedRoom };
+            return new[]
+            {
+                connectedRoom
+            };
         }
 
         /// <summary>
@@ -99,7 +102,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                 if (connectedRoom != null)
                 {
-                    result.Add(currentRoom, new[] { connectedRoom });
+                    result.Add(currentRoom, new[]
+                    {
+                        connectedRoom
+                    });
                 }
             }
 
@@ -124,7 +130,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
         public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
         {
-            return new[] { openTransitions.First() };
+            return new[]
+            {
+                openTransitions.First()
+            };
         }
 
         /// <summary>

@@ -28,7 +28,13 @@ namespace Zilon.Core.PersonModules
                 throw new ArgumentNullException(nameof(monsterScheme));
             }
 
-            return new[] { new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp) { Type = SurvivalStatType.Health } };
+            return new[]
+            {
+                new SurvivalStat(monsterScheme.Hp, 0, monsterScheme.Hp)
+                {
+                    Type = SurvivalStatType.Health
+                }
+            };
         }
 
         /// <summary>

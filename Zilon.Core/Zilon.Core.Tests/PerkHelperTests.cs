@@ -56,8 +56,18 @@ namespace Zilon.Core.Tests
             {
                 Levels = new[]
                 {
-                    new PerkLevelSubScheme { MaxValue = 5 }, new PerkLevelSubScheme { MaxValue = 2 },
-                    new PerkLevelSubScheme { MaxValue = 3 }
+                    new PerkLevelSubScheme
+                    {
+                        MaxValue = 5
+                    },
+                    new PerkLevelSubScheme
+                    {
+                        MaxValue = 2
+                    },
+                    new PerkLevelSubScheme
+                    {
+                        MaxValue = 3
+                    }
                 }
             };
         }

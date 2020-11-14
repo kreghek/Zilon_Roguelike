@@ -8,7 +8,10 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
     {
         public StoneDepositFactory(
             ISchemeService schemeService,
-            IDropResolver dropResolver) : base(toolTags: new[] { "pick-axe" }, dropTableSchemeSid: "stone-deposit",
+            IDropResolver dropResolver) : base(toolTags: new[]
+            {
+                "pick-axe"
+            }, dropTableSchemeSid: "stone-deposit",
             PropContainerPurpose.StoneDeposits, schemeService, dropResolver)
         {
         }

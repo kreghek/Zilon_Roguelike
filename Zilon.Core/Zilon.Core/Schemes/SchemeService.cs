@@ -75,7 +75,8 @@ namespace Zilon.Core.Schemes
             return allSchemes;
         }
 
-        private void InitHandler<TScheme, TSchemeImpl>() where TScheme : class, IScheme
+        private void InitHandler<TScheme, TSchemeImpl>()
+            where TScheme : class, IScheme
             where TSchemeImpl : class, TScheme
         {
             var handler = _schemeServiceHandlerFactory.Create<TSchemeImpl>();

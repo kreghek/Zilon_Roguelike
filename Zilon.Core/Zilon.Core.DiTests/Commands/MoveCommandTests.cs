@@ -167,7 +167,10 @@ namespace Zilon.Core.Tests.Commands
 
             Container.AddSingleton<MoveCommand>();
 
-            _actorList = new List<IActor> { playerStateMock.Object.ActiveActor.Actor };
+            _actorList = new List<IActor>
+            {
+                playerStateMock.Object.ActiveActor.Actor
+            };
             var actorManagerMock = new Mock<IActorManager>();
             actorManagerMock.Setup(x => x.Items).Returns(_actorList);
             var actorManager = actorManagerMock.Object;

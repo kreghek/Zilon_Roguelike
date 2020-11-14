@@ -46,7 +46,10 @@ namespace Zilon.Core.Commands
             var actorNode = CurrentActor.Node;
             var map = _player.SectorNode.Sector.Map;
 
-            var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
+            var detectedTransition = TransitionDetection.Detect(map.Transitions, new[]
+            {
+                actorNode
+            });
 
             var actorOnTransition = detectedTransition != null;
 

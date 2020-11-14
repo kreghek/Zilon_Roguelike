@@ -41,7 +41,10 @@ namespace Zilon.Bot.Players
                     };
                 }
 
-                return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster) { WriteStateChanges = true };
+                return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster)
+                {
+                    WriteStateChanges = true
+                };
             }
 
             var normalizedMode = _botSettings.Mode?.Trim().ToUpperInvariant();
@@ -67,7 +70,10 @@ namespace Zilon.Bot.Players
                     };
 
                 case "MONSTER":
-                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster) { WriteStateChanges = true };
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster)
+                    {
+                        WriteStateChanges = true
+                    };
 
                 default:
                     throw new NotSupportedException();

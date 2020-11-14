@@ -145,7 +145,10 @@ namespace Zilon.Core.Tactics
             var bonus = duration * inversedRation;
             var mod = new DropTableModificatorScheme
             {
-                PropSids = new[] { "evil-pumpkin" },
+                PropSids = new[]
+                {
+                    "evil-pumpkin"
+                },
 
                 //TODO Зачем вообще здесь -1. Бонус - это число, на которое нужно умножить.
                 WeightBonus = bonus - 1
@@ -164,7 +167,10 @@ namespace Zilon.Core.Tactics
             {
                 if (record.SchemeSid == null)
                 {
-                    resultList.Add(new DropTableModRecord { Record = record, ModifiedWeight = record.Weight });
+                    resultList.Add(new DropTableModRecord
+                    {
+                        Record = record, ModifiedWeight = record.Weight
+                    });
                     continue;
                 }
 
@@ -173,8 +179,7 @@ namespace Zilon.Core.Tactics
                 var totalWeightMultiplier = recordModificators.Sum(x => x.WeightBonus) + 1;
                 resultList.Add(new DropTableModRecord
                 {
-                    Record = record,
-                    ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
+                    Record = record, ModifiedWeight = (int)Math.Round(record.Weight * totalWeightMultiplier)
                 });
             }
 

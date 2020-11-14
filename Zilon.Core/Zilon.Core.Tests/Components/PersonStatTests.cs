@@ -46,7 +46,10 @@ namespace Zilon.Core.Tests.Components
 
             var personStat = new PersonStat(baseValue, incrementValue);
 
-            var bonuses = new[] { new PersonStat(bonusValue) };
+            var bonuses = new[]
+            {
+                new PersonStat(bonusValue)
+            };
 
             // ACT
             var factValue = personStat.GetActualValue(level,

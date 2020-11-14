@@ -101,7 +101,13 @@ namespace Zilon.Core.Tests.Commands
         {
             var propScheme = new TestPropScheme
             {
-                Equip = new TestPropEquipSubScheme { SlotTypes = new[] { EquipmentSlotTypes.Hand } }
+                Equip = new TestPropEquipSubScheme
+                {
+                    SlotTypes = new[]
+                    {
+                        EquipmentSlotTypes.Hand
+                    }
+                }
             };
             var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
 

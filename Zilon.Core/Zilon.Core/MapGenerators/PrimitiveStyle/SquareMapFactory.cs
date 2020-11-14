@@ -37,7 +37,10 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
             {
                 IsStart = true,
                 IsOut = true,
-                ExitNodes = new[] { map.Nodes.Last() }
+                ExitNodes = new[]
+                {
+                    map.Nodes.Last()
+                }
             };
 
             map.Regions.Add(mapRegion);
@@ -54,7 +57,10 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
         {
             var factory = new SquareMapFactory();
 
-            var squaregenerationOptionsSubScheme = new SquareGenerationOptionsSubScheme { Size = mapSize };
+            var squaregenerationOptionsSubScheme = new SquareGenerationOptionsSubScheme
+            {
+                Size = mapSize
+            };
             var generationOptions = new SectorMapFactoryOptions(squaregenerationOptionsSubScheme);
 
             return await factory.CreateAsync(generationOptions).ConfigureAwait(false);

@@ -26,7 +26,7 @@ namespace Zilon.Core.Persons.Auxiliary
         public static void UpdateSurvivalEffect(
             [NotNull] IEffectsModule currentEffects,
             [NotNull] SurvivalStat stat,
-            [NotNull][ItemNotNull] SurvivalStatKeySegment[] keySegments,
+            [NotNull] [ItemNotNull] SurvivalStatKeySegment[] keySegments,
             [NotNull] ISurvivalRandomSource survivalRandomSource,
             [NotNull] IPlayerEventLogService playerEventLogService)
         {
@@ -66,7 +66,9 @@ namespace Zilon.Core.Persons.Auxiliary
                         statType,
                         currentSegment.Level,
                         survivalRandomSource)
-                    { PlayerEventLogService = playerEventLogService };
+                    {
+                        PlayerEventLogService = playerEventLogService
+                    };
 
                     currentEffects.Add(newEffect);
                 }

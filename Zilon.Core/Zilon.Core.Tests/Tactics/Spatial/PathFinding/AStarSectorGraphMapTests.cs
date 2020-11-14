@@ -43,7 +43,10 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             {
                 IsStart = true,
                 IsOut = true,
-                ExitNodes = new[] { map.Nodes.Last() }
+                ExitNodes = new[]
+                {
+                    map.Nodes.Last()
+                }
             };
 
             map.Regions.Add(mapRegion);

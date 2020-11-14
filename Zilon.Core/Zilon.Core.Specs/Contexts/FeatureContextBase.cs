@@ -83,7 +83,10 @@ namespace Zilon.Core.Specs.Contexts
                 {
                     IsStart = true,
                     IsOut = true,
-                    ExitNodes = new[] { map.Nodes.Last() }
+                    ExitNodes = new[]
+                    {
+                        map.Nodes.Last()
+                    }
                 };
 
                 map.Regions.Add(mapRegion);

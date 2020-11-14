@@ -117,11 +117,13 @@ namespace Zilon.Core.Tests.MapGenerators
         {
             return new TestSectorSubScheme
             {
-                RegularMonsterSids = new[] { "rat" },
+                RegularMonsterSids = new[]
+                {
+                    "rat"
+                },
                 MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
                 {
-                    RegionCount = 20,
-                    RegionSize = 20
+                    RegionCount = 20, RegionSize = 20
                 }
             };
         }

@@ -71,7 +71,10 @@ namespace Zilon.Core.Tests.Commands
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
-            var propScheme = new TestPropScheme { Use = new TestPropUseSubScheme() };
+            var propScheme = new TestPropScheme
+            {
+                Use = new TestPropUseSubScheme()
+            };
             var usableResource = new Resource(propScheme, 1);
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();

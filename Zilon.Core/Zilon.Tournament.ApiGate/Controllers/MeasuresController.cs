@@ -97,7 +97,10 @@ namespace Zilon.Tournament.ApiGate.Controllers
         {
             var value = GetValue(reader, fieldName);
             var lastValue = GetValue(diffReader, fieldName);
-            return new MeasureValue { TotalValue = value, LastValue = lastValue };
+            return new MeasureValue
+            {
+                TotalValue = value, LastValue = lastValue
+            };
         }
 
         private static double GetValue(DbDataReader diffReader, string fieldName)

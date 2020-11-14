@@ -26,7 +26,10 @@ namespace Zilon.Core.World
         {
             var person = CreateStartPerson(PERSON_SCHEME_SID, _personFactory, Fractions.MainPersonFraction);
             _player.BindPerson(globe, person);
-            return Task.FromResult(new[] { person }.AsEnumerable());
+            return Task.FromResult(new[]
+            {
+                person
+            }.AsEnumerable());
         }
 
         /// <summary>

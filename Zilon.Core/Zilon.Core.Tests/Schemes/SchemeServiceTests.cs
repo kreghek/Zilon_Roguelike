@@ -87,7 +87,10 @@ namespace Zilon.Core.Tests.Schemes
                     }
 
                     var generic = method.MakeGenericMethod(schemeType);
-                    var scheme = generic.Invoke(schemeService, new object[] { "test" });
+                    var scheme = generic.Invoke(schemeService, new object[]
+                    {
+                        "test"
+                    });
                     Console.WriteLine(scheme);
                 };
 

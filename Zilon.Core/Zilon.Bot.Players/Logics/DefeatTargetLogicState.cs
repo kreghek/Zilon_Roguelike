@@ -87,7 +87,10 @@ namespace Zilon.Bot.Players.Logics
             var isInDistance = act.CheckDistance(actor.Node, target.Node, map);
             var targetIsOnLine = map.TargetIsOnLine(actor.Node, target.Node);
 
-            var attackParams = new AttackParams { IsAvailable = isInDistance && targetIsOnLine, TacticalAct = act };
+            var attackParams = new AttackParams
+            {
+                IsAvailable = isInDistance && targetIsOnLine, TacticalAct = act
+            };
 
             return attackParams;
         }

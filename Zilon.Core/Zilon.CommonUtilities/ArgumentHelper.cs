@@ -30,7 +30,10 @@ namespace Zilon.CommonUtilities
         {
             foreach (var arg in args)
             {
-                var components = arg.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                var components = arg.Split(new[]
+                {
+                    '='
+                }, StringSplitOptions.RemoveEmptyEntries);
                 if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (components.Length >= 2)

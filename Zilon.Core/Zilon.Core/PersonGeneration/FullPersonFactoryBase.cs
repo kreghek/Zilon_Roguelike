@@ -79,7 +79,9 @@ namespace Zilon.Core.PersonGeneration
             var survivalModule =
                 new HumanSurvivalModule(personScheme, _survivalRandomSource, attributeModule, effectsModule,
                     evolutionModule, equipmentModule)
-                { PlayerEventLogService = PlayerEventLogService };
+                {
+                    PlayerEventLogService = PlayerEventLogService
+                };
             person.AddModule(survivalModule);
 
             RollStartEquipment(inventoryModule, person);
@@ -146,7 +148,10 @@ namespace Zilon.Core.PersonGeneration
             // Если текущий предмет невозможно экипировать, то его тоже помещаем в инвентарь.
 
             var inventory = person.GetModule<IInventoryModule>();
-            var dropedProps = DropResolver.Resolve(new[] { dropScheme });
+            var dropedProps = DropResolver.Resolve(new[]
+            {
+                dropScheme
+            });
             var usedEquipment = dropedProps.OfType<Equipment>().FirstOrDefault();
             if (usedEquipment != null)
             {

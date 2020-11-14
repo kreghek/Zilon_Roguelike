@@ -20,7 +20,10 @@ namespace Zilon.Bot.Players.Triggers
 
                 if (rule != null)
                 {
-                    yield return new ResourceSelection { Resource = resource, Rule = rule };
+                    yield return new ResourceSelection
+                    {
+                        Resource = resource, Rule = rule
+                    };
                 }
             }
         }

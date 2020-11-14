@@ -17,9 +17,15 @@ namespace Zilon.Core.Tactics
             _nodes = new Dictionary<IGraphNode, SectorMapFowNode>();
             _sectorNodeHash = new Dictionary<SectorMapNodeFowState, List<SectorMapFowNode>>
             {
-                { SectorMapNodeFowState.TerraIncognita, new List<SectorMapFowNode>() },
-                { SectorMapNodeFowState.Explored, new List<SectorMapFowNode>() },
-                { SectorMapNodeFowState.Observing, new List<SectorMapFowNode>() }
+                {
+                    SectorMapNodeFowState.TerraIncognita, new List<SectorMapFowNode>()
+                },
+                {
+                    SectorMapNodeFowState.Explored, new List<SectorMapFowNode>()
+                },
+                {
+                    SectorMapNodeFowState.Observing, new List<SectorMapFowNode>()
+                }
             };
         }
 

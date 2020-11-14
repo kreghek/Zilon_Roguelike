@@ -71,9 +71,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var expectedPath = new IGraphNode[]
             {
-                map.Nodes.SelectByHexCoords(1, 1), map.Nodes.SelectByHexCoords(2, 2),
-                map.Nodes.SelectByHexCoords(2, 3), map.Nodes.SelectByHexCoords(3, 4),
-                map.Nodes.SelectByHexCoords(3, 5), map.Nodes.SelectByHexCoords(4, 6)
+                map.Nodes.SelectByHexCoords(1, 1), map.Nodes.SelectByHexCoords(2, 2), map.Nodes.SelectByHexCoords(2, 3),
+                map.Nodes.SelectByHexCoords(3, 4), map.Nodes.SelectByHexCoords(3, 5), map.Nodes.SelectByHexCoords(4, 6)
             };
 
             var context = CreatePathFindingContext(map);
@@ -103,9 +102,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var expectedPath = new IGraphNode[]
             {
-                map.Nodes.SelectByHexCoords(1, 1), map.Nodes.SelectByHexCoords(2, 2),
-                map.Nodes.SelectByHexCoords(2, 3), map.Nodes.SelectByHexCoords(3, 3),
-                map.Nodes.SelectByHexCoords(4, 3), map.Nodes.SelectByHexCoords(5, 3)
+                map.Nodes.SelectByHexCoords(1, 1), map.Nodes.SelectByHexCoords(2, 2), map.Nodes.SelectByHexCoords(2, 3),
+                map.Nodes.SelectByHexCoords(3, 3), map.Nodes.SelectByHexCoords(4, 3), map.Nodes.SelectByHexCoords(5, 3)
             };
 
             var context = CreatePathFindingContext(map);

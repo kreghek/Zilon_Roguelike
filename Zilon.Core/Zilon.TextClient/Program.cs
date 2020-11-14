@@ -44,18 +44,21 @@ namespace Zilon.TextClient
             var gameLoop = new GameLoop(globe);
             var uiState = scope.ServiceProvider.GetRequiredService<ISectorUiState>();
             var playerActor = (from sectorNode in globe.SectorNodes
-                               from actor in sectorNode.Sector.ActorManager.Items
-                               where actor.Person == player.MainPerson
-                               select actor).SingleOrDefault();
+                from actor in sectorNode.Sector.ActorManager.Items
+                where actor.Person == player.MainPerson
+                select actor).SingleOrDefault();
             var playerActorSectorNode = (from sectorNode in globe.SectorNodes
-                                         from actor in sectorNode.Sector.ActorManager.Items
-                                         where actor.Person == player.MainPerson
-                                         select sectorNode).SingleOrDefault();
+                from actor in sectorNode.Sector.ActorManager.Items
+                where actor.Person == player.MainPerson
+                select sectorNode).SingleOrDefault();
 
             // This is code smells. It is not good settings
             player.BindPerson(globe, playerActor.Person);
 
-            uiState.ActiveActor = new ActorViewModel { Actor = playerActor };
+            uiState.ActiveActor = new ActorViewModel
+            {
+                Actor = playerActor
+            };
 
             // Play
 
@@ -82,7 +85,10 @@ namespace Zilon.TextClient
 
                     var moveCommand = scope.ServiceProvider.GetRequiredService<MoveCommand>();
 
-                    uiState.SelectedViewModel = new NodeViewModel { Node = targetNode };
+                    uiState.SelectedViewModel = new NodeViewModel
+                    {
+                        Node = targetNode
+                    };
 
                     moveCommand.Execute();
                 }

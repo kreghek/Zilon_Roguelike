@@ -20,50 +20,50 @@ namespace Zilon.Core.World.NameGeneration
             // https://www.fantasynamegenerators.com/city-names.php
             var names1 = new[]
             {
-                "a", "e", "i", "o", "u", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-                "", "", ""
+                "a", "e", "i", "o", "u", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "", ""
             };
             var names2 = new[]
             {
-                "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y",
-                "z", "br", "cr", "dr", "fr", "gr", "kr", "pr", "qr", "sr", "tr", "vr", "wr", "yr", "zr", "str",
-                "bl", "cl", "fl", "gl", "kl", "pl", "sl", "vl", "yl", "zl", "ch", "kh", "ph", "sh", "yh", "zh"
+                "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z",
+                "br", "cr", "dr", "fr", "gr", "kr", "pr", "qr", "sr", "tr", "vr", "wr", "yr", "zr", "str", "bl", "cl",
+                "fl", "gl", "kl", "pl", "sl", "vl", "yl", "zl", "ch", "kh", "ph", "sh", "yh", "zh"
             };
             var names3 = new[]
             {
-                "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u",
-                "a", "e", "i", "o", "u", "ae", "ai", "au", "aa", "ee", "ea", "eu", "ia", "ie", "oi", "ou", "ua",
-                "ue", "ui", "uo", "uu", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u",
-                "a", "e", "i", "o", "u", "a", "e", "i", "o", "u"
+                "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a",
+                "e", "i", "o", "u", "ae", "ai", "au", "aa", "ee", "ea", "eu", "ia", "ie", "oi", "ou", "ua", "ue", "ui",
+                "uo", "uu", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i",
+                "o", "u", "a", "e", "i", "o", "u"
             };
             var names4 = new[]
             {
-                "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y",
-                "z", "br", "cr", "dr", "fr", "gr", "kr", "pr", "tr", "vr", "wr", "zr", "st", "bl", "cl", "fl", "gl",
-                "kl", "pl", "sl", "vl", "zl", "ch", "kh", "ph", "sh", "zh"
+                "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z",
+                "br", "cr", "dr", "fr", "gr", "kr", "pr", "tr", "vr", "wr", "zr", "st", "bl", "cl", "fl", "gl", "kl",
+                "pl", "sl", "vl", "zl", "ch", "kh", "ph", "sh", "zh"
             };
             var names5 = new[]
             {
-                "c", "d", "f", "h", "k", "l", "m", "n", "p", "r", "s", "t", "x", "y", "", "", "", "", "", "", "",
-                "", "", "", "", "", "", "", ""
+                "c", "d", "f", "h", "k", "l", "m", "n", "p", "r", "s", "t", "x", "y", "", "", "", "", "", "", "", "",
+                "", "", "", "", "", "", ""
             };
             var names6 = new[]
             {
-                "aco", "ada", "adena", "ago", "agos", "aka", "ale", "alo", "am", "anbu", "ance", "and", "ando",
-                "ane", "ans", "anta", "arc", "ard", "ares", "ario", "ark", "aso", "athe", "eah", "edo", "ego",
-                "eigh", "eim", "eka", "eles", "eley", "ence", "ens", "ento", "erton", "ery", "esa", "ester", "ey",
-                "ia", "ico", "ido", "ila", "ille", "in", "inas", "ine", "ing", "irie", "ison", "ita", "ock", "odon",
-                "oit", "ok", "olis", "olk", "oln", "ona", "oni", "onio", "ont", "ora", "ord", "ore", "oria", "ork",
-                "osa", "ose", "ouis", "ouver", "ul", "urg", "urgh", "ury"
+                "aco", "ada", "adena", "ago", "agos", "aka", "ale", "alo", "am", "anbu", "ance", "and", "ando", "ane",
+                "ans", "anta", "arc", "ard", "ares", "ario", "ark", "aso", "athe", "eah", "edo", "ego", "eigh", "eim",
+                "eka", "eles", "eley", "ence", "ens", "ento", "erton", "ery", "esa", "ester", "ey", "ia", "ico", "ido",
+                "ila", "ille", "in", "inas", "ine", "ing", "irie", "ison", "ita", "ock", "odon", "oit", "ok", "olis",
+                "olk", "oln", "ona", "oni", "onio", "ont", "ora", "ord", "ore", "oria", "ork", "osa", "ose", "ouis",
+                "ouver", "ul", "urg", "urgh", "ury"
             };
             var names7 = new[]
             {
-                "bert", "bridge", "burg", "burgh", "burn", "bury", "bus", "by", "caster", "cester", "chester",
-                "dale", "dence", "diff", "ding", "don", "fast", "field", "ford", "gan", "gas", "gate", "gend",
-                "ginia", "gow", "ham", "hull", "land", "las", "ledo", "lens", "ling", "mery", "mond", "mont",
-                "more", "mouth", "nard", "phia", "phis", "polis", "pool", "port", "pus", "ridge", "rith", "ron",
-                "rora", "ross", "rough", "sa", "sall", "sas", "sea", "set", "sey", "shire", "son", "stead", "stin",
-                "ta", "tin", "tol", "ton", "vale", "ver", "ville", "vine", "ving", "well", "wood"
+                "bert", "bridge", "burg", "burgh", "burn", "bury", "bus", "by", "caster", "cester", "chester", "dale",
+                "dence", "diff", "ding", "don", "fast", "field", "ford", "gan", "gas", "gate", "gend", "ginia", "gow",
+                "ham", "hull", "land", "las", "ledo", "lens", "ling", "mery", "mond", "mont", "more", "mouth", "nard",
+                "phia", "phis", "polis", "pool", "port", "pus", "ridge", "rith", "ron", "rora", "ross", "rough", "sa",
+                "sall", "sas", "sea", "set", "sey", "shire", "son", "stead", "stin", "ta", "tin", "tol", "ton", "vale",
+                "ver", "ville", "vine", "ving", "well", "wood"
             };
 
             var i = _dice.Roll(0, 10);

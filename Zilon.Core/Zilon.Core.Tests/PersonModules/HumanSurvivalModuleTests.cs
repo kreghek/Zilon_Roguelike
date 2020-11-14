@@ -189,15 +189,11 @@ namespace Zilon.Core.Tests.PersonModules
                         {
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Lesser,
-                                Start = 0.25f,
-                                End = 0.75f
+                                Level = PersonSurvivalStatKeypointLevel.Lesser, Start = 0.25f, End = 0.75f
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Strong,
-                                Start = 0.12f,
-                                End = 0.25f
+                                Level = PersonSurvivalStatKeypointLevel.Strong, Start = 0.12f, End = 0.25f
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
@@ -215,15 +211,11 @@ namespace Zilon.Core.Tests.PersonModules
                         {
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Lesser,
-                                Start = 0.25f,
-                                End = 0.75f
+                                Level = PersonSurvivalStatKeypointLevel.Lesser, Start = 0.25f, End = 0.75f
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Strong,
-                                Start = 0.12f,
-                                End = 0.25f
+                                Level = PersonSurvivalStatKeypointLevel.Strong, Start = 0.12f, End = 0.25f
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {

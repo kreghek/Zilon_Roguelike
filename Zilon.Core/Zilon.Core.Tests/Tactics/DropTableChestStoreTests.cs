@@ -26,7 +26,10 @@ namespace Zilon.Core.Tests.Tactics
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.Resolve(It.IsAny<DropTableScheme[]>()))
-                .Returns(new IProp[] { CreateFakeResource(scheme), CreateFakeResource(scheme) });
+                .Returns(new IProp[]
+                {
+                    CreateFakeResource(scheme), CreateFakeResource(scheme)
+                });
             var dropResolver = dropResolverMock.Object;
 
             var store = new DropTableChestStore(new DropTableScheme[0], dropResolver);
@@ -51,7 +54,10 @@ namespace Zilon.Core.Tests.Tactics
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.Resolve(It.IsAny<DropTableScheme[]>()))
-                .Returns(new IProp[] { CreateFakeResource(scheme) });
+                .Returns(new IProp[]
+                {
+                    CreateFakeResource(scheme)
+                });
             var dropResolver = dropResolverMock.Object;
 
             var store = new DropTableChestStore(new DropTableScheme[0], dropResolver);

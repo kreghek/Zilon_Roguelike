@@ -67,9 +67,15 @@ namespace Zilon.Bot.Players.Strategies.Tests
                 .Returns(true);
             var trigger = triggerMock.Object;
 
-            logicTree.Transitions.Add(startLogicState, new[] { new LogicTransition(trigger, secondLogicState) });
+            logicTree.Transitions.Add(startLogicState, new[]
+            {
+                new LogicTransition(trigger, secondLogicState)
+            });
 
-            logicTree.Transitions.Add(secondLogicState, new[] { new LogicTransition(trigger, startLogicState) });
+            logicTree.Transitions.Add(secondLogicState, new[]
+            {
+                new LogicTransition(trigger, startLogicState)
+            });
 
             var actorMock = new Mock<IActor>();
             var actor = actorMock.Object;

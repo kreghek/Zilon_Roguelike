@@ -36,11 +36,17 @@ namespace Zilon.Core.Specs.Steps
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
 
             var perkScheme = schemeService.GetScheme<IPerkScheme>(perkSid);
-            var perk = new Perk { Scheme = perkScheme };
+            var perk = new Perk
+            {
+                Scheme = perkScheme
+            };
 
             var actor = Context.GetActiveActor();
 
-            actor.Person.GetModule<IEvolutionModule>().AddBuildInPerks(new[] { perk });
+            actor.Person.GetModule<IEvolutionModule>().AddBuildInPerks(new[]
+            {
+                perk
+            });
         }
 
         [Then(@"Перк (.+) должен быть прокачен")]

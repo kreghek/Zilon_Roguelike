@@ -35,7 +35,10 @@ namespace Zilon.Core.Persons.Survival
 
         public EffectRule[] GetRules()
         {
-            return new[] { new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser) };
+            return new[]
+            {
+                new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser)
+            };
         }
 
         public void HoldDisease(IDisease disease)

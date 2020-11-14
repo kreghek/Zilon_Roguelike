@@ -55,7 +55,10 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var cellularAutomatonGenerator = new CellularAutomatonGenerator(_dice);
 
             var mapRuleManager = new MapRuleManager();
-            var rule = new RegionCountRule { Count = transitions.Count() + 1 };
+            var rule = new RegionCountRule
+            {
+                Count = transitions.Count() + 1
+            };
             mapRuleManager.AddRule(rule);
 
             var regionPostProcessors = new IRegionPostProcessor[]
@@ -162,8 +165,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 }
 
                 transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
-                                              where map.Transitions.Keys.Contains(regionNode)
-                                              select regionNode).ToArray();
+                    where map.Transitions.Keys.Contains(regionNode)
+                    select regionNode).ToArray();
             }
         }
 

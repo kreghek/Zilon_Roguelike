@@ -212,7 +212,10 @@ namespace Zilon.Core.Specs.Steps
 
             var container = staticObjectManager.Items.Single(x => x.Id == id);
 
-            var chestViewMdel = new TestContainerViewModel { StaticObject = container };
+            var chestViewMdel = new TestContainerViewModel
+            {
+                StaticObject = container
+            };
 
             playerState.HoverViewModel = chestViewMdel;
         }

@@ -154,8 +154,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             return new IGraphNode[]
             {
-                map.Nodes.SelectByHexCoords(4, 4), map.Nodes.SelectByHexCoords(3, 4),
-                map.Nodes.SelectByHexCoords(2, 4), map.Nodes.SelectByHexCoords(1, 5)
+                map.Nodes.SelectByHexCoords(4, 4), map.Nodes.SelectByHexCoords(3, 4), map.Nodes.SelectByHexCoords(2, 4),
+                map.Nodes.SelectByHexCoords(1, 5)
             };
         }
     }

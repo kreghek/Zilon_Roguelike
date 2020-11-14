@@ -44,7 +44,10 @@ namespace Zilon.Core.Tests.MapGenerators
             map.AddEdge(node11, node10);
             map.AddEdge(node11, node01);
 
-            var regionNodes = new IGraphNode[] { node00, node01, node10, node11 };
+            var regionNodes = new IGraphNode[]
+            {
+                node00, node01, node10, node11
+            };
 
             // генерируем выход
             var corridorNode = new HexNode(2, 0);
@@ -90,7 +93,10 @@ namespace Zilon.Core.Tests.MapGenerators
             map.AddEdge(node11, node10);
             map.AddEdge(node11, node01);
 
-            var regionNodes = new IGraphNode[] { node00, node01, node10, node11 };
+            var regionNodes = new IGraphNode[]
+            {
+                node00, node01, node10, node11
+            };
 
             // генерируем выход
             var corridorNode = new HexNode(2, 0);
@@ -98,7 +104,10 @@ namespace Zilon.Core.Tests.MapGenerators
             map.AddEdge(corridorNode, node10);
 
             mapMock.Setup(x => x.GetNext(It.Is<IGraphNode>(n => n == node10)))
-                .Returns(new IGraphNode[] { corridorNode, node00, node11 });
+                .Returns(new IGraphNode[]
+                {
+                    corridorNode, node00, node11
+                });
 
             // ACT
             var node = MapRegionHelper.FindNonBlockedNode(node10, map, regionNodes);
@@ -149,7 +158,10 @@ namespace Zilon.Core.Tests.MapGenerators
 
             // эмулируем выборку сундуков в предыдущих итерациях
             var availableNodes = new List<IGraphNode>(region);
-            var rolled = new[] { 114, 136, 0, 123, 179, 0, 111, 3 };
+            var rolled = new[]
+            {
+                114, 136, 0, 123, 179, 0, 111, 3
+            };
             foreach (int rolledIndex in rolled)
             {
                 var rolledNode = availableNodes[rolledIndex]; // узел, который валил поиск.

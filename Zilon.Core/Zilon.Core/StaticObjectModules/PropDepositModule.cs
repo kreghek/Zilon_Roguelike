@@ -63,7 +63,10 @@ namespace Zilon.Core.StaticObjectModules
                 throw new InvalidOperationException("Попытка выполнить добычу в исчерпанных залежах");
             }
 
-            var props = _dropResolver.Resolve(new[] { _dropTableScheme });
+            var props = _dropResolver.Resolve(new[]
+            {
+                _dropTableScheme
+            });
             foreach (var prop in props)
             {
                 _propContainer.Content.Add(prop);

@@ -122,13 +122,19 @@ namespace Zilon.Core.World.Tests
                             IsStart = true,
                             TransSectorSids = new[]
                             {
-                                new TestSectorTransitionSubScheme { SectorLevelSid = "intro-2" }
+                                new TestSectorTransitionSubScheme
+                                {
+                                    SectorLevelSid = "intro-2"
+                                }
                             }
                         },
                         new TestSectorSubScheme
                         {
                             Sid = "intro-2",
-                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
+                            TransSectorSids = new[]
+                            {
+                                new TestSectorTransitionSubScheme()
+                            }
                         }
                     }
                 },
@@ -143,13 +149,19 @@ namespace Zilon.Core.World.Tests
                             IsStart = true,
                             TransSectorSids = new[]
                             {
-                                new TestSectorTransitionSubScheme { SectorLevelSid = "d1-2" }
+                                new TestSectorTransitionSubScheme
+                                {
+                                    SectorLevelSid = "d1-2"
+                                }
                             }
                         },
                         new TestSectorSubScheme
                         {
                             Sid = "d1-2",
-                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
+                            TransSectorSids = new[]
+                            {
+                                new TestSectorTransitionSubScheme()
+                            }
                         }
                     }
                 },
@@ -162,7 +174,10 @@ namespace Zilon.Core.World.Tests
                         {
                             Sid = "d2-1",
                             IsStart = true,
-                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
+                            TransSectorSids = new[]
+                            {
+                                new TestSectorTransitionSubScheme()
+                            }
                         }
                     }
                 },
@@ -177,8 +192,14 @@ namespace Zilon.Core.World.Tests
                             IsStart = true,
                             TransSectorSids = new[]
                             {
-                                new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" },
-                                new TestSectorTransitionSubScheme { SectorLevelSid = "d3-4" }
+                                new TestSectorTransitionSubScheme
+                                {
+                                    SectorLevelSid = "d3-3"
+                                },
+                                new TestSectorTransitionSubScheme
+                                {
+                                    SectorLevelSid = "d3-4"
+                                }
                             }
                         },
                         new TestSectorSubScheme
@@ -186,7 +207,10 @@ namespace Zilon.Core.World.Tests
                             Sid = "d3-3",
                             TransSectorSids = new[]
                             {
-                                new TestSectorTransitionSubScheme { SectorLevelSid = "d3-2" }
+                                new TestSectorTransitionSubScheme
+                                {
+                                    SectorLevelSid = "d3-2"
+                                }
                             }
                         },
                         new TestSectorSubScheme
@@ -194,13 +218,19 @@ namespace Zilon.Core.World.Tests
                             Sid = "d3-4",
                             TransSectorSids = new[]
                             {
-                                new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" }
+                                new TestSectorTransitionSubScheme
+                                {
+                                    SectorLevelSid = "d3-3"
+                                }
                             }
                         },
                         new TestSectorSubScheme
                         {
                             Sid = "d3-2",
-                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
+                            TransSectorSids = new[]
+                            {
+                                new TestSectorTransitionSubScheme()
+                            }
                         }
                     }
                 }

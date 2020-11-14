@@ -66,7 +66,10 @@ namespace Zilon.Core.Tactics.Behaviour
                 if (fowNode == null)
                 {
                     fowNode = new SectorMapFowNode(observingNode);
-                    fowData.AddNodes(new[] { fowNode });
+                    fowData.AddNodes(new[]
+                    {
+                        fowNode
+                    });
                 }
 
                 fowData.ChangeNodeState(fowNode, SectorMapNodeFowState.Observing);
@@ -83,9 +86,15 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private static IGraphNode[] GetObservingNodes(IFowContext fowContext, IGraphNode baseNode, int radius)
         {
-            var border = new List<IGraphNode> { baseNode };
+            var border = new List<IGraphNode>
+            {
+                baseNode
+            };
 
-            var resultList = new List<IGraphNode> { baseNode };
+            var resultList = new List<IGraphNode>
+            {
+                baseNode
+            };
 
             // Шаги заливки
             for (var stepIndex = 1; stepIndex <= radius; stepIndex++)

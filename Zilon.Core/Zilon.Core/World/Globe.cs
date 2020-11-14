@@ -112,7 +112,10 @@ namespace Zilon.Core.World
                         continue;
                     }
 
-                    yield return new ActorInSector { Actor = actor, Sector = sector };
+                    yield return new ActorInSector
+                    {
+                        Actor = actor, Sector = sector
+                    };
                 }
             }
         }

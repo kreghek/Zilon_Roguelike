@@ -28,7 +28,10 @@ namespace Zilon.Core.Specs.Contexts
                 .Nodes
                 .SelectByHexCoords(targetCoords.X, targetCoords.Y);
 
-            var nodeViewModel = new TestNodeViewModel { Node = targetNode };
+            var nodeViewModel = new TestNodeViewModel
+            {
+                Node = targetNode
+            };
 
             playerState.HoverViewModel = nodeViewModel;
             playerState.SelectedViewModel = nodeViewModel;
@@ -45,7 +48,10 @@ namespace Zilon.Core.Specs.Contexts
             var selectedProp = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
                 .First(x => x.Scheme.Sid == propSid);
 
-            var viewModel = new TestPropItemViewModel { Prop = selectedProp };
+            var viewModel = new TestPropItemViewModel
+            {
+                Prop = selectedProp
+            };
             inventoryState.SelectedProp = viewModel;
 
             useSelfCommand.Execute();

@@ -19,7 +19,10 @@ namespace Zilon.Core.Tests.Common.Schemes
 
         public static TestDropTableRecordSubScheme CreateEmpty(int weight)
         {
-            return new TestDropTableRecordSubScheme { SchemeSid = null, Weight = weight };
+            return new TestDropTableRecordSubScheme
+            {
+                SchemeSid = null, Weight = weight
+            };
         }
     }
 }

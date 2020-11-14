@@ -80,20 +80,38 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var sectorNodeMock = new Mock<ISectorNode>();
             var sectorNode = sectorNodeMock.Object;
             var transition = new RoomTransition(sectorNode);
-            var availableTransitions = new[] { transition };
+            var availableTransitions = new[]
+            {
+                transition
+            };
 
             var randomMock = new Mock<IRoomGeneratorRandomSource>();
             randomMock.Setup(x => x.RollRoomMatrixPositions(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(new[] { new OffsetCoords(0, 0) });
+                .Returns(new[]
+                {
+                    new OffsetCoords(0, 0)
+                });
             randomMock.Setup(x => x.RollTransitions(It.IsAny<IEnumerable<RoomTransition>>()))
-                .Returns(new[] { transition });
+                .Returns(new[]
+                {
+                    transition
+                });
             randomMock.Setup(x => x.RollRoomSize(It.IsAny<int>(), It.IsAny<int>(), It.IsIn<int>(1)))
-                .Returns<int, int, int>((min, max, count) => { return new[] { new Size(0, 0) }; });
+                .Returns<int, int, int>((min, max, count) =>
+                {
+                    return new[]
+                    {
+                        new Size(0, 0)
+                    };
+                });
             var random = randomMock.Object;
 
             var generator = new RoomGenerator(random);
 
-            var expectedTransitions = new[] { transition };
+            var expectedTransitions = new[]
+            {
+                transition
+            };
 
             // ACT
             var factRooms = generator.GenerateRoomsInGrid(1, 1, 1, availableTransitions);

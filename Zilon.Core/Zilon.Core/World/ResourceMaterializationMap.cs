@@ -109,7 +109,10 @@ namespace Zilon.Core.World
                     }
                     else
                     {
-                        dict[item.ResourceType] = new List<float> { item.Share };
+                        dict[item.ResourceType] = new List<float>
+                        {
+                            item.Share
+                        };
                     }
                 }
             }

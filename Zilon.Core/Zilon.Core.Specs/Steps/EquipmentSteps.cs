@@ -65,7 +65,10 @@ namespace Zilon.Core.Specs.Steps
             var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
                 .First(x => x.Scheme.Sid == propSid);
 
-            var targetEquipmentVeiwModel = new TestPropItemViewModel { Prop = targetEquipment };
+            var targetEquipmentVeiwModel = new TestPropItemViewModel
+            {
+                Prop = targetEquipment
+            };
 
             inventoryState.SelectedProp = targetEquipmentVeiwModel;
 
@@ -114,7 +117,10 @@ namespace Zilon.Core.Specs.Steps
             var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
                 .First(x => x.Scheme.Sid == propSid);
 
-            var targetEquipmentVeiwModel = new TestPropItemViewModel { Prop = targetEquipment };
+            var targetEquipmentVeiwModel = new TestPropItemViewModel
+            {
+                Prop = targetEquipment
+            };
 
             inventoryState.SelectedProp = targetEquipmentVeiwModel;
 
