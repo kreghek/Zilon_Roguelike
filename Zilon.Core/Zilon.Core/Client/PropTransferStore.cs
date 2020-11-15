@@ -237,10 +237,7 @@ namespace Zilon.Core.Client
             if (oppositResource != null)
             {
                 var remains = oppositResource.Count - resource.Count;
-                if (remains > 0)
-                {
-                }
-                else
+                if (remains <= 0)
                 {
                     oppositList.Remove(oppositResource);
 

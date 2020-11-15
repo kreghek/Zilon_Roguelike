@@ -145,8 +145,8 @@ namespace Zilon.Core.Tactics.Spatial
         /// <summary>
         /// Выполняет поиск пути к указанному узлу.
         /// </summary>
-        /// <param name="start">Начальный узел поиска пути.</param>
-        /// <param name="end">Целевой узел поиска пути.</param>
+        /// <param name="startNode">Начальный узел поиска пути.</param>
+        /// <param name="targetNode">Целевой узел поиска пути.</param>
         /// <param name="context">Контекст поиска пути.</param>
         /// <param name="outputPath">В результате будет содержать набор узлов,
         /// представляющих путь из указанного узла в целевой.</param>
@@ -155,19 +155,19 @@ namespace Zilon.Core.Tactics.Spatial
         /// и выделять под него память в зависимости от найденного пути.
         /// </remarks>
         public void FindPath(
-            IGraphNode start,
-            IGraphNode end,
+            IGraphNode startNode,
+            IGraphNode targetNode,
             IAstarContext context,
             List<IGraphNode> outputPath)
         {
-            if (start is null)
+            if (startNode is null)
             {
-                throw new ArgumentNullException(nameof(start));
+                throw new ArgumentNullException(nameof(startNode));
             }
 
-            if (end is null)
+            if (targetNode is null)
             {
-                throw new ArgumentNullException(nameof(end));
+                throw new ArgumentNullException(nameof(targetNode));
             }
 
             if (context is null)
@@ -180,10 +180,7 @@ namespace Zilon.Core.Tactics.Spatial
                 throw new ArgumentNullException(nameof(outputPath));
             }
 
-            var startNode = start;
-            var finishNode = end;
-
-            var astar = new AStar(context, startNode, finishNode);
+            var astar = new AStar(context, startNode, targetNode);
             var resultState = astar.Run();
             if (resultState == State.GoalFound)
             {

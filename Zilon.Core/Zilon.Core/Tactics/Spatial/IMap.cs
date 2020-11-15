@@ -47,7 +47,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// <summary>
         /// Выполняет поиск пути к указанному узлу.
         /// </summary>
-        /// <param name="start"> Начальный узел поиска пути. </param>
+        /// <param name="startNode"> Начальный узел поиска пути. </param>
         /// <param name="targetNode"> Целевой узел поиска пути. </param>
         /// <param name="context">Контекст поиска пути.</param>
         /// <param name="outputPath">В результате будет содержать набор узлов,
@@ -57,7 +57,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// и выделять под него память в зависимости от найденного пути.
         /// </remarks>
         void FindPath(
-            IGraphNode start,
+            IGraphNode startNode,
             IGraphNode targetNode,
             IAstarContext context,
             List<IGraphNode> outputPath);
