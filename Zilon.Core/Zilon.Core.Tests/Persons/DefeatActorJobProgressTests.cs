@@ -105,7 +105,8 @@ namespace Zilon.Core.Tests.Persons
             jobMock.SetupProperty(x => x.Progress, startProgress);
             jobMock.SetupGet(x => x.Scheme).Returns(new TestJobSubScheme
             {
-                Type = type, Value = 10
+                Type = type,
+                Value = 10
             });
             var job = jobMock.Object;
             return job;

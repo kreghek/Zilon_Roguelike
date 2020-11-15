@@ -99,7 +99,8 @@ namespace Zilon.Tournament.ApiGate.Controllers
             var lastValue = GetValue(diffReader, fieldName);
             return new MeasureValue
             {
-                TotalValue = value, LastValue = lastValue
+                TotalValue = value,
+                LastValue = lastValue
             };
         }
 
