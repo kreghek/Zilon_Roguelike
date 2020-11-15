@@ -6,44 +6,25 @@ on: push
 jobs:
   # Set the job key. The key is displayed as the job name
   # when a job name is not provided
-  client-lint:
+  dotnet-format-lint:
     # Name the Job
-    name: Lint client code base
+    name: Lint C# code base
     # Set the type of machine to run on
     runs-on: ubuntu-latest
     env:
-      working-directory : ./Zilon.Client/
-
+      working-directory : ./
+    strategy:
+      matrix:
+        codebasePath:
+        - Zilon.Client/Assets/Zilon/Scripts
+        - Zilon.Core/
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - run: git pull
       - run: dotnet tool install -g dotnet-format
-      - name: format
-        run: dotnet-format -f Assets/Zilon/Scripts -v d
-        working-directory: ${{env.working-directory}}
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v5
-        with:
-          message: "[Bot] Automated dotnet-format update"
-          add: "*.cs"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  # Set the job key. The key is displayed as the job name
-  # when a job name is not provided
-  core-lint:
-    # Name the Job
-    name: Lint core code base
-    # Set the type of machine to run on
-    runs-on: ubuntu-latest
-    env:
-      working-directory : ./Zilon.Core/
-
-    steps:
-      - uses: actions/checkout@v2
-      - run: git pull
-      - run: dotnet tool install -g dotnet-format
-      - name: format
-        run: dotnet-format Zilon.Core.sln -v d
+      - name: format codebase ${{ matrix.codebasePath }}
+        run: dotnet-format -f ${{ matrix.codebasePath }} -v d
         working-directory: ${{env.working-directory}}
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
@@ -61,6 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       working-directory : ./Zilon.Core/
+    needs: [dotnet-format-lint]
 
     steps:
       - uses: actions/checkout@v2
@@ -77,7 +59,7 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:
-          message: "[Bot] Automated ReSharper update"
+          message: "[Bot] Automated ReSharper CLT update"
           add: "*.cs"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
