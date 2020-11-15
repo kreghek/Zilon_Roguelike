@@ -31,7 +31,8 @@ namespace Zilon.Core.Benchmarks.Move
                 MapGeneratorOptions =
                     new TestSectorRoomMapFactoryOptionsSubScheme
                     {
-                        RegionCount = 20, RegionSize = 20
+                        RegionCount = 20,
+                        RegionSize = 20
                     },
                 IsStart = true,
                 ChestDropTableSids = new[]
