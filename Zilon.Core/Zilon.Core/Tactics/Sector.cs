@@ -365,7 +365,10 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSizePattern physicalSize, IGraphNode baseNode, IMap map)
+        private static IEnumerable<IGraphNode> GetActorNodes(
+            PhysicalSizePattern physicalSize,
+            IGraphNode baseNode,
+            IMap map)
         {
             yield return baseNode;
 

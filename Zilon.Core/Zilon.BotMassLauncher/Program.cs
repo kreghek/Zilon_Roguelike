@@ -83,8 +83,7 @@ namespace Zilon.BotMassLauncher
         {
             var parallelOptions = new ParallelOptions
             {
-                MaxDegreeOfParallelism = maxDegreeOfParallelism,
-                CancellationToken = _shutdownToken
+                MaxDegreeOfParallelism = maxDegreeOfParallelism, CancellationToken = _shutdownToken
             };
 
             Parallel.For(0, _launchCount, parallelOptions, RunEnvironment);
