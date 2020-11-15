@@ -1,11 +1,5 @@
 ﻿using System;
 
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -15,35 +9,6 @@ namespace Zilon.Bot.Players.Strategies.Tests
     [Parallelizable(ParallelScope.All)]
     public class LogicTreeStrategyTests
     {
-        /// <summary>
-        /// Тест проверяет, что стартовое состояние без переходов возвращает задачу.
-        /// </summary>
-        [Test]
-        public void GetActorTask_OneStateWithoutTransitions_ReturnsTask()
-        {
-            // ARRAGE
-            var logicTree = new LogicStateTree();
-
-            CreateLogicState(out var logicState, out var actorTask);
-
-            logicTree.Transitions.Add(logicState, Array.Empty<LogicTransition>());
-            logicTree.StartState = logicState;
-
-            var actorMock = new Mock<IActor>();
-            var actor = actorMock.Object;
-
-            var taskContextMock = new Mock<ISectorTaskSourceContext>();
-            var taskContext = taskContextMock.Object;
-
-            var strategy = new LogicTreeStrategy(actor, logicTree);
-
-            // ACT
-            var factTask = strategy.GetActorTask(taskContext);
-
-            // ASSERT
-            factTask.Should().Be(actorTask);
-        }
-
         /// <summary>
         /// Тест проверяет, что если из стартового состояния есть переход на другую стадию, то будет
         /// возвращена задача следующей стадии.
@@ -90,6 +55,35 @@ namespace Zilon.Bot.Players.Strategies.Tests
 
             // ASSERT
             factTask.Should().Be(secondActorTask);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что стартовое состояние без переходов возвращает задачу.
+        /// </summary>
+        [Test]
+        public void GetActorTask_OneStateWithoutTransitions_ReturnsTask()
+        {
+            // ARRAGE
+            var logicTree = new LogicStateTree();
+
+            CreateLogicState(out var logicState, out var actorTask);
+
+            logicTree.Transitions.Add(logicState, Array.Empty<LogicTransition>());
+            logicTree.StartState = logicState;
+
+            var actorMock = new Mock<IActor>();
+            var actor = actorMock.Object;
+
+            var taskContextMock = new Mock<ISectorTaskSourceContext>();
+            var taskContext = taskContextMock.Object;
+
+            var strategy = new LogicTreeStrategy(actor, logicTree);
+
+            // ACT
+            var factTask = strategy.GetActorTask(taskContext);
+
+            // ASSERT
+            factTask.Should().Be(actorTask);
         }
 
         private static void CreateLogicState(out ILogicState logicState, out IActorTask actorTask)

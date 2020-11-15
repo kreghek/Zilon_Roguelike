@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Zilon.Core.CommonServices.Dices
+﻿namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
     /// Вспомогательные расширения сервиса для работы с игральной костью.
@@ -39,16 +36,6 @@ namespace Zilon.Core.CommonServices.Dices
             return (roll - 1) + min;
         }
 
-        public static int RollD6(this IDice dice)
-        {
-            if (dice is null)
-            {
-                throw new ArgumentNullException(nameof(dice));
-            }
-
-            return dice.Roll(6);
-        }
-
         public static int Roll2D6(this IDice dice)
         {
             if (dice is null)
@@ -59,6 +46,29 @@ namespace Zilon.Core.CommonServices.Dices
             return dice.Roll(6) + dice.Roll(6);
         }
 
+        /// <summary>
+        /// Выбирает случайный индекс из набора.
+        /// </summary>
+        /// <typeparam name="T"> Тип элементов списка. </typeparam>
+        /// <param name="dice"> Кость, на основе которой делать случайный выбор. </param>
+        /// <param name="list"> Список элементов, из которого выбирать элемент. </param>
+        /// <returns> Случайный элемент из списка. </returns>
+        public static int RollArrayIndex<T>(this IDice dice, IList<T> list)
+        {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
+            if (list is null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            var rollIndex = dice.Roll(0, list.Count);
+            return rollIndex;
+        }
+
         public static int RollD3(this IDice dice)
         {
             if (dice is null)
@@ -67,6 +77,16 @@ namespace Zilon.Core.CommonServices.Dices
             }
 
             return dice.Roll(3);
+        }
+
+        public static int RollD6(this IDice dice)
+        {
+            if (dice is null)
+            {
+                throw new ArgumentNullException(nameof(dice));
+            }
+
+            return dice.Roll(6);
         }
 
         /// <summary>
@@ -129,29 +149,6 @@ namespace Zilon.Core.CommonServices.Dices
 
                 openList.Remove(rolledItem);
             }
-        }
-
-        /// <summary>
-        /// Выбирает случайный индекс из набора.
-        /// </summary>
-        /// <typeparam name="T"> Тип элементов списка. </typeparam>
-        /// <param name="dice"> Кость, на основе которой делать случайный выбор. </param>
-        /// <param name="list"> Список элементов, из которого выбирать элемент. </param>
-        /// <returns> Случайный элемент из списка. </returns>
-        public static int RollArrayIndex<T>(this IDice dice, IList<T> list)
-        {
-            if (dice is null)
-            {
-                throw new ArgumentNullException(nameof(dice));
-            }
-
-            if (list is null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
-
-            var rollIndex = dice.Roll(0, list.Count);
-            return rollIndex;
         }
     }
 }

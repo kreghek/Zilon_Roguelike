@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 
 namespace Zilon.Core.PathFinding
 {
@@ -70,21 +68,30 @@ namespace Zilon.Core.PathFinding
         public IGraphNode CurrentNode { get; private set; }
 
         /// <summary>
-        /// Resets the AStar algorithm with the newly specified start node and goal node.
+        /// Gets the path of the last solution of the AStar algorithm.
+        /// Will return a partial path if the algorithm has not finished yet.
         /// </summary>
-        /// <param name="start">The starting node for the AStar algorithm.</param>
-        /// <param name="goal">The goal node for the AStar algorithm.</param>
-        private void Reset(IGraphNode start, IGraphNode goal)
+        /// <returns>Returns empty if the algorithm has never been run.</returns>
+        public IGraphNode[] GetPath()
         {
-            _openList.Clear();
-            _closedList.Clear();
-            _dataDict.Clear();
+            if (CurrentNode == null)
+            {
+                return System.Array.Empty<IGraphNode>();
+            }
 
-            CurrentNode = start;
-            _goal = goal;
+            var next = CurrentNode;
+            var path = new List<IGraphNode>();
+            while (next != null)
+            {
+                path.Add(next);
 
-            var currentData = GetData(CurrentNode);
-            _openList.AddWithData(CurrentNode, currentData);
+                var nextData = GetData(next);
+
+                next = nextData.Parent;
+            }
+
+            path.Reverse();
+            return path.ToArray();
         }
 
         /// <summary>
@@ -102,6 +109,37 @@ namespace Zilon.Core.PathFinding
                     return state;
                 }
             }
+        }
+
+        private AStarData GetData(IGraphNode node)
+        {
+            if (_dataDict.TryGetValue(node, out var data))
+            {
+                return data;
+            }
+
+            data = new AStarData();
+            _dataDict.Add(node, data);
+
+            return data;
+        }
+
+        /// <summary>
+        /// Resets the AStar algorithm with the newly specified start node and goal node.
+        /// </summary>
+        /// <param name="start">The starting node for the AStar algorithm.</param>
+        /// <param name="goal">The goal node for the AStar algorithm.</param>
+        private void Reset(IGraphNode start, IGraphNode goal)
+        {
+            _openList.Clear();
+            _closedList.Clear();
+            _dataDict.Clear();
+
+            CurrentNode = start;
+            _goal = goal;
+
+            var currentData = GetData(CurrentNode);
+            _openList.AddWithData(CurrentNode, currentData);
         }
 
         /// <summary>
@@ -173,46 +211,6 @@ namespace Zilon.Core.PathFinding
 
             // This step did not find the goal so return status of still searching.
             return State.Searching;
-        }
-
-        private AStarData GetData(IGraphNode node)
-        {
-            if (_dataDict.TryGetValue(node, out var data))
-            {
-                return data;
-            }
-
-            data = new AStarData();
-            _dataDict.Add(node, data);
-
-            return data;
-        }
-
-        /// <summary>
-        /// Gets the path of the last solution of the AStar algorithm.
-        /// Will return a partial path if the algorithm has not finished yet.
-        /// </summary>
-        /// <returns>Returns empty if the algorithm has never been run.</returns>
-        public IGraphNode[] GetPath()
-        {
-            if (CurrentNode == null)
-            {
-                return System.Array.Empty<IGraphNode>();
-            }
-
-            var next = CurrentNode;
-            var path = new List<IGraphNode>();
-            while (next != null)
-            {
-                path.Add(next);
-
-                var nextData = GetData(next);
-
-                next = nextData.Parent;
-            }
-
-            path.Reverse();
-            return path.ToArray();
         }
     }
 }

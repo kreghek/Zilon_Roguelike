@@ -1,6 +1,4 @@
-﻿using BenchmarkDotNet.Running;
-
-namespace Zilon.Core.Benchmarks.CreateSector
+﻿namespace Zilon.Core.Benchmarks.CreateSector
 {
     internal static class Program
     {

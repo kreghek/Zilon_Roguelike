@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.StaticObjectModules
+﻿namespace Zilon.Core.StaticObjectModules
 {
     /// <summary>
     /// Модуль, отвечающий за время жизни статического объекта.

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Players

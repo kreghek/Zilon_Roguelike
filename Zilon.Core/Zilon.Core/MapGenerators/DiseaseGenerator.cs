@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Diseases;
 using Zilon.Core.Localization;
 
@@ -19,6 +15,34 @@ namespace Zilon.Core.MapGenerators
             _dice = dice;
 
             _usedDiseases = new List<DiseaseName>();
+        }
+
+        private bool CheckDuplicates(DiseaseName checkingDisease)
+        {
+            var nameFound = _usedDiseases.Any(x => x == checkingDisease);
+
+            return nameFound;
+        }
+
+        private float RollDiseaseProgressSpeed()
+        {
+            const int BASE_DURABLE = 20_000;
+            const float DIFF_DURABLE_PERCENTAGE = 0.1f;
+            const int DIFF_DURABLE = (int)(BASE_DURABLE * DIFF_DURABLE_PERCENTAGE);
+
+            var rolledDiff = _dice.Roll(-DIFF_DURABLE, DIFF_DURABLE);
+            var factDurable = BASE_DURABLE + rolledDiff;
+
+            return 1f / factDurable;
+        }
+
+        private IEnumerable<DiseaseSymptom> RolledSymptoms()
+        {
+            var symptomCount = _dice.Roll(3, 5);
+
+            var rolledSymptoms = _dice.RollFromList(DiseaseSymptoms.Symptoms, symptomCount);
+
+            return rolledSymptoms;
         }
 
         public IDisease Create()
@@ -80,34 +104,6 @@ namespace Zilon.Core.MapGenerators
             }
 
             return null;
-        }
-
-        private IEnumerable<DiseaseSymptom> RolledSymptoms()
-        {
-            var symptomCount = _dice.Roll(3, 5);
-
-            var rolledSymptoms = _dice.RollFromList(DiseaseSymptoms.Symptoms, symptomCount);
-
-            return rolledSymptoms;
-        }
-
-        private float RollDiseaseProgressSpeed()
-        {
-            const int BASE_DURABLE = 20_000;
-            const float DIFF_DURABLE_PERCENTAGE = 0.1f;
-            const int DIFF_DURABLE = (int)(BASE_DURABLE * DIFF_DURABLE_PERCENTAGE);
-
-            var rolledDiff = _dice.Roll(-DIFF_DURABLE, DIFF_DURABLE);
-            var factDurable = BASE_DURABLE + rolledDiff;
-
-            return 1f / factDurable;
-        }
-
-        private bool CheckDuplicates(DiseaseName checkingDisease)
-        {
-            var nameFound = _usedDiseases.Any(x => x == checkingDisease);
-
-            return nameFound;
         }
     }
 }

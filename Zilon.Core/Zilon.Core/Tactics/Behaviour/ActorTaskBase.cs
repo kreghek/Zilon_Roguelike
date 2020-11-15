@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-using JetBrains.Annotations;
-
-namespace Zilon.Core.Tactics.Behaviour
+﻿namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Базовый класс для всех задач актёра.

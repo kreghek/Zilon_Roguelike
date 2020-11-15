@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.PrimitiveStyle
@@ -13,6 +9,24 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
     /// <seealso cref="IMapFactory" />
     public class SquareMapFactory : IMapFactory
     {
+        /// <summary>
+        /// Вспомогательный метод для создания квадратной карты без создания экземпляра фабрики.
+        /// </summary>
+        /// <param name="mapSize"> Размер карты. </param>
+        /// <returns> Возвращает объект карты. </returns>
+        public static async Task<ISectorMap> CreateAsync(int mapSize)
+        {
+            var factory = new SquareMapFactory();
+
+            var squaregenerationOptionsSubScheme = new SquareGenerationOptionsSubScheme
+            {
+                Size = mapSize
+            };
+            var generationOptions = new SectorMapFactoryOptions(squaregenerationOptionsSubScheme);
+
+            return await factory.CreateAsync(generationOptions).ConfigureAwait(false);
+        }
+
         /// <inheritdoc/>
         public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
@@ -46,24 +60,6 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
             map.Regions.Add(mapRegion);
 
             return Task.FromResult(map);
-        }
-
-        /// <summary>
-        /// Вспомогательный метод для создания квадратной карты без создания экземпляра фабрики.
-        /// </summary>
-        /// <param name="mapSize"> Размер карты. </param>
-        /// <returns> Возвращает объект карты. </returns>
-        public static async Task<ISectorMap> CreateAsync(int mapSize)
-        {
-            var factory = new SquareMapFactory();
-
-            var squaregenerationOptionsSubScheme = new SquareGenerationOptionsSubScheme
-            {
-                Size = mapSize
-            };
-            var generationOptions = new SectorMapFactoryOptions(squaregenerationOptionsSubScheme);
-
-            return await factory.CreateAsync(generationOptions).ConfigureAwait(false);
         }
 
         private class SquareGenerationOptionsSubScheme : ISectorSquareMapFactoryOptionsSubScheme

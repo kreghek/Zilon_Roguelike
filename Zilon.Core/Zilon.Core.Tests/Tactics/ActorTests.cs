@@ -1,8 +1,4 @@
-﻿using Moq;
-
-using NUnit.Framework;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -44,8 +40,7 @@ namespace Zilon.Core.Tactics.Tests
                 {
                     CommonRules = new[]
                     {
-                        new ConsumeCommonRule(
-                            ConsumeCommonRuleType.Intoxication,
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Intoxication,
                             PersonRuleLevel.Lesser,
                             PersonRuleDirection.Negative)
                     }

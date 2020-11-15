@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Zilon.Core.CommonServices.Dices
+﻿namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
     /// Игральная кость, работающая по экпонециальному закону.
@@ -36,36 +33,9 @@ namespace Zilon.Core.CommonServices.Dices
             _random = new Random(seed);
         }
 
-        public int Roll(int n)
-        {
-            var rollUnit = GetBounded(0, 1);
-
-            var roll = DiceValuesHelper.MapDoubleToDiceEdge(rollUnit, n);
-
-            var processedRoll = ProcessedRoll(roll, n);
-
-            return processedRoll;
-        }
-
         protected virtual int ProcessedRoll(int roll, int n)
         {
             return roll;
-        }
-
-        private double GetNext()
-        {
-            var u = GetNextDouble();
-
-            var x = ExponentialAlgorithms.MapToExpo(u, LAMBDA);
-
-            var mappedX = MapToInterval(
-                x,
-                sourceMin: 0,
-                sourceMax: MAX,
-                targetMin: 0,
-                targetMax: 1);
-
-            return mappedX;
         }
 
         private double GetBounded(double min, double max)
@@ -77,6 +47,21 @@ namespace Zilon.Core.CommonServices.Dices
             } while ((x < min) || (x > max));
 
             return x;
+        }
+
+        private double GetNext()
+        {
+            var u = GetNextDouble();
+
+            var x = ExponentialAlgorithms.MapToExpo(u, LAMBDA);
+
+            var mappedX = MapToInterval(x,
+                sourceMin: 0,
+                sourceMax: MAX,
+                targetMin: 0,
+                targetMax: 1);
+
+            return mappedX;
         }
 
         private double GetNextDouble()
@@ -99,6 +84,17 @@ namespace Zilon.Core.CommonServices.Dices
             var xNormalized = targetDiff * sourceRatioX;
 
             return xNormalized + sourceMin;
+        }
+
+        public int Roll(int n)
+        {
+            var rollUnit = GetBounded(0, 1);
+
+            var roll = DiceValuesHelper.MapDoubleToDiceEdge(rollUnit, n);
+
+            var processedRoll = ProcessedRoll(roll, n);
+
+            return processedRoll;
         }
     }
 }

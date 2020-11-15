@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 
 namespace Zilon.Core.Commands
 {
@@ -10,8 +8,7 @@ namespace Zilon.Core.Commands
     public abstract class SpecialActorCommandBase : ActorCommandBase
     {
         [ExcludeFromCodeCoverage]
-        protected SpecialActorCommandBase(
-            ISectorUiState playerState) : base(playerState)
+        protected SpecialActorCommandBase(ISectorUiState playerState) : base(playerState)
         {
         }
     }

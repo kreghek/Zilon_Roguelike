@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.Client
+﻿namespace Zilon.Core.Client
 {
     public interface IInventoryState
     {

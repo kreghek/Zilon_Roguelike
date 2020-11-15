@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators.RoomStyle
 {
@@ -18,6 +11,19 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         protected List<Tuple<OffsetCoords, OffsetCoords>> Connections { get; }
+
+        /// <summary>
+        /// Выбрасывает случайный размер комнаты.
+        /// </summary>
+        /// <param name="minSize">Минимальный размер комнаты.</param>
+        /// <param name="maxSize">Максимальный размер комнаты.</param>
+        /// <returns>
+        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
+        /// </returns>
+        /// <remarks>
+        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
+        /// </remarks>
+        protected abstract Size RollRoomSize(int minSize, int maxSize);
 
         /// <summary>
         /// Выбирает комнаты, с которыми есть соединение.
@@ -135,18 +141,5 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 openTransitions.First()
             };
         }
-
-        /// <summary>
-        /// Выбрасывает случайный размер комнаты.
-        /// </summary>
-        /// <param name="minSize">Минимальный размер комнаты.</param>
-        /// <param name="maxSize">Максимальный размер комнаты.</param>
-        /// <returns>
-        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
-        /// </returns>
-        /// <remarks>
-        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
-        /// </remarks>
-        protected abstract Size RollRoomSize(int minSize, int maxSize);
     }
 }

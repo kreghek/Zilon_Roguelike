@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-using Zilon.Core.PersonModules;
+﻿using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -26,8 +23,7 @@ namespace Zilon.Core.PersonGeneration
                 .Select(x => new PersonDefenceItem(x.Type, x.Level))
                 .ToArray();
 
-            var defenceStats = new PersonDefenceStats(
-                defenses ?? Array.Empty<PersonDefenceItem>(),
+            var defenceStats = new PersonDefenceStats(defenses ?? Array.Empty<PersonDefenceItem>(),
                 Array.Empty<PersonArmorItem>());
 
             var combatStatsModule = new MonsterCombatStatsModule(defenceStats);

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Persons

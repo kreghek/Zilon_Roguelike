@@ -1,8 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using Newtonsoft.Json;
-
-namespace Zilon.Core.Components
+﻿namespace Zilon.Core.Components
 {
     [PublicAPI]
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]

@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MapGenerators

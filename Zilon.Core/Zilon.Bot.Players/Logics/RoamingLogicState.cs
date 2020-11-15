@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Core.Tactics;
+﻿using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
@@ -11,28 +9,6 @@ namespace Zilon.Bot.Players.Logics
     {
         public RoamingLogicState(IDecisionSource decisionSource) : base(decisionSource)
         {
-        }
-
-        private MoveTask CreateBypassMoveTask(IActor actor, ISector sector)
-        {
-            var map = sector.Map;
-            var availableNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
-
-            var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
-            for (var i = 0; i < 3; i++)
-            {
-                var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
-
-                if (map.IsPositionAvailableFor(targetNode, actor))
-                {
-                    var taskContext = new ActorTaskContext(sector);
-                    var moveTask = new MoveTask(actor, taskContext, targetNode, map);
-
-                    return moveTask;
-                }
-            }
-
-            return null;
         }
 
         public override IActorTask GetTask(
@@ -78,6 +54,28 @@ namespace Zilon.Bot.Players.Logics
             }
 
             Complete = true;
+            return null;
+        }
+
+        private MoveTask CreateBypassMoveTask(IActor actor, ISector sector)
+        {
+            var map = sector.Map;
+            var availableNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
+
+            var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
+            for (var i = 0; i < 3; i++)
+            {
+                var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
+
+                if (map.IsPositionAvailableFor(targetNode, actor))
+                {
+                    var taskContext = new ActorTaskContext(sector);
+                    var moveTask = new MoveTask(actor, taskContext, targetNode, map);
+
+                    return moveTask;
+                }
+            }
+
             return null;
         }
     }

@@ -18,17 +18,18 @@ namespace Zilon.Tournament.ApiGate.BotManagement
 
             if (boundary.Length > lengthLimit)
             {
-                throw new InvalidDataException(
-                    $"Multipart boundary length limit {lengthLimit} exceeded.");
+                throw new InvalidDataException($"Multipart boundary length limit {lengthLimit} exceeded.");
             }
 
             return boundary;
         }
 
-        public static bool IsMultipartContentType(string contentType)
+        public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
         {
-            return !string.IsNullOrEmpty(contentType)
-                   && (contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0);
+            return (contentDisposition != null)
+                   && contentDisposition.DispositionType.Equals("form-data")
+                   && (!string.IsNullOrEmpty(contentDisposition.FileName.ToString())
+                       || !string.IsNullOrEmpty(contentDisposition.FileNameStar.ToString()));
         }
 
         public static bool HasFormDataContentDisposition(ContentDispositionHeaderValue contentDisposition)
@@ -39,12 +40,10 @@ namespace Zilon.Tournament.ApiGate.BotManagement
                    && string.IsNullOrEmpty(contentDisposition.FileNameStar.ToString());
         }
 
-        public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
+        public static bool IsMultipartContentType(string contentType)
         {
-            return (contentDisposition != null)
-                   && contentDisposition.DispositionType.Equals("form-data")
-                   && (!string.IsNullOrEmpty(contentDisposition.FileName.ToString())
-                       || !string.IsNullOrEmpty(contentDisposition.FileNameStar.ToString()));
+            return !string.IsNullOrEmpty(contentType)
+                   && (contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0);
         }
     }
 }

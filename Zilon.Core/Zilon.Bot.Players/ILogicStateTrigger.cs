@@ -5,6 +5,8 @@ namespace Zilon.Bot.Players
 {
     public interface ILogicStateTrigger
     {
+        void Reset();
+
         bool Test(
             IActor actor,
             ISectorTaskSourceContext context,
@@ -12,7 +14,5 @@ namespace Zilon.Bot.Players
             ILogicStrategyData strategyData);
 
         void Update();
-
-        void Reset();
     }
 }

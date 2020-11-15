@@ -1,8 +1,4 @@
-﻿using System;
-
-using BenchmarkDotNet.Running;
-
-namespace Zilon.Core.Benchmarks.Fow
+﻿namespace Zilon.Core.Benchmarks.Fow
 {
     internal class Program
     {

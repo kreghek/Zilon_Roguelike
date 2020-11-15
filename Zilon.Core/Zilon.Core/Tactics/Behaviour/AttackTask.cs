@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
@@ -26,9 +22,9 @@ namespace Zilon.Core.Tactics.Behaviour
             TacticalAct = tacticalAct;
         }
 
-        public IAttackTarget Target { get; }
-
         public ITacticalAct TacticalAct { get; }
+
+        public IAttackTarget Target { get; }
 
         protected override void ExecuteTask()
         {
@@ -81,8 +77,8 @@ namespace Zilon.Core.Tactics.Behaviour
                     }
 
                     var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
-                                        where act.Equipment == slotEquipment
-                                        select act;
+                        where act.Equipment == slotEquipment
+                        select act;
 
                     var usedAct = equipmentActs.FirstOrDefault();
 

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
@@ -14,7 +12,7 @@ namespace Zilon.Core.Schemes
     /// </remarks>
     public sealed class PerkLevelSubScheme : SubSchemeBase
     {
-        public PerkRuleSubScheme[] Rules { get; set; }
+        public PerkConditionSubScheme[] Conditions { get; set; }
 
         [JsonConverter(typeof(ConcreteTypeConverter<JobSubScheme[]>))]
         [JsonProperty]
@@ -24,7 +22,7 @@ namespace Zilon.Core.Schemes
 
         public PersonStat PersonLevel { get; set; }
 
-        public PerkConditionSubScheme[] Conditions { get; set; }
+        public PerkRuleSubScheme[] Rules { get; set; }
 
         public PropSet[] Sources { get; set; }
     }

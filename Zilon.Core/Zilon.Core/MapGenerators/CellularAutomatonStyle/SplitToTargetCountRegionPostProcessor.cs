@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
@@ -22,18 +16,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _dice = dice;
         }
 
-        public IEnumerable<RegionDraft> Process(IEnumerable<RegionDraft> sourceRegions)
-        {
-            var regionCountRule = _mapRuleManager.GetRuleOrNull<IRegionMinCountRule>();
-            if (regionCountRule is null)
-            {
-                return sourceRegions;
-            }
-
-            var draftRegionArray = sourceRegions.ToArray();
-            return SplitRegionsForTransitions(draftRegionArray, regionCountRule.Count);
-        }
-
         /// <summary>
         /// Метод отделяет от существующих регионов ячйки таким образом,
         /// чтобы суммарно на карте число регионов равнялось числу переходов + 1 (за стартовый).
@@ -44,7 +26,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// <param name="targetRegionCount"> Целевое число регионов. </param>
         /// <returns> Возвращает новый массив черновиков регионов. </returns>
         private RegionDraft[] SplitRegionsForTransitions(
-            [NotNull][ItemNotNull] RegionDraft[] draftRegions,
+            [NotNull] [ItemNotNull] RegionDraft[] draftRegions,
             int targetRegionCount)
         {
             if (draftRegions == null)
@@ -66,8 +48,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
             var availableCoords = from region in availableSplitRegions
-                                  from coord in region.Coords.Skip(1)
-                                  select new RegionCoords(coord, region);
+                from coord in region.Coords.Skip(1)
+                select new RegionCoords(coord, region);
 
             if (availableCoords.Count() < regionCountDiff)
             {
@@ -124,6 +106,18 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return newDraftRegionList.ToArray();
+        }
+
+        public IEnumerable<RegionDraft> Process(IEnumerable<RegionDraft> sourceRegions)
+        {
+            var regionCountRule = _mapRuleManager.GetRuleOrNull<IRegionMinCountRule>();
+            if (regionCountRule is null)
+            {
+                return sourceRegions;
+            }
+
+            var draftRegionArray = sourceRegions.ToArray();
+            return SplitRegionsForTransitions(draftRegionArray, regionCountRule.Count);
         }
 
         private sealed class RegionCoords

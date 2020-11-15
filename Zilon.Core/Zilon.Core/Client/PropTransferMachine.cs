@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Core.Props;
+﻿using Zilon.Core.Props;
 
 namespace Zilon.Core.Client
 {
@@ -24,14 +22,14 @@ namespace Zilon.Core.Client
         }
 
         /// <summary>
-        /// Состояние трансфера предметов в инвентаре персонажа.
-        /// </summary>
-        public PropTransferStore Inventory { get; }
-
-        /// <summary>
         /// Состояние трансфера предметов в контейнере.
         /// </summary>
         public PropTransferStore Container { get; }
+
+        /// <summary>
+        /// Состояние трансфера предметов в инвентаре персонажа.
+        /// </summary>
+        public PropTransferStore Inventory { get; }
 
         /// <summary>
         /// Перенос предмета между указанными хранилищами.

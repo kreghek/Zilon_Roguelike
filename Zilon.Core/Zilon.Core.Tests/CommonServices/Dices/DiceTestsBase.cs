@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-using FluentAssertions;
-
-using NUnit.Framework;
-
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.Tests.CommonServices.Dices
@@ -13,8 +9,6 @@ namespace Zilon.Core.Tests.CommonServices.Dices
     [Parallelizable(ParallelScope.All)]
     public abstract class DiceTestsBase
     {
-        protected abstract IDice CreateDice(int seed);
-
         /// <summary>
         /// Тест проверяет, что при разных зернах генерации не происходит ошибки получения случайного числа.
         /// </summary>
@@ -52,5 +46,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             seq.Min().Should().BeGreaterOrEqualTo(1);
             seq.Max().Should().BeLessOrEqualTo(n);
         }
+
+        protected abstract IDice CreateDice(int seed);
     }
 }

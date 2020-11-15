@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.Tactics.Behaviour
+﻿namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Базовая реализация сборщика источников команд.

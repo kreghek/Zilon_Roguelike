@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using Zilon.Core.PersonGeneration;
+﻿using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.World
@@ -21,19 +18,6 @@ namespace Zilon.Core.World
             _personFactory = personFactory;
         }
 
-        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe)
-        {
-            return Task.FromResult(CreateStartPersonsInner());
-        }
-
-        private IEnumerable<IPerson> CreateStartPersonsInner()
-        {
-            for (var i = 0; i < 40; i++)
-            {
-                yield return CreateStartPerson(PERSON_SCHEME_SID, _personFactory, _pilgrimFraction);
-            }
-        }
-
         /// <summary>
         /// Создаёт персонажа.
         /// </summary>
@@ -45,6 +29,19 @@ namespace Zilon.Core.World
         {
             var startPerson = personFactory.Create(personSchemeSid, fraction);
             return startPerson;
+        }
+
+        private IEnumerable<IPerson> CreateStartPersonsInner()
+        {
+            for (var i = 0; i < 40; i++)
+            {
+                yield return CreateStartPerson(PERSON_SCHEME_SID, _personFactory, _pilgrimFraction);
+            }
+        }
+
+        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe)
+        {
+            return Task.FromResult(CreateStartPersonsInner());
         }
     }
 }

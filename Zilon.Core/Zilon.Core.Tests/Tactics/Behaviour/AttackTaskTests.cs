@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Common;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.PersonModules;
@@ -14,7 +8,6 @@ using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Tactics.Behaviour

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics
@@ -10,6 +8,18 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public interface ITacticalActUsageRandomSource
     {
+        /// <summary>
+        /// Бросок проверки на защиту бронёй.
+        /// </summary>
+        /// <returns> Возвращает результат броска D6. </returns>
+        int RollArmorSave();
+
+        /// <summary>Выбирает среди надетых предметов случайный предмет,
+        /// который был повреждён в результате действия.</summary>
+        /// <param name="armorEquipments">Доступные предметы экипировки.</param>
+        /// <returns> Случайный экипированный предмет, который был повреждён. </returns>
+        Equipment RollDamagedEquipment(IEnumerable<Equipment> armorEquipments);
+
         /// <summary>
         /// Выбирает значение эффективности действия по указанным характеристикам броска.
         /// </summary>
@@ -25,12 +35,6 @@ namespace Zilon.Core.Tactics
         int RollToHit(Roll roll);
 
         /// <summary>
-        /// Бросок проверки на защиту бронёй.
-        /// </summary>
-        /// <returns> Возвращает результат броска D6. </returns>
-        int RollArmorSave();
-
-        /// <summary>
         /// Бросок проверки на использование дополнительных действий.
         /// </summary>
         /// <returns> Возвращает результат броска D6. </returns>
@@ -38,11 +42,5 @@ namespace Zilon.Core.Tactics
         /// Используется для проверки удара вторым оружием.
         /// </remarks>
         int RollUseSecondaryAct();
-
-        /// <summary>Выбирает среди надетых предметов случайный предмет,
-        /// который был повреждён в результате действия.</summary>
-        /// <param name="armorEquipments">Доступные предметы экипировки.</param>
-        /// <returns> Случайный экипированный предмет, который был повреждён. </returns>
-        Equipment RollDamagedEquipment(IEnumerable<Equipment> armorEquipments);
     }
 }

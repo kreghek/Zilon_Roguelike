@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Core.Tactics.Spatial;
+﻿using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {

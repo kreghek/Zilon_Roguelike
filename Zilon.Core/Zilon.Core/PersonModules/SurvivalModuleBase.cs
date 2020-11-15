@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.PersonModules
@@ -13,6 +9,103 @@ namespace Zilon.Core.PersonModules
         {
             Stats = stats?.ToArray() ?? throw new ArgumentNullException(nameof(stats));
             IsActive = true;
+        }
+
+        /// <summary>
+        /// Invokes the stat changed event with the given parameters
+        /// </summary>
+        /// <param name="caller">The object performing the call</param>
+        /// <param name="args">The <see cref="SurvivalStatChangedEventArgs"/> instance containing the event data.</param>
+        public void InvokeStatChangedEvent(SurvivalModuleBase caller, SurvivalStatChangedEventArgs args)
+        {
+            StatChanged?.Invoke(caller, args);
+        }
+
+        protected void ChangeStatInner(SurvivalStat stat, int value)
+        {
+            if (stat is null)
+            {
+                throw new ArgumentNullException(nameof(stat));
+            }
+
+            stat.Value += value;
+
+            ProcessIfHealth(stat, value);
+            ProcessIfWound(stat);
+        }
+
+        private void DoDead()
+        {
+            Dead?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// Индивидуально обрабатывает характеристику, если это здоровье.
+        /// </summary>
+        /// <param name="stat"> Обрабатываемая характеристика. </param>
+        private void ProcessIfHealth(SurvivalStat stat, int value)
+        {
+            if (stat.Type != SurvivalStatType.Health)
+            {
+                return;
+            }
+
+            var hp = stat.Value;
+            if (hp <= 0)
+            {
+                IsDead = true;
+                DoDead();
+            }
+            else
+            {
+                if (value < 0)
+                {
+                    SetWoundCounter();
+                }
+            }
+        }
+
+        private void ProcessIfWound(SurvivalStat stat)
+        {
+            if (stat.Type != SurvivalStatType.Wound)
+            {
+                return;
+            }
+
+            var woundCounter = stat.Value;
+            if (woundCounter <= 0)
+            {
+                // Если счётчик раны дошёл до 0,
+                // то восстанавливаем единицу здоровья.
+
+                RestoreStat(SurvivalStatType.Health, 1);
+            }
+        }
+
+        /// <summary>
+        /// Если персонаж получает урон, то выставляетс счётчик раны.
+        /// Когда счтётчик раны снижается до 0, восстанавливается 1 здоровья.
+        /// </summary>
+        private void SetWoundCounter()
+        {
+            var woundStat = Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Wound);
+            if (woundStat != null)
+            {
+                SetStatForce(SurvivalStatType.Wound, woundStat.Range.Max);
+            }
+        }
+
+        private static void ValidateStatChangeValue(int value)
+        {
+            if (value == 0)
+            {
+                return;
+            }
+
+            if (value < 0)
+            {
+                throw new ArgumentException("Величина не может быть меньше 0.", nameof(value));
+            }
         }
 
         /// <summary>Текущие характеристики.</summary>
@@ -83,102 +176,5 @@ namespace Zilon.Core.PersonModules
         public abstract void ResetStats();
 
         public abstract void Update();
-
-        /// <summary>
-        /// Invokes the stat changed event with the given parameters
-        /// </summary>
-        /// <param name="caller">The object performing the call</param>
-        /// <param name="args">The <see cref="SurvivalStatChangedEventArgs"/> instance containing the event data.</param>
-        public void InvokeStatChangedEvent(SurvivalModuleBase caller, SurvivalStatChangedEventArgs args)
-        {
-            StatChanged?.Invoke(caller, args);
-        }
-
-        private static void ValidateStatChangeValue(int value)
-        {
-            if (value == 0)
-            {
-                return;
-            }
-
-            if (value < 0)
-            {
-                throw new ArgumentException("Величина не может быть меньше 0.", nameof(value));
-            }
-        }
-
-        protected void ChangeStatInner(SurvivalStat stat, int value)
-        {
-            if (stat is null)
-            {
-                throw new ArgumentNullException(nameof(stat));
-            }
-
-            stat.Value += value;
-
-            ProcessIfHealth(stat, value);
-            ProcessIfWound(stat);
-        }
-
-        /// <summary>
-        /// Индивидуально обрабатывает характеристику, если это здоровье.
-        /// </summary>
-        /// <param name="stat"> Обрабатываемая характеристика. </param>
-        private void ProcessIfHealth(SurvivalStat stat, int value)
-        {
-            if (stat.Type != SurvivalStatType.Health)
-            {
-                return;
-            }
-
-            var hp = stat.Value;
-            if (hp <= 0)
-            {
-                IsDead = true;
-                DoDead();
-            }
-            else
-            {
-                if (value < 0)
-                {
-                    SetWoundCounter();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Если персонаж получает урон, то выставляетс счётчик раны.
-        /// Когда счтётчик раны снижается до 0, восстанавливается 1 здоровья.
-        /// </summary>
-        private void SetWoundCounter()
-        {
-            var woundStat = Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Wound);
-            if (woundStat != null)
-            {
-                SetStatForce(SurvivalStatType.Wound, woundStat.Range.Max);
-            }
-        }
-
-        private void ProcessIfWound(SurvivalStat stat)
-        {
-            if (stat.Type != SurvivalStatType.Wound)
-            {
-                return;
-            }
-
-            var woundCounter = stat.Value;
-            if (woundCounter <= 0)
-            {
-                // Если счётчик раны дошёл до 0,
-                // то восстанавливаем единицу здоровья.
-
-                RestoreStat(SurvivalStatType.Health, 1);
-            }
-        }
-
-        private void DoDead()
-        {
-            Dead?.Invoke(this, new EventArgs());
-        }
     }
 }

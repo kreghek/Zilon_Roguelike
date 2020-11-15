@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.Persons.Survival
+﻿namespace Zilon.Core.Persons.Survival
 {
     /// <summary>
     /// Ключевой сегмент характеристики выживания.
@@ -26,11 +24,6 @@ namespace Zilon.Core.Persons.Survival
         }
 
         /// <summary>
-        /// Начальное значение сегмента в долях от 0.0f до 1.0f.
-        /// </summary>
-        public float Start { get; }
-
-        /// <summary>
         /// Конечное значение сегмента в долях от 0.0f до 1.0f.
         /// </summary>
         public float End { get; }
@@ -42,5 +35,10 @@ namespace Zilon.Core.Persons.Survival
         /// Например, если значение попадает в диапазон [Start..End], то наступит сильный голод.
         /// </remarks>
         public SurvivalStatHazardLevel Level { get; }
+
+        /// <summary>
+        /// Начальное значение сегмента в долях от 0.0f до 1.0f.
+        /// </summary>
+        public float Start { get; }
     }
 }

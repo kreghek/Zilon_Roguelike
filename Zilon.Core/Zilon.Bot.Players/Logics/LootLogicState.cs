@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.StaticObjectModules;
@@ -74,6 +72,11 @@ namespace Zilon.Bot.Players.Logics
             return moveTask;
         }
 
+        protected override void ResetData()
+        {
+            _moveTask = null;
+        }
+
         private MoveTask MoveToContainerTask(
             IActor actor,
             IGraphNode containerMapNode,
@@ -113,11 +116,6 @@ namespace Zilon.Bot.Players.Logics
             {
                 inventoryTransfer, containerTransfer
             });
-        }
-
-        protected override void ResetData()
-        {
-            _moveTask = null;
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
+﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
     /// Base implementation of rule managers.

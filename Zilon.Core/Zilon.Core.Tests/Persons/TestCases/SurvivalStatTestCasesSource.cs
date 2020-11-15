@@ -1,11 +1,19 @@
 ﻿using System.Collections;
 
-using NUnit.Framework;
-
 namespace Zilon.Core.Tests.Persons.TestCases
 {
     internal static class SurvivalStatTestCasesSource
     {
+        public static IEnumerable RangeTestCases
+        {
+            get
+            {
+                yield return new TestCaseData(5, 0, 10, 0, 13).Returns(6);
+
+                yield return new TestCaseData(1, 1, 3, 1, 1).Returns(1);
+            }
+        }
+
         public static IEnumerable ValueTestCases
         {
             get
@@ -20,16 +28,6 @@ namespace Zilon.Core.Tests.Persons.TestCases
 
                 yield return new TestCaseData(0, 0, 10, 3).Returns(3);
                 yield return new TestCaseData(1, 1, 10, 3).Returns(4);
-            }
-        }
-
-        public static IEnumerable RangeTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(5, 0, 10, 0, 13).Returns(6);
-
-                yield return new TestCaseData(1, 1, 3, 1, 1).Returns(1);
             }
         }
     }

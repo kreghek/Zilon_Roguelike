@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Структура для работы с данными работы по атаке актёра.
@@ -11,15 +9,15 @@ namespace Zilon.Core.Persons
     public sealed class AttackActorJobData
     {
         /// <summary>
-        /// Теги оружия, которым произведено действие, чтобы работа была засчитана.
-        /// </summary>
-        [JsonProperty]
-        public string[] WeaponTags { get; private set; }
-
-        /// <summary>
         /// Теги монстров, которые должны быть у атакованного.
         /// </summary>
         [JsonProperty]
         public string[] MonsterTags { get; private set; }
+
+        /// <summary>
+        /// Теги оружия, которым произведено действие, чтобы работа была засчитана.
+        /// </summary>
+        [JsonProperty]
+        public string[] WeaponTags { get; private set; }
     }
 }

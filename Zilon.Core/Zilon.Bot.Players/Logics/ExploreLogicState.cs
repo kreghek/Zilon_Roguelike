@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
@@ -64,6 +60,37 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
+        private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData, ISector sector)
+        {
+            var map = sector.Map;
+            IEnumerable<IGraphNode> availableNodes;
+            var frontNodes = WriteObservedNodes(actor, strategyData, map).ToArray();
+            if (frontNodes.Any())
+            {
+                availableNodes = frontNodes;
+            }
+            else
+            {
+                availableNodes = strategyData.ObserverdNodes;
+            }
+
+            var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
+            for (var i = 0; i < 3; i++)
+            {
+                var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
+
+                if (map.IsPositionAvailableFor(targetNode, actor))
+                {
+                    var context = new ActorTaskContext(sector);
+                    var moveTask = new MoveTask(actor, context, targetNode, map);
+
+                    return moveTask;
+                }
+            }
+
+            return null;
+        }
+
         private IEnumerable<IGraphNode> WriteObservedNodes(
             IActor actor,
             ILogicStrategyData strategyData,
@@ -103,37 +130,6 @@ namespace Zilon.Bot.Players.Logics
                 "Это состояние выполняется, только если есть неисследованые узлы.");
 
             return frontNodes;
-        }
-
-        private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData, ISector sector)
-        {
-            var map = sector.Map;
-            IEnumerable<IGraphNode> availableNodes;
-            var frontNodes = WriteObservedNodes(actor, strategyData, map).ToArray();
-            if (frontNodes.Any())
-            {
-                availableNodes = frontNodes;
-            }
-            else
-            {
-                availableNodes = strategyData.ObserverdNodes;
-            }
-
-            var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
-            for (var i = 0; i < 3; i++)
-            {
-                var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
-
-                if (map.IsPositionAvailableFor(targetNode, actor))
-                {
-                    var context = new ActorTaskContext(sector);
-                    var moveTask = new MoveTask(actor, context, targetNode, map);
-
-                    return moveTask;
-                }
-            }
-
-            return null;
         }
     }
 }

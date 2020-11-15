@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -38,19 +34,158 @@ namespace Zilon.Core.PersonGeneration
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
+        protected static int BodySlotIndex => 1;
+
         protected IDice Dice { get; }
 
         protected IDropResolver DropResolver { get; }
 
-        protected ISchemeService SchemeService { get; }
-
         protected static int HeadSlotIndex => 0;
-
-        protected static int BodySlotIndex => 1;
 
         protected static int MainHandSlotIndex => 2;
 
         protected static int OffHandSlotIndex => 3;
+
+        protected ISchemeService SchemeService { get; }
+
+        protected void AddDefaultProps(IInventoryModule inventory)
+        {
+            AddResource(inventory, "packed-food", 1);
+            AddResource(inventory, "water-bottle", 1);
+            AddResource(inventory, "med-kit", 1);
+        }
+
+        protected static void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
+        {
+            if (equipmentModule is null)
+            {
+                throw new ArgumentNullException(nameof(equipmentModule));
+            }
+
+            equipmentModule[slotIndex] = equipment;
+        }
+
+        protected void AddEquipment(IInventoryModule inventory, string sid)
+        {
+            var scheme = SchemeService.GetScheme<IPropScheme>(sid);
+            var prop = _propFactory.CreateEquipment(scheme);
+            AddPropToInventory(inventory, prop);
+        }
+
+        protected static void AddPropToInventory(IPropStore inventory, IProp prop)
+        {
+            if (inventory is null)
+            {
+                throw new ArgumentNullException(nameof(inventory));
+            }
+
+            inventory.Add(prop);
+        }
+
+        protected void AddResource(IInventoryModule inventory, string resourceSid, int count)
+        {
+            if (inventory is null)
+            {
+                throw new ArgumentNullException(nameof(inventory));
+            }
+
+            try
+            {
+                var resourceScheme = SchemeService.GetScheme<IPropScheme>(resourceSid);
+                var resource = _propFactory.CreateResource(resourceScheme, count);
+                inventory.Add(resource);
+            }
+            catch (KeyNotFoundException exception)
+            {
+                throw new CreatePersonException($"Не найден объект {resourceSid}", exception);
+            }
+        }
+
+        protected void FillSlot(HumanPerson person, IDropTableScheme dropScheme, int slotIndex)
+        {
+            // Генерируем предметы.
+            // Выбираем предмет, как экипировку в слот.
+            // Если он может быть экипирован, то устанавливаем в слот.
+            // Остальные дропнутые предметы складываем просто в инвентарь.
+            // Если текущий предмет невозможно экипировать, то его тоже помещаем в инвентарь.
+
+            var inventory = person.GetModule<IInventoryModule>();
+            var dropedProps = DropResolver.Resolve(new[]
+            {
+                dropScheme
+            });
+            var usedEquipment = dropedProps.OfType<Equipment>().FirstOrDefault();
+            if (usedEquipment != null)
+            {
+                var equipmentModule = person.GetModule<IEquipmentModule>();
+                var canBeEquiped = CanBeEquiped(equipmentModule, slotIndex, usedEquipment);
+                if (canBeEquiped)
+                {
+                    AddEquipment(equipmentModule, slotIndex, usedEquipment);
+                    var unusedMainWeaponDrops = dropedProps.Where(x => x != usedEquipment).ToArray();
+                    foreach (var prop in unusedMainWeaponDrops)
+                    {
+                        AddPropToInventory(inventory, prop);
+                    }
+                }
+                else
+                {
+                    foreach (var prop in dropedProps)
+                    {
+                        AddPropToInventory(inventory, prop);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var prop in dropedProps)
+                {
+                    AddPropToInventory(inventory, prop);
+                }
+            }
+        }
+
+        protected abstract void RollStartEquipment(IInventoryModule inventory, HumanPerson person);
+
+        private static bool CanBeEquiped(
+            IEquipmentModule equipmentModule,
+            int slotIndex,
+            Equipment equipment)
+        {
+            return EquipmentCarrierHelper.CanBeEquiped(equipmentModule, slotIndex, equipment);
+        }
+
+        private IAttributesModule RollAndAddPersonAttributesToPerson(IPerson person)
+        {
+            var attributes = new[]
+            {
+                RollAttribute(PersonAttributeType.PhysicalStrength), RollAttribute(PersonAttributeType.Dexterity),
+                RollAttribute(PersonAttributeType.Perception), RollAttribute(PersonAttributeType.Constitution)
+            };
+
+            var attributesModule = new AttributesModule(attributes);
+
+            person.AddModule(attributesModule);
+
+            return attributesModule;
+        }
+
+        private PersonAttribute RollAttribute(PersonAttributeType attributeType)
+        {
+            var value = 10 + Dice.Roll(-4, 4);
+            return new PersonAttribute(attributeType, value);
+        }
+
+        private void RollTraitPerks(IEvolutionModule evolutionData)
+        {
+            if (evolutionData is null)
+            {
+                throw new ArgumentNullException(nameof(evolutionData));
+            }
+
+            var rolledTraits = _personPerkInitializator.Generate();
+            evolutionData.AddBuildInPerks(rolledTraits);
+        }
 
         public IPerson Create(string personSchemeSid, IFraction fraction)
         {
@@ -103,145 +238,6 @@ namespace Zilon.Core.PersonGeneration
             person.PlayerEventLogService = PlayerEventLogService;
 
             return person;
-        }
-
-        private IAttributesModule RollAndAddPersonAttributesToPerson(IPerson person)
-        {
-            var attributes = new[]
-            {
-                RollAttribute(PersonAttributeType.PhysicalStrength), RollAttribute(PersonAttributeType.Dexterity),
-                RollAttribute(PersonAttributeType.Perception), RollAttribute(PersonAttributeType.Constitution)
-            };
-
-            var attributesModule = new AttributesModule(attributes);
-
-            person.AddModule(attributesModule);
-
-            return attributesModule;
-        }
-
-        private PersonAttribute RollAttribute(PersonAttributeType attributeType)
-        {
-            var value = 10 + Dice.Roll(-4, 4);
-            return new PersonAttribute(attributeType, value);
-        }
-
-        private void RollTraitPerks(IEvolutionModule evolutionData)
-        {
-            if (evolutionData is null)
-            {
-                throw new ArgumentNullException(nameof(evolutionData));
-            }
-
-            var rolledTraits = _personPerkInitializator.Generate();
-            evolutionData.AddBuildInPerks(rolledTraits);
-        }
-
-        protected abstract void RollStartEquipment(IInventoryModule inventory, HumanPerson person);
-
-        protected void FillSlot(HumanPerson person, IDropTableScheme dropScheme, int slotIndex)
-        {
-            // Генерируем предметы.
-            // Выбираем предмет, как экипировку в слот.
-            // Если он может быть экипирован, то устанавливаем в слот.
-            // Остальные дропнутые предметы складываем просто в инвентарь.
-            // Если текущий предмет невозможно экипировать, то его тоже помещаем в инвентарь.
-
-            var inventory = person.GetModule<IInventoryModule>();
-            var dropedProps = DropResolver.Resolve(new[]
-            {
-                dropScheme
-            });
-            var usedEquipment = dropedProps.OfType<Equipment>().FirstOrDefault();
-            if (usedEquipment != null)
-            {
-                var equipmentModule = person.GetModule<IEquipmentModule>();
-                var canBeEquiped = CanBeEquiped(equipmentModule, slotIndex, usedEquipment);
-                if (canBeEquiped)
-                {
-                    AddEquipment(equipmentModule, slotIndex, usedEquipment);
-                    var unusedMainWeaponDrops = dropedProps.Where(x => x != usedEquipment).ToArray();
-                    foreach (var prop in unusedMainWeaponDrops)
-                    {
-                        AddPropToInventory(inventory, prop);
-                    }
-                }
-                else
-                {
-                    foreach (var prop in dropedProps)
-                    {
-                        AddPropToInventory(inventory, prop);
-                    }
-                }
-            }
-            else
-            {
-                foreach (var prop in dropedProps)
-                {
-                    AddPropToInventory(inventory, prop);
-                }
-            }
-        }
-
-        private static bool CanBeEquiped(
-            IEquipmentModule equipmentModule,
-            int slotIndex,
-            Equipment equipment)
-        {
-            return EquipmentCarrierHelper.CanBeEquiped(equipmentModule, slotIndex, equipment);
-        }
-
-        protected static void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
-        {
-            if (equipmentModule is null)
-            {
-                throw new ArgumentNullException(nameof(equipmentModule));
-            }
-
-            equipmentModule[slotIndex] = equipment;
-        }
-
-        protected static void AddPropToInventory(IPropStore inventory, IProp prop)
-        {
-            if (inventory is null)
-            {
-                throw new ArgumentNullException(nameof(inventory));
-            }
-
-            inventory.Add(prop);
-        }
-
-        protected void AddResource(IInventoryModule inventory, string resourceSid, int count)
-        {
-            if (inventory is null)
-            {
-                throw new ArgumentNullException(nameof(inventory));
-            }
-
-            try
-            {
-                var resourceScheme = SchemeService.GetScheme<IPropScheme>(resourceSid);
-                var resource = _propFactory.CreateResource(resourceScheme, count);
-                inventory.Add(resource);
-            }
-            catch (KeyNotFoundException exception)
-            {
-                throw new CreatePersonException($"Не найден объект {resourceSid}", exception);
-            }
-        }
-
-        protected void AddEquipment(IInventoryModule inventory, string sid)
-        {
-            var scheme = SchemeService.GetScheme<IPropScheme>(sid);
-            var prop = _propFactory.CreateEquipment(scheme);
-            AddPropToInventory(inventory, prop);
-        }
-
-        protected void AddDefaultProps(IInventoryModule inventory)
-        {
-            AddResource(inventory, "packed-food", 1);
-            AddResource(inventory, "water-bottle", 1);
-            AddResource(inventory, "med-kit", 1);
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Scoring;
 
@@ -29,10 +24,6 @@ namespace Zilon.Core.Persons
             _rules = CalcRules();
         }
 
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
-
-        public SurvivalStatType Type { get; }
-
         public SurvivalStatHazardLevel Level
         {
             get => _level;
@@ -47,6 +38,58 @@ namespace Zilon.Core.Persons
                     Changed?.Invoke(this, EventArgs.Empty);
                 }
             }
+        }
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
+
+        public SurvivalStatType Type { get; }
+
+        public override string ToString()
+        {
+            return $"{Level} {Type}";
+        }
+
+        private EffectRule[] CalcRules()
+        {
+            var rules = new List<EffectRule>();
+
+            switch (Level)
+            {
+                case SurvivalStatHazardLevel.Lesser:
+                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
+                    break;
+
+                case SurvivalStatHazardLevel.Strong:
+                case SurvivalStatHazardLevel.Max:
+                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
+                    rules.Add(new EffectRule(RollEffectType.ToHit, PersonRuleLevel.Lesser));
+                    break;
+
+                case SurvivalStatHazardLevel.Undefined:
+                    throw new NotSupportedException();
+
+                default:
+                    throw new NotSupportedException("Неизветный уровень угрозы выживания.");
+            }
+
+            return rules.ToArray();
+        }
+
+        private static int GetSuccessHazardDamageRoll()
+        {
+            // В будущем это значение будет расчитывать исходя из характеристик, перков и экипировки персонжа.
+            return 4;
+        }
+
+        private void LogPlayerEvent()
+        {
+            if (PlayerEventLogService is null)
+            {
+                return;
+            }
+
+            var playerEvent = new SurvivalEffectDamageEvent(this);
+            PlayerEventLogService.Log(playerEvent);
         }
 
         public EffectRule[] GetRules()
@@ -77,54 +120,6 @@ namespace Zilon.Core.Persons
                     LogPlayerEvent();
                 }
             }
-        }
-
-        private void LogPlayerEvent()
-        {
-            if (PlayerEventLogService is null)
-            {
-                return;
-            }
-
-            var playerEvent = new SurvivalEffectDamageEvent(this);
-            PlayerEventLogService.Log(playerEvent);
-        }
-
-        private static int GetSuccessHazardDamageRoll()
-        {
-            // В будущем это значение будет расчитывать исходя из характеристик, перков и экипировки персонжа.
-            return 4;
-        }
-
-        private EffectRule[] CalcRules()
-        {
-            var rules = new List<EffectRule>();
-
-            switch (Level)
-            {
-                case SurvivalStatHazardLevel.Lesser:
-                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
-                    break;
-
-                case SurvivalStatHazardLevel.Strong:
-                case SurvivalStatHazardLevel.Max:
-                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
-                    rules.Add(new EffectRule(RollEffectType.ToHit, PersonRuleLevel.Lesser));
-                    break;
-
-                case SurvivalStatHazardLevel.Undefined:
-                    throw new NotSupportedException();
-
-                default:
-                    throw new NotSupportedException("Неизветный уровень угрозы выживания.");
-            }
-
-            return rules.ToArray();
-        }
-
-        public override string ToString()
-        {
-            return $"{Level} {Type}";
         }
     }
 }

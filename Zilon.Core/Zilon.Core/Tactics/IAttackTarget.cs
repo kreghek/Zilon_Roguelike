@@ -16,6 +16,11 @@ namespace Zilon.Core.Tactics
         PhysicalSizePattern PhysicalSize { get; }
 
         /// <summary>
+        /// Проверка, может ли цель быть атакована.
+        /// </summary>
+        bool CanBeDamaged();
+
+        /// <summary>
         /// Принятие урона.
         /// </summary>
         /// <param name="value"> Величина урона, полученного объектом. </param>
@@ -23,10 +28,5 @@ namespace Zilon.Core.Tactics
         /// Это окончательный урон с учетом всех модифиаторов.
         /// </remarks>
         void TakeDamage(int value);
-
-        /// <summary>
-        /// Проверка, может ли цель быть атакована.
-        /// </summary>
-        bool CanBeDamaged();
     }
 }

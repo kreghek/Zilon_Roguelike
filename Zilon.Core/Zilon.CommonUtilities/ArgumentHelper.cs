@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Zilon.CommonUtilities
+﻿namespace Zilon.CommonUtilities
 {
     /// <summary>
     /// Вспомогательный класс для работы с аргументами командной строки
@@ -9,17 +6,6 @@ namespace Zilon.CommonUtilities
     /// </summary>
     public static class ArgumentHelper
     {
-        /// <summary>
-        /// Проверяет, присутствует ли аргумент.
-        /// </summary>
-        /// <param name="args"> Все агрументы приложения. </param>
-        /// <param name="testArg"> Проверяемый аргумент. Без учёта регистра. </param>
-        /// <returns> Возвращает true, если аргумент присутствует. </returns>
-        public static bool HasProgramArgument(string[] args, string testArg)
-        {
-            return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
-        }
-
         /// <summary>
         /// Возвращает значение аргумента.
         /// </summary>
@@ -44,6 +30,17 @@ namespace Zilon.CommonUtilities
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Проверяет, присутствует ли аргумент.
+        /// </summary>
+        /// <param name="args"> Все агрументы приложения. </param>
+        /// <param name="testArg"> Проверяемый аргумент. Без учёта регистра. </param>
+        /// <returns> Возвращает true, если аргумент присутствует. </returns>
+        public static bool HasProgramArgument(string[] args, string testArg)
+        {
+            return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
         }
     }
 }

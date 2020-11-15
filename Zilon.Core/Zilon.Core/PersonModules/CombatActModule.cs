@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-using Newtonsoft.Json;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.LogicCalculations;
 using Zilon.Core.Persons;
@@ -37,16 +29,6 @@ namespace Zilon.Core.PersonModules
             _equipmentModule = equipmentModule;
             _effectsModule = effectsModule;
             _evolutionModule = evolutionModule;
-        }
-
-        public string Key => nameof(ICombatActModule);
-
-        public bool IsActive { get; set; }
-
-        public IEnumerable<ITacticalAct> CalcCombatActs()
-        {
-            var perks = GetPerksSafe();
-            return CalcActs(_defaultActScheme, _equipmentModule, _effectsModule, perks);
         }
 
         private static IEnumerable<ITacticalAct> CalcActs(
@@ -91,39 +73,8 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private IEnumerable<IPerk> GetPerksSafe()
-        {
-            var perks = _evolutionModule?.GetArchievedPerks();
-            if (perks == null)
-            {
-                perks = Array.Empty<IPerk>();
-            }
-
-            return perks;
-        }
-
-        private static ITacticalAct CreateTacticalAct(
-            [NotNull] ITacticalActScheme scheme,
-            [NotNull] Equipment equipment,
-            [NotNull] IEffectsModule effects,
-            [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
-        {
-            var toHitModifierValue = 0;
-            var efficientModifierValue = 0;
-            var efficientRollUnmodified = scheme.Stats.Efficient;
-            CalcSurvivalHazardOnTacticalAct(effects, ref toHitModifierValue, ref efficientModifierValue);
-            CalcPerksBonusesOnTacticalAct(perks, equipment, ref toHitModifierValue, ref efficientModifierValue);
-
-            var toHitRoll = CreateTacticalActRoll(6, 1, toHitModifierValue);
-            var efficientRoll = CreateTacticalActRoll(efficientRollUnmodified.Dice,
-                efficientRollUnmodified.Count,
-                efficientModifierValue);
-
-            return new TacticalAct(scheme, efficientRoll, toHitRoll, equipment);
-        }
-
         private static void CalcPerksBonusesOnTacticalAct(
-            [NotNull][ItemNotNull] IEnumerable<IPerk> archievedPerks,
+            [NotNull] [ItemNotNull] IEnumerable<IPerk> archievedPerks,
             [NotNull] Equipment equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
@@ -157,37 +108,76 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void ProcessRulesBonuses(
-            Equipment equipment,
-            ref int toHitModifierValue,
-            ref int efficientModifierValue,
-            PerkRuleSubScheme[] rules)
-        {
-            foreach (var rule in rules)
-            {
-                GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
-            }
-        }
-
-        private static void GetRuleModifierValue(
-            PerkRuleSubScheme rule,
-            Equipment equipment,
+        private static void CalcSurvivalHazardOnTacticalAct(
+            IEffectsModule effects,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
-            switch (rule.Type)
+            var greaterSurvivalEffect = effects.Items.OfType<SurvivalStatHazardEffect>()
+                .OrderByDescending(x => x.Level).FirstOrDefault();
+
+            if (greaterSurvivalEffect == null)
             {
-                case PersonRuleType.Damage:
-                    efficientModifierValue = GetRollModifierByPerkRule(equipment, efficientModifierValue, rule);
-                    break;
-
-                case PersonRuleType.ToHit:
-                    toHitModifierValue = GetRollModifierByPerkRule(equipment, toHitModifierValue, rule);
-                    break;
-
-                case PersonRuleType.Undefined:
-                    throw new InvalidOperationException("Правило не определно.");
+                return;
             }
+
+            var effecientDebuffRule = greaterSurvivalEffect.GetRules()
+                .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
+
+            var toHitDebuffRule = greaterSurvivalEffect.GetRules()
+                .FirstOrDefault(x => x.RollType == RollEffectType.ToHit);
+
+            if (effecientDebuffRule != null)
+            {
+                efficientModifierValue += -1;
+            }
+
+            if (toHitDebuffRule != null)
+            {
+                toHitModifierValue += -1;
+            }
+        }
+
+        private static ITacticalAct CreateTacticalAct(
+            [NotNull] ITacticalActScheme scheme,
+            [NotNull] Equipment equipment,
+            [NotNull] IEffectsModule effects,
+            [NotNull] [ItemNotNull] IEnumerable<IPerk> perks)
+        {
+            var toHitModifierValue = 0;
+            var efficientModifierValue = 0;
+            var efficientRollUnmodified = scheme.Stats.Efficient;
+            CalcSurvivalHazardOnTacticalAct(effects, ref toHitModifierValue, ref efficientModifierValue);
+            CalcPerksBonusesOnTacticalAct(perks, equipment, ref toHitModifierValue, ref efficientModifierValue);
+
+            var toHitRoll = CreateTacticalActRoll(6, 1, toHitModifierValue);
+            var efficientRoll = CreateTacticalActRoll(efficientRollUnmodified.Dice,
+                efficientRollUnmodified.Count,
+                efficientModifierValue);
+
+            return new TacticalAct(scheme, efficientRoll, toHitRoll, equipment);
+        }
+
+        private static Roll CreateTacticalActRoll(int dice, int count, int modifierValue)
+        {
+            if (modifierValue == 0)
+            {
+                return new Roll(dice, count);
+            }
+
+            var modifier = new RollModifiers(modifierValue);
+            return new Roll(dice, count, modifier);
+        }
+
+        private IEnumerable<IPerk> GetPerksSafe()
+        {
+            var perks = _evolutionModule?.GetArchievedPerks();
+            if (perks == null)
+            {
+                perks = Array.Empty<IPerk>();
+            }
+
+            return perks;
         }
 
         private static int GetRollModifierByPerkRule(
@@ -225,45 +215,47 @@ namespace Zilon.Core.PersonModules
             return efficientModifierValue;
         }
 
-        private static void CalcSurvivalHazardOnTacticalAct(
-            IEffectsModule effects,
+        private static void GetRuleModifierValue(
+            PerkRuleSubScheme rule,
+            Equipment equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
-            var greaterSurvivalEffect = effects.Items.OfType<SurvivalStatHazardEffect>()
-                .OrderByDescending(x => x.Level).FirstOrDefault();
-
-            if (greaterSurvivalEffect == null)
+            switch (rule.Type)
             {
-                return;
-            }
+                case PersonRuleType.Damage:
+                    efficientModifierValue = GetRollModifierByPerkRule(equipment, efficientModifierValue, rule);
+                    break;
 
-            var effecientDebuffRule = greaterSurvivalEffect.GetRules()
-                .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
+                case PersonRuleType.ToHit:
+                    toHitModifierValue = GetRollModifierByPerkRule(equipment, toHitModifierValue, rule);
+                    break;
 
-            var toHitDebuffRule = greaterSurvivalEffect.GetRules()
-                .FirstOrDefault(x => x.RollType == RollEffectType.ToHit);
-
-            if (effecientDebuffRule != null)
-            {
-                efficientModifierValue += -1;
-            }
-
-            if (toHitDebuffRule != null)
-            {
-                toHitModifierValue += -1;
+                case PersonRuleType.Undefined:
+                    throw new InvalidOperationException("Правило не определно.");
             }
         }
 
-        private static Roll CreateTacticalActRoll(int dice, int count, int modifierValue)
+        private static void ProcessRulesBonuses(
+            Equipment equipment,
+            ref int toHitModifierValue,
+            ref int efficientModifierValue,
+            PerkRuleSubScheme[] rules)
         {
-            if (modifierValue == 0)
+            foreach (var rule in rules)
             {
-                return new Roll(dice, count);
+                GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
             }
+        }
 
-            var modifier = new RollModifiers(modifierValue);
-            return new Roll(dice, count, modifier);
+        public string Key => nameof(ICombatActModule);
+
+        public bool IsActive { get; set; }
+
+        public IEnumerable<ITacticalAct> CalcCombatActs()
+        {
+            var perks = GetPerksSafe();
+            return CalcActs(_defaultActScheme, _equipmentModule, _effectsModule, perks);
         }
     }
 }

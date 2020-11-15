@@ -1,9 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tests.StaticObjectModules.TestCaseDataSources;
 

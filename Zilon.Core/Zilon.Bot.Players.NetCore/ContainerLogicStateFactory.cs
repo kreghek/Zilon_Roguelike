@@ -1,8 +1,4 @@
-﻿using System;
-
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Zilon.Bot.Players.NetCore
+﻿namespace Zilon.Bot.Players.NetCore
 {
     public sealed class ContainerLogicStateFactory : ILogicStateFactory
     {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -14,6 +11,28 @@ namespace Zilon.Core.MapGenerators
         public StaticObjectsGeneratorRandomSource(IDice dice)
         {
             _dice = dice;
+        }
+
+        private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
+        {
+            switch (resourceType)
+            {
+                case SectorResourceType.Aurihulk:
+                case SectorResourceType.Copper:
+                case SectorResourceType.Gold:
+                case SectorResourceType.Iron:
+                case SectorResourceType.Silver:
+                    return PropContainerPurpose.OreDeposits;
+                case SectorResourceType.Stones:
+                    return PropContainerPurpose.StoneDeposits;
+                case SectorResourceType.CherryBrushes:
+                    return PropContainerPurpose.CherryBrush;
+                case SectorResourceType.WaterPuddles:
+                    return PropContainerPurpose.Puddle;
+
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         public PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
@@ -58,28 +77,6 @@ namespace Zilon.Core.MapGenerators
             }
 
             return _dice.RollFromList(purposeList);
-        }
-
-        private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
-        {
-            switch (resourceType)
-            {
-                case SectorResourceType.Aurihulk:
-                case SectorResourceType.Copper:
-                case SectorResourceType.Gold:
-                case SectorResourceType.Iron:
-                case SectorResourceType.Silver:
-                    return PropContainerPurpose.OreDeposits;
-                case SectorResourceType.Stones:
-                    return PropContainerPurpose.StoneDeposits;
-                case SectorResourceType.CherryBrushes:
-                    return PropContainerPurpose.CherryBrush;
-                case SectorResourceType.WaterPuddles:
-                    return PropContainerPurpose.Puddle;
-
-                default:
-                    throw new InvalidOperationException();
-            }
         }
     }
 }

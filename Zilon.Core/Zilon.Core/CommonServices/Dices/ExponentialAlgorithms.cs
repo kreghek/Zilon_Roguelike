@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zilon.Core.CommonServices.Dices
+﻿namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
     /// Вспомогательный класс для группировки алгоритмов.

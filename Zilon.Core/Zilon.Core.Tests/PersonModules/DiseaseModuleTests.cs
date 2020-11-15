@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Diseases;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;

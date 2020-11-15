@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using Zilon.Bot.Sdk;
+﻿using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -22,6 +18,8 @@ namespace Zilon.Bot.Players
         {
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
+
+        protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
 
         public void CancelTask(IActorTask cencelledActorTask)
         {
@@ -108,7 +106,5 @@ namespace Zilon.Bot.Players
             // Например, при использовании парного оружия.
             // Механика пока не реализована.
         }
-
-        protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
     }
 }

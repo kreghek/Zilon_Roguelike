@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
@@ -27,6 +21,136 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         public CellularAutomatonMapFactory(IDice dice)
         {
             _dice = dice;
+        }
+
+        private static ISectorMap CreateSectorMap(
+            Matrix<bool> matrix,
+            RegionDraft[] draftRegions,
+            IEnumerable<RoomTransition> transitions)
+        {
+            // Создание графа карты сектора на основе карты клеточного автомата.
+            ISectorMap map = new SectorHexMap();
+
+            FillMapRegions(draftRegions, map);
+
+            MapDraftRegionsToSectorMap(matrix, draftRegions, map);
+
+            // Размещаем переходы и отмечаем стартовую комнату.
+            // Общее описание: стараемся размещать переходы в самых маленьких комнатах.
+            // Для этого сортируем все комнаты по размеру.
+            // Первую занимаем под старт.
+            // Последующие - это переходы.
+
+            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Length).ToArray();
+
+            if (regionOrderedBySize.Any())
+            {
+                CreateTransitionInSmallestRegion(transitions, map, regionOrderedBySize);
+            }
+
+            return map;
+        }
+
+        private static void CreateTransitionInSmallestRegion(
+            IEnumerable<RoomTransition> transitions,
+            ISectorMap map,
+            MapRegion[] regionOrderedBySize)
+        {
+            var startRegion = regionOrderedBySize.First();
+            startRegion.IsStart = true;
+
+            var transitionArray = transitions.ToArray();
+
+            // Пропускаем 1, потому что 1 занять стартом.
+            var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
+
+            Debug.Assert(trasitionRegionDrafts.Length >= transitionArray.Length,
+                "Должно быть достаточно регионов для размещения всех переходов.");
+
+            for (var i = 0; i < transitionArray.Length; i++)
+            {
+                var transitionRegion = trasitionRegionDrafts[i];
+
+                var transition = transitionArray[i];
+
+                var transitionNode = transitionRegion.Nodes.First();
+
+                map.Transitions.Add(transitionNode, transition);
+
+                if (transition.SectorNode == null)
+                {
+                    transitionRegion.IsOut = true;
+                }
+
+                transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
+                    where map.Transitions.Keys.Contains(regionNode)
+                    select regionNode).ToArray();
+            }
+        }
+
+        private static void FillMapRegions(RegionDraft[] draftRegions, ISectorMap map)
+        {
+            var regionIdCounter = 1;
+            foreach (var draftRegion in draftRegions)
+            {
+                var regionNodeList = new List<IGraphNode>();
+
+                foreach (var coord in draftRegion.Coords)
+                {
+                    var node = new HexNode(coord.X, coord.Y);
+                    map.AddNode(node);
+
+                    regionNodeList.Add(node);
+                }
+
+                var region = new MapRegion(regionIdCounter, regionNodeList.ToArray());
+
+                map.Regions.Add(region);
+
+                regionIdCounter++;
+            }
+        }
+
+        /// <summary>
+        /// Преобразовывет черновые регионы в узлы реальной карты.
+        /// </summary>
+        private static void MapDraftRegionsToSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, ISectorMap map)
+        {
+            var cellMap = matrix.Items;
+            var mapWidth = matrix.Width;
+            var mapHeight = matrix.Height;
+
+            var regionNodeCoords = draftRegions.SelectMany(x => x.Coords);
+            var hashSet = new HashSet<OffsetCoords>(regionNodeCoords);
+
+            for (var x = 0; x < mapWidth; x++)
+            {
+                for (var y = 0; y < mapHeight; y++)
+                {
+                    if (cellMap[x, y])
+                    {
+                        var offsetCoord = new OffsetCoords(x, y);
+
+                        if (!hashSet.Contains(offsetCoord))
+                        {
+                            var node = new HexNode(x, y);
+                            map.AddNode(node);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static IEnumerable<RegionDraft> PostProcess(
+            IEnumerable<IRegionPostProcessor> regionPostProcessors,
+            IEnumerable<RegionDraft> regions)
+        {
+            foreach (var processor in regionPostProcessors)
+            {
+                regions = processor.Process(regions);
+            }
+
+            return regions;
         }
 
         /// <inheritdoc/>
@@ -91,136 +215,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             // If the cycle has ended, then no attempt has ended with a successful map building
             throw new InvalidOperationException("Failed to create a map within the maximum number of attempts.");
-        }
-
-        private static IEnumerable<RegionDraft> PostProcess(
-            IEnumerable<IRegionPostProcessor> regionPostProcessors,
-            IEnumerable<RegionDraft> regions)
-        {
-            foreach (var processor in regionPostProcessors)
-            {
-                regions = processor.Process(regions);
-            }
-
-            return regions;
-        }
-
-        private static ISectorMap CreateSectorMap(
-            Matrix<bool> matrix,
-            RegionDraft[] draftRegions,
-            IEnumerable<RoomTransition> transitions)
-        {
-            // Создание графа карты сектора на основе карты клеточного автомата.
-            ISectorMap map = new SectorHexMap();
-
-            FillMapRegions(draftRegions, map);
-
-            MapDraftRegionsToSectorMap(matrix, draftRegions, map);
-
-            // Размещаем переходы и отмечаем стартовую комнату.
-            // Общее описание: стараемся размещать переходы в самых маленьких комнатах.
-            // Для этого сортируем все комнаты по размеру.
-            // Первую занимаем под старт.
-            // Последующие - это переходы.
-
-            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Length).ToArray();
-
-            if (regionOrderedBySize.Any())
-            {
-                CreateTransitionInSmallestRegion(transitions, map, regionOrderedBySize);
-            }
-
-            return map;
-        }
-
-        private static void CreateTransitionInSmallestRegion(
-            IEnumerable<RoomTransition> transitions,
-            ISectorMap map,
-            MapRegion[] regionOrderedBySize)
-        {
-            var startRegion = regionOrderedBySize.First();
-            startRegion.IsStart = true;
-
-            var transitionArray = transitions.ToArray();
-
-            // Пропускаем 1, потому что 1 занять стартом.
-            var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
-
-            Debug.Assert(trasitionRegionDrafts.Length >= transitionArray.Length,
-                "Должно быть достаточно регионов для размещения всех переходов.");
-
-            for (var i = 0; i < transitionArray.Length; i++)
-            {
-                var transitionRegion = trasitionRegionDrafts[i];
-
-                var transition = transitionArray[i];
-
-                var transitionNode = transitionRegion.Nodes.First();
-
-                map.Transitions.Add(transitionNode, transition);
-
-                if (transition.SectorNode == null)
-                {
-                    transitionRegion.IsOut = true;
-                }
-
-                transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
-                                              where map.Transitions.Keys.Contains(regionNode)
-                                              select regionNode).ToArray();
-            }
-        }
-
-        private static void FillMapRegions(RegionDraft[] draftRegions, ISectorMap map)
-        {
-            var regionIdCounter = 1;
-            foreach (var draftRegion in draftRegions)
-            {
-                var regionNodeList = new List<IGraphNode>();
-
-                foreach (var coord in draftRegion.Coords)
-                {
-                    var node = new HexNode(coord.X, coord.Y);
-                    map.AddNode(node);
-
-                    regionNodeList.Add(node);
-                }
-
-                var region = new MapRegion(regionIdCounter, regionNodeList.ToArray());
-
-                map.Regions.Add(region);
-
-                regionIdCounter++;
-            }
-        }
-
-        /// <summary>
-        /// Преобразовывет черновые регионы в узлы реальной карты.
-        /// </summary>
-        private static void MapDraftRegionsToSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, ISectorMap map)
-        {
-            var cellMap = matrix.Items;
-            var mapWidth = matrix.Width;
-            var mapHeight = matrix.Height;
-
-            var regionNodeCoords = draftRegions.SelectMany(x => x.Coords);
-            var hashSet = new HashSet<OffsetCoords>(regionNodeCoords);
-
-            for (var x = 0; x < mapWidth; x++)
-            {
-                for (var y = 0; y < mapHeight; y++)
-                {
-                    if (cellMap[x, y])
-                    {
-                        var offsetCoord = new OffsetCoords(x, y);
-
-                        if (!hashSet.Contains(offsetCoord))
-                        {
-                            var node = new HexNode(x, y);
-                            map.AddNode(node);
-                        }
-                    }
-                }
-            }
         }
     }
 }

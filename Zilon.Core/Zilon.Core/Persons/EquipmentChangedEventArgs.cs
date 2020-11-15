@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Props;
+﻿using Zilon.Core.Props;
 
 namespace Zilon.Core.Persons
 {

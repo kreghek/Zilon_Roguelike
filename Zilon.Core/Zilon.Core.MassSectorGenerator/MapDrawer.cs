@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MassSectorGenerator
@@ -12,6 +8,15 @@ namespace Zilon.Core.MassSectorGenerator
         private const int CELLSIZE = 10;
         private const int MARGIN = 10;
         private const int AXIS_FONT_SIZE = 6;
+
+        public static Bitmap DrawMap(IMap map)
+        {
+            var hexNodes = map.Nodes.OfType<HexNode>().ToArray();
+
+            var bitmap = DrawNodes(hexNodes);
+
+            return bitmap;
+        }
 
         public static Bitmap DrawNodes(IEnumerable<HexNode> nodes)
         {
@@ -24,11 +29,20 @@ namespace Zilon.Core.MassSectorGenerator
             return bitmap;
         }
 
-        public static Bitmap DrawMap(IMap map)
+        private static void Clear(Bitmap bitmap, Graphics graphics)
         {
-            var hexNodes = map.Nodes.OfType<HexNode>().ToArray();
+            graphics.FillRectangle(Brushes.Black, 0, 0, bitmap.Width, bitmap.Height);
+        }
 
-            var bitmap = DrawNodes(hexNodes);
+        private static Bitmap CreateBitmap(ImageInfo info)
+        {
+            var xAxisDiff = info.RightCoord - info.LeftCoord;
+            var width = (xAxisDiff + 1) * CELLSIZE;
+            var yAxisDiff = info.TopCoord - info.BottomCoord;
+            var height = (yAxisDiff + 1) * CELLSIZE;
+
+            var twoSideMargin = MARGIN * 2;
+            var bitmap = new Bitmap(width + twoSideMargin, height + twoSideMargin);
 
             return bitmap;
         }
@@ -53,11 +67,6 @@ namespace Zilon.Core.MassSectorGenerator
                     graphics.FillEllipse(cellBrush, x + MARGIN, y + MARGIN, CELLSIZE, CELLSIZE);
                 }
             }
-        }
-
-        private static void Clear(Bitmap bitmap, Graphics graphics)
-        {
-            graphics.FillRectangle(Brushes.Black, 0, 0, bitmap.Width, bitmap.Height);
         }
 
         private static void DrawAxisNumbers(ImageInfo info, Graphics graphics)
@@ -87,19 +96,6 @@ namespace Zilon.Core.MassSectorGenerator
             }
         }
 
-        private static Bitmap CreateBitmap(ImageInfo info)
-        {
-            var xAxisDiff = info.RightCoord - info.LeftCoord;
-            var width = (xAxisDiff + 1) * CELLSIZE;
-            var yAxisDiff = info.TopCoord - info.BottomCoord;
-            var height = (yAxisDiff + 1) * CELLSIZE;
-
-            var twoSideMargin = MARGIN * 2;
-            var bitmap = new Bitmap(width + twoSideMargin, height + twoSideMargin);
-
-            return bitmap;
-        }
-
         private static ImageInfo GetImageInfo(IEnumerable<HexNode> nodes)
         {
             var xAxisOrderedNode = nodes.OrderBy(x => x.OffsetCoords.X);
@@ -118,13 +114,13 @@ namespace Zilon.Core.MassSectorGenerator
 
         private sealed class ImageInfo
         {
+            public int BottomCoord { get; set; }
+
             public int LeftCoord { get; set; }
 
             public int RightCoord { get; set; }
 
             public int TopCoord { get; set; }
-
-            public int BottomCoord { get; set; }
         }
     }
 }

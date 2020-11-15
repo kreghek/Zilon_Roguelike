@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
 {
@@ -17,13 +15,13 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Действие, которое было совершено.
-        /// </summary>
-        public ITacticalAct TacticalAct { get; }
-
-        /// <summary>
         /// Эффективность действия.
         /// </summary>
         public int Efficient { get; }
+
+        /// <summary>
+        /// Действие, которое было совершено.
+        /// </summary>
+        public ITacticalAct TacticalAct { get; }
     }
 }

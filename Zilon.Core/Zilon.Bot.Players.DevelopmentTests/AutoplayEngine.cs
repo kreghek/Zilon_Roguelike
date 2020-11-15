@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 using Zilon.Emulation.Common;
@@ -17,11 +16,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
             _startup = startup;
         }
 
-        protected override void ConfigBotAux()
-        {
-            _startup.ConfigureAux(ServiceScope.ServiceProvider);
-        }
-
         protected override void CatchActorTaskExecutionException(ActorTaskExecutionException exception)
         {
             Console.WriteLine(exception);
@@ -31,6 +25,11 @@ namespace Zilon.Bot.Players.DevelopmentTests
         protected override void CatchException(Exception exception)
         {
             Console.WriteLine(exception);
+        }
+
+        protected override void ConfigBotAux()
+        {
+            _startup.ConfigureAux(ServiceScope.ServiceProvider);
         }
 
         protected override void ProcessEnd()

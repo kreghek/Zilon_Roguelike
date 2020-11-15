@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
@@ -36,8 +33,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             // Ищем две самые ближние точки между объединённым регионом и 
             // и всеми открытыми регионами.
 
-            FindClosestNodesBetweenOpenAndUnited(
-                openRegions,
+            FindClosestNodesBetweenOpenAndUnited(openRegions,
                 unitedRegionCoords,
                 out OffsetCoords? currentOpenRegionCoord,
                 out OffsetCoords? currentUnitedRegionCoord,
@@ -56,6 +52,28 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                 openRegions.Remove(nearbyOpenRegion);
                 unitedRegions.Add(nearbyOpenRegion);
+            }
+        }
+
+        private static void DrawLineBetweenNodes(
+            Matrix<bool> matrix,
+            CubeCoords openCubeCoord,
+            CubeCoords unitedCubeCoord)
+        {
+            var line = CubeCoordsHelper.CubeDrawLine(openCubeCoord, unitedCubeCoord);
+            foreach (var lineItem in line)
+            {
+                var offsetCoords = HexHelper.ConvertToOffset(lineItem);
+                matrix[offsetCoords.X, offsetCoords.Y] = true;
+
+                // Коридоры должны быть размером в Size7.
+                // Поэтому вокруг каждой точки прорываем соседей.
+
+                var neighborCoords = HexHelper.GetNeighbors(offsetCoords.X, offsetCoords.Y);
+                foreach (var coords in neighborCoords)
+                {
+                    matrix[coords.X, coords.Y] = true;
+                }
             }
         }
 
@@ -89,28 +107,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                             nearbyOpenRegion = currentOpenRegion;
                         }
                     }
-                }
-            }
-        }
-
-        private static void DrawLineBetweenNodes(
-            Matrix<bool> matrix,
-            CubeCoords openCubeCoord,
-            CubeCoords unitedCubeCoord)
-        {
-            var line = CubeCoordsHelper.CubeDrawLine(openCubeCoord, unitedCubeCoord);
-            foreach (var lineItem in line)
-            {
-                var offsetCoords = HexHelper.ConvertToOffset(lineItem);
-                matrix[offsetCoords.X, offsetCoords.Y] = true;
-
-                // Коридоры должны быть размером в Size7.
-                // Поэтому вокруг каждой точки прорываем соседей.
-
-                var neighborCoords = HexHelper.GetNeighbors(offsetCoords.X, offsetCoords.Y);
-                foreach (var coords in neighborCoords)
-                {
-                    matrix[coords.X, coords.Y] = true;
                 }
             }
         }

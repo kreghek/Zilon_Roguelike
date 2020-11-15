@@ -9,11 +9,6 @@ namespace Zilon.Core.Schemes
     public interface IPropArmorItemSubScheme
     {
         /// <summary>
-        /// Тип урона, поглощаемого бронёй.
-        /// </summary>
-        ImpactType Impact { get; }
-
-        /// <summary>
         /// Уровень поглощения урона бронёй.
         /// </summary>
         PersonRuleLevel AbsorbtionLevel { get; }
@@ -22,5 +17,10 @@ namespace Zilon.Core.Schemes
         /// Ранг брони.
         /// </summary>
         int ArmorRank { get; }
+
+        /// <summary>
+        /// Тип урона, поглощаемого бронёй.
+        /// </summary>
+        ImpactType Impact { get; }
     }
 }

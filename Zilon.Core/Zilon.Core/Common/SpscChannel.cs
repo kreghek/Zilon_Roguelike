@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Zilon.Core.Common
+﻿namespace Zilon.Core.Common
 {
     public sealed class SpscChannel<T> : ISender<T>, IReceiver<T>, IDisposable
     {
@@ -16,6 +11,11 @@ namespace Zilon.Core.Common
             _semaphore = new SemaphoreSlim(1);
             _receivers = new ConcurrentQueue<TaskCompletionSource<T>>();
             _values = new ConcurrentQueue<T>();
+        }
+
+        public void Dispose()
+        {
+            _semaphore.Dispose();
         }
 
         public async Task<T> ReceiveAsync()
@@ -61,11 +61,6 @@ namespace Zilon.Core.Common
             {
                 _semaphore.Release();
             }
-        }
-
-        public void Dispose()
-        {
-            _semaphore.Dispose();
         }
     }
 }

@@ -11,12 +11,12 @@ namespace Zilon.Core.Tactics.ActorInteractionEvents
             PersonDefenceItem = personDefenceItem ?? throw new System.ArgumentNullException(nameof(personDefenceItem));
         }
 
-        public IActor TargetActor { get; }
+        public int FactToHitRoll { get; internal set; }
 
         public PersonDefenceItem PersonDefenceItem { get; }
 
         public int SuccessToHitRoll { get; internal set; }
 
-        public int FactToHitRoll { get; internal set; }
+        public IActor TargetActor { get; }
     }
 }

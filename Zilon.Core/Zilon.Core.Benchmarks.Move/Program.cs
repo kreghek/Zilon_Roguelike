@@ -1,6 +1,4 @@
-﻿using BenchmarkDotNet.Running;
-
-namespace Zilon.Core.Benchmarks.Move
+﻿namespace Zilon.Core.Benchmarks.Move
 {
     internal class Program
     {

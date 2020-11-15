@@ -11,11 +11,6 @@
         public static class Equipment
         {
             /// <summary>
-            /// Экипировка может использоваться, как оружие.
-            /// </summary>
-            public static string Weapon => "weapon";
-
-            /// <summary>
             /// Экипировка может использоваться, как оружие дальнего боя.
             /// </summary>
             public static string Ranged => "ranged";
@@ -24,6 +19,11 @@
             /// Экипировка может использоваться, как щит.
             /// </summary>
             public static string Shield => "shield";
+
+            /// <summary>
+            /// Экипировка может использоваться, как оружие.
+            /// </summary>
+            public static string Weapon => "weapon";
         }
     }
 }

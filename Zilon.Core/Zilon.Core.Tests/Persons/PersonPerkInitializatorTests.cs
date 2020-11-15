@@ -1,10 +1,4 @@
-﻿using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
-using Zilon.Core.CommonServices.Dices;
+﻿using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 

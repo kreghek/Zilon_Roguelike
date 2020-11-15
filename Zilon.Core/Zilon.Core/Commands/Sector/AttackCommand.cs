@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -101,20 +97,6 @@ namespace Zilon.Core.Commands
             return true;
         }
 
-        private static IAttackTarget GetTarget(ISectorUiState sectorUiState)
-        {
-            var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
-            var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
-            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()?.Value >
-                                0;
-            if (!canTakeDamage)
-            {
-                selectedStaticObjectViewModel = null;
-            }
-
-            return (IAttackTarget)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.StaticObject;
-        }
-
         protected override void ExecuteTacticCommand()
         {
             var target = GetTarget(PlayerState);
@@ -126,6 +108,35 @@ namespace Zilon.Core.Commands
             var intention = new Intention<AttackTask>(a =>
                 new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+        }
+
+        private static void AddResourceOfUsageToList(
+            string usedPropResourceType,
+            int requiredCount,
+            IList<Resource> propResources,
+            Resource propResource)
+        {
+            var bulletData = propResource.Scheme.Bullet;
+            if (bulletData is null)
+            {
+                return;
+            }
+
+            var isRequiredResourceType = string.Equals(bulletData.Caliber,
+                usedPropResourceType,
+                System.StringComparison.InvariantCulture);
+
+            if (!isRequiredResourceType)
+            {
+                return;
+            }
+
+            if (propResource.Count < requiredCount)
+            {
+                return;
+            }
+
+            propResources.Add(propResource);
         }
 
         private static bool CheckPropResource(
@@ -159,36 +170,6 @@ namespace Zilon.Core.Commands
             return (preferredPropResource != null) && (preferredPropResource.Count >= usedPropResourceCount);
         }
 
-        private static void AddResourceOfUsageToList(
-            string usedPropResourceType,
-            int requiredCount,
-            IList<Resource> propResources,
-            Resource propResource)
-        {
-            var bulletData = propResource.Scheme.Bullet;
-            if (bulletData is null)
-            {
-                return;
-            }
-
-            var isRequiredResourceType = string.Equals(
-                bulletData.Caliber,
-                usedPropResourceType,
-                System.StringComparison.InvariantCulture);
-
-            if (!isRequiredResourceType)
-            {
-                return;
-            }
-
-            if (propResource.Count < requiredCount)
-            {
-                return;
-            }
-
-            propResources.Add(propResource);
-        }
-
         private static IActorViewModel GetCanExecuteActorViewModel(ISectorUiState sectorUiState)
         {
             var hover = sectorUiState.HoverViewModel as IActorViewModel;
@@ -201,6 +182,20 @@ namespace Zilon.Core.Commands
             var hover = sectorUiState.HoverViewModel as IContainerViewModel;
             var selected = sectorUiState.SelectedViewModel as IContainerViewModel;
             return hover ?? selected;
+        }
+
+        private static IAttackTarget GetTarget(ISectorUiState sectorUiState)
+        {
+            var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
+            var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
+            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()?.Value >
+                                0;
+            if (!canTakeDamage)
+            {
+                selectedStaticObjectViewModel = null;
+            }
+
+            return (IAttackTarget)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.StaticObject;
         }
     }
 }

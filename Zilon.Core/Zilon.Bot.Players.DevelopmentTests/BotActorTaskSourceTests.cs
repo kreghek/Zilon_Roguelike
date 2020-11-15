@@ -2,11 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.DependencyInjection;
-
-using NUnit.Framework;
-
-using Zilon.Bot.Sdk;
 using Zilon.Core.Localization;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -41,8 +36,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
             var player = serviceProvider.GetRequiredService<IPlayer>();
 
-            var autoPlayEngine = new AutoplayEngine(
-                startUp,
+            var autoPlayEngine = new AutoplayEngine(startUp,
                 botSettings,
                 globeInitializer);
 
@@ -120,8 +114,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             if (lastEvent != null)
             {
-                var deathReason = deathReasonService.GetDeathReasonSummary(
-                    lastEvent,
+                var deathReason = deathReasonService.GetDeathReasonSummary(lastEvent,
                     Language.En);
 
                 Console.WriteLine($"Death Reason: {deathReason}");

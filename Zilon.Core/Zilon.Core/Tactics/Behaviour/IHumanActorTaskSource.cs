@@ -1,14 +1,12 @@
-﻿using System.Threading.Tasks;
-
-namespace Zilon.Core.Tactics.Behaviour
+﻿namespace Zilon.Core.Tactics.Behaviour
 {
     public interface IHumanActorTaskSource<TContext> : IActorTaskSource<TContext>
         where TContext : ISectorTaskSourceContext
     {
-        Task IntentAsync(IIntention intention, IActor activeActor);
+        bool CanIntent();
 
         void Intent(IIntention intention, IActor activeActor);
 
-        bool CanIntent();
+        Task IntentAsync(IIntention intention, IActor activeActor);
     }
 }

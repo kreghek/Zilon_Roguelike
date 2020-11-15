@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-using Zilon.Core.Props;
+﻿using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.StaticObjectModules
@@ -17,6 +14,22 @@ namespace Zilon.Core.StaticObjectModules
             Content.Removed += Content_Removed;
 
             IsActive = true;
+        }
+
+        private void Content_Added(object sender, PropStoreEventArgs e)
+        {
+            ItemsAdded?.Invoke(this, e);
+        }
+
+        private void Content_Removed(object sender, PropStoreEventArgs e)
+        {
+            ItemsRemoved?.Invoke(this, e);
+        }
+
+        /// <inheritdoc/>
+        private void DoSetIsOpened()
+        {
+            Opened?.Invoke(this, EventArgs.Empty);
         }
 
         /// <inheritdoc/>
@@ -51,22 +64,6 @@ namespace Zilon.Core.StaticObjectModules
         {
             IsOpened = true;
             DoSetIsOpened();
-        }
-
-        /// <inheritdoc/>
-        private void DoSetIsOpened()
-        {
-            Opened?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void Content_Removed(object sender, PropStoreEventArgs e)
-        {
-            ItemsRemoved?.Invoke(this, e);
-        }
-
-        private void Content_Added(object sender, PropStoreEventArgs e)
-        {
-            ItemsAdded?.Invoke(this, e);
         }
     }
 }

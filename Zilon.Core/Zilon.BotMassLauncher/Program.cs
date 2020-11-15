@@ -22,6 +22,44 @@ namespace Zilon.BotMassLauncher
         private static CancellationToken _shutdownToken;
         private static CancellationTokenSource _shutdownTokenSource;
 
+        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            if (_shutdownTokenSource != null)
+            {
+                _shutdownTokenSource.Cancel();
+            }
+        }
+
+        private static string GetProgramArgument(string[] args, string testArg)
+        {
+            if (args == null)
+            {
+                return null;
+            }
+
+            foreach (var arg in args)
+            {
+                var components = arg.Split(new[]
+                {
+                    '='
+                }, StringSplitOptions.RemoveEmptyEntries);
+                if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (components.Length >= 2)
+                    {
+                        return components[1];
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private static bool HasProgramArgument(string[] args, string testArg)
+        {
+            return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
+        }
+
         private static void Main(string[] args)
         {
             Console.WriteLine("[x] START");
@@ -71,33 +109,6 @@ namespace Zilon.BotMassLauncher
             Console.WriteLine("[x] COMPLETE");
         }
 
-        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
-        {
-            if (_shutdownTokenSource != null)
-            {
-                _shutdownTokenSource.Cancel();
-            }
-        }
-
-        private static void RunParallel(int maxDegreeOfParallelism)
-        {
-            var parallelOptions = new ParallelOptions
-            {
-                MaxDegreeOfParallelism = maxDegreeOfParallelism,
-                CancellationToken = _shutdownToken
-            };
-
-            Parallel.For(0, _launchCount, parallelOptions, RunEnvironment);
-        }
-
-        private static void RunLinear()
-        {
-            for (var i = 0; i < _launchCount; i++)
-            {
-                RunEnvironment(i);
-            }
-        }
-
         private static void RunEnvironment(int iteration)
         {
             var modeArg = string.Empty;
@@ -143,34 +154,22 @@ namespace Zilon.BotMassLauncher
             Console.WriteLine($"[x] {infiniteCounterPreffix}ITERATION {iteration} FINISHED");
         }
 
-        private static bool HasProgramArgument(string[] args, string testArg)
+        private static void RunLinear()
         {
-            return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
+            for (var i = 0; i < _launchCount; i++)
+            {
+                RunEnvironment(i);
+            }
         }
 
-        private static string GetProgramArgument(string[] args, string testArg)
+        private static void RunParallel(int maxDegreeOfParallelism)
         {
-            if (args == null)
+            var parallelOptions = new ParallelOptions
             {
-                return null;
-            }
+                MaxDegreeOfParallelism = maxDegreeOfParallelism, CancellationToken = _shutdownToken
+            };
 
-            foreach (var arg in args)
-            {
-                var components = arg.Split(new[]
-                {
-                    '='
-                }, StringSplitOptions.RemoveEmptyEntries);
-                if (string.Equals(components[0], testArg, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (components.Length >= 2)
-                    {
-                        return components[1];
-                    }
-                }
-            }
-
-            return null;
+            Parallel.For(0, _launchCount, parallelOptions, RunEnvironment);
         }
     }
 }

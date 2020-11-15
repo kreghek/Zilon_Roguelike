@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Diseases;
+﻿using Zilon.Core.Diseases;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
@@ -21,42 +17,46 @@ namespace Zilon.Core.PersonModules
             IsActive = true;
         }
 
-        /// <inheritdoc/>
-        public IEnumerable<IDiseaseProcess> Diseases => _diseases;
-
-        public string Key => nameof(IDiseaseModule);
-
-        public bool IsActive { get; set; }
-
-        /// <inheritdoc/>
-        public void Infect(IDisease disease)
+        private static void AddDiseaseEffectForSymptom(
+            IEffectsModule personEffects,
+            IDisease disease,
+            DiseaseSymptom symptom)
         {
-            var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
+            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
+                .SingleOrDefault(x => x.Symptom == symptom);
 
-            if (currentProcess is null)
+            if (currentSymptomEffect is null)
             {
-                currentProcess = new DiseaseProcess(disease);
-                _diseases.Add(currentProcess);
+                // При создании эффекта уже фиксируется болезнь, которая его удерживает.
+                currentSymptomEffect = new DiseaseSymptomEffect(disease, symptom);
+                personEffects.Add(currentSymptomEffect);
+            }
+            else
+            {
+                currentSymptomEffect.HoldDisease(disease);
             }
         }
 
-        /// <inheritdoc/>
-        public void RemoveDisease(IDisease disease)
+        private static void RemoveDiseaseEffectForSimptom(
+            IEffectsModule personEffects,
+            IDisease disease,
+            DiseaseSymptom symptom)
         {
-            var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
-            _diseases.Remove(currentProcess);
-        }
+            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
+                .SingleOrDefault(x => x.Symptom == symptom);
 
-        public void Update(IEffectsModule personEffects)
-        {
-            if (personEffects is null)
+            if (currentSymptomEffect is null)
             {
-                throw new ArgumentNullException(nameof(personEffects));
+                // Просто игнорируем этот эффект.
+                // Ткущий метод может вызываться несколько раз и для симптомов, которые ушли в предыдущих итерациях.
+                return;
             }
 
-            foreach (var diseaseProcess in Diseases.ToArray())
+            currentSymptomEffect.ReleaseDisease(disease);
+
+            if (!currentSymptomEffect.Diseases.Any())
             {
-                UpdateDeseaseProcess(personEffects, diseaseProcess);
+                personEffects.Remove(currentSymptomEffect);
             }
         }
 
@@ -122,29 +122,6 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void RemoveDiseaseEffectForSimptom(
-            IEffectsModule personEffects,
-            IDisease disease,
-            DiseaseSymptom symptom)
-        {
-            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
-                .SingleOrDefault(x => x.Symptom == symptom);
-
-            if (currentSymptomEffect is null)
-            {
-                // Просто игнорируем этот эффект.
-                // Ткущий метод может вызываться несколько раз и для симптомов, которые ушли в предыдущих итерациях.
-                return;
-            }
-
-            currentSymptomEffect.ReleaseDisease(disease);
-
-            if (!currentSymptomEffect.Diseases.Any())
-            {
-                personEffects.Remove(currentSymptomEffect);
-            }
-        }
-
         private static void UpdatePowerUp(
             IEffectsModule personEffects,
             IDisease disease,
@@ -172,23 +149,42 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void AddDiseaseEffectForSymptom(
-            IEffectsModule personEffects,
-            IDisease disease,
-            DiseaseSymptom symptom)
-        {
-            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
-                .SingleOrDefault(x => x.Symptom == symptom);
+        /// <inheritdoc/>
+        public IEnumerable<IDiseaseProcess> Diseases => _diseases;
 
-            if (currentSymptomEffect is null)
+        public string Key => nameof(IDiseaseModule);
+
+        public bool IsActive { get; set; }
+
+        /// <inheritdoc/>
+        public void Infect(IDisease disease)
+        {
+            var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
+
+            if (currentProcess is null)
             {
-                // При создании эффекта уже фиксируется болезнь, которая его удерживает.
-                currentSymptomEffect = new DiseaseSymptomEffect(disease, symptom);
-                personEffects.Add(currentSymptomEffect);
+                currentProcess = new DiseaseProcess(disease);
+                _diseases.Add(currentProcess);
             }
-            else
+        }
+
+        /// <inheritdoc/>
+        public void RemoveDisease(IDisease disease)
+        {
+            var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
+            _diseases.Remove(currentProcess);
+        }
+
+        public void Update(IEffectsModule personEffects)
+        {
+            if (personEffects is null)
             {
-                currentSymptomEffect.HoldDisease(disease);
+                throw new ArgumentNullException(nameof(personEffects));
+            }
+
+            foreach (var diseaseProcess in Diseases.ToArray())
+            {
+                UpdateDeseaseProcess(personEffects, diseaseProcess);
             }
         }
     }

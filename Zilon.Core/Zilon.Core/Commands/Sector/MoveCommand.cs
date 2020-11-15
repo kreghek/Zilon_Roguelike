@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
@@ -54,37 +48,6 @@ namespace Zilon.Core.Commands
         public IList<IGraphNode> Path { get; }
 
         /// <summary>
-        /// Определяем, может ли команда выполниться.
-        /// </summary>
-        /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
-        public override bool CanExecute()
-        {
-            var nodeViewModel = GetHoverNodeViewModel();
-            if (nodeViewModel == null)
-            {
-                return false;
-            }
-
-            if (!CanExecuteForSelected())
-            {
-                return false;
-            }
-
-            CreatePath(nodeViewModel);
-            return Path.Any();
-        }
-
-        /// <summary>
-        /// Проверяет, может ли команда совершить очередное перемещение по уже найденному пути.
-        /// </summary>
-        /// <returns> Возвращает true, если команду можно повторить. </returns>
-        public bool CanRepeat()
-        {
-            var canRepeat = CanExecuteForSelected() && CheckEnemies();
-            return canRepeat;
-        }
-
-        /// <summary>
         /// Выполнение команды на перемещение и обновление игрового цикла.
         /// </summary>
         protected override void ExecuteTacticCommand()
@@ -106,16 +69,6 @@ namespace Zilon.Core.Commands
             PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
         }
 
-        private IMapNodeViewModel GetHoverNodeViewModel()
-        {
-            return PlayerState.HoverViewModel as IMapNodeViewModel;
-        }
-
-        private IMapNodeViewModel GetSelectedNodeViewModel()
-        {
-            return PlayerState.SelectedViewModel as IMapNodeViewModel;
-        }
-
         private bool CanExecuteForSelected()
         {
             var nodeViewModel = GetSelectedNodeViewModel();
@@ -133,6 +86,33 @@ namespace Zilon.Core.Commands
 
             CreatePath(nodeViewModel);
             return Path.Any();
+        }
+
+        private bool CheckEnemies()
+        {
+            var actor = PlayerState.ActiveActor.Actor;
+            var enemies = _player.SectorNode.Sector.ActorManager.Items
+                .Where(x => (x != actor) && (x.Person.Fraction != actor.Person.Fraction)).ToArray();
+
+            foreach (var enemyActor in enemies)
+            {
+                var distance = ((HexNode)actor.Node).CubeCoords.DistanceTo(((HexNode)enemyActor.Node).CubeCoords);
+
+                if (distance > 5)
+                {
+                    continue;
+                }
+
+                var isAvailable = _player.SectorNode.Sector.Map.TargetIsOnLine(actor.Node,
+                    enemyActor.Node);
+
+                if (isAvailable)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void CreatePath(IMapNodeViewModel targetNode)
@@ -161,6 +141,16 @@ namespace Zilon.Core.Commands
             RememberFoundPath(astar);
         }
 
+        private IMapNodeViewModel GetHoverNodeViewModel()
+        {
+            return PlayerState.HoverViewModel as IMapNodeViewModel;
+        }
+
+        private IMapNodeViewModel GetSelectedNodeViewModel()
+        {
+            return PlayerState.SelectedViewModel as IMapNodeViewModel;
+        }
+
         private void RememberFoundPath(AStar astar)
         {
             var foundPath = astar.GetPath().Skip(1).ToArray();
@@ -170,32 +160,35 @@ namespace Zilon.Core.Commands
             }
         }
 
-        private bool CheckEnemies()
+        /// <summary>
+        /// Определяем, может ли команда выполниться.
+        /// </summary>
+        /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
+        public override bool CanExecute()
         {
-            var actor = PlayerState.ActiveActor.Actor;
-            var enemies = _player.SectorNode.Sector.ActorManager.Items
-                .Where(x => (x != actor) && (x.Person.Fraction != actor.Person.Fraction)).ToArray();
-
-            foreach (var enemyActor in enemies)
+            var nodeViewModel = GetHoverNodeViewModel();
+            if (nodeViewModel == null)
             {
-                var distance = ((HexNode)actor.Node).CubeCoords.DistanceTo(((HexNode)enemyActor.Node).CubeCoords);
-
-                if (distance > 5)
-                {
-                    continue;
-                }
-
-                var isAvailable = _player.SectorNode.Sector.Map.TargetIsOnLine(
-                    actor.Node,
-                    enemyActor.Node);
-
-                if (isAvailable)
-                {
-                    return false;
-                }
+                return false;
             }
 
-            return true;
+            if (!CanExecuteForSelected())
+            {
+                return false;
+            }
+
+            CreatePath(nodeViewModel);
+            return Path.Any();
+        }
+
+        /// <summary>
+        /// Проверяет, может ли команда совершить очередное перемещение по уже найденному пути.
+        /// </summary>
+        /// <returns> Возвращает true, если команду можно повторить. </returns>
+        public bool CanRepeat()
+        {
+            var canRepeat = CanExecuteForSelected() && CheckEnemies();
+            return canRepeat;
         }
     }
 }

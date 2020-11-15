@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.World
@@ -16,6 +14,11 @@ namespace Zilon.Core.World
 
         public SectorNode()
         {
+        }
+
+        public override string ToString()
+        {
+            return $"[{Biome.LocationScheme}] {SectorScheme}";
         }
 
         public ISector Sector { get; private set; }
@@ -48,10 +51,5 @@ namespace Zilon.Core.World
         }
 
         public SectorNodeState State { get; private set; }
-
-        public override string ToString()
-        {
-            return $"[{Biome.LocationScheme}] {SectorScheme}";
-        }
     }
 }

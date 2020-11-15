@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Zilon.Core.Diseases
+﻿namespace Zilon.Core.Diseases
 {
     /// <summary>
     /// Объект, представляющий болезнь в игре.

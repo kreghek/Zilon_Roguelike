@@ -1,10 +1,4 @@
-﻿using FluentAssertions;
-
-using Moq;
-
-using NUnit.Framework;
-
-using Zilon.Core.Client;
+﻿using Zilon.Core.Client;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -43,38 +37,6 @@ namespace Zilon.Core.Tests.Client
         }
 
         /// <summary>
-        /// Тест проверяет, что при удалении 1 единицы ресурса из инвентаря с 1 единицей этого ресурса
-        /// на выходе будет пустой инвентярь.
-        /// </summary>
-        [Test]
-        public void Remove_RemoveResourceFromInventoryWithThisResource_PropContains()
-        {
-            // ARRANGE
-            const int inventoryCount = 1;
-            const int expectedCount = 1;
-
-            var testedScheme = new PropScheme();
-
-            var props = new IProp[]
-            {
-                new Resource(testedScheme, inventoryCount)
-            };
-
-            var realStore = CreateContainer(props);
-
-            var testedResource = new Resource(testedScheme, expectedCount);
-
-            var propTransferStore = new PropTransferStore(realStore);
-
-            // ACT
-            propTransferStore.Remove(testedResource);
-
-            // ASSERT
-            var factProps = propTransferStore.CalcActualItems();
-            factProps.Should().BeEmpty();
-        }
-
-        /// <summary>
         /// Тест проверяет, что при добавлении 1 единицы ресурса в инвентарь с 1 единицей этого ресурса
         /// на выходе будет 2 единицы этого ресурса.
         /// </summary>
@@ -108,6 +70,38 @@ namespace Zilon.Core.Tests.Client
             factProps[0].Should().BeOfType<Resource>();
             factProps[0].Scheme.Should().Be(testedScheme);
             ((Resource)factProps[0]).Count.Should().Be(expectedCount);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при удалении 1 единицы ресурса из инвентаря с 1 единицей этого ресурса
+        /// на выходе будет пустой инвентярь.
+        /// </summary>
+        [Test]
+        public void Remove_RemoveResourceFromInventoryWithThisResource_PropContains()
+        {
+            // ARRANGE
+            const int inventoryCount = 1;
+            const int expectedCount = 1;
+
+            var testedScheme = new PropScheme();
+
+            var props = new IProp[]
+            {
+                new Resource(testedScheme, inventoryCount)
+            };
+
+            var realStore = CreateContainer(props);
+
+            var testedResource = new Resource(testedScheme, expectedCount);
+
+            var propTransferStore = new PropTransferStore(realStore);
+
+            // ACT
+            propTransferStore.Remove(testedResource);
+
+            // ASSERT
+            var factProps = propTransferStore.CalcActualItems();
+            factProps.Should().BeEmpty();
         }
 
         private static IPropStore CreateContainer(IProp[] props)

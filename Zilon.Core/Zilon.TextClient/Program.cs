@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Core;
-using Zilon.Core.Client;
-using Zilon.Core.Commands;
-using Zilon.Core.PersonModules;
-using Zilon.Core.Players;
-using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.World;
 
 namespace Zilon.TextClient
 {
@@ -44,13 +32,13 @@ namespace Zilon.TextClient
             var gameLoop = new GameLoop(globe);
             var uiState = scope.ServiceProvider.GetRequiredService<ISectorUiState>();
             var playerActor = (from sectorNode in globe.SectorNodes
-                               from actor in sectorNode.Sector.ActorManager.Items
-                               where actor.Person == player.MainPerson
-                               select actor).SingleOrDefault();
+                from actor in sectorNode.Sector.ActorManager.Items
+                where actor.Person == player.MainPerson
+                select actor).SingleOrDefault();
             var playerActorSectorNode = (from sectorNode in globe.SectorNodes
-                                         from actor in sectorNode.Sector.ActorManager.Items
-                                         where actor.Person == player.MainPerson
-                                         select sectorNode).SingleOrDefault();
+                from actor in sectorNode.Sector.ActorManager.Items
+                where actor.Person == player.MainPerson
+                select sectorNode).SingleOrDefault();
 
             // This is code smells. It is not good settings
             player.BindPerson(globe, playerActor.Person);

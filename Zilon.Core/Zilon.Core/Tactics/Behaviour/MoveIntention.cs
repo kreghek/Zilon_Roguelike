@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -20,18 +18,6 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IGraphNode TargetNode { get; }
 
-        public IActorTask CreateActorTask([NotNull] IActor actor)
-        {
-            return CreateTaskInner(actor);
-        }
-
-        private MoveTask CreateTaskInner(IActor actor)
-        {
-            var taskContext = new ActorTaskContext(_sector);
-
-            return CreateMoveTask(actor, taskContext);
-        }
-
         private MoveTask CreateMoveTask(IActor actor, ActorTaskContext taskContext)
         {
             var movingModule = actor.Person.GetModuleSafe<IMovingModule>();
@@ -42,6 +28,18 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var moveCost = movingModule.CalculateCost();
             return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map, moveCost);
+        }
+
+        private MoveTask CreateTaskInner(IActor actor)
+        {
+            var taskContext = new ActorTaskContext(_sector);
+
+            return CreateMoveTask(actor, taskContext);
+        }
+
+        public IActorTask CreateActorTask([NotNull] IActor actor)
+        {
+            return CreateTaskInner(actor);
         }
     }
 }

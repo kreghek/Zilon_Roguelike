@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Zilon.Core.MapGenerators
+﻿namespace Zilon.Core.MapGenerators
 {
     public interface IStaticObstaclesGenerator
     {

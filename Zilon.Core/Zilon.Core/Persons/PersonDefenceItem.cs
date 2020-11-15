@@ -10,9 +10,9 @@ namespace Zilon.Core.Persons
             Level = level;
         }
 
-        public DefenceType Type { get; }
-
         public PersonRuleLevel Level { get; }
+
+        public DefenceType Type { get; }
 
         public override string ToString()
         {

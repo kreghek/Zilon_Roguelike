@@ -1,9 +1,6 @@
 ﻿using System;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using Zilon.Bot.Players.NetCore;
-using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Players;
 using Zilon.Core.Scoring;

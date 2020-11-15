@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-
-using FluentAssertions;
-
-using NUnit.Framework;
 
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
@@ -64,12 +58,6 @@ namespace Zilon.Core.Tests.MapGenerators
             act.Should().NotThrow();
         }
 
-        private static bool HasEdge(IMap map, HexNode node, HexNode neighbor)
-        {
-            var neighbors = map.GetNext(node);
-            return neighbors.Contains(neighbor);
-        }
-
         private void AssertEdge(
             IMap map,
             int offsetX1,
@@ -81,6 +69,12 @@ namespace Zilon.Core.Tests.MapGenerators
             var node2 = map.Nodes.SelectByHexCoords(offsetX2, offsetY2);
             var hasEdge = HasEdge(map, node1, node2);
             hasEdge.Should().BeTrue();
+        }
+
+        private static bool HasEdge(IMap map, HexNode node, HexNode neighbor)
+        {
+            var neighbors = map.GetNext(node);
+            return neighbors.Contains(neighbor);
         }
     }
 }

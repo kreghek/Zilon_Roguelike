@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
 {
@@ -20,15 +15,15 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Цель действия.
-        /// </summary>
-        [PublicAPI]
-        public IAttackTarget Target { get; }
-
-        /// <summary>
         /// Совершённое над целью действие.
         /// </summary>
         [PublicAPI]
         public ITacticalAct TacticalAct { get; }
+
+        /// <summary>
+        /// Цель действия.
+        /// </summary>
+        [PublicAPI]
+        public IAttackTarget Target { get; }
     }
 }

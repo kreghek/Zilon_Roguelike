@@ -1,12 +1,16 @@
-﻿using System.Threading.Tasks;
-
-namespace Zilon.Core.Tactics.Behaviour
+﻿namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Источник задач для актёров (управление пользователя или AI).
     /// </summary>
     public interface IActorTaskSource<TContext>
     {
+        /// <summary>
+        /// Calle then task cancelled/ Example, when actor removed from sector.
+        /// </summary>
+        /// <param name="cencelledActorTask"></param>
+        void CancelTask(IActorTask cencelledActorTask);
+
         /// <summary>
         /// Возвращает набор задач для указанного актёра.
         /// </summary>
@@ -21,14 +25,8 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </remarks>
         Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context);
 
-        void ProcessTaskExecuted(IActorTask actorTask);
-
         void ProcessTaskComplete(IActorTask actorTask);
 
-        /// <summary>
-        /// Calle then task cancelled/ Example, when actor removed from sector.
-        /// </summary>
-        /// <param name="cencelledActorTask"></param>
-        void CancelTask(IActorTask cencelledActorTask);
+        void ProcessTaskExecuted(IActorTask actorTask);
     }
 }

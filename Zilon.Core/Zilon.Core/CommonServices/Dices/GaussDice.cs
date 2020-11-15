@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Zilon.Core.CommonServices.Dices
+﻿namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
     /// Генератор случайных числе Парка-Миллера.
@@ -27,11 +25,10 @@ namespace Zilon.Core.CommonServices.Dices
         {
         }
 
-        public int Roll(int n)
+        protected virtual double ProcessRandStdNormal(double randStdNormal, double mean)
         {
-            var rand = GetNext(0.0, 1.0);
-            var roll = DiceValuesHelper.MapDoubleToDiceEdge(rand, n);
-            return roll;
+            // В основной реализации ничего не делаем.
+            return randStdNormal;
         }
 
         private double GetNext(double min, double max)
@@ -58,10 +55,11 @@ namespace Zilon.Core.CommonServices.Dices
             return randTotal;
         }
 
-        protected virtual double ProcessRandStdNormal(double randStdNormal, double mean)
+        public int Roll(int n)
         {
-            // В основной реализации ничего не делаем.
-            return randStdNormal;
+            var rand = GetNext(0.0, 1.0);
+            var roll = DiceValuesHelper.MapDoubleToDiceEdge(rand, n);
+            return roll;
         }
     }
 }

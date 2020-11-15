@@ -1,13 +1,4 @@
 ﻿using System;
-using System.Linq;
-
-using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
-
-using NUnit.Framework;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
@@ -15,7 +6,6 @@ using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Commands
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Zilon.Bot.Sdk;
-using Zilon.Core.PersonModules;
+﻿using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -24,9 +18,9 @@ namespace Zilon.Emulation.Common
             _globeInitializer = globeInitializer;
         }
 
-        protected IServiceScope ServiceScope { get; set; }
-
         protected BotSettings BotSettings { get; }
+
+        protected IServiceScope ServiceScope { get; set; }
 
         public async Task<IGlobe> CreateGlobeAsync()
         {

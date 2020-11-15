@@ -2,14 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using FluentAssertions;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
-
-using NUnit.Framework;
-
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Persons;
@@ -17,7 +9,6 @@ using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Commands
 {
@@ -40,45 +31,6 @@ namespace Zilon.Core.Tests.Commands
 
             // ASSERT
             canExecute.Should().Be(true);
-        }
-
-        /// <summary>
-        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
-        /// </summary>
-        [Test]
-        public void ExecuteTest()
-        {
-            // ARRANGE
-            var command = ServiceProvider.GetRequiredService<MoveCommand>();
-            var humanTaskSourceMock =
-                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
-            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
-
-            // ACT
-            command.Execute();
-
-            // ASSERT
-            var target = ((IMapNodeViewModel)playerState.HoverViewModel).Node;
-            humanTaskSourceMock.Verify(x => x.Intent(It.Is<MoveIntention>(intention => intention.TargetNode == target),
-                It.IsAny<IActor>()));
-        }
-
-        /// <summary>
-        /// Тест проверяет, что автоперемещение работает, если в зоне видимости нет монстров.
-        /// </summary>
-        [Test]
-        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
-            Justification = "Naming convention for tests")]
-        public void CanRepeate_NoMonsters_ReturnsTrue()
-        {
-            // ARRANGE
-            var command = ServiceProvider.GetRequiredService<MoveCommand>();
-
-            // ACT
-            var canRepeat = command.CanRepeat();
-
-            // ASSERT
-            canRepeat.Should().BeTrue();
         }
 
         /// <summary>
@@ -143,6 +95,45 @@ namespace Zilon.Core.Tests.Commands
 
             // ASSERT
             canRepeat.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что автоперемещение работает, если в зоне видимости нет монстров.
+        /// </summary>
+        [Test]
+        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+            Justification = "Naming convention for tests")]
+        public void CanRepeate_NoMonsters_ReturnsTrue()
+        {
+            // ARRANGE
+            var command = ServiceProvider.GetRequiredService<MoveCommand>();
+
+            // ACT
+            var canRepeat = command.CanRepeat();
+
+            // ASSERT
+            canRepeat.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
+        /// </summary>
+        [Test]
+        public void ExecuteTest()
+        {
+            // ARRANGE
+            var command = ServiceProvider.GetRequiredService<MoveCommand>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
+
+            // ACT
+            command.Execute();
+
+            // ASSERT
+            var target = ((IMapNodeViewModel)playerState.HoverViewModel).Node;
+            humanTaskSourceMock.Verify(x => x.Intent(It.Is<MoveIntention>(intention => intention.TargetNode == target),
+                It.IsAny<IActor>()));
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)

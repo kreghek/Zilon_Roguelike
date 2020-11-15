@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-using Zilon.Core.Components;
+﻿using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
@@ -17,10 +15,10 @@ namespace Zilon.Core.Schemes
             Direction = direction;
         }
 
-        public EquipCommonRuleType Type { get; }
+        public PersonRuleDirection Direction { get; }
 
         public PersonRuleLevel Level { get; }
 
-        public PersonRuleDirection Direction { get; }
+        public EquipCommonRuleType Type { get; }
     }
 }

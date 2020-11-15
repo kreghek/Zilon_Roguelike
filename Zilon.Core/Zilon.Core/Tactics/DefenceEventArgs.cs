@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
 {
@@ -25,6 +20,12 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
+        /// Фактический бросок, который был выполнен для пробития обороны.
+        /// </summary>
+        [PublicAPI]
+        public int FactToHitRoll { get; }
+
+        /// <summary>
         /// Оборона, которая была использована.
         /// </summary>
         [PublicAPI]
@@ -35,11 +36,5 @@ namespace Zilon.Core.Tactics
         /// </summary>
         [PublicAPI]
         public int SuccessToHitRoll { get; }
-
-        /// <summary>
-        /// Фактический бросок, который был выполнен для пробития обороны.
-        /// </summary>
-        [PublicAPI]
-        public int FactToHitRoll { get; }
     }
 }

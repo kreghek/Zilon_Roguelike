@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-using JetBrains.Annotations;
-
-using Microsoft.Extensions.DependencyInjection;
-
-using Moq;
 
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
@@ -25,7 +18,6 @@ using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Tests.Common;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Specs.Contexts
@@ -44,94 +36,26 @@ namespace Zilon.Core.Specs.Contexts
             Configure(serviceProvider);
         }
 
-        public IServiceProvider ServiceProvider { get; }
+        public IGlobe Globe { get; private set; }
 
         public List<IActorInteractionEvent> RaisedActorInteractionEvents { get; }
 
         public RegisterServices RegisterServices { get; }
 
-        public IGlobe Globe { get; private set; }
+        public IServiceProvider ServiceProvider { get; }
 
-        private void Configure(IServiceProvider serviceProvider)
+        public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
-            ConfigureEventBus(serviceProvider);
+            var sector = GetCurrentGlobeFirstSector();
 
-            RegisterManager.ConfigureAuxServices(serviceProvider);
-        }
+            var node = sector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
+            var chest = new FixedPropChest(Array.Empty<IProp>());
+            var staticObject = new StaticObject(node, chest.Purpose, id);
+            staticObject.AddModule<IPropContainer>(chest);
 
-        private void ConfigureEventBus(IServiceProvider serviceProvider)
-        {
-            var eventMessageBus = serviceProvider.GetRequiredService<IActorInteractionBus>();
-            eventMessageBus.NewEvent += EventMessageBus_NewEvent;
-        }
+            sector.StaticObjectManager.Add(staticObject);
 
-        private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
-        {
-            RaisedActorInteractionEvents.Add(e.ActorInteractionEvent);
-        }
-
-        public async Task CreateGlobeAsync(int startMapSize)
-        {
-            var mapFactory = (FuncMapFactory)ServiceProvider.GetRequiredService<IMapFactory>();
-            mapFactory.SetFunc(() =>
-            {
-                ISectorMap map = new SectorGraphMap<HexNode, HexMapNodeDistanceCalculator>();
-
-                MapFiller.FillSquareMap(map, startMapSize);
-
-                var mapRegion = new MapRegion(1, map.Nodes.ToArray())
-                {
-                    IsStart = true,
-                    IsOut = true,
-                    ExitNodes = new[]
-                    {
-                        map.Nodes.Last()
-                    }
-                };
-
-                map.Regions.Add(mapRegion);
-
-                return Task.FromResult(map);
-            });
-
-            var globeInitialzer = ServiceProvider.GetRequiredService<IGlobeInitializer>();
-            var globe = await globeInitialzer.CreateGlobeAsync("intro").ConfigureAwait(false);
-            Globe = globe;
-        }
-
-        public ISector GetCurrentGlobeFirstSector()
-        {
-            var sector = Globe.SectorNodes.First().Sector;
-            return sector;
-        }
-
-        public void AddWall(
-            int x1,
-            int y1,
-            int x2,
-            int y2)
-        {
-            var map = GetCurrentGlobeFirstSector().Map;
-
-            map.RemoveEdge(x1, y1, x2, y2);
-        }
-
-        public IActor GetActiveActor()
-        {
-            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
-            var actor = playerState.ActiveActor.Actor;
-            return actor;
-        }
-
-        public Equipment CreateEquipment(string propSid)
-        {
-            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
-            var propFactory = ServiceProvider.GetRequiredService<IPropFactory>();
-
-            var propScheme = schemeService.GetScheme<IPropScheme>(propSid);
-
-            var equipment = propFactory.CreateEquipment(propScheme);
-            return equipment;
+            return chest;
         }
 
         public void AddHumanActor(string personSid, ISector sector, OffsetCoords startCoords)
@@ -183,20 +107,6 @@ namespace Zilon.Core.Specs.Contexts
             actorManager.Add(monster);
         }
 
-        public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
-        {
-            var sector = GetCurrentGlobeFirstSector();
-
-            var node = sector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
-            var chest = new FixedPropChest(Array.Empty<IProp>());
-            var staticObject = new StaticObject(node, chest.Purpose, id);
-            staticObject.AddModule<IPropContainer>(chest);
-
-            sector.StaticObjectManager.Add(staticObject);
-
-            return chest;
-        }
-
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
         {
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
@@ -218,6 +128,70 @@ namespace Zilon.Core.Specs.Contexts
             actor.Person.GetModule<IInventoryModule>().Add(resource);
         }
 
+        public void AddWall(
+            int x1,
+            int y1,
+            int x2,
+            int y2)
+        {
+            var map = GetCurrentGlobeFirstSector().Map;
+
+            map.RemoveEdge(x1, y1, x2, y2);
+        }
+
+        public Equipment CreateEquipment(string propSid)
+        {
+            var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
+            var propFactory = ServiceProvider.GetRequiredService<IPropFactory>();
+
+            var propScheme = schemeService.GetScheme<IPropScheme>(propSid);
+
+            var equipment = propFactory.CreateEquipment(propScheme);
+            return equipment;
+        }
+
+        public async Task CreateGlobeAsync(int startMapSize)
+        {
+            var mapFactory = (FuncMapFactory)ServiceProvider.GetRequiredService<IMapFactory>();
+            mapFactory.SetFunc(() =>
+            {
+                ISectorMap map = new SectorGraphMap<HexNode, HexMapNodeDistanceCalculator>();
+
+                MapFiller.FillSquareMap(map, startMapSize);
+
+                var mapRegion = new MapRegion(1, map.Nodes.ToArray())
+                {
+                    IsStart = true,
+                    IsOut = true,
+                    ExitNodes = new[]
+                    {
+                        map.Nodes.Last()
+                    }
+                };
+
+                map.Regions.Add(mapRegion);
+
+                return Task.FromResult(map);
+            });
+
+            var globeInitialzer = ServiceProvider.GetRequiredService<IGlobeInitializer>();
+            var globe = await globeInitialzer.CreateGlobeAsync("intro").ConfigureAwait(false);
+            Globe = globe;
+        }
+
+        public IActor GetActiveActor()
+        {
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
+            var actor = playerState.ActiveActor.Actor;
+            return actor;
+        }
+
+        public ISector GetCurrentGlobeFirstSector()
+        {
+            var sector = Globe.SectorNodes.First().Sector;
+            return sector;
+        }
+
         public IActor GetMonsterById(int id)
         {
             var sector = GetCurrentGlobeFirstSector();
@@ -228,6 +202,19 @@ namespace Zilon.Core.Specs.Contexts
                 .SingleOrDefault(x => x.Person is MonsterPerson && (x.Person.Id == id));
 
             return monster;
+        }
+
+        private void Configure(IServiceProvider serviceProvider)
+        {
+            ConfigureEventBus(serviceProvider);
+
+            RegisterManager.ConfigureAuxServices(serviceProvider);
+        }
+
+        private void ConfigureEventBus(IServiceProvider serviceProvider)
+        {
+            var eventMessageBus = serviceProvider.GetRequiredService<IActorInteractionBus>();
+            eventMessageBus.NewEvent += EventMessageBus_NewEvent;
         }
 
         private IActor CreateHumanActor(
@@ -258,6 +245,11 @@ namespace Zilon.Core.Specs.Contexts
             var actor = new Actor(monsterPerson, taskSource, startNode);
 
             return actor;
+        }
+
+        private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+        {
+            RaisedActorInteractionEvents.Add(e.ActorInteractionEvent);
         }
 
         public class VisualEventInfo

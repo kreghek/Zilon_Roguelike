@@ -1,12 +1,16 @@
-﻿using System;
-
-namespace Zilon.Core.Commands
+﻿namespace Zilon.Core.Commands
 {
     /// <summary>
     /// Базовая команда для команд, связанных с изменением тактической обстановки в бою.
     /// </summary>
     public abstract class TacticCommandBase : ICommand
     {
+        /// <summary>
+        /// Выполнение тактических изменений.
+        /// </summary>
+        /// <returns>Возвращает реакцию на изменения.</returns>
+        protected abstract void ExecuteTacticCommand();
+
         public abstract bool CanExecute();
 
         public void Execute()
@@ -20,11 +24,5 @@ namespace Zilon.Core.Commands
 
             ExecuteTacticCommand();
         }
-
-        /// <summary>
-        /// Выполнение тактических изменений.
-        /// </summary>
-        /// <returns>Возвращает реакцию на изменения.</returns>
-        protected abstract void ExecuteTacticCommand();
     }
 }

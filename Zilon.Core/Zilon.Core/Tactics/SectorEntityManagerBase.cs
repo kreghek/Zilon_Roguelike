@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Zilon.Core.Tactics
+﻿namespace Zilon.Core.Tactics
 {
     /// <summary>
     /// Базовая реализация менеджера сущностей сектора.
@@ -19,6 +15,18 @@ namespace Zilon.Core.Tactics
         protected SectorEntityManagerBase()
         {
             _items = new List<TSectorEntity>();
+        }
+
+        private void DoAdded(params TSectorEntity[] entities)
+        {
+            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
+            Added?.Invoke(this, args);
+        }
+
+        private void DoRemoved(params TSectorEntity[] entities)
+        {
+            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
+            Removed?.Invoke(this, args);
         }
 
         public IEnumerable<TSectorEntity> Items => _items;
@@ -59,17 +67,5 @@ namespace Zilon.Core.Tactics
         public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Added;
 
         public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Removed;
-
-        private void DoAdded(params TSectorEntity[] entities)
-        {
-            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
-            Added?.Invoke(this, args);
-        }
-
-        private void DoRemoved(params TSectorEntity[] entities)
-        {
-            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
-            Removed?.Invoke(this, args);
-        }
     }
 }

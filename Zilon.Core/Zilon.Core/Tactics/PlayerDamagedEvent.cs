@@ -1,6 +1,4 @@
-﻿using System;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Tactics
@@ -13,9 +11,9 @@ namespace Zilon.Core.Tactics
             Damager = damager ?? throw new ArgumentNullException(nameof(damager));
         }
 
-        public ITacticalAct TacticalAct { get; }
-
         public IActor Damager { get; }
+
+        public ITacticalAct TacticalAct { get; }
 
         public string Key => $"{Damager.Person}-{TacticalAct}";
 

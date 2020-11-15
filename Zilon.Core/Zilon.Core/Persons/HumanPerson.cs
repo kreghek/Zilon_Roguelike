@@ -1,8 +1,4 @@
-﻿using System;
-
-using JetBrains.Annotations;
-
-using Zilon.Core.Localization;
+﻿using Zilon.Core.Localization;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 
@@ -31,12 +27,12 @@ namespace Zilon.Core.Persons
         /// </summary>
         public ILocalizedString PersonEquipmentTemplate { get; set; }
 
-        /// <inheritdoc/>
-        public IPersonScheme Scheme { get; }
+        public override PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
-        public override PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
+        /// <inheritdoc/>
+        public IPersonScheme Scheme { get; }
 
         /// <inheritdoc/>
         public override string ToString()

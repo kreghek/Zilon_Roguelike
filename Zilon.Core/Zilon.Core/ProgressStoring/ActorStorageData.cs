@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -8,11 +6,11 @@ namespace Zilon.Core.ProgressStoring
 {
     public sealed class ActorStorageData
     {
+        public OffsetCoords Coords { get; set; }
+
         public string PersonId { get; set; }
 
         public string SectorId { get; set; }
-
-        public OffsetCoords Coords { get; set; }
 
         public static ActorStorageData Create(
             IActor actor,

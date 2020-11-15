@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using JetBrains.Annotations;
-
-namespace Zilon.Core.Props
+﻿namespace Zilon.Core.Props
 {
     /// <summary>
     /// Аргументы событий, связанных с инвентарём.
@@ -13,7 +6,7 @@ namespace Zilon.Core.Props
     public class PropStoreEventArgs
     {
         [ExcludeFromCodeCoverage]
-        public PropStoreEventArgs([NotNull][ItemNotNull] IEnumerable<IProp> props)
+        public PropStoreEventArgs([NotNull] [ItemNotNull] IEnumerable<IProp> props)
         {
             if (props == null)
             {
@@ -24,7 +17,7 @@ namespace Zilon.Core.Props
         }
 
         [ExcludeFromCodeCoverage]
-        public PropStoreEventArgs([NotNull][ItemNotNull] params IProp[] props)
+        public PropStoreEventArgs([NotNull] [ItemNotNull] params IProp[] props)
         {
             Props = props ?? throw new ArgumentNullException(nameof(props));
         }

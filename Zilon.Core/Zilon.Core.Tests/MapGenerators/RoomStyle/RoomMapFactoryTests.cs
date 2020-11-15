@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-
-using FluentAssertions;
-
-using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
@@ -19,28 +14,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
     [Parallelizable(ParallelScope.All)]
     public class RoomMapFactoryTests
     {
-        /// <summary>
-        /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
-        /// </summary>
-        [Test]
-        public void Create_SimpleSnakeMaze_NoExceptions()
-        {
-            var roomGenerator = new TestSnakeRoomGenerator();
-            var factory = new RoomMapFactory(roomGenerator);
-            var sectorScheme = CreateSectorScheme();
-
-            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
-
-            // ACT
-            Func<Task> act = async () =>
-            {
-                await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
-            };
-
-            // ARRANGE
-            act.Should().NotThrow();
-        }
-
         /// <summary>
         /// Тест проверяет, что произвольная карта строится без ошибок. И за допустимое время.
         /// </summary>
@@ -64,10 +37,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
 
             // ACT
-            Func<Task> act = async () =>
-            {
-                await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
-            };
+            Func<Task> act = async () => { await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false); };
 
             // ARRANGE
             act.Should().NotThrow();
@@ -102,14 +72,32 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             }
         }
 
+        /// <summary>
+        /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
+        /// </summary>
+        [Test]
+        public void Create_SimpleSnakeMaze_NoExceptions()
+        {
+            var roomGenerator = new TestSnakeRoomGenerator();
+            var factory = new RoomMapFactory(roomGenerator);
+            var sectorScheme = CreateSectorScheme();
+
+            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
+
+            // ACT
+            Func<Task> act = async () => { await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false); };
+
+            // ARRANGE
+            act.Should().NotThrow();
+        }
+
         private static ISectorSubScheme CreateSectorScheme()
         {
             return new TestSectorSubScheme
             {
                 MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
                 {
-                    RegionCount = 20,
-                    RegionSize = 20
+                    RegionCount = 20, RegionSize = 20
                 }
             };
         }

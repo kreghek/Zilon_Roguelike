@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Core.Graphs;
+﻿using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
 using Zilon.Core.Persons;
 
@@ -20,6 +16,35 @@ namespace Zilon.Core.Tactics.Spatial
             Regions = new List<MapRegion>();
 
             _nodeBlockers = new Dictionary<IGraphNode, IList<IPassMapBlocker>>();
+        }
+
+        private IEnumerable<IGraphNode> GetActorTestTargetNodes(IActor actor, IGraphNode baseTargetNode)
+        {
+            yield return baseTargetNode;
+
+            if (actor.Person.PhysicalSize == PhysicalSizePattern.Size7)
+            {
+                var neighbors = GetNext(baseTargetNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
+                }
+            }
+        }
+
+        private bool IsNodeAvailableForActor(IGraphNode targetNode, IActor actor)
+        {
+            if (!_nodeBlockers.TryGetValue(targetNode, out IList<IPassMapBlocker> blockers))
+            {
+                return true;
+            }
+
+            if (blockers.All(x => x == actor))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -197,34 +222,5 @@ namespace Zilon.Core.Tactics.Spatial
 
         /// <inheritdoc/>
         public abstract int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode);
-
-        private IEnumerable<IGraphNode> GetActorTestTargetNodes(IActor actor, IGraphNode baseTargetNode)
-        {
-            yield return baseTargetNode;
-
-            if (actor.Person.PhysicalSize == PhysicalSizePattern.Size7)
-            {
-                var neighbors = GetNext(baseTargetNode);
-                foreach (var neighbor in neighbors)
-                {
-                    yield return neighbor;
-                }
-            }
-        }
-
-        private bool IsNodeAvailableForActor(IGraphNode targetNode, IActor actor)
-        {
-            if (!_nodeBlockers.TryGetValue(targetNode, out IList<IPassMapBlocker> blockers))
-            {
-                return true;
-            }
-
-            if (blockers.All(x => x == actor))
-            {
-                return true;
-            }
-
-            return false;
-        }
     }
 }

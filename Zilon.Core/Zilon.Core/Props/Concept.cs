@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Zilon.Core.Schemes;
+﻿using Zilon.Core.Schemes;
 
 // ReSharper disable All
 // Убрать отключение инспекций после разработки крафта

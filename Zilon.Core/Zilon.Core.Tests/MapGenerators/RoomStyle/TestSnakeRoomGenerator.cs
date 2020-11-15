@@ -21,33 +21,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             };
         }
 
-        public override IEnumerable<Room> GenerateRoomsInGrid(
-            int roomCount,
-            int roomMinSize,
-            int roomMaxSize,
-            IEnumerable<RoomTransition> availableTransitions)
-        {
-            var rooms = new List<Room>();
-
-            for (var i = 0; i < _rolledOffsetCoords.Length; i++)
-            {
-                var room = new Room
-                {
-                    PositionX = _rolledOffsetCoords[i].X,
-                    PositionY = _rolledOffsetCoords[i].Y
-                };
-
-                var rolledSize = new Size(3, 3);
-
-                room.Width = rolledSize.Width + 2;
-                room.Height = rolledSize.Height + 2;
-
-                rooms.Add(room);
-            }
-
-            return rooms;
-        }
-
         public override void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
         {
             var roomArray = rooms.ToArray();
@@ -63,6 +36,32 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             {
                 CreateOneRoomNodes(map, edgeHash, room);
             }
+        }
+
+        public override IEnumerable<Room> GenerateRoomsInGrid(
+            int roomCount,
+            int roomMinSize,
+            int roomMaxSize,
+            IEnumerable<RoomTransition> availableTransitions)
+        {
+            var rooms = new List<Room>();
+
+            for (var i = 0; i < _rolledOffsetCoords.Length; i++)
+            {
+                var room = new Room
+                {
+                    PositionX = _rolledOffsetCoords[i].X, PositionY = _rolledOffsetCoords[i].Y
+                };
+
+                var rolledSize = new Size(3, 3);
+
+                room.Width = rolledSize.Width + 2;
+                room.Height = rolledSize.Height + 2;
+
+                rooms.Add(room);
+            }
+
+            return rooms;
         }
 
         private void CreateOneRoomNodes(IMap map, HashSet<string> edgeHash, Room room)
