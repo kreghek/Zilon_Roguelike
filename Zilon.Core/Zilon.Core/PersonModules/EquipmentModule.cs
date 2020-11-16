@@ -11,7 +11,7 @@ namespace Zilon.Core.PersonModules
 {
     public class EquipmentModule : EquipmentModuleBase
     {
-        public EquipmentModule([NotNull] [ItemNotNull] IEnumerable<PersonSlotSubScheme> slots) : base(slots)
+        public EquipmentModule([NotNull][ItemNotNull] IEnumerable<PersonSlotSubScheme> slots) : base(slots)
         {
         }
 
