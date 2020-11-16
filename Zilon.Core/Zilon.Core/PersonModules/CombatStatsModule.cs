@@ -179,6 +179,18 @@ namespace Zilon.Core.PersonModules
 
                 case PersonRuleType.Undefined:
                     throw new InvalidOperationException("Undefined rule");
+
+                case PersonRuleType.Health:
+                case PersonRuleType.Damage:
+                case PersonRuleType.ToHit:
+                case PersonRuleType.HealthIfNoBody:
+                case PersonRuleType.HungerResistance:
+                case PersonRuleType.ThristResistance:
+                    // This perk rule is not impact to combat stats.
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Rule {rule.Type} unknown");
             }
         }
 

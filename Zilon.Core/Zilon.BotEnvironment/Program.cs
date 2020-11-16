@@ -10,15 +10,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Sdk;
 using Zilon.CommonUtilities;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
-using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
-    internal class Program
+    internal static class Program
     {
         private const string SERVER_RUN_ARG = "ServerRun";
         private const string SCORE_PREFFIX_ARG = "ScorePreffix";

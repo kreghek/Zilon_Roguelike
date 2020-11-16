@@ -240,7 +240,17 @@ namespace Zilon.Core.PersonModules
                     break;
 
                 case PersonRuleType.Undefined:
-                    throw new InvalidOperationException("Правило не определно.");
+                    throw new InvalidOperationException("Rule is not defined.");
+
+                case PersonRuleType.Health:
+                case PersonRuleType.HealthIfNoBody:
+                case PersonRuleType.HungerResistance:
+                case PersonRuleType.ThristResistance:
+                    // This perk rule is not influence to combat.
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Rule {rule.Type} unknown.");
             }
         }
 

@@ -47,11 +47,9 @@ namespace Zilon.Core
         /// <param name="totalLevel">Суммарный уровень.</param>
         /// <param name="level">Уровень перка.</param>
         /// <param name="subLevel">Подуровень перка.</param>
-        public static void ConvertTotalLevel(
+        public static PerkSchemeLevel ConvertTotalLevel(
             IPerkScheme perkScheme,
-            int totalLevel,
-            out int? level,
-            out int? subLevel)
+            int totalLevel)
         {
             if (perkScheme is null)
             {
@@ -60,13 +58,13 @@ namespace Zilon.Core
 
             var levelRemains = totalLevel;
             var currentLevelPointer = 0;
+            int? level;
+            int? subLevel;
             do
             {
                 if (currentLevelPointer >= perkScheme.Levels.Length)
                 {
-                    level = null;
-                    subLevel = null;
-                    return;
+                    return new PerkSchemeLevel(level: null, subLevel: null);
                 }
 
                 var levelScheme = perkScheme.Levels[currentLevelPointer];
@@ -77,6 +75,8 @@ namespace Zilon.Core
                 var currentLevelCapability = levelScheme.MaxValue;
                 levelRemains -= currentLevelCapability;
             } while (levelRemains >= 0);
+
+            return new PerkSchemeLevel(level, subLevel);
         }
 
         public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
@@ -108,5 +108,21 @@ namespace Zilon.Core
 
             return new PerkLevel(currentLevel, currentSubLevel);
         }
+    }
+
+    /// <summary>
+    /// Scheme level and sublevel in one structure.
+    /// </summary>
+    public class PerkSchemeLevel
+    {
+        public PerkSchemeLevel(int? level, int? subLevel)
+        {
+            Level = level;
+            SubLevel = subLevel;
+        }
+
+        public int? Level { get; }
+
+        public int? SubLevel { get; }
     }
 }

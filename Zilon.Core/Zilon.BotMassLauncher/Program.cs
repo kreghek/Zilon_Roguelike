@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Zilon.BotMassLauncher
 {
-    internal class Program
+    internal static class Program
     {
         private static string _pathToEnv;
         private static int _launchCount;
