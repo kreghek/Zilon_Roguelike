@@ -34,7 +34,8 @@ namespace Zilon.Core.Tests.Schemes
             };
 
             // ASSERT
-            createService.Should().NotThrow();
+            createService.Should()
+                         .NotThrow();
         }
 
         /// <summary>
@@ -96,9 +97,10 @@ namespace Zilon.Core.Tests.Schemes
             // ASSERT
             foreach (var act in actList)
             {
-                act.Should().Throw<TargetInvocationException>()
-                    .WithInnerException<InvalidOperationException>()
-                    .WithInnerException<KeyNotFoundException>();
+                act.Should()
+                   .Throw<TargetInvocationException>()
+                   .WithInnerException<InvalidOperationException>()
+                   .WithInnerException<KeyNotFoundException>();
             }
         }
 
@@ -140,7 +142,8 @@ namespace Zilon.Core.Tests.Schemes
             // ASSERT
             foreach (var act in actList)
             {
-                act.Should().NotThrow();
+                act.Should()
+                   .NotThrow();
             }
         }
 
@@ -165,7 +168,8 @@ namespace Zilon.Core.Tests.Schemes
                 if (prop.IsMimicFor != null)
                 {
                     var realScheme = schemeService.GetScheme<IPropScheme>(prop.IsMimicFor);
-                    realScheme.Should().NotBeNull();
+                    realScheme.Should()
+                              .NotBeNull();
                 }
             }
         }
@@ -186,7 +190,8 @@ namespace Zilon.Core.Tests.Schemes
                 }
             };
 
-            act.Should().NotThrow();
+            act.Should()
+               .NotThrow();
         }
 
         private static ISchemeService CreateSchemeService()
@@ -207,8 +212,9 @@ namespace Zilon.Core.Tests.Schemes
             var assembly = typeof(IScheme).Assembly;
             var allTypes = assembly.GetTypes();
             var schemeTypes = allTypes
-                .Where(x => typeof(IScheme).IsAssignableFrom(x) &&
-                            x.IsInterface && (x != typeof(IScheme))).ToArray();
+                              .Where(x => typeof(IScheme).IsAssignableFrom(x) &&
+                                          x.IsInterface && (x != typeof(IScheme)))
+                              .ToArray();
             return schemeTypes;
         }
     }

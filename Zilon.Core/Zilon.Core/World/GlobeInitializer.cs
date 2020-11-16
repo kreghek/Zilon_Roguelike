@@ -46,23 +46,25 @@ namespace Zilon.Core.World
             var globe = new Globe(_globeTransitionHandler);
 
             var startLocation = _schemeService.GetScheme<ILocationScheme>(startLocationSchemeSid);
-            var startBiom = await _biomeInitializer.InitBiomeAsync(startLocation).ConfigureAwait(false);
+            var startBiom = await _biomeInitializer.InitBiomeAsync(startLocation)
+                                                   .ConfigureAwait(false);
             var startSectorNode = startBiom.Sectors.First(x => x.State == SectorNodeState.SectorMaterialized);
 
             globe.AddSectorNode(startSectorNode);
 
             // Добавляем стартовых персонажей-пилигримов
 
-            var startPersons = await _personInitializer.CreateStartPersonsAsync(globe).ConfigureAwait(false);
+            var startPersons = await _personInitializer.CreateStartPersonsAsync(globe)
+                                                       .ConfigureAwait(false);
 
             var sector = startSectorNode.Sector;
             var personCounter = 0;
             foreach (var person in startPersons)
             {
                 var startNode = sector.Map
-                    .Nodes
-                    .Skip(personCounter)
-                    .First();
+                                      .Nodes
+                                      .Skip(personCounter)
+                                      .First();
                 var actor = CreateActor(person, startNode, _actorTaskSource);
 
                 sector.ActorManager.Add(actor);

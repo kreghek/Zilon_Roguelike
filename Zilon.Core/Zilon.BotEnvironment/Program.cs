@@ -58,7 +58,8 @@ namespace Zilon.BotEnvironment
         {
             foreach (Type type in assembly.GetTypes())
             {
-                if (type.GetCustomAttributes(typeof(TAttribute), true).Length > 0)
+                if (type.GetCustomAttributes(typeof(TAttribute), true)
+                        .Length > 0)
                 {
                     yield return type;
                 }
@@ -71,7 +72,8 @@ namespace Zilon.BotEnvironment
             IServiceCollection serviceRegistry,
             IServiceProvider serviceFactory)
         {
-            var directory = Thread.GetDomain().BaseDirectory;
+            var directory = Thread.GetDomain()
+                                  .BaseDirectory;
             var dllPath = Path.Combine(directory, "bots", botDirectory, assemblyName);
             var botAssembly = Assembly.LoadFrom(dllPath);
 

@@ -82,9 +82,12 @@ namespace Zilon.Core.Tests.Commands
             var factCommand2 = commandManager.Pop();
 
             // ASSERT
-            factCommand1.Should().Be(command1);
-            idleCommand.Should().BeNull();
-            factCommand2.Should().Be(command2);
+            factCommand1.Should()
+                        .Be(command1);
+            idleCommand.Should()
+                       .BeNull();
+            factCommand2.Should()
+                        .Be(command2);
         }
 
         private static void AssertPopCommands(ICommand[] commands, QueueCommandManager commandManager)
@@ -94,7 +97,8 @@ namespace Zilon.Core.Tests.Commands
                 var factCommand = commandManager.Pop();
 
                 // ASSERT
-                factCommand.Should().Be(expectedCommand);
+                factCommand.Should()
+                           .Be(expectedCommand);
             }
         }
 

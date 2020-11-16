@@ -117,8 +117,8 @@ namespace Zilon.Core.MassSectorGenerator
                 // Это используется на билд-сервере, чтобы случайно проверить несколько схем.
 
                 var locationSchemes = schemeService.GetSchemes<ILocationScheme>()
-                    .Where(x => (x.SectorLevels != null) && x.SectorLevels.Any())
-                    .ToArray();
+                                                   .Where(x => (x.SectorLevels != null) && x.SectorLevels.Any())
+                                                   .ToArray();
                 var locationSchemeIndex = _random.Next(0, locationSchemes.Length);
                 var locationScheme = locationSchemes[locationSchemeIndex];
 
@@ -159,10 +159,11 @@ namespace Zilon.Core.MassSectorGenerator
         {
             var thisAssembly = Assembly.GetExecutingAssembly();
             var validatorTypes = thisAssembly.GetTypes()
-                .Where(x => typeof(ISectorValidator).IsAssignableFrom(x))
-                .Where(x => !x.IsInterface && !x.IsAbstract);
+                                             .Where(x => typeof(ISectorValidator).IsAssignableFrom(x))
+                                             .Where(x => !x.IsInterface && !x.IsAbstract);
 
-            var validators = validatorTypes.Select(x => Activator.CreateInstance(x)).Cast<ISectorValidator>();
+            var validators = validatorTypes.Select(x => Activator.CreateInstance(x))
+                                           .Cast<ISectorValidator>();
 
             return validators.ToArray();
         }
@@ -187,7 +188,8 @@ namespace Zilon.Core.MassSectorGenerator
             var sectorNode = new SectorNode(biome, sectorSchemeResult.Sector);
 
             var sectorFactory = serviceProvider.GetRequiredService<ISectorGenerator>();
-            var sector = await sectorFactory.GenerateAsync(sectorNode).ConfigureAwait(false);
+            var sector = await sectorFactory.GenerateAsync(sectorNode)
+                                            .ConfigureAwait(false);
             sector.Scheme = sectorSchemeResult.Location;
 
             // Проверка
@@ -197,7 +199,8 @@ namespace Zilon.Core.MassSectorGenerator
 
             var saveTask = SaveMapAsImageAsync(outputPath, sector);
 
-            await Task.WhenAll(checkTask, saveTask).ConfigureAwait(false);
+            await Task.WhenAll(checkTask, saveTask)
+                      .ConfigureAwait(false);
         }
 
         private static void SaveMapAsImage(ISectorMap map, string outputPath)

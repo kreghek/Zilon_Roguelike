@@ -49,10 +49,14 @@ namespace Zilon.Core.Tests.Tactics.Spatial
             // ASSERT
             for (var i = 0; i < 6; i++)
             {
-                factNeighbors[i].OffsetCoords.Should().Be(expectedNeighbors[i].OffsetCoords);
+                factNeighbors[i]
+                    .OffsetCoords.Should()
+                    .Be(expectedNeighbors[i]
+                        .OffsetCoords);
             }
 
-            factNeighbors.Should().BeEquivalentTo<HexNode>(expectedNeighbors);
+            factNeighbors.Should()
+                         .BeEquivalentTo<HexNode>(expectedNeighbors);
         }
     }
 }

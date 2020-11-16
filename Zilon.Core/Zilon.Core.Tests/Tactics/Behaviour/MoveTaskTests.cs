@@ -30,7 +30,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
 
-            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+            var map = await SquareMapFactory.CreateAsync(10)
+                                            .ConfigureAwait(false);
 
             var expectedPath = CreateExpectedPath(map);
 
@@ -51,7 +52,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             }
 
             // ASSERT
-            task.IsComplete.Should().BeTrue();
+            task.IsComplete.Should()
+                .BeTrue();
         }
 
         /// <summary>
@@ -63,7 +65,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             // ARRANGE
 
-            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+            var map = await SquareMapFactory.CreateAsync(10)
+                                            .ConfigureAwait(false);
             map.RemoveEdge(3, 3, 3, 4);
             map.RemoveEdge(3, 3, 2, 3);
 
@@ -85,7 +88,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 task.Execute();
 
                 // ASSERT
-                actor.Node.Should().Be(expectedPath[step]);
+                actor.Node.Should()
+                     .Be(expectedPath[step]);
             }
         }
 
@@ -98,7 +102,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public async Task ExecuteTest_OpenGridMap_ActorReachPointAndTaskCompleteAsync()
         {
             // ARRANGE
-            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+            var map = await SquareMapFactory.CreateAsync(10)
+                                            .ConfigureAwait(false);
 
             var startNode = map.Nodes.SelectByHexCoords(3, 3);
             var finishNode = map.Nodes.SelectByHexCoords(1, 5);
@@ -124,15 +129,19 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
                 // ASSERT
                 var expectedIsComplete = step >= 3;
-                task.IsComplete.Should().Be(expectedIsComplete);
+                task.IsComplete.Should()
+                    .Be(expectedIsComplete);
 
-                actor.Node.Should().Be(expectedPath[step - 1]);
+                actor.Node.Should()
+                     .Be(expectedPath[step - 1]);
             }
 
             // ASSERT
 
-            task.IsComplete.Should().Be(true);
-            actor.Node.Should().Be(finishNode);
+            task.IsComplete.Should()
+                .Be(true);
+            actor.Node.Should()
+                 .Be(finishNode);
         }
 
         private static IActor CreateActor(IMap map, HexNode startNode)
@@ -141,7 +150,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var player = playerMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSizePattern.Size1);
+            personMock.SetupGet(x => x.PhysicalSize)
+                      .Returns(PhysicalSizePattern.Size1);
             var person = personMock.Object;
 
             var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();

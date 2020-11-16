@@ -29,7 +29,8 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
                 var staticObjectManager = sector.StaticObjectManager;
                 var containerNodes = staticObjectManager.Items.Select(x => x.Node);
 
-                var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>().ToArray();
+                var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>()
+                                                .ToArray();
                 var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));
                 var allNodes = allNonContainerNodes.ToArray();
 

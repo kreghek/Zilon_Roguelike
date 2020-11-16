@@ -34,7 +34,8 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().Be(true);
+            canExecute.Should()
+                      .Be(true);
         }
 
         /// <summary>
@@ -74,7 +75,8 @@ namespace Zilon.Core.Tests.Commands
 
             var targetMock = new Mock<IActor>();
             var targetNode = testMap.Nodes.SelectByHexCoords(2, 0);
-            targetMock.SetupGet(x => x.Node).Returns(targetNode);
+            targetMock.SetupGet(x => x.Node)
+                      .Returns(targetNode);
             var target = targetMock.Object;
 
             var targetVmMock = new Mock<IActorViewModel>();

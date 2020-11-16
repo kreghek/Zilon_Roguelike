@@ -24,9 +24,9 @@ namespace Zilon.Core.Specs.Contexts
             var sector = player.SectorNode.Sector;
 
             var targetNode = sector
-                .Map
-                .Nodes
-                .SelectByHexCoords(targetCoords.X, targetCoords.Y);
+                             .Map
+                             .Nodes
+                             .SelectByHexCoords(targetCoords.X, targetCoords.Y);
 
             var nodeViewModel = new TestNodeViewModel
             {
@@ -45,8 +45,9 @@ namespace Zilon.Core.Specs.Contexts
             var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
             var actor = GetActiveActor();
 
-            var selectedProp = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
-                .First(x => x.Scheme.Sid == propSid);
+            var selectedProp = actor.Person.GetModule<IInventoryModule>()
+                                    .CalcActualItems()
+                                    .First(x => x.Scheme.Sid == propSid);
 
             var viewModel = new TestPropItemViewModel
             {
@@ -66,10 +67,11 @@ namespace Zilon.Core.Specs.Contexts
 
             var map = sector.Map;
             var selectedNode = map.Nodes.Cast<HexNode>()
-                .Single(n => (n.OffsetCoords.X == x) && (n.OffsetCoords.Y == y));
+                                  .Single(n => (n.OffsetCoords.X == x) && (n.OffsetCoords.Y == y));
 
             var nodeViewModelMock = new Mock<IMapNodeViewModel>();
-            nodeViewModelMock.SetupGet(n => n.Node).Returns(selectedNode);
+            nodeViewModelMock.SetupGet(n => n.Node)
+                             .Returns(selectedNode);
             var nodeViewModel = nodeViewModelMock.Object;
 
             playerState.HoverViewModel = nodeViewModel;

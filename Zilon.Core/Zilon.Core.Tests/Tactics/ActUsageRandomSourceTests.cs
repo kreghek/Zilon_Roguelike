@@ -29,7 +29,8 @@ namespace Zilon.Core.Tests.Tactics
             var roll = new Roll(diceEdges, diceCount);
 
             var diceMock = new Mock<IDice>();
-            diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns(1);
+            diceMock.Setup(x => x.Roll(It.IsAny<int>()))
+                    .Returns(1);
             var dice = diceMock.Object;
 
             var service = new TacticalActUsageRandomSource(dice);
@@ -38,7 +39,8 @@ namespace Zilon.Core.Tests.Tactics
             var factRoll = service.RollEfficient(roll);
 
             // ASSERT
-            factRoll.Should().Be(expectedRoll);
+            factRoll.Should()
+                    .Be(expectedRoll);
         }
 
         /// <summary>
@@ -57,7 +59,8 @@ namespace Zilon.Core.Tests.Tactics
             var roll = new Roll(diceEdges, diceCount);
 
             var diceMock = new Mock<IDice>();
-            diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns<int>(n => n);
+            diceMock.Setup(x => x.Roll(It.IsAny<int>()))
+                    .Returns<int>(n => n);
             var dice = diceMock.Object;
 
             var service = new TacticalActUsageRandomSource(dice);
@@ -66,7 +69,8 @@ namespace Zilon.Core.Tests.Tactics
             var factRoll = service.RollEfficient(roll);
 
             // ASSERT
-            factRoll.Should().Be(expectedRoll);
+            factRoll.Should()
+                    .Be(expectedRoll);
         }
     }
 }

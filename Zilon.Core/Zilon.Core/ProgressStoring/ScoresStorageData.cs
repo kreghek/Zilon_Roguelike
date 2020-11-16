@@ -38,18 +38,18 @@ namespace Zilon.Core.ProgressStoring
                 BaseScores = scores.BaseScores,
                 Frags =
                     scores.Frags.Select(x => new ScoreSidCounterStorageData
-                    {
-                        Sid = x.Key.Sid,
-                        Value = x.Value
-                    })
-                        .ToArray(),
+                          {
+                              Sid = x.Key.Sid,
+                              Value = x.Value
+                          })
+                          .ToArray(),
                 PlaceTypes =
                     scores.PlaceTypes.Select(x => new ScoreSidCounterStorageData
-                    {
-                        Sid = x.Key.Sid,
-                        Value = x.Value
-                    })
-                        .ToArray(),
+                          {
+                              Sid = x.Key.Sid,
+                              Value = x.Value
+                          })
+                          .ToArray(),
                 TurnCounter = scores.TurnCounter,
                 Turns = scores.Turns
             };

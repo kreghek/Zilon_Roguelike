@@ -99,7 +99,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             //Координаты не повторяются и их ровно roomCount.
             // Это гарантирует IroomGeneratorRandomSource
-            var roomMatrixCoords = _randomSource.RollRoomMatrixPositions(roomGridSize, roomCount).ToArray();
+            var roomMatrixCoords = _randomSource.RollRoomMatrixPositions(roomGridSize, roomCount)
+                                                .ToArray();
 
             var openTransitions = new List<RoomTransition>(availableTransitions);
 

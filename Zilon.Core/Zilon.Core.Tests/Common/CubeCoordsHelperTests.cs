@@ -38,7 +38,9 @@ namespace Zilon.Core.Tests.Common
             foreach (var coord in line)
             {
                 var sameCoords = line.Where(x => x == coord);
-                sameCoords.Count().Should().Be(1);
+                sameCoords.Count()
+                          .Should()
+                          .Be(1);
 
                 if (line.Count() > 1)
                 {
@@ -59,7 +61,8 @@ namespace Zilon.Core.Tests.Common
                         }
                     }
 
-                    hasNeighbor.Should().Be(true, "Линия должна быть непрерывной.");
+                    hasNeighbor.Should()
+                               .Be(true, "Линия должна быть непрерывной.");
                 }
             }
         }
@@ -90,7 +93,8 @@ namespace Zilon.Core.Tests.Common
                 var linePoint = line[i];
                 var reversePoint = reverseLine[reverseLine.Length - i - 1];
 
-                reversePoint.Should().Be(linePoint);
+                reversePoint.Should()
+                            .Be(linePoint);
             }
         }
     }

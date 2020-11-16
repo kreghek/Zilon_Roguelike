@@ -40,7 +40,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             // Не выбираем првоеряемую координату, как стартовую, потому что
             // она уже закрыта. Заливка от неё не пройдёт.
-            var availableStartPoints = currentCoords.Where(x => x != targetCoords).ToArray();
+            var availableStartPoints = currentCoords.Where(x => x != targetCoords)
+                                                    .ToArray();
             if (!availableStartPoints.Any())
             {
                 // Если нет доступных координат для старта,
@@ -149,7 +150,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             // Ставить препятсвия на краю нельзя,
             // потому что коридор может начаться с препятсвия.
             // Коридоры просто строятся от ближайшей точки региона.
-            var coordsInCenter = GetAvailableCoords(regionDraftCoords).ToArray();
+            var coordsInCenter = GetAvailableCoords(regionDraftCoords)
+                .ToArray();
 
             // Выбираем все координаты, по которым может пройти персонаж размером 7.
             var passableCoords = GetAllPassableSize7Coords(regionDraftCoords);

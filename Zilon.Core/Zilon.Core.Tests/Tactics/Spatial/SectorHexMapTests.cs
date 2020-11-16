@@ -28,7 +28,8 @@ namespace Zilon.Core.Tactics.Spatial.Tests
             var fact = map.TargetIsOnLine(startMap, targetMap);
 
             // ASSERT
-            fact.Should().BeTrue();
+            fact.Should()
+                .BeTrue();
         }
 
         /// <summary>
@@ -58,7 +59,8 @@ namespace Zilon.Core.Tactics.Spatial.Tests
             var fact = map.TargetIsOnLine(startMap, targetMap);
 
             // ASSERT
-            fact.Should().BeFalse();
+            fact.Should()
+                .BeFalse();
         }
     }
 }

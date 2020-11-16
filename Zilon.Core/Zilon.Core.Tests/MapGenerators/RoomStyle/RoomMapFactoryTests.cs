@@ -44,11 +44,13 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             // ACT
             Func<Task> act = async () =>
             {
-                await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
+                await factory.CreateAsync(sectorFactoryOptions)
+                             .ConfigureAwait(false);
             };
 
             // ARRANGE
-            act.Should().NotThrow();
+            act.Should()
+               .NotThrow();
         }
 
         /// <summary>
@@ -69,14 +71,17 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
 
             // ACT
-            var map = await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
+            var map = await factory.CreateAsync(sectorFactoryOptions)
+                                   .ConfigureAwait(false);
 
             // ARRANGE
-            var hexNodes = map.Nodes.Cast<HexNode>().ToArray();
+            var hexNodes = map.Nodes.Cast<HexNode>()
+                              .ToArray();
             foreach (var node in hexNodes)
             {
                 var sameNode = hexNodes.Where(x => (x != node) && (x.OffsetCoords == node.OffsetCoords));
-                sameNode.Should().BeEmpty();
+                sameNode.Should()
+                        .BeEmpty();
             }
         }
 
@@ -95,11 +100,13 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             // ACT
             Func<Task> act = async () =>
             {
-                await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
+                await factory.CreateAsync(sectorFactoryOptions)
+                             .ConfigureAwait(false);
             };
 
             // ARRANGE
-            act.Should().NotThrow();
+            act.Should()
+               .NotThrow();
         }
 
         private static ISectorSubScheme CreateSectorScheme()

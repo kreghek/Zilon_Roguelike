@@ -47,9 +47,9 @@ namespace Zilon.Core.Tactics
             // If globe has no interventionists then spawn they.
             // Next randomly spawns interventionists or militia.
             var interventionistsCount = Globe.SectorNodes.Select(x => x.Sector)
-                .SelectMany(x => x.ActorManager.Items)
-                .Where(x => x.Person.Fraction == Fractions.InterventionistFraction)
-                .Count();
+                                             .SelectMany(x => x.ActorManager.Items)
+                                             .Where(x => x.Person.Fraction == Fractions.InterventionistFraction)
+                                             .Count();
 
             if (interventionistsCount <= 0)
             {

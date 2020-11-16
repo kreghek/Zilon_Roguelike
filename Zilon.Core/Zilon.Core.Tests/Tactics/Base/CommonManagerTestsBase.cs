@@ -45,9 +45,10 @@ namespace Zilon.Core.Tests.Tactics.Base
                 manager.Add(entityList);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
-                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
-                        CheckEventArgs(e, entityCount, entityList));
+                monitor.Should()
+                       .Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
+                       .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
+                           CheckEventArgs(e, entityCount, entityList));
             }
         }
 
@@ -69,9 +70,10 @@ namespace Zilon.Core.Tests.Tactics.Base
                 manager.Add(entity);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
-                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
-                        (e.Items.Length == 1) && (e.Items[0] == entity));
+                monitor.Should()
+                       .Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
+                       .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
+                           (e.Items.Length == 1) && (e.Items[0] == entity));
             }
         }
 
@@ -101,9 +103,10 @@ namespace Zilon.Core.Tests.Tactics.Base
                 manager.Remove(entityList);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
-                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
-                        CheckEventArgs(e, entityCount, entityList));
+                monitor.Should()
+                       .Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
+                       .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
+                           CheckEventArgs(e, entityCount, entityList));
             }
         }
 
@@ -126,9 +129,10 @@ namespace Zilon.Core.Tests.Tactics.Base
                 manager.Remove(entity);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
-                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
-                        (e.Items.Length == 1) && (e.Items[0] == entity));
+                monitor.Should()
+                       .Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
+                       .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
+                           (e.Items.Length == 1) && (e.Items[0] == entity));
             }
         }
 

@@ -54,7 +54,8 @@ namespace Zilon.Core.World
 
                 //TODO Это можно делать параллельно. Одновременно должны думать сразу все актёры.
                 // Делается легко, через Parallel.ForEach, но из-за этого часто заваливаются тесты и даже не видно причины отказа.
-                var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
+                var actorTask = await taskSource.GetActorTaskAsync(actor, context)
+                                                .ConfigureAwait(false);
 
                 var state = new TaskState(actor, actorTask, taskSource);
                 if (!_taskDict.TryAdd(actor, state))
@@ -169,7 +170,8 @@ namespace Zilon.Core.World
         private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)
         {
             var sector = (ISector)sender;
-            await _globeTransitionHandler.ProcessAsync(this, sector, e.Actor, e.Transition).ConfigureAwait(false);
+            await _globeTransitionHandler.ProcessAsync(this, sector, e.Actor, e.Transition)
+                                         .ConfigureAwait(false);
         }
 
         public IEnumerable<ISectorNode> SectorNodes => _sectorNodes;
@@ -190,7 +192,8 @@ namespace Zilon.Core.World
         {
             var actorsWithoutTasks = GetActorsWithoutTasks();
 
-            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks)
+                .ConfigureAwait(false);
 
             ProcessTasks(_taskDict);
             _turnCounter++;

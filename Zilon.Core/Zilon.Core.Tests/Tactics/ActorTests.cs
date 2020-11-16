@@ -27,8 +27,10 @@ namespace Zilon.Core.Tactics.Tests
             var survivalModule = survivalModuleMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalModule);
-            personMock.Setup(x => x.HasModule(It.IsAny<string>())).Returns(true);
+            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>()))
+                      .Returns(survivalModule);
+            personMock.Setup(x => x.HasModule(It.IsAny<string>()))
+                      .Returns(true);
             var person = personMock.Object;
 
             var node = new Mock<IGraphNode>().Object;

@@ -35,8 +35,10 @@ namespace Zilon.Core.Tests.Tactics
         public async Task SetUpAsync()
         {
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
-            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(6);
-            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
+            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
+                                    .Returns(6);
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
+                                    .Returns(1);
             _actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             var personMock = new Mock<IPerson>();
@@ -44,7 +46,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var evolutionModuleMock = new Mock<IEvolutionModule>();
             var evolutionModule = evolutionModuleMock.Object;
-            personMock.Setup(x => x.GetModule<IEvolutionModule>(It.IsAny<string>())).Returns(evolutionModule);
+            personMock.Setup(x => x.GetModule<IEvolutionModule>(It.IsAny<string>()))
+                      .Returns(evolutionModule);
 
             var actScheme = new TestTacticalActStatsSubScheme
             {
@@ -57,12 +60,15 @@ namespace Zilon.Core.Tests.Tactics
             };
 
             var actMock = new Mock<ITacticalAct>();
-            actMock.SetupGet(x => x.Stats).Returns(actScheme);
+            actMock.SetupGet(x => x.Stats)
+                   .Returns(actScheme);
             _act = actMock.Object;
 
-            var map = await SquareMapFactory.CreateAsync(3).ConfigureAwait(false);
+            var map = await SquareMapFactory.CreateAsync(3)
+                                            .ConfigureAwait(false);
             var sectorMock = new Mock<ISector>();
-            sectorMock.SetupGet(x => x.Map).Returns(map);
+            sectorMock.SetupGet(x => x.Map)
+                      .Returns(map);
             _sector = sectorMock.Object;
         }
 
@@ -81,11 +87,13 @@ namespace Zilon.Core.Tests.Tactics
                 handlerSelector);
 
             var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
-            actorMock.SetupGet(x => x.Person).Returns(_person);
+            actorMock.SetupGet(x => x.Node)
+                     .Returns(new HexNode(0, 0));
+            actorMock.SetupGet(x => x.Person)
+                     .Returns(_person);
             actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
-                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null,
-                    (target1, act1) => new UsedActEventArgs(target1, act1));
+                     .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null,
+                         (target1, act1) => new UsedActEventArgs(target1, act1));
             var actor = actorMock.Object;
 
             var monsterMock = CreateMonsterMock();
@@ -102,7 +110,8 @@ namespace Zilon.Core.Tests.Tactics
             actUsageService.UseOn(actor, monster, usedActs, _sector);
 
             // ASSERT
-            monitor.Should().Raise(nameof(IActor.UsedAct));
+            monitor.Should()
+                   .Raise(nameof(IActor.UsedAct));
         }
 
         /// <summary>
@@ -123,8 +132,10 @@ namespace Zilon.Core.Tests.Tactics
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
-            actorMock.SetupGet(x => x.Person).Returns(person);
+            actorMock.SetupGet(x => x.Node)
+                     .Returns(new HexNode(0, 0));
+            actorMock.SetupGet(x => x.Person)
+                     .Returns(person);
             var actor = actorMock.Object;
 
             var monsterMock = CreateOnHitMonsterMock();
@@ -156,11 +167,14 @@ namespace Zilon.Core.Tests.Tactics
                 }
             };
             inventory.Add(new Resource(bulletScheme, 10));
-            personMock.Setup(x => x.GetModule<IInventoryModule>(It.IsAny<string>())).Returns(inventory);
+            personMock.Setup(x => x.GetModule<IInventoryModule>(It.IsAny<string>()))
+                      .Returns(inventory);
 
             var actMock = new Mock<ITacticalAct>();
-            actMock.SetupGet(x => x.Stats).Returns(actStatsSubScheme);
-            actMock.SetupGet(x => x.Constrains).Returns(actConstrainsSubScheme);
+            actMock.SetupGet(x => x.Stats)
+                   .Returns(actStatsSubScheme);
+            actMock.SetupGet(x => x.Constrains)
+                   .Returns(actConstrainsSubScheme);
             var shootAct = actMock.Object;
 
             // ACT
@@ -171,8 +185,10 @@ namespace Zilon.Core.Tests.Tactics
             actUsageService.UseOn(actor, monster, usedActs, _sector);
 
             // ASSERT
-            var bullets = inventory.CalcActualItems().Single(x => x.Scheme.Sid == "bullet-7-62") as Resource;
-            bullets.Count.Should().Be(9);
+            var bullets = inventory.CalcActualItems()
+                                   .Single(x => x.Scheme.Sid == "bullet-7-62") as Resource;
+            bullets.Count.Should()
+                   .Be(9);
         }
 
         /// <summary>
@@ -192,8 +208,10 @@ namespace Zilon.Core.Tests.Tactics
                 handlerSelector);
 
             var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
-            actorMock.SetupGet(x => x.Person).Returns(_person);
+            actorMock.SetupGet(x => x.Node)
+                     .Returns(new HexNode(0, 0));
+            actorMock.SetupGet(x => x.Person)
+                     .Returns(_person);
             var actor = actorMock.Object;
 
             var monsterMock = CreateMonsterMock();
@@ -211,7 +229,8 @@ namespace Zilon.Core.Tests.Tactics
             };
 
             // ASSERT
-            act.Should().Throw<UsageThroughtWallException>();
+            act.Should()
+               .Throw<UsageThroughtWallException>();
         }
 
         private static IActUsageHandlerSelector CreateEmptyHandlerSelector()
@@ -220,7 +239,8 @@ namespace Zilon.Core.Tests.Tactics
             var handler = handlerMock.Object;
 
             var handlerSelectorMock = new Mock<IActUsageHandlerSelector>();
-            handlerSelectorMock.Setup(x => x.GetHandler(It.IsAny<IAttackTarget>())).Returns(handler);
+            handlerSelectorMock.Setup(x => x.GetHandler(It.IsAny<IAttackTarget>()))
+                               .Returns(handler);
             var handlerSelector = handlerSelectorMock.Object;
             return handlerSelector;
         }
@@ -230,30 +250,38 @@ namespace Zilon.Core.Tests.Tactics
             [CanBeNull] PersonArmorItem[] armors = null)
         {
             var monsterMock = new Mock<IActor>();
-            monsterMock.SetupGet(x => x.Node).Returns(new HexNode(1, 0));
+            monsterMock.SetupGet(x => x.Node)
+                       .Returns(new HexNode(1, 0));
 
             var monsterPersonMock = new Mock<IPerson>();
 
             var monsterSurvivalDataMock = new Mock<ISurvivalModule>();
-            monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(false);
+            monsterSurvivalDataMock.SetupGet(x => x.IsDead)
+                                   .Returns(false);
             var monsterSurvival = monsterSurvivalDataMock.Object;
-            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
+            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>()))
+                             .Returns(monsterSurvival);
 
             var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
             monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>()))
-                .Returns(monsterCombatStats);
+                             .Returns(monsterCombatStats);
 
             var monsterPerson = monsterPersonMock.Object;
-            monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
+            monsterMock.SetupGet(x => x.Person)
+                       .Returns(monsterPerson);
 
             var monsterDefenceStatsMock = new Mock<IPersonDefenceStats>();
-            monsterDefenceStatsMock.SetupGet(x => x.Defences).Returns(defences ?? Array.Empty<PersonDefenceItem>());
-            monsterDefenceStatsMock.SetupGet(x => x.Armors).Returns(armors ?? Array.Empty<PersonArmorItem>());
+            monsterDefenceStatsMock.SetupGet(x => x.Defences)
+                                   .Returns(defences ?? Array.Empty<PersonDefenceItem>());
+            monsterDefenceStatsMock.SetupGet(x => x.Armors)
+                                   .Returns(armors ?? Array.Empty<PersonArmorItem>());
             var monsterDefenceStats = monsterDefenceStatsMock.Object;
-            monsterCombatStatsMock.SetupGet(x => x.DefenceStats).Returns(monsterDefenceStats);
+            monsterCombatStatsMock.SetupGet(x => x.DefenceStats)
+                                  .Returns(monsterDefenceStats);
 
-            monsterMock.Setup(x => x.TakeDamage(It.IsAny<int>())).Verifiable();
+            monsterMock.Setup(x => x.TakeDamage(It.IsAny<int>()))
+                       .Verifiable();
 
             return monsterMock;
         }
@@ -263,13 +291,15 @@ namespace Zilon.Core.Tests.Tactics
             [CanBeNull] PersonArmorItem[] armors = null)
         {
             var monsterMock = new Mock<IActor>();
-            monsterMock.SetupGet(x => x.Node).Returns(new HexNode(1, 0));
+            monsterMock.SetupGet(x => x.Node)
+                       .Returns(new HexNode(1, 0));
 
             var monsterPersonMock = new Mock<IPerson>();
 
             var monsterIsDead = false;
             var monsterSurvivalDataMock = new Mock<ISurvivalModule>();
-            monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(() => monsterIsDead);
+            monsterSurvivalDataMock.SetupGet(x => x.IsDead)
+                                   .Returns(() => monsterIsDead);
             monsterSurvivalDataMock
                 .Setup(x => x.DecreaseStat(
                     It.Is<SurvivalStatType>(s => s == SurvivalStatType.Health),
@@ -277,25 +307,30 @@ namespace Zilon.Core.Tests.Tactics
                 )
                 .Callback(() => monsterIsDead = true);
             var monsterSurvival = monsterSurvivalDataMock.Object;
-            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
+            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>()))
+                             .Returns(monsterSurvival);
 
             var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
             monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>()))
-                .Returns(monsterCombatStats);
+                             .Returns(monsterCombatStats);
 
             var monsterPerson = monsterPersonMock.Object;
-            monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
+            monsterMock.SetupGet(x => x.Person)
+                       .Returns(monsterPerson);
 
             var monsterDefenceStatsMock = new Mock<IPersonDefenceStats>();
-            monsterDefenceStatsMock.SetupGet(x => x.Defences).Returns(defences ?? Array.Empty<PersonDefenceItem>());
-            monsterDefenceStatsMock.SetupGet(x => x.Armors).Returns(armors ?? Array.Empty<PersonArmorItem>());
+            monsterDefenceStatsMock.SetupGet(x => x.Defences)
+                                   .Returns(defences ?? Array.Empty<PersonDefenceItem>());
+            monsterDefenceStatsMock.SetupGet(x => x.Armors)
+                                   .Returns(armors ?? Array.Empty<PersonArmorItem>());
             var monsterDefenceStats = monsterDefenceStatsMock.Object;
-            monsterCombatStatsMock.SetupGet(x => x.DefenceStats).Returns(monsterDefenceStats);
+            monsterCombatStatsMock.SetupGet(x => x.DefenceStats)
+                                  .Returns(monsterDefenceStats);
 
             monsterMock.Setup(x => x.TakeDamage(It.IsAny<int>()))
-                .Callback<int>(damage => monsterSurvival.DecreaseStat(SurvivalStatType.Health, damage))
-                .Verifiable();
+                       .Callback<int>(damage => monsterSurvival.DecreaseStat(SurvivalStatType.Health, damage))
+                       .Verifiable();
 
             return monsterMock;
         }
@@ -304,13 +339,14 @@ namespace Zilon.Core.Tests.Tactics
         {
             var mapMock = new Mock<ISectorMap>();
             mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                .Returns(false);
+                   .Returns(false);
             mapMock.Setup(x => x.DistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                .Returns(1);
+                   .Returns(1);
             var map = mapMock.Object;
 
             var sectorMock = new Mock<ISector>();
-            sectorMock.SetupGet(x => x.Map).Returns(map);
+            sectorMock.SetupGet(x => x.Map)
+                      .Returns(map);
             var sector = sectorMock.Object;
 
             return sector;

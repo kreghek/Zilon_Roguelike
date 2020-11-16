@@ -100,7 +100,8 @@ namespace Zilon.Core.World
                 }
             }
 
-            var items = totalResources.Select(x => new ResourceDepositDataItem(x.Key, x.Value)).ToArray();
+            var items = totalResources.Select(x => new ResourceDepositDataItem(x.Key, x.Value))
+                                      .ToArray();
             return items;
         }
 

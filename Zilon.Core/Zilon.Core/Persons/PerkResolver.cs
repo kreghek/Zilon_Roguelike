@@ -25,7 +25,8 @@ namespace Zilon.Core.Persons
                 return true;
             }
 
-            var maxSubLevel = perkLevels[currentLevel.Primary].MaxValue;
+            var maxSubLevel = perkLevels[currentLevel.Primary]
+                .MaxValue;
             var currentSubLevelIsMax = currentLevel.Sub >= maxSubLevel;
             return currentSubLevelIsMax;
         }

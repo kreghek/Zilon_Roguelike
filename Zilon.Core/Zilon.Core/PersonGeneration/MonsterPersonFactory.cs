@@ -23,8 +23,8 @@ namespace Zilon.Core.PersonGeneration
             monsterPerson.AddModule(combaActModule);
 
             var defenses = monsterScheme.Defense?.Defenses?
-                .Select(x => new PersonDefenceItem(x.Type, x.Level))
-                .ToArray();
+                                        .Select(x => new PersonDefenceItem(x.Type, x.Level))
+                                        .ToArray();
 
             var defenceStats = new PersonDefenceStats(
                 defenses ?? Array.Empty<PersonDefenceItem>(),

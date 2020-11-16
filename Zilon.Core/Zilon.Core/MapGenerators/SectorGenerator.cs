@@ -75,7 +75,8 @@ namespace Zilon.Core.MapGenerators
             var sectorFactoryOptions =
                 new SectorMapFactoryOptions(sectorNode.SectorScheme.MapGeneratorOptions, transitions);
 
-            var map = await mapFactory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
+            var map = await mapFactory.CreateAsync(sectorFactoryOptions)
+                                      .ConfigureAwait(false);
 
             var locationScheme = sectorNode.Biome.LocationScheme;
 
@@ -83,7 +84,8 @@ namespace Zilon.Core.MapGenerators
 
             DefineDiseases(sector);
 
-            var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
+            var gameObjectRegions = map.Regions.Where(x => !x.IsStart)
+                                       .ToArray();
 
             var sectorScheme = sectorNode.SectorScheme;
 
@@ -92,7 +94,8 @@ namespace Zilon.Core.MapGenerators
             var staticObjectgenerationContext =
                 new StaticObjectGenerationContext(sector, sectorScheme, resourceDepositData);
 
-            await _staticObstaclesGenerator.CreateAsync(staticObjectgenerationContext).ConfigureAwait(false);
+            await _staticObstaclesGenerator.CreateAsync(staticObjectgenerationContext)
+                                           .ConfigureAwait(false);
 
             var monsterRegions = gameObjectRegions.ToArray();
             _monsterGenerator.CreateMonsters(sector,

@@ -31,17 +31,18 @@ namespace Zilon.Core.Tests.PersonModules
 
             var effectCollectionMock = new Mock<IEffectsModule>();
             effectCollectionMock.Setup(x => x.Add(It.IsAny<IPersonEffect>()))
-                .Callback<IPersonEffect>(x => effectList.Add(x));
+                                .Callback<IPersonEffect>(x => effectList.Add(x));
             effectCollectionMock.Setup(x => x.Remove(It.IsAny<IPersonEffect>()))
-                .Callback<IPersonEffect>(x => effectList.Remove(x));
-            effectCollectionMock.SetupGet(x => x.Items).Returns(effectList);
+                                .Callback<IPersonEffect>(x => effectList.Remove(x));
+            effectCollectionMock.SetupGet(x => x.Items)
+                                .Returns(effectList);
             var effectCollection = effectCollectionMock.Object;
 
             var diseaseMock = new Mock<IDisease>();
             diseaseMock.Setup(x => x.GetSymptoms())
-                .Returns(symptoms);
+                       .Returns(symptoms);
             diseaseMock.SetupGet(x => x.ProgressSpeed)
-                .Returns(0.001f);
+                       .Returns(0.001f);
             var disease = diseaseMock.Object;
 
             var diseaseData = new DiseaseModule();

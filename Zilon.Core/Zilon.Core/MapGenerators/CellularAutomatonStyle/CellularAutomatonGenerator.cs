@@ -31,7 +31,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var matrixWithMargins = resizedMatrix.CreateMatrixWithMargins(2, 2);
 
-            var draftRegions = RegionFinder.FindPassableRegionsFor(matrixWithMargins).ToArray();
+            var draftRegions = RegionFinder.FindPassableRegionsFor(matrixWithMargins)
+                                           .ToArray();
 
             matrix = matrixWithMargins;
 

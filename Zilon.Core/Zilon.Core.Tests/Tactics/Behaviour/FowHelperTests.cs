@@ -46,20 +46,24 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var fowContextMock = new Mock<IFowContext>();
             fowContextMock.Setup(x => x.IsTargetVisible(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode, IGraphNode>((baseNode, targetNode) => map.TargetIsOnLine(baseNode, targetNode));
+                          .Returns<IGraphNode, IGraphNode>((baseNode, targetNode) =>
+                              map.TargetIsOnLine(baseNode, targetNode));
             fowContextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode>(node => map.GetNext(node));
+                          .Returns<IGraphNode>(node => map.GetNext(node));
             var fowContext = fowContextMock.Object;
 
-            var expectedObservingNodes = map.HexNodes.Where(x => map.DistanceBetween(x, baseNode) <= radius).ToArray();
+            var expectedObservingNodes = map.HexNodes.Where(x => map.DistanceBetween(x, baseNode) <= radius)
+                                            .ToArray();
 
             // ACT
 
             FowHelper.UpdateFowData(fowData, fowContext, baseNode, radius);
 
             // ARRANGE
-            var factObservingNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Observing).Select(x => x.Node);
-            factObservingNodes.Should().BeEquivalentTo(expectedObservingNodes);
+            var factObservingNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Observing)
+                                            .Select(x => x.Node);
+            factObservingNodes.Should()
+                              .BeEquivalentTo(expectedObservingNodes);
         }
 
         /// <summary>
@@ -88,31 +92,35 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var nodeList = new List<SectorMapFowNode>();
             var fowDataMock = new Mock<ISectorFowData>();
             fowDataMock.Setup(x => x.AddNodes(It.IsAny<IEnumerable<SectorMapFowNode>>()))
-                .Callback<IEnumerable<SectorMapFowNode>>(nodes => nodeList.AddRange(nodes));
+                       .Callback<IEnumerable<SectorMapFowNode>>(nodes => nodeList.AddRange(nodes));
             fowDataMock.Setup(x => x.ChangeNodeState(It.IsAny<SectorMapFowNode>(), It.IsAny<SectorMapNodeFowState>()))
-                .Callback<SectorMapFowNode, SectorMapNodeFowState>((fowNode, targetState) =>
-                    fowNode.ChangeState(targetState));
+                       .Callback<SectorMapFowNode, SectorMapNodeFowState>((fowNode, targetState) =>
+                           fowNode.ChangeState(targetState));
             var fowData = fowDataMock.Object;
 
             var fowContextMock = new Mock<IFowContext>();
             fowContextMock.Setup(x => x.IsTargetVisible(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode, IGraphNode>((baseNode, targetNode) => map.TargetIsOnLine(baseNode, targetNode));
+                          .Returns<IGraphNode, IGraphNode>((baseNode, targetNode) =>
+                              map.TargetIsOnLine(baseNode, targetNode));
             fowContextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode>(node => map.GetNext(node));
+                          .Returns<IGraphNode>(node => map.GetNext(node));
             var fowContext = fowContextMock.Object;
 
             var baseNode = map.HexNodes.Single(x => x.OffsetCoords.CompsEqual(baseX, baseY));
 
-            var expectedObservingNodes = map.HexNodes.Where(x => map.DistanceBetween(x, baseNode) <= radius).ToArray();
+            var expectedObservingNodes = map.HexNodes.Where(x => map.DistanceBetween(x, baseNode) <= radius)
+                                            .ToArray();
 
             // ACT
 
             FowHelper.UpdateFowData(fowData, fowContext, baseNode, radius);
 
             // ARRANGE
-            var factObservingNodes = nodeList.Where(x => x.State == SectorMapNodeFowState.Observing).Select(x => x.Node)
-                .ToArray();
-            factObservingNodes.Should().BeEquivalentTo(expectedObservingNodes);
+            var factObservingNodes = nodeList.Where(x => x.State == SectorMapNodeFowState.Observing)
+                                             .Select(x => x.Node)
+                                             .ToArray();
+            factObservingNodes.Should()
+                              .BeEquivalentTo(expectedObservingNodes);
         }
     }
 }

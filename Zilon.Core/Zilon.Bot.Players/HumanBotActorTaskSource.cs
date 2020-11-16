@@ -42,7 +42,8 @@ namespace Zilon.Bot.Players
                 };
             }
 
-            var normalizedMode = _botSettings.Mode?.Trim().ToUpperInvariant();
+            var normalizedMode = _botSettings.Mode?.Trim()
+                                             .ToUpperInvariant();
             switch (normalizedMode)
             {
                 case "":

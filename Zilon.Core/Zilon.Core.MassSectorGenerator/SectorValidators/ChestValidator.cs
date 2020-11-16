@@ -66,7 +66,8 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
                 // Сундуки не должны генерироваться на узлы с выходом.
                 var staticObjectManager = sector.StaticObjectManager;
                 var allContainers = staticObjectManager.Items;
-                var allContainerNodes = allContainers.Select(x => x.Node).ToArray();
+                var allContainerNodes = allContainers.Select(x => x.Node)
+                                                     .ToArray();
                 foreach (var container in allContainers)
                 {
                     var hex = (HexNode)container.Node;

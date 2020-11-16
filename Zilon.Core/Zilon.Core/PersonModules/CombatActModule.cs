@@ -82,7 +82,7 @@ namespace Zilon.Core.PersonModules
         }
 
         private static void CalcPerksBonusesOnTacticalAct(
-            [NotNull][ItemNotNull] IEnumerable<IPerk> archievedPerks,
+            [NotNull] [ItemNotNull] IEnumerable<IPerk> archievedPerks,
             [NotNull] Equipment equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
@@ -93,7 +93,8 @@ namespace Zilon.Core.PersonModules
                 {
                     if (perk.Scheme.Levels != null)
                     {
-                        var rules = perk.Scheme.Levels[0].Rules;
+                        var rules = perk.Scheme.Levels[0]
+                                        .Rules;
                         ProcessRulesBonuses(equipment, ref toHitModifierValue, ref efficientModifierValue, rules);
                     }
                 }
@@ -122,7 +123,8 @@ namespace Zilon.Core.PersonModules
             ref int efficientModifierValue)
         {
             var greaterSurvivalEffect = effects.Items.OfType<SurvivalStatHazardEffect>()
-                .OrderByDescending(x => x.Level).FirstOrDefault();
+                                               .OrderByDescending(x => x.Level)
+                                               .FirstOrDefault();
 
             if (greaterSurvivalEffect == null)
             {
@@ -130,10 +132,10 @@ namespace Zilon.Core.PersonModules
             }
 
             var effecientDebuffRule = greaterSurvivalEffect.GetRules()
-                .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
+                                                           .FirstOrDefault(x => x.RollType == RollEffectType.Efficient);
 
             var toHitDebuffRule = greaterSurvivalEffect.GetRules()
-                .FirstOrDefault(x => x.RollType == RollEffectType.ToHit);
+                                                       .FirstOrDefault(x => x.RollType == RollEffectType.ToHit);
 
             if (effecientDebuffRule != null)
             {
@@ -150,7 +152,7 @@ namespace Zilon.Core.PersonModules
             [NotNull] ITacticalActScheme scheme,
             [NotNull] Equipment equipment,
             [NotNull] IEffectsModule effects,
-            [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
+            [NotNull] [ItemNotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
             var efficientModifierValue = 0;

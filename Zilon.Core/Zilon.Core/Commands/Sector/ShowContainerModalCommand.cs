@@ -31,7 +31,8 @@ namespace Zilon.Core.Commands
 
             var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
             var container = targetContainerViewModel?.StaticObject;
-            var containerContent = container?.GetModule<IPropContainer>().Content;
+            var containerContent = container?.GetModule<IPropContainer>()
+                                            .Content;
 
             return (inventory != null) && (containerContent != null);
         }
@@ -41,7 +42,8 @@ namespace Zilon.Core.Commands
             var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
             var targetContainerViewModel = (IContainerViewModel)_playerState.HoverViewModel;
             var container = targetContainerViewModel.StaticObject;
-            var containerContent = container.GetModule<IPropContainer>().Content;
+            var containerContent = container.GetModule<IPropContainer>()
+                                            .Content;
             var transferMachine = new PropTransferMachine(inventory, containerContent);
 
             ModalManager.ShowContainerModal(transferMachine);

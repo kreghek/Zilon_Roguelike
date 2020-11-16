@@ -76,13 +76,18 @@ namespace Zilon.Core.MapGenerators
 
             var sector = generationContext.Sector;
 
-            var exitNodes = sector.Map.Transitions.Keys.Cast<HexNode>().Select(x => x.OffsetCoords).ToArray();
+            var exitNodes = sector.Map.Transitions.Keys.Cast<HexNode>()
+                                  .Select(x => x.OffsetCoords)
+                                  .ToArray();
 
             // Генерация препятсвий, как статических объектов.
             foreach (var region in sector.Map.Regions)
             {
-                var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
-                var regionCoords = regionNodes.Select(x => x.OffsetCoords).Except(exitNodes).ToArray();
+                var regionNodes = region.Nodes.Cast<HexNode>()
+                                        .ToArray();
+                var regionCoords = regionNodes.Select(x => x.OffsetCoords)
+                                              .Except(exitNodes)
+                                              .ToArray();
                 var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords);
 
                 foreach (var interior in interiorMetas)

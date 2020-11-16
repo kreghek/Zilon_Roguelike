@@ -45,7 +45,8 @@ namespace Zilon.Core.MapGenerators
             foreach (var node in map.Nodes)
             {
                 var currentNode = (HexNode)node;
-                var nodes = map.Nodes.Cast<HexNode>().ToArray();
+                var nodes = map.Nodes.Cast<HexNode>()
+                               .ToArray();
                 var neighbors = HexNodeHelper.GetSpatialNeighbors(currentNode, nodes);
 
                 foreach (var neighbor in neighbors)

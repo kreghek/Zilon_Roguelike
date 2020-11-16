@@ -31,7 +31,8 @@ namespace Zilon.Core.Persons.Tests
                     IsBuildIn = true
                 }
             };
-            schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>()).Returns(perkSchemeList);
+            schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>())
+                             .Returns(perkSchemeList);
             var schemeService = schemeServiceMock.Object;
 
             var perkInitializator = new PersonPerkInitializator(dice, schemeService);
@@ -42,8 +43,11 @@ namespace Zilon.Core.Persons.Tests
 
             // ASSERT
 
-            factPerks.Should().HaveCount(1);
-            factPerks[0].Scheme.Should().Be(perkSchemeList[0]);
+            factPerks.Should()
+                     .HaveCount(1);
+            factPerks[0]
+                .Scheme.Should()
+                .Be(perkSchemeList[0]);
         }
     }
 }

@@ -30,7 +30,8 @@ namespace Zilon.Core.StaticObjectModules
 
         private void CheckAndDestroy()
         {
-            if (_depositModule.IsExhausted && !_containerModule.Content.CalcActualItems().Any())
+            if (_depositModule.IsExhausted && !_containerModule.Content.CalcActualItems()
+                                                               .Any())
             {
                 Destroy();
             }

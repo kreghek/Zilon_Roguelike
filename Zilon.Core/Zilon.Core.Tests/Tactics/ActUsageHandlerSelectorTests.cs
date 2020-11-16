@@ -25,7 +25,8 @@ namespace Zilon.Core.Tactics.Tests
             // ARRANGE
 
             var testHandlerMock = new Mock<IActUsageHandler>();
-            testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
+            testHandlerMock.SetupGet(x => x.TargetType)
+                           .Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
             var selector = new ActUsageHandlerSelector(new IActUsageHandler[]
@@ -43,7 +44,8 @@ namespace Zilon.Core.Tactics.Tests
 
             // ASSERT
 
-            act.Should().Throw<HandlerNotFoundException>();
+            act.Should()
+               .Throw<HandlerNotFoundException>();
         }
 
         /// <summary>
@@ -56,7 +58,8 @@ namespace Zilon.Core.Tactics.Tests
             // ARRANGE
 
             var testHandlerMock = new Mock<IActUsageHandler>();
-            testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
+            testHandlerMock.SetupGet(x => x.TargetType)
+                           .Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
             var selector = new ActUsageHandlerSelector(new IActUsageHandler[]
@@ -72,7 +75,8 @@ namespace Zilon.Core.Tactics.Tests
 
             // ASSERT
 
-            factHandler.Should().Be(testHandler);
+            factHandler.Should()
+                       .Be(testHandler);
         }
 
         /// <summary>
@@ -85,7 +89,8 @@ namespace Zilon.Core.Tactics.Tests
             // ARRANGE
 
             var testHandlerMock = new Mock<IActUsageHandler>();
-            testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
+            testHandlerMock.SetupGet(x => x.TargetType)
+                           .Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
             var selector = new ActUsageHandlerSelector(new IActUsageHandler[]
@@ -101,7 +106,8 @@ namespace Zilon.Core.Tactics.Tests
 
             // ASSERT
 
-            factHandler.Should().Be(testHandler);
+            factHandler.Should()
+                       .Be(testHandler);
         }
 
         private class Test1 : ITest1, IAttackTarget

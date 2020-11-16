@@ -33,10 +33,11 @@ namespace Zilon.Core.Specs.Steps
 
             var actor = Context.GetActiveActor();
 
-            actor.Person.GetModule<IEvolutionModule>().AddBuildInPerks(new[]
-            {
-                perk
-            });
+            actor.Person.GetModule<IEvolutionModule>()
+                 .AddBuildInPerks(new[]
+                 {
+                     perk
+                 });
         }
 
         [Given(@"У актёра игрока прогресс (\d+) перка (.+)")]
@@ -44,9 +45,11 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var perk = actor.Person.GetModule<IEvolutionModule>().Perks.Single(x => x.Scheme.Sid == perkSid);
+            var perk = actor.Person.GetModule<IEvolutionModule>()
+                            .Perks.Single(x => x.Scheme.Sid == perkSid);
 
-            perk.CurrentJobs[0].Progress = perkProgress;
+            perk.CurrentJobs[0]
+                .Progress = perkProgress;
         }
 
         [Then(@"Перк (.+) должен быть прокачен")]
@@ -54,12 +57,15 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var perk = actor.Person.GetModule<IEvolutionModule>().Perks.Single(x => x.Scheme.Sid == perkSid);
+            var perk = actor.Person.GetModule<IEvolutionModule>()
+                            .Perks.Single(x => x.Scheme.Sid == perkSid);
 
             perk.CurrentLevel.Should()
                 .NotBeNull("Перк должен быть прокачен. null в уровне означает непрокаченный перк.");
-            perk.CurrentLevel.Primary.Should().Be(0);
-            perk.CurrentLevel.Sub.Should().Be(0);
+            perk.CurrentLevel.Primary.Should()
+                .Be(0);
+            perk.CurrentLevel.Sub.Should()
+                .Be(0);
         }
     }
 }

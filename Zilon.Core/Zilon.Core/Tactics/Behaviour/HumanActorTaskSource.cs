@@ -23,7 +23,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private bool CurrentActorSetAndIsDead()
         {
-            return (_currentActorIntention?.Person?.GetModuleSafe<ISurvivalModule>()?.IsDead).GetValueOrDefault();
+            return (_currentActorIntention?.Person?.GetModuleSafe<ISurvivalModule>()
+                                          ?.IsDead).GetValueOrDefault();
         }
 
         public async Task IntentAsync(IIntention intention, IActor activeActor)
@@ -46,7 +47,8 @@ namespace Zilon.Core.Tactics.Behaviour
             _intentionWait = true;
             _currentActorIntention = activeActor;
 
-            await _actorTaskSender.SendAsync(actorTask).ConfigureAwait(false);
+            await _actorTaskSender.SendAsync(actorTask)
+                                  .ConfigureAwait(false);
         }
 
         public async Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
@@ -55,7 +57,8 @@ namespace Zilon.Core.Tactics.Behaviour
             // Этот источник команд ждёт, пока игрок не укажет задачу.
             // Задача генерируется из намерения. Это значит, что ждать нужно, пока не будет задано намерение.
 
-            return await _actorTaskReceiver.ReceiveAsync().ConfigureAwait(false);
+            return await _actorTaskReceiver.ReceiveAsync()
+                                           .ConfigureAwait(false);
         }
 
         //TODO Избавиться от синхронного варианта.
@@ -63,7 +66,8 @@ namespace Zilon.Core.Tactics.Behaviour
         [Obsolete("Использовать асинк-вариант вместо этого")]
         public void Intent(IIntention intention, IActor activeActor)
         {
-            IntentAsync(intention, activeActor).Wait();
+            IntentAsync(intention, activeActor)
+                .Wait();
         }
 
         public bool CanIntent()

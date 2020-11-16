@@ -34,7 +34,8 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().Be(true);
+            canExecute.Should()
+                      .Be(true);
         }
 
         /// <summary>
@@ -71,7 +72,8 @@ namespace Zilon.Core.Tests.Commands
             var usableResource = new Resource(propScheme, 1);
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();
-            equipmentViewModelMock.SetupGet(x => x.Prop).Returns(usableResource);
+            equipmentViewModelMock.SetupGet(x => x.Prop)
+                                  .Returns(usableResource);
             var equipmentViewModel = equipmentViewModelMock.Object;
 
             var inventoryStateMock = new Mock<IInventoryState>();
@@ -83,7 +85,8 @@ namespace Zilon.Core.Tests.Commands
             Container.AddSingleton<UseSelfCommand>();
 
             var actorManagerMock = new Mock<IActorManager>();
-            actorManagerMock.SetupGet(x => x.Items).Returns(Array.Empty<IActor>());
+            actorManagerMock.SetupGet(x => x.Items)
+                            .Returns(Array.Empty<IActor>());
             var actorManager = actorManagerMock.Object;
             Container.AddSingleton(actorManager);
         }

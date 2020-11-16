@@ -91,7 +91,8 @@ namespace Zilon.Core.Common
 
             var neighborCoords = GetNeighbors(baseCubeCoords);
 
-            return neighborCoords.Select(x => ConvertToOffset(x)).ToArray();
+            return neighborCoords.Select(x => ConvertToOffset(x))
+                                 .ToArray();
         }
 
         /// <summary>

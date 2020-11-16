@@ -35,8 +35,9 @@ namespace Zilon.Core.Specs.Steps
                 tableRow.TryGetValue("y", out var routeY);
 
                 var routeNode = sector.Map.Nodes.Cast<HexNode>()
-                    .Single(node =>
-                        (node.OffsetCoords.X == int.Parse(routeX)) && (node.OffsetCoords.Y == int.Parse(routeY)));
+                                      .Single(node =>
+                                          (node.OffsetCoords.X == int.Parse(routeX)) &&
+                                          (node.OffsetCoords.Y == int.Parse(routeY)));
 
                 patrolPoints.Add(routeNode);
             }
@@ -62,11 +63,13 @@ namespace Zilon.Core.Specs.Steps
 
             if (string.IsNullOrWhiteSpace(isNot))
             {
-                offsetCoords.Should().Be(new OffsetCoords(offsetX, offsetY));
+                offsetCoords.Should()
+                            .Be(new OffsetCoords(offsetX, offsetY));
             }
             else
             {
-                offsetCoords.Should().NotBe(new OffsetCoords(offsetX, offsetY));
+                offsetCoords.Should()
+                            .NotBe(new OffsetCoords(offsetX, offsetY));
             }
         }
     }

@@ -36,7 +36,8 @@ namespace Zilon.Core.Tests.Components
                 bonuses);
 
             // ASSERT
-            factValue.Should().Be(expectedValue);
+            factValue.Should()
+                     .Be(expectedValue);
         }
 
         /// <summary>
@@ -57,7 +58,8 @@ namespace Zilon.Core.Tests.Components
             var factValue = personStat.GetActualValue(level, 0);
 
             // ASSERT
-            factValue.Should().Be(expectedValue);
+            factValue.Should()
+                     .Be(expectedValue);
         }
     }
 }

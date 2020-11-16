@@ -55,7 +55,8 @@ namespace Zilon.Core.Tests.Tactics
             var factTransition = TransitionDetection.Detect(testedTrasitions, testedNodes);
 
             // ASSERT
-            factTransition.Should().Be(expectedTransition);
+            factTransition.Should()
+                          .Be(expectedTransition);
         }
 
         /// <summary>
@@ -93,7 +94,8 @@ namespace Zilon.Core.Tests.Tactics
             var factTransition = TransitionDetection.Detect(testedTrasitions, testedNodes);
 
             // ASSERT
-            factTransition.Should().Be(expectedTransition);
+            factTransition.Should()
+                          .Be(expectedTransition);
         }
     }
 }

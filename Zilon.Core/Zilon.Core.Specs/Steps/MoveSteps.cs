@@ -30,7 +30,8 @@ namespace Zilon.Core.Specs.Steps
 
             var expectedOffsetCoords = new OffsetCoords(expectedOffsetX, expectedOffsetY);
             var factOffsetCoords = hexNode.OffsetCoords;
-            factOffsetCoords.Should().Be(expectedOffsetCoords);
+            factOffsetCoords.Should()
+                            .Be(expectedOffsetCoords);
         }
 
         [Then(@"Команда на перемещение может выполняться")]
@@ -38,7 +39,9 @@ namespace Zilon.Core.Specs.Steps
         {
             var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
 
-            moveCommand.CanExecute().Should().BeTrue();
+            moveCommand.CanExecute()
+                       .Should()
+                       .BeTrue();
         }
 
         [Then(@"Команда на перемещение не может выполняться")]
@@ -46,7 +49,9 @@ namespace Zilon.Core.Specs.Steps
         {
             var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
 
-            moveCommand.CanExecute().Should().BeFalse();
+            moveCommand.CanExecute()
+                       .Should()
+                       .BeFalse();
         }
 
         [When(@"Выполняется команда на перемещение")]

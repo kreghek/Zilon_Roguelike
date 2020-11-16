@@ -60,7 +60,8 @@ namespace Zilon.Core.Tests.Persons
             carrier[changedSlot] = equipment;
 
             // ASSERT
-            monitor.Should().Raise(nameof(carrier.EquipmentChanged));
+            monitor.Should()
+                   .Raise(nameof(carrier.EquipmentChanged));
         }
 
         /// <summary>
@@ -133,7 +134,8 @@ namespace Zilon.Core.Tests.Persons
             };
 
             // ASSERT
-            act.Should().NotThrow();
+            act.Should()
+               .NotThrow();
         }
 
         /// <summary>
@@ -207,7 +209,8 @@ namespace Zilon.Core.Tests.Persons
             };
 
             // ASSERT
-            act.Should().Throw<Exception>();
+            act.Should()
+               .Throw<Exception>();
         }
 
         /// <summary>
@@ -278,7 +281,8 @@ namespace Zilon.Core.Tests.Persons
             };
 
             // ASSERT
-            act.Should().Throw<Exception>();
+            act.Should()
+               .Throw<Exception>();
         }
 
         /// <summary>
@@ -345,7 +349,8 @@ namespace Zilon.Core.Tests.Persons
             };
 
             // ASSERT
-            act.Should().NotThrow<Exception>();
+            act.Should()
+               .NotThrow<Exception>();
         }
 
         /// <summary>
@@ -428,7 +433,8 @@ namespace Zilon.Core.Tests.Persons
             };
 
             // ASSERT
-            act.Should().NotThrow<Exception>();
+            act.Should()
+               .NotThrow<Exception>();
         }
 
         /// <summary>
@@ -512,7 +518,8 @@ namespace Zilon.Core.Tests.Persons
             };
 
             // ASSERT
-            act.Should().NotThrow<Exception>();
+            act.Should()
+               .NotThrow<Exception>();
         }
 
         /// <summary>
@@ -582,11 +589,13 @@ namespace Zilon.Core.Tests.Persons
                 // ASSERT
                 if (expectException)
                 {
-                    act.Should().Throw<Exception>();
+                    act.Should()
+                       .Throw<Exception>();
                 }
                 else
                 {
-                    act.Should().NotThrow<Exception>();
+                    act.Should()
+                       .NotThrow<Exception>();
                 }
             }
         }
@@ -670,7 +679,8 @@ namespace Zilon.Core.Tests.Persons
             };
 
             // ASSERT
-            act.Should().NotThrow<Exception>();
+            act.Should()
+               .NotThrow<Exception>();
         }
 
         private static IPropScheme GetSchemeBySid(string sid)

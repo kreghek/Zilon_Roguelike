@@ -75,7 +75,8 @@ namespace Zilon.Core.Tactics.Spatial
                     return false;
                 }
 
-                var hasNext = GetNext(prevNode).Contains(testNode);
+                var hasNext = GetNext(prevNode)
+                    .Contains(testNode);
                 if (!hasNext)
                 {
                     return false;

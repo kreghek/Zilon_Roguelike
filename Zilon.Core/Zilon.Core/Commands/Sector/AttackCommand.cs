@@ -193,7 +193,8 @@ namespace Zilon.Core.Commands
         {
             var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
             var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
-            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()?.Value >
+            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()
+                                                             ?.Value >
                                 0;
             if (!canTakeDamage)
             {

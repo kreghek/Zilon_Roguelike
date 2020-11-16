@@ -26,11 +26,11 @@ namespace Zilon.Core.Tests.Tactics
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.Resolve(It.IsAny<DropTableScheme[]>()))
-                .Returns(new IProp[]
-                {
-                    CreateFakeResource(scheme),
-                    CreateFakeResource(scheme)
-                });
+                            .Returns(new IProp[]
+                            {
+                                CreateFakeResource(scheme),
+                                CreateFakeResource(scheme)
+                            });
             var dropResolver = dropResolverMock.Object;
 
             var store = new DropTableChestStore(new DropTableScheme[0], dropResolver);
@@ -39,8 +39,10 @@ namespace Zilon.Core.Tests.Tactics
             var props = store.CalcActualItems();
 
             // ASSERT
-            props.Length.Should().Be(1);
-            ((Resource)props[0]).Count.Should().Be(2);
+            props.Length.Should()
+                 .Be(1);
+            ((Resource)props[0]).Count.Should()
+                                .Be(2);
         }
 
         /// <summary>
@@ -55,10 +57,10 @@ namespace Zilon.Core.Tests.Tactics
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.Resolve(It.IsAny<DropTableScheme[]>()))
-                .Returns(new IProp[]
-                {
-                    CreateFakeResource(scheme)
-                });
+                            .Returns(new IProp[]
+                            {
+                                CreateFakeResource(scheme)
+                            });
             var dropResolver = dropResolverMock.Object;
 
             var store = new DropTableChestStore(new DropTableScheme[0], dropResolver);
@@ -69,8 +71,11 @@ namespace Zilon.Core.Tests.Tactics
 
             // ASSERT
             dropResolverMock.Verify(x => x.Resolve(It.IsAny<DropTableScheme[]>()), Times.Once);
-            secondProps.Length.Should().Be(firstProps.Length);
-            secondProps[0].Should().BeSameAs(firstProps[0]);
+            secondProps.Length.Should()
+                       .Be(firstProps.Length);
+            secondProps[0]
+                .Should()
+                .BeSameAs(firstProps[0]);
         }
 
         private Resource CreateFakeResource(PropScheme scheme)

@@ -64,7 +64,8 @@ namespace Zilon.Core.Specs.Steps
                 out SurvivalStatHazardLevel effectLevel);
 
             // Use single to control effect. If effect is incorrect there will be exception.
-            var targetStat = actor.Person.GetModuleSafe<ISurvivalModule>()?.Stats?.Single(x => x.Type == statType);
+            var targetStat = actor.Person.GetModuleSafe<ISurvivalModule>()
+                                  ?.Stats?.Single(x => x.Type == statType);
             var keySegment = targetStat.KeySegments.Single(x => x.Level == effectLevel);
 
             var statValue = keySegment.End;
@@ -105,17 +106,22 @@ namespace Zilon.Core.Specs.Steps
 
             if (stat != SurvivalStatType.Undefined)
             {
-                var effect = actor.Person.GetModule<IEffectsModule>().Items
-                    .OfType<SurvivalStatHazardEffect>()
-                    .SingleOrDefault(x => x.Type == stat);
+                var effect = actor.Person.GetModule<IEffectsModule>()
+                                  .Items
+                                  .OfType<SurvivalStatHazardEffect>()
+                                  .SingleOrDefault(x => x.Type == stat);
 
-                effect.Should().NotBeNull();
-                effect.Level.Should().Be(level);
+                effect.Should()
+                      .NotBeNull();
+                effect.Level.Should()
+                      .Be(level);
             }
             else
             {
-                var effects = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>();
-                effects.Should().BeEmpty();
+                var effects = actor.Person.GetModule<IEffectsModule>()
+                                   .Items.OfType<SurvivalStatHazardEffect>();
+                effects.Should()
+                       .BeEmpty();
             }
         }
 
@@ -139,7 +145,8 @@ namespace Zilon.Core.Specs.Steps
                     throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
 
-            survivalStatValue.Should().Be(expectedValue);
+            survivalStatValue.Should()
+                             .Be(expectedValue);
         }
 
         [Then(@"Значение (сытость|вода) уменьшилось на (.*) и стало (.*)")]
@@ -150,11 +157,15 @@ namespace Zilon.Core.Specs.Steps
             switch (stat)
             {
                 case "сытость":
-                    GetSurvivalValue(actor, SurvivalStatType.Satiety).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Satiety)
+                        .Should()
+                        .Be(expectedValue);
                     break;
 
                 case "вода":
-                    GetSurvivalValue(actor, SurvivalStatType.Hydration).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Hydration)
+                        .Should()
+                        .Be(expectedValue);
                     break;
 
                 default:
@@ -174,11 +185,15 @@ namespace Zilon.Core.Specs.Steps
             switch (stat)
             {
                 case "сытость":
-                    GetSurvivalValue(actor, SurvivalStatType.Satiety).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Satiety)
+                        .Should()
+                        .Be(expectedValue);
                     break;
 
                 case "вода":
-                    GetSurvivalValue(actor, SurvivalStatType.Hydration).Should().Be(expectedValue);
+                    GetSurvivalValue(actor, SurvivalStatType.Hydration)
+                        .Should()
+                        .Be(expectedValue);
                     break;
 
                 default:
@@ -190,7 +205,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var globe = Context.Globe;
             var humatTaskSource = Context.ServiceProvider
-                .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+                                         .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var counter = timeUnitCount;
@@ -210,7 +225,9 @@ namespace Zilon.Core.Specs.Steps
                             idleCommand.Execute();
                         }
 
-                        await globe.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
+                        await globe.UpdateAsync()
+                                   .TimeoutAfter(1000)
+                                   .ConfigureAwait(false);
                     }
 
                     counter--;
@@ -222,7 +239,9 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        await globe.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
+                        await globe.UpdateAsync()
+                                   .TimeoutAfter(1000)
+                                   .ConfigureAwait(false);
                     }
 
                     counter--;
@@ -236,7 +255,8 @@ namespace Zilon.Core.Specs.Steps
             for (var i = 0; i < times; i++)
             {
                 Context.UsePropByActiveActor(propSid);
-                await WaitForIteration(1).ConfigureAwait(false);
+                await WaitForIteration(1)
+                    .ConfigureAwait(false);
             }
         }
 
@@ -359,7 +379,8 @@ namespace Zilon.Core.Specs.Steps
 
         private static int? GetSurvivalValue(IActor actor, SurvivalStatType type)
         {
-            var stat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == type);
+            var stat = actor.Person.GetModule<ISurvivalModule>()
+                            .Stats.SingleOrDefault(x => x.Type == type);
             return stat?.Value;
         }
 

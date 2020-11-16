@@ -77,7 +77,8 @@ namespace Zilon.Bot.Players.Logics.Tests
             var factAct = SelectActHelper.SelectBestAct(acts, null);
 
             // ASSERT
-            factAct.Scheme.Sid.Should().Be("default");
+            factAct.Scheme.Sid.Should()
+                   .Be("default");
         }
 
         [Test]
@@ -135,14 +136,16 @@ namespace Zilon.Bot.Players.Logics.Tests
             };
 
             var inventoryMock = new Mock<IPropStore>();
-            inventoryMock.Setup(x => x.CalcActualItems()).Returns(Array.Empty<IProp>());
+            inventoryMock.Setup(x => x.CalcActualItems())
+                         .Returns(Array.Empty<IProp>());
             var inventory = inventoryMock.Object;
 
             // ACT
             var factAct = SelectActHelper.SelectBestAct(acts, inventory);
 
             // ASSERT
-            factAct.Scheme.Sid.Should().Be("default");
+            factAct.Scheme.Sid.Should()
+                   .Be("default");
         }
     }
 }

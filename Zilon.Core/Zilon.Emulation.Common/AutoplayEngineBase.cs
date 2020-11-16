@@ -32,7 +32,8 @@ namespace Zilon.Emulation.Common
         {
             // Create globe
             var globeInitializer = _globeInitializer;
-            var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
+            var globe = await globeInitializer.CreateGlobeAsync("intro")
+                                              .ConfigureAwait(false);
             return globe;
         }
 
@@ -49,11 +50,13 @@ namespace Zilon.Emulation.Common
             }
 
             var iterationCounter = 1;
-            while (!followedPerson.GetModule<ISurvivalModule>().IsDead && (iterationCounter <= ITERATION_LIMIT))
+            while (!followedPerson.GetModule<ISurvivalModule>()
+                                  .IsDead && (iterationCounter <= ITERATION_LIMIT))
             {
                 try
                 {
-                    await globe.UpdateAsync().ConfigureAwait(false);
+                    await globe.UpdateAsync()
+                               .ConfigureAwait(false);
                 }
                 catch (ActorTaskExecutionException exception)
                 {

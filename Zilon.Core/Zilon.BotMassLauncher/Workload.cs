@@ -41,7 +41,9 @@ namespace Zilon.BotMassLauncher
 
             _pathToEnv = ArgumentHelper.GetProgramArgument(args, "env");
             _launchCount = int.Parse(ArgumentHelper.GetProgramArgument(args, "launchCount"));
-            _scorePrefix = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture).Replace(":", "_").Replace(".", "_");
+            _scorePrefix = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)
+                                   .Replace(":", "_")
+                                   .Replace(".", "_");
 
             _parallel = ArgumentHelper.GetProgramArgument(args, "parallel");
             _isInfinite = ArgumentHelper.HasProgramArgument(args, "infinite");

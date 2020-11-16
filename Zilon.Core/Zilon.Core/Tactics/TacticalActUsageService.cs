@@ -123,17 +123,19 @@ namespace Zilon.Core.Tactics
 
         private static void RemovePropResource(IActor actor, ITacticalAct act)
         {
-            var propResources = from prop in actor.Person.GetModule<IInventoryModule>().CalcActualItems()
-                                where prop is Resource
-                                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
-                                select prop;
+            var propResources = from prop in actor.Person.GetModule<IInventoryModule>()
+                                                  .CalcActualItems()
+                where prop is Resource
+                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
+                select prop;
 
             if (propResources.FirstOrDefault() is Resource propResource)
             {
                 if (propResource.Count >= act.Constrains.PropResourceCount)
                 {
                     var usedResource = new Resource(propResource.Scheme, act.Constrains.PropResourceCount.Value);
-                    actor.Person.GetModule<IInventoryModule>().Remove(usedResource);
+                    actor.Person.GetModule<IInventoryModule>()
+                         .Remove(usedResource);
                 }
                 else
                 {

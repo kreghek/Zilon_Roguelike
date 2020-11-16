@@ -48,7 +48,8 @@ namespace Zilon.BotEnvironment
             AppendException(exception, _scoreFilePreffix);
 
             var monsterActorTaskSource = ServiceScope.ServiceProvider
-                .GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+                                                     .GetRequiredService<MonsterBotActorTaskSource<
+                                                         ISectorTaskSourceContext>>();
             if (exception.ActorTaskSource != monsterActorTaskSource)
             {
                 _botExceptionCount++;
@@ -102,7 +103,7 @@ namespace Zilon.BotEnvironment
             }
 
             var botTaskSource = ServiceScope.ServiceProvider
-                .GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>();
+                                            .GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>();
             var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
             var filename = Path.Combine(path,
                 $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.exceptions");
@@ -155,7 +156,8 @@ namespace Zilon.BotEnvironment
                 file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}\t{scoreManager.Turns}\t{fragSum}");
             }
 
-            DatabaseContext.AppendScores(path, scoreManager, botTaskSource.GetType().FullName, scoreFilePreffix, mode,
+            DatabaseContext.AppendScores(path, scoreManager, botTaskSource.GetType()
+                                                                          .FullName, scoreFilePreffix, mode,
                 summary);
         }
 

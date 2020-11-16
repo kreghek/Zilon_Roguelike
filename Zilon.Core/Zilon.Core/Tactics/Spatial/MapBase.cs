@@ -213,7 +213,9 @@ namespace Zilon.Core.Tactics.Spatial
             var resultState = astar.Run();
             if (resultState == State.GoalFound)
             {
-                var foundPath = astar.GetPath().Skip(1).ToArray();
+                var foundPath = astar.GetPath()
+                                     .Skip(1)
+                                     .ToArray();
                 foreach (var pathNode in foundPath)
                 {
                     outputPath.Add((HexNode)pathNode);

@@ -44,13 +44,13 @@ namespace Zilon.TextClient
             var gameLoop = new GameLoop(globe);
             var uiState = scope.ServiceProvider.GetRequiredService<ISectorUiState>();
             var playerActor = (from sectorNode in globe.SectorNodes
-                               from actor in sectorNode.Sector.ActorManager.Items
-                               where actor.Person == player.MainPerson
-                               select actor).SingleOrDefault();
+                from actor in sectorNode.Sector.ActorManager.Items
+                where actor.Person == player.MainPerson
+                select actor).SingleOrDefault();
             var playerActorSectorNode = (from sectorNode in globe.SectorNodes
-                                         from actor in sectorNode.Sector.ActorManager.Items
-                                         where actor.Person == player.MainPerson
-                                         select sectorNode).SingleOrDefault();
+                from actor in sectorNode.Sector.ActorManager.Items
+                where actor.Person == player.MainPerson
+                select sectorNode).SingleOrDefault();
 
             // This is code smells. It is not good settings
             player.BindPerson(globe, playerActor.Person);
@@ -81,7 +81,7 @@ namespace Zilon.TextClient
                     ISectorMap map = playerActorSectorNode.Sector.Map;
 
                     var targetNode = map.Nodes.OfType<HexNode>()
-                        .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
+                                        .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
 
                     var moveCommand = scope.ServiceProvider.GetRequiredService<MoveCommand>();
 
@@ -120,10 +120,12 @@ namespace Zilon.TextClient
         private static void PrintState(IActor actor)
         {
             Console.WriteLine(new string('=', 10));
-            if (actor.Person.GetModule<IEffectsModule>().Items.Any())
+            if (actor.Person.GetModule<IEffectsModule>()
+                     .Items.Any())
             {
                 Console.WriteLine("Effects:");
-                foreach (var effect in actor.Person.GetModule<IEffectsModule>().Items)
+                foreach (var effect in actor.Person.GetModule<IEffectsModule>()
+                                            .Items)
                 {
                     Console.WriteLine(effect);
                 }

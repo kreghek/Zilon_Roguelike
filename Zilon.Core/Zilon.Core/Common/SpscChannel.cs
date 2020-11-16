@@ -26,7 +26,8 @@ namespace Zilon.Core.Common
         public async Task<T> ReceiveAsync()
         {
             TaskCompletionSource<T> source;
-            await _semaphore.WaitAsync().ConfigureAwait(false);
+            await _semaphore.WaitAsync()
+                            .ConfigureAwait(false);
             try
             {
                 if (_values.TryTake(out var value))
@@ -49,7 +50,8 @@ namespace Zilon.Core.Common
 
         public async Task SendAsync(T obj)
         {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
+            await _semaphore.WaitAsync()
+                            .ConfigureAwait(false);
 
             try
             {

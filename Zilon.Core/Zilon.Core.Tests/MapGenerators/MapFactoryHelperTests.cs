@@ -28,11 +28,15 @@ namespace Zilon.Core.Tests.MapGenerators
 
             // ASSERT
 
-            resizedMatrix[1, 1].Should().BeTrue();
+            resizedMatrix[1, 1]
+                .Should()
+                .BeTrue();
             var n = HexHelper.GetNeighbors(1, 1);
             foreach (var c in n)
             {
-                resizedMatrix[c.X, c.Y].Should().BeTrue();
+                resizedMatrix[c.X, c.Y]
+                    .Should()
+                    .BeTrue();
             }
         }
     }

@@ -27,7 +27,8 @@ namespace Zilon.Core.Benchmarks.CreateSector
             var biom = await biomInitializer.InitBiomeAsync(testScheme);
             var tesSectorNode = biom.Sectors.First();
 
-            await sectorGenerator.GenerateAsync(tesSectorNode).ConfigureAwait(false);
+            await sectorGenerator.GenerateAsync(tesSectorNode)
+                                 .ConfigureAwait(false);
         }
 
         [IterationSetup]

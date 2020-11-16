@@ -118,7 +118,8 @@ namespace Zilon.Core.PersonGeneration
             {
                 dropScheme
             });
-            var usedEquipment = dropedProps.OfType<Equipment>().FirstOrDefault();
+            var usedEquipment = dropedProps.OfType<Equipment>()
+                                           .FirstOrDefault();
             if (usedEquipment != null)
             {
                 var equipmentModule = person.GetModule<IEquipmentModule>();
@@ -126,7 +127,8 @@ namespace Zilon.Core.PersonGeneration
                 if (canBeEquiped)
                 {
                     AddEquipment(equipmentModule, slotIndex, usedEquipment);
-                    var unusedMainWeaponDrops = dropedProps.Where(x => x != usedEquipment).ToArray();
+                    var unusedMainWeaponDrops = dropedProps.Where(x => x != usedEquipment)
+                                                           .ToArray();
                     foreach (var prop in unusedMainWeaponDrops)
                     {
                         AddPropToInventory(inventory, prop);

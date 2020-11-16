@@ -158,9 +158,9 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 // и проводим к ней коридор
 
                 var availableRooms = roomsInGraph
-                    .Where(x => (x.Key != room) && (x.Value < maxNeighbors))
-                    .Select(x => x.Key)
-                    .ToArray();
+                                     .Where(x => (x.Key != room) && (x.Value < maxNeighbors))
+                                     .Select(x => x.Key)
+                                     .ToArray();
 
                 if (!availableRooms.Any())
                 {

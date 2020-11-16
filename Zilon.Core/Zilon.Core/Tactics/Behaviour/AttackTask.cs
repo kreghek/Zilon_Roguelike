@@ -61,12 +61,15 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (Actor.Person.GetModuleSafe<IEquipmentModule>() == null)
             {
-                yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+                yield return Actor.Person.GetModule<ICombatActModule>()
+                                  .CalcCombatActs()
+                                  .First();
             }
             else
             {
                 var usedEquipmentActs = false;
-                var slots = Actor.Person.GetModule<IEquipmentModule>().Slots;
+                var slots = Actor.Person.GetModule<IEquipmentModule>()
+                                 .Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
                     var slotEquipment = Actor.Person.GetModule<IEquipmentModule>()[i];
@@ -75,14 +78,16 @@ namespace Zilon.Core.Tactics.Behaviour
                         continue;
                     }
 
-                    if ((slots[i].Types & EquipmentSlotTypes.Hand) == 0)
+                    if ((slots[i]
+                        .Types & EquipmentSlotTypes.Hand) == 0)
                     {
                         continue;
                     }
 
-                    var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
-                                        where act.Equipment == slotEquipment
-                                        select act;
+                    var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>()
+                                                         .CalcCombatActs()
+                        where act.Equipment == slotEquipment
+                        select act;
 
                     var usedAct = equipmentActs.FirstOrDefault();
 
@@ -96,7 +101,9 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (!usedEquipmentActs)
                 {
-                    yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+                    yield return Actor.Person.GetModule<ICombatActModule>()
+                                      .CalcCombatActs()
+                                      .First();
                 }
             }
         }

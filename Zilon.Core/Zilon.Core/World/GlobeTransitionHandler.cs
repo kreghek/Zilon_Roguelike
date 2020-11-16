@@ -45,7 +45,8 @@ namespace Zilon.Core.World
             {
                 if (sectorNode.State != SectorNodeState.SectorMaterialized)
                 {
-                    await _globeExpander.ExpandAsync(sectorNode).ConfigureAwait(false);
+                    await _globeExpander.ExpandAsync(sectorNode)
+                                        .ConfigureAwait(false);
                     globe.AddSectorNode(sectorNode);
                 }
 
@@ -62,7 +63,8 @@ namespace Zilon.Core.World
                 }
 
                 var nextSector = sectorNode.Sector;
-                var nodeForTransition = nextSector.Map.Transitions.First(x => x.Value.SectorNode.Sector == sector).Key;
+                var nodeForTransition = nextSector.Map.Transitions.First(x => x.Value.SectorNode.Sector == sector)
+                                                  .Key;
                 var actorInNewSector = new Actor(actor.Person, actor.TaskSource, nodeForTransition);
                 nextSector.ActorManager.Add(actorInNewSector);
             }

@@ -244,13 +244,14 @@ namespace Zilon.Core.PersonModules
 
         private static IEnumerable<PersonArmorItem> MergeArmor(IEnumerable<PersonArmorItem> equipmentArmors)
         {
-            var armorGroups = equipmentArmors.GroupBy(x => x.Impact).OrderBy(x => x.Key);
+            var armorGroups = equipmentArmors.GroupBy(x => x.Impact)
+                                             .OrderBy(x => x.Key);
 
             foreach (var armorGroup in armorGroups)
             {
                 var orderedArmors = from armor in armorGroup
-                                    orderby armor.AbsorbtionLevel, armor.ArmorRank
-                                    select armor;
+                    orderby armor.AbsorbtionLevel, armor.ArmorRank
+                    select armor;
 
                 float? rankRaw = null;
                 PersonRuleLevel? armorLevel = null;

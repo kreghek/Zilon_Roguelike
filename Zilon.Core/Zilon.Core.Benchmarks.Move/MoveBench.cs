@@ -41,7 +41,8 @@ namespace Zilon.Core.Benchmarks.Move
 
             _globe = new TestGlobe(personScheme, humanActorTaskSource);
 
-            IActor actor = _globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Single();
+            IActor actor = _globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items)
+                                 .Single();
             var person = actor.Person;
 
             humanPlayer.BindPerson(_globe, person);

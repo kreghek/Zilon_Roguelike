@@ -39,7 +39,8 @@ namespace Zilon.Core.Tests.Persons
             };
 
             // ARRANGE
-            act.Should().NotThrow();
+            act.Should()
+               .NotThrow();
         }
 
         /// <summary>
@@ -55,7 +56,8 @@ namespace Zilon.Core.Tests.Persons
             var module = monster.GetModuleSafe<IEvolutionModule>();
 
             // ASSERT
-            module.Should().BeNull();
+            module.Should()
+                  .BeNull();
         }
 
         /// <summary>
@@ -74,7 +76,8 @@ namespace Zilon.Core.Tests.Persons
             var module = monster.GetModuleSafe<IInventoryModule>();
 
             // ASSERT
-            module.Should().BeNull();
+            module.Should()
+                  .BeNull();
         }
 
         private static MonsterPerson CreateMonster()

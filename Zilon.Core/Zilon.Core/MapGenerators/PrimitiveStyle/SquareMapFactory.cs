@@ -28,7 +28,8 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
             };
             var generationOptions = new SectorMapFactoryOptions(squaregenerationOptionsSubScheme);
 
-            return await factory.CreateAsync(generationOptions).ConfigureAwait(false);
+            return await factory.CreateAsync(generationOptions)
+                                .ConfigureAwait(false);
         }
 
         /// <inheritdoc/>

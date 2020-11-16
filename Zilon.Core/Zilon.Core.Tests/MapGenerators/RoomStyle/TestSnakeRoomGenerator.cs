@@ -57,8 +57,10 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             {
                 var room = new Room
                 {
-                    PositionX = _rolledOffsetCoords[i].X,
-                    PositionY = _rolledOffsetCoords[i].Y
+                    PositionX = _rolledOffsetCoords[i]
+                        .X,
+                    PositionY = _rolledOffsetCoords[i]
+                        .Y
                 };
 
                 var rolledSize = new Size(3, 3);

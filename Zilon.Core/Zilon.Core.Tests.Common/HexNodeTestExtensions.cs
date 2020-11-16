@@ -15,7 +15,8 @@ namespace Zilon.Core.Tests.Common
 
         public static HexNode SelectByHexCoords(this IEnumerable<IGraphNode> nodes, int offsetX, int offsetY)
         {
-            return nodes.Cast<HexNode>().SelectBy(offsetX, offsetY);
+            return nodes.Cast<HexNode>()
+                        .SelectBy(offsetX, offsetY);
         }
     }
 }

@@ -41,10 +41,10 @@ namespace Zilon.Core.Client
         private void MergeResource(List<IProp> result, Resource resource)
         {
             var removedResource = PropRemoved.OfType<Resource>()
-                .SingleOrDefault(x => x.Scheme == resource.Scheme);
+                                             .SingleOrDefault(x => x.Scheme == resource.Scheme);
 
             var addedResource = PropAdded.OfType<Resource>()
-                .SingleOrDefault(x => x.Scheme == resource.Scheme);
+                                         .SingleOrDefault(x => x.Scheme == resource.Scheme);
 
             var addedCount = addedResource?.Count;
             var removedCount = removedResource?.Count;
@@ -126,7 +126,8 @@ namespace Zilon.Core.Client
             IList<IProp> mainList,
             IList<IProp> oppositList)
         {
-            var oppositResource = oppositList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
+            var oppositResource = oppositList.OfType<Resource>()
+                                             .SingleOrDefault(x => x.Scheme == resource.Scheme);
             if (oppositResource != null)
             {
                 var remains = oppositResource.Count - resource.Count;
@@ -146,7 +147,8 @@ namespace Zilon.Core.Client
             }
             else
             {
-                var mainResource = mainList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
+                var mainResource = mainList.OfType<Resource>()
+                                           .SingleOrDefault(x => x.Scheme == resource.Scheme);
                 if (mainResource == null)
                 {
                     mainResource = new Resource(resource.Scheme, resource.Count);
@@ -204,12 +206,14 @@ namespace Zilon.Core.Client
                 case Resource resource:
 
                     // запоминаем предыдущее состояния для событий
-                    var oldProp = (Resource)CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+                    var oldProp = (Resource)CalcActualItems()
+                        ?.SingleOrDefault(x => x.Scheme == prop.Scheme);
 
                     TransferResource(resource, PropAdded, PropRemoved);
 
                     // Выброс событий
-                    var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+                    var currentProp = CalcActualItems()
+                        ?.SingleOrDefault(x => x.Scheme == prop.Scheme);
 
                     if (oldProp == null)
                     {
@@ -241,12 +245,14 @@ namespace Zilon.Core.Client
             {
                 case Resource resource:
                     // запоминаем предыдущее состояние для событий
-                    var oldProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+                    var oldProp = CalcActualItems()
+                        ?.SingleOrDefault(x => x.Scheme == prop.Scheme);
 
                     TransferResource(resource, PropRemoved, PropAdded);
 
                     // Выброс событий
-                    var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+                    var currentProp = CalcActualItems()
+                        ?.SingleOrDefault(x => x.Scheme == prop.Scheme);
 
                     if (currentProp != null)
                     {

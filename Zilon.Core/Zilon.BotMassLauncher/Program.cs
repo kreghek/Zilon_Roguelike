@@ -12,8 +12,8 @@ namespace Zilon.BotMassLauncher
         private static void BuildConfig(IConfigurationBuilder builder)
         {
             builder.SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false, true)
-                .AddEnvironmentVariables();
+                   .AddJsonFile("appsettings.json", false, true)
+                   .AddEnvironmentVariables();
         }
 
         private static void Main(string[] args)
@@ -24,11 +24,12 @@ namespace Zilon.BotMassLauncher
             var configuration = configBuilder.Build();
 
             var host = Host
-                .CreateDefaultBuilder()
-                .ConfigureServices((context, services) => services
-                    .AddLogging(loggingBuilder => loggingBuilder.AddConsole().AddConfiguration(configuration))
-                )
-                .Build();
+                       .CreateDefaultBuilder()
+                       .ConfigureServices((context, services) => services
+                           .AddLogging(loggingBuilder => loggingBuilder.AddConsole()
+                                                                       .AddConfiguration(configuration))
+                       )
+                       .Build();
 
             var workload = ActivatorUtilities.CreateInstance<Workload>(host.Services);
 

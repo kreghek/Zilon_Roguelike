@@ -35,9 +35,14 @@ namespace Zilon.Core.Tests.Props
 
             // ASSERT
             var items = propStore.CalcActualItems();
-            items.Should().HaveCount(expectedItemCount);
-            items[0].Should().BeOfType<Concept>();
-            items[0].Should().Be(concent);
+            items.Should()
+                 .HaveCount(expectedItemCount);
+            items[0]
+                .Should()
+                .BeOfType<Concept>();
+            items[0]
+                .Should()
+                .Be(concent);
         }
 
         /// <summary>
@@ -57,7 +62,8 @@ namespace Zilon.Core.Tests.Props
                 propStore.Add(concent);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(IPropStore.Added));
+                monitor.Should()
+                       .Raise(nameof(IPropStore.Added));
             }
         }
 
@@ -79,8 +85,11 @@ namespace Zilon.Core.Tests.Props
 
             // ASSERT
             var items = propStore.CalcActualItems();
-            items.Should().HaveCount(expectedItemCount);
-            items[0].Should().Be(equipment);
+            items.Should()
+                 .HaveCount(expectedItemCount);
+            items[0]
+                .Should()
+                .Be(equipment);
         }
 
         /// <summary>
@@ -101,7 +110,8 @@ namespace Zilon.Core.Tests.Props
                 propStore.Add(equipment);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(IPropStore.Added));
+                monitor.Should()
+                       .Raise(nameof(IPropStore.Added));
             }
         }
 
@@ -124,7 +134,8 @@ namespace Zilon.Core.Tests.Props
                 propStore.Add(resource);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(IPropStore.Added));
+                monitor.Should()
+                       .Raise(nameof(IPropStore.Added));
             }
         }
 
@@ -147,8 +158,11 @@ namespace Zilon.Core.Tests.Props
 
             // ASSERT
             var items = propStore.CalcActualItems();
-            items.Should().HaveCount(expectedItemCount);
-            items[0].Should().Be(resource);
+            items.Should()
+                 .HaveCount(expectedItemCount);
+            items[0]
+                .Should()
+                .Be(resource);
         }
 
         /// <summary>
@@ -175,10 +189,16 @@ namespace Zilon.Core.Tests.Props
 
             // ASSERT
             var items = propStore.CalcActualItems();
-            items.Should().HaveCount(expectedItemCount);
-            items[0].Scheme.Sid.Should().Be(_resourceScheme.Sid);
-            items[0].Should().BeOfType<Resource>();
-            ((Resource)items[0]).Count.Should().Be(expectedResourceCount);
+            items.Should()
+                 .HaveCount(expectedItemCount);
+            items[0]
+                .Scheme.Sid.Should()
+                .Be(_resourceScheme.Sid);
+            items[0]
+                .Should()
+                .BeOfType<Resource>();
+            ((Resource)items[0]).Count.Should()
+                                .Be(expectedResourceCount);
         }
 
         /// <summary>
@@ -201,12 +221,14 @@ namespace Zilon.Core.Tests.Props
                 propStore.Remove(concent);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(IPropStore.Removed));
+                monitor.Should()
+                       .Raise(nameof(IPropStore.Removed));
             }
 
             // ASSERT
             var items = propStore.CalcActualItems();
-            items.Should().BeEmpty();
+            items.Should()
+                 .BeEmpty();
         }
 
         /// <summary>
@@ -227,7 +249,8 @@ namespace Zilon.Core.Tests.Props
 
             // ASSERT
             var items = propStore.CalcActualItems();
-            items.Should().BeEmpty();
+            items.Should()
+                 .BeEmpty();
         }
 
         /// <summary>
@@ -248,7 +271,8 @@ namespace Zilon.Core.Tests.Props
                 propStore.Remove(equipment);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(IPropStore.Removed));
+                monitor.Should()
+                       .Raise(nameof(IPropStore.Removed));
             }
         }
 
@@ -269,7 +293,8 @@ namespace Zilon.Core.Tests.Props
 
             // ASSERT
             var items = propStore.CalcActualItems();
-            items.Should().BeEmpty();
+            items.Should()
+                 .BeEmpty();
         }
 
         /// <summary>
@@ -294,7 +319,8 @@ namespace Zilon.Core.Tests.Props
                 propStore.Remove(usedResource);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(IPropStore.Changed));
+                monitor.Should()
+                       .Raise(nameof(IPropStore.Changed));
             }
         }
 
@@ -317,7 +343,8 @@ namespace Zilon.Core.Tests.Props
                 propStore.Remove(resource);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(IPropStore.Removed));
+                monitor.Should()
+                       .Raise(nameof(IPropStore.Removed));
             }
         }
 
@@ -340,7 +367,8 @@ namespace Zilon.Core.Tests.Props
 
             // ASSERT
             var items = propStore.CalcActualItems();
-            items.Should().BeEmpty();
+            items.Should()
+                 .BeEmpty();
         }
 
         /// <summary>
@@ -368,8 +396,10 @@ namespace Zilon.Core.Tests.Props
 
             // ASSERT
             var items = propStore.CalcActualItems();
-            items.Should().HaveCount(expectedItemCount);
-            ((Resource)items[0]).Count.Should().Be(expectedResourceCount);
+            items.Should()
+                 .HaveCount(expectedItemCount);
+            ((Resource)items[0]).Count.Should()
+                                .Be(expectedResourceCount);
         }
 
         [SetUp]

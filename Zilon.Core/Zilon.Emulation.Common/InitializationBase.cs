@@ -61,7 +61,8 @@ namespace Zilon.Emulation.Common
             serviceRegistry.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
             serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory =>
             {
-                var factories = diFactory.GetServices<IStaticObjectFactory>().ToArray();
+                var factories = diFactory.GetServices<IStaticObjectFactory>()
+                                         .ToArray();
                 return new StaticObjectFactoryCollector(factories);
             });
             serviceRegistry.AddSingleton<IStaticObjectFactory, StoneDepositFactory>();

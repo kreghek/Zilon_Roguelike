@@ -31,7 +31,7 @@ namespace Zilon.Core.Tactics.Behaviour
             foreach (var linePoint in line)
             {
                 var staticObjects = _staticObjectManager.Items.Where(x => (x.Node as HexNode).CubeCoords == linePoint)
-                    .ToArray();
+                                                        .ToArray();
                 foreach (var staticObject in staticObjects)
                 {
                     if (staticObject.IsSightBlock)

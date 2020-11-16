@@ -17,7 +17,8 @@ namespace Zilon.Core.StaticObjectModules
 
         private void Content_Removed(object sender, PropStoreEventArgs e)
         {
-            if (!Content.CalcActualItems().Any())
+            if (!Content.CalcActualItems()
+                        .Any())
             {
                 IsActive = false;
             }

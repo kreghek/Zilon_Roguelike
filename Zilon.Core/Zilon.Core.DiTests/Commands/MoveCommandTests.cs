@@ -39,7 +39,8 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().Be(true);
+            canExecute.Should()
+                      .Be(true);
         }
 
         /// <summary>
@@ -57,12 +58,15 @@ namespace Zilon.Core.Tests.Commands
             var monsterMock = new Mock<IActor>();
 
             var monsterNode = player.SectorNode.Sector.Map.Nodes.SelectByHexCoords(0, 2);
-            monsterMock.SetupGet(x => x.Node).Returns(monsterNode);
+            monsterMock.SetupGet(x => x.Node)
+                       .Returns(monsterNode);
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.Fraction).Returns(Fractions.MonsterFraction);
+            personMock.SetupGet(x => x.Fraction)
+                      .Returns(Fractions.MonsterFraction);
             var person = personMock.Object;
-            monsterMock.SetupGet(x => x.Person).Returns(person);
+            monsterMock.SetupGet(x => x.Person)
+                       .Returns(person);
 
             var monster = monsterMock.Object;
             _actorList.Add(monster);
@@ -71,7 +75,8 @@ namespace Zilon.Core.Tests.Commands
             var canRepeat = command.CanRepeat();
 
             // ASSERT
-            canRepeat.Should().BeFalse();
+            canRepeat.Should()
+                     .BeFalse();
         }
 
         /// <summary>
@@ -89,12 +94,15 @@ namespace Zilon.Core.Tests.Commands
             var monsterMock = new Mock<IActor>();
 
             var monsterNode = player.SectorNode.Sector.Map.Nodes.SelectByHexCoords(0, 6);
-            monsterMock.SetupGet(x => x.Node).Returns(monsterNode);
+            monsterMock.SetupGet(x => x.Node)
+                       .Returns(monsterNode);
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.Fraction).Returns(Fractions.MonsterFraction);
+            personMock.SetupGet(x => x.Fraction)
+                      .Returns(Fractions.MonsterFraction);
             var person = personMock.Object;
-            monsterMock.SetupGet(x => x.Person).Returns(person);
+            monsterMock.SetupGet(x => x.Person)
+                       .Returns(person);
 
             var monster = monsterMock.Object;
             _actorList.Add(monster);
@@ -103,7 +111,8 @@ namespace Zilon.Core.Tests.Commands
             var canRepeat = command.CanRepeat();
 
             // ASSERT
-            canRepeat.Should().BeTrue();
+            canRepeat.Should()
+                     .BeTrue();
         }
 
         /// <summary>
@@ -121,7 +130,8 @@ namespace Zilon.Core.Tests.Commands
             var canRepeat = command.CanRepeat();
 
             // ASSERT
-            canRepeat.Should().BeTrue();
+            canRepeat.Should()
+                     .BeTrue();
         }
 
         /// <summary>
@@ -172,7 +182,8 @@ namespace Zilon.Core.Tests.Commands
                 playerStateMock.Object.ActiveActor.Actor
             };
             var actorManagerMock = new Mock<IActorManager>();
-            actorManagerMock.Setup(x => x.Items).Returns(_actorList);
+            actorManagerMock.Setup(x => x.Items)
+                            .Returns(_actorList);
             var actorManager = actorManagerMock.Object;
 
             Container.AddSingleton(factory => actorManager);

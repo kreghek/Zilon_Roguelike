@@ -25,7 +25,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
             // ARRANGE
 
             var diceMock = new Mock<IDice>();
-            diceMock.Setup(x => x.Roll(It.IsAny<int>())).Returns(1);
+            diceMock.Setup(x => x.Roll(It.IsAny<int>()))
+                    .Returns(1);
             var dice = diceMock.Object;
 
             var interiorRandomSource = new InteriorObjectRandomSource(dice);
@@ -43,7 +44,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
             var factMetas = interiorRandomSource.RollInteriorObjects(coords);
 
             // ASSERT
-            factMetas.Should().NotBeEmpty();
+            factMetas.Should()
+                     .NotBeEmpty();
         }
     }
 }

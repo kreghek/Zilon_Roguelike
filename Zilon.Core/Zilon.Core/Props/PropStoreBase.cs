@@ -70,7 +70,7 @@ namespace Zilon.Core.Props
         private bool HasResource(Resource resource)
         {
             return Items.OfType<Resource>()
-                .Any(x => (x.Scheme.Sid == resource.Scheme.Sid) && (x.Count >= resource.Count));
+                        .Any(x => (x.Scheme.Sid == resource.Scheme.Sid) && (x.Count >= resource.Count));
         }
 
         private void RemoveConcept(Concept concept)
@@ -88,7 +88,7 @@ namespace Zilon.Core.Props
         private void RemoveResource(Resource resource)
         {
             var currentResource = Items.OfType<Resource>()
-                .SingleOrDefault(x => x.Scheme == resource.Scheme);
+                                       .SingleOrDefault(x => x.Scheme == resource.Scheme);
 
             if (currentResource == null)
             {
@@ -116,7 +116,7 @@ namespace Zilon.Core.Props
         private void StackResource(Resource resource)
         {
             var currentResource = Items.OfType<Resource>()
-                .SingleOrDefault(x => x.Scheme == resource.Scheme);
+                                       .SingleOrDefault(x => x.Scheme == resource.Scheme);
 
             if (currentResource == null)
             {

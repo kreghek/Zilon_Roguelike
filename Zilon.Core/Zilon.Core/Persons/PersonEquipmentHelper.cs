@@ -33,7 +33,8 @@ namespace Zilon.Core.Persons
             }
 
             equipmentCarrier[slotIndex] = null;
-            person.GetModule<IInventoryModule>().Add(currentEquipment);
+            person.GetModule<IInventoryModule>()
+                  .Add(currentEquipment);
         }
     }
 }

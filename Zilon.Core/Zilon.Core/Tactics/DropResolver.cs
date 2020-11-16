@@ -226,7 +226,8 @@ namespace Zilon.Core.Tactics
                 }
             }
 
-            var props = rolledRecords.Select(GenerateProp).ToArray();
+            var props = rolledRecords.Select(GenerateProp)
+                                     .ToArray();
 
             return props;
         }

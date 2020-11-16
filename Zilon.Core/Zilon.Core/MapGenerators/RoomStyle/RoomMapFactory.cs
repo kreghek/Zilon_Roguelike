@@ -74,7 +74,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             foreach (var room in rooms)
             {
                 var passableRoomNodes = room.Nodes;
-                var region = new MapRegion(regionIdCounter, passableRoomNodes.Cast<IGraphNode>().ToArray());
+                var region = new MapRegion(regionIdCounter, passableRoomNodes.Cast<IGraphNode>()
+                                                                             .ToArray());
                 regionIdCounter++;
                 map.Regions.Add(region);
 
@@ -87,8 +88,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 if (room.Transitions?.Any() == true)
                 {
                     region.ExitNodes = (from regionNode in region.Nodes
-                                        where map.Transitions.Keys.Contains(regionNode)
-                                        select regionNode).ToArray();
+                        where map.Transitions.Keys.Contains(regionNode)
+                        select regionNode).ToArray();
                 }
             }
 

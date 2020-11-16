@@ -25,8 +25,10 @@ namespace Zilon.Core.Tests
             var factPerkSchemeLevel = PerkHelper.ConvertTotalLevel(_perkScheme, testedTotalLevel);
 
             // ASSERT
-            factPerkSchemeLevel.Level.Should().Be(expectedLevel);
-            factPerkSchemeLevel.SubLevel.Should().Be(expectedSubLevel);
+            factPerkSchemeLevel.Level.Should()
+                               .Be(expectedLevel);
+            factPerkSchemeLevel.SubLevel.Should()
+                               .Be(expectedSubLevel);
         }
 
         [Test]
@@ -41,8 +43,10 @@ namespace Zilon.Core.Tests
             var factPerkSchemeLevel = PerkHelper.ConvertTotalLevel(_perkScheme, testedTotalLevel);
 
             // ASSERT
-            factPerkSchemeLevel.Level.Should().Be(expectedLevel);
-            factPerkSchemeLevel.SubLevel.Should().Be(expectedSubLevel);
+            factPerkSchemeLevel.Level.Should()
+                               .Be(expectedLevel);
+            factPerkSchemeLevel.SubLevel.Should()
+                               .Be(expectedSubLevel);
         }
 
         [SetUp]

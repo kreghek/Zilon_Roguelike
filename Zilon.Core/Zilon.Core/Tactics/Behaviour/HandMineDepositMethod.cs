@@ -21,7 +21,8 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new ArgumentNullException(nameof(deposit));
             }
 
-            if (deposit.GetToolTags().Any())
+            if (deposit.GetToolTags()
+                       .Any())
             {
                 throw new InvalidOperationException("Попытка выполнить добычу ресурса не подходящим инструментом.");
             }

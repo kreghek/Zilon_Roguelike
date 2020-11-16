@@ -22,7 +22,8 @@ namespace Zilon.Core.Tests.Schemes
         public void Deserialization_SurvivalStats_ValueRangeAndKeyPointsAreCorrect()
         {
             // ARRANGE
-            var assembly = GetType().Assembly;
+            var assembly = GetType()
+                .Assembly;
             var resourceName = "Zilon.Core.Tests.Schemes.human-person.json";
 
             string sourceText;
@@ -39,10 +40,18 @@ namespace Zilon.Core.Tests.Schemes
 
             // Значение взяты из схемы, которая приложена, как ресурс.
             // Может не совпадать с фактическими значениями в боевой схеме.
-            factPersonScheme.SurvivalStats[0].Type.Should().Be(PersonSurvivalStatType.Satiety);
-            factPersonScheme.SurvivalStats[0].MinValue.Should().Be(-3000);
-            factPersonScheme.SurvivalStats[0].MaxValue.Should().Be(500);
-            factPersonScheme.SurvivalStats[0].StartValue.Should().Be(250);
+            factPersonScheme.SurvivalStats[0]
+                            .Type.Should()
+                            .Be(PersonSurvivalStatType.Satiety);
+            factPersonScheme.SurvivalStats[0]
+                            .MinValue.Should()
+                            .Be(-3000);
+            factPersonScheme.SurvivalStats[0]
+                            .MaxValue.Should()
+                            .Be(500);
+            factPersonScheme.SurvivalStats[0]
+                            .StartValue.Should()
+                            .Be(250);
 
             var expectedKeySegments = new[]
             {
@@ -65,7 +74,9 @@ namespace Zilon.Core.Tests.Schemes
                     End = 0.86f
                 }
             };
-            factPersonScheme.SurvivalStats[0].KeyPoints.Should().BeEquivalentTo(expectedKeySegments);
+            factPersonScheme.SurvivalStats[0]
+                            .KeyPoints.Should()
+                            .BeEquivalentTo(expectedKeySegments);
         }
     }
 }

@@ -34,8 +34,8 @@ namespace Zilon.Bot.Players.Strategies.Tests
 
             var triggerMock = new Mock<ILogicStateTrigger>();
             triggerMock.Setup(x => x.Test(It.IsAny<IActor>(), It.IsAny<ISectorTaskSourceContext>(),
-                    It.IsAny<ILogicState>(), It.IsAny<ILogicStrategyData>()))
-                .Returns(true);
+                           It.IsAny<ILogicState>(), It.IsAny<ILogicStrategyData>()))
+                       .Returns(true);
             var trigger = triggerMock.Object;
 
             logicTree.Transitions.Add(startLogicState, new[]
@@ -60,7 +60,8 @@ namespace Zilon.Bot.Players.Strategies.Tests
             var factTask = strategy.GetActorTask(taskContext);
 
             // ASSERT
-            factTask.Should().Be(secondActorTask);
+            factTask.Should()
+                    .Be(secondActorTask);
         }
 
         /// <summary>
@@ -89,7 +90,8 @@ namespace Zilon.Bot.Players.Strategies.Tests
             var factTask = strategy.GetActorTask(taskContext);
 
             // ASSERT
-            factTask.Should().Be(actorTask);
+            factTask.Should()
+                    .Be(actorTask);
         }
 
         private static void CreateLogicState(out ILogicState logicState, out IActorTask actorTask)
@@ -98,8 +100,8 @@ namespace Zilon.Bot.Players.Strategies.Tests
             var startActorTaskMock = new Mock<IActorTask>();
             actorTask = startActorTaskMock.Object;
             startLogicStateMock.Setup(x => x.GetTask(It.IsAny<IActor>(), It.IsAny<ISectorTaskSourceContext>(),
-                    It.IsAny<ILogicStrategyData>()))
-                .Returns(actorTask);
+                                   It.IsAny<ILogicStrategyData>()))
+                               .Returns(actorTask);
             logicState = startLogicStateMock.Object;
         }
     }

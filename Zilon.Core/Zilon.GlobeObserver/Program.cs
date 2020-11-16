@@ -27,7 +27,8 @@ namespace Zilon.GlobeObserver
             startUp.RegisterServices(serviceContainer);
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
-            var globe = await GenerateGlobeAsync(serviceProvider).ConfigureAwait(false);
+            var globe = await GenerateGlobeAsync(serviceProvider)
+                .ConfigureAwait(false);
 
             // Iterate globe
             var globeIterationCounter = 0L;
@@ -47,7 +48,7 @@ namespace Zilon.GlobeObserver
                     globeIterationCounter++;
 
                     var hasActors = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items)
-                        .Any(x => x.Person.Fraction != Fractions.MonsterFraction);
+                                         .Any(x => x.Person.Fraction != Fractions.MonsterFraction);
                     if (!hasActors)
                     {
                         // Все персонажи-немонстры вымерли.
@@ -65,11 +66,12 @@ namespace Zilon.GlobeObserver
             var sectorNodesDiscoveredCount = globe.SectorNodes.Count();
             Console.WriteLine($"Sector Nodes Discovered: {sectorNodesDiscoveredCount}");
 
-            var actorCount = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Count();
+            var actorCount = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items)
+                                  .Count();
             Console.WriteLine($"Actors: {actorCount}");
 
             var fractions = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items)
-                .GroupBy(x => x.Person.Fraction);
+                                 .GroupBy(x => x.Person.Fraction);
             foreach (var fractionGroup in fractions)
             {
                 Console.WriteLine($"Fraction {fractionGroup.Key.Name}: {fractionGroup.Count()}");

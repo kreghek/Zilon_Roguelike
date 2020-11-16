@@ -36,11 +36,17 @@ namespace Zilon.Bot.Players.Triggers
             }
 
             var currentInventoryEquipments =
-                actor.Person.GetModule<IInventoryModule>().CalcActualItems().OfType<Equipment>();
+                actor.Person.GetModule<IInventoryModule>()
+                     .CalcActualItems()
+                     .OfType<Equipment>();
 
-            for (int i = 0; i < actor.Person.GetModule<IEquipmentModule>().Slots.Length; i++)
+            for (int i = 0;
+                i < actor.Person.GetModule<IEquipmentModule>()
+                         .Slots.Length;
+                i++)
             {
-                var slot = actor.Person.GetModule<IEquipmentModule>().Slots[i];
+                var slot = actor.Person.GetModule<IEquipmentModule>()
+                                .Slots[i];
                 var equiped = actor.Person.GetModule<IEquipmentModule>()[i];
                 if (equiped == null)
                 {

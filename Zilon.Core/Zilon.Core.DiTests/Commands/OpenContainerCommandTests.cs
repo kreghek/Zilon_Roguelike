@@ -35,7 +35,8 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().Be(true);
+            canExecute.Should()
+                      .Be(true);
         }
 
         /// <summary>
@@ -70,12 +71,15 @@ namespace Zilon.Core.Tests.Commands
 
             var targetMock = new Mock<IStaticObject>();
             var targetNode = testMap.Nodes.SelectByHexCoords(1, 0);
-            targetMock.SetupGet(x => x.Node).Returns(targetNode);
+            targetMock.SetupGet(x => x.Node)
+                      .Returns(targetNode);
 
             var containerMock = new Mock<IPropContainer>();
-            containerMock.SetupGet(x => x.Purpose).Returns(PropContainerPurpose.Trash);
+            containerMock.SetupGet(x => x.Purpose)
+                         .Returns(PropContainerPurpose.Trash);
             var container = containerMock.Object;
-            targetMock.Setup(x => x.GetModule<IPropContainer>(nameof(IPropContainer))).Returns(container);
+            targetMock.Setup(x => x.GetModule<IPropContainer>(nameof(IPropContainer)))
+                      .Returns(container);
             var target = targetMock.Object;
 
             var targetVmMock = new Mock<IContainerViewModel>();

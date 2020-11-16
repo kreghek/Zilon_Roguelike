@@ -79,12 +79,13 @@ namespace Zilon.Core.Specs.Contexts
             var actUsageRandomSourceMock =
                 new Mock<TacticalActUsageRandomSource>(dice).As<ITacticalActUsageRandomSource>();
             actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
-                .Returns<Roll
-                >(roll => (roll.Dice / 2) * roll.Count); // Всегда берётся среднее значение среди всех бросков
+                                    .Returns<Roll
+                                    >(roll => (roll.Dice / 2) *
+                                              roll.Count); // Всегда берётся среднее значение среди всех бросков
             actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
-                .Returns(4);
+                                    .Returns(4);
             actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
-                .Returns(4);
+                                    .Returns(4);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             return actUsageRandomSource;
@@ -95,8 +96,10 @@ namespace Zilon.Core.Specs.Contexts
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(1);
-            survivalRandomSourceMock.Setup(x => x.RollMaxHazardDamage()).Returns(6);
+            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>()))
+                                    .Returns(1);
+            survivalRandomSourceMock.Setup(x => x.RollMaxHazardDamage())
+                                    .Returns(6);
 
             return survivalRandomSource;
         }

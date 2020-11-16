@@ -34,40 +34,47 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         public async Task AttackTask_NoWall_NotThrowsInvalidOperationException()
         {
             // Подготовка. Два актёра через клетку. Радиус действия 1-2, достаёт.
-            _testMap = await SquareMapFactory.CreateAsync(3).ConfigureAwait(false);
+            _testMap = await SquareMapFactory.CreateAsync(3)
+                                             .ConfigureAwait(false);
 
             var tacticalActMock = new Mock<ITacticalAct>();
-            tacticalActMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme
-            {
-                Range = new Range<int>(1, 2)
-            });
+            tacticalActMock.SetupGet(x => x.Stats)
+                           .Returns(new TestTacticalActStatsSubScheme
+                           {
+                               Range = new Range<int>(1, 2)
+                           });
             var tacticalAct = tacticalActMock.Object;
 
             var combatActModuleMock = new Mock<ICombatActModule>();
             combatActModuleMock.Setup(x => x.CalcCombatActs())
-                .Returns(new[]
-                {
-                    tacticalAct
-                });
+                               .Returns(new[]
+                               {
+                                   tacticalAct
+                               });
             var combatActModule = combatActModuleMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
+            personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>()))
+                      .Returns(combatActModule);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
             var actorNode = _testMap.Nodes.SelectByHexCoords(0, 0);
-            actorMock.SetupGet(x => x.Node).Returns(actorNode);
-            actorMock.SetupGet(x => x.Person).Returns(person);
+            actorMock.SetupGet(x => x.Node)
+                     .Returns(actorNode);
+            actorMock.SetupGet(x => x.Person)
+                     .Returns(person);
             actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
-                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null,
-                    (target1, act1) => new UsedActEventArgs(target1, act1));
+                     .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null,
+                         (target1, act1) => new UsedActEventArgs(target1, act1));
             _actor = actorMock.Object;
 
             var targetMock = new Mock<IActor>();
             var targetNode = _testMap.Nodes.SelectByHexCoords(2, 0);
-            targetMock.Setup(x => x.CanBeDamaged()).Returns(true);
-            targetMock.SetupGet(x => x.Node).Returns(targetNode);
+            targetMock.Setup(x => x.CanBeDamaged())
+                      .Returns(true);
+            targetMock.SetupGet(x => x.Node)
+                      .Returns(targetNode);
             var target = targetMock.Object;
 
             var actServiceMock = new Mock<ITacticalActUsageService>();
@@ -86,7 +93,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             };
 
             // ASSERT
-            act.Should().NotThrow<InvalidOperationException>();
+            act.Should()
+               .NotThrow<InvalidOperationException>();
         }
     }
 }

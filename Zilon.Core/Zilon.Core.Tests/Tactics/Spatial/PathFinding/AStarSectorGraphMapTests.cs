@@ -72,9 +72,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var contextMock = new Mock<IAstarContext>();
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode>(x => map.GetNext(x));
+                       .Returns<IGraphNode>(x => map.GetNext(x));
             contextMock.Setup(x => x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode, IGraphNode>((a, b) => map.DistanceBetween(a, b));
+                       .Returns<IGraphNode, IGraphNode>((a, b) => map.DistanceBetween(a, b));
             var context = contextMock.Object;
 
             // ACT
@@ -83,7 +83,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             // ASSERT
 
-            path.Should().NotBeEmpty();
+            path.Should()
+                .NotBeEmpty();
         }
     }
 }

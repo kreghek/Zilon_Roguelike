@@ -43,7 +43,8 @@ namespace Zilon.Core.World
 
             CreateNextSectorNodes(sectorNode, biome);
 
-            var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
+            var sector = await _sectorGenerator.GenerateAsync(sectorNode)
+                                               .ConfigureAwait(false);
 
             sectorNode.MaterializeSector(sector);
         }
@@ -51,8 +52,9 @@ namespace Zilon.Core.World
         private void CreateNextSectorNodes(ISectorNode sectorNode, IBiome biom)
         {
             var nextSectorLevels = biom.LocationScheme.SectorLevels
-                .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid)
-                    .Contains(x.Sid));
+                                       .Where(x => sectorNode
+                                                   .SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid)
+                                                   .Contains(x.Sid));
 
             foreach (var nextSectorLevelScheme in nextSectorLevels)
             {
@@ -82,7 +84,8 @@ namespace Zilon.Core.World
         private async Task CreateStartSectorAsync(IBiome biome)
         {
             var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
-            await CreateAndAddSectorByScheme(biome, startSectorScheme).ConfigureAwait(false);
+            await CreateAndAddSectorByScheme(biome, startSectorScheme)
+                .ConfigureAwait(false);
         }
 
         private SectorNode RollAndBindBiome()
@@ -102,7 +105,8 @@ namespace Zilon.Core.World
         {
             var biom = new Biome(locationScheme);
 
-            await CreateStartSectorAsync(biom).ConfigureAwait(false);
+            await CreateStartSectorAsync(biom)
+                .ConfigureAwait(false);
 
             return biom;
         }
@@ -126,7 +130,8 @@ namespace Zilon.Core.World
 
             CreateNextSectorNodes(sectorNode, biom);
 
-            var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
+            var sector = await _sectorGenerator.GenerateAsync(sectorNode)
+                                               .ConfigureAwait(false);
 
             sectorNode.MaterializeSector(sector);
         }

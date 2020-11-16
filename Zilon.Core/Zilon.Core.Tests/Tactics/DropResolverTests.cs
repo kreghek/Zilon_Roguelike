@@ -32,19 +32,19 @@ namespace Zilon.Core.Tests.Tactics
 
             var randomSourceMock = new Mock<IDropResolverRandomSource>();
             randomSourceMock.Setup(x => x.RollWeight(It.IsAny<int>()))
-                .Returns(1);
+                            .Returns(1);
             randomSourceMock.Setup(x => x.RollResourceCount(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(1);
+                            .Returns(1);
             var randomSource = randomSourceMock.Object;
 
             var schemeServiceMock = new Mock<ISchemeService>();
             schemeServiceMock.Setup(x => x.GetScheme<IPropScheme>(It.Is<string>(sid => sid == testPropSchemeSid)))
-                .Returns(testResourceScheme);
+                             .Returns(testResourceScheme);
             var schemeService = schemeServiceMock.Object;
 
             var propFactoryMock = new Mock<IPropFactory>();
             propFactoryMock.Setup(x => x.CreateResource(It.IsAny<IPropScheme>(), It.IsAny<int>()))
-                .Returns<IPropScheme, int>((scheme, count) => new Resource(scheme, count));
+                           .Returns<IPropScheme, int>((scheme, count) => new Resource(scheme, count));
             var propFactory = propFactoryMock.Object;
 
             var resolver = new DropResolver(randomSource, schemeService, propFactory, CreateEmptyUserTimeProvider());
@@ -66,9 +66,13 @@ namespace Zilon.Core.Tests.Tactics
             });
 
             // ASSERT
-            factProps.Length.Should().Be(1);
-            factProps[0].Scheme.Should().BeSameAs(testResourceScheme);
-            ((Resource)factProps[0]).Count.Should().Be(1);
+            factProps.Length.Should()
+                     .Be(1);
+            factProps[0]
+                .Scheme.Should()
+                .BeSameAs(testResourceScheme);
+            ((Resource)factProps[0]).Count.Should()
+                                    .Be(1);
         }
 
         /// <summary>
@@ -97,23 +101,24 @@ namespace Zilon.Core.Tests.Tactics
 
             var randomSourceMock = new Mock<IDropResolverRandomSource>();
             randomSourceMock.Setup(x => x.RollWeight(It.IsAny<int>()))
-                .Returns(EXPECTED_WEIGHT);
+                            .Returns(EXPECTED_WEIGHT);
             var randomSource = randomSourceMock.Object;
 
             var schemeServiceMock = new Mock<ISchemeService>();
             schemeServiceMock.Setup(x => x.GetScheme<IPropScheme>(It.Is<string>(sid => sid == testPropSchemeSid)))
-                .Returns(testPropScheme);
+                             .Returns(testPropScheme);
             var schemeService = schemeServiceMock.Object;
 
             var propFactoryMock = new Mock<IPropFactory>();
             propFactoryMock.Setup(x => x.CreateEquipment(It.IsAny<IPropScheme>()))
-                .Returns<IPropScheme>(scheme => new Equipment(scheme, null));
+                           .Returns<IPropScheme>(scheme => new Equipment(scheme, null));
             propFactoryMock.Setup(x => x.CreateResource(It.IsAny<IPropScheme>(), It.IsAny<int>()))
-                .Returns<IPropScheme, int>((scheme, count) => new Resource(scheme, count));
+                           .Returns<IPropScheme, int>((scheme, count) => new Resource(scheme, count));
             var propFactory = propFactoryMock.Object;
 
             var userTimeProviderMock = new Mock<IUserTimeProvider>();
-            userTimeProviderMock.Setup(x => x.GetCurrentTime()).Returns(evilHourDate);
+            userTimeProviderMock.Setup(x => x.GetCurrentTime())
+                                .Returns(evilHourDate);
             var userTimeProvider = userTimeProviderMock.Object;
 
             var resolver = new DropResolver(randomSource, schemeService, propFactory, userTimeProvider);
@@ -134,7 +139,9 @@ namespace Zilon.Core.Tests.Tactics
             });
 
             // ASSERT
-            factProps[0].Scheme.Should().BeSameAs(testPropScheme);
+            factProps[0]
+                .Scheme.Should()
+                .BeSameAs(testPropScheme);
         }
 
         /// <summary>
@@ -162,23 +169,23 @@ namespace Zilon.Core.Tests.Tactics
 
             var randomSourceMock = new Mock<IDropResolverRandomSource>();
             randomSourceMock.Setup(x => x.RollWeight(It.IsAny<int>()))
-                .Returns(1);
+                            .Returns(1);
             randomSourceMock.Setup(x => x.RollResourceCount(It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(1);
+                            .Returns(1);
             var randomSource = randomSourceMock.Object;
 
             var schemeServiceMock = new Mock<ISchemeService>();
             schemeServiceMock.Setup(x => x.GetScheme<IPropScheme>(It.Is<string>(sid => sid == testPropSchemeSid)))
-                .Returns(testPropScheme);
+                             .Returns(testPropScheme);
             schemeServiceMock.Setup(x => x.GetScheme<IPropScheme>(It.Is<string>(sid => sid == testExtraSchemeSid)))
-                .Returns(testExtraScheme);
+                             .Returns(testExtraScheme);
             var schemeService = schemeServiceMock.Object;
 
             var propFactoryMock = new Mock<IPropFactory>();
             propFactoryMock.Setup(x => x.CreateEquipment(It.IsAny<IPropScheme>()))
-                .Returns<IPropScheme>(scheme => new Equipment(scheme, null));
+                           .Returns<IPropScheme>(scheme => new Equipment(scheme, null));
             propFactoryMock.Setup(x => x.CreateResource(It.IsAny<IPropScheme>(), It.IsAny<int>()))
-                .Returns<IPropScheme, int>((scheme, count) => new Resource(scheme, count));
+                           .Returns<IPropScheme, int>((scheme, count) => new Resource(scheme, count));
             var propFactory = propFactoryMock.Object;
 
             var resolver = new DropResolver(randomSource, schemeService, propFactory, CreateEmptyUserTimeProvider());
@@ -209,10 +216,16 @@ namespace Zilon.Core.Tests.Tactics
             });
 
             // ASSERT
-            factProps.Length.Should().Be(2);
-            factProps[0].Scheme.Should().BeSameAs(testPropScheme);
-            factProps[1].Scheme.Should().BeSameAs(testExtraScheme);
-            ((Resource)factProps[1]).Count.Should().Be(1);
+            factProps.Length.Should()
+                     .Be(2);
+            factProps[0]
+                .Scheme.Should()
+                .BeSameAs(testPropScheme);
+            factProps[1]
+                .Scheme.Should()
+                .BeSameAs(testExtraScheme);
+            ((Resource)factProps[1]).Count.Should()
+                                    .Be(1);
         }
 
         private static IUserTimeProvider CreateEmptyUserTimeProvider()

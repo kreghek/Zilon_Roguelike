@@ -6,7 +6,8 @@ namespace Zilon.Core.Benchmarks.Fow
     {
         private static void Main(string[] args)
         {
-            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
+            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly)
+                             .Run(args);
         }
     }
 }

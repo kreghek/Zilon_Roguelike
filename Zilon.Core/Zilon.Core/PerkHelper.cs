@@ -29,7 +29,8 @@ namespace Zilon.Core
             {
                 if (i < level)
                 {
-                    sum += perkScheme.Levels[i].MaxValue + 1;
+                    sum += perkScheme.Levels[i]
+                                     .MaxValue + 1;
                 }
                 else
                 {

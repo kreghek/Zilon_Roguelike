@@ -30,17 +30,25 @@ namespace Zilon.Core.ProgressStoring
             var storageData = new HumanPersonStorageData
             {
                 Survival =
-                    humanPerson.GetModule<ISurvivalModule>().Stats.Select(x =>
-                        new HumanSurvivalStatStorageData
-                        {
-                            Type = x.Type,
-                            Value = x.ValueShare
-                        }).ToArray(),
-                Equipments = humanPerson.GetModule<IEquipmentModule>().Select(CreateEquipmentStorageData).ToArray(),
+                    humanPerson.GetModule<ISurvivalModule>()
+                               .Stats.Select(x =>
+                                   new HumanSurvivalStatStorageData
+                                   {
+                                       Type = x.Type,
+                                       Value = x.ValueShare
+                                   })
+                               .ToArray(),
+                Equipments = humanPerson.GetModule<IEquipmentModule>()
+                                        .Select(CreateEquipmentStorageData)
+                                        .ToArray(),
                 Inventory =
-                    humanPerson.GetModule<IInventoryModule>().CalcActualItems().Select(CreatePropStorageData)
-                        .ToArray(),
-                Perks = humanPerson.GetModule<IEvolutionModule>().Perks.Select(CreatePerkStorageData).ToArray()
+                    humanPerson.GetModule<IInventoryModule>()
+                               .CalcActualItems()
+                               .Select(CreatePropStorageData)
+                               .ToArray(),
+                Perks = humanPerson.GetModule<IEvolutionModule>()
+                                   .Perks.Select(CreatePerkStorageData)
+                                   .ToArray()
             };
 
             return storageData;
@@ -84,7 +92,8 @@ namespace Zilon.Core.ProgressStoring
             {
                 var normalizedValueShare = RangeHelper.NormalizeShare(survivalStoredItem.Value);
 
-                var stat = person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == survivalStoredItem.Type);
+                var stat = person.GetModule<ISurvivalModule>()
+                                 .Stats.Single(x => x.Type == survivalStoredItem.Type);
 
                 stat.SetShare(normalizedValueShare);
             }
@@ -153,12 +162,13 @@ namespace Zilon.Core.ProgressStoring
                 Level = x.CurrentLevel?.Primary,
                 SubLevel = x.CurrentLevel?.Sub,
                 Jobs = x.CurrentJobs.Select(job => new PerkJobStorageData
-                {
-                    Type = job.Scheme.Type,
-                    Scope = job.Scheme.Scope,
-                    Progress = job.Progress,
-                    IsComplete = job.IsComplete
-                }).ToArray()
+                        {
+                            Type = job.Scheme.Type,
+                            Scope = job.Scheme.Scope,
+                            Progress = job.Progress,
+                            IsComplete = job.IsComplete
+                        })
+                        .ToArray()
             };
         }
 
@@ -209,14 +219,20 @@ namespace Zilon.Core.ProgressStoring
                 var currentLevelScheme = perkScheme.Levels[0];
 
                 perk.CurrentJobs = currentLevelScheme.Jobs.Select(job => new PerkJob(job)
-                {
-                    IsComplete =
-                        storedPerk.Jobs
-                            .Single(storedJob => (storedJob.Type == job.Type) && (storedJob.Scope == job.Scope))
-                            .IsComplete,
-                    Progress = storedPerk.Jobs
-                        .Single(storedJob => (storedJob.Type == job.Type) && (storedJob.Scope == job.Scope)).Progress
-                }).ToArray();
+                                                     {
+                                                         IsComplete =
+                                                             storedPerk.Jobs
+                                                                       .Single(storedJob =>
+                                                                           (storedJob.Type == job.Type) &&
+                                                                           (storedJob.Scope == job.Scope))
+                                                                       .IsComplete,
+                                                         Progress = storedPerk.Jobs
+                                                                              .Single(storedJob =>
+                                                                                  (storedJob.Type == job.Type) &&
+                                                                                  (storedJob.Scope == job.Scope))
+                                                                              .Progress
+                                                     })
+                                                     .ToArray();
 
                 perksFromSave.Add(perk);
             }

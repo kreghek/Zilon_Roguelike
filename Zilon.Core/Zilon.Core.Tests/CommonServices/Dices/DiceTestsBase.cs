@@ -38,7 +38,8 @@ namespace Zilon.Core.Tests.CommonServices.Dices
                 }
 
                 var gr = seq.GroupBy(x => x);
-                var freq = gr.ToDictionary(x => x.Key, x => x.Count()).OrderBy(x => x.Key);
+                var freq = gr.ToDictionary(x => x.Key, x => x.Count())
+                             .OrderBy(x => x.Key);
                 foreach (var fr in freq)
                 {
                     Console.WriteLine(fr.Key + "\t" + fr.Value);
@@ -46,9 +47,14 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             };
 
             // ASSERT
-            act.Should().NotThrow();
-            seq.Min().Should().BeGreaterOrEqualTo(1);
-            seq.Max().Should().BeLessOrEqualTo(n);
+            act.Should()
+               .NotThrow();
+            seq.Min()
+               .Should()
+               .BeGreaterOrEqualTo(1);
+            seq.Max()
+               .Should()
+               .BeLessOrEqualTo(n);
         }
 
         protected abstract IDice CreateDice(int seed);

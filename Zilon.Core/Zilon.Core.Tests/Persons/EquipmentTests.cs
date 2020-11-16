@@ -37,7 +37,8 @@ namespace Zilon.Core.Tests.Persons
             };
 
             // ASSERT
-            act.Should().Throw<ArgumentException>();
+            act.Should()
+               .Throw<ArgumentException>();
         }
     }
 }

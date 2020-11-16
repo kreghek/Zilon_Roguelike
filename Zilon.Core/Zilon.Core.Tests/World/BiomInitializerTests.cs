@@ -31,33 +31,34 @@ namespace Zilon.Core.World.Tests
 
             var sectorGeneratorMock = new Mock<ISectorGenerator>();
             sectorGeneratorMock.Setup(x => x.GenerateAsync(It.IsAny<ISectorNode>()))
-                .Returns<ISectorNode>(scheme =>
-                {
-                    return Task.Run(() =>
-                    {
-                        var sectorMock = new Mock<ISector>();
-                        var sector = sectorMock.Object;
-                        return sector;
-                    });
-                });
+                               .Returns<ISectorNode>(scheme =>
+                               {
+                                   return Task.Run(() =>
+                                   {
+                                       var sectorMock = new Mock<ISector>();
+                                       var sector = sectorMock.Object;
+                                       return sector;
+                                   });
+                               });
 
             var sectorGenerator = sectorGeneratorMock.Object;
             var locationSchemes = CreateBiomSchemes();
 
             var schemeRoundCounter = 0;
             var rollerMock = new Mock<IBiomeSchemeRoller>();
-            rollerMock.Setup(x => x.Roll()).Returns(() =>
-            {
-                schemeRoundCounter++;
-                if (schemeRoundCounter >= locationSchemes.Length)
-                {
-                    schemeRoundCounter = 0;
-                }
+            rollerMock.Setup(x => x.Roll())
+                      .Returns(() =>
+                      {
+                          schemeRoundCounter++;
+                          if (schemeRoundCounter >= locationSchemes.Length)
+                          {
+                              schemeRoundCounter = 0;
+                          }
 
-                var scheme = locationSchemes[schemeRoundCounter];
+                          var scheme = locationSchemes[schemeRoundCounter];
 
-                return scheme;
-            });
+                          return scheme;
+                      });
             var roller = rollerMock.Object;
 
             var introScheme = locationSchemes.Single(x => x.Sid == "intro");
@@ -66,7 +67,8 @@ namespace Zilon.Core.World.Tests
 
             // ACT
 
-            var biom = await biomService.InitBiomeAsync(introScheme).ConfigureAwait(false);
+            var biom = await biomService.InitBiomeAsync(introScheme)
+                                        .ConfigureAwait(false);
             var introNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
             var currentNode = introNode;
 
@@ -75,10 +77,11 @@ namespace Zilon.Core.World.Tests
             while (iteration < ITERATION_MAX)
             {
                 var nextNode = currentNode.Biome.GetNext(currentNode)
-                    .OfType<SectorNode>()
-                    .First(x => x.State != SectorNodeState.SectorMaterialized);
+                                          .OfType<SectorNode>()
+                                          .First(x => x.State != SectorNodeState.SectorMaterialized);
 
-                await biomService.MaterializeLevelAsync(nextNode).ConfigureAwait(false);
+                await biomService.MaterializeLevelAsync(nextNode)
+                                 .ConfigureAwait(false);
 
                 currentNode = nextNode;
 
@@ -91,7 +94,8 @@ namespace Zilon.Core.World.Tests
             materializedSectorNodes.Add(scanNode);
             while (true)
             {
-                var nextNodes = scanNode.Biome.GetNext(scanNode).OfType<SectorNode>();
+                var nextNodes = scanNode.Biome.GetNext(scanNode)
+                                        .OfType<SectorNode>();
                 scanNode = nextNodes.SingleOrDefault(x => (x.State == SectorNodeState.SectorMaterialized)
                                                           && !materializedSectorNodes.Contains(x));
 
@@ -104,7 +108,8 @@ namespace Zilon.Core.World.Tests
             }
 
             var expectedMaterializedSectors = ITERATION_MAX + 1; // +1 потому что интровый не учитывается при итерациях.
-            materializedSectorNodes.Should().HaveCount(expectedMaterializedSectors);
+            materializedSectorNodes.Should()
+                                   .HaveCount(expectedMaterializedSectors);
         }
 
         private static ILocationScheme[] CreateBiomSchemes()

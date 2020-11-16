@@ -98,7 +98,8 @@ namespace Zilon.Core.Commands
         {
             var actor = PlayerState.ActiveActor.Actor;
             var enemies = _player.SectorNode.Sector.ActorManager.Items
-                .Where(x => (x != actor) && (x.Person.Fraction != actor.Person.Fraction)).ToArray();
+                                 .Where(x => (x != actor) && (x.Person.Fraction != actor.Person.Fraction))
+                                 .ToArray();
 
             foreach (var enemyActor in enemies)
             {
@@ -160,7 +161,9 @@ namespace Zilon.Core.Commands
 
         private void RememberFoundPath(AStar astar)
         {
-            var foundPath = astar.GetPath().Skip(1).ToArray();
+            var foundPath = astar.GetPath()
+                                 .Skip(1)
+                                 .ToArray();
             foreach (var pathNode in foundPath)
             {
                 Path.Add(pathNode);

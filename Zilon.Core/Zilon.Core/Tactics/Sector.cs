@@ -87,7 +87,8 @@ namespace Zilon.Core.Tactics
 
                 if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                 {
-                    actor.Person.GetModule<ISurvivalModule>().Dead += ActorState_Dead;
+                    actor.Person.GetModule<ISurvivalModule>()
+                         .Dead += ActorState_Dead;
                 }
 
                 actor.Moved += Actor_Moved;
@@ -104,7 +105,8 @@ namespace Zilon.Core.Tactics
 
                 if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                 {
-                    actor.Person.GetModule<ISurvivalModule>().Dead -= ActorState_Dead;
+                    actor.Person.GetModule<ISurvivalModule>()
+                         .Dead -= ActorState_Dead;
                 }
 
                 actor.Moved -= Actor_Moved;
@@ -119,7 +121,8 @@ namespace Zilon.Core.Tactics
 
             if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
             {
-                actor.Person.GetModule<ISurvivalModule>().Dead -= ActorState_Dead;
+                actor.Person.GetModule<ISurvivalModule>()
+                     .Dead -= ActorState_Dead;
             }
 
             ProcessMonsterDeath(actor);
@@ -179,7 +182,8 @@ namespace Zilon.Core.Tactics
         private void LootContainer_ItemsRemoved(object sender, PropStoreEventArgs e)
         {
             var container = (IPropContainer)sender;
-            if (!container.Content.CalcActualItems().Any())
+            if (!container.Content.CalcActualItems()
+                          .Any())
             {
                 var staticObject =
                     StaticObjectManager.Items.Single(x =>
@@ -209,7 +213,8 @@ namespace Zilon.Core.Tactics
             var staticObject = new StaticObject(actor.Node, loot.Purpose, default);
             staticObject.AddModule<IPropContainer>(loot);
 
-            if (loot.Content.CalcActualItems().Any())
+            if (loot.Content.CalcActualItems()
+                    .Any())
             {
                 StaticObjectManager.Add(staticObject);
             }
@@ -318,7 +323,8 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                actor.Person.GetModule<IDiseaseModule>().Update(actor.Person.GetModuleSafe<IEffectsModule>());
+                actor.Person.GetModule<IDiseaseModule>()
+                     .Update(actor.Person.GetModuleSafe<IEffectsModule>());
             }
         }
 

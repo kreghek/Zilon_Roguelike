@@ -31,7 +31,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             List<RegionDraft> openRegions,
             List<RegionDraft> unitedRegions)
         {
-            var unitedRegionCoords = unitedRegions.SelectMany(x => x.Coords).ToArray();
+            var unitedRegionCoords = unitedRegions.SelectMany(x => x.Coords)
+                                                  .ToArray();
 
             // Ищем две самые ближние точки между объединённым регионом и 
             // и всеми открытыми регионами.

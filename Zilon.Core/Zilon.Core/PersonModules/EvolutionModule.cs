@@ -63,15 +63,15 @@ namespace Zilon.Core.PersonModules
         {
             var schemes = _schemeService.GetSchemes<IPerkScheme>()
 
-                // Для развития годятся только те перки, которые не врождённые.
-                // Врождённые перки даются только при генерации персонажа.
-                .Where(x => !x.IsBuildIn)
+                                        // Для развития годятся только те перки, которые не врождённые.
+                                        // Врождённые перки даются только при генерации персонажа.
+                                        .Where(x => !x.IsBuildIn)
 
-                // Защиита от схем, в которых забыли прописать уровни.
-                // По идее, такие перки либо должны быть врождёнными.
-                // Следовательно, если они не отсеяны выше, то это ошибка.
-                // Такие схемы лучше проверять в тестах на валидацию схем.
-                .Where(x => x.Levels != null);
+                                        // Защиита от схем, в которых забыли прописать уровни.
+                                        // По идее, такие перки либо должны быть врождёнными.
+                                        // Следовательно, если они не отсеяны выше, то это ошибка.
+                                        // Такие схемы лучше проверять в тестах на валидацию схем.
+                                        .Where(x => x.Levels != null);
 
             var perks = new List<IPerk>(_buildInPerks);
             if (Perks != null)
@@ -92,9 +92,10 @@ namespace Zilon.Core.PersonModules
                 {
                     Scheme = perkScheme,
                     CurrentLevel = null,
-                    CurrentJobs = perkScheme.Levels[0].Jobs
-                        .Select(x => (IJob)new PerkJob(x))
-                        .ToArray()
+                    CurrentJobs = perkScheme.Levels[0]
+                                            .Jobs
+                                            .Select(x => (IJob)new PerkJob(x))
+                                            .ToArray()
                 };
 
                 perks.Add(perk);

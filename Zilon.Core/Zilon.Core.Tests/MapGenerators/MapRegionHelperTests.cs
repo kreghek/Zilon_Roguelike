@@ -81,7 +81,8 @@ namespace Zilon.Core.Tests.MapGenerators
             var factNode = MapRegionHelper.FindNonBlockedNode(testedNode, hexMap, availableNodes);
 
             // ASSERT
-            factNode.Should().NotBeNull();
+            factNode.Should()
+                    .NotBeNull();
         }
 
         /// <summary>
@@ -129,19 +130,21 @@ namespace Zilon.Core.Tests.MapGenerators
             map.AddEdge(corridorNode, node10);
 
             mapMock.Setup(x => x.GetNext(It.Is<IGraphNode>(n => n == node10)))
-                .Returns(new IGraphNode[]
-                {
-                    corridorNode,
-                    node00,
-                    node11
-                });
+                   .Returns(new IGraphNode[]
+                   {
+                       corridorNode,
+                       node00,
+                       node11
+                   });
 
             // ACT
             var node = MapRegionHelper.FindNonBlockedNode(node10, map, regionNodes);
 
             // ASSERT
-            node.Should().NotBe(node10);
-            node.Should().NotBe(corridorNode);
+            node.Should()
+                .NotBe(node10);
+            node.Should()
+                .NotBe(corridorNode);
         }
 
         /// <summary>
@@ -189,8 +192,10 @@ namespace Zilon.Core.Tests.MapGenerators
             var node = MapRegionHelper.FindNonBlockedNode(node10, map, regionNodes);
 
             // ASSERT
-            node.Should().NotBe(node10);
-            node.Should().NotBe(corridorNode);
+            node.Should()
+                .NotBe(node10);
+            node.Should()
+                .NotBe(corridorNode);
         }
     }
 }

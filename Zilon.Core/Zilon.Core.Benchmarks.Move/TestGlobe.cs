@@ -49,8 +49,9 @@ namespace Zilon.Core.Benchmarks.Move
             var person = new HumanPerson(personScheme, Fractions.MainPersonFraction);
 
             var playerActorStartNode = _sectorNode.Sector.Map.Regions
-                .SingleOrDefault(x => x.IsStart).Nodes
-                .First();
+                                                  .SingleOrDefault(x => x.IsStart)
+                                                  .Nodes
+                                                  .First();
 
             var actor = new Actor(person, humanActorTaskSource, playerActorStartNode);
 

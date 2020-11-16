@@ -37,8 +37,9 @@ namespace Zilon.Bot.Players.Triggers
                 throw new System.ArgumentNullException(nameof(strategyData));
             }
 
-            var hazardEffect = actor.Person.GetModuleSafe<IEffectsModule>()?.Items?.OfType<SurvivalStatHazardEffect>()
-                .SingleOrDefault(x => x.Type == SurvivalStatType.Hydration);
+            var hazardEffect = actor.Person.GetModuleSafe<IEffectsModule>()
+                                    ?.Items?.OfType<SurvivalStatHazardEffect>()
+                                    .SingleOrDefault(x => x.Type == SurvivalStatType.Hydration);
             if (hazardEffect == null)
             {
                 return false;
@@ -46,7 +47,8 @@ namespace Zilon.Bot.Players.Triggers
 
             //
 
-            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>()
+                             .CalcActualItems();
             var resources = props.OfType<Resource>();
             var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 ConsumeCommonRuleType.Thirst);

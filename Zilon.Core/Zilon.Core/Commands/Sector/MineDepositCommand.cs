@@ -30,7 +30,7 @@ namespace Zilon.Core.Commands.Sector
         {
             var selectedViewModel = PlayerState.SelectedViewModel ?? PlayerState.HoverViewModel;
             var targetDeposit = (selectedViewModel as IContainerViewModel)?.StaticObject
-                .GetModuleSafe<IPropDepositModule>();
+                                                                          .GetModuleSafe<IPropDepositModule>();
 
             if (targetDeposit is null)
             {

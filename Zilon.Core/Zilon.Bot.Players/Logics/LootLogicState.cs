@@ -35,7 +35,7 @@ namespace Zilon.Bot.Players.Logics
             }
 
             var containerStaticObjects = staticObjectManager.Items
-                .Where(x => x.HasModule<IPropContainer>());
+                                                            .Where(x => x.HasModule<IPropContainer>());
 
             var foundContainers = LootHelper.FindAvailableContainers(containerStaticObjects,
                 actor.Node,
@@ -56,7 +56,9 @@ namespace Zilon.Bot.Players.Logics
             var staticObjectManager = context.Sector.StaticObjectManager;
             var staticObject = FindContainer(actor, staticObjectManager, map);
 
-            if ((staticObject == null) || !staticObject.GetModule<IPropContainer>().Content.CalcActualItems().Any())
+            if ((staticObject == null) || !staticObject.GetModule<IPropContainer>()
+                                                       .Content.CalcActualItems()
+                                                       .Any())
             {
                 Complete = true;
                 return null;
@@ -106,12 +108,15 @@ namespace Zilon.Bot.Players.Logics
         private static IActorTask TakeAllFromContainerTask(IActor actor, IStaticObject container, ISector sector)
         {
             var inventoryTransfer = new PropTransfer(actor.Person.GetModule<IInventoryModule>(),
-                container.GetModule<IPropContainer>().Content.CalcActualItems(),
+                container.GetModule<IPropContainer>()
+                         .Content.CalcActualItems(),
                 System.Array.Empty<IProp>());
 
-            var containerTransfer = new PropTransfer(container.GetModule<IPropContainer>().Content,
+            var containerTransfer = new PropTransfer(container.GetModule<IPropContainer>()
+                                                              .Content,
                 System.Array.Empty<IProp>(),
-                container.GetModule<IPropContainer>().Content.CalcActualItems());
+                container.GetModule<IPropContainer>()
+                         .Content.CalcActualItems());
 
             var taskContext = new ActorTaskContext(sector);
             return new TransferPropsTask(actor, taskContext, new[]

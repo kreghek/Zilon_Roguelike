@@ -178,7 +178,8 @@ namespace Zilon.Core.MapGenerators
 
         private void RollInfections(ISector sector, List<IActor> resultMonsterActors)
         {
-            var diseaseMonsters = resultMonsterActors.Select(x => x.Person).ToArray();
+            var diseaseMonsters = resultMonsterActors.Select(x => x.Person)
+                                                     .ToArray();
             if (sector.Diseases?.Any() == true)
             {
                 foreach (var disease in sector.Diseases)
@@ -219,7 +220,8 @@ namespace Zilon.Core.MapGenerators
 
         private static void SetMonsterInfection(IPerson monster, IDisease disease)
         {
-            monster.GetModule<IDiseaseModule>().Infect(disease);
+            monster.GetModule<IDiseaseModule>()
+                   .Infect(disease);
         }
 
         /// <summary>Создаёт монстров в секторе по указанной схеме.</summary>

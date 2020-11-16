@@ -37,8 +37,8 @@ namespace Zilon.Bot.Players.Logics
             if ((_moveTask == null) || _moveTask.IsComplete || !_moveTask.CanExecute())
             {
                 var nearbyExitNode = strategyData.ExitNodes
-                    .OrderBy(x => map.DistanceBetween(actor.Node, x))
-                    .First();
+                                                 .OrderBy(x => map.DistanceBetween(actor.Node, x))
+                                                 .First();
 
                 _moveTask = CreateMoveTask(actor, nearbyExitNode, sector, map);
 

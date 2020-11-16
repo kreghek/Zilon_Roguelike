@@ -46,7 +46,8 @@ namespace Zilon.Core.Specs.Steps
         public void GivenАктёрИмеетHp(int startHp)
         {
             var actor = Context.GetActiveActor();
-            actor.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, startHp);
+            actor.Person.GetModule<ISurvivalModule>()
+                 .SetStatForce(SurvivalStatType.Health, startHp);
         }
 
         [Given(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
@@ -60,7 +61,8 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
         {
-            var sectorToAdd = Context.Globe.SectorNodes.First().Sector;
+            var sectorToAdd = Context.Globe.SectorNodes.First()
+                                     .Sector;
             Context.AddHumanActor(personSid, sectorToAdd, new OffsetCoords(nodeX, nodeY));
         }
 
@@ -68,7 +70,8 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Есть карта размером (\d*)")]
         public async Task GivenЕстьКартаРазмеромAsync(int mapSize)
         {
-            await Context.CreateGlobeAsync(mapSize).ConfigureAwait(false);
+            await Context.CreateGlobeAsync(mapSize)
+                         .ConfigureAwait(false);
         }
 
         [UsedImplicitly]
@@ -79,7 +82,8 @@ namespace Zilon.Core.Specs.Steps
             int x,
             int y)
         {
-            var sector = Context.Globe.SectorNodes.First().Sector;
+            var sector = Context.Globe.SectorNodes.First()
+                                .Sector;
             Context.AddMonsterActor(monsterSid, monsterId, sector, new OffsetCoords(x, y));
         }
 
@@ -108,7 +112,8 @@ namespace Zilon.Core.Specs.Steps
         {
             var monster = Context.GetMonsterById(monsterId);
 
-            monster.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, monsterHp);
+            monster.Person.GetModule<ISurvivalModule>()
+                   .SetStatForce(SurvivalStatType.Health, monsterHp);
         }
 
         [UsedImplicitly]
@@ -126,7 +131,8 @@ namespace Zilon.Core.Specs.Steps
             var propScheme = schemeService.GetScheme<IPropScheme>(resourceSid);
             var resource = propFactory.CreateResource(propScheme, count);
 
-            container.GetModule<IPropContainer>().Content.Add(resource);
+            container.GetModule<IPropContainer>()
+                     .Content.Add(resource);
         }
 
         [UsedImplicitly]
@@ -144,7 +150,8 @@ namespace Zilon.Core.Specs.Steps
             var propScheme = schemeService.GetScheme<IPropScheme>(equipmentSid);
             var equipment = propFactory.CreateEquipment(propScheme);
 
-            container.GetModule<IPropContainer>().Content.Add(equipment);
+            container.GetModule<IPropContainer>()
+                     .Content.Add(equipment);
         }
 
         [UsedImplicitly]
@@ -152,8 +159,10 @@ namespace Zilon.Core.Specs.Steps
         public void ThenАктёрИмеетЗадасHp(int expectedHp)
         {
             var actor = Context.GetActiveActor();
-            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
-            hpStat.Value.Should().Be(expectedHp);
+            var hpStat = actor.Person.GetModule<ISurvivalModule>()
+                              .Stats.Single(x => x.Type == SurvivalStatType.Health);
+            hpStat.Value.Should()
+                  .Be(expectedHp);
         }
 
         [Then(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
@@ -161,13 +170,16 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            var propsInInventory = actor.Person.GetModule<IInventoryModule>()
+                                        .CalcActualItems();
             var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
 
-            testedProp.Should().BeOfType<Resource>();
+            testedProp.Should()
+                      .BeOfType<Resource>();
             var testedResouce = (Resource)testedProp;
 
-            testedResouce.Count.Should().Be(expectedCount);
+            testedResouce.Count.Should()
+                         .Be(expectedCount);
         }
 
         [UsedImplicitly]
@@ -178,10 +190,12 @@ namespace Zilon.Core.Specs.Steps
             var containerManager = player.SectorNode.Sector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == containerId);
-            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems()
-                .SingleOrDefault(x => x.Scheme.Sid == resourceSid);
+            var prop = container.GetModule<IPropContainer>()
+                                .Content.CalcActualItems()
+                                .SingleOrDefault(x => x.Scheme.Sid == resourceSid);
 
-            prop.Should().BeNull();
+            prop.Should()
+                .BeNull();
         }
 
         [UsedImplicitly]
@@ -192,10 +206,12 @@ namespace Zilon.Core.Specs.Steps
             var containerManager = player.SectorNode.Sector.StaticObjectManager;
 
             var container = containerManager.Items.Single(x => x.Id == id);
-            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems()
-                .SingleOrDefault(x => x.Scheme.Sid == propSid);
+            var prop = container.GetModule<IPropContainer>()
+                                .Content.CalcActualItems()
+                                .SingleOrDefault(x => x.Scheme.Sid == propSid);
 
-            prop.Should().BeNull();
+            prop.Should()
+                .BeNull();
         }
 
         [UsedImplicitly]
@@ -204,10 +220,12 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            var propsInInventory = actor.Person.GetModule<IInventoryModule>()
+                                        .CalcActualItems();
             var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
 
-            testedProp.Should().BeNull();
+            testedProp.Should()
+                      .BeNull();
         }
 
         [UsedImplicitly]
@@ -215,9 +233,11 @@ namespace Zilon.Core.Specs.Steps
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
             var monster = Context.GetMonsterById(monsterId);
-            var hpStat = monster.Person.GetModule<ISurvivalModule>().Stats
-                .Single(x => x.Type == SurvivalStatType.Health);
-            hpStat.Value.Should().Be(expectedMonsterHp);
+            var hpStat = monster.Person.GetModule<ISurvivalModule>()
+                                .Stats
+                                .Single(x => x.Type == SurvivalStatType.Health);
+            hpStat.Value.Should()
+                  .Be(expectedMonsterHp);
         }
 
         [Then(@"Параметр (.*) равен (.*)")]
@@ -237,7 +257,8 @@ namespace Zilon.Core.Specs.Steps
             var inventoryItems = inventoryModule.CalcActualItems();
             var foundEquipment = inventoryItems.SingleOrDefault(x => x.Scheme.Sid == equipmentSchemeSid);
 
-            foundEquipment.Should().NotBeNull();
+            foundEquipment.Should()
+                          .NotBeNull();
         }
 
         [When(@"Жду (.*) единиц времени")]
@@ -252,7 +273,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var globe = Context.Globe;
             var humanTaskSource = Context.ServiceProvider
-                .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+                                         .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var counter = count;
@@ -268,7 +289,9 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (IsPlayerPersonCanIntent(humanTaskSource, survivalModule) && (counter > 0))
                 {
-                    await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    await globe.UpdateAsync()
+                               .TimeoutAfter(TEST_SHORT_OP_LIMIT_MS)
+                               .ConfigureAwait(false);
                     counter--;
                 }
             }
@@ -276,7 +299,9 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (counter > 0)
                 {
-                    await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    await globe.UpdateAsync()
+                               .TimeoutAfter(TEST_SHORT_OP_LIMIT_MS)
+                               .ConfigureAwait(false);
                     counter--;
                 }
             }
@@ -319,7 +344,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var globe = Context.Globe;
             var humatTaskSource = Context.ServiceProvider
-                .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+                                         .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var counter = timeUnitCount;
@@ -338,7 +363,9 @@ namespace Zilon.Core.Specs.Steps
                             WhenЯВыполняюПростой();
                         }
 
-                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                        await globe.UpdateAsync()
+                                   .TimeoutAfter(TEST_SHORT_OP_LIMIT_MS)
+                                   .ConfigureAwait(false);
                     }
 
                     counter--;
@@ -350,7 +377,9 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                        await globe.UpdateAsync()
+                                   .TimeoutAfter(TEST_SHORT_OP_LIMIT_MS)
+                                   .ConfigureAwait(false);
                     }
 
                     counter--;
@@ -370,12 +399,14 @@ namespace Zilon.Core.Specs.Steps
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
             var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(),
-                container.GetModule<IPropContainer>().Content);
+                container.GetModule<IPropContainer>()
+                         .Content);
             propTransferCommand.TransferMachine = transferMachine;
 
-            var resource = container.GetModule<IPropContainer>().Content.CalcActualItems()
-                .OfType<Resource>()
-                .Single(x => x.Scheme.Sid == resourceSid);
+            var resource = container.GetModule<IPropContainer>()
+                                    .Content.CalcActualItems()
+                                    .OfType<Resource>()
+                                    .Single(x => x.Scheme.Sid == resourceSid);
 
             Resource takenResource;
             if (resource.Count > count)
@@ -405,11 +436,13 @@ namespace Zilon.Core.Specs.Steps
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
             var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(),
-                container.GetModule<IPropContainer>().Content);
+                container.GetModule<IPropContainer>()
+                         .Content);
             propTransferCommand.TransferMachine = transferMachine;
 
-            var equipment = container.GetModule<IPropContainer>().Content.CalcActualItems()
-                .Single(x => x.Scheme.Sid == equipmentSchemeSid);
+            var equipment = container.GetModule<IPropContainer>()
+                                     .Content.CalcActualItems()
+                                     .Single(x => x.Scheme.Sid == equipmentSchemeSid);
 
             transferMachine.TransferProp(equipment,
                 PropTransferMachineStore.Container,

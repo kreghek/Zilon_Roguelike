@@ -69,7 +69,8 @@ namespace Zilon.Core.Tactics.Spatial
             var offsetX = hexNode.OffsetCoords.X;
             var offsetY = hexNode.OffsetCoords.Y;
 
-            var nodeMatrix = _segmentDict.First().Value;
+            var nodeMatrix = _segmentDict.First()
+                                         .Value;
 
             if (nodeMatrix[offsetX, offsetY] != null)
             {
@@ -190,7 +191,8 @@ namespace Zilon.Core.Tactics.Spatial
         {
             const int cellWidth = 4;
 
-            var matrix = _segmentDict.First().Value;
+            var matrix = _segmentDict.First()
+                                     .Value;
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
             {
                 file.Write(" ".PadLeft(cellWidth, ' '));

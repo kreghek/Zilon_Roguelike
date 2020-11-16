@@ -77,7 +77,8 @@ namespace Zilon.Core.PersonModules
         {
             var constitutionBonus = GetConstitutionHpBonus(_attributesModule);
             var totalHp = _personScheme.Hp + constitutionBonus;
-            Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health)?.ChangeStatRange(0, totalHp);
+            Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health)
+                 ?.ChangeStatRange(0, totalHp);
 
             foreach (var stat in Stats)
             {
@@ -311,7 +312,7 @@ namespace Zilon.Core.PersonModules
             InvokeStatChangedEvent(this, args);
         }
 
-        private void FillSurvivalBonusesFromEffects([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEffects([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_effectsModule is null)
             {
@@ -369,7 +370,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromEquipments([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEquipments([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_equipmentModule is null)
             {
@@ -400,7 +401,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromPerks([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromPerks([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_evolutionModule is null)
             {
@@ -498,7 +499,8 @@ namespace Zilon.Core.PersonModules
                 throw new ArgumentNullException(nameof(attributesModule));
             }
 
-            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null);
+            return GetStatsIterator(personScheme, attributesModule)
+                .Where(x => x != null);
         }
 
         private static IEnumerable<SurvivalStat> GetStatsIterator(
@@ -557,7 +559,8 @@ namespace Zilon.Core.PersonModules
 
                         for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
                         {
-                            if (((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0)
+                            if (((equipmentModule.Slots[slotIndex]
+                                                 .Types & EquipmentSlotTypes.Body) > 0)
                                 && (equipmentModule[slotIndex] != null))
                             {
                                 requirementsCompleted = false;
@@ -614,7 +617,8 @@ namespace Zilon.Core.PersonModules
 
                     for (var slotIndex = 0; slotIndex < equipmentModule.Count(); slotIndex++)
                     {
-                        if (((equipmentModule.Slots[slotIndex].Types & EquipmentSlotTypes.Body) > 0)
+                        if (((equipmentModule.Slots[slotIndex]
+                                             .Types & EquipmentSlotTypes.Body) > 0)
                             && (equipmentModule[slotIndex] != null))
                         {
                             requirementsCompleted = false;

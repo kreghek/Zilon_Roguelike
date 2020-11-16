@@ -54,14 +54,16 @@ namespace Zilon.Bot.Players.Logics
             SurvivalStatType hazardType,
             ConsumeCommonRuleType resourceType)
         {
-            var hazardEffect = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>()
-                .SingleOrDefault(x => x.Type == hazardType);
+            var hazardEffect = actor.Person.GetModule<IEffectsModule>()
+                                    .Items.OfType<SurvivalStatHazardEffect>()
+                                    .SingleOrDefault(x => x.Type == hazardType);
             if (hazardEffect == null)
             {
                 return null;
             }
 
-            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>()
+                             .CalcActualItems();
             var resources = props.OfType<Resource>();
             var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 resourceType);

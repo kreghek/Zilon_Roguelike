@@ -95,7 +95,8 @@ namespace Zilon.Bot.Players.Logics
 
             var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
 
-            var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().CalcCombatActs(),
+            var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>()
+                                                         .CalcCombatActs(),
                 inventory);
 
             var isInDistance = act.CheckDistance(actor.Node, target.Node, map);

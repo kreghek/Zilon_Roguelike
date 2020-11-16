@@ -23,7 +23,8 @@ namespace Zilon.Core.Specs.Mocks
             // в которой объясняется, что не всё так просто.
             // Нужно чёткое понимание, зачем здесь ConfigureAwait(false) и
             // к какому результату это приводит по сравнению с простым await.
-            var map = await _factoryFuncAsync().ConfigureAwait(false);
+            var map = await _factoryFuncAsync()
+                .ConfigureAwait(false);
 
             return map;
         }

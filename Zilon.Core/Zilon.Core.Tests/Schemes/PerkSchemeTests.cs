@@ -26,7 +26,10 @@ namespace Zilon.Core.Tests.Schemes
             var factPerkScheme = JsonConvert.DeserializeObject<PerkScheme>(sourceText);
 
             // ASSERT
-            factPerkScheme.Levels[0].Jobs[0].Type.Should().Be(JobType.Defeats);
+            factPerkScheme.Levels[0]
+                          .Jobs[0]
+                          .Type.Should()
+                          .Be(JobType.Defeats);
         }
     }
 }

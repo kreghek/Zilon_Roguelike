@@ -14,7 +14,8 @@ namespace Zilon.Core.World
 
         private async Task ExpandGlobeInternalAsync(IGlobe globe, ISectorNode sectorNode)
         {
-            await _biomeInitializer.MaterializeLevelAsync(sectorNode).ConfigureAwait(false);
+            await _biomeInitializer.MaterializeLevelAsync(sectorNode)
+                                   .ConfigureAwait(false);
 
             // Фиксируем новый узел, как известную, материализованную часть мира.
             // Далее этот узел будет обрабатываться при каждом изменении мира.

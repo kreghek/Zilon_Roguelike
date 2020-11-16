@@ -45,7 +45,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var newObservedFowNodes = UpdateOrCreateFowNodes(fowData, observingNodes);
 
-            var notObservingFowNodes = currentObservedFowNodes.Except(newObservedFowNodes).ToArray();
+            var notObservingFowNodes = currentObservedFowNodes.Except(newObservedFowNodes)
+                                                              .ToArray();
 
             foreach (var fowNode in notObservingFowNodes)
             {
@@ -69,7 +70,8 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 var next = fowContext.GetNext(node);
 
-                var except = border.Union(result).Union(borderTotal);
+                var except = border.Union(result)
+                                   .Union(borderTotal);
 
                 var newBorder = next.Except(except);
 
@@ -96,8 +98,9 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 var newBorder = GetNextForBorder(border, resultList, fowContext);
 
-                var visibleBorder = newBorder.AsParallel().Where(x => fowContext.IsTargetVisible(x, baseNode))
-                    .ToArray();
+                var visibleBorder = newBorder.AsParallel()
+                                             .Where(x => fowContext.IsTargetVisible(x, baseNode))
+                                             .ToArray();
 
                 border.Clear();
                 border.AddRange(visibleBorder);

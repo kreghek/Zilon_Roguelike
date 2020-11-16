@@ -28,7 +28,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         public async Task Run_CheckNeighborBypass_ExpectedPath()
         {
             // ARRAGE
-            var map = await CreateGridOpenMapAsync().ConfigureAwait(false);
+            var map = await CreateGridOpenMapAsync()
+                .ConfigureAwait(false);
 
             var expectedPath = new IGraphNode[]
             {
@@ -49,10 +50,12 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             // ASSERT
 
-            factState.Should().Be(State.GoalFound);
+            factState.Should()
+                     .Be(State.GoalFound);
 
             var factPath = astar.GetPath();
-            factPath.Should().BeEquivalentTo(expectedPath);
+            factPath.Should()
+                    .BeEquivalentTo(expectedPath);
         }
 
         /// <summary>
@@ -63,7 +66,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         public async Task Run_GridGraphAndLinePath_PathFound()
         {
             // ARRAGE
-            var map = await CreateGridOpenMapAsync().ConfigureAwait(false);
+            var map = await CreateGridOpenMapAsync()
+                .ConfigureAwait(false);
 
             var expectedPath = new IGraphNode[]
             {
@@ -84,10 +88,12 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             // ASSERT
 
-            factState.Should().Be(State.GoalFound);
+            factState.Should()
+                     .Be(State.GoalFound);
 
             var factPath = astar.GetPath();
-            factPath.Should().BeEquivalentTo(expectedPath);
+            factPath.Should()
+                    .BeEquivalentTo(expectedPath);
         }
 
         /// <summary>
@@ -127,10 +133,12 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             var factState = astar.Run();
 
             // ASSERT
-            factState.Should().Be(State.GoalFound);
+            factState.Should()
+                     .Be(State.GoalFound);
 
             var factPath = astar.GetPath();
-            factPath.Should().BeEquivalentTo(expectedPath);
+            factPath.Should()
+                    .BeEquivalentTo(expectedPath);
         }
 
         /// <summary>
@@ -166,10 +174,12 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             // ASSERT
 
-            factState.Should().Be(State.GoalFound);
+            factState.Should()
+                     .Be(State.GoalFound);
 
             var factPath = astar.GetPath();
-            factPath.Should().BeEquivalentTo(expectedPath);
+            factPath.Should()
+                    .BeEquivalentTo(expectedPath);
         }
 
         /// <summary>
@@ -178,7 +188,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// <returns></returns>
         private static async Task<IMap> CreateGridOpenMapAsync()
         {
-            return await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+            return await SquareMapFactory.CreateAsync(10)
+                                         .ConfigureAwait(false);
         }
 
         private static IAstarContext CreatePathFindingContext(ISpatialGraph graph)
@@ -186,9 +197,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             var contextMock = new Mock<IAstarContext>();
             var context = contextMock.Object;
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode>(node => graph.GetNext(node));
+                       .Returns<IGraphNode>(node => graph.GetNext(node));
             contextMock.Setup(x => x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode, IGraphNode>((current, target) => graph.DistanceBetween(current, target));
+                       .Returns<IGraphNode, IGraphNode>((current, target) => graph.DistanceBetween(current, target));
 
             return context;
         }
@@ -198,9 +209,10 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             var contextMock = new Mock<IAstarContext>();
             var context = contextMock.Object;
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode>(node => hexMap.GetNext(node).Cast<HexNode>());
+                       .Returns<IGraphNode>(node => hexMap.GetNext(node)
+                                                          .Cast<HexNode>());
             contextMock.Setup(x => x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                .Returns<IGraphNode, IGraphNode>((current, target) => hexMap.DistanceBetween(current, target));
+                       .Returns<IGraphNode, IGraphNode>((current, target) => hexMap.DistanceBetween(current, target));
 
             return context;
         }

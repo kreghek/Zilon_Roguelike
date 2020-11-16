@@ -36,18 +36,22 @@ namespace Zilon.Core.Tests.Commands
         {
             Container = new ServiceCollection();
 
-            var testMap = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+            var testMap = await SquareMapFactory.CreateAsync(10)
+                                                .ConfigureAwait(false);
 
             var sectorMock = new Mock<ISector>();
-            sectorMock.SetupGet(x => x.Map).Returns(testMap);
+            sectorMock.SetupGet(x => x.Map)
+                      .Returns(testMap);
             var sector = sectorMock.Object;
 
             var sectorNodeMock = new Mock<ISectorNode>();
-            sectorNodeMock.SetupGet(x => x.Sector).Returns(sector);
+            sectorNodeMock.SetupGet(x => x.Sector)
+                          .Returns(sector);
             var sectorNode = sectorNodeMock.Object;
 
             var playerMock = new Mock<IPlayer>();
-            playerMock.SetupGet(x => x.SectorNode).Returns(sectorNode);
+            playerMock.SetupGet(x => x.SectorNode)
+                      .Returns(sectorNode);
             var player = playerMock.Object;
             Container.AddSingleton(player);
 
@@ -57,35 +61,40 @@ namespace Zilon.Core.Tests.Commands
 
             var combatActModuleMock = new Mock<ICombatActModule>();
             combatActModuleMock.Setup(x => x.CalcCombatActs())
-                .Returns(new[]
-                {
-                    simpleAct,
-                    cooldownAct,
-                    cooldownResolvedAct
-                });
+                               .Returns(new[]
+                               {
+                                   simpleAct,
+                                   cooldownAct,
+                                   cooldownResolvedAct
+                               });
             var combatActModule = combatActModuleMock.Object;
 
             var equipmentCarrierMock = new Mock<IEquipmentModule>();
             equipmentCarrierMock.SetupGet(x => x.Slots)
-                .Returns(new[]
-                {
-                    new PersonSlotSubScheme
-                    {
-                        Types = EquipmentSlotTypes.Hand
-                    }
-                });
+                                .Returns(new[]
+                                {
+                                    new PersonSlotSubScheme
+                                    {
+                                        Types = EquipmentSlotTypes.Hand
+                                    }
+                                });
             var equipmentCarrier = equipmentCarrierMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
-            personMock.Setup(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentCarrier);
-            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSizePattern.Size1);
+            personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>()))
+                      .Returns(combatActModule);
+            personMock.Setup(x => x.GetModule<IEquipmentModule>(It.IsAny<string>()))
+                      .Returns(equipmentCarrier);
+            personMock.SetupGet(x => x.PhysicalSize)
+                      .Returns(PhysicalSizePattern.Size1);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
             var actorNode = testMap.Nodes.SelectByHexCoords(0, 0);
-            actorMock.SetupGet(x => x.Node).Returns(actorNode);
-            actorMock.SetupGet(x => x.Person).Returns(person);
+            actorMock.SetupGet(x => x.Node)
+                     .Returns(actorNode);
+            actorMock.SetupGet(x => x.Person)
+                     .Returns(person);
             var actor = actorMock.Object;
 
             var actorVmMock = new Mock<IActorViewModel>();
@@ -97,12 +106,13 @@ namespace Zilon.Core.Tests.Commands
 
             var playerStateMock = new Mock<ISectorUiState>();
             playerStateMock.SetupProperty(x => x.ActiveActor, actorVm);
-            playerStateMock.SetupGet(x => x.TaskSource).Returns(humanTaskSource);
+            playerStateMock.SetupGet(x => x.TaskSource)
+                           .Returns(humanTaskSource);
             playerStateMock.SetupProperty(x => x.TacticalAct, simpleAct);
             var playerState = playerStateMock.Object;
 
             sectorMock.SetupGet(x => x.ActorManager)
-                .Returns(() => ServiceProvider.GetRequiredService<IActorManager>());
+                      .Returns(() => ServiceProvider.GetRequiredService<IActorManager>());
 
             var usageServiceMock = new Mock<ITacticalActUsageService>();
             var usageService = usageServiceMock.Object;
@@ -125,8 +135,10 @@ namespace Zilon.Core.Tests.Commands
             {
                 Range = new Range<int>(1, 2)
             };
-            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
-            actMock.SetupGet(x => x.CurrentCooldown).Returns(1);
+            actMock.SetupGet(x => x.Stats)
+                   .Returns(actStatScheme);
+            actMock.SetupGet(x => x.CurrentCooldown)
+                   .Returns(1);
             var act = actMock.Object;
             return act;
         }
@@ -138,8 +150,10 @@ namespace Zilon.Core.Tests.Commands
             {
                 Range = new Range<int>(1, 2)
             };
-            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
-            actMock.SetupGet(x => x.CurrentCooldown).Returns(0);
+            actMock.SetupGet(x => x.Stats)
+                   .Returns(actStatScheme);
+            actMock.SetupGet(x => x.CurrentCooldown)
+                   .Returns(0);
             var act = actMock.Object;
             return act;
         }
@@ -151,7 +165,8 @@ namespace Zilon.Core.Tests.Commands
             {
                 Range = new Range<int>(1, 2)
             };
-            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
+            actMock.SetupGet(x => x.Stats)
+                   .Returns(actStatScheme);
             var act = actMock.Object;
             return act;
         }

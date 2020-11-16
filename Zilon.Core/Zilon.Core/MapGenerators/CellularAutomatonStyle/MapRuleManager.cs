@@ -17,7 +17,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         public T GetRuleOrNull<T>() where T : IMapRule
         {
-            return _list.OfType<T>().SingleOrDefault();
+            return _list.OfType<T>()
+                        .SingleOrDefault();
         }
     }
 }

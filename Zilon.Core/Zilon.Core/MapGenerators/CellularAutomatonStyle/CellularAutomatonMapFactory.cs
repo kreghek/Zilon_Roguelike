@@ -47,7 +47,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             // Первую занимаем под старт.
             // Последующие - это переходы.
 
-            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Length).ToArray();
+            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Length)
+                                         .ToArray();
 
             if (regionOrderedBySize.Any())
             {
@@ -68,7 +69,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             var transitionArray = transitions.ToArray();
 
             // Пропускаем 1, потому что 1 занять стартом.
-            var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
+            var trasitionRegionDrafts = regionOrderedBySize.Skip(1)
+                                                           .ToArray();
 
             Debug.Assert(trasitionRegionDrafts.Length >= transitionArray.Length,
                 "Должно быть достаточно регионов для размещения всех переходов.");
@@ -89,8 +91,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 }
 
                 transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
-                                              where map.Transitions.Keys.Contains(regionNode)
-                                              select regionNode).ToArray();
+                    where map.Transitions.Keys.Contains(regionNode)
+                    select regionNode).ToArray();
             }
         }
 

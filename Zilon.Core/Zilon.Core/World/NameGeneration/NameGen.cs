@@ -27,7 +27,8 @@ namespace Zilon.Core.World.NameGeneration
 
             JsonSerializer serializer = new JsonSerializer();
 
-            var assembly = this.GetType().Assembly;
+            var assembly = this.GetType()
+                               .Assembly;
             var resourceName = "Zilon.Core.World.NameGeneration.names.json";
 
             using (var stream = assembly.GetManifestResourceStream(resourceName))

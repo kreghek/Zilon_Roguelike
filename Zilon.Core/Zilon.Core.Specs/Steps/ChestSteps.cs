@@ -56,7 +56,7 @@ namespace Zilon.Core.Specs.Steps
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.Resolve(It.IsAny<IEnumerable<IDropTableScheme>>()))
-                .Returns(dropProps.ToArray());
+                            .Returns(dropProps.ToArray());
             var dropResolver = dropResolverMock.Object;
 
             var chest = new DropTablePropChest(Array.Empty<DropTableScheme>(), dropResolver);
@@ -73,7 +73,9 @@ namespace Zilon.Core.Specs.Steps
             var selectedChest = (playerState.HoverViewModel as IContainerViewModel).StaticObject;
 
             // lootProps будет изменяться
-            var lootProps = selectedChest.GetModule<IPropContainer>().Content.CalcActualItems().ToList();
+            var lootProps = selectedChest.GetModule<IPropContainer>()
+                                         .Content.CalcActualItems()
+                                         .ToList();
 
             foreach (var tableRow in table.Rows)
             {
@@ -85,9 +87,12 @@ namespace Zilon.Core.Specs.Steps
                 var factLootResource =
                     factLootResources.FirstOrDefault(x => x.Count == int.Parse(expectedResourceCount));
 
-                factLootResource.Should().NotBeNull();
-                factLootResource.Scheme.Sid.Should().Be(expectedPropSid);
-                factLootResource.Count.Should().Be(int.Parse(expectedResourceCount));
+                factLootResource.Should()
+                                .NotBeNull();
+                factLootResource.Scheme.Sid.Should()
+                                .Be(expectedPropSid);
+                factLootResource.Count.Should()
+                                .Be(int.Parse(expectedResourceCount));
                 lootProps.Remove(factLootResource);
             }
         }

@@ -87,7 +87,8 @@ namespace Zilon.Core.Specs.Contexts
             actorManager.Add(humanActor);
 
             var humanActroViewModelMock = new Mock<IActorViewModel>();
-            humanActroViewModelMock.SetupGet(x => x.Actor).Returns(humanActor);
+            humanActroViewModelMock.SetupGet(x => x.Actor)
+                                   .Returns(humanActor);
             var humanActroViewModel = humanActroViewModelMock.Object;
             playerState.ActiveActor = humanActroViewModel;
         }
@@ -133,7 +134,8 @@ namespace Zilon.Core.Specs.Contexts
 
             var resource = new Resource(resourceScheme, count);
 
-            actor.Person.GetModule<IInventoryModule>().Add(resource);
+            actor.Person.GetModule<IInventoryModule>()
+                 .Add(resource);
         }
 
         public void AddWall(
@@ -142,7 +144,8 @@ namespace Zilon.Core.Specs.Contexts
             int x2,
             int y2)
         {
-            var map = GetCurrentGlobeFirstSector().Map;
+            var map = GetCurrentGlobeFirstSector()
+                .Map;
 
             map.RemoveEdge(x1, y1, x2, y2);
         }
@@ -183,7 +186,8 @@ namespace Zilon.Core.Specs.Contexts
             });
 
             var globeInitialzer = ServiceProvider.GetRequiredService<IGlobeInitializer>();
-            var globe = await globeInitialzer.CreateGlobeAsync("intro").ConfigureAwait(false);
+            var globe = await globeInitialzer.CreateGlobeAsync("intro")
+                                             .ConfigureAwait(false);
             Globe = globe;
         }
 
@@ -196,7 +200,8 @@ namespace Zilon.Core.Specs.Contexts
 
         public ISector GetCurrentGlobeFirstSector()
         {
-            var sector = Globe.SectorNodes.First().Sector;
+            var sector = Globe.SectorNodes.First()
+                              .Sector;
             return sector;
         }
 
@@ -207,7 +212,7 @@ namespace Zilon.Core.Specs.Contexts
             var actorManager = sector.ActorManager;
 
             var monster = actorManager.Items
-                .SingleOrDefault(x => x.Person is MonsterPerson && (x.Person.Id == id));
+                                      .SingleOrDefault(x => x.Person is MonsterPerson && (x.Person.Id == id));
 
             return monster;
         }

@@ -37,7 +37,8 @@ namespace Zilon.Core.Tactics.Tests
             var factTestModule = staticObject.GetModule<IPropContainer>();
 
             // ASSERT
-            factTestModule.Should().BeOfType<DropTablePropChest>();
+            factTestModule.Should()
+                          .BeOfType<DropTablePropChest>();
         }
 
         [Test]
@@ -57,8 +58,10 @@ namespace Zilon.Core.Tactics.Tests
             var factTestModule = staticObject.GetModule<ITestModule>();
 
             // ASSERT
-            factTestModule.Should().NotBeNull();
-            factTestModule.Should().BeOfType<TestModule>();
+            factTestModule.Should()
+                          .NotBeNull();
+            factTestModule.Should()
+                          .BeOfType<TestModule>();
         }
 
         private interface ITestModule : IStaticObjectModule

@@ -41,8 +41,10 @@ namespace Zilon.Core.Tests.Persons
             });
 
             // ASSERT
-            testedJob.Progress.Should().Be(expectedProgress);
-            otherJob.Progress.Should().Be(expectedOtherProgress);
+            testedJob.Progress.Should()
+                     .Be(expectedProgress);
+            otherJob.Progress.Should()
+                    .Be(expectedOtherProgress);
         }
 
         /// <summary>
@@ -66,7 +68,8 @@ namespace Zilon.Core.Tests.Persons
             });
 
             // ASSERT
-            job.Progress.Should().Be(expectedProgress);
+            job.Progress.Should()
+               .Be(expectedProgress);
         }
 
         /// <summary>
@@ -89,8 +92,11 @@ namespace Zilon.Core.Tests.Persons
             });
 
             // ASSERT
-            changedJobs.Should().HaveCount(1);
-            changedJobs[0].Should().Be(job);
+            changedJobs.Should()
+                       .HaveCount(1);
+            changedJobs[0]
+                .Should()
+                .Be(job);
         }
 
         private static IActor CreateActor()
@@ -104,11 +110,12 @@ namespace Zilon.Core.Tests.Persons
         {
             var jobMock = new Mock<IJob>();
             jobMock.SetupProperty(x => x.Progress, startProgress);
-            jobMock.SetupGet(x => x.Scheme).Returns(new TestJobSubScheme
-            {
-                Type = type,
-                Value = 10
-            });
+            jobMock.SetupGet(x => x.Scheme)
+                   .Returns(new TestJobSubScheme
+                   {
+                       Type = type,
+                       Value = 10
+                   });
             var job = jobMock.Object;
             return job;
         }

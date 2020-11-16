@@ -32,7 +32,8 @@ namespace Zilon.Core.Tests.Common
             var factCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
 
             // ASSERT
-            factCubeCoords.Should().BeEquivalentTo(expectedCubeCoords);
+            factCubeCoords.Should()
+                          .BeEquivalentTo(expectedCubeCoords);
         }
 
         [Test]
@@ -53,7 +54,8 @@ namespace Zilon.Core.Tests.Common
             var factOffsetCoords = HexHelper.ConvertToOffset(cubeCoords);
 
             // ASSERT
-            factOffsetCoords.Should().BeEquivalentTo(expectedOffset);
+            factOffsetCoords.Should()
+                            .BeEquivalentTo(expectedOffset);
         }
 
         [Test]

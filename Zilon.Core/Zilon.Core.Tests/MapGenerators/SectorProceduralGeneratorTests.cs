@@ -41,11 +41,13 @@ namespace Zilon.Core.Tests.MapGenerators
             // ACT
             Func<Task> act = async () =>
             {
-                await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
+                await generator.GenerateAsync(sectorNode)
+                               .ConfigureAwait(false);
             };
 
             // ASSERT
-            act.Should().NotThrow();
+            act.Should()
+               .NotThrow();
         }
 
         /// <summary>
@@ -72,7 +74,8 @@ namespace Zilon.Core.Tests.MapGenerators
             var sectorNode = CreateSectorNode(sectorScheme);
 
             // ACT
-            await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
+            await generator.GenerateAsync(sectorNode)
+                           .ConfigureAwait(false);
         }
 
         private static ISectorGenerator CreateGenerator(
@@ -89,7 +92,7 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var mapFactorySelectorMock = new Mock<IMapFactorySelector>();
             mapFactorySelectorMock.Setup(x => x.GetMapFactory(It.IsAny<ISectorNode>()))
-                .Returns(mapFactory);
+                                  .Returns(mapFactory);
             var mapFactorySelector = mapFactorySelectorMock.Object;
 
             var diseaseGeneratorMock = new Mock<IDiseaseGenerator>();
@@ -98,11 +101,11 @@ namespace Zilon.Core.Tests.MapGenerators
             var sectorMock = new Mock<ISector>();
             var sector = sectorMock.Object;
             sectorFactoryMock.Setup(x => x.Create(It.IsAny<ISectorMap>(), It.IsAny<ILocationScheme>()))
-                .Returns(sector);
+                             .Returns(sector);
 
             var resourceMaterializationMapMock = new Mock<IResourceMaterializationMap>();
             resourceMaterializationMapMock.Setup(x => x.GetDepositData(It.IsAny<ISectorNode>()))
-                .Returns(new Mock<IResourceDepositData>().Object);
+                                          .Returns(new Mock<IResourceDepositData>().Object);
             var sectorMaterializationService = resourceMaterializationMapMock.Object;
 
             return new SectorGenerator(mapFactorySelector,
@@ -116,13 +119,17 @@ namespace Zilon.Core.Tests.MapGenerators
         private static ISectorNode CreateSectorNode(ISectorSubScheme sectorScheme)
         {
             var biomeMock = new Mock<IBiome>();
-            biomeMock.Setup(x => x.GetNext(It.IsAny<ISectorNode>())).Returns(Array.Empty<ISectorNode>());
+            biomeMock.Setup(x => x.GetNext(It.IsAny<ISectorNode>()))
+                     .Returns(Array.Empty<ISectorNode>());
             var biome = biomeMock.Object;
 
             var sectorNodeMock = new Mock<ISectorNode>();
-            sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorScheme);
-            sectorNodeMock.SetupGet(x => x.Biome).Returns(biome);
-            sectorNodeMock.SetupGet(x => x.State).Returns(SectorNodeState.SchemeKnown);
+            sectorNodeMock.SetupGet(x => x.SectorScheme)
+                          .Returns(sectorScheme);
+            sectorNodeMock.SetupGet(x => x.Biome)
+                          .Returns(biome);
+            sectorNodeMock.SetupGet(x => x.State)
+                          .Returns(SectorNodeState.SchemeKnown);
             var sectorNode = sectorNodeMock.Object;
             return sectorNode;
         }

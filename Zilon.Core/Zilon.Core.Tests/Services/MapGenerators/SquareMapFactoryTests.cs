@@ -25,7 +25,8 @@ namespace Zilon.Core.Tests.MapGenerators
             // ARRANGE
 
             // ACT
-            var map = await SquareMapFactory.CreateAsync(7).ConfigureAwait(false);
+            var map = await SquareMapFactory.CreateAsync(7)
+                                            .ConfigureAwait(false);
 
             // ASSERT
             AssertEdge(map, 0, 0, 1, 0);
@@ -61,7 +62,8 @@ namespace Zilon.Core.Tests.MapGenerators
             };
 
             // ASSERT
-            act.Should().NotThrow();
+            act.Should()
+               .NotThrow();
         }
 
         private void AssertEdge(
@@ -74,7 +76,8 @@ namespace Zilon.Core.Tests.MapGenerators
             var node1 = map.Nodes.SelectByHexCoords(offsetX1, offsetY1);
             var node2 = map.Nodes.SelectByHexCoords(offsetX2, offsetY2);
             var hasEdge = HasEdge(map, node1, node2);
-            hasEdge.Should().BeTrue();
+            hasEdge.Should()
+                   .BeTrue();
         }
 
         private static bool HasEdge(IMap map, HexNode node, HexNode neighbor)

@@ -27,7 +27,7 @@ namespace Zilon.Core.PersonModules
             DiseaseSymptom symptom)
         {
             var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
-                .SingleOrDefault(x => x.Symptom == symptom);
+                                                    .SingleOrDefault(x => x.Symptom == symptom);
 
             if (currentSymptomEffect is null)
             {
@@ -47,7 +47,7 @@ namespace Zilon.Core.PersonModules
             DiseaseSymptom symptom)
         {
             var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
-                .SingleOrDefault(x => x.Symptom == symptom);
+                                                    .SingleOrDefault(x => x.Symptom == symptom);
 
             if (currentSymptomEffect is null)
             {

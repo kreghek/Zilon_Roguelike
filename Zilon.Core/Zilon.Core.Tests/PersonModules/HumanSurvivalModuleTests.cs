@@ -39,14 +39,16 @@ namespace Zilon.Core.Tests.PersonModules
 
             var attributesModuleMock = new Mock<IAttributesModule>();
             attributesModuleMock.Setup(x => x.GetAttribute(PersonAttributeType.Constitution))
-                .Returns(new PersonAttribute(PersonAttributeType.Constitution, CONSTITUTION_VALUE));
+                                .Returns(new PersonAttribute(PersonAttributeType.Constitution, CONSTITUTION_VALUE));
             var attributesModule = attributesModuleMock.Object;
 
             // ACT
             var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
 
             // ASSERT
-            survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_HP);
+            survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health)
+                        .Value.Should()
+                        .Be(EXPECTED_HP);
         }
 
         /// <summary>
@@ -69,14 +71,16 @@ namespace Zilon.Core.Tests.PersonModules
 
             var attributesModuleMock = new Mock<IAttributesModule>();
             attributesModuleMock.Setup(x => x.GetAttribute(PersonAttributeType.Constitution))
-                .Returns(new PersonAttribute(PersonAttributeType.Constitution, CONSTITUTION_VALUE));
+                                .Returns(new PersonAttribute(PersonAttributeType.Constitution, CONSTITUTION_VALUE));
             var attributesModule = attributesModuleMock.Object;
 
             // ACT
             var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
 
             // ASSERT
-            survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_HP);
+            survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health)
+                        .Value.Should()
+                        .Be(EXPECTED_HP);
         }
 
         public static IPersonScheme CreatePersonScheme()
@@ -174,7 +178,8 @@ namespace Zilon.Core.Tests.PersonModules
 
             // ASSERT
             var factStat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
-            factStat.Value.Should().Be(expectedHp);
+            factStat.Value.Should()
+                    .Be(expectedHp);
         }
 
         /// <summary>
@@ -200,7 +205,8 @@ namespace Zilon.Core.Tests.PersonModules
             survivalData.DecreaseStat(SurvivalStatType.Health, damageValue);
 
             // ASSERT
-            monitor.Should().Raise(nameof(ISurvivalModule.Dead));
+            monitor.Should()
+                   .Raise(nameof(ISurvivalModule.Dead));
         }
 
         /// <summary>
@@ -221,7 +227,7 @@ namespace Zilon.Core.Tests.PersonModules
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>()))
-                .Returns(downPassRoll);
+                                    .Returns(downPassRoll);
             var survivalRandomSource = survivalRandomSourceMock.Object;
 
             var survivalStats = new[]
@@ -240,7 +246,8 @@ namespace Zilon.Core.Tests.PersonModules
             survivalData.Update();
 
             // ASSERT
-            return survivalStats[0].Value;
+            return survivalStats[0]
+                .Value;
         }
 
         private static ISurvivalModule CreateSurvivalData(

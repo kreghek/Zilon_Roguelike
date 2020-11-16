@@ -68,7 +68,8 @@ namespace Zilon.Bot.Players.Logics
         {
             var map = sector.Map;
             IEnumerable<IGraphNode> availableNodes;
-            var frontNodes = WriteObservedNodes(actor, strategyData, map).ToArray();
+            var frontNodes = WriteObservedNodes(actor, strategyData, map)
+                .ToArray();
             if (frontNodes.Any())
             {
                 availableNodes = frontNodes;

@@ -20,8 +20,10 @@ namespace Zilon.Core.Tests.StaticObjectModules
         {
             var currentStock = stockValue;
             var depositModuleMock = new Mock<IPropDepositModule>();
-            depositModuleMock.SetupGet(x => x.Stock).Returns(() => (float)currentStock / stockValue);
-            depositModuleMock.Setup(x => x.Mine()).Callback(() => currentStock--);
+            depositModuleMock.SetupGet(x => x.Stock)
+                             .Returns(() => (float)currentStock / stockValue);
+            depositModuleMock.Setup(x => x.Mine())
+                             .Callback(() => currentStock--);
             var depositModule = depositModuleMock.Object;
 
             var lifetimeModuleMock = new Mock<ILifetimeModule>();

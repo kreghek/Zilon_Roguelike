@@ -59,7 +59,8 @@ namespace Zilon.Core.Tests.Common
             var fact = MatrixHelper.RotateClockwise(new Matrix<int>(source, 3, 3));
 
             // ASSERT
-            fact.Items.Should().BeEquivalentTo(expected);
+            fact.Items.Should()
+                .BeEquivalentTo(expected);
         }
     }
 }

@@ -25,9 +25,9 @@ namespace Zilon.Bot.Players.Logics
             }
 
             var availableActs = acts
-                .Where(x => (x.CurrentCooldown == null) || (x.CurrentCooldown == 0))
-                .Where(x => TacticalActIsAvailableByConstrains(x, propStore))
-                .OrderByDescending(x => x.Efficient.Dice * x.Efficient.Count);
+                                .Where(x => (x.CurrentCooldown == null) || (x.CurrentCooldown == 0))
+                                .Where(x => TacticalActIsAvailableByConstrains(x, propStore))
+                                .OrderByDescending(x => x.Efficient.Dice * x.Efficient.Count);
 
             return availableActs.First();
         }

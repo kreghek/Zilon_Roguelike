@@ -54,11 +54,13 @@ namespace Zilon.Core.Tactics
             {
                 case Resource resource:
                     var removeResource = new Resource(resource.Scheme, 1);
-                    Person.GetModule<IInventoryModule>().Remove(removeResource);
+                    Person.GetModule<IInventoryModule>()
+                          .Remove(removeResource);
                     break;
 
                 case Equipment equipment:
-                    Person.GetModule<IInventoryModule>().Remove(equipment);
+                    Person.GetModule<IInventoryModule>()
+                          .Remove(equipment);
                     break;
             }
         }
@@ -68,18 +70,21 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
-                        PropMetrics.HpLesserRestoreValue);
+                    Person.GetModuleSafe<ISurvivalModule>()
+                          ?.DecreaseStat(SurvivalStatType.Health,
+                              PropMetrics.HpLesserRestoreValue);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
-                        PropMetrics.HpNormalRestoreValue);
+                    Person.GetModuleSafe<ISurvivalModule>()
+                          ?.DecreaseStat(SurvivalStatType.Health,
+                              PropMetrics.HpNormalRestoreValue);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
-                        PropMetrics.HpGrandRestoreValue);
+                    Person.GetModuleSafe<ISurvivalModule>()
+                          ?.DecreaseStat(SurvivalStatType.Health,
+                              PropMetrics.HpGrandRestoreValue);
                     break;
 
                 default:
@@ -108,18 +113,21 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
-                        PropMetrics.SurvivalLesserRestoreValue - 1);
+                    Person.GetModuleSafe<ISurvivalModule>()
+                          ?.DecreaseStat(statType,
+                              PropMetrics.SurvivalLesserRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
-                        PropMetrics.SurvivalNormalRestoreValue - 1);
+                    Person.GetModuleSafe<ISurvivalModule>()
+                          ?.DecreaseStat(statType,
+                              PropMetrics.SurvivalNormalRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
-                        PropMetrics.SurvivalGrandRestoreValue - 1);
+                    Person.GetModuleSafe<ISurvivalModule>()
+                          ?.DecreaseStat(statType,
+                              PropMetrics.SurvivalGrandRestoreValue - 1);
                     break;
 
                 case PersonRuleLevel.None:
@@ -262,18 +270,21 @@ namespace Zilon.Core.Tactics
             switch (level)
             {
                 case PersonRuleLevel.Lesser:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
-                        PropMetrics.SurvivalLesserRestoreValue + 1);
+                    Person.GetModuleSafe<ISurvivalModule>()
+                          ?.RestoreStat(statType,
+                              PropMetrics.SurvivalLesserRestoreValue + 1);
                     break;
 
                 case PersonRuleLevel.Normal:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
-                        PropMetrics.SurvivalNormalRestoreValue + 1);
+                    Person.GetModuleSafe<ISurvivalModule>()
+                          ?.RestoreStat(statType,
+                              PropMetrics.SurvivalNormalRestoreValue + 1);
                     break;
 
                 case PersonRuleLevel.Grand:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
-                        PropMetrics.SurvivalGrandRestoreValue + 1);
+                    Person.GetModuleSafe<ISurvivalModule>()
+                          ?.RestoreStat(statType,
+                              PropMetrics.SurvivalGrandRestoreValue + 1);
                     break;
 
                 case PersonRuleLevel.None:
@@ -371,7 +382,8 @@ namespace Zilon.Core.Tactics
                 return false;
             }
 
-            return !Person.GetModule<ISurvivalModule>().IsDead;
+            return !Person.GetModule<ISurvivalModule>()
+                          .IsDead;
         }
 
         public void MoveToNode(IGraphNode targetNode)
@@ -443,7 +455,8 @@ namespace Zilon.Core.Tactics
 
         public void TakeDamage(int value)
         {
-            Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health, value);
+            Person.GetModuleSafe<ISurvivalModule>()
+                  ?.DecreaseStat(SurvivalStatType.Health, value);
 
             if ((_perkResolver != null) && (Person.GetModuleSafe<IEvolutionModule>() != null))
             {

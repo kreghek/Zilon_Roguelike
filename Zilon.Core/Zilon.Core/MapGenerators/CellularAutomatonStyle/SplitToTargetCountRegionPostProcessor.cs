@@ -32,7 +32,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// <param name="targetRegionCount"> Целевое число регионов. </param>
         /// <returns> Возвращает новый массив черновиков регионов. </returns>
         private RegionDraft[] SplitRegionsForTransitions(
-            [NotNull][ItemNotNull] RegionDraft[] draftRegions,
+            [NotNull] [ItemNotNull] RegionDraft[] draftRegions,
             int targetRegionCount)
         {
             if (draftRegions == null)
@@ -54,8 +54,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
             var availableCoords = from region in availableSplitRegions
-                                  from coord in region.Coords.Skip(1)
-                                  select new RegionCoords(coord, region);
+                from coord in region.Coords.Skip(1)
+                select new RegionCoords(coord, region);
 
             if (availableCoords.Count() < regionCountDiff)
             {
@@ -81,17 +81,18 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var newDraftRegionList = new List<RegionDraft>();
             var regionGroups = usedRegionCoords.GroupBy(x => x.Region)
-                .ToDictionary(x => x.Key, x => x.AsEnumerable());
+                                               .ToDictionary(x => x.Key, x => x.AsEnumerable());
 
             foreach (var draftRegion in draftRegions)
             {
                 if (regionGroups.TryGetValue(draftRegion, out var splittedRegionCoords))
                 {
-                    var splittedCoords = splittedRegionCoords.Select(x => x.Coords).ToArray();
+                    var splittedCoords = splittedRegionCoords.Select(x => x.Coords)
+                                                             .ToArray();
 
                     var newCoordsOfCurrentRegion = draftRegion.Coords
-                        .Except(splittedCoords)
-                        .ToArray();
+                                                              .Except(splittedCoords)
+                                                              .ToArray();
 
                     var recreatedRegionDraft = new RegionDraft(newCoordsOfCurrentRegion);
                     newDraftRegionList.Add(recreatedRegionDraft);

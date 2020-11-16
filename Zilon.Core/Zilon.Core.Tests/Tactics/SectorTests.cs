@@ -33,7 +33,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var innerActorList = new List<IActor>();
             var actorManagerMock = new Mock<IActorManager>();
-            actorManagerMock.SetupGet(x => x.Items).Returns(innerActorList);
+            actorManagerMock.SetupGet(x => x.Items)
+                            .Returns(innerActorList);
             var actorManager = actorManagerMock.Object;
 
             var propContainerManagerMock = new Mock<IStaticObjectManager>();
@@ -63,7 +64,8 @@ namespace Zilon.Core.Tests.Tactics
             sector.Update();
 
             // ASSERT
-            monitor.Should().NotRaise(nameof(sector.TrasitionUsed));
+            monitor.Should()
+                   .NotRaise(nameof(sector.TrasitionUsed));
         }
 
         /// <summary>
@@ -79,7 +81,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var innerActorList = new List<IActor>();
             var actorManagerMock = new Mock<IActorManager>();
-            actorManagerMock.SetupGet(x => x.Items).Returns(innerActorList);
+            actorManagerMock.SetupGet(x => x.Items)
+                            .Returns(innerActorList);
             var actorManager = actorManagerMock.Object;
 
             var propContainerManagerMock = new Mock<IStaticObjectManager>();
@@ -117,7 +120,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var personMock = new Mock<IPerson>();
             var person = personMock.Object;
-            actorMock.SetupGet(x => x.Person).Returns(person);
+            actorMock.SetupGet(x => x.Person)
+                     .Returns(person);
 
             _survivalDataMock = new Mock<ISurvivalModule>();
             var survivalStats = new[]
@@ -128,13 +132,17 @@ namespace Zilon.Core.Tests.Tactics
                     Rate = 1
                 }
             };
-            _survivalDataMock.Setup(x => x.Stats).Returns(survivalStats);
+            _survivalDataMock.Setup(x => x.Stats)
+                             .Returns(survivalStats);
             var survivalData = _survivalDataMock.Object;
-            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalData);
-            personMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule)))).Returns(true);
+            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>()))
+                      .Returns(survivalData);
+            personMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule))))
+                      .Returns(true);
 
             var effectCollection = new EffectsModule();
-            personMock.Setup(x => x.GetModule<IEffectsModule>(It.IsAny<string>())).Returns(effectCollection);
+            personMock.Setup(x => x.GetModule<IEffectsModule>(It.IsAny<string>()))
+                      .Returns(effectCollection);
 
             return actorMock;
         }

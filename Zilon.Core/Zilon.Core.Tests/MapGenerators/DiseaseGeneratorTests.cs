@@ -49,7 +49,8 @@ namespace Zilon.Core.Tests.MapGenerators
             // ASSERT
             foreach (var disease in resultDiseases)
             {
-                resultDiseases.Should().NotContain(x => (x != disease) && (x.Name == disease.Name));
+                resultDiseases.Should()
+                              .NotContain(x => (x != disease) && (x.Name == disease.Name));
             }
         }
     }

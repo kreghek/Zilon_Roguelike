@@ -15,7 +15,8 @@ namespace Zilon.Core.MassSectorGenerator
 
         public static Bitmap DrawMap(IMap map)
         {
-            var hexNodes = map.Nodes.OfType<HexNode>().ToArray();
+            var hexNodes = map.Nodes.OfType<HexNode>()
+                              .ToArray();
 
             var bitmap = DrawNodes(hexNodes);
 
@@ -107,10 +108,14 @@ namespace Zilon.Core.MassSectorGenerator
 
             var info = new ImageInfo
             {
-                LeftCoord = xAxisOrderedNode.First().OffsetCoords.X,
-                RightCoord = xAxisOrderedNode.Last().OffsetCoords.X,
-                BottomCoord = yAxisOrderedNode.First().OffsetCoords.Y,
-                TopCoord = yAxisOrderedNode.Last().OffsetCoords.Y
+                LeftCoord = xAxisOrderedNode.First()
+                                            .OffsetCoords.X,
+                RightCoord = xAxisOrderedNode.Last()
+                                             .OffsetCoords.X,
+                BottomCoord = yAxisOrderedNode.First()
+                                              .OffsetCoords.Y,
+                TopCoord = yAxisOrderedNode.Last()
+                                           .OffsetCoords.Y
             };
 
             return info;

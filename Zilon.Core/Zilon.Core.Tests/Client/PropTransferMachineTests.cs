@@ -52,8 +52,10 @@ namespace Zilon.Core.Tests.Client
                 PropTransferMachineStore.Inventory);
 
             // ASSERT
-            monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
-            monitorContainer.Should().Raise(nameof(PropTransferStore.Changed));
+            monitorInventory.Should()
+                            .Raise(nameof(PropTransferStore.Changed));
+            monitorContainer.Should()
+                            .Raise(nameof(PropTransferStore.Changed));
         }
 
         /// <summary>
@@ -90,8 +92,12 @@ namespace Zilon.Core.Tests.Client
                 PropTransferMachineStore.Inventory);
 
             // ASSERT
-            transferMachine.Inventory.PropAdded[0].Should().BeOfType<Equipment>();
-            transferMachine.Container.PropRemoved[0].Should().BeOfType<Equipment>();
+            transferMachine.Inventory.PropAdded[0]
+                           .Should()
+                           .BeOfType<Equipment>();
+            transferMachine.Container.PropRemoved[0]
+                           .Should()
+                           .BeOfType<Equipment>();
         }
 
         /// <summary>
@@ -130,8 +136,10 @@ namespace Zilon.Core.Tests.Client
                 PropTransferMachineStore.Inventory);
 
             // ASSERT
-            monitorInventory.Should().Raise(nameof(PropTransferStore.Added));
-            monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
+            monitorInventory.Should()
+                            .Raise(nameof(PropTransferStore.Added));
+            monitorContainer.Should()
+                            .Raise(nameof(PropTransferStore.Removed));
         }
 
         /// <summary>
@@ -172,8 +180,10 @@ namespace Zilon.Core.Tests.Client
                 PropTransferMachineStore.Inventory);
 
             // ASSERT
-            monitorInventory.Should().Raise(nameof(PropTransferStore.Added));
-            monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
+            monitorInventory.Should()
+                            .Raise(nameof(PropTransferStore.Added));
+            monitorContainer.Should()
+                            .Raise(nameof(PropTransferStore.Removed));
         }
 
         /// <summary>
@@ -210,8 +220,10 @@ namespace Zilon.Core.Tests.Client
                 PropTransferMachineStore.Inventory);
 
             // ASSERT
-            monitorInventory.Should().Raise(nameof(PropTransferStore.Changed));
-            monitorContainer.Should().Raise(nameof(PropTransferStore.Removed));
+            monitorInventory.Should()
+                            .Raise(nameof(PropTransferStore.Changed));
+            monitorContainer.Should()
+                            .Raise(nameof(PropTransferStore.Removed));
         }
 
         /// <summary>
@@ -245,9 +257,12 @@ namespace Zilon.Core.Tests.Client
                 PropTransferMachineStore.Inventory);
 
             // ASSERT
-            transferMachine.Inventory.PropAdded[0].Should().BeOfType<Resource>();
+            transferMachine.Inventory.PropAdded[0]
+                           .Should()
+                           .BeOfType<Resource>();
             var invResource = (Resource)transferMachine.Inventory.PropAdded[0];
-            invResource.Count.Should().Be(1);
+            invResource.Count.Should()
+                       .Be(1);
         }
 
         /// <summary>
@@ -284,10 +299,14 @@ namespace Zilon.Core.Tests.Client
                 PropTransferMachineStore.Inventory);
 
             // ASSERT
-            monitorInventory.Should().Raise(nameof(PropTransferStore.Added))
-                .WithArgs<PropStoreEventArgs>(args => args.Props[0].Scheme == resource.Scheme);
-            monitorContainer.Should().Raise(nameof(PropTransferStore.Removed))
-                .WithArgs<PropStoreEventArgs>(args => args.Props[0].Scheme == resource.Scheme);
+            monitorInventory.Should()
+                            .Raise(nameof(PropTransferStore.Added))
+                            .WithArgs<PropStoreEventArgs>(args => args.Props[0]
+                                                                      .Scheme == resource.Scheme);
+            monitorContainer.Should()
+                            .Raise(nameof(PropTransferStore.Removed))
+                            .WithArgs<PropStoreEventArgs>(args => args.Props[0]
+                                                                      .Scheme == resource.Scheme);
         }
     }
 }

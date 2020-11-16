@@ -29,33 +29,34 @@ namespace Zilon.Core.World.Tests
         {
             var sectorGeneratorMock = new Mock<ISectorGenerator>();
             sectorGeneratorMock.Setup(x => x.GenerateAsync(It.IsAny<ISectorNode>()))
-                .Returns<ISectorNode>(scheme =>
-                {
-                    return Task.Run(() =>
-                    {
-                        var sectorMock = new Mock<ISector>();
-                        var sector = sectorMock.Object;
-                        return sector;
-                    });
-                });
+                               .Returns<ISectorNode>(scheme =>
+                               {
+                                   return Task.Run(() =>
+                                   {
+                                       var sectorMock = new Mock<ISector>();
+                                       var sector = sectorMock.Object;
+                                       return sector;
+                                   });
+                               });
 
             var sectorGenerator = sectorGeneratorMock.Object;
             var locationSchemes = CreateBiomSchemes();
 
             var schemeRoundCounter = 0;
             var rollerMock = new Mock<IBiomeSchemeRoller>();
-            rollerMock.Setup(x => x.Roll()).Returns(() =>
-            {
-                schemeRoundCounter++;
-                if (schemeRoundCounter >= locationSchemes.Length)
-                {
-                    schemeRoundCounter = 0;
-                }
+            rollerMock.Setup(x => x.Roll())
+                      .Returns(() =>
+                      {
+                          schemeRoundCounter++;
+                          if (schemeRoundCounter >= locationSchemes.Length)
+                          {
+                              schemeRoundCounter = 0;
+                          }
 
-                var scheme = locationSchemes[schemeRoundCounter];
+                          var scheme = locationSchemes[schemeRoundCounter];
 
-                return scheme;
-            });
+                          return scheme;
+                      });
             var roller = rollerMock.Object;
 
             var introScheme = locationSchemes.Single(x => x.Sid == "intro");
@@ -70,7 +71,8 @@ namespace Zilon.Core.World.Tests
 
             // ACT
 
-            var biom = await biomService.InitBiomeAsync(introScheme).ConfigureAwait(false);
+            var biom = await biomService.InitBiomeAsync(introScheme)
+                                        .ConfigureAwait(false);
             var introNode = biom.Sectors.Single(x => x.State == SectorNodeState.SectorMaterialized);
             var currentResource = resourceMaterializationMap.GetDepositData(introNode);
             ISectorNode currentNode = introNode;
@@ -80,14 +82,14 @@ namespace Zilon.Core.World.Tests
 
             var openList = new List<NodeInfo>();
             var nextNodes1 = currentNode.Biome.GetNext(currentNode)
-                .OfType<SectorNode>()
-                .Where(x => x.State != SectorNodeState.SectorMaterialized)
-                .Select(x => new NodeInfo
-                {
-                    Current = x,
-                    Parent = introNode,
-                    ParentResource = currentResource
-                });
+                                        .OfType<SectorNode>()
+                                        .Where(x => x.State != SectorNodeState.SectorMaterialized)
+                                        .Select(x => new NodeInfo
+                                        {
+                                            Current = x,
+                                            Parent = introNode,
+                                            ParentResource = currentResource
+                                        });
             openList.AddRange(nextNodes1);
 
             while (iteration < ITERATION_MAX)
@@ -95,22 +97,23 @@ namespace Zilon.Core.World.Tests
                 var nextNode = openList[0];
                 openList.RemoveAt(0);
 
-                await biomService.MaterializeLevelAsync(nextNode.Current).ConfigureAwait(false);
+                await biomService.MaterializeLevelAsync(nextNode.Current)
+                                 .ConfigureAwait(false);
                 var nextResource = resourceMaterializationMap.GetDepositData(nextNode.Current);
 
                 resultStringBuilder.AppendLine(GetVisualString(nextNode.Parent, nextNode.Current,
                     nextNode.ParentResource, nextResource));
 
                 var nextNodes2 = nextNode.Current.Biome.GetNext(nextNode.Current)
-                    .OfType<SectorNode>()
-                    .Where(x => x.State != SectorNodeState.SectorMaterialized)
-                    .Select(x =>
-                        new NodeInfo
-                        {
-                            Current = x,
-                            Parent = nextNode.Current,
-                            ParentResource = nextResource
-                        });
+                                         .OfType<SectorNode>()
+                                         .Where(x => x.State != SectorNodeState.SectorMaterialized)
+                                         .Select(x =>
+                                             new NodeInfo
+                                             {
+                                                 Current = x,
+                                                 Parent = nextNode.Current,
+                                                 ParentResource = nextResource
+                                             });
                 openList.AddRange(nextNodes2);
 
                 iteration++;

@@ -44,7 +44,8 @@ namespace Zilon.Core.Common
 
         private static async Task<TResult> TimeoutAfterInner<TResult>(Task<TResult> task, int millisecondsTimeout)
         {
-            var completedTask = await Task.WhenAny(task, Task.Delay(millisecondsTimeout)).ConfigureAwait(false);
+            var completedTask = await Task.WhenAny(task, Task.Delay(millisecondsTimeout))
+                                          .ConfigureAwait(false);
             if (task == completedTask)
             {
                 return await task.ConfigureAwait(false);
@@ -55,7 +56,8 @@ namespace Zilon.Core.Common
 
         private static async Task TimeoutAfterInner(Task task, int millisecondsTimeout)
         {
-            var completedTask = await Task.WhenAny(task, Task.Delay(millisecondsTimeout)).ConfigureAwait(false);
+            var completedTask = await Task.WhenAny(task, Task.Delay(millisecondsTimeout))
+                                          .ConfigureAwait(false);
             if (task == completedTask)
             {
                 await task.ConfigureAwait(false);
