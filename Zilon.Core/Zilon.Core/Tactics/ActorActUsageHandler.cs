@@ -416,7 +416,8 @@ namespace Zilon.Core.Tactics
 
             var interactEvent = new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem)
             {
-                SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
+                SuccessToHitRoll = successToHitRoll,
+                FactToHitRoll = factToHitRoll
             };
 
             ActorInteractionBus.PushEvent(interactEvent);
@@ -487,7 +488,8 @@ namespace Zilon.Core.Tactics
 
             var damageEvent = new PureMissActorInteractionEvent(actor, targetActor)
             {
-                SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
+                SuccessToHitRoll = successToHitRoll,
+                FactToHitRoll = factToHitRoll
             };
 
             ActorInteractionBus.PushEvent(damageEvent);
@@ -507,7 +509,8 @@ namespace Zilon.Core.Tactics
 
             var damageEvent = new DamageActorInteractionEvent(actor, targetActor, damageEfficientCalcResult)
             {
-                SuccessToHitRoll = successToHitRoll, FactToHitRoll = factToHitRoll
+                SuccessToHitRoll = successToHitRoll,
+                FactToHitRoll = factToHitRoll
             };
             ActorInteractionBus.PushEvent(damageEvent);
         }

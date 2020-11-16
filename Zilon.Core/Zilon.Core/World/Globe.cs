@@ -93,7 +93,8 @@ namespace Zilon.Core.World
 
                     yield return new ActorInSector
                     {
-                        Actor = actor, Sector = sector
+                        Actor = actor,
+                        Sector = sector
                     };
                 }
             }

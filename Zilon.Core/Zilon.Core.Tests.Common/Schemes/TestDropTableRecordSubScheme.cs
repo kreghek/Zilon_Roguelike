@@ -8,7 +8,8 @@ namespace Zilon.Core.Tests.Common.Schemes
         {
             return new TestDropTableRecordSubScheme
             {
-                SchemeSid = null, Weight = weight
+                SchemeSid = null,
+                Weight = weight
             };
         }
 
