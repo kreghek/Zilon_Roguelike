@@ -8,7 +8,8 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public abstract class BotActorTaskSourceBase<TContext> : ISectorActorTaskSource<TContext> where TContext : class, ISectorTaskSourceContext
+    public abstract class BotActorTaskSourceBase<TContext> : ISectorActorTaskSource<TContext>
+        where TContext : class, ISectorTaskSourceContext
     {
         //TODO Есть риск утечки.
         // Актёры могут быть удалены, но информация о них будет храниться здесь, предотвращая чистку.
@@ -21,6 +22,8 @@ namespace Zilon.Bot.Players
         {
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
+
+        protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
 
         public void CancelTask(IActorTask cencelledActorTask)
         {
@@ -86,10 +89,8 @@ namespace Zilon.Bot.Players
 
                 return Task.FromResult(actorTask);
             }
-            else
-            {
-                _actorStrategies.Remove(actor);
-            }
+
+            _actorStrategies.Remove(actor);
 
             // Сюда попадаем в случае смерти персонажа.
             // Когда мы пытаемся выполнить какую-то задачу, а персонаж при это был/стал мертв.
@@ -109,7 +110,5 @@ namespace Zilon.Bot.Players
             // Например, при использовании парного оружия.
             // Механика пока не реализована.
         }
-
-        protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
     }
 }

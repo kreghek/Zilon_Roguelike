@@ -11,6 +11,15 @@ namespace Zilon.Core.Schemes
     [ExcludeFromCodeCoverage]
     public abstract class SchemeBase : IScheme
     {
+        /// <summary>
+        /// Строковое представление рецепта.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{Sid}: {Name}";
+        }
+
         /// <inheritdoc />
         /// <summary>
         /// Символьный идентификатор схемы.
@@ -50,14 +59,5 @@ namespace Zilon.Core.Schemes
         /// </remarks>
         [JsonProperty]
         public virtual bool Disabled { get; protected set; }
-
-        /// <summary>
-        /// Строковое представление рецепта.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return $"{Sid}: {Name}";
-        }
     }
 }

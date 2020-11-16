@@ -12,7 +12,8 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния.
         }
 
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+            ILogicStrategyData strategyData)
         {
             if (context is null)
             {

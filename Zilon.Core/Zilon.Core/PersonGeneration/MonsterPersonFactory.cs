@@ -13,9 +13,10 @@ namespace Zilon.Core.PersonGeneration
         {
             var monsterPerson = new MonsterPerson(monsterScheme);
 
-            var Acts = new ITacticalAct[] {
-                    new MonsterTacticalAct(monsterScheme.PrimaryAct)
-                };
+            var Acts = new ITacticalAct[]
+            {
+                new MonsterTacticalAct(monsterScheme.PrimaryAct)
+            };
 
             var combaActModule = new MonsterCombatActModule(Acts);
 
@@ -26,8 +27,8 @@ namespace Zilon.Core.PersonGeneration
                 .ToArray();
 
             var defenceStats = new PersonDefenceStats(
-                    defenses ?? Array.Empty<PersonDefenceItem>(),
-                    Array.Empty<PersonArmorItem>());
+                defenses ?? Array.Empty<PersonDefenceItem>(),
+                Array.Empty<PersonArmorItem>());
 
             var combatStatsModule = new MonsterCombatStatsModule(defenceStats);
             monsterPerson.AddModule(combatStatsModule);

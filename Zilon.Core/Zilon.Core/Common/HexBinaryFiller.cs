@@ -18,7 +18,7 @@ namespace Zilon.Core.Common
         /// <returns> Возвращает точки, которые были залиты. </returns>
         public static IEnumerable<OffsetCoords> FloodFill(Matrix<bool> matrix, OffsetCoords point)
         {
-            return FloodFillInner(matrix, point, (nextNeighbour) => true);
+            return FloodFillInner(matrix, point, nextNeighbour => true);
         }
 
         /// <summary>
@@ -32,12 +32,13 @@ namespace Zilon.Core.Common
             return FloodFillInner(
                 matrix,
                 point,
-                (nextCoords) => CheckAvailableFor7(nextCoords, matrix));
+                nextCoords => CheckAvailableFor7(nextCoords, matrix));
         }
 
         /// <param name="availabilityDelegate"> In - coords on next, neightbor nodes to check if it next fron current node. </param>
         /// <returns></returns>
-        public static IEnumerable<OffsetCoords> FloodFillInner(Matrix<bool> matrix, OffsetCoords point, Func<OffsetCoords, bool> availabilityDelegate)
+        public static IEnumerable<OffsetCoords> FloodFillInner(Matrix<bool> matrix, OffsetCoords point,
+            Func<OffsetCoords, bool> availabilityDelegate)
         {
             if (matrix is null)
             {

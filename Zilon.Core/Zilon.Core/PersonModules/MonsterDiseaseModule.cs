@@ -22,16 +22,16 @@ namespace Zilon.Core.PersonModules
             IsActive = true;
         }
 
-        /// <inheritdoc/>
-        public IEnumerable<IDiseaseProcess> Diseases { get => _diseases; }
+        /// <inheritdoc />
+        public IEnumerable<IDiseaseProcess> Diseases => _diseases;
 
-        /// <inheritdoc/>
-        public string Key { get => nameof(IDiseaseModule); }
+        /// <inheritdoc />
+        public string Key => nameof(IDiseaseModule);
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool IsActive { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void Infect(IDisease disease)
         {
             var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
@@ -43,7 +43,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void RemoveDisease(IDisease disease)
         {
             var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);

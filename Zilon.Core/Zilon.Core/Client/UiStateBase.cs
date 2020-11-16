@@ -29,7 +29,7 @@ namespace Zilon.Core.Client
             }
         }
 
-        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel"/>.</summary>
+        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel" />.</summary>
         public event EventHandler HoverChanged;
     }
 }

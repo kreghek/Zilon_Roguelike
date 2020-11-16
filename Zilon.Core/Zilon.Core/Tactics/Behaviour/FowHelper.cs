@@ -17,7 +17,8 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <param name="fowContext">Контекст тумана войны.</param>
         /// <param name="baseNode">Опорный узел.</param>
         /// <param name="radius">Радиус обзора персонажа.</param>
-        public static void UpdateFowData(ISectorFowData fowData, IFowContext fowContext, IGraphNode baseNode, int radius)
+        public static void UpdateFowData(ISectorFowData fowData, IFowContext fowContext, IGraphNode baseNode,
+            int radius)
         {
             if (fowData is null)
             {
@@ -49,6 +50,52 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
+        private static SectorMapFowNode GetFowNodeByMapNode(ISectorFowData fowData, IGraphNode observingNode)
+        {
+            return fowData.GetNode(observingNode);
+        }
+
+        private static IGraphNode[] GetNextForBorder(IEnumerable<IGraphNode> border, IEnumerable<IGraphNode> result,
+            IFowContext fowContext)
+        {
+            var borderTotal = new List<IGraphNode>();
+
+            foreach (var node in border)
+            {
+                var next = fowContext.GetNext(node);
+
+                var except = border.Union(result).Union(borderTotal);
+
+                var newBorder = next.Except(except);
+
+                borderTotal.AddRange(newBorder);
+            }
+
+            return borderTotal.ToArray();
+        }
+
+        private static IGraphNode[] GetObservingNodes(IFowContext fowContext, IGraphNode baseNode, int radius)
+        {
+            var border = new List<IGraphNode> { baseNode };
+
+            var resultList = new List<IGraphNode> { baseNode };
+
+            // Шаги заливки
+            for (var stepIndex = 1; stepIndex <= radius; stepIndex++)
+            {
+                var newBorder = GetNextForBorder(border, resultList, fowContext);
+
+                var visibleBorder = newBorder.AsParallel().Where(x => fowContext.IsTargetVisible(x, baseNode))
+                    .ToArray();
+
+                border.Clear();
+                border.AddRange(visibleBorder);
+                resultList.AddRange(visibleBorder);
+            }
+
+            return resultList.ToArray();
+        }
+
         private static SectorMapFowNode[] UpdateOrCreateFowNodes(ISectorFowData fowData, IGraphNode[] observingNodes)
         {
             var observedFowNodes = new List<SectorMapFowNode>();
@@ -70,50 +117,6 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             return observedFowNodes.ToArray();
-        }
-
-        private static SectorMapFowNode GetFowNodeByMapNode(ISectorFowData fowData, IGraphNode observingNode)
-        {
-            return fowData.GetNode(observingNode);
-        }
-
-        private static IGraphNode[] GetObservingNodes(IFowContext fowContext, IGraphNode baseNode, int radius)
-        {
-            var border = new List<IGraphNode> { baseNode };
-
-            var resultList = new List<IGraphNode> { baseNode };
-
-            // Шаги заливки
-            for (var stepIndex = 1; stepIndex <= radius; stepIndex++)
-            {
-                var newBorder = GetNextForBorder(border, resultList, fowContext);
-
-                var visibleBorder = newBorder.AsParallel().Where(x => fowContext.IsTargetVisible(x, baseNode)).ToArray();
-
-                border.Clear();
-                border.AddRange(visibleBorder);
-                resultList.AddRange(visibleBorder);
-            }
-
-            return resultList.ToArray();
-        }
-
-        private static IGraphNode[] GetNextForBorder(IEnumerable<IGraphNode> border, IEnumerable<IGraphNode> result, IFowContext fowContext)
-        {
-            var borderTotal = new List<IGraphNode>();
-
-            foreach (var node in border)
-            {
-                var next = fowContext.GetNext(node);
-
-                var except = border.Union(result).Union(borderTotal);
-
-                var newBorder = next.Except(except);
-
-                borderTotal.AddRange(newBorder);
-            }
-
-            return borderTotal.ToArray();
         }
     }
 }

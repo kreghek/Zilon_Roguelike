@@ -12,9 +12,6 @@ namespace Zilon.Core.Props
     /// </summary>
     public class PropStoreEventArgs
     {
-        [PublicAPI]
-        public IProp[] Props { get; }
-
         [ExcludeFromCodeCoverage]
         public PropStoreEventArgs([NotNull][ItemNotNull] IEnumerable<IProp> props)
         {
@@ -31,5 +28,7 @@ namespace Zilon.Core.Props
         {
             Props = props ?? throw new ArgumentNullException(nameof(props));
         }
+
+        [PublicAPI] public IProp[] Props { get; }
     }
 }

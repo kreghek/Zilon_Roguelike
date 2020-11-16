@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    class SectorTransitTask : ActorTaskBase
+    internal class SectorTransitTask : ActorTaskBase
     {
         public SectorTransitTask([NotNull] IActor actor, IActorTaskContext context) : base(actor, context)
         {

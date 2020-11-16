@@ -12,9 +12,22 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly ITacticalActUsageService _actService;
 
-        public IAttackTarget Target { get; }
+        public AttackTask(IActor actor,
+            IActorTaskContext context,
+            IAttackTarget target,
+            ITacticalAct tacticalAct,
+            ITacticalActUsageService actService) :
+            base(actor, context)
+        {
+            _actService = actService;
+
+            Target = target;
+            TacticalAct = tacticalAct;
+        }
 
         public ITacticalAct TacticalAct { get; }
+
+        public IAttackTarget Target { get; }
 
         protected override void ExecuteTask()
         {
@@ -38,19 +51,6 @@ namespace Zilon.Core.Tactics.Behaviour
             var availableSlotAct = GetUsedActs();
             var usedActs = new UsedTacticalActs(new[] { TacticalAct }, availableSlotAct.Skip(1));
             _actService.UseOn(Actor, Target, usedActs, Context.Sector);
-        }
-
-        public AttackTask(IActor actor,
-            IActorTaskContext context,
-            IAttackTarget target,
-            ITacticalAct tacticalAct,
-            ITacticalActUsageService actService) :
-            base(actor, context)
-        {
-            _actService = actService;
-
-            Target = target;
-            TacticalAct = tacticalAct;
         }
 
         private IEnumerable<ITacticalAct> GetUsedActs()

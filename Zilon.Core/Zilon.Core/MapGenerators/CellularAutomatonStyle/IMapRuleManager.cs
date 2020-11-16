@@ -3,10 +3,9 @@
     /// <summary>
     /// Service to collect rules and pass they to other services.
     /// </summary>
-    interface IMapRuleManager
+    internal interface IMapRuleManager
     {
-        T GetRuleOrNull<T>() where T : IMapRule;
-
         void AddRule<T>(T rule) where T : IMapRule;
+        T GetRuleOrNull<T>() where T : IMapRule;
     }
 }

@@ -41,7 +41,8 @@ namespace Zilon.Core.Tests.Commands
         public void ExecuteTest()
         {
             var command = ServiceProvider.GetRequiredService<PropTransferCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             var transferMachine = ServiceProvider.GetRequiredService<PropTransferMachine>();
             command.TransferMachine = transferMachine;

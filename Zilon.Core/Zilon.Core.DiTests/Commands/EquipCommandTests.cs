@@ -24,23 +24,6 @@ namespace Zilon.Core.Tests.Commands
         private Mock<IInventoryState> _inventoryStateMock;
 
         /// <summary>
-        /// Тест проверяет, что можно использовать экипировку.
-        /// </summary>
-        [Test]
-        public void CanExecute_SelectEquipment_ReturnsTrue()
-        {
-            // ARRANGE
-            var command = ServiceProvider.GetRequiredService<EquipCommand>();
-            command.SlotIndex = 0;
-
-            // ACT
-            var canExecute = command.CanExecute();
-
-            // ASSERT
-            canExecute.Should().BeTrue();
-        }
-
-        /// <summary>
         /// Тест проверяет, что нельзя экипировать ресурс.
         /// </summary>
         [Test]
@@ -52,8 +35,10 @@ namespace Zilon.Core.Tests.Commands
                 Use = new TestPropUseSubScheme
                 {
                     Consumable = true,
-                    CommonRules = new ConsumeCommonRule[] {
-                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser, PersonRuleDirection.Positive)
+                    CommonRules = new[]
+                    {
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser,
+                            PersonRuleDirection.Positive)
                     }
                 }
             };
@@ -76,6 +61,23 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
+        /// Тест проверяет, что можно использовать экипировку.
+        /// </summary>
+        [Test]
+        public void CanExecute_SelectEquipment_ReturnsTrue()
+        {
+            // ARRANGE
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
+            command.SlotIndex = 0;
+
+            // ACT
+            var canExecute = command.CanExecute();
+
+            // ASSERT
+            canExecute.Should().BeTrue();
+        }
+
+        /// <summary>
         /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
         /// </summary>
         [Test]
@@ -85,7 +87,8 @@ namespace Zilon.Core.Tests.Commands
             var command = ServiceProvider.GetRequiredService<EquipCommand>();
             command.SlotIndex = 0;
 
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
@@ -100,7 +103,8 @@ namespace Zilon.Core.Tests.Commands
             {
                 Equip = new TestPropEquipSubScheme
                 {
-                    SlotTypes = new[] {
+                    SlotTypes = new[]
+                    {
                         EquipmentSlotTypes.Hand
                     }
                 }

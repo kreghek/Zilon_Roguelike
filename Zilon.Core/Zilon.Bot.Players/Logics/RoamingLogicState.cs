@@ -13,6 +13,49 @@ namespace Zilon.Bot.Players.Logics
         {
         }
 
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
+        {
+            if (MoveTask == null)
+            {
+                MoveTask = CreateBypassMoveTask(actor, context.Sector);
+
+                if (MoveTask != null)
+                {
+                    return MoveTask;
+                }
+                // Это может произойти, если актёр не выбрал следующий узел.
+                // Тогда переводим актёра в режим ожидания.
+
+                var taskContext = new ActorTaskContext(context.Sector);
+                IdleTask = new IdleTask(actor, taskContext, DecisionSource);
+                return IdleTask;
+            }
+
+            if (!MoveTask.IsComplete)
+            {
+                // Если команда на перемещение к целевой точке патруля не закончена,
+                // тогда продолжаем её.
+                // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
+                if (!MoveTask.CanExecute())
+                {
+                    MoveTask = CreateBypassMoveTask(actor, context.Sector);
+                }
+
+                if (MoveTask != null)
+                {
+                    return MoveTask;
+                }
+
+                var taskContext = new ActorTaskContext(context.Sector);
+                IdleTask = new IdleTask(actor, taskContext, DecisionSource);
+                return IdleTask;
+            }
+
+            Complete = true;
+            return null;
+        }
+
         private MoveTask CreateBypassMoveTask(IActor actor, ISector sector)
         {
             var map = sector.Map;
@@ -33,55 +76,6 @@ namespace Zilon.Bot.Players.Logics
             }
 
             return null;
-        }
-
-        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
-        {
-            if (MoveTask == null)
-            {
-                MoveTask = CreateBypassMoveTask(actor, context.Sector);
-
-                if (MoveTask != null)
-                {
-                    return MoveTask;
-                }
-                else
-                {
-                    // Это может произойти, если актёр не выбрал следующий узел.
-                    // Тогда переводим актёра в режим ожидания.
-
-                    var taskContext = new ActorTaskContext(context.Sector);
-                    IdleTask = new IdleTask(actor, taskContext, DecisionSource);
-                    return IdleTask;
-                }
-            }
-            else
-            {
-                if (!MoveTask.IsComplete)
-                {
-                    // Если команда на перемещение к целевой точке патруля не закончена,
-                    // тогда продолжаем её.
-                    // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
-                    if (!MoveTask.CanExecute())
-                    {
-                        MoveTask = CreateBypassMoveTask(actor, context.Sector);
-                    }
-
-                    if (MoveTask != null)
-                    {
-                        return MoveTask;
-                    }
-
-                    var taskContext = new ActorTaskContext(context.Sector);
-                    IdleTask = new IdleTask(actor, taskContext, DecisionSource);
-                    return IdleTask;
-                }
-                else
-                {
-                    Complete = true;
-                    return null;
-                }
-            }
         }
     }
 }

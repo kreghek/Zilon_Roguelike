@@ -18,14 +18,81 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
-    class Program
+    internal class Program
     {
         private const string SERVER_RUN_ARG = "ServerRun";
         private const string SCORE_PREFFIX_ARG = "ScorePreffix";
         private const string BOT_MODE_ARG = "Mode";
         private static Startup _startUp;
 
-        static async Task Main(string[] args)
+        private static Type GetBotActorTaskSource(Type registerManagerType)
+        {
+            var props = registerManagerType.GetProperties();
+            foreach (var prop in props)
+            {
+                var actorTaskSourceAttribute = prop.GetCustomAttribute<ActorTaskSourceTypeAttribute>();
+                if (actorTaskSourceAttribute != null)
+                {
+                    return prop.GetValue(null) as Type;
+                }
+            }
+
+            return null;
+        }
+
+        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType)
+            where TAttribute : Attribute
+        {
+            var methods = registerManagerType.GetMethods();
+            foreach (var method in methods)
+            {
+                var specificAttr = method.GetCustomAttribute<TAttribute>();
+                if (specificAttr != null)
+                {
+                    return method;
+                }
+            }
+
+            return null;
+        }
+
+        private static IEnumerable<Type> GetTypesWithHelpAttribute<TAttribute>(Assembly assembly)
+        {
+            foreach (var type in assembly.GetTypes())
+            {
+                if (type.GetCustomAttributes(typeof(TAttribute), true).Length > 0)
+                {
+                    yield return type;
+                }
+            }
+        }
+
+        private static void LoadBotAssembly(string botDirectory, string assemblyName,
+            IServiceCollection serviceRegistry, IServiceProvider serviceFactory)
+        {
+            var directory = Thread.GetDomain().BaseDirectory;
+            var dllPath = Path.Combine(directory, "bots", botDirectory, assemblyName);
+            var botAssembly = Assembly.LoadFrom(dllPath);
+
+            // Ищем класс для инициализации.
+            var registerManagers = GetTypesWithHelpAttribute<BotRegistrationAttribute>(botAssembly);
+            var registerManager = registerManagers.SingleOrDefault();
+
+            // Регистрируем сервис источника команд.
+            var botActorTaskSourceType = GetBotActorTaskSource(registerManager);
+            serviceRegistry.AddScoped(typeof(IPluggableActorTaskSource<ISectorTaskSourceContext>),
+                botActorTaskSourceType);
+            serviceRegistry.AddScoped<IActorTaskSource<ISectorTaskSourceContext>>(factory =>
+                factory.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>());
+
+            var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);
+            registerAuxMethod.Invoke(null, new object[] { serviceRegistry });
+
+            var configAuxMethod = GetMethodByAttribute<ConfigureAuxServicesAttribute>(registerManager);
+            configAuxMethod.Invoke(null, new object[] { serviceFactory });
+        }
+
+        private static async Task Main(string[] args)
         {
             var scoreFilePreffix = ArgumentHelper.GetProgramArgument(args, SCORE_PREFFIX_ARG);
 
@@ -60,70 +127,6 @@ namespace Zilon.BotEnvironment
             {
                 Console.ReadLine();
             }
-        }
-
-        private static void LoadBotAssembly(string botDirectory, string assemblyName,
-            IServiceCollection serviceRegistry, IServiceProvider serviceFactory)
-        {
-            var directory = Thread.GetDomain().BaseDirectory;
-            var dllPath = Path.Combine(directory, "bots", botDirectory, assemblyName);
-            var botAssembly = Assembly.LoadFrom(dllPath);
-
-            // Ищем класс для инициализации.
-            var registerManagers = GetTypesWithHelpAttribute<BotRegistrationAttribute>(botAssembly);
-            var registerManager = registerManagers.SingleOrDefault();
-
-            // Регистрируем сервис источника команд.
-            var botActorTaskSourceType = GetBotActorTaskSource(registerManager);
-            serviceRegistry.AddScoped(typeof(IPluggableActorTaskSource<ISectorTaskSourceContext>), botActorTaskSourceType);
-            serviceRegistry.AddScoped<IActorTaskSource<ISectorTaskSourceContext>>(factory => factory.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>());
-
-            var registerAuxMethod = GetMethodByAttribute<RegisterAuxServicesAttribute>(registerManager);
-            registerAuxMethod.Invoke(null, new object[] { serviceRegistry });
-
-            var configAuxMethod = GetMethodByAttribute<ConfigureAuxServicesAttribute>(registerManager);
-            configAuxMethod.Invoke(null, new object[] { serviceFactory });
-        }
-
-        private static IEnumerable<Type> GetTypesWithHelpAttribute<TAttribute>(Assembly assembly)
-        {
-            foreach (Type type in assembly.GetTypes())
-            {
-                if (type.GetCustomAttributes(typeof(TAttribute), true).Length > 0)
-                {
-                    yield return type;
-                }
-            }
-        }
-
-        private static Type GetBotActorTaskSource(Type registerManagerType)
-        {
-            var props = registerManagerType.GetProperties();
-            foreach (var prop in props)
-            {
-                var actorTaskSourceAttribute = prop.GetCustomAttribute<ActorTaskSourceTypeAttribute>();
-                if (actorTaskSourceAttribute != null)
-                {
-                    return prop.GetValue(null) as Type;
-                }
-            }
-
-            return null;
-        }
-
-        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType) where TAttribute : Attribute
-        {
-            var methods = registerManagerType.GetMethods();
-            foreach (var method in methods)
-            {
-                var specificAttr = method.GetCustomAttribute<TAttribute>();
-                if (specificAttr != null)
-                {
-                    return method;
-                }
-            }
-
-            return null;
         }
     }
 }

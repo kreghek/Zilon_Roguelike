@@ -12,6 +12,51 @@ namespace Zilon.Core.Tactics.Spatial
     public static class HexNodeHelper
     {
         /// <summary>
+        /// Ищет ближайший узел карты в сетке шестиугольников без учёта рёбер.
+        /// </summary>
+        /// <param name="node"> Опорный узел. </param>
+        /// <param name="targets"> Целевые узлы, среди которых будет поиск. </param>
+        /// <returns> Возвращает ближайший узел карты. </returns>
+        public static HexNode GetNearbyCoordinates(HexNode node, IEnumerable<HexNode> targets)
+        {
+            if (node is null)
+            {
+                throw new ArgumentNullException(nameof(node));
+            }
+
+            var targetArray = targets.ToArray();
+
+            if (!targetArray.Any())
+            {
+                throw new ArgumentException("Набор целевых узлов не может быть пустым.", nameof(targets));
+            }
+
+            var minDistance = -1;
+            HexNode nearbyNode = null;
+            foreach (var target in targetArray)
+            {
+                if (target == node)
+                {
+                    return node;
+                }
+
+                var distance = target.CubeCoords.DistanceTo(node.CubeCoords);
+                if (distance == 1)
+                {
+                    return target;
+                }
+
+                if (minDistance == -1 || distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearbyNode = target;
+                }
+            }
+
+            return nearbyNode;
+        }
+
+        /// <summary>
         /// Возвращает географически соседние узлы. Т.е. не учитывается, соединены ли узлы рёбрами.
         /// </summary>
         /// <param name="currentNode"></param>
@@ -57,52 +102,6 @@ namespace Zilon.Core.Tactics.Spatial
             }
 
             return list.ToArray();
-        }
-
-
-        /// <summary>
-        /// Ищет ближайший узел карты в сетке шестиугольников без учёта рёбер.
-        /// </summary>
-        /// <param name="node"> Опорный узел. </param>
-        /// <param name="targets"> Целевые узлы, среди которых будет поиск. </param>
-        /// <returns> Возвращает ближайший узел карты. </returns>
-        public static HexNode GetNearbyCoordinates(HexNode node, IEnumerable<HexNode> targets)
-        {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node));
-            }
-
-            var targetArray = targets.ToArray();
-
-            if (!targetArray.Any())
-            {
-                throw new ArgumentException("Набор целевых узлов не может быть пустым.", nameof(targets));
-            }
-
-            var minDistance = -1;
-            HexNode nearbyNode = null;
-            foreach (var target in targetArray)
-            {
-                if (target == node)
-                {
-                    return node;
-                }
-
-                var distance = target.CubeCoords.DistanceTo(node.CubeCoords);
-                if (distance == 1)
-                {
-                    return target;
-                }
-
-                if (minDistance == -1 || distance < minDistance)
-                {
-                    minDistance = distance;
-                    nearbyNode = target;
-                }
-            }
-
-            return nearbyNode;
         }
     }
 }

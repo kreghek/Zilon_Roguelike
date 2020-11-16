@@ -28,6 +28,11 @@ namespace Zilon.Core.Common
         }
 
         /// <summary>
+        /// Минимальное/максимальное значение.
+        /// </summary>
+        public Range<int> Range { get; private set; }
+
+        /// <summary>
         /// Текущее значение.
         /// </summary>
         public int Value
@@ -44,7 +49,7 @@ namespace Zilon.Core.Common
                     return Range.Min;
                 }
 
-                var result = Math.Round((Range.Max - Range.Min) * ValueShare + Range.Min);
+                var result = Math.Round(((Range.Max - Range.Min) * ValueShare) + Range.Min);
                 return (int)result;
             }
             set
@@ -58,28 +63,6 @@ namespace Zilon.Core.Common
                 var boundedValue = Range.GetBounded(value);
                 ValueShare = (boundedValue - Range.Min) / (float)(Range.Max - Range.Min);
             }
-        }
-
-        /// <summary>
-        /// Минимальное/максимальное значение.
-        /// </summary>
-        public Range<int> Range { get; private set; }
-
-        /// <summary>
-        /// Изменение текущего диапазона характеристики.
-        /// </summary>
-        /// <param name="min">The minimum.</param>
-        /// <param name="max">The maximum.</param>
-        public virtual void ChangeStatRange(int min, int max)
-        {
-            if (min >= max)
-            {
-                Range = new Range<int>(min, min);
-                Value = Range.Min;
-                return;
-            }
-
-            Range = new Range<int>(min, max);
         }
 
         /// <summary>
@@ -97,6 +80,23 @@ namespace Zilon.Core.Common
                     Changed?.Invoke(this, new EventArgs());
                 }
             }
+        }
+
+        /// <summary>
+        /// Изменение текущего диапазона характеристики.
+        /// </summary>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        public virtual void ChangeStatRange(int min, int max)
+        {
+            if (min >= max)
+            {
+                Range = new Range<int>(min, min);
+                Value = Range.Min;
+                return;
+            }
+
+            Range = new Range<int>(min, max);
         }
 
         /// <summary>

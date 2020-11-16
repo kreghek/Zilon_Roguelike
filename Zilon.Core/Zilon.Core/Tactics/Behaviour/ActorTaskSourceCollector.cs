@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _actorTaskSources = actorTaskSources ?? throw new ArgumentNullException(nameof(actorTaskSources));
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IActorTaskSource<ISectorTaskSourceContext>[] GetCurrentTaskSources()
         {
             return _actorTaskSources;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Moq;
 
@@ -22,15 +23,17 @@ namespace Zilon.Core.Tests.PersonModules
         {
             if (symptoms is null)
             {
-                throw new System.ArgumentNullException(nameof(symptoms));
+                throw new ArgumentNullException(nameof(symptoms));
             }
 
             // ARRANGE
             var effectList = new List<IPersonEffect>();
 
             var effectCollectionMock = new Mock<IEffectsModule>();
-            effectCollectionMock.Setup(x => x.Add(It.IsAny<IPersonEffect>())).Callback<IPersonEffect>(x => effectList.Add(x));
-            effectCollectionMock.Setup(x => x.Remove(It.IsAny<IPersonEffect>())).Callback<IPersonEffect>(x => effectList.Remove(x));
+            effectCollectionMock.Setup(x => x.Add(It.IsAny<IPersonEffect>()))
+                .Callback<IPersonEffect>(x => effectList.Add(x));
+            effectCollectionMock.Setup(x => x.Remove(It.IsAny<IPersonEffect>()))
+                .Callback<IPersonEffect>(x => effectList.Remove(x));
             effectCollectionMock.SetupGet(x => x.Items).Returns(effectList);
             var effectCollection = effectCollectionMock.Object;
 
@@ -54,8 +57,10 @@ namespace Zilon.Core.Tests.PersonModules
 
             // ARRANGE
             var exceptedTimes = symptoms.Length;
-            effectCollectionMock.Verify(x => x.Add(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))), Times.Exactly(exceptedTimes));
-            effectCollectionMock.Verify(x => x.Remove(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))), Times.Exactly(exceptedTimes));
+            effectCollectionMock.Verify(x => x.Add(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))),
+                Times.Exactly(exceptedTimes));
+            effectCollectionMock.Verify(x => x.Remove(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))),
+                Times.Exactly(exceptedTimes));
         }
 
         private static bool IsDeaseSymptom(IPersonEffect x)

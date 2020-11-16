@@ -20,7 +20,8 @@ namespace Zilon.Core.MapGenerators.Tests
         /// <param name="diceSeed"></param>
         /// <param name="count"></param>
         [Test]
-        public void Create_DifferentDiceSeed_GenerateUniqueDiseases([Values(1, 2, 3, 4, 5)] int diceSeed, [Values(1, 10, 100)] int count)
+        public void Create_DifferentDiceSeed_GenerateUniqueDiseases([Values(1, 2, 3, 4, 5)] int diceSeed,
+            [Values(1, 10, 100)] int count)
         {
             // ARRANGE
 
@@ -38,7 +39,8 @@ namespace Zilon.Core.MapGenerators.Tests
                 if (disease != null)
                 {
                     resultDiseases.Add(disease);
-                    Console.WriteLine($"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}");
+                    Console.WriteLine(
+                        $"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}");
                 }
             }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,7 +31,7 @@ namespace Zilon.Core.Tests.Commands
         protected IServiceProvider ServiceProvider { get; set; }
 
         [SetUp]
-        public async System.Threading.Tasks.Task SetUpAsync()
+        public async Task SetUpAsync()
         {
             Container = new ServiceCollection();
 
@@ -59,9 +60,13 @@ namespace Zilon.Core.Tests.Commands
             var combatActModule = combatActModuleMock.Object;
 
             var equipmentCarrierMock = new Mock<IEquipmentModule>();
-            equipmentCarrierMock.SetupGet(x => x.Slots).Returns(new[] { new PersonSlotSubScheme {
-                Types = EquipmentSlotTypes.Hand
-            } });
+            equipmentCarrierMock.SetupGet(x => x.Slots).Returns(new[]
+            {
+                new PersonSlotSubScheme
+                {
+                    Types = EquipmentSlotTypes.Hand
+                }
+            });
             var equipmentCarrier = equipmentCarrierMock.Object;
 
             var personMock = new Mock<IPerson>();
@@ -104,17 +109,7 @@ namespace Zilon.Core.Tests.Commands
             ServiceProvider = Container.BuildServiceProvider();
         }
 
-        private static ITacticalAct CreateSimpleAct()
-        {
-            var actMock = new Mock<ITacticalAct>();
-            var actStatScheme = new TestTacticalActStatsSubScheme
-            {
-                Range = new Range<int>(1, 2)
-            };
-            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
-            var act = actMock.Object;
-            return act;
-        }
+        protected abstract void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock);
 
         private static ITacticalAct CreateActWithCooldown()
         {
@@ -142,6 +137,16 @@ namespace Zilon.Core.Tests.Commands
             return act;
         }
 
-        protected abstract void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock);
+        private static ITacticalAct CreateSimpleAct()
+        {
+            var actMock = new Mock<ITacticalAct>();
+            var actStatScheme = new TestTacticalActStatsSubScheme
+            {
+                Range = new Range<int>(1, 2)
+            };
+            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
+            var act = actMock.Object;
+            return act;
+        }
     }
 }

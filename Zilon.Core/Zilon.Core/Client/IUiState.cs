@@ -14,7 +14,7 @@ namespace Zilon.Core.Client
         /// </summary>
         ISelectableViewModel SelectedViewModel { get; set; }
 
-        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel"/>.</summary>
+        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel" />.</summary>
         event EventHandler HoverChanged;
     }
 }

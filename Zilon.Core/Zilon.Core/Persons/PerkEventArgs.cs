@@ -11,7 +11,6 @@ namespace Zilon.Core.Persons
             Perk = perk;
         }
 
-        [PublicAPI]
-        public IPerk Perk { get; }
+        [PublicAPI] public IPerk Perk { get; }
     }
 }

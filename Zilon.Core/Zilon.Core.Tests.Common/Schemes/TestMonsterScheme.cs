@@ -1,6 +1,6 @@
 ﻿namespace Zilon.Core.Tests.Common.Schemes
 {
-    using Zilon.Core.Schemes;
+    using Core.Schemes;
 
     public class TestMonsterScheme : SchemeBase, IMonsterScheme
     {
@@ -16,7 +16,7 @@
 
         public ITacticalActStatsSubScheme PrimaryAct { get; set; }
 
-        /// <inheritdoc cref="IMonsterScheme"/>
+        /// <inheritdoc cref="IMonsterScheme" />
         public string[] Tags { get; set; }
     }
 }

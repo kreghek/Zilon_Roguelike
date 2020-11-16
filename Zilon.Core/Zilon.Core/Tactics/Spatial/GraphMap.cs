@@ -11,8 +11,8 @@ namespace Zilon.Core.Tactics.Spatial
 {
     public class GraphMap : MapBase
     {
-        private readonly IList<IGraphNode> _nodes;
         private readonly IList<IGraphEdge> _edges;
+        private readonly IList<IGraphNode> _nodes;
 
         [ExcludeFromCodeCoverage]
         public GraphMap()
@@ -21,7 +21,7 @@ namespace Zilon.Core.Tactics.Spatial
             _nodes = new List<IGraphNode>();
         }
 
-        public override IEnumerable<IGraphNode> Nodes { get => _nodes; }
+        public override IEnumerable<IGraphNode> Nodes => _nodes;
 
         public override void AddEdge([NotNull] IGraphNode node1, [NotNull] IGraphNode node2)
         {
@@ -52,54 +52,6 @@ namespace Zilon.Core.Tactics.Spatial
         public override void AddNode(IGraphNode node)
         {
             _nodes.Add(node);
-        }
-
-        public bool TargetIsOnLine(IGraphNode currentNode, IGraphNode targetNode)
-        {
-            return true;
-        }
-
-        public override IEnumerable<IGraphNode> GetNext(IGraphNode node)
-        {
-            var hexCurrent = (HexNode)node;
-            var hexNodes = Nodes.Cast<HexNode>().ToArray();
-            var neighbors = HexNodeHelper.GetSpatialNeighbors(hexCurrent, hexNodes);
-
-            var currentEdges = from edge in _edges
-                               where edge.Nodes.Contains(node)
-                               select edge;
-            var currentEdgeArray = currentEdges.ToArray();
-
-            foreach (var testedNeighbor in neighbors)
-            {
-                var edge = currentEdgeArray.SingleOrDefault(x => x.Nodes.Contains(testedNeighbor));
-                if (edge == null)
-                {
-                    continue;
-                }
-
-                yield return testedNeighbor;
-            }
-        }
-
-        public override void RemoveEdge(IGraphNode node1, IGraphNode node2)
-        {
-            var currentEdge = (from edge in _edges
-                               where edge.Nodes.Contains(node1)
-                               where edge.Nodes.Contains(node2)
-                               select edge).Single();
-
-            _edges.Remove(currentEdge);
-        }
-
-        private bool CheckNodeInMap(IGraphNode node)
-        {
-            return Nodes.Contains(node);
-        }
-
-        public override bool IsPositionAvailableForContainer(IGraphNode targetNode)
-        {
-            throw new NotImplementedException();
         }
 
         public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
@@ -135,7 +87,45 @@ namespace Zilon.Core.Tactics.Spatial
             return distance;
         }
 
-        /// <inheritdoc/>
+        public override IEnumerable<IGraphNode> GetNext(IGraphNode node)
+        {
+            var hexCurrent = (HexNode)node;
+            var hexNodes = Nodes.Cast<HexNode>().ToArray();
+            var neighbors = HexNodeHelper.GetSpatialNeighbors(hexCurrent, hexNodes);
+
+            var currentEdges = from edge in _edges
+                               where edge.Nodes.Contains(node)
+                               select edge;
+            var currentEdgeArray = currentEdges.ToArray();
+
+            foreach (var testedNeighbor in neighbors)
+            {
+                var edge = currentEdgeArray.SingleOrDefault(x => x.Nodes.Contains(testedNeighbor));
+                if (edge == null)
+                {
+                    continue;
+                }
+
+                yield return testedNeighbor;
+            }
+        }
+
+        public override bool IsPositionAvailableForContainer(IGraphNode targetNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void RemoveEdge(IGraphNode node1, IGraphNode node2)
+        {
+            var currentEdge = (from edge in _edges
+                               where edge.Nodes.Contains(node1)
+                               where edge.Nodes.Contains(node2)
+                               select edge).Single();
+
+            _edges.Remove(currentEdge);
+        }
+
+        /// <inheritdoc />
         public override void RemoveNode(IGraphNode node)
         {
             _nodes.Remove(node);
@@ -148,6 +138,16 @@ namespace Zilon.Core.Tactics.Spatial
                     _edges.Remove(edge);
                 }
             }
+        }
+
+        public bool TargetIsOnLine(IGraphNode currentNode, IGraphNode targetNode)
+        {
+            return true;
+        }
+
+        private bool CheckNodeInMap(IGraphNode node)
+        {
+            return Nodes.Contains(node);
         }
     }
 }

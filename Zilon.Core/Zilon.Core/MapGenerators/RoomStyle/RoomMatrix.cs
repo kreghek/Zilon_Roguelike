@@ -9,14 +9,14 @@
             _rooms = new Room[size, size];
         }
 
-        public void SetRoom(int x, int y, Room room)
-        {
-            _rooms[x, y] = room;
-        }
-
         public Room GetRoom(int x, int y)
         {
             return _rooms[x, y];
+        }
+
+        public void SetRoom(int x, int y, Room room)
+        {
+            _rooms[x, y] = room;
         }
     }
 }

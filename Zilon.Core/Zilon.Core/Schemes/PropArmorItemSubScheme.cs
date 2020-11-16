@@ -7,13 +7,10 @@ namespace Zilon.Core.Schemes
 {
     public class PropArmorItemSubScheme : SubSchemeBase, IPropArmorItemSubScheme
     {
-        [JsonProperty]
-        public ImpactType Impact { get; private set; }
+        [JsonProperty] public ImpactType Impact { get; private set; }
 
-        [JsonProperty]
-        public PersonRuleLevel AbsorbtionLevel { get; private set; }
+        [JsonProperty] public PersonRuleLevel AbsorbtionLevel { get; private set; }
 
-        [JsonProperty]
-        public int ArmorRank { get; private set; }
+        [JsonProperty] public int ArmorRank { get; private set; }
     }
 }

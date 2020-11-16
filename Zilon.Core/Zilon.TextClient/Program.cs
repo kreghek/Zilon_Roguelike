@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,16 +15,17 @@ using Zilon.Core.World;
 
 namespace Zilon.TextClient
 {
-    static class Program
+    internal static class Program
     {
-        static async System.Threading.Tasks.Task Main()
+        private static async Task Main()
         {
             var serviceContainer = new ServiceCollection();
             var startUp = new StartUp();
             startUp.RegisterServices(serviceContainer);
 
             serviceContainer.AddSingleton<IGlobeInitializer, GlobeInitializer>();
-            serviceContainer.AddSingleton<IGlobeExpander>(provider => (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
+            serviceContainer.AddSingleton<IGlobeExpander>(provider =>
+                (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
             serviceContainer.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceContainer.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
@@ -75,7 +77,8 @@ namespace Zilon.TextClient
 
                     ISectorMap map = playerActorSectorNode.Sector.Map;
 
-                    var targetNode = map.Nodes.OfType<HexNode>().SingleOrDefault(node => node.OffsetCoords == offsetCoords);
+                    var targetNode = map.Nodes.OfType<HexNode>()
+                        .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
 
                     var moveCommand = scope.ServiceProvider.GetRequiredService<MoveCommand>();
 
@@ -96,6 +99,7 @@ namespace Zilon.TextClient
                         {
                             Console.Write(" t");
                         }
+
                         Console.WriteLine();
                     }
                 }

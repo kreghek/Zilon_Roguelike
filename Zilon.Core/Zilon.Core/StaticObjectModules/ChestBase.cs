@@ -19,42 +19,9 @@ namespace Zilon.Core.StaticObjectModules
             IsActive = true;
         }
 
-        /// <inheritdoc/>
-        public IPropStore Content { get; }
-
-        /// <inheritdoc/>
-        public bool IsOpened { get; private set; }
-
-        /// <inheritdoc/>
-        public PropContainerPurpose Purpose { get; set; }
-
-        /// <inheritdoc/>
-        public abstract bool IsMapBlock { get; }
-
-        /// <inheritdoc/>
-        public bool IsActive { get; set; }
-
-        /// <inheritdoc/>
-        public string Key { get => nameof(IPropContainer); }
-
-        /// <inheritdoc/>
-        public event EventHandler Opened;
-        /// <inheritdoc/>
-        public event EventHandler<PropStoreEventArgs> ItemsAdded;
-        /// <inheritdoc/>
-        public event EventHandler<PropStoreEventArgs> ItemsRemoved;
-
-        /// <inheritdoc/>
-        public void Open()
+        private void Content_Added(object sender, PropStoreEventArgs e)
         {
-            IsOpened = true;
-            DoSetIsOpened();
-        }
-
-        /// <inheritdoc/>
-        private void DoSetIsOpened()
-        {
-            Opened?.Invoke(this, EventArgs.Empty);
+            ItemsAdded?.Invoke(this, e);
         }
 
         private void Content_Removed(object sender, PropStoreEventArgs e)
@@ -62,9 +29,44 @@ namespace Zilon.Core.StaticObjectModules
             ItemsRemoved?.Invoke(this, e);
         }
 
-        private void Content_Added(object sender, PropStoreEventArgs e)
+        /// <inheritdoc />
+        private void DoSetIsOpened()
         {
-            ItemsAdded?.Invoke(this, e);
+            Opened?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <inheritdoc />
+        public IPropStore Content { get; }
+
+        /// <inheritdoc />
+        public bool IsOpened { get; private set; }
+
+        /// <inheritdoc />
+        public PropContainerPurpose Purpose { get; set; }
+
+        /// <inheritdoc />
+        public abstract bool IsMapBlock { get; }
+
+        /// <inheritdoc />
+        public bool IsActive { get; set; }
+
+        /// <inheritdoc />
+        public string Key => nameof(IPropContainer);
+
+        /// <inheritdoc />
+        public event EventHandler Opened;
+
+        /// <inheritdoc />
+        public event EventHandler<PropStoreEventArgs> ItemsAdded;
+
+        /// <inheritdoc />
+        public event EventHandler<PropStoreEventArgs> ItemsRemoved;
+
+        /// <inheritdoc />
+        public void Open()
+        {
+            IsOpened = true;
+            DoSetIsOpened();
         }
     }
 }

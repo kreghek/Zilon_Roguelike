@@ -9,7 +9,7 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class ConsumeProviantJobProgress : IJobProgress
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
         {
             if (currentJobs is null)

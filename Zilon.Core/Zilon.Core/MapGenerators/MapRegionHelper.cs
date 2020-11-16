@@ -19,8 +19,10 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="node"> Начальный узел поиска. </param>
         /// <param name="map"> Карта, узлы которой сканируются. Карта знает о доступности. </param>
-        /// <param name="availableNodes"> Доступные узлы. Использовать узлы региона.
-        /// Возможно, отфильтрованные от уже занятых узлов. </param>
+        /// <param name="availableNodes">
+        /// Доступные узлы. Использовать узлы региона.
+        /// Возможно, отфильтрованные от уже занятых узлов.
+        /// </param>
         /// <returns> Возвращает узел, который не закрывает проход в регион карты. </returns>
         public static IGraphNode FindNonBlockedNode(
             [NotNull] IGraphNode node,
@@ -51,7 +53,8 @@ namespace Zilon.Core.MapGenerators
                     return node;
                 }
 
-                var openNeighbors = neighborsArray.Where(x => !closedNodes.Contains(x) && availableNodesArray.Contains(x));
+                var openNeighbors =
+                    neighborsArray.Where(x => !closedNodes.Contains(x) && availableNodesArray.Contains(x));
                 openList.AddRange(openNeighbors);
             }
 

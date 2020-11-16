@@ -29,79 +29,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _dice = dice;
         }
 
-        /// <inheritdoc/>
-        public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
-        {
-            if (generationOptions is null)
-            {
-                throw new ArgumentNullException(nameof(generationOptions));
-            }
-
-            var transitions = generationOptions.Transitions;
-
-            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
-            if (cellularAutomatonOptions == null)
-            {
-                throw new ArgumentException($"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
-            }
-
-            var matrixWidth = cellularAutomatonOptions.MapWidth;
-            var matrixHeight = cellularAutomatonOptions.MapHeight;
-
-            var fillProbability = cellularAutomatonOptions.ChanceToStartAlive;
-
-            var cellularAutomatonGenerator = new CellularAutomatonGenerator(_dice);
-
-            var mapRuleManager = new MapRuleManager();
-            var rule = new RegionCountRule { Count = transitions.Count() + 1 };
-            mapRuleManager.AddRule(rule);
-
-            var regionPostProcessors = new IRegionPostProcessor[]
-            {
-                new SplitToTargetCountRegionPostProcessor(mapRuleManager, _dice)
-            };
-
-            for (var retryIndex = 0; retryIndex < RETRY_MAX_COUNT; retryIndex++)
-            {
-                var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
-
-                var regions = cellularAutomatonGenerator.Generate(ref matrix, fillProbability, totalIterations: 7);
-
-                try
-                {
-                    regions = PostProcess(regionPostProcessors, regions);
-
-                    ClosestRegionConnector.Connect(matrix, regions);
-
-                    var map = CreateSectorMap(matrix, regions.ToArray(), transitions);
-
-                    return Task.FromResult(map);
-                }
-                catch (CellularAutomatonException)
-                {
-                    // This means that with the current starting data it is not possible to create a suitable map.
-                    // Start the next iteration.
-                    continue;
-                }
-            }
-
-            // If the cycle has ended, then no attempt has ended with a successful map building
-            throw new InvalidOperationException("Failed to create a map within the maximum number of attempts.");
-        }
-
-        private static IEnumerable<RegionDraft> PostProcess(
-            IEnumerable<IRegionPostProcessor> regionPostProcessors,
-            IEnumerable<RegionDraft> regions)
-        {
-            foreach (var processor in regionPostProcessors)
-            {
-                regions = processor.Process(regions);
-            }
-
-            return regions;
-        }
-
-        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
+        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions,
+            IEnumerable<RoomTransition> transitions)
         {
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
@@ -126,7 +55,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return map;
         }
 
-        private static void CreateTransitionInSmallestRegion(IEnumerable<RoomTransition> transitions, ISectorMap map, MapRegion[] regionOrderedBySize)
+        private static void CreateTransitionInSmallestRegion(IEnumerable<RoomTransition> transitions, ISectorMap map,
+            MapRegion[] regionOrderedBySize)
         {
             var startRegion = regionOrderedBySize.First();
             startRegion.IsStart = true;
@@ -210,6 +140,79 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     }
                 }
             }
+        }
+
+        private static IEnumerable<RegionDraft> PostProcess(
+            IEnumerable<IRegionPostProcessor> regionPostProcessors,
+            IEnumerable<RegionDraft> regions)
+        {
+            foreach (var processor in regionPostProcessors)
+            {
+                regions = processor.Process(regions);
+            }
+
+            return regions;
+        }
+
+        /// <inheritdoc />
+        public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
+        {
+            if (generationOptions is null)
+            {
+                throw new ArgumentNullException(nameof(generationOptions));
+            }
+
+            var transitions = generationOptions.Transitions;
+
+            var cellularAutomatonOptions =
+                (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
+            if (cellularAutomatonOptions == null)
+            {
+                throw new ArgumentException(
+                    $"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
+            }
+
+            var matrixWidth = cellularAutomatonOptions.MapWidth;
+            var matrixHeight = cellularAutomatonOptions.MapHeight;
+
+            var fillProbability = cellularAutomatonOptions.ChanceToStartAlive;
+
+            var cellularAutomatonGenerator = new CellularAutomatonGenerator(_dice);
+
+            var mapRuleManager = new MapRuleManager();
+            var rule = new RegionCountRule { Count = transitions.Count() + 1 };
+            mapRuleManager.AddRule(rule);
+
+            var regionPostProcessors = new IRegionPostProcessor[]
+            {
+                new SplitToTargetCountRegionPostProcessor(mapRuleManager, _dice)
+            };
+
+            for (var retryIndex = 0; retryIndex < RETRY_MAX_COUNT; retryIndex++)
+            {
+                var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
+
+                var regions = cellularAutomatonGenerator.Generate(ref matrix, fillProbability, 7);
+
+                try
+                {
+                    regions = PostProcess(regionPostProcessors, regions);
+
+                    ClosestRegionConnector.Connect(matrix, regions);
+
+                    var map = CreateSectorMap(matrix, regions.ToArray(), transitions);
+
+                    return Task.FromResult(map);
+                }
+                catch (CellularAutomatonException)
+                {
+                    // This means that with the current starting data it is not possible to create a suitable map.
+                    // Start the next iteration.
+                }
+            }
+
+            // If the cycle has ended, then no attempt has ended with a successful map building
+            throw new InvalidOperationException("Failed to create a map within the maximum number of attempts.");
         }
     }
 }

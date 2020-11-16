@@ -10,11 +10,13 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
     {
         public CherryBrushFactory(
             ISchemeService schemeService,
-            IDropResolver dropResolver) : base(toolTags: Array.Empty<string>(), dropTableSchemeSid: "cherry-brush", PropContainerPurpose.CherryBrush, schemeService, dropResolver)
+            IDropResolver dropResolver) : base(Array.Empty<string>(), "cherry-brush", PropContainerPurpose.CherryBrush,
+            schemeService, dropResolver)
         {
         }
 
-        protected override int ExhausingValue { get => 1; }
-        protected override DepositMiningDifficulty Difficulty { get => DepositMiningDifficulty.Easy; }
+        protected override DepositMiningDifficulty Difficulty => DepositMiningDifficulty.Easy;
+
+        protected override int ExhausingValue => 1;
     }
 }

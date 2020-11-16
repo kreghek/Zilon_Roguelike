@@ -15,7 +15,7 @@ namespace Zilon.Core.PersonModules
             _attributesModule = attributesModule;
         }
 
-        public string Key { get => nameof(IMovingModule); }
+        public string Key => nameof(IMovingModule);
         public bool IsActive { get; set; }
 
         public int CalculateCost()
@@ -23,7 +23,7 @@ namespace Zilon.Core.PersonModules
             var dexterityAttribute = _attributesModule.GetAttribute(PersonAttributeType.Dexterity);
             int significantValue = (int)Math.Ceiling(dexterityAttribute.Value);
             var diffValue = significantValue - BASE_DEXTERITY;
-            return BASE_COST - diffValue * COST_PER_DEXTERITY_UNIT;
+            return BASE_COST - (diffValue * COST_PER_DEXTERITY_UNIT);
         }
     }
 }

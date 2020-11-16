@@ -16,16 +16,16 @@ namespace Zilon.Emulation.Common
         private const int ITERATION_LIMIT = 40_000_000;
         private readonly IGlobeInitializer _globeInitializer;
 
-        protected IServiceScope ServiceScope { get; set; }
-
-        protected BotSettings BotSettings { get; }
-
         protected AutoplayEngineBase(BotSettings botSettings,
             IGlobeInitializer globeInitializer)
         {
             BotSettings = botSettings;
             _globeInitializer = globeInitializer;
         }
+
+        protected BotSettings BotSettings { get; }
+
+        protected IServiceScope ServiceScope { get; set; }
 
         public async Task<IGlobe> CreateGlobeAsync()
         {
@@ -64,24 +64,18 @@ namespace Zilon.Emulation.Common
                     throw;
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
-                catch (Exception exception)
-#pragma warning restore CA1031 // Do not catch general exception types
-                {
-                    CatchException(exception);
-                    throw;
-                }
             }
 
             ProcessEnd();
         }
 
-        protected abstract void CatchException(Exception exception);
-
         protected abstract void CatchActorTaskExecutionException(ActorTaskExecutionException exception);
 
-        protected abstract void ProcessEnd();
+        protected abstract void CatchException(Exception exception);
 
         protected abstract void ConfigBotAux();
+
+        protected abstract void ProcessEnd();
 
         protected abstract void ProcessSectorExit();
     }

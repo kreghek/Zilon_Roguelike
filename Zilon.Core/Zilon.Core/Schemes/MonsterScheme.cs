@@ -39,7 +39,7 @@
         [JsonProperty]
         public ITacticalActStatsSubScheme PrimaryAct { get; private set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         public string[] Tags { get; private set; }
     }

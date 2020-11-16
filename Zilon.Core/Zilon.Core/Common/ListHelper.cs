@@ -38,10 +38,8 @@ namespace Zilon.Core.Common
                 foundIndex = list.FindIndex(0, currentIndex, predicate);
                 return list[foundIndex];
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
     }
 }

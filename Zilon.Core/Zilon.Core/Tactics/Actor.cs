@@ -20,22 +20,328 @@ namespace Zilon.Core.Tactics
     {
         private readonly IPerkResolver _perkResolver;
 
-        /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
+            [NotNull] IGraphNode node)
+        {
+            Person = person ?? throw new ArgumentNullException(nameof(person));
+            TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
+            Node = node ?? throw new ArgumentNullException(nameof(node));
+        }
+
+        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
+            [NotNull] IGraphNode node,
+            [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
+        {
+            _perkResolver = perkResolver;
+        }
+
+        public IPlayer Owner { get; }
+
+        [ExcludeFromCodeCoverage]
+        public override string ToString()
+        {
+            return $"{Person}";
+        }
+
+        private void ConsumeResource(IProp usedProp)
+        {
+            switch (usedProp)
+            {
+                case Resource resource:
+                    var removeResource = new Resource(resource.Scheme, 1);
+                    Person.GetModule<IInventoryModule>().Remove(removeResource);
+                    break;
+
+                case Equipment equipment:
+                    Person.GetModule<IInventoryModule>().Remove(equipment);
+                    break;
+            }
+        }
+
+        private void DecreaseHp(PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
+                        PropMetrics.HpLesserRestoreValue);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
+                        PropMetrics.HpNormalRestoreValue);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
+                        PropMetrics.HpGrandRestoreValue);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
+        private void DecreaseStat(SurvivalStatType statType, PersonRuleLevel level)
+        {
+            switch (statType)
+            {
+                case SurvivalStatType.Satiety:
+                case SurvivalStatType.Hydration:
+                case SurvivalStatType.Intoxication:
+                    DecreaseSurvivalStatInner(statType, level);
+                    break;
+
+                case SurvivalStatType.Health:
+                    DecreaseHp(level);
+                    break;
+            }
+        }
+
+        private void DecreaseSurvivalStatInner(SurvivalStatType statType, PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
+                        PropMetrics.SurvivalLesserRestoreValue - 1);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
+                        PropMetrics.SurvivalNormalRestoreValue - 1);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
+                        PropMetrics.SurvivalGrandRestoreValue - 1);
+                    break;
+
+                case PersonRuleLevel.None:
+                    throw new NotSupportedException();
+
+                case PersonRuleLevel.Absolute:
+                    throw new NotSupportedException();
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void DoDamageTaken(int value)
+        {
+            DamageTaken?.Invoke(this, new DamageTakenEventArgs(value));
+        }
+
+        private void DoMineDeposit(IStaticObject deposit, IMineDepositResult openResult)
+        {
+            var e = new MineDepositEventArgs(deposit, openResult);
+            DepositMined?.Invoke(this, e);
+        }
+
+
+        [ExcludeFromCodeCoverage]
+        private void DoOpenContainer(IStaticObject container, IOpenContainerResult openResult)
+        {
+            var e = new OpenContainerEventArgs(container, openResult);
+            OpenedContainer?.Invoke(this, e);
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void DoUseAct(IAttackTarget target, ITacticalAct tacticalAct)
+        {
+            var args = new UsedActEventArgs(target, tacticalAct);
+            UsedAct?.Invoke(this, args);
+        }
+
+        private void ProcessNegativeRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
+        {
+            switch (type)
+            {
+                case ConsumeCommonRuleType.Satiety:
+                    DecreaseStat(SurvivalStatType.Satiety, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Thirst:
+                    DecreaseStat(SurvivalStatType.Hydration, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Health:
+                    DecreaseStat(SurvivalStatType.Health, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Intoxication:
+                    DecreaseStat(SurvivalStatType.Intoxication, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Undefined:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), $"Значение {type} не поддерживается.");
+            }
+        }
+
+        private void ProcessPositiveRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
+        {
+            switch (type)
+            {
+                case ConsumeCommonRuleType.Satiety:
+                    RestoreStat(SurvivalStatType.Satiety, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Thirst:
+                    RestoreStat(SurvivalStatType.Hydration, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Health:
+                    RestoreStat(SurvivalStatType.Health, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Intoxication:
+                    RiseStat(SurvivalStatType.Intoxication, ruleLevel);
+                    break;
+
+                case ConsumeCommonRuleType.Undefined:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), $"Значение {type} не поддерживается.");
+            }
+        }
+
+        private void RestoreHp(PersonRuleLevel level)
+        {
+            var survivalModule = Person.GetModuleSafe<ISurvivalModule>();
+            if (survivalModule is null)
+            {
+                return;
+            }
+
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    survivalModule.RestoreStat(SurvivalStatType.Health, PropMetrics.HpLesserRestoreValue);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    survivalModule.RestoreStat(SurvivalStatType.Health, PropMetrics.HpNormalRestoreValue);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    survivalModule.RestoreStat(SurvivalStatType.Health, PropMetrics.HpGrandRestoreValue);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
+        private void RestoreStat(SurvivalStatType statType, PersonRuleLevel level)
+        {
+            switch (statType)
+            {
+                case SurvivalStatType.Satiety:
+                case SurvivalStatType.Hydration:
+                    RestoreSurvivalStatInner(statType, level);
+                    break;
+
+                case SurvivalStatType.Intoxication:
+                    RiseIntoxicationLevel(level);
+                    break;
+
+                case SurvivalStatType.Health:
+                    RestoreHp(level);
+                    break;
+            }
+        }
+
+        private void RestoreSurvivalStatInner(SurvivalStatType statType, PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
+                        PropMetrics.SurvivalLesserRestoreValue + 1);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
+                        PropMetrics.SurvivalNormalRestoreValue + 1);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
+                        PropMetrics.SurvivalGrandRestoreValue + 1);
+                    break;
+
+                case PersonRuleLevel.None:
+                    throw new NotSupportedException();
+
+                case PersonRuleLevel.Absolute:
+                    throw new NotSupportedException();
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
+        private void RiseIntoxicationLevel(PersonRuleLevel level)
+        {
+            var survivalModule = Person.GetModuleSafe<ISurvivalModule>();
+            if (survivalModule is null)
+            {
+                return;
+            }
+
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    survivalModule.RestoreStat(SurvivalStatType.Intoxication,
+                        PropMetrics.INTOXICATION_RISE_LESSER_VALUE + 1);
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    survivalModule.RestoreStat(SurvivalStatType.Intoxication,
+                        PropMetrics.INTOXICATION_RISE_NORMAL_VALUE + 1);
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    survivalModule.RestoreStat(SurvivalStatType.Intoxication,
+                        PropMetrics.INTOXICATION_RISE_GRAND_VALUE + 1);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
+            }
+        }
+
+        /// <summary>
+        /// Метод введён специально для повышения уровня интоксикации.
+        /// Так как глупо выглядит ResToreStat для повышения интоксикации.
+        /// Просто семантически более удобная обёртка.
+        /// </summary>
+        /// <param name="statType"> Характеристика, повышаемая методом. </param>
+        /// <param name="level"> Уровень увеличения. </param>
+        private void RiseStat(SurvivalStatType statType, PersonRuleLevel level)
+        {
+            RestoreStat(statType, level);
+        }
+
+        /// <inheritdoc />
         public event EventHandler Moved;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public event EventHandler<OpenContainerEventArgs> OpenedContainer;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public event EventHandler<MineDepositEventArgs> DepositMined;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public event EventHandler<UsedActEventArgs> UsedAct;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public event EventHandler<DamageTakenEventArgs> DamageTaken;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public event EventHandler<UsedPropEventArgs> UsedProp;
 
         /// <inheritdoc />
@@ -49,24 +355,9 @@ namespace Zilon.Core.Tactics
         /// </summary>
         public IGraphNode Node { get; private set; }
 
-        public IPlayer Owner { get; }
-        public PhysicalSize PhysicalSize { get => Person.PhysicalSize; }
+        public PhysicalSize PhysicalSize => Person.PhysicalSize;
         public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
-        public bool CanExecuteTasks { get => !Person.CheckIsDead(); }
-
-        [ExcludeFromCodeCoverage]
-        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node)
-        {
-            Person = person ?? throw new ArgumentNullException(nameof(person));
-            TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
-            Node = node ?? throw new ArgumentNullException(nameof(node));
-        }
-
-        public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource, [NotNull] IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
-        {
-            _perkResolver = perkResolver;
-        }
+        public bool CanExecuteTasks => !Person.CheckIsDead();
 
         public bool CanBeDamaged()
         {
@@ -129,7 +420,6 @@ namespace Zilon.Core.Tactics
                         ProcessNegativeRule(rule.Type, rule.Level);
                         break;
                 }
-
             }
 
             if (useData.Consumable && Person.GetModuleSafe<IInventoryModule>() != null)
@@ -144,73 +434,6 @@ namespace Zilon.Core.Tactics
             }
 
             UsedProp?.Invoke(this, new UsedPropEventArgs(usedProp));
-        }
-
-        private void ProcessNegativeRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
-        {
-            switch (type)
-            {
-                case ConsumeCommonRuleType.Satiety:
-                    DecreaseStat(SurvivalStatType.Satiety, ruleLevel);
-                    break;
-
-                case ConsumeCommonRuleType.Thirst:
-                    DecreaseStat(SurvivalStatType.Hydration, ruleLevel);
-                    break;
-
-                case ConsumeCommonRuleType.Health:
-                    DecreaseStat(SurvivalStatType.Health, ruleLevel);
-                    break;
-
-                case ConsumeCommonRuleType.Intoxication:
-                    DecreaseStat(SurvivalStatType.Intoxication, ruleLevel);
-                    break;
-
-                case ConsumeCommonRuleType.Undefined:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), $"Значение {type} не поддерживается.");
-            }
-        }
-
-        private void ProcessPositiveRule(ConsumeCommonRuleType type, PersonRuleLevel ruleLevel)
-        {
-            switch (type)
-            {
-                case ConsumeCommonRuleType.Satiety:
-                    RestoreStat(SurvivalStatType.Satiety, ruleLevel);
-                    break;
-
-                case ConsumeCommonRuleType.Thirst:
-                    RestoreStat(SurvivalStatType.Hydration, ruleLevel);
-                    break;
-
-                case ConsumeCommonRuleType.Health:
-                    RestoreStat(SurvivalStatType.Health, ruleLevel);
-                    break;
-
-                case ConsumeCommonRuleType.Intoxication:
-                    RiseStat(SurvivalStatType.Intoxication, ruleLevel);
-                    break;
-
-                case ConsumeCommonRuleType.Undefined:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), $"Значение {type} не поддерживается.");
-            }
-        }
-
-        private void ConsumeResource(IProp usedProp)
-        {
-            switch (usedProp)
-            {
-                case Resource resource:
-                    var removeResource = new Resource(resource.Scheme, 1);
-                    Person.GetModule<IInventoryModule>().Remove(removeResource);
-                    break;
-
-                case Equipment equipment:
-                    Person.GetModule<IInventoryModule>().Remove(equipment);
-                    break;
-            }
         }
 
         public void TakeDamage(int value)
@@ -229,221 +452,6 @@ namespace Zilon.Core.Tactics
             DoDamageTaken(value);
         }
 
-        [ExcludeFromCodeCoverage]
-        private void DoDamageTaken(int value)
-        {
-            DamageTaken?.Invoke(this, new DamageTakenEventArgs(value));
-        }
-
-
-        [ExcludeFromCodeCoverage]
-        private void DoOpenContainer(IStaticObject container, IOpenContainerResult openResult)
-        {
-            var e = new OpenContainerEventArgs(container, openResult);
-            OpenedContainer?.Invoke(this, e);
-        }
-
-        [ExcludeFromCodeCoverage]
-        private void DoUseAct(IAttackTarget target, ITacticalAct tacticalAct)
-        {
-            var args = new UsedActEventArgs(target, tacticalAct);
-            UsedAct?.Invoke(this, args);
-        }
-
-        [ExcludeFromCodeCoverage]
-        public override string ToString()
-        {
-            return $"{Person}";
-        }
-
-        /// <summary>
-        /// Метод введён специально для повышения уровня интоксикации.
-        /// Так как глупо выглядит ResToreStat для повышения интоксикации.
-        /// Просто семантически более удобная обёртка.
-        /// </summary>
-        /// <param name="statType"> Характеристика, повышаемая методом. </param>
-        /// <param name="level"> Уровень увеличения. </param>
-        private void RiseStat(SurvivalStatType statType, PersonRuleLevel level)
-        {
-            RestoreStat(statType, level);
-        }
-
-        private void RestoreStat(SurvivalStatType statType, PersonRuleLevel level)
-        {
-            switch (statType)
-            {
-                case SurvivalStatType.Satiety:
-                case SurvivalStatType.Hydration:
-                    RestoreSurvivalStatInner(statType, level);
-                    break;
-
-                case SurvivalStatType.Intoxication:
-                    RiseIntoxicationLevel(level);
-                    break;
-
-                case SurvivalStatType.Health:
-                    RestoreHp(level);
-                    break;
-            }
-        }
-
-        private void RestoreSurvivalStatInner(SurvivalStatType statType, PersonRuleLevel level)
-        {
-            switch (level)
-            {
-                case PersonRuleLevel.Lesser:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
-                        PropMetrics.SurvivalLesserRestoreValue + 1);
-                    break;
-
-                case PersonRuleLevel.Normal:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
-                        PropMetrics.SurvivalNormalRestoreValue + 1);
-                    break;
-
-                case PersonRuleLevel.Grand:
-                    Person.GetModuleSafe<ISurvivalModule>()?.RestoreStat(statType,
-                        PropMetrics.SurvivalGrandRestoreValue + 1);
-                    break;
-
-                case PersonRuleLevel.None:
-                    throw new NotSupportedException();
-
-                case PersonRuleLevel.Absolute:
-                    throw new NotSupportedException();
-
-                default:
-                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
-            }
-        }
-
-        private void RestoreHp(PersonRuleLevel level)
-        {
-            var survivalModule = Person.GetModuleSafe<ISurvivalModule>();
-            if (survivalModule is null)
-            {
-                return;
-            }
-
-            switch (level)
-            {
-                case PersonRuleLevel.Lesser:
-                    survivalModule.RestoreStat(SurvivalStatType.Health, PropMetrics.HpLesserRestoreValue);
-                    break;
-
-                case PersonRuleLevel.Normal:
-                    survivalModule.RestoreStat(SurvivalStatType.Health, PropMetrics.HpNormalRestoreValue);
-                    break;
-
-                case PersonRuleLevel.Grand:
-                    survivalModule.RestoreStat(SurvivalStatType.Health, PropMetrics.HpGrandRestoreValue);
-                    break;
-
-                default:
-                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
-            }
-        }
-
-        private void RiseIntoxicationLevel(PersonRuleLevel level)
-        {
-            var survivalModule = Person.GetModuleSafe<ISurvivalModule>();
-            if (survivalModule is null)
-            {
-                return;
-            }
-
-            switch (level)
-            {
-                case PersonRuleLevel.Lesser:
-                    survivalModule.RestoreStat(SurvivalStatType.Intoxication,
-                        PropMetrics.INTOXICATION_RISE_LESSER_VALUE + 1);
-                    break;
-
-                case PersonRuleLevel.Normal:
-                    survivalModule.RestoreStat(SurvivalStatType.Intoxication,
-                        PropMetrics.INTOXICATION_RISE_NORMAL_VALUE + 1);
-                    break;
-
-                case PersonRuleLevel.Grand:
-                    survivalModule.RestoreStat(SurvivalStatType.Intoxication,
-                        PropMetrics.INTOXICATION_RISE_GRAND_VALUE + 1);
-                    break;
-
-                default:
-                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
-            }
-        }
-
-        private void DecreaseStat(SurvivalStatType statType, PersonRuleLevel level)
-        {
-            switch (statType)
-            {
-                case SurvivalStatType.Satiety:
-                case SurvivalStatType.Hydration:
-                case SurvivalStatType.Intoxication:
-                    DecreaseSurvivalStatInner(statType, level);
-                    break;
-
-                case SurvivalStatType.Health:
-                    DecreaseHp(level);
-                    break;
-            }
-        }
-
-        private void DecreaseSurvivalStatInner(SurvivalStatType statType, PersonRuleLevel level)
-        {
-            switch (level)
-            {
-                case PersonRuleLevel.Lesser:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
-                        PropMetrics.SurvivalLesserRestoreValue - 1);
-                    break;
-
-                case PersonRuleLevel.Normal:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
-                        PropMetrics.SurvivalNormalRestoreValue - 1);
-                    break;
-
-                case PersonRuleLevel.Grand:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(statType,
-                        PropMetrics.SurvivalGrandRestoreValue - 1);
-                    break;
-
-                case PersonRuleLevel.None:
-                    throw new NotSupportedException();
-
-                case PersonRuleLevel.Absolute:
-                    throw new NotSupportedException();
-
-                default:
-                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
-            }
-        }
-
-        private void DecreaseHp(PersonRuleLevel level)
-        {
-            switch (level)
-            {
-                case PersonRuleLevel.Lesser:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
-                        PropMetrics.HpLesserRestoreValue);
-                    break;
-
-                case PersonRuleLevel.Normal:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
-                        PropMetrics.HpNormalRestoreValue);
-                    break;
-
-                case PersonRuleLevel.Grand:
-                    Person.GetModuleSafe<ISurvivalModule>()?.DecreaseStat(SurvivalStatType.Health,
-                        PropMetrics.HpGrandRestoreValue);
-                    break;
-
-                default:
-                    throw new InvalidOperationException($"Неизвестный уровень влияния правила {level}.");
-            }
-        }
-
         public void MineDeposit(IStaticObject deposit, IMineDepositMethod method)
         {
             if (deposit is null)
@@ -459,12 +467,6 @@ namespace Zilon.Core.Tactics
             var openResult = method?.TryMine(deposit.GetModule<IPropDepositModule>());
 
             DoMineDeposit(deposit, openResult);
-        }
-
-        private void DoMineDeposit(IStaticObject deposit, IMineDepositResult openResult)
-        {
-            var e = new MineDepositEventArgs(deposit, openResult);
-            DepositMined?.Invoke(this, e);
         }
 
         public void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)

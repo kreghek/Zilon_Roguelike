@@ -8,10 +8,11 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public sealed class HumanBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext>, IPluggableActorTaskSource<TContext> where TContext : class, ISectorTaskSourceContext
+    public sealed class HumanBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext>,
+        IPluggableActorTaskSource<TContext> where TContext : class, ISectorTaskSourceContext
     {
-        private IBotSettings _botSettings;
         private readonly LogicStateTreePatterns _logicStateTreePatterns;
+        private IBotSettings _botSettings;
 
         public HumanBotActorTaskSource(LogicStateTreePatterns logicStateTreePatterns)
         {
@@ -34,13 +35,11 @@ namespace Zilon.Bot.Players
                         WriteStateChanges = true
                     };
                 }
-                else
+
+                return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster)
                 {
-                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster)
-                    {
-                        WriteStateChanges = true
-                    };
-                }
+                    WriteStateChanges = true
+                };
             }
 
             var normalizedMode = _botSettings.Mode?.Trim().ToUpperInvariant();

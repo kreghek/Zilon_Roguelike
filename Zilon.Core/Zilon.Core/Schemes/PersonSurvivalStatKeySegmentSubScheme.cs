@@ -7,14 +7,10 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public sealed class PersonSurvivalStatKeySegmentSubScheme : IPersonSurvivalStatKeySegmentSubScheme
     {
-        [JsonProperty]
-        public PersonSurvivalStatKeypointLevel Level { get; private set; }
+        [JsonProperty] public PersonSurvivalStatKeypointLevel Level { get; private set; }
 
-        [JsonProperty]
-        public float Start { get; private set; }
+        [JsonProperty] public float Start { get; private set; }
 
-        [JsonProperty]
-        public float End { get; private set; }
-
+        [JsonProperty] public float End { get; private set; }
     }
 }
