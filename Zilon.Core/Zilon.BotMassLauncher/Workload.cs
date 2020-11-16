@@ -10,7 +10,7 @@ using Zilon.CommonUtilities;
 
 namespace Zilon.BotMassLauncher
 {
-    internal class Workload
+    internal class Workload: IDisposable
     {
         private readonly ILogger<Workload> _logger;
         private string _botAssembly;
@@ -19,7 +19,6 @@ namespace Zilon.BotMassLauncher
         private ulong _infiniteCounter;
         private bool _isInfinite;
         private int _launchCount;
-        private string _parallel;
         private string _pathToEnv;
         private string _schemeCatalogPath;
         private string _scorePath;
@@ -30,6 +29,14 @@ namespace Zilon.BotMassLauncher
         public Workload(ILogger<Workload> logger)
         {
             _logger = logger;
+        }
+
+        public void Dispose()
+        {
+            if (_shutdownTokenSource != null)
+            {
+                _shutdownTokenSource.Dispose();
+            }
         }
 
         public void Run(params string[] args)
@@ -44,7 +51,8 @@ namespace Zilon.BotMassLauncher
                                    .Replace(":", "_")
                                    .Replace(".", "_");
 
-            _parallel = ArgumentHelper.GetProgramArgument(args, "parallel");
+            var parallel = ArgumentHelper.GetProgramArgument(args, "parallel");
+
             _isInfinite = ArgumentHelper.HasProgramArgument(args, "infinite");
             _botMode = ArgumentHelper.GetProgramArgument(args, "mode");
             _scorePath = ArgumentHelper.GetProgramArgument(args, "output");
@@ -64,9 +72,9 @@ namespace Zilon.BotMassLauncher
                     _logger.LogTrace($"[x] INFINITE COUNTER {_infiniteCounter}");
                 }
 
-                if (!string.IsNullOrWhiteSpace(_parallel))
+                if (!string.IsNullOrWhiteSpace(parallel))
                 {
-                    RunParallel(int.Parse(_parallel), _logger);
+                    RunParallel(int.Parse(parallel), _logger);
                 }
                 else
                 {
