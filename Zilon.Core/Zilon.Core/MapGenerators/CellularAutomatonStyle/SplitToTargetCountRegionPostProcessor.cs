@@ -32,7 +32,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// <param name="targetRegionCount"> Целевое число регионов. </param>
         /// <returns> Возвращает новый массив черновиков регионов. </returns>
         private RegionDraft[] SplitRegionsForTransitions(
-            [NotNull][ItemNotNull] RegionDraft[] draftRegions,
+            [NotNull] [ItemNotNull] RegionDraft[] draftRegions,
             int targetRegionCount)
         {
             if (draftRegions == null)
@@ -54,8 +54,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
             var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
             var availableCoords = from region in availableSplitRegions
-                                  from coord in region.Coords.Skip(1)
-                                  select new RegionCoords(coord, region);
+                from coord in region.Coords.Skip(1)
+                select new RegionCoords(coord, region);
 
             if (availableCoords.Count() < regionCountDiff)
             {

@@ -12,21 +12,20 @@ namespace Zilon.BotMassLauncher
 {
     internal class Workload
     {
-        private string _pathToEnv;
-        private int _launchCount;
-        private string _scorePrefix;
-        private string _parallel;
-        private bool _isInfinite;
-        private ulong _infiniteCounter;
-        private string _botMode;
-        private string _scorePath;
-        private string _botCatalog;
+        private readonly ILogger<Workload> _logger;
         private string _botAssembly;
+        private string _botCatalog;
+        private string _botMode;
+        private ulong _infiniteCounter;
+        private bool _isInfinite;
+        private int _launchCount;
+        private string _parallel;
+        private string _pathToEnv;
         private string _schemeCatalogPath;
+        private string _scorePath;
+        private string _scorePrefix;
         private CancellationToken _shutdownToken;
         private CancellationTokenSource _shutdownTokenSource;
-
-        private readonly ILogger<Workload> _logger;
 
         public Workload(ILogger<Workload> logger)
         {
