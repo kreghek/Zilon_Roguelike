@@ -297,7 +297,9 @@ namespace Zilon.Core.PersonModules
         {
             var stat = new SurvivalStat(100, 0, 100)
             {
-                Type = statType, Rate = 1, DownPassRoll = 0
+                Type = statType,
+                Rate = 1,
+                DownPassRoll = 0
             };
 
             return stat;
@@ -309,7 +311,7 @@ namespace Zilon.Core.PersonModules
             InvokeStatChangedEvent(this, args);
         }
 
-        private void FillSurvivalBonusesFromEffects([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEffects([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_effectsModule is null)
             {
@@ -367,7 +369,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromEquipments([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEquipments([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_equipmentModule is null)
             {
@@ -398,7 +400,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromPerks([NotNull] [ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromPerks([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
             if (_evolutionModule is null)
             {

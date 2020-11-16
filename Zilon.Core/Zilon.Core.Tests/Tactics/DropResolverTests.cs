@@ -51,7 +51,10 @@ namespace Zilon.Core.Tests.Tactics
 
             var testDropTableRecord = new TestDropTableRecordSubScheme
             {
-                SchemeSid = testPropSchemeSid, Weight = 1, MinCount = 1, MaxCount = 1
+                SchemeSid = testPropSchemeSid,
+                Weight = 1,
+                MinCount = 1,
+                MaxCount = 1
             };
 
             var testDropTable = new TestDropTableScheme(1, testDropTableRecord);
@@ -88,7 +91,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var testPropScheme = new TestPropScheme
             {
-                Sid = testPropSchemeSid, Equip = new TestPropEquipSubScheme()
+                Sid = testPropSchemeSid,
+                Equip = new TestPropEquipSubScheme()
             };
 
             var randomSourceMock = new Mock<IDropResolverRandomSource>();
@@ -116,7 +120,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var testDropTableRecord = new TestDropTableRecordSubScheme
             {
-                SchemeSid = testPropSchemeSid, Weight = 1
+                SchemeSid = testPropSchemeSid,
+                Weight = 1
             };
 
             var testDropTable =
@@ -146,7 +151,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var testPropScheme = new TestPropScheme
             {
-                Sid = testPropSchemeSid, Equip = new TestPropEquipSubScheme()
+                Sid = testPropSchemeSid,
+                Equip = new TestPropEquipSubScheme()
             };
 
             var testExtraScheme = new TestPropScheme

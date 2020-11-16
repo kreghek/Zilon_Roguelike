@@ -87,8 +87,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 if (room.Transitions?.Any() == true)
                 {
                     region.ExitNodes = (from regionNode in region.Nodes
-                        where map.Transitions.Keys.Contains(regionNode)
-                        select regionNode).ToArray();
+                                        where map.Transitions.Keys.Contains(regionNode)
+                                        select regionNode).ToArray();
                 }
             }
 

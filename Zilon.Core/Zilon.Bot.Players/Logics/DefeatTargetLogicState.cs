@@ -45,7 +45,7 @@ namespace Zilon.Bot.Players.Logics
             }
 
             var taskContext = new ActorTaskContext(context.Sector);
-            
+
             var attackParams = CheckAttackAvailability(actor, _target, context.Sector.Map);
             if (attackParams.IsAvailable)
             {
@@ -104,7 +104,8 @@ namespace Zilon.Bot.Players.Logics
 
             var attackParams = new AttackParams
             {
-                IsAvailable = isInDistance && targetIsOnLine, TacticalAct = act
+                IsAvailable = isInDistance && targetIsOnLine,
+                TacticalAct = act
             };
 
             return attackParams;
