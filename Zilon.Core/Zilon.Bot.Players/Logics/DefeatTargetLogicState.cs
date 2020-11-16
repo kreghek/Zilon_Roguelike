@@ -44,12 +44,13 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
+            var taskContext = new ActorTaskContext(context.Sector);
+            
             var attackParams = CheckAttackAvailability(actor, _target, context.Sector.Map);
             if (attackParams.IsAvailable)
             {
                 var act = attackParams.TacticalAct;
 
-                var taskContext = new ActorTaskContext(context.Sector);
 
                 var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
                 return attackTask;
@@ -69,16 +70,14 @@ namespace Zilon.Bot.Players.Logics
             _refreshCounter = REFRESH_COUNTER_VALUE;
             var targetIsOnLine = map.TargetIsOnLine(actor.Node, _target.Node);
 
-            if (targetIsOnLine)
+            if (!targetIsOnLine)
             {
-                var taskContext = new ActorTaskContext(context.Sector);
-
-                _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
-                return _moveTask;
+                // Target is out of sight. Target is disappeared.
+                return null;
             }
 
-            // Цел за пределами видимости. Считается потерянной.
-            return null;
+            _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
+            return _moveTask;
         }
 
         protected override void ResetData()
@@ -88,7 +87,7 @@ namespace Zilon.Bot.Players.Logics
             _moveTask = null;
         }
 
-        private AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target, ISectorMap map)
+        private static AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target, ISectorMap map)
         {
             if (actor.Person.GetModuleSafe<ICombatActModule>() is null)
             {
@@ -111,7 +110,7 @@ namespace Zilon.Bot.Players.Logics
             return attackParams;
         }
 
-        private IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
+        private static IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
         {
             foreach (var target in actorManager.Items)
             {
