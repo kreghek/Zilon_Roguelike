@@ -150,7 +150,7 @@ namespace Zilon.BotMassLauncher
                 CancellationToken = _shutdownToken
             };
 
-            Parallel.For(0, _launchCount, parallelOptions, (iteration)=> RunEnvironment(iteration, logger));
+            Parallel.For(0, _launchCount, parallelOptions, (iteration) => RunEnvironment(iteration, logger));
         }
     }
 }

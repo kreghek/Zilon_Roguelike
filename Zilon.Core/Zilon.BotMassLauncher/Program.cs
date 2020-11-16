@@ -29,7 +29,7 @@ namespace Zilon.BotMassLauncher
                 .AddLogging(loggingBuilder => loggingBuilder.AddConsole().AddConfiguration(configuration))
                 )
                 .Build();
-            
+
             var workload = ActivatorUtilities.CreateInstance<Workload>(host.Services);
 
             workload.Run(args);

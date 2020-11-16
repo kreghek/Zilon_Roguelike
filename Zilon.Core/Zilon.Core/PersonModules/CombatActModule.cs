@@ -82,7 +82,7 @@ namespace Zilon.Core.PersonModules
         }
 
         private static void CalcPerksBonusesOnTacticalAct(
-            [NotNull] [ItemNotNull] IEnumerable<IPerk> archievedPerks,
+            [NotNull][ItemNotNull] IEnumerable<IPerk> archievedPerks,
             [NotNull] Equipment equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
@@ -150,7 +150,7 @@ namespace Zilon.Core.PersonModules
             [NotNull] ITacticalActScheme scheme,
             [NotNull] Equipment equipment,
             [NotNull] IEffectsModule effects,
-            [NotNull] [ItemNotNull] IEnumerable<IPerk> perks)
+            [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
             var efficientModifierValue = 0;
