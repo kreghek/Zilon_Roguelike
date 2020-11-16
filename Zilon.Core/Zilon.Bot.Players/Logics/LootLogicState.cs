@@ -116,7 +116,8 @@ namespace Zilon.Bot.Players.Logics
             var taskContext = new ActorTaskContext(sector);
             return new TransferPropsTask(actor, taskContext, new[]
             {
-                inventoryTransfer, containerTransfer
+                inventoryTransfer,
+                containerTransfer
             });
         }
     }

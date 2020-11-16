@@ -95,15 +95,21 @@ namespace Zilon.Core.Tests.PersonModules
                         {
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Lesser, Start = 0.25f, End = 0.75f
+                                Level = PersonSurvivalStatKeypointLevel.Lesser,
+                                Start = 0.25f,
+                                End = 0.75f
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Strong, Start = 0.12f, End = 0.25f
+                                Level = PersonSurvivalStatKeypointLevel.Strong,
+                                Start = 0.12f,
+                                End = 0.25f
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Max, Start = 0, End = 0.12f
+                                Level = PersonSurvivalStatKeypointLevel.Max,
+                                Start = 0,
+                                End = 0.12f
                             }
                         }
                     },
@@ -117,15 +123,21 @@ namespace Zilon.Core.Tests.PersonModules
                         {
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Lesser, Start = 0.25f, End = 0.75f
+                                Level = PersonSurvivalStatKeypointLevel.Lesser,
+                                Start = 0.25f,
+                                End = 0.75f
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Strong, Start = 0.12f, End = 0.25f
+                                Level = PersonSurvivalStatKeypointLevel.Strong,
+                                Start = 0.12f,
+                                End = 0.25f
                             },
                             new TestPersonSurvivalStatKeySegmentSubScheme
                             {
-                                Level = PersonSurvivalStatKeypointLevel.Max, Start = 0, End = 0.12f
+                                Level = PersonSurvivalStatKeypointLevel.Max,
+                                Start = 0,
+                                End = 0.12f
                             }
                         }
                     }
@@ -216,7 +228,9 @@ namespace Zilon.Core.Tests.PersonModules
             {
                 new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE)
                 {
-                    Type = STAT_TYPE, Rate = STAT_RATE, DownPassRoll = statDownPass
+                    Type = STAT_TYPE,
+                    Rate = STAT_RATE,
+                    DownPassRoll = statDownPass
                 }
             };
 

@@ -99,7 +99,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var equipmentsInit = new[]
             {
-                null, testedEquipmentProp
+                null,
+                testedEquipmentProp
             };
             var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[]
                 {
@@ -207,7 +208,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var equipmentsInit = new[]
             {
-                equipedEquipmentProp, testedEquipmentProp
+                equipedEquipmentProp,
+                testedEquipmentProp
             };
             var equipmentModuleMock = new Mock<EquipmentModuleBase>(new object[]
                 {

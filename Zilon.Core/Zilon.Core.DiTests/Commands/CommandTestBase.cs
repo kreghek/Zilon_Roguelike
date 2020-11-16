@@ -59,7 +59,9 @@ namespace Zilon.Core.Tests.Commands
             combatActModuleMock.Setup(x => x.CalcCombatActs())
                 .Returns(new[]
                 {
-                    simpleAct, cooldownAct, cooldownResolvedAct
+                    simpleAct,
+                    cooldownAct,
+                    cooldownResolvedAct
                 });
             var combatActModule = combatActModuleMock.Object;
 

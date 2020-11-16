@@ -30,7 +30,8 @@ namespace Zilon.Core.Common
             var rowOffset = offsetY % 2 == 0 ? 0 : 0.5f;
             return new[]
             {
-                offsetX + rowOffset, (offsetY * 3f) / 4
+                offsetX + rowOffset,
+                (offsetY * 3f) / 4
             };
         }
 
@@ -51,8 +52,12 @@ namespace Zilon.Core.Common
             // Начинаем с верхнего левого.
             var offsets = new[]
             {
-                new CubeCoords(-1, +2, -1), new CubeCoords(-2, +1, +1), new CubeCoords(-1, -1, +2),
-                new CubeCoords(+1, -2, +1), new CubeCoords(+2, -1, -1), new CubeCoords(+1, +1, -2)
+                new CubeCoords(-1, +2, -1),
+                new CubeCoords(-2, +1, +1),
+                new CubeCoords(-1, -1, +2),
+                new CubeCoords(+1, -2, +1),
+                new CubeCoords(+2, -1, -1),
+                new CubeCoords(+1, +1, -2)
             };
 
             return offsets;
@@ -100,8 +105,12 @@ namespace Zilon.Core.Common
         {
             var offsets = new[]
             {
-                new CubeCoords(-1, +1, 0), new CubeCoords(-1, 0, +1), new CubeCoords(0, -1, +1),
-                new CubeCoords(+1, -1, 0), new CubeCoords(+1, 0, -1), new CubeCoords(0, +1, -1)
+                new CubeCoords(-1, +1, 0),
+                new CubeCoords(-1, 0, +1),
+                new CubeCoords(0, -1, +1),
+                new CubeCoords(+1, -1, 0),
+                new CubeCoords(+1, 0, -1),
+                new CubeCoords(0, +1, -1)
             };
 
             return offsets;

@@ -115,7 +115,8 @@ namespace Zilon.Core.Tests.Commands
         {
             return new[]
             {
-                CreateFakeCommand(), CreateFakeCommand()
+                CreateFakeCommand(),
+                CreateFakeCommand()
             };
         }
     }

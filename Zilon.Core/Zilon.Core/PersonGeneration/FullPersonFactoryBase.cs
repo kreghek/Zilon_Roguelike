@@ -163,8 +163,10 @@ namespace Zilon.Core.PersonGeneration
         {
             var attributes = new[]
             {
-                RollAttribute(PersonAttributeType.PhysicalStrength), RollAttribute(PersonAttributeType.Dexterity),
-                RollAttribute(PersonAttributeType.Perception), RollAttribute(PersonAttributeType.Constitution)
+                RollAttribute(PersonAttributeType.PhysicalStrength),
+                RollAttribute(PersonAttributeType.Dexterity),
+                RollAttribute(PersonAttributeType.Perception),
+                RollAttribute(PersonAttributeType.Constitution)
             };
 
             var attributesModule = new AttributesModule(attributes);

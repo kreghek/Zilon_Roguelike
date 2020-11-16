@@ -48,15 +48,21 @@ namespace Zilon.Core.Tests.Schemes
             {
                 new TestPersonSurvivalStatKeySegmentSubScheme
                 {
-                    Level = PersonSurvivalStatKeypointLevel.Max, Start = 0, End = 0.14f
+                    Level = PersonSurvivalStatKeypointLevel.Max,
+                    Start = 0,
+                    End = 0.14f
                 },
                 new TestPersonSurvivalStatKeySegmentSubScheme
                 {
-                    Level = PersonSurvivalStatKeypointLevel.Strong, Start = 0.14f, End = 0.75f
+                    Level = PersonSurvivalStatKeypointLevel.Strong,
+                    Start = 0.14f,
+                    End = 0.75f
                 },
                 new TestPersonSurvivalStatKeySegmentSubScheme
                 {
-                    Level = PersonSurvivalStatKeypointLevel.Lesser, Start = 0.75f, End = 0.86f
+                    Level = PersonSurvivalStatKeypointLevel.Lesser,
+                    Start = 0.75f,
+                    End = 0.86f
                 }
             };
             factPersonScheme.SurvivalStats[0].KeyPoints.Should().BeEquivalentTo(expectedKeySegments);

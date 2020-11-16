@@ -192,7 +192,10 @@ namespace Zilon.Core.Tests.Tactics
                     new TestDropTableScheme(1,
                         new TestDropTableRecordSubScheme
                         {
-                            SchemeSid = testExtraSchemeSid, Weight = 1, MinCount = 1, MaxCount = 1
+                            SchemeSid = testExtraSchemeSid,
+                            Weight = 1,
+                            MinCount = 1,
+                            MaxCount = 1
                         })
                 }
             };

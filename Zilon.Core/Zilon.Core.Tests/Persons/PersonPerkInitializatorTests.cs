@@ -27,7 +27,8 @@ namespace Zilon.Core.Persons.Tests
             {
                 new TestPerkScheme
                 {
-                    Sid = "test", IsBuildIn = true
+                    Sid = "test",
+                    IsBuildIn = true
                 }
             };
             schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>()).Returns(perkSchemeList);

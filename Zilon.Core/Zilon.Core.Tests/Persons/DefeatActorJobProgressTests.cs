@@ -36,7 +36,8 @@ namespace Zilon.Core.Tests.Persons
             // ACT
             progress.ApplyToJobs(new[]
             {
-                testedJob, otherJob
+                testedJob,
+                otherJob
             });
 
             // ASSERT

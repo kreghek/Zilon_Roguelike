@@ -37,7 +37,8 @@ namespace Zilon.Core.Benchmarks.Move
                 IsStart = true,
                 ChestDropTableSids = new[]
                 {
-                    "survival", "default"
+                    "survival",
+                    "default"
                 },
                 RegionChestCountRatio = 9,
                 TotalChestCount = 0

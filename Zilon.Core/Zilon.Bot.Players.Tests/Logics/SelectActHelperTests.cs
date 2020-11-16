@@ -36,7 +36,9 @@ namespace Zilon.Bot.Players.Logics.Tests
                             Efficient = new Roll(3, 1),
                             Offence = new TestTacticalActOffenceSubScheme
                             {
-                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
+                                ApRank = 1,
+                                Impact = ImpactType.Kinetic,
+                                Type = OffenseType.Tactical
                             }
                         }
                     },
@@ -54,12 +56,15 @@ namespace Zilon.Bot.Players.Logics.Tests
                             Efficient = new Roll(3, 3),
                             Offence = new TestTacticalActOffenceSubScheme
                             {
-                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
+                                ApRank = 1,
+                                Impact = ImpactType.Kinetic,
+                                Type = OffenseType.Tactical
                             }
                         },
                         Constrains = new TestTacticalActConstrainsSubScheme
                         {
-                            PropResourceType = "resource", PropResourceCount = 1
+                            PropResourceType = "resource",
+                            PropResourceCount = 1
                         }
                     },
                     new Roll(3, 1),
@@ -92,7 +97,9 @@ namespace Zilon.Bot.Players.Logics.Tests
                             Efficient = new Roll(3, 1),
                             Offence = new TestTacticalActOffenceSubScheme
                             {
-                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
+                                ApRank = 1,
+                                Impact = ImpactType.Kinetic,
+                                Type = OffenseType.Tactical
                             }
                         }
                     },
@@ -110,12 +117,15 @@ namespace Zilon.Bot.Players.Logics.Tests
                             Efficient = new Roll(3, 3),
                             Offence = new TestTacticalActOffenceSubScheme
                             {
-                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
+                                ApRank = 1,
+                                Impact = ImpactType.Kinetic,
+                                Type = OffenseType.Tactical
                             }
                         },
                         Constrains = new TestTacticalActConstrainsSubScheme
                         {
-                            PropResourceType = "resource", PropResourceCount = 1
+                            PropResourceType = "resource",
+                            PropResourceCount = 1
                         }
                     },
                     new Roll(3, 1),

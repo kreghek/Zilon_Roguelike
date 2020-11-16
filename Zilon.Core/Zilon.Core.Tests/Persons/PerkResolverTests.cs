@@ -32,7 +32,8 @@ namespace Zilon.Core.Tests.Persons
                         {
                             new TestJobSubScheme
                             {
-                                Type = JobType.Defeats, Value = 1
+                                Type = JobType.Defeats,
+                                Value = 1
                             }
                         },
 
@@ -104,7 +105,8 @@ namespace Zilon.Core.Tests.Persons
                         {
                             new TestJobSubScheme
                             {
-                                Type = JobType.Defeats, Value = 1
+                                Type = JobType.Defeats,
+                                Value = 1
                             }
                         }
                     }

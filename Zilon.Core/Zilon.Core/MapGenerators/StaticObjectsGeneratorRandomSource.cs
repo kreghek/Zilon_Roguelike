@@ -61,7 +61,9 @@ namespace Zilon.Core.MapGenerators
                 var diff = 100 - purposeList.Count;
                 var everywherePurpose = new[]
                 {
-                    PropContainerPurpose.Puddle, PropContainerPurpose.Pit, PropContainerPurpose.TrashHeap
+                    PropContainerPurpose.Puddle,
+                    PropContainerPurpose.Pit,
+                    PropContainerPurpose.TrashHeap
                 };
                 var diffShare = (int)Math.Ceiling(diff / 2f);
                 foreach (var purpose in everywherePurpose)

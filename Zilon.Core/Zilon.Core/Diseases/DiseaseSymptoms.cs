@@ -16,7 +16,8 @@ namespace Zilon.Core.Diseases
                 {
                     Name = new LocalizedString
                     {
-                        En = "Sore Throat", Ru = "Воспаление горла"
+                        En = "Sore Throat",
+                        Ru = "Воспаление горла"
                     },
                     Rule = DiseaseSymptomType.BreathDownSpeed
                 },
@@ -24,7 +25,8 @@ namespace Zilon.Core.Diseases
                 {
                     Name = new LocalizedString
                     {
-                        En = "Sputum in the lungs", Ru = "Слизь в легких"
+                        En = "Sputum in the lungs",
+                        Ru = "Слизь в легких"
                     },
                     Rule = DiseaseSymptomType.BreathDownSpeed
                 },
@@ -32,7 +34,8 @@ namespace Zilon.Core.Diseases
                 {
                     Name = new LocalizedString
                     {
-                        En = "Dyspnea", Ru = "Одышка"
+                        En = "Dyspnea",
+                        Ru = "Одышка"
                     },
                     Rule = DiseaseSymptomType.BreathDownSpeed
                 },
@@ -40,7 +43,8 @@ namespace Zilon.Core.Diseases
                 {
                     Name = new LocalizedString
                     {
-                        En = "Body aches", Ru = "Ломота в теле"
+                        En = "Body aches",
+                        Ru = "Ломота в теле"
                     },
                     Rule = DiseaseSymptomType.HealthLimit
                 },
@@ -48,7 +52,8 @@ namespace Zilon.Core.Diseases
                 {
                     Name = new LocalizedString
                     {
-                        En = "Poor digestibility", Ru = "Плохая усвояемость"
+                        En = "Poor digestibility",
+                        Ru = "Плохая усвояемость"
                     },
                     Rule = DiseaseSymptomType.HungerSpeed
                 },
@@ -56,7 +61,8 @@ namespace Zilon.Core.Diseases
                 {
                     Name = new LocalizedString
                     {
-                        En = "Fast fatigue", Ru = "Быстрая усталость"
+                        En = "Fast fatigue",
+                        Ru = "Быстрая усталость"
                     },
                     Rule = DiseaseSymptomType.EnegryDownSpeed
                 }

@@ -15,9 +15,16 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         {
             _rolledOffsetCoords = new[]
             {
-                new OffsetCoords(0, 0), new OffsetCoords(1, 0), new OffsetCoords(2, 0), new OffsetCoords(3, 0),
-                new OffsetCoords(3, 1), new OffsetCoords(2, 1), new OffsetCoords(1, 1), new OffsetCoords(0, 1),
-                new OffsetCoords(0, 2), new OffsetCoords(1, 2)
+                new OffsetCoords(0, 0),
+                new OffsetCoords(1, 0),
+                new OffsetCoords(2, 0),
+                new OffsetCoords(3, 0),
+                new OffsetCoords(3, 1),
+                new OffsetCoords(2, 1),
+                new OffsetCoords(1, 1),
+                new OffsetCoords(0, 1),
+                new OffsetCoords(0, 2),
+                new OffsetCoords(1, 2)
             };
         }
 

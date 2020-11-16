@@ -28,11 +28,13 @@ namespace Zilon.Core.PersonModules
             {
                 new SkillStatItem
                 {
-                    Stat = SkillStatType.Ballistic, Value = 10
+                    Stat = SkillStatType.Ballistic,
+                    Value = 10
                 },
                 new SkillStatItem
                 {
-                    Stat = SkillStatType.Melee, Value = 10
+                    Stat = SkillStatType.Melee,
+                    Value = 10
                 }
             };
 

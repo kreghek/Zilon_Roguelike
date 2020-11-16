@@ -59,7 +59,14 @@ namespace Zilon.Core.Tests.MapGenerators
             var availableNodes = new List<IGraphNode>(region);
             var rolled = new[]
             {
-                114, 136, 0, 123, 179, 0, 111, 3
+                114,
+                136,
+                0,
+                123,
+                179,
+                0,
+                111,
+                3
             };
             foreach (int rolledIndex in rolled)
             {
@@ -110,7 +117,10 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var regionNodes = new IGraphNode[]
             {
-                node00, node01, node10, node11
+                node00,
+                node01,
+                node10,
+                node11
             };
 
             // генерируем выход
@@ -121,7 +131,9 @@ namespace Zilon.Core.Tests.MapGenerators
             mapMock.Setup(x => x.GetNext(It.Is<IGraphNode>(n => n == node10)))
                 .Returns(new IGraphNode[]
                 {
-                    corridorNode, node00, node11
+                    corridorNode,
+                    node00,
+                    node11
                 });
 
             // ACT
@@ -162,7 +174,10 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var regionNodes = new IGraphNode[]
             {
-                node00, node01, node10, node11
+                node00,
+                node01,
+                node10,
+                node11
             };
 
             // генерируем выход

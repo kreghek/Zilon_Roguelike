@@ -200,7 +200,9 @@ namespace Zilon.Core.MapGenerators
         {
             var rarityMaxCounter = new[]
             {
-                -1, 10, 1
+                -1,
+                10,
+                1
             };
 
             var currentRarity = GetMonsterRarity(rarityCounter, rarityMaxCounter);

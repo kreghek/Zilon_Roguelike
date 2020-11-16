@@ -74,7 +74,8 @@ namespace Zilon.Core.Tests.Persons
             {
                 Tags = new[]
                 {
-                    PropTags.Equipment.Ranged, PropTags.Equipment.Weapon
+                    PropTags.Equipment.Ranged,
+                    PropTags.Equipment.Weapon
                 },
                 Equip = new TestPropEquipSubScheme
                 {
@@ -89,7 +90,8 @@ namespace Zilon.Core.Tests.Persons
             {
                 Tags = new[]
                 {
-                    PropTags.Equipment.Ranged, PropTags.Equipment.Weapon
+                    PropTags.Equipment.Ranged,
+                    PropTags.Equipment.Weapon
                 },
                 Equip = new TestPropEquipSubScheme
                 {
@@ -151,7 +153,8 @@ namespace Zilon.Core.Tests.Persons
             {
                 Tags = new[]
                 {
-                    PropTags.Equipment.Ranged, PropTags.Equipment.Weapon
+                    PropTags.Equipment.Ranged,
+                    PropTags.Equipment.Weapon
                 },
                 Equip = new TestPropEquipSubScheme
                 {
@@ -356,7 +359,8 @@ namespace Zilon.Core.Tests.Persons
             {
                 Tags = new[]
                 {
-                    PropTags.Equipment.Weapon, PropTags.Equipment.Ranged
+                    PropTags.Equipment.Weapon,
+                    PropTags.Equipment.Ranged
                 },
                 Equip = new TestPropEquipSubScheme
                 {
@@ -438,7 +442,8 @@ namespace Zilon.Core.Tests.Persons
             {
                 Tags = new[]
                 {
-                    PropTags.Equipment.Weapon, PropTags.Equipment.Ranged
+                    PropTags.Equipment.Weapon,
+                    PropTags.Equipment.Ranged
                 },
                 Equip = new TestPropEquipSubScheme
                 {
@@ -717,7 +722,8 @@ namespace Zilon.Core.Tests.Persons
                     {
                         Tags = new[]
                         {
-                            PropTags.Equipment.Weapon, PropTags.Equipment.Ranged
+                            PropTags.Equipment.Weapon,
+                            PropTags.Equipment.Ranged
                         },
                         Equip = new TestPropEquipSubScheme
                         {

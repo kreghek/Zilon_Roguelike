@@ -251,7 +251,8 @@ namespace Zilon.Core.Specs.Steps
         {
             var targetCoords = new[]
             {
-                new OffsetCoords(1, 0), new OffsetCoords(0, 0)
+                new OffsetCoords(1, 0),
+                new OffsetCoords(0, 0)
             };
 
             for (var i = 0; i < moveCount; i++)

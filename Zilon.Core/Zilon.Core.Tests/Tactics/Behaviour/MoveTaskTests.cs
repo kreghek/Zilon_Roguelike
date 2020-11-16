@@ -105,7 +105,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var expectedPath = new[]
             {
-                map.Nodes.SelectByHexCoords(2, 3), map.Nodes.SelectByHexCoords(2, 4), finishNode
+                map.Nodes.SelectByHexCoords(2, 3),
+                map.Nodes.SelectByHexCoords(2, 4),
+                finishNode
             };
 
             var actor = CreateActor(map, startNode);
@@ -154,7 +156,9 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         {
             return new IGraphNode[]
             {
-                map.Nodes.SelectByHexCoords(4, 4), map.Nodes.SelectByHexCoords(3, 4), map.Nodes.SelectByHexCoords(2, 4),
+                map.Nodes.SelectByHexCoords(4, 4),
+                map.Nodes.SelectByHexCoords(3, 4),
+                map.Nodes.SelectByHexCoords(2, 4),
                 map.Nodes.SelectByHexCoords(1, 5)
             };
         }

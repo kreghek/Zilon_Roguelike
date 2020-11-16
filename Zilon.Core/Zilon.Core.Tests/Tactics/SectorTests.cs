@@ -124,7 +124,8 @@ namespace Zilon.Core.Tests.Tactics
             {
                 new SurvivalStat(0, -10, 10)
                 {
-                    Type = SurvivalStatType.Satiety, Rate = 1
+                    Type = SurvivalStatType.Satiety,
+                    Rate = 1
                 }
             };
             _survivalDataMock.Setup(x => x.Stats).Returns(survivalStats);

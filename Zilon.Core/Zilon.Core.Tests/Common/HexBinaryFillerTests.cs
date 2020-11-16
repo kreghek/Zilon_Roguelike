@@ -27,7 +27,8 @@ namespace Zilon.Core.Common.Tests
             // ASSERT
             regions.Should().BeEquivalentTo(new[]
             {
-                new OffsetCoords(4, 4), new OffsetCoords(5, 4)
+                new OffsetCoords(4, 4),
+                new OffsetCoords(5, 4)
             });
         }
 

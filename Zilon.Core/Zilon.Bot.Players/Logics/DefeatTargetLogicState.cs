@@ -51,7 +51,6 @@ namespace Zilon.Bot.Players.Logics
             {
                 var act = attackParams.TacticalAct;
 
-
                 var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
                 return attackTask;
             }

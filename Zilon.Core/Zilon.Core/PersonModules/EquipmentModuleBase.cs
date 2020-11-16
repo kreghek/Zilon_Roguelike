@@ -41,7 +41,7 @@ namespace Zilon.Core.PersonModules
         /// Конструирует экземпляр модуля работы с экипировкой типа <see cref="EquipmentCarrierBase"/>.
         /// </summary>
         /// <param name="slots">Набор слотов, на основе которого создаётся модель работы с экипировкой.</param>
-        protected EquipmentModuleBase([NotNull][ItemNotNull] IEnumerable<PersonSlotSubScheme> slots)
+        protected EquipmentModuleBase([NotNull] [ItemNotNull] IEnumerable<PersonSlotSubScheme> slots)
         {
             if (slots == null)
             {

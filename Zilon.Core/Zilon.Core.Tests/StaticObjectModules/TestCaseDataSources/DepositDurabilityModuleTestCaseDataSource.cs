@@ -15,11 +15,15 @@ namespace Zilon.Core.Tests.StaticObjectModules.TestCaseDataSources
                 // damages, for example new [] { 6, 4 }.
                 yield return new TestCaseData(1, 10, new[]
                 {
-                    6, 4
+                    6,
+                    4
                 });
                 yield return new TestCaseData(2, 10, new[]
                 {
-                    6, 4, 5, 5
+                    6,
+                    4,
+                    5,
+                    5
                 });
                 yield return new TestCaseData(1, 1, new[]
                 {
@@ -31,7 +35,8 @@ namespace Zilon.Core.Tests.StaticObjectModules.TestCaseDataSources
                 });
                 yield return new TestCaseData(1, 10, new[]
                 {
-                    6, 6
+                    6,
+                    6
                 });
             }
         }

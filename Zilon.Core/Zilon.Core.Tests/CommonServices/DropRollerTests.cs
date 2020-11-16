@@ -25,16 +25,17 @@ namespace Zilon.Core.Tests.CommonServices
             // ARRANGE
             var records = new[]
             {
-                new DropTableRecordSubScheme("trophy1", 16), new DropTableRecordSubScheme("trophy2", 64)
+                new DropTableRecordSubScheme("trophy1", 16),
+                new DropTableRecordSubScheme("trophy2", 64)
             };
 
             var roll = 16;
 
             var recMods = records.Select(x => new DropTableModRecord
-            {
-                Record = x,
-                ModifiedWeight = x.Weight
-            })
+                {
+                    Record = x,
+                    ModifiedWeight = x.Weight
+                })
                 .ToArray();
 
             // ACT
