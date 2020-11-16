@@ -23,7 +23,7 @@ namespace Zilon.Core.Common
                 throw new ArgumentNullException(nameof(matrix));
             }
 
-            var snapshotCellmap = (bool[,])matrix.Items.Clone();
+            var snapshotCellMap = (bool[,])matrix.Items.Clone();
 
             var regionPoints = new List<OffsetCoords>();
 
@@ -46,7 +46,7 @@ namespace Zilon.Core.Common
                     continue;
                 }
 
-                if (!snapshotCellmap[currentCell.X, currentCell.Y])
+                if (!snapshotCellMap[currentCell.X, currentCell.Y])
                 {
                     // Заливаем только живые клетки.
                     // Мертвые клетки являются границей, они не попадают в заливку.
@@ -54,7 +54,7 @@ namespace Zilon.Core.Common
                 }
 
                 regionPoints.Add(currentCell);
-                snapshotCellmap[currentCell.X, currentCell.Y] = false;
+                snapshotCellMap[currentCell.X, currentCell.Y] = false;
 
                 var cubeCoords = HexHelper.ConvertToCube(currentCell);
                 var clockwiseOffsets = HexHelper.GetOffsetClockwise();
@@ -88,7 +88,7 @@ namespace Zilon.Core.Common
                 throw new ArgumentNullException(nameof(matrix));
             }
 
-            var snapshotCellmap = (bool[,])matrix.Items.Clone();
+            var snapshotCellMap = (bool[,])matrix.Items.Clone();
 
             var regionPoints = new List<OffsetCoords>();
 
@@ -111,7 +111,7 @@ namespace Zilon.Core.Common
                     continue;
                 }
 
-                if (!snapshotCellmap[currentCell.X, currentCell.Y])
+                if (!snapshotCellMap[currentCell.X, currentCell.Y])
                 {
                     // Заливаем только живые клетки.
                     // Мертвые клетки являются границей, они не попадают в заливку.
@@ -119,7 +119,7 @@ namespace Zilon.Core.Common
                 }
 
                 regionPoints.Add(currentCell);
-                snapshotCellmap[currentCell.X, currentCell.Y] = false;
+                snapshotCellMap[currentCell.X, currentCell.Y] = false;
 
                 var cubeCoords = HexHelper.ConvertToCube(currentCell);
                 var clockwiseOffsets = HexHelper.GetOffsetClockwise();
@@ -132,8 +132,8 @@ namespace Zilon.Core.Common
 
                     if (!openPoints.Contains(neighbourCoords))
                     {
-                        var isAvailbleFor7 = CheckAvailableFor7(neighbourCoords, matrix);
-                        if (isAvailbleFor7)
+                        var isAvailableFor7 = CheckAvailableFor7(neighbourCoords, matrix);
+                        if (isAvailableFor7)
                         {
                             openPoints.Add(neighbourCoords);
                         }
@@ -170,11 +170,19 @@ namespace Zilon.Core.Common
 
         private static bool IsInBounds(OffsetCoords coords, int width, int height)
         {
+            // ReSharper disable once ArgumentsStyleNamedExpression
+            // ReSharper disable once ArgumentsStyleLiteral
+            // ReSharper disable once ArgumentsStyleOther
+            // There used named argument to improve readable of code.
             if (!ValueInRange(value: coords.X, min: 0, max: width - 1))
             {
                 return false;
             }
 
+            // ReSharper disable once ArgumentsStyleNamedExpression
+            // ReSharper disable once ArgumentsStyleLiteral
+            // ReSharper disable once ArgumentsStyleOther
+            // There used named argument to improve readable of code.
             if (!ValueInRange(value: coords.Y, min: 0, max: height - 1))
             {
                 return false;
