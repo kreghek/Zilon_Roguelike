@@ -50,9 +50,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic,
-                    ApRank = 10
+                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
                 }
             };
 
@@ -134,16 +132,13 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = OffenseType.Tactical,
-                    Impact = ImpactType.Kinetic,
-                    ApRank = 10
+                    Type = OffenseType.Tactical, Impact = ImpactType.Kinetic, ApRank = 10
                 }
             };
 
             var actConstrainsSubScheme = new TestTacticalActConstrainsSubScheme
             {
-                PropResourceType = "7-62",
-                PropResourceCount = 1
+                PropResourceType = "7-62", PropResourceCount = 1
             };
 
             var inventory = new InventoryModule();

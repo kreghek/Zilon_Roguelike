@@ -34,8 +34,7 @@ namespace Zilon.Bot.Players.Triggers
                 {
                     yield return new ResourceSelection
                     {
-                        Resource = resource,
-                        Rule = rule
+                        Resource = resource, Rule = rule
                     };
                 }
             }

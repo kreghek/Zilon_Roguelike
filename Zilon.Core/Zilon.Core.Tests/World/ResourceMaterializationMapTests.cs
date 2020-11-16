@@ -84,9 +84,7 @@ namespace Zilon.Core.World.Tests
                 .Where(x => x.State != SectorNodeState.SectorMaterialized)
                 .Select(x => new NodeInfo
                 {
-                    Current = x,
-                    Parent = introNode,
-                    ParentResource = currentResource
+                    Current = x, Parent = introNode, ParentResource = currentResource
                 });
             openList.AddRange(nextNodes1);
 
@@ -107,9 +105,7 @@ namespace Zilon.Core.World.Tests
                     .Select(x =>
                         new NodeInfo
                         {
-                            Current = x,
-                            Parent = nextNode.Current,
-                            ParentResource = nextResource
+                            Current = x, Parent = nextNode.Current, ParentResource = nextResource
                         });
                 openList.AddRange(nextNodes2);
 

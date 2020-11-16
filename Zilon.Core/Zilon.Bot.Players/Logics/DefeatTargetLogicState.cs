@@ -105,8 +105,7 @@ namespace Zilon.Bot.Players.Logics
 
             var attackParams = new AttackParams
             {
-                IsAvailable = isInDistance && targetIsOnLine,
-                TacticalAct = act
+                IsAvailable = isInDistance && targetIsOnLine, TacticalAct = act
             };
 
             return attackParams;
