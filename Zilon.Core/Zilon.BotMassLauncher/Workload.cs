@@ -12,19 +12,19 @@ namespace Zilon.BotMassLauncher
 {
     internal class Workload
     {
-        private static string _pathToEnv;
-        private static int _launchCount;
-        private static string _scorePrefix;
-        private static string _parallel;
-        private static bool _isInfinite;
-        private static ulong _infiniteCounter;
-        private static string _botMode;
-        private static string _scorePath;
-        private static string _botCatalog;
-        private static string _botAssembly;
-        private static string _schemeCatalogPath;
-        private static CancellationToken _shutdownToken;
-        private static CancellationTokenSource _shutdownTokenSource;
+        private string _pathToEnv;
+        private int _launchCount;
+        private string _scorePrefix;
+        private string _parallel;
+        private bool _isInfinite;
+        private ulong _infiniteCounter;
+        private string _botMode;
+        private string _scorePath;
+        private string _botCatalog;
+        private string _botAssembly;
+        private string _schemeCatalogPath;
+        private CancellationToken _shutdownToken;
+        private CancellationTokenSource _shutdownTokenSource;
 
         private readonly ILogger<Workload> _logger;
 
@@ -84,7 +84,7 @@ namespace Zilon.BotMassLauncher
             _logger.LogTrace("[x] COMPLETE");
         }
 
-        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        private void CurrentDomain_ProcessExit(object sender, EventArgs e)
         {
             if (_shutdownTokenSource != null)
             {
@@ -92,7 +92,7 @@ namespace Zilon.BotMassLauncher
             }
         }
 
-        private static void RunEnvironment(int iteration, ILogger logger)
+        private void RunEnvironment(int iteration, ILogger logger)
         {
             var modeArg = string.Empty;
             if (!string.IsNullOrEmpty(_botMode))
@@ -137,7 +137,7 @@ namespace Zilon.BotMassLauncher
             logger.LogTrace($"[x] {infiniteCounterPrefix}ITERATION {iteration} FINISHED");
         }
 
-        private static void RunLinear(ILogger logger)
+        private void RunLinear(ILogger logger)
         {
             for (var i = 0; i < _launchCount; i++)
             {
@@ -145,7 +145,7 @@ namespace Zilon.BotMassLauncher
             }
         }
 
-        private static void RunParallel(int maxDegreeOfParallelism, ILogger logger)
+        private void RunParallel(int maxDegreeOfParallelism, ILogger logger)
         {
             var parallelOptions = new ParallelOptions
             {
