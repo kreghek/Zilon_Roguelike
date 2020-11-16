@@ -59,6 +59,28 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
         }
 
+        private static void DrawLineBetweenNodes(
+            Matrix<bool> matrix,
+            CubeCoords openCubeCoord,
+            CubeCoords unitedCubeCoord)
+        {
+            var line = CubeCoordsHelper.CubeDrawLine(openCubeCoord, unitedCubeCoord);
+            foreach (var lineItem in line)
+            {
+                var offsetCoords = HexHelper.ConvertToOffset(lineItem);
+                matrix[offsetCoords.X, offsetCoords.Y] = true;
+
+                // Коридоры должны быть размером в Size7.
+                // Поэтому вокруг каждой точки прорываем соседей.
+
+                var neighborCoords = HexHelper.GetNeighbors(offsetCoords.X, offsetCoords.Y);
+                foreach (var coords in neighborCoords)
+                {
+                    matrix[coords.X, coords.Y] = true;
+                }
+            }
+        }
+
         private static void FindClosestNodesBetweenOpenAndUnited(
             List<RegionDraft> openRegions,
             OffsetCoords[] unitedRegionCoords,
@@ -89,28 +111,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                             nearbyOpenRegion = currentOpenRegion;
                         }
                     }
-                }
-            }
-        }
-
-        private static void DrawLineBetweenNodes(
-            Matrix<bool> matrix,
-            CubeCoords openCubeCoord,
-            CubeCoords unitedCubeCoord)
-        {
-            var line = CubeCoordsHelper.CubeDrawLine(openCubeCoord, unitedCubeCoord);
-            foreach (var lineItem in line)
-            {
-                var offsetCoords = HexHelper.ConvertToOffset(lineItem);
-                matrix[offsetCoords.X, offsetCoords.Y] = true;
-
-                // Коридоры должны быть размером в Size7.
-                // Поэтому вокруг каждой точки прорываем соседей.
-
-                var neighborCoords = HexHelper.GetNeighbors(offsetCoords.X, offsetCoords.Y);
-                foreach (var coords in neighborCoords)
-                {
-                    matrix[coords.X, coords.Y] = true;
                 }
             }
         }

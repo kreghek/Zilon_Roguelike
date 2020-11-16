@@ -24,23 +24,6 @@ namespace Zilon.Core.Tests.Commands
         private Mock<IInventoryState> _inventoryStateMock;
 
         /// <summary>
-        /// Тест проверяет, что можно использовать экипировку.
-        /// </summary>
-        [Test]
-        public void CanExecute_SelectEquipment_ReturnsTrue()
-        {
-            // ARRANGE
-            var command = ServiceProvider.GetRequiredService<EquipCommand>();
-            command.SlotIndex = 0;
-
-            // ACT
-            var canExecute = command.CanExecute();
-
-            // ASSERT
-            canExecute.Should().BeTrue();
-        }
-
-        /// <summary>
         /// Тест проверяет, что нельзя экипировать ресурс.
         /// </summary>
         [Test]
@@ -75,6 +58,23 @@ namespace Zilon.Core.Tests.Commands
 
             // ASSERT
             canExecute.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что можно использовать экипировку.
+        /// </summary>
+        [Test]
+        public void CanExecute_SelectEquipment_ReturnsTrue()
+        {
+            // ARRANGE
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
+            command.SlotIndex = 0;
+
+            // ACT
+            var canExecute = command.CanExecute();
+
+            // ASSERT
+            canExecute.Should().BeTrue();
         }
 
         /// <summary>

@@ -10,16 +10,6 @@ namespace Zilon.Core.PathFinding
     internal static class SortedListExtensions
     {
         /// <summary>
-        /// Checks if the SortedList is empty.
-        /// </summary>
-        /// <param name="sortedList">SortedList to check if it is empty.</param>
-        /// <returns>True if sortedList is empty, false if it still has elements.</returns>
-        internal static bool IsEmpty<TKey, TValue>(this SortedList<TKey, TValue> sortedList)
-        {
-            return sortedList.Count == 0;
-        }
-
-        /// <summary>
         /// Adds a INode to the SortedList.
         /// </summary>
         /// <param name="sortedList">SortedList to add the node to.</param>
@@ -28,6 +18,16 @@ namespace Zilon.Core.PathFinding
         internal static void AddWithData(this SortedList<int, IGraphNode> sortedList, IGraphNode node, AStarData data)
         {
             sortedList.Add(data.TotalCost, node);
+        }
+
+        /// <summary>
+        /// Checks if the SortedList is empty.
+        /// </summary>
+        /// <param name="sortedList">SortedList to check if it is empty.</param>
+        /// <returns>True if sortedList is empty, false if it still has elements.</returns>
+        internal static bool IsEmpty<TKey, TValue>(this SortedList<TKey, TValue> sortedList)
+        {
+            return sortedList.Count == 0;
         }
 
         /// <summary>

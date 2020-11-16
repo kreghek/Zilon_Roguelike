@@ -31,6 +31,16 @@ namespace Zilon.Core.World
             _personInitializer = personInitializer;
         }
 
+        private static IActor CreateActor(
+            IPerson humanPerson,
+            IGraphNode startNode,
+            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
+        {
+            var actor = new Actor(humanPerson, actorTaskSource, startNode);
+
+            return actor;
+        }
+
         public async Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid)
         {
             var globe = new Globe(_globeTransitionHandler);
@@ -60,16 +70,6 @@ namespace Zilon.Core.World
             }
 
             return globe;
-        }
-
-        private static IActor CreateActor(
-            IPerson humanPerson,
-            IGraphNode startNode,
-            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
-        {
-            var actor = new Actor(humanPerson, actorTaskSource, startNode);
-
-            return actor;
         }
     }
 }

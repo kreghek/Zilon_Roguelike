@@ -21,6 +21,20 @@ namespace Zilon.Core.PersonModules
             }
         }
 
+        /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
+        public override void ResetStats()
+        {
+            // эта реализация пока ничего не делает.
+        }
+
+        /// <summary>
+        /// Обновление состояния данных о выживании.
+        /// </summary>
+        public override void Update()
+        {
+            // Монстры не требуют расчета своих характеристик.
+        }
+
         private static SurvivalStat[] GetStats([NotNull] IMonsterScheme monsterScheme)
         {
             if (monsterScheme is null)
@@ -35,20 +49,6 @@ namespace Zilon.Core.PersonModules
                     Type = SurvivalStatType.Health
                 }
             };
-        }
-
-        /// <summary>
-        /// Обновление состояния данных о выживании.
-        /// </summary>
-        public override void Update()
-        {
-            // Монстры не требуют расчета своих характеристик.
-        }
-
-        /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
-        public override void ResetStats()
-        {
-            // эта реализация пока ничего не делает.
         }
     }
 }

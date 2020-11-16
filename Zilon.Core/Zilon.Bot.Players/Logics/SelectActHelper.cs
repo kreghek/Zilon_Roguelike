@@ -32,6 +32,32 @@ namespace Zilon.Bot.Players.Logics
             return availableActs.First();
         }
 
+        private static bool CheckPropResource(
+            IPropStore inventory,
+            string usedPropResourceType,
+            int usedPropResourceCount)
+        {
+            var props = inventory.CalcActualItems();
+            var propResources = new List<Resource>();
+            foreach (var prop in props)
+            {
+                var propResource = prop as Resource;
+                if (propResource == null)
+                {
+                    continue;
+                }
+
+                if (propResource.Scheme.Bullet?.Caliber == usedPropResourceType)
+                {
+                    propResources.Add(propResource);
+                }
+            }
+
+            var preferredPropResource = propResources.FirstOrDefault();
+
+            return (preferredPropResource != null) && (preferredPropResource.Count >= usedPropResourceCount);
+        }
+
         private static bool TacticalActIsAvailableByConstrains(
             ITacticalAct tacticalAct,
             [CanBeNull] IPropStore propStore)
@@ -66,32 +92,6 @@ namespace Zilon.Bot.Players.Logics
             }
 
             return false;
-        }
-
-        private static bool CheckPropResource(
-            IPropStore inventory,
-            string usedPropResourceType,
-            int usedPropResourceCount)
-        {
-            var props = inventory.CalcActualItems();
-            var propResources = new List<Resource>();
-            foreach (var prop in props)
-            {
-                var propResource = prop as Resource;
-                if (propResource == null)
-                {
-                    continue;
-                }
-
-                if (propResource.Scheme.Bullet?.Caliber == usedPropResourceType)
-                {
-                    propResources.Add(propResource);
-                }
-            }
-
-            var preferredPropResource = propResources.FirstOrDefault();
-
-            return (preferredPropResource != null) && (preferredPropResource.Count >= usedPropResourceCount);
         }
     }
 }

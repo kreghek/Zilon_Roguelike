@@ -20,6 +20,62 @@ namespace Zilon.Bot.Players.Logics.Tests
     public class SelectActHelperTests
     {
         [Test]
+        public void SelectBestAct_HasResourceRequireActAndHasNoInventory_SelectsDefault()
+        {
+            // ARRANGE
+
+            var acts = new ITacticalAct[]
+            {
+                new TacticalAct(
+                    new TestTacticalActScheme
+                    {
+                        Sid = "default",
+                        Stats = new TestTacticalActStatsSubScheme
+                        {
+                            Effect = TacticalActEffectType.Damage,
+                            Efficient = new Roll(3, 1),
+                            Offence = new TestTacticalActOffenceSubScheme
+                            {
+                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
+                            }
+                        }
+                    },
+                    new Roll(3, 1),
+                    new Roll(3, 3),
+                    null
+                ),
+                new TacticalAct(
+                    new TestTacticalActScheme
+                    {
+                        Sid = "resource-required",
+                        Stats = new TestTacticalActStatsSubScheme
+                        {
+                            Effect = TacticalActEffectType.Damage,
+                            Efficient = new Roll(3, 3),
+                            Offence = new TestTacticalActOffenceSubScheme
+                            {
+                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
+                            }
+                        },
+                        Constrains = new TestTacticalActConstrainsSubScheme
+                        {
+                            PropResourceType = "resource", PropResourceCount = 1
+                        }
+                    },
+                    new Roll(3, 1),
+                    new Roll(3, 3),
+                    null
+                )
+            };
+
+            // ACT
+            var factAct = SelectActHelper.SelectBestAct(acts, null);
+
+            // ASSERT
+            factAct.Scheme.Sid.Should().Be("default");
+        }
+
+        [Test]
         public void SelectBestAct_HasResourceRequireActAndHasNoResource_SelectsDefault()
         {
             // ARRANGE
@@ -74,62 +130,6 @@ namespace Zilon.Bot.Players.Logics.Tests
 
             // ACT
             var factAct = SelectActHelper.SelectBestAct(acts, inventory);
-
-            // ASSERT
-            factAct.Scheme.Sid.Should().Be("default");
-        }
-
-        [Test]
-        public void SelectBestAct_HasResourceRequireActAndHasNoInventory_SelectsDefault()
-        {
-            // ARRANGE
-
-            var acts = new ITacticalAct[]
-            {
-                new TacticalAct(
-                    new TestTacticalActScheme
-                    {
-                        Sid = "default",
-                        Stats = new TestTacticalActStatsSubScheme
-                        {
-                            Effect = TacticalActEffectType.Damage,
-                            Efficient = new Roll(3, 1),
-                            Offence = new TestTacticalActOffenceSubScheme
-                            {
-                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
-                            }
-                        }
-                    },
-                    new Roll(3, 1),
-                    new Roll(3, 3),
-                    null
-                ),
-                new TacticalAct(
-                    new TestTacticalActScheme
-                    {
-                        Sid = "resource-required",
-                        Stats = new TestTacticalActStatsSubScheme
-                        {
-                            Effect = TacticalActEffectType.Damage,
-                            Efficient = new Roll(3, 3),
-                            Offence = new TestTacticalActOffenceSubScheme
-                            {
-                                ApRank = 1, Impact = ImpactType.Kinetic, Type = OffenseType.Tactical
-                            }
-                        },
-                        Constrains = new TestTacticalActConstrainsSubScheme
-                        {
-                            PropResourceType = "resource", PropResourceCount = 1
-                        }
-                    },
-                    new Roll(3, 1),
-                    new Roll(3, 3),
-                    null
-                )
-            };
-
-            // ACT
-            var factAct = SelectActHelper.SelectBestAct(acts, null);
 
             // ASSERT
             factAct.Scheme.Sid.Should().Be("default");

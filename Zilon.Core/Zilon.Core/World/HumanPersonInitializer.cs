@@ -22,16 +22,6 @@ namespace Zilon.Core.World
             _player = player ?? throw new ArgumentNullException(nameof(player));
         }
 
-        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe)
-        {
-            var person = CreateStartPerson(PERSON_SCHEME_SID, _personFactory, Fractions.MainPersonFraction);
-            _player.BindPerson(globe, person);
-            return Task.FromResult(new[]
-            {
-                person
-            }.AsEnumerable());
-        }
-
         /// <summary>
         /// Создаёт персонажа.
         /// </summary>
@@ -43,6 +33,16 @@ namespace Zilon.Core.World
         {
             var startPerson = personFactory.Create(personSchemeSid, fraction);
             return startPerson;
+        }
+
+        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe)
+        {
+            var person = CreateStartPerson(PERSON_SCHEME_SID, _personFactory, Fractions.MainPersonFraction);
+            _player.BindPerson(globe, person);
+            return Task.FromResult(new[]
+            {
+                person
+            }.AsEnumerable());
         }
     }
 }

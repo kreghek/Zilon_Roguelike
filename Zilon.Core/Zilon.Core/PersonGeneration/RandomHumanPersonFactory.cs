@@ -63,6 +63,11 @@ namespace Zilon.Core.PersonGeneration
             AddResource(inventory, "bullet-45", 100);
         }
 
+        private IDropTableScheme GetArmors()
+        {
+            return SchemeService.GetScheme<IDropTableScheme>(BODY_DROP_SID);
+        }
+
         private IDropTableScheme GetHeads()
         {
             return SchemeService.GetScheme<IDropTableScheme>(HEAD_DROP_SID);
@@ -71,11 +76,6 @@ namespace Zilon.Core.PersonGeneration
         private IDropTableScheme GetMainWeapons()
         {
             return SchemeService.GetScheme<IDropTableScheme>(MAIN_WEAPON_DROP_SID);
-        }
-
-        private IDropTableScheme GetArmors()
-        {
-            return SchemeService.GetScheme<IDropTableScheme>(BODY_DROP_SID);
         }
 
         private IDropTableScheme GetOffWeapons()

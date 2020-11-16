@@ -6,53 +6,6 @@
     public static class MatrixHelper
     {
         /// <summary>
-        /// Поворот матрицы на 90 градусов по часовой.
-        /// </summary>
-        /// <typeparam name="T"> Тип элементов массива. </typeparam>
-        /// <param name="sourceMatrix"> Исходная матрица. </param>
-        /// <returns> Возращает повёрнутую матрицу. </returns>
-        public static Matrix<T> RotateClockwise<T>(Matrix<T> sourceMatrix)
-        {
-            if (sourceMatrix is null)
-            {
-                throw new System.ArgumentNullException(nameof(sourceMatrix));
-            }
-
-            var n = sourceMatrix.Width;
-            var m = sourceMatrix.Height;
-
-            var ret = new Matrix<T>(m, n);
-
-            for (var i = 0; i < m; i++)
-            {
-                for (var j = 0; j < n; j++)
-                {
-                    ret[i, j] = sourceMatrix[n - j - 1, i];
-                }
-            }
-
-            return ret;
-        }
-
-        /// <summary>
-        /// Поворот матрицы на указанный угол.
-        /// </summary>
-        /// <typeparam name="T"> Тип элементов массива. </typeparam>
-        /// <param name="sourceMatrix"> Исходная матрица. </param>
-        /// <param name="rotation"> Угол поворота. </param>
-        /// <returns> Возращает повёрнутую матрицу. </returns>
-        public static Matrix<T> Rotate<T>(Matrix<T> sourceMatrix, MatrixRotation rotation)
-        {
-            var resultMatrix = sourceMatrix;
-            for (var i = 0; i < (int)rotation; i++)
-            {
-                resultMatrix = RotateClockwise(resultMatrix);
-            }
-
-            return resultMatrix;
-        }
-
-        /// <summary>
         /// Растягивает матрицу.
         /// </summary>
         /// <param name="matrix"> Исходная матрица. </param>
@@ -92,6 +45,53 @@
             }
 
             return scaledMatrix;
+        }
+
+        /// <summary>
+        /// Поворот матрицы на указанный угол.
+        /// </summary>
+        /// <typeparam name="T"> Тип элементов массива. </typeparam>
+        /// <param name="sourceMatrix"> Исходная матрица. </param>
+        /// <param name="rotation"> Угол поворота. </param>
+        /// <returns> Возращает повёрнутую матрицу. </returns>
+        public static Matrix<T> Rotate<T>(Matrix<T> sourceMatrix, MatrixRotation rotation)
+        {
+            var resultMatrix = sourceMatrix;
+            for (var i = 0; i < (int)rotation; i++)
+            {
+                resultMatrix = RotateClockwise(resultMatrix);
+            }
+
+            return resultMatrix;
+        }
+
+        /// <summary>
+        /// Поворот матрицы на 90 градусов по часовой.
+        /// </summary>
+        /// <typeparam name="T"> Тип элементов массива. </typeparam>
+        /// <param name="sourceMatrix"> Исходная матрица. </param>
+        /// <returns> Возращает повёрнутую матрицу. </returns>
+        public static Matrix<T> RotateClockwise<T>(Matrix<T> sourceMatrix)
+        {
+            if (sourceMatrix is null)
+            {
+                throw new System.ArgumentNullException(nameof(sourceMatrix));
+            }
+
+            var n = sourceMatrix.Width;
+            var m = sourceMatrix.Height;
+
+            var ret = new Matrix<T>(m, n);
+
+            for (var i = 0; i < m; i++)
+            {
+                for (var j = 0; j < n; j++)
+                {
+                    ret[i, j] = sourceMatrix[n - j - 1, i];
+                }
+            }
+
+            return ret;
         }
     }
 }

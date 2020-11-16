@@ -21,6 +21,11 @@ namespace Zilon.Core.Tactics.Behaviour
             _actorTaskReceiver = spscChannel;
         }
 
+        private bool CurrentActorSetAndIsDead()
+        {
+            return (_currentActorIntention?.Person?.GetModuleSafe<ISurvivalModule>()?.IsDead).GetValueOrDefault();
+        }
+
         public async Task IntentAsync(IIntention intention, IActor activeActor)
         {
             if (_intentionWait)
@@ -84,11 +89,6 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             _intentionWait = false;
             _currentActorIntention = null;
-        }
-
-        private bool CurrentActorSetAndIsDead()
-        {
-            return (_currentActorIntention?.Person?.GetModuleSafe<ISurvivalModule>()?.IsDead).GetValueOrDefault();
         }
     }
 }

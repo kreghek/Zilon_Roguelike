@@ -18,6 +18,11 @@ namespace Zilon.Core.Common
             _values = new ConcurrentQueue<T>();
         }
 
+        public void Dispose()
+        {
+            _semaphore.Dispose();
+        }
+
         public async Task<T> ReceiveAsync()
         {
             TaskCompletionSource<T> source;
@@ -61,11 +66,6 @@ namespace Zilon.Core.Common
             {
                 _semaphore.Release();
             }
-        }
-
-        public void Dispose()
-        {
-            _semaphore.Dispose();
         }
     }
 }

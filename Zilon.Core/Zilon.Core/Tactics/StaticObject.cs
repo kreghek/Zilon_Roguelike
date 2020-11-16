@@ -24,6 +24,13 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc/>
+        private bool GetIsMapBlock()
+        {
+            var propContainer = this.GetModuleSafe<IPropContainer>();
+            return (propContainer?.IsMapBlock).GetValueOrDefault(true);
+        }
+
+        /// <inheritdoc/>
         public int Id { get; }
 
         /// <inheritdoc/>
@@ -75,13 +82,6 @@ namespace Zilon.Core.Tactics
             }
 
             durabilityModule.TakeDamage(value);
-        }
-
-        /// <inheritdoc/>
-        private bool GetIsMapBlock()
-        {
-            var propContainer = this.GetModuleSafe<IPropContainer>();
-            return (propContainer?.IsMapBlock).GetValueOrDefault(true);
         }
     }
 }

@@ -7,20 +7,6 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public sealed class StaticObjectActUsageHandler : IActUsageHandler
     {
-        /// <inheritdoc/>
-        public Type TargetType => typeof(IStaticObject);
-
-        /// <inheritdoc/>
-        public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll)
-        {
-            if (tacticalActRoll is null)
-            {
-                throw new ArgumentNullException(nameof(tacticalActRoll));
-            }
-
-            UseOnStaticObject(target as IStaticObject, tacticalActRoll);
-        }
-
         /// <summary>
         /// Применяет действие на предмет, на который можно подействовать (сундук/дверь/камень).
         /// </summary>
@@ -34,6 +20,20 @@ namespace Zilon.Core.Tactics
             }
 
             target.TakeDamage(tacticalActRoll.Efficient);
+        }
+
+        /// <inheritdoc/>
+        public Type TargetType => typeof(IStaticObject);
+
+        /// <inheritdoc/>
+        public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll)
+        {
+            if (tacticalActRoll is null)
+            {
+                throw new ArgumentNullException(nameof(tacticalActRoll));
+            }
+
+            UseOnStaticObject(target as IStaticObject, tacticalActRoll);
         }
     }
 }

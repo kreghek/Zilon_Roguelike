@@ -16,6 +16,28 @@ namespace Zilon.Core.MapGenerators
             _dice = dice;
         }
 
+        private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
+        {
+            switch (resourceType)
+            {
+                case SectorResourceType.Aurihulk:
+                case SectorResourceType.Copper:
+                case SectorResourceType.Gold:
+                case SectorResourceType.Iron:
+                case SectorResourceType.Silver:
+                    return PropContainerPurpose.OreDeposits;
+                case SectorResourceType.Stones:
+                    return PropContainerPurpose.StoneDeposits;
+                case SectorResourceType.CherryBrushes:
+                    return PropContainerPurpose.CherryBrush;
+                case SectorResourceType.WaterPuddles:
+                    return PropContainerPurpose.Puddle;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
         public PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
         {
             if (resourceDepositData is null)
@@ -58,28 +80,6 @@ namespace Zilon.Core.MapGenerators
             }
 
             return _dice.RollFromList(purposeList);
-        }
-
-        private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
-        {
-            switch (resourceType)
-            {
-                case SectorResourceType.Aurihulk:
-                case SectorResourceType.Copper:
-                case SectorResourceType.Gold:
-                case SectorResourceType.Iron:
-                case SectorResourceType.Silver:
-                    return PropContainerPurpose.OreDeposits;
-                case SectorResourceType.Stones:
-                    return PropContainerPurpose.StoneDeposits;
-                case SectorResourceType.CherryBrushes:
-                    return PropContainerPurpose.CherryBrush;
-                case SectorResourceType.WaterPuddles:
-                    return PropContainerPurpose.Puddle;
-
-                default:
-                    throw new InvalidOperationException();
-            }
         }
     }
 }

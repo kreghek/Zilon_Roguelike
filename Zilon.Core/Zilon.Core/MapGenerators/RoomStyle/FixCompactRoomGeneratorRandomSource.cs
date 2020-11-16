@@ -30,6 +30,22 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         /// <summary>
+        /// Выбрасывает случайный размер комнаты.
+        /// </summary>
+        /// <param name="minSize">Минимальный размер комнаты.</param>
+        /// <param name="maxSize">Максимальный размер комнаты.</param>
+        /// <returns>
+        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
+        /// </returns>
+        /// <remarks>
+        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
+        /// </remarks>
+        protected override Size RollRoomSize(int minSize, int maxSize)
+        {
+            return new Size(minSize, minSize);
+        }
+
+        /// <summary>
         /// Выбрасывает случайный набор уникальных координат в матрице комнат указаной длины.
         /// </summary>
         /// <param name="roomGridSize">Размер матрицы комнат.</param>
@@ -50,22 +66,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Выбрасывает случайный размер комнаты.
-        /// </summary>
-        /// <param name="minSize">Минимальный размер комнаты.</param>
-        /// <param name="maxSize">Максимальный размер комнаты.</param>
-        /// <returns>
-        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
-        /// </returns>
-        /// <remarks>
-        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
-        /// </remarks>
-        protected override Size RollRoomSize(int minSize, int maxSize)
-        {
-            return new Size(minSize, minSize);
         }
     }
 }

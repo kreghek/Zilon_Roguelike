@@ -29,12 +29,16 @@ namespace Zilon.Core.World
 
         protected GCHandle BitsHandle { get; private set; }
 
-        public void SetPixel(int x, int y, System.Drawing.Color colour)
+        public void Dispose()
         {
-            int index = x + (y * Width);
-            int col = colour.ToArgb();
+            if (Disposed)
+            {
+                return;
+            }
 
-            Bits[index] = col;
+            Disposed = true;
+            Bitmap.Dispose();
+            BitsHandle.Free();
         }
 
         public Color GetPixel(int x, int y)
@@ -46,16 +50,12 @@ namespace Zilon.Core.World
             return result;
         }
 
-        public void Dispose()
+        public void SetPixel(int x, int y, System.Drawing.Color colour)
         {
-            if (Disposed)
-            {
-                return;
-            }
+            int index = x + (y * Width);
+            int col = colour.ToArgb();
 
-            Disposed = true;
-            Bitmap.Dispose();
-            BitsHandle.Free();
+            Bits[index] = col;
         }
     }
 }

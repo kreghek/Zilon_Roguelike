@@ -19,16 +19,10 @@ namespace Zilon.Core.Schemes
         public string[] ClassesRequired { get; set; }
 
         /// <summary>
-        /// Требует наличия родительского перка.
+        /// Требует уровень персонажа не ниже указанного.
         /// </summary>
         [ExcludeFromCodeCoverage]
-        public string ParentPerkSid { get; set; }
-
-        /// <summary>
-        /// Требует у родительского перка суммарный уровень владения не ниже указанного.
-        /// </summary>
-        [ExcludeFromCodeCoverage]
-        public int MinParentPerkLevel { get; set; }
+        public int LevelRequired { get; set; }
 
         /// <summary>
         /// Требует у родительского перка суммарный уровень владения не выше указанного.
@@ -37,10 +31,16 @@ namespace Zilon.Core.Schemes
         public int MaxParentPerkLevel { get; set; }
 
         /// <summary>
-        /// Требует уровень персонажа не ниже указанного.
+        /// Требует у родительского перка суммарный уровень владения не ниже указанного.
         /// </summary>
         [ExcludeFromCodeCoverage]
-        public int LevelRequired { get; set; }
+        public int MinParentPerkLevel { get; set; }
+
+        /// <summary>
+        /// Требует наличия родительского перка.
+        /// </summary>
+        [ExcludeFromCodeCoverage]
+        public string ParentPerkSid { get; set; }
 
         /// <summary>
         /// Требует наличия предмета у персонажа.

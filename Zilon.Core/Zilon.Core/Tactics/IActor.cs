@@ -19,6 +19,11 @@ namespace Zilon.Core.Tactics
     public interface IActor : IAttackTarget, IPassMapBlocker
     {
         /// <summary>
+        /// Указывает, может ли актёр выполнять задачи.
+        /// </summary>
+        bool CanExecuteTasks { get; }
+
+        /// <summary>
         /// Песонаж, который лежит в основе актёра.
         /// </summary>
         IPerson Person { get; }
@@ -26,11 +31,11 @@ namespace Zilon.Core.Tactics
         IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
 
         /// <summary>
-        /// Указывает, может ли актёр выполнять задачи.
+        /// Добыча ресурса из залежей.
         /// </summary>
-        bool CanExecuteTasks { get; }
-
-        void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
+        /// <param name="deposit"> Целевые залежи. </param>
+        /// <param name="method"> Метод добычи. </param>
+        void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.
@@ -45,12 +50,16 @@ namespace Zilon.Core.Tactics
         /// <param name="method"> Метод открытия контейнера. </param>
         void OpenContainer(IStaticObject container, IOpenContainerMethod method);
 
+        void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
+
         /// <summary>
-        /// Добыча ресурса из залежей.
+        /// Приенение действия к указанной цели.
         /// </summary>
-        /// <param name="deposit"> Целевые залежи. </param>
-        /// <param name="method"> Метод добычи. </param>
-        void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
+        /// <param name="target"> Цель действия. </param>
+        /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
+        void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
+
+        void UseProp(IProp usedProp);
 
         /// <summary>
         /// Происходит, когда актёр переместился.
@@ -81,14 +90,5 @@ namespace Zilon.Core.Tactics
         /// Выстреливает, когда актёр использует предмет.
         /// </summary>
         event EventHandler<UsedPropEventArgs> UsedProp;
-
-        /// <summary>
-        /// Приенение действия к указанной цели.
-        /// </summary>
-        /// <param name="target"> Цель действия. </param>
-        /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
-        void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
-
-        void UseProp(IProp usedProp);
     }
 }

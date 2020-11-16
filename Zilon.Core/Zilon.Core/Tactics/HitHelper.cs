@@ -12,6 +12,24 @@ namespace Zilon.Core.Tactics
     public static class HitHelper
     {
         /// <summary>
+        /// Возвращает оборону с наиболее предпочтительными характеристиками. Фактически, самого высокого уровня.
+        /// </summary>
+        /// <param name="currentDefences"> Текущие обороны. </param>
+        /// <returns> Возвращает объект предпочтительной обороны. </returns>
+        public static PersonDefenceItem CalcPreferredDefense(IEnumerable<PersonDefenceItem> currentDefences)
+        {
+            var currentDefensesArray = currentDefences.ToArray();
+            if (!currentDefensesArray.Any())
+            {
+                return null;
+            }
+
+            var sortedDefenses = currentDefensesArray.OrderByDescending(x => x.Level);
+            var preferredDeference = sortedDefenses.First();
+            return preferredDeference;
+        }
+
+        /// <summary>
         /// Рассчитывает успешный бросок для прохода обороны.
         /// </summary>
         /// <param name="defenceItem"> Проверяемая оборона. </param>
@@ -28,24 +46,6 @@ namespace Zilon.Core.Tactics
             var successToHit = CalcSuccessToHitRollInner(defenceItem.Level);
 
             return successToHit;
-        }
-
-        /// <summary>
-        /// Возвращает оборону с наиболее предпочтительными характеристиками. Фактически, самого высокого уровня.
-        /// </summary>
-        /// <param name="currentDefences"> Текущие обороны. </param>
-        /// <returns> Возвращает объект предпочтительной обороны. </returns>
-        public static PersonDefenceItem CalcPreferredDefense(IEnumerable<PersonDefenceItem> currentDefences)
-        {
-            var currentDefensesArray = currentDefences.ToArray();
-            if (!currentDefensesArray.Any())
-            {
-                return null;
-            }
-
-            var sortedDefenses = currentDefensesArray.OrderByDescending(x => x.Level);
-            var preferredDeference = sortedDefenses.First();
-            return preferredDeference;
         }
 
         /// <summary>

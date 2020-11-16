@@ -6,6 +6,11 @@
     public interface IDropTableRecordSubScheme : ISubScheme
     {
         /// <summary>
+        /// Дополнительный дроп к текущему.
+        /// </summary>
+        IDropTableScheme[] Extra { get; }
+
+        /// <summary>
         /// Максимальное количество ресурсов.
         /// </summary>
         /// <remarks>
@@ -36,10 +41,5 @@
         /// Чем выше, тем веротянее будет выбрана данная запись при разрешении дропа.
         /// </remarks>
         int Weight { get; }
-
-        /// <summary>
-        /// Дополнительный дроп к текущему.
-        /// </summary>
-        IDropTableScheme[] Extra { get; }
     }
 }

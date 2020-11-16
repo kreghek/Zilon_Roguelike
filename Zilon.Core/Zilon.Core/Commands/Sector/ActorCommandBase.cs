@@ -20,8 +20,6 @@ namespace Zilon.Core.Commands
             PlayerState = playerState;
         }
 
-        protected ISectorUiState PlayerState { get; }
-
         /// <summary>
         /// Текущий активный актёр.
         /// </summary>
@@ -33,5 +31,7 @@ namespace Zilon.Core.Commands
         /// </summary>
         [CanBeNull]
         public IActorViewModel CurrentActorViewModel => PlayerState.ActiveActor;
+
+        protected ISectorUiState PlayerState { get; }
     }
 }

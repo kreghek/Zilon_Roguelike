@@ -14,6 +14,11 @@ namespace Zilon.GlobeObserver
 {
     internal sealed class StartUp : InitializationBase
     {
+        public override void ConfigureAux(IServiceProvider serviceFactory)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void RegisterServices(IServiceCollection serviceCollection)
         {
             base.RegisterServices(serviceCollection);
@@ -23,11 +28,6 @@ namespace Zilon.GlobeObserver
                 (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
             serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceCollection.AddSingleton<IPersonInitializer, AutoPersonInitializer>();
-        }
-
-        public override void ConfigureAux(IServiceProvider serviceFactory)
-        {
-            throw new NotImplementedException();
         }
 
         protected override void RegisterBot(IServiceCollection serviceCollection)

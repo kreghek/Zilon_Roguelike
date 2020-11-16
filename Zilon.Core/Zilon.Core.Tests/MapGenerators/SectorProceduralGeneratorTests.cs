@@ -113,22 +113,6 @@ namespace Zilon.Core.Tests.MapGenerators
                 sectorMaterializationService);
         }
 
-        private static ISectorSubScheme CreateSectorScheme()
-        {
-            return new TestSectorSubScheme
-            {
-                RegularMonsterSids = new[]
-                {
-                    "rat"
-                },
-                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
-                {
-                    RegionCount = 20,
-                    RegionSize = 20
-                }
-            };
-        }
-
         private static ISectorNode CreateSectorNode(ISectorSubScheme sectorScheme)
         {
             var biomeMock = new Mock<IBiome>();
@@ -141,6 +125,21 @@ namespace Zilon.Core.Tests.MapGenerators
             sectorNodeMock.SetupGet(x => x.State).Returns(SectorNodeState.SchemeKnown);
             var sectorNode = sectorNodeMock.Object;
             return sectorNode;
+        }
+
+        private static ISectorSubScheme CreateSectorScheme()
+        {
+            return new TestSectorSubScheme
+            {
+                RegularMonsterSids = new[]
+                {
+                    "rat"
+                },
+                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
+                {
+                    RegionCount = 20, RegionSize = 20
+                }
+            };
         }
     }
 }

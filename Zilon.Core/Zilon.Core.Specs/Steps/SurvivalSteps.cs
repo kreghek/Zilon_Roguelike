@@ -30,88 +30,6 @@ namespace Zilon.Core.Specs.Steps
         {
         }
 
-        [Given(@"В инвентаре у актёра есть еда: (.*) количество: (.*)")]
-        public void GivenВИнвентареУАктёраЕстьЕдаСыр(string propSid, int count)
-        {
-            var actor = Context.GetActiveActor();
-            Context.AddResourceToActor(propSid, count, actor);
-        }
-
-        [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((сытость|вода|хп)\)")]
-        [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((\-сытость|\-вода|\-хп)\)")]
-        public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(
-            string propSid,
-            string provisionStat)
-        {
-            var actor = Context.GetActiveActor();
-            PersonRuleDirection direction;
-            ConsumeCommonRuleType consumeRuleType;
-            ParseProvisionStat(provisionStat, out direction, out consumeRuleType);
-
-            TestPropScheme propScheme = CreateTestPropScheme(propSid, direction, consumeRuleType);
-
-            FeatureContextBase.AddResourceToActor(propScheme, 1, actor);
-        }
-
-        private static void ParseProvisionStat(
-            string provisionStat,
-            out PersonRuleDirection direction,
-            out ConsumeCommonRuleType consumeRuleType)
-        {
-            direction = PersonRuleDirection.Positive;
-            switch (provisionStat)
-            {
-                case "сытость":
-                    consumeRuleType = ConsumeCommonRuleType.Satiety;
-                    break;
-
-                case "вода":
-                    consumeRuleType = ConsumeCommonRuleType.Thirst;
-                    break;
-
-                case "хп":
-                    consumeRuleType = ConsumeCommonRuleType.Health;
-                    break;
-
-                case "-сытость":
-                    consumeRuleType = ConsumeCommonRuleType.Satiety;
-                    direction = PersonRuleDirection.Negative;
-                    break;
-
-                case "-вода":
-                    consumeRuleType = ConsumeCommonRuleType.Thirst;
-                    direction = PersonRuleDirection.Negative;
-                    break;
-
-                case "-хп":
-                    consumeRuleType = ConsumeCommonRuleType.Health;
-                    direction = PersonRuleDirection.Negative;
-                    break;
-
-                default:
-                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
-            }
-        }
-
-        private static TestPropScheme CreateTestPropScheme(
-            string propSid,
-            PersonRuleDirection direction,
-            ConsumeCommonRuleType consumeRuleType)
-        {
-            return new TestPropScheme
-            {
-                Sid = propSid,
-                Use = new TestPropUseSubScheme
-                {
-                    Consumable = true,
-                    CommonRules = new[]
-                    {
-                        new ConsumeCommonRule(consumeRuleType, PersonRuleLevel.Lesser, direction)
-                    }
-                }
-            };
-        }
-
         [Given(@"Актёр значение (.*) равное (.*)")]
         public void GivenАктёрЗначениеСытостьРавное(string statName, int statValue)
         {
@@ -153,33 +71,118 @@ namespace Zilon.Core.Specs.Steps
             targetStat.SetShare(statValue);
         }
 
-        [When(@"Я перемещаю персонажа на (.*) клетку")]
-        public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)
+        [Given(@"В инвентаре у актёра есть еда: (.*) количество: (.*)")]
+        public void GivenВИнвентареУАктёраЕстьЕдаСыр(string propSid, int count)
         {
-            var targetCoords = new[]
-            {
-                new OffsetCoords(1, 0), new OffsetCoords(0, 0)
-            };
+            var actor = Context.GetActiveActor();
+            Context.AddResourceToActor(propSid, count, actor);
+        }
 
-            for (var i = 0; i < moveCount; i++)
+        [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((сытость|вода|хп)\)")]
+        [Given(@"В инвентаре у актёра есть фейковый провиант (.*) \((\-сытость|\-вода|\-хп)\)")]
+        public void GivenВИнвентареУАктёраЕстьФейковыйПровиантFake_FoodНаХарактеристикуЭффективностью(
+            string propSid,
+            string provisionStat)
+        {
+            var actor = Context.GetActiveActor();
+            PersonRuleDirection direction;
+            ConsumeCommonRuleType consumeRuleType;
+            ParseProvisionStat(provisionStat, out direction, out consumeRuleType);
+
+            TestPropScheme propScheme = CreateTestPropScheme(propSid, direction, consumeRuleType);
+
+            FeatureContextBase.AddResourceToActor(propScheme, 1, actor);
+        }
+
+        [Then(@"Актёр под эффектом (.*)")]
+        public void ThenАктёрПодЭффектом(string effectName)
+        {
+            var actor = Context.GetActiveActor();
+
+            GetEffectStatAndLevelByName(effectName,
+                out SurvivalStatType stat,
+                out SurvivalStatHazardLevel level);
+
+            if (stat != SurvivalStatType.Undefined)
             {
-                Context.MoveOnceActiveActor(targetCoords[i % 2]);
+                var effect = actor.Person.GetModule<IEffectsModule>().Items
+                    .OfType<SurvivalStatHazardEffect>()
+                    .SingleOrDefault(x => x.Type == stat);
+
+                effect.Should().NotBeNull();
+                effect.Level.Should().Be(level);
+            }
+            else
+            {
+                var effects = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>();
+                effects.Should().BeEmpty();
             }
         }
 
-        [When(@"Актёр использует предмет (.*) на себя")]
-        public void WhenАктёрСъедаетЕду(string propSid)
+        [Then(@"Значение (сытость|вода) стало (.*)")]
+        public void ThenЗначениеStatСтало(string stat, int expectedValue)
         {
-            Context.UsePropByActiveActor(propSid);
+            var actor = Context.GetActiveActor();
+
+            int? survivalStatValue;
+            switch (stat)
+            {
+                case "сытость":
+                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Satiety);
+                    break;
+
+                case "вода":
+                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Hydration);
+                    break;
+
+                default:
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
+            }
+
+            survivalStatValue.Should().Be(expectedValue);
         }
 
-        [When(@"Актёр использует предмет (.*) на себя (\d+) раз")]
-        public async Task WhenАctorUsePropNTimesAsync(string propSid, int times)
+        [Then(@"Значение (сытость|вода) уменьшилось на (.*) и стало (.*)")]
+        public void ThenЗначениеStatУменьшилосьНаRate(string stat, int hungerRate, int expectedValue)
         {
-            for (var i = 0; i < times; i++)
+            var actor = Context.GetActiveActor();
+
+            switch (stat)
             {
-                Context.UsePropByActiveActor(propSid);
-                await WaitForIteration(1).ConfigureAwait(false);
+                case "сытость":
+                    GetSurvivalValue(actor, SurvivalStatType.Satiety).Should().Be(expectedValue);
+                    break;
+
+                case "вода":
+                    GetSurvivalValue(actor, SurvivalStatType.Hydration).Should().Be(expectedValue);
+                    break;
+
+                default:
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
+            }
+        }
+
+        [Then(@"Значение (сытость|вода) повысилось на (.*) и уменьшилось на (.*) за игровой цикл и стало (.*)")]
+        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(
+            string stat,
+            int satietyValue,
+            int hungerRate,
+            int expectedValue)
+        {
+            var actor = Context.GetActiveActor();
+
+            switch (stat)
+            {
+                case "сытость":
+                    GetSurvivalValue(actor, SurvivalStatType.Satiety).Should().Be(expectedValue);
+                    break;
+
+                case "вода":
+                    GetSurvivalValue(actor, SurvivalStatType.Hydration).Should().Be(expectedValue);
+                    break;
+
+                default:
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
             }
         }
 
@@ -227,96 +230,53 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        [Then(@"Значение (сытость|вода) уменьшилось на (.*) и стало (.*)")]
-        public void ThenЗначениеStatУменьшилосьНаRate(string stat, int hungerRate, int expectedValue)
+        [When(@"Актёр использует предмет (.*) на себя (\d+) раз")]
+        public async Task WhenАctorUsePropNTimesAsync(string propSid, int times)
         {
-            var actor = Context.GetActiveActor();
-
-            switch (stat)
+            for (var i = 0; i < times; i++)
             {
-                case "сытость":
-                    GetSurvivalValue(actor, SurvivalStatType.Satiety).Should().Be(expectedValue);
-                    break;
-
-                case "вода":
-                    GetSurvivalValue(actor, SurvivalStatType.Hydration).Should().Be(expectedValue);
-                    break;
-
-                default:
-                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
+                Context.UsePropByActiveActor(propSid);
+                await WaitForIteration(1).ConfigureAwait(false);
             }
         }
 
-        [Then(@"Значение (сытость|вода) повысилось на (.*) и уменьшилось на (.*) за игровой цикл и стало (.*)")]
-        public void ThenЗначениеСытостиПовысилосьНаЕдиниц(
-            string stat,
-            int satietyValue,
-            int hungerRate,
-            int expectedValue)
+        [When(@"Актёр использует предмет (.*) на себя")]
+        public void WhenАктёрСъедаетЕду(string propSid)
         {
-            var actor = Context.GetActiveActor();
+            Context.UsePropByActiveActor(propSid);
+        }
 
-            switch (stat)
+        [When(@"Я перемещаю персонажа на (.*) клетку")]
+        public void WhenЯПеремещаюПерсонажаНаОднуКлетку(int moveCount)
+        {
+            var targetCoords = new[]
             {
-                case "сытость":
-                    GetSurvivalValue(actor, SurvivalStatType.Satiety).Should().Be(expectedValue);
-                    break;
+                new OffsetCoords(1, 0), new OffsetCoords(0, 0)
+            };
 
-                case "вода":
-                    GetSurvivalValue(actor, SurvivalStatType.Hydration).Should().Be(expectedValue);
-                    break;
-
-                default:
-                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
+            for (var i = 0; i < moveCount; i++)
+            {
+                Context.MoveOnceActiveActor(targetCoords[i % 2]);
             }
         }
 
-        [Then(@"Значение (сытость|вода) стало (.*)")]
-        public void ThenЗначениеStatСтало(string stat, int expectedValue)
+        private static TestPropScheme CreateTestPropScheme(
+            string propSid,
+            PersonRuleDirection direction,
+            ConsumeCommonRuleType consumeRuleType)
         {
-            var actor = Context.GetActiveActor();
-
-            int? survivalStatValue;
-            switch (stat)
+            return new TestPropScheme
             {
-                case "сытость":
-                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Satiety);
-                    break;
-
-                case "вода":
-                    survivalStatValue = GetSurvivalValue(actor, SurvivalStatType.Hydration);
-                    break;
-
-                default:
-                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
-            }
-
-            survivalStatValue.Should().Be(expectedValue);
-        }
-
-        [Then(@"Актёр под эффектом (.*)")]
-        public void ThenАктёрПодЭффектом(string effectName)
-        {
-            var actor = Context.GetActiveActor();
-
-            GetEffectStatAndLevelByName(effectName,
-                out SurvivalStatType stat,
-                out SurvivalStatHazardLevel level);
-
-            if (stat != SurvivalStatType.Undefined)
-            {
-                var effect = actor.Person.GetModule<IEffectsModule>().Items
-                    .OfType<SurvivalStatHazardEffect>()
-                    .SingleOrDefault(x => x.Type == stat);
-
-                effect.Should().NotBeNull();
-                effect.Level.Should().Be(level);
-            }
-            else
-            {
-                var effects = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>();
-                effects.Should().BeEmpty();
-            }
+                Sid = propSid,
+                Use = new TestPropUseSubScheme
+                {
+                    Consumable = true,
+                    CommonRules = new[]
+                    {
+                        new ConsumeCommonRule(consumeRuleType, PersonRuleLevel.Lesser, direction)
+                    }
+                }
+            };
         }
 
         private static void GetEffectStatAndLevelByName(
@@ -400,6 +360,46 @@ namespace Zilon.Core.Specs.Steps
         {
             var stat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == type);
             return stat?.Value;
+        }
+
+        private static void ParseProvisionStat(
+            string provisionStat,
+            out PersonRuleDirection direction,
+            out ConsumeCommonRuleType consumeRuleType)
+        {
+            direction = PersonRuleDirection.Positive;
+            switch (provisionStat)
+            {
+                case "сытость":
+                    consumeRuleType = ConsumeCommonRuleType.Satiety;
+                    break;
+
+                case "вода":
+                    consumeRuleType = ConsumeCommonRuleType.Thirst;
+                    break;
+
+                case "хп":
+                    consumeRuleType = ConsumeCommonRuleType.Health;
+                    break;
+
+                case "-сытость":
+                    consumeRuleType = ConsumeCommonRuleType.Satiety;
+                    direction = PersonRuleDirection.Negative;
+                    break;
+
+                case "-вода":
+                    consumeRuleType = ConsumeCommonRuleType.Thirst;
+                    direction = PersonRuleDirection.Negative;
+                    break;
+
+                case "-хп":
+                    consumeRuleType = ConsumeCommonRuleType.Health;
+                    direction = PersonRuleDirection.Negative;
+                    break;
+
+                default:
+                    throw new NotSupportedException("Передан неподдерживаемый тип характеристики.");
+            }
         }
     }
 }

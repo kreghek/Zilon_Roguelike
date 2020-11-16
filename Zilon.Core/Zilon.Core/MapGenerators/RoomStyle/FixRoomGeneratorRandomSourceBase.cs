@@ -20,6 +20,19 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         protected List<Tuple<OffsetCoords, OffsetCoords>> Connections { get; }
 
         /// <summary>
+        /// Выбрасывает случайный размер комнаты.
+        /// </summary>
+        /// <param name="minSize">Минимальный размер комнаты.</param>
+        /// <param name="maxSize">Максимальный размер комнаты.</param>
+        /// <returns>
+        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
+        /// </returns>
+        /// <remarks>
+        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
+        /// </remarks>
+        protected abstract Size RollRoomSize(int minSize, int maxSize);
+
+        /// <summary>
         /// Выбирает комнаты, с которыми есть соединение.
         /// </summary>
         /// <param name="currentRoom">Текущая комната, для которой ищуются соединённые соседи.</param>
@@ -135,18 +148,5 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 openTransitions.First()
             };
         }
-
-        /// <summary>
-        /// Выбрасывает случайный размер комнаты.
-        /// </summary>
-        /// <param name="minSize">Минимальный размер комнаты.</param>
-        /// <param name="maxSize">Максимальный размер комнаты.</param>
-        /// <returns>
-        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
-        /// </returns>
-        /// <remarks>
-        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
-        /// </remarks>
-        protected abstract Size RollRoomSize(int minSize, int maxSize);
     }
 }

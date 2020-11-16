@@ -24,9 +24,9 @@ namespace Zilon.Core.MapGenerators
             _equipmentDurableService = equipmentDurableService;
         }
 
-        public IScoreManager ScoreManager { get; set; }
-
         public NationalUnityEventService NationalUnityEventService { get; set; }
+
+        public IScoreManager ScoreManager { get; set; }
 
         public ISector Create(ISectorMap map, ILocationScheme locationScheme)
         {

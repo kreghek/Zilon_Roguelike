@@ -25,40 +25,45 @@ namespace Zilon.BotEnvironment
         private const string BOT_MODE_ARG = "Mode";
         private static Startup _startUp;
 
-        private static async Task Main(string[] args)
+        private static Type GetBotActorTaskSource(Type registerManagerType)
         {
-            var scoreFilePreffix = ArgumentHelper.GetProgramArgument(args, SCORE_PREFFIX_ARG);
-
-            var serviceCollection = new ServiceCollection();
-
-            _startUp = new Startup();
-            _startUp.RegisterServices(serviceCollection);
-
-            var botSettings = new BotSettings
+            var props = registerManagerType.GetProperties();
+            foreach (var prop in props)
             {
-                Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG)
-            };
+                var actorTaskSourceAttribute = prop.GetCustomAttribute<ActorTaskSourceTypeAttribute>();
+                if (actorTaskSourceAttribute != null)
+                {
+                    return prop.GetValue(null) as Type;
+                }
+            }
 
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-            LoadBotAssembly("cdt", "Zilon.Bot.Players.NetCore.dll", serviceCollection, serviceProvider);
-            var serviceProviderWithDynamicBotServices = serviceCollection.BuildServiceProvider();
+            return null;
+        }
 
-            var globeInitializer = serviceProviderWithDynamicBotServices.GetRequiredService<IGlobeInitializer>();
-
-            var autoPlayEngine = new AutoplayEngine(_startUp, botSettings, scoreFilePreffix, globeInitializer);
-
-            var player = serviceProvider.GetRequiredService<IPlayer>();
-            var startPerson = player.MainPerson;
-
-            var globe = await autoPlayEngine.CreateGlobeAsync();
-
-            await autoPlayEngine.StartAsync(globe, startPerson);
-
-            Console.WriteLine(autoPlayEngine.LogOutput);
-
-            if (!ArgumentHelper.HasProgramArgument(args, SERVER_RUN_ARG))
+        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType)
+            where TAttribute : Attribute
+        {
+            var methods = registerManagerType.GetMethods();
+            foreach (var method in methods)
             {
-                Console.ReadLine();
+                var specificAttr = method.GetCustomAttribute<TAttribute>();
+                if (specificAttr != null)
+                {
+                    return method;
+                }
+            }
+
+            return null;
+        }
+
+        private static IEnumerable<Type> GetTypesWithHelpAttribute<TAttribute>(Assembly assembly)
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.GetCustomAttributes(typeof(TAttribute), true).Length > 0)
+                {
+                    yield return type;
+                }
             }
         }
 
@@ -96,46 +101,41 @@ namespace Zilon.BotEnvironment
             });
         }
 
-        private static IEnumerable<Type> GetTypesWithHelpAttribute<TAttribute>(Assembly assembly)
+        private static async Task Main(string[] args)
         {
-            foreach (Type type in assembly.GetTypes())
+            var scoreFilePreffix = ArgumentHelper.GetProgramArgument(args, SCORE_PREFFIX_ARG);
+
+            var serviceCollection = new ServiceCollection();
+
+            _startUp = new Startup();
+            _startUp.RegisterServices(serviceCollection);
+
+            var botSettings = new BotSettings
             {
-                if (type.GetCustomAttributes(typeof(TAttribute), true).Length > 0)
-                {
-                    yield return type;
-                }
-            }
-        }
+                Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG)
+            };
 
-        private static Type GetBotActorTaskSource(Type registerManagerType)
-        {
-            var props = registerManagerType.GetProperties();
-            foreach (var prop in props)
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            LoadBotAssembly("cdt", "Zilon.Bot.Players.NetCore.dll", serviceCollection, serviceProvider);
+            var serviceProviderWithDynamicBotServices = serviceCollection.BuildServiceProvider();
+
+            var globeInitializer = serviceProviderWithDynamicBotServices.GetRequiredService<IGlobeInitializer>();
+
+            var autoPlayEngine = new AutoplayEngine(_startUp, botSettings, scoreFilePreffix, globeInitializer);
+
+            var player = serviceProvider.GetRequiredService<IPlayer>();
+            var startPerson = player.MainPerson;
+
+            var globe = await autoPlayEngine.CreateGlobeAsync();
+
+            await autoPlayEngine.StartAsync(globe, startPerson);
+
+            Console.WriteLine(autoPlayEngine.LogOutput);
+
+            if (!ArgumentHelper.HasProgramArgument(args, SERVER_RUN_ARG))
             {
-                var actorTaskSourceAttribute = prop.GetCustomAttribute<ActorTaskSourceTypeAttribute>();
-                if (actorTaskSourceAttribute != null)
-                {
-                    return prop.GetValue(null) as Type;
-                }
+                Console.ReadLine();
             }
-
-            return null;
-        }
-
-        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType)
-            where TAttribute : Attribute
-        {
-            var methods = registerManagerType.GetMethods();
-            foreach (var method in methods)
-            {
-                var specificAttr = method.GetCustomAttribute<TAttribute>();
-                if (specificAttr != null)
-                {
-                    return method;
-                }
-            }
-
-            return null;
         }
     }
 }

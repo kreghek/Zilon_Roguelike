@@ -22,47 +22,36 @@ namespace Zilon.Core.Benchmarks.Move
         private IGlobe _globe;
         private ServiceProvider _serviceProvider;
 
-        [Benchmark(Description = "Move100")]
-        public void Move100()
+        [IterationSetup]
+        public void IterationSetup()
         {
-            var player = _serviceProvider.GetRequiredService<IPlayer>();
+            var startUp = new Startup();
+            var serviceCollection = new ServiceCollection();
+            startUp.RegisterServices(serviceCollection);
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
-            var moveCommand = _serviceProvider.GetRequiredService<MoveCommand>();
-            var commandManger = _serviceProvider.GetRequiredService<ICommandManager>();
+            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
+            var humanPlayer = _serviceProvider.GetRequiredService<IPlayer>();
+            var humanActorTaskSource =
+                _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
 
-            var gameLoop = new GameLoop(_globe);
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            gameLoop.StartProcessAsync();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
 
-            for (var i = 0; i < 100; i++)
+            _globe = new TestGlobe(personScheme, humanActorTaskSource);
+
+            IActor actor = _globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Single();
+            var person = actor.Person;
+
+            humanPlayer.BindPerson(_globe, person);
+
+            var actorViewModel = new TestActorViewModel
             {
-                var currentActorNode = playerState.ActiveActor.Actor.Node;
-                var nextNodes = player.SectorNode.Sector.Map.GetNext(currentActorNode);
-                var moveTargetNode = (HexNode)nextNodes.First();
+                Actor = actor
+            };
 
-                playerState.SelectedViewModel = new TestNodeViewModel
-                {
-                    Node = moveTargetNode
-                };
-
-                commandManger.Push(moveCommand);
-
-                ICommand command;
-                do
-                {
-                    command = commandManger.Pop();
-
-                    try
-                    {
-                        command?.Execute();
-                    }
-                    catch (Exception exception)
-                    {
-                        throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
-                    }
-                } while (command != null);
-            }
+            playerState.ActiveActor = actorViewModel;
         }
 
         [Benchmark(Description = "Move1")]
@@ -104,36 +93,47 @@ namespace Zilon.Core.Benchmarks.Move
             }
         }
 
-        [IterationSetup]
-        public void IterationSetup()
+        [Benchmark(Description = "Move100")]
+        public void Move100()
         {
-            var startUp = new Startup();
-            var serviceCollection = new ServiceCollection();
-            startUp.RegisterServices(serviceCollection);
-
-            _serviceProvider = serviceCollection.BuildServiceProvider();
-
+            var player = _serviceProvider.GetRequiredService<IPlayer>();
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
-            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
-            var humanPlayer = _serviceProvider.GetRequiredService<IPlayer>();
-            var humanActorTaskSource =
-                _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var moveCommand = _serviceProvider.GetRequiredService<MoveCommand>();
+            var commandManger = _serviceProvider.GetRequiredService<ICommandManager>();
 
-            var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
+            var gameLoop = new GameLoop(_globe);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            gameLoop.StartProcessAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            _globe = new TestGlobe(personScheme, humanActorTaskSource);
-
-            IActor actor = _globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Single();
-            var person = actor.Person;
-
-            humanPlayer.BindPerson(_globe, person);
-
-            var actorViewModel = new TestActorViewModel
+            for (var i = 0; i < 100; i++)
             {
-                Actor = actor
-            };
+                var currentActorNode = playerState.ActiveActor.Actor.Node;
+                var nextNodes = player.SectorNode.Sector.Map.GetNext(currentActorNode);
+                var moveTargetNode = (HexNode)nextNodes.First();
 
-            playerState.ActiveActor = actorViewModel;
+                playerState.SelectedViewModel = new TestNodeViewModel
+                {
+                    Node = moveTargetNode
+                };
+
+                commandManger.Push(moveCommand);
+
+                ICommand command;
+                do
+                {
+                    command = commandManger.Pop();
+
+                    try
+                    {
+                        command?.Execute();
+                    }
+                    catch (Exception exception)
+                    {
+                        throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+                    }
+                } while (command != null);
+            }
         }
     }
 }

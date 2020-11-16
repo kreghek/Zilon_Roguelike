@@ -20,14 +20,14 @@ namespace Zilon.Core.Common
         }
 
         /// <summary>
-        /// Минимальное значение диапазона.
-        /// </summary>
-        public T Min { get; }
-
-        /// <summary>
         /// Максимальное значение диапазона.
         /// </summary>
         public T Max { get; }
+
+        /// <summary>
+        /// Минимальное значение диапазона.
+        /// </summary>
+        public T Min { get; }
 
         /// <summary>
         /// Проверяет вхождение указанного значения в диапазон.

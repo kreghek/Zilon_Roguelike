@@ -19,11 +19,6 @@ namespace Zilon.Bot.Players
             _logicStateTreePatterns = logicStateTreePatterns;
         }
 
-        public override void Configure(IBotSettings botSettings)
-        {
-            _botSettings = botSettings;
-        }
-
         protected override ILogicStrategy GetLogicStrategy(IActor actor)
         {
             if (actor is null)
@@ -78,6 +73,11 @@ namespace Zilon.Bot.Players
                 default:
                     throw new NotSupportedException();
             }
+        }
+
+        public override void Configure(IBotSettings botSettings)
+        {
+            _botSettings = botSettings;
         }
     }
 }

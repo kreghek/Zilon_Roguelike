@@ -8,24 +8,14 @@ namespace Zilon.Core.Schemes
     public sealed class CraftSubScheme : SubSchemeBase
     {
         /// <summary>
-        /// Ресурсы (черновики), которые требуются для прототипирования.
-        /// </summary>
-        public PropSet[] PrototypeSources { get; set; }
-
-        /// <summary>
         /// Инструменты, требуемые для создания предмета.
         /// </summary>
         public InstrumentLevelFunctionSubScheme[] InstrumentFunctions { get; set; }
 
         /// <summary>
-        /// Компетенции, требуемые для создания предмета.
+        /// Количество мастеров, тредуемых для изготовления предмета.
         /// </summary>
-        public ProfessionRequirementSubScheme[] Professions { get; set; }
-
-        /// <summary>
-        /// Исходные ресурсы.
-        /// </summary>
-        public PropSet[] Sources { get; set; }
+        public int MasterCount { get; set; }
 
         /// <summary>
         /// Количество выходной продукции.
@@ -33,8 +23,18 @@ namespace Zilon.Core.Schemes
         public int ProductOutput { get; set; }
 
         /// <summary>
-        /// Количество мастеров, тредуемых для изготовления предмета.
+        /// Компетенции, требуемые для создания предмета.
         /// </summary>
-        public int MasterCount { get; set; }
+        public ProfessionRequirementSubScheme[] Professions { get; set; }
+
+        /// <summary>
+        /// Ресурсы (черновики), которые требуются для прототипирования.
+        /// </summary>
+        public PropSet[] PrototypeSources { get; set; }
+
+        /// <summary>
+        /// Исходные ресурсы.
+        /// </summary>
+        public PropSet[] Sources { get; set; }
     }
 }

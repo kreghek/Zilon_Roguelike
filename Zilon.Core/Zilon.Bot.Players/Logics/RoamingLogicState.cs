@@ -13,28 +13,6 @@ namespace Zilon.Bot.Players.Logics
         {
         }
 
-        private MoveTask CreateBypassMoveTask(IActor actor, ISector sector)
-        {
-            var map = sector.Map;
-            var availableNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
-
-            var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
-            for (var i = 0; i < 3; i++)
-            {
-                var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
-
-                if (map.IsPositionAvailableFor(targetNode, actor))
-                {
-                    var taskContext = new ActorTaskContext(sector);
-                    var moveTask = new MoveTask(actor, taskContext, targetNode, map);
-
-                    return moveTask;
-                }
-            }
-
-            return null;
-        }
-
         public override IActorTask GetTask(
             IActor actor,
             ISectorTaskSourceContext context,
@@ -78,6 +56,28 @@ namespace Zilon.Bot.Players.Logics
             }
 
             Complete = true;
+            return null;
+        }
+
+        private MoveTask CreateBypassMoveTask(IActor actor, ISector sector)
+        {
+            var map = sector.Map;
+            var availableNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
+
+            var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
+            for (var i = 0; i < 3; i++)
+            {
+                var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
+
+                if (map.IsPositionAvailableFor(targetNode, actor))
+                {
+                    var taskContext = new ActorTaskContext(sector);
+                    var moveTask = new MoveTask(actor, taskContext, targetNode, map);
+
+                    return moveTask;
+                }
+            }
+
             return null;
         }
     }

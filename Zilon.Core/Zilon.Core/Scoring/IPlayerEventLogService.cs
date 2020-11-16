@@ -10,15 +10,15 @@ namespace Zilon.Core.Scoring
         IPlayer Player { get; }
 
         /// <summary>
-        /// Зафиксировать событие.
-        /// </summary>
-        /// <param name="playerEvent"></param>
-        void Log(IPlayerEvent playerEvent);
-
-        /// <summary>
         /// Вернуть последнее зарегистрированние событие.
         /// </summary>
         /// <returns></returns>
         IPlayerEvent GetPlayerEvent();
+
+        /// <summary>
+        /// Зафиксировать событие.
+        /// </summary>
+        /// <param name="playerEvent"></param>
+        void Log(IPlayerEvent playerEvent);
     }
 }

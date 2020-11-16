@@ -24,9 +24,9 @@ namespace Zilon.Emulation.Common
             _globeInitializer = globeInitializer;
         }
 
-        protected IServiceScope ServiceScope { get; set; }
-
         protected BotSettings BotSettings { get; }
+
+        protected IServiceScope ServiceScope { get; set; }
 
         public async Task<IGlobe> CreateGlobeAsync()
         {

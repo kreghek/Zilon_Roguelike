@@ -18,6 +18,11 @@ namespace Zilon.Core.World
         {
         }
 
+        public override string ToString()
+        {
+            return $"[{Biome.LocationScheme}] {SectorScheme}";
+        }
+
         public ISector Sector { get; private set; }
 
         public IBiome Biome { get; private set; }
@@ -48,10 +53,5 @@ namespace Zilon.Core.World
         }
 
         public SectorNodeState State { get; private set; }
-
-        public override string ToString()
-        {
-            return $"[{Biome.LocationScheme}] {SectorScheme}";
-        }
     }
 }

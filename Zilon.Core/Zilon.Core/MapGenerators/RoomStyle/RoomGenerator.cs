@@ -27,6 +27,55 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         /// <summary>
+        /// Соединяет комнаты коридорами.
+        /// </summary>
+        /// <param name="map">Карта, в рамках которой происходит генерация.</param>
+        /// <param name="rooms">Существующие комнаты.</param>
+        /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
+        public override void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
+        {
+            var roomNet = _randomSource.RollRoomNet(rooms, 1);
+            foreach (var roomPair in roomNet)
+            {
+                foreach (var selectedRoom in roomPair.Value)
+                {
+                    ConnectRoomsWithCorridor(map, roomPair.Key, selectedRoom, edgeHash);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Создаёт узлы комнат на карте.
+        /// </summary>
+        /// <param name="map">Карта, в рамках которой происходит генерация.</param>
+        /// <param name="rooms">Комнаты, для которых создаются узлы графа карты.</param>
+        /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
+        public override void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
+        {
+            if (map is null)
+            {
+                throw new ArgumentNullException(nameof(map));
+            }
+
+            if (rooms is null)
+            {
+                throw new ArgumentNullException(nameof(rooms));
+            }
+
+            if (edgeHash is null)
+            {
+                throw new ArgumentNullException(nameof(edgeHash));
+            }
+
+            var cellSize = RoomHelper.CalcCellSize(rooms);
+
+            foreach (var room in rooms)
+            {
+                CreateOneRoomNodes(map, edgeHash, room, cellSize);
+            }
+        }
+
+        /// <summary>
         /// Генерация комнат.
         /// </summary>
         /// <param name="roomCount">Количество комнат, которые будут сгенерированы.</param>
@@ -64,8 +113,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                 var room = new Room
                 {
-                    PositionX = rolledPosition.X,
-                    PositionY = rolledPosition.Y
+                    PositionX = rolledPosition.X, PositionY = rolledPosition.Y
                 };
 
                 roomGrid.SetRoom(rolledPosition.X, rolledPosition.Y, room);
@@ -92,55 +140,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             return rooms;
-        }
-
-        /// <summary>
-        /// Создаёт узлы комнат на карте.
-        /// </summary>
-        /// <param name="map">Карта, в рамках которой происходит генерация.</param>
-        /// <param name="rooms">Комнаты, для которых создаются узлы графа карты.</param>
-        /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
-        public override void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
-        {
-            if (map is null)
-            {
-                throw new ArgumentNullException(nameof(map));
-            }
-
-            if (rooms is null)
-            {
-                throw new ArgumentNullException(nameof(rooms));
-            }
-
-            if (edgeHash is null)
-            {
-                throw new ArgumentNullException(nameof(edgeHash));
-            }
-
-            var cellSize = RoomHelper.CalcCellSize(rooms);
-
-            foreach (var room in rooms)
-            {
-                CreateOneRoomNodes(map, edgeHash, room, cellSize);
-            }
-        }
-
-        /// <summary>
-        /// Соединяет комнаты коридорами.
-        /// </summary>
-        /// <param name="map">Карта, в рамках которой происходит генерация.</param>
-        /// <param name="rooms">Существующие комнаты.</param>
-        /// <param name="edgeHash">Хэш рёбер. Нужен для оптимизации при создании узлов графа карты.</param>
-        public override void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
-        {
-            var roomNet = _randomSource.RollRoomNet(rooms, 1);
-            foreach (var roomPair in roomNet)
-            {
-                foreach (var selectedRoom in roomPair.Value)
-                {
-                    ConnectRoomsWithCorridor(map, roomPair.Key, selectedRoom, edgeHash);
-                }
-            }
         }
 
         private void CreateOneRoomNodes(

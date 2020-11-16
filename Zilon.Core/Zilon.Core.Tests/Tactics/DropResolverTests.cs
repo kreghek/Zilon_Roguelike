@@ -18,72 +18,6 @@ namespace Zilon.Core.Tests.Tactics
     [Parallelizable(ParallelScope.All)]
     public class DropResolverTests
     {
-        /// <summary>
-        /// Тест проверяет, что во время злого часа срабатывает бонус на выброс злой тыквы.
-        /// </summary>
-        [Test]
-        public void Resolve_EvilPumpkinHour_EvipPumpkinChanceIncleased()
-        {
-            // ARRANGE
-
-            // Сейчас в коде генерация модификаторов строго завязана на этот символьныи иденфтикатор.
-            const string testPropSchemeSid = "evil-pumpkin";
-
-            // Максимальный пик дропа должен быть 2 ноября любого года. 2019 выбран произвольно.
-            var evilHourDate = new DateTime(2019, 11, 2);
-
-            const int PUMPKIN_WEIGHT = 1;
-            const int PUMPKIN_WEIGHT_BONUS = 5;
-            const int EXPECTED_WEIGHT = PUMPKIN_WEIGHT * PUMPKIN_WEIGHT_BONUS;
-
-            var testPropScheme = new TestPropScheme
-            {
-                Sid = testPropSchemeSid,
-                Equip = new TestPropEquipSubScheme()
-            };
-
-            var randomSourceMock = new Mock<IDropResolverRandomSource>();
-            randomSourceMock.Setup(x => x.RollWeight(It.IsAny<int>()))
-                .Returns(EXPECTED_WEIGHT);
-            var randomSource = randomSourceMock.Object;
-
-            var schemeServiceMock = new Mock<ISchemeService>();
-            schemeServiceMock.Setup(x => x.GetScheme<IPropScheme>(It.Is<string>(sid => sid == testPropSchemeSid)))
-                .Returns(testPropScheme);
-            var schemeService = schemeServiceMock.Object;
-
-            var propFactoryMock = new Mock<IPropFactory>();
-            propFactoryMock.Setup(x => x.CreateEquipment(It.IsAny<IPropScheme>()))
-                .Returns<IPropScheme>(scheme => new Equipment(scheme, null));
-            propFactoryMock.Setup(x => x.CreateResource(It.IsAny<IPropScheme>(), It.IsAny<int>()))
-                .Returns<IPropScheme, int>((scheme, count) => new Resource(scheme, count));
-            var propFactory = propFactoryMock.Object;
-
-            var userTimeProviderMock = new Mock<IUserTimeProvider>();
-            userTimeProviderMock.Setup(x => x.GetCurrentTime()).Returns(evilHourDate);
-            var userTimeProvider = userTimeProviderMock.Object;
-
-            var resolver = new DropResolver(randomSource, schemeService, propFactory, userTimeProvider);
-
-            var testDropTableRecord = new TestDropTableRecordSubScheme
-            {
-                SchemeSid = testPropSchemeSid,
-                Weight = 1
-            };
-
-            var testDropTable =
-                new TestDropTableScheme(1, testDropTableRecord, TestDropTableRecordSubScheme.CreateEmpty(1));
-
-            // ACT
-            var factProps = resolver.Resolve(new[]
-            {
-                testDropTable
-            });
-
-            // ASSERT
-            factProps[0].Scheme.Should().BeSameAs(testPropScheme);
-        }
-
         [Test]
         public void GetPropsTest()
         {
@@ -117,10 +51,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var testDropTableRecord = new TestDropTableRecordSubScheme
             {
-                SchemeSid = testPropSchemeSid,
-                Weight = 1,
-                MinCount = 1,
-                MaxCount = 1
+                SchemeSid = testPropSchemeSid, Weight = 1, MinCount = 1, MaxCount = 1
             };
 
             var testDropTable = new TestDropTableScheme(1, testDropTableRecord);
@@ -138,6 +69,70 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         /// <summary>
+        /// Тест проверяет, что во время злого часа срабатывает бонус на выброс злой тыквы.
+        /// </summary>
+        [Test]
+        public void Resolve_EvilPumpkinHour_EvipPumpkinChanceIncleased()
+        {
+            // ARRANGE
+
+            // Сейчас в коде генерация модификаторов строго завязана на этот символьныи иденфтикатор.
+            const string testPropSchemeSid = "evil-pumpkin";
+
+            // Максимальный пик дропа должен быть 2 ноября любого года. 2019 выбран произвольно.
+            var evilHourDate = new DateTime(2019, 11, 2);
+
+            const int PUMPKIN_WEIGHT = 1;
+            const int PUMPKIN_WEIGHT_BONUS = 5;
+            const int EXPECTED_WEIGHT = PUMPKIN_WEIGHT * PUMPKIN_WEIGHT_BONUS;
+
+            var testPropScheme = new TestPropScheme
+            {
+                Sid = testPropSchemeSid, Equip = new TestPropEquipSubScheme()
+            };
+
+            var randomSourceMock = new Mock<IDropResolverRandomSource>();
+            randomSourceMock.Setup(x => x.RollWeight(It.IsAny<int>()))
+                .Returns(EXPECTED_WEIGHT);
+            var randomSource = randomSourceMock.Object;
+
+            var schemeServiceMock = new Mock<ISchemeService>();
+            schemeServiceMock.Setup(x => x.GetScheme<IPropScheme>(It.Is<string>(sid => sid == testPropSchemeSid)))
+                .Returns(testPropScheme);
+            var schemeService = schemeServiceMock.Object;
+
+            var propFactoryMock = new Mock<IPropFactory>();
+            propFactoryMock.Setup(x => x.CreateEquipment(It.IsAny<IPropScheme>()))
+                .Returns<IPropScheme>(scheme => new Equipment(scheme, null));
+            propFactoryMock.Setup(x => x.CreateResource(It.IsAny<IPropScheme>(), It.IsAny<int>()))
+                .Returns<IPropScheme, int>((scheme, count) => new Resource(scheme, count));
+            var propFactory = propFactoryMock.Object;
+
+            var userTimeProviderMock = new Mock<IUserTimeProvider>();
+            userTimeProviderMock.Setup(x => x.GetCurrentTime()).Returns(evilHourDate);
+            var userTimeProvider = userTimeProviderMock.Object;
+
+            var resolver = new DropResolver(randomSource, schemeService, propFactory, userTimeProvider);
+
+            var testDropTableRecord = new TestDropTableRecordSubScheme
+            {
+                SchemeSid = testPropSchemeSid, Weight = 1
+            };
+
+            var testDropTable =
+                new TestDropTableScheme(1, testDropTableRecord, TestDropTableRecordSubScheme.CreateEmpty(1));
+
+            // ACT
+            var factProps = resolver.Resolve(new[]
+            {
+                testDropTable
+            });
+
+            // ASSERT
+            factProps[0].Scheme.Should().BeSameAs(testPropScheme);
+        }
+
+        /// <summary>
         /// Тест проверяет, что если для записи таблицы дропа задан дополнительный дроп,
         /// то он тоже выпадает.
         /// </summary>
@@ -151,8 +146,7 @@ namespace Zilon.Core.Tests.Tactics
 
             var testPropScheme = new TestPropScheme
             {
-                Sid = testPropSchemeSid,
-                Equip = new TestPropEquipSubScheme()
+                Sid = testPropSchemeSid, Equip = new TestPropEquipSubScheme()
             };
 
             var testExtraScheme = new TestPropScheme

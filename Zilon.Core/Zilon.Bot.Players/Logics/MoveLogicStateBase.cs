@@ -12,11 +12,11 @@ namespace Zilon.Bot.Players.Logics
             DecisionSource = decisionSource ?? throw new ArgumentNullException(nameof(decisionSource));
         }
 
-        protected MoveTask MoveTask { get; set; }
+        protected IDecisionSource DecisionSource { get; }
 
         protected IdleTask IdleTask { get; set; }
 
-        protected IDecisionSource DecisionSource { get; }
+        protected MoveTask MoveTask { get; set; }
 
         protected override void ResetData()
         {

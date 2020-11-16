@@ -18,17 +18,17 @@ namespace Zilon.Core.Tactics
             _valueToExecute = Task.Cost / 2;
         }
 
-        public IActorTask Task { get; }
-
-        public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
+        public IActor Actor { get; }
 
         public int Counter { get; private set; }
 
-        public bool TaskIsExecuting => Counter == _valueToExecute;
+        public IActorTask Task { get; }
 
         public bool TaskComplete => Counter <= 0;
 
-        public IActor Actor { get; }
+        public bool TaskIsExecuting => Counter == _valueToExecute;
+
+        public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
 
         public void UpdateCounter()
         {

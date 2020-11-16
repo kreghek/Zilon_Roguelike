@@ -33,6 +33,40 @@ namespace Zilon.Core.MapGenerators
                                                       nameof(staticObjectsGeneratorRandomSource));
         }
 
+        private IStaticObject CreateStaticObject(ISector sector, HexNode node, IResourceDepositData resourceDepositData)
+        {
+            var staticObjectPurpose = RollPurpose(resourceDepositData);
+
+            var factory = SelectStaticObjectFactory(staticObjectPurpose);
+
+            var staticObject = factory.Create(sector, node, default);
+
+            return staticObject;
+        }
+
+        private PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
+        {
+            return _staticObjectsGeneratorRandomSource.RollPurpose(resourceDepositData);
+        }
+
+        private IStaticObjectFactory SelectStaticObjectFactory(PropContainerPurpose staticObjectPurpose)
+        {
+            var factories = _staticObjectfactoryCollector.GetFactories();
+
+            foreach (var factory in factories)
+            {
+                if (factory.Purpose != staticObjectPurpose)
+                {
+                    continue;
+                }
+
+                return factory;
+            }
+
+            throw new InvalidOperationException(
+                $"Не обнаружена фабрика для статических объектов типа {staticObjectPurpose}");
+        }
+
         public Task CreateAsync(IStaticObjectGenerationContext generationContext)
         {
             if (generationContext is null)
@@ -65,40 +99,6 @@ namespace Zilon.Core.MapGenerators
             _chestGenerator.CreateChests(sector, sectorSubScheme, sector.Map.Regions);
 
             return Task.CompletedTask;
-        }
-
-        private IStaticObject CreateStaticObject(ISector sector, HexNode node, IResourceDepositData resourceDepositData)
-        {
-            var staticObjectPurpose = RollPurpose(resourceDepositData);
-
-            var factory = SelectStaticObjectFactory(staticObjectPurpose);
-
-            var staticObject = factory.Create(sector, node, default);
-
-            return staticObject;
-        }
-
-        private IStaticObjectFactory SelectStaticObjectFactory(PropContainerPurpose staticObjectPurpose)
-        {
-            var factories = _staticObjectfactoryCollector.GetFactories();
-
-            foreach (var factory in factories)
-            {
-                if (factory.Purpose != staticObjectPurpose)
-                {
-                    continue;
-                }
-
-                return factory;
-            }
-
-            throw new InvalidOperationException(
-                $"Не обнаружена фабрика для статических объектов типа {staticObjectPurpose}");
-        }
-
-        private PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
-        {
-            return _staticObjectsGeneratorRandomSource.RollPurpose(resourceDepositData);
         }
     }
 }

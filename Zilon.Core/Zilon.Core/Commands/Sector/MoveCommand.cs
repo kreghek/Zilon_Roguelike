@@ -54,37 +54,6 @@ namespace Zilon.Core.Commands
         public IList<IGraphNode> Path { get; }
 
         /// <summary>
-        /// Определяем, может ли команда выполниться.
-        /// </summary>
-        /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
-        public override bool CanExecute()
-        {
-            var nodeViewModel = GetHoverNodeViewModel();
-            if (nodeViewModel == null)
-            {
-                return false;
-            }
-
-            if (!CanExecuteForSelected())
-            {
-                return false;
-            }
-
-            CreatePath(nodeViewModel);
-            return Path.Any();
-        }
-
-        /// <summary>
-        /// Проверяет, может ли команда совершить очередное перемещение по уже найденному пути.
-        /// </summary>
-        /// <returns> Возвращает true, если команду можно повторить. </returns>
-        public bool CanRepeat()
-        {
-            var canRepeat = CanExecuteForSelected() && CheckEnemies();
-            return canRepeat;
-        }
-
-        /// <summary>
         /// Выполнение команды на перемещение и обновление игрового цикла.
         /// </summary>
         protected override void ExecuteTacticCommand()
@@ -106,16 +75,6 @@ namespace Zilon.Core.Commands
             PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
         }
 
-        private IMapNodeViewModel GetHoverNodeViewModel()
-        {
-            return PlayerState.HoverViewModel as IMapNodeViewModel;
-        }
-
-        private IMapNodeViewModel GetSelectedNodeViewModel()
-        {
-            return PlayerState.SelectedViewModel as IMapNodeViewModel;
-        }
-
         private bool CanExecuteForSelected()
         {
             var nodeViewModel = GetSelectedNodeViewModel();
@@ -133,41 +92,6 @@ namespace Zilon.Core.Commands
 
             CreatePath(nodeViewModel);
             return Path.Any();
-        }
-
-        private void CreatePath(IMapNodeViewModel targetNode)
-        {
-            var actor = PlayerState.ActiveActor.Actor;
-            var startNode = actor.Node;
-            var finishNode = targetNode.Node;
-            var map = _player.SectorNode.Sector.Map;
-
-            Path.Clear();
-
-            if (!map.IsPositionAvailableFor(finishNode, actor))
-            {
-                return;
-            }
-
-            var context = new ActorPathFindingContext(actor, map, finishNode);
-
-            var astar = new AStar(context, startNode, finishNode);
-            var resultState = astar.Run();
-            if (resultState != State.GoalFound)
-            {
-                return;
-            }
-
-            RememberFoundPath(astar);
-        }
-
-        private void RememberFoundPath(AStar astar)
-        {
-            var foundPath = astar.GetPath().Skip(1).ToArray();
-            foreach (var pathNode in foundPath)
-            {
-                Path.Add(pathNode);
-            }
         }
 
         private bool CheckEnemies()
@@ -196,6 +120,82 @@ namespace Zilon.Core.Commands
             }
 
             return true;
+        }
+
+        private void CreatePath(IMapNodeViewModel targetNode)
+        {
+            var actor = PlayerState.ActiveActor.Actor;
+            var startNode = actor.Node;
+            var finishNode = targetNode.Node;
+            var map = _player.SectorNode.Sector.Map;
+
+            Path.Clear();
+
+            if (!map.IsPositionAvailableFor(finishNode, actor))
+            {
+                return;
+            }
+
+            var context = new ActorPathFindingContext(actor, map, finishNode);
+
+            var astar = new AStar(context, startNode, finishNode);
+            var resultState = astar.Run();
+            if (resultState != State.GoalFound)
+            {
+                return;
+            }
+
+            RememberFoundPath(astar);
+        }
+
+        private IMapNodeViewModel GetHoverNodeViewModel()
+        {
+            return PlayerState.HoverViewModel as IMapNodeViewModel;
+        }
+
+        private IMapNodeViewModel GetSelectedNodeViewModel()
+        {
+            return PlayerState.SelectedViewModel as IMapNodeViewModel;
+        }
+
+        private void RememberFoundPath(AStar astar)
+        {
+            var foundPath = astar.GetPath().Skip(1).ToArray();
+            foreach (var pathNode in foundPath)
+            {
+                Path.Add(pathNode);
+            }
+        }
+
+        /// <summary>
+        /// Определяем, может ли команда выполниться.
+        /// </summary>
+        /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
+        public override bool CanExecute()
+        {
+            var nodeViewModel = GetHoverNodeViewModel();
+            if (nodeViewModel == null)
+            {
+                return false;
+            }
+
+            if (!CanExecuteForSelected())
+            {
+                return false;
+            }
+
+            CreatePath(nodeViewModel);
+            return Path.Any();
+        }
+
+        /// <summary>
+        /// Проверяет, может ли команда совершить очередное перемещение по уже найденному пути.
+        /// </summary>
+        /// <returns> Возвращает true, если команду можно повторить. </returns>
+        public bool CanRepeat()
+        {
+            var canRepeat = CanExecuteForSelected() && CheckEnemies();
+            return canRepeat;
         }
     }
 }

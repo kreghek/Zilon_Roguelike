@@ -14,6 +14,23 @@ namespace Zilon.Core.Persons
             Disease = disease ?? throw new ArgumentNullException(nameof(disease));
         }
 
+        private static float CalcPowerByProgress(float progress)
+        {
+            var power = Math.Sin(progress * Math.PI);
+
+            if (power < 0)
+            {
+                return 0;
+            }
+
+            if (power > 1)
+            {
+                return 1;
+            }
+
+            return (float)power;
+        }
+
         /// <summary>
         /// Болезнь, которой инфицирован персонаж.
         /// </summary>
@@ -38,23 +55,6 @@ namespace Zilon.Core.Persons
         public void Update()
         {
             Value += Disease.ProgressSpeed;
-        }
-
-        private static float CalcPowerByProgress(float progress)
-        {
-            var power = Math.Sin(progress * Math.PI);
-
-            if (power < 0)
-            {
-                return 0;
-            }
-
-            if (power > 1)
-            {
-                return 1;
-            }
-
-            return (float)power;
         }
     }
 }

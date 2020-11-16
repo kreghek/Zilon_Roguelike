@@ -60,13 +60,6 @@ namespace Zilon.Core.Tests.Commands
             ), It.IsAny<IActor>()));
         }
 
-        private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
-        {
-            var attackIntention = (Intention<AttackTask>)intention;
-            var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
-            return attackTask.Target == target;
-        }
-
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             if (testMap is null)
@@ -90,6 +83,13 @@ namespace Zilon.Core.Tests.Commands
             playerStateMock.SetupProperty(x => x.SelectedViewModel, targetVm);
 
             Container.AddSingleton<AttackCommand>();
+        }
+
+        private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
+        {
+            var attackIntention = (Intention<AttackTask>)intention;
+            var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
+            return attackTask.Target == target;
         }
     }
 }

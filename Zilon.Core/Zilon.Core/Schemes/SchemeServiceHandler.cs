@@ -35,6 +35,32 @@ namespace Zilon.Core.Schemes
 
         public JsonSerializerSettings JsonSerializerSettings { get; set; }
 
+        private static string CalcDirectory()
+        {
+            var type = typeof(TSchemeImpl);
+            var typeName = type.Name;
+            var schemeName = typeName.Substring(0, typeName.Length - SchemePostfix.Length);
+
+            if (type.IsInterface)
+            {
+                schemeName = schemeName.Remove(0, 1);
+            }
+
+            var directory = schemeName + "s";
+            return directory;
+        }
+
+        private TSchemeImpl ParseSchemeFromFile(SchemeFile file)
+        {
+            // Если явно указаны настройки десериализации, то используем их.
+            if (JsonSerializerSettings == null)
+            {
+                return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content);
+            }
+
+            return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content, JsonSerializerSettings);
+        }
+
         public void LoadSchemes()
         {
             var files = _locator.GetAll(_directory);
@@ -79,32 +105,6 @@ namespace Zilon.Core.Schemes
         public TSchemeImpl[] GetAll()
         {
             return _dict.Values.ToArray();
-        }
-
-        private TSchemeImpl ParseSchemeFromFile(SchemeFile file)
-        {
-            // Если явно указаны настройки десериализации, то используем их.
-            if (JsonSerializerSettings == null)
-            {
-                return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content);
-            }
-
-            return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content, JsonSerializerSettings);
-        }
-
-        private static string CalcDirectory()
-        {
-            var type = typeof(TSchemeImpl);
-            var typeName = type.Name;
-            var schemeName = typeName.Substring(0, typeName.Length - SchemePostfix.Length);
-
-            if (type.IsInterface)
-            {
-                schemeName = schemeName.Remove(0, 1);
-            }
-
-            var directory = schemeName + "s";
-            return directory;
         }
     }
 }

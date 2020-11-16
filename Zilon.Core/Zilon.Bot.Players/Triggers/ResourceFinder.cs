@@ -9,6 +9,18 @@ namespace Zilon.Bot.Players.Triggers
 {
     public static class ResourceFinder
     {
+        public static Resource FindBestConsumableResourceByRule(
+            IEnumerable<Resource> resources,
+            ConsumeCommonRuleType ruleType)
+        {
+            var foundResources = FindConsumableResourcesByRule(resources, ruleType);
+
+            var orderedResources = foundResources.OrderByDescending(x => x.Rule.Level);
+            var bestResource = orderedResources.FirstOrDefault();
+
+            return bestResource?.Resource;
+        }
+
         public static IEnumerable<ResourceSelection> FindConsumableResourcesByRule(
             IEnumerable<Resource> resources,
             ConsumeCommonRuleType ruleType)
@@ -22,23 +34,10 @@ namespace Zilon.Bot.Players.Triggers
                 {
                     yield return new ResourceSelection
                     {
-                        Resource = resource,
-                        Rule = rule
+                        Resource = resource, Rule = rule
                     };
                 }
             }
-        }
-
-        public static Resource FindBestConsumableResourceByRule(
-            IEnumerable<Resource> resources,
-            ConsumeCommonRuleType ruleType)
-        {
-            var foundResources = FindConsumableResourcesByRule(resources, ruleType);
-
-            var orderedResources = foundResources.OrderByDescending(x => x.Rule.Level);
-            var bestResource = orderedResources.FirstOrDefault();
-
-            return bestResource?.Resource;
         }
     }
 

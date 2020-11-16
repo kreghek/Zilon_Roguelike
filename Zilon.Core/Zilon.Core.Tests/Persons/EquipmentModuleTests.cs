@@ -135,73 +135,6 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
-        /// Тест проверяет, что при экипировке двух мечей не выбрасывается исключение.
-        /// </summary>
-        [Test]
-        public void SetEquipment_DualShortSwords_NoException()
-        {
-            // ARRANGE
-            var scheme = new TestPropScheme
-            {
-                Tags = new[]
-                {
-                    PropTags.Equipment.Weapon
-                },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[]
-                    {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
-            };
-
-            var slotSchemes = new[]
-            {
-                new PersonSlotSubScheme
-                {
-                    Types = EquipmentSlotTypes.Hand
-                },
-                new PersonSlotSubScheme
-                {
-                    Types = EquipmentSlotTypes.Hand
-                }
-            };
-
-            var tacticalActScheme = new TestTacticalActScheme
-            {
-                Stats = new TestTacticalActStatsSubScheme
-                {
-                    Range = new Range<int>(1, 1)
-                }
-            };
-
-            var swordEquipment1 = new Equipment(scheme, new[]
-            {
-                tacticalActScheme
-            });
-            var swordEquipment2 = new Equipment(scheme, new[]
-            {
-                tacticalActScheme
-            });
-
-            const int swordSlot1 = 0;
-            const int swordSlot2 = 1;
-
-            var carrier = new EquipmentModule(slotSchemes);
-
-            // ACT
-            Action act = () =>
-            {
-                carrier[swordSlot1] = swordEquipment1;
-                carrier[swordSlot2] = swordEquipment2;
-            };
-
-            // ASSERT
-            act.Should().NotThrow<Exception>();
-        }
-
-        /// <summary>
         /// Тест проверяет, что при экипировке двух пистолетов (стрелковых оружий) выбрасывается исключение.
         /// </summary>
         /// <remarks>
@@ -346,32 +279,17 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
-        /// Тест проверяет, что при экипировке меча и щита не происходит исключений.
+        /// Тест проверяет, что при экипировке двух мечей не выбрасывается исключение.
         /// </summary>
         [Test]
-        public void SetEquipment_SwordAndShield_NoException()
+        public void SetEquipment_DualShortSwords_NoException()
         {
             // ARRANGE
-            var swordScheme = new TestPropScheme
+            var scheme = new TestPropScheme
             {
                 Tags = new[]
                 {
                     PropTags.Equipment.Weapon
-                },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[]
-                    {
-                        EquipmentSlotTypes.Hand
-                    }
-                }
-            };
-
-            var shieldScheme = new TestPropScheme
-            {
-                Tags = new[]
-                {
-                    PropTags.Equipment.Shield
                 },
                 Equip = new TestPropEquipSubScheme
                 {
@@ -402,11 +320,11 @@ namespace Zilon.Core.Tests.Persons
                 }
             };
 
-            var swordEquipment1 = new Equipment(swordScheme, new[]
+            var swordEquipment1 = new Equipment(scheme, new[]
             {
                 tacticalActScheme
             });
-            var sheildEquipment2 = new Equipment(shieldScheme, new[]
+            var swordEquipment2 = new Equipment(scheme, new[]
             {
                 tacticalActScheme
             });
@@ -420,7 +338,7 @@ namespace Zilon.Core.Tests.Persons
             Action act = () =>
             {
                 carrier[swordSlot1] = swordEquipment1;
-                carrier[swordSlot2] = sheildEquipment2;
+                carrier[swordSlot2] = swordEquipment2;
             };
 
             // ASSERT
@@ -666,6 +584,88 @@ namespace Zilon.Core.Tests.Persons
                     act.Should().NotThrow<Exception>();
                 }
             }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при экипировке меча и щита не происходит исключений.
+        /// </summary>
+        [Test]
+        public void SetEquipment_SwordAndShield_NoException()
+        {
+            // ARRANGE
+            var swordScheme = new TestPropScheme
+            {
+                Tags = new[]
+                {
+                    PropTags.Equipment.Weapon
+                },
+                Equip = new TestPropEquipSubScheme
+                {
+                    SlotTypes = new[]
+                    {
+                        EquipmentSlotTypes.Hand
+                    }
+                }
+            };
+
+            var shieldScheme = new TestPropScheme
+            {
+                Tags = new[]
+                {
+                    PropTags.Equipment.Shield
+                },
+                Equip = new TestPropEquipSubScheme
+                {
+                    SlotTypes = new[]
+                    {
+                        EquipmentSlotTypes.Hand
+                    }
+                }
+            };
+
+            var slotSchemes = new[]
+            {
+                new PersonSlotSubScheme
+                {
+                    Types = EquipmentSlotTypes.Hand
+                },
+                new PersonSlotSubScheme
+                {
+                    Types = EquipmentSlotTypes.Hand
+                }
+            };
+
+            var tacticalActScheme = new TestTacticalActScheme
+            {
+                Stats = new TestTacticalActStatsSubScheme
+                {
+                    Range = new Range<int>(1, 1)
+                }
+            };
+
+            var swordEquipment1 = new Equipment(swordScheme, new[]
+            {
+                tacticalActScheme
+            });
+            var sheildEquipment2 = new Equipment(shieldScheme, new[]
+            {
+                tacticalActScheme
+            });
+
+            const int swordSlot1 = 0;
+            const int swordSlot2 = 1;
+
+            var carrier = new EquipmentModule(slotSchemes);
+
+            // ACT
+            Action act = () =>
+            {
+                carrier[swordSlot1] = swordEquipment1;
+                carrier[swordSlot2] = sheildEquipment2;
+            };
+
+            // ASSERT
+            act.Should().NotThrow<Exception>();
         }
 
         private static IPropScheme GetSchemeBySid(string sid)

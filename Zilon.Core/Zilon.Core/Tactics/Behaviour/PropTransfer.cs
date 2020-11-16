@@ -23,14 +23,14 @@ namespace Zilon.Core.Tactics.Behaviour
         }
 
         /// <summary>
-        /// Хранилище, с которым связан трансфер.
-        /// </summary>
-        public IPropStore PropStore { get; }
-
-        /// <summary>
         /// Добавляемые предметы в хранилище.
         /// </summary>
         public IProp[] Added { get; }
+
+        /// <summary>
+        /// Хранилище, с которым связан трансфер.
+        /// </summary>
+        public IPropStore PropStore { get; }
 
         /// <summary>
         /// Извлекаемые из хранилища предметы.

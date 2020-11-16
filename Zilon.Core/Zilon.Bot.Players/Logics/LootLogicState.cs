@@ -74,6 +74,11 @@ namespace Zilon.Bot.Players.Logics
             return moveTask;
         }
 
+        protected override void ResetData()
+        {
+            _moveTask = null;
+        }
+
         private MoveTask MoveToContainerTask(
             IActor actor,
             IGraphNode containerMapNode,
@@ -113,11 +118,6 @@ namespace Zilon.Bot.Players.Logics
             {
                 inventoryTransfer, containerTransfer
             });
-        }
-
-        protected override void ResetData()
-        {
-            _moveTask = null;
         }
     }
 }

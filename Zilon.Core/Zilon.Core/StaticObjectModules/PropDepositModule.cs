@@ -33,6 +33,12 @@ namespace Zilon.Core.StaticObjectModules
             Difficulty = depositMiningDifficulty;
         }
 
+        private void DoMined()
+        {
+            var eventArgs = new EventArgs();
+            Mined?.Invoke(this, eventArgs);
+        }
+
         /// <inheritdoc/>
         public event EventHandler Mined;
 
@@ -76,12 +82,6 @@ namespace Zilon.Core.StaticObjectModules
             _exhaustingCounter--;
 
             DoMined();
-        }
-
-        private void DoMined()
-        {
-            var eventArgs = new EventArgs();
-            Mined?.Invoke(this, eventArgs);
         }
     }
 }

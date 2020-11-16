@@ -25,6 +25,27 @@ namespace Zilon.Core.Schemes
             }
         }
 
+        [ExcludeFromCodeCoverage]
+        public static FileSchemeLocator CreateFromEnvVariable()
+        {
+            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
+            if (string.IsNullOrWhiteSpace(schemeCatalogFromEnvVariable))
+            {
+                throw new InvalidOperationException($"Переменная окружения {schemeCatalogEnvVariable} не задана.");
+            }
+
+            return new FileSchemeLocator(schemeCatalogFromEnvVariable);
+        }
+
+        private static string GetRelativePath(string path, string filePath, string sid)
+        {
+            var relativeFilePath = filePath.Remove(0, path.Length).TrimStart('\\');
+            var fileFolder = relativeFilePath
+                .Substring(0, relativeFilePath.Length - (sid + ".json").Length)
+                .TrimEnd('\\');
+            return fileFolder;
+        }
+
         public SchemeFile[] GetAll(string directory)
         {
             var schemeLocatorFullPath = Path.GetFullPath(_schemeCatalog);
@@ -45,36 +66,13 @@ namespace Zilon.Core.Schemes
 
                 var schemeFile = new SchemeFile
                 {
-                    Sid = sid,
-                    Path = fileFolder,
-                    Content = serialized
+                    Sid = sid, Path = fileFolder, Content = serialized
                 };
 
                 result.Add(schemeFile);
             }
 
             return result.ToArray();
-        }
-
-        [ExcludeFromCodeCoverage]
-        public static FileSchemeLocator CreateFromEnvVariable()
-        {
-            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
-            if (string.IsNullOrWhiteSpace(schemeCatalogFromEnvVariable))
-            {
-                throw new InvalidOperationException($"Переменная окружения {schemeCatalogEnvVariable} не задана.");
-            }
-
-            return new FileSchemeLocator(schemeCatalogFromEnvVariable);
-        }
-
-        private static string GetRelativePath(string path, string filePath, string sid)
-        {
-            var relativeFilePath = filePath.Remove(0, path.Length).TrimStart('\\');
-            var fileFolder = relativeFilePath
-                .Substring(0, relativeFilePath.Length - (sid + ".json").Length)
-                .TrimEnd('\\');
-            return fileFolder;
         }
     }
 }

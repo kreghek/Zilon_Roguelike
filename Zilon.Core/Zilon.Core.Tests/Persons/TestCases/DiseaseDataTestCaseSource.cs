@@ -17,15 +17,6 @@ namespace Zilon.Core.Tests.Persons.TestCases
             }
         }
 
-        private static DiseaseSymptom[] Single =>
-            new[]
-            {
-                new DiseaseSymptom
-                {
-                    Rule = DiseaseSymptomType.BreathDownSpeed
-                }
-            };
-
         private static DiseaseSymptom[] Multiple =>
             new[]
             {
@@ -40,6 +31,15 @@ namespace Zilon.Core.Tests.Persons.TestCases
                 new DiseaseSymptom
                 {
                     Rule = DiseaseSymptomType.HealthLimit
+                }
+            };
+
+        private static DiseaseSymptom[] Single =>
+            new[]
+            {
+                new DiseaseSymptom
+                {
+                    Rule = DiseaseSymptomType.BreathDownSpeed
                 }
             };
     }

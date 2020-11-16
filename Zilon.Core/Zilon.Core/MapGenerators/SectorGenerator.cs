@@ -44,6 +44,18 @@ namespace Zilon.Core.MapGenerators
                                           throw new ArgumentNullException(nameof(resourceMaterializationMap));
         }
 
+        private void DefineDiseases(ISector sector)
+        {
+            var disease = _diseaseGenerator.Create();
+
+            if (disease is null)
+            {
+                return;
+            }
+
+            sector.AddDisease(disease);
+        }
+
         /// <summary>
         /// Создаёт экземпляр сектора подземелий с указанными параметрами.
         /// </summary>
@@ -88,18 +100,6 @@ namespace Zilon.Core.MapGenerators
                 sectorScheme);
 
             return sector;
-        }
-
-        private void DefineDiseases(ISector sector)
-        {
-            var disease = _diseaseGenerator.Create();
-
-            if (disease is null)
-            {
-                return;
-            }
-
-            sector.AddDisease(disease);
         }
     }
 }

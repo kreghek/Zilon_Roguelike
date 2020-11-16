@@ -18,6 +18,35 @@ namespace Zilon.Core.Tactics
             _dice = dice;
         }
 
+        private int RollD6()
+        {
+            var roll = _dice.Roll(6);
+            return roll;
+        }
+
+        private int RollWithModifiers(Roll roll)
+        {
+            var sum = 0;
+            for (var i = 0; i < roll.Count; i++)
+            {
+                var currentRoll = _dice.Roll(roll.Dice);
+
+                if (roll.Modifiers != null)
+                {
+                    currentRoll += roll.Modifiers.ResultBuff;
+                }
+
+                if (currentRoll <= 0)
+                {
+                    currentRoll = 1;
+                }
+
+                sum += currentRoll;
+            }
+
+            return sum;
+        }
+
         /// <summary>Бросок проверки на попадание действием.</summary>
         /// <returns>Возвращает результат броска D6.</returns>
         public int RollToHit(Roll roll)
@@ -66,35 +95,6 @@ namespace Zilon.Core.Tactics
 
             var rollIndex = _dice.Roll(0, count - 1);
             return armorEquipments.ElementAt(rollIndex);
-        }
-
-        private int RollWithModifiers(Roll roll)
-        {
-            var sum = 0;
-            for (var i = 0; i < roll.Count; i++)
-            {
-                var currentRoll = _dice.Roll(roll.Dice);
-
-                if (roll.Modifiers != null)
-                {
-                    currentRoll += roll.Modifiers.ResultBuff;
-                }
-
-                if (currentRoll <= 0)
-                {
-                    currentRoll = 1;
-                }
-
-                sum += currentRoll;
-            }
-
-            return sum;
-        }
-
-        private int RollD6()
-        {
-            var roll = _dice.Roll(6);
-            return roll;
         }
     }
 }

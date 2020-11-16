@@ -9,14 +9,25 @@ namespace Zilon.Core.ScoreResultGenerating
 {
     public class DeathReasonService : IDeathReasonService
     {
-        public string GetDeathReasonSummary(IPlayerEvent playerEvent, Language language)
+        private static string GetActorName(PlayerDamagedEvent playerDamagedEvent, Language language)
         {
-            if (playerEvent is null)
+            var monsterPerson = playerDamagedEvent?.Damager?.Person as MonsterPerson;
+
+            if (monsterPerson == null)
             {
-                throw new ArgumentNullException(nameof(playerEvent));
+                throw new InvalidOperationException();
             }
 
-            return GetDeathReasonString(playerEvent, language);
+            switch (language)
+            {
+                case Language.Ru:
+                    return monsterPerson.Scheme.Name.Ru;
+
+                case Language.En:
+                    return monsterPerson.Scheme.Name.En;
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         private static string GetDeathReasonString(IPlayerEvent dominateEvent, Language language)
@@ -83,25 +94,14 @@ namespace Zilon.Core.ScoreResultGenerating
             }
         }
 
-        private static string GetActorName(PlayerDamagedEvent playerDamagedEvent, Language language)
+        public string GetDeathReasonSummary(IPlayerEvent playerEvent, Language language)
         {
-            var monsterPerson = playerDamagedEvent?.Damager?.Person as MonsterPerson;
-
-            if (monsterPerson == null)
+            if (playerEvent is null)
             {
-                throw new InvalidOperationException();
+                throw new ArgumentNullException(nameof(playerEvent));
             }
 
-            switch (language)
-            {
-                case Language.Ru:
-                    return monsterPerson.Scheme.Name.Ru;
-
-                case Language.En:
-                    return monsterPerson.Scheme.Name.En;
-                default:
-                    throw new InvalidOperationException();
-            }
+            return GetDeathReasonString(playerEvent, language);
         }
     }
 }

@@ -54,6 +54,11 @@ namespace Zilon.Bot.Players.Logics
             return _moveTask;
         }
 
+        protected override void ResetData()
+        {
+            _moveTask = null;
+        }
+
         private static MoveTask CreateMoveTask(
             IActor actor,
             IGraphNode targetExitNode,
@@ -82,11 +87,6 @@ namespace Zilon.Bot.Players.Logics
                 sector.StaticObjectManager.Items.Where(x => (x.Node == node) && x.IsMapBlock);
             var targetNodeIsBlockedByObstacles = staticObstaclesInTargetNode.Any();
             return targetNodeIsBlockedByObstacles;
-        }
-
-        protected override void ResetData()
-        {
-            _moveTask = null;
         }
     }
 }

@@ -20,9 +20,9 @@ namespace Zilon.Core.Common
             Modifiers = modifiers;
         }
 
-        public int Dice { get; }
-
         public int Count { get; }
+
+        public int Dice { get; }
 
         public RollModifiers Modifiers { get; }
     }

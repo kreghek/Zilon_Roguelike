@@ -36,6 +36,12 @@ namespace Zilon.Core.Persons
         }
 
         /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{Scheme} [{Equipment}]";
+        }
+
+        /// <inheritdoc/>
         public ITacticalActStatsSubScheme Stats { get; }
 
         /// <inheritdoc/>
@@ -75,12 +81,6 @@ namespace Zilon.Core.Persons
             {
                 CurrentCooldown--;
             }
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return $"{Scheme} [{Equipment}]";
         }
     }
 }

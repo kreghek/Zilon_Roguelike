@@ -38,60 +38,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return draftRegions;
         }
 
-        private void InitiateMatrix(Matrix<bool> matrix, int fillProbability)
-        {
-            for (var x = 0; x < matrix.Width; x++)
-            {
-                for (var y = 0; y < matrix.Height; y++)
-                {
-                    var blockRoll = _dice.Roll(100);
-                    if (blockRoll < fillProbability)
-                    {
-                        matrix.Items[x, y] = true;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Simulate live during <see cref="totalIterations"/>.
-        /// </summary>
-        private static Matrix<bool> SimulateCellularAutomaton(Matrix<bool> matrix, int totalIterations)
-        {
-            for (var i = 0; i < totalIterations; i++)
-            {
-                var newMap = DoSimulationStep(matrix);
-                matrix = new Matrix<bool>(newMap.Items, matrix.Width, matrix.Height);
-            }
-
-            return matrix;
-        }
-
-        private static Matrix<bool> DoSimulationStep(Matrix<bool> matrix)
-        {
-            var newCellMap = new Matrix<bool>(matrix.Width, matrix.Height);
-
-            for (var x = 0; x < matrix.Width; x++)
-            {
-                for (var y = 0; y < matrix.Height; y++)
-                {
-                    var aliveCount = CountAliveNeighbours(matrix, x, y);
-
-                    if (matrix.Items[x, y])
-                    {
-                        newCellMap[x, y] = aliveCount >= DEATH_LIMIT;
-                    }
-                    else
-                    {
-                        //Otherwise, if the cell is dead now, check if it has the right number of neighbours to be 'born'
-                        newCellMap[x, y] = aliveCount > BIRTH_LIMIT;
-                    }
-                }
-            }
-
-            return newCellMap;
-        }
-
         private static int CountAliveNeighbours(Matrix<bool> matrix, int x, int y)
         {
             var aliveCount = 0;
@@ -119,6 +65,60 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return aliveCount;
+        }
+
+        private static Matrix<bool> DoSimulationStep(Matrix<bool> matrix)
+        {
+            var newCellMap = new Matrix<bool>(matrix.Width, matrix.Height);
+
+            for (var x = 0; x < matrix.Width; x++)
+            {
+                for (var y = 0; y < matrix.Height; y++)
+                {
+                    var aliveCount = CountAliveNeighbours(matrix, x, y);
+
+                    if (matrix.Items[x, y])
+                    {
+                        newCellMap[x, y] = aliveCount >= DEATH_LIMIT;
+                    }
+                    else
+                    {
+                        //Otherwise, if the cell is dead now, check if it has the right number of neighbours to be 'born'
+                        newCellMap[x, y] = aliveCount > BIRTH_LIMIT;
+                    }
+                }
+            }
+
+            return newCellMap;
+        }
+
+        private void InitiateMatrix(Matrix<bool> matrix, int fillProbability)
+        {
+            for (var x = 0; x < matrix.Width; x++)
+            {
+                for (var y = 0; y < matrix.Height; y++)
+                {
+                    var blockRoll = _dice.Roll(100);
+                    if (blockRoll < fillProbability)
+                    {
+                        matrix.Items[x, y] = true;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Simulate live during <see cref="totalIterations"/>.
+        /// </summary>
+        private static Matrix<bool> SimulateCellularAutomaton(Matrix<bool> matrix, int totalIterations)
+        {
+            for (var i = 0; i < totalIterations; i++)
+            {
+                var newMap = DoSimulationStep(matrix);
+                matrix = new Matrix<bool>(newMap.Items, matrix.Width, matrix.Height);
+            }
+
+            return matrix;
         }
     }
 }

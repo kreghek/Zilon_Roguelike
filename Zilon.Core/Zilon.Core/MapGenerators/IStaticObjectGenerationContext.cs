@@ -8,11 +8,11 @@ namespace Zilon.Core.MapGenerators
 {
     public interface IStaticObjectGenerationContext
     {
-        ISector Sector { get; }
+        IResourceDepositData ResourceDepositData { get; }
 
         ISectorSubScheme Scheme { get; }
 
-        IResourceDepositData ResourceDepositData { get; }
+        ISector Sector { get; }
     }
 
     public sealed class StaticObjectGenerationContext : IStaticObjectGenerationContext

@@ -21,6 +21,18 @@ namespace Zilon.Core.Tactics
             _items = new List<TSectorEntity>();
         }
 
+        private void DoAdded(params TSectorEntity[] entities)
+        {
+            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
+            Added?.Invoke(this, args);
+        }
+
+        private void DoRemoved(params TSectorEntity[] entities)
+        {
+            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
+            Removed?.Invoke(this, args);
+        }
+
         public IEnumerable<TSectorEntity> Items => _items;
 
         public void Add(TSectorEntity entity)
@@ -59,17 +71,5 @@ namespace Zilon.Core.Tactics
         public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Added;
 
         public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Removed;
-
-        private void DoAdded(params TSectorEntity[] entities)
-        {
-            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
-            Added?.Invoke(this, args);
-        }
-
-        private void DoRemoved(params TSectorEntity[] entities)
-        {
-            var args = new ManagerItemsChangedEventArgs<TSectorEntity>(entities);
-            Removed?.Invoke(this, args);
-        }
     }
 }

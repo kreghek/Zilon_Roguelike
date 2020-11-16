@@ -19,31 +19,6 @@ namespace Zilon.Core.Tactics.Behaviour
             _staticObjectManager = staticObjectManager ?? throw new ArgumentNullException(nameof(staticObjectManager));
         }
 
-        public IEnumerable<IGraphNode> GetNext(IGraphNode node)
-        {
-            return _sectorMap.GetNext(node);
-        }
-
-        public bool IsTargetVisible(IGraphNode baseNode, IGraphNode targetNode)
-        {
-            if (baseNode is null)
-            {
-                throw new ArgumentNullException(nameof(baseNode));
-            }
-
-            if (targetNode is null)
-            {
-                throw new ArgumentNullException(nameof(targetNode));
-            }
-
-            if (IsBlockedByObstacle(baseNode, targetNode))
-            {
-                return false;
-            }
-
-            return _sectorMap.TargetIsOnLine(baseNode, targetNode);
-        }
-
         /// <summary>
         /// Метод првоеряет, нет ли на пути просмотра объектов, закрывающих видимость.
         /// </summary>
@@ -67,6 +42,31 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             return false;
+        }
+
+        public IEnumerable<IGraphNode> GetNext(IGraphNode node)
+        {
+            return _sectorMap.GetNext(node);
+        }
+
+        public bool IsTargetVisible(IGraphNode baseNode, IGraphNode targetNode)
+        {
+            if (baseNode is null)
+            {
+                throw new ArgumentNullException(nameof(baseNode));
+            }
+
+            if (targetNode is null)
+            {
+                throw new ArgumentNullException(nameof(targetNode));
+            }
+
+            if (IsBlockedByObstacle(baseNode, targetNode))
+            {
+                return false;
+            }
+
+            return _sectorMap.TargetIsOnLine(baseNode, targetNode);
         }
     }
 }

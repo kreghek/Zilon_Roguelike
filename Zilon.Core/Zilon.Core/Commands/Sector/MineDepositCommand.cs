@@ -89,6 +89,22 @@ namespace Zilon.Core.Commands.Sector
             }
         }
 
+        private MineTask CreateTaskByHands(IActor actor, IStaticObject staticObject)
+        {
+            var handMineDepositMethod = new HandMineDepositMethod(_mineDepositMethodRandomSource);
+
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            return new MineTask(actor, taskContext, staticObject, handMineDepositMethod);
+        }
+
+        private MineTask CreateTaskByInstrument(IActor actor, IStaticObject staticObject, Equipment equipedTool)
+        {
+            var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool, _mineDepositMethodRandomSource);
+
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            return new MineTask(actor, taskContext, staticObject, toolMineDepositMethod);
+        }
+
         private static Equipment GetEquipedTool(IEquipmentModule equipmentModule, string[] requiredToolTags)
         {
             if (!requiredToolTags.Any())
@@ -115,22 +131,6 @@ namespace Zilon.Core.Commands.Sector
             }
 
             return null;
-        }
-
-        private MineTask CreateTaskByInstrument(IActor actor, IStaticObject staticObject, Equipment equipedTool)
-        {
-            var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool, _mineDepositMethodRandomSource);
-
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
-            return new MineTask(actor, taskContext, staticObject, toolMineDepositMethod);
-        }
-
-        private MineTask CreateTaskByHands(IActor actor, IStaticObject staticObject)
-        {
-            var handMineDepositMethod = new HandMineDepositMethod(_mineDepositMethodRandomSource);
-
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
-            return new MineTask(actor, taskContext, staticObject, handMineDepositMethod);
         }
     }
 }

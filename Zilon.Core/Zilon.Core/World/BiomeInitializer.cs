@@ -32,63 +32,6 @@ namespace Zilon.Core.World
             _biomeSchemeRoller = biomeSchemeRoller ?? throw new ArgumentNullException(nameof(biomeSchemeRoller));
         }
 
-        public async Task<IBiome> InitBiomeAsync(ILocationScheme locationScheme)
-        {
-            var biom = new Biome(locationScheme);
-
-            await CreateStartSectorAsync(biom).ConfigureAwait(false);
-
-            return biom;
-        }
-
-        public async Task MaterializeLevelAsync(ISectorNode sectorNode)
-        {
-            if (sectorNode is null)
-            {
-                throw new ArgumentNullException(nameof(sectorNode));
-            }
-
-            if (sectorNode.State != SectorNodeState.SchemeKnown)
-            {
-                throw new InvalidOperationException();
-            }
-
-            var biom = sectorNode.Biome;
-
-            // Важно генерировать соседние узлы до начала генерации сектора,
-            // чтобы знать переходы из сектора.
-
-            CreateNextSectorNodes(sectorNode, biom);
-
-            var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
-
-            sectorNode.MaterializeSector(sector);
-        }
-
-        public Task ExpandAsync(ISectorNode sectorNode)
-        {
-            return MaterializeLevelAsync(sectorNode);
-        }
-
-        private SectorNode RollAndBindBiome()
-        {
-            var rolledLocationScheme = _biomeSchemeRoller.Roll();
-
-            var biome = new Biome(rolledLocationScheme);
-
-            var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
-
-            var newBiomeSector = new SectorNode(biome, startSectorScheme);
-
-            return newBiomeSector;
-        }
-
-        private async Task CreateStartSectorAsync(IBiome biome)
-        {
-            var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
-            await CreateAndAddSectorByScheme(biome, startSectorScheme).ConfigureAwait(false);
-        }
-
         private async Task CreateAndAddSectorByScheme(IBiome biome, ISectorSubScheme startSectorScheme)
         {
             var sectorNode = new SectorNode(biome, startSectorScheme);
@@ -134,6 +77,63 @@ namespace Zilon.Core.World
 
                 nextBiom.AddEdge(sectorNode, nextSectorNode);
             }
+        }
+
+        private async Task CreateStartSectorAsync(IBiome biome)
+        {
+            var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
+            await CreateAndAddSectorByScheme(biome, startSectorScheme).ConfigureAwait(false);
+        }
+
+        private SectorNode RollAndBindBiome()
+        {
+            var rolledLocationScheme = _biomeSchemeRoller.Roll();
+
+            var biome = new Biome(rolledLocationScheme);
+
+            var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
+
+            var newBiomeSector = new SectorNode(biome, startSectorScheme);
+
+            return newBiomeSector;
+        }
+
+        public async Task<IBiome> InitBiomeAsync(ILocationScheme locationScheme)
+        {
+            var biom = new Biome(locationScheme);
+
+            await CreateStartSectorAsync(biom).ConfigureAwait(false);
+
+            return biom;
+        }
+
+        public async Task MaterializeLevelAsync(ISectorNode sectorNode)
+        {
+            if (sectorNode is null)
+            {
+                throw new ArgumentNullException(nameof(sectorNode));
+            }
+
+            if (sectorNode.State != SectorNodeState.SchemeKnown)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var biom = sectorNode.Biome;
+
+            // Важно генерировать соседние узлы до начала генерации сектора,
+            // чтобы знать переходы из сектора.
+
+            CreateNextSectorNodes(sectorNode, biom);
+
+            var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
+
+            sectorNode.MaterializeSector(sector);
+        }
+
+        public Task ExpandAsync(ISectorNode sectorNode)
+        {
+            return MaterializeLevelAsync(sectorNode);
         }
     }
 }

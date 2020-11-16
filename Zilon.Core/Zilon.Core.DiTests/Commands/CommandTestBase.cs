@@ -114,17 +114,7 @@ namespace Zilon.Core.Tests.Commands
             ServiceProvider = Container.BuildServiceProvider();
         }
 
-        private static ITacticalAct CreateSimpleAct()
-        {
-            var actMock = new Mock<ITacticalAct>();
-            var actStatScheme = new TestTacticalActStatsSubScheme
-            {
-                Range = new Range<int>(1, 2)
-            };
-            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
-            var act = actMock.Object;
-            return act;
-        }
+        protected abstract void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock);
 
         private static ITacticalAct CreateActWithCooldown()
         {
@@ -152,6 +142,16 @@ namespace Zilon.Core.Tests.Commands
             return act;
         }
 
-        protected abstract void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock);
+        private static ITacticalAct CreateSimpleAct()
+        {
+            var actMock = new Mock<ITacticalAct>();
+            var actStatScheme = new TestTacticalActStatsSubScheme
+            {
+                Range = new Range<int>(1, 2)
+            };
+            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
+            var act = actMock.Object;
+            return act;
+        }
     }
 }

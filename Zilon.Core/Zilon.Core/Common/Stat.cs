@@ -28,6 +28,11 @@ namespace Zilon.Core.Common
         }
 
         /// <summary>
+        /// Минимальное/максимальное значение.
+        /// </summary>
+        public Range<int> Range { get; private set; }
+
+        /// <summary>
         /// Текущее значение.
         /// </summary>
         public int Value
@@ -59,11 +64,6 @@ namespace Zilon.Core.Common
                 ValueShare = (boundedValue - Range.Min) / (float)(Range.Max - Range.Min);
             }
         }
-
-        /// <summary>
-        /// Минимальное/максимальное значение.
-        /// </summary>
-        public Range<int> Range { get; private set; }
 
         /// <summary>
         /// Значение в долях. Значение [0..1] в текущем диапазоне.

@@ -16,30 +16,6 @@ namespace Zilon.Core.Tests.Persons
     public class DefeatActorJobProgressTests
     {
         /// <summary>
-        /// Тест проверяет, что прогресс на уничтожение противника применяется к задачам этого типа.
-        /// </summary>
-        [Test]
-        public void ApplyToJobs_OneDefeatJob_DefeatJobProgressIncreased()
-        {
-            // ARRANGE
-            const int startProgress = 1;
-            const int expectedProgress = startProgress + 1;
-
-            var actor = CreateActor();
-            var job = CreateJob(startProgress, JobType.Defeats);
-            var progress = CreateJobProgress(actor);
-
-            // ACT
-            progress.ApplyToJobs(new[]
-            {
-                job
-            });
-
-            // ASSERT
-            job.Progress.Should().Be(expectedProgress);
-        }
-
-        /// <summary>
         /// Тест проверяет, что прогресс на уничтожение противника применяется ТОЛЬКО к задачам этого типа.
         /// </summary>
         [Test]
@@ -66,6 +42,30 @@ namespace Zilon.Core.Tests.Persons
             // ASSERT
             testedJob.Progress.Should().Be(expectedProgress);
             otherJob.Progress.Should().Be(expectedOtherProgress);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что прогресс на уничтожение противника применяется к задачам этого типа.
+        /// </summary>
+        [Test]
+        public void ApplyToJobs_OneDefeatJob_DefeatJobProgressIncreased()
+        {
+            // ARRANGE
+            const int startProgress = 1;
+            const int expectedProgress = startProgress + 1;
+
+            var actor = CreateActor();
+            var job = CreateJob(startProgress, JobType.Defeats);
+            var progress = CreateJobProgress(actor);
+
+            // ACT
+            progress.ApplyToJobs(new[]
+            {
+                job
+            });
+
+            // ASSERT
+            job.Progress.Should().Be(expectedProgress);
         }
 
         /// <summary>
@@ -105,8 +105,7 @@ namespace Zilon.Core.Tests.Persons
             jobMock.SetupProperty(x => x.Progress, startProgress);
             jobMock.SetupGet(x => x.Scheme).Returns(new TestJobSubScheme
             {
-                Type = type,
-                Value = 10
+                Type = type, Value = 10
             });
             var job = jobMock.Object;
             return job;

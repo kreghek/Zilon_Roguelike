@@ -6,9 +6,9 @@
     /// <typeparam name="TScheme"></typeparam>
     public interface ISchemeServiceHandler<out TScheme> where TScheme : class, IScheme
     {
-        TScheme GetItem(string sid);
-
         TScheme[] GetAll();
+
+        TScheme GetItem(string sid);
 
         void LoadSchemes();
     }

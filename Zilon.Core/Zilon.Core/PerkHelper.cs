@@ -7,7 +7,14 @@ namespace Zilon.Core
 {
     public static class PerkHelper
     {
-        public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        /// <summary>
+        /// Преобразование уровня/подуровня в суммарный уровень.
+        /// </summary>
+        /// <param name="perkScheme">Схема.</param>
+        /// <param name="level">Уровень перка.</param>
+        /// <param name="subLevel">Подуровень перка.</param>
+        /// <returns></returns>
+        public static int? ConvertLevel(IPerkScheme perkScheme, int? level, int subLevel)
         {
             if (perkScheme is null)
             {
@@ -15,26 +22,22 @@ namespace Zilon.Core
             }
 
             if (level == null)
+                return null;
+
+            var sum = 0;
+            for (var i = 0; i <= level; i++)
             {
-                return new PerkLevel(0, 0);
+                if (i < level)
+                {
+                    sum += perkScheme.Levels[i].MaxValue + 1;
+                }
+                else
+                {
+                    sum += subLevel;
+                }
             }
 
-            var currentLevel = level.Primary;
-            var currentSubLevel = level.Sub;
-
-            var currentLevelScheme = perkScheme.Levels[currentLevel];
-
-            if (currentSubLevel + 1 > currentLevelScheme.MaxValue)
-            {
-                currentSubLevel = 0;
-                currentLevel++;
-            }
-            else
-            {
-                currentSubLevel++;
-            }
-
-            return new PerkLevel(currentLevel, currentSubLevel);
+            return sum;
         }
 
         /// <summary>
@@ -76,14 +79,7 @@ namespace Zilon.Core
             } while (levelRemains >= 0);
         }
 
-        /// <summary>
-        /// Преобразование уровня/подуровня в суммарный уровень.
-        /// </summary>
-        /// <param name="perkScheme">Схема.</param>
-        /// <param name="level">Уровень перка.</param>
-        /// <param name="subLevel">Подуровень перка.</param>
-        /// <returns></returns>
-        public static int? ConvertLevel(IPerkScheme perkScheme, int? level, int subLevel)
+        public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
         {
             if (perkScheme is null)
             {
@@ -91,22 +87,26 @@ namespace Zilon.Core
             }
 
             if (level == null)
-                return null;
-
-            var sum = 0;
-            for (var i = 0; i <= level; i++)
             {
-                if (i < level)
-                {
-                    sum += perkScheme.Levels[i].MaxValue + 1;
-                }
-                else
-                {
-                    sum += subLevel;
-                }
+                return new PerkLevel(0, 0);
             }
 
-            return sum;
+            var currentLevel = level.Primary;
+            var currentSubLevel = level.Sub;
+
+            var currentLevelScheme = perkScheme.Levels[currentLevel];
+
+            if (currentSubLevel + 1 > currentLevelScheme.MaxValue)
+            {
+                currentSubLevel = 0;
+                currentLevel++;
+            }
+            else
+            {
+                currentSubLevel++;
+            }
+
+            return new PerkLevel(currentLevel, currentSubLevel);
         }
     }
 }

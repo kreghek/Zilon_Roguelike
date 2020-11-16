@@ -31,16 +31,6 @@ namespace Zilon.Core.Persons.Survival
 
         public DiseaseSymptom Symptom { get; }
 
-        public event EventHandler Changed;
-
-        public EffectRule[] GetRules()
-        {
-            return new[]
-            {
-                new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser)
-            };
-        }
-
         public void HoldDisease(IDisease disease)
         {
             if (!_diseases.Contains(disease))
@@ -56,6 +46,16 @@ namespace Zilon.Core.Persons.Survival
             _diseases.Remove(disease);
 
             Changed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler Changed;
+
+        public EffectRule[] GetRules()
+        {
+            return new[]
+            {
+                new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser)
+            };
         }
     }
 }

@@ -22,51 +22,6 @@ namespace Zilon.Core.Tests.Tactics
         private Mock<ISurvivalModule> _survivalDataMock;
 
         /// <summary>
-        /// Тест проверяет, что при обновлении состояния сектора у актёра игрока в сектора падают
-        /// значения характеристик выживания.
-        /// </summary>
-        [Test]
-        public void Update_PlayerActorWithSurvival_SurvivalStatsDecremented()
-        {
-            // ARRANGE
-            var mapMock = new Mock<ISectorMap>();
-            var map = mapMock.Object;
-
-            var innerActorList = new List<IActor>();
-            var actorManagerMock = new Mock<IActorManager>();
-            actorManagerMock.SetupGet(x => x.Items).Returns(innerActorList);
-            var actorManager = actorManagerMock.Object;
-
-            var propContainerManagerMock = new Mock<IStaticObjectManager>();
-            var propContainerManager = propContainerManagerMock.Object;
-
-            var dropResolverMock = new Mock<IDropResolver>();
-            var dropResolver = dropResolverMock.Object;
-
-            var schemeServiceMock = new Mock<ISchemeService>();
-            var schemeService = schemeServiceMock.Object;
-
-            var equipmentDurableServiceMock = new Mock<IEquipmentDurableService>();
-            var equipmentDurableService = equipmentDurableServiceMock.Object;
-
-            var sector = new Sector(map,
-                actorManager,
-                propContainerManager,
-                dropResolver,
-                schemeService,
-                equipmentDurableService);
-
-            var actorMock = CreateActorMock();
-            innerActorList.Add(actorMock.Object);
-
-            // ACT
-            sector.Update();
-
-            // ASSERT
-            _survivalDataMock.Verify(x => x.Update(), Times.Once);
-        }
-
-        /// <summary>
         /// Тест проверяет, что если для сектора не заданы узлы выхода, то событие выхода не срабатывает.
         /// </summary>
         [Test]
@@ -109,6 +64,51 @@ namespace Zilon.Core.Tests.Tactics
 
             // ASSERT
             monitor.Should().NotRaise(nameof(sector.TrasitionUsed));
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при обновлении состояния сектора у актёра игрока в сектора падают
+        /// значения характеристик выживания.
+        /// </summary>
+        [Test]
+        public void Update_PlayerActorWithSurvival_SurvivalStatsDecremented()
+        {
+            // ARRANGE
+            var mapMock = new Mock<ISectorMap>();
+            var map = mapMock.Object;
+
+            var innerActorList = new List<IActor>();
+            var actorManagerMock = new Mock<IActorManager>();
+            actorManagerMock.SetupGet(x => x.Items).Returns(innerActorList);
+            var actorManager = actorManagerMock.Object;
+
+            var propContainerManagerMock = new Mock<IStaticObjectManager>();
+            var propContainerManager = propContainerManagerMock.Object;
+
+            var dropResolverMock = new Mock<IDropResolver>();
+            var dropResolver = dropResolverMock.Object;
+
+            var schemeServiceMock = new Mock<ISchemeService>();
+            var schemeService = schemeServiceMock.Object;
+
+            var equipmentDurableServiceMock = new Mock<IEquipmentDurableService>();
+            var equipmentDurableService = equipmentDurableServiceMock.Object;
+
+            var sector = new Sector(map,
+                actorManager,
+                propContainerManager,
+                dropResolver,
+                schemeService,
+                equipmentDurableService);
+
+            var actorMock = CreateActorMock();
+            innerActorList.Add(actorMock.Object);
+
+            // ACT
+            sector.Update();
+
+            // ASSERT
+            _survivalDataMock.Verify(x => x.Update(), Times.Once);
         }
 
         private Mock<IActor> CreateActorMock()

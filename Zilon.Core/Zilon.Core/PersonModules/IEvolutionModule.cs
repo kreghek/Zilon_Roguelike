@@ -12,20 +12,14 @@ namespace Zilon.Core.PersonModules
     public interface IEvolutionModule : IPersonModule
     {
         /// <summary>
-        /// Перечень навыков.
-        /// </summary>
-        SkillStatItem[] Stats { get; }
-
-        /// <summary>
         /// Текущие перки.
         /// </summary>
         IPerk[] Perks { get; }
 
         /// <summary>
-        /// Указывает, что один из активных перков считается прокачанным.
+        /// Перечень навыков.
         /// </summary>
-        /// <param name="perk"> Активный перк, который следует считать достигнутым. </param>
-        void PerkLevelUp(IPerk perk);
+        SkillStatItem[] Stats { get; }
 
         /// <summary>
         /// Добавить врождённые перки.
@@ -36,6 +30,12 @@ namespace Zilon.Core.PersonModules
         /// И реализации нужно знать, какие перки врожденные, а какие приобретаются по мере развития персонажа.
         /// </remarks>
         void AddBuildInPerks(IEnumerable<IPerk> perks);
+
+        /// <summary>
+        /// Указывает, что один из активных перков считается прокачанным.
+        /// </summary>
+        /// <param name="perk"> Активный перк, который следует считать достигнутым. </param>
+        void PerkLevelUp(IPerk perk);
 
         /// <summary>
         /// Выстреливает, когда один из перков повышается на уровень.

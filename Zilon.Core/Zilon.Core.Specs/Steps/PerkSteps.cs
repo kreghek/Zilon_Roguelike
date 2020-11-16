@@ -20,16 +20,6 @@ namespace Zilon.Core.Specs.Steps
         {
         }
 
-        [Given(@"У актёра игрока прогресс (\d+) перка (.+)")]
-        public void GivenУАктёраИгрокаПрогрессПеркаНаУбийствоИз(int perkProgress, string perkSid)
-        {
-            var actor = Context.GetActiveActor();
-
-            var perk = actor.Person.GetModule<IEvolutionModule>().Perks.Single(x => x.Scheme.Sid == perkSid);
-
-            perk.CurrentJobs[0].Progress = perkProgress;
-        }
-
         [Given(@"Актёр игрока получает перк (.+)")]
         public void GivenАктёрИгрокаПолучаетПерк(string perkSid)
         {
@@ -47,6 +37,16 @@ namespace Zilon.Core.Specs.Steps
             {
                 perk
             });
+        }
+
+        [Given(@"У актёра игрока прогресс (\d+) перка (.+)")]
+        public void GivenУАктёраИгрокаПрогрессПеркаНаУбийствоИз(int perkProgress, string perkSid)
+        {
+            var actor = Context.GetActiveActor();
+
+            var perk = actor.Person.GetModule<IEvolutionModule>().Perks.Single(x => x.Scheme.Sid == perkSid);
+
+            perk.CurrentJobs[0].Progress = perkProgress;
         }
 
         [Then(@"Перк (.+) должен быть прокачен")]

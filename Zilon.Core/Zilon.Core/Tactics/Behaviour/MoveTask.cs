@@ -54,9 +54,21 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
+        public override int Cost { get; }
+
         public IGraphNode TargetNode { get; }
 
-        public override int Cost { get; }
+        public bool CanExecute()
+        {
+            if (!_path.Any())
+            {
+                return false;
+            }
+
+            var nextNode = _path[0];
+
+            return _map.IsPositionAvailableFor(nextNode, Actor);
+        }
 
         public override void Execute()
         {
@@ -100,6 +112,37 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
+        public override string ToString()
+        {
+            return $"{Actor} ({TargetNode})";
+        }
+
+        private void CreatePath()
+        {
+            var context = new ActorPathFindingContext(Actor, _map, TargetNode);
+
+            var startNode = Actor.Node;
+            var finishNode = TargetNode;
+
+            _path.Clear();
+
+            _map.FindPath(startNode, finishNode, context, _path);
+        }
+
+        private IEnumerable<IGraphNode> GetActorNodes(IPerson person, IGraphNode baseNode)
+        {
+            yield return baseNode;
+
+            if (person.PhysicalSize == PhysicalSizePattern.Size7)
+            {
+                var neighbors = _map.GetNext(baseNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
+                }
+            }
+        }
+
         private void HoldNodes(IGraphNode nextNode, IActor actor)
         {
             var actorNodes = GetActorNodes(actor.Person, nextNode);
@@ -118,49 +161,6 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 _map.ReleaseNode(node, actor);
             }
-        }
-
-        private IEnumerable<IGraphNode> GetActorNodes(IPerson person, IGraphNode baseNode)
-        {
-            yield return baseNode;
-
-            if (person.PhysicalSize == PhysicalSizePattern.Size7)
-            {
-                var neighbors = _map.GetNext(baseNode);
-                foreach (var neighbor in neighbors)
-                {
-                    yield return neighbor;
-                }
-            }
-        }
-
-        public bool CanExecute()
-        {
-            if (!_path.Any())
-            {
-                return false;
-            }
-
-            var nextNode = _path[0];
-
-            return _map.IsPositionAvailableFor(nextNode, Actor);
-        }
-
-        private void CreatePath()
-        {
-            var context = new ActorPathFindingContext(Actor, _map, TargetNode);
-
-            var startNode = Actor.Node;
-            var finishNode = TargetNode;
-
-            _path.Clear();
-
-            _map.FindPath(startNode, finishNode, context, _path);
-        }
-
-        public override string ToString()
-        {
-            return $"{Actor} ({TargetNode})";
         }
     }
 }

@@ -25,6 +25,12 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
+        /// Фактический бросок, который был выполнен для пробития обороны.
+        /// </summary>
+        [PublicAPI]
+        public int FactToHitRoll { get; }
+
+        /// <summary>
         /// Оборона, которая была использована.
         /// </summary>
         [PublicAPI]
@@ -35,11 +41,5 @@ namespace Zilon.Core.Tactics
         /// </summary>
         [PublicAPI]
         public int SuccessToHitRoll { get; }
-
-        /// <summary>
-        /// Фактический бросок, который был выполнен для пробития обороны.
-        /// </summary>
-        [PublicAPI]
-        public int FactToHitRoll { get; }
     }
 }

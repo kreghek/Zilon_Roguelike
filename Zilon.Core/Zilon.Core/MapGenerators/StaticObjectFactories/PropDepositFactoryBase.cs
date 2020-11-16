@@ -28,9 +28,9 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             Purpose = propContainerPurpose;
         }
 
-        protected abstract int ExhausingValue { get; }
-
         protected abstract DepositMiningDifficulty Difficulty { get; }
+
+        protected abstract int ExhausingValue { get; }
 
         public PropContainerPurpose Purpose { get; }
 

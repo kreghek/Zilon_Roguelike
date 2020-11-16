@@ -21,30 +21,6 @@ namespace Zilon.Core.Tests.Tactics.Base
     public abstract class CommonManagerTestsBase<TSectorEntity> where TSectorEntity : class
     {
         /// <summary>
-        /// Тест проверяет, что менеджер выбрасывает событие, если добавлен один актёр.
-        /// </summary>
-        [Test]
-        public void Add_OneEntity_EventRaise()
-        {
-            // ARRANGE
-
-            var entity = CreateEntity();
-
-            var manager = CreateManager();
-
-            // ACT
-            using (var monitor = manager.Monitor())
-            {
-                manager.Add(entity);
-
-                // ASSERT
-                monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
-                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
-                        (e.Items.Length == 1) && (e.Items[0] == entity));
-            }
-        }
-
-        /// <summary>
         /// Тест проверяет, что менеджер выбрасывает событие, если добавлено несколько сущностей.
         /// </summary>
         [Test]
@@ -76,25 +52,24 @@ namespace Zilon.Core.Tests.Tactics.Base
         }
 
         /// <summary>
-        /// Тест проверяет, что менеджер выбрасывает событие, если удалена одна сущность.
+        /// Тест проверяет, что менеджер выбрасывает событие, если добавлен один актёр.
         /// </summary>
         [Test]
-        public void Remove_OneEntity_EventRaise()
+        public void Add_OneEntity_EventRaise()
         {
             // ARRANGE
 
             var entity = CreateEntity();
 
             var manager = CreateManager();
-            manager.Add(entity);
 
             // ACT
             using (var monitor = manager.Monitor())
             {
-                manager.Remove(entity);
+                manager.Add(entity);
 
                 // ASSERT
-                monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
+                monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Added))
                     .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
                         (e.Items.Length == 1) && (e.Items[0] == entity));
             }
@@ -129,6 +104,31 @@ namespace Zilon.Core.Tests.Tactics.Base
                 monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
                     .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
                         CheckEventArgs(e, entityCount, entityList));
+            }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что менеджер выбрасывает событие, если удалена одна сущность.
+        /// </summary>
+        [Test]
+        public void Remove_OneEntity_EventRaise()
+        {
+            // ARRANGE
+
+            var entity = CreateEntity();
+
+            var manager = CreateManager();
+            manager.Add(entity);
+
+            // ACT
+            using (var monitor = manager.Monitor())
+            {
+                manager.Remove(entity);
+
+                // ASSERT
+                monitor.Should().Raise(nameof(ISectorEntityManager<TSectorEntity>.Removed))
+                    .WithArgs<ManagerItemsChangedEventArgs<TSectorEntity>>(e =>
+                        (e.Items.Length == 1) && (e.Items[0] == entity));
             }
         }
 

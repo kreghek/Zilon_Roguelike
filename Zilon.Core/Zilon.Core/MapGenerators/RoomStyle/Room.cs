@@ -16,6 +16,21 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         }
 
         /// <summary>
+        /// Высота комнаты комнаты.
+        /// </summary>
+        public int Height { get; set; }
+
+        /// <summary>
+        /// Признак того, что комната является стартовой в секторе.
+        /// </summary>
+        public bool IsStart { get; set; }
+
+        /// <summary>
+        /// Узлы данной комнаты.
+        /// </summary>
+        public List<HexNode> Nodes { get; }
+
+        /// <summary>
         /// Координата X в матрице комнат.
         /// </summary>
         public int PositionX { get; set; }
@@ -24,21 +39,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// Координата Y в матрице комнат.
         /// </summary>
         public int PositionY { get; set; }
-
-        /// <summary>
-        /// Ширина комнаты.
-        /// </summary>
-        public int Width { get; set; }
-
-        /// <summary>
-        /// Высота комнаты комнаты.
-        /// </summary>
-        public int Height { get; set; }
-
-        /// <summary>
-        /// Узлы данной комнаты.
-        /// </summary>
-        public List<HexNode> Nodes { get; }
 
         /// <summary>
         /// Идентификаторы секторов в текущей локации,
@@ -51,9 +51,9 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public List<RoomTransition> Transitions { get; }
 
         /// <summary>
-        /// Признак того, что комната является стартовой в секторе.
+        /// Ширина комнаты.
         /// </summary>
-        public bool IsStart { get; set; }
+        public int Width { get; set; }
 
         public override string ToString()
         {

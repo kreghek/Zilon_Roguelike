@@ -9,10 +9,10 @@ namespace Zilon.Core.Players
     {
         IGlobe Globe { get; }
 
+        IPerson MainPerson { get; }
+
         [Obsolete("Because we can get in from Globe. Currently remains fro old code.")]
         ISectorNode SectorNode { get; }
-
-        IPerson MainPerson { get; }
 
         void BindPerson(IGlobe globe, IPerson person);
 

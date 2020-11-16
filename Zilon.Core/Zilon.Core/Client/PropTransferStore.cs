@@ -38,6 +38,127 @@ namespace Zilon.Core.Client
         /// </summary>
         public IPropStore PropStore { get; }
 
+        private void MergeResource(List<IProp> result, Resource resource)
+        {
+            var removedResource = PropRemoved.OfType<Resource>()
+                .SingleOrDefault(x => x.Scheme == resource.Scheme);
+
+            var addedResource = PropAdded.OfType<Resource>()
+                .SingleOrDefault(x => x.Scheme == resource.Scheme);
+
+            var addedCount = addedResource?.Count;
+            var removedCount = removedResource?.Count;
+            var remainsCount = (resource.Count + addedCount.GetValueOrDefault()) - removedCount.GetValueOrDefault();
+
+            if (remainsCount > 0)
+            {
+                var remainsResource = new Resource(resource.Scheme, remainsCount);
+                result.Add(remainsResource);
+            }
+        }
+
+        private void ProcessAddedProps(List<IProp> result)
+        {
+            foreach (var prop in PropAdded)
+            {
+                switch (prop)
+                {
+                    case Resource _:
+                        var existsResource = result.SingleOrDefault(x => x.Scheme == prop.Scheme);
+                        if (existsResource == null)
+                        {
+                            result.Add(prop);
+                        }
+
+                        break;
+
+                    case Equipment _:
+                    case Concept _:
+                        result.Add(prop);
+                        break;
+
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+        }
+
+        private void ProcessCurrentProps(List<IProp> result, IProp[] propStoreItems)
+        {
+            foreach (var prop in propStoreItems)
+            {
+                switch (prop)
+                {
+                    case Resource resource:
+                        MergeResource(result, resource);
+                        break;
+
+                    case Equipment _:
+                    case Concept _:
+                        var isRemoved = PropRemoved.Contains(prop);
+
+                        if (!isRemoved)
+                        {
+                            result.Add(prop);
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        private static void TransferNoCount(
+            IProp prop,
+            IList<IProp> bittenList,
+            IList<IProp> oppositList)
+        {
+            var isBitten = bittenList.Contains(prop);
+            if (isBitten)
+            {
+                bittenList.Remove(prop);
+            }
+
+            oppositList.Add(prop);
+        }
+
+        private static void TransferResource(
+            Resource resource,
+            IList<IProp> mainList,
+            IList<IProp> oppositList)
+        {
+            var oppositResource = oppositList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
+            if (oppositResource != null)
+            {
+                var remains = oppositResource.Count - resource.Count;
+                if (remains <= 0)
+                {
+                    oppositList.Remove(oppositResource);
+
+                    if (remains < 0)
+                    {
+                        //resource.Count - похоже на ошибку. Нужно добавить тест.
+                        // должно быть что-то типа remains * -1
+                        // сейчас просто нет ситуации, когда у нас, например, из инвентаря было изъято 10 ед. А потом 15 добавлено.
+                        var mainResource = new Resource(resource.Scheme, resource.Count);
+                        mainList.Add(mainResource);
+                    }
+                }
+            }
+            else
+            {
+                var mainResource = mainList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
+                if (mainResource == null)
+                {
+                    mainResource = new Resource(resource.Scheme, resource.Count);
+                    mainList.Add(mainResource);
+                }
+                else
+                {
+                    mainResource.Count += resource.Count;
+                }
+            }
+        }
+
         /// <summary>
         /// Событие выстреливает, когда в хранилище появляется новый предмет.
         /// </summary>
@@ -157,127 +278,6 @@ namespace Zilon.Core.Client
             //TODO Неправильная реализация
             // Не учитывает списки добавленных и удалённых предметов.
             return PropStore.Has(prop);
-        }
-
-        private void ProcessAddedProps(List<IProp> result)
-        {
-            foreach (var prop in PropAdded)
-            {
-                switch (prop)
-                {
-                    case Resource _:
-                        var existsResource = result.SingleOrDefault(x => x.Scheme == prop.Scheme);
-                        if (existsResource == null)
-                        {
-                            result.Add(prop);
-                        }
-
-                        break;
-
-                    case Equipment _:
-                    case Concept _:
-                        result.Add(prop);
-                        break;
-
-                    default:
-                        throw new NotSupportedException();
-                }
-            }
-        }
-
-        private void ProcessCurrentProps(List<IProp> result, IProp[] propStoreItems)
-        {
-            foreach (var prop in propStoreItems)
-            {
-                switch (prop)
-                {
-                    case Resource resource:
-                        MergeResource(result, resource);
-                        break;
-
-                    case Equipment _:
-                    case Concept _:
-                        var isRemoved = PropRemoved.Contains(prop);
-
-                        if (!isRemoved)
-                        {
-                            result.Add(prop);
-                        }
-
-                        break;
-                }
-            }
-        }
-
-        private void MergeResource(List<IProp> result, Resource resource)
-        {
-            var removedResource = PropRemoved.OfType<Resource>()
-                .SingleOrDefault(x => x.Scheme == resource.Scheme);
-
-            var addedResource = PropAdded.OfType<Resource>()
-                .SingleOrDefault(x => x.Scheme == resource.Scheme);
-
-            var addedCount = addedResource?.Count;
-            var removedCount = removedResource?.Count;
-            var remainsCount = (resource.Count + addedCount.GetValueOrDefault()) - removedCount.GetValueOrDefault();
-
-            if (remainsCount > 0)
-            {
-                var remainsResource = new Resource(resource.Scheme, remainsCount);
-                result.Add(remainsResource);
-            }
-        }
-
-        private static void TransferResource(
-            Resource resource,
-            IList<IProp> mainList,
-            IList<IProp> oppositList)
-        {
-            var oppositResource = oppositList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
-            if (oppositResource != null)
-            {
-                var remains = oppositResource.Count - resource.Count;
-                if (remains <= 0)
-                {
-                    oppositList.Remove(oppositResource);
-
-                    if (remains < 0)
-                    {
-                        //resource.Count - похоже на ошибку. Нужно добавить тест.
-                        // должно быть что-то типа remains * -1
-                        // сейчас просто нет ситуации, когда у нас, например, из инвентаря было изъято 10 ед. А потом 15 добавлено.
-                        var mainResource = new Resource(resource.Scheme, resource.Count);
-                        mainList.Add(mainResource);
-                    }
-                }
-            }
-            else
-            {
-                var mainResource = mainList.OfType<Resource>().SingleOrDefault(x => x.Scheme == resource.Scheme);
-                if (mainResource == null)
-                {
-                    mainResource = new Resource(resource.Scheme, resource.Count);
-                    mainList.Add(mainResource);
-                }
-                else
-                {
-                    mainResource.Count += resource.Count;
-                }
-            }
-        }
-
-        private static void TransferNoCount(
-            IProp prop,
-            IList<IProp> bittenList,
-            IList<IProp> oppositList)
-        {
-            var isBitten = bittenList.Contains(prop);
-            if (isBitten)
-            {
-                bittenList.Remove(prop);
-            }
-
-            oppositList.Add(prop);
         }
     }
 }

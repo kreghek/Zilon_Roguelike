@@ -23,6 +23,8 @@ namespace Zilon.Bot.Players
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
 
+        protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
+
         public void CancelTask(IActorTask cencelledActorTask)
         {
             // Этот метод был введен для HumanActorTaskSource.
@@ -108,7 +110,5 @@ namespace Zilon.Bot.Players
             // Например, при использовании парного оружия.
             // Механика пока не реализована.
         }
-
-        protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
     }
 }
