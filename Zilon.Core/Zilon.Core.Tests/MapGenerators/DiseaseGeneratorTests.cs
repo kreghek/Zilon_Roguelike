@@ -7,8 +7,9 @@ using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Diseases;
+using Zilon.Core.MapGenerators;
 
-namespace Zilon.Core.MapGenerators.Tests
+namespace Zilon.Core.Tests.MapGenerators
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
@@ -37,12 +38,12 @@ namespace Zilon.Core.MapGenerators.Tests
             for (var i = 0; i < count; i++)
             {
                 var disease = generator.Create();
-                if (disease != null)
+                if (disease == null)
                 {
-                    resultDiseases.Add(disease);
-                    Console.WriteLine(
-                        $"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}");
+                    continue;
                 }
+
+                resultDiseases.Add(disease);
             }
 
             // ASSERT
