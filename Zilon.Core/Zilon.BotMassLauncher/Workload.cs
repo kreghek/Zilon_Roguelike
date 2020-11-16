@@ -10,7 +10,7 @@ using Zilon.CommonUtilities;
 
 namespace Zilon.BotMassLauncher
 {
-    public class Workload
+    internal class Workload
     {
         private static string _pathToEnv;
         private static int _launchCount;
