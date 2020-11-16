@@ -162,12 +162,12 @@ namespace Zilon.Core.ProgressStoring
                 Level = x.CurrentLevel?.Primary,
                 SubLevel = x.CurrentLevel?.Sub,
                 Jobs = x.CurrentJobs.Select(job => new PerkJobStorageData
-                        {
-                            Type = job.Scheme.Type,
-                            Scope = job.Scheme.Scope,
-                            Progress = job.Progress,
-                            IsComplete = job.IsComplete
-                        })
+                {
+                    Type = job.Scheme.Type,
+                    Scope = job.Scheme.Scope,
+                    Progress = job.Progress,
+                    IsComplete = job.IsComplete
+                })
                         .ToArray()
             };
         }
@@ -219,19 +219,19 @@ namespace Zilon.Core.ProgressStoring
                 var currentLevelScheme = perkScheme.Levels[0];
 
                 perk.CurrentJobs = currentLevelScheme.Jobs.Select(job => new PerkJob(job)
-                                                     {
-                                                         IsComplete =
+                {
+                    IsComplete =
                                                              storedPerk.Jobs
                                                                        .Single(storedJob =>
                                                                            (storedJob.Type == job.Type) &&
                                                                            (storedJob.Scope == job.Scope))
                                                                        .IsComplete,
-                                                         Progress = storedPerk.Jobs
+                    Progress = storedPerk.Jobs
                                                                               .Single(storedJob =>
                                                                                   (storedJob.Type == job.Type) &&
                                                                                   (storedJob.Scope == job.Scope))
                                                                               .Progress
-                                                     })
+                })
                                                      .ToArray();
 
                 perksFromSave.Add(perk);

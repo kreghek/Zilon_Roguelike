@@ -136,9 +136,9 @@ namespace Zilon.Core.MapGenerators
 
             var map = sector.Map;
             var availableNodes = from node in region.Nodes
-                where !map.Transitions.Keys.Contains(node)
-                where map.IsPositionAvailableForContainer(node)
-                select node;
+                                 where !map.Transitions.Keys.Contains(node)
+                                 where map.IsPositionAvailableForContainer(node)
+                                 select node;
 
             var openNodes = new List<IGraphNode>(availableNodes);
             for (var i = 0; i < rolledCount; i++)

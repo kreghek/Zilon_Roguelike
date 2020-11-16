@@ -250,8 +250,8 @@ namespace Zilon.Core.PersonModules
             foreach (var armorGroup in armorGroups)
             {
                 var orderedArmors = from armor in armorGroup
-                    orderby armor.AbsorbtionLevel, armor.ArmorRank
-                    select armor;
+                                    orderby armor.AbsorbtionLevel, armor.ArmorRank
+                                    select armor;
 
                 float? rankRaw = null;
                 PersonRuleLevel? armorLevel = null;
