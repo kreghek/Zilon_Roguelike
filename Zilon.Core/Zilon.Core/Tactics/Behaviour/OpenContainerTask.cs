@@ -1,4 +1,10 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using System;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Tactics.Spatial;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Задача актёра на подбор предмета из сектора (с земли или из контейнера) в инвентарь

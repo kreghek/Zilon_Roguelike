@@ -1,27 +1,29 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Linq;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.ProgressStoring
 {
     public sealed class ScoresStorageData
     {
-        public ScoreAchievements Achievements { get; set; }
+        public float TurnCounter { get; set; }
 
         public int BaseScores { get; set; }
 
         /// <summary>Фраги по схемам монстров, добытые игроком.</summary>
         public ScoreSidCounterStorageData[] Frags { get; set; }
 
-        /// <summary>Посещённые места.</summary>
-        public OffsetCoords[] Places { get; set; }
-
         /// <summary>Счётчик ходов по типам секторов.</summary>
         public ScoreSidCounterStorageData[] PlaceTypes { get; set; }
 
-        public float TurnCounter { get; set; }
-
         /// <summary>Шаги, прожитые персонажем.</summary>
         public int Turns { get; set; }
+
+        /// <summary>Посещённые места.</summary>
+        public OffsetCoords[] Places { get; set; }
+
+        public ScoreAchievements Achievements { get; set; }
 
         public static ScoresStorageData Create(Scores scores)
         {

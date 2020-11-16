@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Подсхема предмета для хранения характеристик при применении предмета.

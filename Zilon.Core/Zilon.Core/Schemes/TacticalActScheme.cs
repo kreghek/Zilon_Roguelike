@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System;
+
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Схема действия.

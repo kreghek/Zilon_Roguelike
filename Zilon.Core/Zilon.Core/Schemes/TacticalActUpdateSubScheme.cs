@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Подсхема апдейта тактического действия.
@@ -22,15 +24,15 @@
         public int Priority { get; set; }
 
         /// <summary>
-        /// Требуемый уровень для открытия апдейта.
-        /// </summary>
-        [ExcludeFromCodeCoverage]
-        public int? RequiredLevel { get; set; }
-
-        /// <summary>
         /// Символьные идентфиикаторы перков, требуемые для открытия апдейта.
         /// </summary>
         [ExcludeFromCodeCoverage]
         public string[] RequiredPerkSids { get; set; }
+
+        /// <summary>
+        /// Требуемый уровень для открытия апдейта.
+        /// </summary>
+        [ExcludeFromCodeCoverage]
+        public int? RequiredLevel { get; set; }
     }
 }

@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+using System.Collections.Generic;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.StaticObjectModules;
 
@@ -18,13 +21,6 @@ namespace Zilon.Core.Tactics
             Id = id;
             Node = node ?? throw new ArgumentNullException(nameof(node));
             Purpose = purpose;
-        }
-
-        /// <inheritdoc/>
-        private bool GetIsMapBlock()
-        {
-            var propContainer = this.GetModuleSafe<IPropContainer>();
-            return (propContainer?.IsMapBlock).GetValueOrDefault(true);
         }
 
         /// <inheritdoc/>
@@ -79,6 +75,13 @@ namespace Zilon.Core.Tactics
             }
 
             durabilityModule.TakeDamage(value);
+        }
+
+        /// <inheritdoc/>
+        private bool GetIsMapBlock()
+        {
+            var propContainer = this.GetModuleSafe<IPropContainer>();
+            return (propContainer?.IsMapBlock).GetValueOrDefault(true);
         }
     }
 }

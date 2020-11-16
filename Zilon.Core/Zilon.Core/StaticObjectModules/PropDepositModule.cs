@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.StaticObjectModules
@@ -29,12 +31,6 @@ namespace Zilon.Core.StaticObjectModules
             _exhaustingValue = exhaustingValue;
             _exhaustingCounter = exhaustingValue;
             Difficulty = depositMiningDifficulty;
-        }
-
-        private void DoMined()
-        {
-            var eventArgs = new EventArgs();
-            Mined?.Invoke(this, eventArgs);
         }
 
         /// <inheritdoc/>
@@ -80,6 +76,12 @@ namespace Zilon.Core.StaticObjectModules
             _exhaustingCounter--;
 
             DoMined();
+        }
+
+        private void DoMined()
+        {
+            var eventArgs = new EventArgs();
+            Mined?.Invoke(this, eventArgs);
         }
     }
 }

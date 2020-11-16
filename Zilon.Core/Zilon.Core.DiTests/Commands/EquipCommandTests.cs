@@ -1,4 +1,12 @@
-﻿using Zilon.Core.Client;
+﻿using FluentAssertions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Components;
 using Zilon.Core.Props;
@@ -14,6 +22,23 @@ namespace Zilon.Core.Tests.Commands
     public class EquipCommandTests : CommandTestBase
     {
         private Mock<IInventoryState> _inventoryStateMock;
+
+        /// <summary>
+        /// Тест проверяет, что можно использовать экипировку.
+        /// </summary>
+        [Test]
+        public void CanExecute_SelectEquipment_ReturnsTrue()
+        {
+            // ARRANGE
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
+            command.SlotIndex = 0;
+
+            // ACT
+            var canExecute = command.CanExecute();
+
+            // ASSERT
+            canExecute.Should().BeTrue();
+        }
 
         /// <summary>
         /// Тест проверяет, что нельзя экипировать ресурс.
@@ -50,23 +75,6 @@ namespace Zilon.Core.Tests.Commands
 
             // ASSERT
             canExecute.Should().BeFalse();
-        }
-
-        /// <summary>
-        /// Тест проверяет, что можно использовать экипировку.
-        /// </summary>
-        [Test]
-        public void CanExecute_SelectEquipment_ReturnsTrue()
-        {
-            // ARRANGE
-            var command = ServiceProvider.GetRequiredService<EquipCommand>();
-            command.SlotIndex = 0;
-
-            // ACT
-            var canExecute = command.CanExecute();
-
-            // ASSERT
-            canExecute.Should().BeTrue();
         }
 
         /// <summary>

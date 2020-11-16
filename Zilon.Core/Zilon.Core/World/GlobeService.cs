@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.World
+﻿using System;
+using System.Threading.Tasks;
+
+namespace Zilon.Core.World
 {
     public sealed class GlobeService : IGlobeService
     {
@@ -7,15 +10,6 @@
         public GlobeService(IBiomeInitializer biomeInitializer)
         {
             _biomeInitializer = biomeInitializer;
-        }
-
-        private async Task ExpandGlobeInternalAsync(IGlobe globe, ISectorNode sectorNode)
-        {
-            await _biomeInitializer.MaterializeLevelAsync(sectorNode).ConfigureAwait(false);
-
-            // Фиксируем новый узел, как известную, материализованную часть мира.
-            // Далее этот узел будет обрабатываться при каждом изменении мира.
-            globe.AddSectorNode(sectorNode);
         }
 
         public Task ExpandGlobeAsync(IGlobe globe, ISectorNode sectorNode)
@@ -36,6 +30,15 @@
             }
 
             return ExpandGlobeInternalAsync(globe, sectorNode);
+        }
+
+        private async Task ExpandGlobeInternalAsync(IGlobe globe, ISectorNode sectorNode)
+        {
+            await _biomeInitializer.MaterializeLevelAsync(sectorNode).ConfigureAwait(false);
+
+            // Фиксируем новый узел, как известную, материализованную часть мира.
+            // Далее этот узел будет обрабатываться при каждом изменении мира.
+            globe.AddSectorNode(sectorNode);
         }
     }
 }

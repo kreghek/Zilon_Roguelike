@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Запись в схеме таблицы дропа.

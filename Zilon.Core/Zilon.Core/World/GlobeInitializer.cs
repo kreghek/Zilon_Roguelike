@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Graphs;
+﻿using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -26,16 +29,6 @@ namespace Zilon.Core.World
             _schemeService = schemeService;
             _actorTaskSource = actorTaskSource;
             _personInitializer = personInitializer;
-        }
-
-        private static IActor CreateActor(
-            IPerson humanPerson,
-            IGraphNode startNode,
-            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
-        {
-            var actor = new Actor(humanPerson, actorTaskSource, startNode);
-
-            return actor;
         }
 
         public async Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid)
@@ -67,6 +60,16 @@ namespace Zilon.Core.World
             }
 
             return globe;
+        }
+
+        private static IActor CreateActor(
+            IPerson humanPerson,
+            IGraphNode startNode,
+            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
+        {
+            var actor = new Actor(humanPerson, actorTaskSource, startNode);
+
+            return actor;
         }
     }
 }

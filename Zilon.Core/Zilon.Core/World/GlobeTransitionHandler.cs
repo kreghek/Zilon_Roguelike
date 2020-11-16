@@ -1,4 +1,9 @@
-﻿using Zilon.Core.MapGenerators;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.World
@@ -17,9 +22,33 @@ namespace Zilon.Core.World
             _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
-        public void Dispose()
+        public Task ProcessAsync(
+            IGlobe globe,
+            ISector sector,
+            IActor actor,
+            RoomTransition transition)
         {
-            _semaphoreSlim.Dispose();
+            if (globe is null)
+            {
+                throw new ArgumentNullException(nameof(globe));
+            }
+
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            if (transition is null)
+            {
+                throw new ArgumentNullException(nameof(transition));
+            }
+
+            return ProcessInnerAsync(globe, sector, actor, transition);
         }
 
         private async Task ProcessInnerAsync(
@@ -69,33 +98,9 @@ namespace Zilon.Core.World
             }
         }
 
-        public Task ProcessAsync(
-            IGlobe globe,
-            ISector sector,
-            IActor actor,
-            RoomTransition transition)
+        public void Dispose()
         {
-            if (globe is null)
-            {
-                throw new ArgumentNullException(nameof(globe));
-            }
-
-            if (sector is null)
-            {
-                throw new ArgumentNullException(nameof(sector));
-            }
-
-            if (actor is null)
-            {
-                throw new ArgumentNullException(nameof(actor));
-            }
-
-            if (transition is null)
-            {
-                throw new ArgumentNullException(nameof(transition));
-            }
-
-            return ProcessInnerAsync(globe, sector, actor, transition);
+            _semaphoreSlim.Dispose();
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.CommonServices.Dices
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.CommonServices.Dices
 {
     /// <summary>
     /// Реализация игральной кости, которая выбрасывает числа по линейному закону.

@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+using System.Threading.Tasks;
+
+namespace Zilon.Core.Common
 {
     public static class TaskExtensions
     {
@@ -21,6 +24,17 @@
             return TimeoutAfterInner(task, millisecondsTimeout);
         }
 
+        private static async Task<TResult> TimeoutAfterInner<TResult>(Task<TResult> task, int millisecondsTimeout)
+        {
+            var completedTask = await Task.WhenAny(task, Task.Delay(millisecondsTimeout)).ConfigureAwait(false);
+            if (task == completedTask)
+            {
+                return await task.ConfigureAwait(false);
+            }
+
+            throw new TimeoutException();
+        }
+
         /// <summary>
         /// Выполняет задачу не дольше указанного времени.
         /// </summary>
@@ -37,17 +51,6 @@
             }
 
             return TimeoutAfterInner(task, millisecondsTimeout);
-        }
-
-        private static async Task<TResult> TimeoutAfterInner<TResult>(Task<TResult> task, int millisecondsTimeout)
-        {
-            var completedTask = await Task.WhenAny(task, Task.Delay(millisecondsTimeout)).ConfigureAwait(false);
-            if (task == completedTask)
-            {
-                return await task.ConfigureAwait(false);
-            }
-
-            throw new TimeoutException();
         }
 
         private static async Task TimeoutAfterInner(Task task, int millisecondsTimeout)

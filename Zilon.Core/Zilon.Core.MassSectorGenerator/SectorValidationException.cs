@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.MassSectorGenerator
+﻿using System;
+
+namespace Zilon.Core.MassSectorGenerator
 {
     /// <summary>
     /// Выбрасывается в процессе проверки валидности сектора.

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Props;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics

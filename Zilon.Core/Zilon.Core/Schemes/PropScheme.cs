@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <inheritdoc cref="IPropScheme" />
     /// <summary>

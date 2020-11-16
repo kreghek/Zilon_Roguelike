@@ -1,4 +1,6 @@
-﻿namespace Zilon.Bot.Players
+﻿using System;
+
+namespace Zilon.Bot.Players
 {
     public class LogicTransition
     {
@@ -8,9 +10,9 @@
             NextState = nextState ?? throw new ArgumentNullException(nameof(nextState));
         }
 
-        public ILogicState NextState { get; }
-
         public ILogicStateTrigger Trigger { get; }
+
+        public ILogicState NextState { get; }
 
         public override string ToString()
         {

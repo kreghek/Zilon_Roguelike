@@ -1,5 +1,11 @@
 ﻿using System;
 
+using FluentAssertions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using TechTalk.SpecFlow;
+
 using Zilon.Core.Commands;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.Tactics.Spatial;
@@ -11,20 +17,6 @@ namespace Zilon.Core.Specs.Steps
     {
         protected MoveSteps(CommonGameActionsContext context) : base(context)
         {
-        }
-
-        [Then(@"Актёр находится в ячейке \((.*), (.*)\)")]
-        public void ThenАктёрНаходитсяВЯчейке(int expectedOffsetX, int expectedOffsetY)
-        {
-            var actor = Context.GetActiveActor();
-
-            var node = actor.Node;
-
-            var hexNode = (HexNode)node;
-
-            var expectedOffsetCoords = new OffsetCoords(expectedOffsetX, expectedOffsetY);
-            var factOffsetCoords = hexNode.OffsetCoords;
-            factOffsetCoords.Should().Be(expectedOffsetCoords);
         }
 
         [Then(@"Команда на перемещение может выполняться")]
@@ -62,6 +54,20 @@ namespace Zilon.Core.Specs.Steps
             {
                 Console.WriteLine(exception.ToString());
             }
+        }
+
+        [Then(@"Актёр находится в ячейке \((.*), (.*)\)")]
+        public void ThenАктёрНаходитсяВЯчейке(int expectedOffsetX, int expectedOffsetY)
+        {
+            var actor = Context.GetActiveActor();
+
+            var node = actor.Node;
+
+            var hexNode = (HexNode)node;
+
+            var expectedOffsetCoords = new OffsetCoords(expectedOffsetX, expectedOffsetY);
+            var factOffsetCoords = hexNode.OffsetCoords;
+            factOffsetCoords.Should().Be(expectedOffsetCoords);
         }
     }
 }

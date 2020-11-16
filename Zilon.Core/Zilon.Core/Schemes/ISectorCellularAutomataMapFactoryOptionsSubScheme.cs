@@ -6,10 +6,9 @@
     public interface ISectorCellularAutomataMapFactoryOptionsSubScheme : ISectorMapFactoryOptionsSubScheme
     {
         /// <summary>
-        /// Шанс, что на первоначальной карте клетка будет живой.
-        /// Указывается в диапазоне 0..100.
+        /// Ширина матрицы, на которой будет работать клеточный автомат.
         /// </summary>
-        int ChanceToStartAlive { get; }
+        int MapWidth { get; }
 
         /// <summary>
         /// Высота матрицы, на которой будет работать клеточный автомат.
@@ -17,8 +16,9 @@
         int MapHeight { get; }
 
         /// <summary>
-        /// Ширина матрицы, на которой будет работать клеточный автомат.
+        /// Шанс, что на первоначальной карте клетка будет живой.
+        /// Указывается в диапазоне 0..100.
         /// </summary>
-        int MapWidth { get; }
+        int ChanceToStartAlive { get; }
     }
 }

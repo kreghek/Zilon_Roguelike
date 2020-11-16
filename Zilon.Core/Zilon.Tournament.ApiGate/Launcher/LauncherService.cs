@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using Newtonsoft.Json;
+
 namespace Zilon.Tournament.ApiGate.Launcher
 {
     public class LauncherService : BackgroundService

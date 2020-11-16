@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Schemes
+﻿using JetBrains.Annotations;
+
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Схема персонажа.

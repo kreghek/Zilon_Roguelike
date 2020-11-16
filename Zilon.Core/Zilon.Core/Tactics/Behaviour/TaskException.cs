@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using System;
+using System.Runtime.Serialization;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
     /// Исключение, которые выбрасывается при нарушении выполнения задачи актёра.

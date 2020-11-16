@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Components;
+﻿using System;
+
+using Zilon.Core.Components;
 
 namespace Zilon.Core.LogicCalculations
 {

@@ -8,23 +8,23 @@ namespace Zilon.Core.Schemes
     public interface IPropEquipSubScheme
     {
         /// <summary>
-        /// Идентификаторы действий, которые позволяет совершать предмет.
-        /// </summary>
-        string[] ActSids { get; }
-
-        /// <summary>
         /// Характеристики брони, которую даёт предмет при экипировке.
         /// </summary>
         IPropArmorItemSubScheme[] Armors { get; }
 
         /// <summary>
-        /// Правила, которые будут срабатывать при экипировке предмета.
+        /// Идентификаторы действий, которые позволяет совершать предмет.
         /// </summary>
-        PersonRule[] Rules { get; }
+        string[] ActSids { get; }
 
         /// <summary>
         /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
         EquipmentSlotTypes[] SlotTypes { get; }
+
+        /// <summary>
+        /// Правила, которые будут срабатывать при экипировке предмета.
+        /// </summary>
+        PersonRule[] Rules { get; }
     }
 }

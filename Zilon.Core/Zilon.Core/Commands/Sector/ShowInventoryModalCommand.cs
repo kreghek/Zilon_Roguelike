@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 
 namespace Zilon.Core.Commands
@@ -18,14 +22,14 @@ namespace Zilon.Core.Commands
             _playerState = playerState;
         }
 
-        public override bool CanExecute()
-        {
-            return true;
-        }
-
         public override void Execute()
         {
             ModalManager.ShowInventoryModal(_playerState.ActiveActor.Actor);
+        }
+
+        public override bool CanExecute()
+        {
+            return true;
         }
     }
 }

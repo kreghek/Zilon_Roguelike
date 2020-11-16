@@ -1,4 +1,10 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.World
@@ -25,6 +31,39 @@ namespace Zilon.Core.World
                 globeTransitionHandler ?? throw new ArgumentNullException(nameof(globeTransitionHandler));
         }
 
+        public IEnumerable<ISectorNode> SectorNodes => _sectorNodes;
+
+        public void AddSectorNode(ISectorNode sectorNode)
+        {
+            if (sectorNode is null)
+            {
+                throw new ArgumentNullException(nameof(sectorNode));
+            }
+
+            _sectorNodes.Add(sectorNode);
+            sectorNode.Sector.TrasitionUsed += Sector_TrasitionUsed;
+            sectorNode.Sector.ActorManager.Removed += ActorManager_Removed;
+        }
+
+        public async Task UpdateAsync()
+        {
+            var actorsWithoutTasks = GetActorsWithoutTasks();
+
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
+
+            ProcessTasks(_taskDict);
+            _turnCounter++;
+            if (_turnCounter >= GlobeMetrics.OneIterationLength)
+            {
+                _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
+
+                foreach (var sectorNode in _sectorNodes)
+                {
+                    sectorNode.Sector.Update();
+                }
+            }
+        }
+
         private void ActorManager_Removed(object sender, ManagerItemsChangedEventArgs<IActor> e)
         {
             // Remove all current tasks
@@ -34,30 +73,18 @@ namespace Zilon.Core.World
             }
         }
 
-        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
+        private void RemoveActorTaskState(IActor actor)
         {
-            var actorDataListMaterialized = actorDataList.ToArray();
-            foreach (var actorDataItem in actorDataListMaterialized)
+            if (_taskDict.TryRemove(actor, out var taskState))
             {
-                var actor = actorDataItem.Actor;
-                var sector = actorDataItem.Sector;
-
-                var taskSource = actor.TaskSource;
-
-                var context = new SectorTaskSourceContext(sector);
-
-                //TODO Это можно делать параллельно. Одновременно должны думать сразу все актёры.
-                // Делается легко, через Parallel.ForEach, но из-за этого часто заваливаются тесты и даже не видно причины отказа.
-                var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
-
-                var state = new TaskState(actor, actorTask, taskSource);
-                if (!_taskDict.TryAdd(actor, state))
-                {
-                    // Это происходит, когда игрок пытается присвоить новую команду,
-                    // когда старая еще не закончена и не может быть заменена.
-                    throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
-                }
+                taskState.TaskSource.CancelTask(taskState.Task);
             }
+        }
+
+        private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)
+        {
+            var sector = (ISector)sender;
+            await _globeTransitionHandler.ProcessAsync(this, sector, e.Actor, e.Transition).ConfigureAwait(false);
         }
 
         private IEnumerable<ActorInSector> GetActorsWithoutTasks()
@@ -89,6 +116,32 @@ namespace Zilon.Core.World
                     {
                         Actor = actor, Sector = sector
                     };
+                }
+            }
+        }
+
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
+        {
+            var actorDataListMaterialized = actorDataList.ToArray();
+            foreach (var actorDataItem in actorDataListMaterialized)
+            {
+                var actor = actorDataItem.Actor;
+                var sector = actorDataItem.Sector;
+
+                var taskSource = actor.TaskSource;
+
+                var context = new SectorTaskSourceContext(sector);
+
+                //TODO Это можно делать параллельно. Одновременно должны думать сразу все актёры.
+                // Делается легко, через Parallel.ForEach, но из-за этого часто заваливаются тесты и даже не видно причины отказа.
+                var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
+
+                var state = new TaskState(actor, actorTask, taskSource);
+                if (!_taskDict.TryAdd(actor, state))
+                {
+                    // Это происходит, когда игрок пытается присвоить новую команду,
+                    // когда старая еще не закончена и не может быть заменена.
+                    throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
                 }
             }
         }
@@ -151,58 +204,11 @@ namespace Zilon.Core.World
             }
         }
 
-        private void RemoveActorTaskState(IActor actor)
-        {
-            if (_taskDict.TryRemove(actor, out var taskState))
-            {
-                taskState.TaskSource.CancelTask(taskState.Task);
-            }
-        }
-
-        private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)
-        {
-            var sector = (ISector)sender;
-            await _globeTransitionHandler.ProcessAsync(this, sector, e.Actor, e.Transition).ConfigureAwait(false);
-        }
-
-        public IEnumerable<ISectorNode> SectorNodes => _sectorNodes;
-
-        public void AddSectorNode(ISectorNode sectorNode)
-        {
-            if (sectorNode is null)
-            {
-                throw new ArgumentNullException(nameof(sectorNode));
-            }
-
-            _sectorNodes.Add(sectorNode);
-            sectorNode.Sector.TrasitionUsed += Sector_TrasitionUsed;
-            sectorNode.Sector.ActorManager.Removed += ActorManager_Removed;
-        }
-
-        public async Task UpdateAsync()
-        {
-            var actorsWithoutTasks = GetActorsWithoutTasks();
-
-            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
-
-            ProcessTasks(_taskDict);
-            _turnCounter++;
-            if (_turnCounter >= GlobeMetrics.OneIterationLength)
-            {
-                _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
-
-                foreach (var sectorNode in _sectorNodes)
-                {
-                    sectorNode.Sector.Update();
-                }
-            }
-        }
-
         private sealed class ActorInSector
         {
-            public IActor Actor { get; set; }
-
             public ISector Sector { get; set; }
+
+            public IActor Actor { get; set; }
         }
     }
 }

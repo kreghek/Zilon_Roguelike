@@ -6,13 +6,13 @@
     internal interface IMapRule
     {
         /// <summary>
-        /// Description for debugging.
-        /// </summary>
-        string Description { get; }
-
-        /// <summary>
         /// Name for debug
         /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// Description for debugging.
+        /// </summary>
+        string Description { get; }
     }
 }

@@ -5,11 +5,11 @@
     /// </summary>
     public class SchemeFile
     {
-        public string Content { get; set; }
+        public string Sid { get; set; }
 
         public string Path { get; set; }
 
-        public string Sid { get; set; }
+        public string Content { get; set; }
 
         public override string ToString()
         {

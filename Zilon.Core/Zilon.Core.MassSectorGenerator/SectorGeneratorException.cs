@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.MassSectorGenerator
+﻿using System;
+
+namespace Zilon.Core.MassSectorGenerator
 {
     /// <summary>
     /// Исключение, которое выбрасывается в случае предстказуемой ошибки в работе рисовальщика.

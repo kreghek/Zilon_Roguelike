@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -12,6 +16,39 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
     internal class ChestValidator : ISectorValidator
     {
+        public Task Validate(ISector sector, IServiceProvider scopeContainer)
+        {
+            return Task.Run(() =>
+            {
+                // Сундуки не должны генерироваться на узлы, которые являются препятствием.
+                // Сундуки не должны генерироваться на узлы с выходом.
+                var staticObjectManager = sector.StaticObjectManager;
+                var allContainers = staticObjectManager.Items;
+                var allContainerNodes = allContainers.Select(x => x.Node).ToArray();
+                foreach (var container in allContainers)
+                {
+                    var hex = (HexNode)container.Node;
+
+                    ValidateTransitionOverlap(sector, container);
+
+                    ValidatePassability(hex, sector.Map, allContainerNodes);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Проверяем, что сундук не на клетке с выходом.
+        /// </summary>
+        private static void ValidateTransitionOverlap(ISector sector, IStaticObject container)
+        {
+            var transitionNodes = sector.Map.Transitions.Keys;
+            var chestOnTransitionNode = transitionNodes.Contains(container.Node);
+            if (chestOnTransitionNode)
+            {
+                throw new SectorValidationException();
+            }
+        }
+
         /// <summary>
         /// Проверяем, что к сундуку есть подход.
         /// </summary>
@@ -39,39 +76,6 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
             {
                 throw new SectorValidationException($"Контейнер {currentContainerHex} не имеет подступов.");
             }
-        }
-
-        /// <summary>
-        /// Проверяем, что сундук не на клетке с выходом.
-        /// </summary>
-        private static void ValidateTransitionOverlap(ISector sector, IStaticObject container)
-        {
-            var transitionNodes = sector.Map.Transitions.Keys;
-            var chestOnTransitionNode = transitionNodes.Contains(container.Node);
-            if (chestOnTransitionNode)
-            {
-                throw new SectorValidationException();
-            }
-        }
-
-        public Task Validate(ISector sector, IServiceProvider scopeContainer)
-        {
-            return Task.Run(() =>
-            {
-                // Сундуки не должны генерироваться на узлы, которые являются препятствием.
-                // Сундуки не должны генерироваться на узлы с выходом.
-                var staticObjectManager = sector.StaticObjectManager;
-                var allContainers = staticObjectManager.Items;
-                var allContainerNodes = allContainers.Select(x => x.Node).ToArray();
-                foreach (var container in allContainers)
-                {
-                    var hex = (HexNode)container.Node;
-
-                    ValidateTransitionOverlap(sector, container);
-
-                    ValidatePassability(hex, sector.Map, allContainerNodes);
-                }
-            });
         }
     }
 }

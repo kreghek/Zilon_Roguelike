@@ -1,5 +1,13 @@
 ﻿using System;
 
+using FluentAssertions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
@@ -49,8 +57,16 @@ namespace Zilon.Core.Tests.Commands
             var selectedProp = inventoryState.SelectedProp.Prop;
 
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
-                    CheckUsePropIntention(intention, playerState, selectedProp)),
+                    CheckUsePropIntention(intention, playerState, selectedProp)
+                ),
                 It.IsAny<IActor>()));
+        }
+
+        private static bool CheckUsePropIntention(IIntention intention, ISectorUiState playerState, IProp usedProp)
+        {
+            var usePropIntention = (Intention<UsePropTask>)intention;
+            var usePropTask = usePropIntention.TaskFactory(playerState.ActiveActor.Actor);
+            return usePropTask.UsedProp == usedProp;
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
@@ -77,13 +93,6 @@ namespace Zilon.Core.Tests.Commands
             actorManagerMock.SetupGet(x => x.Items).Returns(Array.Empty<IActor>());
             var actorManager = actorManagerMock.Object;
             Container.AddSingleton(actorManager);
-        }
-
-        private static bool CheckUsePropIntention(IIntention intention, ISectorUiState playerState, IProp usedProp)
-        {
-            var usePropIntention = (Intention<UsePropTask>)intention;
-            var usePropTask = usePropIntention.TaskFactory(playerState.ActiveActor.Actor);
-            return usePropTask.UsedProp == usedProp;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.MapGenerators.RoomStyle
+﻿using System;
+using System.Collections.Generic;
+
+namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public class FixCompactRoomGeneratorRandomSource : FixRoomGeneratorRandomSourceBase, IRoomGeneratorRandomSource
     {
@@ -10,32 +13,20 @@
                 {
                     if (x == 0)
                     {
-                        Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(new OffsetCoords(x, y),
-                            new OffsetCoords(x, y - 1)));
+                        Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
+                            new OffsetCoords(x, y),
+                            new OffsetCoords(x, y - 1))
+                        );
                     }
                     else
                     {
-                        Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(new OffsetCoords(x, y),
-                            new OffsetCoords(x - 1, y)));
+                        Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
+                            new OffsetCoords(x, y),
+                            new OffsetCoords(x - 1, y))
+                        );
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Выбрасывает случайный размер комнаты.
-        /// </summary>
-        /// <param name="minSize">Минимальный размер комнаты.</param>
-        /// <param name="maxSize">Максимальный размер комнаты.</param>
-        /// <returns>
-        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
-        /// </returns>
-        /// <remarks>
-        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
-        /// </remarks>
-        protected override Size RollRoomSize(int minSize, int maxSize)
-        {
-            return new Size(minSize, minSize);
         }
 
         /// <summary>
@@ -59,6 +50,22 @@
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Выбрасывает случайный размер комнаты.
+        /// </summary>
+        /// <param name="minSize">Минимальный размер комнаты.</param>
+        /// <param name="maxSize">Максимальный размер комнаты.</param>
+        /// <returns>
+        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
+        /// </returns>
+        /// <remarks>
+        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
+        /// </remarks>
+        protected override Size RollRoomSize(int minSize, int maxSize)
+        {
+            return new Size(minSize, minSize);
         }
     }
 }

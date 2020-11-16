@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.PersonModules;
 using Zilon.Core.StaticObjectModules;
@@ -21,17 +25,6 @@ namespace Zilon.Core.Commands
             _playerState = playerState;
         }
 
-        public override bool CanExecute()
-        {
-            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
-
-            var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
-            var container = targetContainerViewModel?.StaticObject;
-            var containerContent = container?.GetModule<IPropContainer>().Content;
-
-            return (inventory != null) && (containerContent != null);
-        }
-
         public override void Execute()
         {
             var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
@@ -41,6 +34,17 @@ namespace Zilon.Core.Commands
             var transferMachine = new PropTransferMachine(inventory, containerContent);
 
             ModalManager.ShowContainerModal(transferMachine);
+        }
+
+        public override bool CanExecute()
+        {
+            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
+
+            var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
+            var container = targetContainerViewModel?.StaticObject;
+            var containerContent = container?.GetModule<IPropContainer>().Content;
+
+            return (inventory != null) && (containerContent != null);
         }
     }
 }

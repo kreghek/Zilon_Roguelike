@@ -1,4 +1,9 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+using System.Collections.Generic;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -6,6 +11,13 @@ namespace Zilon.Core.PersonModules
 {
     public interface IEquipmentModule : IPersonModule, IEnumerable<Equipment>
     {
+        /// <summary>
+        /// Текущие слоты экипировки.
+        /// </summary>
+        [NotNull]
+        [ItemNotNull]
+        PersonSlotSubScheme[] Slots { get; }
+
         /// <summary>
         /// Экипировка персонажа.
         /// </summary>
@@ -18,13 +30,6 @@ namespace Zilon.Core.PersonModules
         /// </remarks>
         [CanBeNull]
         Equipment this[int index] { get; set; }
-
-        /// <summary>
-        /// Текущие слоты экипировки.
-        /// </summary>
-        [NotNull]
-        [ItemNotNull]
-        PersonSlotSubScheme[] Slots { get; }
 
         /// <summary>
         /// Выстреливает, когда экипировка изменяется.

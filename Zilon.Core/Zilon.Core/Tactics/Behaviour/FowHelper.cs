@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Graphs;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -50,30 +53,35 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
+        private static SectorMapFowNode[] UpdateOrCreateFowNodes(ISectorFowData fowData, IGraphNode[] observingNodes)
+        {
+            var observedFowNodes = new List<SectorMapFowNode>();
+
+            foreach (var observingNode in observingNodes)
+            {
+                // Если узла нет в данных о тумане войны, то добавляем его.
+                // Текущий узел в тумане войны переводим в состояние наблюдаемого.
+                var fowNode = GetFowNodeByMapNode(fowData, observingNode);
+
+                if (fowNode == null)
+                {
+                    fowNode = new SectorMapFowNode(observingNode);
+                    fowData.AddNodes(new[]
+                    {
+                        fowNode
+                    });
+                }
+
+                fowData.ChangeNodeState(fowNode, SectorMapNodeFowState.Observing);
+                observedFowNodes.Add(fowNode);
+            }
+
+            return observedFowNodes.ToArray();
+        }
+
         private static SectorMapFowNode GetFowNodeByMapNode(ISectorFowData fowData, IGraphNode observingNode)
         {
             return fowData.GetNode(observingNode);
-        }
-
-        private static IGraphNode[] GetNextForBorder(
-            IEnumerable<IGraphNode> border,
-            IEnumerable<IGraphNode> result,
-            IFowContext fowContext)
-        {
-            var borderTotal = new List<IGraphNode>();
-
-            foreach (var node in border)
-            {
-                var next = fowContext.GetNext(node);
-
-                var except = border.Union(result).Union(borderTotal);
-
-                var newBorder = next.Except(except);
-
-                borderTotal.AddRange(newBorder);
-            }
-
-            return borderTotal.ToArray();
         }
 
         private static IGraphNode[] GetObservingNodes(IFowContext fowContext, IGraphNode baseNode, int radius)
@@ -104,30 +112,25 @@ namespace Zilon.Core.Tactics.Behaviour
             return resultList.ToArray();
         }
 
-        private static SectorMapFowNode[] UpdateOrCreateFowNodes(ISectorFowData fowData, IGraphNode[] observingNodes)
+        private static IGraphNode[] GetNextForBorder(
+            IEnumerable<IGraphNode> border,
+            IEnumerable<IGraphNode> result,
+            IFowContext fowContext)
         {
-            var observedFowNodes = new List<SectorMapFowNode>();
+            var borderTotal = new List<IGraphNode>();
 
-            foreach (var observingNode in observingNodes)
+            foreach (var node in border)
             {
-                // Если узла нет в данных о тумане войны, то добавляем его.
-                // Текущий узел в тумане войны переводим в состояние наблюдаемого.
-                var fowNode = GetFowNodeByMapNode(fowData, observingNode);
+                var next = fowContext.GetNext(node);
 
-                if (fowNode == null)
-                {
-                    fowNode = new SectorMapFowNode(observingNode);
-                    fowData.AddNodes(new[]
-                    {
-                        fowNode
-                    });
-                }
+                var except = border.Union(result).Union(borderTotal);
 
-                fowData.ChangeNodeState(fowNode, SectorMapNodeFowState.Observing);
-                observedFowNodes.Add(fowNode);
+                var newBorder = next.Except(except);
+
+                borderTotal.AddRange(newBorder);
             }
 
-            return observedFowNodes.ToArray();
+            return borderTotal.ToArray();
         }
     }
 }

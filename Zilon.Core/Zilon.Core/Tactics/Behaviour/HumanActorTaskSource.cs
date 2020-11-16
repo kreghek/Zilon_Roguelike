@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+using System.Threading.Tasks;
+
+using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -16,11 +19,6 @@ namespace Zilon.Core.Tactics.Behaviour
             var spscChannel = new SpscChannel<IActorTask>();
             _actorTaskSender = spscChannel;
             _actorTaskReceiver = spscChannel;
-        }
-
-        private bool CurrentActorSetAndIsDead()
-        {
-            return (_currentActorIntention?.Person?.GetModuleSafe<ISurvivalModule>()?.IsDead).GetValueOrDefault();
         }
 
         public async Task IntentAsync(IIntention intention, IActor activeActor)
@@ -86,6 +84,11 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             _intentionWait = false;
             _currentActorIntention = null;
+        }
+
+        private bool CurrentActorSetAndIsDead()
+        {
+            return (_currentActorIntention?.Person?.GetModuleSafe<ISurvivalModule>()?.IsDead).GetValueOrDefault();
         }
     }
 }

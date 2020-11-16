@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -32,7 +39,10 @@ namespace Zilon.Core.Tests.MapGenerators
             var sectorNode = CreateSectorNode(sectorScheme);
 
             // ACT
-            Func<Task> act = async () => { await generator.GenerateAsync(sectorNode).ConfigureAwait(false); };
+            Func<Task> act = async () =>
+            {
+                await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
+            };
 
             // ASSERT
             act.Should().NotThrow();
@@ -65,7 +75,8 @@ namespace Zilon.Core.Tests.MapGenerators
             await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
         }
 
-        private static ISectorGenerator CreateGenerator(IMapFactory mapFactory)
+        private static ISectorGenerator CreateGenerator(
+            IMapFactory mapFactory)
         {
             var staticObstaclesGeneratorMock = new Mock<IStaticObstaclesGenerator>();
             var staticObstaclesGenerator = staticObstaclesGeneratorMock.Object;
@@ -102,20 +113,6 @@ namespace Zilon.Core.Tests.MapGenerators
                 sectorMaterializationService);
         }
 
-        private static ISectorNode CreateSectorNode(ISectorSubScheme sectorScheme)
-        {
-            var biomeMock = new Mock<IBiome>();
-            biomeMock.Setup(x => x.GetNext(It.IsAny<ISectorNode>())).Returns(Array.Empty<ISectorNode>());
-            var biome = biomeMock.Object;
-
-            var sectorNodeMock = new Mock<ISectorNode>();
-            sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorScheme);
-            sectorNodeMock.SetupGet(x => x.Biome).Returns(biome);
-            sectorNodeMock.SetupGet(x => x.State).Returns(SectorNodeState.SchemeKnown);
-            var sectorNode = sectorNodeMock.Object;
-            return sectorNode;
-        }
-
         private static ISectorSubScheme CreateSectorScheme()
         {
             return new TestSectorSubScheme
@@ -129,6 +126,20 @@ namespace Zilon.Core.Tests.MapGenerators
                     RegionCount = 20, RegionSize = 20
                 }
             };
+        }
+
+        private static ISectorNode CreateSectorNode(ISectorSubScheme sectorScheme)
+        {
+            var biomeMock = new Mock<IBiome>();
+            biomeMock.Setup(x => x.GetNext(It.IsAny<ISectorNode>())).Returns(Array.Empty<ISectorNode>());
+            var biome = biomeMock.Object;
+
+            var sectorNodeMock = new Mock<ISectorNode>();
+            sectorNodeMock.SetupGet(x => x.SectorScheme).Returns(sectorScheme);
+            sectorNodeMock.SetupGet(x => x.Biome).Returns(biome);
+            sectorNodeMock.SetupGet(x => x.State).Returns(SectorNodeState.SchemeKnown);
+            var sectorNode = sectorNodeMock.Object;
+            return sectorNode;
         }
     }
 }

@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Tactics.Spatial;
+﻿using System.Threading.Tasks;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
 {

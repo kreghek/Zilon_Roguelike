@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using FluentAssertions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
+
+using TechTalk.SpecFlow;
+
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -75,39 +83,6 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        [Then(@"Актёр игрока мертв")]
-        public void ThenАктёрИгрокаМертв()
-        {
-            var actor = Context.GetActiveActor();
-
-            var survivalModule = actor.Person.GetModule<ISurvivalModule>();
-            survivalModule.IsDead.Should().BeTrue();
-        }
-
-        [Then(@"Монстр Id:(.*) успешно обороняется")]
-        public void ThenМонстрIdУспешноОбороняется(int monsterId)
-        {
-            var monster = Context.GetMonsterById(monsterId);
-
-            // Проверяем наличие события успешной обороны.
-            var monsterDodgeEvent = Context.RaisedActorInteractionEvents
-                .OfType<DodgeActorInteractionEvent>()
-                .SingleOrDefault(x => x.TargetActor == monster);
-
-            monsterDodgeEvent.Should().NotBeNull();
-        }
-
-        [Then(@"Тактическое умение (.*) имеет дебафф на эффективность")]
-        public void ThenТактическоеУмениеChopИмеетДебаффНаЭффективность(string tacticalActSid)
-        {
-            var actor = Context.GetActiveActor();
-
-            var act = actor.Person.GetModule<ICombatActModule>().CalcCombatActs().OfType<TacticalAct>()
-                .Single(x => x.Scheme.Sid == tacticalActSid);
-
-            act.Efficient.Modifiers.ResultBuff.Should().Be(-1);
-        }
-
         [When(@"Актёр игрока атакует монстра Id:(.*)")]
         public void WhenАктёрИгрокаАтакуетМонстраId(int monsterId)
         {
@@ -169,6 +144,39 @@ namespace Zilon.Core.Specs.Steps
                     yield return actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
                 }
             }
+        }
+
+        [Then(@"Актёр игрока мертв")]
+        public void ThenАктёрИгрокаМертв()
+        {
+            var actor = Context.GetActiveActor();
+
+            var survivalModule = actor.Person.GetModule<ISurvivalModule>();
+            survivalModule.IsDead.Should().BeTrue();
+        }
+
+        [Then(@"Монстр Id:(.*) успешно обороняется")]
+        public void ThenМонстрIdУспешноОбороняется(int monsterId)
+        {
+            var monster = Context.GetMonsterById(monsterId);
+
+            // Проверяем наличие события успешной обороны.
+            var monsterDodgeEvent = Context.RaisedActorInteractionEvents
+                .OfType<DodgeActorInteractionEvent>()
+                .SingleOrDefault(x => x.TargetActor == monster);
+
+            monsterDodgeEvent.Should().NotBeNull();
+        }
+
+        [Then(@"Тактическое умение (.*) имеет дебафф на эффективность")]
+        public void ThenТактическоеУмениеChopИмеетДебаффНаЭффективность(string tacticalActSid)
+        {
+            var actor = Context.GetActiveActor();
+
+            var act = actor.Person.GetModule<ICombatActModule>().CalcCombatActs().OfType<TacticalAct>()
+                .Single(x => x.Scheme.Sid == tacticalActSid);
+
+            act.Efficient.Modifiers.ResultBuff.Should().Be(-1);
         }
     }
 }

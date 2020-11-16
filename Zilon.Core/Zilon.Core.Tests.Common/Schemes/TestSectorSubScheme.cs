@@ -11,11 +11,6 @@ namespace Zilon.Core.Tests.Common.Schemes
 
         public SchemeSectorMapGenerator MapGenerator { get; }
 
-        public override string ToString()
-        {
-            return Sid;
-        }
-
         public string Sid { get; set; }
 
         public LocalizedStringSubScheme Name { get; set; }
@@ -43,5 +38,10 @@ namespace Zilon.Core.Tests.Common.Schemes
         public int MinRegionMonsterCount { get; }
 
         public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; set; }
+
+        public override string ToString()
+        {
+            return Sid;
+        }
     }
 }

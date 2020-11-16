@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Common;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 
 namespace Zilon.Core.Persons
@@ -17,6 +19,11 @@ namespace Zilon.Core.Persons
         }
 
         /// <summary>
+        /// Тип воздействия, которое выдерживает броня.
+        /// </summary>
+        public ImpactType Impact { get; }
+
+        /// <summary>
         /// Уровень поглощения урона бронёй.
         /// </summary>
         public PersonRuleLevel AbsorbtionLevel { get; }
@@ -25,10 +32,5 @@ namespace Zilon.Core.Persons
         /// Ранг брони.
         /// </summary>
         public int ArmorRank { get; }
-
-        /// <summary>
-        /// Тип воздействия, которое выдерживает броня.
-        /// </summary>
-        public ImpactType Impact { get; }
     }
 }

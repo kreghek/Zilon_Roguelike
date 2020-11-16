@@ -8,6 +8,11 @@ namespace Zilon.Core.Persons
     public class Perk : IPerk
     {
         /// <summary>
+        /// Схема уровеня перка, которая прокачивается.
+        /// </summary>
+        public PerkLevelSubScheme TargetLevelScheme { get; set; }
+
+        /// <summary>
         /// Достигнутые уровени перка.
         /// </summary>
         public PerkLevelSubScheme[] ArchievedLevelSchemes { get; set; }
@@ -16,11 +21,6 @@ namespace Zilon.Core.Persons
         /// Признак того, что целевой уровень перка проплачен.
         /// </summary>
         public bool IsLevelPaid { get; internal set; }
-
-        /// <summary>
-        /// Схема уровеня перка, которая прокачивается.
-        /// </summary>
-        public PerkLevelSubScheme TargetLevelScheme { get; set; }
 
         /// <summary>
         /// Схема перка.

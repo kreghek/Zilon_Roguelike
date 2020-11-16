@@ -21,23 +21,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             };
         }
 
-        public override void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
-        {
-            var roomArray = rooms.ToArray();
-            for (var i = 0; i < roomArray.Length - 1; i++)
-            {
-                ConnectRoomsWithCorridor(map, roomArray[i], roomArray[i + 1], edgeHash);
-            }
-        }
-
-        public override void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
-        {
-            foreach (var room in rooms)
-            {
-                CreateOneRoomNodes(map, edgeHash, room);
-            }
-        }
-
         public override IEnumerable<Room> GenerateRoomsInGrid(
             int roomCount,
             int roomMinSize,
@@ -62,6 +45,23 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             }
 
             return rooms;
+        }
+
+        public override void BuildRoomCorridors(IMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
+        {
+            var roomArray = rooms.ToArray();
+            for (var i = 0; i < roomArray.Length - 1; i++)
+            {
+                ConnectRoomsWithCorridor(map, roomArray[i], roomArray[i + 1], edgeHash);
+            }
+        }
+
+        public override void CreateRoomNodes(ISectorMap map, IEnumerable<Room> rooms, HashSet<string> edgeHash)
+        {
+            foreach (var room in rooms)
+            {
+                CreateOneRoomNodes(map, edgeHash, room);
+            }
         }
 
         private void CreateOneRoomNodes(IMap map, HashSet<string> edgeHash, Room room)

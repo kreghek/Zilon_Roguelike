@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
@@ -80,33 +84,19 @@ namespace Zilon.Core.Tactics.Spatial
             nodeMatrix[offsetX, offsetY] = hexNode;
         }
 
-        /// <summary>
-        /// Distances the between.
-        /// </summary>
-        /// <param name="currentNode">The current node.</param>
-        /// <param name="targetNode">The target node.</param>
-        /// <returns></returns>
-        public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
+        protected HexNode GetByCoords(int x, int y)
         {
-            if (currentNode is null)
+            var segmentKey = new SegmentKey(0, 0);
+            var segment = _segmentDict[segmentKey];
+            try
             {
-                throw new ArgumentNullException(nameof(currentNode));
+                var node = segment[x, y];
+                return (HexNode)node;
             }
-
-            if (targetNode is null)
+            catch (IndexOutOfRangeException)
             {
-                throw new ArgumentNullException(nameof(targetNode));
+                return null;
             }
-
-            var actorHexNode = (HexNode)currentNode;
-            var containerHexNode = (HexNode)targetNode;
-
-            var actorCoords = actorHexNode.CubeCoords;
-            var containerCoords = containerHexNode.CubeCoords;
-
-            var distance = actorCoords.DistanceTo(containerCoords);
-
-            return distance;
         }
 
         /// <summary>Возвращает узлы, напрямую соединённые с указанным узлом.</summary>
@@ -140,105 +130,6 @@ namespace Zilon.Core.Tactics.Spatial
             var matrix = _segmentDict[segmentKey];
 
             return GetNextFromMatrix(localOffsetX, localOffsetY, segmentX, segmentY, matrix);
-        }
-
-        /// <summary>
-        /// Проверяет, является ли данная ячейка доступной для текущего актёра.
-        /// </summary>
-        /// <param name="targetNode">Целевая ячейка.</param>
-        /// <param name="actor">Проверяемый актёр.</param>
-        /// <returns>true, если указанный узел проходим для актёра. Иначе - false.</returns>
-        public override bool IsPositionAvailableFor(IGraphNode targetNode, IActor actor)
-        {
-            if (targetNode is null)
-            {
-                throw new ArgumentNullException(nameof(targetNode));
-            }
-
-            if (!base.IsPositionAvailableFor(targetNode, actor))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public override bool IsPositionAvailableForContainer(IGraphNode targetNode)
-        {
-            return true;
-        }
-
-        /// <summary>Удаляет ребро между двумя узлами графа карты.</summary>
-        /// <param name="node1">Узел графа карты.</param>
-        /// <param name="node2">Узел графа карты.</param>
-        public override void RemoveEdge(IGraphNode node1, IGraphNode node2)
-        {
-            // Эта возможность не нужна. Пока не будет сделан метод удаления ребра.
-            // Сейчас ребра есть между всеми соседями в сетке шестиугольников.
-        }
-
-        public override void RemoveNode(IGraphNode node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveToFile(string fileName)
-        {
-            const int cellWidth = 4;
-
-            var matrix = _segmentDict.First().Value;
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
-            {
-                file.Write(" ".PadLeft(cellWidth, ' '));
-                for (var x = 0; x < _segmentSize; x++)
-                {
-                    file.Write($"{x,3}".PadRight(cellWidth, ' '));
-                }
-
-                file.WriteLine();
-
-                for (var y = 0; y < _segmentSize; y++)
-                {
-                    file.Write($"{y,3}".PadLeft(cellWidth, ' '));
-                    for (var x = 0; x < _segmentSize; x++)
-                    {
-                        if (matrix[x, y] != null)
-                        {
-                            file.Write(" ".PadLeft(cellWidth, ' '));
-                        }
-                        else
-                        {
-                            file.Write("x".PadLeft(cellWidth, ' '));
-                        }
-                    }
-
-                    file.WriteLine();
-                }
-            }
-        }
-
-        protected HexNode GetByCoords(int x, int y)
-        {
-            var segmentKey = new SegmentKey(0, 0);
-            var segment = _segmentDict[segmentKey];
-            try
-            {
-                var node = segment[x, y];
-                return (HexNode)node;
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return null;
-            }
-        }
-
-        private void CreateSegment(int segmentX, int segmentY)
-        {
-            //TODO Отказаться от многомерного массива. Вместо этого сделать одномерный и адресацию через смещение.
-            var matrix = new IGraphNode[_segmentSize, _segmentSize];
-
-            var key = new SegmentKey(segmentX, segmentY);
-            _segmentDict[key] = matrix;
         }
 
         private IEnumerable<IGraphNode> GetNextFromMatrix(
@@ -297,6 +188,80 @@ namespace Zilon.Core.Tactics.Spatial
             }
         }
 
+        /// <summary>
+        /// Проверяет, является ли данная ячейка доступной для текущего актёра.
+        /// </summary>
+        /// <param name="targetNode">Целевая ячейка.</param>
+        /// <param name="actor">Проверяемый актёр.</param>
+        /// <returns>true, если указанный узел проходим для актёра. Иначе - false.</returns>
+        public override bool IsPositionAvailableFor(IGraphNode targetNode, IActor actor)
+        {
+            if (targetNode is null)
+            {
+                throw new ArgumentNullException(nameof(targetNode));
+            }
+
+            if (!base.IsPositionAvailableFor(targetNode, actor))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>Удаляет ребро между двумя узлами графа карты.</summary>
+        /// <param name="node1">Узел графа карты.</param>
+        /// <param name="node2">Узел графа карты.</param>
+        public override void RemoveEdge(IGraphNode node1, IGraphNode node2)
+        {
+            // Эта возможность не нужна. Пока не будет сделан метод удаления ребра.
+            // Сейчас ребра есть между всеми соседями в сетке шестиугольников.
+        }
+
+        public void SaveToFile(string fileName)
+        {
+            const int cellWidth = 4;
+
+            var matrix = _segmentDict.First().Value;
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
+            {
+                file.Write(" ".PadLeft(cellWidth, ' '));
+                for (var x = 0; x < _segmentSize; x++)
+                {
+                    file.Write($"{x,3}".PadRight(cellWidth, ' '));
+                }
+
+                file.WriteLine();
+
+                for (var y = 0; y < _segmentSize; y++)
+                {
+                    file.Write($"{y,3}".PadLeft(cellWidth, ' '));
+                    for (var x = 0; x < _segmentSize; x++)
+                    {
+                        if (matrix[x, y] != null)
+                        {
+                            file.Write(" ".PadLeft(cellWidth, ' '));
+                        }
+                        else
+                        {
+                            file.Write("x".PadLeft(cellWidth, ' '));
+                        }
+                    }
+
+                    file.WriteLine();
+                }
+            }
+        }
+
+        private void CreateSegment(int segmentX, int segmentY)
+        {
+            //TODO Отказаться от многомерного массива. Вместо этого сделать одномерный и адресацию через смещение.
+            var matrix = new IGraphNode[_segmentSize, _segmentSize];
+
+            var key = new SegmentKey(segmentX, segmentY);
+            _segmentDict[key] = matrix;
+        }
+
         private int NormalizeNeighborCoord(int neighborX)
         {
             if (neighborX < 0)
@@ -309,6 +274,45 @@ namespace Zilon.Core.Tactics.Spatial
             }
 
             return neighborX;
+        }
+
+        public override bool IsPositionAvailableForContainer(IGraphNode targetNode)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Distances the between.
+        /// </summary>
+        /// <param name="currentNode">The current node.</param>
+        /// <param name="targetNode">The target node.</param>
+        /// <returns></returns>
+        public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
+        {
+            if (currentNode is null)
+            {
+                throw new ArgumentNullException(nameof(currentNode));
+            }
+
+            if (targetNode is null)
+            {
+                throw new ArgumentNullException(nameof(targetNode));
+            }
+
+            var actorHexNode = (HexNode)currentNode;
+            var containerHexNode = (HexNode)targetNode;
+
+            var actorCoords = actorHexNode.CubeCoords;
+            var containerCoords = containerHexNode.CubeCoords;
+
+            var distance = actorCoords.DistanceTo(containerCoords);
+
+            return distance;
+        }
+
+        public override void RemoveNode(IGraphNode node)
+        {
+            throw new NotImplementedException();
         }
 
         private struct SegmentKey : IEquatable<SegmentKey>

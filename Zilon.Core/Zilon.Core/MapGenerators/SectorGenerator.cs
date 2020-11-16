@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
@@ -38,18 +42,6 @@ namespace Zilon.Core.MapGenerators
             _diseaseGenerator = diseaseGenerator ?? throw new ArgumentNullException(nameof(diseaseGenerator));
             _resourceMaterializationMap = resourceMaterializationMap ??
                                           throw new ArgumentNullException(nameof(resourceMaterializationMap));
-        }
-
-        private void DefineDiseases(ISector sector)
-        {
-            var disease = _diseaseGenerator.Create();
-
-            if (disease is null)
-            {
-                return;
-            }
-
-            sector.AddDisease(disease);
         }
 
         /// <summary>
@@ -96,6 +88,18 @@ namespace Zilon.Core.MapGenerators
                 sectorScheme);
 
             return sector;
+        }
+
+        private void DefineDiseases(ISector sector)
+        {
+            var disease = _diseaseGenerator.Create();
+
+            if (disease is null)
+            {
+                return;
+            }
+
+            sector.AddDisease(disease);
         }
     }
 }

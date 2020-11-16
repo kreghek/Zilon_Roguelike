@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Components
+﻿using System;
+
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Components
 {
     /// <summary>
     /// Цели действия.

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Client.Windows;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Client.Windows;
 
 namespace Zilon.Core.Commands
 {

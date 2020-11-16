@@ -1,4 +1,7 @@
-﻿using Zilon.Core.StaticObjectModules;
+﻿using System;
+using System.Linq;
+
+using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics.Behaviour
 {

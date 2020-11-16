@@ -1,4 +1,6 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System;
+
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -24,6 +26,13 @@ namespace Zilon.Core.Tactics.Behaviour
             _dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
+        public bool RollSuccess(DepositMiningDifficulty difficulty)
+        {
+            var successValue = GetSuccessValue(difficulty);
+            var rollValue = _dice.Roll2D6();
+            return rollValue >= successValue;
+        }
+
         private static int GetSuccessValue(DepositMiningDifficulty difficulty)
         {
             switch (difficulty)
@@ -44,13 +53,6 @@ namespace Zilon.Core.Tactics.Behaviour
                 default:
                     throw new InvalidOperationException($"Неизвестная сложность добычи {difficulty}");
             }
-        }
-
-        public bool RollSuccess(DepositMiningDifficulty difficulty)
-        {
-            var successValue = GetSuccessValue(difficulty);
-            var rollValue = _dice.Roll2D6();
-            return rollValue >= successValue;
         }
     }
 }

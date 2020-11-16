@@ -1,4 +1,11 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core.Schemes
 {
     public class FileSchemeLocator : ISchemeLocator
     {
@@ -16,27 +23,6 @@
             {
                 throw new System.ArgumentException($"Директория каталога {schemeLocatorFullPath} не найдена.");
             }
-        }
-
-        [ExcludeFromCodeCoverage]
-        public static FileSchemeLocator CreateFromEnvVariable()
-        {
-            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
-            if (string.IsNullOrWhiteSpace(schemeCatalogFromEnvVariable))
-            {
-                throw new InvalidOperationException($"Переменная окружения {schemeCatalogEnvVariable} не задана.");
-            }
-
-            return new FileSchemeLocator(schemeCatalogFromEnvVariable);
-        }
-
-        private static string GetRelativePath(string path, string filePath, string sid)
-        {
-            var relativeFilePath = filePath.Remove(0, path.Length).TrimStart('\\');
-            var fileFolder = relativeFilePath
-                .Substring(0, relativeFilePath.Length - (sid + ".json").Length)
-                .TrimEnd('\\');
-            return fileFolder;
         }
 
         public SchemeFile[] GetAll(string directory)
@@ -66,6 +52,27 @@
             }
 
             return result.ToArray();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public static FileSchemeLocator CreateFromEnvVariable()
+        {
+            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
+            if (string.IsNullOrWhiteSpace(schemeCatalogFromEnvVariable))
+            {
+                throw new InvalidOperationException($"Переменная окружения {schemeCatalogEnvVariable} не задана.");
+            }
+
+            return new FileSchemeLocator(schemeCatalogFromEnvVariable);
+        }
+
+        private static string GetRelativePath(string path, string filePath, string sid)
+        {
+            var relativeFilePath = filePath.Remove(0, path.Length).TrimStart('\\');
+            var fileFolder = relativeFilePath
+                .Substring(0, relativeFilePath.Length - (sid + ".json").Length)
+                .TrimEnd('\\');
+            return fileFolder;
         }
     }
 }

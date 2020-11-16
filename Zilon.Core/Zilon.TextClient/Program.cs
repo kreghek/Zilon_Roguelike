@@ -1,5 +1,17 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Core;
+using Zilon.Core.Client;
+using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
+using Zilon.Core.Players;
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.TextClient
 {

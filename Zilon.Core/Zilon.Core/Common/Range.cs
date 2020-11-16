@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
     /// Класс для представления диапазона значений.
@@ -18,14 +20,14 @@
         }
 
         /// <summary>
-        /// Максимальное значение диапазона.
-        /// </summary>
-        public T Max { get; }
-
-        /// <summary>
         /// Минимальное значение диапазона.
         /// </summary>
         public T Min { get; }
+
+        /// <summary>
+        /// Максимальное значение диапазона.
+        /// </summary>
+        public T Max { get; }
 
         /// <summary>
         /// Проверяет вхождение указанного значения в диапазон.

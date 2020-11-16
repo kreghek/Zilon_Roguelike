@@ -1,4 +1,7 @@
-﻿namespace Zilon.Bot.Players.Strategies
+﻿using System;
+using System.Collections.Generic;
+
+namespace Zilon.Bot.Players.Strategies
 {
     [Serializable]
     public class BotStrategyException : Exception

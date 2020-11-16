@@ -1,4 +1,11 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Scoring;
 
@@ -55,7 +62,8 @@ namespace Zilon.Core.Persons.Auxiliary
                 if (currentSegment != null)
                 {
                     // Создаём эффект
-                    var newEffect = new SurvivalStatHazardEffect(statType,
+                    var newEffect = new SurvivalStatHazardEffect(
+                        statType,
                         currentSegment.Level,
                         survivalRandomSource)
                     {

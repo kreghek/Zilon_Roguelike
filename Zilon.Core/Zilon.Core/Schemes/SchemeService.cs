@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System;
+using System.Collections.Generic;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Класс для работы со схемами игрового мира.
@@ -27,27 +30,6 @@
             InitHandler<IMonsterScheme, MonsterScheme>();
             InitHandler<IDropTableModificatorScheme, DropTableModificatorScheme>();
             InitHandler<IPersonTemplateScheme, PersonTemplateScheme>();
-        }
-
-        private ISchemeServiceHandler<TScheme> GetHandler<TScheme>()
-            where TScheme : class, IScheme
-        {
-            if (!_handlerDict.TryGetValue(typeof(TScheme), out object handlerObj))
-            {
-                throw new ArgumentException("Указан неизвестный тип схемы.");
-            }
-
-            var handler = (ISchemeServiceHandler<TScheme>)handlerObj;
-            return handler;
-        }
-
-        private void InitHandler<TScheme, TSchemeImpl>()
-            where TScheme : class, IScheme
-            where TSchemeImpl : class, TScheme
-        {
-            var handler = _schemeServiceHandlerFactory.Create<TSchemeImpl>();
-            _handlerDict.Add(typeof(TScheme), handler);
-            handler.LoadSchemes();
         }
 
         /// <summary>Извлечь схему по идентификатору.</summary>
@@ -91,6 +73,27 @@
             var handler = GetHandler<TScheme>();
             var allSchemes = handler.GetAll();
             return allSchemes;
+        }
+
+        private void InitHandler<TScheme, TSchemeImpl>()
+            where TScheme : class, IScheme
+            where TSchemeImpl : class, TScheme
+        {
+            var handler = _schemeServiceHandlerFactory.Create<TSchemeImpl>();
+            _handlerDict.Add(typeof(TScheme), handler);
+            handler.LoadSchemes();
+        }
+
+        private ISchemeServiceHandler<TScheme> GetHandler<TScheme>()
+            where TScheme : class, IScheme
+        {
+            if (!_handlerDict.TryGetValue(typeof(TScheme), out object handlerObj))
+            {
+                throw new ArgumentException("Указан неизвестный тип схемы.");
+            }
+
+            var handler = (ISchemeServiceHandler<TScheme>)handlerObj;
+            return handler;
         }
     }
 }

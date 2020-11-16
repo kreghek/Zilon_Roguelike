@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Common.Tests
+﻿using FluentAssertions;
+
+using NUnit.Framework;
+
+namespace Zilon.Core.Common.Tests
 {
     /// <summary>
     /// Тесты проверяют корректность работы заливки размером в 7.
@@ -9,6 +13,23 @@
     [Parallelizable(ParallelScope.All)]
     public class HexBinaryFillerTests
     {
+        [Test]
+        public void FloodFill7_OneSize7Area_ReturnsOneCentralPoint()
+        {
+            // ARRANGE
+            var matrix = new Matrix<bool>(10, 10);
+            PlaceArea(4, 4, matrix);
+
+            // ACT
+            var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));
+
+            // ASSERT
+            regions.Should().BeEquivalentTo(new[]
+            {
+                new OffsetCoords(4, 4)
+            });
+        }
+
         [Test]
         public void FloodFill7_2Size7Area_Returns2CentralPoint()
         {
@@ -34,23 +55,6 @@
             var matrix = new Matrix<bool>(10, 10);
             PlaceArea(4, 4, matrix);
             PlaceArea(7, 7, matrix);
-
-            // ACT
-            var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));
-
-            // ASSERT
-            regions.Should().BeEquivalentTo(new[]
-            {
-                new OffsetCoords(4, 4)
-            });
-        }
-
-        [Test]
-        public void FloodFill7_OneSize7Area_ReturnsOneCentralPoint()
-        {
-            // ARRANGE
-            var matrix = new Matrix<bool>(10, 10);
-            PlaceArea(4, 4, matrix);
 
             // ACT
             var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));

@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.MapGenerators.RoomStyle
+﻿using System;
+using System.Collections.Generic;
+
+namespace Zilon.Core.MapGenerators.RoomStyle
 {
     public class FixLargeRoomGeneratorRandomSource : FixRoomGeneratorRandomSourceBase, IRoomGeneratorRandomSource
     {
@@ -15,26 +18,12 @@
                     var current = new OffsetCoords(x, y);
                     var mirror = new OffsetCoords(5 - x, 5 - y);
 
-                    Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(current,
-                        mirror));
+                    Connections.Add(new Tuple<OffsetCoords, OffsetCoords>(
+                        current,
+                        mirror)
+                    );
                 }
             }
-        }
-
-        /// <summary>
-        /// Выбрасывает случайный размер комнаты.
-        /// </summary>
-        /// <param name="minSize">Минимальный размер комнаты.</param>
-        /// <param name="maxSize">Максимальный размер комнаты.</param>
-        /// <returns>
-        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
-        /// </returns>
-        /// <remarks>
-        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
-        /// </remarks>
-        protected override Size RollRoomSize(int minSize, int maxSize)
-        {
-            return new Size(maxSize, maxSize);
         }
 
         /// <summary>
@@ -62,6 +51,22 @@
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Выбрасывает случайный размер комнаты.
+        /// </summary>
+        /// <param name="minSize">Минимальный размер комнаты.</param>
+        /// <param name="maxSize">Максимальный размер комнаты.</param>
+        /// <returns>
+        /// Возвращает размер с произвольными шириной и высотой в диапазоне (minSize, maxSize).
+        /// </returns>
+        /// <remarks>
+        /// Источник рандома возвращает случайный размер комнаты в указанном диапазоне.
+        /// </remarks>
+        protected override Size RollRoomSize(int minSize, int maxSize)
+        {
+            return new Size(maxSize, maxSize);
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+using System.Collections.Generic;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
 using Zilon.Core.Persons;
 
@@ -22,19 +25,14 @@ namespace Zilon.Core.Tactics.Spatial
 
         public IGraphNode TargetNode { get; }
 
-        private static bool BorderIsAvailabe(IGraphNode testedNeighbor, IActor actor, IMap map)
+        public int GetDistanceBetween(IGraphNode current, IGraphNode target)
         {
-            var borders = map.GetNext(testedNeighbor);
-            foreach (var node in borders)
-            {
-                var isNodeAvailable = map.IsPositionAvailableFor(node, actor);
-                if (!isNodeAvailable)
-                {
-                    return false;
-                }
-            }
+            return _map.DistanceBetween(current, target);
+        }
 
-            return true;
+        public IEnumerable<IGraphNode> GetNext(IGraphNode current)
+        {
+            return GetAvailableNeighbors(current, _map);
         }
 
         /// <summary>
@@ -75,6 +73,21 @@ namespace Zilon.Core.Tactics.Spatial
             throw new InvalidOperationException($"Размер {actorSize} не обрабатывается.");
         }
 
+        private bool IsNodeAvailableForSmallActor(IMap map, IGraphNode testedNeighbor)
+        {
+            if (TargetNode == testedNeighbor)
+            {
+                return true;
+            }
+
+            if (map.IsPositionAvailableFor(testedNeighbor, Actor))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private bool IsNodeAvailableForNormalActor(IMap map, IGraphNode testedNeighbor)
         {
             if (TargetNode == testedNeighbor)
@@ -93,29 +106,19 @@ namespace Zilon.Core.Tactics.Spatial
             return false;
         }
 
-        private bool IsNodeAvailableForSmallActor(IMap map, IGraphNode testedNeighbor)
+        private static bool BorderIsAvailabe(IGraphNode testedNeighbor, IActor actor, IMap map)
         {
-            if (TargetNode == testedNeighbor)
+            var borders = map.GetNext(testedNeighbor);
+            foreach (var node in borders)
             {
-                return true;
+                var isNodeAvailable = map.IsPositionAvailableFor(node, actor);
+                if (!isNodeAvailable)
+                {
+                    return false;
+                }
             }
 
-            if (map.IsPositionAvailableFor(testedNeighbor, Actor))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public int GetDistanceBetween(IGraphNode current, IGraphNode target)
-        {
-            return _map.DistanceBetween(current, target);
-        }
-
-        public IEnumerable<IGraphNode> GetNext(IGraphNode current)
-        {
-            return GetAvailableNeighbors(current, _map);
+            return true;
         }
     }
 }

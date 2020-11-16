@@ -4,8 +4,8 @@ namespace Zilon.Core.Persons
 {
     public interface ISurvivalRandomSource
     {
-        int RollMaxHazardDamage();
-
         int RollSurvival(SurvivalStat stat);
+
+        int RollMaxHazardDamage();
     }
 }

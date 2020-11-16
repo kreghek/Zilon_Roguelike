@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿using System;
+
+namespace Zilon.Core.Persons
 {
     [Serializable]
     public class CreatePersonException : Exception

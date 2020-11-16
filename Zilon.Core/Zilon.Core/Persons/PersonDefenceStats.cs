@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Persons
+﻿using System;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core.Persons
 {
     public class PersonDefenceStats : IPersonDefenceStats
     {

@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
     /// Вспомогательный класс для работы с заливкой

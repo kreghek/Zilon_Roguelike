@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Components;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -23,70 +27,20 @@ namespace Zilon.Core.PersonModules
             _equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
         }
 
-        private static void AddStatToDict(
-            Dictionary<SkillStatType, float> bonusDict,
-            SkillStatType targetStatType,
-            PersonRuleLevel level,
-            PersonRuleDirection direction)
-        {
-            bonusDict.TryGetValue(targetStatType, out float value);
-
-            float q;
-            switch (level)
-            {
-                case PersonRuleLevel.Lesser:
-                    q = 0.1f;
-                    break;
-
-                case PersonRuleLevel.Normal:
-                    q = 0.3f;
-                    break;
-
-                case PersonRuleLevel.Grand:
-                    q = 0.5f;
-                    break;
-
-                case PersonRuleLevel.None:
-                    throw new NotSupportedException();
-
-                case PersonRuleLevel.Absolute:
-                    throw new NotSupportedException();
-
-                default:
-                    throw new NotSupportedException($"Неизветный уровень угрозы выживания {level}.");
-            }
-
-            switch (direction)
-            {
-                case PersonRuleDirection.Positive:
-                    // Бонус изначально расчитывается, как положительный. Ничего не делаем.
-                    break;
-                case PersonRuleDirection.Negative:
-                    q *= -1;
-                    break;
-
-                default:
-                    throw new NotSupportedException($"Неизветный уровень угрозы выживания {direction}.");
-            }
-
-            value += q;
-
-            bonusDict[targetStatType] = value;
-        }
-
         /// <summary>
-        /// Применение бонуса к характеристике навыка.
+        /// Навыки обороны против наступательных действий.
         /// </summary>
-        /// <param name="bonusValue"> Величина бонуса. </param>
-        /// <param name="stat"> Характеристика навыка. </param>
-        private static void ApplyBonusToStat(float bonusValue, SkillStatItem stat)
-        {
-            stat.Value += stat.Value * bonusValue;
+        public IPersonDefenceStats DefenceStats { get; set; }
 
-            if (stat.Value <= 1)
-            {
-                stat.Value = 1;
-            }
+        /// <inheritdoc/>
+        public string Key => nameof(ICombatStatsModule);
+
+        /// <inheritdoc/>
+        public bool IsActive { get; set; }
+
+        private void EquipmentModule_EquipmentChanged(object sender, EquipmentChangedEventArgs e)
+        {
+            CalcCombatStats();
         }
 
         private void CalcCombatStats()
@@ -116,6 +70,21 @@ namespace Zilon.Core.PersonModules
             }
 
             RecalculatePersonArmor();
+        }
+
+        /// <summary>
+        /// Применение бонуса к характеристике навыка.
+        /// </summary>
+        /// <param name="bonusValue"> Величина бонуса. </param>
+        /// <param name="stat"> Характеристика навыка. </param>
+        private static void ApplyBonusToStat(float bonusValue, SkillStatItem stat)
+        {
+            stat.Value += stat.Value * bonusValue;
+
+            if (stat.Value <= 1)
+            {
+                stat.Value = 1;
+            }
         }
 
         /// <summary>
@@ -178,33 +147,33 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void EquipmentModule_EquipmentChanged(object sender, EquipmentChangedEventArgs e)
+        /// <summary>
+        /// Пересчёт показателей брони персонажа.
+        /// </summary>
+        private void RecalculatePersonArmor()
         {
-            CalcCombatStats();
-        }
+            var equipmentModule = _equipmentModule;
 
-        private static int GetArmorModifierByLevel(PersonRuleLevel level)
-        {
-            switch (level)
+            var equipmentArmors = new List<PersonArmorItem>();
+            foreach (var equipment in equipmentModule)
             {
-                case PersonRuleLevel.None:
-                    return 0;
+                if (equipment == null)
+                {
+                    continue;
+                }
 
-                case PersonRuleLevel.Lesser:
-                    return 1;
+                var equipStats = equipment.Scheme.Equip;
 
-                case PersonRuleLevel.Normal:
-                    return 2;
-
-                case PersonRuleLevel.Grand:
-                    return 3;
-
-                case PersonRuleLevel.Absolute:
-                    return 5;
-
-                default:
-                    throw new ArgumentException($"Неизвестное значение уровня {level}.", nameof(level));
+                if (equipStats.Armors != null)
+                {
+                    var currentEquipmentArmors = GetEquipmentArmors(equipStats.Armors);
+                    equipmentArmors.AddRange(currentEquipmentArmors);
+                }
             }
+
+            var mergedArmors = MergeArmor(equipmentArmors);
+
+            DefenceStats.SetArmors(mergedArmors.ToArray());
         }
 
         private static IEnumerable<PersonArmorItem> GetEquipmentArmors(IEnumerable<IPropArmorItemSubScheme> armors)
@@ -217,13 +186,6 @@ namespace Zilon.Core.PersonModules
 
                 yield return personArmorItem;
             }
-        }
-
-        private static int GetLevelDiff(PersonRuleLevel level, PersonRuleLevel baseLevel)
-        {
-            var a = GetArmorModifierByLevel(level);
-            var b = GetArmorModifierByLevel(baseLevel);
-            return a - b;
         }
 
         private static IEnumerable<PersonArmorItem> MergeArmor(IEnumerable<PersonArmorItem> equipmentArmors)
@@ -272,44 +234,86 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        /// <summary>
-        /// Пересчёт показателей брони персонажа.
-        /// </summary>
-        private void RecalculatePersonArmor()
+        private static int GetLevelDiff(PersonRuleLevel level, PersonRuleLevel baseLevel)
         {
-            var equipmentModule = _equipmentModule;
-
-            var equipmentArmors = new List<PersonArmorItem>();
-            foreach (var equipment in equipmentModule)
-            {
-                if (equipment == null)
-                {
-                    continue;
-                }
-
-                var equipStats = equipment.Scheme.Equip;
-
-                if (equipStats.Armors != null)
-                {
-                    var currentEquipmentArmors = GetEquipmentArmors(equipStats.Armors);
-                    equipmentArmors.AddRange(currentEquipmentArmors);
-                }
-            }
-
-            var mergedArmors = MergeArmor(equipmentArmors);
-
-            DefenceStats.SetArmors(mergedArmors.ToArray());
+            var a = GetArmorModifierByLevel(level);
+            var b = GetArmorModifierByLevel(baseLevel);
+            return a - b;
         }
 
-        /// <summary>
-        /// Навыки обороны против наступательных действий.
-        /// </summary>
-        public IPersonDefenceStats DefenceStats { get; set; }
+        private static int GetArmorModifierByLevel(PersonRuleLevel level)
+        {
+            switch (level)
+            {
+                case PersonRuleLevel.None:
+                    return 0;
 
-        /// <inheritdoc/>
-        public string Key => nameof(ICombatStatsModule);
+                case PersonRuleLevel.Lesser:
+                    return 1;
 
-        /// <inheritdoc/>
-        public bool IsActive { get; set; }
+                case PersonRuleLevel.Normal:
+                    return 2;
+
+                case PersonRuleLevel.Grand:
+                    return 3;
+
+                case PersonRuleLevel.Absolute:
+                    return 5;
+
+                default:
+                    throw new ArgumentException($"Неизвестное значение уровня {level}.", nameof(level));
+            }
+        }
+
+        private static void AddStatToDict(
+            Dictionary<SkillStatType, float> bonusDict,
+            SkillStatType targetStatType,
+            PersonRuleLevel level,
+            PersonRuleDirection direction)
+        {
+            bonusDict.TryGetValue(targetStatType, out float value);
+
+            float q;
+            switch (level)
+            {
+                case PersonRuleLevel.Lesser:
+                    q = 0.1f;
+                    break;
+
+                case PersonRuleLevel.Normal:
+                    q = 0.3f;
+                    break;
+
+                case PersonRuleLevel.Grand:
+                    q = 0.5f;
+                    break;
+
+                case PersonRuleLevel.None:
+                    throw new NotSupportedException();
+
+                case PersonRuleLevel.Absolute:
+                    throw new NotSupportedException();
+
+                default:
+                    throw new NotSupportedException($"Неизветный уровень угрозы выживания {level}.");
+            }
+
+            switch (direction)
+            {
+                case PersonRuleDirection.Positive:
+                    // Бонус изначально расчитывается, как положительный. Ничего не делаем.
+                    break;
+                case PersonRuleDirection.Negative:
+                    q *= -1;
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Неизветный уровень угрозы выживания {direction}.");
+            }
+
+            value += q;
+
+            bonusDict[targetStatType] = value;
+        }
     }
 }

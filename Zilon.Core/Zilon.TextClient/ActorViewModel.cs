@@ -1,4 +1,7 @@
-﻿namespace Zilon.TextClient
+﻿using Zilon.Core.Client;
+using Zilon.Core.Tactics;
+
+namespace Zilon.TextClient
 {
     internal class ActorViewModel : IActorViewModel
     {

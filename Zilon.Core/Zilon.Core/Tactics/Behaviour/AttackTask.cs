@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Components;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
@@ -22,9 +26,9 @@ namespace Zilon.Core.Tactics.Behaviour
             TacticalAct = tacticalAct;
         }
 
-        public ITacticalAct TacticalAct { get; }
-
         public IAttackTarget Target { get; }
+
+        public ITacticalAct TacticalAct { get; }
 
         protected override void ExecuteTask()
         {

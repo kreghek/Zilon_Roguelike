@@ -1,19 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Core.Persons;
+using Zilon.Core.World;
 
 namespace Zilon.GlobeObserver
 {
     internal static class Program
     {
-        private static async Task<IGlobe> GenerateGlobeAsync(ServiceProvider serviceProvider)
-        {
-            // Create globe
-            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
-            var globe = await globeInitializer.CreateGlobeAsync("intro");
-
-            return globe;
-        }
-
         private static async Task Main()
         {
             var serviceContainer = new ServiceCollection();
@@ -52,6 +49,15 @@ namespace Zilon.GlobeObserver
                 Console.WriteLine($"Globe Iteration: {globeIterationCounter}");
                 PrintReport(globe);
             } while (true);
+        }
+
+        private static async Task<IGlobe> GenerateGlobeAsync(ServiceProvider serviceProvider)
+        {
+            // Create globe
+            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
+            var globe = await globeInitializer.CreateGlobeAsync("intro");
+
+            return globe;
         }
 
         private static void PrintReport(IGlobe globe)

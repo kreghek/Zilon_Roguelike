@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -6,11 +8,11 @@ namespace Zilon.Core.MapGenerators
 {
     public interface IStaticObjectGenerationContext
     {
-        IResourceDepositData ResourceDepositData { get; }
+        ISector Sector { get; }
 
         ISectorSubScheme Scheme { get; }
 
-        ISector Sector { get; }
+        IResourceDepositData ResourceDepositData { get; }
     }
 
     public sealed class StaticObjectGenerationContext : IStaticObjectGenerationContext

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Tactics.ActorInteractionEvents
+﻿using System;
+
+namespace Zilon.Core.Tactics.ActorInteractionEvents
 {
     public sealed class DamageActorInteractionEvent : ActorInteractionEventBase
     {
@@ -11,12 +13,12 @@
             DamageEfficientCalcResult = damageEfficientCalcResult;
         }
 
-        public DamageEfficientCalc DamageEfficientCalcResult { get; }
+        public IActor TargetActor { get; }
 
-        public int FactToHitRoll { get; internal set; }
+        public DamageEfficientCalc DamageEfficientCalcResult { get; }
 
         public int SuccessToHitRoll { get; internal set; }
 
-        public IActor TargetActor { get; }
+        public int FactToHitRoll { get; internal set; }
     }
 }

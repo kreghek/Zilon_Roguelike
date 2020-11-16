@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Commands
@@ -9,10 +13,14 @@ namespace Zilon.Core.Commands
     public abstract class ActorCommandBase : TacticCommandBase
     {
         [ExcludeFromCodeCoverage]
-        protected ActorCommandBase(ISectorUiState playerState)
+        protected ActorCommandBase(
+            ISectorUiState playerState
+        )
         {
             PlayerState = playerState;
         }
+
+        protected ISectorUiState PlayerState { get; }
 
         /// <summary>
         /// Текущий активный актёр.
@@ -25,7 +33,5 @@ namespace Zilon.Core.Commands
         /// </summary>
         [CanBeNull]
         public IActorViewModel CurrentActorViewModel => PlayerState.ActiveActor;
-
-        protected ISectorUiState PlayerState { get; }
     }
 }

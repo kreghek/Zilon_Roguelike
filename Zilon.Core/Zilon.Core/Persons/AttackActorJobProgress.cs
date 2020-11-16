@@ -1,4 +1,10 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+
+using Newtonsoft.Json;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Persons
@@ -14,95 +20,25 @@ namespace Zilon.Core.Persons
             _tacticalAct = tacticalAct;
         }
 
-        private static bool ActorHasTag(string tag, IActor targetActor)
+        public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
         {
-            var monsterPersonScheme = GetPersonScheme(targetActor);
-
-            if (monsterPersonScheme is null)
+            if (currentJobs is null)
             {
-                return false;
+                throw new System.ArgumentNullException(nameof(currentJobs));
             }
 
-            if (monsterPersonScheme.Tags != null)
+            var modifiedJobs = new List<IJob>();
+            foreach (var job in currentJobs)
             {
-                return false;
-            }
-
-            return monsterPersonScheme.Tags.Contains(tag);
-        }
-
-        private static void AddProgress(IJob job, List<IJob> modifiedJobs)
-        {
-            job.Progress++;
-            modifiedJobs.Add(job);
-        }
-
-        private static IMonsterScheme GetPersonScheme(IActor targetActor)
-        {
-            var monsterPerson = targetActor.Person as MonsterPerson;
-            return monsterPerson?.Scheme;
-        }
-
-        private void ProcessAttackBySpecifiedWeapons(IJob job, List<IJob> modifiedJobs, AttackActorJobData jobData)
-        {
-            Debug.Assert(jobData.WeaponTags.Any(), "Должно быть указано не менее одного тега.");
-            if (!jobData.WeaponTags.Any())
-            {
-                return;
-            }
-
-            var weaponHasAllTags = true;
-            foreach (var tag in jobData.WeaponTags)
-            {
-                Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
-                if (string.IsNullOrWhiteSpace(tag))
+                if (job.Scheme.Type != JobType.AttacksActor)
                 {
                     continue;
                 }
 
-                var weaponHasTag = WeaponHasTag(tag, _tacticalAct);
-                if (!weaponHasTag)
-                {
-                    weaponHasAllTags = false;
-                    break;
-                }
+                ProcessJob(job, modifiedJobs);
             }
 
-            if (weaponHasAllTags)
-            {
-                AddProgress(job, modifiedJobs);
-            }
-        }
-
-        private void ProcessAttackToSpecifiedMonster(IJob job, List<IJob> modifiedJobs, AttackActorJobData jobData)
-        {
-            Debug.Assert(jobData.WeaponTags.Any(), "Должно быть указано не менее одного тега.");
-            if (!jobData.MonsterTags.Any())
-            {
-                return;
-            }
-
-            var monsterHasAllTags = true;
-            foreach (var tag in jobData.WeaponTags)
-            {
-                Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
-                if (string.IsNullOrWhiteSpace(tag))
-                {
-                    continue;
-                }
-
-                var actorHasTag = ActorHasTag(tag, _targetActor);
-                if (!actorHasTag)
-                {
-                    monsterHasAllTags = false;
-                    break;
-                }
-            }
-
-            if (monsterHasAllTags)
-            {
-                AddProgress(job, modifiedJobs);
-            }
+            return modifiedJobs.ToArray();
         }
 
         private void ProcessJob(IJob job, List<IJob> modifiedJobs)
@@ -148,6 +84,85 @@ namespace Zilon.Core.Persons
             }
         }
 
+        private void ProcessAttackToSpecifiedMonster(IJob job, List<IJob> modifiedJobs, AttackActorJobData jobData)
+        {
+            Debug.Assert(jobData.WeaponTags.Any(), "Должно быть указано не менее одного тега.");
+            if (!jobData.MonsterTags.Any())
+            {
+                return;
+            }
+
+            var monsterHasAllTags = true;
+            foreach (var tag in jobData.WeaponTags)
+            {
+                Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
+                if (string.IsNullOrWhiteSpace(tag))
+                {
+                    continue;
+                }
+
+                var actorHasTag = ActorHasTag(tag, _targetActor);
+                if (!actorHasTag)
+                {
+                    monsterHasAllTags = false;
+                    break;
+                }
+            }
+
+            if (monsterHasAllTags)
+            {
+                AddProgress(job, modifiedJobs);
+            }
+        }
+
+        private void ProcessAttackBySpecifiedWeapons(IJob job, List<IJob> modifiedJobs, AttackActorJobData jobData)
+        {
+            Debug.Assert(jobData.WeaponTags.Any(), "Должно быть указано не менее одного тега.");
+            if (!jobData.WeaponTags.Any())
+            {
+                return;
+            }
+
+            var weaponHasAllTags = true;
+            foreach (var tag in jobData.WeaponTags)
+            {
+                Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
+                if (string.IsNullOrWhiteSpace(tag))
+                {
+                    continue;
+                }
+
+                var weaponHasTag = WeaponHasTag(tag, _tacticalAct);
+                if (!weaponHasTag)
+                {
+                    weaponHasAllTags = false;
+                    break;
+                }
+            }
+
+            if (weaponHasAllTags)
+            {
+                AddProgress(job, modifiedJobs);
+            }
+        }
+
+        private static bool ActorHasTag(string tag, IActor targetActor)
+        {
+            var monsterPersonScheme = GetPersonScheme(targetActor);
+
+            if (monsterPersonScheme is null)
+            {
+                return false;
+            }
+
+            if (monsterPersonScheme.Tags != null)
+            {
+                return false;
+            }
+
+            return monsterPersonScheme.Tags.Contains(tag);
+        }
+
         private static bool WeaponHasTag(string tag, ITacticalAct _tacticalAct)
         {
             if (_tacticalAct.Equipment == null)
@@ -163,25 +178,16 @@ namespace Zilon.Core.Persons
             return _tacticalAct.Equipment.Scheme.Tags.Contains(tag);
         }
 
-        public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
+        private static IMonsterScheme GetPersonScheme(IActor targetActor)
         {
-            if (currentJobs is null)
-            {
-                throw new System.ArgumentNullException(nameof(currentJobs));
-            }
+            var monsterPerson = targetActor.Person as MonsterPerson;
+            return monsterPerson?.Scheme;
+        }
 
-            var modifiedJobs = new List<IJob>();
-            foreach (var job in currentJobs)
-            {
-                if (job.Scheme.Type != JobType.AttacksActor)
-                {
-                    continue;
-                }
-
-                ProcessJob(job, modifiedJobs);
-            }
-
-            return modifiedJobs.ToArray();
+        private static void AddProgress(IJob job, List<IJob> modifiedJobs)
+        {
+            job.Progress++;
+            modifiedJobs.Add(job);
         }
     }
 }

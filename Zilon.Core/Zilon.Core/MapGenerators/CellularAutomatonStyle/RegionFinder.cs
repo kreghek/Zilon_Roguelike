@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Common;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
@@ -49,7 +53,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         private static IEnumerable<OffsetCoords> FloodFillRegions(Matrix<bool> matrix, OffsetCoords point)
         {
-            var regionPoints = HexBinaryFiller.FloodFill(matrix,
+            var regionPoints = HexBinaryFiller.FloodFill(
+                matrix,
                 point);
 
             // В регионе должна быть хоть одна точка - стартовая.

@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Common;
+﻿using FluentAssertions;
+
+using NUnit.Framework;
+
+using Zilon.Core.Common;
 using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
 namespace Zilon.Core.Tests.Common

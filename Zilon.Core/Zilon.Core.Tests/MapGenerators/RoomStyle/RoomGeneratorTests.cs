@@ -1,5 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
 
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -12,6 +19,56 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
     [Parallelizable(ParallelScope.All)]
     public class RoomGeneratorTests
     {
+        /// <summary>
+        /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим лучшие случаи (см бенчи).
+        /// </summary>
+        [Test]
+        [Category("integration")]
+        public void GenerateRoomsInGrid_WithFixCompact_NotThrowsExceptions()
+        {
+            // ARRANGE
+            var random = new FixCompactRoomGeneratorRandomSource();
+            var generator = new RoomGenerator(random);
+            var graphMap = new SectorHexMap();
+
+            // ACT
+            Action act = () =>
+            {
+                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, Array.Empty<RoomTransition>());
+                var edgeHash = new HashSet<string>();
+                generator.CreateRoomNodes(graphMap, rooms, edgeHash);
+                generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
+            };
+
+            // ASSERT
+            act.Should().NotThrow();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим худшие случаи (см бенчи).
+        /// </summary>
+        [Test]
+        [Category("integration")]
+        public void GenerateRoomsInGrid_WithFixLarge_NotThrowsExceptions()
+        {
+            // ARRANGE
+            var random = new FixLargeRoomGeneratorRandomSource();
+            var generator = new RoomGenerator(random);
+            var graphMap = new SectorHexMap();
+
+            // ACT
+            Action act = () =>
+            {
+                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, Array.Empty<RoomTransition>());
+                var edgeHash = new HashSet<string>();
+                generator.CreateRoomNodes(graphMap, rooms, edgeHash);
+                generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
+            };
+
+            // ASSERT
+            act.Should().NotThrow();
+        }
+
         /// <summary>
         /// Тест проверяет, что если в схеме сектора обозначены переходы,
         /// то они генерируются в комнате.
@@ -61,56 +118,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
 
             // ASSERT
             factRooms.ElementAt(0).Transitions.Should().BeEquivalentTo(expectedTransitions);
-        }
-
-        /// <summary>
-        /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим лучшие случаи (см бенчи).
-        /// </summary>
-        [Test]
-        [Category("integration")]
-        public void GenerateRoomsInGrid_WithFixCompact_NotThrowsExceptions()
-        {
-            // ARRANGE
-            var random = new FixCompactRoomGeneratorRandomSource();
-            var generator = new RoomGenerator(random);
-            var graphMap = new SectorHexMap();
-
-            // ACT
-            Action act = () =>
-            {
-                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, Array.Empty<RoomTransition>());
-                var edgeHash = new HashSet<string>();
-                generator.CreateRoomNodes(graphMap, rooms, edgeHash);
-                generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
-            };
-
-            // ASSERT
-            act.Should().NotThrow();
-        }
-
-        /// <summary>
-        /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим худшие случаи (см бенчи).
-        /// </summary>
-        [Test]
-        [Category("integration")]
-        public void GenerateRoomsInGrid_WithFixLarge_NotThrowsExceptions()
-        {
-            // ARRANGE
-            var random = new FixLargeRoomGeneratorRandomSource();
-            var generator = new RoomGenerator(random);
-            var graphMap = new SectorHexMap();
-
-            // ACT
-            Action act = () =>
-            {
-                var rooms = generator.GenerateRoomsInGrid(20, 2, 20, Array.Empty<RoomTransition>());
-                var edgeHash = new HashSet<string>();
-                generator.CreateRoomNodes(graphMap, rooms, edgeHash);
-                generator.BuildRoomCorridors(graphMap, rooms, edgeHash);
-            };
-
-            // ASSERT
-            act.Should().NotThrow();
         }
     }
 }

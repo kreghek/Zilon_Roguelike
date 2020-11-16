@@ -1,4 +1,11 @@
-﻿using Zilon.Core.Graphs;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics.Spatial;
 
@@ -17,11 +24,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public RoomMapFactory([NotNull] IRoomGenerator roomGenerator)
         {
             _roomGenerator = roomGenerator ?? throw new System.ArgumentNullException(nameof(roomGenerator));
-        }
-
-        private static ISectorMap CreateMapInstance()
-        {
-            return new SectorHexMap();
         }
 
         /// <summary>
@@ -86,6 +88,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             }
 
             return Task.FromResult(map);
+        }
+
+        private static ISectorMap CreateMapInstance()
+        {
+            return new SectorHexMap();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core
+﻿using System;
+
+namespace Zilon.Core
 {
     public struct OffsetCoords : IEquatable<OffsetCoords>
     {

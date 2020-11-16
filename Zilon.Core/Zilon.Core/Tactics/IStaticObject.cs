@@ -39,19 +39,19 @@ namespace Zilon.Core.Tactics
         PropContainerPurpose Purpose { get; }
 
         /// <summary>
+        /// Получение модуля статического объекта.
+        /// </summary>
+        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
+        /// <returns>Возвращает объект модуля.</returns>
+        TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule;
+
+        /// <summary>
         /// Добавление модуля статического объекта.
         /// </summary>
         /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
         /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
         void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule)
             where TStaticObjectModule : IStaticObjectModule;
-
-        /// <summary>
-        /// Получение модуля статического объекта.
-        /// </summary>
-        /// <typeparam name="TStaticObjectModule">Тип модуля.</typeparam>
-        /// <returns>Возвращает объект модуля.</returns>
-        TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule;
 
         /// <summary>
         /// Проверка наличия модуля статического объекта.

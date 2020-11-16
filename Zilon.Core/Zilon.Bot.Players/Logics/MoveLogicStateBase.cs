@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics.Behaviour;
+﻿using System;
+
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 
 namespace Zilon.Bot.Players.Logics
@@ -10,11 +12,11 @@ namespace Zilon.Bot.Players.Logics
             DecisionSource = decisionSource ?? throw new ArgumentNullException(nameof(decisionSource));
         }
 
-        protected IDecisionSource DecisionSource { get; }
+        protected MoveTask MoveTask { get; set; }
 
         protected IdleTask IdleTask { get; set; }
 
-        protected MoveTask MoveTask { get; set; }
+        protected IDecisionSource DecisionSource { get; }
 
         protected override void ResetData()
         {

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Bot.Players.Strategies
+﻿using System;
+
+namespace Zilon.Bot.Players.Strategies
 {
     public sealed class LogicStateTrack
     {
@@ -8,9 +10,9 @@
             FiredTrigger = firedTrigger;
         }
 
-        public ILogicStateTrigger FiredTrigger { get; }
-
         public ILogicState Logic { get; }
+
+        public ILogicStateTrigger FiredTrigger { get; }
 
         public override string ToString()
         {

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Persons
+﻿using System.Collections.Generic;
+
+namespace Zilon.Core.Persons
 {
     /// <summary>
     /// Интерфейс для прогресса по работе.

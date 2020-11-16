@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Components;
+﻿using Newtonsoft.Json;
+
+using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
@@ -34,13 +36,13 @@ namespace Zilon.Core.Schemes
             }
         }
 
-        /// <summary>Направление влияния (бонус/штраф).</summary>
-        public PersonRuleDirection Direction { get; }
+        /// <summary>Тип правила.</summary>
+        public ConsumeCommonRuleType Type { get; }
 
         /// <summary>Уровень влияния правила.</summary>
         public PersonRuleLevel Level { get; }
 
-        /// <summary>Тип правила.</summary>
-        public ConsumeCommonRuleType Type { get; }
+        /// <summary>Направление влияния (бонус/штраф).</summary>
+        public PersonRuleDirection Direction { get; }
     }
 }

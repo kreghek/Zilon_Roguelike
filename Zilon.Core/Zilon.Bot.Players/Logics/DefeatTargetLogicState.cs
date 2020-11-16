@@ -1,4 +1,8 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -21,6 +25,74 @@ namespace Zilon.Bot.Players.Logics
         public DefeatTargetLogicState(ITacticalActUsageService actService)
         {
             _actService = actService ?? throw new ArgumentNullException(nameof(actService));
+        }
+
+        private IAttackTarget GetTarget(IActor actor, ISectorMap _map, IActorManager actorManager)
+        {
+            //TODO Убрать дублирование кода с IntruderDetectedTrigger
+            // Этот фрагмент уже однажды был использован неправильно,
+            // что привело к трудноуловимой ошибке.
+            var intruders = CheckForIntruders(actor, _map, actorManager);
+
+            var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
+            var nearbyIntruder = orderedIntruders.FirstOrDefault();
+
+            return nearbyIntruder;
+        }
+
+        private IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
+        {
+            foreach (var target in actorManager.Items)
+            {
+                if ((target.Person.Fraction == actor.Person.Fraction) ||
+                    (((target.Person.Fraction == Fractions.MilitiaFraction) &&
+                      (actor.Person.Fraction == Fractions.MainPersonFraction)) ||
+                     ((target.Person.Fraction == Fractions.MainPersonFraction) &&
+                      (actor.Person.Fraction == Fractions.MilitiaFraction)) ||
+                     ((target.Person.Fraction == Fractions.InterventionistFraction) &&
+                      (actor.Person.Fraction == Fractions.TroublemakerFraction)) ||
+                     ((target.Person.Fraction == Fractions.TroublemakerFraction) &&
+                      (actor.Person.Fraction == Fractions.InterventionistFraction))))
+                {
+                    continue;
+                }
+
+                if (target.Person.CheckIsDead())
+                {
+                    continue;
+                }
+
+                var isVisible = LogicHelper.CheckTargetVisible(map, actor.Node, target.Node);
+                if (!isVisible)
+                {
+                    continue;
+                }
+
+                yield return target;
+            }
+        }
+
+        private AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target, ISectorMap map)
+        {
+            if (actor.Person.GetModuleSafe<ICombatActModule>() is null)
+            {
+                throw new NotSupportedException();
+            }
+
+            var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
+
+            var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().CalcCombatActs(),
+                inventory);
+
+            var isInDistance = act.CheckDistance(actor.Node, target.Node, map);
+            var targetIsOnLine = map.TargetIsOnLine(actor.Node, target.Node);
+
+            var attackParams = new AttackParams
+            {
+                IsAvailable = isInDistance && targetIsOnLine, TacticalAct = act
+            };
+
+            return attackParams;
         }
 
         public override IActorTask GetTask(
@@ -82,74 +154,6 @@ namespace Zilon.Bot.Players.Logics
             _refreshCounter = 0;
             _target = null;
             _moveTask = null;
-        }
-
-        private AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target, ISectorMap map)
-        {
-            if (actor.Person.GetModuleSafe<ICombatActModule>() is null)
-            {
-                throw new NotSupportedException();
-            }
-
-            var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
-
-            var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().CalcCombatActs(),
-                inventory);
-
-            var isInDistance = act.CheckDistance(actor.Node, target.Node, map);
-            var targetIsOnLine = map.TargetIsOnLine(actor.Node, target.Node);
-
-            var attackParams = new AttackParams
-            {
-                IsAvailable = isInDistance && targetIsOnLine, TacticalAct = act
-            };
-
-            return attackParams;
-        }
-
-        private IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
-        {
-            foreach (var target in actorManager.Items)
-            {
-                if ((target.Person.Fraction == actor.Person.Fraction) ||
-                    (((target.Person.Fraction == Fractions.MilitiaFraction) &&
-                      (actor.Person.Fraction == Fractions.MainPersonFraction)) ||
-                     ((target.Person.Fraction == Fractions.MainPersonFraction) &&
-                      (actor.Person.Fraction == Fractions.MilitiaFraction)) ||
-                     ((target.Person.Fraction == Fractions.InterventionistFraction) &&
-                      (actor.Person.Fraction == Fractions.TroublemakerFraction)) ||
-                     ((target.Person.Fraction == Fractions.TroublemakerFraction) &&
-                      (actor.Person.Fraction == Fractions.InterventionistFraction))))
-                {
-                    continue;
-                }
-
-                if (target.Person.CheckIsDead())
-                {
-                    continue;
-                }
-
-                var isVisible = LogicHelper.CheckTargetVisible(map, actor.Node, target.Node);
-                if (!isVisible)
-                {
-                    continue;
-                }
-
-                yield return target;
-            }
-        }
-
-        private IAttackTarget GetTarget(IActor actor, ISectorMap _map, IActorManager actorManager)
-        {
-            //TODO Убрать дублирование кода с IntruderDetectedTrigger
-            // Этот фрагмент уже однажды был использован неправильно,
-            // что привело к трудноуловимой ошибке.
-            var intruders = CheckForIntruders(actor, _map, actorManager);
-
-            var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
-            var nearbyIntruder = orderedIntruders.FirstOrDefault();
-
-            return nearbyIntruder;
         }
 
         private class AttackParams

@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+using System.Linq;
+
+namespace Zilon.Core.Common
 {
     public static class StringExtensions
     {
@@ -11,10 +14,8 @@
 
             switch (input)
             {
-                case "":
-                    throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
-                default:
-                    return input.First().ToString().ToUpper(invariantCulture) + input.Substring(1);
+                case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
+                default: return input.First().ToString().ToUpper(invariantCulture) + input.Substring(1);
             }
         }
     }

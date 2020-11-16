@@ -1,4 +1,11 @@
-﻿namespace Zilon.Core.Props
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core.Props
 {
     /// <summary>
     /// Аргументы событий, связанных с инвентарём.

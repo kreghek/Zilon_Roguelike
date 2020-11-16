@@ -1,4 +1,7 @@
-﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
     /// Base implementation of rule managers.

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;
@@ -17,11 +19,6 @@ namespace Zilon.Core.Tactics
     public interface IActor : IAttackTarget, IPassMapBlocker
     {
         /// <summary>
-        /// Указывает, может ли актёр выполнять задачи.
-        /// </summary>
-        bool CanExecuteTasks { get; }
-
-        /// <summary>
         /// Песонаж, который лежит в основе актёра.
         /// </summary>
         IPerson Person { get; }
@@ -29,11 +26,11 @@ namespace Zilon.Core.Tactics
         IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
 
         /// <summary>
-        /// Добыча ресурса из залежей.
+        /// Указывает, может ли актёр выполнять задачи.
         /// </summary>
-        /// <param name="deposit"> Целевые залежи. </param>
-        /// <param name="method"> Метод добычи. </param>
-        void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
+        bool CanExecuteTasks { get; }
+
+        void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.
@@ -48,16 +45,12 @@ namespace Zilon.Core.Tactics
         /// <param name="method"> Метод открытия контейнера. </param>
         void OpenContainer(IStaticObject container, IOpenContainerMethod method);
 
-        void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
-
         /// <summary>
-        /// Приенение действия к указанной цели.
+        /// Добыча ресурса из залежей.
         /// </summary>
-        /// <param name="target"> Цель действия. </param>
-        /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
-        void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
-
-        void UseProp(IProp usedProp);
+        /// <param name="deposit"> Целевые залежи. </param>
+        /// <param name="method"> Метод добычи. </param>
+        void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
 
         /// <summary>
         /// Происходит, когда актёр переместился.
@@ -88,5 +81,14 @@ namespace Zilon.Core.Tactics
         /// Выстреливает, когда актёр использует предмет.
         /// </summary>
         event EventHandler<UsedPropEventArgs> UsedProp;
+
+        /// <summary>
+        /// Приенение действия к указанной цели.
+        /// </summary>
+        /// <param name="target"> Цель действия. </param>
+        /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
+        void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
+
+        void UseProp(IProp usedProp);
     }
 }

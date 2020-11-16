@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Components
+﻿using System;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core.Components
 {
     [PublicAPI]
     [Flags]

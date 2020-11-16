@@ -16,11 +16,6 @@ namespace Zilon.Bot.Players.Triggers
 
         public bool CounterIsOver => Counter <= 0;
 
-        private void CounterDown()
-        {
-            Counter--;
-        }
-
         public void Reset()
         {
             Counter = COUNTER_INITIAL_VALUE;
@@ -38,6 +33,11 @@ namespace Zilon.Bot.Players.Triggers
         public void Update()
         {
             CounterDown();
+        }
+
+        private void CounterDown()
+        {
+            Counter--;
         }
     }
 }

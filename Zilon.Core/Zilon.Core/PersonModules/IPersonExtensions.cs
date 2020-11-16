@@ -1,19 +1,11 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
     public static class IPersonExtensions
     {
-        public static TPersonModule GetModule<TPersonModule>(this IPerson person) where TPersonModule : IPersonModule
-        {
-            if (person is null)
-            {
-                throw new ArgumentNullException(nameof(person));
-            }
-
-            return person.GetModule<TPersonModule>(typeof(TPersonModule).Name);
-        }
-
         public static TPersonModule GetModuleSafe<TPersonModule>(this IPerson source)
             where TPersonModule : IPersonModule
         {
@@ -28,6 +20,16 @@ namespace Zilon.Core.PersonModules
             }
 
             return source.GetModule<TPersonModule>();
+        }
+
+        public static TPersonModule GetModule<TPersonModule>(this IPerson person) where TPersonModule : IPersonModule
+        {
+            if (person is null)
+            {
+                throw new ArgumentNullException(nameof(person));
+            }
+
+            return person.GetModule<TPersonModule>(typeof(TPersonModule).Name);
         }
 
         /// <inheritdoc/>

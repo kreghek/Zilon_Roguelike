@@ -1,10 +1,20 @@
 ﻿using System;
+using System.Linq;
+
+using FluentAssertions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Moq;
+
+using NUnit.Framework;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Commands
 {
@@ -46,7 +56,15 @@ namespace Zilon.Core.Tests.Commands
             var target = ((IActorViewModel)playerState.SelectedViewModel).Actor;
 
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
-                CheckAttackIntention(intention, playerState, target)), It.IsAny<IActor>()));
+                CheckAttackIntention(intention, playerState, target)
+            ), It.IsAny<IActor>()));
+        }
+
+        private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
+        {
+            var attackIntention = (Intention<AttackTask>)intention;
+            var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
+            return attackTask.Target == target;
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
@@ -72,13 +90,6 @@ namespace Zilon.Core.Tests.Commands
             playerStateMock.SetupProperty(x => x.SelectedViewModel, targetVm);
 
             Container.AddSingleton<AttackCommand>();
-        }
-
-        private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
-        {
-            var attackIntention = (Intention<AttackTask>)intention;
-            var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
-            return attackTask.Target == target;
         }
     }
 }

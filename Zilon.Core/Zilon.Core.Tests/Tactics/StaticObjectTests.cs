@@ -1,4 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
@@ -9,6 +17,27 @@ namespace Zilon.Core.Tactics.Tests
     [TestFixture]
     public class StaticObjectTests
     {
+        [Test]
+        public void AddModule_TestModuleWithAdditionalInterfact_ReturnsTestModule()
+        {
+            // ARRANGE
+            var nodeMock = new Mock<IGraphNode>();
+            var node = nodeMock.Object;
+
+            var staticObject = new StaticObject(node, default, default);
+
+            var testModule = new TestModule();
+
+            // ACT
+
+            staticObject.AddModule(testModule);
+            var factTestModule = staticObject.GetModule<ITestModule>();
+
+            // ASSERT
+            factTestModule.Should().NotBeNull();
+            factTestModule.Should().BeOfType<TestModule>();
+        }
+
         [Test]
         public void AddModule_From()
         {
@@ -30,27 +59,6 @@ namespace Zilon.Core.Tactics.Tests
 
             // ASSERT
             factTestModule.Should().BeOfType<DropTablePropChest>();
-        }
-
-        [Test]
-        public void AddModule_TestModuleWithAdditionalInterfact_ReturnsTestModule()
-        {
-            // ARRANGE
-            var nodeMock = new Mock<IGraphNode>();
-            var node = nodeMock.Object;
-
-            var staticObject = new StaticObject(node, default, default);
-
-            var testModule = new TestModule();
-
-            // ACT
-
-            staticObject.AddModule(testModule);
-            var factTestModule = staticObject.GetModule<ITestModule>();
-
-            // ASSERT
-            factTestModule.Should().NotBeNull();
-            factTestModule.Should().BeOfType<TestModule>();
         }
 
         private interface ITestModule : IStaticObjectModule

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Components
+﻿using System.Linq;
+
+namespace Zilon.Core.Components
 {
     /// <summary>
     /// Структура для хранения характеристики.

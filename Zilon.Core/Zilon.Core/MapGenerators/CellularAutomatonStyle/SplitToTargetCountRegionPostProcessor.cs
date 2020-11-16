@@ -1,4 +1,10 @@
-﻿using Zilon.Core.CommonServices.Dices;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
@@ -14,6 +20,18 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         {
             _mapRuleManager = mapRuleManager;
             _dice = dice;
+        }
+
+        public IEnumerable<RegionDraft> Process(IEnumerable<RegionDraft> sourceRegions)
+        {
+            var regionCountRule = _mapRuleManager.GetRuleOrNull<IRegionMinCountRule>();
+            if (regionCountRule is null)
+            {
+                return sourceRegions;
+            }
+
+            var draftRegionArray = sourceRegions.ToArray();
+            return SplitRegionsForTransitions(draftRegionArray, regionCountRule.Count);
         }
 
         /// <summary>
@@ -106,18 +124,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return newDraftRegionList.ToArray();
-        }
-
-        public IEnumerable<RegionDraft> Process(IEnumerable<RegionDraft> sourceRegions)
-        {
-            var regionCountRule = _mapRuleManager.GetRuleOrNull<IRegionMinCountRule>();
-            if (regionCountRule is null)
-            {
-                return sourceRegions;
-            }
-
-            var draftRegionArray = sourceRegions.ToArray();
-            return SplitRegionsForTransitions(draftRegionArray, regionCountRule.Count);
         }
 
         private sealed class RegionCoords

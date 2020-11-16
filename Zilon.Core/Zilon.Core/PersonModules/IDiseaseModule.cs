@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Diseases;
+﻿using System.Collections.Generic;
+
+using Zilon.Core.Diseases;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules

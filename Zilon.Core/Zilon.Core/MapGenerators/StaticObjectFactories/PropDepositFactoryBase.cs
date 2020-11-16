@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -26,9 +28,9 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             Purpose = propContainerPurpose;
         }
 
-        protected abstract DepositMiningDifficulty Difficulty { get; }
-
         protected abstract int ExhausingValue { get; }
+
+        protected abstract DepositMiningDifficulty Difficulty { get; }
 
         public PropContainerPurpose Purpose { get; }
 

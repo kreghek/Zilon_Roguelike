@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Graphs;
+﻿using System.Collections.Generic;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {

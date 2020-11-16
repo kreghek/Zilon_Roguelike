@@ -1,8 +1,12 @@
-﻿using Zilon.Core.Client;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands

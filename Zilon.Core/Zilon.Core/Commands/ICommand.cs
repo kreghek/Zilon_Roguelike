@@ -9,14 +9,14 @@
     public interface ICommand
     {
         /// <summary>
+        /// Выполнение команды.
+        /// </summary>
+        void Execute();
+
+        /// <summary>
         /// Проверяет, возможно ли выполнение команды.
         /// </summary>
         /// <returns> Возвращает true, если команду можно выполнить. Иначе возвращает false. </returns>
         bool CanExecute();
-
-        /// <summary>
-        /// Выполнение команды.
-        /// </summary>
-        void Execute();
     }
 }

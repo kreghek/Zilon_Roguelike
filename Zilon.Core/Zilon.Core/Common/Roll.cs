@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Common
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Newtonsoft.Json;
+
+namespace Zilon.Core.Common
 {
     public class Roll
     {
@@ -16,9 +20,9 @@
             Modifiers = modifiers;
         }
 
-        public int Count { get; }
-
         public int Dice { get; }
+
+        public int Count { get; }
 
         public RollModifiers Modifiers { get; }
     }

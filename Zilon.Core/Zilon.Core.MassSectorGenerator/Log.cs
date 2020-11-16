@@ -1,7 +1,14 @@
-﻿namespace Zilon.Core.MassSectorGenerator
+﻿using System;
+
+namespace Zilon.Core.MassSectorGenerator
 {
     public static class Log
     {
+        public static void Info(string message)
+        {
+            Console.WriteLine(message);
+        }
+
         public static void Error(Exception exception)
         {
             if (exception is null)
@@ -13,11 +20,6 @@
         }
 
         public static void Error(string message)
-        {
-            Console.WriteLine(message);
-        }
-
-        public static void Info(string message)
         {
             Console.WriteLine(message);
         }

@@ -1,4 +1,9 @@
-﻿using Zilon.Core.MapGenerators;
+﻿using FluentAssertions;
+
+using NUnit.Framework;
+
+using Zilon.Core.MapGenerators;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tactics.Spatial.Tests
 {

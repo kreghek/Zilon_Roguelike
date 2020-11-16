@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -8,13 +12,13 @@ namespace Zilon.Core.ProgressStoring
 {
     public class HumanPersonStorageData
     {
+        public HumanSurvivalStatStorageData[] Survival { get; set; }
+
         public PropStorageData[] Equipments { get; set; }
 
         public PropStorageData[] Inventory { get; set; }
 
         public PerkStorageData[] Perks { get; set; }
-
-        public HumanSurvivalStatStorageData[] Survival { get; set; }
 
         public static HumanPersonStorageData Create(HumanPerson humanPerson)
         {
@@ -37,6 +41,56 @@ namespace Zilon.Core.ProgressStoring
                         .ToArray(),
                 Perks = humanPerson.GetModule<IEvolutionModule>().Perks.Select(CreatePerkStorageData).ToArray()
             };
+
+            return storageData;
+        }
+
+        private static PerkStorageData CreatePerkStorageData(IPerk x)
+        {
+            return new PerkStorageData
+            {
+                Sid = x.Scheme.Sid,
+                Level = x.CurrentLevel?.Primary,
+                SubLevel = x.CurrentLevel?.Sub,
+                Jobs = x.CurrentJobs.Select(job => new PerkJobStorageData
+                {
+                    Type = job.Scheme.Type,
+                    Scope = job.Scheme.Scope,
+                    Progress = job.Progress,
+                    IsComplete = job.IsComplete
+                }).ToArray()
+            };
+        }
+
+        private static PropStorageData CreateEquipmentStorageData(IProp prop)
+        {
+            if (prop == null)
+            {
+                return null;
+            }
+
+            return CreatePropStorageData(prop);
+        }
+
+        private static PropStorageData CreatePropStorageData(IProp prop)
+        {
+            var storageData = new PropStorageData
+            {
+                Sid = prop.Scheme.Sid
+            };
+
+            switch (prop)
+            {
+                case Equipment equipment:
+                    storageData.Type = PropType.Equipment;
+                    storageData.Durable = equipment.Durable.Value;
+                    break;
+
+                case Resource resource:
+                    storageData.Type = PropType.Resource;
+                    storageData.Count = resource.Count;
+                    break;
+            }
 
             return storageData;
         }
@@ -128,56 +182,6 @@ namespace Zilon.Core.ProgressStoring
             }
 
             return person;
-        }
-
-        private static PropStorageData CreateEquipmentStorageData(IProp prop)
-        {
-            if (prop == null)
-            {
-                return null;
-            }
-
-            return CreatePropStorageData(prop);
-        }
-
-        private static PerkStorageData CreatePerkStorageData(IPerk x)
-        {
-            return new PerkStorageData
-            {
-                Sid = x.Scheme.Sid,
-                Level = x.CurrentLevel?.Primary,
-                SubLevel = x.CurrentLevel?.Sub,
-                Jobs = x.CurrentJobs.Select(job => new PerkJobStorageData
-                {
-                    Type = job.Scheme.Type,
-                    Scope = job.Scheme.Scope,
-                    Progress = job.Progress,
-                    IsComplete = job.IsComplete
-                }).ToArray()
-            };
-        }
-
-        private static PropStorageData CreatePropStorageData(IProp prop)
-        {
-            var storageData = new PropStorageData
-            {
-                Sid = prop.Scheme.Sid
-            };
-
-            switch (prop)
-            {
-                case Equipment equipment:
-                    storageData.Type = PropType.Equipment;
-                    storageData.Durable = equipment.Durable.Value;
-                    break;
-
-                case Resource resource:
-                    storageData.Type = PropType.Resource;
-                    storageData.Count = resource.Count;
-                    break;
-            }
-
-            return storageData;
         }
 
         private static void RestoreEvolutionData(

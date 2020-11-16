@@ -1,4 +1,8 @@
-﻿namespace Zilon.Core.Tactics.Behaviour
+﻿using System;
+
+using JetBrains.Annotations;
+
+namespace Zilon.Core.Tactics.Behaviour
 {
     public class MineTask : OneTurnActorTaskBase
     {

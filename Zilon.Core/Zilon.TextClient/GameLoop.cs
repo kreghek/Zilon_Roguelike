@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Zilon.Core.World;
+
 namespace Zilon.TextClient
 {
     internal class GameLoop

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
+﻿using System;
+
+namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
     /// Метаданные элемета интерьера комнаты.

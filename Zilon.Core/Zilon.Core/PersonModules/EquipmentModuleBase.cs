@@ -1,4 +1,11 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+using JetBrains.Annotations;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -55,65 +62,6 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <summary>
-        /// Возвращает энумератор, который перебирает текущую экипировку.
-        /// </summary>
-        /// <returns>
-        /// Энумератор, который может быть использован для перебора текущей экипировки.
-        /// </returns>
-        public IEnumerator<Equipment> GetEnumerator()
-        {
-            return _equipment.AsEnumerable().GetEnumerator();
-        }
-
-        /// <summary>
-        /// Выбрасывает событие <see cref="EquipmentChanged"/> с указыннми данными в аргументах.
-        /// </summary>
-        /// <param name="slotIndex">Индекс слота, в котором произошли изменения.</param>
-        /// <param name="oldEquipment">Старая экипировка, которая была до изменнеия слота.</param>
-        /// <param name="equipment">Текущая экипировка.</param>
-        protected virtual void DoEquipmentChanged(
-            int slotIndex,
-            Equipment oldEquipment,
-            Equipment equipment)
-        {
-            EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
-        }
-
-        /// <summary>
-        /// Проверяет возможность установки предмета в указанный слот экипировки.
-        /// Используется в this[].set.
-        /// </summary>
-        /// <param name="equipment">Предмет, который будет экипирован.</param>
-        /// <param name="slotIndex">Слот, в который будет произведена экипировка.</param>
-        /// <remarks>
-        /// При нарушении условий будет выбрасывать исключение.
-        /// </remarks>
-        protected abstract void ValidateSetEquipment(Equipment equipment, int slotIndex);
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _equipment.GetEnumerator();
-        }
-
-        private void SetEquipment(Equipment equipment, int slotIndex)
-        {
-            if (equipment != null)
-            {
-                ValidateSetEquipment(equipment, slotIndex);
-
-                _equipment[slotIndex] = equipment;
-            }
-            else
-            {
-                _equipment[slotIndex] = null;
-            }
-
-            var oldEquipment = _equipment[slotIndex];
-
-            DoEquipmentChanged(slotIndex, oldEquipment, equipment);
-        }
-
-        /// <summary>
         /// Экипировка персонажа.
         /// </summary>
         /// <remarks>
@@ -145,5 +93,64 @@ namespace Zilon.Core.PersonModules
         /// Выстреливает, когда экипировка изменяется.
         /// </summary>
         public event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
+
+        /// <summary>
+        /// Возвращает энумератор, который перебирает текущую экипировку.
+        /// </summary>
+        /// <returns>
+        /// Энумератор, который может быть использован для перебора текущей экипировки.
+        /// </returns>
+        public IEnumerator<Equipment> GetEnumerator()
+        {
+            return _equipment.AsEnumerable().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _equipment.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Проверяет возможность установки предмета в указанный слот экипировки.
+        /// Используется в this[].set.
+        /// </summary>
+        /// <param name="equipment">Предмет, который будет экипирован.</param>
+        /// <param name="slotIndex">Слот, в который будет произведена экипировка.</param>
+        /// <remarks>
+        /// При нарушении условий будет выбрасывать исключение.
+        /// </remarks>
+        protected abstract void ValidateSetEquipment(Equipment equipment, int slotIndex);
+
+        private void SetEquipment(Equipment equipment, int slotIndex)
+        {
+            if (equipment != null)
+            {
+                ValidateSetEquipment(equipment, slotIndex);
+
+                _equipment[slotIndex] = equipment;
+            }
+            else
+            {
+                _equipment[slotIndex] = null;
+            }
+
+            var oldEquipment = _equipment[slotIndex];
+
+            DoEquipmentChanged(slotIndex, oldEquipment, equipment);
+        }
+
+        /// <summary>
+        /// Выбрасывает событие <see cref="EquipmentChanged"/> с указыннми данными в аргументах.
+        /// </summary>
+        /// <param name="slotIndex">Индекс слота, в котором произошли изменения.</param>
+        /// <param name="oldEquipment">Старая экипировка, которая была до изменнеия слота.</param>
+        /// <param name="equipment">Текущая экипировка.</param>
+        protected virtual void DoEquipmentChanged(
+            int slotIndex,
+            Equipment oldEquipment,
+            Equipment equipment)
+        {
+            EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
+        }
     }
 }

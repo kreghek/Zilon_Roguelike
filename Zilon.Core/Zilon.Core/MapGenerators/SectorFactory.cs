@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Props;
+﻿using System;
+
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
@@ -22,9 +24,9 @@ namespace Zilon.Core.MapGenerators
             _equipmentDurableService = equipmentDurableService;
         }
 
-        public NationalUnityEventService NationalUnityEventService { get; set; }
-
         public IScoreManager ScoreManager { get; set; }
+
+        public NationalUnityEventService NationalUnityEventService { get; set; }
 
         public ISector Create(ISectorMap map, ILocationScheme locationScheme)
         {

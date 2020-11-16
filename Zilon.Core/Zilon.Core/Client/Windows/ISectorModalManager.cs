@@ -10,10 +10,10 @@ namespace Zilon.Core.Client.Windows
     {
         void ShowContainerModal(PropTransferMachine transferMachine);
 
-        void ShowInstructionModal();
-
         void ShowInventoryModal(IActor actor);
 
         void ShowPerksModal(IActor actor);
+
+        void ShowInstructionModal();
     }
 }

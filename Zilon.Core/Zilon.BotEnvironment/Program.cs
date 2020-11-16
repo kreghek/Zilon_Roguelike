@@ -6,10 +6,15 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Bot.Sdk;
 using Zilon.CommonUtilities;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
+using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
@@ -20,45 +25,40 @@ namespace Zilon.BotEnvironment
         private const string BOT_MODE_ARG = "Mode";
         private static Startup _startUp;
 
-        private static Type GetBotActorTaskSource(Type registerManagerType)
+        private static async Task Main(string[] args)
         {
-            var props = registerManagerType.GetProperties();
-            foreach (var prop in props)
+            var scoreFilePreffix = ArgumentHelper.GetProgramArgument(args, SCORE_PREFFIX_ARG);
+
+            var serviceCollection = new ServiceCollection();
+
+            _startUp = new Startup();
+            _startUp.RegisterServices(serviceCollection);
+
+            var botSettings = new BotSettings
             {
-                var actorTaskSourceAttribute = prop.GetCustomAttribute<ActorTaskSourceTypeAttribute>();
-                if (actorTaskSourceAttribute != null)
-                {
-                    return prop.GetValue(null) as Type;
-                }
-            }
+                Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG)
+            };
 
-            return null;
-        }
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            LoadBotAssembly("cdt", "Zilon.Bot.Players.NetCore.dll", serviceCollection, serviceProvider);
+            var serviceProviderWithDynamicBotServices = serviceCollection.BuildServiceProvider();
 
-        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType)
-            where TAttribute : Attribute
-        {
-            var methods = registerManagerType.GetMethods();
-            foreach (var method in methods)
+            var globeInitializer = serviceProviderWithDynamicBotServices.GetRequiredService<IGlobeInitializer>();
+
+            var autoPlayEngine = new AutoplayEngine(_startUp, botSettings, scoreFilePreffix, globeInitializer);
+
+            var player = serviceProvider.GetRequiredService<IPlayer>();
+            var startPerson = player.MainPerson;
+
+            var globe = await autoPlayEngine.CreateGlobeAsync();
+
+            await autoPlayEngine.StartAsync(globe, startPerson);
+
+            Console.WriteLine(autoPlayEngine.LogOutput);
+
+            if (!ArgumentHelper.HasProgramArgument(args, SERVER_RUN_ARG))
             {
-                var specificAttr = method.GetCustomAttribute<TAttribute>();
-                if (specificAttr != null)
-                {
-                    return method;
-                }
-            }
-
-            return null;
-        }
-
-        private static IEnumerable<Type> GetTypesWithHelpAttribute<TAttribute>(Assembly assembly)
-        {
-            foreach (Type type in assembly.GetTypes())
-            {
-                if (type.GetCustomAttributes(typeof(TAttribute), true).Length > 0)
-                {
-                    yield return type;
-                }
+                Console.ReadLine();
             }
         }
 
@@ -96,41 +96,46 @@ namespace Zilon.BotEnvironment
             });
         }
 
-        private static async Task Main(string[] args)
+        private static IEnumerable<Type> GetTypesWithHelpAttribute<TAttribute>(Assembly assembly)
         {
-            var scoreFilePreffix = ArgumentHelper.GetProgramArgument(args, SCORE_PREFFIX_ARG);
-
-            var serviceCollection = new ServiceCollection();
-
-            _startUp = new Startup();
-            _startUp.RegisterServices(serviceCollection);
-
-            var botSettings = new BotSettings
+            foreach (Type type in assembly.GetTypes())
             {
-                Mode = ArgumentHelper.GetProgramArgument(args, BOT_MODE_ARG)
-            };
-
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-            LoadBotAssembly("cdt", "Zilon.Bot.Players.NetCore.dll", serviceCollection, serviceProvider);
-            var serviceProviderWithDynamicBotServices = serviceCollection.BuildServiceProvider();
-
-            var globeInitializer = serviceProviderWithDynamicBotServices.GetRequiredService<IGlobeInitializer>();
-
-            var autoPlayEngine = new AutoplayEngine(_startUp, botSettings, scoreFilePreffix, globeInitializer);
-
-            var player = serviceProvider.GetRequiredService<IPlayer>();
-            var startPerson = player.MainPerson;
-
-            var globe = await autoPlayEngine.CreateGlobeAsync();
-
-            await autoPlayEngine.StartAsync(globe, startPerson);
-
-            Console.WriteLine(autoPlayEngine.LogOutput);
-
-            if (!ArgumentHelper.HasProgramArgument(args, SERVER_RUN_ARG))
-            {
-                Console.ReadLine();
+                if (type.GetCustomAttributes(typeof(TAttribute), true).Length > 0)
+                {
+                    yield return type;
+                }
             }
+        }
+
+        private static Type GetBotActorTaskSource(Type registerManagerType)
+        {
+            var props = registerManagerType.GetProperties();
+            foreach (var prop in props)
+            {
+                var actorTaskSourceAttribute = prop.GetCustomAttribute<ActorTaskSourceTypeAttribute>();
+                if (actorTaskSourceAttribute != null)
+                {
+                    return prop.GetValue(null) as Type;
+                }
+            }
+
+            return null;
+        }
+
+        private static MethodInfo GetMethodByAttribute<TAttribute>(Type registerManagerType)
+            where TAttribute : Attribute
+        {
+            var methods = registerManagerType.GetMethods();
+            foreach (var method in methods)
+            {
+                var specificAttr = method.GetCustomAttribute<TAttribute>();
+                if (specificAttr != null)
+                {
+                    return method;
+                }
+            }
+
+            return null;
         }
     }
 }

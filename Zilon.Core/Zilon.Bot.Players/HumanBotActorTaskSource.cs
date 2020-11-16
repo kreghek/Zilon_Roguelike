@@ -1,4 +1,6 @@
-﻿using Zilon.Bot.Players.Strategies;
+﻿using System;
+
+using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
@@ -15,6 +17,11 @@ namespace Zilon.Bot.Players
         public HumanBotActorTaskSource(LogicStateTreePatterns logicStateTreePatterns)
         {
             _logicStateTreePatterns = logicStateTreePatterns;
+        }
+
+        public override void Configure(IBotSettings botSettings)
+        {
+            _botSettings = botSettings;
         }
 
         protected override ILogicStrategy GetLogicStrategy(IActor actor)
@@ -71,11 +78,6 @@ namespace Zilon.Bot.Players
                 default:
                     throw new NotSupportedException();
             }
-        }
-
-        public override void Configure(IBotSettings botSettings)
-        {
-            _botSettings = botSettings;
         }
     }
 }

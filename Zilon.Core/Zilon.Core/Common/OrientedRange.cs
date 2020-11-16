@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
     /// Расширенный диапазон значений с указанием направления.

@@ -1,11 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.PathFinding;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 {
@@ -13,16 +21,6 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
     [Parallelizable(ParallelScope.All)]
     public class AStarSectorGraphMapTests
     {
-        public static void AddWall(
-            ISectorMap map,
-            int x1,
-            int y1,
-            int x2,
-            int y2)
-        {
-            map.RemoveEdge(x1, y1, x2, y2);
-        }
-
         /// <summary>
         /// Тест из спеки:
         /// Перемещение актёра по узла каждый ход. На карте есть монстры и источник команд для них.
@@ -76,6 +74,16 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             // ASSERT
 
             path.Should().NotBeEmpty();
+        }
+
+        public static void AddWall(
+            ISectorMap map,
+            int x1,
+            int y1,
+            int x2,
+            int y2)
+        {
+            map.RemoveEdge(x1, y1, x2, y2);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
     /// Матрица значений.
@@ -37,6 +39,16 @@
         }
 
         /// <summary>
+        /// Элементы матрицы.
+        /// </summary>
+        public T[,] Items { get; }
+
+        /// <summary>
+        /// Ширина матрицы.
+        /// </summary>
+        public int Width { get; }
+
+        /// <summary>
         /// Высота матрицы.
         /// </summary>
         public int Height { get; }
@@ -46,16 +58,6 @@
             get => Items[x, y];
             set => Items[x, y] = value;
         }
-
-        /// <summary>
-        /// Элементы матрицы.
-        /// </summary>
-        public T[,] Items { get; }
-
-        /// <summary>
-        /// Ширина матрицы.
-        /// </summary>
-        public int Width { get; }
 
         public bool IsIn(int x, int y)
         {

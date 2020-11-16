@@ -1,4 +1,8 @@
-﻿using Zilon.Core.Common;
+﻿using FluentAssertions;
+
+using NUnit.Framework;
+
+using Zilon.Core.Common;
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tests.MapGenerators

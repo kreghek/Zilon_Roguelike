@@ -1,4 +1,10 @@
-﻿using Zilon.Core.Persons;
+﻿using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common.Schemes;
@@ -9,6 +15,30 @@ namespace Zilon.Core.Tests.Persons
     [Parallelizable(ParallelScope.All)]
     public class DefeatActorJobProgressTests
     {
+        /// <summary>
+        /// Тест проверяет, что прогресс на уничтожение противника применяется к задачам этого типа.
+        /// </summary>
+        [Test]
+        public void ApplyToJobs_OneDefeatJob_DefeatJobProgressIncreased()
+        {
+            // ARRANGE
+            const int startProgress = 1;
+            const int expectedProgress = startProgress + 1;
+
+            var actor = CreateActor();
+            var job = CreateJob(startProgress, JobType.Defeats);
+            var progress = CreateJobProgress(actor);
+
+            // ACT
+            progress.ApplyToJobs(new[]
+            {
+                job
+            });
+
+            // ASSERT
+            job.Progress.Should().Be(expectedProgress);
+        }
+
         /// <summary>
         /// Тест проверяет, что прогресс на уничтожение противника применяется ТОЛЬКО к задачам этого типа.
         /// </summary>
@@ -36,30 +66,6 @@ namespace Zilon.Core.Tests.Persons
             // ASSERT
             testedJob.Progress.Should().Be(expectedProgress);
             otherJob.Progress.Should().Be(expectedOtherProgress);
-        }
-
-        /// <summary>
-        /// Тест проверяет, что прогресс на уничтожение противника применяется к задачам этого типа.
-        /// </summary>
-        [Test]
-        public void ApplyToJobs_OneDefeatJob_DefeatJobProgressIncreased()
-        {
-            // ARRANGE
-            const int startProgress = 1;
-            const int expectedProgress = startProgress + 1;
-
-            var actor = CreateActor();
-            var job = CreateJob(startProgress, JobType.Defeats);
-            var progress = CreateJobProgress(actor);
-
-            // ACT
-            progress.ApplyToJobs(new[]
-            {
-                job
-            });
-
-            // ASSERT
-            job.Progress.Should().Be(expectedProgress);
         }
 
         /// <summary>

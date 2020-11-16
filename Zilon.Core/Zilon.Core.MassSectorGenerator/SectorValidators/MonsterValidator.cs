@@ -1,4 +1,9 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MassSectorGenerator.SectorValidators
 {

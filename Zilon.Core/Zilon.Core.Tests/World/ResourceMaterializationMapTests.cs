@@ -6,12 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.World.Tests
 {
@@ -108,6 +113,96 @@ namespace Zilon.Core.World.Tests
             }
 
             Console.Write(resultStringBuilder.ToString());
+        }
+
+        private static string GetVisualString(
+            ISectorNode currentNode,
+            ISectorNode nextNode,
+            IResourceDepositData currentResource,
+            IResourceDepositData nextResource)
+        {
+            var str = new StringBuilder(
+                $"    {currentNode.GetHashCode()}{ResourceToString(currentResource)}-->{nextNode.GetHashCode()}{ResourceToString(nextResource)};");
+
+            if (currentResource.Items.Any())
+            {
+                var currentResColor = ResourceToStyle(currentResource);
+                str.AppendLine($"    style {currentNode.GetHashCode()} fill:{ColorTranslator.ToHtml(currentResColor)}");
+            }
+
+            if (nextResource.Items.Any())
+            {
+                var nextResColor = ResourceToStyle(nextResource);
+                str.AppendLine($"    style {nextNode.GetHashCode()} fill:{ColorTranslator.ToHtml(nextResColor)}");
+            }
+
+            return str.ToString();
+        }
+
+        private static Color ResourceToStyle(IResourceDepositData currentResource)
+        {
+            var totalColor = new Color();
+            var colorDict = new Dictionary<SectorResourceType, Color>
+            {
+                {
+                    SectorResourceType.Iron, Color.Maroon
+                },
+                {
+                    SectorResourceType.Stones, Color.Silver
+                },
+                {
+                    SectorResourceType.WaterPuddles, Color.Aqua
+                },
+                {
+                    SectorResourceType.CherryBrushes, Color.Green
+                }
+            };
+
+            foreach (var item in currentResource.Items)
+            {
+                var resColor = colorDict[item.ResourceType];
+                var r = MathUtils.Lerp(totalColor.R, resColor.R, item.Share);
+                var g = MathUtils.Lerp(totalColor.G, resColor.G, item.Share);
+                var b = MathUtils.Lerp(totalColor.B, resColor.B, item.Share);
+
+                totalColor = Color.FromArgb((int)r, (int)g, (int)b);
+            }
+
+            return totalColor;
+        }
+
+        private static string ResourceToString(IResourceDepositData currentResource)
+        {
+            if (currentResource.Items.Any())
+            {
+                var colorDict = new Dictionary<SectorResourceType, string>
+                {
+                    {
+                        SectorResourceType.Iron, "i"
+                    },
+                    {
+                        SectorResourceType.Stones, "s"
+                    },
+                    {
+                        SectorResourceType.WaterPuddles, "w"
+                    },
+                    {
+                        SectorResourceType.CherryBrushes, "b"
+                    }
+                };
+
+                var sb = new StringBuilder();
+                foreach (var item in currentResource.Items)
+                {
+                    var resColor = colorDict[item.ResourceType];
+
+                    sb.Append($"{resColor}-{Math.Round(item.Share, 2).ToString(CultureInfo.InvariantCulture)} ");
+                }
+
+                return $"[{sb.ToString().Trim()}]";
+            }
+
+            return string.Empty;
         }
 
         private static ILocationScheme[] CreateBiomSchemes()
@@ -238,96 +333,6 @@ namespace Zilon.Core.World.Tests
                     }
                 }
             };
-        }
-
-        private static string GetVisualString(
-            ISectorNode currentNode,
-            ISectorNode nextNode,
-            IResourceDepositData currentResource,
-            IResourceDepositData nextResource)
-        {
-            var str = new StringBuilder(
-                $"    {currentNode.GetHashCode()}{ResourceToString(currentResource)}-->{nextNode.GetHashCode()}{ResourceToString(nextResource)};");
-
-            if (currentResource.Items.Any())
-            {
-                var currentResColor = ResourceToStyle(currentResource);
-                str.AppendLine($"    style {currentNode.GetHashCode()} fill:{ColorTranslator.ToHtml(currentResColor)}");
-            }
-
-            if (nextResource.Items.Any())
-            {
-                var nextResColor = ResourceToStyle(nextResource);
-                str.AppendLine($"    style {nextNode.GetHashCode()} fill:{ColorTranslator.ToHtml(nextResColor)}");
-            }
-
-            return str.ToString();
-        }
-
-        private static string ResourceToString(IResourceDepositData currentResource)
-        {
-            if (currentResource.Items.Any())
-            {
-                var colorDict = new Dictionary<SectorResourceType, string>
-                {
-                    {
-                        SectorResourceType.Iron, "i"
-                    },
-                    {
-                        SectorResourceType.Stones, "s"
-                    },
-                    {
-                        SectorResourceType.WaterPuddles, "w"
-                    },
-                    {
-                        SectorResourceType.CherryBrushes, "b"
-                    }
-                };
-
-                var sb = new StringBuilder();
-                foreach (var item in currentResource.Items)
-                {
-                    var resColor = colorDict[item.ResourceType];
-
-                    sb.Append($"{resColor}-{Math.Round(item.Share, 2).ToString(CultureInfo.InvariantCulture)} ");
-                }
-
-                return $"[{sb.ToString().Trim()}]";
-            }
-
-            return string.Empty;
-        }
-
-        private static Color ResourceToStyle(IResourceDepositData currentResource)
-        {
-            var totalColor = new Color();
-            var colorDict = new Dictionary<SectorResourceType, Color>
-            {
-                {
-                    SectorResourceType.Iron, Color.Maroon
-                },
-                {
-                    SectorResourceType.Stones, Color.Silver
-                },
-                {
-                    SectorResourceType.WaterPuddles, Color.Aqua
-                },
-                {
-                    SectorResourceType.CherryBrushes, Color.Green
-                }
-            };
-
-            foreach (var item in currentResource.Items)
-            {
-                var resColor = colorDict[item.ResourceType];
-                var r = MathUtils.Lerp(totalColor.R, resColor.R, item.Share);
-                var g = MathUtils.Lerp(totalColor.G, resColor.G, item.Share);
-                var b = MathUtils.Lerp(totalColor.B, resColor.B, item.Share);
-
-                totalColor = Color.FromArgb((int)r, (int)g, (int)b);
-            }
-
-            return totalColor;
         }
 
         private class NodeInfo

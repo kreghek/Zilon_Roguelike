@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Common;
+﻿using System.Linq;
+
+using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -7,31 +9,20 @@ namespace Zilon.Core.Persons
 {
     public static class EquipmentCarrierHelper
     {
-        public static bool CanBeEquiped(IEquipmentModule equipmentCarrier, int slotIndex, Equipment equipment)
+        public static bool CheckSlotCompability(Equipment equipment, PersonSlotSubScheme slot)
         {
-            if (equipmentCarrier is null)
-            {
-                throw new System.ArgumentNullException(nameof(equipmentCarrier));
-            }
-
             if (equipment is null)
             {
                 throw new System.ArgumentNullException(nameof(equipment));
             }
 
-            var slot = equipmentCarrier.Slots[slotIndex];
-
-            if (!CheckSlotCompability(equipment, slot))
+            if (slot is null)
             {
-                return false;
+                throw new System.ArgumentNullException(nameof(slot));
             }
 
-            if (!CheckDualCompability(equipmentCarrier, equipment, slotIndex))
-            {
-                return false;
-            }
-
-            if (!CheckShieldCompability(equipmentCarrier, equipment, slotIndex))
+            var invalidSlot = (slot.Types & equipment.Scheme.Equip.SlotTypes[0]) == 0;
+            if (invalidSlot)
             {
                 return false;
             }
@@ -139,20 +130,31 @@ namespace Zilon.Core.Persons
             return true;
         }
 
-        public static bool CheckSlotCompability(Equipment equipment, PersonSlotSubScheme slot)
+        public static bool CanBeEquiped(IEquipmentModule equipmentCarrier, int slotIndex, Equipment equipment)
         {
+            if (equipmentCarrier is null)
+            {
+                throw new System.ArgumentNullException(nameof(equipmentCarrier));
+            }
+
             if (equipment is null)
             {
                 throw new System.ArgumentNullException(nameof(equipment));
             }
 
-            if (slot is null)
+            var slot = equipmentCarrier.Slots[slotIndex];
+
+            if (!CheckSlotCompability(equipment, slot))
             {
-                throw new System.ArgumentNullException(nameof(slot));
+                return false;
             }
 
-            var invalidSlot = (slot.Types & equipment.Scheme.Equip.SlotTypes[0]) == 0;
-            if (invalidSlot)
+            if (!CheckDualCompability(equipmentCarrier, equipment, slotIndex))
+            {
+                return false;
+            }
+
+            if (!CheckShieldCompability(equipmentCarrier, equipment, slotIndex))
             {
                 return false;
             }

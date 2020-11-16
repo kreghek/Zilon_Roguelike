@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Benchmarks.Move
+﻿using BenchmarkDotNet.Running;
+
+namespace Zilon.Core.Benchmarks.Move
 {
     internal class Program
     {

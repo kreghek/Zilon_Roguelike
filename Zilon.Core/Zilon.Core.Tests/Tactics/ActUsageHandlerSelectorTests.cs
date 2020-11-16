@@ -1,5 +1,11 @@
 ﻿using System;
 
+using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 
@@ -9,34 +15,6 @@ namespace Zilon.Core.Tactics.Tests
     [Parallelizable(ParallelScope.All)]
     public class ActUsageHandlerSelectorTests
     {
-        /// <summary>
-        /// Тест проверяет, что селектор возвращает null (НЕ во),
-        /// если тип целевого объекта не приводится к целевому типу обработчика.
-        /// </summary>
-        [Test]
-        public void GetHandler_IsNotHandleTarget_ThrowsExceptionHandlerNotFound()
-        {
-            // ARRANGE
-
-            var testHandlerMock = new Mock<IActUsageHandler>();
-            testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
-            var testHandler = testHandlerMock.Object;
-
-            var selector = new ActUsageHandlerSelector(new IActUsageHandler[]
-            {
-                testHandler
-            });
-
-            var targetObject = new NotHandleTarget();
-
-            // ACT
-            Action act = () => { selector.GetHandler(targetObject); };
-
-            // ASSERT
-
-            act.Should().Throw<HandlerNotFoundException>();
-        }
-
         /// <summary>
         /// Тест проверяет, что селектор корректно возвращает обработчик,
         /// если целевой объект напрямую реализует тестовый интерфейс.
@@ -93,6 +71,37 @@ namespace Zilon.Core.Tactics.Tests
             // ASSERT
 
             factHandler.Should().Be(testHandler);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что селектор возвращает null (НЕ во),
+        /// если тип целевого объекта не приводится к целевому типу обработчика.
+        /// </summary>
+        [Test]
+        public void GetHandler_IsNotHandleTarget_ThrowsExceptionHandlerNotFound()
+        {
+            // ARRANGE
+
+            var testHandlerMock = new Mock<IActUsageHandler>();
+            testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
+            var testHandler = testHandlerMock.Object;
+
+            var selector = new ActUsageHandlerSelector(new IActUsageHandler[]
+            {
+                testHandler
+            });
+
+            var targetObject = new NotHandleTarget();
+
+            // ACT
+            Action act = () =>
+            {
+                selector.GetHandler(targetObject);
+            };
+
+            // ASSERT
+
+            act.Should().Throw<HandlerNotFoundException>();
         }
 
         private class Test1 : ITest1, IAttackTarget

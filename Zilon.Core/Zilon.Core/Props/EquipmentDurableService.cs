@@ -1,4 +1,6 @@
-﻿using Zilon.Core.PersonModules;
+﻿using System;
+
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Props
@@ -22,34 +24,6 @@ namespace Zilon.Core.Props
         public EquipmentDurableService(IEquipmentDurableServiceRandomSource randomSource)
         {
             _randomSource = randomSource;
-        }
-
-        private static void UnequipIfDurableIsOver(Equipment equipment, IPerson equipmentOwner)
-        {
-            if (equipment.Durable.Value <= 0)
-            {
-                var equipmentCarrier = equipmentOwner.GetModule<IEquipmentModule>();
-                if (equipmentCarrier == null)
-                {
-                    return;
-                }
-
-                int? slotIndex = null;
-                for (var i = 0; i < equipmentCarrier.Slots.Length; i++)
-                {
-                    var prop = equipmentCarrier[i];
-                    if (prop == equipment)
-                    {
-                        slotIndex = i;
-                        break;
-                    }
-                }
-
-                if (slotIndex != null)
-                {
-                    equipmentOwner.UnequipProp(slotIndex.Value);
-                }
-            }
         }
 
         /// <summary>Определяет, может ли экипировка быть отремонтирована.</summary>
@@ -118,6 +92,34 @@ namespace Zilon.Core.Props
             }
 
             UnequipIfDurableIsOver(equipment, equipmentOwner);
+        }
+
+        private static void UnequipIfDurableIsOver(Equipment equipment, IPerson equipmentOwner)
+        {
+            if (equipment.Durable.Value <= 0)
+            {
+                var equipmentCarrier = equipmentOwner.GetModule<IEquipmentModule>();
+                if (equipmentCarrier == null)
+                {
+                    return;
+                }
+
+                int? slotIndex = null;
+                for (var i = 0; i < equipmentCarrier.Slots.Length; i++)
+                {
+                    var prop = equipmentCarrier[i];
+                    if (prop == equipment)
+                    {
+                        slotIndex = i;
+                        break;
+                    }
+                }
+
+                if (slotIndex != null)
+                {
+                    equipmentOwner.UnequipProp(slotIndex.Value);
+                }
+            }
         }
     }
 }
