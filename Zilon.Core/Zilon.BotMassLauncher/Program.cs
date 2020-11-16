@@ -26,7 +26,7 @@ namespace Zilon.BotMassLauncher
             var host = Host
                 .CreateDefaultBuilder()
                 .ConfigureServices((context, services) => services
-                .AddLogging(loggingBuilder => loggingBuilder.AddConsole().AddConfiguration(configuration))
+                    .AddLogging(loggingBuilder => loggingBuilder.AddConsole().AddConfiguration(configuration))
                 )
                 .Build();
 

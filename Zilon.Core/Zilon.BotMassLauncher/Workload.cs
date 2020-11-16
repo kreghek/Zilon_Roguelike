@@ -82,6 +82,14 @@ namespace Zilon.BotMassLauncher
             _logger.LogTrace("[x] COMPLETE");
         }
 
+        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            if (_shutdownTokenSource != null)
+            {
+                _shutdownTokenSource.Cancel();
+            }
+        }
+
         private static void RunEnvironment(int iteration, ILogger logger)
         {
             var modeArg = string.Empty;
@@ -127,13 +135,6 @@ namespace Zilon.BotMassLauncher
             logger.LogTrace($"[x] {infiniteCounterPrefix}ITERATION {iteration} FINISHED");
         }
 
-        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
-        {
-            if (_shutdownTokenSource != null)
-            {
-                _shutdownTokenSource.Cancel();
-            }
-        }
         private static void RunLinear(ILogger logger)
         {
             for (var i = 0; i < _launchCount; i++)
@@ -150,7 +151,7 @@ namespace Zilon.BotMassLauncher
                 CancellationToken = _shutdownToken
             };
 
-            Parallel.For(0, _launchCount, parallelOptions, (iteration) => RunEnvironment(iteration, logger));
+            Parallel.For(0, _launchCount, parallelOptions, iteration => RunEnvironment(iteration, logger));
         }
     }
 }
