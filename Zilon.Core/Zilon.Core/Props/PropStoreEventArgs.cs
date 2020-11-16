@@ -13,7 +13,7 @@ namespace Zilon.Core.Props
     public class PropStoreEventArgs
     {
         [ExcludeFromCodeCoverage]
-        public PropStoreEventArgs([NotNull] [ItemNotNull] IEnumerable<IProp> props)
+        public PropStoreEventArgs([NotNull][ItemNotNull] IEnumerable<IProp> props)
         {
             if (props == null)
             {
@@ -24,7 +24,7 @@ namespace Zilon.Core.Props
         }
 
         [ExcludeFromCodeCoverage]
-        public PropStoreEventArgs([NotNull] [ItemNotNull] params IProp[] props)
+        public PropStoreEventArgs([NotNull][ItemNotNull] params IProp[] props)
         {
             Props = props ?? throw new ArgumentNullException(nameof(props));
         }
