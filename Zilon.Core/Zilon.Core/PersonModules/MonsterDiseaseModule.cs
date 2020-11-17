@@ -1,10 +1,7 @@
-﻿using System.Linq;
-
-using Zilon.Core.Persons;
+﻿using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
-
     /// <summary>
     /// Модуль болезней для монстров.
     /// Значительно упрошен по сравнению с базовой реализацией.
