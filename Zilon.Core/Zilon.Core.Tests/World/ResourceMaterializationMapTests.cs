@@ -106,21 +106,6 @@ namespace Zilon.Core.World.Tests
             Console.Write(resultStringBuilder.ToString());
         }
 
-        private static IEnumerable<NodeInfo> GetNotMaterializedNodeInfos(
-            NodeInfo nextNode,
-            IResourceDepositData nextResource,
-            IEnumerable<SectorNode> sectorNodes)
-        {
-            return from sectorNode in sectorNodes
-                   where sectorNode.State != SectorNodeState.SectorMaterialized
-                   select new NodeInfo
-                   {
-                       Current = sectorNode,
-                       Parent = nextNode.Current,
-                       ParentResource = nextResource
-                   };
-        }
-
         private static ILocationScheme[] CreateBiomSchemes()
         {
             return new ILocationScheme[]
@@ -213,6 +198,21 @@ namespace Zilon.Core.World.Tests
                     }
                 }
             };
+        }
+
+        private static IEnumerable<NodeInfo> GetNotMaterializedNodeInfos(
+            NodeInfo nextNode,
+            IResourceDepositData nextResource,
+            IEnumerable<SectorNode> sectorNodes)
+        {
+            return from sectorNode in sectorNodes
+                   where sectorNode.State != SectorNodeState.SectorMaterialized
+                   select new NodeInfo
+                   {
+                       Current = sectorNode,
+                       Parent = nextNode.Current,
+                       ParentResource = nextResource
+                   };
         }
 
         private static string GetVisualString(ISectorNode currentNode, ISectorNode nextNode,
