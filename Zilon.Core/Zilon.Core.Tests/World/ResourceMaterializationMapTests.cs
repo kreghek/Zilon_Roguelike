@@ -100,7 +100,7 @@ namespace Zilon.Core.World.Tests
                     .OfType<SectorNode>()
                     .Where(x => x.State != SectorNodeState.SectorMaterialized)
                     .Select(x => new NodeInfo
-                        { Current = x, Parent = nextNode.Current, ParentResource = nextResource });
+                    { Current = x, Parent = nextNode.Current, ParentResource = nextResource });
                 openList.AddRange(nextNodes2);
 
                 iteration++;
