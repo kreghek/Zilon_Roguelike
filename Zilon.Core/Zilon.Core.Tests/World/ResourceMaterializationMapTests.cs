@@ -96,17 +96,29 @@ namespace Zilon.Core.World.Tests
                 resultStringBuilder.AppendLine(GetVisualString(nextNode.Parent, nextNode.Current,
                     nextNode.ParentResource, nextResource));
 
-                var nextNodes2 = nextNode.Current.Biome.GetNext(nextNode.Current)
-                    .OfType<SectorNode>()
-                    .Where(x => x.State != SectorNodeState.SectorMaterialized)
-                    .Select(x => new NodeInfo
-                        { Current = x, Parent = nextNode.Current, ParentResource = nextResource });
+                var sectorNodes = nextNode.Current.Biome.GetNext(nextNode.Current).OfType<SectorNode>();
+                var nextNodes2 = GetNotMaterializedNodeInfos(nextNode, nextResource, sectorNodes);
                 openList.AddRange(nextNodes2);
 
                 iteration++;
             }
 
             Console.Write(resultStringBuilder.ToString());
+        }
+
+        private static IEnumerable<NodeInfo> GetNotMaterializedNodeInfos(
+            NodeInfo nextNode,
+            IResourceDepositData nextResource,
+            IEnumerable<SectorNode> sectorNodes)
+        {
+            return from sectorNode in sectorNodes
+                   where sectorNode.State != SectorNodeState.SectorMaterialized
+                   select new NodeInfo
+                   {
+                       Current = sectorNode,
+                       Parent = nextNode.Current,
+                       ParentResource = nextResource
+                   };
         }
 
         private static ILocationScheme[] CreateBiomSchemes()
