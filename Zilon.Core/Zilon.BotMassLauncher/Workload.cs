@@ -10,7 +10,7 @@ using Zilon.CommonUtilities;
 
 namespace Zilon.BotMassLauncher
 {
-    internal class Workload: IDisposable
+    internal class Workload : IDisposable
     {
         private readonly ILogger<Workload> _logger;
         private string _botAssembly;
