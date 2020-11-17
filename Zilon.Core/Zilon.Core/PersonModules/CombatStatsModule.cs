@@ -176,8 +176,20 @@ namespace Zilon.Core.PersonModules
                     AddStatToDict(bonusDict, SkillStatType.Ballistic, rule.Level, PersonRuleDirection.Positive);
                     break;
 
+                case PersonRuleType.Health:
+                case PersonRuleType.Damage:
+                case PersonRuleType.ToHit:
+                case PersonRuleType.HealthIfNoBody:
+                case PersonRuleType.HungerResistance:
+                case PersonRuleType.ThristResistance:
+                    // This perk rule is not impact to combat stats.
+                    break;
+
                 case PersonRuleType.Undefined:
                     throw new InvalidOperationException("Undefined rule");
+
+                default:
+                    throw new InvalidOperationException($"Rule {rule.Type} unknown");
             }
         }
 
