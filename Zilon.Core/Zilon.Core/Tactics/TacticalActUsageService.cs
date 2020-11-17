@@ -69,7 +69,9 @@ namespace Zilon.Core.Tactics
             return roll;
         }
 
-        private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSizePattern physicalSize, IGraphNode baseNode,
+        private static IEnumerable<IGraphNode> GetActorNodes(
+            PhysicalSizePattern physicalSize,
+            IGraphNode baseNode,
             IMap map)
         {
             yield return baseNode;
