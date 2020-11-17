@@ -82,28 +82,41 @@ namespace Zilon.Core.Common
 
                 regionPoints.Add(currentCell);
                 snapshotCellMap[currentCell.X, currentCell.Y] = false;
-
-                var cubeCoords = HexHelper.ConvertToCube(currentCell);
-                var clockwiseOffsets = HexHelper.GetOffsetClockwise();
-
-                foreach (var offset in clockwiseOffsets)
-                {
-                    var neighbourCubeCoords = cubeCoords + offset;
-
-                    var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
-
-                    if (!openPoints.Contains(neighbourCoords))
-                    {
-                        var isAvailable = availabilityDelegate(neighbourCoords);
-                        if (isAvailable)
-                        {
-                            openPoints.Add(neighbourCoords);
-                        }
-                    }
-                }
+                var nextPoints = AddNextOpenNodes(currentCell, availabilityDelegate);
+                AddAllInOpenPoints(openPoints, nextPoints);
             }
 
             return regionPoints;
+        }
+
+        private static void AddAllInOpenPoints(HashSet<OffsetCoords> openPoints, IEnumerable<OffsetCoords> nextPoints)
+        {
+            foreach (var nextPoint in nextPoints)
+            {
+                // Hashset garantee unique points. Do not check occurrence of an item in a hashset.
+                openPoints.Add(nextPoint);
+            }
+        }
+
+        private static IEnumerable<OffsetCoords> AddNextOpenNodes(
+            OffsetCoords currentCell,
+            Func<OffsetCoords, bool> availabilityDelegate)
+        {
+            var cubeCoords = HexHelper.ConvertToCube(currentCell);
+            var clockwiseOffsets = HexHelper.GetOffsetClockwise();
+
+            foreach (var offset in clockwiseOffsets)
+            {
+                var neighbourCubeCoords = cubeCoords + offset;
+
+                var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
+
+                var isAvailable = availabilityDelegate(neighbourCoords);
+                if (isAvailable)
+                {
+                    yield return neighbourCoords;
+                }
+            }
         }
 
         private static bool CheckAvailableFor7(OffsetCoords testCoords, Matrix<bool> matrix)
