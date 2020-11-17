@@ -29,6 +29,7 @@ namespace Zilon.Core.Props
             Props = props ?? throw new ArgumentNullException(nameof(props));
         }
 
-        [PublicAPI] public IProp[] Props { get; }
+        [PublicAPI]
+        public IProp[] Props { get; }
     }
 }

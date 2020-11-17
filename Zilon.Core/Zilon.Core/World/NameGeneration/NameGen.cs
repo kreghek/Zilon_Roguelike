@@ -194,11 +194,14 @@ namespace Zilon.Core.World.NameGeneration
                 Last = System.Array.Empty<string>();
             }
 
-            [JsonProperty(PropertyName = "boys")] public string[] Boys { get; set; }
+            [JsonProperty(PropertyName = "boys")]
+            public string[] Boys { get; set; }
 
-            [JsonProperty(PropertyName = "girls")] public string[] Girls { get; set; }
+            [JsonProperty(PropertyName = "girls")]
+            public string[] Girls { get; set; }
 
-            [JsonProperty(PropertyName = "last")] public string[] Last { get; set; }
+            [JsonProperty(PropertyName = "last")]
+            public string[] Last { get; set; }
         }
     }
 }

@@ -19,10 +19,13 @@ namespace Zilon.Core.Persons
             SlotIndex = slotIndex;
         }
 
-        [PublicAPI] public Equipment Equipment { get; }
+        [PublicAPI]
+        public Equipment Equipment { get; }
 
-        [PublicAPI] public Equipment OldEquipment { get; }
+        [PublicAPI]
+        public Equipment OldEquipment { get; }
 
-        [PublicAPI] public int SlotIndex { get; }
+        [PublicAPI]
+        public int SlotIndex { get; }
     }
 }

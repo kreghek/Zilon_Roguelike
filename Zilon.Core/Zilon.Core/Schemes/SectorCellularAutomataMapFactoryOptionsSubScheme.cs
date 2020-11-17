@@ -7,10 +7,13 @@ namespace Zilon.Core.Schemes
     {
         public override SchemeSectorMapGenerator MapGenerator => SchemeSectorMapGenerator.CellularAutomaton;
 
-        [JsonProperty] public int MapWidth { get; private set; }
+        [JsonProperty]
+        public int MapWidth { get; private set; }
 
-        [JsonProperty] public int MapHeight { get; private set; }
+        [JsonProperty]
+        public int MapHeight { get; private set; }
 
-        [JsonProperty] public int ChanceToStartAlive { get; private set; }
+        [JsonProperty]
+        public int ChanceToStartAlive { get; private set; }
     }
 }

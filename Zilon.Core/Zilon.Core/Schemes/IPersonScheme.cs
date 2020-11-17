@@ -8,11 +8,14 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public interface IPersonScheme : IScheme
     {
-        [NotNull] string DefaultAct { get; set; }
+        [NotNull]
+        string DefaultAct { get; set; }
 
         int Hp { get; set; }
 
-        [NotNull] [ItemNotNull] PersonSlotSubScheme[] Slots { get; set; }
+        [NotNull]
+        [ItemNotNull]
+        PersonSlotSubScheme[] Slots { get; set; }
 
         /// <summary>
         /// Характеристики выживания персонажа.
