@@ -14,7 +14,7 @@ namespace Zilon.Core.PersonModules
     {
         private readonly IEffectsModule _personEffects;
 
-        public DiseaseModule(IEffectsModule personEffects) : base()
+        public DiseaseModule(IEffectsModule personEffects)
         {
             _personEffects = personEffects ?? throw new ArgumentNullException(nameof(personEffects));
         }
