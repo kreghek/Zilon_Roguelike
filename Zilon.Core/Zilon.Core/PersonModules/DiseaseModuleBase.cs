@@ -14,17 +14,20 @@ namespace Zilon.Core.PersonModules
     {
         private readonly ICollection<IDiseaseProcess> _diseasesList;
 
-        public string Key => nameof(IDiseaseModule);
-
-        /// <inheritdoc />
-        public bool IsActive { get; set; }
-        public IEnumerable<IDiseaseProcess> Diseases { get; }
-
         protected DiseaseModuleBase()
         {
             _diseasesList = new List<IDiseaseProcess>();
             IsActive = true;
         }
+
+        protected abstract void UpdateDeseaseProcess(IEffectsModule personEffects, IDiseaseProcess diseaseProcess);
+
+        public string Key => nameof(IDiseaseModule);
+
+        /// <inheritdoc />
+        public bool IsActive { get; set; }
+
+        public IEnumerable<IDiseaseProcess> Diseases { get; }
 
         public void Infect(IDisease disease)
         {
@@ -47,7 +50,5 @@ namespace Zilon.Core.PersonModules
         {
             throw new System.NotImplementedException();
         }
-
-        protected abstract void UpdateDeseaseProcess(IEffectsModule personEffects, IDiseaseProcess diseaseProcess);
     }
 }

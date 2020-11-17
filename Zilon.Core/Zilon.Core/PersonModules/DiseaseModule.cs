@@ -12,49 +12,6 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public class DiseaseModule : DiseaseModuleBase
     {
-        private static void AddDiseaseEffectForSymptom(
-            IEffectsModule personEffects,
-            IDisease disease,
-            DiseaseSymptom symptom)
-        {
-            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
-                .SingleOrDefault(x => x.Symptom == symptom);
-
-            if (currentSymptomEffect is null)
-            {
-                // При создании эффекта уже фиксируется болезнь, которая его удерживает.
-                currentSymptomEffect = new DiseaseSymptomEffect(disease, symptom);
-                personEffects.Add(currentSymptomEffect);
-            }
-            else
-            {
-                currentSymptomEffect.HoldDisease(disease);
-            }
-        }
-
-        private static void RemoveDiseaseEffectForSimptom(
-            IEffectsModule personEffects,
-            IDisease disease,
-            DiseaseSymptom symptom)
-        {
-            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
-                .SingleOrDefault(x => x.Symptom == symptom);
-
-            if (currentSymptomEffect is null)
-            {
-                // Просто игнорируем этот эффект.
-                // Ткущий метод может вызываться несколько раз и для симптомов, которые ушли в предыдущих итерациях.
-                return;
-            }
-
-            currentSymptomEffect.ReleaseDisease(disease);
-
-            if (!currentSymptomEffect.Diseases.Any())
-            {
-                personEffects.Remove(currentSymptomEffect);
-            }
-        }
-
         protected override void UpdateDeseaseProcess(IEffectsModule personEffects, IDiseaseProcess diseaseProcess)
         {
             if (diseaseProcess is null)
@@ -99,6 +56,49 @@ namespace Zilon.Core.PersonModules
             if (diseaseProcess.Value >= 1)
             {
                 RemoveDisease(diseaseProcess.Disease);
+            }
+        }
+
+        private static void AddDiseaseEffectForSymptom(
+            IEffectsModule personEffects,
+            IDisease disease,
+            DiseaseSymptom symptom)
+        {
+            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
+                .SingleOrDefault(x => x.Symptom == symptom);
+
+            if (currentSymptomEffect is null)
+            {
+                // При создании эффекта уже фиксируется болезнь, которая его удерживает.
+                currentSymptomEffect = new DiseaseSymptomEffect(disease, symptom);
+                personEffects.Add(currentSymptomEffect);
+            }
+            else
+            {
+                currentSymptomEffect.HoldDisease(disease);
+            }
+        }
+
+        private static void RemoveDiseaseEffectForSimptom(
+            IEffectsModule personEffects,
+            IDisease disease,
+            DiseaseSymptom symptom)
+        {
+            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
+                .SingleOrDefault(x => x.Symptom == symptom);
+
+            if (currentSymptomEffect is null)
+            {
+                // Просто игнорируем этот эффект.
+                // Ткущий метод может вызываться несколько раз и для симптомов, которые ушли в предыдущих итерациях.
+                return;
+            }
+
+            currentSymptomEffect.ReleaseDisease(disease);
+
+            if (!currentSymptomEffect.Diseases.Any())
+            {
+                personEffects.Remove(currentSymptomEffect);
             }
         }
 
