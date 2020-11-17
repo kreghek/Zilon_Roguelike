@@ -124,7 +124,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             yield return baseNode;
 
-            if (person.PhysicalSize == PhysicalSize.Size7)
+            if (person.PhysicalSize == PhysicalSizePattern.Size7)
             {
                 var neighbors = _map.GetNext(baseNode);
                 foreach (var neighbor in neighbors)

@@ -20,7 +20,7 @@ namespace Zilon.Core.Persons
         public override int Id { get; set; }
 
         /// <inheritdoc />
-        public override PhysicalSize PhysicalSize => PhysicalSize.Size1;
+        public override PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
 
         /// <inheritdoc />
         public IMonsterScheme Scheme { get; }

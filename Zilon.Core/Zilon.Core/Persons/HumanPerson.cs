@@ -31,7 +31,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         public ILocalizedString PersonEquipmentTemplate { get; set; }
 
-        public override PhysicalSize PhysicalSize => PhysicalSize.Size1;
+        public override PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 

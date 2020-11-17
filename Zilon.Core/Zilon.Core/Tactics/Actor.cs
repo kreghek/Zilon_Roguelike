@@ -355,7 +355,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         public IGraphNode Node { get; private set; }
 
-        public PhysicalSize PhysicalSize => Person.PhysicalSize;
+        public PhysicalSizePattern PhysicalSize => Person.PhysicalSize;
         public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
         public bool CanExecuteTasks => !Person.CheckIsDead();
 

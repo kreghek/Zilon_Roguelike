@@ -363,7 +363,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var player = playerMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
+            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSizePattern.Size1);
             var person = personMock.Object;
 
             var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();

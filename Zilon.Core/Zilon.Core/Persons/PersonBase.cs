@@ -19,7 +19,7 @@ namespace Zilon.Core.Persons
         public abstract int Id { get; set; }
 
         /// <inheritdoc />
-        public abstract PhysicalSize PhysicalSize { get; }
+        public abstract PhysicalSizePattern PhysicalSize { get; }
 
         /// <inheritdoc />
         public IFraction Fraction { get; }

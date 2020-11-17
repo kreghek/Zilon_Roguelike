@@ -26,7 +26,7 @@ namespace Zilon.Core.Tactics.Spatial
         {
             yield return baseTargetNode;
 
-            if (actor.Person.PhysicalSize == PhysicalSize.Size7)
+            if (actor.Person.PhysicalSize == PhysicalSizePattern.Size7)
             {
                 var neighbors = GetNext(baseTargetNode);
                 foreach (var neighbor in neighbors)

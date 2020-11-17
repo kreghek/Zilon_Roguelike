@@ -65,12 +65,12 @@ namespace Zilon.Core.Tactics.Spatial
         private bool IsNodeAvailableForActor(IMap map, IGraphNode testedNeighbor)
         {
             var actorSize = Actor.Person.PhysicalSize;
-            if (actorSize == PhysicalSize.Size1)
+            if (actorSize == PhysicalSizePattern.Size1)
             {
                 return IsNodeAvailableForSmallActor(map, testedNeighbor);
             }
 
-            if (actorSize == PhysicalSize.Size7)
+            if (actorSize == PhysicalSizePattern.Size7)
             {
                 return IsNodeAvailableForNormalActor(map, testedNeighbor);
             }

@@ -13,7 +13,7 @@ namespace Zilon.Core.Persons
         IFraction Fraction { get; }
         int Id { get; set; }
 
-        PhysicalSize PhysicalSize { get; }
+        PhysicalSizePattern PhysicalSize { get; }
 
         /// <summary>
         /// Добавление модуля статического объекта.
