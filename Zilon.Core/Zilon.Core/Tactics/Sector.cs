@@ -130,7 +130,8 @@ namespace Zilon.Core.Tactics
             TrasitionUsed?.Invoke(this, e);
         }
 
-        private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSizePattern physicalSize, IGraphNode baseNode, IMap map)
+        private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSizePattern physicalSize, IGraphNode baseNode,
+            IMap map)
         {
             yield return baseNode;
 
