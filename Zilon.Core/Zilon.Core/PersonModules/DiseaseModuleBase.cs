@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Diseases;
@@ -49,7 +50,16 @@ namespace Zilon.Core.PersonModules
 
         public void Update(IEffectsModule personEffects)
         {
-            throw new System.NotImplementedException();
+            if (personEffects is null)
+            {
+                throw new ArgumentNullException(nameof(personEffects));
+            }
+
+            var diseaseMaterialized = Diseases.ToArray();
+            foreach (var diseaseProcess in diseaseMaterialized)
+            {
+                UpdateDeseaseProcess(personEffects, diseaseProcess);
+            }
         }
     }
 }
