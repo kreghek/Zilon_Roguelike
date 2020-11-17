@@ -5,10 +5,10 @@
     /// </summary>
     public class LocalizedString : ILocalizedString
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string En { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string Ru { get; set; }
     }
 }

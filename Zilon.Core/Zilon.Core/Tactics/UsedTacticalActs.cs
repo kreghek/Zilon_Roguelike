@@ -17,7 +17,6 @@ namespace Zilon.Core.Tactics
         public UsedTacticalActs([NotNull][ItemNotNull] IEnumerable<ITacticalAct> primary) :
             this(primary, new ITacticalAct[0])
         {
-
         }
 
         [ExcludeFromCodeCoverage]

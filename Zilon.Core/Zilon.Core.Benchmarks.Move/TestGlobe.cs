@@ -13,13 +13,14 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmarks.Move
 {
-    class TestGlobe : IGlobe
+    internal class TestGlobe : IGlobe
     {
         private readonly TestMaterializedSectorNode _sectorNode;
 
-        public TestGlobe(IPersonScheme personScheme, IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource)
+        public TestGlobe(IPersonScheme personScheme,
+            IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource)
         {
-            TestSectorSubScheme testSectorSubScheme = new TestSectorSubScheme
+            var testSectorSubScheme = new TestSectorSubScheme
             {
                 RegularMonsterSids = new[] { "rat" },
                 RegionMonsterCount = 0,
@@ -27,7 +28,7 @@ namespace Zilon.Core.Benchmarks.Move
                 MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
                 {
                     RegionCount = 20,
-                    RegionSize = 20,
+                    RegionSize = 20
                 },
 
                 IsStart = true,
@@ -41,7 +42,6 @@ namespace Zilon.Core.Benchmarks.Move
 
             var person = new HumanPerson(personScheme, Fractions.MainPersonFraction);
 
-
             var playerActorStartNode = _sectorNode.Sector.Map.Regions
                 .SingleOrDefault(x => x.IsStart).Nodes
                 .First();
@@ -51,7 +51,7 @@ namespace Zilon.Core.Benchmarks.Move
             _sectorNode.Sector.ActorManager.Add(actor);
         }
 
-        public IEnumerable<ISectorNode> SectorNodes { get => new[] { _sectorNode }; }
+        public IEnumerable<ISectorNode> SectorNodes => new[] { _sectorNode };
 
         public void AddSectorNode(ISectorNode sectorNode)
         {

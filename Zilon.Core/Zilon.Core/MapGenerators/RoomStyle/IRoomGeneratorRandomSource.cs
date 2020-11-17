@@ -10,6 +10,23 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     public interface IRoomGeneratorRandomSource
     {
         /// <summary>
+        /// Выбирает комнаты, с которыми есть соединение.
+        /// </summary>
+        /// <param name="currentRoom"> Текущая комната, для которой ищуются соединённые соседи. </param>
+        /// <param name="maxNeighbors"> Максимальное количество соединённых соседей. </param>
+        /// <param name="availableRooms"> Набор доступных для соединения соседенй. </param>
+        /// <returns> Возвращает целевые комнаты для соединения. </returns>
+        Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms);
+
+        /// <summary>
+        /// Выбрасывает случаный набор элементов интерьера комнаты.
+        /// </summary>
+        /// <param name="roomWidth">Ширина комнаты.</param>
+        /// <param name="roomHeight">Высота комнаты.</param>
+        /// <returns> Возвращает набор элементов интерьера комнаты. </returns>
+        RoomInteriorObjectMeta[] RollInteriorObjects(int roomWidth, int roomHeight);
+
+        /// <summary>
         /// Выбрасывает случайный набор уникальных координат в матрице комнат указаной длины.
         /// </summary>
         /// <param name="roomGridSize"> Размер матрицы комнат. </param>
@@ -19,6 +36,17 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// Координаты не повторяются и их ровно roomCount. Эти 2 условия метод должен гарантировать.
         /// </remarks>
         IEnumerable<OffsetCoords> RollRoomMatrixPositions(int roomGridSize, int roomCount);
+
+        /// <summary>
+        /// Возвращает матрицу смежности между комнатами (сеть комнат).
+        /// </summary>
+        /// <param name="rooms"> Всё комнаты, которые должны быть соединены в сеть. </param>
+        /// <param name="maxNeighbors"> Максимальное количество соседей у комнаты. </param>
+        /// <returns>
+        /// Возвращает словарь, представляющий собой матрицу смежности комнат.
+        /// Минимальное число соседей - 1. Максимальное - не превышает указанное в аргументе значение.
+        /// </returns>
+        IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors);
 
         /// <summary>
         /// Выбрасывает случайный размер комнаты.
@@ -31,32 +59,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// </remarks>
         Size[] RollRoomSize(int minSize, int maxSize, int count);
 
-        /// <summary>
-        /// Выбирает комнаты, с которыми есть соединение.
-        /// </summary>
-        /// <param name="currentRoom"> Текущая комната, для которой ищуются соединённые соседи. </param>
-        /// <param name="maxNeighbors"> Максимальное количество соединённых соседей. </param>
-        /// <param name="availableRooms"> Набор доступных для соединения соседенй. </param>
-        /// <returns> Возвращает целевые комнаты для соединения. </returns>
-        Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms);
-
-        /// <summary>
-        /// Возвращает матрицу смежности между комнатами (сеть комнат).
-        /// </summary>
-        /// <param name="rooms"> Всё комнаты, которые должны быть соединены в сеть. </param>
-        /// <param name="maxNeighbors"> Максимальное количество соседей у комнаты. </param>
-        /// <returns> Возвращает словарь, представляющий собой матрицу смежности комнат.
-        /// Минимальное число соседей - 1. Максимальное - не превышает указанное в аргументе значение. </returns>
-        IDictionary<Room, Room[]> RollRoomNet(IEnumerable<Room> rooms, int maxNeighbors);
-        IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions);
         HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes);
-
-        /// <summary>
-        /// Выбрасывает случаный набор элементов интерьера комнаты.
-        /// </summary>
-        /// <param name="roomWidth">Ширина комнаты.</param>
-        /// <param name="roomHeight">Высота комнаты.</param>
-        /// <returns> Возвращает набор элементов интерьера комнаты. </returns>
-        RoomInteriorObjectMeta[] RollInteriorObjects(int roomWidth, int roomHeight);
+        IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions);
     }
 }

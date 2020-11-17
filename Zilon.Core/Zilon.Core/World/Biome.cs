@@ -13,10 +13,8 @@ namespace Zilon.Core.World
     /// </summary>
     public sealed class Biome : IBiome
     {
-        private readonly IList<SectorNode> _nodes;
         private readonly IList<IGraphEdge> _edges;
-
-        public ILocationScheme LocationScheme { get; }
+        private readonly IList<SectorNode> _nodes;
 
         public Biome(ILocationScheme locationScheme)
         {
@@ -26,9 +24,11 @@ namespace Zilon.Core.World
             _edges = new List<IGraphEdge>();
         }
 
-        public IEnumerable<SectorNode> Sectors { get => _nodes.OfType<SectorNode>(); }
+        public ILocationScheme LocationScheme { get; }
 
-        public IEnumerable<IGraphNode> Nodes { get => _nodes; }
+        public IEnumerable<SectorNode> Sectors => _nodes.OfType<SectorNode>();
+
+        public IEnumerable<IGraphNode> Nodes => _nodes;
 
         public void AddEdge(IGraphNode node1, IGraphNode node2)
         {

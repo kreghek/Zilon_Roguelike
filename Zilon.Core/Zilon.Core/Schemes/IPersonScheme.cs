@@ -13,7 +13,8 @@ namespace Zilon.Core.Schemes
 
         int Hp { get; set; }
 
-        [NotNull, ItemNotNull]
+        [NotNull]
+        [ItemNotNull]
         PersonSlotSubScheme[] Slots { get; set; }
 
         /// <summary>

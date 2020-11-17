@@ -45,7 +45,8 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<UseSelfCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
@@ -56,16 +57,9 @@ namespace Zilon.Core.Tests.Commands
             var selectedProp = inventoryState.SelectedProp.Prop;
 
             humanTaskSourceMock.Verify(x => x.Intent(It.Is<IIntention>(intention =>
-                CheckUsePropIntention(intention, playerState, selectedProp)
-            ),
-            It.IsAny<IActor>()));
-        }
-
-        private static bool CheckUsePropIntention(IIntention intention, ISectorUiState playerState, IProp usedProp)
-        {
-            var usePropIntention = (Intention<UsePropTask>)intention;
-            var usePropTask = usePropIntention.TaskFactory(playerState.ActiveActor.Actor);
-            return usePropTask.UsedProp == usedProp;
+                    CheckUsePropIntention(intention, playerState, selectedProp)
+                ),
+                It.IsAny<IActor>()));
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
@@ -92,6 +86,13 @@ namespace Zilon.Core.Tests.Commands
             actorManagerMock.SetupGet(x => x.Items).Returns(Array.Empty<IActor>());
             var actorManager = actorManagerMock.Object;
             Container.AddSingleton(actorManager);
+        }
+
+        private static bool CheckUsePropIntention(IIntention intention, ISectorUiState playerState, IProp usedProp)
+        {
+            var usePropIntention = (Intention<UsePropTask>)intention;
+            var usePropTask = usePropIntention.TaskFactory(playerState.ActiveActor.Actor);
+            return usePropTask.UsedProp == usedProp;
         }
     }
 }

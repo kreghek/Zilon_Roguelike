@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using FluentAssertions;
 
@@ -44,7 +45,8 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<AttackCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             // ACT
@@ -58,23 +60,16 @@ namespace Zilon.Core.Tests.Commands
             ), It.IsAny<IActor>()));
         }
 
-        private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
-        {
-            var attackIntention = (Intention<AttackTask>)intention;
-            var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
-            return attackTask.Target == target;
-        }
-
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             if (testMap is null)
             {
-                throw new System.ArgumentNullException(nameof(testMap));
+                throw new ArgumentNullException(nameof(testMap));
             }
 
             if (playerStateMock is null)
             {
-                throw new System.ArgumentNullException(nameof(playerStateMock));
+                throw new ArgumentNullException(nameof(playerStateMock));
             }
 
             var targetMock = new Mock<IActor>();
@@ -88,6 +83,13 @@ namespace Zilon.Core.Tests.Commands
             playerStateMock.SetupProperty(x => x.SelectedViewModel, targetVm);
 
             Container.AddSingleton<AttackCommand>();
+        }
+
+        private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
+        {
+            var attackIntention = (Intention<AttackTask>)intention;
+            var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
+            return attackTask.Target == target;
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public sealed class FailureMineDepositResult : IMineDepositResult
     {
-        public bool Success { get => false; }
+        public bool Success => false;
     }
 }

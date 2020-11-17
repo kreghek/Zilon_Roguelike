@@ -11,31 +11,6 @@ namespace Zilon.Core.Tests.Components
     public class PersonStatTests
     {
         /// <summary>
-        /// Тест проверяет, что характеристика на первом уровне при отсутствии бонусов равна базовой.
-        /// </summary>
-        [Test]
-        public void GetActualValue_1LvlWithoutBonuses_ReturnBaseValue()
-        {
-            // ARRANGE
-            const int baseValue = 10;
-            const int incrementValue = 1;
-            const int level = 1;
-            const int expectedValue = baseValue;
-
-            var personStat = new PersonStat(baseValue, incrementValue);
-
-
-
-            // ACT
-            var factValue = personStat.GetActualValue(level, rarityBonus: 0);
-
-
-
-            // ASSERT
-            factValue.Should().Be(expectedValue);
-        }
-
-        /// <summary>
         /// Тест проверяет, что характеристика на первом уровне + бонус равна базовому значению + бонус.
         /// </summary>
         [Test]
@@ -50,18 +25,36 @@ namespace Zilon.Core.Tests.Components
 
             var personStat = new PersonStat(baseValue, incrementValue);
 
-            var bonuses = new[] {
+            var bonuses = new[]
+            {
                 new PersonStat(bonusValue)
             };
 
-
-
             // ACT
             var factValue = personStat.GetActualValue(level,
-                rarityBonus: 0,
-                bonuses: bonuses);
+                0,
+                bonuses);
 
+            // ASSERT
+            factValue.Should().Be(expectedValue);
+        }
 
+        /// <summary>
+        /// Тест проверяет, что характеристика на первом уровне при отсутствии бонусов равна базовой.
+        /// </summary>
+        [Test]
+        public void GetActualValue_1LvlWithoutBonuses_ReturnBaseValue()
+        {
+            // ARRANGE
+            const int baseValue = 10;
+            const int incrementValue = 1;
+            const int level = 1;
+            const int expectedValue = baseValue;
+
+            var personStat = new PersonStat(baseValue, incrementValue);
+
+            // ACT
+            var factValue = personStat.GetActualValue(level, 0);
 
             // ASSERT
             factValue.Should().Be(expectedValue);

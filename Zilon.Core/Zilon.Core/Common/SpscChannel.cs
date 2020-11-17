@@ -7,8 +7,8 @@ namespace Zilon.Core.Common
 {
     public sealed class SpscChannel<T> : ISender<T>, IReceiver<T>, IDisposable
     {
-        private readonly SemaphoreSlim _semaphore;
         private readonly IProducerConsumerCollection<TaskCompletionSource<T>> _receivers;
+        private readonly SemaphoreSlim _semaphore;
         private readonly IProducerConsumerCollection<T> _values;
 
         public SpscChannel()
@@ -18,25 +18,9 @@ namespace Zilon.Core.Common
             _values = new ConcurrentQueue<T>();
         }
 
-        public async Task SendAsync(T obj)
+        public void Dispose()
         {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
-
-            try
-            {
-                if (_receivers.TryTake(out var receiver))
-                {
-                    receiver.SetResult(obj);
-                }
-                else
-                {
-                    _values.TryAdd(obj);
-                }
-            }
-            finally
-            {
-                _semaphore.Release();
-            }
+            _semaphore.Dispose();
         }
 
         public async Task<T> ReceiveAsync()
@@ -63,9 +47,25 @@ namespace Zilon.Core.Common
             return await source.Task.ConfigureAwait(false);
         }
 
-        public void Dispose()
+        public async Task SendAsync(T obj)
         {
-            _semaphore.Dispose();
+            await _semaphore.WaitAsync().ConfigureAwait(false);
+
+            try
+            {
+                if (_receivers.TryTake(out var receiver))
+                {
+                    receiver.SetResult(obj);
+                }
+                else
+                {
+                    _values.TryAdd(obj);
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
     }
 }

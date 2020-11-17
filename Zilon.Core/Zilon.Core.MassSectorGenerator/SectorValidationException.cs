@@ -11,8 +11,11 @@ namespace Zilon.Core.MassSectorGenerator
         public SectorValidationException() { }
         public SectorValidationException(string message) : base(message) { }
         public SectorValidationException(string message, Exception inner) : base(message, inner) { }
+
         protected SectorValidationException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+            System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context)
+        {
+        }
     }
 }

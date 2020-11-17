@@ -12,12 +12,10 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class ActorCommandBase : TacticCommandBase
     {
-        protected ISectorUiState PlayerState { get; }
-
         [ExcludeFromCodeCoverage]
         protected ActorCommandBase(
             ISectorUiState playerState
-            )
+        )
         {
             PlayerState = playerState;
         }
@@ -33,5 +31,7 @@ namespace Zilon.Core.Commands
         /// </summary>
         [CanBeNull]
         public IActorViewModel CurrentActorViewModel => PlayerState.ActiveActor;
+
+        protected ISectorUiState PlayerState { get; }
     }
 }

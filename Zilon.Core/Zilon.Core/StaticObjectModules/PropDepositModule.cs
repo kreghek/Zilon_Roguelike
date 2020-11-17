@@ -7,16 +7,13 @@ namespace Zilon.Core.StaticObjectModules
 {
     public class PropDepositModule : IPropDepositModule
     {
-        private readonly IPropContainer _propContainer;
-        private readonly IDropTableScheme _dropTableScheme;
         private readonly IDropResolver _dropResolver;
-        private readonly string[] _toolTags;
+        private readonly IDropTableScheme _dropTableScheme;
 
         private readonly int _exhaustingValue;
+        private readonly IPropContainer _propContainer;
+        private readonly string[] _toolTags;
         private int _exhaustingCounter;
-
-        /// <inheritdoc/>
-        public event EventHandler Mined;
 
         public PropDepositModule(IPropContainer propContainer,
             IDropTableScheme dropTableScheme,
@@ -35,24 +32,34 @@ namespace Zilon.Core.StaticObjectModules
             Difficulty = depositMiningDifficulty;
         }
 
-        /// <inheritdoc/>
+        private void DoMined()
+        {
+            var eventArgs = new EventArgs();
+            Mined?.Invoke(this, eventArgs);
+        }
+
+        /// <inheritdoc />
+        public event EventHandler Mined;
+
+        /// <inheritdoc />
         public string[] GetToolTags()
         {
             return _toolTags;
         }
 
-        /// <inheritdoc/>
-        public bool IsExhausted { get => Stock <= 0; }
+        /// <inheritdoc />
+        public bool IsExhausted => Stock <= 0;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool IsActive { get; set; }
 
-        /// <inheritdoc/>
-        public string Key { get => nameof(IPropDepositModule); }
-        public DepositMiningDifficulty Difficulty { get; }
-        public float Stock { get => (float)_exhaustingCounter / _exhaustingValue; }
+        /// <inheritdoc />
+        public string Key => nameof(IPropDepositModule);
 
-        /// <inheritdoc/>
+        public DepositMiningDifficulty Difficulty { get; }
+        public float Stock => (float)_exhaustingCounter / _exhaustingValue;
+
+        /// <inheritdoc />
         public void Mine()
         {
             if (_exhaustingCounter <= 0)
@@ -70,12 +77,6 @@ namespace Zilon.Core.StaticObjectModules
             _exhaustingCounter--;
 
             DoMined();
-        }
-
-        private void DoMined()
-        {
-            var eventArgs = new EventArgs();
-            Mined?.Invoke(this, eventArgs);
         }
     }
 }

@@ -9,11 +9,11 @@ namespace Zilon.Core.PersonModules
     {
         IEnumerable<IPersonEffect> Items { get; }
 
+        void Add(IPersonEffect effect);
+        void Remove(IPersonEffect effect);
+
         event EventHandler<EffectEventArgs> Added;
         event EventHandler<EffectEventArgs> Changed;
         event EventHandler<EffectEventArgs> Removed;
-
-        void Add(IPersonEffect effect);
-        void Remove(IPersonEffect effect);
     }
 }

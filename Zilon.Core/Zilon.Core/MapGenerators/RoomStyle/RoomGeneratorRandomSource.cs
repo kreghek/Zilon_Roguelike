@@ -32,7 +32,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает целевые комнаты для соединения.
         /// </returns>
-        [NotNull, ItemNotNull]
+        [NotNull]
+        [ItemNotNull]
         public Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms)
         {
             var openRooms = new List<Room>(availableRooms);

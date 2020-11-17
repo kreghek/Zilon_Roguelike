@@ -34,40 +34,40 @@ namespace Zilon.Core.Persons
             CurrentCooldown = scheme.Constrains?.Cooldown != null ? 0 : (int?)null;
         }
 
-        /// <inheritdoc/>
-        public ITacticalActStatsSubScheme Stats { get; }
-
-        /// <inheritdoc/>
-        public ITacticalActScheme Scheme { get; }
-
-        /// <inheritdoc/>
-        public Roll Efficient { get; }
-
-        /// <inheritdoc/>
-        public Roll ToHit { get; }
-
-        /// <inheritdoc/>
-        public Equipment Equipment { get; }
-
-        /// <inheritdoc/>
-        public ITacticalActConstrainsSubScheme Constrains { get; }
-
-        /// <inheritdoc/>
-        public int? CurrentCooldown { get; private set; }
-
-        /// <inheritdoc/>
-        public void StartCooldownIfItIs()
-        {
-            CurrentCooldown = Constrains?.Cooldown;
-        }
-
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override string ToString()
         {
             return $"{Scheme} [{Equipment}]";
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
+        public ITacticalActStatsSubScheme Stats { get; }
+
+        /// <inheritdoc />
+        public ITacticalActScheme Scheme { get; }
+
+        /// <inheritdoc />
+        public Roll Efficient { get; }
+
+        /// <inheritdoc />
+        public Roll ToHit { get; }
+
+        /// <inheritdoc />
+        public Equipment Equipment { get; }
+
+        /// <inheritdoc />
+        public ITacticalActConstrainsSubScheme Constrains { get; }
+
+        /// <inheritdoc />
+        public int? CurrentCooldown { get; private set; }
+
+        /// <inheritdoc />
+        public void StartCooldownIfItIs()
+        {
+            CurrentCooldown = Constrains?.Cooldown;
+        }
+
+        /// <inheritdoc />
         public void UpdateCooldown()
         {
             if (CurrentCooldown is null)

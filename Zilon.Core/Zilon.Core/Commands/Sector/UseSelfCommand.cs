@@ -13,8 +13,8 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class UseSelfCommand : ActorCommandBase
     {
-        private readonly IPlayer _player;
         private readonly IInventoryState _inventoryState;
+        private readonly IPlayer _player;
 
         [ExcludeFromCodeCoverage]
         public UseSelfCommand(

@@ -23,8 +23,8 @@ namespace Zilon.Core
             unchecked
             {
                 var hashCode = 1861411795;
-                hashCode = hashCode * -1521134295 + X.GetHashCode();
-                hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                hashCode = (hashCode * -1521134295) + X.GetHashCode();
+                hashCode = (hashCode * -1521134295) + Y.GetHashCode();
                 return hashCode;
             }
         }

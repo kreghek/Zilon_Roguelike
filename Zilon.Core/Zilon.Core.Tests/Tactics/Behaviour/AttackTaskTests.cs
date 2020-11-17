@@ -23,8 +23,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     [Parallelizable(ParallelScope.All)]
     public class AttackTaskTests
     {
-        private AttackTask _attackTask;
         private IActor _actor;
+        private AttackTask _attackTask;
         private IMap _testMap;
 
         /// <summary>
@@ -57,7 +57,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             actorMock.SetupGet(x => x.Person).Returns(person);
             actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
-                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
+                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null,
+                    (target1, act1) => new UsedActEventArgs(target1, act1));
             _actor = actorMock.Object;
 
             var targetMock = new Mock<IActor>();
@@ -80,8 +81,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
                 // ACT
                 _attackTask.Execute();
             };
-
-
 
             // ASSERT
             act.Should().NotThrow<InvalidOperationException>();

@@ -16,7 +16,8 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния
         }
 
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+            ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
@@ -34,7 +35,8 @@ namespace Zilon.Bot.Players.Triggers
             }
 
             //TODO Здесь лучше проверять на наличие эффекта раны
-            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats
+                .SingleOrDefault(x => x.Type == SurvivalStatType.Health);
             var isLowHp = hpStat.ValueShare <= 0.5f;
             if (!isLowHp)
             {

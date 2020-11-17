@@ -5,7 +5,7 @@ using Zilon.Core.World;
 
 namespace Zilon.TextClient
 {
-    class GameLoop
+    internal class GameLoop
     {
         private readonly IGlobe _globe;
 

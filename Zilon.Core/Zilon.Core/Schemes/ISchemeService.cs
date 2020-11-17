@@ -13,8 +13,10 @@ namespace Zilon.Core.Schemes
         /// <typeparam name="TScheme"> Тип схемы. </typeparam>
         /// <param name="sid"> Идентификатор схемы. </param>
         /// <returns> Возвращает экземпляр схемы. </returns>
-        /// <exception cref="KeyNotFoundException"> Выбрасывает исключение,
-        /// если схема указанного типа не найдена по указанному идентификатору. </exception>
+        /// <exception cref="KeyNotFoundException">
+        /// Выбрасывает исключение,
+        /// если схема указанного типа не найдена по указанному идентификатору.
+        /// </exception>
         TScheme GetScheme<TScheme>(string sid) where TScheme : class, IScheme;
 
         /// <summary>

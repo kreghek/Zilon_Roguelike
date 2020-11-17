@@ -12,9 +12,31 @@ namespace Zilon.Core.Common
         /// <param name="task">Выполняемая задача.</param>
         /// <param name="millisecondsTimeout">Время в миллисекундах, доступное для выполнения задачи.</param>
         /// <returns>Возвращает агрегирующую задачу для вычисления результата TResult.</returns>
-        /// <exception cref="System.TimeoutException">Исключение выбрасывается, если задача выполняется дольше,
-        /// чем указанный таймаут.</exception>
+        /// <exception cref="System.TimeoutException">
+        /// Исключение выбрасывается, если задача выполняется дольше,
+        /// чем указанный таймаут.
+        /// </exception>
         public static Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, int millisecondsTimeout)
+        {
+            if (task is null)
+            {
+                throw new ArgumentNullException(nameof(task));
+            }
+
+            return TimeoutAfterInner(task, millisecondsTimeout);
+        }
+
+        /// <summary>
+        /// Выполняет задачу не дольше указанного времени.
+        /// </summary>
+        /// <param name="task">Выполняемая задача.</param>
+        /// <param name="millisecondsTimeout">Время в миллисекундах, доступное для выполнения задачи.</param>
+        /// <returns>Возвращает агрегирующую задачу для вычисления результата TResult.</returns>
+        /// <exception cref="System.TimeoutException">
+        /// Исключение выбрасывается, если задача выполняется дольше,
+        /// чем указанный таймаут.
+        /// </exception>
+        public static Task TimeoutAfter(this Task task, int millisecondsTimeout)
         {
             if (task is null)
             {
@@ -31,28 +53,8 @@ namespace Zilon.Core.Common
             {
                 return await task.ConfigureAwait(false);
             }
-            else
-            {
-                throw new TimeoutException();
-            }
-        }
 
-        /// <summary>
-        /// Выполняет задачу не дольше указанного времени.
-        /// </summary>
-        /// <param name="task">Выполняемая задача.</param>
-        /// <param name="millisecondsTimeout">Время в миллисекундах, доступное для выполнения задачи.</param>
-        /// <returns>Возвращает агрегирующую задачу для вычисления результата TResult.</returns>
-        /// <exception cref="System.TimeoutException">Исключение выбрасывается, если задача выполняется дольше,
-        /// чем указанный таймаут.</exception>
-        public static Task TimeoutAfter(this Task task, int millisecondsTimeout)
-        {
-            if (task is null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
-
-            return TimeoutAfterInner(task, millisecondsTimeout);
+            throw new TimeoutException();
         }
 
         private static async Task TimeoutAfterInner(Task task, int millisecondsTimeout)

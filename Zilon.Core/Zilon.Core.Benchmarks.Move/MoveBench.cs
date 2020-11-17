@@ -19,8 +19,79 @@ namespace Zilon.Core.Benchmarks.Move
 {
     public class MoveBench
     {
-        private ServiceProvider _serviceProvider;
         private IGlobe _globe;
+        private ServiceProvider _serviceProvider;
+
+        [IterationSetup]
+        public void IterationSetup()
+        {
+            var startUp = new Startup();
+            var serviceCollection = new ServiceCollection();
+            startUp.RegisterServices(serviceCollection);
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
+            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
+            var humanPlayer = _serviceProvider.GetRequiredService<IPlayer>();
+            var humanActorTaskSource =
+                _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+
+            var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
+
+            _globe = new TestGlobe(personScheme, humanActorTaskSource);
+
+            IActor actor = _globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Single();
+            var person = actor.Person;
+
+            humanPlayer.BindPerson(_globe, person);
+
+            var actorViewModel = new TestActorViewModel
+            {
+                Actor = actor
+            };
+
+            playerState.ActiveActor = actorViewModel;
+        }
+
+        [Benchmark(Description = "Move1")]
+        public void Move1()
+        {
+            var player = _serviceProvider.GetRequiredService<IPlayer>();
+            var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
+            var moveCommand = _serviceProvider.GetRequiredService<MoveCommand>();
+            var commandManger = _serviceProvider.GetRequiredService<ICommandManager>();
+
+            var sector = player.SectorNode.Sector;
+            for (var i = 0; i < 1; i++)
+            {
+                var currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
+                var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sector.Map.Nodes.Cast<HexNode>());
+                var moveTargetNode = nextNodes.First();
+
+                playerState.SelectedViewModel = new TestNodeViewModel
+                {
+                    Node = moveTargetNode
+                };
+
+                commandManger.Push(moveCommand);
+
+                ICommand command;
+                do
+                {
+                    command = commandManger.Pop();
+
+                    try
+                    {
+                        command?.Execute();
+                    }
+                    catch (Exception exception)
+                    {
+                        throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+                    }
+                } while (command != null);
+            }
+        }
 
         [Benchmark(Description = "Move100")]
         public void Move100()
@@ -63,76 +134,6 @@ namespace Zilon.Core.Benchmarks.Move
                     }
                 } while (command != null);
             }
-        }
-
-        [Benchmark(Description = "Move1")]
-        public void Move1()
-        {
-            var player = _serviceProvider.GetRequiredService<IPlayer>();
-            var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
-            var moveCommand = _serviceProvider.GetRequiredService<MoveCommand>();
-            var commandManger = _serviceProvider.GetRequiredService<ICommandManager>();
-
-            var sector = player.SectorNode.Sector;
-            for (var i = 0; i < 1; i++)
-            {
-                var currentActorNode = (HexNode)playerState.ActiveActor.Actor.Node;
-                var nextNodes = HexNodeHelper.GetSpatialNeighbors(currentActorNode, sector.Map.Nodes.Cast<HexNode>());
-                var moveTargetNode = nextNodes.First();
-
-                playerState.SelectedViewModel = new TestNodeViewModel
-                {
-                    Node = moveTargetNode
-                };
-
-                commandManger.Push(moveCommand);
-
-                ICommand command;
-                do
-                {
-                    command = commandManger.Pop();
-
-                    try
-                    {
-                        command?.Execute();
-                    }
-                    catch (Exception exception)
-                    {
-                        throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
-                    }
-                } while (command != null);
-            }
-        }
-
-        [IterationSetup]
-        public void IterationSetup()
-        {
-            var startUp = new Startup();
-            var serviceCollection = new ServiceCollection();
-            startUp.RegisterServices(serviceCollection);
-
-            _serviceProvider = serviceCollection.BuildServiceProvider();
-
-            var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
-            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
-            var humanPlayer = _serviceProvider.GetRequiredService<IPlayer>();
-            var humanActorTaskSource = _serviceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-
-            var personScheme = schemeService.GetScheme<IPersonScheme>("human-person");
-
-            _globe = new TestGlobe(personScheme, humanActorTaskSource);
-
-            IActor actor = _globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Single();
-            var person = actor.Person;
-
-            humanPlayer.BindPerson(_globe, person);
-
-            var actorViewModel = new TestActorViewModel
-            {
-                Actor = actor
-            };
-
-            playerState.ActiveActor = actorViewModel;
         }
     }
 }

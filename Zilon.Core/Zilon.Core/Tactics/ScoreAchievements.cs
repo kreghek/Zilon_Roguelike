@@ -6,6 +6,6 @@ namespace Zilon.Core.Tactics
     public enum ScoreAchievements
     {
         Nothing = 0,
-        HomeFound = 1,
+        HomeFound = 1
     }
 }

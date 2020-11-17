@@ -16,7 +16,8 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния.
         }
 
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+            ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
@@ -34,7 +35,7 @@ namespace Zilon.Bot.Players.Triggers
             }
 
             var hazardEffect = actor.Person.GetModuleSafe<IEffectsModule>()?.Items?.OfType<SurvivalStatHazardEffect>()
-               .SingleOrDefault(x => x.Type == SurvivalStatType.Hydration);
+                .SingleOrDefault(x => x.Type == SurvivalStatType.Hydration);
             if (hazardEffect == null)
             {
                 return false;

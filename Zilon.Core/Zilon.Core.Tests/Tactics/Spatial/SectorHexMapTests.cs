@@ -44,12 +44,12 @@ namespace Zilon.Core.Tactics.Spatial.Tests
             // ARRANGE
             var map = new SectorHexMap();
             MapFiller.FillSquareMap(map,
-                mapSize: 2);
+                2);
 
             MapFiller.FillSquareMap(map,
-                startX: 3,
-                startY: 0,
-                mapSize: 2);
+                3,
+                0,
+                2);
 
             var startMap = map.HexNodes.SelectBy(0, 0);
             var targetMap = map.HexNodes.SelectBy(4, 0);

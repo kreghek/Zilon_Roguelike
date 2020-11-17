@@ -28,7 +28,8 @@ namespace Zilon.Core.Schemes
 
             if (weight <= 0)
             {
-                throw new System.ArgumentNullException(nameof(weight), "Вес записи в таблице дропа должен быть положительным.");
+                throw new System.ArgumentNullException(nameof(weight),
+                    "Вес записи в таблице дропа должен быть положительным.");
             }
 
             Weight = weight;

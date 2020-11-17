@@ -6,9 +6,9 @@ on: push
 jobs:
   # Set the job key. The key is displayed as the job name
   # when a job name is not provided
-  lint:
+  dotnet-format-lint:
     # Name the Job
-    name: Lint C# code base
+    name: Lint C# code base via dotnet-format
     # Set the type of machine to run on
     runs-on: ubuntu-latest
     env:
@@ -30,6 +30,36 @@ jobs:
         uses: EndBug/add-and-commit@v5
         with:
           message: "[Bot] Automated dotnet-format update"
+          add: "*.cs"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # Set the job key. The key is displayed as the job name
+  # when a job name is not provided
+  resharper-core-lint:
+    # Name the Job
+    name: Lint C# code base via R#
+    # Set the type of machine to run on
+    runs-on: ubuntu-latest
+    env:
+      working-directory : ./Zilon.Core/
+    needs: [dotnet-format-lint]
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: git pull
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - name: Setup ReSharper Command Line Tools
+        run: dotnet tool install -g JetBrains.ReSharper.GlobalTools
+      - name: Clean up code
+        run: jb cleanupcode --profile="Full Cleanup" Zilon.Core.sln
+        working-directory: ${{env.working-directory}}
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v5
+        with:
+          message: "[Bot] Automated ReSharper CLT update"
           add: "*.cs"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

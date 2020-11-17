@@ -1,6 +1,9 @@
 ﻿namespace Zilon.Core.Persons
 {
-    public enum PhysicalSize
+    /// <summary>
+    /// The size of person says how much nodes e locks.
+    /// </summary>
+    public enum PhysicalSizePattern
     {
         Undefined = 0,
 

@@ -22,29 +22,9 @@ namespace Zilon.Core.World
             _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
-        public Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
+        public void Dispose()
         {
-            if (globe is null)
-            {
-                throw new ArgumentNullException(nameof(globe));
-            }
-
-            if (sector is null)
-            {
-                throw new ArgumentNullException(nameof(sector));
-            }
-
-            if (actor is null)
-            {
-                throw new ArgumentNullException(nameof(actor));
-            }
-
-            if (transition is null)
-            {
-                throw new ArgumentNullException(nameof(transition));
-            }
-
-            return ProcessInnerAsync(globe, sector, actor, transition);
+            _semaphoreSlim.Dispose();
         }
 
         private async Task ProcessInnerAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
@@ -90,9 +70,29 @@ namespace Zilon.Core.World
             }
         }
 
-        public void Dispose()
+        public Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
         {
-            _semaphoreSlim.Dispose();
+            if (globe is null)
+            {
+                throw new ArgumentNullException(nameof(globe));
+            }
+
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            if (transition is null)
+            {
+                throw new ArgumentNullException(nameof(transition));
+            }
+
+            return ProcessInnerAsync(globe, sector, actor, transition);
         }
     }
 }

@@ -13,9 +13,10 @@
     public interface ITacticalActConstrainsSubScheme : ISubScheme
     {
         /// <summary>
-        /// Тип ресурсов, необходимых для выполнения действия.
+        /// КД на использование.
+        /// Это количество ходов, которое не доступно действие после применения.
         /// </summary>
-        string PropResourceType { get; }
+        int? Cooldown { get; }
 
         /// <summary>
         /// Количество ресурсов, необходимых для использования действия.
@@ -23,9 +24,8 @@
         int? PropResourceCount { get; }
 
         /// <summary>
-        /// КД на использование.
-        /// Это количество ходов, которое не доступно действие после применения.
+        /// Тип ресурсов, необходимых для выполнения действия.
         /// </summary>
-        int? Cooldown { get; }
+        string PropResourceType { get; }
     }
 }

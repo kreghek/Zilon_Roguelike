@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using FluentAssertions;
 
@@ -41,48 +43,10 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
-        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
-        /// </summary>
-        [Test]
-        public void ExecuteTest()
-        {
-            // ARRANGE
-            var command = ServiceProvider.GetRequiredService<MoveCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
-            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
-
-            // ACT
-            command.Execute();
-
-            // ASSERT
-            var target = ((IMapNodeViewModel)playerState.HoverViewModel).Node;
-            humanTaskSourceMock.Verify(x => x.Intent(It.Is<MoveIntention>(intention => intention.TargetNode == target),
-                It.IsAny<IActor>()));
-        }
-
-        /// <summary>
-        /// Тест проверяет, что автоперемещение работает, если в зоне видимости нет монстров.
-        /// </summary>
-        [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
-            Justification = "Naming convention for tests")]
-        public void CanRepeate_NoMonsters_ReturnsTrue()
-        {
-            // ARRANGE
-            var command = ServiceProvider.GetRequiredService<MoveCommand>();
-
-            // ACT
-            var canRepeat = command.CanRepeat();
-
-            // ASSERT
-            canRepeat.Should().BeTrue();
-        }
-
-        /// <summary>
         /// Тест проверяет, что автоперемещение не работает, если в зоне видимости монстр.
         /// </summary>
         [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
             Justification = "Naming convention for tests")]
         public void CanRepeate_MonsterInSign_ReturnsFalse()
         {
@@ -114,7 +78,7 @@ namespace Zilon.Core.Tests.Commands
         /// Тест проверяет, что автоперемещение работает, если монстр далеко.
         /// </summary>
         [Test]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
             Justification = "Naming convention for tests")]
         public void CanRepeate_MonsterNotInSign_ReturnsTrue()
         {
@@ -142,16 +106,55 @@ namespace Zilon.Core.Tests.Commands
             canRepeat.Should().BeTrue();
         }
 
+        /// <summary>
+        /// Тест проверяет, что автоперемещение работает, если в зоне видимости нет монстров.
+        /// </summary>
+        [Test]
+        [SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+            Justification = "Naming convention for tests")]
+        public void CanRepeate_NoMonsters_ReturnsTrue()
+        {
+            // ARRANGE
+            var command = ServiceProvider.GetRequiredService<MoveCommand>();
+
+            // ACT
+            var canRepeat = command.CanRepeat();
+
+            // ASSERT
+            canRepeat.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
+        /// </summary>
+        [Test]
+        public void ExecuteTest()
+        {
+            // ARRANGE
+            var command = ServiceProvider.GetRequiredService<MoveCommand>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
+
+            // ACT
+            command.Execute();
+
+            // ASSERT
+            var target = ((IMapNodeViewModel)playerState.HoverViewModel).Node;
+            humanTaskSourceMock.Verify(x => x.Intent(It.Is<MoveIntention>(intention => intention.TargetNode == target),
+                It.IsAny<IActor>()));
+        }
+
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             if (testMap is null)
             {
-                throw new System.ArgumentNullException(nameof(testMap));
+                throw new ArgumentNullException(nameof(testMap));
             }
 
             if (playerStateMock is null)
             {
-                throw new System.ArgumentNullException(nameof(playerStateMock));
+                throw new ArgumentNullException(nameof(playerStateMock));
             }
 
             var targetNode = testMap.Nodes.SelectByHexCoords(1, 0);

@@ -17,7 +17,8 @@ namespace Zilon.Core.PersonGeneration
             IPropFactory propFactory,
             IDropResolver dropResolver,
             IPersonPerkInitializator personPerkInitializator,
-            IDice dice) : base(schemeService, survivalRandomSource, propFactory, dropResolver, personPerkInitializator, dice)
+            IDice dice) : base(schemeService, survivalRandomSource, propFactory, dropResolver, personPerkInitializator,
+            dice)
         {
         }
 
@@ -50,34 +51,10 @@ namespace Zilon.Core.PersonGeneration
             AddDefaultProps(inventory);
         }
 
-        private static IPersonTemplateScheme[] GetPersonTemplateByFraction(IFraction fraction, ISchemeService schemeService)
-        {
-            if (fraction == Fractions.InterventionistFraction)
-            {
-                return GetInterventionalistsPersonTemplates(schemeService);
-            }
-            else if (fraction == Fractions.MilitiaFraction)
-            {
-                return GetMilitiaPersonTemplates(schemeService);
-            }
-            else if (fraction == Fractions.TroublemakerFraction)
-            {
-                return GetTroublemakerPersonTemplates(schemeService);
-            }
-            else
-            {
-                return GetPlayerPersonTemplates(schemeService);
-            }
-        }
-
         private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "interventionists").ToArray();
-        }
-
-        private static IPersonTemplateScheme[] GetTroublemakerPersonTemplates(ISchemeService schemeService)
-        {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "troublemakers").ToArray();
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "interventionists")
+                .ToArray();
         }
 
         private static IPersonTemplateScheme[] GetMilitiaPersonTemplates(ISchemeService schemeService)
@@ -85,9 +62,36 @@ namespace Zilon.Core.PersonGeneration
             return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "militia").ToArray();
         }
 
+        private static IPersonTemplateScheme[] GetPersonTemplateByFraction(IFraction fraction,
+            ISchemeService schemeService)
+        {
+            if (fraction == Fractions.InterventionistFraction)
+            {
+                return GetInterventionalistsPersonTemplates(schemeService);
+            }
+
+            if (fraction == Fractions.MilitiaFraction)
+            {
+                return GetMilitiaPersonTemplates(schemeService);
+            }
+
+            if (fraction == Fractions.TroublemakerFraction)
+            {
+                return GetTroublemakerPersonTemplates(schemeService);
+            }
+
+            return GetPlayerPersonTemplates(schemeService);
+        }
+
         private static IPersonTemplateScheme[] GetPlayerPersonTemplates(ISchemeService schemeService)
         {
             return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "player").ToArray();
+        }
+
+        private static IPersonTemplateScheme[] GetTroublemakerPersonTemplates(ISchemeService schemeService)
+        {
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "troublemakers")
+                .ToArray();
         }
     }
 }

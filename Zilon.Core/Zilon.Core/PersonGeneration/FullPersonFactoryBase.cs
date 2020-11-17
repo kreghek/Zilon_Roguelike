@@ -14,25 +14,9 @@ namespace Zilon.Core.PersonGeneration
 {
     public abstract class FullPersonFactoryBase : IPersonFactory
     {
-        private readonly ISurvivalRandomSource _survivalRandomSource;
-        private readonly IPropFactory _propFactory;
         private readonly IPersonPerkInitializator _personPerkInitializator;
-
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
-
-        protected IDice Dice { get; }
-
-        protected IDropResolver DropResolver { get; }
-
-        protected ISchemeService SchemeService { get; }
-
-        protected static int HeadSlotIndex => 0;
-
-        protected static int BodySlotIndex => 1;
-
-        protected static int MainHandSlotIndex => 2;
-
-        protected static int OffHandSlotIndex => 3;
+        private readonly IPropFactory _propFactory;
+        private readonly ISurvivalRandomSource _survivalRandomSource;
 
         protected FullPersonFactoryBase(
             ISchemeService schemeService,
@@ -43,97 +27,83 @@ namespace Zilon.Core.PersonGeneration
             IDice dice)
         {
             SchemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
-            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
+            _survivalRandomSource =
+                survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
             _propFactory = propFactory ?? throw new ArgumentNullException(nameof(propFactory));
             DropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
-            _personPerkInitializator = personPerkInitializator ?? throw new ArgumentNullException(nameof(personPerkInitializator));
+            _personPerkInitializator = personPerkInitializator ??
+                                       throw new ArgumentNullException(nameof(personPerkInitializator));
             Dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
-        public IPerson Create(string personSchemeSid, IFraction fraction)
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
+
+        protected static int BodySlotIndex => 1;
+
+        protected IDice Dice { get; }
+
+        protected IDropResolver DropResolver { get; }
+
+        protected static int HeadSlotIndex => 0;
+
+        protected static int MainHandSlotIndex => 2;
+
+        protected static int OffHandSlotIndex => 3;
+
+        protected ISchemeService SchemeService { get; }
+
+        protected void AddDefaultProps(IInventoryModule inventory)
         {
-            var personScheme = SchemeService.GetScheme<IPersonScheme>(personSchemeSid);
+            AddResource(inventory, "packed-food", 1);
+            AddResource(inventory, "water-bottle", 1);
+            AddResource(inventory, "med-kit", 1);
+        }
 
-            var person = new HumanPerson(personScheme, fraction);
-
-            var attributeModule = RollAndAddPersonAttributesToPerson(person);
-
-            var movingModule = new MovingModule(attributeModule);
-            person.AddModule(movingModule);
-
-            var inventoryModule = new InventoryModule();
-            person.AddModule(inventoryModule);
-
-            var equipmentModule = new EquipmentModule(personScheme.Slots);
-            person.AddModule(equipmentModule);
-
-            var effectsModule = new EffectsModule();
-            person.AddModule(effectsModule);
-
-            var evolutionModule = new EvolutionModule(SchemeService);
-            person.AddModule(evolutionModule);
-            RollTraitPerks(evolutionModule);
-
-            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, attributeModule, effectsModule, evolutionModule, equipmentModule)
+        protected static void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
+        {
+            if (equipmentModule is null)
             {
-                PlayerEventLogService = PlayerEventLogService
-            };
-            person.AddModule(survivalModule);
-
-            RollStartEquipment(inventoryModule, person);
-
-            var defaultActScheme = SchemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
-            var combatActModule = new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
-            person.AddModule(combatActModule);
-
-            var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
-            person.AddModule(combatStatsModule);
-
-            var diseaseModule = new DiseaseModule();
-            person.AddModule(diseaseModule);
-
-            var fowModule = new FowData();
-            person.AddModule(fowModule);
-
-            person.PlayerEventLogService = PlayerEventLogService;
-
-            return person;
-        }
-
-        private IAttributesModule RollAndAddPersonAttributesToPerson(IPerson person)
-        {
-            var attributes = new[] {
-                RollAttribute(PersonAttributeType.PhysicalStrength),
-                RollAttribute(PersonAttributeType.Dexterity),
-                RollAttribute(PersonAttributeType.Perception),
-                RollAttribute(PersonAttributeType.Constitution)
-            };
-
-            var attributesModule = new AttributesModule(attributes);
-
-            person.AddModule(attributesModule);
-
-            return attributesModule;
-        }
-
-        private PersonAttribute RollAttribute(PersonAttributeType attributeType)
-        {
-            var value = 10 + Dice.Roll(-4, 4);
-            return new PersonAttribute(attributeType, value);
-        }
-
-        private void RollTraitPerks(IEvolutionModule evolutionData)
-        {
-            if (evolutionData is null)
-            {
-                throw new ArgumentNullException(nameof(evolutionData));
+                throw new ArgumentNullException(nameof(equipmentModule));
             }
 
-            var rolledTraits = _personPerkInitializator.Generate();
-            evolutionData.AddBuildInPerks(rolledTraits);
+            equipmentModule[slotIndex] = equipment;
         }
 
-        protected abstract void RollStartEquipment(IInventoryModule inventory, HumanPerson person);
+        protected void AddEquipment(IInventoryModule inventory, string sid)
+        {
+            var scheme = SchemeService.GetScheme<IPropScheme>(sid);
+            var prop = _propFactory.CreateEquipment(scheme);
+            AddPropToInventory(inventory, prop);
+        }
+
+        protected static void AddPropToInventory(IPropStore inventory, IProp prop)
+        {
+            if (inventory is null)
+            {
+                throw new ArgumentNullException(nameof(inventory));
+            }
+
+            inventory.Add(prop);
+        }
+
+        protected void AddResource(IInventoryModule inventory, string resourceSid, int count)
+        {
+            if (inventory is null)
+            {
+                throw new ArgumentNullException(nameof(inventory));
+            }
+
+            try
+            {
+                var resourceScheme = SchemeService.GetScheme<IPropScheme>(resourceSid);
+                var resource = _propFactory.CreateResource(resourceScheme, count);
+                inventory.Add(resource);
+            }
+            catch (KeyNotFoundException exception)
+            {
+                throw new CreatePersonException($"Не найден объект {resourceSid}", exception);
+            }
+        }
 
         protected void FillSlot(HumanPerson person, IDropTableScheme dropScheme, int slotIndex)
         {
@@ -176,6 +146,8 @@ namespace Zilon.Core.PersonGeneration
             }
         }
 
+        protected abstract void RollStartEquipment(IInventoryModule inventory, HumanPerson person);
+
         private static bool CanBeEquiped(
             IEquipmentModule equipmentModule,
             int slotIndex,
@@ -184,56 +156,94 @@ namespace Zilon.Core.PersonGeneration
             return EquipmentCarrierHelper.CanBeEquiped(equipmentModule, slotIndex, equipment);
         }
 
-        protected static void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
+        private IAttributesModule RollAndAddPersonAttributesToPerson(IPerson person)
         {
-            if (equipmentModule is null)
+            var attributes = new[]
             {
-                throw new ArgumentNullException(nameof(equipmentModule));
-            }
+                RollAttribute(PersonAttributeType.PhysicalStrength),
+                RollAttribute(PersonAttributeType.Dexterity),
+                RollAttribute(PersonAttributeType.Perception),
+                RollAttribute(PersonAttributeType.Constitution)
+            };
 
-            equipmentModule[slotIndex] = equipment;
+            var attributesModule = new AttributesModule(attributes);
+
+            person.AddModule(attributesModule);
+
+            return attributesModule;
         }
 
-        protected static void AddPropToInventory(IPropStore inventory, IProp prop)
+        private PersonAttribute RollAttribute(PersonAttributeType attributeType)
         {
-            if (inventory is null)
-            {
-                throw new ArgumentNullException(nameof(inventory));
-            }
-
-            inventory.Add(prop);
+            var value = 10 + Dice.Roll(-4, 4);
+            return new PersonAttribute(attributeType, value);
         }
 
-        protected void AddResource(IInventoryModule inventory, string resourceSid, int count)
+        private void RollTraitPerks(IEvolutionModule evolutionData)
         {
-            if (inventory is null)
+            if (evolutionData is null)
             {
-                throw new ArgumentNullException(nameof(inventory));
+                throw new ArgumentNullException(nameof(evolutionData));
             }
 
-            try
-            {
-                var resourceScheme = SchemeService.GetScheme<IPropScheme>(resourceSid);
-                var resource = _propFactory.CreateResource(resourceScheme, count);
-                inventory.Add(resource);
-            }
-            catch (KeyNotFoundException exception)
-            {
-                throw new CreatePersonException($"Не найден объект {resourceSid}", exception);
-            }
-        }
-        protected void AddEquipment(IInventoryModule inventory, string sid)
-        {
-            var scheme = SchemeService.GetScheme<IPropScheme>(sid);
-            var prop = _propFactory.CreateEquipment(scheme);
-            AddPropToInventory(inventory, prop);
+            var rolledTraits = _personPerkInitializator.Generate();
+            evolutionData.AddBuildInPerks(rolledTraits);
         }
 
-        protected void AddDefaultProps(IInventoryModule inventory)
+        public IPerson Create(string personSchemeSid, IFraction fraction)
         {
-            AddResource(inventory, "packed-food", 1);
-            AddResource(inventory, "water-bottle", 1);
-            AddResource(inventory, "med-kit", 1);
+            var personScheme = SchemeService.GetScheme<IPersonScheme>(personSchemeSid);
+
+            var person = new HumanPerson(personScheme, fraction);
+
+            var attributeModule = RollAndAddPersonAttributesToPerson(person);
+
+            var movingModule = new MovingModule(attributeModule);
+            person.AddModule(movingModule);
+
+            var inventoryModule = new InventoryModule();
+            person.AddModule(inventoryModule);
+
+            var equipmentModule = new EquipmentModule(personScheme.Slots);
+            person.AddModule(equipmentModule);
+
+            var effectsModule = new EffectsModule();
+            person.AddModule(effectsModule);
+
+            var evolutionModule = new EvolutionModule(SchemeService);
+            person.AddModule(evolutionModule);
+            RollTraitPerks(evolutionModule);
+
+            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, attributeModule,
+                effectsModule, evolutionModule, equipmentModule)
+            {
+                PlayerEventLogService = PlayerEventLogService
+            };
+            person.AddModule(survivalModule);
+
+            RollStartEquipment(inventoryModule, person);
+
+            var defaultActScheme = SchemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
+            var combatActModule = new CombatActModule(
+                defaultActScheme,
+                equipmentModule,
+                effectsModule,
+                evolutionModule);
+
+            person.AddModule(combatActModule);
+
+            var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
+            person.AddModule(combatStatsModule);
+
+            var diseaseModule = new DiseaseModule(effectsModule);
+            person.AddModule(diseaseModule);
+
+            var fowModule = new FowData();
+            person.AddModule(fowModule);
+
+            person.PlayerEventLogService = PlayerEventLogService;
+
+            return person;
         }
     }
 }

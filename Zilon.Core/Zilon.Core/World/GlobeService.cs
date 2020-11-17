@@ -12,6 +12,15 @@ namespace Zilon.Core.World
             _biomeInitializer = biomeInitializer;
         }
 
+        private async Task ExpandGlobeInternalAsync(IGlobe globe, ISectorNode sectorNode)
+        {
+            await _biomeInitializer.MaterializeLevelAsync(sectorNode).ConfigureAwait(false);
+
+            // Фиксируем новый узел, как известную, материализованную часть мира.
+            // Далее этот узел будет обрабатываться при каждом изменении мира.
+            globe.AddSectorNode(sectorNode);
+        }
+
         public Task ExpandGlobeAsync(IGlobe globe, ISectorNode sectorNode)
         {
             if (globe is null)
@@ -30,15 +39,6 @@ namespace Zilon.Core.World
             }
 
             return ExpandGlobeInternalAsync(globe, sectorNode);
-        }
-
-        private async Task ExpandGlobeInternalAsync(IGlobe globe, ISectorNode sectorNode)
-        {
-            await _biomeInitializer.MaterializeLevelAsync(sectorNode).ConfigureAwait(false);
-
-            // Фиксируем новый узел, как известную, материализованную часть мира.
-            // Далее этот узел будет обрабатываться при каждом изменении мира.
-            globe.AddSectorNode(sectorNode);
         }
     }
 }

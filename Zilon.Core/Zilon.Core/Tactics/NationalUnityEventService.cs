@@ -12,9 +12,9 @@ namespace Zilon.Core.Tactics
 {
     public class NationalUnityEventService
     {
-        private readonly IPersonFactory _personFactory;
-        private readonly IDice _dice;
         private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
+        private readonly IDice _dice;
+        private readonly IPersonFactory _personFactory;
         private readonly IUserTimeProvider _userTimeProvider;
 
         public NationalUnityEventService(
@@ -107,7 +107,8 @@ namespace Zilon.Core.Tactics
             const double EVENT_BONUS_MIN_PROBABILITY = 50;
             const double EVENT_BONUS_PROBABILITY_DIFF = EVENT_BONUS_MIN_PROBABILITY - EVENT_BONUS_MAX_PROBABILITY;
             var dateDistanceNormalized = Math.Min(dateDistance, EVENT_BONUS_DURATION);
-            var eventRaiseRollValue = EVENT_BONUS_MAX_PROBABILITY + EVENT_BONUS_PROBABILITY_DIFF * dateDistanceNormalized / EVENT_BONUS_DURATION;
+            var eventRaiseRollValue = EVENT_BONUS_MAX_PROBABILITY +
+                                      ((EVENT_BONUS_PROBABILITY_DIFF * dateDistanceNormalized) / EVENT_BONUS_DURATION);
 
             return _dice.Roll(100) > eventRaiseRollValue;
         }

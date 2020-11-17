@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+
+using FluentAssertions;
 
 using Moq;
 
@@ -22,12 +24,16 @@ namespace Zilon.Core.Tests.PersonModules
             // ARRANGE
             var schemeServiceMock = new Mock<ISchemeService>();
             schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>())
-                .Returns(new IPerkScheme[] {
-                    new PerkScheme{
-                        Levels = new[]{
-                            new PerkLevelSubScheme{
+                .Returns(new IPerkScheme[]
+                {
+                    new PerkScheme
+                    {
+                        Levels = new[]
+                        {
+                            new PerkLevelSubScheme
+                            {
                                 MaxValue = 2,
-                                Jobs = System.Array.Empty<IJobSubScheme>()
+                                Jobs = Array.Empty<IJobSubScheme>()
                             }
                         }
                     }

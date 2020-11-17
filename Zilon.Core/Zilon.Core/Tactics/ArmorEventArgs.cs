@@ -22,15 +22,15 @@ namespace Zilon.Core.Tactics
         public int ArmorRank { get; }
 
         /// <summary>
-        /// Бросок, который нужен был для упешного использования брони.
-        /// </summary>
-        [PublicAPI]
-        public int SuccessRoll { get; }
-
-        /// <summary>
         /// Фактический бросок.
         /// </summary>
         [PublicAPI]
         public int FactRoll { get; }
+
+        /// <summary>
+        /// Бросок, который нужен был для упешного использования брони.
+        /// </summary>
+        [PublicAPI]
+        public int SuccessRoll { get; }
     }
 }

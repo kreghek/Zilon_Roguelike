@@ -7,7 +7,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Benchmarks.Fow
 {
-    class TestFowContext : IFowContext
+    internal class TestFowContext : IFowContext
     {
         private readonly ISectorMap _sectorMap;
 

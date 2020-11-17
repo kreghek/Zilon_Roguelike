@@ -2,7 +2,8 @@
 
 namespace Zilon.Core.Schemes
 {
-    public class SectorRoomMapFactoryOptionsSubScheme : SectorMapFactoryOptionsSubSchemeBase, ISectorRoomMapFactoryOptionsSubScheme
+    public class SectorRoomMapFactoryOptionsSubScheme : SectorMapFactoryOptionsSubSchemeBase,
+        ISectorRoomMapFactoryOptionsSubScheme
     {
         public override SchemeSectorMapGenerator MapGenerator => SchemeSectorMapGenerator.Room;
 

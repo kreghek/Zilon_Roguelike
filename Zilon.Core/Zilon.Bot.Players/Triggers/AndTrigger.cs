@@ -20,7 +20,8 @@ namespace Zilon.Bot.Players.Triggers
             }
         }
 
-        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+            ILogicStrategyData strategyData)
         {
             foreach (var trigger in _triggers)
             {

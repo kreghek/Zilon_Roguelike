@@ -26,6 +26,11 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             _roomGenerator = roomGenerator ?? throw new System.ArgumentNullException(nameof(roomGenerator));
         }
 
+        private static ISectorMap CreateMapInstance()
+        {
+            return new SectorHexMap();
+        }
+
         /// <summary>
         /// Создание карты.
         /// </summary>
@@ -84,17 +89,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                     region.ExitNodes = (from regionNode in region.Nodes
                                         where map.Transitions.Keys.Contains(regionNode)
                                         select regionNode).ToArray();
-
-                    continue;
                 }
             }
 
             return Task.FromResult(map);
-        }
-
-        private static ISectorMap CreateMapInstance()
-        {
-            return new SectorHexMap();
         }
     }
 }

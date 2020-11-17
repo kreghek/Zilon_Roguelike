@@ -8,6 +8,12 @@ namespace Zilon.Core.Client.Windows
     public interface ICommonModalManager
     {
         /// <summary>
+        /// Показать окно создания персонажа.
+        /// Используется на старте игры, чтобы показать начальные перки и экипировку персонажа.
+        /// </summary>
+        void ShowCreatePersonModal(IPerson playerPerson);
+
+        /// <summary>
         /// Выводит окно с подтверждением выхода из игры.
         /// </summary>
         void ShowQuitComfirmationModal();
@@ -21,11 +27,5 @@ namespace Zilon.Core.Client.Windows
         /// Показывает окно с игровым счётом.
         /// </summary>
         void ShowScoreModal();
-
-        /// <summary>
-        /// Показать окно создания персонажа.
-        /// Используется на старте игры, чтобы показать начальные перки и экипировку персонажа.
-        /// </summary>
-        void ShowCreatePersonModal(IPerson playerPerson);
     }
 }

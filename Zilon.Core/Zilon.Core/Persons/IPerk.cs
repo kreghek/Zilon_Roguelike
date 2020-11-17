@@ -8,13 +8,13 @@ namespace Zilon.Core.Persons
     public interface IPerk : IJobExecutable
     {
         /// <summary>
-        /// Схема перка.
-        /// </summary>
-        IPerkScheme Scheme { get; }
-
-        /// <summary>
         /// Текущий уровень перка. Иначе - индекс схемы уровня.
         /// </summary>
         PerkLevel CurrentLevel { get; set; }
+
+        /// <summary>
+        /// Схема перка.
+        /// </summary>
+        IPerkScheme Scheme { get; }
     }
 }
