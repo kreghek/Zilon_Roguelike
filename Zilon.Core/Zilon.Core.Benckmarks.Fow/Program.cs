@@ -4,7 +4,7 @@ using BenchmarkDotNet.Running;
 
 namespace Zilon.Core.Benchmarks.Fow
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main(string[] args)
         {

@@ -16,7 +16,7 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.MassSectorGenerator
 {
-    internal class Program
+    internal static class Program
     {
         private static readonly Random _random;
 

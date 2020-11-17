@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Benchmarks.Move
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main(string[] args)
         {

@@ -18,7 +18,7 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
-    internal class Program
+    internal static class Program
     {
         private const string SERVER_RUN_ARG = "ServerRun";
         private const string SCORE_PREFFIX_ARG = "ScorePreffix";
