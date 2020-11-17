@@ -39,8 +39,6 @@ namespace Zilon.Core.MapGenerators.Tests
                 if (disease != null)
                 {
                     resultDiseases.Add(disease);
-                    Console.WriteLine(
-                        $"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}");
                 }
             }
 

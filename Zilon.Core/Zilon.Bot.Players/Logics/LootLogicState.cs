@@ -13,7 +13,6 @@ namespace Zilon.Bot.Players.Logics
     public sealed class LootLogicState : LogicStateBase
     {
         private MoveTask _moveTask;
-        private IStaticObject _staticObject;
 
         public static IStaticObject FindContainer(IActor actor, IStaticObjectManager staticObjectManager,
             ISectorMap map)
@@ -51,29 +50,28 @@ namespace Zilon.Bot.Players.Logics
         {
             var map = context.Sector.Map;
             var staticObjectManager = context.Sector.StaticObjectManager;
-            _staticObject = FindContainer(actor, staticObjectManager, map);
+            var staticObject = FindContainer(actor, staticObjectManager, map);
 
-            if (_staticObject == null || !_staticObject.GetModule<IPropContainer>().Content.CalcActualItems().Any())
+            if (staticObject == null || !staticObject.GetModule<IPropContainer>().Content.CalcActualItems().Any())
             {
                 Complete = true;
                 return null;
             }
 
-            var distance = map.DistanceBetween(actor.Node, _staticObject.Node);
+            var distance = map.DistanceBetween(actor.Node, staticObject.Node);
             if (distance <= 1)
             {
-                return TakeAllFromContainerTask(actor, _staticObject, context.Sector);
+                return TakeAllFromContainerTask(actor, staticObject, context.Sector);
             }
 
             var storedMoveTask = _moveTask;
-            var moveTask = MoveToContainerTask(actor, _staticObject.Node, storedMoveTask, context.Sector);
+            var moveTask = MoveToContainerTask(actor, staticObject.Node, storedMoveTask, context.Sector);
             _moveTask = moveTask;
             return moveTask;
         }
 
         protected override void ResetData()
         {
-            _staticObject = null;
             _moveTask = null;
         }
 
