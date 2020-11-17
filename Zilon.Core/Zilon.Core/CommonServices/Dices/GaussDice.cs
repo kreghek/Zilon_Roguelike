@@ -27,10 +27,11 @@ namespace Zilon.Core.CommonServices.Dices
         {
         }
 
-        protected virtual double ProcessRandStdNormal(double randStdNormal, double mean)
+        public int Roll(int n)
         {
-            // В основной реализации ничего не делаем.
-            return randStdNormal;
+            var rand = GetNext(0.0, 1.0);
+            var roll = DiceValuesHelper.MapDoubleToDiceEdge(rand, n);
+            return roll;
         }
 
         private double GetNext(double min, double max)
@@ -39,8 +40,7 @@ namespace Zilon.Core.CommonServices.Dices
             do
             {
                 x = NextGaussian(MEAN, STDDEV);
-            } while ((x < min) || (x > max));
-
+            } while (x < min || x > max);
             return x;
         }
 
@@ -57,11 +57,10 @@ namespace Zilon.Core.CommonServices.Dices
             return randTotal;
         }
 
-        public int Roll(int n)
+        protected virtual double ProcessRandStdNormal(double randStdNormal, double mean)
         {
-            var rand = GetNext(0.0, 1.0);
-            var roll = DiceValuesHelper.MapDoubleToDiceEdge(rand, n);
-            return roll;
+            // В основной реализации ничего не делаем.
+            return randStdNormal;
         }
     }
 }

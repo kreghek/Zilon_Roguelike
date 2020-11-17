@@ -2,8 +2,8 @@
 {
     public class MeasureValue
     {
-        public double LastValue { get; set; }
-
         public double TotalValue { get; set; }
+
+        public double LastValue { get; set; }
     }
 }

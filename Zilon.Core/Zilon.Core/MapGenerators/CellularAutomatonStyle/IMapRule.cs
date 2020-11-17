@@ -3,16 +3,16 @@
     /// <summary>
     /// Map restriction. For example, min region count.
     /// </summary>
-    internal interface IMapRule
+    interface IMapRule
     {
-        /// <summary>
-        /// Description for debugging.
-        /// </summary>
-        string Description { get; }
-
         /// <summary>
         /// Name for debug
         /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// Description for debugging.
+        /// </summary>
+        string Description { get; }
     }
 }

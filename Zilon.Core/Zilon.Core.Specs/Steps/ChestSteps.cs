@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using FluentAssertions;
@@ -29,11 +28,7 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\) со случайным лутом")]
-        public void GivenЕстьСундукIdВЯчейкеСоСлучайнымЛутом(
-            int chestId,
-            int chestPosX,
-            int chestPosY,
-            Table table)
+        public void GivenЕстьСундукIdВЯчейкеСоСлучайнымЛутом(int chestId, int chestPosX, int chestPosY, Table table)
         {
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
             var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
@@ -56,10 +51,10 @@ namespace Zilon.Core.Specs.Steps
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.Resolve(It.IsAny<IEnumerable<IDropTableScheme>>()))
-                            .Returns(dropProps.ToArray());
+                .Returns(dropProps.ToArray());
             var dropResolver = dropResolverMock.Object;
 
-            var chest = new DropTablePropChest(Array.Empty<DropTableScheme>(), dropResolver);
+            var chest = new DropTablePropChest(System.Array.Empty<DropTableScheme>(), dropResolver);
             var staticObject = new StaticObject(node, chest.Purpose, chestId);
             staticObject.AddModule<IPropContainer>(chest);
 
@@ -73,9 +68,7 @@ namespace Zilon.Core.Specs.Steps
             var selectedChest = (playerState.HoverViewModel as IContainerViewModel).StaticObject;
 
             // lootProps будет изменяться
-            var lootProps = selectedChest.GetModule<IPropContainer>()
-                                         .Content.CalcActualItems()
-                                         .ToList();
+            var lootProps = selectedChest.GetModule<IPropContainer>().Content.CalcActualItems().ToList();
 
             foreach (var tableRow in table.Rows)
             {
@@ -84,15 +77,11 @@ namespace Zilon.Core.Specs.Steps
 
                 var factLootProps = lootProps.Where(x => x.Scheme.Sid == expectedPropSid);
                 var factLootResources = factLootProps.Cast<Resource>();
-                var factLootResource =
-                    factLootResources.FirstOrDefault(x => x.Count == int.Parse(expectedResourceCount));
+                var factLootResource = factLootResources.FirstOrDefault(x => x.Count == int.Parse(expectedResourceCount));
 
-                factLootResource.Should()
-                                .NotBeNull();
-                factLootResource.Scheme.Sid.Should()
-                                .Be(expectedPropSid);
-                factLootResource.Count.Should()
-                                .Be(int.Parse(expectedResourceCount));
+                factLootResource.Should().NotBeNull();
+                factLootResource.Scheme.Sid.Should().Be(expectedPropSid);
+                factLootResource.Count.Should().Be(int.Parse(expectedResourceCount));
                 lootProps.Remove(factLootResource);
             }
         }

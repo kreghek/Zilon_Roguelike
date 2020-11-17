@@ -16,24 +16,22 @@ namespace Zilon.Emulation.Common
         private const int ITERATION_LIMIT = 40_000_000;
         private readonly IGlobeInitializer _globeInitializer;
 
-        protected AutoplayEngineBase(
-            BotSettings botSettings,
+        protected IServiceScope ServiceScope { get; set; }
+
+        protected BotSettings BotSettings { get; }
+
+        protected AutoplayEngineBase(BotSettings botSettings,
             IGlobeInitializer globeInitializer)
         {
             BotSettings = botSettings;
             _globeInitializer = globeInitializer;
         }
 
-        protected BotSettings BotSettings { get; }
-
-        protected IServiceScope ServiceScope { get; set; }
-
         public async Task<IGlobe> CreateGlobeAsync()
         {
             // Create globe
             var globeInitializer = _globeInitializer;
-            var globe = await globeInitializer.CreateGlobeAsync("intro")
-                                              .ConfigureAwait(false);
+            var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
             return globe;
         }
 
@@ -50,13 +48,11 @@ namespace Zilon.Emulation.Common
             }
 
             var iterationCounter = 1;
-            while (!followedPerson.GetModule<ISurvivalModule>()
-                                  .IsDead && (iterationCounter <= ITERATION_LIMIT))
+            while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
             {
                 try
                 {
-                    await globe.UpdateAsync()
-                               .ConfigureAwait(false);
+                    await globe.UpdateAsync().ConfigureAwait(false);
                 }
                 catch (ActorTaskExecutionException exception)
                 {
@@ -68,6 +64,12 @@ namespace Zilon.Emulation.Common
                     throw;
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
+                catch (Exception exception)
+#pragma warning restore CA1031 // Do not catch general exception types
+                {
+                    CatchException(exception);
+                    throw;
+                }
             }
 
             ProcessEnd();

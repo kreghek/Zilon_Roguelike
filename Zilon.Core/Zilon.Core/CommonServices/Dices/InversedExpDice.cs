@@ -19,7 +19,7 @@ namespace Zilon.Core.CommonServices.Dices
 
         protected override int ProcessedRoll(int roll, int n)
         {
-            var inversedRoll = (n - roll) + 1;
+            var inversedRoll = n - roll + 1;
             return inversedRoll;
         }
     }

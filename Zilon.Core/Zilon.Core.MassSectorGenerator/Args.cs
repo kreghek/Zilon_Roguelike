@@ -3,7 +3,7 @@
     /// <summary>
     /// Аргументы, используемые в текущем консольном приложении.
     /// </summary>
-    internal static class Args
+    static class Args
     {
         /// <summary>
         /// Зерно генерации.

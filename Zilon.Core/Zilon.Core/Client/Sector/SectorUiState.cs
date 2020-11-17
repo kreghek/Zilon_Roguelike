@@ -21,8 +21,7 @@ namespace Zilon.Core.Client
         }
 
         /// <inheritdoc/>
-        public IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource =>
-            ActiveActor?.Actor?.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>;
+        public IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource { get => ActiveActor?.Actor?.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>; }
 
         public event EventHandler ActiveActorChanged;
 

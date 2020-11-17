@@ -14,11 +14,7 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния.
         }
 
-        public bool Test(
-            IActor actor,
-            ISectorTaskSourceContext context,
-            ILogicState currentState,
-            ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
@@ -35,18 +31,11 @@ namespace Zilon.Bot.Players.Triggers
                 throw new System.ArgumentNullException(nameof(strategyData));
             }
 
-            var currentInventoryEquipments =
-                actor.Person.GetModule<IInventoryModule>()
-                     .CalcActualItems()
-                     .OfType<Equipment>();
+            var currentInventoryEquipments = actor.Person.GetModule<IInventoryModule>().CalcActualItems().OfType<Equipment>();
 
-            for (int i = 0;
-                i < actor.Person.GetModule<IEquipmentModule>()
-                         .Slots.Length;
-                i++)
+            for (int i = 0; i < actor.Person.GetModule<IEquipmentModule>().Slots.Length; i++)
             {
-                var slot = actor.Person.GetModule<IEquipmentModule>()
-                                .Slots[i];
+                var slot = actor.Person.GetModule<IEquipmentModule>().Slots[i];
                 var equiped = actor.Person.GetModule<IEquipmentModule>()[i];
                 if (equiped == null)
                 {

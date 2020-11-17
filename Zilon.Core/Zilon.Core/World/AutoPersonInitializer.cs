@@ -10,9 +10,9 @@ namespace Zilon.Core.World
     {
         private const string PERSON_SCHEME_SID = "human-person";
         private const string START_FACTION_NAME = "Pilgrims";
-        private readonly IPersonFactory _personFactory;
 
         private readonly IFraction _pilgrimFraction;
+        private readonly IPersonFactory _personFactory;
 
         public AutoPersonInitializer(IPersonFactory personFactory)
         {
@@ -21,17 +21,9 @@ namespace Zilon.Core.World
             _personFactory = personFactory;
         }
 
-        /// <summary>
-        /// Создаёт персонажа.
-        /// </summary>
-        /// <returns> Возвращает созданного персонажа. </returns>
-        private static IPerson CreateStartPerson(
-            string personSchemeSid,
-            IPersonFactory personFactory,
-            IFraction fraction)
+        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe)
         {
-            var startPerson = personFactory.Create(personSchemeSid, fraction);
-            return startPerson;
+            return Task.FromResult(CreateStartPersonsInner());
         }
 
         private IEnumerable<IPerson> CreateStartPersonsInner()
@@ -42,9 +34,14 @@ namespace Zilon.Core.World
             }
         }
 
-        public Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe)
+        /// <summary>
+        /// Создаёт персонажа.
+        /// </summary>
+        /// <returns> Возвращает созданного персонажа. </returns>
+        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory, IFraction fraction)
         {
-            return Task.FromResult(CreateStartPersonsInner());
+            var startPerson = personFactory.Create(personSchemeSid, fraction);
+            return startPerson;
         }
     }
 }

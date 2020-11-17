@@ -13,8 +13,10 @@ namespace Zilon.Core.World
     /// </summary>
     public sealed class Biome : IBiome
     {
-        private readonly IList<IGraphEdge> _edges;
         private readonly IList<SectorNode> _nodes;
+        private readonly IList<IGraphEdge> _edges;
+
+        public ILocationScheme LocationScheme { get; }
 
         public Biome(ILocationScheme locationScheme)
         {
@@ -24,11 +26,9 @@ namespace Zilon.Core.World
             _edges = new List<IGraphEdge>();
         }
 
-        public ILocationScheme LocationScheme { get; }
+        public IEnumerable<SectorNode> Sectors { get => _nodes.OfType<SectorNode>(); }
 
-        public IEnumerable<SectorNode> Sectors => _nodes.OfType<SectorNode>();
-
-        public IEnumerable<IGraphNode> Nodes => _nodes;
+        public IEnumerable<IGraphNode> Nodes { get => _nodes; }
 
         public void AddEdge(IGraphNode node1, IGraphNode node2)
         {
@@ -59,13 +59,12 @@ namespace Zilon.Core.World
             // Выбираем все другие узлы, которые указаны в выбранных ребрах.
 
             var currentEdges = from edge in _edges
-                where edge.Nodes.Contains(node)
-                select edge;
+                               where edge.Nodes.Contains(node)
+                               select edge;
 
             var currentEdgeArray = currentEdges.ToArray();
 
-            return currentEdgeArray.SelectMany(x => x.Nodes)
-                                   .Where(x => x != node);
+            return currentEdgeArray.SelectMany(x => x.Nodes).Where(x => x != node);
         }
 
         public void RemoveEdge(IGraphNode node1, IGraphNode node2)

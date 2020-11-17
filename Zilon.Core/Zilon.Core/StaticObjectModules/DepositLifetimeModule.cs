@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.StaticObjectModules
@@ -11,10 +10,10 @@ namespace Zilon.Core.StaticObjectModules
     /// </summary>
     public class DepositLifetimeModule : ILifetimeModule
     {
-        private readonly IPropContainer _containerModule;
-        private readonly IPropDepositModule _depositModule;
-        private readonly IStaticObject _parentStaticObject;
         private readonly IStaticObjectManager _staticObjectManager;
+        private readonly IStaticObject _parentStaticObject;
+        private readonly IPropDepositModule _depositModule;
+        private readonly IPropContainer _containerModule;
 
         public DepositLifetimeModule(IStaticObjectManager staticObjectManager, IStaticObject parentStaticObject)
         {
@@ -28,32 +27,26 @@ namespace Zilon.Core.StaticObjectModules
             _containerModule.ItemsRemoved += ContainerModule_ItemsRemoved;
         }
 
-        private void CheckAndDestroy()
-        {
-            if (_depositModule.IsExhausted && !_containerModule.Content.CalcActualItems()
-                                                               .Any())
-            {
-                Destroy();
-            }
-        }
-
-        private void ContainerModule_ItemsRemoved(object sender, PropStoreEventArgs e)
-        {
-            CheckAndDestroy();
-        }
-
         private void DepositModule_Mined(object sender, EventArgs e)
         {
             CheckAndDestroy();
         }
 
-        private void DoDestroyed()
+        private void ContainerModule_ItemsRemoved(object sender, Props.PropStoreEventArgs e)
         {
-            Destroyed?.Invoke(this, EventArgs.Empty);
+            CheckAndDestroy();
+        }
+
+        private void CheckAndDestroy()
+        {
+            if (_depositModule.IsExhausted && !_containerModule.Content.CalcActualItems().Any())
+            {
+                Destroy();
+            }
         }
 
         /// <inheritdoc/>
-        public string Key => nameof(ILifetimeModule);
+        public string Key { get => nameof(ILifetimeModule); }
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }
@@ -67,6 +60,11 @@ namespace Zilon.Core.StaticObjectModules
             _containerModule.ItemsRemoved -= ContainerModule_ItemsRemoved;
             _staticObjectManager.Remove(_parentStaticObject);
             DoDestroyed();
+        }
+
+        private void DoDestroyed()
+        {
+            Destroyed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

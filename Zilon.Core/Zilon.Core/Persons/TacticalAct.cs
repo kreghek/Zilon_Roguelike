@@ -14,8 +14,7 @@ namespace Zilon.Core.Persons
     public class TacticalAct : ITacticalAct
     {
         [ExcludeFromCodeCoverage]
-        public TacticalAct(
-            [NotNull] ITacticalActScheme scheme,
+        public TacticalAct([NotNull] ITacticalActScheme scheme,
             [NotNull] Roll efficient,
             [NotNull] Roll toHit,
             [CanBeNull] Equipment equipment)
@@ -33,12 +32,6 @@ namespace Zilon.Core.Persons
             Constrains = scheme.Constrains;
 
             CurrentCooldown = scheme.Constrains?.Cooldown != null ? 0 : (int?)null;
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return $"{Scheme} [{Equipment}]";
         }
 
         /// <inheritdoc/>
@@ -66,6 +59,12 @@ namespace Zilon.Core.Persons
         public void StartCooldownIfItIs()
         {
             CurrentCooldown = Constrains?.Cooldown;
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{Scheme} [{Equipment}]";
         }
 
         /// <inheritdoc/>

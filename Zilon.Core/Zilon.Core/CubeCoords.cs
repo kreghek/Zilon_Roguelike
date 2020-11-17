@@ -6,9 +6,7 @@ namespace Zilon.Core
     public struct CubeCoords : IEquatable<CubeCoords>
     {
         public int X { get; }
-
         public int Y { get; }
-
         public int Z { get; }
 
         public CubeCoords(int x, int y, int z)
@@ -66,9 +64,9 @@ namespace Zilon.Core
 
         public bool Equals(CubeCoords other)
         {
-            return (X == other.X) &&
-                   (Y == other.Y) &&
-                   (Z == other.Z);
+            return X == other.X &&
+                   Y == other.Y &&
+                   Z == other.Z;
         }
 
         public override int GetHashCode()
@@ -76,9 +74,9 @@ namespace Zilon.Core
             unchecked
             {
                 var hashCode = -307843816;
-                hashCode = (hashCode * -1521134295) + X.GetHashCode();
-                hashCode = (hashCode * -1521134295) + Y.GetHashCode();
-                hashCode = (hashCode * -1521134295) + Z.GetHashCode();
+                hashCode = hashCode * -1521134295 + X.GetHashCode();
+                hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                hashCode = hashCode * -1521134295 + Z.GetHashCode();
                 return hashCode;
             }
         }

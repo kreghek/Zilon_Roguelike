@@ -15,41 +15,38 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.BotEnvironment
 {
-    internal class AutoplayEngine : AutoplayEngineBase
+    class AutoplayEngine : AutoplayEngineBase
     {
         private const string SCORE_FILE_PATH = "bot-scores";
         private const int BOT_EXCEPTION_LIMIT = 3;
         private const int ENVIRONMENT_EXCEPTION_LIMIT = 3;
 
-        private readonly StringBuilder _logStringBuilder;
-        private readonly string _scoreFilePreffix;
-
         private readonly Startup _startup;
+        private readonly string _scoreFilePreffix;
 
         private int _botExceptionCount;
         private int _envExceptionCount;
 
-        public AutoplayEngine(
-            Startup startup,
+        private readonly StringBuilder _logStringBuilder;
+
+        public string LogOutput => _logStringBuilder.ToString();
+
+        public AutoplayEngine(Startup startup,
             BotSettings botSettings,
             string scoreFilePreffix,
             IGlobeInitializer globeInitializer
-        ) : base(botSettings, globeInitializer)
+            ) : base(botSettings, globeInitializer)
         {
             _startup = startup;
             _scoreFilePreffix = scoreFilePreffix;
             _logStringBuilder = new StringBuilder();
         }
 
-        public string LogOutput => _logStringBuilder.ToString();
-
         protected override void CatchActorTaskExecutionException(ActorTaskExecutionException exception)
         {
             AppendException(exception, _scoreFilePreffix);
 
-            var monsterActorTaskSource = ServiceScope.ServiceProvider
-                                                     .GetRequiredService<MonsterBotActorTaskSource<
-                                                         ISectorTaskSourceContext>>();
+            var monsterActorTaskSource = ServiceScope.ServiceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
             if (exception.ActorTaskSource != monsterActorTaskSource)
             {
                 _botExceptionCount++;
@@ -89,48 +86,13 @@ namespace Zilon.BotEnvironment
             WriteScores(ServiceScope.ServiceProvider, scoreManager, mode, _scoreFilePreffix);
         }
 
-        protected override void ProcessSectorExit()
+        private void WriteScores(IServiceProvider serviceFactory, IScoreManager scoreManager, string mode, string scoreFilePreffix)
         {
-            Log("Exit");
-        }
+            var summaryText = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
 
-        private void AppendException(Exception exception, string scoreFilePreffix)
-        {
-            var path = SCORE_FILE_PATH;
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
+            Log(summaryText);
 
-            var botTaskSource = ServiceScope.ServiceProvider
-                                            .GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>();
-            var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
-            var filename = Path.Combine(path,
-                $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.exceptions");
-
-            using var file = new StreamWriter(filename, true);
-            file.WriteLine(DateTime.UtcNow);
-            file.WriteLine(exception);
-            file.WriteLine();
-        }
-
-        private void AppendFail(IServiceProvider serviceFactory, string scoreFilePreffix)
-        {
-            Log("[x] Bot task source error limit reached");
-
-            var path = SCORE_FILE_PATH;
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            var botTaskSource =
-                serviceFactory.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>();
-            var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
-            var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.scores");
-
-            using var file = new StreamWriter(filename, true);
-            file.WriteLine("-1");
+            AppendScores(scoreManager, serviceFactory, scoreFilePreffix, mode, summaryText);
         }
 
         private static void AppendScores(
@@ -146,27 +108,34 @@ namespace Zilon.BotEnvironment
                 Directory.CreateDirectory(path);
             }
 
-            var botTaskSource =
-                serviceFactory.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>();
+            var botTaskSource = serviceFactory.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>();
             var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
             var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.scores");
-            using (var file = new StreamWriter(filename, true))
+            using (var file = new StreamWriter(filename, append: true))
             {
                 var fragSum = scoreManager.Frags.Sum(x => x.Value);
                 file.WriteLine($"{DateTime.UtcNow}\t{scoreManager.BaseScores}\t{scoreManager.Turns}\t{fragSum}");
             }
 
-            DatabaseContext.AppendScores(path, scoreManager, botTaskSource.GetType()
-                                                                          .FullName, scoreFilePreffix, mode,
-                summary);
+            DatabaseContext.AppendScores(path, scoreManager, botTaskSource.GetType().FullName, scoreFilePreffix, mode, summary);
         }
 
-        private static void CheckEnvExceptions(int envExceptionCount, Exception exception)
+        private void AppendException(Exception exception, string scoreFilePreffix)
         {
-            if (envExceptionCount >= ENVIRONMENT_EXCEPTION_LIMIT)
+            var path = SCORE_FILE_PATH;
+            if (!Directory.Exists(path))
             {
-                throw exception;
+                Directory.CreateDirectory(path);
             }
+
+            var botTaskSource = ServiceScope.ServiceProvider.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>();
+            var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
+            var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.exceptions");
+
+            using var file = new StreamWriter(filename, append: true);
+            file.WriteLine(DateTime.UtcNow);
+            file.WriteLine(exception);
+            file.WriteLine();
         }
 
         private static string GetScoreFilePreffix(string scoreFilePreffix)
@@ -180,22 +149,40 @@ namespace Zilon.BotEnvironment
             return scoreFilePreffixFileName;
         }
 
+        private void AppendFail(IServiceProvider serviceFactory, string scoreFilePreffix)
+        {
+            Log("[x] Bot task source error limit reached");
+
+            var path = SCORE_FILE_PATH;
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            var botTaskSource = serviceFactory.GetRequiredService<IPluggableActorTaskSource<ISectorTaskSourceContext>>();
+            var scoreFilePreffixFileName = GetScoreFilePreffix(scoreFilePreffix);
+            var filename = Path.Combine(path, $"{botTaskSource.GetType().FullName}{scoreFilePreffixFileName}.scores");
+
+            using var file = new StreamWriter(filename, append: true);
+            file.WriteLine($"-1");
+        }
+
+        private static void CheckEnvExceptions(int envExceptionCount, Exception exception)
+        {
+            if (envExceptionCount >= ENVIRONMENT_EXCEPTION_LIMIT)
+            {
+                throw exception;
+            }
+        }
+
         private void Log(string message)
         {
             _logStringBuilder.AppendLine(message);
         }
 
-        private void WriteScores(
-            IServiceProvider serviceFactory,
-            IScoreManager scoreManager,
-            string mode,
-            string scoreFilePreffix)
+        protected override void ProcessSectorExit()
         {
-            var summaryText = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
-
-            Log(summaryText);
-
-            AppendScores(scoreManager, serviceFactory, scoreFilePreffix, mode, summaryText);
+            Log("Exit");
         }
     }
 }

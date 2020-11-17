@@ -7,9 +7,8 @@ using NUnit.Framework;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Diseases;
-using Zilon.Core.MapGenerators;
 
-namespace Zilon.Core.Tests.MapGenerators
+namespace Zilon.Core.MapGenerators.Tests
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
@@ -21,9 +20,7 @@ namespace Zilon.Core.Tests.MapGenerators
         /// <param name="diceSeed"></param>
         /// <param name="count"></param>
         [Test]
-        public void Create_DifferentDiceSeed_GenerateUniqueDiseases(
-            [Values(1, 2, 3, 4, 5)] int diceSeed,
-            [Values(1, 10, 100)] int count)
+        public void Create_DifferentDiceSeed_GenerateUniqueDiseases([Values(1, 2, 3, 4, 5)] int diceSeed, [Values(1, 10, 100)] int count)
         {
             // ARRANGE
 
@@ -38,19 +35,17 @@ namespace Zilon.Core.Tests.MapGenerators
             for (var i = 0; i < count; i++)
             {
                 var disease = generator.Create();
-                if (disease == null)
+                if (disease != null)
                 {
-                    continue;
+                    resultDiseases.Add(disease);
+                    Console.WriteLine($"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}");
                 }
-
-                resultDiseases.Add(disease);
             }
 
             // ASSERT
             foreach (var disease in resultDiseases)
             {
-                resultDiseases.Should()
-                              .NotContain(x => (x != disease) && (x.Name == disease.Name));
+                resultDiseases.Should().NotContain(x => x != disease && x.Name == disease.Name);
             }
         }
     }

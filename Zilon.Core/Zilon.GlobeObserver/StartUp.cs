@@ -14,20 +14,19 @@ namespace Zilon.GlobeObserver
 {
     internal sealed class StartUp : InitializationBase
     {
-        public override void ConfigureAux(IServiceProvider serviceFactory)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void RegisterServices(IServiceCollection serviceCollection)
         {
             base.RegisterServices(serviceCollection);
 
             serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
-            serviceCollection.AddSingleton<IGlobeExpander>(provider =>
-                (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
+            serviceCollection.AddSingleton<IGlobeExpander>(provider => (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
             serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceCollection.AddSingleton<IPersonInitializer, AutoPersonInitializer>();
+        }
+
+        public override void ConfigureAux(IServiceProvider serviceFactory)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void RegisterBot(IServiceCollection serviceCollection)
@@ -36,9 +35,7 @@ namespace Zilon.GlobeObserver
             serviceCollection.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
             serviceCollection.AddSingleton<LogicStateTreePatterns>();
 
-            serviceCollection
-                .AddSingleton<IActorTaskSource<ISectorTaskSourceContext>,
-                    HumanBotActorTaskSource<ISectorTaskSourceContext>>();
+            serviceCollection.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>, HumanBotActorTaskSource<ISectorTaskSourceContext>>();
         }
     }
 }

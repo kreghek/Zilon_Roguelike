@@ -10,13 +10,6 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public sealed class OpenContainerEventArgs : EventArgs
     {
-        [ExcludeFromCodeCoverage]
-        public OpenContainerEventArgs(IStaticObject container, [NotNull] IOpenContainerResult result)
-        {
-            Container = container ?? throw new ArgumentNullException(nameof(container));
-            Result = result ?? throw new ArgumentNullException(nameof(result));
-        }
-
         /// <summary>
         /// Контейнер, который пытались открыть.
         /// </summary>
@@ -28,5 +21,12 @@ namespace Zilon.Core.Tactics
         /// </summary>
         [PublicAPI]
         public IOpenContainerResult Result { get; }
+
+        [ExcludeFromCodeCoverage]
+        public OpenContainerEventArgs(IStaticObject container, [NotNull] IOpenContainerResult result)
+        {
+            Container = container ?? throw new ArgumentNullException(nameof(container));
+            Result = result ?? throw new ArgumentNullException(nameof(result));
+        }
     }
 }

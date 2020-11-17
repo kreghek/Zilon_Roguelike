@@ -14,14 +14,17 @@ namespace Zilon.Core.PersonModules
     public interface ISurvivalModule : IPersonModule
     {
         /// <summary>
-        /// Признак того, что персонаж мёртв.
-        /// </summary>
-        bool IsDead { get; }
-
-        /// <summary>
         /// Текущие характеристики.
         /// </summary>
         SurvivalStat[] Stats { get; }
+
+        /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
+        void ResetStats();
+
+        /// <summary>
+        /// Обновление состояния данных о выживании.
+        /// </summary>
+        void Update();
 
         /// <summary>
         /// Снижение характеристики.
@@ -29,9 +32,6 @@ namespace Zilon.Core.PersonModules
         /// <param name="type"> Тип характеритсики, которая будет произведено влияние. </param>
         /// <param name="value"> Значение, на которое снижается текущий запас. </param>
         void DecreaseStat(SurvivalStatType type, int value);
-
-        /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
-        void ResetStats();
 
         /// <summary>
         /// Пополнение запаса характеристики.
@@ -48,9 +48,9 @@ namespace Zilon.Core.PersonModules
         void SetStatForce(SurvivalStatType type, int value);
 
         /// <summary>
-        /// Обновление состояния данных о выживании.
+        /// Признак того, что персонаж мёртв.
         /// </summary>
-        void Update();
+        bool IsDead { get; }
 
         /// <summary>
         /// Происходит, если персонаж умирает.

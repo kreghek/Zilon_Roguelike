@@ -11,13 +11,13 @@ namespace Zilon.Core.Persons
     public sealed class DropTableModRecord
     {
         /// <summary>
-        /// Модифицированный вес.
-        /// </summary>
-        public int ModifiedWeight { get; set; }
-
-        /// <summary>
         /// Запись таблицы дропа.
         /// </summary>
         public IDropTableRecordSubScheme Record { get; set; }
+
+        /// <summary>
+        /// Модифицированный вес.
+        /// </summary>
+        public int ModifiedWeight { get; set; }
     }
 }

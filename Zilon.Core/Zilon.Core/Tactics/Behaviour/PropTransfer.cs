@@ -12,8 +12,7 @@ namespace Zilon.Core.Tactics.Behaviour
     /// </summary>
     public class PropTransfer
     {
-        public PropTransfer(
-            [NotNull] IPropStore propStore,
+        public PropTransfer([NotNull] IPropStore propStore,
             [NotNull] IEnumerable<IProp> added,
             [NotNull] IEnumerable<IProp> removed)
         {
@@ -23,18 +22,19 @@ namespace Zilon.Core.Tactics.Behaviour
         }
 
         /// <summary>
-        /// Добавляемые предметы в хранилище.
-        /// </summary>
-        public IProp[] Added { get; }
-
-        /// <summary>
         /// Хранилище, с которым связан трансфер.
         /// </summary>
         public IPropStore PropStore { get; }
 
         /// <summary>
+        /// Добавляемые предметы в хранилище.
+        /// </summary>
+        public IProp[] Added { get; }
+
+        /// <summary>
         /// Извлекаемые из хранилища предметы.
         /// </summary>
         public IProp[] Removed { get; }
+
     }
 }

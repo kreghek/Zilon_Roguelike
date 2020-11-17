@@ -4,32 +4,12 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
+
     /// <summary>
     /// Интерфейс тактического действия.
     /// </summary>
     public interface ITacticalAct
     {
-        /// <summary>
-        /// Подсхема с ограничениями на использование действий.
-        /// </summary>
-        ITacticalActConstrainsSubScheme Constrains { get; }
-
-        /// <summary>
-        /// Текущее состояние КД на использование.
-        /// Используется, если в схеме <see cref="ITacticalActConstrainsSubScheme.Cooldown"/> не null.
-        /// </summary>
-        int? CurrentCooldown { get; }
-
-        /// <summary>
-        /// Актуальные данные об эффективности действия.
-        /// </summary>
-        Roll Efficient { get; }
-
-        /// <summary>
-        /// Предмет экипировки, который даёт данное действие.
-        /// </summary>
-        Equipment Equipment { get; }
-
         /// <summary>
         /// Схема действия.
         /// </summary>
@@ -41,9 +21,30 @@ namespace Zilon.Core.Persons
         ITacticalActStatsSubScheme Stats { get; }
 
         /// <summary>
+        /// Подсхема с ограничениями на использование действий.
+        /// </summary>
+        ITacticalActConstrainsSubScheme Constrains { get; }
+
+        /// <summary>
+        /// Предмет экипировки, который даёт данное действие.
+        /// </summary>
+        Equipment Equipment { get; }
+
+        /// <summary>
+        /// Актуальные данные об эффективности действия.
+        /// </summary>
+        Roll Efficient { get; }
+
+        /// <summary>
         /// Актуальные данные о применении действия.
         /// </summary>
         Roll ToHit { get; }
+
+        /// <summary>
+        /// Текущее состояние КД на использование.
+        /// Используется, если в схеме <see cref="ITacticalActConstrainsSubScheme.Cooldown"/> не null.
+        /// </summary>
+        int? CurrentCooldown { get; }
 
         /// <summary>
         /// Сброс счётчика КД.

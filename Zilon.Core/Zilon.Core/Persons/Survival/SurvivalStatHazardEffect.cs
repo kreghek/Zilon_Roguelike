@@ -11,23 +11,25 @@ namespace Zilon.Core.Persons
 {
     public class SurvivalStatHazardEffect : IPersonEffect, ISurvivalStatEffect
     {
-        private readonly ISurvivalRandomSource _survivalRandomSource;
         private SurvivalStatHazardLevel _level;
         private EffectRule[] _rules;
+        private readonly ISurvivalRandomSource _survivalRandomSource;
 
-        public SurvivalStatHazardEffect(
-            SurvivalStatType type,
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
+
+        public SurvivalStatHazardEffect(SurvivalStatType type,
             SurvivalStatHazardLevel level,
             [NotNull] ISurvivalRandomSource survivalRandomSource)
         {
             Type = type;
             Level = level;
 
-            _survivalRandomSource =
-                survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
+            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
 
             _rules = CalcRules();
         }
+
+        public SurvivalStatType Type { get; }
 
         public SurvivalStatHazardLevel Level
         {
@@ -45,13 +47,51 @@ namespace Zilon.Core.Persons
             }
         }
 
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
-
-        public SurvivalStatType Type { get; }
-
-        public override string ToString()
+        public EffectRule[] GetRules()
         {
-            return $"{Level} {Type}";
+            return _rules;
+        }
+
+        public event EventHandler Changed;
+
+        /// <summary>
+        /// Применяет эффект к указанным данным.
+        /// </summary>
+        /// <param name="survivalData"> Данные, на коорые влияет эффект. </param>
+        public void Apply(ISurvivalModule survivalData)
+        {
+            if (survivalData is null)
+            {
+                throw new ArgumentNullException(nameof(survivalData));
+            }
+
+            if (Level == SurvivalStatHazardLevel.Max && Type != SurvivalStatType.Health)
+            {
+                var roll = _survivalRandomSource.RollMaxHazardDamage();
+                var successRoll = GetSuccessHazardDamageRoll();
+                if (roll >= successRoll)
+                {
+                    survivalData.DecreaseStat(SurvivalStatType.Health, 1);
+                    LogPlayerEvent();
+                }
+            }
+        }
+
+        private void LogPlayerEvent()
+        {
+            if (PlayerEventLogService is null)
+            {
+                return;
+            }
+
+            var playerEvent = new SurvivalEffectDamageEvent(this);
+            PlayerEventLogService.Log(playerEvent);
+        }
+
+        private static int GetSuccessHazardDamageRoll()
+        {
+            // В будущем это значение будет расчитывать исходя из характеристик, перков и экипировки персонжа.
+            return 4;
         }
 
         private EffectRule[] CalcRules()
@@ -80,51 +120,9 @@ namespace Zilon.Core.Persons
             return rules.ToArray();
         }
 
-        private static int GetSuccessHazardDamageRoll()
+        public override string ToString()
         {
-            // В будущем это значение будет расчитывать исходя из характеристик, перков и экипировки персонжа.
-            return 4;
-        }
-
-        private void LogPlayerEvent()
-        {
-            if (PlayerEventLogService is null)
-            {
-                return;
-            }
-
-            var playerEvent = new SurvivalEffectDamageEvent(this);
-            PlayerEventLogService.Log(playerEvent);
-        }
-
-        public EffectRule[] GetRules()
-        {
-            return _rules;
-        }
-
-        public event EventHandler Changed;
-
-        /// <summary>
-        /// Применяет эффект к указанным данным.
-        /// </summary>
-        /// <param name="survivalData"> Данные, на коорые влияет эффект. </param>
-        public void Apply(ISurvivalModule survivalData)
-        {
-            if (survivalData is null)
-            {
-                throw new ArgumentNullException(nameof(survivalData));
-            }
-
-            if ((Level == SurvivalStatHazardLevel.Max) && (Type != SurvivalStatType.Health))
-            {
-                var roll = _survivalRandomSource.RollMaxHazardDamage();
-                var successRoll = GetSuccessHazardDamageRoll();
-                if (roll >= successRoll)
-                {
-                    survivalData.DecreaseStat(SurvivalStatType.Health, 1);
-                    LogPlayerEvent();
-                }
-            }
+            return $"{Level} {Type}";
         }
     }
 }

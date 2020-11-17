@@ -25,115 +25,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _dice = dice;
         }
 
-        private static bool CheckMapPassable(IEnumerable<OffsetCoords> currentCoords, OffsetCoords targetCoords)
-        {
-            var matrix = new Matrix<bool>(1000, 1000);
-            foreach (var coords in currentCoords)
-            {
-                var x = coords.X;
-                var y = coords.Y;
-                matrix.Items[x, y] = true;
-            }
-
-            // Закрываем проверяемый узел
-            matrix.Items[targetCoords.X, targetCoords.Y] = false;
-
-            // Не выбираем првоеряемую координату, как стартовую, потому что
-            // она уже закрыта. Заливка от неё не пройдёт.
-            var availableStartPoints = currentCoords.Where(x => x != targetCoords)
-                                                    .ToArray();
-            if (!availableStartPoints.Any())
-            {
-                // Если нет доступных координат для старта,
-                // значит стартовая координата была единственной.
-                // Её нельзя закрывать препятсвием.
-                return false;
-            }
-
-            var startPoint = availableStartPoints.First(x => MapFactoryHelper.IsAvailableFor(matrix, x));
-            var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
-
-            foreach (var point in floodPoints)
-            {
-                matrix.Items[point.X, point.Y] = false;
-            }
-
-            foreach (var node in currentCoords)
-            {
-                var x = node.X;
-                var y = node.Y;
-                if (matrix.Items[x, y])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private static OffsetCoords[] GetAllPassableSize7Coords(OffsetCoords[] regionDraftCoords)
-        {
-            return regionDraftCoords;
-        }
-
-        private static IEnumerable<OffsetCoords> GetAvailableCoords(OffsetCoords[] regionDraftCoords)
-        {
-            var coordHash = new HashSet<OffsetCoords>(regionDraftCoords);
-
-            var neighborCubeOffsets = HexHelper.GetOffsetClockwise();
-            foreach (var coords in regionDraftCoords)
-            {
-                var cube = HexHelper.ConvertToCube(coords);
-
-                var isValid = HasAllHeighbors(coordHash, neighborCubeOffsets, cube);
-
-                if (isValid)
-                {
-                    yield return coords;
-                }
-            }
-        }
-
-        ///<summary>
-        /// Для препятсвий выбираются только те узлы, для которых есть все соседи.
-        ///</summary> 
-        private static bool HasAllHeighbors(
-            HashSet<OffsetCoords> coordHash,
-            CubeCoords[] neighborCubeOffsets,
-            CubeCoords cube)
-        {
-            foreach (var neighborCubeOffset in neighborCubeOffsets)
-            {
-                var neighborCube = cube + neighborCubeOffset;
-                var neighborOffsetCoords = HexHelper.ConvertToOffset(neighborCube);
-                if (!coordHash.Contains(neighborOffsetCoords))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool TryRollInteriorCoord(
-            OffsetCoords[] openCoords,
-            IEnumerable<OffsetCoords> passableRegionCoords,
-            out OffsetCoords rolledCoords)
-        {
-            var supposedRolledCoords = _dice.RollFromList(openCoords);
-
-            // Проверяем, что элемент декора не перекрывает проход.
-            var isNotBlockPass = CheckMapPassable(passableRegionCoords, supposedRolledCoords);
-            if (!isNotBlockPass)
-            {
-                rolledCoords = supposedRolledCoords;
-                return false;
-            }
-
-            rolledCoords = supposedRolledCoords;
-            return true;
-        }
-
         /// <summary>
         /// Случайный выбор координат для размещения элемента интерьера.
         /// </summary>
@@ -150,8 +41,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             // Ставить препятсвия на краю нельзя,
             // потому что коридор может начаться с препятсвия.
             // Коридоры просто строятся от ближайшей точки региона.
-            var coordsInCenter = GetAvailableCoords(regionDraftCoords)
-                .ToArray();
+            var coordsInCenter = GetAvailableCoords(regionDraftCoords).ToArray();
 
             // Выбираем все координаты, по которым может пройти персонаж размером 7.
             var passableCoords = GetAllPassableSize7Coords(regionDraftCoords);
@@ -203,6 +93,110 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
 
             return resultMetaList.ToArray();
+        }
+
+        private static OffsetCoords[] GetAllPassableSize7Coords(OffsetCoords[] regionDraftCoords)
+        {
+            return regionDraftCoords;
+        }
+
+        private bool TryRollInteriorCoord(OffsetCoords[] openCoords,
+            IEnumerable<OffsetCoords> passableRegionCoords,
+            out OffsetCoords rolledCoords)
+        {
+            var supposedRolledCoords = _dice.RollFromList(openCoords);
+
+            // Проверяем, что элемент декора не перекрывает проход.
+            var isNotBlockPass = CheckMapPassable(passableRegionCoords, supposedRolledCoords);
+            if (!isNotBlockPass)
+            {
+                rolledCoords = supposedRolledCoords;
+                return false;
+            }
+
+            rolledCoords = supposedRolledCoords;
+            return true;
+        }
+
+        private static bool CheckMapPassable(IEnumerable<OffsetCoords> currentCoords, OffsetCoords targetCoords)
+        {
+            var matrix = new Matrix<bool>(1000, 1000);
+            foreach (var coords in currentCoords)
+            {
+                var x = coords.X;
+                var y = coords.Y;
+                matrix.Items[x, y] = true;
+            }
+
+            // Закрываем проверяемый узел
+            matrix.Items[targetCoords.X, targetCoords.Y] = false;
+
+            // Не выбираем првоеряемую координату, как стартовую, потому что
+            // она уже закрыта. Заливка от неё не пройдёт.
+            var availableStartPoints = currentCoords.Where(x => x != targetCoords).ToArray();
+            if (!availableStartPoints.Any())
+            {
+                // Если нет доступных координат для старта,
+                // значит стартовая координата была единственной.
+                // Её нельзя закрывать препятсвием.
+                return false;
+            }
+
+            var startPoint = availableStartPoints.First(x => MapFactoryHelper.IsAvailableFor(matrix, x));
+            var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
+
+            foreach (var point in floodPoints)
+            {
+                matrix.Items[point.X, point.Y] = false;
+            }
+
+            foreach (var node in currentCoords)
+            {
+                var x = node.X;
+                var y = node.Y;
+                if (matrix.Items[x, y])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static IEnumerable<OffsetCoords> GetAvailableCoords(OffsetCoords[] regionDraftCoords)
+        {
+            var coordHash = new HashSet<OffsetCoords>(regionDraftCoords);
+
+            var neighborCubeOffsets = HexHelper.GetOffsetClockwise();
+            foreach (var coords in regionDraftCoords)
+            {
+                var cube = HexHelper.ConvertToCube(coords);
+
+                var isValid = HasAllHeighbors(coordHash, neighborCubeOffsets, cube);
+
+                if (isValid)
+                {
+                    yield return coords;
+                }
+            }
+        }
+
+        ///<summary>
+        /// Для препятсвий выбираются только те узлы, для которых есть все соседи.
+        ///</summary> 
+        private static bool HasAllHeighbors(HashSet<OffsetCoords> coordHash, CubeCoords[] neighborCubeOffsets, CubeCoords cube)
+        {
+            foreach (var neighborCubeOffset in neighborCubeOffsets)
+            {
+                var neighborCube = cube + neighborCubeOffset;
+                var neighborOffsetCoords = HexHelper.ConvertToOffset(neighborCube);
+                if (!coordHash.Contains(neighborOffsetCoords))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

@@ -6,11 +6,10 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public class MineTask : OneTurnActorTaskBase
     {
-        private readonly IMineDepositMethod _method;
         private readonly IStaticObject _staticObject;
+        private readonly IMineDepositMethod _method;
 
-        public MineTask(
-            [NotNull] IActor actor,
+        public MineTask([NotNull] IActor actor,
             [NotNull] IActorTaskContext context,
             [NotNull] IStaticObject staticObject,
             [NotNull] IMineDepositMethod method) : base(actor, context)

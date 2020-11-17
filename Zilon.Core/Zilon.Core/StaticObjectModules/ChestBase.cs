@@ -19,22 +19,6 @@ namespace Zilon.Core.StaticObjectModules
             IsActive = true;
         }
 
-        private void Content_Added(object sender, PropStoreEventArgs e)
-        {
-            ItemsAdded?.Invoke(this, e);
-        }
-
-        private void Content_Removed(object sender, PropStoreEventArgs e)
-        {
-            ItemsRemoved?.Invoke(this, e);
-        }
-
-        /// <inheritdoc/>
-        private void DoSetIsOpened()
-        {
-            Opened?.Invoke(this, EventArgs.Empty);
-        }
-
         /// <inheritdoc/>
         public IPropStore Content { get; }
 
@@ -51,14 +35,12 @@ namespace Zilon.Core.StaticObjectModules
         public bool IsActive { get; set; }
 
         /// <inheritdoc/>
-        public string Key => nameof(IPropContainer);
+        public string Key { get => nameof(IPropContainer); }
 
         /// <inheritdoc/>
         public event EventHandler Opened;
-
         /// <inheritdoc/>
         public event EventHandler<PropStoreEventArgs> ItemsAdded;
-
         /// <inheritdoc/>
         public event EventHandler<PropStoreEventArgs> ItemsRemoved;
 
@@ -67,6 +49,22 @@ namespace Zilon.Core.StaticObjectModules
         {
             IsOpened = true;
             DoSetIsOpened();
+        }
+
+        /// <inheritdoc/>
+        private void DoSetIsOpened()
+        {
+            Opened?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void Content_Removed(object sender, PropStoreEventArgs e)
+        {
+            ItemsRemoved?.Invoke(this, e);
+        }
+
+        private void Content_Added(object sender, PropStoreEventArgs e)
+        {
+            ItemsAdded?.Invoke(this, e);
         }
     }
 }

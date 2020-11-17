@@ -13,16 +13,6 @@ namespace Zilon.Core.MassSectorGenerator
         private const int MARGIN = 10;
         private const int AXIS_FONT_SIZE = 6;
 
-        public static Bitmap DrawMap(IMap map)
-        {
-            var hexNodes = map.Nodes.OfType<HexNode>()
-                              .ToArray();
-
-            var bitmap = DrawNodes(hexNodes);
-
-            return bitmap;
-        }
-
         public static Bitmap DrawNodes(IEnumerable<HexNode> nodes)
         {
             var info = GetImageInfo(nodes);
@@ -34,20 +24,11 @@ namespace Zilon.Core.MassSectorGenerator
             return bitmap;
         }
 
-        private static void Clear(Bitmap bitmap, Graphics graphics)
+        public static Bitmap DrawMap(IMap map)
         {
-            graphics.FillRectangle(Brushes.Black, 0, 0, bitmap.Width, bitmap.Height);
-        }
+            var hexNodes = map.Nodes.OfType<HexNode>().ToArray();
 
-        private static Bitmap CreateBitmap(ImageInfo info)
-        {
-            var xAxisDiff = info.RightCoord - info.LeftCoord;
-            var width = (xAxisDiff + 1) * CELLSIZE;
-            var yAxisDiff = info.TopCoord - info.BottomCoord;
-            var height = (yAxisDiff + 1) * CELLSIZE;
-
-            var twoSideMargin = MARGIN * 2;
-            var bitmap = new Bitmap(width + twoSideMargin, height + twoSideMargin);
+            var bitmap = DrawNodes(hexNodes);
 
             return bitmap;
         }
@@ -74,6 +55,11 @@ namespace Zilon.Core.MassSectorGenerator
             }
         }
 
+        private static void Clear(Bitmap bitmap, Graphics graphics)
+        {
+            graphics.FillRectangle(Brushes.Black, 0, 0, bitmap.Width, bitmap.Height);
+        }
+
         private static void DrawAxisNumbers(ImageInfo info, Graphics graphics)
         {
             using (var font = new Font(SystemFonts.DefaultFont.FontFamily, AXIS_FONT_SIZE, FontStyle.Regular))
@@ -91,7 +77,6 @@ namespace Zilon.Core.MassSectorGenerator
                 for (var i = 0; i <= height; i++)
                 {
                     var ratio = 3f / 4;
-
                     // Приводим к float, чтобы избежать переполнения при умножении int.
                     // Здесь от float мы всё равно не избавимся из-за ratio.
                     // https://lgtm.com/rules/1506096756023/
@@ -101,6 +86,19 @@ namespace Zilon.Core.MassSectorGenerator
             }
         }
 
+        private static Bitmap CreateBitmap(ImageInfo info)
+        {
+            var xAxisDiff = info.RightCoord - info.LeftCoord;
+            var width = (xAxisDiff + 1) * CELLSIZE;
+            var yAxisDiff = info.TopCoord - info.BottomCoord;
+            var height = (yAxisDiff + 1) * CELLSIZE;
+
+            var twoSideMargin = MARGIN * 2;
+            var bitmap = new Bitmap(width + twoSideMargin, height + twoSideMargin);
+
+            return bitmap;
+        }
+
         private static ImageInfo GetImageInfo(IEnumerable<HexNode> nodes)
         {
             var xAxisOrderedNode = nodes.OrderBy(x => x.OffsetCoords.X);
@@ -108,14 +106,11 @@ namespace Zilon.Core.MassSectorGenerator
 
             var info = new ImageInfo
             {
-                LeftCoord = xAxisOrderedNode.First()
-                                            .OffsetCoords.X,
-                RightCoord = xAxisOrderedNode.Last()
-                                             .OffsetCoords.X,
-                BottomCoord = yAxisOrderedNode.First()
-                                              .OffsetCoords.Y,
-                TopCoord = yAxisOrderedNode.Last()
-                                           .OffsetCoords.Y
+                LeftCoord = xAxisOrderedNode.First().OffsetCoords.X,
+                RightCoord = xAxisOrderedNode.Last().OffsetCoords.X,
+
+                BottomCoord = yAxisOrderedNode.First().OffsetCoords.Y,
+                TopCoord = yAxisOrderedNode.Last().OffsetCoords.Y
             };
 
             return info;
@@ -123,13 +118,10 @@ namespace Zilon.Core.MassSectorGenerator
 
         private sealed class ImageInfo
         {
-            public int BottomCoord { get; set; }
-
             public int LeftCoord { get; set; }
-
             public int RightCoord { get; set; }
-
             public int TopCoord { get; set; }
+            public int BottomCoord { get; set; }
         }
     }
 }

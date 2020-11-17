@@ -7,10 +7,9 @@
             TargetActor = targetActor ?? throw new System.ArgumentNullException(nameof(targetActor));
         }
 
-        public int FactToHitRoll { get; internal set; }
+        public IActor TargetActor { get; }
 
         public int SuccessToHitRoll { get; internal set; }
-
-        public IActor TargetActor { get; }
+        public int FactToHitRoll { get; internal set; }
     }
 }

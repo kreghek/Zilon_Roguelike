@@ -2,16 +2,12 @@
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
 {
+
     /// <summary>
     /// Базовая реализация маршрута патруллирования.
     /// </summary>
     public class PatrolRoute : IPatrolRoute
     {
-        public PatrolRoute(params IGraphNode[] points)
-        {
-            Points = points;
-        }
-
         /// <summary>
         /// Контрольные узлы патруллирования.
         /// </summary>
@@ -19,5 +15,10 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         /// Если монстр находится на маршруте патруллирования, то он будет обходить эти узлы.
         /// </remarks>
         public IGraphNode[] Points { get; }
+
+        public PatrolRoute(params IGraphNode[] points)
+        {
+            Points = points;
+        }
     }
 }

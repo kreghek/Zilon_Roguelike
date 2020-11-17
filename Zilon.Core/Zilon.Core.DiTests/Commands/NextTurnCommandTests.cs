@@ -32,8 +32,7 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should()
-                      .Be(true);
+            canExecute.Should().Be(true);
         }
 
         /// <summary>
@@ -44,8 +43,7 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<NextTurnCommand>();
-            var humanTaskSourceMock =
-                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
@@ -57,8 +55,7 @@ namespace Zilon.Core.Tests.Commands
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             var decisionSourceMock = new Mock<IDecisionSource>();
-            decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
-                              .Returns(1);
+            decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>())).Returns(1);
             var decisionSource = decisionSourceMock.Object;
 
             Container.AddSingleton(factory => decisionSource);

@@ -154,7 +154,7 @@ namespace Zilon.Core.Common
             var neighbours = HexHelper.GetNeighbors(testCoords.X, testCoords.Y);
             foreach (var neighbour in neighbours)
             {
-                if ((neighbour.X >= matrix.Width) || (neighbour.Y >= matrix.Height))
+                if (neighbour.X >= matrix.Width || neighbour.Y >= matrix.Height)
                 {
                     return false;
                 }
@@ -170,12 +170,12 @@ namespace Zilon.Core.Common
 
         private static bool IsInBounds(OffsetCoords coords, int width, int height)
         {
-            if (!ValueInRange(coords.X, 0, width - 1))
+            if (!ValueInRange(value: coords.X, min: 0, max: width - 1))
             {
                 return false;
             }
 
-            if (!ValueInRange(coords.Y, 0, height - 1))
+            if (!ValueInRange(value: coords.Y, min: 0, max: height - 1))
             {
                 return false;
             }
@@ -185,7 +185,7 @@ namespace Zilon.Core.Common
 
         private static bool ValueInRange(int value, int min, int max)
         {
-            return (min <= value) && (value <= max);
+            return min <= value && value <= max;
         }
     }
 }

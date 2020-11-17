@@ -24,46 +24,6 @@ namespace Zilon.Core.Tests.Commands
         private Mock<IInventoryState> _inventoryStateMock;
 
         /// <summary>
-        /// Тест проверяет, что нельзя экипировать ресурс.
-        /// </summary>
-        [Test]
-        public void CanExecute_SelectConsumableResource_ReturnsFalse()
-        {
-            // ARRANGE
-            var propScheme = new TestPropScheme
-            {
-                Use = new TestPropUseSubScheme
-                {
-                    Consumable = true,
-                    CommonRules = new[]
-                    {
-                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser,
-                            PersonRuleDirection.Positive)
-                    }
-                }
-            };
-            var resource = new Resource(propScheme, 10);
-
-            var equipmentViewModelMock = new Mock<IPropItemViewModel>();
-            equipmentViewModelMock.SetupGet(x => x.Prop)
-                                  .Returns(resource);
-            var equipmentViewModel = equipmentViewModelMock.Object;
-
-            _inventoryStateMock.SetupGet(x => x.SelectedProp)
-                               .Returns(equipmentViewModel);
-
-            var command = ServiceProvider.GetRequiredService<EquipCommand>();
-            command.SlotIndex = 0;
-
-            // ACT
-            var canExecute = command.CanExecute();
-
-            // ASSERT
-            canExecute.Should()
-                      .BeFalse();
-        }
-
-        /// <summary>
         /// Тест проверяет, что можно использовать экипировку.
         /// </summary>
         [Test]
@@ -77,8 +37,42 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should()
-                      .BeTrue();
+            canExecute.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что нельзя экипировать ресурс.
+        /// </summary>
+        [Test]
+        public void CanExecute_SelectConsumableResource_ReturnsFalse()
+        {
+            // ARRANGE
+            var propScheme = new TestPropScheme
+            {
+                Use = new TestPropUseSubScheme
+                {
+                    Consumable = true,
+                    CommonRules = new ConsumeCommonRule[] {
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser, PersonRuleDirection.Positive)
+                    }
+                }
+            };
+            var resource = new Resource(propScheme, 10);
+
+            var equipmentViewModelMock = new Mock<IPropItemViewModel>();
+            equipmentViewModelMock.SetupGet(x => x.Prop).Returns(resource);
+            var equipmentViewModel = equipmentViewModelMock.Object;
+
+            _inventoryStateMock.SetupGet(x => x.SelectedProp).Returns(equipmentViewModel);
+
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
+            command.SlotIndex = 0;
+
+            // ACT
+            var canExecute = command.CanExecute();
+
+            // ASSERT
+            canExecute.Should().BeFalse();
         }
 
         /// <summary>
@@ -91,8 +85,7 @@ namespace Zilon.Core.Tests.Commands
             var command = ServiceProvider.GetRequiredService<EquipCommand>();
             command.SlotIndex = 0;
 
-            var humanTaskSourceMock =
-                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
@@ -107,8 +100,7 @@ namespace Zilon.Core.Tests.Commands
             {
                 Equip = new TestPropEquipSubScheme
                 {
-                    SlotTypes = new[]
-                    {
+                    SlotTypes = new[] {
                         EquipmentSlotTypes.Hand
                     }
                 }
@@ -116,8 +108,7 @@ namespace Zilon.Core.Tests.Commands
             var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();
-            equipmentViewModelMock.SetupGet(x => x.Prop)
-                                  .Returns(equipment);
+            equipmentViewModelMock.SetupGet(x => x.Prop).Returns(equipment);
             var equipmentViewModel = equipmentViewModelMock.Object;
 
             _inventoryStateMock = new Mock<IInventoryState>();

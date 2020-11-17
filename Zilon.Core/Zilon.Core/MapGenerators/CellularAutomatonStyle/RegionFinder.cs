@@ -9,7 +9,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// <summary>
     /// Find isolated regions in matrix of bool.
     /// </summary>
-    internal static class RegionFinder
+    static class RegionFinder
     {
         /// <summary>
         /// Find all passable (true) regions.

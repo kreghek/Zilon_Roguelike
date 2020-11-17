@@ -28,8 +28,7 @@ namespace Zilon.Core.Tactics.Spatial.Tests
             var fact = map.TargetIsOnLine(startMap, targetMap);
 
             // ASSERT
-            fact.Should()
-                .BeTrue();
+            fact.Should().BeTrue();
         }
 
         /// <summary>
@@ -45,12 +44,12 @@ namespace Zilon.Core.Tactics.Spatial.Tests
             // ARRANGE
             var map = new SectorHexMap();
             MapFiller.FillSquareMap(map,
-                2);
+                mapSize: 2);
 
             MapFiller.FillSquareMap(map,
-                3,
-                0,
-                2);
+                startX: 3,
+                startY: 0,
+                mapSize: 2);
 
             var startMap = map.HexNodes.SelectBy(0, 0);
             var targetMap = map.HexNodes.SelectBy(4, 0);
@@ -59,8 +58,7 @@ namespace Zilon.Core.Tactics.Spatial.Tests
             var fact = map.TargetIsOnLine(startMap, targetMap);
 
             // ASSERT
-            fact.Should()
-                .BeFalse();
+            fact.Should().BeFalse();
         }
     }
 }

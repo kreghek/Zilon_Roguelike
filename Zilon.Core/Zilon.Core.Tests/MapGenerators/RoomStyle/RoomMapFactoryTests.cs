@@ -20,6 +20,28 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
     public class RoomMapFactoryTests
     {
         /// <summary>
+        /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
+        /// </summary>
+        [Test]
+        public void Create_SimpleSnakeMaze_NoExceptions()
+        {
+            var roomGenerator = new TestSnakeRoomGenerator();
+            var factory = new RoomMapFactory(roomGenerator);
+            var sectorScheme = CreateSectorScheme();
+
+            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
+
+            // ACT
+            Func<Task> act = async () =>
+            {
+                await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
+            };
+
+            // ARRANGE
+            act.Should().NotThrow();
+        }
+
+        /// <summary>
         /// Тест проверяет, что произвольная карта строится без ошибок. И за допустимое время.
         /// </summary>
         [Test]
@@ -44,13 +66,11 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             // ACT
             Func<Task> act = async () =>
             {
-                await factory.CreateAsync(sectorFactoryOptions)
-                             .ConfigureAwait(false);
+                await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
             };
 
             // ARRANGE
-            act.Should()
-               .NotThrow();
+            act.Should().NotThrow();
         }
 
         /// <summary>
@@ -71,42 +91,15 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
 
             // ACT
-            var map = await factory.CreateAsync(sectorFactoryOptions)
-                                   .ConfigureAwait(false);
+            var map = await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
 
             // ARRANGE
-            var hexNodes = map.Nodes.Cast<HexNode>()
-                              .ToArray();
+            var hexNodes = map.Nodes.Cast<HexNode>().ToArray();
             foreach (var node in hexNodes)
             {
-                var sameNode = hexNodes.Where(x => (x != node) && (x.OffsetCoords == node.OffsetCoords));
-                sameNode.Should()
-                        .BeEmpty();
+                var sameNode = hexNodes.Where(x => x != node && x.OffsetCoords == node.OffsetCoords);
+                sameNode.Should().BeEmpty();
             }
-        }
-
-        /// <summary>
-        /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
-        /// </summary>
-        [Test]
-        public void Create_SimpleSnakeMaze_NoExceptions()
-        {
-            var roomGenerator = new TestSnakeRoomGenerator();
-            var factory = new RoomMapFactory(roomGenerator);
-            var sectorScheme = CreateSectorScheme();
-
-            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
-
-            // ACT
-            Func<Task> act = async () =>
-            {
-                await factory.CreateAsync(sectorFactoryOptions)
-                             .ConfigureAwait(false);
-            };
-
-            // ARRANGE
-            act.Should()
-               .NotThrow();
         }
 
         private static ISectorSubScheme CreateSectorScheme()
@@ -116,7 +109,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
                 MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
                 {
                     RegionCount = 20,
-                    RegionSize = 20
+                    RegionSize = 20,
                 }
             };
         }

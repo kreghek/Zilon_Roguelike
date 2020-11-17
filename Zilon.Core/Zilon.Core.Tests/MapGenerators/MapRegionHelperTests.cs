@@ -17,6 +17,104 @@ namespace Zilon.Core.Tests.MapGenerators
     public class MapRegionHelperTests
     {
         /// <summary>
+        /// Тест проверяет, что узел, который является единственным выходом, не выбирается.
+        /// </summary>
+        [Test]
+        public void FindNonBlockedNode_RoomWithCorridor_ExitNotBlocked()
+        {
+            // ARRANGE
+            var map = new GraphMap();
+
+            // В этом тесте можно использовать более простые реализации IMapNode
+
+            // генерируем комнату
+            var node00 = new HexNode(0, 0);
+            map.AddNode(node00);
+            var node10 = new HexNode(1, 0);
+            map.AddNode(node10);
+
+            var node01 = new HexNode(0, 1);
+            map.AddNode(node01);
+            var node11 = new HexNode(1, 1);
+            map.AddNode(node11);
+
+            map.AddEdge(node00, node10);
+            map.AddEdge(node00, node01);
+
+            map.AddEdge(node11, node10);
+            map.AddEdge(node11, node01);
+
+            var regionNodes = new IGraphNode[] { node00, node01, node10, node11 };
+
+            // генерируем выход
+            var corridorNode = new HexNode(2, 0);
+            map.AddNode(corridorNode);
+            map.AddEdge(corridorNode, node10);
+
+
+
+            // ACT
+            var node = MapRegionHelper.FindNonBlockedNode(node10, map, regionNodes);
+
+
+            // ASSERT
+            node.Should().NotBe(node10);
+            node.Should().NotBe(corridorNode);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что при поиске узла корректный узел находится, даже если первым начинается
+        /// выбираться узел коридора.
+        /// </summary>
+        [Test]
+        public void FindNonBlockedNode_NextIsCorridorNode_NodeFound()
+        {
+            // ARRANGE
+            var mapMock = new Mock<GraphMap>().As<IMap>();
+            mapMock.CallBase = true;
+            var map = mapMock.Object;
+
+            // В этом тесте можно использовать более простые реализации IMapNode
+
+            // генерируем комнату
+            var node00 = new HexNode(0, 0);
+            map.AddNode(node00);
+            var node10 = new HexNode(1, 0);
+            map.AddNode(node10);
+
+            var node01 = new HexNode(0, 1);
+            map.AddNode(node01);
+            var node11 = new HexNode(1, 1);
+            map.AddNode(node11);
+
+            map.AddEdge(node00, node10);
+            map.AddEdge(node00, node01);
+
+            map.AddEdge(node11, node10);
+            map.AddEdge(node11, node01);
+
+            var regionNodes = new IGraphNode[] { node00, node01, node10, node11 };
+
+            // генерируем выход
+            var corridorNode = new HexNode(2, 0);
+            map.AddNode(corridorNode);
+            map.AddEdge(corridorNode, node10);
+
+            mapMock.Setup(x => x.GetNext(It.Is<IGraphNode>(n => n == node10)))
+                .Returns(new IGraphNode[] { corridorNode, node00, node11 });
+
+
+
+            // ACT
+            var node = MapRegionHelper.FindNonBlockedNode(node10, map, regionNodes);
+
+
+            // ASSERT
+            node.Should().NotBe(node10);
+            node.Should().NotBe(corridorNode);
+        }
+
+        /// <summary>
         /// Тест воспроизводит ошибку, возникующую в MoveCommandTest
         /// в коммите SHA-1: df2c306ddd744bcd32f9b8b47839838f9982fd85
         /// </summary>
@@ -57,145 +155,25 @@ namespace Zilon.Core.Tests.MapGenerators
 
             // эмулируем выборку сундуков в предыдущих итерациях
             var availableNodes = new List<IGraphNode>(region);
-            var rolled = new[]
-            {
-                114,
-                136,
-                0,
-                123,
-                179,
-                0,
-                111,
-                3
-            };
+            var rolled = new[] { 114, 136, 0, 123, 179, 0, 111, 3 };
             foreach (int rolledIndex in rolled)
             {
-                var rolledNode = availableNodes[rolledIndex]; // узел, который валил поиск.
+                var rolledNode = availableNodes[rolledIndex];  // узел, который валил поиск.
                 var selectedNode = MapRegionHelper.FindNonBlockedNode(rolledNode, hexMap, availableNodes);
 
                 availableNodes.Remove(selectedNode);
             }
 
+
+
             // ACT
-            var testedNode = availableNodes[0]; // узел, который валил поиск.
+            var testedNode = availableNodes[0];  // узел, который валил поиск.
             var factNode = MapRegionHelper.FindNonBlockedNode(testedNode, hexMap, availableNodes);
 
-            // ASSERT
-            factNode.Should()
-                    .NotBeNull();
-        }
 
-        /// <summary>
-        /// Тест проверяет, что при поиске узла корректный узел находится, даже если первым начинается
-        /// выбираться узел коридора.
-        /// </summary>
-        [Test]
-        public void FindNonBlockedNode_NextIsCorridorNode_NodeFound()
-        {
-            // ARRANGE
-            var mapMock = new Mock<GraphMap>().As<IMap>();
-            mapMock.CallBase = true;
-            var map = mapMock.Object;
-
-            // В этом тесте можно использовать более простые реализации IMapNode
-
-            // генерируем комнату
-            var node00 = new HexNode(0, 0);
-            map.AddNode(node00);
-            var node10 = new HexNode(1, 0);
-            map.AddNode(node10);
-
-            var node01 = new HexNode(0, 1);
-            map.AddNode(node01);
-            var node11 = new HexNode(1, 1);
-            map.AddNode(node11);
-
-            map.AddEdge(node00, node10);
-            map.AddEdge(node00, node01);
-
-            map.AddEdge(node11, node10);
-            map.AddEdge(node11, node01);
-
-            var regionNodes = new IGraphNode[]
-            {
-                node00,
-                node01,
-                node10,
-                node11
-            };
-
-            // генерируем выход
-            var corridorNode = new HexNode(2, 0);
-            map.AddNode(corridorNode);
-            map.AddEdge(corridorNode, node10);
-
-            mapMock.Setup(x => x.GetNext(It.Is<IGraphNode>(n => n == node10)))
-                   .Returns(new IGraphNode[]
-                   {
-                       corridorNode,
-                       node00,
-                       node11
-                   });
-
-            // ACT
-            var node = MapRegionHelper.FindNonBlockedNode(node10, map, regionNodes);
 
             // ASSERT
-            node.Should()
-                .NotBe(node10);
-            node.Should()
-                .NotBe(corridorNode);
-        }
-
-        /// <summary>
-        /// Тест проверяет, что узел, который является единственным выходом, не выбирается.
-        /// </summary>
-        [Test]
-        public void FindNonBlockedNode_RoomWithCorridor_ExitNotBlocked()
-        {
-            // ARRANGE
-            var map = new GraphMap();
-
-            // В этом тесте можно использовать более простые реализации IMapNode
-
-            // генерируем комнату
-            var node00 = new HexNode(0, 0);
-            map.AddNode(node00);
-            var node10 = new HexNode(1, 0);
-            map.AddNode(node10);
-
-            var node01 = new HexNode(0, 1);
-            map.AddNode(node01);
-            var node11 = new HexNode(1, 1);
-            map.AddNode(node11);
-
-            map.AddEdge(node00, node10);
-            map.AddEdge(node00, node01);
-
-            map.AddEdge(node11, node10);
-            map.AddEdge(node11, node01);
-
-            var regionNodes = new IGraphNode[]
-            {
-                node00,
-                node01,
-                node10,
-                node11
-            };
-
-            // генерируем выход
-            var corridorNode = new HexNode(2, 0);
-            map.AddNode(corridorNode);
-            map.AddEdge(corridorNode, node10);
-
-            // ACT
-            var node = MapRegionHelper.FindNonBlockedNode(node10, map, regionNodes);
-
-            // ASSERT
-            node.Should()
-                .NotBe(node10);
-            node.Should()
-                .NotBe(corridorNode);
+            factNode.Should().NotBeNull();
         }
     }
 }

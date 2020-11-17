@@ -6,7 +6,7 @@ namespace Zilon.Core.Common
     {
         public static CubeCoords ConvertToCube(int offsetX, int offsetY)
         {
-            var x = offsetX - ((offsetY - (offsetY & 1)) / 2);
+            var x = offsetX - (offsetY - (offsetY & 1)) / 2;
             var z = offsetY;
             var y = -x - z;
 
@@ -20,7 +20,7 @@ namespace Zilon.Core.Common
 
         public static OffsetCoords ConvertToOffset(CubeCoords cube)
         {
-            var col = cube.X + ((cube.Z - (cube.Z & 1)) / 2);
+            var col = cube.X + (cube.Z - (cube.Z & 1)) / 2;
             var row = cube.Z;
             return new OffsetCoords(col, row);
         }
@@ -28,10 +28,9 @@ namespace Zilon.Core.Common
         public static float[] ConvertToWorld(int offsetX, int offsetY)
         {
             var rowOffset = offsetY % 2 == 0 ? 0 : 0.5f;
-            return new[]
-            {
+            return new[] {
                 offsetX + rowOffset,
-                (offsetY * 3f) / 4
+                offsetY * 3f / 4
             };
         }
 
@@ -41,23 +40,18 @@ namespace Zilon.Core.Common
         }
 
         /// <summary>
-        /// Возвращает смещения диагоналей по часовой стрелке.
+        /// Возвращает смещения по часовой стрелке.
         /// </summary>
         /// <returns> Массив со смещениями. </returns>
         /// <remarks>
         /// Основано на статье https://www.redblobgames.com/grids/hexagons/.
         /// </remarks>
-        public static CubeCoords[] GetDiagonalOffsetClockwise()
+        public static CubeCoords[] GetOffsetClockwise()
         {
-            // Начинаем с верхнего левого.
             var offsets = new[]
             {
-                new CubeCoords(-1, +2, -1),
-                new CubeCoords(-2, +1, +1),
-                new CubeCoords(-1, -1, +2),
-                new CubeCoords(+1, -2, +1),
-                new CubeCoords(+2, -1, -1),
-                new CubeCoords(+1, +1, -2)
+                new CubeCoords(-1, +1, 0), new CubeCoords(-1, 0, +1), new CubeCoords(0, -1, +1),
+                new CubeCoords(+1, -1, 0),new CubeCoords(+1, 0, -1),new CubeCoords(0, +1, -1)
             };
 
             return offsets;
@@ -91,27 +85,23 @@ namespace Zilon.Core.Common
 
             var neighborCoords = GetNeighbors(baseCubeCoords);
 
-            return neighborCoords.Select(x => ConvertToOffset(x))
-                                 .ToArray();
+            return neighborCoords.Select(x => ConvertToOffset(x)).ToArray();
         }
 
         /// <summary>
-        /// Возвращает смещения по часовой стрелке.
+        /// Возвращает смещения диагоналей по часовой стрелке.
         /// </summary>
         /// <returns> Массив со смещениями. </returns>
         /// <remarks>
         /// Основано на статье https://www.redblobgames.com/grids/hexagons/.
         /// </remarks>
-        public static CubeCoords[] GetOffsetClockwise()
+        public static CubeCoords[] GetDiagonalOffsetClockwise()
         {
+            // Начинаем с верхнего левого.
             var offsets = new[]
             {
-                new CubeCoords(-1, +1, 0),
-                new CubeCoords(-1, 0, +1),
-                new CubeCoords(0, -1, +1),
-                new CubeCoords(+1, -1, 0),
-                new CubeCoords(+1, 0, -1),
-                new CubeCoords(0, +1, -1)
+                new CubeCoords(-1, +2, -1), new CubeCoords(-2, +1, +1), new CubeCoords(-1, -1, +2),
+                new CubeCoords(+1, -2, +1),new CubeCoords(+2, -1, -1),new CubeCoords(+1, +1, -2)
             };
 
             return offsets;

@@ -8,12 +8,6 @@ namespace Zilon.Core.Tactics.Behaviour
     public interface IActorTaskSource<TContext>
     {
         /// <summary>
-        /// Calle then task cancelled/ Example, when actor removed from sector.
-        /// </summary>
-        /// <param name="cencelledActorTask"></param>
-        void CancelTask(IActorTask cencelledActorTask);
-
-        /// <summary>
         /// Возвращает набор задач для указанного актёра.
         /// </summary>
         /// <param name="actor"> Актёр, для которого определяются задачи. </param>
@@ -27,8 +21,14 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </remarks>
         Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context);
 
+        void ProcessTaskExecuted(IActorTask actorTask);
+
         void ProcessTaskComplete(IActorTask actorTask);
 
-        void ProcessTaskExecuted(IActorTask actorTask);
+        /// <summary>
+        /// Calle then task cancelled/ Example, when actor removed from sector.
+        /// </summary>
+        /// <param name="cencelledActorTask"></param>
+        void CancelTask(IActorTask cencelledActorTask);
     }
 }

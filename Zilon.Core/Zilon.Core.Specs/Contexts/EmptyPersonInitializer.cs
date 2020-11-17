@@ -7,7 +7,7 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Specs.Contexts
 {
-    internal class EmptyPersonInitializer : IPersonInitializer
+    class EmptyPersonInitializer : IPersonInitializer
     {
         public Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe)
         {

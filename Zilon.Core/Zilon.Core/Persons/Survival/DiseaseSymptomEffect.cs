@@ -27,7 +27,7 @@ namespace Zilon.Core.Persons.Survival
             HoldDisease(disease);
         }
 
-        public IList<IDisease> Diseases => _diseases;
+        public IList<IDisease> Diseases { get => _diseases; }
 
         public DiseaseSymptom Symptom { get; }
 
@@ -52,10 +52,7 @@ namespace Zilon.Core.Persons.Survival
 
         public EffectRule[] GetRules()
         {
-            return new[]
-            {
-                new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser)
-            };
+            return new[] { new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser) };
         }
     }
 }

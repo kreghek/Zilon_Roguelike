@@ -11,11 +11,11 @@ namespace Zilon.Core.PersonModules
 {
     public class EquipmentModule : EquipmentModuleBase
     {
-        public EquipmentModule([NotNull] [ItemNotNull] IEnumerable<PersonSlotSubScheme> slots) : base(slots)
+        public override PersonSlotSubScheme[] Slots { get; protected set; }
+
+        public EquipmentModule([NotNull][ItemNotNull] IEnumerable<PersonSlotSubScheme> slots) : base(slots)
         {
         }
-
-        public override PersonSlotSubScheme[] Slots { get; protected set; }
 
         protected override void ValidateSetEquipment(Equipment equipment, int slotIndex)
         {
@@ -23,14 +23,12 @@ namespace Zilon.Core.PersonModules
 
             if (!EquipmentCarrierHelper.CheckSlotCompability(equipment, slot))
             {
-                throw new ArgumentException(
-                    $"Для экипировки указан слот {slot}, не подходящий для данного типа предмета {equipment}.");
+                throw new ArgumentException($"Для экипировки указан слот {slot}, не подходящий для данного типа предмета {equipment}.");
             }
 
             if (!EquipmentCarrierHelper.CheckDualCompability(this, equipment, slotIndex))
             {
-                throw new InvalidOperationException(
-                    $"Попытка экипировать предмет {equipment}, несовместимый с текущий экипировкой.");
+                throw new InvalidOperationException($"Попытка экипировать предмет {equipment}, несовместимый с текущий экипировкой.");
             }
 
             if (!EquipmentCarrierHelper.CheckShieldCompability(this, equipment, slotIndex))

@@ -32,15 +32,13 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет получение задачи актёра после указания намерения.
         /// </summary>
         [Test]
-
         // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
         [Timeout(1000)]
         public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask()
         {
             // ARRANGE
 
-            var map = await SquareMapFactory.CreateAsync(10)
-                                            .ConfigureAwait(false);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var actorNode = map.Nodes.SelectByHexCoords(0, 0);
 
@@ -49,8 +47,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var taskMock = new Mock<IActorTask>();
             var task = taskMock.Object;
             var intentionMock = new Mock<IIntention>();
-            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>()))
-                         .Returns(task);
+            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
             var intention = intentionMock.Object;
 
             var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
@@ -61,28 +58,24 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // ACT
 
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
-            await taskSource.IntentAsync(intention, actor)
-                            .ConfigureAwait(false);
+            await taskSource.IntentAsync(intention, actor).ConfigureAwait(false);
             var factActorTask = await getActorTaskTask.ConfigureAwait(false);
 
             // ASSERT
-            factActorTask.Should()
-                         .Be(task);
+            factActorTask.Should().Be(task);
         }
 
         /// <summary>
         /// Тест проверяет получение задачи актёра после указания намерения.
         /// </summary>
         [Test]
-
         // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
         //[Timeout(1000)]
         public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask2()
         {
             // ARRANGE
 
-            var map = await SquareMapFactory.CreateAsync(10)
-                                            .ConfigureAwait(false);
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
 
             var actorNode = map.Nodes.SelectByHexCoords(0, 0);
 
@@ -91,8 +84,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var taskMock = new Mock<IActorTask>();
             var task = taskMock.Object;
             var intentionMock = new Mock<IIntention>();
-            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>()))
-                         .Returns(task);
+            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
             var intention = intentionMock.Object;
 
             var contextMock = new Mock<ISectorTaskSourceContext>();
@@ -102,14 +94,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             // ACT
 
-            await taskSource.IntentAsync(intention, actor)
-                            .ConfigureAwait(false);
+            await taskSource.IntentAsync(intention, actor).ConfigureAwait(false);
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
             var factActorTask = await getActorTaskTask.ConfigureAwait(false);
 
             // ASSERT
-            factActorTask.Should()
-                         .Be(task);
+            factActorTask.Should().Be(task);
         }
 
         /*
@@ -373,8 +363,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var player = playerMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.SetupGet(x => x.PhysicalSize)
-                      .Returns(PhysicalSizePattern.Size1);
+            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
             var person = personMock.Object;
 
             var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();

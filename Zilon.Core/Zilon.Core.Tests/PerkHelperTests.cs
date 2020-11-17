@@ -21,14 +21,19 @@ namespace Zilon.Core.Tests
             const int expectedLevel = 1;
             const int expectedSubLevel = 2;
 
+
+
+
             // ACT
-            var factPerkSchemeLevel = PerkHelper.ConvertTotalLevel(_perkScheme, testedTotalLevel);
+            PerkHelper.ConvertTotalLevel(_perkScheme, testedTotalLevel,
+                out int? factLevel,
+                out int? factSubLevel);
+
+
 
             // ASSERT
-            factPerkSchemeLevel.Level.Should()
-                               .Be(expectedLevel);
-            factPerkSchemeLevel.SubLevel.Should()
-                               .Be(expectedSubLevel);
+            factLevel.Should().Be(expectedLevel);
+            factSubLevel.Should().Be(expectedSubLevel);
         }
 
         [Test]
@@ -39,14 +44,19 @@ namespace Zilon.Core.Tests
             const int expectedLevel = 2;
             const int expectedSubLevel = 1;
 
+
+
+
             // ACT
-            var factPerkSchemeLevel = PerkHelper.ConvertTotalLevel(_perkScheme, testedTotalLevel);
+            PerkHelper.ConvertTotalLevel(_perkScheme, testedTotalLevel,
+                out int? factLevel,
+                out int? factSubLevel);
+
+
 
             // ASSERT
-            factPerkSchemeLevel.Level.Should()
-                               .Be(expectedLevel);
-            factPerkSchemeLevel.SubLevel.Should()
-                               .Be(expectedSubLevel);
+            factLevel.Should().Be(expectedLevel);
+            factSubLevel.Should().Be(expectedSubLevel);
         }
 
         [SetUp]
@@ -54,18 +64,17 @@ namespace Zilon.Core.Tests
         {
             _perkScheme = new TestPerkScheme
             {
-                Levels = new[]
-                {
-                    new PerkLevelSubScheme
+                Levels = new[] {
+                    new PerkLevelSubScheme()
                     {
                         MaxValue = 5
                     },
-                    new PerkLevelSubScheme
-                    {
+                     new PerkLevelSubScheme()
+                     {
                         MaxValue = 2
                     },
-                    new PerkLevelSubScheme
-                    {
+                      new PerkLevelSubScheme()
+                      {
                         MaxValue = 3
                     }
                 }

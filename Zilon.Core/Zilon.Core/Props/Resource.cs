@@ -9,6 +9,8 @@ namespace Zilon.Core.Props
     {
         private int _count;
 
+        public event EventHandler<EventArgs> Changed;
+
         [ExcludeFromCodeCoverage]
         public Resource(IPropScheme scheme, int count) : base(scheme)
         {
@@ -38,6 +40,12 @@ namespace Zilon.Core.Props
             }
         }
 
+        [ExcludeFromCodeCoverage]
+        private void DoChange()
+        {
+            Changed?.Invoke(this, new EventArgs());
+        }
+
         /// <summary>
         /// Разделяет текущий сток ресурсов и формирует новый экземпляр с указанным количеством.
         /// </summary>
@@ -55,13 +63,5 @@ namespace Zilon.Core.Props
         {
             return $"{Scheme} x {Count}";
         }
-
-        [ExcludeFromCodeCoverage]
-        private void DoChange()
-        {
-            Changed?.Invoke(this, new EventArgs());
-        }
-
-        public event EventHandler<EventArgs> Changed;
     }
 }

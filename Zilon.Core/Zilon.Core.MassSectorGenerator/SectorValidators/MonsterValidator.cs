@@ -13,7 +13,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
         "CA1812:Avoid uninstantiated internal classes",
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
-    internal class MonsterValidator : ISectorValidator
+    class MonsterValidator : ISectorValidator
     {
         public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {

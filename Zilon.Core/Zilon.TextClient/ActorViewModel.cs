@@ -3,10 +3,9 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.TextClient
 {
-    internal class ActorViewModel : IActorViewModel
+    class ActorViewModel : IActorViewModel
     {
         public IActor Actor { get; set; }
-
-        public object Item => Actor;
+        public object Item { get => Actor; }
     }
 }

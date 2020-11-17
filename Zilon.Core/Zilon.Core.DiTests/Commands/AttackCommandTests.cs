@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using FluentAssertions;
 
@@ -34,8 +33,7 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should()
-                      .Be(true);
+            canExecute.Should().Be(true);
         }
 
         /// <summary>
@@ -46,8 +44,7 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<AttackCommand>();
-            var humanTaskSourceMock =
-                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
             var playerState = ServiceProvider.GetRequiredService<ISectorUiState>();
 
             // ACT
@@ -61,22 +58,28 @@ namespace Zilon.Core.Tests.Commands
             ), It.IsAny<IActor>()));
         }
 
+        private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
+        {
+            var attackIntention = (Intention<AttackTask>)intention;
+            var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
+            return attackTask.Target == target;
+        }
+
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             if (testMap is null)
             {
-                throw new ArgumentNullException(nameof(testMap));
+                throw new System.ArgumentNullException(nameof(testMap));
             }
 
             if (playerStateMock is null)
             {
-                throw new ArgumentNullException(nameof(playerStateMock));
+                throw new System.ArgumentNullException(nameof(playerStateMock));
             }
 
             var targetMock = new Mock<IActor>();
             var targetNode = testMap.Nodes.SelectByHexCoords(2, 0);
-            targetMock.SetupGet(x => x.Node)
-                      .Returns(targetNode);
+            targetMock.SetupGet(x => x.Node).Returns(targetNode);
             var target = targetMock.Object;
 
             var targetVmMock = new Mock<IActorViewModel>();
@@ -85,13 +88,6 @@ namespace Zilon.Core.Tests.Commands
             playerStateMock.SetupProperty(x => x.SelectedViewModel, targetVm);
 
             Container.AddSingleton<AttackCommand>();
-        }
-
-        private static bool CheckAttackIntention(IIntention intention, ISectorUiState playerState, IActor target)
-        {
-            var attackIntention = (Intention<AttackTask>)intention;
-            var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
-            return attackTask.Target == target;
         }
     }
 }

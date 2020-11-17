@@ -7,9 +7,7 @@ namespace Zilon.Core.Schemes
     public sealed class PersonRule
     {
         [JsonConstructor]
-        public PersonRule(
-            EquipCommonRuleType type,
-            PersonRuleLevel level,
+        public PersonRule(EquipCommonRuleType type, PersonRuleLevel level,
             PersonRuleDirection direction = PersonRuleDirection.Positive)
         {
             Type = type;
@@ -17,10 +15,8 @@ namespace Zilon.Core.Schemes
             Direction = direction;
         }
 
-        public PersonRuleDirection Direction { get; }
-
-        public PersonRuleLevel Level { get; }
-
         public EquipCommonRuleType Type { get; }
+        public PersonRuleLevel Level { get; }
+        public PersonRuleDirection Direction { get; }
     }
 }

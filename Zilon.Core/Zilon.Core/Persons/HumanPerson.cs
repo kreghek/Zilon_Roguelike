@@ -13,13 +13,6 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class HumanPerson : PersonBase
     {
-        public HumanPerson([NotNull] IPersonScheme scheme, IFraction fraction) : base(fraction)
-        {
-            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
-
-            Name = scheme.Sid;
-        }
-
         /// <inheritdoc/>
         public override int Id { get; set; }
 
@@ -31,12 +24,19 @@ namespace Zilon.Core.Persons
         /// </summary>
         public ILocalizedString PersonEquipmentTemplate { get; set; }
 
-        public override PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
+        /// <inheritdoc/>
+        public IPersonScheme Scheme { get; }
 
         public IPlayerEventLogService PlayerEventLogService { get; set; }
 
-        /// <inheritdoc/>
-        public IPersonScheme Scheme { get; }
+        public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
+
+        public HumanPerson([NotNull] IPersonScheme scheme, IFraction fraction) : base(fraction)
+        {
+            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
+
+            Name = scheme.Sid;
+        }
 
         /// <inheritdoc/>
         public override string ToString()

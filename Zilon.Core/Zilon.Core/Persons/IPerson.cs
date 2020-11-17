@@ -10,18 +10,9 @@ namespace Zilon.Core.Persons
     /// </remarks>
     public interface IPerson
     {
-        IFraction Fraction { get; }
-
         int Id { get; set; }
 
-        PhysicalSizePattern PhysicalSize { get; }
-
-        /// <summary>
-        /// Добавление модуля статического объекта.
-        /// </summary>
-        /// <typeparam name="TPersonModule">Тип модуля.</typeparam>
-        /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
-        void AddModule<TPersonModule>(TPersonModule sectorObjectModule) where TPersonModule : IPersonModule;
+        PhysicalSize PhysicalSize { get; }
 
         /// <summary>
         /// Получение модуля статического объекта.
@@ -31,9 +22,18 @@ namespace Zilon.Core.Persons
         TPersonModule GetModule<TPersonModule>(string key) where TPersonModule : IPersonModule;
 
         /// <summary>
+        /// Добавление модуля статического объекта.
+        /// </summary>
+        /// <typeparam name="TPersonModule">Тип модуля.</typeparam>
+        /// <param name="sectorObjectModule">Объект модуля, который нужно добавить к объекту.</param>
+        void AddModule<TPersonModule>(TPersonModule sectorObjectModule) where TPersonModule : IPersonModule;
+
+        /// <summary>
         /// Проверка наличия модуля статического объекта.
         /// </summary>
         /// <returns>Возвращает true, если модуль указанного типа есть у объекта. Иначе, false.</returns>
         bool HasModule(string key);
+
+        IFraction Fraction { get; }
     }
 }

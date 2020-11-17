@@ -10,14 +10,13 @@ namespace Zilon.Core.StaticObjectModules
     /// </summary>
     public class DropTableLoot : ChestBase, ILootContainer
     {
+        public override bool IsMapBlock => false;
+
         [ExcludeFromCodeCoverage]
-        public DropTableLoot(
-            IDropTableScheme[] dropTables,
+        public DropTableLoot(IDropTableScheme[] dropTables,
             IDropResolver dropResolver) : base(new DropTableChestStore(dropTables, dropResolver))
         {
             Purpose = PropContainerPurpose.Loot;
         }
-
-        public override bool IsMapBlock => false;
     }
 }

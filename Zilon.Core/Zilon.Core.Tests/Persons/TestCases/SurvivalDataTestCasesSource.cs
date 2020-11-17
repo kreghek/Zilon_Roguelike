@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Zilon.Core.Tests.Persons.TestCases
 {
-    internal static class SurvivalDataTestCasesSource
+    static class SurvivalDataTestCasesSource
     {
         public static IEnumerable DownPassTestCases
         {

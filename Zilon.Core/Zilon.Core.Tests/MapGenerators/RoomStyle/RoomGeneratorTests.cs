@@ -20,59 +20,6 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
     public class RoomGeneratorTests
     {
         /// <summary>
-        /// Тест проверяет, что если в схеме сектора обозначены переходы,
-        /// то они генерируются в комнате.
-        /// </summary>
-        [Test]
-        public void GenerateRoomsInGrid_Transitions()
-        {
-            // ARRANGE
-            var sectorNodeMock = new Mock<ISectorNode>();
-            var sectorNode = sectorNodeMock.Object;
-            var transition = new RoomTransition(sectorNode);
-            var availableTransitions = new[]
-            {
-                transition
-            };
-
-            var randomMock = new Mock<IRoomGeneratorRandomSource>();
-            randomMock.Setup(x => x.RollRoomMatrixPositions(It.IsAny<int>(), It.IsAny<int>()))
-                      .Returns(new[]
-                      {
-                          new OffsetCoords(0, 0)
-                      });
-            randomMock.Setup(x => x.RollTransitions(It.IsAny<IEnumerable<RoomTransition>>()))
-                      .Returns(new[]
-                      {
-                          transition
-                      });
-            randomMock.Setup(x => x.RollRoomSize(It.IsAny<int>(), It.IsAny<int>(), It.IsIn<int>(1)))
-                      .Returns<int, int, int>((min, max, count) =>
-                      {
-                          return new[]
-                          {
-                              new Size(0, 0)
-                          };
-                      });
-            var random = randomMock.Object;
-
-            var generator = new RoomGenerator(random);
-
-            var expectedTransitions = new[]
-            {
-                transition
-            };
-
-            // ACT
-            var factRooms = generator.GenerateRoomsInGrid(1, 1, 1, availableTransitions);
-
-            // ASSERT
-            factRooms.ElementAt(0)
-                     .Transitions.Should()
-                     .BeEquivalentTo(expectedTransitions);
-        }
-
-        /// <summary>
         /// Тест проверяет, что генератор корректно отрабатывает с источником рандома, выбрасывающим лучшие случаи (см бенчи).
         /// </summary>
         [Test]
@@ -94,8 +41,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             };
 
             // ASSERT
-            act.Should()
-               .NotThrow();
+            act.Should().NotThrow();
         }
 
         /// <summary>
@@ -120,8 +66,40 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             };
 
             // ASSERT
-            act.Should()
-               .NotThrow();
+            act.Should().NotThrow();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что если в схеме сектора обозначены переходы,
+        /// то они генерируются в комнате.
+        /// </summary>
+        [Test]
+        public void GenerateRoomsInGrid_Transitions()
+        {
+            // ARRANGE
+            var sectorNodeMock = new Mock<ISectorNode>();
+            var sectorNode = sectorNodeMock.Object;
+            var transition = new RoomTransition(sectorNode);
+            var availableTransitions = new[] { transition };
+
+            var randomMock = new Mock<IRoomGeneratorRandomSource>();
+            randomMock.Setup(x => x.RollRoomMatrixPositions(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(new[] { new OffsetCoords(0, 0) });
+            randomMock.Setup(x => x.RollTransitions(It.IsAny<IEnumerable<RoomTransition>>()))
+                .Returns(new[] { transition });
+            randomMock.Setup(x => x.RollRoomSize(It.IsAny<int>(), It.IsAny<int>(), It.IsIn<int>(1)))
+                .Returns<int, int, int>((min, max, count) => { return new[] { new Size(0, 0) }; });
+            var random = randomMock.Object;
+
+            var generator = new RoomGenerator(random);
+
+            var expectedTransitions = new[] { transition };
+
+            // ACT
+            var factRooms = generator.GenerateRoomsInGrid(1, 1, 1, availableTransitions);
+
+            // ASSERT
+            factRooms.ElementAt(0).Transitions.Should().BeEquivalentTo(expectedTransitions);
         }
     }
 }

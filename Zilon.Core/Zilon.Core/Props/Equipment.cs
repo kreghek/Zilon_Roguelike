@@ -29,8 +29,7 @@ namespace Zilon.Core.Props
         /// Выбрасывает, если на вход подана схема,
         /// не содержащая характеристики экипировки <see cref="P:Zilon.Core.Schemes.PropScheme.Equip" />.
         /// </exception>
-        public Equipment(
-            IPropScheme propScheme,
+        public Equipment(IPropScheme propScheme,
             IEnumerable<ITacticalActScheme> acts) :
             base(propScheme)
         {
@@ -60,8 +59,7 @@ namespace Zilon.Core.Props
         {
         }
 
-        public Equipment(
-            IPropScheme propScheme,
+        public Equipment(IPropScheme propScheme,
             IEnumerable<ITacticalActScheme> acts,
             [NotNull] string name) :
             this(propScheme, acts)

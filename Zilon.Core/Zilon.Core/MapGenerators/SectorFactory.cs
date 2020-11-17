@@ -11,11 +11,10 @@ namespace Zilon.Core.MapGenerators
     public class SectorFactory : ISectorFactory
     {
         private readonly IDropResolver _dropResolver;
-        private readonly IEquipmentDurableService _equipmentDurableService;
         private readonly ISchemeService _schemeService;
+        private readonly IEquipmentDurableService _equipmentDurableService;
 
-        public SectorFactory(
-            IDropResolver dropResolver,
+        public SectorFactory(IDropResolver dropResolver,
             ISchemeService schemeService,
             IEquipmentDurableService equipmentDurableService)
         {
@@ -24,9 +23,9 @@ namespace Zilon.Core.MapGenerators
             _equipmentDurableService = equipmentDurableService;
         }
 
-        public NationalUnityEventService NationalUnityEventService { get; set; }
-
         public IScoreManager ScoreManager { get; set; }
+
+        public NationalUnityEventService NationalUnityEventService { get; set; }
 
         public ISector Create(ISectorMap map, ILocationScheme locationScheme)
         {

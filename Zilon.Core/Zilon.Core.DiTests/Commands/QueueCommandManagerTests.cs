@@ -18,10 +18,10 @@ namespace Zilon.Core.Tests.Commands
         /// 3. Команды должны быть такими, какими их поместили в порядке очереди.
         /// </summary>
         [Test]
-        public void Pop_FakeCommands2_AllCommandsExtracted()
+        public void Pop_GetOneCommand_AllCommandsExtracted()
         {
             // ARRANGE
-            var commands = GetTwoCommands();
+            var commands = GetOneCommand();
 
             var commandManager = new QueueCommandManager();
             foreach (var command in commands)
@@ -39,10 +39,10 @@ namespace Zilon.Core.Tests.Commands
         /// 3. Команды должны быть такими, какими их поместили в порядке очереди.
         /// </summary>
         [Test]
-        public void Pop_GetOneCommand_AllCommandsExtracted()
+        public void Pop_FakeCommands2_AllCommandsExtracted()
         {
             // ARRANGE
-            var commands = GetOneCommand();
+            var commands = GetTwoCommands();
 
             var commandManager = new QueueCommandManager();
             foreach (var command in commands)
@@ -52,6 +52,17 @@ namespace Zilon.Core.Tests.Commands
 
             // ACT
             AssertPopCommands(commands, commandManager);
+        }
+
+        private static void AssertPopCommands(ICommand[] commands, QueueCommandManager commandManager)
+        {
+            foreach (var expectedCommand in commands)
+            {
+                var factCommand = commandManager.Pop();
+
+                // ASSERT
+                factCommand.Should().Be(expectedCommand);
+            }
         }
 
         /// <summary>
@@ -82,46 +93,27 @@ namespace Zilon.Core.Tests.Commands
             var factCommand2 = commandManager.Pop();
 
             // ASSERT
-            factCommand1.Should()
-                        .Be(command1);
-            idleCommand.Should()
-                       .BeNull();
-            factCommand2.Should()
-                        .Be(command2);
+            factCommand1.Should().Be(command1);
+            idleCommand.Should().BeNull();
+            factCommand2.Should().Be(command2);
         }
 
-        private static void AssertPopCommands(ICommand[] commands, QueueCommandManager commandManager)
+        private static ICommand[] GetOneCommand()
         {
-            foreach (var expectedCommand in commands)
-            {
-                var factCommand = commandManager.Pop();
+            return new[] { CreateFakeCommand() };
+        }
 
-                // ASSERT
-                factCommand.Should()
-                           .Be(expectedCommand);
-            }
+        private static ICommand[] GetTwoCommands()
+        {
+            return new[] {
+                CreateFakeCommand(),
+                CreateFakeCommand()
+            };
         }
 
         private static ICommand CreateFakeCommand()
         {
             return new Mock<ICommand>().Object;
-        }
-
-        private static ICommand[] GetOneCommand()
-        {
-            return new[]
-            {
-                CreateFakeCommand()
-            };
-        }
-
-        private static ICommand[] GetTwoCommands()
-        {
-            return new[]
-            {
-                CreateFakeCommand(),
-                CreateFakeCommand()
-            };
         }
     }
 }

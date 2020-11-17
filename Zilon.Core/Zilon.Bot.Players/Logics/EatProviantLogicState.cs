@@ -12,10 +12,7 @@ namespace Zilon.Bot.Players.Logics
 {
     public class EatProviantLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(
-            IActor actor,
-            ISectorTaskSourceContext context,
-            ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
@@ -48,22 +45,16 @@ namespace Zilon.Bot.Players.Logics
             // Внутреннего состояния нет.
         }
 
-        private UsePropTask CheckHazard(
-            IActor actor,
-            ISectorTaskSourceContext context,
-            SurvivalStatType hazardType,
-            ConsumeCommonRuleType resourceType)
+        private UsePropTask CheckHazard(IActor actor, ISectorTaskSourceContext context, SurvivalStatType hazardType, ConsumeCommonRuleType resourceType)
         {
-            var hazardEffect = actor.Person.GetModule<IEffectsModule>()
-                                    .Items.OfType<SurvivalStatHazardEffect>()
-                                    .SingleOrDefault(x => x.Type == hazardType);
+            var hazardEffect = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>()
+                .SingleOrDefault(x => x.Type == hazardType);
             if (hazardEffect == null)
             {
                 return null;
             }
 
-            var props = actor.Person.GetModule<IInventoryModule>()
-                             .CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
             var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 resourceType);

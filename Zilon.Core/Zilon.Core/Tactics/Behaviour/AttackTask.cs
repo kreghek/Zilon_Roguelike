@@ -12,23 +12,9 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly ITacticalActUsageService _actService;
 
-        public AttackTask(
-            IActor actor,
-            IActorTaskContext context,
-            IAttackTarget target,
-            ITacticalAct tacticalAct,
-            ITacticalActUsageService actService) :
-            base(actor, context)
-        {
-            _actService = actService;
-
-            Target = target;
-            TacticalAct = tacticalAct;
-        }
+        public IAttackTarget Target { get; }
 
         public ITacticalAct TacticalAct { get; }
-
-        public IAttackTarget Target { get; }
 
         protected override void ExecuteTask()
         {
@@ -50,26 +36,33 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var availableSlotAct = GetUsedActs();
-            var usedActs = new UsedTacticalActs(new[]
-            {
-                TacticalAct
-            }, availableSlotAct.Skip(1));
+            var usedActs = new UsedTacticalActs(new[] { TacticalAct }, availableSlotAct.Skip(1));
             _actService.UseOn(Actor, Target, usedActs, Context.Sector);
+        }
+
+        public AttackTask(IActor actor,
+            IActorTaskContext context,
+            IAttackTarget target,
+            ITacticalAct tacticalAct,
+            ITacticalActUsageService actService) :
+            base(actor, context)
+        {
+            _actService = actService;
+
+            Target = target;
+            TacticalAct = tacticalAct;
         }
 
         private IEnumerable<ITacticalAct> GetUsedActs()
         {
             if (Actor.Person.GetModuleSafe<IEquipmentModule>() == null)
             {
-                yield return Actor.Person.GetModule<ICombatActModule>()
-                                  .CalcCombatActs()
-                                  .First();
+                yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
             }
             else
             {
                 var usedEquipmentActs = false;
-                var slots = Actor.Person.GetModule<IEquipmentModule>()
-                                 .Slots;
+                var slots = Actor.Person.GetModule<IEquipmentModule>().Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
                     var slotEquipment = Actor.Person.GetModule<IEquipmentModule>()[i];
@@ -78,16 +71,14 @@ namespace Zilon.Core.Tactics.Behaviour
                         continue;
                     }
 
-                    if ((slots[i]
-                        .Types & EquipmentSlotTypes.Hand) == 0)
+                    if ((slots[i].Types & EquipmentSlotTypes.Hand) == 0)
                     {
                         continue;
                     }
 
-                    var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>()
-                                                         .CalcCombatActs()
-                        where act.Equipment == slotEquipment
-                        select act;
+                    var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
+                                        where act.Equipment == slotEquipment
+                                        select act;
 
                     var usedAct = equipmentActs.FirstOrDefault();
 
@@ -101,9 +92,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (!usedEquipmentActs)
                 {
-                    yield return Actor.Person.GetModule<ICombatActModule>()
-                                      .CalcCombatActs()
-                                      .First();
+                    yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
                 }
             }
         }

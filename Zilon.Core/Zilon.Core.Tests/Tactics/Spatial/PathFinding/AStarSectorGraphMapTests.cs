@@ -21,16 +21,6 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
     [Parallelizable(ParallelScope.All)]
     public class AStarSectorGraphMapTests
     {
-        public static void AddWall(
-            ISectorMap map,
-            int x1,
-            int y1,
-            int x2,
-            int y2)
-        {
-            map.RemoveEdge(x1, y1, x2, y2);
-        }
-
         /// <summary>
         /// Тест из спеки:
         /// Перемещение актёра по узла каждый ход. На карте есть монстры и источник команд для них.
@@ -53,10 +43,7 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             {
                 IsStart = true,
                 IsOut = true,
-                ExitNodes = new[]
-                {
-                    map.Nodes.Last()
-                }
+                ExitNodes = new[] { map.Nodes.Last() }
             };
 
             map.Regions.Add(mapRegion);
@@ -72,9 +59,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             var contextMock = new Mock<IAstarContext>();
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
-                       .Returns<IGraphNode>(x => map.GetNext(x));
+                .Returns<IGraphNode>(x => map.GetNext(x));
             contextMock.Setup(x => x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                       .Returns<IGraphNode, IGraphNode>((a, b) => map.DistanceBetween(a, b));
+                .Returns<IGraphNode, IGraphNode>((a, b) => map.DistanceBetween(a, b));
             var context = contextMock.Object;
 
             // ACT
@@ -83,8 +70,12 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             // ASSERT
 
-            path.Should()
-                .NotBeEmpty();
+            path.Should().NotBeEmpty();
+        }
+
+        public static void AddWall(ISectorMap map, int x1, int y1, int x2, int y2)
+        {
+            map.RemoveEdge(x1, y1, x2, y2);
         }
     }
 }

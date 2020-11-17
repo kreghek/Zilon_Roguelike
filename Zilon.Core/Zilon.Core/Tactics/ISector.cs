@@ -15,35 +15,6 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public interface ISector
     {
-        IActorManager ActorManager { get; }
-
-        /// <summary>
-        /// Текущие болезни в секторе.
-        /// </summary>
-        /// <remarks>
-        /// Если в секторе есть болезни, то один из монстров будет инфицирован этой болезнью.
-        /// </remarks>
-        IEnumerable<IDisease> Diseases { get; }
-
-        /// <summary>
-        /// Карта в основе сектора.
-        /// </summary>
-        ISectorMap Map { get; }
-
-        /// <summary>
-        /// Маршруты патрулирования в секторе.
-        /// </summary>
-        Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
-
-        ILocationScheme Scheme { get; set; }
-
-        /// <summary>Менеджер работы с очками.</summary>
-        IScoreManager ScoreManager { get; set; }
-
-        IStaticObjectManager StaticObjectManager { get; }
-
-        void AddDisease(IDisease disease);
-
         /// <summary>
         /// Обновление состояние сектора.
         /// </summary>
@@ -55,15 +26,44 @@ namespace Zilon.Core.Tactics
         void Update();
 
         /// <summary>
+        /// Событие выстреливает, когда группа актёров игрока покинула сектор.
+        /// </summary>
+        event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
+
+        /// <summary>
+        /// Карта в основе сектора.
+        /// </summary>
+        ISectorMap Map { get; }
+
+        /// <summary>
+        /// Маршруты патрулирования в секторе.
+        /// </summary>
+        Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
+
+        /// <summary>Менеджер работы с очками.</summary>
+        IScoreManager ScoreManager { get; set; }
+
+        ILocationScheme Scheme { get; set; }
+
+        /// <summary>
         /// Вызывает актёр, когда хочет переёти из одного сектора в другой.
         /// </summary>
         /// <param name="actor"> Актёр, применивший переход. </param>
         /// <param name="transition"> переход, который бы задействован. </param>
         void UseTransition(IActor actor, RoomTransition transition);
 
+        IActorManager ActorManager { get; }
+
+        IStaticObjectManager StaticObjectManager { get; }
+
         /// <summary>
-        /// Событие выстреливает, когда группа актёров игрока покинула сектор.
+        /// Текущие болезни в секторе.
         /// </summary>
-        event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
+        /// <remarks>
+        /// Если в секторе есть болезни, то один из монстров будет инфицирован этой болезнью.
+        /// </remarks>
+        IEnumerable<IDisease> Diseases { get; }
+
+        void AddDisease(IDisease disease);
     }
 }

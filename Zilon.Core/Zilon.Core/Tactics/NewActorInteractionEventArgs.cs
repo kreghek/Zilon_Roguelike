@@ -6,8 +6,7 @@ namespace Zilon.Core.Tactics
     {
         public NewActorInteractionEventArgs(IActorInteractionEvent actorInteractionEvent)
         {
-            ActorInteractionEvent =
-                actorInteractionEvent ?? throw new ArgumentNullException(nameof(actorInteractionEvent));
+            ActorInteractionEvent = actorInteractionEvent ?? throw new ArgumentNullException(nameof(actorInteractionEvent));
         }
 
         public IActorInteractionEvent ActorInteractionEvent { get; }

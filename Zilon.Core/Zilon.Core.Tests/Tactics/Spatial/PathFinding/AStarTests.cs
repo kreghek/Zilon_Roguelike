@@ -21,127 +21,6 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
     public class AStarTests
     {
         /// <summary>
-        /// Тест проверяет корректность обхода соседей при выборе пути.
-        /// Обход соседей должен начинаться с левого и идти по часовой стрелке.
-        /// </summary>
-        [Test]
-        public async Task Run_CheckNeighborBypass_ExpectedPath()
-        {
-            // ARRAGE
-            var map = await CreateGridOpenMapAsync()
-                .ConfigureAwait(false);
-
-            var expectedPath = new IGraphNode[]
-            {
-                map.Nodes.SelectByHexCoords(1, 1),
-                map.Nodes.SelectByHexCoords(2, 2),
-                map.Nodes.SelectByHexCoords(2, 3),
-                map.Nodes.SelectByHexCoords(3, 3),
-                map.Nodes.SelectByHexCoords(4, 3),
-                map.Nodes.SelectByHexCoords(5, 3)
-            };
-
-            var context = CreatePathFindingContext(map);
-
-            var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
-
-            // ACT
-            var factState = astar.Run();
-
-            // ASSERT
-
-            factState.Should()
-                     .Be(State.GoalFound);
-
-            var factPath = astar.GetPath();
-            factPath.Should()
-                    .BeEquivalentTo(expectedPath);
-        }
-
-        /// <summary>
-        /// Тест проверяет корректность алгоритма в сетке шестиугольников.
-        /// Точки расположены так, что есть прямой путь.
-        /// </summary>
-        [Test]
-        public async Task Run_GridGraphAndLinePath_PathFound()
-        {
-            // ARRAGE
-            var map = await CreateGridOpenMapAsync()
-                .ConfigureAwait(false);
-
-            var expectedPath = new IGraphNode[]
-            {
-                map.Nodes.SelectByHexCoords(1, 1),
-                map.Nodes.SelectByHexCoords(2, 2),
-                map.Nodes.SelectByHexCoords(2, 3),
-                map.Nodes.SelectByHexCoords(3, 4),
-                map.Nodes.SelectByHexCoords(3, 5),
-                map.Nodes.SelectByHexCoords(4, 6)
-            };
-
-            var context = CreatePathFindingContext(map);
-
-            var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
-
-            // ACT
-            var factState = astar.Run();
-
-            // ASSERT
-
-            factState.Should()
-                     .Be(State.GoalFound);
-
-            var factPath = astar.GetPath();
-            factPath.Should()
-                    .BeEquivalentTo(expectedPath);
-        }
-
-        /// <summary>
-        /// Тест проверяет, что в карте шестиугольников выполняется корректный поиск пути
-        /// с учётом припятсвий.
-        /// </summary>
-        [Test]
-        [Category("integrational")]
-        public void Run_HexMapWithObstacle_FoundExpectedPath()
-        {
-            var hexMap = new HexMap(10);
-            hexMap.AddNode(new HexNode(0, 0));
-
-            // Узел 1, 0 отсутствует, т.к. занят препятсвием.
-            hexMap.AddNode(new HexNode(2, 0));
-
-            hexMap.AddNode(new HexNode(0, 1));
-            hexMap.AddNode(new HexNode(1, 1));
-            hexMap.AddNode(new HexNode(2, 1));
-
-            var context = CreatePathFindingContext(hexMap);
-
-            var startNode = hexMap.Nodes.SelectByHexCoords(0, 0);
-            var finishNode = hexMap.Nodes.SelectByHexCoords(2, 0);
-
-            var expectedPath = new[]
-            {
-                hexMap.Nodes.SelectByHexCoords(0, 0),
-                hexMap.Nodes.SelectByHexCoords(0, 1),
-                hexMap.Nodes.SelectByHexCoords(1, 1),
-                hexMap.Nodes.SelectByHexCoords(2, 0)
-            };
-
-            var astar = new AStar(context, startNode, finishNode);
-
-            // ACT
-            var factState = astar.Run();
-
-            // ASSERT
-            factState.Should()
-                     .Be(State.GoalFound);
-
-            var factPath = astar.GetPath();
-            factPath.Should()
-                    .BeEquivalentTo(expectedPath);
-        }
-
-        /// <summary>
         /// Тест проверяет корректность алгоритма в сетке шестиугольников.
         /// </summary>
         [Test]
@@ -174,22 +53,120 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
 
             // ASSERT
 
-            factState.Should()
-                     .Be(State.GoalFound);
+            factState.Should().Be(State.GoalFound);
 
             var factPath = astar.GetPath();
-            factPath.Should()
-                    .BeEquivalentTo(expectedPath);
+            factPath.Should().BeEquivalentTo(expectedPath);
         }
 
         /// <summary>
-        /// Создаёт открытую карту без препятствий.
+        /// Тест проверяет корректность алгоритма в сетке шестиугольников.
+        /// Точки расположены так, что есть прямой путь.
         /// </summary>
-        /// <returns></returns>
-        private static async Task<IMap> CreateGridOpenMapAsync()
+        [Test]
+        public async Task Run_GridGraphAndLinePath_PathFound()
         {
-            return await SquareMapFactory.CreateAsync(10)
-                                         .ConfigureAwait(false);
+            // ARRAGE
+            var map = await CreateGridOpenMapAsync().ConfigureAwait(false);
+
+            var expectedPath = new IGraphNode[] {
+                map.Nodes.SelectByHexCoords(1,1),
+                map.Nodes.SelectByHexCoords(2,2),
+                map.Nodes.SelectByHexCoords(2,3),
+                map.Nodes.SelectByHexCoords(3,4),
+                map.Nodes.SelectByHexCoords(3,5),
+                map.Nodes.SelectByHexCoords(4,6)
+            };
+
+            var context = CreatePathFindingContext(map);
+
+            var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
+
+            // ACT
+            var factState = astar.Run();
+
+            // ASSERT
+
+            factState.Should().Be(State.GoalFound);
+
+            var factPath = astar.GetPath();
+            factPath.Should().BeEquivalentTo(expectedPath);
+        }
+
+        /// <summary>
+        /// Тест проверяет корректность обхода соседей при выборе пути.
+        /// Обход соседей должен начинаться с левого и идти по часовой стрелке.
+        /// </summary>
+        [Test]
+        public async Task Run_CheckNeighborBypass_ExpectedPath()
+        {
+            // ARRAGE
+            var map = await CreateGridOpenMapAsync().ConfigureAwait(false);
+
+            var expectedPath = new IGraphNode[] {
+                map.Nodes.SelectByHexCoords(1, 1),
+                map.Nodes.SelectByHexCoords(2, 2),
+                map.Nodes.SelectByHexCoords(2, 3),
+                map.Nodes.SelectByHexCoords(3, 3),
+                map.Nodes.SelectByHexCoords(4, 3),
+                map.Nodes.SelectByHexCoords(5, 3),
+            };
+
+
+            var context = CreatePathFindingContext(map);
+
+            var astar = new AStar(context, expectedPath.First(), expectedPath.Last());
+
+            // ACT
+            var factState = astar.Run();
+
+            // ASSERT
+
+            factState.Should().Be(State.GoalFound);
+
+            var factPath = astar.GetPath();
+            factPath.Should().BeEquivalentTo(expectedPath);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что в карте шестиугольников выполняется корректный поиск пути
+        /// с учётом припятсвий.
+        /// </summary>
+        [Test]
+        [Category("integrational")]
+        public void Run_HexMapWithObstacle_FoundExpectedPath()
+        {
+            var hexMap = new HexMap(10);
+            hexMap.AddNode(new HexNode(0, 0));
+            // Узел 1, 0 отсутствует, т.к. занят препятсвием.
+            hexMap.AddNode(new HexNode(2, 0));
+
+            hexMap.AddNode(new HexNode(0, 1));
+            hexMap.AddNode(new HexNode(1, 1));
+            hexMap.AddNode(new HexNode(2, 1));
+
+            var context = CreatePathFindingContext(hexMap);
+
+            var startNode = hexMap.Nodes.SelectByHexCoords(0, 0);
+            var finishNode = hexMap.Nodes.SelectByHexCoords(2, 0);
+
+            var expectedPath = new[] {
+                hexMap.Nodes.SelectByHexCoords(0, 0),
+                hexMap.Nodes.SelectByHexCoords(0, 1),
+                hexMap.Nodes.SelectByHexCoords(1, 1),
+                hexMap.Nodes.SelectByHexCoords(2, 0)
+            };
+
+            var astar = new AStar(context, startNode, finishNode);
+
+            // ACT
+            var factState = astar.Run();
+
+            // ASSERT
+            factState.Should().Be(State.GoalFound);
+
+            var factPath = astar.GetPath();
+            factPath.Should().BeEquivalentTo(expectedPath);
         }
 
         private static IAstarContext CreatePathFindingContext(ISpatialGraph graph)
@@ -197,9 +174,9 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             var contextMock = new Mock<IAstarContext>();
             var context = contextMock.Object;
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
-                       .Returns<IGraphNode>(node => graph.GetNext(node));
+                .Returns<IGraphNode>(node => graph.GetNext(node));
             contextMock.Setup(x => x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                       .Returns<IGraphNode, IGraphNode>((current, target) => graph.DistanceBetween(current, target));
+                .Returns<IGraphNode, IGraphNode>((current, target) => graph.DistanceBetween(current, target));
 
             return context;
         }
@@ -209,12 +186,20 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             var contextMock = new Mock<IAstarContext>();
             var context = contextMock.Object;
             contextMock.Setup(x => x.GetNext(It.IsAny<IGraphNode>()))
-                       .Returns<IGraphNode>(node => hexMap.GetNext(node)
-                                                          .Cast<HexNode>());
+                .Returns<IGraphNode>(node => hexMap.GetNext(node).Cast<HexNode>());
             contextMock.Setup(x => x.GetDistanceBetween(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))
-                       .Returns<IGraphNode, IGraphNode>((current, target) => hexMap.DistanceBetween(current, target));
+                .Returns<IGraphNode, IGraphNode>((current, target) => hexMap.DistanceBetween(current, target));
 
             return context;
+        }
+
+        /// <summary>
+        /// Создаёт открытую карту без препятствий.
+        /// </summary>
+        /// <returns></returns>
+        private static async Task<IMap> CreateGridOpenMapAsync()
+        {
+            return await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
         }
     }
 }

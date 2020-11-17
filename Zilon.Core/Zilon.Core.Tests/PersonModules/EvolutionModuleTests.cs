@@ -1,6 +1,4 @@
-﻿using System;
-
-using FluentAssertions;
+﻿using FluentAssertions;
 
 using Moq;
 
@@ -24,20 +22,16 @@ namespace Zilon.Core.Tests.PersonModules
             // ARRANGE
             var schemeServiceMock = new Mock<ISchemeService>();
             schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>())
-                             .Returns(new IPerkScheme[]
-                             {
-                                 new PerkScheme
-                                 {
-                                     Levels = new[]
-                                     {
-                                         new PerkLevelSubScheme
-                                         {
-                                             MaxValue = 2,
-                                             Jobs = Array.Empty<IJobSubScheme>()
-                                         }
-                                     }
-                                 }
-                             });
+                .Returns(new IPerkScheme[] {
+                    new PerkScheme{
+                        Levels = new[]{
+                            new PerkLevelSubScheme{
+                                MaxValue = 2,
+                                Jobs = System.Array.Empty<IJobSubScheme>()
+                            }
+                        }
+                    }
+                });
             var schemeService = schemeServiceMock.Object;
 
             var evolutionData = new EvolutionModule(schemeService);
@@ -50,11 +44,8 @@ namespace Zilon.Core.Tests.PersonModules
             evolutionData.PerkLevelUp(perk);
 
             // ASSERT
-            evolutionData.Perks.Length.Should()
-                         .Be(1);
-            evolutionData.Perks[0]
-                         .CurrentLevel.Sub.Should()
-                         .Be(1);
+            evolutionData.Perks.Length.Should().Be(1);
+            evolutionData.Perks[0].CurrentLevel.Sub.Should().Be(1);
         }
     }
 }

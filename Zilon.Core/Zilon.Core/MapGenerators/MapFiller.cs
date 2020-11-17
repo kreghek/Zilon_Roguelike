@@ -21,8 +21,7 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        public static void FillSquareMap(
-            IMap map,
+        public static void FillSquareMap(IMap map,
             int startX,
             int startY,
             int mapSize)
@@ -45,8 +44,7 @@ namespace Zilon.Core.MapGenerators
             foreach (var node in map.Nodes)
             {
                 var currentNode = (HexNode)node;
-                var nodes = map.Nodes.Cast<HexNode>()
-                               .ToArray();
+                var nodes = map.Nodes.Cast<HexNode>().ToArray();
                 var neighbors = HexNodeHelper.GetSpatialNeighbors(currentNode, nodes);
 
                 foreach (var neighbor in neighbors)
@@ -60,8 +58,7 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private static void CreateNodes(
-            IMap map,
+        private static void CreateNodes(IMap map,
             int startX,
             int startY,
             int mapSize)

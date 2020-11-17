@@ -10,8 +10,7 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly PropTransfer[] _transfers;
 
-        public TransferPropsTask(
-            IActor actor,
+        public TransferPropsTask(IActor actor,
             IActorTaskContext context,
             IEnumerable<PropTransfer> transfers) :
             base(actor, context)
@@ -37,6 +36,10 @@ namespace Zilon.Core.Tactics.Behaviour
                     if (transfer.PropStore.Has(prop))
                     {
                         propStore.Remove(prop);
+                    }
+                    else
+                    {
+                        // Значит кто-то уже взял предмет, пока выполнялась задача.
                     }
                 }
             }

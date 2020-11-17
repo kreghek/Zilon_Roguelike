@@ -10,8 +10,7 @@ namespace Zilon.Tournament.ApiGate.BotManagement
         // The spec says 70 characters is a reasonable limit.
         public static string GetBoundary(MediaTypeHeaderValue contentType, int lengthLimit)
         {
-            var boundary = HeaderUtilities.RemoveQuotes(contentType.Boundary)
-                                          .ToString();
+            var boundary = HeaderUtilities.RemoveQuotes(contentType.Boundary).ToString();
             if (string.IsNullOrWhiteSpace(boundary))
             {
                 throw new InvalidDataException("Missing content-type boundary.");
@@ -26,26 +25,26 @@ namespace Zilon.Tournament.ApiGate.BotManagement
             return boundary;
         }
 
-        public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
+        public static bool IsMultipartContentType(string contentType)
         {
-            return (contentDisposition != null)
-                   && contentDisposition.DispositionType.Equals("form-data")
-                   && (!string.IsNullOrEmpty(contentDisposition.FileName.ToString())
-                       || !string.IsNullOrEmpty(contentDisposition.FileNameStar.ToString()));
+            return !string.IsNullOrEmpty(contentType)
+                   && contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         public static bool HasFormDataContentDisposition(ContentDispositionHeaderValue contentDisposition)
         {
-            return (contentDisposition != null)
+            return contentDisposition != null
                    && contentDisposition.DispositionType.Equals("form-data")
                    && string.IsNullOrEmpty(contentDisposition.FileName.ToString())
                    && string.IsNullOrEmpty(contentDisposition.FileNameStar.ToString());
         }
 
-        public static bool IsMultipartContentType(string contentType)
+        public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
         {
-            return !string.IsNullOrEmpty(contentType)
-                   && (contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0);
+            return contentDisposition != null
+                   && contentDisposition.DispositionType.Equals("form-data")
+                   && (!string.IsNullOrEmpty(contentDisposition.FileName.ToString())
+                       || !string.IsNullOrEmpty(contentDisposition.FileNameStar.ToString()));
         }
     }
 }

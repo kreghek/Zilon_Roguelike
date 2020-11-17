@@ -27,8 +27,7 @@ namespace Zilon.Bot.Players.NetCore.DependencyInjectionExtensions
         private static IEnumerable<Type> GetTypes<TInterface>()
         {
             var logicTypes = typeof(ILogicState).Assembly.GetTypes()
-                                                .Where(x => !x.IsAbstract && !x.IsInterface &&
-                                                            typeof(TInterface).IsAssignableFrom(x));
+                .Where(x => !x.IsAbstract && !x.IsInterface && typeof(TInterface).IsAssignableFrom(x));
             return logicTypes;
         }
     }

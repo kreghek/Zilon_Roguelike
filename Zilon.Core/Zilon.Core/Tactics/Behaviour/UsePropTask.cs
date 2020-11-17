@@ -10,8 +10,7 @@ namespace Zilon.Core.Tactics.Behaviour
     public sealed class UsePropTask : OneTurnActorTaskBase
     {
         [ExcludeFromCodeCoverage]
-        public UsePropTask(
-            IActor actor,
+        public UsePropTask(IActor actor,
             IActorTaskContext context,
             IProp usedProp) : base(actor, context)
         {

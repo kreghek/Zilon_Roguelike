@@ -15,10 +15,7 @@ namespace Zilon.Core.Common
             switch (input)
             {
                 case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
-                default:
-                    return input.First()
-                                .ToString()
-                                .ToUpper(invariantCulture) + input.Substring(1);
+                default: return input.First().ToString().ToUpper(invariantCulture) + input.Substring(1);
             }
         }
     }

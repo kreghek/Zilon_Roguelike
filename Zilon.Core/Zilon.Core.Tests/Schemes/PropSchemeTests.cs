@@ -39,19 +39,17 @@ namespace Zilon.Core.Tests.Schemes
 }
 ";
 
+
+
             // ACT
             var factPropScheme = JsonConvert.DeserializeObject<PropScheme>(sourceText);
 
+
+
             // ASSERT
-            factPropScheme.Equip.Armors[0]
-                          .Impact.Should()
-                          .Be(ImpactType.Kinetic);
-            factPropScheme.Equip.Armors[0]
-                          .AbsorbtionLevel.Should()
-                          .Be(PersonRuleLevel.Normal);
-            factPropScheme.Equip.Armors[0]
-                          .ArmorRank.Should()
-                          .Be(5);
+            factPropScheme.Equip.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
+            factPropScheme.Equip.Armors[0].AbsorbtionLevel.Should().Be(PersonRuleLevel.Normal);
+            factPropScheme.Equip.Armors[0].ArmorRank.Should().Be(5);
         }
 
         /// <summary>
@@ -76,14 +74,16 @@ namespace Zilon.Core.Tests.Schemes
 }
 ";
 
+
+
             // ACT
             var factPropScheme = JsonConvert.DeserializeObject<PropScheme>(sourceText);
 
+
+
             // ASSERT
-            factPropScheme.Tags.Should()
-                          .BeEquivalentTo("weapon", "ranged");
-            factPropScheme.Equip.Should()
-                          .NotBeNull();
+            factPropScheme.Tags.Should().BeEquivalentTo("weapon", "ranged");
+            factPropScheme.Equip.Should().NotBeNull();
         }
     }
 }

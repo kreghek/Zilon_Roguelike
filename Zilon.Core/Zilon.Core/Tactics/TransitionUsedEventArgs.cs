@@ -13,7 +13,6 @@ namespace Zilon.Core.Tactics
         }
 
         public IActor Actor { get; }
-
         public RoomTransition Transition { get; }
     }
 }

@@ -29,7 +29,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// <summary>
         /// Координаты, которые входя в черновик региона.
         /// </summary>
-        public IEnumerable<OffsetCoords> Coords => _coords;
+        public IEnumerable<OffsetCoords> Coords { get => _coords; }
 
         public bool Contains(OffsetCoords coords)
         {

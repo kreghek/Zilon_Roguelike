@@ -21,6 +21,11 @@ namespace Zilon.Core.Commands
         private readonly IPlayer _player;
 
         /// <summary>
+        /// Текущий путь, по которому будет перемещаться персонаж.
+        /// </summary>
+        public IList<IGraphNode> Path { get; }
+
+        /// <summary>
         /// Конструктор на создание команды перемещения.
         /// </summary>
         /// <param name="gameLoop"> Игровой цикл.
@@ -46,128 +51,6 @@ namespace Zilon.Core.Commands
             Path = new List<IGraphNode>();
 
             _player = player ?? throw new ArgumentNullException(nameof(player));
-        }
-
-        /// <summary>
-        /// Текущий путь, по которому будет перемещаться персонаж.
-        /// </summary>
-        public IList<IGraphNode> Path { get; }
-
-        /// <summary>
-        /// Выполнение команды на перемещение и обновление игрового цикла.
-        /// </summary>
-        protected override void ExecuteTacticCommand()
-        {
-            var selectedNodeVm = GetSelectedNodeViewModel();
-            if (selectedNodeVm == null)
-            {
-                throw new InvalidOperationException(
-                    "Невозможно выполнить команду на перемещение, если не указан целевой узел.");
-            }
-
-            CreatePath(selectedNodeVm);
-
-            var targetNode = selectedNodeVm.Node;
-
-            var currentSector = _player.SectorNode.Sector;
-
-            var moveIntetion = new MoveIntention(targetNode, currentSector);
-            PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
-        }
-
-        private bool CanExecuteForSelected()
-        {
-            var nodeViewModel = GetSelectedNodeViewModel();
-            if (nodeViewModel is null)
-            {
-                return false;
-            }
-
-            if (PlayerState.ActiveActor?.Actor is null)
-            {
-                return false;
-            }
-
-            //test
-
-            CreatePath(nodeViewModel);
-            return Path.Any();
-        }
-
-        private bool CheckEnemies()
-        {
-            var actor = PlayerState.ActiveActor.Actor;
-            var enemies = _player.SectorNode.Sector.ActorManager.Items
-                                 .Where(x => (x != actor) && (x.Person.Fraction != actor.Person.Fraction))
-                                 .ToArray();
-
-            foreach (var enemyActor in enemies)
-            {
-                var distance = ((HexNode)actor.Node).CubeCoords.DistanceTo(((HexNode)enemyActor.Node).CubeCoords);
-
-                if (distance > 5)
-                {
-                    continue;
-                }
-
-                var isAvailable = _player.SectorNode.Sector.Map.TargetIsOnLine(
-                    actor.Node,
-                    enemyActor.Node);
-
-                if (isAvailable)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private void CreatePath(IMapNodeViewModel targetNode)
-        {
-            var actor = PlayerState.ActiveActor.Actor;
-            var startNode = actor.Node;
-            var finishNode = targetNode.Node;
-            var map = _player.SectorNode.Sector.Map;
-
-            Path.Clear();
-
-            if (!map.IsPositionAvailableFor(finishNode, actor))
-            {
-                return;
-            }
-
-            var context = new ActorPathFindingContext(actor, map, finishNode);
-
-            var astar = new AStar(context, startNode, finishNode);
-            var resultState = astar.Run();
-            if (resultState != State.GoalFound)
-            {
-                return;
-            }
-
-            RememberFoundPath(astar);
-        }
-
-        private IMapNodeViewModel GetHoverNodeViewModel()
-        {
-            return PlayerState.HoverViewModel as IMapNodeViewModel;
-        }
-
-        private IMapNodeViewModel GetSelectedNodeViewModel()
-        {
-            return PlayerState.SelectedViewModel as IMapNodeViewModel;
-        }
-
-        private void RememberFoundPath(AStar astar)
-        {
-            var foundPath = astar.GetPath()
-                                 .Skip(1)
-                                 .ToArray();
-            foreach (var pathNode in foundPath)
-            {
-                Path.Add(pathNode);
-            }
         }
 
         /// <summary>
@@ -199,6 +82,119 @@ namespace Zilon.Core.Commands
         {
             var canRepeat = CanExecuteForSelected() && CheckEnemies();
             return canRepeat;
+        }
+
+        /// <summary>
+        /// Выполнение команды на перемещение и обновление игрового цикла.
+        /// </summary>
+        protected override void ExecuteTacticCommand()
+        {
+            var selectedNodeVm = GetSelectedNodeViewModel();
+            if (selectedNodeVm == null)
+            {
+                throw new InvalidOperationException("Невозможно выполнить команду на перемещение, если не указан целевой узел.");
+            }
+
+            CreatePath(selectedNodeVm);
+
+            var targetNode = selectedNodeVm.Node;
+
+            var currentSector = _player.SectorNode.Sector;
+
+            var moveIntetion = new MoveIntention(targetNode, currentSector);
+            PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
+        }
+
+        private IMapNodeViewModel GetHoverNodeViewModel()
+        {
+            return PlayerState.HoverViewModel as IMapNodeViewModel;
+        }
+
+        private IMapNodeViewModel GetSelectedNodeViewModel()
+        {
+            return PlayerState.SelectedViewModel as IMapNodeViewModel;
+        }
+
+        private bool CanExecuteForSelected()
+        {
+            var nodeViewModel = GetSelectedNodeViewModel();
+            if (nodeViewModel is null)
+            {
+                return false;
+            }
+
+            if (PlayerState.ActiveActor?.Actor is null)
+            {
+                return false;
+            }
+
+            //test
+
+            CreatePath(nodeViewModel);
+            return Path.Any();
+        }
+
+        private void CreatePath(IMapNodeViewModel targetNode)
+        {
+            var actor = PlayerState.ActiveActor.Actor;
+            var startNode = actor.Node;
+            var finishNode = targetNode.Node;
+            var map = _player.SectorNode.Sector.Map;
+
+            Path.Clear();
+
+            if (!map.IsPositionAvailableFor(finishNode, actor))
+            {
+                return;
+            }
+
+            var context = new ActorPathFindingContext(actor, map, finishNode);
+
+            var astar = new AStar(context, startNode, finishNode);
+            var resultState = astar.Run();
+            if (resultState != State.GoalFound)
+            {
+                return;
+            }
+
+            RememberFoundPath(astar);
+        }
+
+        private void RememberFoundPath(AStar astar)
+        {
+            var foundPath = astar.GetPath().Skip(1).ToArray();
+            foreach (var pathNode in foundPath)
+            {
+                Path.Add(pathNode);
+            }
+        }
+
+        private bool CheckEnemies()
+        {
+            var actor = PlayerState.ActiveActor.Actor;
+            var enemies = _player.SectorNode.Sector.ActorManager.Items
+                .Where(x => x != actor && x.Person.Fraction != actor.Person.Fraction).ToArray();
+
+            foreach (var enemyActor in enemies)
+            {
+                var distance = ((HexNode)actor.Node).CubeCoords.DistanceTo(((HexNode)enemyActor.Node).CubeCoords);
+
+                if (distance > 5)
+                {
+                    continue;
+                }
+
+                var isAvailable = _player.SectorNode.Sector.Map.TargetIsOnLine(
+                    actor.Node,
+                    enemyActor.Node);
+
+                if (isAvailable)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

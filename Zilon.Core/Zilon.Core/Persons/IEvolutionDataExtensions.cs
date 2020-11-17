@@ -29,7 +29,7 @@ namespace Zilon.Core.Persons
                 throw new ArgumentNullException(nameof(evolutionModule));
             }
 
-            var archievedPerks = evolutionModule.Perks?.Where(x => (x.CurrentLevel != null) || x.Scheme.IsBuildIn);
+            var archievedPerks = evolutionModule.Perks?.Where(x => x.CurrentLevel != null || x.Scheme.IsBuildIn);
             if (archievedPerks == null)
             {
                 archievedPerks = Array.Empty<IPerk>();

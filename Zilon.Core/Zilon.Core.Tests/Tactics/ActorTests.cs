@@ -2,7 +2,6 @@
 
 using NUnit.Framework;
 
-using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -27,10 +26,8 @@ namespace Zilon.Core.Tactics.Tests
             var survivalModule = survivalModuleMock.Object;
 
             var personMock = new Mock<IPerson>();
-            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>()))
-                      .Returns(survivalModule);
-            personMock.Setup(x => x.HasModule(It.IsAny<string>()))
-                      .Returns(true);
+            personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalModule);
+            personMock.Setup(x => x.HasModule(It.IsAny<string>())).Returns(true);
             var person = personMock.Object;
 
             var node = new Mock<IGraphNode>().Object;
@@ -44,12 +41,11 @@ namespace Zilon.Core.Tactics.Tests
             {
                 Use = new TestPropUseSubScheme
                 {
-                    CommonRules = new[]
-                    {
+                    CommonRules = new[] {
                         new ConsumeCommonRule(
                             ConsumeCommonRuleType.Intoxication,
-                            PersonRuleLevel.Lesser,
-                            PersonRuleDirection.Negative)
+                            Components.PersonRuleLevel.Lesser,
+                            Components.PersonRuleDirection.Negative)
                     }
                 }
             };
@@ -59,9 +55,8 @@ namespace Zilon.Core.Tactics.Tests
             actor.UseProp(testResource);
 
             // ASSERT
-            survivalModuleMock.Verify(x =>
-                x.DecreaseStat(It.Is<SurvivalStatType>(v => v == SurvivalStatType.Intoxication),
-                    It.IsAny<int>()));
+            survivalModuleMock.Verify(x => x.DecreaseStat(It.Is<SurvivalStatType>(v => v == SurvivalStatType.Intoxication),
+                It.IsAny<int>()));
         }
     }
 }

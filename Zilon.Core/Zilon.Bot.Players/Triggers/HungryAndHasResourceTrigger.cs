@@ -16,11 +16,7 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния.
         }
 
-        public bool Test(
-            IActor actor,
-            ISectorTaskSourceContext context,
-            ILogicState currentState,
-            ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
@@ -34,7 +30,7 @@ namespace Zilon.Bot.Players.Triggers
             }
 
             var hazardEffect = effectsModule.Items.OfType<SurvivalStatHazardEffect>()
-                                            .SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
+                .SingleOrDefault(x => x.Type == SurvivalStatType.Satiety);
             if (hazardEffect == null)
             {
                 return false;
@@ -42,8 +38,7 @@ namespace Zilon.Bot.Players.Triggers
 
             //
 
-            var props = actor.Person.GetModule<IInventoryModule>()
-                             .CalcActualItems();
+            var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
             var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
                 ConsumeCommonRuleType.Satiety);

@@ -27,7 +27,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var decisionSourceMock = new Mock<IDecisionSource>();
             decisionSourceMock.Setup(x => x.SelectIdleDuration(It.IsAny<int>(), It.IsAny<int>()))
-                              .Returns(1);
+                .Returns(1);
             var decisionSource = decisionSourceMock.Object;
 
             var contextMock = new Mock<IActorTaskContext>();
@@ -39,8 +39,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             task.Execute();
 
             // ASSERT
-            task.IsComplete.Should()
-                .Be(true);
+            task.IsComplete.Should().Be(true);
         }
     }
 }

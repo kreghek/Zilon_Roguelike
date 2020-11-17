@@ -23,16 +23,13 @@ namespace Zilon.Core.Persons.Tests
             var dice = diceMock.Object;
 
             var schemeServiceMock = new Mock<ISchemeService>();
-            var perkSchemeList = new IPerkScheme[]
-            {
-                new TestPerkScheme
-                {
-                    Sid = "test",
-                    IsBuildIn = true
-                }
-            };
-            schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>())
-                             .Returns(perkSchemeList);
+            var perkSchemeList = new IPerkScheme[] {
+                    new TestPerkScheme{
+                        Sid = "test",
+                        IsBuildIn = true
+                    }
+                };
+            schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>()).Returns(perkSchemeList);
             var schemeService = schemeServiceMock.Object;
 
             var perkInitializator = new PersonPerkInitializator(dice, schemeService);
@@ -43,11 +40,8 @@ namespace Zilon.Core.Persons.Tests
 
             // ASSERT
 
-            factPerks.Should()
-                     .HaveCount(1);
-            factPerks[0]
-                .Scheme.Should()
-                .Be(perkSchemeList[0]);
+            factPerks.Should().HaveCount(1);
+            factPerks[0].Scheme.Should().Be(perkSchemeList[0]);
         }
     }
 }

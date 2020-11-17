@@ -10,6 +10,7 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests.Persons
 {
+
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
     public class EquipmentTests
@@ -29,6 +30,7 @@ namespace Zilon.Core.Tests.Persons
 
             var acts = new TacticalActScheme[0];
 
+
             // ACT
             Action act = () =>
             {
@@ -36,9 +38,10 @@ namespace Zilon.Core.Tests.Persons
                 var equipment = new Equipment(scheme, acts);
             };
 
+
+
             // ASSERT
-            act.Should()
-               .Throw<ArgumentException>();
+            act.Should().Throw<ArgumentException>();
         }
     }
 }

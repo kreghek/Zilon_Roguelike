@@ -38,11 +38,7 @@ namespace Zilon.Bot.Players.Triggers
             return foundIntruders.ToArray();
         }
 
-        public bool Test(
-            IActor actor,
-            ISectorTaskSourceContext context,
-            ILogicState currentState,
-            ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
         {
             if (actor is null)
             {

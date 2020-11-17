@@ -33,12 +33,14 @@ namespace Zilon.Core.Tests.Tactics.Spatial
 
             var testedNode = nodes.SelectBy(3, 3);
 
-            var expectedNeighbors = new[]
-            {
+            var expectedNeighbors = new[] {
                 nodes.SelectBy(2, 3),
+
                 nodes.SelectBy(3, 4),
                 nodes.SelectBy(4, 4),
+
                 nodes.SelectBy(4, 3),
+
                 nodes.SelectBy(4, 2),
                 nodes.SelectBy(3, 2)
             };
@@ -49,14 +51,10 @@ namespace Zilon.Core.Tests.Tactics.Spatial
             // ASSERT
             for (var i = 0; i < 6; i++)
             {
-                factNeighbors[i]
-                    .OffsetCoords.Should()
-                    .Be(expectedNeighbors[i]
-                        .OffsetCoords);
+                factNeighbors[i].OffsetCoords.Should().Be(expectedNeighbors[i].OffsetCoords);
             }
 
-            factNeighbors.Should()
-                         .BeEquivalentTo<HexNode>(expectedNeighbors);
+            factNeighbors.Should().BeEquivalentTo<HexNode>(expectedNeighbors);
         }
     }
 }

@@ -6,9 +6,9 @@
     public sealed class ProfessionRequirementSubScheme : SubSchemeBase
     {
         /// <summary>
-        /// Максимальный уровень владения.
+        /// Тип компетенции.
         /// </summary>
-        public int MaxLevel { get; set; }
+        public ProfessionType Profession { get; set; }
 
         /// <summary>
         /// Минимальный уровень владения.
@@ -16,8 +16,8 @@
         public int MinLevel { get; set; }
 
         /// <summary>
-        /// Тип компетенции.
+        /// Максимальный уровень владения.
         /// </summary>
-        public ProfessionType Profession { get; set; }
+        public int MaxLevel { get; set; }
     }
 }

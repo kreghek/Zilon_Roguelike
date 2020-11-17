@@ -2,10 +2,8 @@
 {
     public interface IActorTask
     {
-        int Cost { get; }
-
-        bool IsComplete { get; }
-
         void Execute();
+        bool IsComplete { get; }
+        int Cost { get; }
     }
 }

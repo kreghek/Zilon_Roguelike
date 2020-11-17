@@ -13,8 +13,9 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public sealed class EvolutionModule : IEvolutionModule
     {
-        private readonly List<IPerk> _buildInPerks;
         private readonly ISchemeService _schemeService;
+
+        private readonly List<IPerk> _buildInPerks;
 
         public EvolutionModule(ISchemeService schemeService)
         {
@@ -24,91 +25,12 @@ namespace Zilon.Core.PersonModules
 
             _buildInPerks = new List<IPerk>();
 
-            Stats = new[]
-            {
-                new SkillStatItem
-                {
-                    Stat = SkillStatType.Ballistic,
-                    Value = 10
-                },
-                new SkillStatItem
-                {
-                    Stat = SkillStatType.Melee,
-                    Value = 10
-                }
+            Stats = new[] {
+                new SkillStatItem{Stat = SkillStatType.Ballistic, Value = 10 },
+                new SkillStatItem{Stat = SkillStatType.Melee, Value = 10 }
             };
 
             UpdatePerks();
-        }
-
-        /// <summary>
-        /// Этот метод формированно устанавливает перки персонажа с их состоянием.
-        /// Используется для восстановления персонажа из сохранения.
-        /// </summary>
-        /// <param name="perks"> Набор перков с их состоянием, который нужно восстановить. </param>
-        public void SetPerksForced(IEnumerable<IPerk> perks)
-        {
-            Perks = perks.ToArray();
-
-            UpdatePerks();
-        }
-
-        private void DoPerkArchieved(IPerk perk)
-        {
-            var eventArgs = new PerkEventArgs(perk);
-            PerkLeveledUp?.Invoke(this, eventArgs);
-        }
-
-        private IList<IPerk> GetPerks()
-        {
-            var schemes = _schemeService.GetSchemes<IPerkScheme>()
-
-                                        // Для развития годятся только те перки, которые не врождённые.
-                                        // Врождённые перки даются только при генерации персонажа.
-                                        .Where(x => !x.IsBuildIn)
-
-                                        // Защиита от схем, в которых забыли прописать уровни.
-                                        // По идее, такие перки либо должны быть врождёнными.
-                                        // Следовательно, если они не отсеяны выше, то это ошибка.
-                                        // Такие схемы лучше проверять в тестах на валидацию схем.
-                                        .Where(x => x.Levels != null);
-
-            var perks = new List<IPerk>(_buildInPerks);
-            if (Perks != null)
-            {
-                perks.AddRange(Perks);
-            }
-
-            foreach (var perkScheme in schemes)
-            {
-                var existingPerk = Perks?.SingleOrDefault(x => x.Scheme == perkScheme);
-                if (existingPerk != null)
-                {
-                    continue;
-                }
-
-                //TODO Сейчас можно качнуть только первый уровень перка. Должно быть полноценное развитие.
-                var perk = new Perk
-                {
-                    Scheme = perkScheme,
-                    CurrentLevel = null,
-                    CurrentJobs = perkScheme.Levels[0]
-                                            .Jobs
-                                            .Select(x => (IJob)new PerkJob(x))
-                                            .ToArray()
-                };
-
-                perks.Add(perk);
-            }
-
-            return perks;
-        }
-
-        private void UpdatePerks()
-        {
-            var perks = GetPerks();
-
-            Perks = perks.ToArray();
         }
 
         /// <inheritdoc/>
@@ -118,7 +40,7 @@ namespace Zilon.Core.PersonModules
         public IPerk[] Perks { get; private set; }
 
         /// <inheritdoc/>
-        public string Key => nameof(IEvolutionModule);
+        public string Key { get => nameof(IEvolutionModule); }
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }
@@ -168,6 +90,73 @@ namespace Zilon.Core.PersonModules
             UpdatePerks();
 
             DoPerkArchieved(perk);
+        }
+
+        /// <summary>
+        /// Этот метод формированно устанавливает перки персонажа с их состоянием.
+        /// Используется для восстановления персонажа из сохранения.
+        /// </summary>
+        /// <param name="perks"> Набор перков с их состоянием, который нужно восстановить. </param>
+        public void SetPerksForced(IEnumerable<IPerk> perks)
+        {
+            Perks = perks.ToArray();
+
+            UpdatePerks();
+        }
+
+        private void DoPerkArchieved(IPerk perk)
+        {
+            var eventArgs = new PerkEventArgs(perk);
+            PerkLeveledUp?.Invoke(this, eventArgs);
+        }
+
+        private void UpdatePerks()
+        {
+            var perks = GetPerks();
+
+            Perks = perks.ToArray();
+        }
+
+        private IList<IPerk> GetPerks()
+        {
+            var schemes = _schemeService.GetSchemes<IPerkScheme>()
+                            // Для развития годятся только те перки, которые не врождённые.
+                            // Врождённые перки даются только при генерации персонажа.
+                            .Where(x => !x.IsBuildIn)
+                            // Защиита от схем, в которых забыли прописать уровни.
+                            // По идее, такие перки либо должны быть врождёнными.
+                            // Следовательно, если они не отсеяны выше, то это ошибка.
+                            // Такие схемы лучше проверять в тестах на валидацию схем.
+                            .Where(x => x.Levels != null);
+
+            var perks = new List<IPerk>(_buildInPerks);
+            if (Perks != null)
+            {
+                perks.AddRange(Perks);
+            }
+
+            foreach (var perkScheme in schemes)
+            {
+                var existingPerk = Perks?.SingleOrDefault(x => x.Scheme == perkScheme);
+                if (existingPerk != null)
+                {
+                    continue;
+                }
+
+                //TODO Сейчас можно качнуть только первый уровень перка. Должно быть полноценное развитие.
+                var perk = new Perk
+                {
+                    Scheme = perkScheme,
+                    CurrentLevel = null,
+                    CurrentJobs = perkScheme.Levels[0].Jobs
+                        .Select(x => (IJob)new PerkJob(x))
+                        .ToArray()
+                };
+
+                perks.Add(perk);
+            }
+
+            return perks;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Zilon.Tournament.ApiGate.Controllers
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = @"SELECT [Name]
+                    command.CommandText = $@"SELECT [Name]
                             ,[Mode]
                             ,MIN([MinScores])*1.0 AS MinScores
                             ,AVG([AvgScores]) AS AvgScores
@@ -72,15 +72,19 @@ namespace Zilon.Tournament.ApiGate.Controllers
                             {
                                 BotName = (string)reader["Name"],
                                 BotMode = (string)reader["Mode"],
+
                                 MinScores = GetMeasureValue(reader, diffReader, "MinScores"),
                                 AvgScores = GetMeasureValue(reader, diffReader, "AvgScores"),
                                 MaxScores = GetMeasureValue(reader, diffReader, "MaxScores"),
+
                                 MinTurns = GetMeasureValue(reader, diffReader, "MinTurns"),
                                 AvgTurns = GetMeasureValue(reader, diffReader, "AvgTurns"),
                                 MaxTurns = GetMeasureValue(reader, diffReader, "MaxTurns"),
+
                                 MinFrags = GetMeasureValue(reader, diffReader, "MinFrags"),
                                 AvgFrags = GetMeasureValue(reader, diffReader, "AvgFrags"),
                                 MaxFrags = GetMeasureValue(reader, diffReader, "MaxFrags"),
+
                                 AvgIterationDuration = GetMeasureValue(reader, diffReader, "AvgIterationDuration")
                             };
 
@@ -88,6 +92,8 @@ namespace Zilon.Tournament.ApiGate.Controllers
                         }
                     }
                 }
+
+
             }
 
             return resultList;
@@ -97,11 +103,7 @@ namespace Zilon.Tournament.ApiGate.Controllers
         {
             var value = GetValue(reader, fieldName);
             var lastValue = GetValue(diffReader, fieldName);
-            return new MeasureValue
-            {
-                TotalValue = value,
-                LastValue = lastValue
-            };
+            return new MeasureValue { TotalValue = value, LastValue = lastValue };
         }
 
         private static double GetValue(DbDataReader diffReader, string fieldName)

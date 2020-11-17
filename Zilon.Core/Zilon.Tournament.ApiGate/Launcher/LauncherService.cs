@@ -20,7 +20,6 @@ namespace Zilon.Tournament.ApiGate.Launcher
         {
             _logger = logger;
         }
-
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogDebug("Launcher Service is starting");
@@ -46,8 +45,7 @@ namespace Zilon.Tournament.ApiGate.Launcher
                                     FileName = $"{appPath}Zilon.BotMassLauncher.exe",
                                     UseShellExecute = false,
                                     CreateNoWindow = true,
-                                    Arguments =
-                                        $"parallel=10 mode={mode} botCatalog={botInfo.Catalog} botAssembly={botInfo.Assembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
+                                    Arguments = $"parallel=10 mode={mode} botCatalog={botInfo.Catalog} botAssembly={botInfo.Assembly} env=\"{appPath}Zilon.BotEnvironment.exe\" launchCount=1000 output=\"{outputCatalog}\" schemeCatalogPath=\"{schemeCatalogPath}\"",
                                     RedirectStandardOutput = true,
                                     RedirectStandardError = true
                                 };

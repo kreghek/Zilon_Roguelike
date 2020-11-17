@@ -39,17 +39,6 @@ namespace Zilon.Core.Common
         }
 
         /// <summary>
-        /// Высота матрицы.
-        /// </summary>
-        public int Height { get; }
-
-        public T this[int x, int y]
-        {
-            get => Items[x, y];
-            set => Items[x, y] = value;
-        }
-
-        /// <summary>
         /// Элементы матрицы.
         /// </summary>
         public T[,] Items { get; }
@@ -59,14 +48,31 @@ namespace Zilon.Core.Common
         /// </summary>
         public int Width { get; }
 
+        /// <summary>
+        /// Высота матрицы.
+        /// </summary>
+        public int Height { get; }
+
+        public T this[int x, int y]
+        {
+            get
+            {
+                return Items[x, y];
+            }
+            set
+            {
+                Items[x, y] = value;
+            }
+        }
+
         public bool IsIn(int x, int y)
         {
-            if ((x >= Width) || (y >= Height))
+            if (x >= Width || y >= Height)
             {
                 return false;
             }
 
-            if ((x < 0) || (y < 0))
+            if (x < 0 || y < 0)
             {
                 return false;
             }

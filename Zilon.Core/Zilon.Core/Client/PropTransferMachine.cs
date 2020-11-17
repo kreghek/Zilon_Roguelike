@@ -24,14 +24,14 @@ namespace Zilon.Core.Client
         }
 
         /// <summary>
-        /// Состояние трансфера предметов в контейнере.
-        /// </summary>
-        public PropTransferStore Container { get; }
-
-        /// <summary>
         /// Состояние трансфера предметов в инвентаре персонажа.
         /// </summary>
         public PropTransferStore Inventory { get; }
+
+        /// <summary>
+        /// Состояние трансфера предметов в контейнере.
+        /// </summary>
+        public PropTransferStore Container { get; }
 
         /// <summary>
         /// Перенос предмета между указанными хранилищами.
@@ -39,8 +39,7 @@ namespace Zilon.Core.Client
         /// <param name="prop"> Предмет, который будет перенесён. </param>
         /// <param name="sourceStoreType"> Хранилище-источник. </param>
         /// <param name="distStoreType"> Хранилище-назначение. </param>
-        public void TransferProp(
-            IProp prop,
+        public void TransferProp(IProp prop,
             PropTransferMachineStore sourceStoreType,
             PropTransferMachineStore distStoreType)
         {

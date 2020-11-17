@@ -22,14 +22,14 @@ namespace Zilon.Core.Commands
             _playerState = playerState;
         }
 
-        public override bool CanExecute()
-        {
-            return true;
-        }
-
         public override void Execute()
         {
             ModalManager.ShowInventoryModal(_playerState.ActiveActor.Actor);
+        }
+
+        public override bool CanExecute()
+        {
+            return true;
         }
     }
 }

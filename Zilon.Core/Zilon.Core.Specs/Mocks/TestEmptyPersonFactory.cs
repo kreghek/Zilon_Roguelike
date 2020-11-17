@@ -15,8 +15,7 @@ namespace Zilon.Core.Specs.Mocks
         public TestEmptyPersonFactory(ISchemeService schemeService, ISurvivalRandomSource survivalRandomSource)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
-            _survivalRandomSource =
-                survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
+            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
         }
 
         public IPerson Create(string personSchemeSid, IFraction fraction)
@@ -25,8 +24,7 @@ namespace Zilon.Core.Specs.Mocks
 
             var person = new HumanPerson(personScheme, fraction);
 
-            var attributes = new[]
-            {
+            var attributes = new[] {
                 new PersonAttribute(PersonAttributeType.PhysicalStrength, 10),
                 new PersonAttribute(PersonAttributeType.Dexterity, 10),
                 new PersonAttribute(PersonAttributeType.Perception, 10),
@@ -47,13 +45,11 @@ namespace Zilon.Core.Specs.Mocks
             var evolutionModule = new EvolutionModule(_schemeService);
             person.AddModule(evolutionModule);
 
-            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, attributesModule,
-                effectsModule, evolutionModule, equipmentModule);
+            var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, attributesModule, effectsModule, evolutionModule, equipmentModule);
             person.AddModule(survivalModule);
 
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
-            var combatActModule =
-                new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
+            var combatActModule = new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
             person.AddModule(combatActModule);
 
             var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);

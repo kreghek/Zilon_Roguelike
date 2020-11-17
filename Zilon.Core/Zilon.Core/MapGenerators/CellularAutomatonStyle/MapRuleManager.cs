@@ -6,7 +6,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// <summary>
     /// Base implementation of rule managers.
     /// </summary>
-    internal class MapRuleManager : IMapRuleManager
+    class MapRuleManager : IMapRuleManager
     {
         private readonly List<IMapRule> _list = new List<IMapRule>();
 
@@ -17,8 +17,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         public T GetRuleOrNull<T>() where T : IMapRule
         {
-            return _list.OfType<T>()
-                        .SingleOrDefault();
+            return _list.OfType<T>().SingleOrDefault();
         }
     }
 }

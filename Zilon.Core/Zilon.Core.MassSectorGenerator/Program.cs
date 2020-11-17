@@ -16,19 +16,71 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.MassSectorGenerator
 {
-    internal static class Program
+    class Program
     {
-        private static readonly Random _random;
+        private readonly static Random _random;
 
         static Program()
         {
             _random = new Random();
         }
 
-        private static Task CheckSectorAsync(
-            ISectorValidator[] validators,
-            IServiceProvider scopeContainer,
-            ISector sector)
+        static async Task Main(string[] args)
+        {
+            var diceSeed = GetDiceSeed(args);
+            var outputPath = GetOutputPath(args);
+
+            var startUp = new Startup(diceSeed);
+            var serviceContainer = new ServiceCollection();
+
+            startUp.RegisterServices(serviceContainer);
+
+            var serviceProvider = serviceContainer.BuildServiceProvider();
+
+            var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
+
+            var sectorSchemeResult = GetSectorScheme(args, schemeService);
+
+            var biome = new Biome(sectorSchemeResult.Location);
+            var sectorNode = new SectorNode(biome, sectorSchemeResult.Sector);
+
+            var sectorFactory = serviceProvider.GetRequiredService<ISectorGenerator>();
+            var sector = await sectorFactory.GenerateAsync(sectorNode).ConfigureAwait(false);
+            sector.Scheme = sectorSchemeResult.Location;
+
+            // Проверка
+
+            var sectorValidators = GetValidatorsInAssembly();
+            var checkTask = CheckSectorAsync(sectorValidators, serviceProvider, sector);
+
+            var saveTask = SaveMapAsImageAsync(outputPath, sector);
+
+            await Task.WhenAll(checkTask, saveTask).ConfigureAwait(false);
+        }
+
+        private static ISectorValidator[] GetValidatorsInAssembly()
+        {
+            var thisAssembly = Assembly.GetExecutingAssembly();
+            var validatorTypes = thisAssembly.GetTypes()
+                .Where(x => typeof(ISectorValidator).IsAssignableFrom(x))
+                .Where(x => !x.IsInterface && !x.IsAbstract);
+
+            var validators = validatorTypes.Select(x => Activator.CreateInstance(x)).Cast<ISectorValidator>();
+
+            return validators.ToArray();
+        }
+
+        private static Task SaveMapAsImageAsync(string outputPath, ISector sector)
+        {
+            if (outputPath != null)
+            {
+                SaveMapAsImage(sector.Map, outputPath);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private static Task CheckSectorAsync(ISectorValidator[] validators, IServiceProvider scopeContainer, ISector sector)
         {
             return Task.Run(() =>
             {
@@ -64,6 +116,27 @@ namespace Zilon.Core.MassSectorGenerator
             });
         }
 
+        private static string GetOutputPath(string[] args)
+        {
+            var outputPath = ArgumentHelper.GetProgramArgument(args, Args.OUT_PATH_ARG_NAME);
+            if (string.IsNullOrWhiteSpace(outputPath))
+            {
+                return null;
+            }
+
+            try
+            {
+                Path.GetFullPath(outputPath);
+            }
+            catch (Exception exception)
+            {
+                Log.Error(exception);
+                return null;
+            }
+
+            return outputPath;
+        }
+
         private static int GetDiceSeed(string[] args)
         {
             var diceSeedString = ArgumentHelper.GetProgramArgument(args, Args.DICE_SEED_ARG_NAME);
@@ -86,27 +159,6 @@ namespace Zilon.Core.MassSectorGenerator
             return diceSeed;
         }
 
-        private static string GetOutputPath(string[] args)
-        {
-            var outputPath = ArgumentHelper.GetProgramArgument(args, Args.OUT_PATH_ARG_NAME);
-            if (string.IsNullOrWhiteSpace(outputPath))
-            {
-                return null;
-            }
-
-            try
-            {
-                Path.GetFullPath(outputPath);
-            }
-            catch (Exception exception)
-            {
-                Log.Error(exception);
-                return null;
-            }
-
-            return outputPath;
-        }
-
         private static SectorSchemeResult GetSectorScheme(string[] args, ISchemeService schemeService)
         {
             var locationSchemeSid = ArgumentHelper.GetProgramArgument(args, Args.LOCATION_SCHEME_SID_ARG_NAME);
@@ -117,8 +169,8 @@ namespace Zilon.Core.MassSectorGenerator
                 // Это используется на билд-сервере, чтобы случайно проверить несколько схем.
 
                 var locationSchemes = schemeService.GetSchemes<ILocationScheme>()
-                                                   .Where(x => (x.SectorLevels != null) && x.SectorLevels.Any())
-                                                   .ToArray();
+                    .Where(x => x.SectorLevels != null && x.SectorLevels.Any())
+                    .ToArray();
                 var locationSchemeIndex = _random.Next(0, locationSchemes.Length);
                 var locationScheme = locationSchemes[locationSchemeIndex];
 
@@ -155,70 +207,12 @@ namespace Zilon.Core.MassSectorGenerator
             }
         }
 
-        private static ISectorValidator[] GetValidatorsInAssembly()
-        {
-            var thisAssembly = Assembly.GetExecutingAssembly();
-            var validatorTypes = thisAssembly.GetTypes()
-                                             .Where(x => typeof(ISectorValidator).IsAssignableFrom(x))
-                                             .Where(x => !x.IsInterface && !x.IsAbstract);
-
-            var validators = validatorTypes.Select(x => Activator.CreateInstance(x))
-                                           .Cast<ISectorValidator>();
-
-            return validators.ToArray();
-        }
-
-        private static async Task Main(string[] args)
-        {
-            var diceSeed = GetDiceSeed(args);
-            var outputPath = GetOutputPath(args);
-
-            var startUp = new Startup(diceSeed);
-            var serviceContainer = new ServiceCollection();
-
-            startUp.RegisterServices(serviceContainer);
-
-            var serviceProvider = serviceContainer.BuildServiceProvider();
-
-            var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
-
-            var sectorSchemeResult = GetSectorScheme(args, schemeService);
-
-            var biome = new Biome(sectorSchemeResult.Location);
-            var sectorNode = new SectorNode(biome, sectorSchemeResult.Sector);
-
-            var sectorFactory = serviceProvider.GetRequiredService<ISectorGenerator>();
-            var sector = await sectorFactory.GenerateAsync(sectorNode)
-                                            .ConfigureAwait(false);
-            sector.Scheme = sectorSchemeResult.Location;
-
-            // Проверка
-
-            var sectorValidators = GetValidatorsInAssembly();
-            var checkTask = CheckSectorAsync(sectorValidators, serviceProvider, sector);
-
-            var saveTask = SaveMapAsImageAsync(outputPath, sector);
-
-            await Task.WhenAll(checkTask, saveTask)
-                      .ConfigureAwait(false);
-        }
-
         private static void SaveMapAsImage(ISectorMap map, string outputPath)
         {
             using (var bmp = MapDrawer.DrawMap(map))
             {
                 bmp.Save(outputPath);
             }
-        }
-
-        private static Task SaveMapAsImageAsync(string outputPath, ISector sector)
-        {
-            if (outputPath != null)
-            {
-                SaveMapAsImage(sector.Map, outputPath);
-            }
-
-            return Task.CompletedTask;
         }
     }
 }

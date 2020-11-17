@@ -3,7 +3,7 @@
     /// <summary>
     /// Require minimum region count on map.
     /// </summary>
-    internal interface IRegionMinCountRule : IMapRule
+    interface IRegionMinCountRule : IMapRule
     {
         int Count { get; set; }
     }

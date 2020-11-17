@@ -8,7 +8,6 @@ namespace Zilon.Core.World
     public interface IBiome : IGraph
     {
         ILocationScheme LocationScheme { get; }
-
         IEnumerable<SectorNode> Sectors { get; }
     }
 }

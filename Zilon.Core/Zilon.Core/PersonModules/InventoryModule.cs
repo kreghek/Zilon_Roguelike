@@ -7,13 +7,12 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public sealed class InventoryModule : PropStoreBase, IInventoryModule
     {
-        public InventoryModule()
+        public InventoryModule() : base()
         {
             IsActive = true;
         }
 
-        public string Key => nameof(IInventoryModule);
-
+        public string Key { get => nameof(IInventoryModule); }
         public bool IsActive { get; set; }
     }
 }

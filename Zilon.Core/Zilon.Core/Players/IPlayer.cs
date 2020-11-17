@@ -7,14 +7,13 @@ namespace Zilon.Core.Players
 {
     public interface IPlayer
     {
-        IGlobe Globe { get; }
+        void BindPerson(IGlobe globe, IPerson person);
 
-        IPerson MainPerson { get; }
+        IGlobe Globe { get; }
 
         [Obsolete("Because we can get in from Globe. Currently remains fro old code.")]
         ISectorNode SectorNode { get; }
-
-        void BindPerson(IGlobe globe, IPerson person);
+        IPerson MainPerson { get; }
 
         void Reset();
     }

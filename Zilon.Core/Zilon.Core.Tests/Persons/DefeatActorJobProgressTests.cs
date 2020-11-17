@@ -16,6 +16,32 @@ namespace Zilon.Core.Tests.Persons
     public class DefeatActorJobProgressTests
     {
         /// <summary>
+        /// Тест проверяет, что прогресс на уничтожение противника применяется к задачам этого типа.
+        /// </summary>
+        [Test]
+        public void ApplyToJobs_OneDefeatJob_DefeatJobProgressIncreased()
+        {
+            // ARRANGE
+            const int startProgress = 1;
+            const int expectedProgress = startProgress + 1;
+
+            var actor = CreateActor();
+            var job = CreateJob(startProgress, JobType.Defeats);
+            var progress = CreateJobProgress(actor);
+
+
+
+
+            // ACT
+            progress.ApplyToJobs(new IJob[] { job });
+
+
+
+            // ASSERT
+            job.Progress.Should().Be(expectedProgress);
+        }
+
+        /// <summary>
         /// Тест проверяет, что прогресс на уничтожение противника применяется ТОЛЬКО к задачам этого типа.
         /// </summary>
         [Test]
@@ -33,43 +59,16 @@ namespace Zilon.Core.Tests.Persons
 
             var progress = CreateJobProgress(actor);
 
-            // ACT
-            progress.ApplyToJobs(new[]
-            {
-                testedJob,
-                otherJob
-            });
 
-            // ASSERT
-            testedJob.Progress.Should()
-                     .Be(expectedProgress);
-            otherJob.Progress.Should()
-                    .Be(expectedOtherProgress);
-        }
-
-        /// <summary>
-        /// Тест проверяет, что прогресс на уничтожение противника применяется к задачам этого типа.
-        /// </summary>
-        [Test]
-        public void ApplyToJobs_OneDefeatJob_DefeatJobProgressIncreased()
-        {
-            // ARRANGE
-            const int startProgress = 1;
-            const int expectedProgress = startProgress + 1;
-
-            var actor = CreateActor();
-            var job = CreateJob(startProgress, JobType.Defeats);
-            var progress = CreateJobProgress(actor);
 
             // ACT
-            progress.ApplyToJobs(new[]
-            {
-                job
-            });
+            progress.ApplyToJobs(new IJob[] { testedJob, otherJob });
+
+
 
             // ASSERT
-            job.Progress.Should()
-               .Be(expectedProgress);
+            testedJob.Progress.Should().Be(expectedProgress);
+            otherJob.Progress.Should().Be(expectedOtherProgress);
         }
 
         /// <summary>
@@ -85,19 +84,19 @@ namespace Zilon.Core.Tests.Persons
             var job = CreateJob(startProgress, JobType.Defeats);
             var progress = CreateJobProgress(actor);
 
+
+
+
             // ACT
-            var changedJobs = progress.ApplyToJobs(new[]
-            {
-                job
-            });
+            var changedJobs = progress.ApplyToJobs(new IJob[] { job });
+
+
 
             // ASSERT
-            changedJobs.Should()
-                       .HaveCount(1);
-            changedJobs[0]
-                .Should()
-                .Be(job);
+            changedJobs.Should().HaveCount(1);
+            changedJobs[0].Should().Be(job);
         }
+
 
         private static IActor CreateActor()
         {
@@ -106,16 +105,16 @@ namespace Zilon.Core.Tests.Persons
             return actor;
         }
 
+
         private static IJob CreateJob(int startProgress, JobType type)
         {
             var jobMock = new Mock<IJob>();
             jobMock.SetupProperty(x => x.Progress, startProgress);
-            jobMock.SetupGet(x => x.Scheme)
-                   .Returns(new TestJobSubScheme
-                   {
-                       Type = type,
-                       Value = 10
-                   });
+            jobMock.SetupGet(x => x.Scheme).Returns(new TestJobSubScheme
+            {
+                Type = type,
+                Value = 10
+            });
             var job = jobMock.Object;
             return job;
         }

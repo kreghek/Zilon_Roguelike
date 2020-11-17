@@ -49,7 +49,7 @@ namespace Zilon.Core.Commands
             var targetNode = target.Node;
 
             var act = PlayerState.TacticalAct;
-            if (((act.Stats.Targets & TacticalActTargets.Self) > 0) &&
+            if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
                 ReferenceEquals(PlayerState.ActiveActor.Actor, target))
             {
                 // Лечить можно только самого себя.
@@ -57,48 +57,62 @@ namespace Zilon.Core.Commands
                 // Тогда эту проверку нужно будет доработать.
                 return true;
             }
-
-            // Проверка, что цель достаточно близка по дистации и видна.
-            if (act.Stats.Range == null)
+            else
             {
-                return false;
-            }
+                // Проверка, что цель достаточно близка по дистации и видна.
+                if (act.Stats.Range == null)
+                {
+                    return false;
+                }
 
-            var isInDistance = act.CheckDistance(currentNode, targetNode, _player.SectorNode.Sector.Map);
-            if (!isInDistance)
-            {
-                return false;
-            }
+                var isInDistance = act.CheckDistance(currentNode, targetNode, _player.SectorNode.Sector.Map);
+                if (!isInDistance)
+                {
+                    return false;
+                }
 
-            var targetIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
-            if (!targetIsOnLine)
-            {
-                return false;
-            }
+                var targetIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
+                if (!targetIsOnLine)
+                {
+                    return false;
+                }
 
-            // Проверка наличия ресурсов для выполнения действия
+                // Проверка наличия ресурсов для выполнения действия
 
-            if ((act.Constrains?.PropResourceType != null) && (act.Constrains?.PropResourceCount != null))
-            {
-                var hasPropResource = CheckPropResource(
-                    PlayerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>(),
-                    act.Constrains.PropResourceType,
-                    act.Constrains.PropResourceCount.Value);
+                if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
+                {
+                    var hasPropResource = CheckPropResource(PlayerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>(),
+                        act.Constrains.PropResourceType,
+                        act.Constrains.PropResourceCount.Value);
 
-                if (!hasPropResource)
+                    if (!hasPropResource)
+                    {
+                        return false;
+                    }
+                }
+
+                // Проверка КД
+
+                if (act.CurrentCooldown > 0)
                 {
                     return false;
                 }
             }
 
-            // Проверка КД
+            return true;
+        }
 
-            if (act.CurrentCooldown > 0)
+        private static IAttackTarget GetTarget(ISectorUiState sectorUiState)
+        {
+            var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
+            var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
+            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()?.Value > 0;
+            if (!canTakeDamage)
             {
-                return false;
+                selectedStaticObjectViewModel = null;
             }
 
-            return true;
+            return (IAttackTarget)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.StaticObject;
         }
 
         protected override void ExecuteTacticCommand()
@@ -109,9 +123,38 @@ namespace Zilon.Core.Commands
 
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
-            var intention = new Intention<AttackTask>(a =>
-                new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
+            var intention = new Intention<AttackTask>(a => new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+        }
+
+        private static bool CheckPropResource(IPropStore inventory,
+            string usedPropResourceType,
+            int usedPropResourceCount)
+        {
+            var props = inventory.CalcActualItems();
+            var propResources = new List<Resource>();
+            foreach (var prop in props)
+            {
+                if (prop is Resource propResource)
+                {
+                    AddResourceOfUsageToList(usedPropResourceType, usedPropResourceCount, propResources, propResource);
+                }
+
+                // Остальные типы предметов пока не могут выступать, как источник ресурса.
+                // Далее нужно будет сделать, чтобы:
+                // 1. У персонажа был предмет экипировки, который позволяет выполнять
+                // определённые действия другим предметов. Условно, симбиоз двух предметов (или сет предметов).
+                // 2. У персонажа был экипирован предмет, который позволяет выполнять
+                // определённые действия другим предметов.
+                // 3. Расход прочности другого предмета.
+                // 4. Применение обойм. Механика расхода предметов, когда ресурсы изымаются не из инвентаря,
+                // а их специального контейнера внутри предмета. При необходимости, предмет нужно перезаряжать за
+                // отдельное время.
+            }
+
+            var preferredPropResource = propResources.FirstOrDefault();
+
+            return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
         }
 
         private static void AddResourceOfUsageToList(
@@ -144,37 +187,6 @@ namespace Zilon.Core.Commands
             propResources.Add(propResource);
         }
 
-        private static bool CheckPropResource(
-            IPropStore inventory,
-            string usedPropResourceType,
-            int usedPropResourceCount)
-        {
-            var props = inventory.CalcActualItems();
-            var propResources = new List<Resource>();
-            foreach (var prop in props)
-            {
-                if (prop is Resource propResource)
-                {
-                    AddResourceOfUsageToList(usedPropResourceType, usedPropResourceCount, propResources, propResource);
-                }
-
-                // Остальные типы предметов пока не могут выступать, как источник ресурса.
-                // Далее нужно будет сделать, чтобы:
-                // 1. У персонажа был предмет экипировки, который позволяет выполнять
-                // определённые действия другим предметов. Условно, симбиоз двух предметов (или сет предметов).
-                // 2. У персонажа был экипирован предмет, который позволяет выполнять
-                // определённые действия другим предметов.
-                // 3. Расход прочности другого предмета.
-                // 4. Применение обойм. Механика расхода предметов, когда ресурсы изымаются не из инвентаря,
-                // а их специального контейнера внутри предмета. При необходимости, предмет нужно перезаряжать за
-                // отдельное время.
-            }
-
-            var preferredPropResource = propResources.FirstOrDefault();
-
-            return (preferredPropResource != null) && (preferredPropResource.Count >= usedPropResourceCount);
-        }
-
         private static IActorViewModel GetCanExecuteActorViewModel(ISectorUiState sectorUiState)
         {
             var hover = sectorUiState.HoverViewModel as IActorViewModel;
@@ -187,21 +199,6 @@ namespace Zilon.Core.Commands
             var hover = sectorUiState.HoverViewModel as IContainerViewModel;
             var selected = sectorUiState.SelectedViewModel as IContainerViewModel;
             return hover ?? selected;
-        }
-
-        private static IAttackTarget GetTarget(ISectorUiState sectorUiState)
-        {
-            var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
-            var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
-            var canTakeDamage = selectedStaticObjectViewModel?.StaticObject?.GetModuleSafe<IDurabilityModule>()
-                                                             ?.Value >
-                                0;
-            if (!canTakeDamage)
-            {
-                selectedStaticObjectViewModel = null;
-            }
-
-            return (IAttackTarget)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.StaticObject;
         }
     }
 }

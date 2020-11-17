@@ -11,7 +11,6 @@ namespace Zilon.Core.Schemes
         }
 
         public DefenceType Type { get; }
-
         public PersonRuleLevel Level { get; }
     }
 }

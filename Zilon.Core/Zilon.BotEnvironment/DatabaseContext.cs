@@ -39,8 +39,7 @@ namespace Zilon.BotEnvironment
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText =
-                        $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
+                    command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
                     VALUES ('{botName}', '{scoreFilePreffix}', '{mode}', {scoreManager.BaseScores}, {scoreManager.Turns}, {fragSum}, '{textSummary}')";
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();

@@ -58,8 +58,7 @@ namespace Zilon.Tournament.ApiGate.Controllers
                             copyStream.Seek(0, SeekOrigin.Begin);
                             using (var targetStream = System.IO.File.Create(botRootCatalog))
                             {
-                                await copyStream.CopyToAsync(targetStream)
-                                                .ConfigureAwait(false);
+                                await copyStream.CopyToAsync(targetStream).ConfigureAwait(false);
                             }
                         }
                     }

@@ -23,13 +23,65 @@ namespace Zilon.Core.World
 
     public class BiomeInitializer : IBiomeInitializer, IGlobeExpander
     {
-        private readonly IBiomeSchemeRoller _biomeSchemeRoller;
         private readonly ISectorGenerator _sectorGenerator;
+        private readonly IBiomeSchemeRoller _biomeSchemeRoller;
 
         public BiomeInitializer(ISectorGenerator sectorGenerator, IBiomeSchemeRoller biomeSchemeRoller)
         {
             _sectorGenerator = sectorGenerator ?? throw new ArgumentNullException(nameof(sectorGenerator));
             _biomeSchemeRoller = biomeSchemeRoller ?? throw new ArgumentNullException(nameof(biomeSchemeRoller));
+        }
+
+        public async Task<IBiome> InitBiomeAsync(ILocationScheme locationScheme)
+        {
+            var biom = new Biome(locationScheme);
+
+            await CreateStartSectorAsync(biom).ConfigureAwait(false);
+
+            return biom;
+        }
+
+        public async Task MaterializeLevelAsync(ISectorNode sectorNode)
+        {
+            if (sectorNode is null)
+            {
+                throw new ArgumentNullException(nameof(sectorNode));
+            }
+
+            if (sectorNode.State != SectorNodeState.SchemeKnown)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var biom = sectorNode.Biome;
+
+            // Важно генерировать соседние узлы до начала генерации сектора,
+            // чтобы знать переходы из сектора.
+
+            CreateNextSectorNodes(sectorNode, biom);
+
+            var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
+
+            sectorNode.MaterializeSector(sector);
+        }
+
+        private SectorNode RollAndBindBiome()
+        {
+            var rolledLocationScheme = _biomeSchemeRoller.Roll();
+
+            var biome = new Biome(rolledLocationScheme);
+
+            var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
+
+            var newBiomeSector = new SectorNode(biome, startSectorScheme);
+
+            return newBiomeSector;
+        }
+
+        private async Task CreateStartSectorAsync(IBiome biome)
+        {
+            var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
+            await CreateAndAddSectorByScheme(biome, startSectorScheme).ConfigureAwait(false);
         }
 
         private async Task CreateAndAddSectorByScheme(IBiome biome, ISectorSubScheme startSectorScheme)
@@ -43,8 +95,7 @@ namespace Zilon.Core.World
 
             CreateNextSectorNodes(sectorNode, biome);
 
-            var sector = await _sectorGenerator.GenerateAsync(sectorNode)
-                                               .ConfigureAwait(false);
+            var sector = await _sectorGenerator.GenerateAsync(sectorNode).ConfigureAwait(false);
 
             sectorNode.MaterializeSector(sector);
         }
@@ -52,9 +103,7 @@ namespace Zilon.Core.World
         private void CreateNextSectorNodes(ISectorNode sectorNode, IBiome biom)
         {
             var nextSectorLevels = biom.LocationScheme.SectorLevels
-                                       .Where(x => sectorNode
-                                                   .SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid)
-                                                   .Contains(x.Sid));
+                    .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid).Contains(x.Sid));
 
             foreach (var nextSectorLevelScheme in nextSectorLevels)
             {
@@ -79,61 +128,6 @@ namespace Zilon.Core.World
 
                 nextBiom.AddEdge(sectorNode, nextSectorNode);
             }
-        }
-
-        private async Task CreateStartSectorAsync(IBiome biome)
-        {
-            var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
-            await CreateAndAddSectorByScheme(biome, startSectorScheme)
-                .ConfigureAwait(false);
-        }
-
-        private SectorNode RollAndBindBiome()
-        {
-            var rolledLocationScheme = _biomeSchemeRoller.Roll();
-
-            var biome = new Biome(rolledLocationScheme);
-
-            var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
-
-            var newBiomeSector = new SectorNode(biome, startSectorScheme);
-
-            return newBiomeSector;
-        }
-
-        public async Task<IBiome> InitBiomeAsync(ILocationScheme locationScheme)
-        {
-            var biom = new Biome(locationScheme);
-
-            await CreateStartSectorAsync(biom)
-                .ConfigureAwait(false);
-
-            return biom;
-        }
-
-        public async Task MaterializeLevelAsync(ISectorNode sectorNode)
-        {
-            if (sectorNode is null)
-            {
-                throw new ArgumentNullException(nameof(sectorNode));
-            }
-
-            if (sectorNode.State != SectorNodeState.SchemeKnown)
-            {
-                throw new InvalidOperationException();
-            }
-
-            var biom = sectorNode.Biome;
-
-            // Важно генерировать соседние узлы до начала генерации сектора,
-            // чтобы знать переходы из сектора.
-
-            CreateNextSectorNodes(sectorNode, biom);
-
-            var sector = await _sectorGenerator.GenerateAsync(sectorNode)
-                                               .ConfigureAwait(false);
-
-            sectorNode.MaterializeSector(sector);
         }
 
         public Task ExpandAsync(ISectorNode sectorNode)

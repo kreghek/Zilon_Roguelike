@@ -49,13 +49,15 @@ namespace Zilon.Core.Tests.Schemes
 }
 ";
 
+
+
             // ACT
             var factPerkScheme = JsonConvert.DeserializeObject<MonsterScheme>(sourceText);
 
+
+
             // ASSERT
-            factPerkScheme.Defense.Defenses[0]
-                          .Type.Should()
-                          .Be(DefenceType.TacticalDefence);
+            factPerkScheme.Defense.Defenses[0].Type.Should().Be(DefenceType.TacticalDefence);
         }
     }
 }

@@ -7,6 +7,8 @@ namespace Zilon.Core.StaticObjectModules
     /// </summary>
     public class FixedPropChest : ChestBase
     {
+        public override bool IsMapBlock => true;
+
         public FixedPropChest(IProp[] props) : base(new ChestStore())
         {
             if (props is null)
@@ -19,7 +21,5 @@ namespace Zilon.Core.StaticObjectModules
                 Content.Add(prop);
             }
         }
-
-        public override bool IsMapBlock => true;
     }
 }

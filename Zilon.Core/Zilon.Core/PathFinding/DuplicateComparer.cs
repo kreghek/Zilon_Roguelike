@@ -17,11 +17,11 @@ namespace Zilon.Core.PathFinding
         {
         }
 
-        public static DuplicateComparer Instance { get; private set; }
-
         public int Compare(int x, int y)
         {
             return x <= y ? -1 : 1;
         }
+
+        public static DuplicateComparer Instance { get; private set; }
     }
 }

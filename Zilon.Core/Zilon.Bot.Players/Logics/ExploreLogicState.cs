@@ -18,10 +18,7 @@ namespace Zilon.Bot.Players.Logics
         {
         }
 
-        public override IActorTask GetTask(
-            IActor actor,
-            ISectorTaskSourceContext context,
-            ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             if (MoveTask == null)
             {
@@ -31,75 +28,46 @@ namespace Zilon.Bot.Players.Logics
                 {
                     return MoveTask;
                 }
-
-                // Это может произойти, если актёр не выбрал следующий узел.
-                // Тогда переводим актёра в режим ожидания.
-
-                var taskContext = new ActorTaskContext(context.Sector);
-                IdleTask = new IdleTask(actor, taskContext, DecisionSource);
-                return IdleTask;
-            }
-
-            if (!MoveTask.IsComplete)
-            {
-                // Если команда на перемещение к целевой точке патруля не закончена,
-                // тогда продолжаем её.
-                // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
-                if (!MoveTask.CanExecute())
+                else
                 {
-                    MoveTask = CreateBypassMoveTask(actor, strategyData, context.Sector);
+                    // Это может произойти, если актёр не выбрал следующий узел.
+                    // Тогда переводим актёра в режим ожидания.
+
+                    var taskContext = new ActorTaskContext(context.Sector);
+                    IdleTask = new IdleTask(actor, taskContext, DecisionSource);
+                    return IdleTask;
                 }
-
-                if (MoveTask != null)
-                {
-                    return MoveTask;
-                }
-
-                var taskContext = new ActorTaskContext(context.Sector);
-                IdleTask = new IdleTask(actor, taskContext, DecisionSource);
-                return IdleTask;
-            }
-
-            Complete = true;
-            return null;
-        }
-
-        private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData, ISector sector)
-        {
-            var map = sector.Map;
-            IEnumerable<IGraphNode> availableNodes;
-            var frontNodes = WriteObservedNodes(actor, strategyData, map)
-                .ToArray();
-            if (frontNodes.Any())
-            {
-                availableNodes = frontNodes;
             }
             else
             {
-                availableNodes = strategyData.ObserverdNodes;
-            }
-
-            var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
-            for (var i = 0; i < 3; i++)
-            {
-                var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
-
-                if (map.IsPositionAvailableFor(targetNode, actor))
+                if (!MoveTask.IsComplete)
                 {
-                    var context = new ActorTaskContext(sector);
-                    var moveTask = new MoveTask(actor, context, targetNode, map);
+                    // Если команда на перемещение к целевой точке патруля не закончена,
+                    // тогда продолжаем её.
+                    // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
+                    if (!MoveTask.CanExecute())
+                    {
+                        MoveTask = CreateBypassMoveTask(actor, strategyData, context.Sector);
+                    }
 
-                    return moveTask;
+                    if (MoveTask != null)
+                    {
+                        return MoveTask;
+                    }
+
+                    var taskContext = new ActorTaskContext(context.Sector);
+                    IdleTask = new IdleTask(actor, taskContext, DecisionSource);
+                    return IdleTask;
+                }
+                else
+                {
+                    Complete = true;
+                    return null;
                 }
             }
-
-            return null;
         }
 
-        private IEnumerable<IGraphNode> WriteObservedNodes(
-            IActor actor,
-            ILogicStrategyData strategyData,
-            ISectorMap map)
+        private IEnumerable<IGraphNode> WriteObservedNodes(IActor actor, ILogicStrategyData strategyData, ISectorMap map)
         {
             var observeNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
 
@@ -135,6 +103,37 @@ namespace Zilon.Bot.Players.Logics
                 "Это состояние выполняется, только если есть неисследованые узлы.");
 
             return frontNodes;
+        }
+
+        private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData, ISector sector)
+        {
+            var map = sector.Map;
+            IEnumerable<IGraphNode> availableNodes;
+            var frontNodes = WriteObservedNodes(actor, strategyData, map).ToArray();
+            if (frontNodes.Any())
+            {
+                availableNodes = frontNodes;
+            }
+            else
+            {
+                availableNodes = strategyData.ObserverdNodes;
+            }
+
+            var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
+            for (var i = 0; i < 3; i++)
+            {
+                var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
+
+                if (map.IsPositionAvailableFor(targetNode, actor))
+                {
+                    var context = new ActorTaskContext(sector);
+                    var moveTask = new MoveTask(actor, context, targetNode, map);
+
+                    return moveTask;
+                }
+            }
+
+            return null;
         }
     }
 }

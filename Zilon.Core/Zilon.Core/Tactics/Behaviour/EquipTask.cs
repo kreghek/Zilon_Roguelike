@@ -14,8 +14,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly Equipment _equipment;
         private readonly int _slotIndex;
 
-        public EquipTask(
-            IActor actor,
+        public EquipTask(IActor actor,
             IActorTaskContext context,
             Equipment equipment,
             int slotIndex) :
@@ -49,6 +48,7 @@ namespace Zilon.Core.Tactics.Behaviour
             // (0) изымаем предмет из инвентаря                 меняем предметы в слотах местами
             // (1) изымаем из инвентаря, а текущий в инвентярь  меняем предметы в слотах местами
 
+
             // проверяем, есть ли в текущем слоте предмет (0)/(1).
             var currentEquipment = equipmentCarrier[_slotIndex];
 
@@ -63,12 +63,10 @@ namespace Zilon.Core.Tactics.Behaviour
                 // при (0) ничего не делаем
                 if (currentEquipment != null)
                 {
-                    Actor.Person.GetModule<IInventoryModule>()
-                         .Add(currentEquipment);
+                    Actor.Person.GetModule<IInventoryModule>().Add(currentEquipment);
                 }
 
-                Actor.Person.GetModule<IInventoryModule>()
-                     .Remove(_equipment);
+                Actor.Person.GetModule<IInventoryModule>().Remove(_equipment);
                 equipmentCarrier[_slotIndex] = _equipment;
             }
             else

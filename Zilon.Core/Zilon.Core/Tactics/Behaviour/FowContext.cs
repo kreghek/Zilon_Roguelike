@@ -19,31 +19,6 @@ namespace Zilon.Core.Tactics.Behaviour
             _staticObjectManager = staticObjectManager ?? throw new ArgumentNullException(nameof(staticObjectManager));
         }
 
-        /// <summary>
-        /// Метод првоеряет, нет ли на пути просмотра объектов, закрывающих видимость.
-        /// </summary>
-        private bool IsBlockedByObstacle(IGraphNode baseNode, IGraphNode targetNode)
-        {
-            var baseCubeCoords = ((HexNode)baseNode).CubeCoords;
-            var targetCubeCoords = ((HexNode)targetNode).CubeCoords;
-            var line = CubeCoordsHelper.CubeDrawLine(baseCubeCoords, targetCubeCoords);
-
-            foreach (var linePoint in line)
-            {
-                var staticObjects = _staticObjectManager.Items.Where(x => (x.Node as HexNode).CubeCoords == linePoint)
-                                                        .ToArray();
-                foreach (var staticObject in staticObjects)
-                {
-                    if (staticObject.IsSightBlock)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
         public IEnumerable<IGraphNode> GetNext(IGraphNode node)
         {
             return _sectorMap.GetNext(node);
@@ -67,6 +42,30 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             return _sectorMap.TargetIsOnLine(baseNode, targetNode);
+        }
+
+        /// <summary>
+        /// Метод првоеряет, нет ли на пути просмотра объектов, закрывающих видимость.
+        /// </summary>
+        private bool IsBlockedByObstacle(IGraphNode baseNode, IGraphNode targetNode)
+        {
+            var baseCubeCoords = ((HexNode)baseNode).CubeCoords;
+            var targetCubeCoords = ((HexNode)targetNode).CubeCoords;
+            var line = CubeCoordsHelper.CubeDrawLine(baseCubeCoords, targetCubeCoords);
+
+            foreach (var linePoint in line)
+            {
+                var staticObjects = _staticObjectManager.Items.Where(x => (x.Node as HexNode).CubeCoords == linePoint).ToArray();
+                foreach (var staticObject in staticObjects)
+                {
+                    if (staticObject.IsSightBlock)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

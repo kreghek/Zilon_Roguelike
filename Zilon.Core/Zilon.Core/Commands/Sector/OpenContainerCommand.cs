@@ -67,8 +67,7 @@ namespace Zilon.Core.Commands
             var staticObject = targetContainerViewModel.StaticObject;
             if (staticObject == null)
             {
-                throw new InvalidOperationException(
-                    "Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
+                throw new InvalidOperationException("Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
             }
 
             var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, staticObject));

@@ -16,39 +16,6 @@ namespace Zilon.Core.Tactics.Tests
     public class ActUsageHandlerSelectorTests
     {
         /// <summary>
-        /// Тест проверяет, что селектор возвращает null (НЕ во),
-        /// если тип целевого объекта не приводится к целевому типу обработчика.
-        /// </summary>
-        [Test]
-        public void GetHandler_IsNotHandleTarget_ThrowsExceptionHandlerNotFound()
-        {
-            // ARRANGE
-
-            var testHandlerMock = new Mock<IActUsageHandler>();
-            testHandlerMock.SetupGet(x => x.TargetType)
-                           .Returns(typeof(ITest1));
-            var testHandler = testHandlerMock.Object;
-
-            var selector = new ActUsageHandlerSelector(new IActUsageHandler[]
-            {
-                testHandler
-            });
-
-            var targetObject = new NotHandleTarget();
-
-            // ACT
-            Action act = () =>
-            {
-                selector.GetHandler(targetObject);
-            };
-
-            // ASSERT
-
-            act.Should()
-               .Throw<HandlerNotFoundException>();
-        }
-
-        /// <summary>
         /// Тест проверяет, что селектор корректно возвращает обработчик,
         /// если целевой объект напрямую реализует тестовый интерфейс.
         /// </summary>
@@ -58,14 +25,10 @@ namespace Zilon.Core.Tactics.Tests
             // ARRANGE
 
             var testHandlerMock = new Mock<IActUsageHandler>();
-            testHandlerMock.SetupGet(x => x.TargetType)
-                           .Returns(typeof(ITest1));
+            testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
-            var selector = new ActUsageHandlerSelector(new IActUsageHandler[]
-            {
-                testHandler
-            });
+            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] { testHandler });
 
             var targetObject = new Test1();
 
@@ -75,8 +38,7 @@ namespace Zilon.Core.Tactics.Tests
 
             // ASSERT
 
-            factHandler.Should()
-                       .Be(testHandler);
+            factHandler.Should().Be(testHandler);
         }
 
         /// <summary>
@@ -89,14 +51,10 @@ namespace Zilon.Core.Tactics.Tests
             // ARRANGE
 
             var testHandlerMock = new Mock<IActUsageHandler>();
-            testHandlerMock.SetupGet(x => x.TargetType)
-                           .Returns(typeof(ITest1));
+            testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
             var testHandler = testHandlerMock.Object;
 
-            var selector = new ActUsageHandlerSelector(new IActUsageHandler[]
-            {
-                testHandler
-            });
+            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] { testHandler });
 
             var targetObject = new Test2();
 
@@ -106,15 +64,41 @@ namespace Zilon.Core.Tactics.Tests
 
             // ASSERT
 
-            factHandler.Should()
-                       .Be(testHandler);
+            factHandler.Should().Be(testHandler);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что селектор возвращает null (НЕ во),
+        /// если тип целевого объекта не приводится к целевому типу обработчика.
+        /// </summary>
+        [Test]
+        public void GetHandler_IsNotHandleTarget_ThrowsExceptionHandlerNotFound()
+        {
+            // ARRANGE
+
+            var testHandlerMock = new Mock<IActUsageHandler>();
+            testHandlerMock.SetupGet(x => x.TargetType).Returns(typeof(ITest1));
+            var testHandler = testHandlerMock.Object;
+
+            var selector = new ActUsageHandlerSelector(new IActUsageHandler[] { testHandler });
+
+            var targetObject = new NotHandleTarget();
+
+            // ACT
+            Action act = () =>
+            {
+                selector.GetHandler(targetObject);
+            };
+
+            // ASSERT
+
+            act.Should().Throw<HandlerNotFoundException>();
         }
 
         private class Test1 : ITest1, IAttackTarget
         {
             public IGraphNode Node { get; }
-
-            public PhysicalSizePattern PhysicalSize { get; }
+            public PhysicalSize PhysicalSize { get; }
 
             public bool CanBeDamaged()
             {
@@ -134,8 +118,7 @@ namespace Zilon.Core.Tactics.Tests
         private sealed class NotHandleTarget : IAttackTarget
         {
             public IGraphNode Node { get; }
-
-            public PhysicalSizePattern PhysicalSize { get; }
+            public PhysicalSize PhysicalSize { get; }
 
             public bool CanBeDamaged()
             {

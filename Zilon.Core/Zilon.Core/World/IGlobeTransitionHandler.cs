@@ -7,10 +7,6 @@ namespace Zilon.Core.World
 {
     public interface IGlobeTransitionHandler
     {
-        Task ProcessAsync(
-            IGlobe globe,
-            ISector sector,
-            IActor actor,
-            RoomTransition transition);
+        Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition);
     }
 }

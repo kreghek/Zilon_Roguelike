@@ -9,16 +9,6 @@ namespace Zilon.Core.MapGenerators
     public abstract class SwitchMapFactorySelectorBase : IMapFactorySelector
     {
         /// <summary>
-        /// Экземпляр фабрики, генерирующей карты на основе клеточного автомата.
-        /// </summary>
-        protected abstract IMapFactory CellularAutomatonMapFactory { get; }
-
-        /// <summary>
-        /// Экземпляр фабрики, генерирующий карты на основе прямоугольных комнат.
-        /// </summary>
-        protected abstract IMapFactory RoomMapFactory { get; }
-
-        /// <summary>
         /// Возвращает генератор карты.
         /// </summary>
         /// <param name="sectorNode">Схема сектора, на основе которой будет принято решение,
@@ -54,5 +44,15 @@ namespace Zilon.Core.MapGenerators
                     return RoomMapFactory;
             }
         }
+
+        /// <summary>
+        /// Экземпляр фабрики, генерирующей карты на основе клеточного автомата.
+        /// </summary>
+        protected abstract IMapFactory CellularAutomatonMapFactory { get; }
+
+        /// <summary>
+        /// Экземпляр фабрики, генерирующий карты на основе прямоугольных комнат.
+        /// </summary>
+        protected abstract IMapFactory RoomMapFactory { get; }
     }
 }

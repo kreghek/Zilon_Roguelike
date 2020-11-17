@@ -7,7 +7,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
     public sealed class PitFactory : IStaticObjectFactory
     {
-        public PropContainerPurpose Purpose => PropContainerPurpose.Pit;
+        public PropContainerPurpose Purpose { get => PropContainerPurpose.Pit; }
 
         public IStaticObject Create(ISector sector, HexNode node, int id)
         {

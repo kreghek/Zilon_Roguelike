@@ -20,6 +20,16 @@ namespace Zilon.Core.Specs.Steps
         {
         }
 
+        [Given(@"У актёра игрока прогресс (\d+) перка (.+)")]
+        public void GivenУАктёраИгрокаПрогрессПеркаНаУбийствоИз(int perkProgress, string perkSid)
+        {
+            var actor = Context.GetActiveActor();
+
+            var perk = actor.Person.GetModule<IEvolutionModule>().Perks.Single(x => x.Scheme.Sid == perkSid);
+
+            perk.CurrentJobs[0].Progress = perkProgress;
+        }
+
         [Given(@"Актёр игрока получает перк (.+)")]
         public void GivenАктёрИгрокаПолучаетПерк(string perkSid)
         {
@@ -33,23 +43,7 @@ namespace Zilon.Core.Specs.Steps
 
             var actor = Context.GetActiveActor();
 
-            actor.Person.GetModule<IEvolutionModule>()
-                 .AddBuildInPerks(new[]
-                 {
-                     perk
-                 });
-        }
-
-        [Given(@"У актёра игрока прогресс (\d+) перка (.+)")]
-        public void GivenУАктёраИгрокаПрогрессПеркаНаУбийствоИз(int perkProgress, string perkSid)
-        {
-            var actor = Context.GetActiveActor();
-
-            var perk = actor.Person.GetModule<IEvolutionModule>()
-                            .Perks.Single(x => x.Scheme.Sid == perkSid);
-
-            perk.CurrentJobs[0]
-                .Progress = perkProgress;
+            actor.Person.GetModule<IEvolutionModule>().AddBuildInPerks(new[] { perk });
         }
 
         [Then(@"Перк (.+) должен быть прокачен")]
@@ -57,15 +51,11 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var perk = actor.Person.GetModule<IEvolutionModule>()
-                            .Perks.Single(x => x.Scheme.Sid == perkSid);
+            var perk = actor.Person.GetModule<IEvolutionModule>().Perks.Single(x => x.Scheme.Sid == perkSid);
 
-            perk.CurrentLevel.Should()
-                .NotBeNull("Перк должен быть прокачен. null в уровне означает непрокаченный перк.");
-            perk.CurrentLevel.Primary.Should()
-                .Be(0);
-            perk.CurrentLevel.Sub.Should()
-                .Be(0);
+            perk.CurrentLevel.Should().NotBeNull("Перк должен быть прокачен. null в уровне означает непрокаченный перк.");
+            perk.CurrentLevel.Primary.Should().Be(0);
+            perk.CurrentLevel.Sub.Should().Be(0);
         }
     }
 }

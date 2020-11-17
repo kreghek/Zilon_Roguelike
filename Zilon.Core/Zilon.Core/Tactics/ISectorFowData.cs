@@ -10,10 +10,10 @@ namespace Zilon.Core.Tactics
 
         void AddNodes(IEnumerable<SectorMapFowNode> nodes);
 
+        SectorMapFowNode GetNode(IGraphNode node);
+
         void ChangeNodeState(SectorMapFowNode node, SectorMapNodeFowState targetState);
 
         IEnumerable<SectorMapFowNode> GetFowNodeByState(SectorMapNodeFowState targetState);
-
-        SectorMapFowNode GetNode(IGraphNode node);
     }
 }

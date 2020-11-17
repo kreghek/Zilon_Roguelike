@@ -20,7 +20,7 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <inheritdoc/>
-        public string Key => nameof(ICombatActModule);
+        public string Key { get => nameof(ICombatActModule); }
 
         /// <inheritdoc/>
         public bool IsActive { get; set; }

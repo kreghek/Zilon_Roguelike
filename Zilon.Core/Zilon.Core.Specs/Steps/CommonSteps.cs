@@ -42,68 +42,41 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [Given(@"Актёр игрока имеет Hp: (.*)")]
-        public void GivenАктёрИмеетHp(int startHp)
+        [Given(@"Есть карта размером (\d*)")]
+        public async Task GivenЕстьКартаРазмеромAsync(int mapSize)
         {
-            var actor = Context.GetActiveActor();
-            actor.Person.GetModule<ISurvivalModule>()
-                 .SetStatForce(SurvivalStatType.Health, startHp);
+            await Context.CreateGlobeAsync(mapSize).ConfigureAwait(false);
         }
 
-        [Given(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
-        public void GivenВИнвентареУАктёраЕстьРесурс(string propSid, int count)
+        [UsedImplicitly]
+        [Given(@"Между ячейками \((.*), (.*)\) и \((.*), (.*)\) есть стена")]
+        public void GivenМеждуЯчейкамиИЕстьСтена(int x1, int y1, int x2, int y2)
         {
-            var actor = Context.GetActiveActor();
-            Context.AddResourceToActor(propSid, count, actor);
+            Context.AddWall(x1, y1, x2, y2);
         }
 
         [UsedImplicitly]
         [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
         {
-            var sectorToAdd = Context.Globe.SectorNodes.First()
-                                     .Sector;
+            var sectorToAdd = Context.Globe.SectorNodes.First().Sector;
             Context.AddHumanActor(personSid, sectorToAdd, new OffsetCoords(nodeX, nodeY));
         }
 
         [UsedImplicitly]
-        [Given(@"Есть карта размером (\d*)")]
-        public async Task GivenЕстьКартаРазмеромAsync(int mapSize)
+        [Given(@"Актёр игрока имеет Hp: (.*)")]
+        public void GivenАктёрИмеетHp(int startHp)
         {
-            await Context.CreateGlobeAsync(mapSize)
-                         .ConfigureAwait(false);
+            var actor = Context.GetActiveActor();
+            actor.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, startHp);
         }
 
         [UsedImplicitly]
         [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
-        public void GivenЕстьМонстрКлассаRatВЯчейке(
-            string monsterSid,
-            int monsterId,
-            int x,
-            int y)
+        public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int monsterId, int x, int y)
         {
-            var sector = Context.Globe.SectorNodes.First()
-                                .Sector;
+            var sector = Context.Globe.SectorNodes.First().Sector;
             Context.AddMonsterActor(monsterSid, monsterId, sector, new OffsetCoords(x, y));
-        }
-
-        [UsedImplicitly]
-        [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\)")]
-        public void GivenЕстьСундукВЯчейке(int id, int offsetX, int offsetY)
-        {
-            var coords = new OffsetCoords(offsetX, offsetY);
-            Context.AddChest(id, coords);
-        }
-
-        [UsedImplicitly]
-        [Given(@"Между ячейками \((.*), (.*)\) и \((.*), (.*)\) есть стена")]
-        public void GivenМеждуЯчейкамиИЕстьСтена(
-            int x1,
-            int y1,
-            int x2,
-            int y2)
-        {
-            Context.AddWall(x1, y1, x2, y2);
         }
 
         [UsedImplicitly]
@@ -112,27 +85,15 @@ namespace Zilon.Core.Specs.Steps
         {
             var monster = Context.GetMonsterById(monsterId);
 
-            monster.Person.GetModule<ISurvivalModule>()
-                   .SetStatForce(SurvivalStatType.Health, monsterHp);
+            monster.Person.GetModule<ISurvivalModule>().SetStatForce(SurvivalStatType.Health, monsterHp);
         }
 
         [UsedImplicitly]
-        [Given(@"Сундук содержит Id:(.*) ресурс (.*) в количестве (.*)")]
-        public void GivenСундукСодержитIdРусурсPistol(int id, string resourceSid, int count)
+        [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\)")]
+        public void GivenЕстьСундукВЯчейке(int id, int offsetX, int offsetY)
         {
-            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
-            var propFactory = Context.ServiceProvider.GetRequiredService<IPropFactory>();
-            var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
-
-            var staticObjectManager = player.SectorNode.Sector.StaticObjectManager;
-
-            var container = staticObjectManager.Items.Single(x => x.Id == id);
-
-            var propScheme = schemeService.GetScheme<IPropScheme>(resourceSid);
-            var resource = propFactory.CreateResource(propScheme, count);
-
-            container.GetModule<IPropContainer>()
-                     .Content.Add(resource);
+            var coords = new OffsetCoords(offsetX, offsetY);
+            Context.AddChest(id, coords);
         }
 
         [UsedImplicitly]
@@ -150,121 +111,32 @@ namespace Zilon.Core.Specs.Steps
             var propScheme = schemeService.GetScheme<IPropScheme>(equipmentSid);
             var equipment = propFactory.CreateEquipment(propScheme);
 
-            container.GetModule<IPropContainer>()
-                     .Content.Add(equipment);
+            container.GetModule<IPropContainer>().Content.Add(equipment);
         }
 
         [UsedImplicitly]
-        [Then(@"Актёр игрока имеет запас hp (.*)")]
-        public void ThenАктёрИмеетЗадасHp(int expectedHp)
-        {
-            var actor = Context.GetActiveActor();
-            var hpStat = actor.Person.GetModule<ISurvivalModule>()
-                              .Stats.Single(x => x.Type == SurvivalStatType.Health);
-            hpStat.Value.Should()
-                  .Be(expectedHp);
-        }
-
-        [Then(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
-        public void ThenВИнвентареУАктёраЕстьРесурсPropSidКоличествоExpectedCount(string propSid, int expectedCount)
-        {
-            var actor = Context.GetActiveActor();
-
-            var propsInInventory = actor.Person.GetModule<IInventoryModule>()
-                                        .CalcActualItems();
-            var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
-
-            testedProp.Should()
-                      .BeOfType<Resource>();
-            var testedResouce = (Resource)testedProp;
-
-            testedResouce.Count.Should()
-                         .Be(expectedCount);
-        }
-
-        [UsedImplicitly]
-        [Then(@"В сундуке Id:(.*) нет предмета (.*)")]
-        public void ThenВСундукеIdНетПредметаWater(int containerId, string resourceSid)
+        [Given(@"Сундук содержит Id:(.*) ресурс (.*) в количестве (.*)")]
+        public void GivenСундукСодержитIdРусурсPistol(int id, string resourceSid, int count)
         {
             var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
-            var containerManager = player.SectorNode.Sector.StaticObjectManager;
+            var propFactory = Context.ServiceProvider.GetRequiredService<IPropFactory>();
+            var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
 
-            var container = containerManager.Items.Single(x => x.Id == containerId);
-            var prop = container.GetModule<IPropContainer>()
-                                .Content.CalcActualItems()
-                                .SingleOrDefault(x => x.Scheme.Sid == resourceSid);
+            var staticObjectManager = player.SectorNode.Sector.StaticObjectManager;
 
-            prop.Should()
-                .BeNull();
+            var container = staticObjectManager.Items.Single(x => x.Id == id);
+
+            var propScheme = schemeService.GetScheme<IPropScheme>(resourceSid);
+            var resource = propFactory.CreateResource(propScheme, count);
+
+            container.GetModule<IPropContainer>().Content.Add(resource);
         }
 
-        [UsedImplicitly]
-        [Then(@"В сундуке Id:(.*) нет экипировки (.*)")]
-        public void ThenВСундукеIdНетЭкипировкиPistol(int id, string propSid)
-        {
-            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
-            var containerManager = player.SectorNode.Sector.StaticObjectManager;
-
-            var container = containerManager.Items.Single(x => x.Id == id);
-            var prop = container.GetModule<IPropContainer>()
-                                .Content.CalcActualItems()
-                                .SingleOrDefault(x => x.Scheme.Sid == propSid);
-
-            prop.Should()
-                .BeNull();
-        }
-
-        [UsedImplicitly]
-        [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
-        public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
+        [Given(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
+        public void GivenВИнвентареУАктёраЕстьРесурс(string propSid, int count)
         {
             var actor = Context.GetActiveActor();
-
-            var propsInInventory = actor.Person.GetModule<IInventoryModule>()
-                                        .CalcActualItems();
-            var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
-
-            testedProp.Should()
-                      .BeNull();
-        }
-
-        [UsedImplicitly]
-        [Then(@"Монстр Id:(\d*) имеет Hp (\d*)")]
-        public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
-        {
-            var monster = Context.GetMonsterById(monsterId);
-            var hpStat = monster.Person.GetModule<ISurvivalModule>()
-                                .Stats
-                                .Single(x => x.Type == SurvivalStatType.Health);
-            hpStat.Value.Should()
-                  .Be(expectedMonsterHp);
-        }
-
-        [Then(@"Параметр (.*) равен (.*)")]
-        public void ThenПараметр_Равен(string paramType, string paramValue)
-        {
-            // пока нет предметов, которые изменяют характеристики, этот метод не реализуем.
-            // оставляем, чтобы после остались проверки.
-        }
-
-        [UsedImplicitly]
-        [Then(@"У актёра в инвентаре есть (.*)")]
-        public void ThenУАктёраВИнвентареЕстьPistol(string equipmentSchemeSid)
-        {
-            var actor = Context.GetActiveActor();
-
-            var inventoryModule = actor.Person.GetModule<IInventoryModule>();
-            var inventoryItems = inventoryModule.CalcActualItems();
-            var foundEquipment = inventoryItems.SingleOrDefault(x => x.Scheme.Sid == equipmentSchemeSid);
-
-            foundEquipment.Should()
-                          .NotBeNull();
-        }
-
-        [When(@"Жду (.*) единиц времени")]
-        public Task WhenЖдуЕдиницВремениAsync(int timeUnitCount)
-        {
-            return WhenСледующаяИтерацияСектораAsync(timeUnitCount);
+            Context.AddResourceToActor(propSid, count, actor);
         }
 
         [UsedImplicitly]
@@ -272,8 +144,7 @@ namespace Zilon.Core.Specs.Steps
         public async Task WhenСледующаяИтерацияСектораAsync(int count)
         {
             var globe = Context.Globe;
-            var humanTaskSource = Context.ServiceProvider
-                                         .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var humanTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
             var counter = count;
@@ -287,11 +158,9 @@ namespace Zilon.Core.Specs.Steps
             var testHasPlayerPerson = playerState.ActiveActor?.Actor != null;
             if (testHasPlayerPerson)
             {
-                while (IsPlayerPersonCanIntent(humanTaskSource, survivalModule) && (counter > 0))
+                while (IsPlayerPersonCanIntent(humanTaskSource, survivalModule) && counter > 0)
                 {
-                    await globe.UpdateAsync()
-                               .TimeoutAfter(TEST_SHORT_OP_LIMIT_MS)
-                               .ConfigureAwait(false);
+                    await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
                     counter--;
                 }
             }
@@ -299,12 +168,27 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (counter > 0)
                 {
-                    await globe.UpdateAsync()
-                               .TimeoutAfter(TEST_SHORT_OP_LIMIT_MS)
-                               .ConfigureAwait(false);
+                    await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
                     counter--;
                 }
             }
+        }
+
+        private static bool IsPlayerPersonCanIntent([NotNull] IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource, [CanBeNull] ISurvivalModule survivalModule)
+        {
+            if (humanTaskSource is null)
+            {
+                throw new ArgumentNullException(nameof(humanTaskSource));
+            }
+
+            return !humanTaskSource.CanIntent() && survivalModule?.IsDead == false;
+        }
+
+        [UsedImplicitly]
+        [When(@"Я выбираю ячейку \((.*), (.*)\)")]
+        public void WhenЯВыбираюЯчейку(int x, int y)
+        {
+            Context.ClickOnNode(x, y);
         }
 
         [UsedImplicitly]
@@ -326,65 +210,25 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [When(@"Я выбираю ячейку \((.*), (.*)\)")]
-        public void WhenЯВыбираюЯчейку(int x, int y)
+        [When(@"Я забираю из сундука экипировку (.*)")]
+        public void WhenЯЗабираюИзСундукаЭкипировкуPistol(string equipmentSchemeSid)
         {
-            Context.ClickOnNode(x, y);
-        }
-
-        [When(@"Я выполняю простой")]
-        public void WhenЯВыполняюПростой()
-        {
-            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
-            idleCommand.Execute();
-        }
-
-        [When(@"Я жду (.*) итераций")]
-        public async Task WhenЯЖдуЕдиницВремениAsync(int timeUnitCount)
-        {
-            var globe = Context.Globe;
-            var humatTaskSource = Context.ServiceProvider
-                                         .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
+            var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
 
-            var counter = timeUnitCount;
+            var actor = Context.GetActiveActor();
+            var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
-            var survivalModule = playerState.ActiveActor?.Actor.Person?.GetModuleSafe<ISurvivalModule>();
+            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(), container.GetModule<IPropContainer>().Content);
+            propTransferCommand.TransferMachine = transferMachine;
 
-            var isPlayerActor = playerState.ActiveActor?.Actor != null;
-            if (isPlayerActor)
-            {
-                while (counter > 0)
-                {
-                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
-                    {
-                        if (humatTaskSource.CanIntent() && (survivalModule?.IsDead == false))
-                        {
-                            WhenЯВыполняюПростой();
-                        }
+            var equipment = container.GetModule<IPropContainer>().Content.CalcActualItems().Single(x => x.Scheme.Sid == equipmentSchemeSid);
 
-                        await globe.UpdateAsync()
-                                   .TimeoutAfter(TEST_SHORT_OP_LIMIT_MS)
-                                   .ConfigureAwait(false);
-                    }
+            transferMachine.TransferProp(equipment,
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory);
 
-                    counter--;
-                }
-            }
-            else
-            {
-                while (counter > 0)
-                {
-                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
-                    {
-                        await globe.UpdateAsync()
-                                   .TimeoutAfter(TEST_SHORT_OP_LIMIT_MS)
-                                   .ConfigureAwait(false);
-                    }
-
-                    counter--;
-                }
-            }
+            propTransferCommand.Execute();
         }
 
         [UsedImplicitly]
@@ -398,15 +242,12 @@ namespace Zilon.Core.Specs.Steps
             var actor = Context.GetActiveActor();
             var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
 
-            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(),
-                container.GetModule<IPropContainer>()
-                         .Content);
+            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(), container.GetModule<IPropContainer>().Content);
             propTransferCommand.TransferMachine = transferMachine;
 
-            var resource = container.GetModule<IPropContainer>()
-                                    .Content.CalcActualItems()
-                                    .OfType<Resource>()
-                                    .Single(x => x.Scheme.Sid == resourceSid);
+            var resource = container.GetModule<IPropContainer>().Content.CalcActualItems()
+                .OfType<Resource>()
+                .Single(x => x.Scheme.Sid == resourceSid);
 
             Resource takenResource;
             if (resource.Count > count)
@@ -425,42 +266,150 @@ namespace Zilon.Core.Specs.Steps
             propTransferCommand.Execute();
         }
 
-        [UsedImplicitly]
-        [When(@"Я забираю из сундука экипировку (.*)")]
-        public void WhenЯЗабираюИзСундукаЭкипировкуPistol(string equipmentSchemeSid)
+        [When(@"Жду (.*) единиц времени")]
+        public Task WhenЖдуЕдиницВремениAsync(int timeUnitCount)
         {
-            var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
-            var propTransferCommand = Context.ServiceProvider.GetRequiredService<PropTransferCommand>();
-
-            var actor = Context.GetActiveActor();
-            var container = ((IContainerViewModel)playerState.HoverViewModel).StaticObject;
-
-            var transferMachine = new PropTransferMachine(actor.Person.GetModule<IInventoryModule>(),
-                container.GetModule<IPropContainer>()
-                         .Content);
-            propTransferCommand.TransferMachine = transferMachine;
-
-            var equipment = container.GetModule<IPropContainer>()
-                                     .Content.CalcActualItems()
-                                     .Single(x => x.Scheme.Sid == equipmentSchemeSid);
-
-            transferMachine.TransferProp(equipment,
-                PropTransferMachineStore.Container,
-                PropTransferMachineStore.Inventory);
-
-            propTransferCommand.Execute();
+            return WhenСледующаяИтерацияСектораAsync(timeUnitCount);
         }
 
-        private static bool IsPlayerPersonCanIntent(
-            [NotNull] IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource,
-            [CanBeNull] ISurvivalModule survivalModule)
+        [When(@"Я жду (.*) итераций")]
+        public async Task WhenЯЖдуЕдиницВремениAsync(int timeUnitCount)
         {
-            if (humanTaskSource is null)
-            {
-                throw new ArgumentNullException(nameof(humanTaskSource));
-            }
+            var globe = Context.Globe;
+            var humatTaskSource = Context.ServiceProvider.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
 
-            return !humanTaskSource.CanIntent() && (survivalModule?.IsDead == false);
+            var counter = timeUnitCount;
+
+            var survivalModule = playerState.ActiveActor?.Actor.Person?.GetModuleSafe<ISurvivalModule>();
+
+            var isPlayerActor = playerState.ActiveActor?.Actor != null;
+            if (isPlayerActor)
+            {
+                while (counter > 0)
+                {
+                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+                    {
+                        if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
+                        {
+                            WhenЯВыполняюПростой();
+                        }
+
+                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    }
+
+                    counter--;
+                }
+            }
+            else
+            {
+                while (counter > 0)
+                {
+                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+                    {
+                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    }
+
+                    counter--;
+                }
+            }
+        }
+
+        [When(@"Я выполняю простой")]
+        public void WhenЯВыполняюПростой()
+        {
+            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+            idleCommand.Execute();
+        }
+
+        [UsedImplicitly]
+        [Then(@"У актёра в инвентаре есть (.*)")]
+        public void ThenУАктёраВИнвентареЕстьPistol(string equipmentSchemeSid)
+        {
+            var actor = Context.GetActiveActor();
+
+            var inventoryModule = actor.Person.GetModule<IInventoryModule>();
+            var inventoryItems = inventoryModule.CalcActualItems();
+            var foundEquipment = inventoryItems.SingleOrDefault(x => x.Scheme.Sid == equipmentSchemeSid);
+
+            foundEquipment.Should().NotBeNull();
+        }
+
+        [UsedImplicitly]
+        [Then(@"В сундуке Id:(.*) нет экипировки (.*)")]
+        public void ThenВСундукеIdНетЭкипировкиPistol(int id, string propSid)
+        {
+            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
+            var containerManager = player.SectorNode.Sector.StaticObjectManager;
+
+            var container = containerManager.Items.Single(x => x.Id == id);
+            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == propSid);
+
+            prop.Should().BeNull();
+        }
+
+        [UsedImplicitly]
+        [Then(@"В сундуке Id:(.*) нет предмета (.*)")]
+        public void ThenВСундукеIdНетПредметаWater(int containerId, string resourceSid)
+        {
+            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
+            var containerManager = player.SectorNode.Sector.StaticObjectManager;
+
+            var container = containerManager.Items.Single(x => x.Id == containerId);
+            var prop = container.GetModule<IPropContainer>().Content.CalcActualItems().SingleOrDefault(x => x.Scheme.Sid == resourceSid);
+
+            prop.Should().BeNull();
+        }
+
+        [Then(@"В инвентаре у актёра есть ресурс: (.*) количество: (\d*)")]
+        public void ThenВИнвентареУАктёраЕстьРесурсPropSidКоличествоExpectedCount(string propSid, int expectedCount)
+        {
+            var actor = Context.GetActiveActor();
+
+            var propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            var testedProp = propsInInventory.First(x => x.Scheme.Sid == propSid);
+
+            testedProp.Should().BeOfType<Resource>();
+            var testedResouce = (Resource)testedProp;
+
+            testedResouce.Count.Should().Be(expectedCount);
+        }
+
+        [UsedImplicitly]
+        [Then(@"Предмет (.*) отсутствует в инвентаре актёра")]
+        public void ThenЕдаСырОтсутствуетВИнвентареПерсонажа(string propSid)
+        {
+            var actor = Context.GetActiveActor();
+
+            var propsInInventory = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
+            var testedProp = propsInInventory.FirstOrDefault(x => x.Scheme.Sid == propSid);
+
+            testedProp.Should().BeNull();
+        }
+
+        [UsedImplicitly]
+        [Then(@"Актёр игрока имеет запас hp (.*)")]
+        public void ThenАктёрИмеетЗадасHp(int expectedHp)
+        {
+            var actor = Context.GetActiveActor();
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
+            hpStat.Value.Should().Be(expectedHp);
+        }
+
+        [UsedImplicitly]
+        [Then(@"Монстр Id:(\d*) имеет Hp (\d*)")]
+        public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
+        {
+            var monster = Context.GetMonsterById(monsterId);
+            var hpStat = monster.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health);
+            hpStat.Value.Should().Be(expectedMonsterHp);
+        }
+
+        [Then(@"Параметр (.*) равен (.*)")]
+        public void ThenПараметр_Равен(string paramType, string paramValue)
+        {
+            // пока нет предметов, которые изменяют характеристики, этот метод не реализуем.
+            // оставляем, чтобы после остались проверки.
         }
     }
 }

@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 using Zilon.Bot.Sdk;
-using Zilon.Core.Localization;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -33,10 +32,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             startUp.RegisterServices(serviceContainer);
             var serviceProvider = serviceContainer.BuildServiceProvider();
 
-            var botSettings = new BotSettings
-            {
-                Mode = mode
-            };
+            var botSettings = new BotSettings { Mode = mode };
 
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
             var player = serviceProvider.GetRequiredService<IPlayer>();
@@ -46,14 +42,12 @@ namespace Zilon.Bot.Players.DevelopmentTests
                 botSettings,
                 globeInitializer);
 
-            var globe = await autoPlayEngine.CreateGlobeAsync()
-                                            .ConfigureAwait(false);
+            var globe = await autoPlayEngine.CreateGlobeAsync().ConfigureAwait(false);
             var followedPerson = player.MainPerson;
 
             PrintPersonBacklog(followedPerson);
 
-            await autoPlayEngine.StartAsync(globe, followedPerson)
-                                .ConfigureAwait(false);
+            await autoPlayEngine.StartAsync(globe, followedPerson).ConfigureAwait(false);
 
             PrintResult(serviceProvider);
         }
@@ -61,17 +55,14 @@ namespace Zilon.Bot.Players.DevelopmentTests
         private static void PrintPersonBacklog(IPerson humanPerson)
         {
             Console.WriteLine("Build In Traits:");
-            var buildinTraits = humanPerson.GetModule<IEvolutionModule>()
-                                           .Perks.Where(x => x.Scheme.IsBuildIn)
-                                           .ToArray();
+            var buildinTraits = humanPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
             foreach (var buildInTrait in buildinTraits)
             {
                 Console.WriteLine(buildInTrait.Scheme.Name.En);
             }
 
             Console.WriteLine("Start Equipments:");
-            var equipments = humanPerson.GetModule<IEquipmentModule>()
-                                        .ToArray();
+            var equipments = humanPerson.GetModule<IEquipmentModule>().ToArray();
             foreach (var equipment in equipments)
             {
                 if (equipment is null)
@@ -83,9 +74,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             }
 
             Console.WriteLine("Start Inventory:");
-            var inventoryProps = humanPerson.GetModule<IInventoryModule>()
-                                            .CalcActualItems()
-                                            .ToArray();
+            var inventoryProps = humanPerson.GetModule<IInventoryModule>().CalcActualItems().ToArray();
             foreach (var prop in inventoryProps)
             {
                 switch (prop)
@@ -105,8 +94,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             }
 
             Console.WriteLine("Start attributes:");
-            foreach (var attr in humanPerson.GetModule<IAttributesModule>()
-                                            .GetAttributes())
+            foreach (var attr in humanPerson.GetModule<IAttributesModule>().GetAttributes())
             {
                 Console.WriteLine($"{attr.Type}: {attr.Value}");
             }
@@ -129,7 +117,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             {
                 var deathReason = deathReasonService.GetDeathReasonSummary(
                     lastEvent,
-                    Language.En);
+                    Core.Localization.Language.En);
 
                 Console.WriteLine($"Death Reason: {deathReason}");
             }

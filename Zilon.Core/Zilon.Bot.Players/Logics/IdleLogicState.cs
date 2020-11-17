@@ -6,18 +6,15 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class IdleLogicState : LogicStateBase
     {
-        private readonly IDecisionSource _decisionSource;
         private IdleTask _idleTask;
+        private readonly IDecisionSource _decisionSource;
 
         public IdleLogicState(IDecisionSource decisionSource)
         {
             _decisionSource = decisionSource;
         }
 
-        public override IActorTask GetTask(
-            IActor actor,
-            ISectorTaskSourceContext context,
-            ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
         {
             if (_idleTask == null)
             {

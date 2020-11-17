@@ -32,20 +32,7 @@ namespace Zilon.Core.Schemes
             InitHandler<IPersonTemplateScheme, PersonTemplateScheme>();
         }
 
-        private ISchemeServiceHandler<TScheme> GetHandler<TScheme>()
-            where TScheme : class, IScheme
-        {
-            if (!_handlerDict.TryGetValue(typeof(TScheme), out object handlerObj))
-            {
-                throw new ArgumentException("Указан неизвестный тип схемы.");
-            }
-
-            var handler = (ISchemeServiceHandler<TScheme>)handlerObj;
-            return handler;
-        }
-
-        private void InitHandler<TScheme, TSchemeImpl>()
-            where TScheme : class, IScheme
+        private void InitHandler<TScheme, TSchemeImpl>() where TScheme : class, IScheme
             where TSchemeImpl : class, TScheme
         {
             var handler = _schemeServiceHandlerFactory.Create<TSchemeImpl>();
@@ -87,13 +74,24 @@ namespace Zilon.Core.Schemes
             var schemeType = typeof(TScheme);
             if (!schemeType.IsInterface)
             {
-                throw new ArgumentException(
-                    $"Тип схемы должен быть интерфейсом, унаследованным от {typeof(IScheme).Name}");
+                throw new ArgumentException($"Тип схемы должен быть интерфейсом, унаследованным от {typeof(IScheme).Name}");
             }
 
             var handler = GetHandler<TScheme>();
             var allSchemes = handler.GetAll();
             return allSchemes;
+        }
+
+        private ISchemeServiceHandler<TScheme> GetHandler<TScheme>()
+            where TScheme : class, IScheme
+        {
+            if (!_handlerDict.TryGetValue(typeof(TScheme), out object handlerObj))
+            {
+                throw new ArgumentException("Указан неизвестный тип схемы.");
+            }
+
+            var handler = (ISchemeServiceHandler<TScheme>)handlerObj;
+            return handler;
         }
     }
 }

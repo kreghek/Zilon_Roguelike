@@ -9,8 +9,9 @@ namespace Zilon.Core.Schemes
 {
     public class FileSchemeLocator : ISchemeLocator
     {
-        private const string schemeCatalogEnvVariable = "ZILON_LIV_SCHEME_CATALOG";
         private readonly string _schemeCatalog;
+
+        private const string schemeCatalogEnvVariable = "ZILON_LIV_SCHEME_CATALOG";
 
         [ExcludeFromCodeCoverage]
         public FileSchemeLocator([NotNull] string schemeCatalog)
@@ -35,16 +36,6 @@ namespace Zilon.Core.Schemes
             }
 
             return new FileSchemeLocator(schemeCatalogFromEnvVariable);
-        }
-
-        private static string GetRelativePath(string path, string filePath, string sid)
-        {
-            var relativeFilePath = filePath.Remove(0, path.Length)
-                                           .TrimStart('\\');
-            var fileFolder = relativeFilePath
-                             .Substring(0, relativeFilePath.Length - (sid + ".json").Length)
-                             .TrimEnd('\\');
-            return fileFolder;
         }
 
         public SchemeFile[] GetAll(string directory)
@@ -76,6 +67,15 @@ namespace Zilon.Core.Schemes
             }
 
             return result.ToArray();
+        }
+
+        private static string GetRelativePath(string path, string filePath, string sid)
+        {
+            var relativeFilePath = filePath.Remove(0, path.Length).TrimStart('\\');
+            var fileFolder = relativeFilePath
+                .Substring(0, relativeFilePath.Length - (sid + ".json").Length)
+                .TrimEnd('\\');
+            return fileFolder;
         }
     }
 }

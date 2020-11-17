@@ -14,7 +14,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
         "CA1812:Avoid uninstantiated internal classes",
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
-    internal class PassMapValidator : ISectorValidator
+    class PassMapValidator : ISectorValidator
     {
         public Task Validate(ISector sector, IServiceProvider scopeContainer)
         {
@@ -29,8 +29,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
                 var staticObjectManager = sector.StaticObjectManager;
                 var containerNodes = staticObjectManager.Items.Select(x => x.Node);
 
-                var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>()
-                                                .ToArray();
+                var allNonObstacleNodes = sector.Map.Nodes.OfType<HexNode>().ToArray();
                 var allNonContainerNodes = allNonObstacleNodes.Where(x => !containerNodes.Contains(x));
                 var allNodes = allNonContainerNodes.ToArray();
 

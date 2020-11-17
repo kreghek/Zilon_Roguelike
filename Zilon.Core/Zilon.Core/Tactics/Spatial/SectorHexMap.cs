@@ -20,13 +20,19 @@ namespace Zilon.Core.Tactics.Spatial
             Transitions = new Dictionary<IGraphNode, RoomTransition>();
         }
 
+        /// <inheritdoc/>
+        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
+
         /// <summary>
         /// Узлы карты, приведённые к <see cref="HexNode"/>.
         /// </summary>
-        public IEnumerable<HexNode> HexNodes => Nodes.Cast<HexNode>();
-
-        /// <inheritdoc/>
-        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
+        public IEnumerable<HexNode> HexNodes
+        {
+            get
+            {
+                return Nodes.Cast<HexNode>();
+            }
+        }
 
         /// <summary>
         /// Проверяет, доступен ли целевой узел из стартового узла.
@@ -75,8 +81,7 @@ namespace Zilon.Core.Tactics.Spatial
                     return false;
                 }
 
-                var hasNext = GetNext(prevNode)
-                    .Contains(testNode);
+                var hasNext = GetNext(prevNode).Contains(testNode);
                 if (!hasNext)
                 {
                     return false;

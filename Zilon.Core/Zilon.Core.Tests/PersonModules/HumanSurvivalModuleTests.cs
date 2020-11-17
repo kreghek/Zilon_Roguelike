@@ -20,135 +20,41 @@ namespace Zilon.Core.Tests.PersonModules
     public class HumanSurvivalModuleTests
     {
         /// <summary>
-        /// Проверяет, что при конституции больше базового значения увеличивается запас ХП.
+        /// Тест проверяет, что характеристика с изменённым DownPass корректно
+        /// изменяется при указанных результатах броска кости.
         /// </summary>
         [Test]
-        public void Constructor_ConstitutionAboveBase_HpIncreased()
+        [TestCaseSource(typeof(SurvivalDataTestCasesSource), nameof(SurvivalDataTestCasesSource.DownPassTestCases))]
+        public int Update_ModifiedDownPass_StatDownCorrectly(int statDownPass, int downPassRoll)
         {
             // ARRANGE
 
-            const int PERSON_HP = 1;
-            const int EXPECTED_HP = PERSON_HP + 2;
-            const int CONSTITUTION_BASE = 10;
-            const int CONSTITUTION_VALUE = CONSTITUTION_BASE + 1;
+            const int STAT_RATE = 1;
+            const int MIN_STAT_VALUE = 0;
+            const int MAX_STAT_VALUE = 1;
+            const int START_STAT_VALUE = MAX_STAT_VALUE;
+            const SurvivalStatType STAT_TYPE = SurvivalStatType.Satiety;
 
-            var personScheme = CreatePersonScheme();
-            var survivalRandomSource = CreateSurvivalRandomSource();
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>()))
+                .Returns(downPassRoll);
+            var survivalRandomSource = survivalRandomSourceMock.Object;
 
-            personScheme.Hp = PERSON_HP;
-
-            var attributesModuleMock = new Mock<IAttributesModule>();
-            attributesModuleMock.Setup(x => x.GetAttribute(PersonAttributeType.Constitution))
-                                .Returns(new PersonAttribute(PersonAttributeType.Constitution, CONSTITUTION_VALUE));
-            var attributesModule = attributesModuleMock.Object;
-
-            // ACT
-            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
-
-            // ASSERT
-            survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health)
-                        .Value.Should()
-                        .Be(EXPECTED_HP);
-        }
-
-        /// <summary>
-        /// Проверяет, что при конституции ниже базового значения увеличивается запас ХП.
-        /// </summary>
-        [Test]
-        public void Constructor_ConstitutionBelowBase_HpDecreased()
-        {
-            // ARRANGE
-
-            const int PERSON_HP = 3;
-            const int EXPECTED_HP = PERSON_HP - 2;
-            const int CONSTITUTION_BASE = 10;
-            const int CONSTITUTION_VALUE = CONSTITUTION_BASE - 1;
-
-            var personScheme = CreatePersonScheme();
-            var survivalRandomSource = CreateSurvivalRandomSource();
-
-            personScheme.Hp = PERSON_HP;
-
-            var attributesModuleMock = new Mock<IAttributesModule>();
-            attributesModuleMock.Setup(x => x.GetAttribute(PersonAttributeType.Constitution))
-                                .Returns(new PersonAttribute(PersonAttributeType.Constitution, CONSTITUTION_VALUE));
-            var attributesModule = attributesModuleMock.Object;
-
-            // ACT
-            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
-
-            // ASSERT
-            survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health)
-                        .Value.Should()
-                        .Be(EXPECTED_HP);
-        }
-
-        public static IPersonScheme CreatePersonScheme()
-        {
-            var personScheme = new TestPersonScheme
-            {
-                SurvivalStats = new[]
-                {
-                    new TestPersonSurvivalStatSubScheme
-                    {
-                        Type = PersonSurvivalStatType.Satiety,
-                        MinValue = -100,
-                        MaxValue = 100,
-                        StartValue = 0,
-                        KeyPoints = new[]
-                        {
-                            new TestPersonSurvivalStatKeySegmentSubScheme
-                            {
-                                Level = PersonSurvivalStatKeypointLevel.Lesser,
-                                Start = 0.25f,
-                                End = 0.75f
-                            },
-                            new TestPersonSurvivalStatKeySegmentSubScheme
-                            {
-                                Level = PersonSurvivalStatKeypointLevel.Strong,
-                                Start = 0.12f,
-                                End = 0.25f
-                            },
-                            new TestPersonSurvivalStatKeySegmentSubScheme
-                            {
-                                Level = PersonSurvivalStatKeypointLevel.Max,
-                                Start = 0,
-                                End = 0.12f
-                            }
-                        }
-                    },
-                    new TestPersonSurvivalStatSubScheme
-                    {
-                        Type = PersonSurvivalStatType.Hydration,
-                        MinValue = -100,
-                        MaxValue = 100,
-                        StartValue = 0,
-                        KeyPoints = new[]
-                        {
-                            new TestPersonSurvivalStatKeySegmentSubScheme
-                            {
-                                Level = PersonSurvivalStatKeypointLevel.Lesser,
-                                Start = 0.25f,
-                                End = 0.75f
-                            },
-                            new TestPersonSurvivalStatKeySegmentSubScheme
-                            {
-                                Level = PersonSurvivalStatKeypointLevel.Strong,
-                                Start = 0.12f,
-                                End = 0.25f
-                            },
-                            new TestPersonSurvivalStatKeySegmentSubScheme
-                            {
-                                Level = PersonSurvivalStatKeypointLevel.Max,
-                                Start = 0,
-                                End = 0.12f
-                            }
-                        }
-                    }
+            var survivalStats = new[] {
+                new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE){
+                    Type = STAT_TYPE,
+                    Rate = STAT_RATE,
+                    DownPassRoll = statDownPass
                 }
             };
 
-            return personScheme;
+            var survivalData = new HumanSurvivalModule(survivalStats, survivalRandomSource);
+
+            // ACT
+            survivalData.Update();
+
+            // ASSERT
+            return survivalStats[0].Value;
         }
 
         /// <summary>
@@ -178,8 +84,7 @@ namespace Zilon.Core.Tests.PersonModules
 
             // ASSERT
             var factStat = survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health);
-            factStat.Value.Should()
-                    .Be(expectedHp);
+            factStat.Value.Should().Be(expectedHp);
         }
 
         /// <summary>
@@ -205,66 +110,148 @@ namespace Zilon.Core.Tests.PersonModules
             survivalData.DecreaseStat(SurvivalStatType.Health, damageValue);
 
             // ASSERT
-            monitor.Should()
-                   .Raise(nameof(ISurvivalModule.Dead));
+            monitor.Should().Raise(nameof(ISurvivalModule.Dead));
         }
 
         /// <summary>
-        /// Тест проверяет, что характеристика с изменённым DownPass корректно
-        /// изменяется при указанных результатах броска кости.
+        /// Проверяет, что при конституции больше базового значения увеличивается запас ХП.
         /// </summary>
         [Test]
-        [TestCaseSource(typeof(SurvivalDataTestCasesSource), nameof(SurvivalDataTestCasesSource.DownPassTestCases))]
-        public int Update_ModifiedDownPass_StatDownCorrectly(int statDownPass, int downPassRoll)
+        public void Constructor_ConstitutionAboveBase_HpIncreased()
         {
             // ARRANGE
 
-            const int STAT_RATE = 1;
-            const int MIN_STAT_VALUE = 0;
-            const int MAX_STAT_VALUE = 1;
-            const int START_STAT_VALUE = MAX_STAT_VALUE;
-            const SurvivalStatType STAT_TYPE = SurvivalStatType.Satiety;
+            const int PERSON_HP = 1;
+            const int EXPECTED_HP = PERSON_HP + 2;
+            const int CONSTITUTION_BASE = 10;
+            const int CONSTITUTION_VALUE = CONSTITUTION_BASE + 1;
 
-            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
-            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>()))
-                                    .Returns(downPassRoll);
-            var survivalRandomSource = survivalRandomSourceMock.Object;
+            var personScheme = CreatePersonScheme();
+            var survivalRandomSource = CreateSurvivalRandomSource();
 
-            var survivalStats = new[]
+            personScheme.Hp = PERSON_HP;
+
+            var attributesModuleMock = new Mock<IAttributesModule>();
+            attributesModuleMock.Setup(x => x.GetAttribute(PersonAttributeType.Constitution))
+                .Returns(new PersonAttribute(PersonAttributeType.Constitution, CONSTITUTION_VALUE));
+            var attributesModule = attributesModuleMock.Object;
+
+            // ACT
+            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
+
+            // ASSERT
+            survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_HP);
+        }
+
+        /// <summary>
+        /// Проверяет, что при конституции ниже базового значения увеличивается запас ХП.
+        /// </summary>
+        [Test]
+        public void Constructor_ConstitutionBelowBase_HpDecreased()
+        {
+            // ARRANGE
+
+            const int PERSON_HP = 3;
+            const int EXPECTED_HP = PERSON_HP - 2;
+            const int CONSTITUTION_BASE = 10;
+            const int CONSTITUTION_VALUE = CONSTITUTION_BASE - 1;
+
+            var personScheme = CreatePersonScheme();
+            var survivalRandomSource = CreateSurvivalRandomSource();
+
+            personScheme.Hp = PERSON_HP;
+
+            var attributesModuleMock = new Mock<IAttributesModule>();
+            attributesModuleMock.Setup(x => x.GetAttribute(PersonAttributeType.Constitution))
+                .Returns(new PersonAttribute(PersonAttributeType.Constitution, CONSTITUTION_VALUE));
+            var attributesModule = attributesModuleMock.Object;
+
+            // ACT
+            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
+
+            // ASSERT
+            survivalData.Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(EXPECTED_HP);
+        }
+
+        public static IPersonScheme CreatePersonScheme()
+        {
+            var personScheme = new TestPersonScheme
             {
-                new SurvivalStat(START_STAT_VALUE, MIN_STAT_VALUE, MAX_STAT_VALUE)
-                {
-                    Type = STAT_TYPE,
-                    Rate = STAT_RATE,
-                    DownPassRoll = statDownPass
+                SurvivalStats = new[] {
+                    new TestPersonSurvivalStatSubScheme
+                    {
+                        Type = PersonSurvivalStatType.Satiety,
+                        MinValue = -100,
+                        MaxValue = 100,
+                        StartValue = 0,
+                        KeyPoints = new []{
+                            new TestPersonSurvivalStatKeySegmentSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Lesser,
+                                Start = 0.25f,
+                                End = 0.75f
+                            },
+                            new TestPersonSurvivalStatKeySegmentSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Strong,
+                                Start = 0.12f,
+                                End = 0.25f
+                            },
+                            new TestPersonSurvivalStatKeySegmentSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Max,
+                                Start = 0,
+                                End = 0.12f
+                            }
+                        }
+                    },
+
+                    new TestPersonSurvivalStatSubScheme
+                    {
+                        Type = PersonSurvivalStatType.Hydration,
+                        MinValue = -100,
+                        MaxValue = 100,
+                        StartValue = 0,
+                        KeyPoints = new []{
+                            new TestPersonSurvivalStatKeySegmentSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Lesser,
+                                Start = 0.25f,
+                                End = 0.75f
+                            },
+                            new TestPersonSurvivalStatKeySegmentSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Strong,
+                                Start = 0.12f,
+                                End = 0.25f
+                            },
+                            new TestPersonSurvivalStatKeySegmentSubScheme
+                            {
+                                Level = PersonSurvivalStatKeypointLevel.Max,
+                                Start = 0,
+                                End = 0.12f
+                            }
+                        }
+                    }
                 }
             };
 
-            var survivalData = new HumanSurvivalModule(survivalStats, survivalRandomSource);
-
-            // ACT
-            survivalData.Update();
-
-            // ASSERT
-            return survivalStats[0]
-                .Value;
-        }
-
-        private static ISurvivalModule CreateSurvivalData(
-            IPersonScheme personScheme,
-            ISurvivalRandomSource survivalRandomSource)
-        {
-            var attributesModuleMock = new Mock<IAttributesModule>();
-            var attributesModule = attributesModuleMock.Object;
-
-            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
-            return survivalData;
+            return personScheme;
         }
 
         private static ISurvivalRandomSource CreateSurvivalRandomSource()
         {
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
             return survivalRandomSourceMock.Object;
+        }
+
+        private static ISurvivalModule CreateSurvivalData(IPersonScheme personScheme, ISurvivalRandomSource survivalRandomSource)
+        {
+            var attributesModuleMock = new Mock<IAttributesModule>();
+            var attributesModule = attributesModuleMock.Object;
+
+            var survivalData = new HumanSurvivalModule(personScheme, survivalRandomSource, attributesModule);
+            return survivalData;
         }
     }
 }

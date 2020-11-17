@@ -24,32 +24,23 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc/>
-        private bool GetIsMapBlock()
-        {
-            var propContainer = this.GetModuleSafe<IPropContainer>();
-            return (propContainer?.IsMapBlock).GetValueOrDefault(true);
-        }
-
-        /// <inheritdoc/>
         public int Id { get; }
 
         /// <inheritdoc/>
         public IGraphNode Node { get; }
 
         /// <inheritdoc/>
-        public bool IsMapBlock => GetIsMapBlock();
+        public bool IsMapBlock { get => GetIsMapBlock(); }
 
         /// <inheritdoc/>
-        public bool IsSightBlock => false;
+        public bool IsSightBlock { get => false; }
 
         /// <inheritdoc/>
         public PropContainerPurpose Purpose { get; }
-
-        public PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
+        public PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
 
         /// <inheritdoc/>
-        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule)
-            where TStaticObjectModule : IStaticObjectModule
+        public void AddModule<TStaticObjectModule>(TStaticObjectModule sectorObjectModule) where TStaticObjectModule : IStaticObjectModule
         {
             _modules.Add(sectorObjectModule.Key, sectorObjectModule);
         }
@@ -57,12 +48,11 @@ namespace Zilon.Core.Tactics
         public bool CanBeDamaged()
         {
             var durabilityModule = this.GetModuleSafe<IDurabilityModule>();
-            return (durabilityModule != null) && (durabilityModule.Value > 0);
+            return durabilityModule != null && durabilityModule.Value > 0;
         }
 
         /// <inheritdoc/>
-        public TStaticObjectModule GetModule<TStaticObjectModule>(string key)
-            where TStaticObjectModule : IStaticObjectModule
+        public TStaticObjectModule GetModule<TStaticObjectModule>(string key) where TStaticObjectModule : IStaticObjectModule
         {
             return (TStaticObjectModule)_modules[key];
         }
@@ -82,6 +72,13 @@ namespace Zilon.Core.Tactics
             }
 
             durabilityModule.TakeDamage(value);
+        }
+
+        /// <inheritdoc/>
+        private bool GetIsMapBlock()
+        {
+            var propContainer = this.GetModuleSafe<IPropContainer>();
+            return (propContainer?.IsMapBlock).GetValueOrDefault(true);
         }
     }
 }

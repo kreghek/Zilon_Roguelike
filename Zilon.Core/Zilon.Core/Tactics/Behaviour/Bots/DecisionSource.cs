@@ -17,23 +17,6 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
             _dice = dice;
         }
 
-        private int RollToIndex(int roll)
-        {
-            return roll - 1;
-        }
-
-        private IGraphNode SelectRandomEnumerableImpl(IEnumerable<IGraphNode> mapNodes)
-        {
-            var roll = _dice.Roll(mapNodes.Count());
-            return mapNodes.ElementAt(RollToIndex(roll));
-        }
-
-        private IGraphNode SelectRandomListImpl(IList<IGraphNode> mapNodesList)
-        {
-            var roll = _dice.Roll(mapNodesList.Count);
-            return mapNodesList[RollToIndex(roll)];
-        }
-
         [ExcludeFromCodeCoverage]
         public int SelectIdleDuration(int min, int max)
         {
@@ -53,6 +36,23 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
 
             // Медленный вариант доступа.
             return SelectRandomEnumerableImpl(mapNodes);
+        }
+
+        private IGraphNode SelectRandomEnumerableImpl(IEnumerable<IGraphNode> mapNodes)
+        {
+            var roll = _dice.Roll(mapNodes.Count());
+            return mapNodes.ElementAt(RollToIndex(roll));
+        }
+
+        private IGraphNode SelectRandomListImpl(IList<IGraphNode> mapNodesList)
+        {
+            var roll = _dice.Roll(mapNodesList.Count);
+            return mapNodesList[RollToIndex(roll)];
+        }
+
+        private int RollToIndex(int roll)
+        {
+            return roll - 1;
         }
     }
 }

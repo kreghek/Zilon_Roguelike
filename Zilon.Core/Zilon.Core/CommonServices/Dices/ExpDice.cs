@@ -36,20 +36,20 @@ namespace Zilon.Core.CommonServices.Dices
             _random = new Random(seed);
         }
 
+        public int Roll(int n)
+        {
+            var rollUnit = GetBounded(0, 1);
+
+            var roll = DiceValuesHelper.MapDoubleToDiceEdge(rollUnit, n);
+
+            var processedRoll = ProcessedRoll(roll, n);
+
+            return processedRoll;
+        }
+
         protected virtual int ProcessedRoll(int roll, int n)
         {
             return roll;
-        }
-
-        private double GetBounded(double min, double max)
-        {
-            double x;
-            do
-            {
-                x = GetNext();
-            } while ((x < min) || (x > max));
-
-            return x;
         }
 
         private double GetNext()
@@ -68,18 +68,23 @@ namespace Zilon.Core.CommonServices.Dices
             return mappedX;
         }
 
+        private double GetBounded(double min, double max)
+        {
+            double x;
+            do
+            {
+                x = GetNext();
+            } while (x < min || x > max);
+            return x;
+        }
+
         private double GetNextDouble()
         {
             var next = _random.NextDouble();
             return next;
         }
 
-        private static double MapToInterval(
-            double x,
-            double sourceMin,
-            double sourceMax,
-            double targetMin,
-            double targetMax)
+        private static double MapToInterval(double x, double sourceMin, double sourceMax, double targetMin, double targetMax)
         {
             var targetDiff = targetMax - targetMin;
             var sourceDiff = sourceMax - sourceMin;
@@ -88,17 +93,6 @@ namespace Zilon.Core.CommonServices.Dices
             var xNormalized = targetDiff * sourceRatioX;
 
             return xNormalized + sourceMin;
-        }
-
-        public int Roll(int n)
-        {
-            var rollUnit = GetBounded(0, 1);
-
-            var roll = DiceValuesHelper.MapDoubleToDiceEdge(rollUnit, n);
-
-            var processedRoll = ProcessedRoll(roll, n);
-
-            return processedRoll;
         }
     }
 }

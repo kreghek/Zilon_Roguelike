@@ -9,12 +9,6 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class PerkJob : IJob
     {
-        [ExcludeFromCodeCoverage]
-        public PerkJob(IJobSubScheme scheme)
-        {
-            Scheme = scheme;
-        }
-
         /// <inheritdoc />
         public IJobSubScheme Scheme { get; }
 
@@ -23,5 +17,11 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc />
         public bool IsComplete { get; set; }
+
+        [ExcludeFromCodeCoverage]
+        public PerkJob(IJobSubScheme scheme)
+        {
+            Scheme = scheme;
+        }
     }
 }

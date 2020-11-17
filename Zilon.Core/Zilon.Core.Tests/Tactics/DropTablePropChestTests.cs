@@ -44,29 +44,19 @@ namespace Zilon.Core.Tests.Tactics
 
             var dropResolverMock = new Mock<IDropResolver>();
             dropResolverMock.Setup(x => x.Resolve(It.IsAny<IEnumerable<IDropTableScheme>>()))
-                            .Returns(new IProp[]
-                            {
-                                new Resource(testPropScheme, 1)
-                            });
+                .Returns(new IProp[] { new Resource(testPropScheme, 1) });
             var dropResolver = dropResolverMock.Object;
 
-            var container = new DropTablePropChest(new IDropTableScheme[]
-                {
-                    dropTable
-                },
+            var container = new DropTablePropChest(new IDropTableScheme[] { dropTable },
                 dropResolver);
 
             // ACT
             var factProps = container.Content.CalcActualItems();
 
             // ASSERT
-            factProps.Length.Should()
-                     .Be(1);
-            factProps[0]
-                .Scheme.Should()
-                .BeSameAs(testPropScheme);
-            ((Resource)factProps[0]).Count.Should()
-                                    .Be(1);
+            factProps.Length.Should().Be(1);
+            factProps[0].Scheme.Should().BeSameAs(testPropScheme);
+            ((Resource)factProps[0]).Count.Should().Be(1);
         }
     }
 }

@@ -16,8 +16,10 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class EquipCommand : SpecialActorCommandBase
     {
-        private readonly IInventoryState _inventoryState;
         private readonly IPlayer _player;
+        private readonly IInventoryState _inventoryState;
+
+        public int? SlotIndex { get; set; }
 
         [ExcludeFromCodeCoverage]
         public EquipCommand(
@@ -30,8 +32,6 @@ namespace Zilon.Core.Commands
             _inventoryState = inventoryState;
         }
 
-        public int? SlotIndex { get; set; }
-
         public override bool CanExecute()
         {
             if (_inventoryState.SelectedProp == null)
@@ -40,7 +40,7 @@ namespace Zilon.Core.Commands
             }
 
             var equipment = GetInventorySelectedEquipment();
-            if (equipment is null && (_inventoryState.SelectedProp != null))
+            if (equipment is null && _inventoryState.SelectedProp != null)
             {
                 return false;
             }
@@ -48,7 +48,7 @@ namespace Zilon.Core.Commands
             // Сломанную экипировку нельзя надевать
             //TODO Тут есть замечание, что equipment не проверяется.
             // Реорганизовать этот код в более понятный.
-            if ((equipment != null) && (equipment.Durable.Value <= 0))
+            if (equipment != null && equipment.Durable.Value <= 0)
             {
                 return false;
             }

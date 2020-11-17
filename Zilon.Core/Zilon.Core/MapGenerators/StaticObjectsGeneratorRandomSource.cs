@@ -16,28 +16,6 @@ namespace Zilon.Core.MapGenerators
             _dice = dice;
         }
 
-        private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
-        {
-            switch (resourceType)
-            {
-                case SectorResourceType.Aurihulk:
-                case SectorResourceType.Copper:
-                case SectorResourceType.Gold:
-                case SectorResourceType.Iron:
-                case SectorResourceType.Silver:
-                    return PropContainerPurpose.OreDeposits;
-                case SectorResourceType.Stones:
-                    return PropContainerPurpose.StoneDeposits;
-                case SectorResourceType.CherryBrushes:
-                    return PropContainerPurpose.CherryBrush;
-                case SectorResourceType.WaterPuddles:
-                    return PropContainerPurpose.Puddle;
-
-                default:
-                    throw new InvalidOperationException();
-            }
-        }
-
         public PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
         {
             if (resourceDepositData is null)
@@ -59,12 +37,7 @@ namespace Zilon.Core.MapGenerators
             if (purposeList.Count < 100)
             {
                 var diff = 100 - purposeList.Count;
-                var everywherePurpose = new[]
-                {
-                    PropContainerPurpose.Puddle,
-                    PropContainerPurpose.Pit,
-                    PropContainerPurpose.TrashHeap
-                };
+                var everywherePurpose = new[] { PropContainerPurpose.Puddle, PropContainerPurpose.Pit, PropContainerPurpose.TrashHeap };
                 var diffShare = (int)Math.Ceiling(diff / 2f);
                 foreach (var purpose in everywherePurpose)
                 {
@@ -82,6 +55,28 @@ namespace Zilon.Core.MapGenerators
             }
 
             return _dice.RollFromList(purposeList);
+        }
+
+        private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
+        {
+            switch (resourceType)
+            {
+                case SectorResourceType.Aurihulk:
+                case SectorResourceType.Copper:
+                case SectorResourceType.Gold:
+                case SectorResourceType.Iron:
+                case SectorResourceType.Silver:
+                    return PropContainerPurpose.OreDeposits;
+                case SectorResourceType.Stones:
+                    return PropContainerPurpose.StoneDeposits;
+                case SectorResourceType.CherryBrushes:
+                    return PropContainerPurpose.CherryBrush;
+                case SectorResourceType.WaterPuddles:
+                    return PropContainerPurpose.Puddle;
+
+                default:
+                    throw new InvalidOperationException();
+            }
         }
     }
 }

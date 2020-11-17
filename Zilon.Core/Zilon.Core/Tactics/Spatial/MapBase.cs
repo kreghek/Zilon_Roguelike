@@ -4,7 +4,6 @@ using System.Linq;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
-using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.Spatial
 {
@@ -15,42 +14,6 @@ namespace Zilon.Core.Tactics.Spatial
     {
         private readonly IDictionary<IGraphNode, IList<IPassMapBlocker>> _nodeBlockers;
 
-        protected MapBase()
-        {
-            Regions = new List<MapRegion>();
-
-            _nodeBlockers = new Dictionary<IGraphNode, IList<IPassMapBlocker>>();
-        }
-
-        private IEnumerable<IGraphNode> GetActorTestTargetNodes(IActor actor, IGraphNode baseTargetNode)
-        {
-            yield return baseTargetNode;
-
-            if (actor.Person.PhysicalSize == PhysicalSizePattern.Size7)
-            {
-                var neighbors = GetNext(baseTargetNode);
-                foreach (var neighbor in neighbors)
-                {
-                    yield return neighbor;
-                }
-            }
-        }
-
-        private bool IsNodeAvailableForActor(IGraphNode targetNode, IActor actor)
-        {
-            if (!_nodeBlockers.TryGetValue(targetNode, out IList<IPassMapBlocker> blockers))
-            {
-                return true;
-            }
-
-            if (blockers.All(x => x == actor))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         /// <summary>
         /// Регионы карты.
         /// </summary>
@@ -60,6 +23,13 @@ namespace Zilon.Core.Tactics.Spatial
         /// Список узлов карты.
         /// </summary>
         public abstract IEnumerable<IGraphNode> Nodes { get; }
+
+        protected MapBase()
+        {
+            Regions = new List<MapRegion>();
+
+            _nodeBlockers = new Dictionary<IGraphNode, IList<IPassMapBlocker>>();
+        }
 
         /// <summary>
         /// Проверяет, является ли данная ячейка доступной для текущего актёра.
@@ -100,6 +70,35 @@ namespace Zilon.Core.Tactics.Spatial
             return true;
         }
 
+        private IEnumerable<IGraphNode> GetActorTestTargetNodes(IActor actor, IGraphNode baseTargetNode)
+        {
+            yield return baseTargetNode;
+
+            if (actor.Person.PhysicalSize == Persons.PhysicalSize.Size7)
+            {
+                var neighbors = GetNext(baseTargetNode);
+                foreach (var neighbor in neighbors)
+                {
+                    yield return neighbor;
+                }
+            }
+        }
+
+        private bool IsNodeAvailableForActor(IGraphNode targetNode, IActor actor)
+        {
+            if (!_nodeBlockers.TryGetValue(targetNode, out IList<IPassMapBlocker> blockers))
+            {
+                return true;
+            }
+
+            if (blockers.All(x => x == actor))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Указывает, что узел карты освобождён одним из блоков.
         /// </summary>
@@ -119,8 +118,7 @@ namespace Zilon.Core.Tactics.Spatial
 
             if (!blockers.Contains(blocker))
             {
-                throw new InvalidOperationException(
-                    $"Попытка освободить узел {node}, который не заблокирован блокировщиком {blocker}.");
+                throw new InvalidOperationException($"Попытка освободить узел {node}, который не заблокирован блокировщиком {blocker}.");
             }
 
             blockers.Remove(blocker);
@@ -174,8 +172,8 @@ namespace Zilon.Core.Tactics.Spatial
         /// <summary>
         /// Выполняет поиск пути к указанному узлу.
         /// </summary>
-        /// <param name="startNode">Начальный узел поиска пути.</param>
-        /// <param name="targetNode">Целевой узел поиска пути.</param>
+        /// <param name="start">Начальный узел поиска пути.</param>
+        /// <param name="end">Целевой узел поиска пути.</param>
         /// <param name="context">Контекст поиска пути.</param>
         /// <param name="outputPath">В результате будет содержать набор узлов,
         /// представляющих путь из указанного узла в целевой.</param>
@@ -183,20 +181,16 @@ namespace Zilon.Core.Tactics.Spatial
         /// Передача списка для результатов сделана для оптимизации - не нужно каждый раз создавать список
         /// и выделять под него память в зависимости от найденного пути.
         /// </remarks>
-        public void FindPath(
-            IGraphNode startNode,
-            IGraphNode targetNode,
-            IAstarContext context,
-            List<IGraphNode> outputPath)
+        public void FindPath(IGraphNode start, IGraphNode end, IAstarContext context, List<IGraphNode> outputPath)
         {
-            if (startNode is null)
+            if (start is null)
             {
-                throw new ArgumentNullException(nameof(startNode));
+                throw new ArgumentNullException(nameof(start));
             }
 
-            if (targetNode is null)
+            if (end is null)
             {
-                throw new ArgumentNullException(nameof(targetNode));
+                throw new ArgumentNullException(nameof(end));
             }
 
             if (context is null)
@@ -209,13 +203,14 @@ namespace Zilon.Core.Tactics.Spatial
                 throw new ArgumentNullException(nameof(outputPath));
             }
 
-            var astar = new AStar(context, startNode, targetNode);
+            var startNode = start;
+            var finishNode = end;
+
+            var astar = new AStar(context, startNode, finishNode);
             var resultState = astar.Run();
             if (resultState == State.GoalFound)
             {
-                var foundPath = astar.GetPath()
-                                     .Skip(1)
-                                     .ToArray();
+                var foundPath = astar.GetPath().Skip(1).ToArray();
                 foreach (var pathNode in foundPath)
                 {
                     outputPath.Add((HexNode)pathNode);

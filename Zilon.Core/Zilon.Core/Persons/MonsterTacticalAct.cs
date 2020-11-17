@@ -9,26 +9,21 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class MonsterTacticalAct : ITacticalAct
     {
+        public ITacticalActStatsSubScheme Stats { get; }
+        public Roll Efficient { get; }
+        public Roll ToHit { get; }
+        public Equipment Equipment => null;
+        public ITacticalActConstrainsSubScheme Constrains => null;
+
+        public ITacticalActScheme Scheme { get; }
+        public int? CurrentCooldown { get; }
+
         public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
         {
             Stats = stats ?? throw new System.ArgumentNullException(nameof(stats));
             Efficient = stats.Efficient;
             ToHit = new Roll(6, 1);
         }
-
-        public ITacticalActStatsSubScheme Stats { get; }
-
-        public Roll Efficient { get; }
-
-        public Roll ToHit { get; }
-
-        public Equipment Equipment => null;
-
-        public ITacticalActConstrainsSubScheme Constrains => null;
-
-        public ITacticalActScheme Scheme { get; }
-
-        public int? CurrentCooldown { get; }
 
         public void StartCooldownIfItIs()
         {

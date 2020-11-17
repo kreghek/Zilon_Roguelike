@@ -8,9 +8,9 @@ namespace Zilon.Core
     public interface IJob
     {
         /// <summary>
-        /// Признак того, что работа завершена.
+        /// Схема текущей работы.
         /// </summary>
-        bool IsComplete { get; set; }
+        IJobSubScheme Scheme { get; }
 
         /// <summary>
         /// Текущий прогресс по работе.
@@ -18,8 +18,8 @@ namespace Zilon.Core
         int Progress { get; set; }
 
         /// <summary>
-        /// Схема текущей работы.
+        /// Признак того, что работа завершена.
         /// </summary>
-        IJobSubScheme Scheme { get; }
+        bool IsComplete { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using FluentAssertions;
 
@@ -35,8 +34,7 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should()
-                      .Be(true);
+            canExecute.Should().Be(true);
         }
 
         /// <summary>
@@ -47,8 +45,7 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<OpenContainerCommand>();
-            var humanTaskSourceMock =
-                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
+            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
@@ -61,25 +58,22 @@ namespace Zilon.Core.Tests.Commands
         {
             if (testMap is null)
             {
-                throw new ArgumentNullException(nameof(testMap));
+                throw new System.ArgumentNullException(nameof(testMap));
             }
 
             if (playerStateMock is null)
             {
-                throw new ArgumentNullException(nameof(playerStateMock));
+                throw new System.ArgumentNullException(nameof(playerStateMock));
             }
 
             var targetMock = new Mock<IStaticObject>();
             var targetNode = testMap.Nodes.SelectByHexCoords(1, 0);
-            targetMock.SetupGet(x => x.Node)
-                      .Returns(targetNode);
+            targetMock.SetupGet(x => x.Node).Returns(targetNode);
 
             var containerMock = new Mock<IPropContainer>();
-            containerMock.SetupGet(x => x.Purpose)
-                         .Returns(PropContainerPurpose.Trash);
+            containerMock.SetupGet(x => x.Purpose).Returns(PropContainerPurpose.Trash);
             var container = containerMock.Object;
-            targetMock.Setup(x => x.GetModule<IPropContainer>(nameof(IPropContainer)))
-                      .Returns(container);
+            targetMock.Setup(x => x.GetModule<IPropContainer>(nameof(IPropContainer))).Returns(container);
             var target = targetMock.Object;
 
             var targetVmMock = new Mock<IContainerViewModel>();

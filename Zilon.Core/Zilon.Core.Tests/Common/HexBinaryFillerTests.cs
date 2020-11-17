@@ -14,6 +14,20 @@ namespace Zilon.Core.Common.Tests
     public class HexBinaryFillerTests
     {
         [Test]
+        public void FloodFill7_OneSize7Area_ReturnsOneCentralPoint()
+        {
+            // ARRANGE
+            var matrix = new Matrix<bool>(10, 10);
+            PlaceArea(4, 4, matrix);
+
+            // ACT
+            var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));
+
+            // ASSERT
+            regions.Should().BeEquivalentTo(new[] { new OffsetCoords(4, 4) });
+        }
+
+        [Test]
         public void FloodFill7_2Size7Area_Returns2CentralPoint()
         {
             // ARRANGE
@@ -25,12 +39,7 @@ namespace Zilon.Core.Common.Tests
             var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));
 
             // ASSERT
-            regions.Should()
-                   .BeEquivalentTo(new[]
-                   {
-                       new OffsetCoords(4, 4),
-                       new OffsetCoords(5, 4)
-                   });
+            regions.Should().BeEquivalentTo(new[] { new OffsetCoords(4, 4), new OffsetCoords(5, 4) });
         }
 
         [Test]
@@ -45,29 +54,7 @@ namespace Zilon.Core.Common.Tests
             var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));
 
             // ASSERT
-            regions.Should()
-                   .BeEquivalentTo(new[]
-                   {
-                       new OffsetCoords(4, 4)
-                   });
-        }
-
-        [Test]
-        public void FloodFill7_OneSize7Area_ReturnsOneCentralPoint()
-        {
-            // ARRANGE
-            var matrix = new Matrix<bool>(10, 10);
-            PlaceArea(4, 4, matrix);
-
-            // ACT
-            var regions = HexBinaryFiller.FloodFill7(matrix, new OffsetCoords(4, 4));
-
-            // ASSERT
-            regions.Should()
-                   .BeEquivalentTo(new[]
-                   {
-                       new OffsetCoords(4, 4)
-                   });
+            regions.Should().BeEquivalentTo(new[] { new OffsetCoords(4, 4) });
         }
 
         private static void PlaceArea(int x, int y, Matrix<bool> matrix)
