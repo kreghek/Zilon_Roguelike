@@ -14,51 +14,46 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public abstract class DiseaseModuleBase : IDiseaseModule
     {
-        private readonly ICollection<IDiseaseProcess> _diseasesList;
+        private readonly ICollection<IDiseaseProcess> _diseaseList;
 
         protected DiseaseModuleBase()
         {
-            _diseasesList = new List<IDiseaseProcess>();
+            _diseaseList = new List<IDiseaseProcess>();
             IsActive = true;
         }
 
-        protected abstract void UpdateDeseaseProcess(IEffectsModule personEffects, IDiseaseProcess diseaseProcess);
+        protected abstract void UpdateDeseaseProcess(IDiseaseProcess diseaseProcess);
 
         public string Key => nameof(IDiseaseModule);
 
         /// <inheritdoc />
         public bool IsActive { get; set; }
 
-        public IEnumerable<IDiseaseProcess> Diseases { get; }
+        public IEnumerable<IDiseaseProcess> Diseases => _diseaseList;
 
         public void Infect(IDisease disease)
         {
-            var currentProcess = _diseasesList.SingleOrDefault(x => x.Disease == disease);
+            var currentProcess = _diseaseList.SingleOrDefault(x => x.Disease == disease);
 
             if (currentProcess is null)
             {
                 currentProcess = new DiseaseProcess(disease);
-                _diseasesList.Add(currentProcess);
+                _diseaseList.Add(currentProcess);
             }
         }
 
         public void RemoveDisease(IDisease disease)
         {
-            var currentProcess = _diseasesList.SingleOrDefault(x => x.Disease == disease);
-            _diseasesList.Remove(currentProcess);
+            var currentProcess = _diseaseList.SingleOrDefault(x => x.Disease == disease);
+            _diseaseList.Remove(currentProcess);
         }
 
-        public void Update(IEffectsModule personEffects)
+        public void Update()
         {
-            if (personEffects is null)
-            {
-                throw new ArgumentNullException(nameof(personEffects));
-            }
-
             var diseaseMaterialized = Diseases.ToArray();
             foreach (var diseaseProcess in diseaseMaterialized)
             {
-                UpdateDeseaseProcess(personEffects, diseaseProcess);
+                UpdateDeseaseProcess(diseaseProcess);
             }
         }
     }

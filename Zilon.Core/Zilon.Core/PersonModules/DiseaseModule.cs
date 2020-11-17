@@ -12,7 +12,14 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public class DiseaseModule : DiseaseModuleBase
     {
-        protected override void UpdateDeseaseProcess(IEffectsModule personEffects, IDiseaseProcess diseaseProcess)
+        private readonly IEffectsModule _personEffects;
+
+        public DiseaseModule(IEffectsModule personEffects): base()
+        {
+            _personEffects = personEffects ?? throw new ArgumentNullException(nameof(personEffects));
+        }
+
+        protected override void UpdateDeseaseProcess(IDiseaseProcess diseaseProcess)
         {
             if (diseaseProcess is null)
             {
@@ -44,11 +51,11 @@ namespace Zilon.Core.PersonModules
             // Затем, остаток, обрабатываем, как спад (выздоровление).
             if (diseaseProcess.Value < 0.5f)
             {
-                UpdatePowerUp(personEffects, disease, symptoms, currentPower, symptomPowerSegment);
+                UpdatePowerUp(_personEffects, disease, symptoms, currentPower, symptomPowerSegment);
             }
             else
             {
-                UpdatePowerDown(personEffects, disease, symptoms, currentPower, symptomPowerSegment);
+                UpdatePowerDown(_personEffects, disease, symptoms, currentPower, symptomPowerSegment);
             }
 
             // Если процесс болезни прошёл, то удаляем болезнь из модуля персонажа.

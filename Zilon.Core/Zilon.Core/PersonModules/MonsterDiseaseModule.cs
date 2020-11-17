@@ -10,7 +10,7 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public class MonsterDiseaseModule : DiseaseModuleBase
     {
-        protected override void UpdateDeseaseProcess(IEffectsModule personEffects, IDiseaseProcess diseaseProcess)
+        protected override void UpdateDeseaseProcess(IDiseaseProcess diseaseProcess)
         {
             // Do nothing.
             // Disease progress is not calculated.

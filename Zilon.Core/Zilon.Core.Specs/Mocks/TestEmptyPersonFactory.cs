@@ -59,7 +59,7 @@ namespace Zilon.Core.Specs.Mocks
             var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
             person.AddModule(combatStatsModule);
 
-            var diseaseModule = new DiseaseModule();
+            var diseaseModule = new DiseaseModule(effectsModule);
             person.AddModule(diseaseModule);
 
             return person;

@@ -224,14 +224,18 @@ namespace Zilon.Core.PersonGeneration
             RollStartEquipment(inventoryModule, person);
 
             var defaultActScheme = SchemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
-            var combatActModule =
-                new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
+            var combatActModule = new CombatActModule(
+                defaultActScheme,
+                equipmentModule,
+                effectsModule,
+                evolutionModule);
+
             person.AddModule(combatActModule);
 
             var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
             person.AddModule(combatStatsModule);
 
-            var diseaseModule = new DiseaseModule();
+            var diseaseModule = new DiseaseModule(effectsModule);
             person.AddModule(diseaseModule);
 
             var fowModule = new FowData();
