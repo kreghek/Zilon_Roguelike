@@ -31,14 +31,6 @@ namespace Zilon.BotMassLauncher
             _logger = logger;
         }
 
-        public void Dispose()
-        {
-            if (_shutdownTokenSource != null)
-            {
-                _shutdownTokenSource.Dispose();
-            }
-        }
-
         public void Run(params string[] args)
         {
             _logger.LogTrace("[x] START");
@@ -48,8 +40,8 @@ namespace Zilon.BotMassLauncher
             _pathToEnv = ArgumentHelper.GetProgramArgument(args, "env");
             _launchCount = int.Parse(ArgumentHelper.GetProgramArgument(args, "launchCount"));
             _scorePrefix = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)
-                                   .Replace(":", "_")
-                                   .Replace(".", "_");
+                .Replace(":", "_")
+                .Replace(".", "_");
 
             var parallel = ArgumentHelper.GetProgramArgument(args, "parallel");
 
@@ -161,6 +153,14 @@ namespace Zilon.BotMassLauncher
             };
 
             Parallel.For(0, _launchCount, parallelOptions, iteration => RunEnvironment(iteration, logger));
+        }
+
+        public void Dispose()
+        {
+            if (_shutdownTokenSource != null)
+            {
+                _shutdownTokenSource.Dispose();
+            }
         }
     }
 }
