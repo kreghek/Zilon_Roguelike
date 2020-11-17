@@ -12,7 +12,7 @@ namespace Zilon.Core.Schemes
 
         int Hp { get; set; }
 
-        [NotNull][ItemNotNull] PersonSlotSubScheme[] Slots { get; set; }
+        [NotNull] [ItemNotNull] PersonSlotSubScheme[] Slots { get; set; }
 
         /// <summary>
         /// Характеристики выживания персонажа.
