@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
@@ -21,13 +22,17 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             _actService = actService;
 
-            Target = target;
-            TacticalAct = tacticalAct;
+            TargetObject = target ?? throw new ArgumentNullException(nameof(target));
+            TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
+
+            TargetNode = target.Node;
         }
 
         public ITacticalAct TacticalAct { get; }
 
-        public IAttackTarget Target { get; }
+        public IAttackTarget TargetObject { get; }
+
+        public IGraphNode TargetNode { get; }
 
         protected override void ExecuteTask()
         {
@@ -36,7 +41,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new NotImplementedException("Не неализована возможность атаковать без навыков.");
             }
 
-            if (!Target.CanBeDamaged())
+            if (!TargetObject.CanBeDamaged())
             {
                 // Эта ситуация может произойти, когда:
                 // 1. Текущий актёр начал выполнять задачу.
@@ -49,8 +54,15 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var availableSlotAct = GetSecondaryUsedActs();
-            var usedActs = new UsedTacticalActs(new[] { TacticalAct }, availableSlotAct.Where(x => x != TacticalAct));
-            _actService.UseOn(Actor, Target, usedActs, Context.Sector);
+
+            var primary = new[] { TacticalAct };
+            var secondary = availableSlotAct.Where(x => x != TacticalAct).Skip(1).ToArray();
+            
+            var usedActs = new UsedTacticalActs(primary, secondary);
+
+            var actTargetInfo = new ActTargetInfo(TargetObject, TargetNode);
+
+            _actService.UseOn(Actor, actTargetInfo, usedActs, Context.Sector);
         }
 
         private IEnumerable<ITacticalAct> GetSecondaryUsedActs()

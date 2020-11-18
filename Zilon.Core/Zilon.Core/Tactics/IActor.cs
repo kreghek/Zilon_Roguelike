@@ -55,9 +55,9 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Приенение действия к указанной цели.
         /// </summary>
-        /// <param name="target"> Цель действия. </param>
+        /// <param name="targetNode"> Узел карты, в которую прозошло действие. </param>
         /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
-        void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
+        void UseAct(IGraphNode targetNode, ITacticalAct tacticalAct);
 
         void UseProp(IProp usedProp);
 

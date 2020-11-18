@@ -98,19 +98,16 @@ namespace Zilon.Core.Tactics
             return 5;
         }
 
-        private static bool IsInDistance(IActor actor, IAttackTarget target, ITacticalAct act, ISectorMap map)
+        private static bool IsInDistance(IActor actor, IGraphNode targetNode, ITacticalAct act, ISectorMap map)
         {
             var actorNodes = GetActorNodes(actor.PhysicalSize, actor.Node, map);
-            var targetNodes = GetActorNodes(target.PhysicalSize, target.Node, map);
+
             foreach (var node in actorNodes)
             {
-                foreach (var targetNode in targetNodes)
+                var isInDistanceInNode = act.CheckDistance(node, targetNode, map);
+                if (isInDistanceInNode)
                 {
-                    var isInDistanceInNode = act.CheckDistance(node, targetNode, map);
-                    if (isInDistanceInNode)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -166,7 +163,7 @@ namespace Zilon.Core.Tactics
             return sector.ActorManager.Items.Any(x => x == actor);
         }
 
-        private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act, ISectorMap map)
+        private void UseAct(IActor actor, ActTargetInfo target, ITacticalAct act, ISectorMap map)
         {
             bool isInDistance;
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 && actor == target)
@@ -175,7 +172,7 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                isInDistance = IsInDistance(actor, target, act, map);
+                isInDistance = IsInDistance(actor, target.TargetNode, act, map);
             }
 
             if (!isInDistance)
@@ -187,7 +184,7 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var targetNode = target.Node;
+            var targetNode = target.TargetNode;
 
             var targetIsOnLine = map.TargetIsOnLine(
                 actor.Node,
@@ -195,18 +192,12 @@ namespace Zilon.Core.Tactics
 
             if (targetIsOnLine)
             {
-                actor.UseAct(target, act);
+                actor.UseAct(targetNode, act);
 
                 var tacticalActRoll = GetActEfficient(act);
 
-                // Изъятие патронов
-                if (act.Constrains?.PropResourceType != null)
-                {
-                    RemovePropResource(actor, act);
-                }
-
-                var actHandler = _actUsageHandlerSelector.GetHandler(target);
-                actHandler.ProcessActUsage(actor, target, tacticalActRoll);
+                var actHandler = _actUsageHandlerSelector.GetHandler(target.TargetObject);
+                actHandler.ProcessActUsage(actor, target.TargetObject, tacticalActRoll);
 
                 UseActResources(actor, act);
             }
@@ -218,7 +209,14 @@ namespace Zilon.Core.Tactics
                 // 2. Ошибка во внешнем коде, когда не провели предварительную проверку. Раньше здесь выбрасывалось исключения UsageThroughtWallException.
                 // Нужно подумать, как обрабатывать теперь такие исходы.
 
-                UseActResources(actor, act);
+                if (target.TargetNode == target.TargetObject.Node)
+                {
+                    throw new UsageThroughtWallException();
+                }
+                else
+                {
+                    UseActResources(actor, act);
+                }
             }
         }
 
@@ -239,7 +237,7 @@ namespace Zilon.Core.Tactics
             act.StartCooldownIfItIs();
         }
 
-        public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs, ISector sector)
+        public void UseOn(IActor actor, ActTargetInfo target, UsedTacticalActs usedActs, ISector sector)
         {
             if (actor is null)
             {
@@ -262,7 +260,7 @@ namespace Zilon.Core.Tactics
             }
 
             Debug.Assert(SectorHasCurrentActor(sector, actor), "Current actor must be in sector");
-            Debug.Assert(SectorHasAttackTarget(sector, target), "Target must be in sector");
+            Debug.Assert(SectorHasAttackTarget(sector, target.TargetObject), "Target must be in sector");
 
             foreach (var act in usedActs.Primary)
             {
@@ -289,5 +287,17 @@ namespace Zilon.Core.Tactics
                 UseAct(actor, target, act, sector.Map);
             }
         }
+    }
+
+    public class ActTargetInfo
+    {
+        public ActTargetInfo(IAttackTarget targetObject, IGraphNode targetNode)
+        {
+            TargetObject = targetObject ?? throw new ArgumentNullException(nameof(targetObject));
+            TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
+        }
+
+        public IAttackTarget TargetObject { get; }
+        public IGraphNode TargetNode { get; }
     }
 }
