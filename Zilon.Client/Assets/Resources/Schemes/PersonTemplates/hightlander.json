@@ -5,6 +5,7 @@
     "En": "Highlander"
   },
   "HeadEquipments": {
+  "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "highlander-helmet",
@@ -13,6 +14,7 @@
     ]
   },
   "MainHandEquipments": {
+  "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "short-sword",
@@ -37,6 +39,7 @@
     ]
   },
   "InventoryProps": {
+  "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "med-kit",

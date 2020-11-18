@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.CommonServices;
@@ -174,6 +175,7 @@ namespace Zilon.Core.Tactics
                 try
                 {
                     var table = openDropTables[0];
+
                     var records = table.Records;
                     if (!records.Any())
                     {
@@ -188,7 +190,14 @@ namespace Zilon.Core.Tactics
 
                     var totalWeight = recMods.Sum(x => x.ModifiedWeight);
 
-                    for (var rollIndex = 0; rollIndex < table.Rolls; rollIndex++)
+                    Debug.Assert(table.Rolls > 0, "There is no reason to have zero rolls in table. This is most likely a mistake.");
+                    var rolls = table.Rolls;
+                    if (rolls == 0)
+                    {
+                        rolls = 1;
+                    }
+
+                    for (var rollIndex = 0; rollIndex < rolls; rollIndex++)
                     {
                         var rolledWeight = _randomSource.RollWeight(totalWeight);
                         var recMod = DropRoller.GetRecord(recMods, rolledWeight);
