@@ -5,7 +5,7 @@
     "En": "Undertaker"
   },
   "BodyEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "leather-jacket",
@@ -14,7 +14,7 @@
     ]
   },
   "MainHandEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "pick-axe",
@@ -23,7 +23,7 @@
     ]
   },
   "InventoryProps": {
-  "Rolls": 5,
+    "Rolls": 5,
     "Records": [
       {
         "SchemeSid": "med-kit",
