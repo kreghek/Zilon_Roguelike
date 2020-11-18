@@ -57,7 +57,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var primary = new[] { TacticalAct };
             var secondary = availableSlotAct.Where(x => x != TacticalAct).Skip(1).ToArray();
-            
+
             var usedActs = new UsedTacticalActs(primary, secondary);
 
             var actTargetInfo = new ActTargetInfo(TargetObject, TargetNode);
