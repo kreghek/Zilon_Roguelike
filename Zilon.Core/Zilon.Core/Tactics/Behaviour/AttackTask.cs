@@ -49,7 +49,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var availableSlotAct = GetSecondaryUsedActs();
-            var usedActs = new UsedTacticalActs(new[] { TacticalAct }, availableSlotAct.Where(x=>x!= TacticalAct));
+            var usedActs = new UsedTacticalActs(new[] { TacticalAct }, availableSlotAct.Where(x => x != TacticalAct));
             _actService.UseOn(Actor, Target, usedActs, Context.Sector);
         }
 
