@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.Components;
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -103,8 +104,8 @@ namespace Zilon.Core.Tests.Tactics
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             actorMock.SetupGet(x => x.Person).Returns(person);
-            actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
-                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null,
+            actorMock.Setup(x => x.UseAct(It.IsAny<IGraphNode>(), It.IsAny<ITacticalAct>()))
+                .Raises<IGraphNode, ITacticalAct>(x => x.UsedAct += null,
                     (target1, act1) => new UsedActEventArgs(target1, act1));
             var actor = actorMock.Object;
 
@@ -231,16 +232,16 @@ namespace Zilon.Core.Tests.Tactics
         public void UseOn_ArmorSavePassed_ActEfficientDecrease()
         {
             // ARRANGE
-            const OffenseType offenceType = OffenseType.Tactical;
-            const int fakeToHitDiceRoll = 2; // успех в ToHit 2+
-            const int fakeArmorSaveDiceRoll = 6; // успех в ArmorSave 4+ при раных рангах
-            const int fakeActEfficientRoll = 3; // эффективность пробрасывается D3, максимальный бросок
-            const int expectedActEfficient = fakeActEfficientRoll - 1; // -1 даёт текущая броня
+            const OffenseType OFFENCETYPE = OffenseType.Tactical;
+            const int FAKE_TOHIT_DICE_ROLL = 2; // успех в ToHit 2+
+            const int FAKE_ARMORSAVE_DICE_ROLL = 6; // успех в ArmorSave 4+ при раных рангах
+            const int FAKE_ACTEFFICIENT_ROLL = 3; // эффективность пробрасывается D3, максимальный бросок
+            const int EXPECTED_ACTEFFICIENT = FAKE_ACTEFFICIENT_ROLL - 1; // -1 даёт текущая броня
 
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
-            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(fakeToHitDiceRoll);
-            actUsageRandomSourceMock.Setup(x => x.RollArmorSave()).Returns(fakeArmorSaveDiceRoll);
-            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(fakeActEfficientRoll);
+            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(FAKE_TOHIT_DICE_ROLL);
+            actUsageRandomSourceMock.Setup(x => x.RollArmorSave()).Returns(FAKE_ARMORSAVE_DICE_ROLL);
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(FAKE_ACTEFFICIENT_ROLL);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             var perkResolverMock = new Mock<IPerkResolver>();
@@ -261,7 +262,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = offenceType,
+                    Type = OFFENCETYPE,
                     ApRank = 10,
                     Impact = ImpactType.Kinetic
                 }
@@ -272,12 +273,12 @@ namespace Zilon.Core.Tests.Tactics
             var act = actMock.Object;
 
             // ACT
-            var usedActs = new TacticalActRoll(act, fakeActEfficientRoll);
+            var usedActs = new TacticalActRoll(act, FAKE_ACTEFFICIENT_ROLL);
             actUsageService.ProcessActUsage(actor, monster, usedActs);
 
             // ASSERT
             actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Once);
-            monsterMock.Verify(x => x.TakeDamage(It.Is<int>(damage => damage == expectedActEfficient)), Times.Once);
+            monsterMock.Verify(x => x.TakeDamage(It.Is<int>(damage => damage == EXPECTED_ACTEFFICIENT)), Times.Once);
         }
 
         private static bool CheckDefeateProgress(IJobProgress progress, IAttackTarget expectedTarget)

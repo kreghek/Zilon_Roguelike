@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Components;
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
@@ -21,13 +22,17 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             _actService = actService;
 
-            Target = target;
-            TacticalAct = tacticalAct;
+            TargetObject = target ?? throw new ArgumentNullException(nameof(target));
+            TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
+
+            TargetNode = target.Node;
         }
 
         public ITacticalAct TacticalAct { get; }
 
-        public IAttackTarget Target { get; }
+        public IGraphNode TargetNode { get; }
+
+        public IAttackTarget TargetObject { get; }
 
         protected override void ExecuteTask()
         {
@@ -36,7 +41,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new NotImplementedException("Не неализована возможность атаковать без навыков.");
             }
 
-            if (!Target.CanBeDamaged())
+            if (!TargetObject.CanBeDamaged())
             {
                 // Эта ситуация может произойти, когда:
                 // 1. Текущий актёр начал выполнять задачу.
@@ -48,24 +53,36 @@ namespace Zilon.Core.Tactics.Behaviour
                 return;
             }
 
-            var availableSlotAct = GetUsedActs();
-            var usedActs = new UsedTacticalActs(new[] { TacticalAct }, availableSlotAct.Skip(1));
-            _actService.UseOn(Actor, Target, usedActs, Context.Sector);
+            var availableSlotAct = GetSecondaryUsedActs();
+
+            var primary = new[] { TacticalAct };
+            var secondary = availableSlotAct.Where(x => x != TacticalAct).Skip(1).ToArray();
+
+            var usedActs = new UsedTacticalActs(primary, secondary);
+
+            var actTargetInfo = new ActTargetInfo(TargetObject, TargetNode);
+
+            _actService.UseOn(Actor, actTargetInfo, usedActs, Context.Sector);
         }
 
-        private IEnumerable<ITacticalAct> GetUsedActs()
+        private IEnumerable<ITacticalAct> GetSecondaryUsedActs()
         {
-            if (Actor.Person.GetModuleSafe<IEquipmentModule>() == null)
+            var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
+            var combatActModule = Actor.Person.GetModule<ICombatActModule>();
+            var currentActs = combatActModule.CalcCombatActs();
+
+            if (equipmentModule == null)
             {
-                yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+                // If person has not equipment, the has only one default action in current moment. Use it.
+                yield return currentActs.Single();
             }
             else
             {
                 var usedEquipmentActs = false;
-                var slots = Actor.Person.GetModule<IEquipmentModule>().Slots;
+                var slots = equipmentModule.Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
-                    var slotEquipment = Actor.Person.GetModule<IEquipmentModule>()[i];
+                    var slotEquipment = equipmentModule[i];
                     if (slotEquipment == null)
                     {
                         continue;
@@ -76,7 +93,7 @@ namespace Zilon.Core.Tactics.Behaviour
                         continue;
                     }
 
-                    var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
+                    var equipmentActs = from act in currentActs
                                         where act.Equipment == slotEquipment
                                         select act;
 
@@ -92,7 +109,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (!usedEquipmentActs)
                 {
-                    yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+                    // If no equipment was selected then use default act. Each person has only one default act in current moment.
+                    yield return currentActs.Single();
                 }
             }
         }

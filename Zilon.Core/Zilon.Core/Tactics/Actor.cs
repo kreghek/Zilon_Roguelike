@@ -150,9 +150,9 @@ namespace Zilon.Core.Tactics
         }
 
         [ExcludeFromCodeCoverage]
-        private void DoUseAct(IAttackTarget target, ITacticalAct tacticalAct)
+        private void DoUseAct(IGraphNode targetNode, ITacticalAct tacticalAct)
         {
-            var args = new UsedActEventArgs(target, tacticalAct);
+            var args = new UsedActEventArgs(targetNode, tacticalAct);
             UsedAct?.Invoke(this, args);
         }
 
@@ -387,14 +387,15 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(method));
             }
 
-            var openResult = method?.TryOpen(container.GetModule<IPropContainer>());
+            var openResult = method.TryOpen(container.GetModule<IPropContainer>());
 
             DoOpenContainer(container, openResult);
         }
 
-        public void UseAct(IAttackTarget target, ITacticalAct tacticalAct)
+        /// <inheritdoc />
+        public void UseAct(IGraphNode targetNode, ITacticalAct tacticalAct)
         {
-            DoUseAct(target, tacticalAct);
+            DoUseAct(targetNode, tacticalAct);
         }
 
         public void UseProp(IProp usedProp)
@@ -464,7 +465,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(method));
             }
 
-            var openResult = method?.TryMine(deposit.GetModule<IPropDepositModule>());
+            var openResult = method.TryMine(deposit.GetModule<IPropDepositModule>());
 
             DoMineDeposit(deposit, openResult);
         }

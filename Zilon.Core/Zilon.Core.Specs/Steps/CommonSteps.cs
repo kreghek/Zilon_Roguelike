@@ -203,7 +203,7 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [Then(@"Монстр Id:(\d*) имеет Hp (\d*)")]
+        [Then(@"Монстр Id:(\d+) имеет Hp (\d+)")]
         public void ThenМонстрIdИмеетHp(int monsterId, int expectedMonsterHp)
         {
             var monster = Context.GetMonsterById(monsterId);
@@ -307,6 +307,7 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [When(@"Я жду (.*) итераций")]
+        [When(@"В мире проходит (.*) итераций")]
         public async Task WhenЯЖдуЕдиницВремениAsync(int timeUnitCount)
         {
             var globe = Context.Globe;

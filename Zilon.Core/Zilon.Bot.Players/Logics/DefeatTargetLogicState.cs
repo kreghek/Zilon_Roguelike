@@ -52,10 +52,10 @@ namespace Zilon.Bot.Players.Logics
                 var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
                 return attackTask;
             }
+
             // Маршрут до цели обновляем каждые 3 хода.
             // Для оптимизации.
             // Эффект потери цели.
-
             if (_refreshCounter > 0 && _moveTask?.CanExecute() == true)
             {
                 _refreshCounter--;
@@ -85,17 +85,18 @@ namespace Zilon.Bot.Players.Logics
             _moveTask = null;
         }
 
-        private AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target, ISectorMap map)
+        private static AttackParams CheckAttackAvailability(IActor actor, IAttackTarget target, ISectorMap map)
         {
-            if (actor.Person.GetModuleSafe<ICombatActModule>() is null)
+            var combatActModule = actor.Person.GetModuleSafe<ICombatActModule>();
+            if (combatActModule is null)
             {
                 throw new NotSupportedException();
             }
 
             var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
 
-            var act = SelectActHelper.SelectBestAct(actor.Person.GetModule<ICombatActModule>().CalcCombatActs(),
-                inventory);
+            var acts = combatActModule.CalcCombatActs();
+            var act = SelectActHelper.SelectBestAct(acts, inventory);
 
             var isInDistance = act.CheckDistance(actor.Node, target.Node, map);
             var targetIsOnLine = map.TargetIsOnLine(actor.Node, target.Node);
@@ -109,7 +110,7 @@ namespace Zilon.Bot.Players.Logics
             return attackParams;
         }
 
-        private IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
+        private static IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
         {
             foreach (var target in actorManager.Items)
             {

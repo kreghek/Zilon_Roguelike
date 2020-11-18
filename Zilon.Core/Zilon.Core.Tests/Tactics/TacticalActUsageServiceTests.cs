@@ -83,8 +83,8 @@ namespace Zilon.Core.Tests.Tactics
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             actorMock.SetupGet(x => x.Person).Returns(_person);
-            actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
-                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null,
+            actorMock.Setup(x => x.UseAct(It.IsAny<IGraphNode>(), It.IsAny<ITacticalAct>()))
+                .Raises<IGraphNode, ITacticalAct>(x => x.UsedAct += null,
                     (target1, act1) => new UsedActEventArgs(target1, act1));
             var actor = actorMock.Object;
 
@@ -93,10 +93,12 @@ namespace Zilon.Core.Tests.Tactics
 
             var usedActs = new UsedTacticalActs(new[] { _act });
 
+            var actTargetInfo = new ActTargetInfo(monster, monster.Node);
+
             using var monitor = actor.Monitor();
 
             // ACT
-            actUsageService.UseOn(actor, monster, usedActs, _sector);
+            actUsageService.UseOn(actor, actTargetInfo, usedActs, _sector);
 
             // ASSERT
             monitor.Should().Raise(nameof(IActor.UsedAct));
@@ -160,11 +162,16 @@ namespace Zilon.Core.Tests.Tactics
             actMock.SetupGet(x => x.Constrains).Returns(actConstrainsSubScheme);
             var shootAct = actMock.Object;
 
-            // ACT
+            var actTargetInfo = new ActTargetInfo(monster, monster.Node);
+
             var usedActs = new UsedTacticalActs(new[] { shootAct });
-            actUsageService.UseOn(actor, monster, usedActs, _sector);
+
+            // ACT
+
+            actUsageService.UseOn(actor, actTargetInfo, usedActs, _sector);
 
             // ASSERT
+
             var bullets = inventory.CalcActualItems().Single(x => x.Scheme.Sid == "bullet-7-62") as Resource;
             bullets.Count.Should().Be(9);
         }
@@ -193,12 +200,14 @@ namespace Zilon.Core.Tests.Tactics
             var monsterMock = CreateMonsterMock();
             var monster = monsterMock.Object;
 
-            // ACT
+            var actTargetInfo = new ActTargetInfo(monster, monster.Node);
             var usedActs = new UsedTacticalActs(new[] { _act });
+
+            // ACT
 
             Action act = () =>
             {
-                actUsageService.UseOn(actor, monster, usedActs, sector);
+                actUsageService.UseOn(actor, actTargetInfo, usedActs, sector);
             };
 
             // ASSERT
@@ -289,7 +298,7 @@ namespace Zilon.Core.Tests.Tactics
             return monsterMock;
         }
 
-        private ISector CreateSectorManagerWithWall()
+        private static ISector CreateSectorManagerWithWall()
         {
             var mapMock = new Mock<ISectorMap>();
             mapMock.Setup(x => x.TargetIsOnLine(It.IsAny<IGraphNode>(), It.IsAny<IGraphNode>()))

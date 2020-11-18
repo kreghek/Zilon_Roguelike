@@ -89,7 +89,7 @@ namespace Zilon.Core.Tests.Commands
         {
             var attackIntention = (Intention<AttackTask>)intention;
             var attackTask = attackIntention.TaskFactory(playerState.ActiveActor.Actor);
-            return attackTask.Target == target;
+            return attackTask.TargetObject == target;
         }
     }
 }

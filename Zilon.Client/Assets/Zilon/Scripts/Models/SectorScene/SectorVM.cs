@@ -16,6 +16,7 @@ using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -560,7 +561,7 @@ public class SectorVM : MonoBehaviour
         {
             try
             {
-                HandleSectorTransitionInner(e);
+                HandleSectorTransitionInner();
             }
             catch (Exception exception)
             {
@@ -569,7 +570,7 @@ public class SectorVM : MonoBehaviour
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Wait();
     }
 
-    private void HandleSectorTransitionInner(TransitionUsedEventArgs e)
+    private void HandleSectorTransitionInner()
     {
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;
@@ -728,7 +729,7 @@ public class SectorVM : MonoBehaviour
         var actor = GetActorFromEventSender(sender);
 
         var actorHexNode = actor.Node as HexNode;
-        var targetHexNode = e.Target.Node as HexNode;
+        var targetHexNode = e.TargetNode as HexNode;
 
         // Визуализируем удар.
         var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
@@ -737,7 +738,7 @@ public class SectorVM : MonoBehaviour
         switch (actEffect)
         {
             case TacticalActEffectType.Damage:
-                ProcessDamage(e.Target, e.TacticalAct, actor, actorViewModel);
+                ProcessDamage(e.TargetNode, e.TacticalAct, actor, actorViewModel);
                 break;
 
             case TacticalActEffectType.Heal:
@@ -771,10 +772,10 @@ public class SectorVM : MonoBehaviour
         actorViewModel.GraphicRoot.ProcessHit(actorViewModel.transform.position);
     }
 
-    private void ProcessDamage(IAttackTarget target, ITacticalAct tacticalAct, IActor actor, ActorViewModel actorViewModel)
+    private void ProcessDamage(IGraphNode targetNode, ITacticalAct tacticalAct, IActor actor, ActorViewModel actorViewModel)
     {
-        var targetActorViewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Item, target));
-        var targetStaticObjectViewModel = _staticObjectViewModels.SingleOrDefault(x => ReferenceEquals(x.Item, target));
+        var targetActorViewModel = ActorViewModels.SingleOrDefault(x => x.Actor.Node == targetNode);
+        var targetStaticObjectViewModel = _staticObjectViewModels.SingleOrDefault(x => x.StaticObject.Node == targetNode);
         var canBeHitViewModel = (ICanBeHitSectorObject)targetActorViewModel ?? targetStaticObjectViewModel;
         if (canBeHitViewModel is null)
         {
@@ -792,7 +793,7 @@ public class SectorVM : MonoBehaviour
             sfx.EffectSpriteRenderer.sprite = sfx.ShootSprite;
 
             // Создаём снараяд
-            CreateBullet(actor, target);
+            CreateBullet(actor, targetNode);
         }
     }
 
@@ -806,12 +807,12 @@ public class SectorVM : MonoBehaviour
         throw new NotSupportedException("Не поддерживается обработка событий использования действия.");
     }
 
-    private void CreateBullet(IActor actor, IAttackTarget target)
+    private void CreateBullet(IActor actor, IGraphNode targetNode)
     {
         var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
 
-        var targetActorViewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Item, target));
-        var targetStaticObjectViewModel = _staticObjectViewModels.SingleOrDefault(x => ReferenceEquals(x.Item, target));
+        var targetActorViewModel = ActorViewModels.SingleOrDefault(x => x.Actor.Node == targetNode);
+        var targetStaticObjectViewModel = _staticObjectViewModels.SingleOrDefault(x => x.StaticObject.Node == targetNode);
         var canBeHitViewModel = (ICanBeHitSectorObject)targetActorViewModel ?? targetStaticObjectViewModel;
 
         var bulletTracer = Instantiate(GunShootTracer, transform);

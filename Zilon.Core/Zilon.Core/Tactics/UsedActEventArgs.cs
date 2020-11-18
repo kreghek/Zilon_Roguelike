@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
@@ -13,9 +14,9 @@ namespace Zilon.Core.Tactics
     public sealed class UsedActEventArgs : EventArgs
     {
         [ExcludeFromCodeCoverage]
-        public UsedActEventArgs([NotNull] IAttackTarget target, [NotNull] ITacticalAct tacticalAct)
+        public UsedActEventArgs([NotNull] IGraphNode targetNode, [NotNull] ITacticalAct tacticalAct)
         {
-            Target = target ?? throw new ArgumentNullException(nameof(target));
+            TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
             TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
         }
 
@@ -29,6 +30,6 @@ namespace Zilon.Core.Tactics
         /// Цель действия.
         /// </summary>
         [PublicAPI]
-        public IAttackTarget Target { get; }
+        public IGraphNode TargetNode { get; }
     }
 }
