@@ -286,17 +286,4 @@ namespace Zilon.Core.Tactics
             }
         }
     }
-
-    public class ActTargetInfo
-    {
-        public ActTargetInfo(IAttackTarget targetObject, IGraphNode targetNode)
-        {
-            TargetObject = targetObject ?? throw new ArgumentNullException(nameof(targetObject));
-            TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
-        }
-
-        public IGraphNode TargetNode { get; }
-
-        public IAttackTarget TargetObject { get; }
-    }
 }
