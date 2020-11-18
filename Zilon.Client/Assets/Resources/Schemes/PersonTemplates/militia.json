@@ -5,7 +5,7 @@
     "En": "Militia"
   },
   "BodyEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "quilted-coat",
@@ -30,7 +30,7 @@
     ]
   },
   "HeadEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "tactical-helmet",
@@ -39,7 +39,7 @@
     ]
   },
   "MainHandEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "short-sword",
@@ -60,7 +60,7 @@
     ]
   },
   "OffHandEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "wooden-shield",

@@ -5,7 +5,7 @@
     "En": "Troublemaker"
   },
   "BodyEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "quilted-coat",
@@ -30,7 +30,7 @@
     ]
   },
   "MainHandEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "rough-sword",
@@ -63,7 +63,7 @@
     ]
   },
   "OffHandEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "wooden-shield",

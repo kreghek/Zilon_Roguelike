@@ -5,7 +5,7 @@
     "En": "Heavy Interventionist"
   },
   "BodyEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "steel-armor",
@@ -14,7 +14,7 @@
     ]
   },
   "HeadEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "gas-mask",
@@ -23,7 +23,7 @@
     ]
   },
   "MainHandEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "rough-sword",

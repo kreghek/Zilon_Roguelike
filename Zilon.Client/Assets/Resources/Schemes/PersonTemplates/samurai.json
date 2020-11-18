@@ -5,7 +5,7 @@
     "En": "Samurai"
   },
   "BodyEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "leather-jacket",
@@ -18,7 +18,7 @@
     ]
   },
   "MainHandEquipments": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "bocken",
@@ -35,7 +35,7 @@
     ]
   },
   "InventoryProps": {
-  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "med-kit",
