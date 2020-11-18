@@ -94,7 +94,7 @@ namespace Zilon.Bot.Players.Logics
             }
 
             var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
-            
+
             var acts = combatActModule.CalcCombatActs();
             var act = SelectActHelper.SelectBestAct(acts, inventory);
 
