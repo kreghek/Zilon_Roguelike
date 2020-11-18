@@ -1,0 +1,52 @@
+{
+  "FractionSid": "player",
+  "Name": {
+    "Ru": "Гробовщик",
+    "En": "Undertaker"
+  },
+  "BodyEquipments": {
+  "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "leather-jacket",
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+  "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "pick-axe",
+        "Weight": 1
+      }
+    ]
+  },
+  "InventoryProps": {
+  "Rolls": 5,
+    "Records": [
+      {
+        "SchemeSid": "med-kit",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "packed-food",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "water-bottle",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 4
+      }
+    ]
+  }
+}
