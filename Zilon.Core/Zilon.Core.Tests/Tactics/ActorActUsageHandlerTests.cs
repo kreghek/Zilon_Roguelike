@@ -106,7 +106,7 @@ namespace Zilon.Core.Tests.Tactics
             actorMock.SetupGet(x => x.Person).Returns(person);
             actorMock.Setup(x => x.UseAct(It.IsAny<IGraphNode>(), It.IsAny<ITacticalAct>()))
                 .Raises<IGraphNode, ITacticalAct>(x => x.UsedAct += null,
-                (target1, act1) => new UsedActEventArgs(target1, act1));
+                    (target1, act1) => new UsedActEventArgs(target1, act1));
             var actor = actorMock.Object;
 
             var actStatScheme = new TestTacticalActStatsSubScheme

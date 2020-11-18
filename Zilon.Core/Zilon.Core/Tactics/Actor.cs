@@ -392,7 +392,7 @@ namespace Zilon.Core.Tactics
             DoOpenContainer(container, openResult);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void UseAct(IGraphNode targetNode, ITacticalAct tacticalAct)
         {
             DoUseAct(targetNode, tacticalAct);

@@ -30,9 +30,9 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public ITacticalAct TacticalAct { get; }
 
-        public IAttackTarget TargetObject { get; }
-
         public IGraphNode TargetNode { get; }
+
+        public IAttackTarget TargetObject { get; }
 
         protected override void ExecuteTask()
         {

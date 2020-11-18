@@ -213,10 +213,8 @@ namespace Zilon.Core.Tactics
                 {
                     throw new UsageThroughtWallException();
                 }
-                else
-                {
-                    UseActResources(actor, act);
-                }
+
+                UseActResources(actor, act);
             }
         }
 
@@ -297,7 +295,8 @@ namespace Zilon.Core.Tactics
             TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
         }
 
-        public IAttackTarget TargetObject { get; }
         public IGraphNode TargetNode { get; }
+
+        public IAttackTarget TargetObject { get; }
     }
 }
