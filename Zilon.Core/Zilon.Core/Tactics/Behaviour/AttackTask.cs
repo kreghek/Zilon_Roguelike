@@ -48,24 +48,29 @@ namespace Zilon.Core.Tactics.Behaviour
                 return;
             }
 
-            var availableSlotAct = GetUsedActs();
-            var usedActs = new UsedTacticalActs(new[] { TacticalAct }, availableSlotAct.Skip(1));
+            var availableSlotAct = GetSecondaryUsedActs();
+            var usedActs = new UsedTacticalActs(new[] { TacticalAct }, availableSlotAct.Where(x=>x!= TacticalAct));
             _actService.UseOn(Actor, Target, usedActs, Context.Sector);
         }
 
-        private IEnumerable<ITacticalAct> GetUsedActs()
+        private IEnumerable<ITacticalAct> GetSecondaryUsedActs()
         {
-            if (Actor.Person.GetModuleSafe<IEquipmentModule>() == null)
+            var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
+            var combatActModule = Actor.Person.GetModule<ICombatActModule>();
+            var currentActs = combatActModule.CalcCombatActs();
+
+            if (equipmentModule == null)
             {
-                yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+                // If person has not equipment, the has only one default action in current moment. Use it.
+                yield return currentActs.Single();
             }
             else
             {
                 var usedEquipmentActs = false;
-                var slots = Actor.Person.GetModule<IEquipmentModule>().Slots;
+                var slots = equipmentModule.Slots;
                 for (var i = 0; i < slots.Length; i++)
                 {
-                    var slotEquipment = Actor.Person.GetModule<IEquipmentModule>()[i];
+                    var slotEquipment = equipmentModule[i];
                     if (slotEquipment == null)
                     {
                         continue;
@@ -76,7 +81,7 @@ namespace Zilon.Core.Tactics.Behaviour
                         continue;
                     }
 
-                    var equipmentActs = from act in Actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
+                    var equipmentActs = from act in currentActs
                                         where act.Equipment == slotEquipment
                                         select act;
 
@@ -92,7 +97,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (!usedEquipmentActs)
                 {
-                    yield return Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+                    // If no equipment was selected then use default act. Each person has only one default act in current moment.
+                    yield return currentActs.Single();
                 }
             }
         }

@@ -193,23 +193,42 @@ namespace Zilon.Core.Tactics
                 actor.Node,
                 targetNode);
 
-            if (!targetIsOnLine)
+            if (targetIsOnLine)
             {
-                throw new UsageThroughtWallException("Задачу на атаку нельзя выполнить сквозь стены.");
+                actor.UseAct(target, act);
+
+                var tacticalActRoll = GetActEfficient(act);
+
+                // Изъятие патронов
+                if (act.Constrains?.PropResourceType != null)
+                {
+                    RemovePropResource(actor, act);
+                }
+
+                var actHandler = _actUsageHandlerSelector.GetHandler(target);
+                actHandler.ProcessActUsage(actor, target, tacticalActRoll);
+
+                UseActResources(actor, act);
             }
+            else
+            {
+                // Ситация, когда цель за стеной может произойти по следующим причинам:
+                // 1. В момент начала применения действия цель была доступна. К моменту выполнения дейтвия цель скрылась.
+                // В этом случае изымаем патроны и начинаем КД по действию, так как фактически ресурсы на него потрачены. Но на цель не воздействуем.
+                // 2. Ошибка во внешнем коде, когда не провели предварительную проверку. Раньше здесь выбрасывалось исключения UsageThroughtWallException.
+                // Нужно подумать, как обрабатывать теперь такие исходы.
 
-            actor.UseAct(target, act);
+                UseActResources(actor, act);
+            }
+        }
 
-            var tacticalActRoll = GetActEfficient(act);
-
+        private void UseActResources(IActor actor, ITacticalAct act)
+        {
             // Изъятие патронов
             if (act.Constrains?.PropResourceType != null)
             {
                 RemovePropResource(actor, act);
             }
-
-            var actHandler = _actUsageHandlerSelector.GetHandler(target);
-            actHandler.ProcessActUsage(actor, target, tacticalActRoll);
 
             if (act.Equipment != null)
             {
