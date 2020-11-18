@@ -190,7 +190,8 @@ namespace Zilon.Core.Tactics
 
                     var totalWeight = recMods.Sum(x => x.ModifiedWeight);
 
-                    Debug.Assert(table.Rolls > 0, "There is no reason to have zero rolls in table. This is most likely a mistake.");
+                    Debug.Assert(table.Rolls > 0,
+                        "There is no reason to have zero rolls in table. This is most likely a mistake.");
                     var rolls = table.Rolls;
                     if (rolls == 0)
                     {
