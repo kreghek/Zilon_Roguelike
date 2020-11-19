@@ -43,7 +43,7 @@
         [JsonProperty]
         public string[] Tags { get; private set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         public int BaseMoveSpeed { get; }
     }
