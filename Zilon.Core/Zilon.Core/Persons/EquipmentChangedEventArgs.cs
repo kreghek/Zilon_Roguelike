@@ -9,15 +9,6 @@ namespace Zilon.Core.Persons
 {
     public class EquipmentChangedEventArgs : EventArgs
     {
-        [PublicAPI]
-        public Equipment Equipment { get; }
-        
-        [PublicAPI]
-        public Equipment OldEquipment { get; }
-        
-        [PublicAPI]
-        public int SlotIndex { get; }
-
         [ExcludeFromCodeCoverage]
         public EquipmentChangedEventArgs(Equipment equipment,
             Equipment oldEquipment,
@@ -27,5 +18,14 @@ namespace Zilon.Core.Persons
             OldEquipment = oldEquipment;
             SlotIndex = slotIndex;
         }
+
+        [PublicAPI]
+        public Equipment Equipment { get; }
+
+        [PublicAPI]
+        public Equipment OldEquipment { get; }
+
+        [PublicAPI]
+        public int SlotIndex { get; }
     }
 }

@@ -21,12 +21,13 @@ namespace Zilon.Core.Persons.Auxiliary
         /// </summary>
         /// <param name="currentEffects"> Текущий список эффектов. </param>
         /// <param name="stat"> Характеристика, на которую влияет эффект. </param>
-        /// <param name="keySegments"> Ключевые сегменты, которые были пересечены при изменении характеристики.
+        /// <param name="keySegments">
+        /// Ключевые сегменты, которые были пересечены при изменении характеристики.
         /// <param name="survivalRandomSource"> Источник рандома выживания. </param>
         public static void UpdateSurvivalEffect(
             [NotNull] IEffectsModule currentEffects,
             [NotNull] SurvivalStat stat,
-            [NotNull] [ItemNotNull] SurvivalStatKeySegment[] keySegments,
+            [NotNull][ItemNotNull] SurvivalStatKeySegment[] keySegments,
             [NotNull] ISurvivalRandomSource survivalRandomSource,
             [NotNull] IPlayerEventLogService playerEventLogService)
         {
@@ -63,9 +64,9 @@ namespace Zilon.Core.Persons.Auxiliary
                 {
                     // Создаём эффект
                     var newEffect = new SurvivalStatHazardEffect(
-                    statType,
-                    currentSegment.Level,
-                    survivalRandomSource)
+                        statType,
+                        currentSegment.Level,
+                        survivalRandomSource)
                     {
                         PlayerEventLogService = playerEventLogService
                     };
@@ -75,11 +76,12 @@ namespace Zilon.Core.Persons.Auxiliary
             }
         }
 
-        private static SurvivalStatHazardEffect GetCurrentEffect(IEffectsModule currentEffects, SurvivalStatType statType)
+        private static SurvivalStatHazardEffect GetCurrentEffect(IEffectsModule currentEffects,
+            SurvivalStatType statType)
         {
             return currentEffects.Items
-                            .OfType<SurvivalStatHazardEffect>()
-                            .SingleOrDefault(x => x.Type == statType);
+                .OfType<SurvivalStatHazardEffect>()
+                .SingleOrDefault(x => x.Type == statType);
         }
 
         [ExcludeFromCodeCoverage]

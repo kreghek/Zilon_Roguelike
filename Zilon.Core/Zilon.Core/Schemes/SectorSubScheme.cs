@@ -79,7 +79,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Идентфикаторы связанных секторов в рамках текущей локации.
         /// </summary>
-        /// <seealso cref="Sid"/>
+        /// <seealso cref="Sid" />
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<SectorTransitionSubScheme[]>))]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",

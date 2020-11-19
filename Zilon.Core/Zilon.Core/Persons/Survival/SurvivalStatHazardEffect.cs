@@ -11,11 +11,9 @@ namespace Zilon.Core.Persons
 {
     public class SurvivalStatHazardEffect : IPersonEffect, ISurvivalStatEffect
     {
+        private readonly ISurvivalRandomSource _survivalRandomSource;
         private SurvivalStatHazardLevel _level;
         private EffectRule[] _rules;
-        private readonly ISurvivalRandomSource _survivalRandomSource;
-
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public SurvivalStatHazardEffect(SurvivalStatType type,
             SurvivalStatHazardLevel level,
@@ -24,24 +22,78 @@ namespace Zilon.Core.Persons
             Type = type;
             Level = level;
 
-            _survivalRandomSource = survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
+            _survivalRandomSource =
+                survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
 
             _rules = CalcRules();
         }
-
-        public SurvivalStatType Type { get; }
 
         public SurvivalStatHazardLevel Level
         {
             get => _level;
             set
             {
-                _level = value;
+                if (_level != value)
+                {
+                    _level = value;
 
-                _rules = CalcRules();
+                    _rules = CalcRules();
 
-                Changed?.Invoke(this, EventArgs.Empty);
+                    Changed?.Invoke(this, EventArgs.Empty);
+                }
             }
+        }
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
+
+        public SurvivalStatType Type { get; }
+
+        public override string ToString()
+        {
+            return $"{Level} {Type}";
+        }
+
+        private EffectRule[] CalcRules()
+        {
+            var rules = new List<EffectRule>();
+
+            switch (Level)
+            {
+                case SurvivalStatHazardLevel.Lesser:
+                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
+                    break;
+
+                case SurvivalStatHazardLevel.Strong:
+                case SurvivalStatHazardLevel.Max:
+                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
+                    rules.Add(new EffectRule(RollEffectType.ToHit, PersonRuleLevel.Lesser));
+                    break;
+
+                case SurvivalStatHazardLevel.Undefined:
+                    throw new NotSupportedException();
+
+                default:
+                    throw new NotSupportedException("Неизветный уровень угрозы выживания.");
+            }
+
+            return rules.ToArray();
+        }
+
+        private static int GetSuccessHazardDamageRoll()
+        {
+            // В будущем это значение будет расчитывать исходя из характеристик, перков и экипировки персонжа.
+            return 4;
+        }
+
+        private void LogPlayerEvent()
+        {
+            if (PlayerEventLogService is null)
+            {
+                return;
+            }
+
+            var playerEvent = new SurvivalEffectDamageEvent(this);
+            PlayerEventLogService.Log(playerEvent);
         }
 
         public EffectRule[] GetRules()
@@ -72,54 +124,6 @@ namespace Zilon.Core.Persons
                     LogPlayerEvent();
                 }
             }
-        }
-
-        private void LogPlayerEvent()
-        {
-            if (PlayerEventLogService is null)
-            {
-                return;
-            }
-
-            var playerEvent = new SurvivalEffectDamageEvent(this);
-            PlayerEventLogService.Log(playerEvent);
-        }
-
-        private static int GetSuccessHazardDamageRoll()
-        {
-            // В будущем это значение будет расчитывать исходя из характеристик, перков и экипировки персонжа.
-            return 4;
-        }
-
-        private EffectRule[] CalcRules()
-        {
-            var rules = new List<EffectRule>();
-
-            switch (Level)
-            {
-                case SurvivalStatHazardLevel.Lesser:
-                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
-                    break;
-
-                case SurvivalStatHazardLevel.Strong:
-                case SurvivalStatHazardLevel.Max:
-                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
-                    rules.Add(new EffectRule(RollEffectType.ToHit, PersonRuleLevel.Lesser));
-                    break;
-
-                case SurvivalStatHazardLevel.Undefined:
-                    throw new NotSupportedException();
-
-                default:
-                    throw new NotSupportedException("Неизветный уровень угрозы выживания.");
-            }
-
-            return rules.ToArray();
-        }
-
-        public override string ToString()
-        {
-            return $"{Level} {Type}";
         }
     }
 }

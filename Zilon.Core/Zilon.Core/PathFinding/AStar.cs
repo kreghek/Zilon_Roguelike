@@ -20,11 +20,6 @@ namespace Zilon.Core.PathFinding
     public sealed class AStar
     {
         /// <summary>
-        /// The open list.
-        /// </summary>
-        private readonly SortedList<int, IGraphNode> _openList;
-
-        /// <summary>
         /// The closed list.
         /// </summary>
         private readonly HashSet<IGraphNode> _closedList;
@@ -33,14 +28,14 @@ namespace Zilon.Core.PathFinding
         private readonly Dictionary<IGraphNode, AStarData> _dataDict;
 
         /// <summary>
+        /// The open list.
+        /// </summary>
+        private readonly SortedList<int, IGraphNode> _openList;
+
+        /// <summary>
         /// The goal node.
         /// </summary>
         private IGraphNode _goal;
-
-        /// <summary>
-        /// Gets the current node that the AStar algorithm is at.
-        /// </summary>
-        public IGraphNode CurrentNode { get; private set; }
 
         /// <summary>
         /// Creates a new AStar algorithm instance with the provided start and goal nodes.
@@ -70,21 +65,35 @@ namespace Zilon.Core.PathFinding
         }
 
         /// <summary>
-        /// Resets the AStar algorithm with the newly specified start node and goal node.
+        /// Gets the current node that the AStar algorithm is at.
         /// </summary>
-        /// <param name="start">The starting node for the AStar algorithm.</param>
-        /// <param name="goal">The goal node for the AStar algorithm.</param>
-        private void Reset(IGraphNode start, IGraphNode goal)
+        public IGraphNode CurrentNode { get; private set; }
+
+        /// <summary>
+        /// Gets the path of the last solution of the AStar algorithm.
+        /// Will return a partial path if the algorithm has not finished yet.
+        /// </summary>
+        /// <returns>Returns empty if the algorithm has never been run.</returns>
+        public IGraphNode[] GetPath()
         {
-            _openList.Clear();
-            _closedList.Clear();
-            _dataDict.Clear();
+            if (CurrentNode == null)
+            {
+                return System.Array.Empty<IGraphNode>();
+            }
 
-            CurrentNode = start;
-            _goal = goal;
+            var next = CurrentNode;
+            var path = new List<IGraphNode>();
+            while (next != null)
+            {
+                path.Add(next);
 
-            var currentData = GetData(CurrentNode);
-            _openList.AddWithData(CurrentNode, currentData);
+                var nextData = GetData(next);
+
+                next = nextData.Parent;
+            }
+
+            path.Reverse();
+            return path.ToArray();
         }
 
         /// <summary>
@@ -102,6 +111,37 @@ namespace Zilon.Core.PathFinding
                     return state;
                 }
             }
+        }
+
+        private AStarData GetData(IGraphNode node)
+        {
+            if (_dataDict.TryGetValue(node, out var data))
+            {
+                return data;
+            }
+
+            data = new AStarData();
+            _dataDict.Add(node, data);
+
+            return data;
+        }
+
+        /// <summary>
+        /// Resets the AStar algorithm with the newly specified start node and goal node.
+        /// </summary>
+        /// <param name="start">The starting node for the AStar algorithm.</param>
+        /// <param name="goal">The goal node for the AStar algorithm.</param>
+        private void Reset(IGraphNode start, IGraphNode goal)
+        {
+            _openList.Clear();
+            _closedList.Clear();
+            _dataDict.Clear();
+
+            CurrentNode = start;
+            _goal = goal;
+
+            var currentData = GetData(CurrentNode);
+            _openList.AddWithData(CurrentNode, currentData);
         }
 
         /// <summary>
@@ -174,48 +214,5 @@ namespace Zilon.Core.PathFinding
             // This step did not find the goal so return status of still searching.
             return State.Searching;
         }
-
-        private AStarData GetData(IGraphNode node)
-        {
-            if (_dataDict.TryGetValue(node, out var data))
-            {
-                return data;
-            }
-
-            data = new AStarData();
-            _dataDict.Add(node, data);
-
-            return data;
-        }
-
-        /// <summary>
-        /// Gets the path of the last solution of the AStar algorithm.
-        /// Will return a partial path if the algorithm has not finished yet.
-        /// </summary>
-        /// <returns>Returns empty if the algorithm has never been run.</returns>
-        public IGraphNode[] GetPath()
-        {
-            if (CurrentNode == null)
-            {
-                return System.Array.Empty<IGraphNode>();
-            }
-
-            var next = CurrentNode;
-            var path = new List<IGraphNode>();
-            while (next != null)
-            {
-                path.Add(next);
-
-                var nextData = GetData(next);
-
-                next = nextData.Parent;
-            }
-
-            path.Reverse();
-            return path.ToArray();
-        }
     }
-
-
 }
-

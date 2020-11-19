@@ -24,17 +24,6 @@ namespace Zilon.Core.Commands
         {
             _playerState = playerState;
         }
-        
-        public override void Execute()
-        {
-            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
-            var targetContainerViewModel = (IContainerViewModel)_playerState.HoverViewModel;
-            var container = targetContainerViewModel.StaticObject;
-            var containerContent = container.GetModule<IPropContainer>().Content;
-            var transferMachine = new PropTransferMachine(inventory, containerContent);
-            
-            ModalManager.ShowContainerModal(transferMachine);
-        }
 
         public override bool CanExecute()
         {
@@ -45,6 +34,17 @@ namespace Zilon.Core.Commands
             var containerContent = container?.GetModule<IPropContainer>().Content;
 
             return inventory != null && containerContent != null;
+        }
+
+        public override void Execute()
+        {
+            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
+            var targetContainerViewModel = (IContainerViewModel)_playerState.HoverViewModel;
+            var container = targetContainerViewModel.StaticObject;
+            var containerContent = container.GetModule<IPropContainer>().Content;
+            var transferMachine = new PropTransferMachine(inventory, containerContent);
+
+            ModalManager.ShowContainerModal(transferMachine);
         }
     }
 }

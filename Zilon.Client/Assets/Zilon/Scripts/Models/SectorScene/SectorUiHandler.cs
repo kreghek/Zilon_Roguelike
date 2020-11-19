@@ -12,6 +12,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Players;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 
@@ -22,14 +23,11 @@ using Zilon.Core.Tactics;
 /// </summary>
 public class SectorUiHandler : MonoBehaviour
 {
+    [Inject] private readonly IPlayer _player;
+
     [Inject] private readonly ISectorUiState _playerState;
 
-    [Inject] private readonly ISectorManager _sectorManager;
-
     [Inject] private readonly ICommandManager _clientCommandExecutor;
-
-    [Inject]
-    private readonly IGameLoop _gameLoop;
 
     [Inject(Id = "next-turn-command")] private readonly ICommand _nextTurnCommand;
 
@@ -102,8 +100,10 @@ public class SectorUiHandler : MonoBehaviour
 
     private bool GetIsInCity()
     {
-        return _sectorManager.CurrentSector?.Scheme.Sid == "city";
+        return CurrentSector?.Scheme.Sid == "city";
     }
+
+    private ISector CurrentSector => _player.SectorNode.Sector;
 
     private bool GetCanOpenLoot()
     {
@@ -124,7 +124,7 @@ public class SectorUiHandler : MonoBehaviour
 
     private IStaticObject GetContainerInNode(IGraphNode targetnNode)
     {
-        var staticObjectManager = _sectorManager.CurrentSector.StaticObjectManager;
+        var staticObjectManager = CurrentSector.StaticObjectManager;
         var containerStaticObjectInNode = staticObjectManager.Items
             .FirstOrDefault(x => x.Node == targetnNode && x.HasModule<IPropContainer>());
         return containerStaticObjectInNode;

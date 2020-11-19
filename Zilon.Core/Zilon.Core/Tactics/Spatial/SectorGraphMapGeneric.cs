@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
+
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tactics.Spatial
 {
-    public class SectorGraphMap<TNode, TNodeDistanceCalculator>: GraphMap, ISectorMap
-        where TNode: IGraphNode
-        where TNodeDistanceCalculator: IMapNodeDistanceCalculator<TNode>, new()
+    public class SectorGraphMap<TNode, TNodeDistanceCalculator> : GraphMap, ISectorMap
+        where TNode : IGraphNode
+        where TNodeDistanceCalculator : IMapNodeDistanceCalculator<TNode>, new()
     {
         private readonly TNodeDistanceCalculator _nodeDistanceCalculator;
-
-        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
 
         public SectorGraphMap()
         {
@@ -18,6 +17,8 @@ namespace Zilon.Core.Tactics.Spatial
 
             Transitions = new Dictionary<IGraphNode, RoomTransition>();
         }
+
+        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
 
         public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
         {

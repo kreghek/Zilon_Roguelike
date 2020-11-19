@@ -2,7 +2,6 @@
 
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -20,20 +19,23 @@ namespace Zilon.Core.Tactics
     public interface IActor : IAttackTarget, IPassMapBlocker
     {
         /// <summary>
+        /// Указывает, может ли актёр выполнять задачи.
+        /// </summary>
+        bool CanExecuteTasks { get; }
+
+        /// <summary>
         /// Песонаж, который лежит в основе актёра.
         /// </summary>
         IPerson Person { get; }
 
+        IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
+
         /// <summary>
-        /// Владелец актёра.
+        /// Добыча ресурса из залежей.
         /// </summary>
-        /// <remarks>
-        /// 1. Опредляет возможность управлять актёром.
-        /// 2. Боты по этому полю определяют противников.
-        /// Может быть человек или бот.
-        /// Персонажи игрока могут быть под прямым и не прямым управлением.
-        /// </remarks>
-        IPlayer Owner { get; }
+        /// <param name="deposit"> Целевые залежи. </param>
+        /// <param name="method"> Метод добычи. </param>
+        void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.
@@ -48,12 +50,16 @@ namespace Zilon.Core.Tactics
         /// <param name="method"> Метод открытия контейнера. </param>
         void OpenContainer(IStaticObject container, IOpenContainerMethod method);
 
+        void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
+
         /// <summary>
-        /// Добыча ресурса из залежей.
+        /// Приенение действия к указанной цели.
         /// </summary>
-        /// <param name="deposit"> Целевые залежи. </param>
-        /// <param name="method"> Метод добычи. </param>
-        void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
+        /// <param name="targetNode"> Узел карты, в которую прозошло действие. </param>
+        /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
+        void UseAct(IGraphNode targetNode, ITacticalAct tacticalAct);
+
+        void UseProp(IProp usedProp);
 
         /// <summary>
         /// Происходит, когда актёр переместился.
@@ -84,29 +90,5 @@ namespace Zilon.Core.Tactics
         /// Выстреливает, когда актёр использует предмет.
         /// </summary>
         event EventHandler<UsedPropEventArgs> UsedProp;
-
-        /// <summary>
-        /// Приенение действия к указанной цели.
-        /// </summary>
-        /// <param name="target"> Цель действия. </param>
-        /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
-        void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
-
-        void UseProp(IProp usedProp);
-
-        /// <summary>
-        /// Данные о тумане войны актёра.
-        /// </summary>
-        /// <remarks>
-        /// Актёр живёт только в рамках сектора. Если сектор уничтожается,
-        /// будет потеряна ссылка на актёра, а следовательно и на информацию о тумане войны.
-        /// Таким образом ненужные данные о тумане войны не будут оставать в памяти при смене секторов.
-        /// Но будут специфичны для каждого актёра. Например, для ботов.
-        /// </remarks>
-        ISectorFowData SectorFowData { get; }
-
-        int GameLoopCounter { get; }
-
-        void IncreaseGameLoopCounter(int value);
     }
 }

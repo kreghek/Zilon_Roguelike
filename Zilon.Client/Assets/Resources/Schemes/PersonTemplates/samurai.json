@@ -1,0 +1,64 @@
+{
+  "FractionSid": "player",
+  "Name": {
+    "Ru": "Самурай",
+    "En": "Samurai"
+  },
+  "BodyEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "leather-jacket",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "bocken",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "katana",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "dikatana",
+        "Weight": 1
+      }
+    ]
+  },
+  "InventoryProps": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "med-kit",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "packed-food",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "water-bottle",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 4
+      }
+    ]
+  }
+}

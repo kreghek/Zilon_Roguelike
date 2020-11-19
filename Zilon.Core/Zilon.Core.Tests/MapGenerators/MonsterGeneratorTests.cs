@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -7,14 +9,15 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
@@ -30,7 +33,7 @@ namespace Zilon.Core.Tests.MapGenerators
         /// то слоты всех верхних уровней редкости будут заполнены (10 за редких, 1 чемпион).
         /// </summary>
         [Test]
-        public async System.Threading.Tasks.Task CreateMonsters_AlwaysMaxRarityRolls_MaxHighRarityMonstersAsync()
+        public async Task CreateMonsters_AlwaysMaxRarityRolls_MaxHighRarityMonstersAsync()
         {
             var schemeDict = new Dictionary<string, IMonsterScheme>
             {
@@ -59,13 +62,17 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var propContainerManagerMock = new Mock<IStaticObjectManager>();
             var propContainerManager = propContainerManagerMock.Object;
-            propContainerManagerMock.SetupGet(x => x.Items).Returns(System.Array.Empty<IStaticObject>());
+            propContainerManagerMock.SetupGet(x => x.Items).Returns(Array.Empty<IStaticObject>());
+
+            var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
+            var taskSource = taskSourceMock.Object;
 
             var monsterFactory = new MonsterPersonFactory();
 
             var monsterGenerator = new MonsterGenerator(schemeService,
                 monsterFactory,
-                randomSource);
+                randomSource,
+                taskSource);
 
             var map = await SquareMapFactory.CreateAsync(20).ConfigureAwait(false);
 
@@ -76,7 +83,8 @@ namespace Zilon.Core.Tests.MapGenerators
             sectorMock.SetupGet(x => x.StaticObjectManager).Returns(propContainerManager);
             var sector = sectorMock.Object;
 
-            var monsterRegions = new List<MapRegion> {
+            var monsterRegions = new List<MapRegion>
+            {
                 new MapRegion(1, map.Nodes.ToArray())
             };
 
@@ -89,7 +97,6 @@ namespace Zilon.Core.Tests.MapGenerators
 
             // ACT
             monsterGenerator.CreateMonsters(sector,
-                new Mock<IBotPlayer>().Object,
                 monsterRegions,
                 sectorScheme);
 
@@ -108,7 +115,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 Sid = sid,
                 PrimaryAct = new TestTacticalActStatsSubScheme
                 {
-                    Efficient = new Core.Common.Roll(6, 1)
+                    Efficient = new Roll(6, 1)
                 }
             };
             return scheme;

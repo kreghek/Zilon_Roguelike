@@ -13,22 +13,68 @@ namespace Zilon.Bot.Players.Strategies
 
         private readonly LogicTreeStrategyData _strategyData;
 
-        public bool WriteStateChanges { get; set; }
-
         public LogicTreeStrategy(IActor actor, LogicStateTree stateTree)
         {
-            Actor = actor;
-            _stateTree = stateTree;
+            Actor = actor ?? throw new ArgumentNullException(nameof(actor));
+            _stateTree = stateTree ?? throw new ArgumentNullException(nameof(stateTree));
+
             _strategyData = new LogicTreeStrategyData();
 
             CurrentState = _stateTree.StartState;
+        }
+
+        public bool WriteStateChanges { get; set; }
+
+        private void ResetLogicStates(LogicStateTree logicStateTree)
+        {
+            foreach (var transition in logicStateTree.Transitions)
+            {
+                transition.Key.Reset();
+
+                foreach (var trigger in transition.Value)
+                {
+                    trigger.Trigger.Reset();
+                }
+            }
+        }
+
+        private bool SelectCurrentState(ILogicState currentState, ISectorTaskSourceContext context,
+            out ILogicState newState)
+        {
+            var transitionWasPerformed = false;
+            newState = null;
+
+            var currentStateTransitions = _stateTree.Transitions[CurrentState];
+
+            foreach (var transition in currentStateTransitions)
+            {
+                var trigger = transition.Trigger;
+
+                var isFired = trigger.Test(Actor, context, currentState, _strategyData);
+                if (isFired)
+                {
+                    newState = transition.NextState;
+                    transitionWasPerformed = true;
+                    break;
+                }
+            }
+
+            return transitionWasPerformed;
+        }
+
+        private void UpdateCurrentTriggers(IEnumerable<ILogicStateTrigger> currentLogicTriggers)
+        {
+            foreach (var trigger in currentLogicTriggers)
+            {
+                trigger.Update();
+            }
         }
 
         public IActor Actor { get; }
         public ILogicState CurrentState { get; private set; }
         public ILogicStrategyData StrategyData => _strategyData;
 
-        public IActorTask GetActorTask()
+        public IActorTask GetActorTask(ISectorTaskSourceContext context)
         {
             // Для текущего состояния проверяем каждый из переходов.
             // Если переход выстреливает, то генерируем задачу актёру.
@@ -44,7 +90,7 @@ namespace Zilon.Bot.Players.Strategies
             // После окончания всех проверок триггеров выполняется обновление состояния триггеров. Некоторые триггеры
             // могут иметь счётчики или логику, которая выполняется при каждой итерации (считай, каждый ход).
 
-            var transitionWasPerformed = SelectCurrentState(CurrentState, out var newState);
+            var transitionWasPerformed = SelectCurrentState(CurrentState, context, out var newState);
 
             if (transitionWasPerformed)
             {
@@ -57,55 +103,11 @@ namespace Zilon.Bot.Players.Strategies
                 ResetLogicStates(_stateTree);
             }
 
-            var actorTask = CurrentState.GetTask(Actor, _strategyData);
+            var actorTask = CurrentState.GetTask(Actor, context, _strategyData);
             var currentTriggers = _stateTree.Transitions[CurrentState].Select(x => x.Trigger);
             UpdateCurrentTriggers(currentTriggers);
 
             return actorTask;
-        }
-
-        private bool SelectCurrentState(ILogicState currentState, out ILogicState newState)
-        {
-            var transitionWasPerformed = false;
-            newState = null;
-
-            var currentStateTransitions = _stateTree.Transitions[CurrentState];
-
-            foreach (var transition in currentStateTransitions)
-            {
-                var trigger = transition.Trigger;
-
-                var isFired = trigger.Test(Actor, currentState, _strategyData);
-                if (isFired)
-                {
-                    newState = transition.NextState;
-                    transitionWasPerformed = true;
-                    break;
-                }
-            }
-
-            return transitionWasPerformed;
-        }
-
-        private void ResetLogicStates(LogicStateTree logicStateTree)
-        {
-            foreach (var transition in logicStateTree.Transitions)
-            {
-                transition.Key.Reset();
-
-                foreach (var trigger in transition.Value)
-                {
-                    trigger.Trigger.Reset();
-                }
-            }
-        }
-
-        private void UpdateCurrentTriggers(IEnumerable<ILogicStateTrigger> currentLogicTriggers)
-        {
-            foreach (var trigger in currentLogicTriggers)
-            {
-                trigger.Update();
-            }
         }
     }
 }

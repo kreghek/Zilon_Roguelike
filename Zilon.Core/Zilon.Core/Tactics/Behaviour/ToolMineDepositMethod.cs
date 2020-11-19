@@ -8,8 +8,8 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public sealed class ToolMineDepositMethod : IMineDepositMethod
     {
-        private readonly Equipment _tool;
         private readonly IMineDepositMethodRandomSource _mineDepositMethodRandomSource;
+        private readonly Equipment _tool;
 
         public ToolMineDepositMethod(Equipment tool, IMineDepositMethodRandomSource mineDepositMethodRandomSource)
         {
@@ -38,10 +38,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 return new SuccessMineDepositResult();
             }
-            else
-            {
-                return new FailureMineDepositResult();
-            }
+
+            return new FailureMineDepositResult();
         }
     }
 }

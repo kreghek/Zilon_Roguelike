@@ -40,6 +40,10 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
         var backstoryText = GetLocalizedBackstoryText(currentLanguage, "main");
         DescriptionText.text = backstoryText + Environment.NewLine + Environment.NewLine;
 
+        var className = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, (playerPerson as HumanPerson).PersonEquipmentTemplate);
+        var classDescriptonText = GetLocalizedBackstoryText(currentLanguage, "class") + " " + className;
+        DescriptionText.text += classDescriptonText + Environment.NewLine + Environment.NewLine;
+
         DescriptionText.text += GetLocalizedBackstoryText(currentLanguage, "trait") + Environment.NewLine;
 
         var buildInTraits = playerPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn).ToArray();

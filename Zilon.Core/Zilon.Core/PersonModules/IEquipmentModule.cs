@@ -9,18 +9,8 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.PersonModules
 {
-    public interface IEquipmentModule: IPersonModule, IEnumerable<Equipment>
+    public interface IEquipmentModule : IPersonModule, IEnumerable<Equipment>
     {
-        /// <summary>
-        /// Текущие слоты экипировки.
-        /// </summary>
-        [NotNull] [ItemNotNull] PersonSlotSubScheme[] Slots { get; }
-
-        /// <summary>
-        /// Выстреливает, когда экипировка изменяется.
-        /// </summary>
-        event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
-
         /// <summary>
         /// Экипировка персонажа.
         /// </summary>
@@ -33,5 +23,17 @@ namespace Zilon.Core.PersonModules
         /// </remarks>
         [CanBeNull]
         Equipment this[int index] { get; set; }
+
+        /// <summary>
+        /// Текущие слоты экипировки.
+        /// </summary>
+        [NotNull]
+        [ItemNotNull]
+        PersonSlotSubScheme[] Slots { get; }
+
+        /// <summary>
+        /// Выстреливает, когда экипировка изменяется.
+        /// </summary>
+        event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using JetBrains.Annotations;
+
 using Zilon.Core.Props;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -20,19 +22,18 @@ namespace Zilon.Core.Tactics.Behaviour
         }
 
         /// <summary>
-        /// Хранилище, с которым связан трансфер.
-        /// </summary>
-        public IPropStore PropStore { get; }
-
-        /// <summary>
         /// Добавляемые предметы в хранилище.
         /// </summary>
         public IProp[] Added { get; }
 
         /// <summary>
+        /// Хранилище, с которым связан трансфер.
+        /// </summary>
+        public IPropStore PropStore { get; }
+
+        /// <summary>
         /// Извлекаемые из хранилища предметы.
         /// </summary>
         public IProp[] Removed { get; }
-        
     }
 }

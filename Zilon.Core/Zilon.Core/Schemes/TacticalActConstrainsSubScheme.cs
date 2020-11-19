@@ -10,15 +10,15 @@ namespace Zilon.Core.Schemes
     /// </remarks>
     public class TacticalActConstrainsSubScheme : SubSchemeBase, ITacticalActConstrainsSubScheme
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         public int? PropResourceCount { get; private set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         public string PropResourceType { get; private set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         public int? Cooldown { get; private set; }
     }

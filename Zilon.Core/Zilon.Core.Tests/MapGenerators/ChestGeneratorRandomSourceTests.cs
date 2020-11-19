@@ -9,7 +9,8 @@ using Zilon.Core.MapGenerators;
 
 namespace Zilon.Core.Tests.MapGenerators
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class ChestGeneratorRandomSourceTests
     {
         [Test]
@@ -22,12 +23,8 @@ namespace Zilon.Core.Tests.MapGenerators
 
             var random = new ChestGeneratorRandomSource(dice);
 
-
-
             // ACT
             var factRolled = random.RollChestCount(3);
-
-
 
             // ASSERT
             factRolled.Should().Be(3);

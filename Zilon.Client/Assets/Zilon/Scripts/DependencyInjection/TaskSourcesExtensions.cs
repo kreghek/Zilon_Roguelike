@@ -17,12 +17,12 @@ namespace Assets.Zilon.Scripts.DependencyInjection
     {
         public static void RegisterActorTaskSourcesServices(this DiContainer diContainer)
         {
-            diContainer.Bind<IHumanActorTaskSource>().To<HumanActorTaskSource>().AsSingle();
-            diContainer.Bind<MonsterBotActorTaskSource>().AsSingle();
+            diContainer.Bind<IHumanActorTaskSource<ISectorTaskSourceContext>>().To<HumanActorTaskSource<ISectorTaskSourceContext>>().AsSingle();
+            diContainer.Bind<IActorTaskSource<ISectorTaskSourceContext>>().To<HumanBotActorTaskSource<ISectorTaskSourceContext>>().AsSingle();
             diContainer.Bind<IActorTaskSourceCollector>().FromMethod(injectContext =>
             {
-                var botTaskSource = injectContext.Container.Resolve<MonsterBotActorTaskSource>();
-                var humanTaskSource = injectContext.Container.Resolve<IHumanActorTaskSource>();
+                var botTaskSource = injectContext.Container.Resolve<IActorTaskSource<ISectorTaskSourceContext>>();
+                var humanTaskSource = injectContext.Container.Resolve<IHumanActorTaskSource<ISectorTaskSourceContext>>();
                 return new TaskSourceCollector(botTaskSource, humanTaskSource);
             }).AsSingle();
             diContainer.Bind<LogicStateTreePatterns>().AsSingle();

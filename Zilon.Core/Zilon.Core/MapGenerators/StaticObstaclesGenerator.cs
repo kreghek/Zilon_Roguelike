@@ -23,41 +23,13 @@ namespace Zilon.Core.MapGenerators
             IStaticObjectsGeneratorRandomSource staticObjectsGeneratorRandomSource)
         {
             _chestGenerator = chestGenerator ?? throw new ArgumentNullException(nameof(chestGenerator));
-            _interiorObjectRandomSource = interiorObjectRandomSource ?? throw new ArgumentNullException(nameof(interiorObjectRandomSource));
-            _staticObjectfactoryCollector = staticObjectfactoryCollector ?? throw new ArgumentNullException(nameof(staticObjectfactoryCollector));
-            _staticObjectsGeneratorRandomSource = staticObjectsGeneratorRandomSource ?? throw new ArgumentNullException(nameof(staticObjectsGeneratorRandomSource));
-        }
-
-        public Task CreateAsync(IStaticObjectGenerationContext generationContext)
-        {
-            if (generationContext is null)
-            {
-                throw new ArgumentNullException(nameof(generationContext));
-            }
-
-            var sector = generationContext.Sector;
-
-            // Генерация препятсвий, как статических объектов.
-            foreach (var region in sector.Map.Regions)
-            {
-                var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
-                var regionCoords = regionNodes.Select(x => x.OffsetCoords).ToArray();
-                var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords);
-
-                foreach (var interior in interiorMetas)
-                {
-                    var node = regionNodes.Single(x => x.OffsetCoords == interior.Coords);
-                    var resourceDepositData = generationContext.ResourceDepositData;
-                    var staticObject = CreateStaticObject(sector, node, resourceDepositData);
-
-                    sector.StaticObjectManager.Add(staticObject);
-                }
-            }
-
-            var sectorSubScheme = generationContext.Scheme;
-            _chestGenerator.CreateChests(sector, sectorSubScheme, sector.Map.Regions);
-
-            return Task.CompletedTask;
+            _interiorObjectRandomSource = interiorObjectRandomSource ??
+                                          throw new ArgumentNullException(nameof(interiorObjectRandomSource));
+            _staticObjectfactoryCollector = staticObjectfactoryCollector ??
+                                            throw new ArgumentNullException(nameof(staticObjectfactoryCollector));
+            _staticObjectsGeneratorRandomSource = staticObjectsGeneratorRandomSource ??
+                                                  throw new ArgumentNullException(
+                                                      nameof(staticObjectsGeneratorRandomSource));
         }
 
         private IStaticObject CreateStaticObject(ISector sector, HexNode node, IResourceDepositData resourceDepositData)
@@ -69,6 +41,11 @@ namespace Zilon.Core.MapGenerators
             var staticObject = factory.Create(sector, node, default);
 
             return staticObject;
+        }
+
+        private PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
+        {
+            return _staticObjectsGeneratorRandomSource.RollPurpose(resourceDepositData);
         }
 
         private IStaticObjectFactory SelectStaticObjectFactory(PropContainerPurpose staticObjectPurpose)
@@ -85,12 +62,42 @@ namespace Zilon.Core.MapGenerators
                 return factory;
             }
 
-            throw new InvalidOperationException($"Не обнаружена фабрика для статических объектов типа {staticObjectPurpose}");
+            throw new InvalidOperationException(
+                $"Не обнаружена фабрика для статических объектов типа {staticObjectPurpose}");
         }
 
-        private PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
+        public Task CreateAsync(IStaticObjectGenerationContext generationContext)
         {
-            return _staticObjectsGeneratorRandomSource.RollPurpose(resourceDepositData);
+            if (generationContext is null)
+            {
+                throw new ArgumentNullException(nameof(generationContext));
+            }
+
+            var sector = generationContext.Sector;
+
+            var exitNodes = sector.Map.Transitions.Keys.Cast<HexNode>().Select(x => x.OffsetCoords).ToArray();
+
+            // Генерация препятсвий, как статических объектов.
+            foreach (var region in sector.Map.Regions)
+            {
+                var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
+                var regionCoords = regionNodes.Select(x => x.OffsetCoords).Except(exitNodes).ToArray();
+                var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords);
+
+                foreach (var interior in interiorMetas)
+                {
+                    var node = regionNodes.Single(x => x.OffsetCoords == interior.Coords);
+                    var resourceDepositData = generationContext.ResourceDepositData;
+                    var staticObject = CreateStaticObject(sector, node, resourceDepositData);
+
+                    sector.StaticObjectManager.Add(staticObject);
+                }
+            }
+
+            var sectorSubScheme = generationContext.Scheme;
+            _chestGenerator.CreateChests(sector, sectorSubScheme, sector.Map.Regions);
+
+            return Task.CompletedTask;
         }
     }
 }

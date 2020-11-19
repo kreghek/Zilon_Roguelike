@@ -8,12 +8,12 @@
 		  <ExcludeAssets>runtime; build</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-		  <Version>3.0.0</Version>
+		  <Version>3.3.1</Version>
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection">
-            <Version>3.1.4</Version>
+            <Version>5.0.0</Version>
         </PackageReference>
 	</ItemGroup>
 	<ItemGroup>

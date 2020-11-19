@@ -38,11 +38,11 @@
   },
   "DropTableSids": [
     "survival",
-	"champion-loot",
-	"hellrock-loot",
-	"demon",
-	"default",
-	"default-evil-hour"
+    "champion-loot",
+    "hellrock-loot",
+    "demon",
+    "default",
+    "default-evil-hour"
   ],
   "BaseScore": 100,
   "Tags": [

@@ -20,7 +20,7 @@ public class MovePathVisualizer : MonoBehaviour
     private readonly ISectorUiState _playerState;
     private IList<IGraphNode> _lastPath;
 
-    public void FixedUpdate()
+    public void Update()
     {
         var moveCommand = (MoveCommand)_moveCommand;
         var path = moveCommand.Path;

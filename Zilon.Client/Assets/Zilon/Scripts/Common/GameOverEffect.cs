@@ -14,7 +14,8 @@ using Zilon.Core.Client.Windows;
 /// </summary>
 public class GameOverEffect : MonoBehaviour
 {
-    [NotNull] [Inject]
+    [NotNull]
+    [Inject]
     private readonly ISectorModalManager _sectorModalManager;
 
     private float _counter;

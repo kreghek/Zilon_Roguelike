@@ -14,99 +14,58 @@ namespace Zilon.Bot.Players.Logics
     // Есть подозрение, что оно не работает.
     public sealed class ExploreLogicState : MoveLogicStateBase
     {
-        public ExploreLogicState(IDecisionSource decisionSource, ISectorManager sectorManager) : base(decisionSource, sectorManager)
+        public ExploreLogicState(IDecisionSource decisionSource) : base(decisionSource)
         {
         }
 
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
         {
             if (MoveTask == null)
             {
-                MoveTask = CreateBypassMoveTask(actor, strategyData);
+                MoveTask = CreateBypassMoveTask(actor, strategyData, context.Sector);
 
                 if (MoveTask != null)
                 {
                     return MoveTask;
                 }
-                else
-                {
-                    // Это может произойти, если актёр не выбрал следующий узел.
-                    // Тогда переводим актёра в режим ожидания.
+                // Это может произойти, если актёр не выбрал следующий узел.
+                // Тогда переводим актёра в режим ожидания.
 
-                    IdleTask = new IdleTask(actor, DecisionSource);
-                    return IdleTask;
-                }
+                var taskContext = new ActorTaskContext(context.Sector);
+                IdleTask = new IdleTask(actor, taskContext, DecisionSource);
+                return IdleTask;
             }
-            else
+
+            if (!MoveTask.IsComplete)
             {
-                if (!MoveTask.IsComplete)
+                // Если команда на перемещение к целевой точке патруля не закончена,
+                // тогда продолжаем её.
+                // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
+                if (!MoveTask.CanExecute())
                 {
-                    // Если команда на перемещение к целевой точке патруля не закончена,
-                    // тогда продолжаем её.
-                    // Предварительно проверяем, не мешает ли что-либо её продолжить выполнять.
-                    if (!MoveTask.CanExecute())
-                    {
-                        MoveTask = CreateBypassMoveTask(actor, strategyData);
-                    }
-
-                    if (MoveTask != null)
-                    {
-                        return MoveTask;
-                    }
-
-                    IdleTask = new IdleTask(actor, DecisionSource);
-                    return IdleTask;
+                    MoveTask = CreateBypassMoveTask(actor, strategyData, context.Sector);
                 }
-                else
+
+                if (MoveTask != null)
                 {
-                    Complete = true;
-                    return null;
+                    return MoveTask;
                 }
+
+                var taskContext = new ActorTaskContext(context.Sector);
+                IdleTask = new IdleTask(actor, taskContext, DecisionSource);
+                return IdleTask;
             }
+
+            Complete = true;
+            return null;
         }
 
-        private IEnumerable<IGraphNode> WriteObservedNodes(IActor actor, ILogicStrategyData strategyData)
+        private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData, ISector sector)
         {
-            var observeNodes = Map.Nodes.Where(x => Map.DistanceBetween(x, actor.Node) < 5);
-
-            foreach (var mapNode in observeNodes)
-            {
-                strategyData.ObserverdNodes.Add(mapNode);
-            }
-
-            // Собираем пограничные неисследованные узлы.
-            var frontNodes = new HashSet<IGraphNode>();
-            foreach (var observedNode in strategyData.ObserverdNodes)
-            {
-                var nextNodes = Map.GetNext(observedNode);
-
-                var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObserverdNodes.Contains(x));
-
-                foreach (var edgeNode in notObservedNextNodes)
-                {
-                    frontNodes.Add(edgeNode);
-                }
-
-                // Примечаем выходы
-                if (Map.Transitions.ContainsKey(observedNode))
-                {
-                    strategyData.ExitNodes.Add(observedNode);
-                }
-            }
-
-            var emptyFrontNodes = !frontNodes.Any();
-            var allNodesObserved = Map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
-
-            Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
-                "Это состояние выполняется, только если есть неисследованые узлы.");
-
-            return frontNodes;
-        }
-
-        private MoveTask CreateBypassMoveTask(IActor actor, ILogicStrategyData strategyData)
-        {
+            var map = sector.Map;
             IEnumerable<IGraphNode> availableNodes;
-            var frontNodes = WriteObservedNodes(actor, strategyData).ToArray();
+            var frontNodes = WriteObservedNodes(actor, strategyData, map).ToArray();
             if (frontNodes.Any())
             {
                 availableNodes = frontNodes;
@@ -121,15 +80,55 @@ namespace Zilon.Bot.Players.Logics
             {
                 var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
 
-                if (Map.IsPositionAvailableFor(targetNode, actor))
+                if (map.IsPositionAvailableFor(targetNode, actor))
                 {
-                    var moveTask = new MoveTask(actor, targetNode, Map);
+                    var context = new ActorTaskContext(sector);
+                    var moveTask = new MoveTask(actor, context, targetNode, map);
 
                     return moveTask;
                 }
             }
 
             return null;
+        }
+
+        private IEnumerable<IGraphNode> WriteObservedNodes(IActor actor, ILogicStrategyData strategyData,
+            ISectorMap map)
+        {
+            var observeNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
+
+            foreach (var mapNode in observeNodes)
+            {
+                strategyData.ObserverdNodes.Add(mapNode);
+            }
+
+            // Собираем пограничные неисследованные узлы.
+            var frontNodes = new HashSet<IGraphNode>();
+            foreach (var observedNode in strategyData.ObserverdNodes)
+            {
+                var nextNodes = map.GetNext(observedNode);
+
+                var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObserverdNodes.Contains(x));
+
+                foreach (var edgeNode in notObservedNextNodes)
+                {
+                    frontNodes.Add(edgeNode);
+                }
+
+                // Примечаем выходы
+                if (map.Transitions.ContainsKey(observedNode))
+                {
+                    strategyData.ExitNodes.Add(observedNode);
+                }
+            }
+
+            var emptyFrontNodes = !frontNodes.Any();
+            var allNodesObserved = map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
+
+            Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
+                "Это состояние выполняется, только если есть неисследованые узлы.");
+
+            return frontNodes;
         }
     }
 }

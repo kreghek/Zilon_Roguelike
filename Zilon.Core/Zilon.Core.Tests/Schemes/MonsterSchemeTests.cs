@@ -3,12 +3,14 @@
 using Newtonsoft.Json;
 
 using NUnit.Framework;
+
 using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Schemes
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class MonsterSchemeTests
     {
         /// <summary>
@@ -47,12 +49,8 @@ namespace Zilon.Core.Tests.Schemes
 }
 ";
 
-
-
             // ACT
             var factPerkScheme = JsonConvert.DeserializeObject<MonsterScheme>(sourceText);
-
-
 
             // ASSERT
             factPerkScheme.Defense.Defenses[0].Type.Should().Be(DefenceType.TacticalDefence);

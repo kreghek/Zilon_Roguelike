@@ -2,6 +2,7 @@
 
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -10,8 +11,8 @@ namespace Zilon.Core.MapGenerators
     public class SectorFactory : ISectorFactory
     {
         private readonly IDropResolver _dropResolver;
-        private readonly ISchemeService _schemeService;
         private readonly IEquipmentDurableService _equipmentDurableService;
+        private readonly ISchemeService _schemeService;
 
         public SectorFactory(IDropResolver dropResolver,
             ISchemeService schemeService,
@@ -21,6 +22,10 @@ namespace Zilon.Core.MapGenerators
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _equipmentDurableService = equipmentDurableService;
         }
+
+        public NationalUnityEventService NationalUnityEventService { get; set; }
+
+        public IScoreManager ScoreManager { get; set; }
 
         public ISector Create(ISectorMap map, ILocationScheme locationScheme)
         {
@@ -34,7 +39,9 @@ namespace Zilon.Core.MapGenerators
                 _schemeService,
                 _equipmentDurableService)
             {
-                Scheme = locationScheme
+                Scheme = locationScheme,
+                ScoreManager = ScoreManager,
+                NationalUnityEventService = NationalUnityEventService
             };
 
             return sector;

@@ -1,0 +1,42 @@
+{
+  "FractionSid": "interventionists",
+  "Name": {
+    "Ru": "Тяжелый интервент",
+    "En": "Heavy Interventionist"
+  },
+  "BodyEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "steel-armor",
+        "Weight": 1
+      }
+    ]
+  },
+  "HeadEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "gas-mask",
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "rough-sword",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "tribal-spear",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "knight-sword",
+        "Weight": 1
+      }
+    ]
+  }
+}

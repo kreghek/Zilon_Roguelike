@@ -5,6 +5,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Triggers
 {
@@ -15,7 +16,8 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+            ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
@@ -32,9 +34,10 @@ namespace Zilon.Bot.Players.Triggers
                 throw new System.ArgumentNullException(nameof(strategyData));
             }
 
-            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
-            var hpStatCoeff = (float)hpStat.Value / (hpStat.Range.Max - hpStat.Range.Min);
-            var isLowHp = hpStatCoeff <= 0.5f;
+            //TODO Здесь лучше проверять на наличие эффекта раны
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats
+                .SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            var isLowHp = hpStat.ValueShare <= 0.5f;
             if (!isLowHp)
             {
                 return false;

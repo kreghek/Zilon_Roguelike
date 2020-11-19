@@ -10,7 +10,8 @@ namespace Zilon.Bot.Players.Logics
 {
     public sealed class EquipBetterPropLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
         {
             var inventory = actor.Person.GetModule<IInventoryModule>();
             var currentInventoryProps = inventory.CalcActualItems();
@@ -34,7 +35,8 @@ namespace Zilon.Bot.Players.Logics
                         var targetEquipmentFromInventory = availableEquipments.First();
                         var targetSlotIndex = slotIndex;
 
-                        return new EquipTask(actor, targetEquipmentFromInventory, targetSlotIndex);
+                        var taskContext = new ActorTaskContext(context.Sector);
+                        return new EquipTask(actor, taskContext, targetEquipmentFromInventory, targetSlotIndex);
                     }
                 }
             }

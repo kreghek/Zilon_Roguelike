@@ -2,23 +2,12 @@
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public interface IHumanActorTaskSource: IActorTaskSource
+    public interface IHumanActorTaskSource<TContext> : IActorTaskSource<TContext>
+        where TContext : ISectorTaskSourceContext
     {
-        /// <summary>
-        /// Переключает текущего ключевого актёра.
-        /// </summary>
-        /// <param name="currentActor"> Целевой клчевой актёр. </param>
-        void SwitchActiveActor(IActor currentActor);
-
-        /// <summary>
-        /// Текущий активный ключевой актёр.
-        /// </summary>
-        IActor ActiveActor { get; }
-
-        Task IntentAsync(IIntention intention);
-
-        void Intent(IIntention intention);
-
         bool CanIntent();
+
+        void Intent(IIntention intention, IActor activeActor);
+        Task IntentAsync(IIntention intention, IActor activeActor);
     }
 }

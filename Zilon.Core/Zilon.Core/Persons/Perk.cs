@@ -5,12 +5,17 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Текущее состояние перка персонажа.
     /// </summary>
-    public class Perk: IPerk
+    public class Perk : IPerk
     {
         /// <summary>
-        /// Схема перка.
+        /// Достигнутые уровени перка.
         /// </summary>
-        public IPerkScheme Scheme { get; set; }
+        public PerkLevelSubScheme[] ArchievedLevelSchemes { get; set; }
+
+        /// <summary>
+        /// Признак того, что целевой уровень перка проплачен.
+        /// </summary>
+        public bool IsLevelPaid { get; internal set; }
 
         /// <summary>
         /// Схема уровеня перка, которая прокачивается.
@@ -18,9 +23,9 @@ namespace Zilon.Core.Persons
         public PerkLevelSubScheme TargetLevelScheme { get; set; }
 
         /// <summary>
-        /// Достигнутые уровени перка.
+        /// Схема перка.
         /// </summary>
-        public PerkLevelSubScheme[] ArchievedLevelSchemes { get; set; }
+        public IPerkScheme Scheme { get; set; }
 
         /// <summary>
         /// Аккумулированные работы по перку.
@@ -32,10 +37,5 @@ namespace Zilon.Core.Persons
         /// Текущий уровень перка.
         /// </summary>
         public PerkLevel CurrentLevel { get; set; }
-
-        /// <summary>
-        /// Признак того, что целевой уровень перка проплачен.
-        /// </summary>
-        public bool IsLevelPaid { get; internal set; }
     }
 }

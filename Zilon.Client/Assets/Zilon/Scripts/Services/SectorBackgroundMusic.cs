@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Zenject;
 
-using Zilon.Core.Tactics;
+using Zilon.Core.Players;
 
 public class SectorBackgroundMusic : MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class SectorBackgroundMusic : MonoBehaviour
     };
 
     [Inject]
-    private readonly ISectorManager _sectorManager;
+    private readonly IPlayer _player;
 
     public AudioSource AudioSource;
 
@@ -36,7 +36,7 @@ public class SectorBackgroundMusic : MonoBehaviour
 
     public void SelectAndStartPlayingMusic()
     {
-        var currentSectorSid = _sectorManager.CurrentSector.Scheme?.Sid;
+        var currentSectorSid = _player.SectorNode.Sector.Scheme?.Sid;
 
         var selectedClip = SelectMusicClipBySectorSid(currentSectorSid);
         AudioSource.clip = selectedClip;

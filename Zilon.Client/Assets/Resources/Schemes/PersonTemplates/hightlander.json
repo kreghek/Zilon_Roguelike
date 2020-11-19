@@ -1,0 +1,68 @@
+{
+  "FractionSid": "player",
+  "Name": {
+    "Ru": "Горец",
+    "En": "Highlander"
+  },
+  "HeadEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "highlander-helmet",
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "short-sword",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "battle-axe",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "mace",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "club",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "claw-sword",
+        "Weight": 1
+      }
+    ]
+  },
+  "InventoryProps": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "med-kit",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "packed-food",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "water-bottle",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 4
+      }
+    ]
+  }
+}

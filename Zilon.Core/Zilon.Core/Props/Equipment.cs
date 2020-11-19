@@ -33,6 +33,11 @@ namespace Zilon.Core.Props
             IEnumerable<ITacticalActScheme> acts) :
             base(propScheme)
         {
+            if (propScheme is null)
+            {
+                throw new ArgumentNullException(nameof(propScheme));
+            }
+
             if (propScheme.Equip == null)
             {
                 throw new ArgumentException("Не корректная схема.", nameof(propScheme));
@@ -44,13 +49,13 @@ namespace Zilon.Core.Props
             }
             else
             {
-                Acts = new ITacticalActScheme[0];
+                Acts = Array.Empty<ITacticalActScheme>();
             }
 
             Durable = new Stat(EQUIPMENT_DURABLE, 0, EQUIPMENT_DURABLE);
         }
 
-        public Equipment(IPropScheme propScheme) : this(propScheme, new ITacticalActScheme[0])
+        public Equipment(IPropScheme propScheme) : this(propScheme, Array.Empty<ITacticalActScheme>())
         {
         }
 
@@ -62,7 +67,7 @@ namespace Zilon.Core.Props
             _name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        public ITacticalActScheme[] Acts { get; }
+        public IEnumerable<ITacticalActScheme> Acts { get; }
 
         /// <summary>Прочность предмета.</summary>
         public Stat Durable { get; }

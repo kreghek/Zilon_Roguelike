@@ -2,6 +2,7 @@
 using System.Linq;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics.Spatial;
 
@@ -31,7 +32,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает целевые комнаты для соединения.
         /// </returns>
-        [NotNull, ItemNotNull]
+        [NotNull]
+        [ItemNotNull]
         public Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms)
         {
             var openRooms = new List<Room>(availableRooms);
@@ -61,7 +63,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             if (roomWidth <= 2 || roomHeight <= 2)
             {
-                return new RoomInteriorObjectMeta[0];
+                return System.Array.Empty<RoomInteriorObjectMeta>();
             }
 
             const int PASS_PADDING = 1;

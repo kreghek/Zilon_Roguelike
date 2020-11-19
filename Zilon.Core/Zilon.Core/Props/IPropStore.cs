@@ -12,15 +12,22 @@ namespace Zilon.Core.Props
     public interface IPropStore
     {
         /// <summary>
+        /// Добавление предмета в хранилище.
+        /// </summary>
+        /// <param name="prop"> Целевой предмет. </param>
+        void Add(IProp prop);
+
+        /// <summary>
         /// Предметы в инвентаре.
         /// </summary>
         IProp[] CalcActualItems();
 
         /// <summary>
-        /// Добавление предмета в хранилище.
+        /// Проверяет, что предмет есть в хранилище.
         /// </summary>
-        /// <param name="prop"> Целевой предмет. </param>
-        void Add(IProp prop);
+        /// <param name="prop">Указанные предмет.</param>
+        /// <returns>true - если предмет есть.</returns>
+        bool Has(IProp prop);
 
         /// <summary>
         /// Удаление предмета из хранилища.

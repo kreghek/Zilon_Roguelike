@@ -2,17 +2,19 @@
 
 using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
-using Zilon.Core.Players;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public sealed class HumanBotActorTaskSource : BotActorTaskSourceBase, IPluggableActorTaskSource
+    public sealed class HumanBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext>,
+        IPluggableActorTaskSource<TContext> where TContext : class, ISectorTaskSourceContext
     {
-        private IBotSettings _botSettings;
         private readonly LogicStateTreePatterns _logicStateTreePatterns;
+        private IBotSettings _botSettings;
 
-        public HumanBotActorTaskSource(HumanPlayer player, LogicStateTreePatterns logicStateTreePatterns) : base(player)
+        public HumanBotActorTaskSource(LogicStateTreePatterns logicStateTreePatterns)
         {
             _logicStateTreePatterns = logicStateTreePatterns;
         }
@@ -26,7 +28,15 @@ namespace Zilon.Bot.Players
 
             if (_botSettings == null)
             {
-                return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot)
+                if (actor.Person is HumanPerson)
+                {
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot)
+                    {
+                        WriteStateChanges = true
+                    };
+                }
+
+                return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster)
                 {
                     WriteStateChanges = true
                 };

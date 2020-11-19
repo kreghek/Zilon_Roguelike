@@ -8,9 +8,9 @@ namespace Zilon.Core.PathFinding
     internal class AStarData
     {
         /// <summary>
-        /// Родительский узел.
+        /// Оценка расстояния от текущей вершины до цели.
         /// </summary>
-        public IGraphNode Parent { get; set; }
+        public int EstimateCost { get; set; }
 
         /// <summary>
         /// Стоимость перемещение от стартовой вершины к этой вершине.
@@ -19,9 +19,9 @@ namespace Zilon.Core.PathFinding
         public int MovementCost { get; set; }
 
         /// <summary>
-        /// Оценка расстояния от текущей вершины до цели.
+        /// Родительский узел.
         /// </summary>
-        public int EstimateCost { get; set; }
+        public IGraphNode Parent { get; set; }
 
         /// <summary>
         /// Суммарная стоимость.

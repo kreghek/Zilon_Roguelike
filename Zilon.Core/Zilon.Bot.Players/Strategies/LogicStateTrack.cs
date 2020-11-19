@@ -10,9 +10,9 @@ namespace Zilon.Bot.Players.Strategies
             FiredTrigger = firedTrigger;
         }
 
-        public ILogicState Logic { get; }
-
         public ILogicStateTrigger FiredTrigger { get; }
+
+        public ILogicState Logic { get; }
 
         public override string ToString()
         {

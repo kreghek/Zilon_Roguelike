@@ -7,6 +7,12 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class TacticCommandBase : ICommand
     {
+        /// <summary>
+        /// Выполнение тактических изменений.
+        /// </summary>
+        /// <returns>Возвращает реакцию на изменения.</returns>
+        protected abstract void ExecuteTacticCommand();
+
         public abstract bool CanExecute();
 
         public void Execute()
@@ -14,16 +20,11 @@ namespace Zilon.Core.Commands
             var canExecute = CanExecute();
             if (!canExecute)
             {
-                throw new InvalidOperationException("Попытка выполнить команду, которую нельзя выполнять в данный момент.");
+                throw new InvalidOperationException(
+                    "Попытка выполнить команду, которую нельзя выполнять в данный момент.");
             }
 
             ExecuteTacticCommand();
         }
-
-        /// <summary>
-        /// Выполнение тактических изменений.
-        /// </summary>
-        /// <returns>Возвращает реакцию на изменения.</returns>
-        protected abstract void ExecuteTacticCommand();
     }
 }

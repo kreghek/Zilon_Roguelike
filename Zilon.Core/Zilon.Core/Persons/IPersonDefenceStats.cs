@@ -8,21 +8,23 @@ namespace Zilon.Core.Persons
     public interface IPersonDefenceStats
     {
         /// <summary>
-        /// Виды обороны, которыми владеет персонаж.
-        /// </summary>
-        [NotNull] [ItemNotNull]
-        PersonDefenceItem[] Defences { get; }
-
-        /// <summary>
         /// Виды брони, которые есть у персонажа.
         /// </summary>
-        [NotNull] [ItemNotNull]
+        [NotNull]
+        [ItemNotNull]
         PersonArmorItem[] Armors { get; }
+
+        /// <summary>
+        /// Виды обороны, которыми владеет персонаж.
+        /// </summary>
+        [NotNull]
+        [ItemNotNull]
+        PersonDefenceItem[] Defences { get; }
 
         /// <summary>
         /// Установка показаний брони для характеристик персонажа.
         /// </summary>
         /// <param name="armors"> Набор элементов брони. </param>
-        void SetArmors([NotNull] [ItemNotNull] PersonArmorItem[] armors);
+        void SetArmors([NotNull][ItemNotNull] PersonArmorItem[] armors);
     }
 }

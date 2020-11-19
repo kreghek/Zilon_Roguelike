@@ -16,9 +16,9 @@ namespace Zilon.Core.MapGenerators
     /// </summary>
     public class ChestGenerator : IChestGenerator
     {
-        private readonly ISchemeService _schemeService;
-        private readonly IDropResolver _dropResolver;
         private readonly IChestGeneratorRandomSource _chestGeneratorRandomSource;
+        private readonly IDropResolver _dropResolver;
+        private readonly ISchemeService _schemeService;
 
         public ChestGenerator(ISchemeService schemeService,
             IDropResolver dropResolver,
@@ -26,43 +26,83 @@ namespace Zilon.Core.MapGenerators
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
-            _chestGeneratorRandomSource = chestGeneratorRandomSource ?? throw new ArgumentNullException(nameof(chestGeneratorRandomSource));
+            _chestGeneratorRandomSource = chestGeneratorRandomSource ??
+                                          throw new ArgumentNullException(nameof(chestGeneratorRandomSource));
         }
 
-        /// <inheritdoc/>
-        /// <summary>
-        /// Создать сундуки в секторе.
-        /// </summary>
-        public void CreateChests(ISector sector, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions)
+        private static bool CheckMap(ISector sector, HexNode containerNode)
         {
-            if (sector is null)
+            var map = sector.Map;
+            var currentStaticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
+
+            var allNonObstacleNodes = map.Nodes.OfType<HexNode>().ToArray();
+            var allNonContainerNodes = allNonObstacleNodes.Where(x => !currentStaticObjectsNodes.Contains(x));
+            var allNodes = allNonContainerNodes.ToArray();
+
+            var matrix = new Matrix<bool>(1000, 1000);
+            foreach (var node in allNodes)
             {
-                throw new ArgumentNullException(nameof(sector));
+                var x = node.OffsetCoords.X;
+                var y = node.OffsetCoords.Y;
+                matrix.Items[x, y] = true;
             }
 
-            if (sectorSubScheme is null)
+            // Закрываем проверяемый узел
+            matrix.Items[containerNode.OffsetCoords.X, containerNode.OffsetCoords.Y] = false;
+
+            var startNode = allNodes.First();
+            var startPoint = startNode.OffsetCoords;
+            var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
+
+            foreach (var point in floodPoints)
             {
-                throw new ArgumentNullException(nameof(sectorSubScheme));
+                matrix.Items[point.X, point.Y] = false;
             }
 
-            if (regions is null)
+            foreach (var node in allNodes)
             {
-                throw new ArgumentNullException(nameof(regions));
+                var x = node.OffsetCoords.X;
+                var y = node.OffsetCoords.Y;
+                if (matrix.Items[x, y])
+                {
+                    return false;
+                }
             }
 
-            var trashDropTables = GetTrashDropTables(sectorSubScheme);
-            var treasuresDropTable = GetTreasuresDropTable();
-            var chestCounter = sectorSubScheme.TotalChestCount;
+            return true;
+        }
 
-            //TODO В схемах хранить уже приведённое значение пропорции.
-            var countChestRatioNormal = 1f / sectorSubScheme.RegionChestCountRatio;
-            foreach (var region in regions)
+        private void CreateChest(List<IGraphNode> openNodes, ISector sector, IDropTableScheme[] trashDropTables,
+            IDropTableScheme[] treasuresDropTable)
+        {
+            // Выбрать из коллекции доступных узлов
+            var rollIndex = _chestGeneratorRandomSource.RollNodeIndex(openNodes.Count);
+            var map = sector.Map;
+            var containerNode = MapRegionHelper.FindNonBlockedNode(openNodes[rollIndex], map, openNodes);
+            if (containerNode == null)
             {
-                var maxChestCountRaw = region.Nodes.Length * countChestRatioNormal;
-                var maxChestCount = (int)Math.Max(maxChestCountRaw, 1);
-
-                CreateChestsForRegion(region, maxChestCount, sector, trashDropTables, treasuresDropTable, ref chestCounter);
+                // в этом случае будет сгенерировано на один сундук меньше.
+                // узел, с которого не удаётся найти подходящий узел, удаляем,
+                // чтобы больше его не анализировать, т.к. всё равно будет такой же исход.
+                openNodes.Remove(openNodes[rollIndex]);
+                return;
             }
+
+            // Проверка, что сундук не перегораживает проход.
+            var isValid = CheckMap(sector, (HexNode)containerNode);
+            if (!isValid)
+            {
+                // в этом случае будет сгенерировано на один сундук меньше.
+                // узел, с которого не удаётся найти подходящий узел, удаляем,
+                // чтобы больше его не анализировать, т.к. всё равно будет такой же исход.
+                openNodes.Remove(openNodes[rollIndex]);
+                return;
+            }
+
+            openNodes.Remove(containerNode);
+
+            var staticObject = CreateChestStaticObject(trashDropTables, treasuresDropTable, containerNode);
+            sector.StaticObjectManager.Add(staticObject);
         }
 
         private void CreateChestsForRegion(
@@ -110,39 +150,8 @@ namespace Zilon.Core.MapGenerators
             }
         }
 
-        private void CreateChest(List<IGraphNode> openNodes, ISector sector, IDropTableScheme[] trashDropTables, IDropTableScheme[] treasuresDropTable)
-        {
-            // Выбрать из коллекции доступных узлов
-            var rollIndex = _chestGeneratorRandomSource.RollNodeIndex(openNodes.Count);
-            var map = sector.Map;
-            var containerNode = MapRegionHelper.FindNonBlockedNode(openNodes[rollIndex], map, openNodes);
-            if (containerNode == null)
-            {
-                // в этом случае будет сгенерировано на один сундук меньше.
-                // узел, с которого не удаётся найти подходящий узел, удаляем,
-                // чтобы больше его не анализировать, т.к. всё равно будет такой же исход.
-                openNodes.Remove(openNodes[rollIndex]);
-                return;
-            }
-
-            // Проверка, что сундук не перегораживает проход.
-            var isValid = CheckMap(sector, (HexNode)containerNode);
-            if (!isValid)
-            {
-                // в этом случае будет сгенерировано на один сундук меньше.
-                // узел, с которого не удаётся найти подходящий узел, удаляем,
-                // чтобы больше его не анализировать, т.к. всё равно будет такой же исход.
-                openNodes.Remove(openNodes[rollIndex]);
-                return;
-            }
-
-            openNodes.Remove(containerNode);
-
-            var staticObject = CreateChestStaticObject(trashDropTables, treasuresDropTable, containerNode);
-            sector.StaticObjectManager.Add(staticObject);
-        }
-
-        private IStaticObject CreateChestStaticObject(IDropTableScheme[] trashDropTables, IDropTableScheme[] treasuresDropTable, IGraphNode containerNode)
+        private IStaticObject CreateChestStaticObject(IDropTableScheme[] trashDropTables,
+            IDropTableScheme[] treasuresDropTable, IGraphNode containerNode)
         {
             var containerPurpose = _chestGeneratorRandomSource.RollPurpose();
             var container = CreateContainerModuleByPurpose(trashDropTables,
@@ -154,7 +163,8 @@ namespace Zilon.Core.MapGenerators
             return staticObject;
         }
 
-        private IPropContainer CreateContainerModuleByPurpose(IDropTableScheme[] trashDropTables, IDropTableScheme[] treasuresDropTable, PropContainerPurpose containerPurpose)
+        private IPropContainer CreateContainerModuleByPurpose(IDropTableScheme[] trashDropTables,
+            IDropTableScheme[] treasuresDropTable, PropContainerPurpose containerPurpose)
         {
             IPropContainer container;
             switch (containerPurpose)
@@ -180,53 +190,6 @@ namespace Zilon.Core.MapGenerators
             return container;
         }
 
-        private static bool CheckMap(ISector sector, HexNode containerNode)
-        {
-            var map = sector.Map;
-            var currentStaticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
-
-            var allNonObstacleNodes = map.Nodes.OfType<HexNode>().ToArray();
-            var allNonContainerNodes = allNonObstacleNodes.Where(x => !currentStaticObjectsNodes.Contains(x));
-            var allNodes = allNonContainerNodes.ToArray();
-
-            var matrix = new Matrix<bool>(1000, 1000);
-            foreach (var node in allNodes)
-            {
-                var x = node.OffsetCoords.X;
-                var y = node.OffsetCoords.Y;
-                matrix.Items[x, y] = true;
-            }
-
-            // Закрываем проверяемый узел
-            matrix.Items[containerNode.OffsetCoords.X, containerNode.OffsetCoords.Y] = false;
-
-            var startNode = allNodes.First();
-            var startPoint = startNode.OffsetCoords;
-            var floodPoints = HexBinaryFiller.FloodFill(matrix, startPoint);
-
-            foreach (var point in floodPoints)
-            {
-                matrix.Items[point.X, point.Y] = false;
-            }
-
-            foreach (var node in allNodes)
-            {
-                var x = node.OffsetCoords.X;
-                var y = node.OffsetCoords.Y;
-                if (matrix.Items[x, y])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private IDropTableScheme[] GetTreasuresDropTable()
-        {
-            return new[] { _schemeService.GetScheme<IDropTableScheme>("treasures") };
-        }
-
         private IDropTableScheme[] GetTrashDropTables(ISectorSubScheme sectorSubScheme)
         {
             var dropTables = new List<IDropTableScheme>();
@@ -237,6 +200,48 @@ namespace Zilon.Core.MapGenerators
             }
 
             return dropTables.ToArray();
+        }
+
+        private IDropTableScheme[] GetTreasuresDropTable()
+        {
+            return new[] { _schemeService.GetScheme<IDropTableScheme>("treasures") };
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Создать сундуки в секторе.
+        /// </summary>
+        public void CreateChests(ISector sector, ISectorSubScheme sectorSubScheme, IEnumerable<MapRegion> regions)
+        {
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
+            if (sectorSubScheme is null)
+            {
+                throw new ArgumentNullException(nameof(sectorSubScheme));
+            }
+
+            if (regions is null)
+            {
+                throw new ArgumentNullException(nameof(regions));
+            }
+
+            var trashDropTables = GetTrashDropTables(sectorSubScheme);
+            var treasuresDropTable = GetTreasuresDropTable();
+            var chestCounter = sectorSubScheme.TotalChestCount;
+
+            //TODO В схемах хранить уже приведённое значение пропорции.
+            var countChestRatioNormal = 1f / sectorSubScheme.RegionChestCountRatio;
+            foreach (var region in regions)
+            {
+                var maxChestCountRaw = region.Nodes.Length * countChestRatioNormal;
+                var maxChestCount = (int)Math.Max(maxChestCountRaw, 1);
+
+                CreateChestsForRegion(region, maxChestCount, sector, trashDropTables, treasuresDropTable,
+                    ref chestCounter);
+            }
         }
     }
 }

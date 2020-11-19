@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+
+using Zilon.Core.Players;
 
 namespace Zilon.Core.Scoring
 {
@@ -6,10 +8,15 @@ namespace Zilon.Core.Scoring
     {
         private IPlayerEvent _playerEvent;
 
-        public IActor Actor { get; set; }
+        public PlayerEventLogService(IPlayer player)
+        {
+            Player = player ?? throw new ArgumentNullException(nameof(player));
+        }
+
+        public IPlayer Player { get; }
 
         public IPlayerEvent GetPlayerEvent()
-        { 
+        {
             return _playerEvent;
         }
 

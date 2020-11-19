@@ -10,8 +10,9 @@ namespace Assets.Zilon.Scripts.DependencyInjection
     {
         public static void RegisterPersonFactory(this DiContainer diContainer)
         {
-            diContainer.Bind<IPersonFactory>().To<RandomHumanPersonFactory>().AsSingle()
-                .OnInstantiated<RandomHumanPersonFactory>((injectContext, service) => {
+            diContainer.Bind<IPersonFactory>().To<TemplateBasedPersonFactory>().AsSingle()
+                .OnInstantiated<TemplateBasedPersonFactory>((injectContext, service) =>
+                {
                     service.PlayerEventLogService = injectContext.Container.Resolve<IPlayerEventLogService>();
                 });
             diContainer.Bind<IMonsterPersonFactory>().To<MonsterPersonFactory>().AsSingle();

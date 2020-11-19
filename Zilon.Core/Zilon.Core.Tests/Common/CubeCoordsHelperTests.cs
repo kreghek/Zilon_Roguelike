@@ -9,7 +9,8 @@ using Zilon.Core.Tests.Common.TestCases;
 
 namespace Zilon.Core.Tests.Common
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class CubeCoordsHelperTests
     {
         /// <summary>
@@ -76,7 +77,7 @@ namespace Zilon.Core.Tests.Common
             var reverseLine = CubeCoordsHelper.CubeDrawLine(finishCubeCoords, startCubeCoords);
 
             // ASSERT
-            for (int i = 0; i < line.Length; i++)
+            for (var i = 0; i < line.Length; i++)
             {
                 var linePoint = line[i];
                 var reversePoint = reverseLine[reverseLine.Length - i - 1];

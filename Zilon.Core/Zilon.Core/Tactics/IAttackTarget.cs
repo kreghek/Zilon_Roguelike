@@ -13,7 +13,12 @@ namespace Zilon.Core.Tactics
         /// </summary>
         IGraphNode Node { get; }
 
-        PhysicalSize PhysicalSize { get; }
+        PhysicalSizePattern PhysicalSize { get; }
+
+        /// <summary>
+        /// Проверка, может ли цель быть атакована.
+        /// </summary>
+        bool CanBeDamaged();
 
         /// <summary>
         /// Принятие урона.
@@ -23,10 +28,5 @@ namespace Zilon.Core.Tactics
         /// Это окончательный урон с учетом всех модифиаторов.
         /// </remarks>
         void TakeDamage(int value);
-
-        /// <summary>
-        /// Проверка, может ли цель быть атакована.
-        /// </summary>
-        bool CanBeDamaged();
     }
 }

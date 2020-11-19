@@ -25,17 +25,6 @@ namespace Zilon.Core.Persons.Survival
         }
 
         /// <summary>
-        /// Тип характеристики.
-        /// </summary>
-        public SurvivalStatType Type { get; set; }
-
-
-        /// <summary>
-        /// Скорость снижения характеристики за ход.
-        /// </summary>
-        public int Rate { get; set; }
-
-        /// <summary>
         /// Бросок кости, при проходит тест на снижение характеристики.
         /// То есть характеристики не снижается, если выброшено больше.
         /// При 0 - не снижается никогда.
@@ -47,5 +36,16 @@ namespace Zilon.Core.Persons.Survival
         /// Ключевые сегменты характеристики.
         /// </summary>
         public SurvivalStatKeySegment[] KeySegments { get; set; }
+
+
+        /// <summary>
+        /// Скорость снижения характеристики за ход.
+        /// </summary>
+        public int Rate { get; set; }
+
+        /// <summary>
+        /// Тип характеристики.
+        /// </summary>
+        public SurvivalStatType Type { get; set; }
     }
 }

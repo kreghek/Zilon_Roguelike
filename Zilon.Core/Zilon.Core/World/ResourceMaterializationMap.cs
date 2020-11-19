@@ -9,59 +9,15 @@ namespace Zilon.Core.World
     public sealed class ResourceMaterializationMap : IResourceMaterializationMap
     {
         private const float START_RESOURCE_SHARE = 0.10f;
+        private readonly IDice _dice;
 
         private readonly Dictionary<ISectorNode, IResourceDepositData> _map;
-        private readonly IDice _dice;
 
         public ResourceMaterializationMap(IDice dice)
         {
             _dice = dice ?? throw new System.ArgumentNullException(nameof(dice));
 
             _map = new Dictionary<ISectorNode, IResourceDepositData>();
-        }
-
-        public IResourceDepositData GetDepositData(ISectorNode sectorNode)
-        {
-            if (sectorNode is null)
-            {
-                throw new System.ArgumentNullException(nameof(sectorNode));
-            }
-
-            // Алгоритм.
-
-            // Первое, что делаем, это проверяем, не является ли узел стартовым. То есть еще ничего нет.
-            // В этом случае задаём случайные стартовые ресурсы.
-
-            // Если не стартовый, тогда собираем данные с соседних, уже сгенерированных узлов.
-            // Для каждого ресурса из соседних получаем усреднённое значение.
-            // Затем, для каждого ресурса либо снижаем долю, либо увеличиваем.
-
-            if (!_map.Any())
-            {
-                var data = CreateStartResourceData();
-
-                _map[sectorNode] = data;
-
-                return data;
-            }
-            else
-            {
-                var data = CalcCurrentResouceData(sectorNode);
-
-                _map[sectorNode] = data;
-
-                return data;
-            }
-        }
-
-        private IResourceDepositData CalcCurrentResouceData(ISectorNode sectorNode)
-        {
-            var neighborNodes = sectorNode.Biome.GetNext(sectorNode);
-            var items = CalcAverageResourceByNeightbors(neighborNodes);
-            items = AddNewResourceIfNeed(items);
-
-            var data = new ResourceDepositData(items);
-            return data;
         }
 
         private ResourceDepositDataItem[] AddNewResourceIfNeed(ResourceDepositDataItem[] items)
@@ -71,12 +27,13 @@ namespace Zilon.Core.World
             if (!items.Any() || newRoll > 3)
             {
                 var itemsNew = new List<ResourceDepositDataItem>(items);
-                var availableResources = new List<SectorResourceType> {
-                        SectorResourceType.CherryBrushes,
-                        SectorResourceType.Iron,
-                        SectorResourceType.Stones,
-                        SectorResourceType.WaterPuddles
-                    };
+                var availableResources = new List<SectorResourceType>
+                {
+                    SectorResourceType.CherryBrushes,
+                    SectorResourceType.Iron,
+                    SectorResourceType.Stones,
+                    SectorResourceType.WaterPuddles
+                };
 
                 foreach (var res in availableResources)
                 {
@@ -144,13 +101,24 @@ namespace Zilon.Core.World
             return items;
         }
 
+        private IResourceDepositData CalcCurrentResouceData(ISectorNode sectorNode)
+        {
+            var neighborNodes = sectorNode.Biome.GetNext(sectorNode);
+            var items = CalcAverageResourceByNeightbors(neighborNodes);
+            items = AddNewResourceIfNeed(items);
+
+            var data = new ResourceDepositData(items);
+            return data;
+        }
+
         private static IResourceDepositData CreateStartResourceData()
         {
-            var items = new[] {
+            var items = new[]
+            {
                 new ResourceDepositDataItem(SectorResourceType.Iron, START_RESOURCE_SHARE),
                 new ResourceDepositDataItem(SectorResourceType.Stones, START_RESOURCE_SHARE),
                 new ResourceDepositDataItem(SectorResourceType.WaterPuddles, START_RESOURCE_SHARE),
-                new ResourceDepositDataItem(SectorResourceType.CherryBrushes, START_RESOURCE_SHARE),
+                new ResourceDepositDataItem(SectorResourceType.CherryBrushes, START_RESOURCE_SHARE)
             };
             var data = new ResourceDepositData(items);
             return data;
@@ -164,6 +132,40 @@ namespace Zilon.Core.World
                 {
                     yield return data;
                 }
+            }
+        }
+
+        public IResourceDepositData GetDepositData(ISectorNode sectorNode)
+        {
+            if (sectorNode is null)
+            {
+                throw new System.ArgumentNullException(nameof(sectorNode));
+            }
+
+            // Алгоритм.
+
+            // Первое, что делаем, это проверяем, не является ли узел стартовым. То есть еще ничего нет.
+            // В этом случае задаём случайные стартовые ресурсы.
+
+            // Если не стартовый, тогда собираем данные с соседних, уже сгенерированных узлов.
+            // Для каждого ресурса из соседних получаем усреднённое значение.
+            // Затем, для каждого ресурса либо снижаем долю, либо увеличиваем.
+
+            if (!_map.Any())
+            {
+                var data = CreateStartResourceData();
+
+                _map[sectorNode] = data;
+
+                return data;
+            }
+            else
+            {
+                var data = CalcCurrentResouceData(sectorNode);
+
+                _map[sectorNode] = data;
+
+                return data;
             }
         }
     }

@@ -15,7 +15,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
-using Zilon.Core.Tactics;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
 
 public class KeyboardMoveController : MonoBehaviour
@@ -59,7 +59,7 @@ public class KeyboardMoveController : MonoBehaviour
     private readonly ISectorUiState _sectorUiState;
 
     [Inject]
-    private readonly ISectorManager _sectorManager;
+    private readonly IPlayer _player;
 
     [Inject]
     private readonly ICommandBlockerService _commandBlockerService;
@@ -152,7 +152,7 @@ public class KeyboardMoveController : MonoBehaviour
             throw new ArgumentException("Не определено направление.", nameof(direction));
         }
 
-        var neighborNodes = _sectorManager.CurrentSector.Map.GetNext(actorHexNode).OfType<HexNode>();
+        var neighborNodes = _player.SectorNode.Sector.Map.GetNext(actorHexNode).OfType<HexNode>();
         var directions = HexHelper.GetOffsetClockwise();
 
         var stepDirectionIndex = _stepDirectionIndexes[direction];

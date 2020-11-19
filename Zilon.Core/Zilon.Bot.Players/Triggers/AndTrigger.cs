@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Triggers
 {
@@ -19,11 +20,12 @@ namespace Zilon.Bot.Players.Triggers
             }
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+            ILogicStrategyData strategyData)
         {
             foreach (var trigger in _triggers)
             {
-                if (!trigger.Test(actor, currentState, strategyData))
+                if (!trigger.Test(actor, context, currentState, strategyData))
                 {
                     return false;
                 }

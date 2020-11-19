@@ -10,8 +10,8 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public sealed class DropTableChestStore : PropStoreBase
     {
-        private readonly IEnumerable<IDropTableScheme> _dropTables;
         private readonly IDropResolver _dropResolver;
+        private readonly IEnumerable<IDropTableScheme> _dropTables;
 
         /// <summary>
         /// Внутренний ключ, указывающий, что разрешение контента уже произведено.
@@ -30,7 +30,7 @@ namespace Zilon.Core.Tactics
             {
                 return base.CalcActualItems();
             }
-            
+
             var props = GenerateProps();
             AddToContent(props);
             _contentResolved = true;

@@ -10,9 +10,11 @@ namespace Zilon.Core.MapGenerators
         /// <summary>
         /// Возвращает генератор карты.
         /// </summary>
-        /// <param name="sectorScheme">Схема сектора, на основе которой будет принято решение,
-        /// какой генератор карты использовать.</param>
+        /// <param name="sectorScheme">
+        /// Схема сектора, на основе которой будет принято решение,
+        /// какой генератор карты использовать.
+        /// </param>
         /// <returns> Возвращает фабрику карт для сектора. </returns>
-        IMapFactory GetMapFactory(ISectorNode sectorNode);        
+        IMapFactory GetMapFactory(ISectorNode sectorNode);
     }
 }

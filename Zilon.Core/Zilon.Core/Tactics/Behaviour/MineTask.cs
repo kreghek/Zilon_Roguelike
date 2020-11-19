@@ -2,35 +2,32 @@
 
 using JetBrains.Annotations;
 
-using Zilon.Core.Tactics.Spatial;
-
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class MineTask : OneTurnActorTaskBase
     {
-        private readonly IStaticObject _staticObject;
         private readonly IMineDepositMethod _method;
-        private readonly ISectorMap _map;
+        private readonly IStaticObject _staticObject;
 
         public MineTask([NotNull] IActor actor,
+            [NotNull] IActorTaskContext context,
             [NotNull] IStaticObject staticObject,
-            [NotNull] IMineDepositMethod method,
-            [NotNull] ISectorMap map) : base(actor)
+            [NotNull] IMineDepositMethod method) : base(actor, context)
         {
             _staticObject = staticObject ?? throw new ArgumentNullException(nameof(staticObject));
             _method = method ?? throw new ArgumentNullException(nameof(method));
-            _map = map ?? throw new ArgumentNullException(nameof(map));
         }
 
         protected override void ExecuteTask()
         {
-            var distance = _map.DistanceBetween(Actor.Node, _staticObject.Node);
+            var map = Context.Sector.Map;
+            var distance = map.DistanceBetween(Actor.Node, _staticObject.Node);
             if (distance > 1)
             {
                 throw new InvalidOperationException("Невозможно взаимодействовать с объектом на расстоянии больше 1.");
             }
 
-            var targetIsOnLine = _map.TargetIsOnLine(Actor.Node, _staticObject.Node);
+            var targetIsOnLine = map.TargetIsOnLine(Actor.Node, _staticObject.Node);
 
             if (!targetIsOnLine)
             {

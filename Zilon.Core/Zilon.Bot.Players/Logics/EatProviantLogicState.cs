@@ -12,20 +12,26 @@ namespace Zilon.Bot.Players.Logics
 {
     public class EatProviantLogicState : LogicStateBase
     {
-        public override IActorTask GetTask(IActor actor, ILogicStrategyData strategyData)
+        public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
                 throw new System.ArgumentNullException(nameof(actor));
             }
 
-            var eatFoodTask = CheckHazard(actor, SurvivalStatType.Satiety, ConsumeCommonRuleType.Satiety);
+            if (context is null)
+            {
+                throw new System.ArgumentNullException(nameof(context));
+            }
+
+            var eatFoodTask = CheckHazard(actor, context, SurvivalStatType.Satiety, ConsumeCommonRuleType.Satiety);
             if (eatFoodTask != null)
             {
                 return eatFoodTask;
             }
 
-            var drinkWaterTask = CheckHazard(actor, SurvivalStatType.Hydration, ConsumeCommonRuleType.Thirst);
+            var drinkWaterTask = CheckHazard(actor, context, SurvivalStatType.Hydration, ConsumeCommonRuleType.Thirst);
             if (drinkWaterTask != null)
             {
                 return drinkWaterTask;
@@ -40,7 +46,8 @@ namespace Zilon.Bot.Players.Logics
             // Внутреннего состояния нет.
         }
 
-        private UsePropTask CheckHazard(IActor actor, SurvivalStatType hazardType, ConsumeCommonRuleType resourceType)
+        private UsePropTask CheckHazard(IActor actor, ISectorTaskSourceContext context, SurvivalStatType hazardType,
+            ConsumeCommonRuleType resourceType)
         {
             var hazardEffect = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == hazardType);
@@ -59,7 +66,8 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            return new UsePropTask(actor, bestResource);
+            var taskContxt = new ActorTaskContext(context.Sector);
+            return new UsePropTask(actor, taskContxt, bestResource);
         }
     }
 }

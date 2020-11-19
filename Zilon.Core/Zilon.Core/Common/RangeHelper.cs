@@ -3,7 +3,7 @@
 namespace Zilon.Core.Common
 {
     /// <summary>
-    ///  Вспомогательный класс для диапазонов.
+    /// Вспомогательный класс для диапазонов.
     /// </summary>
     public static class RangeHelper
     {

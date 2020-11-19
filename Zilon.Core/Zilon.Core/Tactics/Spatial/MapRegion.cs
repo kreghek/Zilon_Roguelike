@@ -1,6 +1,7 @@
 ﻿using System;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
@@ -23,7 +24,7 @@ namespace Zilon.Core.Tactics.Spatial
             Nodes = nodes ?? throw new ArgumentNullException(nameof(nodes));
         }
 
-        public IGraphNode[] Nodes { get; }
+        public IGraphNode[] ExitNodes { get; set; }
 
         public int Id { get; }
 
@@ -31,7 +32,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         public bool IsStart { get; set; }
 
-        public IGraphNode[] ExitNodes { get; set; }
+        public IGraphNode[] Nodes { get; }
 
         public override string ToString()
         {

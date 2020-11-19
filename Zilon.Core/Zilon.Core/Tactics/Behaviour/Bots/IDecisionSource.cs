@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using JetBrains.Annotations;
+
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Behaviour.Bots
@@ -23,6 +24,7 @@ namespace Zilon.Core.Tactics.Behaviour.Bots
         /// </summary>
         /// <param name="mapNodes">Доступные для выбора узлы карты.</param>
         /// <returns>Возвращает узле карты сектора. Или null, если такого узла нет.</returns>
-        [CanBeNull] IGraphNode SelectTargetRoamingNode([NotNull, ItemNotNull] IEnumerable<IGraphNode> mapNodes);
+        [CanBeNull]
+        IGraphNode SelectTargetRoamingNode([NotNull][ItemNotNull] IEnumerable<IGraphNode> mapNodes);
     }
 }

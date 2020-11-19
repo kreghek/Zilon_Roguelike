@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,12 +13,14 @@ using Zilon.Core.Components;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.Tests.Common.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.Commands
 {
@@ -28,7 +31,7 @@ namespace Zilon.Core.Tests.Commands
         protected IServiceProvider ServiceProvider { get; set; }
 
         [SetUp]
-        public async System.Threading.Tasks.Task SetUpAsync()
+        public async Task SetUpAsync()
         {
             Container = new ServiceCollection();
 
@@ -38,9 +41,15 @@ namespace Zilon.Core.Tests.Commands
             sectorMock.SetupGet(x => x.Map).Returns(testMap);
             var sector = sectorMock.Object;
 
-            var sectorManagerMock = new Mock<ISectorManager>();
-            sectorManagerMock.SetupGet(x => x.CurrentSector).Returns(sector);
-            var sectorManager = sectorManagerMock.Object;
+            var sectorNodeMock = new Mock<ISectorNode>();
+            sectorNodeMock.SetupGet(x => x.Sector).Returns(sector);
+            var sectorNode = sectorNodeMock.Object;
+
+            var playerMock = new Mock<IPlayer>();
+            playerMock.SetupGet(x => x.SectorNode).Returns(sectorNode);
+            var player = playerMock.Object;
+            Container.AddSingleton(player);
+
             var simpleAct = CreateSimpleAct();
             var cooldownAct = CreateActWithCooldown();
             var cooldownResolvedAct = CreateActWithResolvedCooldown();
@@ -51,15 +60,19 @@ namespace Zilon.Core.Tests.Commands
             var combatActModule = combatActModuleMock.Object;
 
             var equipmentCarrierMock = new Mock<IEquipmentModule>();
-            equipmentCarrierMock.SetupGet(x => x.Slots).Returns(new[] { new PersonSlotSubScheme {
-                Types = EquipmentSlotTypes.Hand
-            } });
+            equipmentCarrierMock.SetupGet(x => x.Slots).Returns(new[]
+            {
+                new PersonSlotSubScheme
+                {
+                    Types = EquipmentSlotTypes.Hand
+                }
+            });
             var equipmentCarrier = equipmentCarrierMock.Object;
 
             var personMock = new Mock<IPerson>();
             personMock.Setup(x => x.GetModule<ICombatActModule>(It.IsAny<string>())).Returns(combatActModule);
             personMock.Setup(x => x.GetModule<IEquipmentModule>(It.IsAny<string>())).Returns(equipmentCarrier);
-            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSize.Size1);
+            personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSizePattern.Size1);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
@@ -72,28 +85,23 @@ namespace Zilon.Core.Tests.Commands
             actorVmMock.SetupProperty(x => x.Actor, actor);
             var actorVm = actorVmMock.Object;
 
-            var humanTaskSourceMock = new Mock<IHumanActorTaskSource>();
+            var humanTaskSourceMock = new Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var humanTaskSource = humanTaskSourceMock.Object;
 
             var playerStateMock = new Mock<ISectorUiState>();
             playerStateMock.SetupProperty(x => x.ActiveActor, actorVm);
-            playerStateMock.SetupProperty(x => x.TaskSource, humanTaskSource);
+            playerStateMock.SetupGet(x => x.TaskSource).Returns(humanTaskSource);
             playerStateMock.SetupProperty(x => x.TacticalAct, simpleAct);
             var playerState = playerStateMock.Object;
 
             sectorMock.SetupGet(x => x.ActorManager)
                 .Returns(() => ServiceProvider.GetRequiredService<IActorManager>());
 
-            var gameLoopMock = new Mock<IGameLoop>();
-            var gameLoop = gameLoopMock.Object;
-
             var usageServiceMock = new Mock<ITacticalActUsageService>();
             var usageService = usageServiceMock.Object;
 
-            Container.AddSingleton(factory => sectorManager);
             Container.AddSingleton(factory => humanTaskSourceMock);
             Container.AddSingleton(factory => playerState);
-            Container.AddSingleton(factory => gameLoop);
             Container.AddSingleton(factory => usageService);
 
             RegisterSpecificServices(testMap, playerStateMock);
@@ -101,17 +109,7 @@ namespace Zilon.Core.Tests.Commands
             ServiceProvider = Container.BuildServiceProvider();
         }
 
-        private static ITacticalAct CreateSimpleAct()
-        {
-            var actMock = new Mock<ITacticalAct>();
-            var actStatScheme = new TestTacticalActStatsSubScheme
-            {
-                Range = new Range<int>(1, 2)
-            };
-            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
-            var act = actMock.Object;
-            return act;
-        }
+        protected abstract void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock);
 
         private static ITacticalAct CreateActWithCooldown()
         {
@@ -139,6 +137,16 @@ namespace Zilon.Core.Tests.Commands
             return act;
         }
 
-        protected abstract void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock);
+        private static ITacticalAct CreateSimpleAct()
+        {
+            var actMock = new Mock<ITacticalAct>();
+            var actStatScheme = new TestTacticalActStatsSubScheme
+            {
+                Range = new Range<int>(1, 2)
+            };
+            actMock.SetupGet(x => x.Stats).Returns(actStatScheme);
+            var act = actMock.Object;
+            return act;
+        }
     }
 }

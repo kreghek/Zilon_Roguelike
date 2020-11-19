@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+
 using NUnit.Framework;
 
 using Zilon.Core.Schemes;
@@ -6,7 +7,8 @@ using Zilon.Core.Tests.Common.Schemes;
 
 namespace Zilon.Core.Tests
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class PerkHelperTests
     {
         private TestPerkScheme _perkScheme;
@@ -19,15 +21,10 @@ namespace Zilon.Core.Tests
             const int expectedLevel = 1;
             const int expectedSubLevel = 2;
 
-
-
-
             // ACT
             PerkHelper.ConvertTotalLevel(_perkScheme, testedTotalLevel,
-                out int? factLevel,
-                out int? factSubLevel);
-
-
+                out var factLevel,
+                out var factSubLevel);
 
             // ASSERT
             factLevel.Should().Be(expectedLevel);
@@ -42,15 +39,10 @@ namespace Zilon.Core.Tests
             const int expectedLevel = 2;
             const int expectedSubLevel = 1;
 
-
-
-
             // ACT
             PerkHelper.ConvertTotalLevel(_perkScheme, testedTotalLevel,
-                out int? factLevel,
-                out int? factSubLevel);
-
-
+                out var factLevel,
+                out var factSubLevel);
 
             // ASSERT
             factLevel.Should().Be(expectedLevel);
@@ -62,17 +54,18 @@ namespace Zilon.Core.Tests
         {
             _perkScheme = new TestPerkScheme
             {
-                Levels = new[] {
-                    new PerkLevelSubScheme()
+                Levels = new[]
+                {
+                    new PerkLevelSubScheme
                     {
                         MaxValue = 5
                     },
-                     new PerkLevelSubScheme()
-                     {
+                    new PerkLevelSubScheme
+                    {
                         MaxValue = 2
                     },
-                      new PerkLevelSubScheme()
-                      {
+                    new PerkLevelSubScheme
+                    {
                         MaxValue = 3
                     }
                 }

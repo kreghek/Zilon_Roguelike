@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Props
@@ -7,8 +8,6 @@ namespace Zilon.Core.Props
     public sealed class Resource : PropBase
     {
         private int _count;
-
-        public event EventHandler<EventArgs> Changed;
 
         [ExcludeFromCodeCoverage]
         public Resource(IPropScheme scheme, int count) : base(scheme)
@@ -39,12 +38,6 @@ namespace Zilon.Core.Props
             }
         }
 
-        [ExcludeFromCodeCoverage]
-        private void DoChange()
-        {
-            Changed?.Invoke(this, new EventArgs());
-        }
-
         /// <summary>
         /// Разделяет текущий сток ресурсов и формирует новый экземпляр с указанным количеством.
         /// </summary>
@@ -62,5 +55,13 @@ namespace Zilon.Core.Props
         {
             return $"{Scheme} x {Count}";
         }
+
+        [ExcludeFromCodeCoverage]
+        private void DoChange()
+        {
+            Changed?.Invoke(this, new EventArgs());
+        }
+
+        public event EventHandler<EventArgs> Changed;
     }
 }

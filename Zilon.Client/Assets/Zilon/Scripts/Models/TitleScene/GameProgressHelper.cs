@@ -9,7 +9,7 @@ namespace Assets.Zilon.Scripts.Models.TitleScene
     {
         public static void ResetGameState(
             IScoreManager scoreManager,
-            HumanPlayer humanPlayer)
+            IPlayer humanPlayer)
         {
             humanPlayer.Reset();
             scoreManager.ResetScores();

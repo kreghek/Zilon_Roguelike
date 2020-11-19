@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Client
 {
-    public class UiStateBase: IUiState
+    public class UiStateBase : IUiState
     {
         private ISelectableViewModel _hoverViewModel;
         private ISelectableViewModel _selectedViewModel;
@@ -29,7 +29,7 @@ namespace Zilon.Core.Client
             }
         }
 
-        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel"/>.</summary>
+        /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel" />.</summary>
         public event EventHandler HoverChanged;
     }
 }

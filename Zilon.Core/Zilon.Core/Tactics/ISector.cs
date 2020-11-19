@@ -15,20 +15,15 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public interface ISector
     {
-        /// <summary>
-        /// Обновление состояние сектора.
-        /// </summary>
-        /// <remarks>
-        /// Включает в себя обработку текущих источников задач.
-        /// Выполнение задач актёров на один шаг.
-        /// Определение и обработка состояния актёров.
-        /// </remarks>
-        void Update();
+        IActorManager ActorManager { get; }
 
         /// <summary>
-        /// Событие выстреливает, когда группа актёров игрока покинула сектор.
+        /// Текущие болезни в секторе.
         /// </summary>
-        event EventHandler<SectorExitEventArgs> HumanGroupExit;
+        /// <remarks>
+        /// Если в секторе есть болезни, то один из монстров будет инфицирован этой болезнью.
+        /// </remarks>
+        IEnumerable<IDisease> Diseases { get; }
 
         /// <summary>
         /// Карта в основе сектора.
@@ -40,25 +35,35 @@ namespace Zilon.Core.Tactics
         /// </summary>
         Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
 
+        ILocationScheme Scheme { get; set; }
+
         /// <summary>Менеджер работы с очками.</summary>
         IScoreManager ScoreManager { get; set; }
 
-        ILocationScheme Scheme { get; set; }
-
-        void UseTransition(RoomTransition transition);
-
-        IActorManager ActorManager { get; }
-
         IStaticObjectManager StaticObjectManager { get; }
 
+        void AddDisease(IDisease disease);
+
         /// <summary>
-        /// Текущие болезни в секторе.
+        /// Обновление состояние сектора.
         /// </summary>
         /// <remarks>
-        /// Если в секторе есть болезни, то один из монстров будет инфицирован этой болезнью.
+        /// Включает в себя обработку текущих источников задач.
+        /// Выполнение задач актёров на один шаг.
+        /// Определение и обработка состояния актёров.
         /// </remarks>
-        IEnumerable<IDisease> Diseases { get; }
+        void Update();
 
-        void AddDisease(IDisease disease);
+        /// <summary>
+        /// Вызывает актёр, когда хочет переёти из одного сектора в другой.
+        /// </summary>
+        /// <param name="actor"> Актёр, применивший переход. </param>
+        /// <param name="transition"> переход, который бы задействован. </param>
+        void UseTransition(IActor actor, RoomTransition transition);
+
+        /// <summary>
+        /// Событие выстреливает, когда группа актёров игрока покинула сектор.
+        /// </summary>
+        event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
     }
 }

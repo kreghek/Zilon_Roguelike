@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.Components;
@@ -17,19 +18,14 @@ namespace Zilon.Core.Tactics
     /// <seealso cref="ITacticalActUsageService" />
     public sealed class TacticalActUsageService : ITacticalActUsageService
     {
-        private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
-        private readonly ISectorManager _sectorManager;
         private readonly IActUsageHandlerSelector _actUsageHandlerSelector;
-
-        /// <summary>Сервис для работы с прочностью экипировки.</summary>
-        public IEquipmentDurableService EquipmentDurableService { get; set; }
+        private readonly ITacticalActUsageRandomSource _actUsageRandomSource;
 
         /// <summary>
-        /// Конструирует экземпляр службы <see cref="TacticalActUsageService"/>.
+        /// Конструирует экземпляр службы <see cref="TacticalActUsageService" />.
         /// </summary>
         /// <param name="actUsageRandomSource">Источник рандома для выполнения действий.</param>
         /// <param name="perkResolver">Сервис для работы с прогрессом перков.</param>
-        /// <param name="sectorManager">Менеджер сектора.</param>
         /// <exception cref="System.ArgumentNullException">
         /// actUsageRandomSource
         /// or
@@ -39,71 +35,48 @@ namespace Zilon.Core.Tactics
         /// </exception>
         public TacticalActUsageService(
             ITacticalActUsageRandomSource actUsageRandomSource,
-            ISectorManager sectorManager,
             IActUsageHandlerSelector actUsageHandlerSelector)
         {
-            _actUsageRandomSource = actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
-            _sectorManager = sectorManager ?? throw new ArgumentNullException(nameof(sectorManager));
-            _actUsageHandlerSelector = actUsageHandlerSelector ?? throw new ArgumentNullException(nameof(actUsageHandlerSelector));
+            _actUsageRandomSource =
+                actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
+            _actUsageHandlerSelector = actUsageHandlerSelector ??
+                                       throw new ArgumentNullException(nameof(actUsageHandlerSelector));
         }
 
         public TacticalActUsageService(
             ITacticalActUsageRandomSource actUsageRandomSource,
-            ISectorManager sectorManager,
             IActUsageHandlerSelector actUsageHandlerSelector,
-            IEquipmentDurableService equipmentDurableService) : this(actUsageRandomSource, sectorManager, actUsageHandlerSelector)
+            IEquipmentDurableService equipmentDurableService) : this(actUsageRandomSource, actUsageHandlerSelector)
         {
-            EquipmentDurableService = equipmentDurableService ?? throw new ArgumentNullException(nameof(equipmentDurableService));
+            EquipmentDurableService = equipmentDurableService ??
+                                      throw new ArgumentNullException(nameof(equipmentDurableService));
         }
 
-        public void UseOn(IActor actor, IAttackTarget target, UsedTacticalActs usedActs)
+        /// <summary>Сервис для работы с прочностью экипировки.</summary>
+        public IEquipmentDurableService EquipmentDurableService { get; set; }
+
+        /// <summary>
+        /// Возвращает случайное значение эффективность действия.
+        /// </summary>
+        /// <param name="act"> Соверщённое действие. </param>
+        /// <returns> Возвращает выпавшее значение эффективности. </returns>
+        private TacticalActRoll GetActEfficient(ITacticalAct act)
         {
-            if (actor is null)
-            {
-                throw new ArgumentNullException(nameof(actor));
-            }
+            var rolledEfficient = _actUsageRandomSource.RollEfficient(act.Efficient);
 
-            if (target is null)
-            {
-                throw new ArgumentNullException(nameof(target));
-            }
+            var roll = new TacticalActRoll(act, rolledEfficient);
 
-            if (usedActs is null)
-            {
-                throw new ArgumentNullException(nameof(usedActs));
-            }
-
-            foreach (var act in usedActs.Primary)
-            {
-                if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && actor == target)
-                {
-                    throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
-                }
-
-                UseAct(actor, target, act);
-            }
-
-            // Использование дополнительных действий.
-            // Используются с некоторой вероятностью.
-            foreach (var act in usedActs.Secondary)
-            {
-                var useSuccessRoll = GetUseSuccessRoll();
-                var useFactRoll = GetUseFactRoll();
-
-                if (useFactRoll < useSuccessRoll)
-                {
-                    continue;
-                }
-
-                UseAct(actor, target, act);
-            }
+            return roll;
         }
 
-        private static IEnumerable<IGraphNode> GetActorNodes(PhysicalSize physicalSize, IGraphNode baseNode, IMap map)
+        private static IEnumerable<IGraphNode> GetActorNodes(
+            PhysicalSizePattern physicalSize,
+            IGraphNode baseNode,
+            IMap map)
         {
             yield return baseNode;
 
-            if (physicalSize == PhysicalSize.Size7)
+            if (physicalSize == PhysicalSizePattern.Size7)
             {
                 var neighbors = map.GetNext(baseNode);
                 foreach (var neighbor in neighbors)
@@ -113,73 +86,28 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void UseAct(IActor actor, IAttackTarget target, ITacticalAct act)
+        private int GetUseFactRoll()
         {
-            bool isInDistance;
-            if ((act.Stats.Targets & TacticalActTargets.Self) > 0 && actor == target)
-            {
-                isInDistance = true;
-            }
-            else
-            {
-                isInDistance = IsInDistance(actor, target, act);
-            }
-
-            if (!isInDistance)
-            {
-                // Это может произойти, если цель, в процессе применения действия
-                // успела выйти из радиуса применения.
-                // TODO Лучше сделать, чтобы этот метод возвращал объект с результатом выполнения действия.
-                // А внешний код пусть либо считает исход допустимым, либо выбрасывает исключения типа UsageOutOfDistanceException
-                return;
-            }
-
-            var targetNode = target.Node;
-
-            var targetIsOnLine = _sectorManager.CurrentSector.Map.TargetIsOnLine(
-                actor.Node,
-                targetNode);
-
-            if (!targetIsOnLine)
-            {
-                throw new UsageThroughtWallException("Задачу на атаку нельзя выполнить сквозь стены.");
-            }
-
-            actor.UseAct(target, act);
-
-            var tacticalActRoll = GetActEfficient(act);
-
-            // Изъятие патронов
-            if (act.Constrains?.PropResourceType != null)
-            {
-                RemovePropResource(actor, act);
-            }
-
-            var actHandler = _actUsageHandlerSelector.GetHandler(target);
-            actHandler.ProcessActUsage(actor, target, tacticalActRoll);
-
-            if (act.Equipment != null)
-            {
-                EquipmentDurableService?.UpdateByUse(act.Equipment, actor.Person);
-            }
-
-            // Сброс КД, если он есть.
-            act.StartCooldownIfItIs();
+            var roll = _actUsageRandomSource.RollUseSecondaryAct();
+            return roll;
         }
 
-        private bool IsInDistance(IActor actor, IAttackTarget target, ITacticalAct act)
+        private static int GetUseSuccessRoll()
         {
-            var actorNodes = GetActorNodes(actor.PhysicalSize, actor.Node, _sectorManager.CurrentSector.Map);
-            var targetNodes = GetActorNodes(target.PhysicalSize, target.Node, _sectorManager.CurrentSector.Map);
+            // В будущем успех использования вторичных дейсвий будет зависить от действия, экипировки, перков.
+            return 5;
+        }
+
+        private static bool IsInDistance(IActor actor, IGraphNode targetNode, ITacticalAct act, ISectorMap map)
+        {
+            var actorNodes = GetActorNodes(actor.PhysicalSize, actor.Node, map);
+
             foreach (var node in actorNodes)
             {
-                foreach (var targetNode in targetNodes)
+                var isInDistanceInNode = act.CheckDistance(node, targetNode, map);
+                if (isInDistanceInNode)
                 {
-                    var isInDistanceInNode = act.CheckDistance(node, targetNode, _sectorManager.CurrentSector.Map);
-                    if (isInDistanceInNode)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -202,39 +130,160 @@ namespace Zilon.Core.Tactics
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Не хватает ресурса {propResource} для использования действия {act}.");
+                    throw new InvalidOperationException(
+                        $"Не хватает ресурса {propResource} для использования действия {act}.");
                 }
             }
             else
             {
-                throw new InvalidOperationException($"Не хватает ресурса {act.Constrains?.PropResourceType} для использования действия {act}.");
+                throw new InvalidOperationException(
+                    $"Не хватает ресурса {act.Constrains?.PropResourceType} для использования действия {act}.");
             }
         }
 
-        private int GetUseFactRoll()
+        private static bool SectorHasAttackTarget(ISector sector, IAttackTarget target)
         {
-            var roll = _actUsageRandomSource.RollUseSecondaryAct();
-            return roll;
+            if (sector.ActorManager is null)
+            {
+                // In test environment not all sector mocks has actor manager
+                return true;
+            }
+
+            return sector.ActorManager.Items.Any(x => ReferenceEquals(x, target));
         }
 
-        private int GetUseSuccessRoll()
+        private static bool SectorHasCurrentActor(ISector sector, IActor actor)
         {
-            // В будущем успех использования вторичных дейсвий будет зависить от действия, экипировки, перков.
-            return 5;
+            if (sector.ActorManager is null)
+            {
+                // In test environment not all sector mocks has actor manager
+                return true;
+            }
+
+            return sector.ActorManager.Items.Any(x => x == actor);
         }
 
-        /// <summary>
-        /// Возвращает случайное значение эффективность действия.
-        /// </summary>
-        /// <param name="act"> Соверщённое действие. </param>
-        /// <returns> Возвращает выпавшее значение эффективности. </returns>
-        private TacticalActRoll GetActEfficient(ITacticalAct act)
+        private void UseAct(IActor actor, ActTargetInfo target, ITacticalAct act, ISectorMap map)
         {
-            var rolledEfficient = _actUsageRandomSource.RollEfficient(act.Efficient);
+            bool isInDistance;
+            if ((act.Stats.Targets & TacticalActTargets.Self) > 0 && actor == target)
+            {
+                isInDistance = true;
+            }
+            else
+            {
+                isInDistance = IsInDistance(actor, target.TargetNode, act, map);
+            }
 
-            var roll = new TacticalActRoll(act, rolledEfficient);
+            if (!isInDistance)
+            {
+                // Это может произойти, если цель, в процессе применения действия
+                // успела выйти из радиуса применения.
+                // TODO Лучше сделать, чтобы этот метод возвращал объект с результатом выполнения действия.
+                // А внешний код пусть либо считает исход допустимым, либо выбрасывает исключения типа UsageOutOfDistanceException
+                return;
+            }
 
-            return roll;
+            var targetNode = target.TargetNode;
+
+            var targetIsOnLine = map.TargetIsOnLine(
+                actor.Node,
+                targetNode);
+
+            if (targetIsOnLine)
+            {
+                actor.UseAct(targetNode, act);
+
+                var tacticalActRoll = GetActEfficient(act);
+
+                var actHandler = _actUsageHandlerSelector.GetHandler(target.TargetObject);
+                actHandler.ProcessActUsage(actor, target.TargetObject, tacticalActRoll);
+
+                UseActResources(actor, act);
+            }
+            else
+            {
+                // Ситация, когда цель за стеной может произойти по следующим причинам:
+                // 1. В момент начала применения действия цель была доступна. К моменту выполнения дейтвия цель скрылась.
+                // В этом случае изымаем патроны и начинаем КД по действию, так как фактически ресурсы на него потрачены. Но на цель не воздействуем.
+                // 2. Ошибка во внешнем коде, когда не провели предварительную проверку. Это проверяется сравнением ячейки в которую целились
+                // на момент начала действия и текущую ячейку цели.
+
+                if (target.TargetNode == target.TargetObject.Node)
+                {
+                    throw new UsageThroughtWallException();
+                }
+
+                UseActResources(actor, act);
+            }
+        }
+
+        private void UseActResources(IActor actor, ITacticalAct act)
+        {
+            // Изъятие патронов
+            if (act.Constrains?.PropResourceType != null)
+            {
+                RemovePropResource(actor, act);
+            }
+
+            if (act.Equipment != null)
+            {
+                EquipmentDurableService?.UpdateByUse(act.Equipment, actor.Person);
+            }
+
+            // Сброс КД, если он есть.
+            act.StartCooldownIfItIs();
+        }
+
+        public void UseOn(IActor actor, ActTargetInfo target, UsedTacticalActs usedActs, ISector sector)
+        {
+            if (actor is null)
+            {
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            if (target is null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
+            if (usedActs is null)
+            {
+                throw new ArgumentNullException(nameof(usedActs));
+            }
+
+            if (sector is null)
+            {
+                throw new ArgumentNullException(nameof(sector));
+            }
+
+            Debug.Assert(SectorHasCurrentActor(sector, actor), "Current actor must be in sector");
+            Debug.Assert(SectorHasAttackTarget(sector, target.TargetObject), "Target must be in sector");
+
+            foreach (var act in usedActs.Primary)
+            {
+                if (!act.Stats.Targets.HasFlag(TacticalActTargets.Self) && actor == target)
+                {
+                    throw new ArgumentException("Актёр не может атаковать сам себя", nameof(target));
+                }
+
+                UseAct(actor, target, act, sector.Map);
+            }
+
+            // Использование дополнительных действий.
+            // Используются с некоторой вероятностью.
+            foreach (var act in usedActs.Secondary)
+            {
+                var useSuccessRoll = GetUseSuccessRoll();
+                var useFactRoll = GetUseFactRoll();
+
+                if (useFactRoll < useSuccessRoll)
+                {
+                    continue;
+                }
+
+                UseAct(actor, target, act, sector.Map);
+            }
         }
     }
 }

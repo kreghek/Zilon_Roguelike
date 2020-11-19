@@ -9,16 +9,6 @@ namespace Zilon.Core.Common
     public class Range<T> where T : IComparable
     {
         /// <summary>
-        /// Минимальное значение диапазона.
-        /// </summary>
-        public T Min { get; }
-
-        /// <summary>
-        /// Максимальное значение диапазона.
-        /// </summary>
-        public T Max { get; }
-
-        /// <summary>
         /// Конструктор.
         /// </summary>
         /// <param name="min"> Минимальное значение диапазона. </param>
@@ -28,6 +18,16 @@ namespace Zilon.Core.Common
             Min = min;
             Max = max;
         }
+
+        /// <summary>
+        /// Максимальное значение диапазона.
+        /// </summary>
+        public T Max { get; }
+
+        /// <summary>
+        /// Минимальное значение диапазона.
+        /// </summary>
+        public T Min { get; }
 
         /// <summary>
         /// Проверяет вхождение указанного значения в диапазон.

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using FluentAssertions;
 
@@ -45,25 +46,26 @@ namespace Zilon.Core.Tests.Commands
         {
             // ARRANGE
             var command = ServiceProvider.GetRequiredService<OpenContainerCommand>();
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
 
             // ASSERT
-            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()));
+            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>(), It.IsAny<IActor>()));
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
         {
             if (testMap is null)
             {
-                throw new System.ArgumentNullException(nameof(testMap));
+                throw new ArgumentNullException(nameof(testMap));
             }
 
             if (playerStateMock is null)
             {
-                throw new System.ArgumentNullException(nameof(playerStateMock));
+                throw new ArgumentNullException(nameof(playerStateMock));
             }
 
             var targetMock = new Mock<IStaticObject>();

@@ -1,0 +1,82 @@
+name: Build Unity Client
+
+on:
+  pull_request:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  buildCore:
+    name: Build core libs
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        core_project:
+          - Zilon.Core
+          - Zilon.Bot.Players
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - run: dotnet publish Zilon.Core/${{ matrix.core_project }}/${{ matrix.core_project }}.csproj -c Release -f netstandard2.0 -o bin
+      - uses: actions/upload-artifact@v1
+        with:
+          name: CoreLibs
+          path: bin
+  buildForSomePlatforms:
+    name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
+    runs-on: ubuntu-latest
+    needs: buildCore
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - Zilon.Client
+        unityVersion:
+          - 2020.1.10f1
+        targetPlatform:
+          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows # Build a Windows standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: actions/checkout@v2
+        with:
+          repository: kreghek/Zilon_Roguelike_Plugins
+          path: ${{ matrix.projectPath }}/Assets/Plugins/
+      - name: Download core libs from artifatcs
+        uses: actions/download-artifact@v2
+        with:
+          name: CoreLibs
+          path: ${{ matrix.projectPath }}/Assets/Plugins
+      - uses: actions/cache@v1.1.0
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-${{ matrix.projectPath }}-
+            Library-
+      - uses: webbertakken/unity-builder@v1.5
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          versioning: None # Because this error https://github.com/webbertakken/unity-builder/issues/163
+      - uses: actions/upload-artifact@v1
+        with:
+          name: LAST.${{ matrix.targetPlatform }}
+          path: build

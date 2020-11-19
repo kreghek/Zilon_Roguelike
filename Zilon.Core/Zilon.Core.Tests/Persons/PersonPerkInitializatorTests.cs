@@ -23,12 +23,14 @@ namespace Zilon.Core.Persons.Tests
             var dice = diceMock.Object;
 
             var schemeServiceMock = new Mock<ISchemeService>();
-            var perkSchemeList = new IPerkScheme[] {
-                    new TestPerkScheme{
-                        Sid = "test",
-                        IsBuildIn = true
-                    }
-                };
+            var perkSchemeList = new IPerkScheme[]
+            {
+                new TestPerkScheme
+                {
+                    Sid = "test",
+                    IsBuildIn = true
+                }
+            };
             schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>()).Returns(perkSchemeList);
             var schemeService = schemeServiceMock.Object;
 
@@ -36,7 +38,7 @@ namespace Zilon.Core.Persons.Tests
 
             // ACT
 
-            var factPerks = perkInitializator.Get();
+            var factPerks = perkInitializator.Generate();
 
             // ASSERT
 

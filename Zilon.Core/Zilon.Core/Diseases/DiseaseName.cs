@@ -47,14 +47,15 @@ namespace Zilon.Core.Diseases
             return obj is DiseaseName name && Equals(name);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1407:ArithmeticExpressionsMustDeclarePrecedence",
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules",
+            "SA1407:ArithmeticExpressionsMustDeclarePrecedence",
             Justification = "Автогенерируемый код расчёта хэша. Так принято.")]
         public override int GetHashCode()
         {
             var hashCode = -2010629649;
-            hashCode = hashCode * -1521134295 + EqualityComparer<ILocalizedString>.Default.GetHashCode(Primary);
-            hashCode = hashCode * -1521134295 + EqualityComparer<ILocalizedString>.Default.GetHashCode(PrimaryPrefix);
-            hashCode = hashCode * -1521134295 + EqualityComparer<ILocalizedString>.Default.GetHashCode(Secondary);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<ILocalizedString>.Default.GetHashCode(Primary);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<ILocalizedString>.Default.GetHashCode(PrimaryPrefix);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<ILocalizedString>.Default.GetHashCode(Secondary);
             return hashCode;
         }
 

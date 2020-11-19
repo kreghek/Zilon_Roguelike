@@ -4,6 +4,6 @@ namespace Zilon.Core.PersonGeneration
 {
     public interface IPersonFactory
     {
-        IPerson Create(string personSchemeSid);
+        IPerson Create(string personSchemeSid, IFraction fraction);
     }
 }

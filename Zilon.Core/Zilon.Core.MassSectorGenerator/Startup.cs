@@ -8,8 +8,8 @@ namespace Zilon.Core.MassSectorGenerator
 {
     public class Startup : InitializationBase
     {
-        public Startup(int diceSeed): base(diceSeed)
-        { 
+        public Startup(int diceSeed) : base(diceSeed)
+        {
         }
 
         public override void ConfigureAux(IServiceProvider serviceFactory)

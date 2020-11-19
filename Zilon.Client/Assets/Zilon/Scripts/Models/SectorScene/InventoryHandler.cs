@@ -337,6 +337,6 @@ public class InventoryHandler : MonoBehaviour
 
     public void ReadButton_Handler()
     {
-       // Эта кнопка не делает ничего, пока не будут введены свитки и книги
+        // Эта кнопка не делает ничего, пока не будут введены свитки и книги
     }
 }

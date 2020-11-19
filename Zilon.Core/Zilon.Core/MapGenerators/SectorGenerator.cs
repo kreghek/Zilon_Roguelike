@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -14,38 +13,47 @@ namespace Zilon.Core.MapGenerators
     /// <seealso cref="ISectorGenerator" />
     public class SectorGenerator : ISectorGenerator
     {
-        private readonly IStaticObstaclesGenerator _staticObstaclesGenerator;
         private readonly IDiseaseGenerator _diseaseGenerator;
-        private readonly IBotPlayer _botPlayer;
-        private readonly IResourceMaterializationMap _resourceMaterializationMap;
         private readonly IMapFactorySelector _mapFactorySelector;
-        private readonly ISectorFactory _sectorFactory;
         private readonly IMonsterGenerator _monsterGenerator;
+        private readonly IResourceMaterializationMap _resourceMaterializationMap;
+        private readonly ISectorFactory _sectorFactory;
+        private readonly IStaticObstaclesGenerator _staticObstaclesGenerator;
 
         /// <summary>
-        /// Создаёт экземпляр <see cref="SectorGenerator"/>.
+        /// Создаёт экземпляр <see cref="SectorGenerator" />.
         /// </summary>
         /// <param name="mapFactorySelector"> Сервис для выбора фабрики для создания карты. </param>
         /// <param name="sectorFactory"> Фабрика сектора. </param>
         /// <param name="monsterGenerator"> Генератор монстров для подземелий. </param>
-        /// <param name="chestGenerator"> Генератор сундуков для подземеоий </param>
-        /// <param name="botPlayer"> Игрок, управляющий монстрами, мирными жителями. </param>
         public SectorGenerator(
             IMapFactorySelector mapFactorySelector,
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
             IStaticObstaclesGenerator staticObstaclesGenerator,
             IDiseaseGenerator diseaseGenerator,
-            IBotPlayer botPlayer,
             IResourceMaterializationMap resourceMaterializationMap)
         {
             _mapFactorySelector = mapFactorySelector ?? throw new ArgumentNullException(nameof(mapFactorySelector));
             _sectorFactory = sectorFactory ?? throw new ArgumentNullException(nameof(sectorFactory));
             _monsterGenerator = monsterGenerator ?? throw new ArgumentNullException(nameof(monsterGenerator));
-            _staticObstaclesGenerator = staticObstaclesGenerator ?? throw new ArgumentNullException(nameof(staticObstaclesGenerator));
+            _staticObstaclesGenerator = staticObstaclesGenerator ??
+                                        throw new ArgumentNullException(nameof(staticObstaclesGenerator));
             _diseaseGenerator = diseaseGenerator ?? throw new ArgumentNullException(nameof(diseaseGenerator));
-            _botPlayer = botPlayer ?? throw new ArgumentNullException(nameof(botPlayer));
-            _resourceMaterializationMap = resourceMaterializationMap ?? throw new ArgumentNullException(nameof(resourceMaterializationMap));
+            _resourceMaterializationMap = resourceMaterializationMap ??
+                                          throw new ArgumentNullException(nameof(resourceMaterializationMap));
+        }
+
+        private void DefineDiseases(ISector sector)
+        {
+            var disease = _diseaseGenerator.Create();
+
+            if (disease is null)
+            {
+                return;
+            }
+
+            sector.AddDisease(disease);
         }
 
         /// <summary>
@@ -64,7 +72,8 @@ namespace Zilon.Core.MapGenerators
 
             var transitions = MapFactoryHelper.CreateTransitions(sectorNode);
 
-            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorNode.SectorScheme.MapGeneratorOptions, transitions);
+            var sectorFactoryOptions =
+                new SectorMapFactoryOptions(sectorNode.SectorScheme.MapGeneratorOptions, transitions);
 
             var map = await mapFactory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
 
@@ -80,29 +89,17 @@ namespace Zilon.Core.MapGenerators
 
             var resourceDepositData = _resourceMaterializationMap.GetDepositData(sectorNode);
 
-            var staticObjectgenerationContext = new StaticObjectGenerationContext(sector, sectorScheme, resourceDepositData);
+            var staticObjectgenerationContext =
+                new StaticObjectGenerationContext(sector, sectorScheme, resourceDepositData);
 
             await _staticObstaclesGenerator.CreateAsync(staticObjectgenerationContext).ConfigureAwait(false);
 
             var monsterRegions = gameObjectRegions.ToArray();
             _monsterGenerator.CreateMonsters(sector,
-                _botPlayer,
                 monsterRegions,
                 sectorScheme);
 
             return sector;
-        }
-
-        private void DefineDiseases(ISector sector)
-        {
-            var disease = _diseaseGenerator.Create();
-
-            if (disease is null)
-            {
-                return;
-            }
-
-            sector.AddDisease(disease);
         }
     }
 }

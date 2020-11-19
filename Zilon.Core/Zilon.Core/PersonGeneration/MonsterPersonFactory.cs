@@ -30,8 +30,8 @@ namespace Zilon.Core.PersonGeneration
                 .ToArray();
 
             var defenceStats = new PersonDefenceStats(
-                    defenses ?? Array.Empty<PersonDefenceItem>(),
-                    Array.Empty<PersonArmorItem>());
+                defenses ?? Array.Empty<PersonDefenceItem>(),
+                Array.Empty<PersonArmorItem>());
 
             var combatStatsModule = new MonsterCombatStatsModule(defenceStats);
             monsterPerson.AddModule(combatStatsModule);

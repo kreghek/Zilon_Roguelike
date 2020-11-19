@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Graphs;
@@ -19,11 +17,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     /// </summary>
     public sealed class CellularAutomatonMapFactory : IMapFactory
     {
-        private const int SIMULATION_COUNT = 2;
-        private const int DEATH_LIMIT = 4;
-        private const int BIRTH_LIMIT = 6;
-        private const int RETRY_LIMIT = 3;
-
+        private const int RETRY_MAX_COUNT = 3;
         private readonly IDice _dice;
 
         /// <summary>
@@ -35,111 +29,68 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             _dice = dice;
         }
 
-        /// <inheritdoc/>
-        public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
-        {
-            if (generationOptions is null)
-            {
-                throw new ArgumentNullException(nameof(generationOptions));
-            }
-
-            var transitions = generationOptions.Transitions;
-
-            var cellularAutomatonOptions = (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
-            if (cellularAutomatonOptions == null)
-            {
-                throw new ArgumentException($"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
-            }
-
-            var matrixWidth = cellularAutomatonOptions.MapWidth;
-            var matrixHeight = cellularAutomatonOptions.MapHeight;
-
-            var chanceToStartAlive = cellularAutomatonOptions.ChanceToStartAlive;
-
-            var targetRegionDraftCount = transitions.Count() + 1;
-            var createResult = CreateInner(
-                targetRegionDraftCount,
-                chanceToStartAlive,
-                matrixWidth,
-                matrixHeight);
-
-            var matrix = createResult.Matrix;
-            var draftRegions = createResult.Regions;
-
-            var map = CreateSectorMap(matrix, draftRegions, transitions);
-
-            return Task.FromResult(map);
-        }
-
-        //TODO Придумать название метода получше
-        private CreateMatrixResult CreateInner(int targetRegionDraftCount, int chanceToStartAlive, int matrixWidth, int matrixHeight)
-        {
-            var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
-
-            for (var retry = 0; retry < RETRY_LIMIT; retry++)
-            {
-                InitStartAliveMatrix(matrix, chanceToStartAlive);
-
-                // Несколько шагов симуляции
-                for (var i = 0; i < SIMULATION_COUNT; i++)
-                {
-                    var newMap = DoSimulationStep(matrix);
-                    matrix = new Matrix<bool>(newMap.Items, matrix.Width, matrix.Height);
-                }
-
-                var resizedMatrix = MapFactoryHelper.ResizeMatrixTo7(matrix);
-
-                var matrixWithMargins = resizedMatrix.CreateMatrixWithMargins(2, 2);
-
-                RegionDraft[] draftRegions;
-                try
-                {
-                    draftRegions = MakeUnitedRegions(matrixWithMargins);
-                }
-                catch (CellularAutomatonException)
-                {
-                    // Это означает, что при текущих стартовых данных невозможно создать подходящую карту.
-                    // Запускаем следующую итерацю.
-                    continue;
-                }
-
-                // Обрабатываем ситуацию, когда на карте тегионов меньше, чем переходов.
-                // На карте должно быть минимум столько регионов, сколько переходов.
-                // +1 - это регион старта.
-                if (draftRegions.Length < targetRegionDraftCount)
-                {
-                    try
-                    {
-                        var splittedDraftRegions = SplitRegionsForTransitions(draftRegions, targetRegionDraftCount);
-
-                        // Разделение успешно выполнено.
-                        // Пропускаем карту дальше.
-                        var result = new CreateMatrixResult(matrixWithMargins, splittedDraftRegions);
-                        return result;
-                    }
-                    catch (CellularAutomatonException)
-                    {
-                        // Это означает, что при текущих стартовых данных невозможно создать подходящую карту.
-                        // Запускаем следующую итерацю.
-                        continue;
-                    }
-                }
-                else
-                {
-                    var result = new CreateMatrixResult(matrixWithMargins, draftRegions);
-                    return result;
-                }
-            }
-
-            // Если цикл закончился, значит вышел лимит попыток.
-            throw new InvalidOperationException("Не удалось создать карту за предельное число попыток.");
-        }
-
-        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions, IEnumerable<RoomTransition> transitions)
+        private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions,
+            IEnumerable<RoomTransition> transitions)
         {
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
 
+            FillMapRegions(draftRegions, map);
+
+            MapDraftRegionsToSectorMap(matrix, draftRegions, map);
+
+            // Размещаем переходы и отмечаем стартовую комнату.
+            // Общее описание: стараемся размещать переходы в самых маленьких комнатах.
+            // Для этого сортируем все комнаты по размеру.
+            // Первую занимаем под старт.
+            // Последующие - это переходы.
+
+            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Length).ToArray();
+
+            if (regionOrderedBySize.Any())
+            {
+                CreateTransitionInSmallestRegion(transitions, map, regionOrderedBySize);
+            }
+
+            return map;
+        }
+
+        private static void CreateTransitionInSmallestRegion(IEnumerable<RoomTransition> transitions, ISectorMap map,
+            MapRegion[] regionOrderedBySize)
+        {
+            var startRegion = regionOrderedBySize.First();
+            startRegion.IsStart = true;
+
+            var transitionArray = transitions.ToArray();
+            // Пропускаем 1, потому что 1 занять стартом.
+            var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
+
+            Debug.Assert(trasitionRegionDrafts.Length >= transitionArray.Length,
+                "Должно быть достаточно регионов для размещения всех переходов.");
+
+            for (var i = 0; i < transitionArray.Length; i++)
+            {
+                var transitionRegion = trasitionRegionDrafts[i];
+
+                var transition = transitionArray[i];
+
+                var transitionNode = transitionRegion.Nodes.First();
+
+                map.Transitions.Add(transitionNode, transition);
+
+                if (transition.SectorNode == null)
+                {
+                    transitionRegion.IsOut = true;
+                }
+
+                transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
+                                              where map.Transitions.Keys.Contains(regionNode)
+                                              select regionNode).ToArray();
+            }
+        }
+
+        private static void FillMapRegions(RegionDraft[] draftRegions, ISectorMap map)
+        {
             var regionIdCounter = 1;
             foreach (var draftRegion in draftRegions)
             {
@@ -159,153 +110,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
                 regionIdCounter++;
             }
-
-            MapDraftRegionsToSectorMap(matrix, draftRegions, map);
-
-            // Размещаем переходы и отмечаем стартовую комнату.
-            // Общее описание: стараемся размещать переходы в самых маленьких комнатах.
-            // Для этого сортируем все комнаты по размеру.
-            // Первую занимаем под старт.
-            // Последующие - это переходы.
-
-            var regionOrderedBySize = map.Regions.OrderBy(x => x.Nodes.Length).ToArray();
-
-            if (regionOrderedBySize.Any())
-            {
-                var startRegion = regionOrderedBySize.First();
-                startRegion.IsStart = true;
-
-                var transitionArray = transitions.ToArray();
-                // Пропускаем 1, потому что 1 занять стартом.
-                var trasitionRegionDrafts = regionOrderedBySize.Skip(1).ToArray();
-
-                Debug.Assert(trasitionRegionDrafts.Length >= transitionArray.Length,
-                    "Должно быть достаточно регионов для размещения всех переходов.");
-
-                for (var i = 0; i < transitionArray.Length; i++)
-                {
-                    var transitionRegion = trasitionRegionDrafts[i];
-
-                    var transition = transitionArray[i];
-
-                    var transitionNode = transitionRegion.Nodes.First();
-
-                    map.Transitions.Add(transitionNode, transition);
-
-                    if (transition.SectorNode == null)
-                    {
-                        transitionRegion.IsOut = true;
-                    }
-
-                    transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
-                                                  where map.Transitions.Keys.Contains(regionNode)
-                                                  select regionNode).ToArray();
-                }
-            }
-
-            return map;
-        }
-
-        private void InitStartAliveMatrix(Matrix<bool> matrix, int _chanceToStartAlive)
-        {
-            for (var x = 0; x < matrix.Width; x++)
-            {
-                for (var y = 0; y < matrix.Height; y++)
-                {
-                    var blockRoll = _dice.Roll(100);
-                    if (blockRoll < _chanceToStartAlive)
-                    {
-                        matrix.Items[x, y] = true;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Метод отделяет от существующих регионов ячйки таким образом,
-        /// чтобы суммарно на карте число регионов равнялось числу переходов + 1 (за стартовый).
-        /// Сейчас все отщеплённые регионы в первую отщепляются от произвольных.
-        /// Уже одноклеточные регионы не участвуют в расщеплении.
-        /// </summary>
-        /// <param name="draftRegions"> Текущие регионы на карте. </param>
-        /// <param name="targetRegionCount"> Целевое число регионов. </param>
-        /// <returns> Возвращает новый массив черновиков регионов. </returns>
-        private RegionDraft[] SplitRegionsForTransitions(
-            [NotNull, ItemNotNull] RegionDraft[] draftRegions,
-            int targetRegionCount)
-        {
-            if (draftRegions == null)
-            {
-                throw new ArgumentNullException(nameof(draftRegions));
-            }
-
-            if (targetRegionCount <= 0)
-            {
-                throw new ArgumentException("Целевое количество регионов должно быть больше 0.", nameof(targetRegionCount));
-            }
-
-            var regionCountDiff = targetRegionCount - draftRegions.Length;
-            if (regionCountDiff <= 0)
-            {
-                return (RegionDraft[])draftRegions.Clone();
-            }
-
-            var availableSplitRegions = draftRegions.Where(x => x.Coords.Count() > 1);
-            var availableCoords = from region in availableSplitRegions
-                                  from coord in region.Coords.Skip(1)
-                                  select new RegionCoords(coord, region);
-
-            if (availableCoords.Count() < regionCountDiff)
-            {
-                // Возможна ситуация, когда в принципе клеток меньше,
-                // чем требуется регионов.
-                // Даже если делать по одной клетки на регион.
-                // В этом случае ничего сделать нельзя.
-                // Передаём проблему вызывающему коду.
-                throw new CellularAutomatonException("Невозможно расщепить регионы на достаточное количество. Клеток меньше, чем требуется.");
-            }
-
-            var openRegionCoords = new List<RegionCoords>(availableCoords);
-            var usedRegionCoords = new List<RegionCoords>();
-
-            for (var i = 0; i < regionCountDiff; i++)
-            {
-                var coordRollIndex = _dice.Roll(0, openRegionCoords.Count - 1);
-                var regionCoordPair = openRegionCoords[coordRollIndex];
-                openRegionCoords.RemoveAt(coordRollIndex);
-                usedRegionCoords.Add(regionCoordPair);
-            }
-
-            var newDraftRegionList = new List<RegionDraft>();
-            var regionGroups = usedRegionCoords.GroupBy(x => x.Region)
-                .ToDictionary(x => x.Key, x => x.AsEnumerable());
-
-            foreach (var draftRegion in draftRegions)
-            {
-                if (regionGroups.TryGetValue(draftRegion, out var splittedRegionCoords))
-                {
-                    var splittedCoords = splittedRegionCoords.Select(x => x.Coords).ToArray();
-
-                    var newCoordsOfCurrentRegion = draftRegion.Coords
-                        .Except(splittedCoords)
-                        .ToArray();
-
-                    var recreatedRegionDraft = new RegionDraft(newCoordsOfCurrentRegion);
-                    newDraftRegionList.Add(recreatedRegionDraft);
-
-                    foreach (var splittedCoord in splittedCoords)
-                    {
-                        var newRegionDraft = new RegionDraft(new[] { splittedCoord });
-                        newDraftRegionList.Add(newRegionDraft);
-                    }
-                }
-                else
-                {
-                    newDraftRegionList.Add(draftRegion);
-                }
-            }
-
-            return newDraftRegionList.ToArray();
         }
 
         /// <summary>
@@ -338,251 +142,77 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             }
         }
 
-        private static RegionDraft[] MakeUnitedRegions(Matrix<bool> matrix)
+        private static IEnumerable<RegionDraft> PostProcess(
+            IEnumerable<IRegionPostProcessor> regionPostProcessors,
+            IEnumerable<RegionDraft> regions)
         {
-            // Формирование регионов.
-            // Регионы, кроме дальнейшего размещения игровых предметов,
-            // в рамках этой генерации будут служить для обнаружения
-            // изолированных регионов.
-            // В секторе не должно быть изолированых регионов, поэтому
-            // дальше все регионы объединяются в единый граф.
-
-            var openNodes = new List<OffsetCoords>();
-            AddAllPassableNodesToOpenList(matrix, openNodes);
-
-            if (!openNodes.Any())
+            foreach (var processor in regionPostProcessors)
             {
-                throw new CellularAutomatonException("Ни одна из клеток не выжила.");
+                regions = processor.Process(regions);
             }
 
-            // Разбиваем все проходимые (true) клетки на регионы
-            // через заливку.
-            var regions = new List<RegionDraft>();
-            while (openNodes.Any())
+            return regions;
+        }
+
+        /// <inheritdoc />
+        public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
+        {
+            if (generationOptions is null)
             {
-                var openNode = openNodes.First(x => MapFactoryHelper.IsAvailableFor7(matrix, x));
-                var regionCoords = FloodFillRegions(matrix, openNode);
-                var region = new RegionDraft(regionCoords.ToArray());
-
-                openNodes.RemoveAll(x => region.Contains(x));
-
-                regions.Add(region);
+                throw new ArgumentNullException(nameof(generationOptions));
             }
 
-            // Соединяем все регионы в единый граф.
-            var openRegions = new List<RegionDraft>(regions);
-            var unitedRegions = new List<RegionDraft>();
+            var transitions = generationOptions.Transitions;
 
-            var startRegion = openRegions[0];
-            openRegions.RemoveAt(0);
-            unitedRegions.Add(startRegion);
-
-            while (openRegions.Any())
+            var cellularAutomatonOptions =
+                (ISectorCellularAutomataMapFactoryOptionsSubScheme)generationOptions.OptionsSubScheme;
+            if (cellularAutomatonOptions == null)
             {
-                var unitedRegionCoords = unitedRegions.SelectMany(x => x.Coords).ToArray();
+                throw new ArgumentException(
+                    $"Для {nameof(generationOptions)} не задано {nameof(ISectorSubScheme.MapGeneratorOptions)} равно null.");
+            }
 
-                // Ищем две самые ближние точки между объединённым регионом и 
-                // и всеми открытыми регионами.
+            var matrixWidth = cellularAutomatonOptions.MapWidth;
+            var matrixHeight = cellularAutomatonOptions.MapHeight;
 
-                FindClosestNodesBetweenOpenAndUnited(
-                    openRegions,
-                    unitedRegionCoords,
-                    out OffsetCoords? currentOpenRegionCoord,
-                    out OffsetCoords? currentUnitedRegionCoord,
-                    out RegionDraft nearbyOpenRegion);
+            var fillProbability = cellularAutomatonOptions.ChanceToStartAlive;
 
-                // Если координаты, которые нужно соединить, найдены,
-                // то прорываем тоннель.
-                if (nearbyOpenRegion != null
-                    && currentOpenRegionCoord != null
-                     && currentUnitedRegionCoord != null)
+            var cellularAutomatonGenerator = new CellularAutomatonGenerator(_dice);
+
+            var mapRuleManager = new MapRuleManager();
+            var rule = new RegionCountRule { Count = transitions.Count() + 1 };
+            mapRuleManager.AddRule(rule);
+
+            var regionPostProcessors = new IRegionPostProcessor[]
+            {
+                new SplitToTargetCountRegionPostProcessor(mapRuleManager, _dice)
+            };
+
+            for (var retryIndex = 0; retryIndex < RETRY_MAX_COUNT; retryIndex++)
+            {
+                var matrix = new Matrix<bool>(matrixWidth, matrixHeight);
+
+                var regions = cellularAutomatonGenerator.Generate(ref matrix, fillProbability, 7);
+
+                try
                 {
-                    var openCubeCoord = HexHelper.ConvertToCube(currentOpenRegionCoord.Value);
-                    var unitedCubeCoord = HexHelper.ConvertToCube(currentUnitedRegionCoord.Value);
+                    regions = PostProcess(regionPostProcessors, regions);
 
-                    DrawLineBetweenNodes(matrix, openCubeCoord, unitedCubeCoord);
+                    ClosestRegionConnector.Connect(matrix, regions);
 
-                    openRegions.Remove(nearbyOpenRegion);
-                    unitedRegions.Add(nearbyOpenRegion);
+                    var map = CreateSectorMap(matrix, regions.ToArray(), transitions);
+
+                    return Task.FromResult(map);
+                }
+                catch (CellularAutomatonException)
+                {
+                    // This means that with the current starting data it is not possible to create a suitable map.
+                    // Start the next iteration.
                 }
             }
 
-            return regions.ToArray();
-        }
-
-        private static void DrawLineBetweenNodes(Matrix<bool> matrix, CubeCoords openCubeCoord, CubeCoords unitedCubeCoord)
-        {
-            var line = CubeCoordsHelper.CubeDrawLine(openCubeCoord, unitedCubeCoord);
-            foreach (var lineItem in line)
-            {
-                var offsetCoords = HexHelper.ConvertToOffset(lineItem);
-                matrix[offsetCoords.X, offsetCoords.Y] = true;
-
-                // Коридоры должны быть размером в Size7.
-                // Поэтому вокруг каждой точки прорываем соседей.
-
-                var neighborCoords = HexHelper.GetNeighbors(offsetCoords.X, offsetCoords.Y);
-                foreach (var coords in neighborCoords)
-                {
-                    matrix[coords.X, coords.Y] = true;
-                }
-            }
-        }
-
-        private static void FindClosestNodesBetweenOpenAndUnited(List<RegionDraft> openRegions, OffsetCoords[] unitedRegionCoords, out OffsetCoords? currentOpenRegionCoord, out OffsetCoords? currentUnitedRegionCoord, out RegionDraft nearbyOpenRegion)
-        {
-            var currentDistance = int.MaxValue;
-            currentOpenRegionCoord = null;
-            currentUnitedRegionCoord = null;
-            nearbyOpenRegion = null;
-            foreach (var currentOpenRegion in openRegions)
-            {
-                foreach (var openRegionCoord in currentOpenRegion.Coords)
-                {
-                    var openCubeCoord = HexHelper.ConvertToCube(openRegionCoord);
-
-                    foreach (var unitedRegionCoord in unitedRegionCoords)
-                    {
-                        var unitedCubeCoord = HexHelper.ConvertToCube(unitedRegionCoord);
-                        var distance = openCubeCoord.DistanceTo(unitedCubeCoord);
-
-                        if (distance < currentDistance)
-                        {
-                            currentDistance = distance;
-                            currentOpenRegionCoord = openRegionCoord;
-                            currentUnitedRegionCoord = unitedRegionCoord;
-                            nearbyOpenRegion = currentOpenRegion;
-                        }
-                    }
-                }
-            }
-        }
-
-        private static void AddAllPassableNodesToOpenList(Matrix<bool> matrix, List<OffsetCoords> openNodes)
-        {
-            for (var x = 0; x < matrix.Width; x++)
-            {
-                for (var y = 0; y < matrix.Height; y++)
-                {
-                    if (matrix.Items[x, y])
-                    {
-                        openNodes.Add(new OffsetCoords(x, y));
-                    }
-                }
-            }
-        }
-
-        private static Matrix<bool> DoSimulationStep(Matrix<bool> matrix)
-        {
-            var newCellMap = new Matrix<bool>(matrix.Width, matrix.Height);
-
-            for (var x = 0; x < matrix.Width; x++)
-            {
-                for (var y = 0; y < matrix.Height; y++)
-                {
-                    var aliveCount = CountAliveNeighbours(matrix, x, y);
-
-                    if (matrix.Items[x, y])
-                    {
-                        if (aliveCount < DEATH_LIMIT)
-                        {
-                            newCellMap[x, y] = false;
-                        }
-                        else
-                        {
-                            newCellMap[x, y] = true;
-                        }
-                    } //Otherwise, if the cell is dead now, check if it has the right number of neighbours to be 'born'
-                    else
-                    {
-                        if (aliveCount > BIRTH_LIMIT)
-                        {
-                            newCellMap[x, y] = true;
-                        }
-                        else
-                        {
-                            newCellMap[x, y] = false;
-                        }
-                    }
-                }
-            }
-
-            return newCellMap;
-        }
-
-        private static int CountAliveNeighbours(Matrix<bool> matrix, int x, int y)
-        {
-            var aliveCount = 0;
-
-            var cubeCoords = HexHelper.ConvertToCube(x, y);
-            var offsetsImplicit = HexHelper.GetOffsetClockwise();
-            var offsetsDiagonal = HexHelper.GetDiagonalOffsetClockwise();
-            var offsets = offsetsImplicit.Union(offsetsDiagonal);
-            foreach (var offset in offsets)
-            {
-                var neighbour = cubeCoords + offset;
-
-                var offsetCoords = HexHelper.ConvertToOffset(neighbour);
-
-                var nX = offsetCoords.X;
-                var nY = offsetCoords.Y;
-
-                // Границу мертвым живым соседом.
-                // Сделано, чтобы углы не заполнялись.
-
-                if (nX >= 0 && nY >= 0 && nX < matrix.Width && nY < matrix.Height)
-                {
-                    if (matrix.Items[nX, nY])
-                    {
-                        aliveCount++;
-                    }
-                }
-            }
-
-            return aliveCount;
-        }
-
-        private static IEnumerable<OffsetCoords> FloodFillRegions(Matrix<bool> matrix, OffsetCoords point)
-        {
-            var regionPoints = HexBinaryFiller.FloodFill(
-                matrix,
-                point);
-
-            // В регионе должна быть хоть одна точка - стартовая.
-            // Потому что заливка начинается с выбора незалитых точек.
-            // Если этот метод не будет возращать точки, то будет бесконечный цикл.
-            // Это критично, поэтому выбрасываем исключение.
-            if (!regionPoints.Any())
-            {
-                throw new InvalidOperationException("Должна быть залита хотя бы одна точка.");
-            }
-
-            return regionPoints;
-        }
-
-        private sealed class RegionCoords
-        {
-            public RegionCoords(OffsetCoords coords, RegionDraft region)
-            {
-                Coords = coords;
-                Region = region ?? throw new ArgumentNullException(nameof(region));
-            }
-
-            public OffsetCoords Coords { get; }
-
-            public RegionDraft Region { get; }
-        }
-
-        private sealed class CreateMatrixResult
-        {
-            public CreateMatrixResult(Matrix<bool> matrix, RegionDraft[] regions)
-            {
-                Matrix = matrix ?? throw new ArgumentNullException(nameof(matrix));
-                Regions = regions ?? throw new ArgumentNullException(nameof(regions));
-            }
-
-            public Matrix<bool> Matrix { get; }
-            public RegionDraft[] Regions { get; }
+            // If the cycle has ended, then no attempt has ended with a successful map building
+            throw new InvalidOperationException("Failed to create a map within the maximum number of attempts.");
         }
     }
 }

@@ -74,9 +74,9 @@ namespace Zilon.Core
             unchecked
             {
                 var hashCode = -307843816;
-                hashCode = hashCode * -1521134295 + X.GetHashCode();
-                hashCode = hashCode * -1521134295 + Y.GetHashCode();
-                hashCode = hashCode * -1521134295 + Z.GetHashCode();
+                hashCode = (hashCode * -1521134295) + X.GetHashCode();
+                hashCode = (hashCode * -1521134295) + Y.GetHashCode();
+                hashCode = (hashCode * -1521134295) + Z.GetHashCode();
                 return hashCode;
             }
         }

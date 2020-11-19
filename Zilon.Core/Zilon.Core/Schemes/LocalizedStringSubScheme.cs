@@ -7,8 +7,14 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Локализованная на разные языки строка.
     /// </summary>
-    public sealed class LocalizedStringSubScheme: ILocalizedString
+    public sealed class LocalizedStringSubScheme : ILocalizedString
     {
+        [ExcludeFromCodeCoverage]
+        public override string ToString()
+        {
+            return $"{Ru ?? En}";
+        }
+
         /// <summary>
         /// Английский вариант.
         /// </summary>
@@ -18,11 +24,5 @@ namespace Zilon.Core.Schemes
         /// Русский вариант.
         /// </summary>
         public string Ru { get; set; }
-
-        [ExcludeFromCodeCoverage]
-        public override string ToString()
-        {
-            return $"{Ru ?? En}";
-        }
     }
 }
