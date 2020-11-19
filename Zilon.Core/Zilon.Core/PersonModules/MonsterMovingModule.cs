@@ -10,15 +10,15 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public sealed class MonsterMovingModule : IMovingModule
     {
-        private readonly IMonsterScheme _monsterScheme;
         private const int BASE_MOVE_SPEED = 1000;
+        private readonly IMonsterScheme _monsterScheme;
 
         public MonsterMovingModule(IMonsterScheme monsterScheme)
         {
             _monsterScheme = monsterScheme ?? throw new ArgumentNullException(nameof(monsterScheme));
         }
 
-        public string Key { get => nameof(IMovingModule); }
+        public string Key => nameof(IMovingModule);
         public bool IsActive { get; set; }
 
         public int CalculateCost()
@@ -28,6 +28,7 @@ namespace Zilon.Core.PersonModules
             {
                 moveSpeed = BASE_MOVE_SPEED;
             }
+
             return moveSpeed;
         }
     }
