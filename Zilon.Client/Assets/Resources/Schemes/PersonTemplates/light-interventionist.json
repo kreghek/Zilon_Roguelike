@@ -5,6 +5,7 @@
     "En": "Light Interventionist"
   },
   "BodyEquipments": {
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "quilted-coat",
@@ -13,6 +14,7 @@
     ]
   },
   "HeadEquipments": {
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "gas-mask",
@@ -21,6 +23,7 @@
     ]
   },
   "MainHandEquipments": {
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "rough-sword",

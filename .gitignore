@@ -5,3 +5,4 @@
 /Zilon.Core/*.leu
 /Builds/x64
 /Builds/x86
+/Zilon.Client/Assets/Resources/Schemes/*.meta
