@@ -70,13 +70,14 @@ jobs:
           restore-keys: |
             Library-${{ matrix.projectPath }}-
             Library-
-      - uses: webbertakken/unity-builder@v1.5
+      - uses: webbertakken/unity-builder@v2.0-aplha-5
+        id: myBuildStep
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-          versioning: None # Because this error https://github.com/webbertakken/unity-builder/issues/163
+          buildName: LAST
       - uses: actions/upload-artifact@v1
         with:
-          name: LAST.${{ matrix.targetPlatform }}
+          name: LAST.${{ matrix.targetPlatform }}.${{ steps.myBuildStep.outputs.buildVersion }}
           path: build
