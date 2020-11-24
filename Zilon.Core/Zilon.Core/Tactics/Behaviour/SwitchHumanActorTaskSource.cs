@@ -10,16 +10,19 @@ namespace Zilon.Core.Tactics.Behaviour
         Bot = 2
     }
 
-    public class SwitchHumanActorTaskSource<TContext> : IHumanActorTaskSource<TContext> where TContext : ISectorTaskSourceContext
+    public class SwitchHumanActorTaskSource<TContext> : IHumanActorTaskSource<TContext>
+        where TContext : ISectorTaskSourceContext
     {
-        private readonly IHumanActorTaskSource<TContext> _humanActorTaskSource;
         private readonly IActorTaskSource<TContext> _botActorTaskContext;
+        private readonly IHumanActorTaskSource<TContext> _humanActorTaskSource;
 
-        private ActorTaskSourceControl _taskSourceControl;
+        private readonly ActorTaskSourceControl _taskSourceControl;
 
-        public SwitchHumanActorTaskSource(IHumanActorTaskSource<TContext> humanActorTaskSource, IActorTaskSource<TContext> botActorTaskContext)
+        public SwitchHumanActorTaskSource(IHumanActorTaskSource<TContext> humanActorTaskSource,
+            IActorTaskSource<TContext> botActorTaskContext)
         {
-            _humanActorTaskSource = humanActorTaskSource ?? throw new ArgumentNullException(nameof(humanActorTaskSource));
+            _humanActorTaskSource =
+                humanActorTaskSource ?? throw new ArgumentNullException(nameof(humanActorTaskSource));
             _botActorTaskContext = botActorTaskContext ?? throw new ArgumentNullException(nameof(botActorTaskContext));
 
             _taskSourceControl = ActorTaskSourceControl.Human;
