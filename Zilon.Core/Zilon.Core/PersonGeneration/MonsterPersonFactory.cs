@@ -13,6 +13,9 @@ namespace Zilon.Core.PersonGeneration
         {
             var monsterPerson = new MonsterPerson(monsterScheme);
 
+            var movingModule = new MonsterMovingModule(monsterScheme);
+            monsterPerson.AddModule(movingModule);
+
             var Acts = new ITacticalAct[]
             {
                 new MonsterTacticalAct(monsterScheme.PrimaryAct)
