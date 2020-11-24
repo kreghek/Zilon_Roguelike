@@ -61,7 +61,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
             var biomInitializer = injectContext.Container.Resolve<IBiomeInitializer>();
             var globeTransitionHandler = injectContext.Container.Resolve<IGlobeTransitionHandler>();
             var schemeService = injectContext.Container.Resolve<ISchemeService>();
-            var humanTaskSource = injectContext.Container.Resolve<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var humanTaskSource = injectContext.Container.Resolve<IActorTaskSource<ISectorTaskSourceContext>>();
             var personInitializer = injectContext.Container.Resolve<IPersonInitializer>();
             var globeIntializer = new GlobeInitializer(biomInitializer, globeTransitionHandler, schemeService, humanTaskSource, personInitializer);
             return globeIntializer;
