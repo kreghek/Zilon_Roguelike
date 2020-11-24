@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Zilon.Core.Tactics.Behaviour
 {
     public enum ActorTaskSourceControl
-    { 
+    {
         Undefined = 0,
         Human = 1,
         Bot = 2
@@ -27,7 +27,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void CancelTask(IActorTask cancelledActorTask)
         {
-            switch(_taskSourceControl)
+            switch (_taskSourceControl)
             {
                 case ActorTaskSourceControl.Human:
                     _humanActorTaskSource.CancelTask(cancelledActorTask);
