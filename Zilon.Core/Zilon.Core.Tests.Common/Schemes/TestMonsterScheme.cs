@@ -18,5 +18,8 @@
 
         /// <inheritdoc cref="IMonsterScheme" />
         public string[] Tags { get; set; }
+
+        /// <inheritdoc />
+        public int BaseMoveSpeed { get; }
     }
 }

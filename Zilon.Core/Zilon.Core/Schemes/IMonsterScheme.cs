@@ -7,6 +7,11 @@
     public interface IMonsterScheme : IScheme
     {
         /// <summary>
+        /// Базовая скорость передвижения монстра.
+        /// </summary>
+        int BaseMoveSpeed { get; }
+
+        /// <summary>
         /// Базовые очки, начисляемые за убиство монстра.
         /// </summary>
         int BaseScore { get; }
