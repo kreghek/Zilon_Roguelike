@@ -4,7 +4,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations">
-		  <Version>2020.1.0</Version>
+		  <Version>2020.3.0</Version>
 		  <ExcludeAssets>runtime; build</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
