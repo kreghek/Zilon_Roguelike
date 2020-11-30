@@ -11,7 +11,9 @@ categories:
       - 'bugfix'
       - 'bug'
   - title: '🧰 Codebase improvements'
-    label: 'code improvement'
+    labels:
+      - 'code improvement'
+      - 'continuous integration'
 change-template: |
   ### $TITLE (#$NUMBER)
   
