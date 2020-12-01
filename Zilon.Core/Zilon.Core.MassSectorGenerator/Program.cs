@@ -200,10 +200,8 @@ namespace Zilon.Core.MassSectorGenerator
 
         private static void SaveMapAsImage(ISectorMap map, string outputPath)
         {
-            using (var bmp = MapDrawer.DrawMap(map))
-            {
-                bmp.Save(outputPath);
-            }
+            using var bmp = MapDrawer.DrawMap(map);
+            bmp.Save(outputPath);
         }
 
         private static Task SaveMapAsImageAsync(string outputPath, ISector sector)
