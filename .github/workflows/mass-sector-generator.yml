@@ -12,7 +12,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
-    - name: Generate coverage report ${{ matrix.test_csproj }}
+    - name: Start mass generator script
       env:
         ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
