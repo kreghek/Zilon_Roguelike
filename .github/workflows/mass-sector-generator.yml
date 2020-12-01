@@ -1,0 +1,20 @@
+name: Mass sector generation and validation
+
+on: push
+
+jobs:
+
+  main:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+    - name: Generate coverage report ${{ matrix.test_csproj }}
+      env:
+        ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+        DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      run: chmod +x sector_mass_generator.sh && sector_mass_generator.sh
