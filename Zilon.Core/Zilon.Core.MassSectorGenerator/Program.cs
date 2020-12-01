@@ -20,6 +20,48 @@ namespace Zilon.Core.MassSectorGenerator
             _random = new Random();
         }
 
+        public static async Task Main(string[] args)
+        {
+            var diceSeed = GetDiceSeed(args);
+            var outputPath = GetOutputPath(args);
+
+            var startUp = new Startup(diceSeed);
+            var serviceContainer = new ServiceCollection();
+
+            startUp.RegisterServices(serviceContainer);
+
+            var serviceProvider = serviceContainer.BuildServiceProvider();
+
+            var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
+
+            var sectorSchemeResult = ValidationHelper.GetSectorScheme(_random, args, schemeService);
+
+            var biome = new Biome(sectorSchemeResult.LocationScheme);
+            var sectorNode = new SectorNode(biome, sectorSchemeResult.SectorScheme);
+            biome.AddNode(sectorNode);
+
+            var nextCount = 3;
+            for (var i = 0; i < nextCount; i++)
+            {
+                var nextSectorNode = new SectorNode(biome, sectorSchemeResult.SectorScheme);
+                biome.AddNode(nextSectorNode);
+                biome.AddEdge(sectorNode, nextSectorNode);
+            }
+
+            var sectorFactory = serviceProvider.GetRequiredService<ISectorGenerator>();
+            var sector = await sectorFactory.GenerateAsync(sectorNode).ConfigureAwait(false);
+            sector.Scheme = sectorSchemeResult.LocationScheme;
+
+            // Проверка
+
+            var sectorValidators = ValidatorCollector.GetValidatorsInAssembly();
+            var checkTask = ValidationHelper.CheckSectorAsync(sectorValidators, serviceProvider, sector);
+
+            var saveTask = ImageHelper.SaveMapAsImageAsync(outputPath, sector);
+
+            await Task.WhenAll(checkTask, saveTask).ConfigureAwait(false);
+        }
+
         private static int GetDiceSeed(string[] args)
         {
             var diceSeedString = ArgumentHelper.GetProgramArgument(args, Args.DICE_SEED_ARG_NAME);
@@ -61,48 +103,6 @@ namespace Zilon.Core.MassSectorGenerator
             }
 
             return outputPath;
-        }
-
-        public static async Task Main(string[] args)
-        {
-            var diceSeed = GetDiceSeed(args);
-            var outputPath = GetOutputPath(args);
-
-            var startUp = new Startup(diceSeed);
-            var serviceContainer = new ServiceCollection();
-
-            startUp.RegisterServices(serviceContainer);
-
-            var serviceProvider = serviceContainer.BuildServiceProvider();
-
-            var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
-
-            var sectorSchemeResult = ValidationHelper.GetSectorScheme(_random, args, schemeService);
-
-            var biome = new Biome(sectorSchemeResult.LocationScheme);
-            var sectorNode = new SectorNode(biome, sectorSchemeResult.SectorScheme);
-            biome.AddNode(sectorNode);
-
-            var nextCount = 3;
-            for (var i = 0; i < nextCount; i++)
-            {
-                var nextSectorNode = new SectorNode(biome, sectorSchemeResult.SectorScheme);
-                biome.AddNode(nextSectorNode);
-                biome.AddEdge(sectorNode, nextSectorNode);
-            }
-
-            var sectorFactory = serviceProvider.GetRequiredService<ISectorGenerator>();
-            var sector = await sectorFactory.GenerateAsync(sectorNode).ConfigureAwait(false);
-            sector.Scheme = sectorSchemeResult.LocationScheme;
-
-            // Проверка
-
-            var sectorValidators = ValidatorCollector.GetValidatorsInAssembly();
-            var checkTask = ValidationHelper.CheckSectorAsync(sectorValidators, serviceProvider, sector);
-
-            var saveTask = ImageHelper.SaveMapAsImageAsync(outputPath, sector);
-
-            await Task.WhenAll(checkTask, saveTask).ConfigureAwait(false);
         }
     }
 }

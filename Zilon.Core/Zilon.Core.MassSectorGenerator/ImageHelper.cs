@@ -7,12 +7,6 @@ namespace Zilon.Core.MassSectorGenerator
 {
     internal class ImageHelper
     {
-        private static void SaveMapAsImage(ISectorMap map, string outputPath)
-        {
-            using var bmp = MapDrawer.DrawMap(map);
-            bmp.Save(outputPath);
-        }
-
         public static Task SaveMapAsImageAsync(string outputPath, ISector sector)
         {
             if (outputPath != null)
@@ -21,6 +15,12 @@ namespace Zilon.Core.MassSectorGenerator
             }
 
             return Task.CompletedTask;
+        }
+
+        private static void SaveMapAsImage(ISectorMap map, string outputPath)
+        {
+            using var bmp = MapDrawer.DrawMap(map);
+            bmp.Save(outputPath);
         }
     }
 }
