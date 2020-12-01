@@ -90,7 +90,7 @@ namespace Zilon.Core.MassSectorGenerator
                 biome.AddNode(nextSectorNode);
                 biome.AddEdge(sectorNode, nextSectorNode);
             }
-                
+
             var sectorFactory = serviceProvider.GetRequiredService<ISectorGenerator>();
             var sector = await sectorFactory.GenerateAsync(sectorNode).ConfigureAwait(false);
             sector.Scheme = sectorSchemeResult.LocationScheme;
