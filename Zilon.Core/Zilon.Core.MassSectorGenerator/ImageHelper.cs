@@ -11,10 +11,10 @@ namespace Zilon.Core.MassSectorGenerator
         {
             if (outputPath is null)
             {
-                throw new ArgumentNullException(nameof(outputPath)) ;
+                throw new ArgumentNullException(nameof(outputPath));
             }
 
-            return Task.Run(()=>SaveMapAsImage(sector.Map, outputPath));
+            return Task.Run(() => SaveMapAsImage(sector.Map, outputPath));
         }
 
         private static void SaveMapAsImage(ISectorMap map, string outputPath)
