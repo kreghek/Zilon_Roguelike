@@ -5,7 +5,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MassSectorGenerator
 {
-    internal class ImageHelper
+    internal static class ImageHelper
     {
         public static Task SaveMapAsImageAsync(string outputPath, ISector sector)
         {
