@@ -9,12 +9,12 @@ namespace Zilon.Core.MassSectorGenerator
     {
         public static Task SaveMapAsImageAsync(string outputPath, ISector sector)
         {
-            if (outputPath != null)
+            if (outputPath is null)
             {
-                SaveMapAsImage(sector.Map, outputPath);
+                throw new ArgumentNullException(nameof(outputPath)) ;
             }
 
-            return Task.CompletedTask;
+            return Task.Run(()=>SaveMapAsImage(sector.Map, outputPath));
         }
 
         private static void SaveMapAsImage(ISectorMap map, string outputPath)
