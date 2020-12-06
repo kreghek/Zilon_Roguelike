@@ -1,0 +1,97 @@
+version: 1
+update_configs:
+  - package_manager: "dotnet:nuget"
+    directory: "/Zilon.Core"
+    update_schedule: "weekly"
+
+Applied config from .dependabot/config.yml:
+
+---
+update_configs:
+- directory: "/Zilon.Core"
+  package_manager: dotnet:nuget
+  update_schedule: weekly
+In addition, the following defaults have been applied:
+
+---
+allowed_updates:
+- match:
+    update_type: all
+    dependency_type: direct
+- match:
+    update_type: security
+    dependency_type: indirect
+automerged_updates: []
+default_assignees: []
+default_labels:
+- dependencies
+default_reviewers: []
+ignored_updates:
+- match:
+    dependency_name: Microsoft.CodeAnalysis.Analyzers
+    version_requirement: "> 2.6.1"
+- match:
+    dependency_name: Microsoft.CodeAnalysis.Common
+    version_requirement: "> 2.9.0"
+- match:
+    dependency_name: Microsoft.CodeAnalysis.CSharp
+    version_requirement: "> 2.9.0"
+- match:
+    dependency_name: Microsoft.CodeAnalysis.VersionCheckAnalyzer
+    version_requirement: "> 2.9.3"
+- match:
+    dependency_name: Microsoft.DotNet.PlatformAbstractions
+    version_requirement: "> 2.1.0"
+- match:
+    dependency_name: Microsoft.NetFramework.Analyzers
+    version_requirement: "> 2.9.3"
+- match:
+    dependency_name: System.Management
+    version_requirement: "> 4.5.0"
+- match:
+    dependency_name: System.Runtime.Extensions
+    version_requirement: "> 4.3.0"
+target_branch: master
+
+
+
+
+Update config file (beta)
+
+Dependabot is moving natively into GitHub, and we need a quick update from you to finish the move! Click "Create pull request" to open a pull request on Zilon_Roguelike with an updated config file. When you merge the pull request, we'll swap outdependabot-preview for a new dependabot app, and you'll be all set.
+
+The pull request removes the existing config file and adds a new one in.github/dependabot.yml. The config file uses the new syntax:
+
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/Zilon.Core"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: Microsoft.CodeAnalysis.Analyzers
+    versions:
+    - "> 2.6.1"
+  - dependency-name: Microsoft.CodeAnalysis.Common
+    versions:
+    - "> 2.9.0"
+  - dependency-name: Microsoft.CodeAnalysis.CSharp
+    versions:
+    - "> 2.9.0"
+  - dependency-name: Microsoft.CodeAnalysis.VersionCheckAnalyzer
+    versions:
+    - "> 2.9.3"
+  - dependency-name: Microsoft.DotNet.PlatformAbstractions
+    versions:
+    - "> 2.1.0"
+  - dependency-name: Microsoft.NetFramework.Analyzers
+    versions:
+    - "> 2.9.3"
+  - dependency-name: System.Management
+    versions:
+    - "> 4.5.0"
+  - dependency-name: System.Runtime.Extensions
+    versions:
+    - "> 4.3.0"
+
