@@ -73,7 +73,8 @@ namespace Zilon.Core.Specs.Steps
 
         [UsedImplicitly]
         [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
-        public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int monsterId, int x, int y)
+        [Given(@"the monster with class (.*) and Id:(.*) in the map node \((.*), (.*)\)")]
+        public void GivenMonsterWithClassAndIdInMapNode(string monsterSid, int monsterId, int x, int y)
         {
             var sector = Context.Globe.SectorNodes.First().Sector;
             Context.AddMonsterActor(monsterSid, monsterId, sector, new OffsetCoords(x, y));
@@ -84,7 +85,12 @@ namespace Zilon.Core.Specs.Steps
         public void GivenЕстьСундукВЯчейке(int id, int offsetX, int offsetY)
         {
             var coords = new OffsetCoords(offsetX, offsetY);
-            Context.AddChest(id, coords);
+
+            var staticObject = Context.AddStaticObject(id, Tactics.PropContainerPurpose.Treasures, coords);
+
+            var chest = new FixedPropChest(Array.Empty<IProp>());
+
+            staticObject.AddModule<IPropContainer>(chest);
         }
 
         [UsedImplicitly]

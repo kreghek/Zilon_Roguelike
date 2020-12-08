@@ -14,6 +14,7 @@ using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -52,14 +53,11 @@ namespace Zilon.Core.Specs.Contexts
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
-            var sector = GetCurrentGlobeFirstSector();
-
-            var node = sector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
             var chest = new FixedPropChest(Array.Empty<IProp>());
-            var staticObject = new StaticObject(node, chest.Purpose, id);
-            staticObject.AddModule<IPropContainer>(chest);
 
-            sector.StaticObjectManager.Add(staticObject);
+            var staticObject = AddStaticObject(id, chest.Purpose, nodeCoords);
+
+            staticObject.AddModule<IPropContainer>(chest);
 
             return chest;
         }
@@ -107,6 +105,38 @@ namespace Zilon.Core.Specs.Contexts
             monster.Person.Id = monsterId;
 
             actorManager.Add(monster);
+        }
+
+        public IStaticObject AddStaticObject(int staticObjectId, PropContainerPurpose purpose, OffsetCoords coords)
+        {
+            var sector = Globe.SectorNodes.First().Sector;
+
+            var staticObjectNode = sector.Map.Nodes.SelectByHexCoords(coords.X, coords.Y);
+
+            var factory = GetFactoryByPurpose(purpose);
+
+            var staticObject = factory.Create(sector, staticObjectNode, staticObjectId);
+
+            return staticObject;
+        }
+
+        private IStaticObjectFactory GetFactoryByPurpose(PropContainerPurpose purpose)
+        {
+            var staticObjectFactoryCollector = ServiceProvider.GetRequiredService<IStaticObjectFactoryCollector>();
+
+            var factories = staticObjectFactoryCollector.GetFactories();
+
+            foreach (var factory in factories)
+            {
+                if (factory.Purpose != purpose)
+                {
+                    continue;
+                }
+
+                return factory;
+            }
+
+            return null;
         }
 
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
@@ -197,6 +227,18 @@ namespace Zilon.Core.Specs.Contexts
                 .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
 
             return monster;
+        }
+
+        public IStaticObject GetStaticObjectById(int id)
+        {
+            var sector = GetCurrentGlobeFirstSector();
+
+            var staticObjectManager = sector.StaticObjectManager;
+
+            var staticObject = staticObjectManager.Items
+                .SingleOrDefault(x => x.Id == id);
+
+            return staticObject;
         }
 
         private void Configure(IServiceProvider serviceProvider)
