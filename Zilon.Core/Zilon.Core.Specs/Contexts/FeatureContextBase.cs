@@ -107,38 +107,6 @@ namespace Zilon.Core.Specs.Contexts
             actorManager.Add(monster);
         }
 
-        public IStaticObject AddStaticObject(int staticObjectId, PropContainerPurpose purpose, OffsetCoords coords)
-        {
-            var sector = Globe.SectorNodes.First().Sector;
-
-            var staticObjectNode = sector.Map.Nodes.SelectByHexCoords(coords.X, coords.Y);
-
-            var factory = GetFactoryByPurpose(purpose);
-
-            var staticObject = factory.Create(sector, staticObjectNode, staticObjectId);
-
-            return staticObject;
-        }
-
-        private IStaticObjectFactory GetFactoryByPurpose(PropContainerPurpose purpose)
-        {
-            var staticObjectFactoryCollector = ServiceProvider.GetRequiredService<IStaticObjectFactoryCollector>();
-
-            var factories = staticObjectFactoryCollector.GetFactories();
-
-            foreach (var factory in factories)
-            {
-                if (factory.Purpose != purpose)
-                {
-                    continue;
-                }
-
-                return factory;
-            }
-
-            return null;
-        }
-
         public void AddResourceToActor(string resourceSid, int count, IActor actor)
         {
             var schemeService = ServiceProvider.GetRequiredService<ISchemeService>();
@@ -158,6 +126,19 @@ namespace Zilon.Core.Specs.Contexts
             var resource = new Resource(resourceScheme, count);
 
             actor.Person.GetModule<IInventoryModule>().Add(resource);
+        }
+
+        public IStaticObject AddStaticObject(int staticObjectId, PropContainerPurpose purpose, OffsetCoords coords)
+        {
+            var sector = Globe.SectorNodes.First().Sector;
+
+            var staticObjectNode = sector.Map.Nodes.SelectByHexCoords(coords.X, coords.Y);
+
+            var factory = GetFactoryByPurpose(purpose);
+
+            var staticObject = factory.Create(sector, staticObjectNode, staticObjectId);
+
+            return staticObject;
         }
 
         public void AddWall(int x1, int y1, int x2, int y2)
@@ -285,6 +266,25 @@ namespace Zilon.Core.Specs.Contexts
         private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
         {
             RaisedActorInteractionEvents.Add(e.ActorInteractionEvent);
+        }
+
+        private IStaticObjectFactory GetFactoryByPurpose(PropContainerPurpose purpose)
+        {
+            var staticObjectFactoryCollector = ServiceProvider.GetRequiredService<IStaticObjectFactoryCollector>();
+
+            var factories = staticObjectFactoryCollector.GetFactories();
+
+            foreach (var factory in factories)
+            {
+                if (factory.Purpose != purpose)
+                {
+                    continue;
+                }
+
+                return factory;
+            }
+
+            return null;
         }
 
         public class VisualEventInfo

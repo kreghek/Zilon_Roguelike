@@ -38,6 +38,15 @@ namespace Zilon.Core.Specs.Steps
             _ = Context.AddStaticObject(staticObjectId, PropContainerPurpose.OreDeposits, coords);
         }
 
+        [Then(@"Объект Id:(.*) уничтожен")]
+        public void ThenОбъектIdУничтожен(int id)
+        {
+            var sector = Context.Globe.SectorNodes.First().Sector;
+            var staticObject = sector.StaticObjectManager.Items.SingleOrDefault(x => x.Id == id);
+
+            staticObject.Should().BeNull();
+        }
+
         [When(@"Актёр игрока атакует объект Id:(.*)")]
         public void WhenPlayerPersonAttacksObjectWithId(int targetId)
         {
@@ -55,15 +64,6 @@ namespace Zilon.Core.Specs.Steps
             playerState.TacticalAct = GetUsedActs(playerState.ActiveActor.Actor).First();
 
             attackCommand.Execute();
-        }
-
-        [Then(@"Объект Id:(.*) уничтожен")]
-        public void ThenОбъектIdУничтожен(int id)
-        {
-            var sector = Context.Globe.SectorNodes.First().Sector;
-            var staticObject = sector.StaticObjectManager.Items.SingleOrDefault(x => x.Id == id);
-
-            staticObject.Should().BeNull();
         }
 
 

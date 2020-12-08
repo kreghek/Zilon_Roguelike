@@ -20,6 +20,7 @@ using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.StaticObjectModules;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.World;
@@ -39,6 +40,15 @@ namespace Zilon.Core.Specs.Steps
         [UsedImplicitly]
         public CommonSteps(CommonGameActionsContext context) : base(context)
         {
+        }
+
+        [UsedImplicitly]
+        [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
+        [Given(@"the monster with class (.*) and Id:(.*) in the map node \((.*), (.*)\)")]
+        public void GivenMonsterWithClassAndIdInMapNode(string monsterSid, int monsterId, int x, int y)
+        {
+            var sector = Context.Globe.SectorNodes.First().Sector;
+            Context.AddMonsterActor(monsterSid, monsterId, sector, new OffsetCoords(x, y));
         }
 
         [UsedImplicitly]
@@ -72,21 +82,12 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
-        [Given(@"the monster with class (.*) and Id:(.*) in the map node \((.*), (.*)\)")]
-        public void GivenMonsterWithClassAndIdInMapNode(string monsterSid, int monsterId, int x, int y)
-        {
-            var sector = Context.Globe.SectorNodes.First().Sector;
-            Context.AddMonsterActor(monsterSid, monsterId, sector, new OffsetCoords(x, y));
-        }
-
-        [UsedImplicitly]
         [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьСундукВЯчейке(int id, int offsetX, int offsetY)
         {
             var coords = new OffsetCoords(offsetX, offsetY);
 
-            var staticObject = Context.AddStaticObject(id, Tactics.PropContainerPurpose.Treasures, coords);
+            var staticObject = Context.AddStaticObject(id, PropContainerPurpose.Treasures, coords);
 
             var chest = new FixedPropChest(Array.Empty<IProp>());
 
