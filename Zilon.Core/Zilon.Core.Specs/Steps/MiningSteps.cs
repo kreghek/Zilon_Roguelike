@@ -24,7 +24,7 @@ namespace Zilon.Core.Specs.Steps
 {
     [UsedImplicitly]
     [Binding]
-    public sealed class MiningSteps: GenericStepsBase<CommonGameActionsContext>
+    public sealed class MiningSteps : GenericStepsBase<CommonGameActionsContext>
     {
         public MiningSteps(CommonGameActionsContext context) : base(context)
         {
