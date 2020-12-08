@@ -35,7 +35,7 @@ GamePlay Video
 Это нужно для запуска тестов в *Zilon.Core*. Путь должен быть полным. Например, `C:\MyProjects\Zilon_Roguelike` для Windows и `/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes` для Linux.
 
 4. *Не обязательно*. **Установить расширение Specflow for Visual Studio 2019**.
-Это нужно для удобства при разработке спецификаций, написанных на *Gherkin*. К сожалению, нет способа избежать ручной установки. Самый простой путь - это найти расширение в `Visual Studio / Tools / manage Extensions`
+Это нужно для удобства при разработке спецификаций, написанных на *Gherkin*. К сожалению, нет способа избежать ручной установки. Самый простой путь - это найти расширение в `Visual Studio / Extensions / Manage Extensions`
 
 ## Контрибьюция
 
