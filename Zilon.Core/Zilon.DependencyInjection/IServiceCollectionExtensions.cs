@@ -17,7 +17,8 @@ namespace Zilon.DependencyInjection
             });
 
             var coreAssembly = typeof(IStaticObjectFactory).Assembly;
-            var allStaticObjectFactoryTypes = ImplementationGatheringHelper.GetImplementations<IStaticObjectFactory>(coreAssembly);
+            var allStaticObjectFactoryTypes =
+                ImplementationGatheringHelper.GetImplementations<IStaticObjectFactory>(coreAssembly);
             foreach (var factoryType in allStaticObjectFactoryTypes)
             {
                 serviceRegistry.AddSingleton(typeof(IStaticObjectFactory), factoryType);
