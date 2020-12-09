@@ -87,11 +87,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var coords = new OffsetCoords(offsetX, offsetY);
 
-            var staticObject = Context.AddStaticObject(id, PropContainerPurpose.Treasures, coords);
-
-            var chest = new FixedPropChest(Array.Empty<IProp>());
-
-            staticObject.AddModule<IPropContainer>(chest);
+            Context.AddChest(id, coords);
         }
 
         [UsedImplicitly]

@@ -11,5 +11,7 @@ namespace Zilon.Core.StaticObjectModules
         void Destroy();
 
         event EventHandler Destroyed;
+
+        bool IsParentStaticObjectDestroyed { get; }
     }
 }
