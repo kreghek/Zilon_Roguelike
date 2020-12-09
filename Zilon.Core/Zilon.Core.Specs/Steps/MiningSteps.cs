@@ -47,6 +47,13 @@ namespace Zilon.Core.Specs.Steps
             _ = Context.AddStaticObject(staticObjectId, PropContainerPurpose.OreDeposits, coords);
         }
 
+        [Given(@"the trash heap with id:(\d+) in the map node \((\d+), (\d+)\)")]
+        public void GivenTrashHeapWithIdIntoMapNode(int staticObjectId, int coordX, int coordY)
+        {
+            var coords = new OffsetCoords(coordX, coordY);
+            _ = Context.AddStaticObject(staticObjectId, PropContainerPurpose.TrashHeap, coords);
+        }
+
         [Then(@"Объект Id:(.*) уничтожен")]
         public void ThenОбъектIdУничтожен(int id)
         {
