@@ -19,5 +19,6 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
 	  <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
+	  <ProjectReference Include="..\Zilon.DependencyInjection\Zilon.DependencyInjection.csproj" />
 	</ItemGroup>
 </Project>
