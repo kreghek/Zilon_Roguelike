@@ -209,8 +209,9 @@ namespace Zilon.Core.Specs.Contexts
 
             var actorManager = sector.ActorManager;
 
-            var monster = actorManager.Items
-                .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
+            var actor = GetCurrentSectorMapObjectById(id, actorManager);
+
+            var monster = actor.Person is MonsterPerson ? actor : null;
 
             return monster;
         }
@@ -221,10 +222,15 @@ namespace Zilon.Core.Specs.Contexts
 
             var staticObjectManager = sector.StaticObjectManager;
 
-            var staticObject = staticObjectManager.Items
-                .SingleOrDefault(x => x.Id == id);
+            var staticObject = GetCurrentSectorMapObjectById(id, staticObjectManager);
 
             return staticObject;
+        }
+
+        [CanBeNull]
+        private static T GetCurrentSectorMapObjectById<T>(int id, [NotNull] ISectorEntityManager<T> objectManager) where T : class, IIdentifiableMapObject
+        {
+            return objectManager.Items.SingleOrDefault(x => x.Id == id);
         }
 
         private void Configure(IServiceProvider serviceProvider)
