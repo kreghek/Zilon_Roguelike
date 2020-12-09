@@ -57,6 +57,7 @@ namespace Zilon.Core.StaticObjectModules
 
         /// <inheritdoc />
         public bool IsActive { get; set; }
+
         public bool IsParentStaticObjectDestroyed { get; private set; }
 
         /// <inheritdoc />
