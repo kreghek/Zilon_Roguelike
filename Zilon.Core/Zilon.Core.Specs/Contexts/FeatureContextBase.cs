@@ -227,12 +227,6 @@ namespace Zilon.Core.Specs.Contexts
             return staticObject;
         }
 
-        [CanBeNull]
-        private static T GetCurrentSectorMapObjectById<T>(int id, [NotNull] ISectorEntityManager<T> objectManager) where T : class, IIdentifiableMapObject
-        {
-            return objectManager.Items.SingleOrDefault(x => x.Id == id);
-        }
-
         private void Configure(IServiceProvider serviceProvider)
         {
             ConfigureEventBus(serviceProvider);
@@ -277,6 +271,13 @@ namespace Zilon.Core.Specs.Contexts
         private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
         {
             RaisedActorInteractionEvents.Add(e.ActorInteractionEvent);
+        }
+
+        [CanBeNull]
+        private static T GetCurrentSectorMapObjectById<T>(int id, [NotNull] ISectorEntityManager<T> objectManager)
+            where T : class, IIdentifiableMapObject
+        {
+            return objectManager.Items.SingleOrDefault(x => x.Id == id);
         }
 
         private IStaticObjectFactory GetFactoryByPurpose(PropContainerPurpose purpose)

@@ -359,7 +359,7 @@ namespace Zilon.Core.Tactics
         public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; private set; }
         public bool CanExecuteTasks => !Person.CheckIsDead();
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public int Id => Person.Id;
 
         public bool CanBeDamaged()
