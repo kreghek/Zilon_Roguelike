@@ -48,8 +48,9 @@ namespace Zilon.Core.Specs.Steps
             _ = Context.AddStaticObject(staticObjectId, PropContainerPurpose.OreDeposits, coords);
         }
 
-        [Then(@"Объект Id:(.*) уничтожен")]
-        public void ThenОбъектIdУничтожен(int id)
+        [Then(@"Объект Id:(\d+) уничтожен")]
+        [Then(@"the object with id:(\d+) does not exist")]
+        public void ThenObjectWithIdDoesNotExist(int id)
         {
             var sector = Context.Globe.SectorNodes.First().Sector;
             var staticObject = sector.StaticObjectManager.Items.SingleOrDefault(x => x.Id == id);
