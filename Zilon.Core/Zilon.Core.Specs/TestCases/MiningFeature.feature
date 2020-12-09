@@ -1,6 +1,6 @@
 ﻿Feature: Mining
 
-@dev16
+@dev16 @mining
 Scenario: Destroy deposit
 	Given Есть карта размером 2
 	And Есть актёр игрока класса human-person в ячейке (0, 0)
