@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -12,13 +13,15 @@ using TechTalk.SpecFlow;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Components;
-using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tests.Common;
+using Zilon.Core.World;
+using Zilon.Core.Common;
 
 namespace Zilon.Core.Specs.Steps
 {
@@ -26,6 +29,12 @@ namespace Zilon.Core.Specs.Steps
     [Binding]
     public sealed class MiningSteps : GenericStepsBase<CommonGameActionsContext>
     {
+        /// <summary>
+        /// Количество миллисекунд, которые можно потратить на выполнение быстрой операции.
+        /// Эта константа нужна, чтобы задавать лимит по времени. Чтобы быстрее проваливать тесты, которые "подвисают".
+        /// </summary>
+        private const int TEST_SHORT_OP_LIMIT_MS = 1000;
+
         public MiningSteps(CommonGameActionsContext context) : base(context)
         {
         }
@@ -48,6 +57,7 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [When(@"Актёр игрока атакует объект Id:(.*)")]
+        [When(@"the player actor attacks object with id:(.*)")]
         public void WhenPlayerPersonAttacksObjectWithId(int targetId)
         {
             var attackCommand = Context.ServiceProvider.GetRequiredService<AttackCommand>();
@@ -66,6 +76,20 @@ namespace Zilon.Core.Specs.Steps
             attackCommand.Execute();
         }
 
+        [When(@"the player actor attacks object with id:(.*) while it exists")]
+        public async Task WhenPlayerPersonAttacksObjectWithIdWhileItExistsAsync(int targetId)
+        {
+            var sector = Context.GetCurrentGlobeFirstSector();
+            var staticObject = sector.StaticObjectManager.Items.SingleOrDefault(x => x.Id == targetId);
+
+            while (staticObject != null)
+            {
+                WhenPlayerPersonAttacksObjectWithId(targetId);
+                await WhenЯЖдуЕдиницВремениAsync(1).ConfigureAwait(false);
+
+                staticObject = sector.StaticObjectManager.Items.SingleOrDefault(x => x.Id == targetId);
+            }
+        }
 
         private static IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
         {
@@ -109,6 +133,55 @@ namespace Zilon.Core.Specs.Steps
                     yield return actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
                 }
             }
+        }
+
+        public async Task WhenЯЖдуЕдиницВремениAsync(int timeUnitCount)
+        {
+            var globe = Context.Globe;
+            var humatTaskSource = Context.ServiceProvider
+                .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
+
+            var counter = timeUnitCount;
+
+            var survivalModule = playerState.ActiveActor?.Actor.Person?.GetModuleSafe<ISurvivalModule>();
+
+            var isPlayerActor = playerState.ActiveActor?.Actor != null;
+            if (isPlayerActor)
+            {
+                while (counter > 0)
+                {
+                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+                    {
+                        if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
+                        {
+                            WhenЯВыполняюПростой();
+                        }
+
+                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    }
+
+                    counter--;
+                }
+            }
+            else
+            {
+                while (counter > 0)
+                {
+                    for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+                    {
+                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    }
+
+                    counter--;
+                }
+            }
+        }
+
+        public void WhenЯВыполняюПростой()
+        {
+            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+            idleCommand.Execute();
         }
     }
 }

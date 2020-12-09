@@ -138,6 +138,8 @@ namespace Zilon.Core.Specs.Contexts
 
             var staticObject = factory.Create(sector, staticObjectNode, staticObjectId);
 
+            sector.StaticObjectManager.Add(staticObject);
+
             return staticObject;
         }
 

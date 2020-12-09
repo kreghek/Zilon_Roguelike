@@ -14,6 +14,7 @@ using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
@@ -35,7 +36,7 @@ namespace Zilon.Core.Specs.Contexts
 
         public IServiceProvider Register()
         {
-            var serviceCollection = RegisterServices1();
+            var serviceCollection = RegisterServicesInner();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -189,6 +190,22 @@ namespace Zilon.Core.Specs.Contexts
             });
         }
 
+        private static void RegisterStaticObjectFactories(IServiceCollection serviceRegistry)
+        {
+            serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory =>
+            {
+                var factories = diFactory.GetServices<IStaticObjectFactory>().ToArray();
+                return new StaticObjectFactoryCollector(factories);
+            });
+            serviceRegistry.AddSingleton<IStaticObjectFactory, StoneDepositFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, OreDepositFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, TrashHeapFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, CherryBrushFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, PitFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, PuddleFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectsGeneratorRandomSource, StaticObjectsGeneratorRandomSource>();
+        }
+
         private static void RegisterPlayerServices(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
@@ -235,16 +252,18 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
         }
 
-        private IServiceCollection RegisterServices1()
+        private IServiceCollection RegisterServicesInner()
         {
             var serviceCollection = new ServiceCollection();
             RegisterGlobeInitializationServices(serviceCollection);
             RegisterSchemeService(serviceCollection);
+            RegisterStaticObjectFactories(serviceCollection);
             RegisterSectorService(serviceCollection);
             RegisterAuxServices(serviceCollection);
             RegisterPlayerServices(serviceCollection);
             RegisterClientServices(serviceCollection);
             RegisterCommands(serviceCollection);
+
             return serviceCollection;
         }
     }
