@@ -5,7 +5,7 @@ using Zilon.Core.Tactics;
 namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
     /// <summary>
-    /// Base implementation of <see cref="IStaticObjectFactoryCollector"/>.
+    /// Base implementation of <see cref="IStaticObjectFactoryCollector" />.
     /// </summary>
     public sealed class StaticObjectFactoryCollector : IStaticObjectFactoryCollector
     {
@@ -16,7 +16,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
             _factories = factories;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IStaticObjectFactory SelectFactoryByStaticObjectPurpose(PropContainerPurpose purpose)
         {
             foreach (var factory in _factories)
