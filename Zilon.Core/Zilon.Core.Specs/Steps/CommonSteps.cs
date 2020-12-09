@@ -30,15 +30,18 @@ namespace Zilon.Core.Specs.Steps
     [Binding]
     public class CommonSteps : GenericStepsBase<CommonGameActionsContext>
     {
-        /// <summary>
-        /// Количество миллисекунд, которые можно потратить на выполнение быстрой операции.
-        /// Эта константа нужна, чтобы задавать лимит по времени. Чтобы быстрее проваливать тесты, которые "подвисают".
-        /// </summary>
-        private const int TEST_SHORT_OP_LIMIT_MS = 1000;
-
         [UsedImplicitly]
         public CommonSteps(CommonGameActionsContext context) : base(context)
         {
+        }
+
+        [UsedImplicitly]
+        [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
+        [Given(@"the monster with class (.*) and Id:(.*) in the map node \((.*), (.*)\)")]
+        public void GivenMonsterWithClassAndIdInMapNode(string monsterSid, int monsterId, int x, int y)
+        {
+            var sector = Context.Globe.SectorNodes.First().Sector;
+            Context.AddMonsterActor(monsterSid, monsterId, sector, new OffsetCoords(x, y));
         }
 
         [UsedImplicitly]
@@ -72,18 +75,11 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
-        public void GivenЕстьМонстрКлассаRatВЯчейке(string monsterSid, int monsterId, int x, int y)
-        {
-            var sector = Context.Globe.SectorNodes.First().Sector;
-            Context.AddMonsterActor(monsterSid, monsterId, sector, new OffsetCoords(x, y));
-        }
-
-        [UsedImplicitly]
         [Given(@"Есть сундук Id:(.*) в ячейке \((.*), (.*)\)")]
         public void GivenЕстьСундукВЯчейке(int id, int offsetX, int offsetY)
         {
             var coords = new OffsetCoords(offsetX, offsetY);
+
             Context.AddChest(id, coords);
         }
 
@@ -260,7 +256,10 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (IsPlayerPersonCanIntent(humanTaskSource, survivalModule) && counter > 0)
                 {
-                    await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    await globe.UpdateAsync()
+                        .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
+                        .ConfigureAwait(false);
+
                     counter--;
                 }
             }
@@ -268,7 +267,10 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (counter > 0)
                 {
-                    await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    await globe.UpdateAsync()
+                        .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
+                        .ConfigureAwait(false);
+
                     counter--;
                 }
             }
@@ -331,7 +333,9 @@ namespace Zilon.Core.Specs.Steps
                             WhenЯВыполняюПростой();
                         }
 
-                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                        await globe.UpdateAsync()
+                            .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
+                            .ConfigureAwait(false);
                     }
 
                     counter--;
@@ -343,7 +347,9 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                        await globe.UpdateAsync()
+                            .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
+                            .ConfigureAwait(false);
                     }
 
                     counter--;

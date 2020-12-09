@@ -14,6 +14,7 @@ using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
+using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
@@ -26,6 +27,7 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
+using Zilon.DependencyInjection;
 
 namespace Zilon.Core.Specs.Contexts
 {
@@ -35,7 +37,7 @@ namespace Zilon.Core.Specs.Contexts
 
         public IServiceProvider Register()
         {
-            var serviceCollection = RegisterServices1();
+            var serviceCollection = RegisterServicesInner();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -235,17 +237,24 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
         }
 
-        private IServiceCollection RegisterServices1()
+        private IServiceCollection RegisterServicesInner()
         {
             var serviceCollection = new ServiceCollection();
             RegisterGlobeInitializationServices(serviceCollection);
             RegisterSchemeService(serviceCollection);
+            RegisterStaticObjectFactories(serviceCollection);
             RegisterSectorService(serviceCollection);
             RegisterAuxServices(serviceCollection);
             RegisterPlayerServices(serviceCollection);
             RegisterClientServices(serviceCollection);
             RegisterCommands(serviceCollection);
+
             return serviceCollection;
+        }
+
+        private static void RegisterStaticObjectFactories(IServiceCollection serviceCollection)
+        {
+            serviceCollection.RegisterStaticObjectFactoringFromCore();
         }
     }
 }
