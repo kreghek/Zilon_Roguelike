@@ -30,12 +30,6 @@ namespace Zilon.Core.Specs.Steps
     [Binding]
     public class CommonSteps : GenericStepsBase<CommonGameActionsContext>
     {
-        /// <summary>
-        /// Количество миллисекунд, которые можно потратить на выполнение быстрой операции.
-        /// Эта константа нужна, чтобы задавать лимит по времени. Чтобы быстрее проваливать тесты, которые "подвисают".
-        /// </summary>
-        private const int TEST_SHORT_OP_LIMIT_MS = 1000;
-
         [UsedImplicitly]
         public CommonSteps(CommonGameActionsContext context) : base(context)
         {
@@ -262,7 +256,10 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (IsPlayerPersonCanIntent(humanTaskSource, survivalModule) && counter > 0)
                 {
-                    await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    await globe.UpdateAsync()
+                        .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
+                        .ConfigureAwait(false);
+
                     counter--;
                 }
             }
@@ -270,7 +267,10 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (counter > 0)
                 {
-                    await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                    await globe.UpdateAsync()
+                        .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
+                        .ConfigureAwait(false);
+
                     counter--;
                 }
             }
@@ -333,7 +333,9 @@ namespace Zilon.Core.Specs.Steps
                             WhenЯВыполняюПростой();
                         }
 
-                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                        await globe.UpdateAsync()
+                            .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
+                            .ConfigureAwait(false);
                     }
 
                     counter--;
@@ -345,7 +347,9 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        await globe.UpdateAsync().TimeoutAfter(TEST_SHORT_OP_LIMIT_MS).ConfigureAwait(false);
+                        await globe.UpdateAsync()
+                            .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
+                            .ConfigureAwait(false);
                     }
 
                     counter--;
