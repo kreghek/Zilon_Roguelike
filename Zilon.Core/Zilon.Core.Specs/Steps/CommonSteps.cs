@@ -20,7 +20,6 @@ using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Specs.Contexts;
 using Zilon.Core.StaticObjectModules;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tests.Common;
 using Zilon.Core.World;
