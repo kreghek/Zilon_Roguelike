@@ -39,19 +39,19 @@ namespace Zilon.Core.Specs.Steps
         {
         }
 
+        [Given(@"the trash heap with id:(\d+) in the map node \((\d+), (\d+)\)")]
+        public void GivenTrashHeapWithIdIntoMapNode(int staticObjectId, int coordX, int coordY)
+        {
+            var coords = new OffsetCoords(coordX, coordY);
+            _ = Context.AddStaticObject(staticObjectId, PropContainerPurpose.TrashHeap, coords);
+        }
+
         [Given(@"Есть руда Id:(\d+) в ячейке \((\d+), (\d+)\)")]
         [Given(@"the ore with id:(\d+) in the map node \((\d+), (\d+)\)")]
         public void GivenЕстьРудаIdВЯчейке(int staticObjectId, int coordX, int coordY)
         {
             var coords = new OffsetCoords(coordX, coordY);
             _ = Context.AddStaticObject(staticObjectId, PropContainerPurpose.OreDeposits, coords);
-        }
-
-        [Given(@"the trash heap with id:(\d+) in the map node \((\d+), (\d+)\)")]
-        public void GivenTrashHeapWithIdIntoMapNode(int staticObjectId, int coordX, int coordY)
-        {
-            var coords = new OffsetCoords(coordX, coordY);
-            _ = Context.AddStaticObject(staticObjectId, PropContainerPurpose.TrashHeap, coords);
         }
 
         [Then(@"Объект Id:(.*) уничтожен")]
