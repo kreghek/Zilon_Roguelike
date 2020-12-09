@@ -190,22 +190,6 @@ namespace Zilon.Core.Specs.Contexts
             });
         }
 
-        private static void RegisterStaticObjectFactories(IServiceCollection serviceRegistry)
-        {
-            serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory =>
-            {
-                var factories = diFactory.GetServices<IStaticObjectFactory>().ToArray();
-                return new StaticObjectFactoryCollector(factories);
-            });
-            serviceRegistry.AddSingleton<IStaticObjectFactory, StoneDepositFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, OreDepositFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, TrashHeapFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, CherryBrushFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, PitFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, PuddleFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectsGeneratorRandomSource, StaticObjectsGeneratorRandomSource>();
-        }
-
         private static void RegisterPlayerServices(ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
@@ -265,6 +249,22 @@ namespace Zilon.Core.Specs.Contexts
             RegisterCommands(serviceCollection);
 
             return serviceCollection;
+        }
+
+        private static void RegisterStaticObjectFactories(IServiceCollection serviceRegistry)
+        {
+            serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory =>
+            {
+                var factories = diFactory.GetServices<IStaticObjectFactory>().ToArray();
+                return new StaticObjectFactoryCollector(factories);
+            });
+            serviceRegistry.AddSingleton<IStaticObjectFactory, StoneDepositFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, OreDepositFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, TrashHeapFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, CherryBrushFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, PitFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectFactory, PuddleFactory>();
+            serviceRegistry.AddSingleton<IStaticObjectsGeneratorRandomSource, StaticObjectsGeneratorRandomSource>();
         }
     }
 }

@@ -91,48 +91,10 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private static IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
+        public void WhenЯВыполняюПростой()
         {
-            if (actor.Person.GetModuleSafe<IEquipmentModule>() is null)
-            {
-                yield return actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
-            }
-            else
-            {
-                var usedEquipmentActs = false;
-                var slots = actor.Person.GetModule<IEquipmentModule>().Slots;
-                for (var i = 0; i < slots.Length; i++)
-                {
-                    var slotEquipment = actor.Person.GetModule<IEquipmentModule>()[i];
-                    if (slotEquipment == null)
-                    {
-                        continue;
-                    }
-
-                    if ((slots[i].Types & EquipmentSlotTypes.Hand) == 0)
-                    {
-                        continue;
-                    }
-
-                    var equipmentActs = from act in actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
-                                        where act.Equipment == slotEquipment
-                                        select act;
-
-                    var usedAct = equipmentActs.FirstOrDefault();
-
-                    if (usedAct != null)
-                    {
-                        usedEquipmentActs = true;
-
-                        yield return usedAct;
-                    }
-                }
-
-                if (!usedEquipmentActs)
-                {
-                    yield return actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
-                }
-            }
+            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+            idleCommand.Execute();
         }
 
         public async Task WhenЯЖдуЕдиницВремениAsync(int timeUnitCount)
@@ -178,10 +140,48 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        public void WhenЯВыполняюПростой()
+        private static IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
         {
-            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
-            idleCommand.Execute();
+            if (actor.Person.GetModuleSafe<IEquipmentModule>() is null)
+            {
+                yield return actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+            }
+            else
+            {
+                var usedEquipmentActs = false;
+                var slots = actor.Person.GetModule<IEquipmentModule>().Slots;
+                for (var i = 0; i < slots.Length; i++)
+                {
+                    var slotEquipment = actor.Person.GetModule<IEquipmentModule>()[i];
+                    if (slotEquipment == null)
+                    {
+                        continue;
+                    }
+
+                    if ((slots[i].Types & EquipmentSlotTypes.Hand) == 0)
+                    {
+                        continue;
+                    }
+
+                    var equipmentActs = from act in actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
+                                        where act.Equipment == slotEquipment
+                                        select act;
+
+                    var usedAct = equipmentActs.FirstOrDefault();
+
+                    if (usedAct != null)
+                    {
+                        usedEquipmentActs = true;
+
+                        yield return usedAct;
+                    }
+                }
+
+                if (!usedEquipmentActs)
+                {
+                    yield return actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+                }
+            }
         }
     }
 }
