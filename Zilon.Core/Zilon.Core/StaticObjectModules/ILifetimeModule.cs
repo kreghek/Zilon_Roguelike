@@ -8,10 +8,9 @@ namespace Zilon.Core.StaticObjectModules
     /// </summary>
     public interface ILifetimeModule : IStaticObjectModule
     {
+        bool IsParentStaticObjectDestroyed { get; }
         void Destroy();
 
         event EventHandler Destroyed;
-
-        bool IsParentStaticObjectDestroyed { get; }
     }
 }
