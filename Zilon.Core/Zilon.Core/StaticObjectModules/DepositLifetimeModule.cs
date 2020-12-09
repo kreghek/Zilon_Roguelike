@@ -30,7 +30,8 @@ namespace Zilon.Core.StaticObjectModules
 
         private void CheckAndDestroy()
         {
-            if (_depositModule.IsExhausted && !_containerModule.Content.CalcActualItems().Any())
+            var minedProps = _containerModule.Content.CalcActualItems();
+            if (_depositModule.IsExhausted && !minedProps.Any())
             {
                 Destroy();
             }
@@ -56,6 +57,7 @@ namespace Zilon.Core.StaticObjectModules
 
         /// <inheritdoc />
         public bool IsActive { get; set; }
+        public bool IsParentStaticObjectDestroyed { get; private set; }
 
         /// <inheritdoc />
         public event EventHandler Destroyed;
@@ -65,6 +67,7 @@ namespace Zilon.Core.StaticObjectModules
             _depositModule.Mined -= DepositModule_Mined;
             _containerModule.ItemsRemoved -= ContainerModule_ItemsRemoved;
             _staticObjectManager.Remove(_parentStaticObject);
+            IsParentStaticObjectDestroyed = true;
             DoDestroyed();
         }
     }
