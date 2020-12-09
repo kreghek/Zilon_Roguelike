@@ -53,11 +53,14 @@ namespace Zilon.Core.Specs.Contexts
 
         public IPropContainer AddChest(int id, OffsetCoords nodeCoords)
         {
+            var sector = GetCurrentGlobeFirstSector();
+
+            var node = sector.Map.Nodes.SelectByHexCoords(nodeCoords.X, nodeCoords.Y);
             var chest = new FixedPropChest(Array.Empty<IProp>());
-
-            var staticObject = AddStaticObject(id, chest.Purpose, nodeCoords);
-
+            var staticObject = new StaticObject(node, chest.Purpose, id);
             staticObject.AddModule<IPropContainer>(chest);
+
+            sector.StaticObjectManager.Add(staticObject);
 
             return chest;
         }
