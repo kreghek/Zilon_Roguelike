@@ -284,19 +284,7 @@ namespace Zilon.Core.Specs.Contexts
         {
             var staticObjectFactoryCollector = ServiceProvider.GetRequiredService<IStaticObjectFactoryCollector>();
 
-            var factories = staticObjectFactoryCollector.GetFactories();
-
-            foreach (var factory in factories)
-            {
-                if (factory.Purpose != purpose)
-                {
-                    continue;
-                }
-
-                return factory;
-            }
-
-            return null;
+            return staticObjectFactoryCollector.SelectFactoryByStaticObjectPurpose(purpose);
         }
 
         public class VisualEventInfo

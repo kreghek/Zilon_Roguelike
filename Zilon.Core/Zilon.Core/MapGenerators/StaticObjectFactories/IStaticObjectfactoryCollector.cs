@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.MapGenerators.StaticObjectFactories
+﻿using Zilon.Core.Tactics;
+
+namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
     /// <summary>
     /// Сервис для сбора и предоставления всех возможных фабрик статических объектов.
@@ -6,9 +8,9 @@
     public interface IStaticObjectFactoryCollector
     {
         /// <summary>
-        /// Возвращает доступные в системе фабрики.
+        /// Select factory by purpose of static object.
         /// </summary>
-        /// <returns></returns>
-        IStaticObjectFactory[] GetFactories();
+        /// <returns>Factory to create static object of specified purpose.</returns>
+        IStaticObjectFactory SelectFactoryByStaticObjectPurpose(PropContainerPurpose purpose);
     }
 }
