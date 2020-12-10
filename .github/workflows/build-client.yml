@@ -37,14 +37,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: buildCore
     env:
-      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2 }}
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_1_16 }}
     strategy:
       fail-fast: false
       matrix:
         projectPath:
           - Zilon.Client
         unityVersion:
-          - 2020.1.10f1
+          - 2020.1.16f1
         targetPlatform:
           - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
           - StandaloneWindows # Build a Windows standalone.
