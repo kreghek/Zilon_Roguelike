@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -56,6 +57,17 @@ namespace Zilon.Core.MapGenerators
             sector.AddDisease(disease);
         }
 
+        private async Task GenerateStaticObjectsAsync(
+            ISector sector,
+            ISectorSubScheme sectorScheme,
+            ISectorNode sectorNode)
+        {
+            var resourceDepositData = _resourceMaterializationMap.GetDepositData(sectorNode);
+            var context = new StaticObjectGenerationContext(sector, sectorScheme, resourceDepositData);
+
+            await _staticObstaclesGenerator.CreateAsync(context).ConfigureAwait(false);
+        }
+
         /// <summary>
         /// Создаёт экземпляр сектора подземелий с указанными параметрами.
         /// </summary>
@@ -95,17 +107,6 @@ namespace Zilon.Core.MapGenerators
                 sectorScheme);
 
             return sector;
-        }
-
-        private async Task GenerateStaticObjectsAsync(
-            ISector sector,
-            Schemes.ISectorSubScheme sectorScheme,
-            ISectorNode sectorNode)
-        {
-            var resourceDepositData = _resourceMaterializationMap.GetDepositData(sectorNode);
-            var context = new StaticObjectGenerationContext(sector, sectorScheme, resourceDepositData);
-
-            await _staticObstaclesGenerator.CreateAsync(context).ConfigureAwait(false);
         }
     }
 }
