@@ -11,12 +11,12 @@ namespace Zilon.Core.MassSectorGenerator
     {
         public SectorSchemeResult(ILocationScheme location, ISectorSubScheme sector)
         {
-            Location = location ?? throw new ArgumentNullException(nameof(location));
-            Sector = sector ?? throw new ArgumentNullException(nameof(sector));
+            LocationScheme = location ?? throw new ArgumentNullException(nameof(location));
+            SectorScheme = sector ?? throw new ArgumentNullException(nameof(sector));
         }
 
-        public ILocationScheme Location { get; }
+        public ILocationScheme LocationScheme { get; }
 
-        public ISectorSubScheme Sector { get; }
+        public ISectorSubScheme SectorScheme { get; }
     }
 }

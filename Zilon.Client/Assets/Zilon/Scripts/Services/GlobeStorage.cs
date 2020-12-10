@@ -10,5 +10,10 @@ namespace Assets.Zilon.Scripts.Services
         {
             Globe = globe;
         }
+
+        public void Reset()
+        {
+            Globe = null;
+        }
     }
 }

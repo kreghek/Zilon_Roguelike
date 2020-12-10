@@ -50,7 +50,10 @@ namespace Zilon.Core.StaticObjectModules
                 }
                 else
                 {
-                    _lifetimeModule.Destroy();
+                    if (!_lifetimeModule.IsParentStaticObjectDestroyed)
+                    {
+                        _lifetimeModule.Destroy();
+                    }
                 }
             }
         }

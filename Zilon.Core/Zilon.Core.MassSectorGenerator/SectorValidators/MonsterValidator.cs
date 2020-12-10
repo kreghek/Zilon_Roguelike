@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
     /// <summary>
     /// Валидатор корректности расстановки моснтров в секторе.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
+    [SuppressMessage("Performance",
         "CA1812:Avoid uninstantiated internal classes",
         Justification = "Регистрируется в контейнере зависимостей через рефлексию.")]
     internal class MonsterValidator : ISectorValidator

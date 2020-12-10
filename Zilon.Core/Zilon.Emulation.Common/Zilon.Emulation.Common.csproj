@@ -4,11 +4,11 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations">
-		  <Version>2020.1.0</Version>
+		  <Version>2020.3.0</Version>
 		  <ExcludeAssets>runtime; build</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-		  <Version>3.3.1</Version>
+		  <Version>3.3.2</Version>
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -19,5 +19,6 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
 	  <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
+	  <ProjectReference Include="..\Zilon.DependencyInjection\Zilon.DependencyInjection.csproj" />
 	</ItemGroup>
 </Project>

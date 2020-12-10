@@ -21,6 +21,22 @@ This is rogue-like game about the randomly-generated guy-vagabond, which trying 
 GamePlay Video
 [![Watch the GamePlay Video](https://img.youtube.com/vi/KJJ2ab35eFg/maxresdefault.jpg)](https://www.youtube.com/watch?v=KJJ2ab35eFg)
 
+## Build
+
+We strive to launch a project with one button. But now there are a few manual steps that must be performed before the game can be launched from the editor.
+
+1. **Clone the repository https://github.com/kreghek/Zilon_Roguelike_Plugins into Zilon.Client/Assets/ Plugins.**
+[Zenject](https://github.com/modesttree/Zenject) and [SQLiter](https://assetstore.unity.com/packages/tools/integration/sqliter-20660) must be installed into the `Assets/Plugins` folder. The fastest way is to clone the https://github.com/kreghek/Zilon_Roguelike_Plugins repository into `Assets/Plugins`. The project started before there was a package manager in Unity. And I didn't want to store other assets' source code inside my own repository. Perhaps someday these dependencies will be loaded through the package manager.
+
+2. **Run the publish_core_to_plugins.bat script.**
+Into the same `Assets/Plugins` folder, you need to publish the core functionality developed in a separate *Zilon.Core* project. The easiest way is to run the `publish_core_to_plugins.bat` script in the root of the project.
+
+3. *Optional*. **Set the `ZILON_LIV_SCHEME_CATALOG` environment variable to specify the full path to `\Zilon.Client\Assets\Resources\Schemes`**.
+This is needed to run tests in Zilon.Core. The path must be complete, that is, it must begin, for example, with `C:\MyProjects\Zilon_Roguelike` for Windows and `/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes` for Linux.
+
+4. *Optional*. **Install the Specflow for Visual Studio 2019 extension**.
+It is necessary for convenient editing of specifications, written in *Gherkin*. Unfortunately, we do not see a way to install this tool within the project yet. Easiest way to find it in `Visual Studio / Extensions / Manage Extensions`
+
 ## Contributing
 
 [Code conventions](/CODE_CONVENTIONS.md)

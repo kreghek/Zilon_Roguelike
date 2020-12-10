@@ -36,7 +36,7 @@ namespace Zilon.Core.MapGenerators
         {
             var staticObjectPurpose = RollPurpose(resourceDepositData);
 
-            var factory = SelectStaticObjectFactory(staticObjectPurpose);
+            var factory = _staticObjectfactoryCollector.SelectFactoryByStaticObjectPurpose(staticObjectPurpose);
 
             var staticObject = factory.Create(sector, node, default);
 
@@ -46,24 +46,6 @@ namespace Zilon.Core.MapGenerators
         private PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
         {
             return _staticObjectsGeneratorRandomSource.RollPurpose(resourceDepositData);
-        }
-
-        private IStaticObjectFactory SelectStaticObjectFactory(PropContainerPurpose staticObjectPurpose)
-        {
-            var factories = _staticObjectfactoryCollector.GetFactories();
-
-            foreach (var factory in factories)
-            {
-                if (factory.Purpose != staticObjectPurpose)
-                {
-                    continue;
-                }
-
-                return factory;
-            }
-
-            throw new InvalidOperationException(
-                $"Не обнаружена фабрика для статических объектов типа {staticObjectPurpose}");
         }
 
         public Task CreateAsync(IStaticObjectGenerationContext generationContext)

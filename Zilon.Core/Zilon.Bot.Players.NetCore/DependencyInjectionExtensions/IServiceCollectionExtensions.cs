@@ -4,6 +4,8 @@ using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Zilon.DependencyInjection;
+
 namespace Zilon.Bot.Players.NetCore.DependencyInjectionExtensions
 {
     public static class IServiceCollectionExtensions
@@ -26,8 +28,10 @@ namespace Zilon.Bot.Players.NetCore.DependencyInjectionExtensions
 
         private static IEnumerable<Type> GetTypes<TInterface>()
         {
-            var logicTypes = typeof(ILogicState).Assembly.GetTypes()
-                .Where(x => !x.IsAbstract && !x.IsInterface && typeof(TInterface).IsAssignableFrom(x));
+            var assembly = typeof(ILogicState).Assembly;
+
+            var logicTypes = ImplementationGatheringHelper.GetImplementations<TInterface>(assembly);
+
             return logicTypes;
         }
     }

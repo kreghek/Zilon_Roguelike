@@ -7,16 +7,8 @@ namespace Zilon.Core.Tactics
     /// Статический объект в секторе. Противоположность актёром, которые активны и воздействуют на статически-пассивные
     /// объекты.
     /// </summary>
-    public interface IStaticObject : IPassMapBlocker, IAttackTarget
+    public interface IStaticObject : IPassMapBlocker, IAttackTarget, IIdentifiableMapObject
     {
-        /// <summary>
-        /// Идентфикиатор объекта.
-        /// </summary>
-        /// <remarks>
-        /// Задаётся и используется в тестах для выборки сундука.
-        /// </remarks>
-        int Id { get; }
-
         /// <summary>
         /// Блокер проходимости карты.
         /// </summary>
