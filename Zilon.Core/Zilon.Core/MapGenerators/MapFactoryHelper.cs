@@ -26,12 +26,12 @@ namespace Zilon.Core.MapGenerators
 
             if (sectorNode.State != SectorNodeState.SchemeKnown)
             {
-                throw new ArgumentException("Узел сектора должен быть материализован", nameof(sectorNode));
+                throw new ArgumentException($"Sector node {sectorNode} is not materialized.", nameof(sectorNode));
             }
 
-            var next = sectorNode.Biome.GetNext(sectorNode);
+            var nextSectorNodes = sectorNode.Biome.GetNext(sectorNode);
 
-            return next.Select(node => new RoomTransition(node as ISectorNode));
+            return nextSectorNodes.Select(node => new RoomTransition(node as ISectorNode));
         }
 
         public static bool IsAvailableFor(Matrix<bool> matrix, OffsetCoords coords)
