@@ -11,27 +11,22 @@ namespace Zilon.Core.MapGenerators
     public sealed class SectorTransition
     {
         /// <summary>
-        /// Создаение экземпляра перехода.
+        /// Constructor.
         /// </summary>
+        /// <param name="sectorNode">The node of the globe graph with next sector.</param>
         public SectorTransition(ISectorNode sectorNode)
         {
             SectorNode = sectorNode ?? throw new System.ArgumentNullException(nameof(sectorNode));
         }
 
         /// <summary>
-        /// Узел сектора в графе биома.
+        /// The node of the globe graph with next sector.
         /// </summary>
         public ISectorNode SectorNode { get; }
 
-        /// <summary>
-        /// Вывод строкого представления перехода.
-        /// </summary>
-        /// <returns>
-        /// <see cref="string" />, который представляет переход.
-        /// </returns>
         public override string ToString()
         {
-            return SectorNode.ToString();
+            return $"Transition to {SectorNode}";
         }
     }
 }
