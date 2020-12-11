@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Zilon.Core.Common;
@@ -6,19 +7,22 @@ using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    public class HumanActorTaskSource<TContext> : IHumanActorTaskSource<TContext>
+    public sealed class HumanActorTaskSource<TContext> : IDisposable, IHumanActorTaskSource<TContext>
         where TContext : ISectorTaskSourceContext
     {
         private readonly IReceiver<IActorTask> _actorTaskReceiver;
+        private readonly SpscChannel<IActorTask> _spscChannel;
         private readonly ISender<IActorTask> _actorTaskSender;
         private IActor _currentActorIntention;
         private bool _intentionWait;
+        private CancellationTokenSource _cancellationTokenSource;
 
         public HumanActorTaskSource()
         {
-            var spscChannel = new SpscChannel<IActorTask>();
-            _actorTaskSender = spscChannel;
-            _actorTaskReceiver = spscChannel;
+            _spscChannel = new SpscChannel<IActorTask>();
+            _actorTaskSender = _spscChannel;
+            _actorTaskReceiver = _spscChannel;
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         private bool CurrentActorSetAndIsDead()
@@ -46,7 +50,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _intentionWait = true;
             _currentActorIntention = activeActor;
 
-            await _actorTaskSender.SendAsync(actorTask).ConfigureAwait(false);
+            await _actorTaskSender.SendAsync(actorTask, _cancellationTokenSource.Token).ConfigureAwait(false);
         }
 
         public async Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
@@ -55,7 +59,7 @@ namespace Zilon.Core.Tactics.Behaviour
             // Этот источник команд ждёт, пока игрок не укажет задачу.
             // Задача генерируется из намерения. Это значит, что ждать нужно, пока не будет задано намерение.
 
-            return await _actorTaskReceiver.ReceiveAsync().ConfigureAwait(false);
+            return await _actorTaskReceiver.ReceiveAsync(_cancellationTokenSource.Token).ConfigureAwait(false);
         }
 
         //TODO Избавиться от синхронного варианта.
@@ -89,6 +93,19 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             _intentionWait = false;
             _currentActorIntention = null;
+        }
+
+        public void Dispose()
+        {
+            _spscChannel.Dispose();
+            _cancellationTokenSource.Dispose();
+        }
+
+        public void DropIntention()
+        {
+            _cancellationTokenSource.Cancel();
+
+            _cancellationTokenSource = new CancellationTokenSource();
         }
     }
 }
