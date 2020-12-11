@@ -27,7 +27,7 @@ namespace Zilon.Core.World
             _semaphoreSlim.Dispose();
         }
 
-        private async Task ProcessInnerAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
+        private async Task ProcessInnerAsync(IGlobe globe, ISector sector, IActor actor, SectorTransition transition)
         {
             var sectorNode = transition.SectorNode;
 
@@ -70,7 +70,7 @@ namespace Zilon.Core.World
             }
         }
 
-        public Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
+        public Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, SectorTransition transition)
         {
             if (globe is null)
             {

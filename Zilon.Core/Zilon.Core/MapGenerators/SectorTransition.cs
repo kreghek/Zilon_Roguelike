@@ -3,20 +3,19 @@
 namespace Zilon.Core.MapGenerators
 {
     /// <summary>
-    /// Данные по переходу из данной комнаты.
+    /// Info about transition to other sector.
     /// </summary>
     /// <remarks>
-    /// Используется для обозначения переходов между секторами
-    /// или выхода из подземелья.
+    /// Used to move user person between sector levels or biomes.
     /// </remarks>
-    public sealed class RoomTransition
+    public sealed class SectorTransition
     {
         /// <summary>
         /// Создаение экземпляра перехода.
         /// </summary>
-        public RoomTransition(ISectorNode sectorNode)
+        public SectorTransition(ISectorNode sectorNode)
         {
-            SectorNode = sectorNode;
+            SectorNode = sectorNode ?? throw new System.ArgumentNullException(nameof(sectorNode));
         }
 
         /// <summary>

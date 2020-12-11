@@ -17,7 +17,7 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="sectorNode"> Схема сектора. </param>
         /// <returns> Набор объектов переходов. </returns>
-        public static IEnumerable<RoomTransition> CreateTransitions(ISectorNode sectorNode)
+        public static IEnumerable<SectorTransition> CreateTransitions(ISectorNode sectorNode)
         {
             if (sectorNode is null)
             {
@@ -31,7 +31,7 @@ namespace Zilon.Core.MapGenerators
 
             var nextSectorNodes = sectorNode.Biome.GetNext(sectorNode);
 
-            return nextSectorNodes.Select(node => new RoomTransition(node as ISectorNode));
+            return nextSectorNodes.Select(node => new SectorTransition(node as ISectorNode));
         }
 
         public static bool IsAvailableFor(Matrix<bool> matrix, OffsetCoords coords)

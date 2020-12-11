@@ -124,7 +124,7 @@ namespace Zilon.Core.Tactics
             ProcessMonsterDeath(actor);
         }
 
-        private void DoActorExit([NotNull] IActor actor, [NotNull] RoomTransition roomTransition)
+        private void DoActorExit([NotNull] IActor actor, [NotNull] SectorTransition roomTransition)
         {
             var e = new TransitionUsedEventArgs(actor, roomTransition);
             TrasitionUsed?.Invoke(this, e);
@@ -460,7 +460,7 @@ namespace Zilon.Core.Tactics
             UpdateNationalUnityEvent();
         }
 
-        public void UseTransition(IActor actor, RoomTransition transition)
+        public void UseTransition(IActor actor, SectorTransition transition)
         {
             DoActorExit(actor, transition);
         }

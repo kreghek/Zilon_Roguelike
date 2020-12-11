@@ -7,7 +7,7 @@ namespace Zilon.Core.Tactics.Spatial
 {
     public interface ISectorMap : IMap
     {
-        Dictionary<IGraphNode, RoomTransition> Transitions { get; }
+        Dictionary<IGraphNode, SectorTransition> Transitions { get; }
 
         /// <summary>
         /// Проверяет, доступен ли целевой узел из стартового узла.

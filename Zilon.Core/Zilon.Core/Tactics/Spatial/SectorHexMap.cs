@@ -17,7 +17,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         public SectorHexMap(int segmentSize) : base(segmentSize)
         {
-            Transitions = new Dictionary<IGraphNode, RoomTransition>();
+            Transitions = new Dictionary<IGraphNode, SectorTransition>();
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Zilon.Core.Tactics.Spatial
         public IEnumerable<HexNode> HexNodes => Nodes.Cast<HexNode>();
 
         /// <inheritdoc />
-        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
+        public Dictionary<IGraphNode, SectorTransition> Transitions { get; }
 
         /// <summary>
         /// Проверяет, доступен ли целевой узел из стартового узла.

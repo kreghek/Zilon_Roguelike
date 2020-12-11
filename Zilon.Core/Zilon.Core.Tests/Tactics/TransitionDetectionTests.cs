@@ -35,16 +35,16 @@ namespace Zilon.Core.Tests.Tactics
             var sectorNodeMock = new Mock<ISectorNode>();
             var sectorNode = sectorNodeMock.Object;
 
-            var transition = new RoomTransition(sectorNode);
+            var transition = new SectorTransition(sectorNode);
 
-            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition>
+            var testedTrasitions = new Dictionary<IGraphNode, SectorTransition>
             {
                 { transitionNode, transition }
             };
 
             var testedNodes = new[] { actorNode };
 
-            RoomTransition expectedTransition = null;
+            SectorTransition expectedTransition = null;
 
             // ACT
             var factTransition = TransitionDetection.Detect(testedTrasitions, testedNodes);
@@ -68,9 +68,9 @@ namespace Zilon.Core.Tests.Tactics
             var sectorNodeMock = new Mock<ISectorNode>();
             var sectorNode = sectorNodeMock.Object;
 
-            var transition = new RoomTransition(sectorNode);
+            var transition = new SectorTransition(sectorNode);
 
-            var testedTrasitions = new Dictionary<IGraphNode, RoomTransition>
+            var testedTrasitions = new Dictionary<IGraphNode, SectorTransition>
             {
                 { actorNode, transition }
             };
