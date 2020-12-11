@@ -106,21 +106,26 @@ namespace Zilon.TextClient
                     {
                         Console.Write(node);
 
+                        if (nextMoveNodes.Contains(node))
+                        {
+                            Console.Write(" 1");
+                        }
+
                         if (playerActorSectorNode.Sector.Map.Transitions.TryGetValue(node, out var _))
                         {
                             Console.Write(" t");
                         }
 
                         var monsterInNode = playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Node == node);
-                        if (monsterInNode != null)
+                        if (monsterInNode != null && monsterInNode != uiState.ActiveActor.Actor)
                         {
-                            Console.Write($" monster {monsterInNode}");
+                            Console.Write($" monster {monsterInNode.Person}");
                         }
 
                         var staticObjectInNode = playerActorSectorNode.Sector.StaticObjectManager.Items.SingleOrDefault(x => x.Node == node);
                         if (staticObjectInNode != null)
                         {
-                            Console.Write($" object in node {staticObjectInNode}");
+                            Console.Write($" object in node {staticObjectInNode.Purpose}");
                         }
 
                         Console.WriteLine();
