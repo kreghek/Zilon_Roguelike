@@ -202,7 +202,7 @@ namespace Zilon.Core.Specs.Steps
                     {
                         if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
                         {
-                            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+                            var idleCommand = Context.ServiceProvider.GetRequiredService<IdleCommand>();
                             idleCommand.Execute();
                         }
 

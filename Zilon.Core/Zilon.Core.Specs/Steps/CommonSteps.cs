@@ -304,7 +304,7 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Я выполняю простой")]
         public void WhenЯВыполняюПростой()
         {
-            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+            var idleCommand = Context.ServiceProvider.GetRequiredService<IdleCommand>();
             idleCommand.Execute();
         }
 

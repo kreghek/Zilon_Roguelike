@@ -4,11 +4,14 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
 {
-    public class NextTurnCommand : ActorCommandBase
+    /// <summary>
+    /// Command to wait some time.
+    /// </summary>
+    public class IdleCommand : ActorCommandBase
     {
         private readonly IPlayer _player;
 
-        public NextTurnCommand(
+        public IdleCommand(
             IPlayer player,
             ISectorUiState playerState) : base(playerState)
         {
