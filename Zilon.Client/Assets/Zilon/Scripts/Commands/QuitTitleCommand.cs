@@ -1,4 +1,5 @@
-﻿using Assets.Zilon.Scripts.Services;
+﻿using Assets.Zilon.Scripts.Common;
+using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
 
@@ -28,8 +29,7 @@ namespace Assets.Zilon.Scripts.Commands
 
         public void Execute()
         {
-            _player.Reset();
-            _globeStorage.Reset();
+            GameCleanupHelper.ResetState(_player, _globeStorage);
 
             SceneManager.LoadScene("title");
         }
