@@ -111,7 +111,7 @@ namespace Zilon.TextClient
                             Console.Write(" t");
                         }
 
-                        var monsterInNode = playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x=>x.Node == node);
+                        var monsterInNode = playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Node == node);
                         if (monsterInNode != null)
                         {
                             Console.Write($" monster {monsterInNode}");
