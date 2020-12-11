@@ -53,15 +53,20 @@ namespace Zilon.Core.World
             // Генерируем новый биом, стартовый узел и организуем связь с текущим узлом.
             if (sectorNode.SectorScheme.TransSectorSids.Any(x => x.SectorLevelSid is null))
             {
-                var nextSectorNode = RollAndBindBiome();
+                var nextBiomeCount = RollNextBiomeCount();
 
-                // Организуем связь между двумя биомами.
+                for (var nextBiomeIndex = 0; nextBiomeIndex < nextBiomeCount; nextBiomeIndex++)
+                {
+                    var nextSectorNode = RollAndBindBiome();
 
-                biom.AddEdge(sectorNode, nextSectorNode);
+                    // Организуем связь между двумя биомами.
 
-                var nextBiom = nextSectorNode.Biome;
+                    biom.AddEdge(sectorNode, nextSectorNode);
 
-                nextBiom.AddEdge(sectorNode, nextSectorNode);
+                    var nextBiom = nextSectorNode.Biome;
+
+                    nextBiom.AddEdge(sectorNode, nextSectorNode);
+                }
             }
         }
 
@@ -82,6 +87,11 @@ namespace Zilon.Core.World
             var newBiomeSector = new SectorNode(biome, startSectorScheme);
 
             return newBiomeSector;
+        }
+
+        private int RollNextBiomeCount()
+        {
+            return 3;
         }
 
         public async Task<IBiome> InitBiomeAsync(ILocationScheme locationScheme)
