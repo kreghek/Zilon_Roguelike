@@ -78,6 +78,11 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
+        public override string ToString()
+        {
+            return $"Defeat {_target}";
+        }
+
         protected override void ResetData()
         {
             _refreshCounter = 0;
@@ -153,11 +158,6 @@ namespace Zilon.Bot.Players.Logics
             var nearbyIntruder = orderedIntruders.FirstOrDefault();
 
             return nearbyIntruder;
-        }
-
-        public override string ToString()
-        {
-            return $"Defeat {_target}";
         }
 
         private class AttackParams
