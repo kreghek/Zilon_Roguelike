@@ -142,7 +142,7 @@ namespace Zilon.Bot.Players.Logics
             }
         }
 
-        private IAttackTarget GetTarget(IActor actor, ISectorMap _map, IActorManager actorManager)
+        private static IAttackTarget GetTarget(IActor actor, ISectorMap _map, IActorManager actorManager)
         {
             //TODO Убрать дублирование кода с IntruderDetectedTrigger
             // Этот фрагмент уже однажды был использован неправильно,
@@ -153,6 +153,11 @@ namespace Zilon.Bot.Players.Logics
             var nearbyIntruder = orderedIntruders.FirstOrDefault();
 
             return nearbyIntruder;
+        }
+
+        public override string ToString()
+        {
+            return $"Defeat {_target}";
         }
 
         private class AttackParams
