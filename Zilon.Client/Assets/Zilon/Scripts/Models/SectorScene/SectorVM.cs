@@ -718,6 +718,7 @@ public class SectorVM : MonoBehaviour
     {
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         var activeActor = _playerState.ActiveActor.Actor;
+        //(activeActor.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>).DropIntention();
         var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
         survivalModule.Dead -= HumanPersonSurvival_Dead;
 

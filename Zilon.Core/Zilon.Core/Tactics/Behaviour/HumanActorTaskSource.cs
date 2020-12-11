@@ -99,6 +99,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             _intentionWait = false;
             _currentActorIntention = null;
+            DropIntention();
         }
 
         public void DropIntention()

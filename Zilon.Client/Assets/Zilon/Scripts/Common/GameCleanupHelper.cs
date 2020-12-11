@@ -12,7 +12,7 @@ namespace Assets.Zilon.Scripts.Common
             GlobeStorage globeStorage,
             IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource)
         {
-            humanActorTaskSource.DropIntention();
+            //humanActorTaskSource.DropIntention();
             player.Reset();
             globeStorage.Reset();
         }
