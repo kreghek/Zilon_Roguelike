@@ -11,11 +11,11 @@ namespace Zilon.Core.Tactics.Behaviour
         where TContext : ISectorTaskSourceContext
     {
         private readonly IReceiver<IActorTask> _actorTaskReceiver;
-        private readonly SpscChannel<IActorTask> _spscChannel;
         private readonly ISender<IActorTask> _actorTaskSender;
+        private readonly SpscChannel<IActorTask> _spscChannel;
+        private CancellationTokenSource _cancellationTokenSource;
         private IActor _currentActorIntention;
         private bool _intentionWait;
-        private CancellationTokenSource _cancellationTokenSource;
 
         public HumanActorTaskSource()
         {
@@ -23,6 +23,12 @@ namespace Zilon.Core.Tactics.Behaviour
             _actorTaskSender = _spscChannel;
             _actorTaskReceiver = _spscChannel;
             _cancellationTokenSource = new CancellationTokenSource();
+        }
+
+        public void Dispose()
+        {
+            _spscChannel.Dispose();
+            _cancellationTokenSource.Dispose();
         }
 
         private bool CurrentActorSetAndIsDead()
@@ -93,12 +99,6 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             _intentionWait = false;
             _currentActorIntention = null;
-        }
-
-        public void Dispose()
-        {
-            _spscChannel.Dispose();
-            _cancellationTokenSource.Dispose();
         }
 
         public void DropIntention()

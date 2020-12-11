@@ -7,10 +7,10 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         bool CanIntent();
 
+        void DropIntention();
+
         void Intent(IIntention intention, IActor activeActor);
 
         Task IntentAsync(IIntention intention, IActor activeActor);
-
-        void DropIntention();
     }
 }
