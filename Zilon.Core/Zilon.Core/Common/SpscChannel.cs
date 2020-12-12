@@ -18,17 +18,17 @@ namespace Zilon.Core.Common
             _values = new ConcurrentQueue<T>();
         }
 
+        public void Dispose()
+        {
+            _semaphore.Dispose();
+        }
+
         public void CancelReceiving()
         {
             foreach (var receiver in _receivers)
             {
                 receiver.SetCanceled();
             }
-        }
-
-        public void Dispose()
-        {
-            _semaphore.Dispose();
         }
 
         public async Task<T> ReceiveAsync(CancellationToken cancellationToken)

@@ -29,11 +29,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     public class HumanActorTaskSourceTests
     {
         /// <summary>
-        /// Тест проверяет получение задачи актёра после указания намерения.
-        /// Задача запрашивается до указания намерения.
+        /// Тест проверяет сброс ожидания задачи.
         /// </summary>
         [Test]
-        public async Task GetActorTaskAsync_GetActorTaskBeforeIntention_ReturnsActorTask()
+        public async Task DropIntention_WaitTask_InteroptsTaskWaiting()
         {
             // ARRANGE
 
@@ -49,19 +48,23 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
             var intention = intentionMock.Object;
 
-            using var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
-
             var contextMock = new Mock<ISectorTaskSourceContext>();
             var context = contextMock.Object;
+
+            using var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
 
             // ACT
 
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
-            await taskSource.IntentAsync(intention, actor).ConfigureAwait(false);
-            var factActorTask = await getActorTaskTask.ConfigureAwait(false);
+            taskSource.DropIntention();
+
+            Func<Task> act = async () =>
+            {
+                var _ = await getActorTaskTask.ConfigureAwait(false);
+            };
 
             // ASSERT
-            factActorTask.Should().Be(task);
+            act.Should().Throw<TaskCanceledException>();
         }
 
         /// <summary>
@@ -101,10 +104,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         }
 
         /// <summary>
-        /// Тест проверяет сброс ожидания задачи.
+        /// Тест проверяет получение задачи актёра после указания намерения.
+        /// Задача запрашивается до указания намерения.
         /// </summary>
         [Test]
-        public async Task DropIntention_WaitTask_InteroptsTaskWaiting()
+        public async Task GetActorTaskAsync_GetActorTaskBeforeIntention_ReturnsActorTask()
         {
             // ARRANGE
 
@@ -120,23 +124,19 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
             var intention = intentionMock.Object;
 
+            using var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
+
             var contextMock = new Mock<ISectorTaskSourceContext>();
             var context = contextMock.Object;
-
-            using var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
 
             // ACT
 
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
-            taskSource.DropIntention();
-
-            Func<Task> act = async () =>
-            {
-                var _ = await getActorTaskTask.ConfigureAwait(false);
-            };
+            await taskSource.IntentAsync(intention, actor).ConfigureAwait(false);
+            var factActorTask = await getActorTaskTask.ConfigureAwait(false);
 
             // ASSERT
-            act.Should().Throw<TaskCanceledException>();
+            factActorTask.Should().Be(task);
         }
 
         private static IActor CreateActor(IMap map, IGraphNode startNode)
