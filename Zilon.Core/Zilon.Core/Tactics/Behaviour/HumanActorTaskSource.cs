@@ -113,7 +113,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 _spscChannel.CancelReceiving();
             }
             catch (TaskCanceledException)
-            { 
+            {
                 // This is expected cancellation behaviour.
                 // Just ensure that exception is corrent and continue execution.
             }
