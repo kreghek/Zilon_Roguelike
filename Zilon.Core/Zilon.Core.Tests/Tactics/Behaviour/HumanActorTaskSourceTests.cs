@@ -22,15 +22,17 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     /// По окончанию задачи на перемещение должен выдавать пустые задачи.
     /// </summary>
     [TestFixture]
+    // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
+    // Бесконечное ожидание задачи в тестах - признак ошибки.
+    [Timeout(1000)]
     public class HumanActorTaskSourceTests
     {
         /// <summary>
         /// Тест проверяет получение задачи актёра после указания намерения.
+        /// Задача запрашивается до указания намерения.
         /// </summary>
         [Test]
-        // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
-        [Timeout(1000)]
-        public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask()
+        public async Task GetActorTaskAsync_GetActorTaskBeforeIntention_ReturnsActorTask()
         {
             // ARRANGE
 
@@ -63,11 +65,12 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
         /// <summary>
         /// Тест проверяет получение задачи актёра после указания намерения.
+        /// Задача запрашивается после указания намерения.
         /// </summary>
         [Test]
         // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
         [Timeout(1000)]
-        public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask2()
+        public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask()
         {
             // ARRANGE
 
@@ -92,6 +95,42 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             await taskSource.IntentAsync(intention, actor).ConfigureAwait(false);
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
+            var factActorTask = await getActorTaskTask.ConfigureAwait(false);
+
+            // ASSERT
+            factActorTask.Should().Be(task);
+        }
+
+        /// <summary>
+        /// Тест проверяет сброс ожидания задачи.
+        /// </summary>
+        [Test]
+        public async Task DropIntention_WaitTask_InteroptsTaskWaiting()
+        {
+            // ARRANGE
+
+            var map = await SquareMapFactory.CreateAsync(10).ConfigureAwait(false);
+
+            var actorNode = map.Nodes.SelectByHexCoords(0, 0);
+
+            var actor = CreateActor(map, actorNode);
+
+            var taskMock = new Mock<IActorTask>();
+            var task = taskMock.Object;
+            var intentionMock = new Mock<IIntention>();
+            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
+            var intention = intentionMock.Object;
+
+            var contextMock = new Mock<ISectorTaskSourceContext>();
+            var context = contextMock.Object;
+
+            using var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
+
+            // ACT
+
+            var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
+            taskSource.DropIntention();
+            
             var factActorTask = await getActorTaskTask.ConfigureAwait(false);
 
             // ASSERT
