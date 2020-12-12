@@ -107,6 +107,16 @@ namespace Zilon.Core.Tactics.Behaviour
             _cancellationTokenSource.Cancel();
 
             _cancellationTokenSource = new CancellationTokenSource();
+
+            try
+            {
+                _spscChannel.CancelReceiving();
+            }
+            catch (TaskCanceledException)
+            { 
+                // This is expected cancellation behaviour.
+                // Just ensure that exception is corrent and continue execution.
+            }
         }
     }
 }

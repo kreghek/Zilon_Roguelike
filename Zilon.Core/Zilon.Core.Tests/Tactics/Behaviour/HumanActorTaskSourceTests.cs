@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -68,8 +69,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Задача запрашивается после указания намерения.
         /// </summary>
         [Test]
-        // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
-        [Timeout(1000)]
         public async Task GetActorTaskAsync_GetActorTaskAfterIntention_ReturnsActorTask()
         {
             // ARRANGE
@@ -130,11 +129,14 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
             taskSource.DropIntention();
-            
-            var factActorTask = await getActorTaskTask.ConfigureAwait(false);
+
+            Func<Task> act = async () =>
+            {
+                var _ = await getActorTaskTask.ConfigureAwait(false);
+            };
 
             // ASSERT
-            factActorTask.Should().Be(task);
+            act.Should().Throw<TaskCanceledException>();
         }
 
         private static IActor CreateActor(IMap map, IGraphNode startNode)

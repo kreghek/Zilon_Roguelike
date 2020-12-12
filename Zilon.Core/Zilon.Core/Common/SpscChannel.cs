@@ -18,6 +18,14 @@ namespace Zilon.Core.Common
             _values = new ConcurrentQueue<T>();
         }
 
+        public void CancelReceiving()
+        {
+            foreach (var receiver in _receivers)
+            {
+                receiver.SetCanceled();
+            }
+        }
+
         public void Dispose()
         {
             _semaphore.Dispose();
