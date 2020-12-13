@@ -11,10 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Zilon/Scenes/combat.unity
     guid: 9150d1f561c93334d88041c1ea9ea261
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Zilon/Scenes/scores.unity
     guid: 721f50cc8827c684bac660610525f7a9
+  - enabled: 1
+    path: Assets/Zilon/Scenes/globe-selection.unity
+    guid: a7dcf705c18b0bf45aadaeafaf6c415e
   m_configObjects: {}

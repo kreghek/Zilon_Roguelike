@@ -130,18 +130,6 @@ public class SectorVM : MonoBehaviour
     [Inject]
     private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
 
-    [NotNull]
-    [Inject]
-    private readonly GlobeStorage _globeStorage;
-
-    [NotNull]
-    [Inject]
-    private readonly IGlobeInitializer _globeInitializer;
-
-    [NotNull]
-    [Inject]
-    private readonly NationalUnityEventService _nationalUnityEventService;
-
     public List<ActorViewModel> ActorViewModels { get; }
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
@@ -218,9 +206,9 @@ public class SectorVM : MonoBehaviour
     }
 
     // ReSharper disable once UnusedMember.Local
-    public async void Awake()
+    public void Awake()
     {
-        await InitServicesAsync();
+        InitServices();
 
         var nodeViewModels = InitNodeViewModels();
         _nodeViewModels.AddRange(nodeViewModels);
@@ -282,16 +270,8 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private async Task InitServicesAsync()
+    private void InitServices()
     {
-        //TODO эти операции лучше выполнять на однельной сцене генерации мира.
-        if (_globeStorage.Globe == null)
-        {
-            var globe = await _globeInitializer.CreateGlobeAsync("intro");
-            _globeStorage.AssignGlobe(globe);
-            _nationalUnityEventService.Globe = globe;
-        }
-
         SectorNode = _humanPlayer.SectorNode;
 
         _staticObjectManager = SectorNode.Sector.StaticObjectManager;
