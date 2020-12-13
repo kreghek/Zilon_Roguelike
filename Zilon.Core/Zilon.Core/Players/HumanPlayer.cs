@@ -40,7 +40,8 @@ namespace Zilon.Core.Players
 
         public void Reset()
         {
-            var actor = Globe.SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items).SingleOrDefault(x => x.Person == MainPerson);
+            var actor = Globe.SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items)
+                .SingleOrDefault(x => x.Person == MainPerson);
             if (actor != null)
             {
                 if (actor.TaskSource is IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource)
