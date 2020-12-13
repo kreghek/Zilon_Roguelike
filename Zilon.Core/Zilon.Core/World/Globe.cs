@@ -68,7 +68,7 @@ namespace Zilon.Core.World
                     }
                 }
                 catch (TaskCanceledException)
-                { 
+                {
                     // Do nothing for his actor. His task cancelled.
                 }
             }
