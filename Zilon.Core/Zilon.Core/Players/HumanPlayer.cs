@@ -44,7 +44,7 @@ namespace Zilon.Core.Players
             if (actor != null)
             {
                 if (actor.TaskSource is IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource)
-                { 
+                {
                     //TODO Cancel current task waiting
                 }
             }
