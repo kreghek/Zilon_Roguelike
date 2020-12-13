@@ -8,18 +8,23 @@ using JetBrains.Annotations;
 
 using UnityEngine;
 
+using Zilon.Core.Players;
+
 class GameLoopUpdater
 {
-    [NotNull] private readonly GlobeStorage _globeStorage;
-    [NotNull] private readonly ICommandBlockerService _commandBlockerService;
+    [NotNull] 
+    private readonly IPlayer _player;
+
+    [NotNull] 
+    private readonly ICommandBlockerService _commandBlockerService;
 
     private CancellationTokenSource _cancellationTokenSource;
 
     public bool IsStarted { get; private set; }
 
-    public GameLoopUpdater(GlobeStorage globeStorage, ICommandBlockerService commandBlockerService)
+    public GameLoopUpdater(IPlayer player, ICommandBlockerService commandBlockerService)
     {
-        _globeStorage = globeStorage ?? throw new ArgumentNullException(nameof(globeStorage));
+        this._player = player;
         _commandBlockerService = commandBlockerService ?? throw new ArgumentNullException(nameof(commandBlockerService));
     }
 
@@ -52,7 +57,7 @@ class GameLoopUpdater
 
             try
             {
-                await _globeStorage.Globe.UpdateAsync();
+                await _player.Globe.UpdateAsync();
             }
             catch(Exception exception)
             {

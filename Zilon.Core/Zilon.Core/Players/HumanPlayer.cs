@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using Zilon.Core.Persons;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Players
@@ -39,6 +40,15 @@ namespace Zilon.Core.Players
 
         public void Reset()
         {
+            var actor = Globe.SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items).SingleOrDefault(x => x.Person == MainPerson);
+            if (actor != null)
+            {
+                if (actor.TaskSource is IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource)
+                { 
+                    //TODO Cancel current task waiting
+                }
+            }
+
             Globe = null;
             MainPerson = null;
         }
