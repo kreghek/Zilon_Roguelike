@@ -146,6 +146,10 @@ public class SectorVM : MonoBehaviour
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
 
+    public ISectorNode SectorNode { get; set; }
+
+    public ISector Sector => SectorNode.Sector;
+
     public SectorVM()
     {
         _nodeViewModels = new List<MapNodeVM>();
@@ -288,14 +292,14 @@ public class SectorVM : MonoBehaviour
             _nationalUnityEventService.Globe = globe;
         }
 
-        var sectorNode = _humanPlayer.SectorNode;
+        SectorNode = _humanPlayer.SectorNode;
 
-        _staticObjectManager = sectorNode.Sector.StaticObjectManager;
+        _staticObjectManager = SectorNode.Sector.StaticObjectManager;
 
         _staticObjectManager.Added += StaticObjectManager_Added;
         _staticObjectManager.Removed += StaticObjectManager_Removed;
 
-        sectorNode.Sector.TrasitionUsed += Sector_HumanGroupExit;
+        SectorNode.Sector.TrasitionUsed += Sector_HumanGroupExit;
     }
 
     private void StaticObjectManager_Removed(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
@@ -318,7 +322,7 @@ public class SectorVM : MonoBehaviour
 
     private List<MapNodeVM> InitNodeViewModels()
     {
-        var map = _humanPlayer.SectorNode.Sector.Map;
+        var map = Sector.Map;
         var nodeVMs = new List<MapNodeVM>();
 
         foreach (var node in map.Nodes)
@@ -333,7 +337,7 @@ public class SectorVM : MonoBehaviour
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
             mapNodeVm.Neighbors = map.GetNext(node).Cast<HexNode>().ToArray();
-            mapNodeVm.LocaltionScheme = _humanPlayer.SectorNode.Sector.Scheme;
+            mapNodeVm.LocaltionScheme = Sector.Scheme;
 
             if (map.Transitions.ContainsKey(node))
             {
@@ -360,7 +364,7 @@ public class SectorVM : MonoBehaviour
 
     private void CreateMonsterViewModels(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
+        var monsters = Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
         foreach (var monsterActor in monsters)
         {
             var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
@@ -397,7 +401,7 @@ public class SectorVM : MonoBehaviour
             ActorViewModels.Add(actorViewModel);
         }
 
-        var humanActors = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is HumanPerson && x.Person != _humanPlayer.MainPerson).ToArray();
+        var humanActors = Sector.ActorManager.Items.Where(x => x.Person is HumanPerson && x.Person != _humanPlayer.MainPerson).ToArray();
         foreach (var actor in humanActors)
         {
             var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
@@ -607,7 +611,7 @@ public class SectorVM : MonoBehaviour
             }
         }
 
-        _humanPlayer.SectorNode.Sector.TrasitionUsed -= Sector_HumanGroupExit;
+        Sector.TrasitionUsed -= Sector_HumanGroupExit;
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.

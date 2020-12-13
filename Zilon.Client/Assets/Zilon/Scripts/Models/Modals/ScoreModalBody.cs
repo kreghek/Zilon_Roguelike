@@ -74,7 +74,7 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
 
             _scoreStorage.AppendScores(name, scores, deathReason);
 
-            GameCleanupHelper.ResetState(_player, _globeStorage, _playerState.TaskSource);
+            GameCleanupHelper.ResetState(_player, _globeStorage);
         }
         catch (Exception exception)
         {

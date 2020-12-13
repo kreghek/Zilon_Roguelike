@@ -23,8 +23,6 @@ namespace Assets.Zilon.Scripts.Commands
         [Inject]
         private readonly GlobeStorage _globeStorage;
 
-        [NotNull] [Inject] private readonly ISectorUiState _playerState;
-
         public bool CanExecute()
         {
             return true;
@@ -32,7 +30,7 @@ namespace Assets.Zilon.Scripts.Commands
 
         public void Execute()
         {
-            GameCleanupHelper.ResetState(_player, _globeStorage, _playerState.TaskSource);
+            GameCleanupHelper.ResetState(_player, _globeStorage);
 
             SceneManager.LoadScene("title");
         }

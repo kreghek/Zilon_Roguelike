@@ -9,10 +9,8 @@ namespace Assets.Zilon.Scripts.Common
     {
         public static void ResetState(
             IPlayer player,
-            GlobeStorage globeStorage,
-            IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource)
+            GlobeStorage globeStorage)
         {
-            //humanActorTaskSource.DropIntention();
             player.Reset();
             globeStorage.Reset();
         }
