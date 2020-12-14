@@ -92,13 +92,15 @@ namespace Zilon.TextClient
                             Console.Write(" t");
                         }
 
-                        var monsterInNode = playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Node == node);
+                        var monsterInNode =
+                            playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Node == node);
                         if (monsterInNode != null && monsterInNode != uiState.ActiveActor.Actor)
                         {
                             Console.Write($" monster {monsterInNode.Person}");
                         }
 
-                        var staticObjectInNode = playerActorSectorNode.Sector.StaticObjectManager.Items.SingleOrDefault(x => x.Node == node);
+                        var staticObjectInNode =
+                            playerActorSectorNode.Sector.StaticObjectManager.Items.SingleOrDefault(x => x.Node == node);
                         if (staticObjectInNode != null)
                         {
                             Console.Write($" object in node {staticObjectInNode.Purpose}");
@@ -118,7 +120,6 @@ namespace Zilon.TextClient
                 {
                     break;
                 }
-
             } while (true);
 
             return GameScreen.Scores;
