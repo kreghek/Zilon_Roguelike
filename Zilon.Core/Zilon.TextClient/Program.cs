@@ -30,7 +30,6 @@ namespace Zilon.TextClient
             serviceContainer.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
             serviceContainer.AddScoped<MoveCommand>();
-            serviceContainer.AddScoped<NextTurnCommand>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 
@@ -67,12 +66,6 @@ namespace Zilon.TextClient
             do
             {
                 PrintState(uiState.ActiveActor.Actor);
-
-                Console.WriteLine("- \"move x y\" to move person.");
-                Console.WriteLine("- \"look\" to get detailet info around.");
-                Console.WriteLine("- \"idle\" to wait some time.");
-                Console.WriteLine("- \"exit\" to quit the game.");
-
                 Console.WriteLine("Input command:");
                 var inputText = Console.ReadLine();
                 if (inputText.StartsWith("m"))
@@ -87,62 +80,34 @@ namespace Zilon.TextClient
                     var targetNode = map.Nodes.OfType<HexNode>()
                         .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
 
-                    var command = scope.ServiceProvider.GetRequiredService<MoveCommand>();
+                    var moveCommand = scope.ServiceProvider.GetRequiredService<MoveCommand>();
 
                     uiState.SelectedViewModel = new NodeViewModel { Node = targetNode };
 
-                    command.Execute();
+                    moveCommand.Execute();
                 }
 
                 if (inputText.StartsWith("look"))
                 {
                     var nextMoveNodes = playerActorSectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node);
-                    var actorFow = uiState.ActiveActor.Actor.Person.GetModule<IFowData>();
-                    var fowNodes = actorFow.GetSectorFowData(playerActorSectorNode.Sector).Nodes.Select(x => x.Node);
-
                     Console.WriteLine("Nodes:");
                     Console.WriteLine();
-                    foreach (var node in fowNodes)
+                    foreach (var nextNode in nextMoveNodes)
                     {
-                        Console.Write(node);
-
-                        if (nextMoveNodes.Contains(node))
-                        {
-                            Console.Write(" 1");
-                        }
-
-                        if (playerActorSectorNode.Sector.Map.Transitions.TryGetValue(node, out var _))
+                        Console.Write(nextNode);
+                        if (playerActorSectorNode.Sector.Map.Transitions.TryGetValue(nextNode, out var _))
                         {
                             Console.Write(" t");
-                        }
-
-                        var monsterInNode = playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Node == node);
-                        if (monsterInNode != null && monsterInNode != uiState.ActiveActor.Actor)
-                        {
-                            Console.Write($" monster {monsterInNode.Person}");
-                        }
-
-                        var staticObjectInNode = playerActorSectorNode.Sector.StaticObjectManager.Items.SingleOrDefault(x => x.Node == node);
-                        if (staticObjectInNode != null)
-                        {
-                            Console.Write($" object in node {staticObjectInNode.Purpose}");
                         }
 
                         Console.WriteLine();
                     }
                 }
 
-                if (inputText.StartsWith("idle"))
-                {
-                    var command = scope.ServiceProvider.GetRequiredService<NextTurnCommand>();
-                    command.Execute();
-                }
-
                 if (inputText.StartsWith("exit"))
                 {
                     break;
                 }
-
             } while (true);
         }
 
