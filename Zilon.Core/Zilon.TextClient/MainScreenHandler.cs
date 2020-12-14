@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -52,8 +54,9 @@ namespace Zilon.TextClient
 
             // Play
 
+            var cancellationTokenSource = new CancellationTokenSource();
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            gameLoop.StartProcessAsync();
+            gameLoop.StartProcessAsync(cancellationTokenSource.Token);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             do
@@ -68,11 +71,11 @@ namespace Zilon.TextClient
 
                 Console.WriteLine("Input command:");
                 var inputText = Console.ReadLine();
-                if (inputText.StartsWith("m"))
+                if (inputText.StartsWith("m", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var components = inputText.Split(' ');
-                    var x = int.Parse(components[1]);
-                    var y = int.Parse(components[2]);
+                    var x = int.Parse(components[1], CultureInfo.InvariantCulture);
+                    var y = int.Parse(components[2], CultureInfo.InvariantCulture);
                     var offsetCoords = new OffsetCoords(x, y);
 
                     ISectorMap map = playerActorSectorNode.Sector.Map;
@@ -87,7 +90,7 @@ namespace Zilon.TextClient
                     command.Execute();
                 }
 
-                if (inputText.StartsWith("look"))
+                if (inputText.StartsWith("look", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var nextMoveNodes = playerActorSectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node);
                     var actorFow = uiState.ActiveActor.Actor.Person.GetModule<IFowData>();
@@ -127,24 +130,26 @@ namespace Zilon.TextClient
                     }
                 }
 
-                if (inputText.StartsWith("idle"))
+                if (inputText.StartsWith("idle", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var command = serviceScope.ServiceProvider.GetRequiredService<NextTurnCommand>();
                     command.Execute();
                 }
 
-                if (inputText.StartsWith("dead"))
+                if (inputText.StartsWith("dead", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var survivalModule = player.MainPerson.GetModule<ISurvivalModule>();
                     survivalModule.SetStatForce(Core.Persons.SurvivalStatType.Health, 0);
                 }
 
-                if (inputText.StartsWith("exit"))
+                if (inputText.StartsWith("exit", StringComparison.InvariantCultureIgnoreCase))
                 {
                     break;
                 }
             } while (!player.MainPerson.GetModule<ISurvivalModule>().IsDead);
 
+
+            cancellationTokenSource.Cancel();
             return GameScreen.Scores;
         }
     }
