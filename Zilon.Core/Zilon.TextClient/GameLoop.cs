@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Zilon.Core.World;
@@ -14,10 +15,12 @@ namespace Zilon.TextClient
             _globe = globe ?? throw new ArgumentNullException(nameof(globe));
         }
 
-        public async Task StartProcessAsync()
+        public async Task StartProcessAsync(CancellationToken cancellationToken)
         {
             while (true)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 await _globe.UpdateAsync();
             }
         }

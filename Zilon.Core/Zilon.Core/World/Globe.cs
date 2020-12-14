@@ -69,7 +69,8 @@ namespace Zilon.Core.World
                 }
                 catch (TaskCanceledException)
                 {
-                    // Do nothing for his actor. His task cancelled.
+                    // Do nothing for his actor. His task was cancelled.
+                    _taskDict.TryRemove(actor, out var _);
                 }
             }
         }
