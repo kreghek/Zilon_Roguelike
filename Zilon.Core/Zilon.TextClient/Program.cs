@@ -50,6 +50,28 @@ namespace Zilon.TextClient
                 CurrentScreen = GameScreen.GlobeSelection,
                 ServiceScope = scope
             };
+
+            var mainScreenHandler = new MainScreenHandler();
+            var globeSelectionScreenHandler = new GlobeSelectionScreenHandler();
+            IScreenHandler screenHandler = globeSelectionScreenHandler;
+            do
+            {
+                var nextScreen = await screenHandler.StartProcessingAsync(gameState.ServiceScope);
+
+                switch (nextScreen)
+                {
+                    case GameScreen.GlobeSelection:
+                        screenHandler = globeSelectionScreenHandler;
+                        break;
+
+                    case GameScreen.Main:
+                        screenHandler = mainScreenHandler;
+                        break;
+
+                    default:
+                        throw new System.Exception();
+                }
+            } while (true);
         }
     }
 }

@@ -14,7 +14,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.TextClient
 {
-    internal class MainScreenHandler
+    internal class MainScreenHandler : IScreenHandler
     {
         public async Task<GameScreen> StartProcessingAsync(IServiceScope serviceScope)
         {
