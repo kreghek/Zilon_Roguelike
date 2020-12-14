@@ -62,6 +62,7 @@ namespace Zilon.TextClient
                 Console.WriteLine("- \"move x y\" to move person.");
                 Console.WriteLine("- \"look\" to get detailet info around.");
                 Console.WriteLine("- \"idle\" to wait some time.");
+                Console.WriteLine("- \"dead\" to dead :)");
                 Console.WriteLine("- \"exit\" to quit the game.");
 
                 Console.WriteLine("Input command:");
@@ -131,13 +132,19 @@ namespace Zilon.TextClient
                     command.Execute();
                 }
 
+                if (inputText.StartsWith("dead"))
+                {
+                    var survivalModule = player.MainPerson.GetModule<ISurvivalModule>();
+                    survivalModule.SetStatForce(Core.Persons.SurvivalStatType.Health, 0);
+                }
+
                 if (inputText.StartsWith("exit"))
                 {
                     break;
                 }
-            } while (true);
+            } while (!player.MainPerson.GetModule<ISurvivalModule>().IsDead);
 
-            return GameScreen.Scores;
+            return GameScreen.GlobeSelection;
         }
     }
 }
