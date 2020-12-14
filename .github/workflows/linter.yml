@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: git pull
-      - run: dotnet tool install -g dotnet-format
+      - run: dotnet tool install --global dotnet-format --version 4.1.131201
       - name: format codebase ${{ matrix.codebasePath }}
         run: dotnet-format -f ${{ matrix.codebasePath }} -v d
         working-directory: ${{env.working-directory}}
@@ -52,7 +52,7 @@ jobs:
         with:
           dotnet-version: '3.1.x'
       - name: Setup ReSharper Command Line Tools
-        run: dotnet tool install -g JetBrains.ReSharper.GlobalTools
+        run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2020.2.4
       - name: Clean up code
         run: jb cleanupcode --profile="Full Cleanup" Zilon.Core.sln
         working-directory: ${{env.working-directory}}
