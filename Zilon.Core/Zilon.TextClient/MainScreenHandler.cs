@@ -38,7 +38,7 @@ namespace Zilon.TextClient
             var serviceScope = gameState.ServiceScope;
             var player = serviceScope.ServiceProvider.GetRequiredService<IPlayer>();
 
-            var gameLoop = new GameLoop(player.Globe);
+            var gameLoop = new GameLoop(player.Globe, player);
             var globe = player.Globe;
             var uiState = serviceScope.ServiceProvider.GetRequiredService<ISectorUiState>();
             var playerActor = (from sectorNode in globe.SectorNodes

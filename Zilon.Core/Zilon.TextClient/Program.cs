@@ -60,7 +60,7 @@ namespace Zilon.TextClient
             IScreenHandler screenHandler = globeSelectionScreenHandler;
             do
             {
-                var nextScreen = await screenHandler.StartProcessingAsync(gameState);
+                var nextScreen = await screenHandler.StartProcessingAsync(gameState).ConfigureAwait(false);
 
                 switch (nextScreen)
                 {

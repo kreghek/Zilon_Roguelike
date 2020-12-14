@@ -168,6 +168,14 @@ namespace Zilon.Core.World
             {
                 taskState.TaskSource.CancelTask(taskState.Task);
             }
+            else
+            {
+                if (actor.TaskSource is IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource)
+                {
+                    humanTaskSource.DropIntention();
+                }
+                
+            }
         }
 
         private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)

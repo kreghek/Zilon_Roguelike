@@ -95,7 +95,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _currentActorIntention = null;
         }
 
-        public void CancelTask(IActorTask cencelledActorTask)
+        public void CancelTask(IActorTask cancelledActorTask)
         {
             _intentionWait = false;
             _currentActorIntention = null;
@@ -104,6 +104,9 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void DropIntention()
         {
+            _intentionWait = false;
+            _currentActorIntention = null;
+
             _cancellationTokenSource.Cancel();
 
             _cancellationTokenSource = new CancellationTokenSource();
