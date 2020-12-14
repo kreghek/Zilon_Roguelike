@@ -174,7 +174,7 @@ namespace Zilon.Core.World.NameGeneration
             {
                 var s = sex != null ? sex.Value : (Sex)_dice.Roll(0, 2 - 1);
                 bool init = initials != null ? (bool)initials : _dice.Roll(0, 2 - 1) != 0;
-                int middle = _dice.Roll(0, maxMiddleNames + 1 - 1);
+                int middle = _dice.Roll(0, (maxMiddleNames + 1) - 1);
 
                 names.Add(Generate(s, middle, init));
             }

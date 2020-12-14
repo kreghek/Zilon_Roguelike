@@ -48,7 +48,7 @@ namespace Zilon.Core.Client
 
             var addedCount = addedResource?.Count;
             var removedCount = removedResource?.Count;
-            var remainsCount = resource.Count + addedCount.GetValueOrDefault() - removedCount.GetValueOrDefault();
+            var remainsCount = (resource.Count + addedCount.GetValueOrDefault()) - removedCount.GetValueOrDefault();
 
             if (remainsCount > 0)
             {
