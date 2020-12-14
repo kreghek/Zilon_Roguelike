@@ -52,7 +52,7 @@ namespace Zilon.TextClient
                     GameScreen.GlobeSelection => globeSelectionScreenHandler,
                     GameScreen.Main => mainScreenHandler,
                     GameScreen.Scores => scoresScreenHandler,
-                    _ => throw new InvalidOperationException($"Unsupported screen {nextScreen}."),
+                    _ => throw new InvalidOperationException($"Unsupported screen {nextScreen}.")
                 };
             } while (true);
         }
