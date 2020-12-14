@@ -52,7 +52,7 @@ jobs:
         with:
           dotnet-version: '3.1.x'
       - name: Setup ReSharper Command Line Tools
-        run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2020.2.4
+        run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2020.3.0
       - name: Clean up code
         run: jb cleanupcode --profile="Full Cleanup" Zilon.Core.sln
         working-directory: ${{env.working-directory}}
