@@ -31,7 +31,7 @@ namespace Zilon.Core.Common
             return new[]
             {
                 offsetX + rowOffset,
-                (offsetY * 3f) / 4
+                offsetY * 3f / 4
             };
         }
 

@@ -40,7 +40,7 @@ namespace Zilon.Core.Common
                 // t принимает значения 0..1.
                 // Мы делим 1 на количество шагов n.
                 // И  берём i-тый шаг.
-                var t = (1.0f / n) * i;
+                var t = 1.0f / n * i;
 
                 AddPointToList(a, b, list, t);
             }

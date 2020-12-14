@@ -24,7 +24,7 @@ namespace Zilon.Core.CommonServices.Dices
             var notForcedDiff = n - forcedDiff;
 
             var forcedLow = (notForcedDiff / 2) + 1;
-            var forcedHigh = (forcedLow + forcedDiff) - 1;
+            var forcedHigh = forcedLow + forcedDiff - 1;
 
             var selectiveRoll = _random.NextDouble();
             if (selectiveRoll <= FORCED_P)
@@ -46,7 +46,7 @@ namespace Zilon.Core.CommonServices.Dices
             if (selectiveRoll <= notForcedSeparatorShiffted)
             {
                 // Берём маленькие числа
-                return _random.Next(1, (forcedLow - 1) + 1);
+                return _random.Next(1, forcedLow - 1 + 1);
             }
 
             // Берём большие числа

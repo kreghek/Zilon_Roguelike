@@ -17,7 +17,8 @@ namespace Zilon.TextClient
 
             Console.WriteLine("Globe created");
             Console.WriteLine($"Nodes: {globe.SectorNodes.Count()}");
-            Console.WriteLine($"Persons: {globe.SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items).Count()}");
+            Console.WriteLine(
+                $"Persons: {globe.SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items).Count()}");
             Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
 

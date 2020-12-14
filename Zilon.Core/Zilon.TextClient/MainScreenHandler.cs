@@ -16,6 +16,21 @@ namespace Zilon.TextClient
 {
     internal class MainScreenHandler : IScreenHandler
     {
+        private static void PrintState(IActor actor)
+        {
+            Console.WriteLine(new string('=', 10));
+            if (actor.Person.GetModule<IEffectsModule>().Items.Any())
+            {
+                Console.WriteLine("Effects:");
+                foreach (var effect in actor.Person.GetModule<IEffectsModule>().Items)
+                {
+                    Console.WriteLine(effect);
+                }
+            }
+
+            Console.WriteLine($"Position:{actor.Node}");
+        }
+
         public async Task<GameScreen> StartProcessingAsync(IServiceScope serviceScope)
         {
             var player = serviceScope.ServiceProvider.GetRequiredService<IPlayer>();
@@ -123,22 +138,6 @@ namespace Zilon.TextClient
             } while (true);
 
             return GameScreen.Scores;
-        }
-
-
-        private static void PrintState(IActor actor)
-        {
-            Console.WriteLine(new string('=', 10));
-            if (actor.Person.GetModule<IEffectsModule>().Items.Any())
-            {
-                Console.WriteLine("Effects:");
-                foreach (var effect in actor.Person.GetModule<IEffectsModule>().Items)
-                {
-                    Console.WriteLine(effect);
-                }
-            }
-
-            Console.WriteLine($"Position:{actor.Node}");
         }
     }
 }

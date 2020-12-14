@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -69,7 +70,7 @@ namespace Zilon.TextClient
                         break;
 
                     default:
-                        throw new System.Exception();
+                        throw new Exception();
                 }
             } while (true);
         }
