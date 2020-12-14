@@ -31,8 +31,9 @@ namespace Zilon.TextClient
             Console.WriteLine($"Position:{actor.Node}");
         }
 
-        public async Task<GameScreen> StartProcessingAsync(IServiceScope serviceScope)
+        public async Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
+            var serviceScope = gameState.ServiceScope;
             var player = serviceScope.ServiceProvider.GetRequiredService<IPlayer>();
 
             var gameLoop = new GameLoop(player.Globe);
@@ -144,7 +145,7 @@ namespace Zilon.TextClient
                 }
             } while (!player.MainPerson.GetModule<ISurvivalModule>().IsDead);
 
-            return GameScreen.GlobeSelection;
+            return GameScreen.Scores;
         }
     }
 }

@@ -10,8 +10,9 @@ namespace Zilon.TextClient
 {
     internal class GlobeSelectionScreenHandler : IScreenHandler
     {
-        public async Task<GameScreen> StartProcessingAsync(IServiceScope serviceScope)
+        public async Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
+            var serviceScope = gameState.ServiceScope;
             var globeInitializer = serviceScope.ServiceProvider.GetRequiredService<IGlobeInitializer>();
             var globe = await globeInitializer.CreateGlobeAsync("intro");
 

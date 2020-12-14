@@ -21,6 +21,7 @@ namespace Zilon.TextClient
     {
         public GameScreen CurrentScreen { get; set; }
         public IServiceScope ServiceScope { get; set; }
+        public ServiceProvider ServiceProvider { get; internal set; }
     }
 
     internal static class Program
@@ -49,15 +50,17 @@ namespace Zilon.TextClient
             var gameState = new GameState
             {
                 CurrentScreen = GameScreen.GlobeSelection,
-                ServiceScope = scope
+                ServiceScope = scope,
+                ServiceProvider = serviceProvider
             };
 
             var mainScreenHandler = new MainScreenHandler();
             var globeSelectionScreenHandler = new GlobeSelectionScreenHandler();
+            var scoresScreenHandler = new ScoresScreenHandler();
             IScreenHandler screenHandler = globeSelectionScreenHandler;
             do
             {
-                var nextScreen = await screenHandler.StartProcessingAsync(gameState.ServiceScope);
+                var nextScreen = await screenHandler.StartProcessingAsync(gameState);
 
                 switch (nextScreen)
                 {
@@ -67,6 +70,10 @@ namespace Zilon.TextClient
 
                     case GameScreen.Main:
                         screenHandler = mainScreenHandler;
+                        break;
+
+                    case GameScreen.Scores:
+                        screenHandler = scoresScreenHandler;
                         break;
 
                     default:
