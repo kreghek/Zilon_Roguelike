@@ -9,21 +9,6 @@ using Zilon.Core.World;
 
 namespace Zilon.TextClient
 {
-    internal enum GameScreen
-    {
-        Undefinded,
-        GlobeSelection,
-        Main,
-        Scores
-    }
-
-    internal class GameState
-    {
-        public GameScreen CurrentScreen { get; set; }
-        public ServiceProvider ServiceProvider { get; internal set; }
-        public IServiceScope ServiceScope { get; set; }
-    }
-
     internal static class Program
     {
         private static async Task Main()
@@ -62,23 +47,13 @@ namespace Zilon.TextClient
             {
                 var nextScreen = await screenHandler.StartProcessingAsync(gameState).ConfigureAwait(false);
 
-                switch (nextScreen)
+                screenHandler = nextScreen switch
                 {
-                    case GameScreen.GlobeSelection:
-                        screenHandler = globeSelectionScreenHandler;
-                        break;
-
-                    case GameScreen.Main:
-                        screenHandler = mainScreenHandler;
-                        break;
-
-                    case GameScreen.Scores:
-                        screenHandler = scoresScreenHandler;
-                        break;
-
-                    default:
-                        throw new Exception();
-                }
+                    GameScreen.GlobeSelection => globeSelectionScreenHandler,
+                    GameScreen.Main => mainScreenHandler,
+                    GameScreen.Scores => scoresScreenHandler,
+                    _ => throw new InvalidOperationException($"Unsupported screen {nextScreen}."),
+                };
             } while (true);
         }
     }
