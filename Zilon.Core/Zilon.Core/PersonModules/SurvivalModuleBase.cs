@@ -174,7 +174,7 @@ namespace Zilon.Core.PersonModules
             {
                 stat.Value = value;
 
-                ProcessIfHealth(stat, valueDiff: 0);
+                ProcessIfHealth(stat, 0);
                 ProcessIfWound(stat);
             }
         }
