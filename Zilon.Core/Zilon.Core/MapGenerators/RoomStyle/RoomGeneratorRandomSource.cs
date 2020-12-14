@@ -80,7 +80,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var bottomBorder = maxVerticalBorder - PASS_PADDING;
 
             var list = new List<RoomInteriorObjectMeta>();
-            var maxCount = (roomWidth * roomHeight) / 9;
+            var maxCount = roomWidth * roomHeight / 9;
             var count = _dice.Roll(0, maxCount);
             for (var i = 0; i < count; i++)
             {

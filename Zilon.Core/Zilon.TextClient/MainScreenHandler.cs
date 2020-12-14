@@ -148,7 +148,6 @@ namespace Zilon.TextClient
                 }
             } while (!player.MainPerson.GetModule<ISurvivalModule>().IsDead);
 
-
             cancellationTokenSource.Cancel();
             return GameScreen.Scores;
         }
