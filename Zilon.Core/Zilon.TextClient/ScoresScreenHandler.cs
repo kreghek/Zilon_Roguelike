@@ -21,6 +21,7 @@ namespace Zilon.TextClient
             var player = gameState.ServiceScope.ServiceProvider.GetRequiredService<IPlayer>();
             player.Reset();
 
+            Console.WriteLine("Press Enter to start new game...");
             Console.ReadLine();
 
             gameState.ServiceScope.Dispose();

@@ -21,7 +21,7 @@ namespace Zilon.TextClient
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                await _globe.UpdateAsync();
+                await _globe.UpdateAsync().ConfigureAwait(false);
             }
         }
     }
