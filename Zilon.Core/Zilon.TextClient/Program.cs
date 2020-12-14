@@ -9,7 +9,7 @@ using Zilon.Core.World;
 namespace Zilon.TextClient
 {
     internal enum GameScreen
-    { 
+    {
         Undefinded,
         GlobeSelection,
         Main,
@@ -45,7 +45,8 @@ namespace Zilon.TextClient
 
             using var scope = serviceProvider.CreateScope();
 
-            var gameState = new GameState { 
+            var gameState = new GameState
+            {
                 CurrentScreen = GameScreen.GlobeSelection,
                 ServiceScope = scope
             };
