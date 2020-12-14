@@ -174,7 +174,6 @@ namespace Zilon.Core.World
                 {
                     humanTaskSource.DropIntention();
                 }
-
             }
         }
 
