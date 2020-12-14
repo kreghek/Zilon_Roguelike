@@ -36,7 +36,7 @@ namespace Zilon.Core.CommonServices.Dices
             var range = max - min;
             var roll = dice.Roll(range + 1);
 
-            return (roll - 1) + min;
+            return roll - 1 + min;
         }
 
         public static int Roll2D6(this IDice dice)

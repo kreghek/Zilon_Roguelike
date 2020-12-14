@@ -32,7 +32,7 @@ namespace Zilon.Core.CommonServices
 
             foreach (var record in records)
             {
-                if (roll >= pointer && roll <= (pointer + record.ModifiedWeight) - 1)
+                if (roll >= pointer && roll <= pointer + record.ModifiedWeight - 1)
                 {
                     return record;
                 }

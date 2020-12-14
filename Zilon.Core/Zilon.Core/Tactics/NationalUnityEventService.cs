@@ -108,7 +108,7 @@ namespace Zilon.Core.Tactics
             const double EVENT_BONUS_PROBABILITY_DIFF = EVENT_BONUS_MIN_PROBABILITY - EVENT_BONUS_MAX_PROBABILITY;
             var dateDistanceNormalized = Math.Min(dateDistance, EVENT_BONUS_DURATION);
             var eventRaiseRollValue = EVENT_BONUS_MAX_PROBABILITY +
-                                      ((EVENT_BONUS_PROBABILITY_DIFF * dateDistanceNormalized) / EVENT_BONUS_DURATION);
+                                      (EVENT_BONUS_PROBABILITY_DIFF * dateDistanceNormalized / EVENT_BONUS_DURATION);
 
             return _dice.Roll(100) > eventRaiseRollValue;
         }

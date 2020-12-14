@@ -44,7 +44,7 @@ namespace Zilon.Core.Specs.Steps
                             .As<ITacticalActUsageRandomSource>();
                         actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
                             // Всегда берётся среднее значение среди всех бросков
-                            .Returns<Roll>(roll => (roll.Dice / 2) * roll.Count);
+                            .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);
                         actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
                             .Returns(4);
                         actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
@@ -65,7 +65,7 @@ namespace Zilon.Core.Specs.Steps
                             .As<ITacticalActUsageRandomSource>();
                         actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>()))
                             // Всегда берётся среднее значение среди всех бросков
-                            .Returns<Roll>(roll => (roll.Dice / 2) * roll.Count);
+                            .Returns<Roll>(roll => roll.Dice / 2 * roll.Count);
                         actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>()))
                             .Returns(4);
                         actUsageRandomSourceMock.Setup(x => x.RollArmorSave())
