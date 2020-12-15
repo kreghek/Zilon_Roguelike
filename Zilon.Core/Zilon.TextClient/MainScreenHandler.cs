@@ -130,14 +130,16 @@ namespace Zilon.TextClient
                             playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Node == node);
                         if (monsterInNode != null && monsterInNode != uiState.ActiveActor.Actor)
                         {
-                            Console.Write($" {UiResource.MonsterNodeMarker} {monsterInNode.Person.Id}:{monsterInNode.Person}");
+                            Console.Write(
+                                $" {UiResource.MonsterNodeMarker} {monsterInNode.Person.Id}:{monsterInNode.Person}");
                         }
 
                         var staticObjectInNode =
                             playerActorSectorNode.Sector.StaticObjectManager.Items.SingleOrDefault(x => x.Node == node);
                         if (staticObjectInNode != null)
                         {
-                            Console.Write($" {UiResource.StaticObjectNodeMarker} {staticObjectInNode.Id}:{staticObjectInNode.Purpose}");
+                            Console.Write(
+                                $" {UiResource.StaticObjectNodeMarker} {staticObjectInNode.Id}:{staticObjectInNode.Purpose}");
                         }
 
                         Console.WriteLine();
