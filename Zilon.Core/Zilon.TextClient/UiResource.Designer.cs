@@ -72,9 +72,9 @@ namespace Zilon.TextClient {
         /// <summary>
         ///   Looks up a localized string similar to Effects.
         /// </summary>
-        internal static string Effects {
+        internal static string EffectsLabel {
             get {
-                return ResourceManager.GetString("Effects", resourceCulture);
+                return ResourceManager.GetString("EffectsLabel", resourceCulture);
             }
         }
         
@@ -84,6 +84,15 @@ namespace Zilon.TextClient {
         internal static string ExitCommandDescription {
             get {
                 return ResourceManager.GetString("ExitCommandDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Globe created.
+        /// </summary>
+        internal static string GlobeGenerationCompleteMessage {
+            get {
+                return ResourceManager.GetString("GlobeGenerationCompleteMessage", resourceCulture);
             }
         }
         
@@ -144,9 +153,27 @@ namespace Zilon.TextClient {
         /// <summary>
         ///   Looks up a localized string similar to Nodes.
         /// </summary>
-        internal static string Nodes {
+        internal static string NodesLabel {
             get {
-                return ResourceManager.GetString("Nodes", resourceCulture);
+                return ResourceManager.GetString("NodesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Persons.
+        /// </summary>
+        internal static string PersonsLabel {
+            get {
+                return ResourceManager.GetString("PersonsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press [Enter] to continue....
+        /// </summary>
+        internal static string PressEnterToContinuePropmpt {
+            get {
+                return ResourceManager.GetString("PressEnterToContinuePropmpt", resourceCulture);
             }
         }
         

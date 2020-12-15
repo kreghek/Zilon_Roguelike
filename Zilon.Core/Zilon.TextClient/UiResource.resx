@@ -120,11 +120,14 @@
   <data name="DeadCommandDescription" xml:space="preserve">
     <value>- "dead" to dead :)</value>
   </data>
-  <data name="Effects" xml:space="preserve">
+  <data name="EffectsLabel" xml:space="preserve">
     <value>Effects</value>
   </data>
   <data name="ExitCommandDescription" xml:space="preserve">
     <value>- "exit" to quit the game.</value>
+  </data>
+  <data name="GlobeGenerationCompleteMessage" xml:space="preserve">
+    <value>Globe created</value>
   </data>
   <data name="IdleCommandDescription" xml:space="preserve">
     <value>- "idle" to wait some time.</value>
@@ -144,8 +147,14 @@
   <data name="NextNodeMarker" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="Nodes" xml:space="preserve">
+  <data name="NodesLabel" xml:space="preserve">
     <value>Nodes</value>
+  </data>
+  <data name="PersonsLabel" xml:space="preserve">
+    <value>Persons</value>
+  </data>
+  <data name="PressEnterToContinuePropmpt" xml:space="preserve">
+    <value>Press [Enter] to continue...</value>
   </data>
   <data name="StaticObjectNodeMarker" xml:space="preserve">
     <value>object</value>

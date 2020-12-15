@@ -23,7 +23,7 @@ namespace Zilon.TextClient
             Console.WriteLine(new string('=', 10));
             if (actor.Person.GetModule<IEffectsModule>().Items.Any())
             {
-                Console.WriteLine($"{UiResource.Effects}:");
+                Console.WriteLine($"{UiResource.EffectsLabel}:");
                 foreach (var effect in actor.Person.GetModule<IEffectsModule>().Items)
                 {
                     Console.WriteLine(effect);
@@ -96,7 +96,7 @@ namespace Zilon.TextClient
                     var actorFow = uiState.ActiveActor.Actor.Person.GetModule<IFowData>();
                     var fowNodes = actorFow.GetSectorFowData(playerActorSectorNode.Sector).Nodes.Select(x => x.Node);
 
-                    Console.WriteLine($"{UiResource.Nodes}:");
+                    Console.WriteLine($"{UiResource.NodesLabel}:");
                     Console.WriteLine();
                     foreach (var node in fowNodes)
                     {

@@ -14,13 +14,18 @@ namespace Zilon.TextClient
         {
             var serviceScope = gameState.ServiceScope;
             var globeInitializer = serviceScope.ServiceProvider.GetRequiredService<IGlobeInitializer>();
-            var globe = await globeInitializer.CreateGlobeAsync("intro");
+            var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
 
-            Console.WriteLine("Globe created");
-            Console.WriteLine($"Nodes: {globe.SectorNodes.Count()}");
-            Console.WriteLine(
-                $"Persons: {globe.SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items).Count()}");
-            Console.WriteLine("Press Enter to continue...");
+            Console.WriteLine(UiResource.GlobeGenerationCompleteMessage);
+
+            var sectors = globe.SectorNodes.Select(x => x.Sector);
+            Console.WriteLine($"{UiResource.NodesLabel}: {sectors.Count()}");
+
+            var persons = sectors.SelectMany(x => x.ActorManager.Items);
+            Console.WriteLine($"{UiResource.PersonsLabel}: {persons.Count()}");
+
+            Console.WriteLine(UiResource.PressEnterToContinuePropmpt);
+
             Console.ReadLine();
 
             return GameScreen.Main;
