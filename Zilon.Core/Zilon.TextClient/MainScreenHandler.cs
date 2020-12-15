@@ -107,7 +107,7 @@ namespace Zilon.TextClient
                     var nextMoveNodes = playerActorSectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node);
                     var actorFow = uiState.ActiveActor.Actor.Person.GetModule<IFowData>();
                     var fowNodes = actorFow.GetSectorFowData(playerActorSectorNode.Sector)
-                        .Nodes.Where(x=>x.State == SectorMapNodeFowState.Observing)
+                        .Nodes.Where(x => x.State == SectorMapNodeFowState.Observing)
                         .Select(x => x.Node);
 
                     Console.WriteLine($"{UiResource.NodesLabel}:");
