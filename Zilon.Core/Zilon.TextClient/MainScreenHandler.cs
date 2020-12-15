@@ -137,7 +137,7 @@ namespace Zilon.TextClient
 
                 if (inputText.StartsWith("idle", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var command = serviceScope.ServiceProvider.GetRequiredService<NextTurnCommand>();
+                    var command = serviceScope.ServiceProvider.GetRequiredService<IdleCommand>();
                     command.Execute();
                 }
 
