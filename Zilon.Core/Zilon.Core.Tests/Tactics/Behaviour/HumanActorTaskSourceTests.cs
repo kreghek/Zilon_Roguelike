@@ -56,7 +56,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // ACT
 
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
-            taskSource.DropIntention();
+            taskSource.DropIntentionWaiting();
 
             Func<Task> act = async () =>
             {

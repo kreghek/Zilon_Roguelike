@@ -172,7 +172,7 @@ namespace Zilon.Core.World
             {
                 if (actor.TaskSource is IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource)
                 {
-                    humanTaskSource.DropIntention();
+                    humanTaskSource.DropIntentionWaiting();
                 }
             }
         }
