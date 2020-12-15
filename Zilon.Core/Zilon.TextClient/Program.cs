@@ -26,6 +26,7 @@ namespace Zilon.TextClient
             serviceContainer.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
             serviceContainer.AddScoped<MoveCommand>();
+            serviceContainer.AddScoped<IdleCommand>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 
