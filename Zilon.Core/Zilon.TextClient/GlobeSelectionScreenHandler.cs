@@ -8,8 +8,13 @@ using Zilon.Core.World;
 
 namespace Zilon.TextClient
 {
+    /// <summary>
+    /// Screen to work with globe generation and selection.
+    /// Potentially, game may have multiple globes. And the user can select different globe to play.
+    /// </summary>
     internal class GlobeSelectionScreenHandler : IScreenHandler
     {
+        /// <inheritdoc/>
         public async Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
             var serviceScope = gameState.ServiceScope;

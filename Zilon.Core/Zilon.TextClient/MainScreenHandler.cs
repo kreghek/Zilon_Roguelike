@@ -16,6 +16,10 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.TextClient
 {
+    /// <summary>
+    /// Main game screen handler.
+    /// All game in this screen.
+    /// </summary>
     internal class MainScreenHandler : IScreenHandler
     {
         private static void PrintState(IActor actor)
@@ -33,6 +37,7 @@ namespace Zilon.TextClient
             Console.WriteLine($"Position:{actor.Node}");
         }
 
+        /// <inheritdoc/>
         public Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
             var serviceScope = gameState.ServiceScope;

@@ -8,8 +8,12 @@ using Zilon.Core.Scoring;
 
 namespace Zilon.TextClient
 {
+    /// <summary>
+    /// The game screen to show final player scores and achievements.
+    /// </summary>
     internal class ScoresScreenHandler : IScreenHandler
     {
+        /// <inheritdoc/>
         public Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
             var scoreManager = gameState.ServiceScope.ServiceProvider.GetRequiredService<IScoreManager>();
