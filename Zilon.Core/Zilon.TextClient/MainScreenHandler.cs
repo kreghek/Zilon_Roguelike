@@ -110,6 +110,10 @@ namespace Zilon.TextClient
                         .Nodes.Where(x => x.State == SectorMapNodeFowState.Observing)
                         .Select(x => x.Node);
 
+                    var fowNodesAll = actorFow.GetSectorFowData(playerActorSectorNode.Sector)
+                        .Nodes.Where(x => x.State == SectorMapNodeFowState.Explored || x.State == SectorMapNodeFowState.Observing)
+                        .Select(x => x.Node);
+
                     Console.WriteLine($"{UiResource.NodesLabel}:");
                     Console.WriteLine();
                     foreach (var node in fowNodes)
@@ -124,6 +128,12 @@ namespace Zilon.TextClient
                         if (playerActorSectorNode.Sector.Map.Transitions.TryGetValue(node, out var _))
                         {
                             Console.Write($" {UiResource.TransitionNodeMarker}");
+                        }
+
+                        var undiscoveredNodes = playerActorSectorNode.Sector.Map.GetNext(node).Where(x=> !fowNodesAll.Contains(x));
+                        if (undiscoveredNodes.Any())
+                        {
+                            Console.Write($" {UiResource.UndiscaveredNodeMarker}");
                         }
 
                         var monsterInNode =

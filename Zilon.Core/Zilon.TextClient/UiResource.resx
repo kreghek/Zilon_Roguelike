@@ -165,4 +165,7 @@
   <data name="TransitionNodeMarker" xml:space="preserve">
     <value>t</value>
   </data>
+  <data name="UndiscaveredNodeMarker" xml:space="preserve">
+    <value>u</value>
+  </data>
 </root>

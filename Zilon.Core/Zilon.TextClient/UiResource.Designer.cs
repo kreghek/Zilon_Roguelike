@@ -203,5 +203,14 @@ namespace Zilon.TextClient {
                 return ResourceManager.GetString("TransitionNodeMarker", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to u.
+        /// </summary>
+        internal static string UndiscaveredNodeMarker {
+            get {
+                return ResourceManager.GetString("UndiscaveredNodeMarker", resourceCulture);
+            }
+        }
     }
 }
