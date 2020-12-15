@@ -13,8 +13,8 @@ on:
       - 'v*.*.*'
 
 jobs:
-  buildCore:
-    name: Build text client
+  buildRelease:
+    name: Build release text client
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -22,14 +22,39 @@ jobs:
           - Zilon.TextClient
         configuration:
           - Release
-          - Debug
+        runtime:
+          - win10-x64
+          - ubuntu.16.10-x64
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x'
-      - run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj -c ${{ matrix.configuration }} -f netcoreapp3.1 -o bin
+      - run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj -c ${{ matrix.configuration }} -f netcoreapp3.1 -o bin /p:DebugType=None -r ${{ matrix.runtime }}
+      - uses: actions/upload-artifact@v1
+        with:
+          name: TextClient
+          path: bin
+  buildDebug:
+    name: Build debug text client
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - Zilon.TextClient
+        configuration:
+          - Debug
+        runtime:
+          - win10-x64
+          - ubuntu.16.10-x64
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj -c ${{ matrix.configuration }} -f netcoreapp3.1 -o bin -r ${{ matrix.runtime }}
       - uses: actions/upload-artifact@v1
         with:
           name: TextClient
