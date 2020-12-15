@@ -92,14 +92,23 @@ namespace Zilon.TextClient
 
                     uiState.SelectedViewModel = new NodeViewModel { Node = targetNode };
 
-                    command.Execute();
+                    if (command.CanExecute())
+                    {
+                        command.Execute();
+                    }
+                    else
+                    {
+                        Console.WriteLine(UiResource.CommandCantExecuteMessage);
+                    }
                 }
 
                 if (inputText.StartsWith("look", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var nextMoveNodes = playerActorSectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node);
                     var actorFow = uiState.ActiveActor.Actor.Person.GetModule<IFowData>();
-                    var fowNodes = actorFow.GetSectorFowData(playerActorSectorNode.Sector).Nodes.Select(x => x.Node);
+                    var fowNodes = actorFow.GetSectorFowData(playerActorSectorNode.Sector)
+                        .Nodes.Where(x=>x.State == SectorMapNodeFowState.Observing)
+                        .Select(x => x.Node);
 
                     Console.WriteLine($"{UiResource.NodesLabel}:");
                     Console.WriteLine();
@@ -121,14 +130,14 @@ namespace Zilon.TextClient
                             playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Node == node);
                         if (monsterInNode != null && monsterInNode != uiState.ActiveActor.Actor)
                         {
-                            Console.Write($" {UiResource.MonsterNodeMarker} {monsterInNode.Person}");
+                            Console.Write($" {UiResource.MonsterNodeMarker} {monsterInNode.Person.Id}:{monsterInNode.Person}");
                         }
 
                         var staticObjectInNode =
                             playerActorSectorNode.Sector.StaticObjectManager.Items.SingleOrDefault(x => x.Node == node);
                         if (staticObjectInNode != null)
                         {
-                            Console.Write($" {UiResource.StaticObjectNodeMarker} {staticObjectInNode.Purpose}");
+                            Console.Write($" {UiResource.StaticObjectNodeMarker} {staticObjectInNode.Id}:{staticObjectInNode.Purpose}");
                         }
 
                         Console.WriteLine();
@@ -138,7 +147,15 @@ namespace Zilon.TextClient
                 if (inputText.StartsWith("idle", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var command = serviceScope.ServiceProvider.GetRequiredService<IdleCommand>();
-                    command.Execute();
+
+                    if (command.CanExecute())
+                    {
+                        command.Execute();
+                    }
+                    else
+                    {
+                        Console.WriteLine(UiResource.CommandCantExecuteMessage);
+                    }
                 }
 
                 if (inputText.StartsWith("dead", StringComparison.InvariantCultureIgnoreCase))

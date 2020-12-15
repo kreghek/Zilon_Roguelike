@@ -61,6 +61,15 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can not do this.
+        /// </summary>
+        internal static string CommandCantExecuteMessage {
+            get {
+                return ResourceManager.GetString("CommandCantExecuteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to - &quot;dead&quot; to dead :).
         /// </summary>
         internal static string DeadCommandDescription {
