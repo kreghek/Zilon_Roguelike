@@ -82,7 +82,7 @@ namespace Zilon.Emulation.Common
             serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>(serviceProvider =>
             {
                 var identifierGenerator = serviceProvider.GetService<IMonsterIdentifierGenerator>();
-                return new MonsterPersonFactory()
+                return new MonsterPersonFactory
                 {
                     MonsterIdentifierGenerator = identifierGenerator
                 };
