@@ -13,7 +13,7 @@ namespace Zilon.TextClient
     /// </summary>
     internal class ScoresScreenHandler : IScreenHandler
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
             var scoreManager = gameState.ServiceScope.ServiceProvider.GetRequiredService<IScoreManager>();

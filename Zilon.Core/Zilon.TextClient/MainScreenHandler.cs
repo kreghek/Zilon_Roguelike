@@ -37,7 +37,7 @@ namespace Zilon.TextClient
             Console.WriteLine($"Position:{actor.Node}");
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
             var serviceScope = gameState.ServiceScope;

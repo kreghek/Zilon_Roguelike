@@ -14,7 +14,7 @@ namespace Zilon.TextClient
     /// </summary>
     internal class GlobeSelectionScreenHandler : IScreenHandler
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
             var serviceScope = gameState.ServiceScope;
