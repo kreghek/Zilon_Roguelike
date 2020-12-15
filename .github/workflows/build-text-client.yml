@@ -1,0 +1,36 @@
+name: Build Text Client
+
+on:
+  pull_request:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  buildCore:
+    name: Build text client
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - Zilon.TextClient
+        configuration:
+          - Release
+          - Debug
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj -c {{ matrix.configuration }} -f netcoreapp3.1 -o bin
+      - uses: actions/upload-artifact@v1
+        with:
+          name: TextClient
+          path: bin
