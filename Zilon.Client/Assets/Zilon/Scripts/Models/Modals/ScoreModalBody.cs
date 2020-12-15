@@ -1,10 +1,7 @@
 ﻿using System;
 
 using Assets.Zilon.Scripts;
-using Assets.Zilon.Scripts.Common;
 using Assets.Zilon.Scripts.Services;
-
-using JetBrains.Annotations;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,8 +9,6 @@ using UnityEngine.UI;
 
 using Zenject;
 
-using Zilon.Core.Client;
-using Zilon.Core.Players;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 
@@ -36,14 +31,6 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
 
     [Inject]
     private readonly IPlayerEventLogService _playerEventLogService;
-
-    [Inject]
-    private readonly IPlayer _player;
-
-    [Inject]
-    private readonly GlobeStorage _globeStorage;
-
-    [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     public string Caption => "Scores";
 
@@ -73,8 +60,6 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
             var deathReason = _deathReasonService.GetDeathReasonSummary(lastPlayerEvent, Zilon.Core.Localization.Language.Ru);
 
             _scoreStorage.AppendScores(name, scores, deathReason);
-
-            GameCleanupHelper.ResetState(_player, _globeStorage);
         }
         catch (Exception exception)
         {

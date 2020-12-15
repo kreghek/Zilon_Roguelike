@@ -29,6 +29,11 @@ namespace Zilon.Core.Common
             {
                 receiver.SetCanceled();
             }
+
+            for (var i = 0; i < _receivers.ToArray().Length; i++)
+            {
+                _receivers.TryTake(out var _);
+            }
         }
 
         public async Task<T> ReceiveAsync(CancellationToken cancellationToken)

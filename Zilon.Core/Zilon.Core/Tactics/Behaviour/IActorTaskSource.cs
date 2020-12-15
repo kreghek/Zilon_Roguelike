@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -11,8 +10,8 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <summary>
         /// Called then task cancelled. Example, when actor removed from sector.
         /// </summary>
-        /// <param name="cencelledActorTask"></param>
-        void CancelTask(IActorTask cencelledActorTask);
+        /// <param name="cancelledActorTask"></param>
+        void CancelTask(IActorTask cancelledActorTask);
 
         /// <summary>
         /// Возвращает набор задач для указанного актёра.

@@ -69,7 +69,8 @@ namespace Zilon.Core.World
                 }
                 catch (TaskCanceledException)
                 {
-                    // Do nothing for his actor. His task cancelled.
+                    // Do nothing for his actor. His task was cancelled.
+                    _taskDict.TryRemove(actor, out var _);
                 }
             }
         }
@@ -166,6 +167,13 @@ namespace Zilon.Core.World
             if (_taskDict.TryRemove(actor, out var taskState))
             {
                 taskState.TaskSource.CancelTask(taskState.Task);
+            }
+            else
+            {
+                if (actor.TaskSource is IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource)
+                {
+                    humanTaskSource.DropIntentionWaiting();
+                }
             }
         }
 

@@ -42,21 +42,14 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             var actor = CreateActor(map, actorNode);
 
-            var taskMock = new Mock<IActorTask>();
-            var task = taskMock.Object;
-            var intentionMock = new Mock<IIntention>();
-            intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
-            var intention = intentionMock.Object;
-
-            var contextMock = new Mock<ISectorTaskSourceContext>();
-            var context = contextMock.Object;
+            var context = Mock.Of<ISectorTaskSourceContext>();
 
             using var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
 
             // ACT
 
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
-            taskSource.DropIntention();
+            taskSource.DropIntentionWaiting();
 
             Func<Task> act = async () =>
             {
@@ -88,8 +81,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             intentionMock.Setup(x => x.CreateActorTask(It.IsAny<IActor>())).Returns(task);
             var intention = intentionMock.Object;
 
-            var contextMock = new Mock<ISectorTaskSourceContext>();
-            var context = contextMock.Object;
+            var context = Mock.Of<ISectorTaskSourceContext>();
 
             using var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
 
@@ -126,8 +118,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
             using var taskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
 
-            var contextMock = new Mock<ISectorTaskSourceContext>();
-            var context = contextMock.Object;
+            var context = Mock.Of<ISectorTaskSourceContext>();
 
             // ACT
 
@@ -141,15 +132,11 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
         private static IActor CreateActor(IMap map, IGraphNode startNode)
         {
-            var playerMock = new Mock<IPlayer>();
-            var player = playerMock.Object;
-
             var personMock = new Mock<IPerson>();
             personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSizePattern.Size1);
             var person = personMock.Object;
 
-            var taskSourceMock = new Mock<IActorTaskSource<ISectorTaskSourceContext>>();
-            var taskSource = taskSourceMock.Object;
+            var taskSource = Mock.Of<IActorTaskSource<ISectorTaskSourceContext>>();
 
             var actor = new Actor(person, taskSource, startNode);
 

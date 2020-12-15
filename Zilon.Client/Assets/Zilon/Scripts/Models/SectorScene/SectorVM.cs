@@ -130,13 +130,21 @@ public class SectorVM : MonoBehaviour
     [Inject]
     private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
 
+    [NotNull]
+    [Inject]
+    private readonly GlobeStorage _globeStorage;
+
+    [NotNull]
+    [Inject]
+    private readonly IGlobeInitializer _globeInitializer;
+
+    [NotNull]
+    [Inject]
+    private readonly NationalUnityEventService _nationalUnityEventService;
+
     public List<ActorViewModel> ActorViewModels { get; }
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
-
-    public ISectorNode SectorNode { get; set; }
-
-    public ISector Sector => SectorNode.Sector;
 
     public SectorVM()
     {
@@ -206,9 +214,9 @@ public class SectorVM : MonoBehaviour
     }
 
     // ReSharper disable once UnusedMember.Local
-    public void Awake()
+    public async void Awake()
     {
-        InitServices();
+        await InitServicesAsync();
 
         var nodeViewModels = InitNodeViewModels();
         _nodeViewModels.AddRange(nodeViewModels);
@@ -270,16 +278,24 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void InitServices()
+    private async Task InitServicesAsync()
     {
-        SectorNode = _humanPlayer.SectorNode;
+        //TODO эти операции лучше выполнять на однельной сцене генерации мира.
+        if (_globeStorage.Globe == null)
+        {
+            var globe = await _globeInitializer.CreateGlobeAsync("intro");
+            _globeStorage.AssignGlobe(globe);
+            _nationalUnityEventService.Globe = globe;
+        }
 
-        _staticObjectManager = SectorNode.Sector.StaticObjectManager;
+        var sectorNode = _humanPlayer.SectorNode;
+
+        _staticObjectManager = sectorNode.Sector.StaticObjectManager;
 
         _staticObjectManager.Added += StaticObjectManager_Added;
         _staticObjectManager.Removed += StaticObjectManager_Removed;
 
-        SectorNode.Sector.TrasitionUsed += Sector_HumanGroupExit;
+        sectorNode.Sector.TrasitionUsed += Sector_HumanGroupExit;
     }
 
     private void StaticObjectManager_Removed(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
@@ -302,7 +318,7 @@ public class SectorVM : MonoBehaviour
 
     private List<MapNodeVM> InitNodeViewModels()
     {
-        var map = Sector.Map;
+        var map = _humanPlayer.SectorNode.Sector.Map;
         var nodeVMs = new List<MapNodeVM>();
 
         foreach (var node in map.Nodes)
@@ -317,7 +333,7 @@ public class SectorVM : MonoBehaviour
             mapNodeVm.transform.position = worldPosition;
             mapNodeVm.Node = hexNode;
             mapNodeVm.Neighbors = map.GetNext(node).Cast<HexNode>().ToArray();
-            mapNodeVm.LocaltionScheme = Sector.Scheme;
+            mapNodeVm.LocaltionScheme = _humanPlayer.SectorNode.Sector.Scheme;
 
             if (map.Transitions.ContainsKey(node))
             {
@@ -344,7 +360,7 @@ public class SectorVM : MonoBehaviour
 
     private void CreateMonsterViewModels(IEnumerable<MapNodeVM> nodeViewModels)
     {
-        var monsters = Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
+        var monsters = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is MonsterPerson).ToArray();
         foreach (var monsterActor in monsters)
         {
             var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
@@ -381,7 +397,7 @@ public class SectorVM : MonoBehaviour
             ActorViewModels.Add(actorViewModel);
         }
 
-        var humanActors = Sector.ActorManager.Items.Where(x => x.Person is HumanPerson && x.Person != _humanPlayer.MainPerson).ToArray();
+        var humanActors = _humanPlayer.SectorNode.Sector.ActorManager.Items.Where(x => x.Person is HumanPerson && x.Person != _humanPlayer.MainPerson).ToArray();
         foreach (var actor in humanActors)
         {
             var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
@@ -591,7 +607,7 @@ public class SectorVM : MonoBehaviour
             }
         }
 
-        Sector.TrasitionUsed -= Sector_HumanGroupExit;
+        _humanPlayer.SectorNode.Sector.TrasitionUsed -= Sector_HumanGroupExit;
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.
@@ -702,7 +718,6 @@ public class SectorVM : MonoBehaviour
     {
         _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
         var activeActor = _playerState.ActiveActor.Actor;
-        (activeActor.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>).DropIntention();
         var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
         survivalModule.Dead -= HumanPersonSurvival_Dead;
 

@@ -5,7 +5,6 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
-using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 
 public class RestIndicatorHandler : MonoBehaviour
@@ -25,16 +24,11 @@ public class RestIndicatorHandler : MonoBehaviour
 
     public void Update()
     {
-        if (_humanPlayer.MainPerson is null)
+        if (_humanPlayer.SectorNode.Sector is null)
         {
-            // In start of the game until initialization was not complete yet.
-            Icon.SetActive(false);
-            return;
-        }
-
-        if (_humanPlayer.MainPerson.GetModuleSafe<ISurvivalModule>()?.IsDead == true)
-        {
-            Icon.SetActive(false);
+            // Это может происходить, пока создаётся сектор при Awake модели представления сектора.
+            // TODO Добавить метод Init для того, чтобы сообщить текущему обработчику,
+            // что можно начать мониторинг.
             return;
         }
 

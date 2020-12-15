@@ -1,5 +1,4 @@
-﻿using Assets.Zilon.Scripts.Common;
-using Assets.Zilon.Scripts.Services;
+﻿using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
 
@@ -7,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 using Zenject;
 
-using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Players;
 
@@ -30,7 +28,8 @@ namespace Assets.Zilon.Scripts.Commands
 
         public void Execute()
         {
-            GameCleanupHelper.ResetState(_player, _globeStorage);
+            _player.Reset();
+            _globeStorage.Reset();
 
             SceneManager.LoadScene("title");
         }
