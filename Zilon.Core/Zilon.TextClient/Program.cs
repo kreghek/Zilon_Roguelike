@@ -9,6 +9,7 @@ using Zilon.Core.Players;
 using Zilon.Core.World;
 
 [assembly: NeutralResourcesLanguage("en")]
+
 namespace Zilon.TextClient
 {
     internal static class Program
