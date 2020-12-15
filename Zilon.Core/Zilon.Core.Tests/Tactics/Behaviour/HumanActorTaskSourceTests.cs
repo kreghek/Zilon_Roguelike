@@ -132,8 +132,6 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
 
         private static IActor CreateActor(IMap map, IGraphNode startNode)
         {
-            var player = Mock.Of<IPlayer>();
-
             var personMock = new Mock<IPerson>();
             personMock.SetupGet(x => x.PhysicalSize).Returns(PhysicalSizePattern.Size1);
             var person = personMock.Object;
