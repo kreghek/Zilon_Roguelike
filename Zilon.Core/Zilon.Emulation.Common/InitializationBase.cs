@@ -79,7 +79,14 @@ namespace Zilon.Emulation.Common
                 var generator = new MonsterGenerator(schemeService, monsterFactory, randomSource, actorTaskSource);
                 return generator;
             });
-            serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
+            serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>(serviceProvider =>
+            {
+                var identifierGenerator = serviceProvider.GetService<IMonsterIdentifierGenerator>();
+                return new MonsterPersonFactory()
+                {
+                    MonsterIdentifierGenerator = identifierGenerator
+                };
+            });
             serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
         }
 

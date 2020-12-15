@@ -9,9 +9,16 @@ namespace Zilon.Core.PersonGeneration
 {
     public sealed class MonsterPersonFactory : IMonsterPersonFactory
     {
+        public IMonsterIdentifierGenerator MonsterIdentifierGenerator { get; set; }
+
         public IPerson Create(IMonsterScheme monsterScheme)
         {
             var monsterPerson = new MonsterPerson(monsterScheme);
+
+            if (MonsterIdentifierGenerator != null)
+            {
+                monsterPerson.Id = MonsterIdentifierGenerator.GetNewId();
+            }
 
             var movingModule = new MonsterMovingModule(monsterScheme);
             monsterPerson.AddModule(movingModule);

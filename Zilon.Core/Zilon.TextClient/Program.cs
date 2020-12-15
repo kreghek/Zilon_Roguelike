@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core.Commands;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.Players;
 using Zilon.Core.World;
 
@@ -28,6 +29,7 @@ namespace Zilon.TextClient
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
             serviceContainer.AddScoped<MoveCommand>();
             serviceContainer.AddScoped<IdleCommand>();
+            serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 
