@@ -54,14 +54,23 @@ namespace Zilon.Core.World
 
                 //TODO Это можно делать параллельно. Одновременно должны думать сразу все актёры.
                 // Делается легко, через Parallel.ForEach, но из-за этого часто заваливаются тесты и даже не видно причины отказа.
-                var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
+                var actorTaskTask = taskSource.GetActorTaskAsync(actor, context);
 
-                var state = new TaskState(actor, actorTask, taskSource);
-                if (!_taskDict.TryAdd(actor, state))
+                try
                 {
-                    // Это происходит, когда игрок пытается присвоить новую команду,
-                    // когда старая еще не закончена и не может быть заменена.
-                    throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
+                    var actorTask = await actorTaskTask.ConfigureAwait(false);
+                    var state = new TaskState(actor, actorTask, taskSource);
+                    if (!_taskDict.TryAdd(actor, state))
+                    {
+                        // Это происходит, когда игрок пытается присвоить новую команду,
+                        // когда старая еще не закончена и не может быть заменена.
+                        throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                    // Do nothing for his actor. His task was cancelled.
+                    _taskDict.TryRemove(actor, out var _);
                 }
             }
         }
@@ -158,6 +167,13 @@ namespace Zilon.Core.World
             if (_taskDict.TryRemove(actor, out var taskState))
             {
                 taskState.TaskSource.CancelTask(taskState.Task);
+            }
+            else
+            {
+                if (actor.TaskSource is IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource)
+                {
+                    humanTaskSource.DropIntentionWaiting();
+                }
             }
         }
 
