@@ -23,7 +23,7 @@ namespace Zilon.TextClient
             Console.WriteLine(new string('=', 10));
             if (actor.Person.GetModule<IEffectsModule>().Items.Any())
             {
-                Console.WriteLine("Effects:");
+                Console.WriteLine($"{UiResource.Effects}:");
                 foreach (var effect in actor.Person.GetModule<IEffectsModule>().Items)
                 {
                     Console.WriteLine(effect);
@@ -33,7 +33,7 @@ namespace Zilon.TextClient
             Console.WriteLine($"Position:{actor.Node}");
         }
 
-        public async Task<GameScreen> StartProcessingAsync(GameState gameState)
+        public Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
             var serviceScope = gameState.ServiceScope;
             var player = serviceScope.ServiceProvider.GetRequiredService<IPlayer>();
@@ -54,7 +54,7 @@ namespace Zilon.TextClient
 
             // Play
 
-            var cancellationTokenSource = new CancellationTokenSource();
+            using var cancellationTokenSource = new CancellationTokenSource();
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             gameLoop.StartProcessAsync(cancellationTokenSource.Token);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -63,13 +63,13 @@ namespace Zilon.TextClient
             {
                 PrintState(uiState.ActiveActor.Actor);
 
-                Console.WriteLine("- \"move x y\" to move person.");
-                Console.WriteLine("- \"look\" to get detailet info around.");
-                Console.WriteLine("- \"idle\" to wait some time.");
-                Console.WriteLine("- \"dead\" to dead :)");
-                Console.WriteLine("- \"exit\" to quit the game.");
+                Console.WriteLine(UiResource.MoveCommandDescription);
+                Console.WriteLine(UiResource.LookCommandDescription);
+                Console.WriteLine(UiResource.IdleCommandDescription);
+                Console.WriteLine(UiResource.DeadCommandDescription);
+                Console.WriteLine(UiResource.ExitCommandDescription);
 
-                Console.WriteLine("Input command:");
+                Console.WriteLine($"{UiResource.InputPrompt}:");
                 var inputText = Console.ReadLine();
                 if (inputText.StartsWith("m", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -96,7 +96,7 @@ namespace Zilon.TextClient
                     var actorFow = uiState.ActiveActor.Actor.Person.GetModule<IFowData>();
                     var fowNodes = actorFow.GetSectorFowData(playerActorSectorNode.Sector).Nodes.Select(x => x.Node);
 
-                    Console.WriteLine("Nodes:");
+                    Console.WriteLine($"{UiResource.Nodes}:");
                     Console.WriteLine();
                     foreach (var node in fowNodes)
                     {
@@ -104,26 +104,26 @@ namespace Zilon.TextClient
 
                         if (nextMoveNodes.Contains(node))
                         {
-                            Console.Write(" 1");
+                            Console.Write($" {UiResource.NextNodeMarker}");
                         }
 
                         if (playerActorSectorNode.Sector.Map.Transitions.TryGetValue(node, out var _))
                         {
-                            Console.Write(" t");
+                            Console.Write($" {UiResource.TransitionNodeMarker}");
                         }
 
                         var monsterInNode =
                             playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Node == node);
                         if (monsterInNode != null && monsterInNode != uiState.ActiveActor.Actor)
                         {
-                            Console.Write($" monster {monsterInNode.Person}");
+                            Console.Write($" {UiResource.MonsterNodeMarker} {monsterInNode.Person}");
                         }
 
                         var staticObjectInNode =
                             playerActorSectorNode.Sector.StaticObjectManager.Items.SingleOrDefault(x => x.Node == node);
                         if (staticObjectInNode != null)
                         {
-                            Console.Write($" object in node {staticObjectInNode.Purpose}");
+                            Console.Write($" {UiResource.StaticObjectNodeMarker} {staticObjectInNode.Purpose}");
                         }
 
                         Console.WriteLine();
@@ -149,7 +149,7 @@ namespace Zilon.TextClient
             } while (!player.MainPerson.GetModule<ISurvivalModule>().IsDead);
 
             cancellationTokenSource.Cancel();
-            return GameScreen.Scores;
+            return Task.FromResult(GameScreen.Scores);
         }
     }
 }
