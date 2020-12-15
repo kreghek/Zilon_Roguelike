@@ -29,7 +29,7 @@ namespace Zilon.Core.Tactics.Behaviour
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void Dispose()
         {
             _spscChannel.Dispose();
@@ -41,7 +41,7 @@ namespace Zilon.Core.Tactics.Behaviour
             return (_currentActorIntention?.Person?.GetModuleSafe<ISurvivalModule>()?.IsDead).GetValueOrDefault();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task IntentAsync(IIntention intention, IActor activeActor)
         {
             if (_intentionWait)
@@ -65,7 +65,7 @@ namespace Zilon.Core.Tactics.Behaviour
             await _actorTaskSender.SendAsync(actorTask, _cancellationTokenSource.Token).ConfigureAwait(false);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
         {
             // Тезисы:
@@ -75,7 +75,7 @@ namespace Zilon.Core.Tactics.Behaviour
             return await _actorTaskReceiver.ReceiveAsync(_cancellationTokenSource.Token).ConfigureAwait(false);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         //TODO Избавиться от синхронного варианта.
         // Сейчас он оставлен прото из-за тестов. Сложностей с удалением нет, кроме рутины.
         [Obsolete("Использовать асинк-вариант вместо этого")]
@@ -84,13 +84,13 @@ namespace Zilon.Core.Tactics.Behaviour
             IntentAsync(intention, activeActor).Wait();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool CanIntent()
         {
             return !_intentionWait && !CurrentActorSetAndIsDead();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void ProcessTaskExecuted(IActorTask actorTask)
         {
             // Пока ничего не делаем.
@@ -99,14 +99,14 @@ namespace Zilon.Core.Tactics.Behaviour
             // когда задача выполнена, но не закончена.
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void ProcessTaskComplete(IActorTask actorTask)
         {
             _intentionWait = false;
             _currentActorIntention = null;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void CancelTask(IActorTask cancelledActorTask)
         {
             _intentionWait = false;
@@ -114,7 +114,7 @@ namespace Zilon.Core.Tactics.Behaviour
             DropIntentionWaiting();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void DropIntentionWaiting()
         {
             _intentionWait = false;
