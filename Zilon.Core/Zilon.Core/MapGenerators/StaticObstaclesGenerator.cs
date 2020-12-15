@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.StaticObjectFactories;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
@@ -16,6 +17,8 @@ namespace Zilon.Core.MapGenerators
         private readonly IInteriorObjectRandomSource _interiorObjectRandomSource;
         private readonly IStaticObjectFactoryCollector _staticObjectfactoryCollector;
         private readonly IStaticObjectsGeneratorRandomSource _staticObjectsGeneratorRandomSource;
+
+        public IMonsterIdentifierGenerator MonsterIdentifierGenerator { get; set; }
 
         public StaticObstaclesGenerator(IChestGenerator chestGenerator,
             IInteriorObjectRandomSource interiorObjectRandomSource,
@@ -38,7 +41,13 @@ namespace Zilon.Core.MapGenerators
 
             var factory = _staticObjectfactoryCollector.SelectFactoryByStaticObjectPurpose(staticObjectPurpose);
 
-            var staticObject = factory.Create(sector, node, default);
+            var id = default(int);
+            if (MonsterIdentifierGenerator != null)
+            {
+                id = MonsterIdentifierGenerator.GetNewId();
+            }
+
+            var staticObject = factory.Create(sector, node, id);
 
             return staticObject;
         }
