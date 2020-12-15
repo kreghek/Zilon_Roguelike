@@ -31,7 +31,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x'
-      - run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj -c ${{ matrix.configuration }} -f netcoreapp3.1 -o bin /p:DebugType=None -r ${{ matrix.runtime }}
+      - run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework netcoreapp3.1 --output bin --runtime ${{ matrix.runtime }} /p:DebugType=None /p:PublishSingleFile=true
       - uses: actions/upload-artifact@v1
         with:
           name: TextClient
@@ -54,7 +54,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x'
-      - run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj -c ${{ matrix.configuration }} -f netcoreapp3.1 -o bin -r ${{ matrix.runtime }}
+      - run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework netcoreapp3.1 --output bin --runtime ${{ matrix.runtime }} --no-self-contained
       - uses: actions/upload-artifact@v1
         with:
           name: TextClient
