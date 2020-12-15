@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Resources;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.Players;
 using Zilon.Core.World;
 
+[assembly: NeutralResourcesLanguage("en")]
 namespace Zilon.TextClient
 {
     internal static class Program
