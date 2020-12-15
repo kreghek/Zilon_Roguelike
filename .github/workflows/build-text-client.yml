@@ -1,0 +1,61 @@
+name: Build Text Client
+
+on:
+  pull_request:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  buildRelease:
+    name: Build release text client
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - Zilon.TextClient
+        configuration:
+          - Release
+        runtime:
+          - win10-x64
+          - ubuntu.16.10-x64
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework netcoreapp3.1 --output bin --runtime ${{ matrix.runtime }} --self-contained true /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+      - uses: actions/upload-artifact@v1
+        with:
+          name: TextClient
+          path: bin
+  buildDebug:
+    name: Build debug text client
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - Zilon.TextClient
+        configuration:
+          - Debug
+        runtime:
+          - win10-x64
+          - ubuntu.16.10-x64
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework netcoreapp3.1 --output bin --runtime ${{ matrix.runtime }} --no-self-contained
+      - uses: actions/upload-artifact@v1
+        with:
+          name: TextClient
+          path: bin
