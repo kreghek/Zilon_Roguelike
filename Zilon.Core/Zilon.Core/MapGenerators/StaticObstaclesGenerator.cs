@@ -18,8 +18,6 @@ namespace Zilon.Core.MapGenerators
         private readonly IStaticObjectFactoryCollector _staticObjectfactoryCollector;
         private readonly IStaticObjectsGeneratorRandomSource _staticObjectsGeneratorRandomSource;
 
-        public IMonsterIdentifierGenerator MonsterIdentifierGenerator { get; set; }
-
         public StaticObstaclesGenerator(IChestGenerator chestGenerator,
             IInteriorObjectRandomSource interiorObjectRandomSource,
             IStaticObjectFactoryCollector staticObjectfactoryCollector,
@@ -34,6 +32,8 @@ namespace Zilon.Core.MapGenerators
                                                   throw new ArgumentNullException(
                                                       nameof(staticObjectsGeneratorRandomSource));
         }
+
+        public IMonsterIdentifierGenerator MonsterIdentifierGenerator { get; set; }
 
         private IStaticObject CreateStaticObject(ISector sector, HexNode node, IResourceDepositData resourceDepositData)
         {
