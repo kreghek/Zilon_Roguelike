@@ -130,7 +130,7 @@ namespace Zilon.TextClient
                             Console.Write($" {UiResource.TransitionNodeMarker}");
                         }
 
-                        var undiscoveredNodes = playerActorSectorNode.Sector.Map.GetNext(node).Where(x=> !fowNodesAll.Contains(x));
+                        var undiscoveredNodes = playerActorSectorNode.Sector.Map.GetNext(node).Where(x => !fowNodesAll.Contains(x));
                         if (undiscoveredNodes.Any())
                         {
                             Console.Write($" {UiResource.UndiscaveredNodeMarker}");
