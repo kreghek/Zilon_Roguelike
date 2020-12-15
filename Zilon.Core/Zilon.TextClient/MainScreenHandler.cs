@@ -111,7 +111,8 @@ namespace Zilon.TextClient
                         .Select(x => x.Node);
 
                     var fowNodesAll = actorFow.GetSectorFowData(playerActorSectorNode.Sector)
-                        .Nodes.Where(x => x.State == SectorMapNodeFowState.Explored || x.State == SectorMapNodeFowState.Observing)
+                        .Nodes.Where(x =>
+                            x.State == SectorMapNodeFowState.Explored || x.State == SectorMapNodeFowState.Observing)
                         .Select(x => x.Node);
 
                     Console.WriteLine($"{UiResource.NodesLabel}:");
@@ -130,7 +131,8 @@ namespace Zilon.TextClient
                             Console.Write($" {UiResource.TransitionNodeMarker}");
                         }
 
-                        var undiscoveredNodes = playerActorSectorNode.Sector.Map.GetNext(node).Where(x => !fowNodesAll.Contains(x));
+                        var undiscoveredNodes = playerActorSectorNode.Sector.Map.GetNext(node)
+                            .Where(x => !fowNodesAll.Contains(x));
                         if (undiscoveredNodes.Any())
                         {
                             Console.Write($" {UiResource.UndiscaveredNodeMarker}");
