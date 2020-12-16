@@ -24,7 +24,7 @@ class GameLoopUpdater
 
     public GameLoopUpdater(IPlayer player, ICommandBlockerService commandBlockerService)
     {
-        this._player = player;
+        _player = player;
         _commandBlockerService = commandBlockerService ?? throw new ArgumentNullException(nameof(commandBlockerService));
     }
 
