@@ -1,18 +1,13 @@
-﻿using Assets.Zilon.Scripts.Services;
-
-using Zilon.Core.Players;
-using Zilon.Core.Tactics.Behaviour;
+﻿using Zilon.Core.Players;
 
 namespace Assets.Zilon.Scripts.Common
 {
     internal static class GameCleanupHelper
     {
         public static void ResetState(
-            IPlayer player,
-            GlobeStorage globeStorage)
+            IPlayer player)
         {
             player.Reset();
-            globeStorage.Reset();
         }
     }
 }
