@@ -9,8 +9,6 @@ namespace Assets.Zilon.Scripts.Services
 
         public ScoreModalBody ScoreModalPrefab;
 
-        public PersonCreateModalBody PersonCreateModalPrefab;
-
         public void ShowQuitComfirmationModal()
         {
             ShowQuitComfirmationModalInner("Quit game?", closeGame: true);
@@ -25,12 +23,6 @@ namespace Assets.Zilon.Scripts.Services
         {
             var modalBody = CreateWindowHandler<ScoreModalBody>(ScoreModalPrefab.gameObject);
             modalBody.Init();
-        }
-
-        public void ShowCreatePersonModal(IPerson playerPerson)
-        {
-            var modalBody = CreateWindowHandler<PersonCreateModalBody>(PersonCreateModalPrefab.gameObject);
-            modalBody.Init(playerPerson);
         }
 
         private void ShowQuitComfirmationModalInner(string caption, bool closeGame)
