@@ -23,5 +23,4 @@ public class GameLoopUpdaterObject : MonoBehaviour
             _gameLoopUpdater.Stop();
         }
     }
-
 }
