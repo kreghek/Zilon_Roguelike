@@ -221,12 +221,6 @@ public class SectorVM : MonoBehaviour
 
         FowManager.InitViewModels(nodeViewModels, ActorViewModels, _staticObjectViewModels);
 
-        //TODO Этот фрагмент нужно заменить следующим:
-        // Для сектора/мира добавить события на итерацию.
-        // Еще лучше - событие, когда актёр выполняет/начинает выполнять задачу.
-        // Не забыть отписываться.
-        //_gameLoop.Updated += GameLoop_Updated;
-
         //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
         _commandBlockerService.DropBlockers();
 
@@ -235,15 +229,7 @@ public class SectorVM : MonoBehaviour
         // таких сервисов, как ISectorUiState. Потому что есть много элементов UI,
         // которые зависят от значения ActiveActor.
         WindowCanvas.gameObject.SetActive(true);
-
-        if (!_gameLoopUpdater.IsStarted)
-        {
-            _gameLoopUpdater.Start();
-        }
     }
-
-    [Inject]
-    private readonly GameLoopUpdater _gameLoopUpdater;
 
     private void AddPlayerActorEventHandlers(ActorViewModel actorViewModel)
     {
