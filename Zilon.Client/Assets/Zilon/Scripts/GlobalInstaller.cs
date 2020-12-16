@@ -26,7 +26,6 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
     public override void InstallBindings()
     {
         Container.Bind<UiSettingService>().AsSingle();
-        Container.Bind<GameLoopUpdater>().AsSingle();
 
         RegisterDices();
 
