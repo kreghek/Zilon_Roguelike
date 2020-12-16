@@ -15,6 +15,8 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 {
     public override void InstallBindings()
     {
+        Container.Bind<GameLoopUpdater>().AsSingle();
+
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
 
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
