@@ -19,10 +19,6 @@ namespace Assets.Zilon.Scripts.Commands
         [NotNull]
         private readonly IPlayer _player;
 
-        [NotNull]
-        [Inject]
-        private readonly GlobeStorage _globeStorage;
-
         public bool CanExecute()
         {
             return true;
@@ -30,7 +26,7 @@ namespace Assets.Zilon.Scripts.Commands
 
         public void Execute()
         {
-            GameCleanupHelper.ResetState(_player, _globeStorage);
+            GameCleanupHelper.ResetState(_player);
 
             SceneManager.LoadScene("title");
         }
