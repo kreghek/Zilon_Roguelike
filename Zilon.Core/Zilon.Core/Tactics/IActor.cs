@@ -16,7 +16,7 @@ namespace Zilon.Core.Tactics
     /// персонажа, которого этот актёр отыгрывает. Состояниеи характеристики актёра могут меняться.
     /// Актёр может умереть.
     /// </remarks>
-    public interface IActor : IAttackTarget, IPassMapBlocker
+    public interface IActor : IAttackTarget, IPassMapBlocker, IIdentifiableMapObject
     {
         /// <summary>
         /// Указывает, может ли актёр выполнять задачи.

@@ -22,6 +22,7 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
+using Zilon.DependencyInjection;
 
 namespace Zilon.Emulation.Common
 {
@@ -59,17 +60,9 @@ namespace Zilon.Emulation.Common
             serviceRegistry.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
             serviceRegistry.AddScoped<IChestGenerator, ChestGenerator>();
             serviceRegistry.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
-            serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory =>
-            {
-                var factories = diFactory.GetServices<IStaticObjectFactory>().ToArray();
-                return new StaticObjectFactoryCollector(factories);
-            });
-            serviceRegistry.AddSingleton<IStaticObjectFactory, StoneDepositFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, OreDepositFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, TrashHeapFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, CherryBrushFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, PitFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, PuddleFactory>();
+
+            serviceRegistry.RegisterStaticObjectFactoringFromCore();
+
             serviceRegistry.AddSingleton<IStaticObjectsGeneratorRandomSource, StaticObjectsGeneratorRandomSource>();
         }
 

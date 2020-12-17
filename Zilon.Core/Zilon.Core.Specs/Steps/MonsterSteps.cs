@@ -56,7 +56,7 @@ namespace Zilon.Core.Specs.Steps
             var cubeCoords = node.CubeCoords;
             var offsetCoords = HexHelper.ConvertToOffset(cubeCoords);
 
-            if (string.IsNullOrWhiteSpace(isNot))
+            if (string.IsNullOrWhiteSpace(isNot) || isNot != "не")
             {
                 offsetCoords.Should().Be(new OffsetCoords(offsetX, offsetY));
             }

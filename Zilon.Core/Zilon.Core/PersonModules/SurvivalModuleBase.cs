@@ -47,7 +47,7 @@ namespace Zilon.Core.PersonModules
         /// Индивидуально обрабатывает характеристику, если это здоровье.
         /// </summary>
         /// <param name="stat"> Обрабатываемая характеристика. </param>
-        private void ProcessIfHealth(SurvivalStat stat, int value)
+        private void ProcessIfHealth(SurvivalStat stat, int valueDiff)
         {
             if (stat.Type != SurvivalStatType.Health)
             {
@@ -62,7 +62,7 @@ namespace Zilon.Core.PersonModules
             }
             else
             {
-                if (value < 0)
+                if (valueDiff < 0)
                 {
                     SetWoundCounter();
                 }
@@ -173,6 +173,9 @@ namespace Zilon.Core.PersonModules
             if (stat != null)
             {
                 stat.Value = value;
+
+                ProcessIfHealth(stat, valueDiff: 0);
+                ProcessIfWound(stat);
             }
         }
 

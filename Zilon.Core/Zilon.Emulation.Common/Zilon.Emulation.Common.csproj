@@ -13,11 +13,12 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection">
-            <Version>5.0.0</Version>
+            <Version>5.0.1</Version>
         </PackageReference>
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
 	  <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
+	  <ProjectReference Include="..\Zilon.DependencyInjection\Zilon.DependencyInjection.csproj" />
 	</ItemGroup>
 </Project>

@@ -74,6 +74,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.GlobeObserver", "Zilo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.TextClient", "Zilon.TextClient\Zilon.TextClient.csproj", "{17EF4DE9-8F84-46ED-9597-FF824672921A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zilon.DependencyInjection", "Zilon.DependencyInjection\Zilon.DependencyInjection.csproj", "{A7F9651F-A176-4C9F-9268-7B38BAF7B0A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -168,6 +170,10 @@ Global
 		{17EF4DE9-8F84-46ED-9597-FF824672921A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17EF4DE9-8F84-46ED-9597-FF824672921A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17EF4DE9-8F84-46ED-9597-FF824672921A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7F9651F-A176-4C9F-9268-7B38BAF7B0A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7F9651F-A176-4C9F-9268-7B38BAF7B0A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7F9651F-A176-4C9F-9268-7B38BAF7B0A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7F9651F-A176-4C9F-9268-7B38BAF7B0A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

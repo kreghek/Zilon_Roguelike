@@ -1,39 +1,70 @@
 ﻿using System;
 using System.Linq;
 
-using Assets.Zilon.Scripts;
 using Assets.Zilon.Scripts.Services;
 
+using JetBrains.Annotations;
+
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using Zenject;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
 using Zilon.Core.Props;
+using Zilon.Core.Tactics;
+using Zilon.Core.World;
 
-public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
+public class GlobeSelectionHandler : MonoBehaviour
 {
+    [NotNull]
+    [Inject]
+    private readonly IGlobeInitializer _globeInitializer;
+
+    [NotNull]
+    [Inject]
+    private readonly NationalUnityEventService _nationalUnityEventService;
+
+    [NotNull]
     [Inject]
     private readonly UiSettingService _uiSettingService;
 
+    [NotNull]
+    [Inject]
+    private readonly IPlayer _player;
+
+    public GameObject NoGlobeParentObject;
+
+    public GameObject GlobeDescriptionParentObject;
+
     public Text DescriptionText;
 
-    public string Caption
+    public void Start()
     {
-        get
-        {
-            var currentLanguage = _uiSettingService.CurrentLanguage;
-            var caption = StaticPhrases.GetValue("caption-person-create", currentLanguage);
-
-            return caption;
-        }
+        NoGlobeParentObject.SetActive(true);
+        GlobeDescriptionParentObject.SetActive(false);
     }
 
-    public event EventHandler Closed;
+    public void GoButtonHandler()
+    {
+        SceneManager.LoadScene("combat");
+    }
 
-    public void Init(IPerson playerPerson)
+    public void GenerateGlobeButtonHandler()
+    {
+        var globe = _globeInitializer.CreateGlobeAsync("intro").Result;
+        _nationalUnityEventService.Globe = globe;
+
+        ShowPersonInfoInDescriptionTextbox(_player.MainPerson, DescriptionText, _uiSettingService);
+        
+        NoGlobeParentObject.SetActive(false);
+        GlobeDescriptionParentObject.SetActive(true);
+    }
+
+    private static void ShowPersonInfoInDescriptionTextbox(IPerson playerPerson, Text DescriptionText, UiSettingService _uiSettingService)
     {
         var currentLanguage = _uiSettingService.CurrentLanguage;
 
@@ -80,7 +111,7 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
         }
     }
 
-    private string GetLocalizedBackstoryText(Language currentLanguage, string mainKey)
+    private static string GetLocalizedBackstoryText(Language currentLanguage, string mainKey)
     {
         string langKey;
         switch (currentLanguage)
@@ -100,16 +131,5 @@ public class PersonCreateModalBody : MonoBehaviour, IModalWindowHandler
         var text = Resources.Load<TextAsset>($@"Backstory\{mainKey}-{langKey}");
 
         return text.text;
-    }
-
-    public void ApplyChanges()
-    {
-        // Ничего не делаем при закрытии окна.
-        // Окно только читает данные. Ничего не изменяет.
-    }
-
-    public void CancelChanges()
-    {
-        throw new NotImplementedException();
     }
 }

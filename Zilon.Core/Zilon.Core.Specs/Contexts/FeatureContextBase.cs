@@ -14,6 +14,7 @@ using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -130,6 +131,21 @@ namespace Zilon.Core.Specs.Contexts
             actor.Person.GetModule<IInventoryModule>().Add(resource);
         }
 
+        public IStaticObject AddStaticObject(int staticObjectId, PropContainerPurpose purpose, OffsetCoords coords)
+        {
+            var sector = Globe.SectorNodes.First().Sector;
+
+            var staticObjectNode = sector.Map.Nodes.SelectByHexCoords(coords.X, coords.Y);
+
+            var factory = GetFactoryByPurpose(purpose);
+
+            var staticObject = factory.Create(sector, staticObjectNode, staticObjectId);
+
+            sector.StaticObjectManager.Add(staticObject);
+
+            return staticObject;
+        }
+
         public void AddWall(int x1, int y1, int x2, int y2)
         {
             var map = GetCurrentGlobeFirstSector().Map;
@@ -193,10 +209,22 @@ namespace Zilon.Core.Specs.Contexts
 
             var actorManager = sector.ActorManager;
 
-            var monster = actorManager.Items
-                .SingleOrDefault(x => x.Person is MonsterPerson && x.Person.Id == id);
+            var actor = GetCurrentSectorMapObjectById(id, actorManager);
+
+            var monster = actor.Person is MonsterPerson ? actor : null;
 
             return monster;
+        }
+
+        public IStaticObject GetStaticObjectById(int id)
+        {
+            var sector = GetCurrentGlobeFirstSector();
+
+            var staticObjectManager = sector.StaticObjectManager;
+
+            var staticObject = GetCurrentSectorMapObjectById(id, staticObjectManager);
+
+            return staticObject;
         }
 
         private void Configure(IServiceProvider serviceProvider)
@@ -243,6 +271,20 @@ namespace Zilon.Core.Specs.Contexts
         private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
         {
             RaisedActorInteractionEvents.Add(e.ActorInteractionEvent);
+        }
+
+        [CanBeNull]
+        private static T GetCurrentSectorMapObjectById<T>(int id, [NotNull] ISectorEntityManager<T> objectManager)
+            where T : class, IIdentifiableMapObject
+        {
+            return objectManager.Items.SingleOrDefault(x => x.Id == id);
+        }
+
+        private IStaticObjectFactory GetFactoryByPurpose(PropContainerPurpose purpose)
+        {
+            var staticObjectFactoryCollector = ServiceProvider.GetRequiredService<IStaticObjectFactoryCollector>();
+
+            return staticObjectFactoryCollector.SelectFactoryByStaticObjectPurpose(purpose);
         }
 
         public class VisualEventInfo
