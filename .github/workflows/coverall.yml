@@ -30,6 +30,17 @@ jobs:
         build_configuration:
           - Debug
           - Release
+        include:
+          - test_csproj: Zilon.Core.Tests
+            test_category: Unit
+          - test_csproj: Zilon.Bot.Players.Tests
+            test_category: Unit
+          - test_csproj: Zilon.Core.Specs
+            test_category: Functional
+          - test_csproj: Zilon.Core.DiTests
+            test_category: Unit
+          - test_csproj: Zilon.Bot.Players.DevelopmentTests
+            test_category: Functional
 
     steps:
     - uses: actions/checkout@v2
@@ -51,6 +62,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{env.TEST_RESULT_PATH}}coverage.info
         parallel: true
+        flag-name: ${{ test_category }}
 
   finish:
     needs: test
