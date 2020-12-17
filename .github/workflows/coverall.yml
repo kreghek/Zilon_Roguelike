@@ -30,6 +30,17 @@ jobs:
         build_configuration:
           - Debug
           - Release
+        include:
+          - test_csproj: Zilon.Core.Tests
+            test_category: Unit
+          - test_csproj: Zilon.Bot.Players.Tests
+            test_category: Unit
+          - test_csproj: Zilon.Core.Specs
+            test_category: Functional
+          - test_csproj: Zilon.Core.DiTests
+            test_category: Unit
+          - test_csproj: Zilon.Bot.Players.DevelopmentTests
+            test_category: Functional
 
     steps:
     - uses: actions/checkout@v2
@@ -37,7 +48,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
-    - name: Generate coverage report ${{ matrix.test_csproj }} in {{ matrix.build_configuration }}
+    - name: Generate coverage report ${{ matrix.test_csproj }} in ${{ matrix.build_configuration }}
       env:
         ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -46,18 +57,19 @@ jobs:
         cd ./Zilon.Core
         dotnet test ${{ matrix.test_csproj }}/${{ matrix.test_csproj }}.csproj -c ${{ matrix.build_configuration }} /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:Exclude="[*Tests*]"
     - name: Publish coverage report to coveralls.io
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v1.1.2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{env.TEST_RESULT_PATH}}coverage.info
         parallel: true
+        flag-name: ${{ matrix.test_category }}
 
   finish:
     needs: test
     runs-on: ubuntu-latest
     steps:
     - name: Coveralls Finished
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v1.1.2
       with:
         github-token: ${{ secrets.github_token }}
         parallel-finished: true

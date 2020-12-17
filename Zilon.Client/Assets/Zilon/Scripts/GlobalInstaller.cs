@@ -26,7 +26,6 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
     public override void InstallBindings()
     {
         Container.Bind<UiSettingService>().AsSingle();
-        Container.Bind<GameLoopUpdater>().AsSingle();
 
         RegisterDices();
 
@@ -76,7 +75,6 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
             return injectContext.Container.Resolve<BiomeInitializer>();
         }).AsSingle();
         Container.Bind<IGlobeTransitionHandler>().To<GlobeTransitionHandler>().AsSingle();
-        Container.Bind<GlobeStorage>().AsSingle();
 
         Container.RegisterGenerationServices();
         Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();

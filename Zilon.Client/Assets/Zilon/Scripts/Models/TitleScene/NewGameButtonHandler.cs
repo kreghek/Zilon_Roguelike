@@ -22,6 +22,6 @@ public class NewGameButtonHandler : MonoBehaviour
     {
         GameProgressHelper.ResetGameState(_scoreManager, _humanPlayer);
         _progressStorageService.Destroy();
-        SceneManager.LoadScene("combat");
+        SceneManager.LoadScene("globe-selection");
     }
 }
