@@ -45,6 +45,9 @@ namespace Zilon.Core.World
                     globe.AddSectorNode(sectorNode);
                 }
 
+                // It was used as fallback later.
+                var oldActorNode = actor.Node;
+
                 try
                 {
                     sector.ActorManager.Remove(actor);
@@ -59,7 +62,22 @@ namespace Zilon.Core.World
 
                 var nextSector = sectorNode.Sector;
                 var nodeForTransition = nextSector.Map.Transitions.First(x => x.Value.SectorNode.Sector == sector).Key;
-                var actorInNewSector = new Actor(actor.Person, actor.TaskSource, nodeForTransition);
+                var availableNextNodesToTransition = nextSector.Map.GetNext(nodeForTransition);
+
+                var allPotentialNodesToTransition = new[] { nodeForTransition }.Concat(availableNextNodesToTransition);
+                var allAvailableNodesToTransition = allPotentialNodesToTransition.Where(x => FilterNodeToTransition(x, nextSector)).ToArray();
+
+                var availableNodeToTransition = allAvailableNodesToTransition.FirstOrDefault();
+                if (availableNodeToTransition is null)
+                {
+                    // I dont know what I can do.
+                    // I think it was solved when a some transition pool was developed.
+                    // Now just return person into old sector in old transition node.
+                    nextSector = sectorNode.Sector;
+                    availableNodeToTransition = oldActorNode;
+                }
+
+                var actorInNewSector = new Actor(actor.Person, actor.TaskSource, availableNodeToTransition);
                 nextSector.ActorManager.Add(actorInNewSector);
             }
             finally
@@ -68,6 +86,23 @@ namespace Zilon.Core.World
                 //This is why it is important to do the Release within a try...finally clause; program execution may crash or take a different path, this way you are guaranteed execution
                 _semaphoreSlim.Release();
             }
+        }
+
+        private static bool FilterNodeToTransition(Graphs.IGraphNode textNode, ISector nextSector)
+        {
+            var nodeIsBusyWithMonster = nextSector.ActorManager.Items.Any(x=>x.Node == textNode);
+            if (nodeIsBusyWithMonster)
+            {
+                return false;
+            }
+
+            var nodeIsBusyWithStaticObject = nextSector.StaticObjectManager.Items.Any(x => x.Node == textNode);
+            if (nodeIsBusyWithStaticObject)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
