@@ -90,7 +90,7 @@ namespace Zilon.Core.World
 
         private static bool FilterNodeToTransition(Graphs.IGraphNode textNode, ISector nextSector)
         {
-            var nodeIsBusyWithMonster = nextSector.ActorManager.Items.Any(x=>x.Node == textNode);
+            var nodeIsBusyWithMonster = nextSector.ActorManager.Items.Any(x => x.Node == textNode);
             if (nodeIsBusyWithMonster)
             {
                 return false;
