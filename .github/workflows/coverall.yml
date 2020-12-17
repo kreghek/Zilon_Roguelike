@@ -62,7 +62,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{env.TEST_RESULT_PATH}}coverage.info
         parallel: true
-        flag-name: ${{ test_category }}
+        flag-name: ${{ matrix.test_category }}
 
   finish:
     needs: test
