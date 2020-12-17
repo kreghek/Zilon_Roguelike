@@ -53,10 +53,11 @@ This is needed to run tests in Zilon.Core. The path must be complete, that is, i
 4. *Optional*. **Install the Specflow for Visual Studio 2019 extension**.
 It is necessary for convenient editing of specifications, written in *Gherkin*. Unfortunately, we do not see a way to install this tool within the project yet. Easiest way to find it in `Visual Studio / Extensions / Manage Extensions`
 
-5. Open `Assets/Zilon/Scenes/globe-selection` scene.
-The must start from this or from `title` scenes. Besause to start playing you must generate and select a game globe first. By default empty scene will be selected.
+5. **Open `Assets/Zilon/Scenes/globe-selection` scene**.
+The game must start from this or from `title` scenes. Because to start playing you must generate and select a game globe first. By default empty scene will be selected.
 
-Now you can click `Play` button in Unity editor.
+6. **Now you can click `Play` button in Unity editor**.
+You are awesome!
 
 ## Contributing
 
