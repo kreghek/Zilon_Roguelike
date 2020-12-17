@@ -12,7 +12,23 @@
 
 ![Poster A3 horizontal](https://user-images.githubusercontent.com/2405499/58764985-41faf600-8598-11e9-9220-277923ca7f5b.png)
 
-This is rogue-like game about the randomly-generated guy-vagabond, which trying to find the randomly-generated home in the randomly-generated world. Project at early stage of development. Getting done slowly and with pleasure, but reguraly.
+This is rogue-like game about the randomly-generated vagabond, which trying to find the randomly-generated home in the randomly-generated world. Project at early stage of development. Development are slowly and with pleasure, but reguraly.
+
+[Russian version of this file](\README_RU.md)
+
+## The short game rules
+
+You need to survive as long as you can. To survive, you need to collect resources. Resources can be found at the level or dropped from monsters.
+
+Reasons why you will die:
+- You will be attacked by monsters and get a mortal wound.
+- You will die of hunger, because there will be nothing to eat.
+- You will die of dehydration because you will not have drinking water.
+- You will die from high intoxication because you are badly injured and you use too much medicine.
+- You will catch a disease that will greatly weaken you, that you will not have the strength to fight off even a hungry rat.
+- You write the command "dead" in the text version of the game.
+
+## Join us
 
 [Project group at VK](https://vk.com/last_imperial_vagabond)
 
@@ -21,7 +37,7 @@ This is rogue-like game about the randomly-generated guy-vagabond, which trying 
 GamePlay Video
 [![Watch the GamePlay Video](https://img.youtube.com/vi/KJJ2ab35eFg/maxresdefault.jpg)](https://www.youtube.com/watch?v=KJJ2ab35eFg)
 
-## Build
+## How to build and launch
 
 We strive to launch a project with one button. But now there are a few manual steps that must be performed before the game can be launched from the editor.
 
@@ -37,6 +53,12 @@ This is needed to run tests in Zilon.Core. The path must be complete, that is, i
 4. *Optional*. **Install the Specflow for Visual Studio 2019 extension**.
 It is necessary for convenient editing of specifications, written in *Gherkin*. Unfortunately, we do not see a way to install this tool within the project yet. Easiest way to find it in `Visual Studio / Extensions / Manage Extensions`
 
+5. **Open `Assets/Zilon/Scenes/globe-selection` scene**.
+The game must start from this or from `title` scenes. Because to start playing you must generate and select a game globe first. By default empty scene will be selected.
+
+6. **Now you can click `Play` button in Unity editor**.
+You are awesome!
+
 ## Contributing
 
-[Code conventions](/CODE_CONVENTIONS.md)
+We will be glad for any contribution to the development and support of the project. During development, we adhere to the [Code of Conduct] (/ CODE_OF_CONDUCT.md) and the [Source Code Conventions] (/ CODE_CONVENTIONS.md).

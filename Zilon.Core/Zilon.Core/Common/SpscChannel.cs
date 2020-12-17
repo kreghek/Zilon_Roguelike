@@ -23,10 +23,23 @@ namespace Zilon.Core.Common
             _semaphore.Dispose();
         }
 
-        public async Task<T> ReceiveAsync()
+        public void CancelReceiving()
+        {
+            foreach (var receiver in _receivers)
+            {
+                receiver.SetCanceled();
+            }
+
+            for (var i = 0; i < _receivers.ToArray().Length; i++)
+            {
+                _receivers.TryTake(out var _);
+            }
+        }
+
+        public async Task<T> ReceiveAsync(CancellationToken cancellationToken)
         {
             TaskCompletionSource<T> source;
-            await _semaphore.WaitAsync().ConfigureAwait(false);
+            await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
             try
             {
                 if (_values.TryTake(out var value))
@@ -47,9 +60,9 @@ namespace Zilon.Core.Common
             return await source.Task.ConfigureAwait(false);
         }
 
-        public async Task SendAsync(T obj)
+        public async Task SendAsync(T obj, CancellationToken cancellationToken)
         {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
+            await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
             try
             {

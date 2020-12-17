@@ -8,19 +8,25 @@ using JetBrains.Annotations;
 
 using UnityEngine;
 
+using Zilon.Core.PersonModules;
+using Zilon.Core.Players;
+
 class GameLoopUpdater
 {
-    [NotNull] private readonly GlobeStorage _globeStorage;
-    [NotNull] private readonly ICommandBlockerService _commandBlockerService;
+    [NotNull]
+    private readonly IPlayer _player;
+
+    [NotNull] 
+    private readonly ICommandBlockerService _commandBlockerService;
 
     private CancellationTokenSource _cancellationTokenSource;
 
     public bool IsStarted { get; private set; }
 
-    public GameLoopUpdater(GlobeStorage globeStorage, ICommandBlockerService commandBlockerService)
+    public GameLoopUpdater(IPlayer player, ICommandBlockerService commandBlockerService)
     {
-        _globeStorage = globeStorage ?? throw new ArgumentNullException(nameof(globeStorage));
         _commandBlockerService = commandBlockerService ?? throw new ArgumentNullException(nameof(commandBlockerService));
+        _player = player ?? throw new ArgumentNullException(nameof(player));
     }
 
     public void Start()
@@ -34,6 +40,7 @@ class GameLoopUpdater
 
         updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnFaulted);
         updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnCanceled);
+        updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnRanToCompletion);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
         IsStarted = true;
@@ -46,13 +53,13 @@ class GameLoopUpdater
 
     private async Task StartGameLoopUpdate(CancellationToken cancelToken)
     {
-        while (true)
+        while (!_player.MainPerson.GetModule<ISurvivalModule>().IsDead)
         {
             cancelToken.ThrowIfCancellationRequested();
 
             try
             {
-                await _globeStorage.Globe.UpdateAsync();
+                await _player.Globe.UpdateAsync();
             }
             catch(Exception exception)
             {
