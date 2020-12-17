@@ -50,7 +50,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{env.TEST_RESULT_PATH}}coverage.info
         parallel: true
-        
+
   test:
     runs-on: ubuntu-latest
     strategy:
