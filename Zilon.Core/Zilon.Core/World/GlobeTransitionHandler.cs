@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Tactics;
 
@@ -25,6 +26,23 @@ namespace Zilon.Core.World
         public void Dispose()
         {
             _semaphoreSlim.Dispose();
+        }
+
+        private static bool FilterNodeToTransition(IGraphNode textNode, ISector nextSector)
+        {
+            var nodeIsBusyWithMonster = nextSector.ActorManager.Items.Any(x => x.Node == textNode);
+            if (nodeIsBusyWithMonster)
+            {
+                return false;
+            }
+
+            var nodeIsBusyWithStaticObject = nextSector.StaticObjectManager.Items.Any(x => x.Node == textNode);
+            if (nodeIsBusyWithStaticObject)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private async Task ProcessInnerAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
@@ -65,7 +83,8 @@ namespace Zilon.Core.World
                 var availableNextNodesToTransition = nextSector.Map.GetNext(nodeForTransition);
 
                 var allPotentialNodesToTransition = new[] { nodeForTransition }.Concat(availableNextNodesToTransition);
-                var allAvailableNodesToTransition = allPotentialNodesToTransition.Where(x => FilterNodeToTransition(x, nextSector)).ToArray();
+                var allAvailableNodesToTransition = allPotentialNodesToTransition
+                    .Where(x => FilterNodeToTransition(x, nextSector)).ToArray();
 
                 var availableNodeToTransition = allAvailableNodesToTransition.FirstOrDefault();
                 if (availableNodeToTransition is null)
@@ -86,23 +105,6 @@ namespace Zilon.Core.World
                 //This is why it is important to do the Release within a try...finally clause; program execution may crash or take a different path, this way you are guaranteed execution
                 _semaphoreSlim.Release();
             }
-        }
-
-        private static bool FilterNodeToTransition(Graphs.IGraphNode textNode, ISector nextSector)
-        {
-            var nodeIsBusyWithMonster = nextSector.ActorManager.Items.Any(x => x.Node == textNode);
-            if (nodeIsBusyWithMonster)
-            {
-                return false;
-            }
-
-            var nodeIsBusyWithStaticObject = nextSector.StaticObjectManager.Items.Any(x => x.Node == textNode);
-            if (nodeIsBusyWithStaticObject)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         public Task ProcessAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
