@@ -57,7 +57,7 @@ jobs:
         cd ./Zilon.Core
         dotnet test ${{ matrix.test_csproj }}/${{ matrix.test_csproj }}.csproj -c ${{ matrix.build_configuration }} /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:Exclude="[*Tests*]"
     - name: Publish coverage report to coveralls.io
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v1.1.2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{env.TEST_RESULT_PATH}}coverage.info
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Coveralls Finished
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v1.1.2
       with:
         github-token: ${{ secrets.github_token }}
         parallel-finished: true
