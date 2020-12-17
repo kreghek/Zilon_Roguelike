@@ -14,6 +14,8 @@
 
 This is rogue-like game about the randomly-generated vagabond, which trying to find the randomly-generated home in the randomly-generated world. Project at early stage of development. Development are slowly and with pleasure, but reguraly.
 
+[Russian version of this file](\README_RU.md)
+
 ## The short game rules
 
 You need to survive as long as you can. To survive, you need to collect resources. Resources can be found at the level or dropped from monsters.
@@ -51,6 +53,12 @@ This is needed to run tests in Zilon.Core. The path must be complete, that is, i
 4. *Optional*. **Install the Specflow for Visual Studio 2019 extension**.
 It is necessary for convenient editing of specifications, written in *Gherkin*. Unfortunately, we do not see a way to install this tool within the project yet. Easiest way to find it in `Visual Studio / Extensions / Manage Extensions`
 
+5. **Open `Assets/Zilon/Scenes/globe-selection` scene**.
+The game must start from this or from `title` scenes. Because to start playing you must generate and select a game globe first. By default empty scene will be selected.
+
+6. **Now you can click `Play` button in Unity editor**.
+You are awesome!
+
 ## Contributing
 
-[Code conventions](/CODE_CONVENTIONS.md)
+We will be glad for any contribution to the development and support of the project. During development, we adhere to the [Code of Conduct] (/ CODE_OF_CONDUCT.md) and the [Source Code Conventions] (/ CODE_CONVENTIONS.md).
