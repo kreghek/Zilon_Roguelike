@@ -21,6 +21,13 @@ namespace Zilon.Core.Specs.Steps
         {
         }
 
+        [UsedImplicitly]
+        [Given(@"the linear globe")]
+        public async Task GivenLinearGlobeAsync()
+        {
+            await Context.CreateLinearGlobeAsync().ConfigureAwait(false);
+        }
+
         [Then(@"the player actor in the map with id:(\d+)")]
         public void ThenThePlayerActionInMapId(int expectedMapId)
         {
@@ -30,13 +37,6 @@ namespace Zilon.Core.Specs.Steps
             var map = sector.Map;
 
             map.Id.Should().Be(expectedMapId);
-        }
-
-        [UsedImplicitly]
-        [Given(@"the linear globe")]
-        public async Task GivenLinearGlobeAsync()
-        {
-            await Context.CreateLinearGlobeAsync().ConfigureAwait(false);
         }
     }
 }
