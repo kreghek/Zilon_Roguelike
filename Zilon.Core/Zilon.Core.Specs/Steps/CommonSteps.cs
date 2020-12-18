@@ -60,9 +60,19 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
-        public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
+        [Given(@"Есть актёр игрока класса (.+) в ячейке \((.*), (.*)\)")]
+        [Given(@"the player actor with class (.+) in the map node \((\d+), (\d+)\)")]
+        public void GivenThePlayerActorWithSpecifiedClassInTheNode(string personSid, int nodeX, int nodeY)
         {
+            var sectorToAdd = Context.Globe.SectorNodes.First().Sector;
+            Context.AddHumanActor(personSid, sectorToAdd, new OffsetCoords(nodeX, nodeY));
+        }
+
+        [UsedImplicitly]
+        [Given(@"the player actor in the map node \((\d+), (\d+)\)")]
+        public void GivenThePlayerActorWithPersonHumanClassInTheNode(int nodeX, int nodeY)
+        {
+            var personSid = "human-person";
             var sectorToAdd = Context.Globe.SectorNodes.First().Sector;
             Context.AddHumanActor(personSid, sectorToAdd, new OffsetCoords(nodeX, nodeY));
         }
@@ -71,7 +81,14 @@ namespace Zilon.Core.Specs.Steps
         [Given(@"Есть карта размером (\d*)")]
         public async Task GivenЕстьКартаРазмеромAsync(int mapSize)
         {
-            await Context.CreateGlobeAsync(mapSize).ConfigureAwait(false);
+            await Context.CreateSingleMapGlobeAsync(mapSize).ConfigureAwait(false);
+        }
+
+        [UsedImplicitly]
+        [Given(@"the linear globe")]
+        public async Task GivenLinearGlobeAsync()
+        {
+            await Context.CreateLinearGlobeAsync().ConfigureAwait(false);
         }
 
         [UsedImplicitly]
@@ -310,6 +327,10 @@ namespace Zilon.Core.Specs.Steps
 
         [When(@"Я жду (.*) итераций")]
         [When(@"В мире проходит (.*) итераций")]
+        [When(@"Я жду (.*) итерации")]
+        [When(@"В мире проходит (.*) итерации")]
+        [When(@"Я жду (.*) итерацию")]
+        [When(@"В мире проходит (.*) итерация")]
         public async Task WhenЯЖдуЕдиницВремениAsync(int timeUnitCount)
         {
             var globe = Context.Globe;
