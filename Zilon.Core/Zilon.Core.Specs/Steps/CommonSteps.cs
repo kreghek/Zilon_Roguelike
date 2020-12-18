@@ -36,13 +36,6 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [Given(@"the linear globe")]
-        public async Task GivenLinearGlobeAsync()
-        {
-            await Context.CreateLinearGlobeAsync().ConfigureAwait(false);
-        }
-
-        [UsedImplicitly]
         [Given(@"Есть монстр класса (.*) Id:(.*) в ячейке \((.*), (.*)\)")]
         [Given(@"the monster with class (.*) and Id:(.*) in the map node \((.*), (.*)\)")]
         public void GivenMonsterWithClassAndIdInMapNode(string monsterSid, int monsterId, int x, int y)

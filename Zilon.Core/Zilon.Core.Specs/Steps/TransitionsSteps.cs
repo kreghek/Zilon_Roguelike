@@ -1,4 +1,8 @@
-﻿using FluentAssertions;
+﻿using System.Threading.Tasks;
+
+using FluentAssertions;
+
+using JetBrains.Annotations;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,11 +32,11 @@ namespace Zilon.Core.Specs.Steps
             map.Id.Should().Be(expectedMapId);
         }
 
-        [When(@"I use current transition")]
-        public void WhenIUseCurrentTransition()
+        [UsedImplicitly]
+        [Given(@"the linear globe")]
+        public async Task GivenLinearGlobeAsync()
         {
-            var transitionCommand = Context.ServiceProvider.GetRequiredService<SectorTransitionMoveCommand>();
-            transitionCommand.Execute();
+            await Context.CreateLinearGlobeAsync().ConfigureAwait(false);
         }
     }
 }
