@@ -64,7 +64,8 @@ namespace Zilon.Core.MapGenerators
         {
             var regionNodes = region.Nodes.OfType<HexNode>();
             var staticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
-            var availableMonsterNodes = regionNodes.Except(staticObjectsNodes);
+            var nodesWithTransitions = sector.Map.Transitions.Keys.ToArray();
+            var availableMonsterNodes = regionNodes.Except(staticObjectsNodes).Except(nodesWithTransitions);
 
             var freeNodes = new List<IGraphNode>(availableMonsterNodes);
 

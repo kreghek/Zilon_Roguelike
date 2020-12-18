@@ -33,7 +33,7 @@ namespace Zilon.Core.MapGenerators
         private static bool CheckMap(ISector sector, HexNode containerNode)
         {
             var map = sector.Map;
-            var currentStaticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
+            var currentStaticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node).OfType<HexNode>();
 
             var allNonObstacleNodes = map.Nodes.OfType<HexNode>().ToArray();
             var allNonContainerNodes = allNonObstacleNodes.Where(x => !currentStaticObjectsNodes.Contains(x));
