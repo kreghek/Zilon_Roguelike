@@ -28,14 +28,10 @@ namespace Zilon.Core.Tactics.Spatial
         /// <inheritdoc />
         public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
 
-        /// <summary>
-        /// Проверяет, доступен ли целевой узел из стартового узла.
-        /// </summary>
-        /// <param name="currentNode">Стартовый узел.</param>
-        /// <param name="targetNode">Целевой проверяемый узел.</param>
-        /// <returns>
-        /// Возвращает true, если узел доступен. Иначе, false.
-        /// </returns>
+        /// <inheritdoc />
+        public int Id { get; set; }
+
+        /// <inheritdoc />
         public bool TargetIsOnLine(IGraphNode currentNode, IGraphNode targetNode)
         {
             if (currentNode is null)

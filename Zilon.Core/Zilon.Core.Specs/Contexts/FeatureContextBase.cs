@@ -164,16 +164,49 @@ namespace Zilon.Core.Specs.Contexts
             return equipment;
         }
 
-        public async Task CreateGlobeAsync(int startMapSize)
+        public async Task CreateLinearGlobeAsync()
+        {
+            var mapId = 0;
+
+            var mapFactory = (FuncMapFactory)ServiceProvider.GetRequiredService<IMapFactory>();
+            mapFactory.SetFunc(generationOptions =>
+            {
+                ISectorMap map = new SectorGraphMap<HexNode, HexMapNodeDistanceCalculator>();
+
+                MapFiller.FillSquareMap(map, mapSize: 3);
+
+                map.Transitions.Add(map.Nodes.First(), generationOptions.Transitions.First());
+
+                var mapRegion = new MapRegion(id: 1, map.Nodes.ToArray())
+                {
+                    IsStart = true,
+                    IsOut = true,
+                    ExitNodes = new[] { map.Nodes.Last() }
+                };
+
+                mapId++;
+                map.Id = mapId;
+
+                map.Regions.Add(mapRegion);
+
+                return Task.FromResult(map);
+            });
+
+            var globeInitialzer = ServiceProvider.GetRequiredService<IGlobeInitializer>();
+            var globe = await globeInitialzer.CreateGlobeAsync("intro").ConfigureAwait(false);
+            Globe = globe;
+        }
+
+        public async Task CreateSingleMapGlobeAsync(int startMapSize)
         {
             var mapFactory = (FuncMapFactory)ServiceProvider.GetRequiredService<IMapFactory>();
-            mapFactory.SetFunc(() =>
+            mapFactory.SetFunc(generationOptions =>
             {
                 ISectorMap map = new SectorGraphMap<HexNode, HexMapNodeDistanceCalculator>();
 
                 MapFiller.FillSquareMap(map, startMapSize);
 
-                var mapRegion = new MapRegion(1, map.Nodes.ToArray())
+                var mapRegion = new MapRegion(id: 1, map.Nodes.ToArray())
                 {
                     IsStart = true,
                     IsOut = true,
