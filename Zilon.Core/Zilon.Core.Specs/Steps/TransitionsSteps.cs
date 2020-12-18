@@ -34,6 +34,5 @@ namespace Zilon.Core.Specs.Steps
 
             map.Id.Should().Be(expectedMapId);
         }
-
     }
 }
