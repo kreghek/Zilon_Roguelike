@@ -32,6 +32,7 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<NextTurnCommand>();
             serviceCollection.AddSingleton<UseSelfCommand>();
             serviceCollection.AddSingleton<AttackCommand>();
+            serviceCollection.AddSingleton<SectorTransitionMoveCommand>();
 
             serviceCollection.AddTransient<PropTransferCommand>();
             serviceCollection.AddTransient<EquipCommand>();
