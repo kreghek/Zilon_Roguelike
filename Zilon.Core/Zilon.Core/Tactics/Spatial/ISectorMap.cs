@@ -25,8 +25,10 @@ namespace Zilon.Core.Tactics.Spatial
         /// </summary>
         /// <param name="currentNode">Start node.</param>
         /// <param name="targetNode">Target node.</param>
-        /// <returns> Returns <c>true</c> if <see cref="targetNode"/> is on line from
-        /// <see cref="currentNode"/>. <c>false</c> - otherwise.</returns>
+        /// <returns>
+        /// Returns <c>true</c> if <see cref="targetNode" /> is on line from
+        /// <see cref="currentNode" />. <c>false</c> - otherwise.
+        /// </returns>
         bool TargetIsOnLine(IGraphNode currentNode, IGraphNode targetNode);
     }
 }

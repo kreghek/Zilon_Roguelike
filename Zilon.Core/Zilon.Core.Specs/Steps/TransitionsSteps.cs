@@ -20,6 +20,5 @@ namespace Zilon.Core.Specs.Steps
             var transitionCommand = Context.ServiceProvider.GetRequiredService<SectorTransitionMoveCommand>();
             transitionCommand.Execute();
         }
-
     }
 }

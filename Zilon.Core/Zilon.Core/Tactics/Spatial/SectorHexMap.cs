@@ -28,10 +28,10 @@ namespace Zilon.Core.Tactics.Spatial
         /// <inheritdoc />
         public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public int Id { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool TargetIsOnLine(IGraphNode currentNode, IGraphNode targetNode)
         {
             if (currentNode is null)

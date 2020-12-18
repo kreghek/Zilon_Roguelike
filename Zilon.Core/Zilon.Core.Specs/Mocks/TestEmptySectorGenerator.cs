@@ -29,7 +29,7 @@ namespace Zilon.Core.Specs.Mocks
                                        throw new ArgumentNullException(nameof(equipmentDurableService));
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<ISector> GenerateAsync(ISectorNode sectorNode)
         {
             var transitions = MapFactoryHelper.CreateTransitions(sectorNode);
