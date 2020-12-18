@@ -30,7 +30,6 @@ namespace Zilon.Core.Specs.Contexts
             return serviceProvider;
         }
 
-
         public static void RegisterActUsageServices(IServiceCollection container)
         {
             container.AddScoped<IActUsageHandlerSelector>(serviceProvider =>
@@ -86,7 +85,6 @@ namespace Zilon.Core.Specs.Contexts
             // Указание необязательных зависимостей
             tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
         }
-
 
         private ITacticalActUsageRandomSource CreateActUsageRandomSource(IDice dice)
         {

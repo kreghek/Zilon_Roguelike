@@ -97,7 +97,6 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
         }
 
-
         public static void RegisterStaticObjectFactories(this IServiceCollection serviceCollection)
         {
             serviceCollection.RegisterStaticObjectFactoringFromCore();

@@ -23,6 +23,7 @@ namespace Zilon.Core.Specs.Steps
             var transitionCommand = Context.ServiceProvider.GetRequiredService<SectorTransitionMoveCommand>();
             transitionCommand.Execute();
         }
+
         [Then(@"the player actor in the map with id:(\d+)")]
         public void ThenThePlayerActionInMapId(int expectedMapId)
         {
