@@ -30,9 +30,61 @@ namespace Zilon.Core.Specs.Contexts
             return serviceProvider;
         }
 
+
+        public static void RegisterActUsageServices(IServiceCollection container)
+        {
+            container.AddScoped<IActUsageHandlerSelector>(serviceProvider =>
+            {
+                var handlers = serviceProvider.GetServices<IActUsageHandler>();
+                var handlersArray = handlers.ToArray();
+                var handlerSelector = new ActUsageHandlerSelector(handlersArray);
+                return handlerSelector;
+            });
+            container.AddScoped<IActUsageHandler>(serviceProvider =>
+            {
+                var perkResolver = serviceProvider.GetRequiredService<IPerkResolver>();
+                var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
+                var handler = new ActorActUsageHandler(perkResolver, randomSource);
+                ConfigurateActorActUsageHandler(serviceProvider, handler);
+                return handler;
+            });
+            container.AddScoped<IActUsageHandler, StaticObjectActUsageHandler>();
+            container.AddScoped<ITacticalActUsageService>(serviceProvider =>
+            {
+                var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
+                var actHandlerSelector = serviceProvider.GetRequiredService<IActUsageHandlerSelector>();
+
+                var tacticalActUsageService = new TacticalActUsageService(randomSource, actHandlerSelector);
+
+                ConfigurateTacticalActUsageService(serviceProvider, tacticalActUsageService);
+
+                return tacticalActUsageService;
+            });
+        }
+
         public void SpecifyTacticalActUsageRandomSource(ITacticalActUsageRandomSource actUsageRandomSource)
         {
             _specificActUsageRandomSource = actUsageRandomSource;
+        }
+
+        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider,
+            ActorActUsageHandler handler)
+        {
+            // Указание необязательных зависимостей
+            handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
+
+            handler.ActorInteractionBus = serviceProvider.GetService<IActorInteractionBus>();
+
+            handler.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+
+            handler.ScoreManager = serviceProvider.GetService<IScoreManager>();
+        }
+
+        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider,
+            TacticalActUsageService tacticalActUsageService)
+        {
+            // Указание необязательных зависимостей
+            tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
         }
 
 
@@ -55,6 +107,17 @@ namespace Zilon.Core.Specs.Contexts
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             return actUsageRandomSource;
+        }
+
+        private static ISurvivalRandomSource CreateSurvivalRandomSource()
+        {
+            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
+            var survivalRandomSource = survivalRandomSourceMock.Object;
+
+            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(1);
+            survivalRandomSourceMock.Setup(x => x.RollMaxHazardDamage()).Returns(6);
+
+            return survivalRandomSource;
         }
 
         /// <summary>
@@ -101,68 +164,6 @@ namespace Zilon.Core.Specs.Contexts
             RegisterAuxServices(serviceCollection);
 
             return serviceCollection;
-        }
-
-
-        public static void RegisterActUsageServices(IServiceCollection container)
-        {
-            container.AddScoped<IActUsageHandlerSelector>(serviceProvider =>
-            {
-                var handlers = serviceProvider.GetServices<IActUsageHandler>();
-                var handlersArray = handlers.ToArray();
-                var handlerSelector = new ActUsageHandlerSelector(handlersArray);
-                return handlerSelector;
-            });
-            container.AddScoped<IActUsageHandler>(serviceProvider =>
-            {
-                var perkResolver = serviceProvider.GetRequiredService<IPerkResolver>();
-                var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
-                var handler = new ActorActUsageHandler(perkResolver, randomSource);
-                ConfigurateActorActUsageHandler(serviceProvider, handler);
-                return handler;
-            });
-            container.AddScoped<IActUsageHandler, StaticObjectActUsageHandler>();
-            container.AddScoped<ITacticalActUsageService>(serviceProvider =>
-            {
-                var randomSource = serviceProvider.GetRequiredService<ITacticalActUsageRandomSource>();
-                var actHandlerSelector = serviceProvider.GetRequiredService<IActUsageHandlerSelector>();
-
-                var tacticalActUsageService = new TacticalActUsageService(randomSource, actHandlerSelector);
-
-                ConfigurateTacticalActUsageService(serviceProvider, tacticalActUsageService);
-
-                return tacticalActUsageService;
-            });
-        }
-
-        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider, ActorActUsageHandler handler)
-        {
-            // Указание необязательных зависимостей
-            handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
-
-            handler.ActorInteractionBus = serviceProvider.GetService<IActorInteractionBus>();
-
-            handler.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
-
-            handler.ScoreManager = serviceProvider.GetService<IScoreManager>();
-        }
-
-        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider,
-            TacticalActUsageService tacticalActUsageService)
-        {
-            // Указание необязательных зависимостей
-            tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
-        }
-
-        private static ISurvivalRandomSource CreateSurvivalRandomSource()
-        {
-            var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
-            var survivalRandomSource = survivalRandomSourceMock.Object;
-
-            survivalRandomSourceMock.Setup(x => x.RollSurvival(It.IsAny<SurvivalStat>())).Returns(1);
-            survivalRandomSourceMock.Setup(x => x.RollMaxHazardDamage()).Returns(6);
-
-            return survivalRandomSource;
         }
     }
 }
