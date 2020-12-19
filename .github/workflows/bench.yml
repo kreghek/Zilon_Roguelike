@@ -1,0 +1,22 @@
+name: Benchmarks
+
+on: push
+
+jobs:
+  buildCore:
+    name: Run benchs
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        bench_project:
+          - Zilon.Core.Benchmarks.Move
+        include:
+          - bench_project: Zilon.Core.Benchmarks.Move
+          - bench_filter: GamePlayBench
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - run: dotnet run --project Zilon.Core/${{ matrix.bench_project }}/${{ matrix.bench_project }}.csproj --configuration Release --filter *${{ matrix.bench_filter }}*
