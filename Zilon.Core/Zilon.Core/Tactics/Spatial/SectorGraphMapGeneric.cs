@@ -19,7 +19,7 @@ namespace Zilon.Core.Tactics.Spatial
         }
 
         /// <inheritdoc />
-        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
+        public Dictionary<IGraphNode, SectorTransition> Transitions { get; }
 
         /// <inheritdoc />
         public int Id { get; set; }

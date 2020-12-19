@@ -45,7 +45,7 @@ namespace Zilon.Core.World
             return true;
         }
 
-        private async Task ProcessInnerAsync(IGlobe globe, ISector sector, IActor actor, RoomTransition transition)
+        private async Task ProcessInnerAsync(IGlobe globe, ISector sector, IActor actor, SectorTransition transition)
         {
             var sectorNode = transition.SectorNode;
 
