@@ -62,6 +62,11 @@ namespace Zilon.Core.Benchmarks.Move
             var moveCommand = _serviceProvider.GetRequiredService<MoveCommand>();
             var commandManger = _serviceProvider.GetRequiredService<ICommandManager>();
 
+            var gameLoop = new GameLoop(_globe);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            gameLoop.StartProcessAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
             var sector = player.SectorNode.Sector;
             for (var i = 0; i < 1; i++)
             {
