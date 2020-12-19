@@ -101,7 +101,6 @@ namespace Zilon.Bot.Players.Logics
         {
             return sector.Map.Nodes;
 
-
             /*var map = sector.Map;
 
             var personFowModule = actor.Person.GetModuleSafe<IFowData>();
