@@ -15,10 +15,6 @@ namespace Zilon.Core.Benchmarks.Move
 {
     internal class Startup : InitializationBase
     {
-        public Startup()
-        {
-        }
-
         public override void ConfigureAux(IServiceProvider serviceProvider)
         {
             // Конфигурация дополнительных сервисов для коробочного источника команд не требуется.
