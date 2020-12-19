@@ -99,9 +99,8 @@ namespace Zilon.Bot.Players.Logics
         private IEnumerable<IGraphNode> WriteObservedNodes(IActor actor, ILogicStrategyData strategyData,
             ISector sector)
         {
-            return sector.Map.Nodes;
+            var map = sector.Map;
 
-            /*var map = sector.Map;
 
             var personFowModule = actor.Person.GetModuleSafe<IFowData>();
             if (personFowModule is null)
@@ -144,8 +143,36 @@ namespace Zilon.Bot.Players.Logics
             else
             {
                 var fowData = personFowModule.GetSectorFowData(sector);
-                fowData.Nodes.Where(x=>x.State == SectorMapNodeFowState)
-            }*/
+
+                // Собираем пограничные неисследованные узлы.
+                var frontNodes = new HashSet<IGraphNode>();
+                var observerdNodes = fowData.Nodes.Select(x=>x.Node);
+                foreach (var observedNode in observerdNodes)
+                {
+                    var nextNodes = map.GetNext(observedNode);
+
+                    var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObserverdNodes.Contains(x));
+
+                    foreach (var edgeNode in notObservedNextNodes)
+                    {
+                        frontNodes.Add(edgeNode);
+                    }
+
+                    // Примечаем выходы
+                    if (map.Transitions.ContainsKey(observedNode))
+                    {
+                        strategyData.ExitNodes.Add(observedNode);
+                    }
+                }
+
+                var emptyFrontNodes = !frontNodes.Any();
+                var allNodesObserved = map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
+
+                Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
+                    "Это состояние выполняется, только если есть неисследованые узлы.");
+
+                return frontNodes;
+            }
         }
     }
 }
