@@ -1,4 +1,6 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Threading.Tasks;
+
+using BenchmarkDotNet.Attributes;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +13,7 @@ namespace Zilon.Core.Benchmarks.Move
     public class GamePlayBench
     {
         [Benchmark(Description = "GamePlay")]
-        public async System.Threading.Tasks.Task Move1Async()
+        public async Task Move1Async()
         {
             var serviceContainer = new ServiceCollection();
             var startUp = new Startup();

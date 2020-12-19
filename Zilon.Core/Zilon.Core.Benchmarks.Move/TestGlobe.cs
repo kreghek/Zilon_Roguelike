@@ -53,12 +53,12 @@ namespace Zilon.Core.Benchmarks.Move
 
         public IEnumerable<ISectorNode> SectorNodes => new[] { _sectorNode };
 
-        public void AddSectorNode(ISectorNode sectorNode)
+        public Task UpdateAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync()
+        public void AddSectorNode(ISectorNode sectorNode)
         {
             throw new NotImplementedException();
         }
