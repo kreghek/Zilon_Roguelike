@@ -146,7 +146,7 @@ namespace Zilon.Bot.Players.Logics
 
                 // Собираем пограничные неисследованные узлы.
                 var frontNodes = new HashSet<IGraphNode>();
-                var observerdNodes = fowData.Nodes.Select(x=>x.Node);
+                var observerdNodes = fowData.Nodes.Select(x => x.Node);
                 foreach (var observedNode in observerdNodes)
                 {
                     var nextNodes = map.GetNext(observedNode);
