@@ -6,43 +6,36 @@ using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
+using Zilon.Core.Players;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
 namespace Zilon.Core.Benchmarks.Move
 {
     internal class Startup : InitializationBase
     {
-        public Startup() : base(123)
+        public Startup()
         {
         }
 
-        public override void ConfigureAux(IServiceProvider serviceFactory)
+        public override void ConfigureAux(IServiceProvider serviceProvider)
         {
-            // Сейчас конфигурирование доп.сервисов для базового бота не требуется.
+            // Конфигурация дополнительных сервисов для коробочного источника команд не требуется.
         }
 
-        public override void RegisterServices(IServiceCollection serviceCollection)
+        protected override void RegisterBot(IServiceCollection container)
         {
-            base.RegisterServices(serviceCollection);
+            container.RegisterLogicState();
+            container.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
+            container.AddSingleton<LogicStateTreePatterns>();
 
-            serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
-            serviceCollection.AddSingleton<IGlobeExpander>(provider =>
-                (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
-            serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
-            serviceCollection.AddSingleton<IPersonInitializer, AutoPersonInitializer>();
-        }
+            container.AddSingleton<HumanBotActorTaskSource<ISectorTaskSourceContext>>();
+            container.AddSingleton<IActorTaskSource<ISectorTaskSourceContext>>(serviceProvider =>
+                serviceProvider.GetRequiredService<HumanBotActorTaskSource<ISectorTaskSourceContext>>());
 
-        protected override void RegisterBot(IServiceCollection serviceCollection)
-        {
-            serviceCollection.RegisterLogicState();
-            serviceCollection.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
-            serviceCollection.AddSingleton<LogicStateTreePatterns>();
-
-            serviceCollection
-                .AddSingleton<IActorTaskSource<ISectorTaskSourceContext>,
-                    HumanBotActorTaskSource<ISectorTaskSourceContext>>();
+            container.AddSingleton<IPlayer, HumanPlayer>();
+            container.AddSingleton<IScoreManager, ScoreManager>();
         }
     }
 }

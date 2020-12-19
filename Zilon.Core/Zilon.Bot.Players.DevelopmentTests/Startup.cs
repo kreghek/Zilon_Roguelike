@@ -12,7 +12,7 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
-    internal class Startup : InitializationBase
+    internal sealed class Startup : InitializationBase
     {
         public override void ConfigureAux(IServiceProvider serviceProvider)
         {
