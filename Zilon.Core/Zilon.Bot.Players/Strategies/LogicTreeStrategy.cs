@@ -96,7 +96,7 @@ namespace Zilon.Bot.Players.Strategies
             {
                 if (WriteStateChanges)
                 {
-                    Console.WriteLine(newState);
+                    //Console.WriteLine(newState);
                 }
 
                 CurrentState = newState;
