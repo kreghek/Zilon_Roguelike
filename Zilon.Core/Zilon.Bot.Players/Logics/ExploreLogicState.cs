@@ -135,7 +135,6 @@ namespace Zilon.Bot.Players.Logics
                 "Это состояние выполняется, только если есть неисследованые узлы.");
 
             return frontNodes;
-
         }
     }
 }
