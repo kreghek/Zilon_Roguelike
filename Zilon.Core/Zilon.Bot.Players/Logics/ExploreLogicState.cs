@@ -151,7 +151,7 @@ namespace Zilon.Bot.Players.Logics
                 {
                     var nextNodes = map.GetNext(observedNode);
 
-                    var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObserverdNodes.Contains(x));
+                    var notObservedNextNodes = nextNodes.Where(x => !observerdNodes.Contains(x));
 
                     foreach (var edgeNode in notObservedNextNodes)
                     {
@@ -166,7 +166,7 @@ namespace Zilon.Bot.Players.Logics
                 }
 
                 var emptyFrontNodes = !frontNodes.Any();
-                var allNodesObserved = map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
+                var allNodesObserved = map.Nodes.All(x => observerdNodes.Contains(x));
 
                 Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
                     "Это состояние выполняется, только если есть неисследованые узлы.");
