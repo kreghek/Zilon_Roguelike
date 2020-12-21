@@ -266,6 +266,7 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
             serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceCollection.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
+            serviceCollection.AddSingleton<ITransitionPool, TransitionPool>();
             serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider =>
             {
                 return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();

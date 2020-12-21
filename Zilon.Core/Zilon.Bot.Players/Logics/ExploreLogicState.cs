@@ -101,77 +101,40 @@ namespace Zilon.Bot.Players.Logics
         {
             var map = sector.Map;
 
-            var personFowModule = actor.Person.GetModuleSafe<IFowData>();
-            if (personFowModule is null)
+            var observeNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
+
+            foreach (var mapNode in observeNodes)
             {
-                var observeNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
-
-                foreach (var mapNode in observeNodes)
-                {
-                    strategyData.ObserverdNodes.Add(mapNode);
-                }
-
-                // Собираем пограничные неисследованные узлы.
-                var frontNodes = new HashSet<IGraphNode>();
-                foreach (var observedNode in strategyData.ObserverdNodes)
-                {
-                    var nextNodes = map.GetNext(observedNode);
-
-                    var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObserverdNodes.Contains(x));
-
-                    foreach (var edgeNode in notObservedNextNodes)
-                    {
-                        frontNodes.Add(edgeNode);
-                    }
-
-                    // Примечаем выходы
-                    if (map.Transitions.ContainsKey(observedNode))
-                    {
-                        strategyData.ExitNodes.Add(observedNode);
-                    }
-                }
-
-                var emptyFrontNodes = !frontNodes.Any();
-                var allNodesObserved = map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
-
-                Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
-                    "Это состояние выполняется, только если есть неисследованые узлы.");
-
-                return frontNodes;
+                strategyData.ObserverdNodes.Add(mapNode);
             }
-            else
+
+            // Собираем пограничные неисследованные узлы.
+            var frontNodes = new HashSet<IGraphNode>();
+            foreach (var observedNode in strategyData.ObserverdNodes)
             {
-                var fowData = personFowModule.GetSectorFowData(sector);
+                var nextNodes = map.GetNext(observedNode);
 
-                // Собираем пограничные неисследованные узлы.
-                var frontNodes = new HashSet<IGraphNode>();
-                var observerdNodes = fowData.Nodes.Select(x => x.Node);
-                foreach (var observedNode in observerdNodes)
+                var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObserverdNodes.Contains(x));
+
+                foreach (var edgeNode in notObservedNextNodes)
                 {
-                    var nextNodes = map.GetNext(observedNode);
-
-                    var notObservedNextNodes = nextNodes.Where(x => !observerdNodes.Contains(x));
-
-                    foreach (var edgeNode in notObservedNextNodes)
-                    {
-                        frontNodes.Add(edgeNode);
-                    }
-
-                    // Примечаем выходы
-                    if (map.Transitions.ContainsKey(observedNode))
-                    {
-                        strategyData.ExitNodes.Add(observedNode);
-                    }
+                    frontNodes.Add(edgeNode);
                 }
 
-                var emptyFrontNodes = !frontNodes.Any();
-                var allNodesObserved = map.Nodes.All(x => observerdNodes.Contains(x));
-
-                Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
-                    "Это состояние выполняется, только если есть неисследованые узлы.");
-
-                return frontNodes;
+                // Примечаем выходы
+                if (map.Transitions.ContainsKey(observedNode))
+                {
+                    strategyData.ExitNodes.Add(observedNode);
+                }
             }
+
+            var emptyFrontNodes = !frontNodes.Any();
+            var allNodesObserved = map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
+
+            Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
+                "Это состояние выполняется, только если есть неисследованые узлы.");
+
+            return frontNodes;
         }
     }
 }
