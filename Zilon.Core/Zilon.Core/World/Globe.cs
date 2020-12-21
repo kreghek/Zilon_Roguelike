@@ -147,30 +147,30 @@ namespace Zilon.Core.World
                         state.TaskSource.ProcessTaskExecuted(state.Task);
                     }
                 }
-
-                // удаляем выполненные задачи.
-                foreach (var taskStatePair in taskDict.ToArray())
-                {
-                    var state = taskStatePair.Value;
-                    if (state.TaskComplete)
-                    {
-                        taskDict.Remove(taskStatePair.Key);
-                        state.TaskSource.ProcessTaskComplete(state.Task);
-                    }
-
-                    var actor = taskStatePair.Key;
-                    if (!actor.CanExecuteTasks)
-                    {
-                        // Песонаж может перестать выполнять задачи по следующим причинам:
-                        // 1. Персонажи, у которых есть модуль выживания, могут умереть.
-                        // Мертвые персонажы не выполняют задач.
-                        // Их задачи можно прервать, потому что:
-                        //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
-                        //   * Экономит ресурсы.
-                        taskDict.Remove(taskStatePair.Key);
-                    }
-                }
             });
+
+            // удаляем выполненные задачи.
+            foreach (var taskStatePair in taskDict.ToArray())
+            {
+                var state = taskStatePair.Value;
+                if (state.TaskComplete)
+                {
+                    taskDict.Remove(taskStatePair.Key);
+                    state.TaskSource.ProcessTaskComplete(state.Task);
+                }
+
+                var actor = taskStatePair.Key;
+                if (!actor.CanExecuteTasks)
+                {
+                    // Песонаж может перестать выполнять задачи по следующим причинам:
+                    // 1. Персонажи, у которых есть модуль выживания, могут умереть.
+                    // Мертвые персонажы не выполняют задач.
+                    // Их задачи можно прервать, потому что:
+                    //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
+                    //   * Экономит ресурсы.
+                    taskDict.Remove(taskStatePair.Key);
+                }
+            }
         }
 
         private void RemoveActorTaskState(IActor actor)
