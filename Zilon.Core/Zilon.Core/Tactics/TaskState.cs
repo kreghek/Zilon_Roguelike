@@ -8,9 +8,10 @@ namespace Zilon.Core.Tactics
     {
         private readonly int _valueToExecute;
 
-        public TaskState(IActor actor, IActorTask task, IActorTaskSource<ISectorTaskSourceContext> taskSource)
+        public TaskState(IActor actor, ISector sector, IActorTask task, IActorTaskSource<ISectorTaskSourceContext> taskSource)
         {
             Actor = actor ?? throw new ArgumentNullException(nameof(actor));
+            Sector = sector ?? throw new ArgumentNullException(nameof(sector));
             Task = task ?? throw new ArgumentNullException(nameof(task));
             TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
 
@@ -19,6 +20,7 @@ namespace Zilon.Core.Tactics
         }
 
         public IActor Actor { get; }
+        public ISector Sector { get; }
         public int Counter { get; private set; }
 
         public IActorTask Task { get; }

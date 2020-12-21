@@ -40,39 +40,45 @@ namespace Zilon.Core.World
             }
         }
 
-        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
+        private Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
         {
             var actorDataListMaterialized = actorDataList.ToArray();
-            foreach (var actorDataItem in actorDataListMaterialized)
+
+            var actorGrouppedBySector = actorDataListMaterialized.GroupBy(x => x.Sector);
+
+            Parallel.ForEach(actorGrouppedBySector, async sectorGroup => 
             {
-                var actor = actorDataItem.Actor;
-                var sector = actorDataItem.Sector;
-
-                var taskSource = actor.TaskSource;
-
-                var context = new SectorTaskSourceContext(sector);
-
-                //TODO Это можно делать параллельно. Одновременно должны думать сразу все актёры.
-                // Делается легко, через Parallel.ForEach, но из-за этого часто заваливаются тесты и даже не видно причины отказа.
-                var actorTaskTask = taskSource.GetActorTaskAsync(actor, context);
-
-                try
+                foreach (var actorDataItem in sectorGroup)
                 {
-                    var actorTask = await actorTaskTask.ConfigureAwait(false);
-                    var state = new TaskState(actor, actorTask, taskSource);
-                    if (!_taskDict.TryAdd(actor, state))
+                    var actor = actorDataItem.Actor;
+                    var sector = actorDataItem.Sector;
+
+                    var taskSource = actor.TaskSource;
+
+                    var context = new SectorTaskSourceContext(sector);
+
+                    var actorTaskTask = taskSource.GetActorTaskAsync(actor, context);
+
+                    try
                     {
-                        // Это происходит, когда игрок пытается присвоить новую команду,
-                        // когда старая еще не закончена и не может быть заменена.
-                        throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
+                        var actorTask = await actorTaskTask.ConfigureAwait(false);
+                        var state = new TaskState(actor, sector, actorTask, taskSource);
+                        if (!_taskDict.TryAdd(actor, state))
+                        {
+                            // Это происходит, когда игрок пытается присвоить новую команду,
+                            // когда старая еще не закончена и не может быть заменена.
+                            throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
+                        }
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        // Do nothing for his actor. His task was cancelled.
+                        _taskDict.TryRemove(actor, out var _);
                     }
                 }
-                catch (TaskCanceledException)
-                {
-                    // Do nothing for his actor. His task was cancelled.
-                    _taskDict.TryRemove(actor, out var _);
-                }
-            }
+            });
+
+            return Task.CompletedTask;
         }
 
         private IEnumerable<ActorInSector> GetActorsWithoutTasks()
@@ -108,58 +114,63 @@ namespace Zilon.Core.World
         private static void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
         {
             var states = taskDict.Values;
-            // Все актёры еще раз сортируются, чтобы зафиксировать поведение для тестов.
-            // Может быть ситуация, когда найдено одновременно два актёра без задач (в самом начале теста, например).
-            // В этом случае порядок элементов, полученных из states, не фиксирован.
-            // В тестах мжет быть важно, в каком порядке ходят актёры, чтобы корректно обрабатывать коллизии.
-            // Поэтому тут выполняется еще одна сортировка, от которой, по-хорошему нужно избавиться.
-            // Лучше сразу иметь список states с сортировкой по приоритету при добавлении элемента.
-            var orderedStates = states.OrderBy(x => x.Actor.Person.Id);
-            foreach (var state in orderedStates)
-            {
-                if (!state.Actor.CanExecuteTasks)
+
+            var statesGroupedBySector = states.GroupBy(x => x.Sector).ToArray();
+
+            Parallel.ForEach(statesGroupedBySector, sectorStates=> {
+                // Все актёры еще раз сортируются, чтобы зафиксировать поведение для тестов.
+                // Может быть ситуация, когда найдено одновременно два актёра без задач (в самом начале теста, например).
+                // В этом случае порядок элементов, полученных из states, не фиксирован.
+                // В тестах мжет быть важно, в каком порядке ходят актёры, чтобы корректно обрабатывать коллизии.
+                // Поэтому тут выполняется еще одна сортировка, от которой, по-хорошему нужно избавиться.
+                // Лучше сразу иметь список states с сортировкой по приоритету при добавлении элемента.
+                var orderedStates = sectorStates.OrderBy(x => x.Actor.Person.Id);
+                foreach (var state in orderedStates)
                 {
-                    // По сути, возможность выполнять задачи - это основая роль этого объекта.
-                    // песонаж может перестать выполнять задачи по следующим причинам:
-                    // 1. Персонажи, у которых есть модуль выживания, могут умереть, пока выполняют текущую задачу (выполняются предусловия).
-                    // Мертвые персонажы не выполняют задач.
-                    // Их задачи игнорируем, т.к. задачи могут выполниться после смерти персонажа,
-                    // что противоречит логике задач.
-                    continue;
+                    if (!state.Actor.CanExecuteTasks)
+                    {
+                        // По сути, возможность выполнять задачи - это основая роль этого объекта.
+                        // песонаж может перестать выполнять задачи по следующим причинам:
+                        // 1. Персонажи, у которых есть модуль выживания, могут умереть, пока выполняют текущую задачу (выполняются предусловия).
+                        // Мертвые персонажы не выполняют задач.
+                        // Их задачи игнорируем, т.к. задачи могут выполниться после смерти персонажа,
+                        // что противоречит логике задач.
+                        continue;
+                    }
+
+                    state.UpdateCounter();
+
+                    if (state.TaskIsExecuting)
+                    {
+                        state.Task.Execute();
+
+                        state.TaskSource.ProcessTaskExecuted(state.Task);
+                    }
                 }
 
-                state.UpdateCounter();
-
-                if (state.TaskIsExecuting)
+                // удаляем выполненные задачи.
+                foreach (var taskStatePair in taskDict.ToArray())
                 {
-                    state.Task.Execute();
+                    var state = taskStatePair.Value;
+                    if (state.TaskComplete)
+                    {
+                        taskDict.Remove(taskStatePair.Key);
+                        state.TaskSource.ProcessTaskComplete(state.Task);
+                    }
 
-                    state.TaskSource.ProcessTaskExecuted(state.Task);
+                    var actor = taskStatePair.Key;
+                    if (!actor.CanExecuteTasks)
+                    {
+                        // Песонаж может перестать выполнять задачи по следующим причинам:
+                        // 1. Персонажи, у которых есть модуль выживания, могут умереть.
+                        // Мертвые персонажы не выполняют задач.
+                        // Их задачи можно прервать, потому что:
+                        //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
+                        //   * Экономит ресурсы.
+                        taskDict.Remove(taskStatePair.Key);
+                    }
                 }
-            }
-
-            // удаляем выполненные задачи.
-            foreach (var taskStatePair in taskDict.ToArray())
-            {
-                var state = taskStatePair.Value;
-                if (state.TaskComplete)
-                {
-                    taskDict.Remove(taskStatePair.Key);
-                    state.TaskSource.ProcessTaskComplete(state.Task);
-                }
-
-                var actor = taskStatePair.Key;
-                if (!actor.CanExecuteTasks)
-                {
-                    // Песонаж может перестать выполнять задачи по следующим причинам:
-                    // 1. Персонажи, у которых есть модуль выживания, могут умереть.
-                    // Мертвые персонажы не выполняют задач.
-                    // Их задачи можно прервать, потому что:
-                    //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
-                    //   * Экономит ресурсы.
-                    taskDict.Remove(taskStatePair.Key);
-                }
-            }
+            });
         }
 
         private void RemoveActorTaskState(IActor actor)
@@ -180,7 +191,7 @@ namespace Zilon.Core.World
         private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)
         {
             var sector = (ISector)sender;
-            await _globeTransitionHandler.ProcessAsync(this, sector, e.Actor, e.Transition).ConfigureAwait(false);
+            await _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition).ConfigureAwait(false);
         }
 
         public IEnumerable<ISectorNode> SectorNodes => _sectorNodes;
@@ -213,6 +224,8 @@ namespace Zilon.Core.World
                 {
                     sectorNode.Sector.Update();
                 }
+
+                _globeTransitionHandler.UpdateTransitions();
             }
         }
 
