@@ -50,7 +50,7 @@ namespace Zilon.Core.Tests.PersonModules
 
             // ACT
 
-            for (var i = 0; i < 1000; i++)
+            for (var i = 0; i < 10; i++)
             {
                 diseaseData.Update();
             }

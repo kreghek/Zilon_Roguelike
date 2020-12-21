@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.PersonModules
 {
@@ -10,7 +11,7 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public sealed class MonsterMovingModule : IMovingModule
     {
-        private const int BASE_MOVE_SPEED = 1000;
+        private int BASE_MOVE_SPEED = GlobeMetrics.OneIterationLength;
         private readonly IMonsterScheme _monsterScheme;
 
         public MonsterMovingModule(IMonsterScheme monsterScheme)
