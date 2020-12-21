@@ -44,7 +44,7 @@ namespace Zilon.Core.World
         {
             var actorDataListMaterialized = actorDataList.ToArray();
 
-            var actorGrouppedBySector = actorDataListMaterialized.GroupBy(x => x.Sector);
+            var actorGrouppedBySector = actorDataListMaterialized.GroupBy(x => x.Sector).ToArray();
 
             Parallel.ForEach(actorGrouppedBySector, async sectorGroup =>
             {
