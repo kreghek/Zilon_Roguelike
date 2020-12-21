@@ -40,6 +40,34 @@ namespace Zilon.Core.World
             }
         }
 
+        private static void ClearUpTasks(IDictionary<IActor, TaskState> taskDict)
+        {
+            // удаляем выполненные задачи.
+            foreach (var taskStatePair in taskDict.ToArray())
+            {
+                var state = taskStatePair.Value;
+
+                if (state.TaskComplete)
+                {
+                    taskDict.Remove(taskStatePair.Key);
+                    state.TaskSource.ProcessTaskComplete(state.Task);
+                    return;
+                }
+
+                var actor = taskStatePair.Key;
+                if (!actor.CanExecuteTasks)
+                {
+                    // Песонаж может перестать выполнять задачи по следующим причинам:
+                    // 1. Персонажи, у которых есть модуль выживания, могут умереть.
+                    // Мертвые персонажы не выполняют задач.
+                    // Их задачи можно прервать, потому что:
+                    //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
+                    //   * Экономит ресурсы.
+                    taskDict.Remove(taskStatePair.Key);
+                }
+            }
+        }
+
         private void GenerateActorTasksAndPutInDict(IEnumerable<ActorInSector> actorDataList)
         {
             var actorDataListMaterialized = actorDataList.ToArray();
@@ -110,20 +138,6 @@ namespace Zilon.Core.World
             }
         }
 
-        private static void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
-        {
-            var states = taskDict.Values;
-            var materializedSectorList = GroupTaskStates(states);
-
-            foreach (var sectorStates in materializedSectorList)
-            {
-                var orderedStates = SortActorStates(sectorStates);
-                ProcessActorStates(orderedStates);
-            }
-
-            ClearUpTasks(taskDict);
-        }
-
         private static List<TaskState[]> GroupTaskStates(ICollection<TaskState> states)
         {
             var statesGroupedBySector = states.GroupBy(x => x.Sector).ToArray();
@@ -140,34 +154,6 @@ namespace Zilon.Core.World
             }
 
             return materializedSectorList;
-        }
-
-        private static void ClearUpTasks(IDictionary<IActor, TaskState> taskDict)
-        {
-            // удаляем выполненные задачи.
-            foreach (var taskStatePair in taskDict.ToArray())
-            {
-                var state = taskStatePair.Value;
-
-                if (state.TaskComplete)
-                {
-                    taskDict.Remove(taskStatePair.Key);
-                    state.TaskSource.ProcessTaskComplete(state.Task);
-                    return;
-                }
-
-                var actor = taskStatePair.Key;
-                if (!actor.CanExecuteTasks)
-                {
-                    // Песонаж может перестать выполнять задачи по следующим причинам:
-                    // 1. Персонажи, у которых есть модуль выживания, могут умереть.
-                    // Мертвые персонажы не выполняют задач.
-                    // Их задачи можно прервать, потому что:
-                    //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
-                    //   * Экономит ресурсы.
-                    taskDict.Remove(taskStatePair.Key);
-                }
-            }
         }
 
         private static void ProcessActorStates(IEnumerable<TaskState> states)
@@ -196,16 +182,18 @@ namespace Zilon.Core.World
             }
         }
 
-        private static TaskState[] SortActorStates(IEnumerable<TaskState> sectorStates)
+        private static void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
         {
-            // Все актёры еще раз сортируются, чтобы зафиксировать поведение для тестов.
-            // Может быть ситуация, когда найдено одновременно два актёра без задач (в самом начале теста, например).
-            // В этом случае порядок элементов, полученных из states, не фиксирован.
-            // В тестах мжет быть важно, в каком порядке ходят актёры, чтобы корректно обрабатывать коллизии.
-            // Поэтому тут выполняется еще одна сортировка, от которой, по-хорошему нужно избавиться.
-            // Лучше сразу иметь список states с сортировкой по приоритету при добавлении элемента.
+            var states = taskDict.Values;
+            var materializedSectorList = GroupTaskStates(states);
 
-            return sectorStates.OrderBy(x => x.Actor.Person.Id).ToArray();
+            foreach (var sectorStates in materializedSectorList)
+            {
+                var orderedStates = SortActorStates(sectorStates);
+                ProcessActorStates(orderedStates);
+            }
+
+            ClearUpTasks(taskDict);
         }
 
         private void RemoveActorTaskState(IActor actor)
@@ -228,6 +216,18 @@ namespace Zilon.Core.World
             var sector = (ISector)sender;
             await _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition)
                 .ConfigureAwait(false);
+        }
+
+        private static TaskState[] SortActorStates(IEnumerable<TaskState> sectorStates)
+        {
+            // Все актёры еще раз сортируются, чтобы зафиксировать поведение для тестов.
+            // Может быть ситуация, когда найдено одновременно два актёра без задач (в самом начале теста, например).
+            // В этом случае порядок элементов, полученных из states, не фиксирован.
+            // В тестах мжет быть важно, в каком порядке ходят актёры, чтобы корректно обрабатывать коллизии.
+            // Поэтому тут выполняется еще одна сортировка, от которой, по-хорошему нужно избавиться.
+            // Лучше сразу иметь список states с сортировкой по приоритету при добавлении элемента.
+
+            return sectorStates.OrderBy(x => x.Actor.Person.Id).ToArray();
         }
 
         public IEnumerable<ISectorNode> SectorNodes => _sectorNodes;
