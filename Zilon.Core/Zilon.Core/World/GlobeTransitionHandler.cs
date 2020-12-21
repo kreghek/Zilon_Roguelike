@@ -120,6 +120,7 @@ namespace Zilon.Core.World
 
         public void UpdateTransitions()
         {
+            var counter = 10;
             TransitionPoolItem transitionItem = null;
             do
             {
@@ -154,7 +155,10 @@ namespace Zilon.Core.World
 
                 var actorInNewSector = new Actor(actor.Person, actor.TaskSource, availableNodeToTransition);
                 nextSector.ActorManager.Add(actorInNewSector);
-            } while (transitionItem != null);
+
+                counter--;
+
+            } while (counter > 0);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Zilon.Core.World
             }
         }
 
-        private Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
+        private void GenerateActorTasksAndPutInDict(IEnumerable<ActorInSector> actorDataList)
         {
             var actorDataListMaterialized = actorDataList.ToArray();
 
@@ -78,8 +78,6 @@ namespace Zilon.Core.World
                     }
                 }
             });
-
-            return Task.CompletedTask;
         }
 
         private IEnumerable<ActorInSector> GetActorsWithoutTasks()
@@ -211,25 +209,28 @@ namespace Zilon.Core.World
             sectorNode.Sector.ActorManager.Removed += ActorManager_Removed;
         }
 
-        public async Task UpdateAsync()
+        public Task UpdateAsync()
         {
-            var actorsWithoutTasks = GetActorsWithoutTasks();
-
-            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
-
-            ProcessTasks(_taskDict);
-            _turnCounter++;
-            if (_turnCounter >= GlobeMetrics.OneIterationLength)
+            return Task.Run(() =>
             {
-                _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
+                var actorsWithoutTasks = GetActorsWithoutTasks();
 
-                foreach (var sectorNode in _sectorNodes)
+                GenerateActorTasksAndPutInDict(actorsWithoutTasks);
+
+                ProcessTasks(_taskDict);
+                _turnCounter++;
+                if (_turnCounter >= GlobeMetrics.OneIterationLength)
                 {
-                    sectorNode.Sector.Update();
-                }
+                    _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
 
-                _globeTransitionHandler.UpdateTransitions();
-            }
+                    foreach (var sectorNode in _sectorNodes)
+                    {
+                        sectorNode.Sector.Update();
+                    }
+
+                    _globeTransitionHandler.UpdateTransitions();
+                }
+            });
         }
 
         private sealed class ActorInSector
