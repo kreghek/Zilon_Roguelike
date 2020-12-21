@@ -7,9 +7,8 @@ namespace Zilon.Core.World
 {
     public interface ITransitionPool
     {
-        void Push(TransitionPoolItem poolItem);
-
         TransitionPoolItem Pop();
+        void Push(TransitionPoolItem poolItem);
     }
 
     public class TransitionPool : ITransitionPool
@@ -49,7 +48,7 @@ namespace Zilon.Core.World
 
         public IActor Actor { get; }
         public ISector NextSector { get; }
-        public ISector OldSector { get; }
         public IGraphNode OldNode { get; }
+        public ISector OldSector { get; }
     }
 }

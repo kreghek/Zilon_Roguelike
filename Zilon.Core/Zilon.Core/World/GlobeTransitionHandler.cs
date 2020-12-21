@@ -12,9 +12,9 @@ namespace Zilon.Core.World
     public sealed class GlobeTransitionHandler : IGlobeTransitionHandler, IDisposable
     {
         private readonly IGlobeExpander _globeExpander;
-        private readonly ITransitionPool _transitionPool;
 
         private readonly SemaphoreSlim _semaphoreSlim;
+        private readonly ITransitionPool _transitionPool;
 
         public GlobeTransitionHandler(IGlobeExpander globeExpander, ITransitionPool transitionPool)
         {
@@ -132,7 +132,8 @@ namespace Zilon.Core.World
 
                 var nextSector = transitionItem.NextSector;
 
-                var nodeForTransition = nextSector.Map.Transitions.First(x => x.Value.SectorNode.Sector == transitionItem.OldSector).Key;
+                var nodeForTransition = nextSector.Map.Transitions
+                    .First(x => x.Value.SectorNode.Sector == transitionItem.OldSector).Key;
                 var availableNextNodesToTransition = nextSector.Map.GetNext(nodeForTransition);
 
                 var allPotentialNodesToTransition = new[] { nodeForTransition }.Concat(availableNextNodesToTransition);

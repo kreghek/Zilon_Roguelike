@@ -67,7 +67,8 @@ namespace Zilon.Core.World
                         {
                             // Это происходит, когда игрок пытается присвоить новую команду,
                             // когда старая еще не закончена и не может быть заменена.
-                            throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
+                            throw new InvalidOperationException(
+                                "Попытка назначить задачу, когда старая еще не удалена.");
                         }
                     }
                     catch (TaskCanceledException)
@@ -192,7 +193,8 @@ namespace Zilon.Core.World
         private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)
         {
             var sector = (ISector)sender;
-            await _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition).ConfigureAwait(false);
+            await _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition)
+                .ConfigureAwait(false);
         }
 
         public IEnumerable<ISectorNode> SectorNodes => _sectorNodes;
