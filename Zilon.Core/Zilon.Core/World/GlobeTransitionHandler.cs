@@ -157,7 +157,6 @@ namespace Zilon.Core.World
                 nextSector.ActorManager.Add(actorInNewSector);
 
                 counter--;
-
             } while (counter > 0);
         }
     }
