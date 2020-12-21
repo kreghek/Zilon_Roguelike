@@ -46,7 +46,7 @@ namespace Zilon.Core.World
 
             var actorGrouppedBySector = actorDataListMaterialized.GroupBy(x => x.Sector);
 
-            Parallel.ForEach(actorGrouppedBySector, async sectorGroup => 
+            Parallel.ForEach(actorGrouppedBySector, async sectorGroup =>
             {
                 foreach (var actorDataItem in sectorGroup)
                 {
@@ -117,7 +117,8 @@ namespace Zilon.Core.World
 
             var statesGroupedBySector = states.GroupBy(x => x.Sector).ToArray();
 
-            Parallel.ForEach(statesGroupedBySector, sectorStates=> {
+            Parallel.ForEach(statesGroupedBySector, sectorStates =>
+            {
                 // Все актёры еще раз сортируются, чтобы зафиксировать поведение для тестов.
                 // Может быть ситуация, когда найдено одновременно два актёра без задач (в самом начале теста, например).
                 // В этом случае порядок элементов, полученных из states, не фиксирован.
