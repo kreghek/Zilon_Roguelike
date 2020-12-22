@@ -10,7 +10,8 @@ namespace Zilon.Core.World
     /// </summary>
     public class TransitionPoolItem
     {
-        public TransitionPoolItem(IPerson person, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource, ISector nextSector, ISector oldSector, IGraphNode oldNode)
+        public TransitionPoolItem(IPerson person, IActorTaskSource<ISectorTaskSourceContext> actorTaskSource,
+            ISector nextSector, ISector oldSector, IGraphNode oldNode)
         {
             Person = person ?? throw new System.ArgumentNullException(nameof(person));
             TaskSource = actorTaskSource ?? throw new System.ArgumentNullException(nameof(actorTaskSource));
@@ -19,10 +20,11 @@ namespace Zilon.Core.World
             OldNode = oldNode ?? throw new System.ArgumentNullException(nameof(oldNode));
         }
 
-        public IPerson Person { get; }
-        public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
         public ISector NextSector { get; }
         public IGraphNode OldNode { get; }
         public ISector OldSector { get; }
+
+        public IPerson Person { get; }
+        public IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
     }
 }

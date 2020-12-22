@@ -83,7 +83,8 @@ namespace Zilon.Core.World
 
                 var nextSector = sectorNode.Sector;
 
-                var transitionItem = new TransitionPoolItem(actor.Person, actor.TaskSource, nextSector, sector, oldActorNode);
+                var transitionItem =
+                    new TransitionPoolItem(actor.Person, actor.TaskSource, nextSector, sector, oldActorNode);
                 _transitionPool.Push(transitionItem);
             }
             finally
@@ -92,6 +93,33 @@ namespace Zilon.Core.World
                 //This is why it is important to do the Release within a try...finally clause; program execution may crash or take a different path, this way you are guaranteed execution
                 _semaphoreSlim.Release();
             }
+        }
+
+        private static void TryToTransitPersonToTargetSector(TransitionPoolItem transitionItem)
+        {
+            var nextSector = transitionItem.NextSector;
+
+            var nodeForTransition = nextSector.Map.Transitions
+                .First(x => x.Value.SectorNode.Sector == transitionItem.OldSector).Key;
+            var availableNextNodesToTransition = nextSector.Map.GetNext(nodeForTransition);
+
+            var allPotentialNodesToTransition = new[] { nodeForTransition }.Concat(availableNextNodesToTransition);
+            var allAvailableNodesToTransition = allPotentialNodesToTransition
+                .Where(x => FilterNodeToTransition(x, nextSector)).ToArray();
+
+            var availableNodeToTransition = allAvailableNodesToTransition.FirstOrDefault();
+            if (availableNodeToTransition is null)
+            {
+                // I dont know what I can do.
+                // I think it was solved when a some transition pool was developed.
+                // Now just return person into old sector in old transition node.
+                nextSector = transitionItem.OldSector;
+                availableNodeToTransition = transitionItem.OldNode;
+            }
+
+            var actorInNewSector =
+                new Actor(transitionItem.Person, transitionItem.TaskSource, availableNodeToTransition);
+            nextSector.ActorManager.Add(actorInNewSector);
         }
 
         public Task InitActorTransitionAsync(IGlobe globe, ISector sector, IActor actor, SectorTransition transition)
@@ -139,32 +167,6 @@ namespace Zilon.Core.World
 
                 counter--;
             } while (counter > 0);
-        }
-
-        private static void TryToTransitPersonToTargetSector(TransitionPoolItem transitionItem)
-        {
-            var nextSector = transitionItem.NextSector;
-
-            var nodeForTransition = nextSector.Map.Transitions
-                .First(x => x.Value.SectorNode.Sector == transitionItem.OldSector).Key;
-            var availableNextNodesToTransition = nextSector.Map.GetNext(nodeForTransition);
-
-            var allPotentialNodesToTransition = new[] { nodeForTransition }.Concat(availableNextNodesToTransition);
-            var allAvailableNodesToTransition = allPotentialNodesToTransition
-                .Where(x => FilterNodeToTransition(x, nextSector)).ToArray();
-
-            var availableNodeToTransition = allAvailableNodesToTransition.FirstOrDefault();
-            if (availableNodeToTransition is null)
-            {
-                // I dont know what I can do.
-                // I think it was solved when a some transition pool was developed.
-                // Now just return person into old sector in old transition node.
-                nextSector = transitionItem.OldSector;
-                availableNodeToTransition = transitionItem.OldNode;
-            }
-
-            var actorInNewSector = new Actor(transitionItem.Person, transitionItem.TaskSource, availableNodeToTransition);
-            nextSector.ActorManager.Add(actorInNewSector);
         }
     }
 }

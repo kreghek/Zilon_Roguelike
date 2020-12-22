@@ -14,13 +14,13 @@ namespace Zilon.Core.World
             _queue = new ConcurrentQueue<TransitionPoolItem>();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void Push(TransitionPoolItem poolItem)
         {
             _queue.Enqueue(poolItem);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public TransitionPoolItem Pop()
         {
             if (!_queue.TryDequeue(out var item))
