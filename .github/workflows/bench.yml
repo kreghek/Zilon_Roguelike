@@ -28,4 +28,4 @@ jobs:
       - uses: actions/upload-artifact@v1
         with:
           name: benchs
-          path: Zilon.Core/BenchmarkDotNet.Artifacts/results
+          path: BenchmarkDotNet.Artifacts/results
