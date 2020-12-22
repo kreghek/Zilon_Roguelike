@@ -62,3 +62,9 @@ You are awesome!
 ## Contributing
 
 We will be glad for any contribution to the development and support of the project. During development, we adhere to the [Code of Conduct] (/ CODE_OF_CONDUCT.md) and the [Source Code Conventions] (/ CODE_CONVENTIONS.md).
+
+## License
+
+- Released under [MIT](/LICENSE).
+- Feel free to modify and reuse this project. You are required to include the license when using this code. Copy `LICENSE` to `LICENSE-source` and then modify `LICENSE` with your own name.
+- Please link back to this repo as well.
