@@ -135,31 +135,36 @@ namespace Zilon.Core.World
                     return;
                 }
 
-                var nextSector = transitionItem.NextSector;
-
-                var nodeForTransition = nextSector.Map.Transitions
-                    .First(x => x.Value.SectorNode.Sector == transitionItem.OldSector).Key;
-                var availableNextNodesToTransition = nextSector.Map.GetNext(nodeForTransition);
-
-                var allPotentialNodesToTransition = new[] { nodeForTransition }.Concat(availableNextNodesToTransition);
-                var allAvailableNodesToTransition = allPotentialNodesToTransition
-                    .Where(x => FilterNodeToTransition(x, nextSector)).ToArray();
-
-                var availableNodeToTransition = allAvailableNodesToTransition.FirstOrDefault();
-                if (availableNodeToTransition is null)
-                {
-                    // I dont know what I can do.
-                    // I think it was solved when a some transition pool was developed.
-                    // Now just return person into old sector in old transition node.
-                    nextSector = transitionItem.OldSector;
-                    availableNodeToTransition = transitionItem.OldNode;
-                }
-
-                var actorInNewSector = new Actor(transitionItem.Person, transitionItem.TaskSource, availableNodeToTransition);
-                nextSector.ActorManager.Add(actorInNewSector);
+                TryToTransitPersonToTargetSector(transitionItem);
 
                 counter--;
             } while (counter > 0);
+        }
+
+        private static void TryToTransitPersonToTargetSector(TransitionPoolItem transitionItem)
+        {
+            var nextSector = transitionItem.NextSector;
+
+            var nodeForTransition = nextSector.Map.Transitions
+                .First(x => x.Value.SectorNode.Sector == transitionItem.OldSector).Key;
+            var availableNextNodesToTransition = nextSector.Map.GetNext(nodeForTransition);
+
+            var allPotentialNodesToTransition = new[] { nodeForTransition }.Concat(availableNextNodesToTransition);
+            var allAvailableNodesToTransition = allPotentialNodesToTransition
+                .Where(x => FilterNodeToTransition(x, nextSector)).ToArray();
+
+            var availableNodeToTransition = allAvailableNodesToTransition.FirstOrDefault();
+            if (availableNodeToTransition is null)
+            {
+                // I dont know what I can do.
+                // I think it was solved when a some transition pool was developed.
+                // Now just return person into old sector in old transition node.
+                nextSector = transitionItem.OldSector;
+                availableNodeToTransition = transitionItem.OldNode;
+            }
+
+            var actorInNewSector = new Actor(transitionItem.Person, transitionItem.TaskSource, availableNodeToTransition);
+            nextSector.ActorManager.Add(actorInNewSector);
         }
     }
 }
