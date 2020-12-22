@@ -1,54 +1,20 @@
-﻿using System.Collections.Concurrent;
-
-using Zilon.Core.Graphs;
-using Zilon.Core.Tactics;
-
-namespace Zilon.Core.World
+﻿namespace Zilon.Core.World
 {
+    /// <summary>
+    /// Game pool of a persons which try to transit to other sector levels.
+    /// </summary>
     public interface ITransitionPool
     {
+        /// <summary>
+        /// Get a transition info from the pool. Or null if the pool is empty.
+        /// </summary>
+        /// <returns></returns>
         TransitionPoolItem Pop();
+
+        /// <summary>
+        /// Add information about a person and target sector level.
+        /// </summary>
+        /// <param name="poolItem"> The pool item is the dat about transition. </param>
         void Push(TransitionPoolItem poolItem);
-    }
-
-    public class TransitionPool : ITransitionPool
-    {
-        private readonly ConcurrentQueue<TransitionPoolItem> _queue;
-
-        public TransitionPool()
-        {
-            _queue = new ConcurrentQueue<TransitionPoolItem>();
-        }
-
-        public void Push(TransitionPoolItem poolItem)
-        {
-            _queue.Enqueue(poolItem);
-        }
-
-        public TransitionPoolItem Pop()
-        {
-            if (!_queue.TryDequeue(out var item))
-            {
-                return null;
-            }
-
-            return item;
-        }
-    }
-
-    public class TransitionPoolItem
-    {
-        public TransitionPoolItem(IActor actor, ISector nextSector, ISector oldSector, IGraphNode oldNode)
-        {
-            Actor = actor;
-            NextSector = nextSector;
-            OldSector = oldSector;
-            OldNode = oldNode;
-        }
-
-        public IActor Actor { get; }
-        public ISector NextSector { get; }
-        public IGraphNode OldNode { get; }
-        public ISector OldSector { get; }
     }
 }

@@ -11,6 +11,7 @@ namespace Zilon.Core.World
 {
     public sealed class GlobeTransitionHandler : IGlobeTransitionHandler, IDisposable
     {
+        private const int TransitionPerGlobeIteration = 10;
         private readonly IGlobeExpander _globeExpander;
 
         private readonly SemaphoreSlim _semaphoreSlim;
@@ -82,7 +83,7 @@ namespace Zilon.Core.World
 
                 var nextSector = sectorNode.Sector;
 
-                var transitionItem = new TransitionPoolItem(actor, nextSector, sector, oldActorNode);
+                var transitionItem = new TransitionPoolItem(actor.Person, actor.TaskSource, nextSector, sector, oldActorNode);
                 _transitionPool.Push(transitionItem);
             }
             finally
@@ -120,8 +121,11 @@ namespace Zilon.Core.World
 
         public void UpdateTransitions()
         {
-            var counter = 10;
+            // The counter is restriction of transition per globe iteration.
+            var counter = TransitionPerGlobeIteration;
             TransitionPoolItem transitionItem = null;
+
+            // Transit persons from pool to target sector levels while the pool is not empty or transition limit reached.
             do
             {
                 transitionItem = _transitionPool.Pop();
@@ -151,9 +155,7 @@ namespace Zilon.Core.World
                     availableNodeToTransition = transitionItem.OldNode;
                 }
 
-                var actor = transitionItem.Actor;
-
-                var actorInNewSector = new Actor(actor.Person, actor.TaskSource, availableNodeToTransition);
+                var actorInNewSector = new Actor(transitionItem.Person, transitionItem.TaskSource, availableNodeToTransition);
                 nextSector.ActorManager.Add(actorInNewSector);
 
                 counter--;
