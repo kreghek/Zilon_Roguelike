@@ -28,6 +28,8 @@ Reasons why you will die:
 - You will catch a disease that will greatly weaken you, that you will not have the strength to fight off even a hungry rat.
 - You write the command "dead" in the text version of the game.
 
+[The Rules](https://last-imperial-vagabond.github.io/LAST_IMPERIAL_VAGABOND.github.io/)
+
 ## Join us
 
 [Project group at VK](https://vk.com/last_imperial_vagabond)
