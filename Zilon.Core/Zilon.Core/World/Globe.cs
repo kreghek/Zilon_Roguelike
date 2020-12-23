@@ -244,9 +244,9 @@ namespace Zilon.Core.World
             sectorNode.Sector.ActorManager.Removed += ActorManager_Removed;
         }
 
-        public Task UpdateAsync()
+        public async Task UpdateAsync()
         {
-            return Task.Run(() =>
+            await Task.Run(() =>
             {
                 var actorsWithoutTasks = GetActorsWithoutTasks();
 
