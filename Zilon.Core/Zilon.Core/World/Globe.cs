@@ -74,7 +74,7 @@ namespace Zilon.Core.World
 
             var actorGrouppedBySector = actorDataListMaterialized.GroupBy(x => x.Sector).ToArray();
 
-            foreach(var sectorGroup in actorGrouppedBySector)
+            foreach (var sectorGroup in actorGrouppedBySector)
             {
                 foreach (var actorDataItem in sectorGroup)
                 {
