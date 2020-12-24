@@ -68,13 +68,13 @@ namespace Zilon.Core.World
             }
         }
 
-        private void GenerateActorTasksAndPutInDict(IEnumerable<ActorInSector> actorDataList)
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
         {
             var actorDataListMaterialized = actorDataList.ToArray();
 
             var actorGrouppedBySector = actorDataListMaterialized.GroupBy(x => x.Sector).ToArray();
 
-            Parallel.ForEach(actorGrouppedBySector, async sectorGroup =>
+            foreach(var sectorGroup in actorGrouppedBySector)
             {
                 foreach (var actorDataItem in sectorGroup)
                 {
@@ -105,7 +105,7 @@ namespace Zilon.Core.World
                         _taskDict.TryRemove(actor, out var _);
                     }
                 }
-            });
+            };
         }
 
         private IEnumerable<ActorInSector> GetActorsWithoutTasks()
@@ -246,26 +246,23 @@ namespace Zilon.Core.World
 
         public async Task UpdateAsync()
         {
-            await Task.Run(() =>
+            var actorsWithoutTasks = GetActorsWithoutTasks();
+
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
+
+            ProcessTasks(_taskDict);
+            _turnCounter++;
+            if (_turnCounter >= GlobeMetrics.OneIterationLength)
             {
-                var actorsWithoutTasks = GetActorsWithoutTasks();
+                _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
 
-                GenerateActorTasksAndPutInDict(actorsWithoutTasks);
-
-                ProcessTasks(_taskDict);
-                _turnCounter++;
-                if (_turnCounter >= GlobeMetrics.OneIterationLength)
+                foreach (var sectorNode in _sectorNodes)
                 {
-                    _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
-
-                    foreach (var sectorNode in _sectorNodes)
-                    {
-                        sectorNode.Sector.Update();
-                    }
-
-                    _globeTransitionHandler.UpdateTransitions();
+                    sectorNode.Sector.Update();
                 }
-            });
+
+                _globeTransitionHandler.UpdateTransitions();
+            }
         }
 
         private sealed class ActorInSector
