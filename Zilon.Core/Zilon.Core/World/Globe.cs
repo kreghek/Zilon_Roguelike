@@ -105,7 +105,9 @@ namespace Zilon.Core.World
                         _taskDict.TryRemove(actor, out var _);
                     }
                 }
-            };
+            }
+
+            ;
         }
 
         private IEnumerable<ActorInSector> GetActorsWithoutTasks()
