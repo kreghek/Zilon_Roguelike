@@ -106,38 +106,58 @@ namespace Zilon.Core.World
                     }
                 }
             }
-
-            ;
         }
 
         private IEnumerable<ActorInSector> GetActorsWithoutTasks()
         {
+            return GetActorsWithoutTasksEnumerator().ToArray();
+        }
+
+        private IEnumerable<ActorInSector> GetActorsWithoutTasksEnumerator()
+        {
             // _sectorNodes фиксируем в отдельный массив.
             // потому что по мере выполнения задач актёров, может быть переход в новый узел мира.
             // Мир при том расширится и список поменяется. А это приведёт к ошибке, что коллекция в foreach изменяется.
-            foreach (var sectorNode in _sectorNodes.ToArray())
+            var sectorNodes = _sectorNodes.ToArray();
+            foreach (var sectorNode in sectorNodes)
             {
                 var sector = sectorNode.Sector;
-                foreach (var actor in sector.ActorManager.Items.ToArray())
+                var actors = sector.ActorManager.Items.ToArray();
+                foreach (var actor in actors)
                 {
-                    if (!sector.ActorManager.Items.Contains(actor))
+                    var needCreateTask = IsActorNeedsInTask(sector, actor);
+
+                    if (needCreateTask)
                     {
-                        // Это может произойти, когда в процессе исполнения задач,
-                        // актёр вышел из сектора. Соответственно, его уже нет в списке актёров сектора.
-
-                        RemoveActorTaskState(actor);
-
-                        continue;
+                        yield return new ActorInSector
+                        {
+                            Actor = actor,
+                            Sector = sector
+                        };
                     }
-
-                    if (_taskDict.TryGetValue(actor, out _))
-                    {
-                        continue;
-                    }
-
-                    yield return new ActorInSector { Actor = actor, Sector = sector };
                 }
             }
+        }
+
+        private bool IsActorNeedsInTask(ISector sector, IActor actor)
+        {
+            if (!sector.ActorManager.Items.Contains(actor))
+            {
+                // Это может произойти, когда в процессе исполнения задач,
+                // актёр вышел из сектора. Соответственно, его уже нет в списке актёров сектора.
+
+                RemoveActorTaskState(actor);
+
+                return false;
+            }
+            else if (_taskDict.TryGetValue(actor, out _))
+            {
+                // Actor has task yet.
+
+                return false;
+            }
+
+            return true;
         }
 
         private static List<TaskState[]> GroupTaskStates(ICollection<TaskState> states)
