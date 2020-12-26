@@ -139,6 +139,13 @@ namespace Zilon.Core.World
             }
         }
 
+        private static List<TaskState[]> GroupTaskStates(ICollection<TaskState> states)
+        {
+            var statesGroupedBySector = states.GroupBy(x => x.Sector).ToArray();
+            var materializedSectorList = MaterializeSectorStates(statesGroupedBySector);
+            return materializedSectorList;
+        }
+
         private bool IsActorNeedsInTask(ISector sector, IActor actor)
         {
             if (!sector.ActorManager.Items.Contains(actor))
@@ -150,7 +157,8 @@ namespace Zilon.Core.World
 
                 return false;
             }
-            else if (_taskDict.TryGetValue(actor, out _))
+
+            if (_taskDict.TryGetValue(actor, out _))
             {
                 // Actor has task yet.
 
@@ -158,13 +166,6 @@ namespace Zilon.Core.World
             }
 
             return true;
-        }
-
-        private static List<TaskState[]> GroupTaskStates(ICollection<TaskState> states)
-        {
-            var statesGroupedBySector = states.GroupBy(x => x.Sector).ToArray();
-            var materializedSectorList = MaterializeSectorStates(statesGroupedBySector);
-            return materializedSectorList;
         }
 
         private static List<TaskState[]> MaterializeSectorStates(IGrouping<ISector, TaskState>[] statesGroupedBySector)
