@@ -697,7 +697,7 @@ public class SectorVM : MonoBehaviour
     private async void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
         await Task.Factory.StartNew(() =>
-        { 
+        {
             _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
             var activeActor = _playerState.ActiveActor.Actor;
             var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
