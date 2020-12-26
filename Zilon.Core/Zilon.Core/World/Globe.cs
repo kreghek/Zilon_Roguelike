@@ -85,11 +85,9 @@ namespace Zilon.Core.World
 
                     var context = new SectorTaskSourceContext(sector);
 
-                    var actorTaskTask = taskSource.GetActorTaskAsync(actor, context);
-
                     try
                     {
-                        var actorTask = await actorTaskTask.ConfigureAwait(false);
+                        var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
                         var state = new TaskState(actor, sector, actorTask, taskSource);
                         if (!_taskDict.TryAdd(actor, state))
                         {
