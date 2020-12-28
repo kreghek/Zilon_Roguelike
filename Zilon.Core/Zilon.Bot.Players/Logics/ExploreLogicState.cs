@@ -96,7 +96,8 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
-        private static IEnumerable<IGraphNode> WriteObservedNodesOrGetFromFow(IActor actor, ILogicStrategyData strategyData,
+        private static IEnumerable<IGraphNode> WriteObservedNodesOrGetFromFow(IActor actor,
+            ILogicStrategyData strategyData,
             ISector sector)
         {
             IEnumerable<IGraphNode> frontNodes;
@@ -148,7 +149,8 @@ namespace Zilon.Bot.Players.Logics
                 var exploredFowItems = fowItems.GetFowNodeByState(SectorMapNodeFowState.Explored);
                 var observingFowItems = fowItems.GetFowNodeByState(SectorMapNodeFowState.Observing);
 
-                var knownNodes = exploredFowItems.Select(x => x.Node).Union(observingFowItems.Select(x => x.Node)).ToArray();
+                var knownNodes = exploredFowItems.Select(x => x.Node).Union(observingFowItems.Select(x => x.Node))
+                    .ToArray();
 
                 var map = sector.Map;
                 var frontNodesHashSet = new HashSet<IGraphNode>();

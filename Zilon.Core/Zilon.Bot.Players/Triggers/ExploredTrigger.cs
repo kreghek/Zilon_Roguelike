@@ -47,8 +47,10 @@ namespace Zilon.Bot.Players.Triggers
             else
             {
                 var fowData = fowModule.GetSectorFowData(context.Sector);
-                var observingNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Observing).Select(x => x.Node).ToArray();
-                var exploredNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Explored).Select(x => x.Node).ToArray();
+                var observingNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Observing).Select(x => x.Node)
+                    .ToArray();
+                var exploredNodes = fowData.GetFowNodeByState(SectorMapNodeFowState.Explored).Select(x => x.Node)
+                    .ToArray();
 
                 var knownNodes = observingNodes.Union(exploredNodes);
 
