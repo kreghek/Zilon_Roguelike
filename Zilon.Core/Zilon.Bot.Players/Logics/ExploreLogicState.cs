@@ -160,7 +160,7 @@ namespace Zilon.Bot.Players.Logics
                         strategyData.ExitNodes.Add(node);
                     }
 
-                    var nextUnknownNodes = map.GetNext(node).Where(x=> !knownNodes.Contains(x));
+                    var nextUnknownNodes = map.GetNext(node).Where(x => !knownNodes.Contains(x));
                     if (nextUnknownNodes.Any())
                     {
                         foreach (var unknownNode in nextUnknownNodes)
