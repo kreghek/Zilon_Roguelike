@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players.Strategies
 {
@@ -12,7 +13,13 @@ namespace Zilon.Bot.Players.Strategies
             ExitNodes = new HashSet<IGraphNode>();
         }
 
+        /// <inheritdoc/>
         public HashSet<IGraphNode> ObserverdNodes { get; }
+
+        /// <inheritdoc/>
         public HashSet<IGraphNode> ExitNodes { get; }
+
+        /// <inheritdoc/>
+        public IActor TriggerIntuder { get; set; }
     }
 }

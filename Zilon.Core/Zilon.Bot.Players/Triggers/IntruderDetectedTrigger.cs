@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Bot.Players.Logics;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -64,12 +65,9 @@ namespace Zilon.Bot.Players.Triggers
             var map = context.Sector.Map;
             var actorManager = context.Sector.ActorManager;
 
-            // На каждом шаге осматриваем окрестности
-            // на предмет нарушителей.
-            var intruders = CheckForIntruders(actor, map, actorManager);
-
-            var orderedIntruders = intruders.OrderBy(x => map.DistanceBetween(actor.Node, x.Node));
-            var nearbyIntruder = orderedIntruders.FirstOrDefault();
+            var nearbyIntruder = IntruderDetectionHelper.GetIntruder(actor, map, actorManager);
+            // Remember last intruder for logic with will handle reaction.
+            strategyData.TriggerIntuder = nearbyIntruder;
 
             if (nearbyIntruder == null)
             {
