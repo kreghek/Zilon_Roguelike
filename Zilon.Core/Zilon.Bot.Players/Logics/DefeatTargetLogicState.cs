@@ -32,7 +32,8 @@ namespace Zilon.Bot.Players.Logics
 
             if (triggerTarget == null)
             {
-                throw new InvalidOperationException($"Assign {nameof(strategyData.TriggerIntuder)} with not null valie in related trigger.");
+                throw new InvalidOperationException(
+                    $"Assign {nameof(strategyData.TriggerIntuder)} with not null valie in related trigger.");
             }
 
             var targetCanBeDamaged = triggerTarget.CanBeDamaged();

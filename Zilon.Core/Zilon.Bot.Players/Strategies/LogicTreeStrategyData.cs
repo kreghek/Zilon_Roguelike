@@ -13,13 +13,13 @@ namespace Zilon.Bot.Players.Strategies
             ExitNodes = new HashSet<IGraphNode>();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public HashSet<IGraphNode> ObserverdNodes { get; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public HashSet<IGraphNode> ExitNodes { get; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IActor TriggerIntuder { get; set; }
     }
 }
