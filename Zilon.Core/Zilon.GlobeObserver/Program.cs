@@ -70,14 +70,6 @@ namespace Zilon.GlobeObserver
             } while (true);
         }
 
-        private static async Task RunGlobeIteration(IGlobe globe)
-        {
-            for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
-            {
-                await globe.UpdateAsync().ConfigureAwait(false);
-            }
-        }
-
         private static void PrintReport(IGlobe globe)
         {
             var sectorNodesDiscoveredCount = globe.SectorNodes.Count();
@@ -91,6 +83,14 @@ namespace Zilon.GlobeObserver
             foreach (var fractionGroup in fractions)
             {
                 Console.WriteLine($"Fraction {fractionGroup.Key.Name}: {fractionGroup.Count()}");
+            }
+        }
+
+        private static async Task RunGlobeIteration(IGlobe globe)
+        {
+            for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+            {
+                await globe.UpdateAsync().ConfigureAwait(false);
             }
         }
     }
