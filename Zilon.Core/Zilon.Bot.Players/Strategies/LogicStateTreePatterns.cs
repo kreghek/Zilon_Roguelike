@@ -26,7 +26,7 @@ namespace Zilon.Bot.Players.Strategies
                 var exploreLogic = _factory.CreateLogic<ExploreLogicState>();
                 var fightLogic = _factory.CreateLogic<DefeatTargetLogicState>();
                 var healSelfLogic = _factory.CreateLogic<HealSelfLogicState>();
-                var eatProviantLogic = _factory.CreateLogic<EatProviantLogicState>();
+                var eatProviantLogic = _factory.CreateLogic<UseProviantLogicState>();
                 var lootLogic = _factory.CreateLogic<LootLogicState>();
                 var equipLogic = _factory.CreateLogic<EquipBetterPropLogicState>();
                 var exitLogic = _factory.CreateLogic<ExitLogicState>();
@@ -107,7 +107,7 @@ namespace Zilon.Bot.Players.Strategies
                 var fightLogic = _factory.CreateLogic<DefeatTargetLogicState>();
                 var fightIdleLogic = _factory.CreateLogic<IdleLogicState>();
                 var healSelfLogic = _factory.CreateLogic<HealSelfLogicState>();
-                var eatProviantLogic = _factory.CreateLogic<EatProviantLogicState>();
+                var eatProviantLogic = _factory.CreateLogic<UseProviantLogicState>();
                 var lootLogic = _factory.CreateLogic<LootLogicState>();
                 var exitLogic = _factory.CreateLogic<ExitLogicState>();
 

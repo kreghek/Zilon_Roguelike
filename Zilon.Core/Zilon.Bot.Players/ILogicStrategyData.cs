@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players
@@ -12,5 +13,7 @@ namespace Zilon.Bot.Players
         HashSet<IGraphNode> ObserverdNodes { get; }
 
         IActor TriggerIntuder { get; set; }
+
+        Resource ResourceToReduceHazard { get; set; }
     }
 }
