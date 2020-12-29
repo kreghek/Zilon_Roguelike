@@ -76,7 +76,7 @@ namespace Zilon.Bot.Players.Logics
             }
             else
             {
-                availableNodes = strategyData.ObserverdNodes;
+                availableNodes = strategyData.ObservedNodes;
             }
 
             var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
@@ -111,16 +111,16 @@ namespace Zilon.Bot.Players.Logics
 
                 foreach (var mapNode in observeNodes)
                 {
-                    strategyData.ObserverdNodes.Add(mapNode);
+                    strategyData.ObservedNodes.Add(mapNode);
                 }
 
                 // Собираем пограничные неисследованные узлы.
                 var frontNodesHashSet = new HashSet<IGraphNode>();
-                foreach (var observedNode in strategyData.ObserverdNodes)
+                foreach (var observedNode in strategyData.ObservedNodes)
                 {
                     var nextNodes = map.GetNext(observedNode);
 
-                    var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObserverdNodes.Contains(x));
+                    var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObservedNodes.Contains(x));
 
                     foreach (var edgeNode in notObservedNextNodes)
                     {
@@ -135,7 +135,7 @@ namespace Zilon.Bot.Players.Logics
                 }
 
                 var emptyFrontNodes = !frontNodesHashSet.Any();
-                var allNodesObserved = map.Nodes.All(x => strategyData.ObserverdNodes.Contains(x));
+                var allNodesObserved = map.Nodes.All(x => strategyData.ObservedNodes.Contains(x));
 
                 Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
                     "Это состояние выполняется, только если есть неисследованые узлы.");

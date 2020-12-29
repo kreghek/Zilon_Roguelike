@@ -39,7 +39,7 @@ namespace Zilon.Bot.Players.Triggers
             var fowModule = actor.Person.GetModuleSafe<IFowData>();
             if (fowModule is null)
             {
-                var notObservedNodes = context.Sector.Map.Nodes.Where(x => !strategyData.ObserverdNodes.Contains(x));
+                var notObservedNodes = context.Sector.Map.Nodes.Where(x => !strategyData.ObservedNodes.Contains(x));
 
                 var allNodesObserved = !notObservedNodes.Any();
                 return allNodesObserved;
