@@ -19,13 +19,13 @@ namespace Zilon.Bot.Players
         HashSet<IGraphNode> ObservedNodes { get; }
 
         /// <summary>
-        /// Intruder which was detected in trigger.
-        /// </summary>
-        IActor TriggerIntuder { get; set; }
-
-        /// <summary>
         /// Resource which was selected by trigger witch test survival hazard and ability to reduce it.
         /// </summary>
         Resource ResourceToReduceHazard { get; set; }
+
+        /// <summary>
+        /// Intruder which was detected in trigger.
+        /// </summary>
+        IActor TriggerIntuder { get; set; }
     }
 }
