@@ -10,6 +10,7 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmarks.Move
 {
+    [MemoryDiagnoser]
     public class GamePlayBench
     {
         [Benchmark(Description = "GamePlay")]
