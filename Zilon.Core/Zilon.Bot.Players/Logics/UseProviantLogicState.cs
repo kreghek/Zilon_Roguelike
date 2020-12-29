@@ -28,6 +28,7 @@ namespace Zilon.Bot.Players.Logics
             var usePropTask = CreateTask(actor, context, strategyData);
             if (usePropTask != null)
             {
+                Complete = true;
                 return usePropTask;
             }
 
@@ -46,11 +47,14 @@ namespace Zilon.Bot.Players.Logics
             if (strategyData.ResourceToReduceHazard is null)
             {
                 throw new InvalidOperationException(
-                    $"Assign ${nameof(strategyData.ResourceToReduceHazard)} value in the triggers first.");
+                    $"Assign {nameof(strategyData.ResourceToReduceHazard)} value in the triggers first.");
             }
 
             var taskContxt = new ActorTaskContext(context.Sector);
-            return new UsePropTask(actor, taskContxt, strategyData.ResourceToReduceHazard);
+            var prop = strategyData.ResourceToReduceHazard;
+            // When prop was used it no need to store anymore.
+            strategyData.ResourceToReduceHazard = null;
+            return new UsePropTask(actor, taskContxt, prop);
         }
     }
 }
