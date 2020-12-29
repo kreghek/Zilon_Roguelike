@@ -12,8 +12,8 @@ namespace Zilon.Bot.Players
 
         HashSet<IGraphNode> ObserverdNodes { get; }
 
-        IActor TriggerIntuder { get; set; }
-
         Resource ResourceToReduceHazard { get; set; }
+
+        IActor TriggerIntuder { get; set; }
     }
 }

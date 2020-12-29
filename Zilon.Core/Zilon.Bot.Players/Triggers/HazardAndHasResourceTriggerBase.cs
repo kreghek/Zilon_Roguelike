@@ -1,5 +1,4 @@
-﻿
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -8,6 +7,12 @@ namespace Zilon.Bot.Players.Triggers
 {
     public abstract class HazardAndHasResourceTriggerBase : ILogicStateTrigger
     {
+        protected abstract bool TestInner(
+            [NotNull] IActor actor,
+            [NotNull] ISectorTaskSourceContext context,
+            [NotNull] ILogicState currentState,
+            [NotNull] ILogicStrategyData strategyData);
+
         public void Reset()
         {
             // Has no state
@@ -42,12 +47,6 @@ namespace Zilon.Bot.Players.Triggers
 
             return TestInner(actor, context, currentState, strategyData);
         }
-
-        protected abstract bool TestInner(
-            [NotNull] IActor actor,
-            [NotNull] ISectorTaskSourceContext context,
-            [NotNull] ILogicState currentState,
-            [NotNull] ILogicStrategyData strategyData);
 
         public void Update()
         {

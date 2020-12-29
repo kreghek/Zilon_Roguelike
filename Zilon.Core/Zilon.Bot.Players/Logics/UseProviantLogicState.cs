@@ -40,11 +40,13 @@ namespace Zilon.Bot.Players.Logics
             // Has no inner state.
         }
 
-        private static UsePropTask CreateTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData)
+        private static UsePropTask CreateTask(IActor actor, ISectorTaskSourceContext context,
+            ILogicStrategyData strategyData)
         {
             if (strategyData.ResourceToReduceHazard is null)
             {
-                throw new InvalidOperationException($"Assign ${nameof(strategyData.ResourceToReduceHazard)} value in the triggers first.");
+                throw new InvalidOperationException(
+                    $"Assign ${nameof(strategyData.ResourceToReduceHazard)} value in the triggers first.");
             }
 
             var taskContxt = new ActorTaskContext(context.Sector);

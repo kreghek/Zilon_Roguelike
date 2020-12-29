@@ -7,9 +7,11 @@ namespace Zilon.Bot.Players.Triggers
 {
     public class HungryAndHasResourceTrigger : HazardAndHasResourceTriggerBase
     {
-        protected override bool TestInner(IActor actor, ISectorTaskSourceContext context, ILogicState currentState, ILogicStrategyData strategyData)
+        protected override bool TestInner(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+            ILogicStrategyData strategyData)
         {
-            return SurvivalHazardTriggerHelper.TestHazardAndResource(actor, strategyData, SurvivalStatType.Satiety, ConsumeCommonRuleType.Satiety);
+            return SurvivalHazardTriggerHelper.TestHazardAndResource(actor, strategyData, SurvivalStatType.Satiety,
+                ConsumeCommonRuleType.Satiety);
         }
     }
 }

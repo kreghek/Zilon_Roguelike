@@ -13,6 +13,32 @@ namespace Zilon.Bot.Players.Triggers
 {
     public static class SurvivalHazardTriggerHelper
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods",
+            Justification = "All null checks in the top-level Test method.")]
+        public static bool TestHazardAndResource(
+            [NotNull] IActor actor,
+            [NotNull] ILogicStrategyData strategyData,
+            SurvivalStatType statType,
+            ConsumeCommonRuleType ruleType)
+        {
+            var hasHazardEffect = HasEffect(actor, statType);
+            if (!hasHazardEffect)
+            {
+                return false;
+            }
+
+            var resource = ResourceToReduceHazard(actor, ruleType);
+            if (resource is null)
+            {
+                strategyData.ResourceToReduceHazard = null;
+                return false;
+            }
+
+            strategyData.ResourceToReduceHazard = resource;
+
+            return true;
+        }
+
         private static bool HasEffect(IActor actor, SurvivalStatType survivalStatType)
         {
             if (actor is null)
@@ -50,32 +76,6 @@ namespace Zilon.Bot.Players.Triggers
                 ruleType);
 
             return bestResource;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods",
-            Justification = "All null checks in the top-level Test method.")]
-        public static bool TestHazardAndResource(
-            [NotNull] IActor actor,
-            [NotNull] ILogicStrategyData strategyData,
-            SurvivalStatType statType,
-            ConsumeCommonRuleType ruleType)
-        {
-            var hasHazardEffect = HasEffect(actor, statType);
-            if (!hasHazardEffect)
-            {
-                return false;
-            }
-
-            var resource = ResourceToReduceHazard(actor, ruleType);
-            if (resource is null)
-            {
-                strategyData.ResourceToReduceHazard = null;
-                return false;
-            }
-
-            strategyData.ResourceToReduceHazard = resource;
-
-            return true;
         }
     }
 }
