@@ -23,11 +23,6 @@ namespace Zilon.Core.Benchmarks.Move
             throw exception;
         }
 
-        protected override void CatchException(Exception exception)
-        {
-            Console.WriteLine(exception);
-        }
-
         protected override void ConfigBotAux()
         {
             _startup.ConfigureAux(ServiceScope.ServiceProvider);
