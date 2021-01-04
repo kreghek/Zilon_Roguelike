@@ -11,7 +11,7 @@ jobs:
         bench_project:
           - Zilon.Core.Benchmarks.Gameplay
         include:
-          - bench_project: Zilon.Core.Benchmarks.Move
+          - bench_project: Zilon.Core.Benchmarks.Gameplay
           - bench_filter: GamePlayBench
     steps:
       - uses: actions/checkout@v2
