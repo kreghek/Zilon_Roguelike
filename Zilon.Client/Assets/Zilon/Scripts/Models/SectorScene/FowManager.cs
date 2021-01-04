@@ -27,34 +27,6 @@ public class FowManager : MonoBehaviour
     private IList<ActorViewModel> _actorViewModels;
     private IList<StaticObjectViewModel> _staticObjectViewModels;
 
-    /*private TaskScheduler _taskScheduler;
-
-    public void Start()
-    {
-        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-
-        UpdateFowState();
-
-        var activeActor = _sectorUiState.ActiveActor.Actor;
-
-        activeActor.Moved += ActiveActor_Moved;
-    }
-
-    public void OnDestroy()
-    {
-        var activeActor = _sectorUiState.ActiveActor.Actor;
-
-        activeActor.Moved -= ActiveActor_Moved;
-    }
-
-    private async void ActiveActor_Moved(object sender, System.EventArgs e)
-    {
-        await Task.Factory.StartNew(() =>
-        {
-            UpdateFowState();
-        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
-    }*/
-
     public void Update()
     {
         if (_fowUpdateCounter >= UPDATE_FOW_DELAY)
