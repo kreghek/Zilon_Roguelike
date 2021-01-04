@@ -96,23 +96,16 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
-        private static IEnumerable<IGraphNode> WriteObservedNodesOrGetFromFow(IActor actor,
-            ILogicStrategyData strategyData,
-            ISector sector)
+        private static IGraphNode[] GetKnownNodes(ISector sector, IFowData fowModule)
         {
-            IEnumerable<IGraphNode> frontNodes;
+            var fowItems = fowModule.GetSectorFowData(sector);
 
-            var fowModule = actor.Person.GetModuleSafe<IFowData>();
-            if (fowModule is null)
-            {
-                frontNodes = GetNodesUsingStrategyData(actor, strategyData, sector);
-            }
-            else
-            {
-                frontNodes = GetNodesUsingFowModule(strategyData, sector, fowModule);
-            }
+            var exploredFowItems = fowItems.GetFowNodeByState(SectorMapNodeFowState.Explored);
+            var observingFowItems = fowItems.GetFowNodeByState(SectorMapNodeFowState.Observing);
 
-            return frontNodes;
+            var knownNodes = exploredFowItems.Select(x => x.Node).Union(observingFowItems.Select(x => x.Node))
+                .ToArray();
+            return knownNodes;
         }
 
         private static IEnumerable<IGraphNode> GetNodesUsingFowModule(
@@ -146,18 +139,6 @@ namespace Zilon.Bot.Players.Logics
 
             frontNodes = frontNodesHashSet;
             return frontNodes;
-        }
-
-        private static IGraphNode[] GetKnownNodes(ISector sector, IFowData fowModule)
-        {
-            var fowItems = fowModule.GetSectorFowData(sector);
-
-            var exploredFowItems = fowItems.GetFowNodeByState(SectorMapNodeFowState.Explored);
-            var observingFowItems = fowItems.GetFowNodeByState(SectorMapNodeFowState.Observing);
-
-            var knownNodes = exploredFowItems.Select(x => x.Node).Union(observingFowItems.Select(x => x.Node))
-                .ToArray();
-            return knownNodes;
         }
 
         private static IEnumerable<IGraphNode> GetNodesUsingStrategyData(
@@ -202,6 +183,25 @@ namespace Zilon.Bot.Players.Logics
                 "Это состояние выполняется, только если есть неисследованые узлы.");
 
             frontNodes = frontNodesHashSet;
+            return frontNodes;
+        }
+
+        private static IEnumerable<IGraphNode> WriteObservedNodesOrGetFromFow(IActor actor,
+            ILogicStrategyData strategyData,
+            ISector sector)
+        {
+            IEnumerable<IGraphNode> frontNodes;
+
+            var fowModule = actor.Person.GetModuleSafe<IFowData>();
+            if (fowModule is null)
+            {
+                frontNodes = GetNodesUsingStrategyData(actor, strategyData, sector);
+            }
+            else
+            {
+                frontNodes = GetNodesUsingFowModule(strategyData, sector, fowModule);
+            }
+
             return frontNodes;
         }
     }
