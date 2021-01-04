@@ -9,6 +9,8 @@ namespace Zilon.Core.World
 {
     public class BiomeInitializer : IBiomeInitializer, IGlobeExpander
     {
+        private const int NEXT_BIOME_COUNT = 3;
+
         private readonly IBiomeSchemeRoller _biomeSchemeRoller;
         private readonly ISectorGenerator _sectorGenerator;
 
@@ -53,7 +55,7 @@ namespace Zilon.Core.World
             // Генерируем новый биом, стартовый узел и организуем связь с текущим узлом.
             if (sectorNode.SectorScheme.TransSectorSids.Any(x => x.SectorLevelSid is null))
             {
-                var nextBiomeCount = RollNextBiomeCount();
+                var nextBiomeCount = NEXT_BIOME_COUNT;
 
                 for (var nextBiomeIndex = 0; nextBiomeIndex < nextBiomeCount; nextBiomeIndex++)
                 {
@@ -87,11 +89,6 @@ namespace Zilon.Core.World
             var newBiomeSector = new SectorNode(biome, startSectorScheme);
 
             return newBiomeSector;
-        }
-
-        private int RollNextBiomeCount()
-        {
-            return 3;
         }
 
         public async Task<IBiome> InitBiomeAsync(ILocationScheme locationScheme)
