@@ -111,6 +111,11 @@ namespace Zilon.Core.CommonServices.Dices
                 throw new ArgumentNullException(nameof(list));
             }
 
+            if (list.Count == 1)
+            {
+                return list[0];
+            }
+
             var rollIndex = dice.Roll(0, list.Count - 1);
             var item = list[rollIndex];
             return item;
