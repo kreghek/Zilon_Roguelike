@@ -1,14 +1,16 @@
 ﻿using System;
 
+using Zilon.Core.World;
+
 namespace Zilon.Core.PersonModules
 {
     public class MovingModule : IMovingModule
     {
-        private const int BASE_COST = 1000;
         private const int BASE_DEXTERITY = 10;
-        private const int COST_PER_DEXTERITY_UNIT = 25;
+        private const int COST_PER_DEXTERITY_UNIT = 1;
 
         private readonly IAttributesModule _attributesModule;
+        private readonly int BASE_COST = GlobeMetrics.OneIterationLength;
 
         public MovingModule(IAttributesModule attributesModule)
         {

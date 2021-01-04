@@ -34,7 +34,7 @@ namespace Assets.Zilon.Scripts.Services
             return sector;
         }
 
-        private static void CreateTransitions(RoomTransition[] transitions, ISectorMap map)
+        private static void CreateTransitions(SectorTransition[] transitions, ISectorMap map)
         {
             var nodes = map.Nodes.ToArray();
             for (var i = 0; i < transitions.Count(); i++)

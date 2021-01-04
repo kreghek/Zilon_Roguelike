@@ -41,7 +41,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         public override IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
             int roomMinSize,
             int roomMaxSize,
-            IEnumerable<RoomTransition> availableTransitions)
+            IEnumerable<SectorTransition> availableTransitions)
         {
             var rooms = new List<Room>();
 

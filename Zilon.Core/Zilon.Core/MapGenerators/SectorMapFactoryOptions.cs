@@ -8,7 +8,7 @@ namespace Zilon.Core.MapGenerators
     public class SectorMapFactoryOptions : ISectorMapFactoryOptions
     {
         public SectorMapFactoryOptions(ISectorMapFactoryOptionsSubScheme optionsSubScheme,
-            IEnumerable<RoomTransition> transitions)
+            IEnumerable<SectorTransition> transitions)
         {
             OptionsSubScheme = optionsSubScheme ?? throw new ArgumentNullException(nameof(optionsSubScheme));
             Transitions = transitions ?? throw new ArgumentNullException(nameof(transitions));
@@ -17,10 +17,10 @@ namespace Zilon.Core.MapGenerators
         public SectorMapFactoryOptions(ISectorMapFactoryOptionsSubScheme optionsSubScheme)
         {
             OptionsSubScheme = optionsSubScheme ?? throw new ArgumentNullException(nameof(optionsSubScheme));
-            Transitions = Array.Empty<RoomTransition>();
+            Transitions = Array.Empty<SectorTransition>();
         }
 
         public ISectorMapFactoryOptionsSubScheme OptionsSubScheme { get; set; }
-        public IEnumerable<RoomTransition> Transitions { get; set; }
+        public IEnumerable<SectorTransition> Transitions { get; set; }
     }
 }

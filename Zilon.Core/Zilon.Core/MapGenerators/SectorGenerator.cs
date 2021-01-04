@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -56,6 +57,17 @@ namespace Zilon.Core.MapGenerators
             sector.AddDisease(disease);
         }
 
+        private async Task GenerateStaticObjectsAsync(
+            ISector sector,
+            ISectorSubScheme sectorScheme,
+            ISectorNode sectorNode)
+        {
+            var resourceDepositData = _resourceMaterializationMap.GetDepositData(sectorNode);
+            var context = new StaticObjectGenerationContext(sector, sectorScheme, resourceDepositData);
+
+            await _staticObstaclesGenerator.CreateAsync(context).ConfigureAwait(false);
+        }
+
         /// <summary>
         /// Создаёт экземпляр сектора подземелий с указанными параметрами.
         /// </summary>
@@ -72,8 +84,8 @@ namespace Zilon.Core.MapGenerators
 
             var transitions = MapFactoryHelper.CreateTransitions(sectorNode);
 
-            var sectorFactoryOptions =
-                new SectorMapFactoryOptions(sectorNode.SectorScheme.MapGeneratorOptions, transitions);
+            var mapGeneratorOptions = sectorNode.SectorScheme.MapGeneratorOptions;
+            var sectorFactoryOptions = new SectorMapFactoryOptions(mapGeneratorOptions, transitions);
 
             var map = await mapFactory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
 
@@ -87,12 +99,7 @@ namespace Zilon.Core.MapGenerators
 
             var sectorScheme = sectorNode.SectorScheme;
 
-            var resourceDepositData = _resourceMaterializationMap.GetDepositData(sectorNode);
-
-            var staticObjectgenerationContext =
-                new StaticObjectGenerationContext(sector, sectorScheme, resourceDepositData);
-
-            await _staticObstaclesGenerator.CreateAsync(staticObjectgenerationContext).ConfigureAwait(false);
+            await GenerateStaticObjectsAsync(sector, sectorScheme, sectorNode).ConfigureAwait(false);
 
             var monsterRegions = gameObjectRegions.ToArray();
             _monsterGenerator.CreateMonsters(sector,

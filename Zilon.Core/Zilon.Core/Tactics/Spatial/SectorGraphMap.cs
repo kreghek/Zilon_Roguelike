@@ -9,11 +9,11 @@ namespace Zilon.Core.Tactics.Spatial
     {
         public SectorGraphMap()
         {
-            Transitions = new Dictionary<IGraphNode, RoomTransition>();
+            Transitions = new Dictionary<IGraphNode, SectorTransition>();
         }
 
         /// <inheritdoc />
-        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
+        public Dictionary<IGraphNode, SectorTransition> Transitions { get; }
 
         /// <inheritdoc />
         public int Id { get; set; }

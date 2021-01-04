@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics
         /// <param name="transitions"> Доступные переходы. </param>
         /// <param name="actorNodes"> Набор проверяемых узлов. Сюда передаются узлы актеров, которые пренадлежат игроку. </param>
         /// <returns> Возвращает отработавший переход. Иначе возаращает null. </returns>
-        public static RoomTransition Detect(IDictionary<IGraphNode, RoomTransition> transitions,
+        public static SectorTransition Detect(IDictionary<IGraphNode, SectorTransition> transitions,
             IEnumerable<IGraphNode> actorNodes)
         {
             // Из сектора нет прямого выхода.
@@ -32,7 +32,7 @@ namespace Zilon.Core.Tactics
             // И проверка сообщает, что нет ниодного персонажа игрока вне узлов выхода.
             var atLeastOneHuman = false;
 
-            RoomTransition expectedTransition = null;
+            SectorTransition expectedTransition = null;
             foreach (var actorNode in actorNodes)
             {
                 atLeastOneHuman = true;

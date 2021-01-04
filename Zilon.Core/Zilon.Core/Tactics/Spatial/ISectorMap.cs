@@ -18,7 +18,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// <summary>
         /// Transitions and transition nodes between sector levels.
         /// </summary>
-        Dictionary<IGraphNode, RoomTransition> Transitions { get; }
+        Dictionary<IGraphNode, SectorTransition> Transitions { get; }
 
         /// <summary>
         /// Check availability of the target node from the start node using line.

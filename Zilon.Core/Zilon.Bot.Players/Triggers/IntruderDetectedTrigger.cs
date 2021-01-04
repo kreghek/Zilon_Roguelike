@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Zilon.Bot.Players.Logics;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -10,34 +11,6 @@ namespace Zilon.Bot.Players.Triggers
 {
     public class IntruderDetectedTrigger : ILogicStateTrigger
     {
-        private static IActor[] CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
-        {
-            var foundIntruders = new List<IActor>();
-
-            foreach (var target in actorManager.Items)
-            {
-                if (target.Person.Fraction == actor.Person.Fraction)
-                {
-                    continue;
-                }
-
-                if (target.Person.CheckIsDead())
-                {
-                    continue;
-                }
-
-                var isVisible = LogicHelper.CheckTargetVisible(map, actor.Node, target.Node);
-                if (!isVisible)
-                {
-                    continue;
-                }
-
-                foundIntruders.Add(target);
-            }
-
-            return foundIntruders.ToArray();
-        }
-
         public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
             ILogicStrategyData strategyData)
         {
@@ -64,12 +37,9 @@ namespace Zilon.Bot.Players.Triggers
             var map = context.Sector.Map;
             var actorManager = context.Sector.ActorManager;
 
-            // На каждом шаге осматриваем окрестности
-            // на предмет нарушителей.
-            var intruders = CheckForIntruders(actor, map, actorManager);
-
-            var orderedIntruders = intruders.OrderBy(x => map.DistanceBetween(actor.Node, x.Node));
-            var nearbyIntruder = orderedIntruders.FirstOrDefault();
+            var nearbyIntruder = IntruderDetectionHelper.GetIntruder(actor, map, actorManager);
+            // Remember last intruder for logic with will handle reaction.
+            strategyData.TriggerIntuder = nearbyIntruder;
 
             if (nearbyIntruder == null)
             {
