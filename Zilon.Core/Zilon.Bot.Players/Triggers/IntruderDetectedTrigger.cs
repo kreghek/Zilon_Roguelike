@@ -11,34 +11,6 @@ namespace Zilon.Bot.Players.Triggers
 {
     public class IntruderDetectedTrigger : ILogicStateTrigger
     {
-        private static IActor[] CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
-        {
-            var foundIntruders = new List<IActor>();
-
-            foreach (var target in actorManager.Items)
-            {
-                if (target.Person.Fraction == actor.Person.Fraction)
-                {
-                    continue;
-                }
-
-                if (target.Person.CheckIsDead())
-                {
-                    continue;
-                }
-
-                var isVisible = LogicHelper.CheckTargetVisible(map, actor.Node, target.Node);
-                if (!isVisible)
-                {
-                    continue;
-                }
-
-                foundIntruders.Add(target);
-            }
-
-            return foundIntruders.ToArray();
-        }
-
         public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
             ILogicStrategyData strategyData)
         {

@@ -64,7 +64,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.CreateSector", "Zilon.Core.Benchmarks.CreateSector\Zilon.Core.Benchmarks.CreateSector.csproj", "{FDED5B7E-C77E-46D7-8327-30E2F594C5C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.Move", "Zilon.Core.Benchmarks.Move\Zilon.Core.Benchmarks.Move.csproj", "{269BD69F-E372-42A5-8A15-43338AD5D051}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.Gameplay", "Zilon.Core.Benchmarks.Move\Zilon.Core.Benchmarks.Gameplay.csproj", "{269BD69F-E372-42A5-8A15-43338AD5D051}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.Fow", "Zilon.Core.Benckmarks.Fow\Zilon.Core.Benchmarks.Fow.csproj", "{8E9A2932-C54F-44F1-BF81-837837541077}"
 EndProject
