@@ -80,6 +80,14 @@ namespace Zilon.Bot.Players.Logics
             }
 
             var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
+
+            if (availableNodesArray.Length == 0)
+            {
+                // There is no nodes available to roaming.
+                // We can do nothing.
+                return null;
+            }
+
             for (var i = 0; i < 3; i++)
             {
                 var targetNode = DecisionSource.SelectTargetRoamingNode(availableNodesArray);
