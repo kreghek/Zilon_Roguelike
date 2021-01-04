@@ -30,6 +30,7 @@ namespace Zilon.TextClient
             serviceContainer.AddScoped<MoveCommand>();
             serviceContainer.AddScoped<IdleCommand>();
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
+            serviceContainer.AddScoped<SectorTransitionMoveCommand>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 

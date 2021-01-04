@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace Zilon.GlobeObserver
         {
             // Create globe
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
-            var globe = await globeInitializer.CreateGlobeAsync("intro");
+            var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
 
             return globe;
         }
@@ -34,15 +35,23 @@ namespace Zilon.GlobeObserver
             do
             {
                 Console.WriteLine("Iteratin count:");
-                var iterationCount = int.Parse(Console.ReadLine());
+
+                var input = Console.ReadLine();
+
+                if (string.Equals(input, "stop", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    // Stop to generate the world and print results.
+
+                    PrintReport(globe);
+
+                    break;
+                }
+
+                var iterationCount = int.Parse(input, CultureInfo.InvariantCulture);
+
                 for (var i = 0; i < iterationCount; i++)
                 {
-                    for (var iterationPassIndex = 0;
-                        iterationPassIndex < GlobeMetrics.OneIterationLength;
-                        iterationPassIndex++)
-                    {
-                        await globe.UpdateAsync();
-                    }
+                    await RunGlobeIteration(globe).ConfigureAwait(false);
 
                     globeIterationCounter++;
 
@@ -50,7 +59,8 @@ namespace Zilon.GlobeObserver
                         .Any(x => x.Person.Fraction != Fractions.MonsterFraction);
                     if (!hasActors)
                     {
-                        // Все персонажи-немонстры вымерли.
+                        // There is no human persons.
+                        // We can stop update the globe, because monsters can't change the world. Only humans.
                         break;
                     }
                 }
@@ -73,6 +83,14 @@ namespace Zilon.GlobeObserver
             foreach (var fractionGroup in fractions)
             {
                 Console.WriteLine($"Fraction {fractionGroup.Key.Name}: {fractionGroup.Count()}");
+            }
+        }
+
+        private static async Task RunGlobeIteration(IGlobe globe)
+        {
+            for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+            {
+                await globe.UpdateAsync().ConfigureAwait(false);
             }
         }
     }

@@ -20,8 +20,6 @@ namespace Zilon.Bot.Players.Logics
 
         private int _refreshCounter;
 
-        private IAttackTarget _target;
-
         public DefeatTargetLogicState(ITacticalActUsageService actService)
         {
             _actService = actService ?? throw new ArgumentNullException(nameof(actService));
@@ -30,26 +28,29 @@ namespace Zilon.Bot.Players.Logics
         public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
-            if (_target == null)
+            var triggerTarget = strategyData.TriggerIntuder;
+
+            if (triggerTarget == null)
             {
-                _target = GetTarget(actor, context.Sector.Map, context.Sector.ActorManager);
+                throw new InvalidOperationException(
+                    $"Assign {nameof(strategyData.TriggerIntuder)} with not null valie in related trigger.");
             }
 
-            var targetCanBeDamaged = _target.CanBeDamaged();
+            var targetCanBeDamaged = triggerTarget.CanBeDamaged();
             if (!targetCanBeDamaged)
             {
                 Complete = true;
                 return null;
             }
 
-            var attackParams = CheckAttackAvailability(actor, _target, context.Sector.Map);
+            var attackParams = CheckAttackAvailability(actor, triggerTarget, context.Sector.Map);
             if (attackParams.IsAvailable)
             {
                 var act = attackParams.TacticalAct;
 
                 var taskContext = new ActorTaskContext(context.Sector);
 
-                var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
+                var attackTask = new AttackTask(actor, taskContext, triggerTarget, act, _actService);
                 return attackTask;
             }
 
@@ -64,13 +65,13 @@ namespace Zilon.Bot.Players.Logics
 
             var map = context.Sector.Map;
             _refreshCounter = REFRESH_COUNTER_VALUE;
-            var targetIsOnLine = map.TargetIsOnLine(actor.Node, _target.Node);
+            var targetIsOnLine = map.TargetIsOnLine(actor.Node, triggerTarget.Node);
 
             if (targetIsOnLine)
             {
                 var taskContext = new ActorTaskContext(context.Sector);
 
-                _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
+                _moveTask = new MoveTask(actor, taskContext, triggerTarget.Node, map);
                 return _moveTask;
             }
 
@@ -86,7 +87,6 @@ namespace Zilon.Bot.Players.Logics
         protected override void ResetData()
         {
             _refreshCounter = 0;
-            _target = null;
             _moveTask = null;
         }
 

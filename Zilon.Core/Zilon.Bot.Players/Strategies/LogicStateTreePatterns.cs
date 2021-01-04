@@ -15,34 +15,6 @@ namespace Zilon.Bot.Players.Strategies
             _factory = factory;
         }
 
-        public LogicStateTree Citizen
-        {
-            get
-            {
-                var tree = new LogicStateTree();
-
-                var roamingLogic = _factory.CreateLogic<RoamingLogicState>();
-                var roamingIdleLogic = _factory.CreateLogic<IdleLogicState>();
-
-                tree.StartState = roamingLogic;
-
-                tree.Transitions.Add(roamingLogic, new[]
-                {
-                    new LogicTransition(_factory.CreateTrigger<LogicOverTrigger>(), roamingIdleLogic)
-                });
-
-                tree.Transitions.Add(roamingIdleLogic, new[]
-                {
-                    new LogicTransition(_factory.CreateTrigger<CounterOverTrigger>(), roamingLogic)
-                });
-
-                Debug.Assert(ValidateTree(tree),
-                    "Все используемые логики должны быть добавлены в Transitions, как ключи.");
-
-                return tree;
-            }
-        }
-
         public LogicStateTree DefaultHumanBot => JoeHumanBot;
 
         public LogicStateTree DuncanHumanBot
@@ -54,7 +26,7 @@ namespace Zilon.Bot.Players.Strategies
                 var exploreLogic = _factory.CreateLogic<ExploreLogicState>();
                 var fightLogic = _factory.CreateLogic<DefeatTargetLogicState>();
                 var healSelfLogic = _factory.CreateLogic<HealSelfLogicState>();
-                var eatProviantLogic = _factory.CreateLogic<EatProviantLogicState>();
+                var eatProviantLogic = _factory.CreateLogic<UseProviantLogicState>();
                 var lootLogic = _factory.CreateLogic<LootLogicState>();
                 var equipLogic = _factory.CreateLogic<EquipBetterPropLogicState>();
                 var exitLogic = _factory.CreateLogic<ExitLogicState>();
@@ -135,7 +107,7 @@ namespace Zilon.Bot.Players.Strategies
                 var fightLogic = _factory.CreateLogic<DefeatTargetLogicState>();
                 var fightIdleLogic = _factory.CreateLogic<IdleLogicState>();
                 var healSelfLogic = _factory.CreateLogic<HealSelfLogicState>();
-                var eatProviantLogic = _factory.CreateLogic<EatProviantLogicState>();
+                var eatProviantLogic = _factory.CreateLogic<UseProviantLogicState>();
                 var lootLogic = _factory.CreateLogic<LootLogicState>();
                 var exitLogic = _factory.CreateLogic<ExitLogicState>();
 

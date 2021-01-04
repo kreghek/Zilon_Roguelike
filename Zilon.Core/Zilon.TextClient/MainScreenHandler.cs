@@ -34,7 +34,7 @@ namespace Zilon.TextClient
                 }
             }
 
-            Console.WriteLine($"Position:{actor.Node}");
+            Console.WriteLine($"Position: {actor.Node}");
         }
 
         /// <inheritdoc />
@@ -69,6 +69,7 @@ namespace Zilon.TextClient
                 PrintState(uiState.ActiveActor.Actor);
 
                 Console.WriteLine(UiResource.MoveCommandDescription);
+                Console.WriteLine(UiResource.TransitionCommandDescription);
                 Console.WriteLine(UiResource.LookCommandDescription);
                 Console.WriteLine(UiResource.IdleCommandDescription);
                 Console.WriteLine(UiResource.DeadCommandDescription);
@@ -176,6 +177,12 @@ namespace Zilon.TextClient
                 {
                     var survivalModule = player.MainPerson.GetModule<ISurvivalModule>();
                     survivalModule.SetStatForce(Core.Persons.SurvivalStatType.Health, 0);
+                }
+
+                if (inputText.StartsWith("transit", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var command = serviceScope.ServiceProvider.GetRequiredService<SectorTransitionMoveCommand>();
+                    command.Execute();
                 }
 
                 if (inputText.StartsWith("exit", StringComparison.InvariantCultureIgnoreCase))

@@ -21,7 +21,8 @@ namespace Zilon.TextClient
 
         public async Task StartProcessAsync(CancellationToken cancellationToken)
         {
-            while (!_player.MainPerson.GetModule<ISurvivalModule>().IsDead)
+            var playerPersonSurvivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
+            while (!playerPersonSurvivalModule.IsDead)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 

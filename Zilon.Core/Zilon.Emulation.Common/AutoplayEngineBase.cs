@@ -71,7 +71,10 @@ namespace Zilon.Emulation.Common
 
         protected abstract void CatchActorTaskExecutionException(ActorTaskExecutionException exception);
 
-        protected abstract void CatchException(Exception exception);
+        protected virtual void CatchException(Exception exception)
+        {
+            Console.WriteLine(exception);
+        }
 
         protected abstract void ConfigBotAux();
 

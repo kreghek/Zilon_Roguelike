@@ -1,6 +1,7 @@
 ﻿using Zilon.Core.Client;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Commands
 {
@@ -27,7 +28,8 @@ namespace Zilon.Core.Commands
         {
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
-            var intention = new Intention<IdleTask>(actor => new IdleTask(actor, taskContext, 1000));
+            var intention =
+                new Intention<IdleTask>(actor => new IdleTask(actor, taskContext, GlobeMetrics.OneIterationLength));
             PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
         }
     }

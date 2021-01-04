@@ -196,6 +196,15 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to - &quot;transit&quot; to go to next level.
+        /// </summary>
+        internal static string TransitionCommandDescription {
+            get {
+                return ResourceManager.GetString("TransitionCommandDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to t.
         /// </summary>
         internal static string TransitionNodeMarker {

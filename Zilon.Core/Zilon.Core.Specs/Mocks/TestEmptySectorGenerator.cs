@@ -29,11 +29,15 @@ namespace Zilon.Core.Specs.Mocks
                                        throw new ArgumentNullException(nameof(equipmentDurableService));
         }
 
+        /// <inheritdoc />
         public async Task<ISector> GenerateAsync(ISectorNode sectorNode)
         {
-            var sectorFactoryOptions = new SectorMapFactoryOptions(sectorNode.SectorScheme.MapGeneratorOptions);
+            var transitions = MapFactoryHelper.CreateTransitions(sectorNode);
 
-            var map = await _mapFactory.CreateAsync(sectorFactoryOptions);
+            var sectorFactoryOptions =
+                new SectorMapFactoryOptions(sectorNode.SectorScheme.MapGeneratorOptions, transitions);
+
+            var map = await _mapFactory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
 
             var actorManager = new ActorManager();
             var staticObjectManager = new StaticObjectManager();
