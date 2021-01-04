@@ -20,8 +20,6 @@ namespace Zilon.Bot.Players.Logics
 
         private int _refreshCounter;
 
-        private IAttackTarget _target;
-
         public DefeatTargetLogicState(ITacticalActUsageService actService)
         {
             _actService = actService ?? throw new ArgumentNullException(nameof(actService));
@@ -30,26 +28,29 @@ namespace Zilon.Bot.Players.Logics
         public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
-            if (_target == null)
+            var triggerTarget = strategyData.TriggerIntuder;
+
+            if (triggerTarget == null)
             {
-                _target = GetTarget(actor, context.Sector.Map, context.Sector.ActorManager);
+                throw new InvalidOperationException(
+                    $"Assign {nameof(strategyData.TriggerIntuder)} with not null valie in related trigger.");
             }
 
-            var targetCanBeDamaged = _target.CanBeDamaged();
+            var targetCanBeDamaged = triggerTarget.CanBeDamaged();
             if (!targetCanBeDamaged)
             {
                 Complete = true;
                 return null;
             }
 
-            var attackParams = CheckAttackAvailability(actor, _target, context.Sector.Map);
+            var attackParams = CheckAttackAvailability(actor, triggerTarget, context.Sector.Map);
             if (attackParams.IsAvailable)
             {
                 var act = attackParams.TacticalAct;
 
                 var taskContext = new ActorTaskContext(context.Sector);
 
-                var attackTask = new AttackTask(actor, taskContext, _target, act, _actService);
+                var attackTask = new AttackTask(actor, taskContext, triggerTarget, act, _actService);
                 return attackTask;
             }
 
@@ -64,13 +65,13 @@ namespace Zilon.Bot.Players.Logics
 
             var map = context.Sector.Map;
             _refreshCounter = REFRESH_COUNTER_VALUE;
-            var targetIsOnLine = map.TargetIsOnLine(actor.Node, _target.Node);
+            var targetIsOnLine = map.TargetIsOnLine(actor.Node, triggerTarget.Node);
 
             if (targetIsOnLine)
             {
                 var taskContext = new ActorTaskContext(context.Sector);
 
-                _moveTask = new MoveTask(actor, taskContext, _target.Node, map);
+                _moveTask = new MoveTask(actor, taskContext, triggerTarget.Node, map);
                 return _moveTask;
             }
 
@@ -81,7 +82,6 @@ namespace Zilon.Bot.Players.Logics
         protected override void ResetData()
         {
             _refreshCounter = 0;
-            _target = null;
             _moveTask = null;
         }
 
@@ -108,51 +108,6 @@ namespace Zilon.Bot.Players.Logics
             };
 
             return attackParams;
-        }
-
-        private static IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
-        {
-            foreach (var target in actorManager.Items)
-            {
-                if (target.Person.Fraction == actor.Person.Fraction ||
-                    (target.Person.Fraction == Fractions.MilitiaFraction &&
-                     actor.Person.Fraction == Fractions.MainPersonFraction) ||
-                    (target.Person.Fraction == Fractions.MainPersonFraction &&
-                     actor.Person.Fraction == Fractions.MilitiaFraction) ||
-                    (target.Person.Fraction == Fractions.InterventionistFraction &&
-                     actor.Person.Fraction == Fractions.TroublemakerFraction) ||
-                    (target.Person.Fraction == Fractions.TroublemakerFraction &&
-                     actor.Person.Fraction == Fractions.InterventionistFraction))
-                {
-                    continue;
-                }
-
-                if (target.Person.CheckIsDead())
-                {
-                    continue;
-                }
-
-                var isVisible = LogicHelper.CheckTargetVisible(map, actor.Node, target.Node);
-                if (!isVisible)
-                {
-                    continue;
-                }
-
-                yield return target;
-            }
-        }
-
-        private IAttackTarget GetTarget(IActor actor, ISectorMap _map, IActorManager actorManager)
-        {
-            //TODO Убрать дублирование кода с IntruderDetectedTrigger
-            // Этот фрагмент уже однажды был использован неправильно,
-            // что привело к трудноуловимой ошибке.
-            var intruders = CheckForIntruders(actor, _map, actorManager);
-
-            var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
-            var nearbyIntruder = orderedIntruders.FirstOrDefault();
-
-            return nearbyIntruder;
         }
 
         private class AttackParams

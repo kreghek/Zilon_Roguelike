@@ -69,11 +69,11 @@ namespace Zilon.TextClient
                 PrintState(uiState.ActiveActor.Actor);
 
                 Console.WriteLine(UiResource.MoveCommandDescription);
+                Console.WriteLine(UiResource.TransitionCommandDescription);
                 Console.WriteLine(UiResource.LookCommandDescription);
                 Console.WriteLine(UiResource.IdleCommandDescription);
                 Console.WriteLine(UiResource.DeadCommandDescription);
                 Console.WriteLine(UiResource.ExitCommandDescription);
-                Console.WriteLine(UiResource.TransitionCommandDescription);
 
                 Console.WriteLine($"{UiResource.InputPrompt}:");
                 var inputText = Console.ReadLine();
