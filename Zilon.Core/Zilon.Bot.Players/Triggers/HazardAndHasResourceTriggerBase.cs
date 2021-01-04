@@ -16,7 +16,6 @@ namespace Zilon.Bot.Players.Triggers
         public void Reset()
         {
             // Has no state
-            // TODO Reset strategyData.ResourceToReduceHazard
         }
 
         public bool Test(
