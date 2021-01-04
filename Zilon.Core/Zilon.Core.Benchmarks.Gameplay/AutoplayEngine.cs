@@ -36,6 +36,7 @@ namespace Zilon.Core.Benchmarks.Move
 
         protected override void ProcessSectorExit()
         {
+            // Do nothing in bench
         }
     }
 }
