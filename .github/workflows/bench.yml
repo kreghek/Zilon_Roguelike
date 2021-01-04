@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         bench_project:
-          - Zilon.Core.Benchmarks.Move
+          - Zilon.Core.Benchmarks.Gameplay
         include:
           - bench_project: Zilon.Core.Benchmarks.Move
           - bench_filter: GamePlayBench
