@@ -12,6 +12,11 @@
         public static int OneIterationLength => 10;
 
         /// <summary>
+        /// Duration of idle. Depends on <see cref="OneIterationLength"/>.
+        /// </summary>
+        public static int IdleDuration => OneIterationLength / 3;
+
+        /// <summary>
         /// Transition limit from pool.
         /// The limit is required to prevent hanging.
         /// </summary>
