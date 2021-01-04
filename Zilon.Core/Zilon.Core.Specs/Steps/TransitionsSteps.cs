@@ -28,6 +28,7 @@ namespace Zilon.Core.Specs.Steps
             await Context.CreateLinearGlobeAsync().ConfigureAwait(false);
         }
 
+        [UsedImplicitly]
         [Then(@"the player actor in the map with id:(\d+)")]
         public void ThenThePlayerActionInMapId(int expectedMapId)
         {
@@ -37,6 +38,13 @@ namespace Zilon.Core.Specs.Steps
             var map = sector.Map;
 
             map.Id.Should().Be(expectedMapId);
+        }
+
+        [When(@"the player person uses current transition")]
+        public void WhenThePlayerPersonUsesCurrentTransition()
+        {
+            var transitCommand = Context.ServiceProvider.GetRequiredService<SectorTransitionMoveCommand>();
+            transitCommand.Execute();
         }
     }
 }
