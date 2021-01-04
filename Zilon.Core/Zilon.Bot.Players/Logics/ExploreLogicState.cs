@@ -105,76 +105,103 @@ namespace Zilon.Bot.Players.Logics
             var fowModule = actor.Person.GetModuleSafe<IFowData>();
             if (fowModule is null)
             {
-                var map = sector.Map;
-
-                var observeNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
-
-                foreach (var mapNode in observeNodes)
-                {
-                    strategyData.ObservedNodes.Add(mapNode);
-                }
-
-                // Собираем пограничные неисследованные узлы.
-                var frontNodesHashSet = new HashSet<IGraphNode>();
-                foreach (var observedNode in strategyData.ObservedNodes)
-                {
-                    var nextNodes = map.GetNext(observedNode);
-
-                    var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObservedNodes.Contains(x));
-
-                    foreach (var edgeNode in notObservedNextNodes)
-                    {
-                        frontNodesHashSet.Add(edgeNode);
-                    }
-
-                    // Примечаем выходы
-                    if (map.Transitions.ContainsKey(observedNode))
-                    {
-                        strategyData.ExitNodes.Add(observedNode);
-                    }
-                }
-
-                var emptyFrontNodes = !frontNodesHashSet.Any();
-                var allNodesObserved = map.Nodes.All(x => strategyData.ObservedNodes.Contains(x));
-
-                Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
-                    "Это состояние выполняется, только если есть неисследованые узлы.");
-
-                frontNodes = frontNodesHashSet;
+                frontNodes = GetNodesUsingStrategyData(actor, strategyData, sector);
             }
             else
             {
-                var fowItems = fowModule.GetSectorFowData(sector);
-
-                var exploredFowItems = fowItems.GetFowNodeByState(SectorMapNodeFowState.Explored);
-                var observingFowItems = fowItems.GetFowNodeByState(SectorMapNodeFowState.Observing);
-
-                var knownNodes = exploredFowItems.Select(x => x.Node).Union(observingFowItems.Select(x => x.Node))
-                    .ToArray();
-
-                var map = sector.Map;
-                var frontNodesHashSet = new HashSet<IGraphNode>();
-                foreach (var node in knownNodes)
-                {
-                    // Примечаем выходы
-                    if (map.Transitions.ContainsKey(node))
-                    {
-                        strategyData.ExitNodes.Add(node);
-                    }
-
-                    var nextUnknownNodes = map.GetNext(node).Where(x => !knownNodes.Contains(x));
-                    if (nextUnknownNodes.Any())
-                    {
-                        foreach (var unknownNode in nextUnknownNodes)
-                        {
-                            frontNodesHashSet.Add(unknownNode);
-                        }
-                    }
-                }
-
-                frontNodes = frontNodesHashSet;
+                frontNodes = GetNodesUsingFowModule(strategyData, sector, fowModule);
             }
 
+            return frontNodes;
+        }
+
+        private static IEnumerable<IGraphNode> GetNodesUsingFowModule(
+            ILogicStrategyData strategyData,
+            ISector sector,
+            IFowData fowModule)
+        {
+            IEnumerable<IGraphNode> frontNodes;
+
+            var knownNodes = GetKnownNodes(sector, fowModule);
+
+            var map = sector.Map;
+            var frontNodesHashSet = new HashSet<IGraphNode>();
+            foreach (var node in knownNodes)
+            {
+                // Примечаем выходы
+                if (map.Transitions.ContainsKey(node))
+                {
+                    strategyData.ExitNodes.Add(node);
+                }
+
+                var nextUnknownNodes = map.GetNext(node).Where(x => !knownNodes.Contains(x));
+                if (nextUnknownNodes.Any())
+                {
+                    foreach (var unknownNode in nextUnknownNodes)
+                    {
+                        frontNodesHashSet.Add(unknownNode);
+                    }
+                }
+            }
+
+            frontNodes = frontNodesHashSet;
+            return frontNodes;
+        }
+
+        private static IGraphNode[] GetKnownNodes(ISector sector, IFowData fowModule)
+        {
+            var fowItems = fowModule.GetSectorFowData(sector);
+
+            var exploredFowItems = fowItems.GetFowNodeByState(SectorMapNodeFowState.Explored);
+            var observingFowItems = fowItems.GetFowNodeByState(SectorMapNodeFowState.Observing);
+
+            var knownNodes = exploredFowItems.Select(x => x.Node).Union(observingFowItems.Select(x => x.Node))
+                .ToArray();
+            return knownNodes;
+        }
+
+        private static IEnumerable<IGraphNode> GetNodesUsingStrategyData(
+            IActor actor,
+            ILogicStrategyData strategyData,
+            ISector sector)
+        {
+            IEnumerable<IGraphNode> frontNodes;
+            var map = sector.Map;
+
+            var observeNodes = map.Nodes.Where(x => map.DistanceBetween(x, actor.Node) < 5);
+
+            foreach (var mapNode in observeNodes)
+            {
+                strategyData.ObservedNodes.Add(mapNode);
+            }
+
+            // Собираем пограничные неисследованные узлы.
+            var frontNodesHashSet = new HashSet<IGraphNode>();
+            foreach (var observedNode in strategyData.ObservedNodes)
+            {
+                var nextNodes = map.GetNext(observedNode);
+
+                var notObservedNextNodes = nextNodes.Where(x => !strategyData.ObservedNodes.Contains(x));
+
+                foreach (var edgeNode in notObservedNextNodes)
+                {
+                    frontNodesHashSet.Add(edgeNode);
+                }
+
+                // Примечаем выходы
+                if (map.Transitions.ContainsKey(observedNode))
+                {
+                    strategyData.ExitNodes.Add(observedNode);
+                }
+            }
+
+            var emptyFrontNodes = !frontNodesHashSet.Any();
+            var allNodesObserved = map.Nodes.All(x => strategyData.ObservedNodes.Contains(x));
+
+            Debug.Assert((emptyFrontNodes && allNodesObserved) || !emptyFrontNodes,
+                "Это состояние выполняется, только если есть неисследованые узлы.");
+
+            frontNodes = frontNodesHashSet;
             return frontNodes;
         }
     }
