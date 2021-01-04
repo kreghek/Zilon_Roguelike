@@ -79,11 +79,6 @@ namespace Zilon.Bot.Players.Logics
             return null;
         }
 
-        public override string ToString()
-        {
-            return $"Defeat {_target}";
-        }
-
         protected override void ResetData()
         {
             _refreshCounter = 0;
@@ -113,51 +108,6 @@ namespace Zilon.Bot.Players.Logics
             };
 
             return attackParams;
-        }
-
-        private static IEnumerable<IActor> CheckForIntruders(IActor actor, ISectorMap map, IActorManager actorManager)
-        {
-            foreach (var target in actorManager.Items)
-            {
-                if (target.Person.Fraction == actor.Person.Fraction ||
-                    (target.Person.Fraction == Fractions.MilitiaFraction &&
-                     actor.Person.Fraction == Fractions.MainPersonFraction) ||
-                    (target.Person.Fraction == Fractions.MainPersonFraction &&
-                     actor.Person.Fraction == Fractions.MilitiaFraction) ||
-                    (target.Person.Fraction == Fractions.InterventionistFraction &&
-                     actor.Person.Fraction == Fractions.TroublemakerFraction) ||
-                    (target.Person.Fraction == Fractions.TroublemakerFraction &&
-                     actor.Person.Fraction == Fractions.InterventionistFraction))
-                {
-                    continue;
-                }
-
-                if (target.Person.CheckIsDead())
-                {
-                    continue;
-                }
-
-                var isVisible = LogicHelper.CheckTargetVisible(map, actor.Node, target.Node);
-                if (!isVisible)
-                {
-                    continue;
-                }
-
-                yield return target;
-            }
-        }
-
-        private static IAttackTarget GetTarget(IActor actor, ISectorMap _map, IActorManager actorManager)
-        {
-            //TODO Убрать дублирование кода с IntruderDetectedTrigger
-            // Этот фрагмент уже однажды был использован неправильно,
-            // что привело к трудноуловимой ошибке.
-            var intruders = CheckForIntruders(actor, _map, actorManager);
-
-            var orderedIntruders = intruders.OrderBy(x => _map.DistanceBetween(actor.Node, x.Node));
-            var nearbyIntruder = orderedIntruders.FirstOrDefault();
-
-            return nearbyIntruder;
         }
 
         private class AttackParams

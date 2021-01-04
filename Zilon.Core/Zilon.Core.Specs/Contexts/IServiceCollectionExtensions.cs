@@ -29,7 +29,7 @@ namespace Zilon.Core.Specs.Contexts
         public static void RegisterCommands(this ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<MoveCommand>();
-            serviceCollection.AddSingleton<NextTurnCommand>();
+            serviceCollection.AddSingleton<IdleCommand>();
             serviceCollection.AddSingleton<UseSelfCommand>();
             serviceCollection.AddSingleton<AttackCommand>();
             serviceCollection.AddSingleton<SectorTransitionMoveCommand>();

@@ -98,11 +98,6 @@ namespace Zilon.Bot.Players.Strategies
 
             var actorTask = CurrentState.GetTask(Actor, context, _strategyData);
 
-            if (transitionWasPerformed && WriteStateChanges)
-            {
-                Console.WriteLine(newState);
-            }
-
             var currentTriggers = _stateTree.Transitions[CurrentState].Select(x => x.Trigger);
             UpdateCurrentTriggers(currentTriggers);
 
