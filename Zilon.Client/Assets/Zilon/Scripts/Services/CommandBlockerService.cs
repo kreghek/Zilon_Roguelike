@@ -14,8 +14,10 @@ namespace Assets.Zilon.Scripts.Services
             _commandBlockers = new HashSet<ICommandBlocker>();
         }
 
+        /// <inheritdoc/>
         public bool HasBlockers { get => _commandBlockers.Count > 0; }
 
+        /// <inheritdoc/>
         public void AddBlocker(ICommandBlocker commandBlocker)
         {
             commandBlocker.Released += CommandBlocker_Release;
@@ -23,6 +25,7 @@ namespace Assets.Zilon.Scripts.Services
             tcs = new TaskCompletionSource<bool>();
         }
 
+        /// <inheritdoc/>
         public void DropBlockers()
         {
             foreach (var commandBlocker in _commandBlockers)
@@ -33,6 +36,7 @@ namespace Assets.Zilon.Scripts.Services
             _commandBlockers.Clear();
         }
 
+        /// <inheritdoc/>
         public Task WaitBlockersAsync()
         {
             if (tcs is null)
