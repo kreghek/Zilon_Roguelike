@@ -6,7 +6,7 @@ namespace Assets.Zilon.Scripts.Services
     {
         void AddBlocker(ICommandBlocker commandBlocker);
 
-        Task WaitBlockers();
+        Task WaitBlockersAsync();
 
         bool HasBlockers { get; }
 

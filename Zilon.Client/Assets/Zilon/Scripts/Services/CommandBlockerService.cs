@@ -25,10 +25,15 @@ namespace Assets.Zilon.Scripts.Services
 
         public void DropBlockers()
         {
+            foreach (var commandBlocker in _commandBlockers)
+            {
+                commandBlocker.Released -= CommandBlocker_Release;
+            }
+
             _commandBlockers.Clear();
         }
 
-        public Task WaitBlockers()
+        public Task WaitBlockersAsync()
         {
             if (tcs is null)
             {
