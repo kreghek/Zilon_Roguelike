@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
@@ -23,6 +25,10 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
     private const float MOVE_SPEED_Q = 1f;
     private const float END_MOVE_COUNTER = 0.3f;
 
+    private TaskScheduler _taskScheduler;
+
+    private object _lockObj;
+
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     [NotNull] [Inject] private readonly IPlayer _player;
@@ -38,6 +44,7 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
     public ActorViewModel()
     {
         _effectList = new List<HitSfx>();
+        _lockObj = new object();
     }
 
     public event EventHandler Selected;
@@ -57,10 +64,13 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
     [UsedImplicitly]
     public void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         Actor.Moved += Actor_Moved;
-        if (Actor.Person.GetModuleSafe<ISurvivalModule>() != null)
+        var survivalModule = Actor.Person.GetModuleSafe<ISurvivalModule>();
+        if (survivalModule != null)
         {
-            Actor.Person.GetModule<ISurvivalModule>().Dead += Survival_Dead;
+            survivalModule.Dead += Survival_Dead;
         }
 
         Actor.OpenedContainer += Actor_OpenedContainer;
@@ -95,10 +105,13 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
         {
             _moveCounter = null;
 
-            if (_moveCommandBlocker != null)
+            lock (_lockObj)
             {
-                _moveCommandBlocker.Release();
-                _moveCommandBlocker = null;
+                if (_moveCommandBlocker != null)
+                {
+                    _moveCommandBlocker.Release();
+                    _moveCommandBlocker = null;
+                }
             }
         }
     }
@@ -132,43 +145,58 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
         _effectList.Add(sfxObject);
     }
 
-    private void Survival_Dead(object sender, EventArgs e)
+    private async void Survival_Dead(object sender, EventArgs e)
     {
-        var isHumanPerson = Actor.Person == _player.MainPerson;
-        GraphicRoot.ProcessDeath(
-            rootObject: gameObject,
-            isRootRotting: !isHumanPerson
-        );
-
-        Destroy(GetComponent<Collider2D>());
-
-        if (PlayerState != null && ReferenceEquals(PlayerState.ActiveActor, this))
+        await Task.Factory.StartNew(() =>
         {
-            PlayerState.ActiveActor = null;
-        }
+            var isHumanPerson = Actor.Person == _player.MainPerson;
+            GraphicRoot.ProcessDeath(
+                rootObject: gameObject,
+                isRootRotting: !isHumanPerson
+            );
+
+            Destroy(GetComponent<Collider2D>());
+
+            if (PlayerState != null && ReferenceEquals(PlayerState.ActiveActor, this))
+            {
+                PlayerState.ActiveActor = null;
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
-    private void Actor_Moved(object sender, EventArgs e)
+    private async void Actor_Moved(object sender, EventArgs e)
     {
-        _moveCounter = 0;
-        var actorHexNode = (HexNode)Actor.Node;
-        var worldPositionParts = HexHelper.ConvertToWorld(actorHexNode.OffsetCoords);
-        _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, actorHexNode.OffsetCoords.Y - 0.26f);
-
-        if (GraphicRoot.gameObject.activeSelf)
+        await Task.Factory.StartNew(() =>
         {
-            _moveCommandBlocker = new MoveCommandBlocker();
-            _commandBlockerService.AddBlocker(_moveCommandBlocker);
-        }
-        GraphicRoot.ProcessMove(_targetPosition);
+            _moveCounter = 0;
+            var actorHexNode = (HexNode)Actor.Node;
+            var worldPositionParts = HexHelper.ConvertToWorld(actorHexNode.OffsetCoords);
+            _targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, actorHexNode.OffsetCoords.Y - 0.26f);
+
+            if (GraphicRoot.gameObject.activeSelf)
+            {
+                lock (_lockObj)
+                {
+                    if (_moveCommandBlocker is null)
+                    {
+                        _moveCommandBlocker = new MoveCommandBlocker();
+                        _commandBlockerService.AddBlocker(_moveCommandBlocker);
+                    }
+                }
+            }
+            GraphicRoot.ProcessMove(_targetPosition);
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
-    private void Actor_OpenedContainer(object sender, OpenContainerEventArgs e)
+    private async void Actor_OpenedContainer(object sender, OpenContainerEventArgs e)
     {
-        var containerNode = (HexNode)e.Container.Node;
-        var worldPositionParts = HexHelper.ConvertToWorld(containerNode.OffsetCoords);
-        var targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
+        await Task.Factory.StartNew(() =>
+        {
+            var containerNode = (HexNode)e.Container.Node;
+            var worldPositionParts = HexHelper.ConvertToWorld(containerNode.OffsetCoords);
+            var targetPosition = new Vector3(worldPositionParts[0], worldPositionParts[1] / 2, -1);
 
-        GraphicRoot.ProcessInteractive(targetPosition);
+            GraphicRoot.ProcessInteractive(targetPosition);
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 }

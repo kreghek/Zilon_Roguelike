@@ -135,7 +135,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return openRoomNodes.First();
         }
 
-        public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
+        public IEnumerable<SectorTransition> RollTransitions(IEnumerable<SectorTransition> openTransitions)
         {
             return new[] { openTransitions.First() };
         }

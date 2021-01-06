@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 using UnityEngine;
 
@@ -7,6 +9,7 @@ using Zilon.Core.Tactics;
 
 public class ContainerVm : StaticObjectViewModel
 {
+    private TaskScheduler _taskScheduler;
     private IPropContainer _propContainer;
 
     public SpriteRenderer SpriteRenderer;
@@ -29,6 +32,8 @@ public class ContainerVm : StaticObjectViewModel
 
     public override void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         base.Start();
 
         var isOpened = Container.GetModule<IPropContainer>().IsOpened;
@@ -42,8 +47,11 @@ public class ContainerVm : StaticObjectViewModel
         _propContainer.Opened -= Container_Opened;
     }
 
-    private void Container_Opened(object sender, EventArgs e)
+    private async void Container_Opened(object sender, EventArgs e)
     {
-        SpriteRenderer.sprite = OpenedSprite;
+        await Task.Factory.StartNew(() =>
+        {
+            SpriteRenderer.sprite = OpenedSprite;
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 }

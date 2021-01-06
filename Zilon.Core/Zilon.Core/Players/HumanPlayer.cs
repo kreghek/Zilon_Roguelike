@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.Persons;
 using Zilon.Core.World;
@@ -11,8 +12,23 @@ namespace Zilon.Core.Players
     /// <seealso cref="PlayerBase" />
     public class HumanPlayer : IPlayer
     {
-        public ISectorNode SectorNode =>
-            Globe.SectorNodes.Single(node => node.Sector.ActorManager.Items.Any(x => x.Person == MainPerson));
+        private ISectorNode GetSectorNode()
+        {
+            var sectorNode = Globe.SectorNodes.SingleOrDefault(IsActorInSector);
+            if (sectorNode is null)
+            {
+                throw new InvalidOperationException("There is no sector with the player person.");
+            }
+
+            return sectorNode;
+        }
+
+        private bool IsActorInSector(ISectorNode node)
+        {
+            return node.Sector.ActorManager.Items.Any(x => x.Person == MainPerson);
+        }
+
+        public ISectorNode SectorNode => GetSectorNode();
 
         /// <summary>
         /// Ссылка на основного персонажа игрока.

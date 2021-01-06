@@ -9,11 +9,16 @@ namespace Zilon.Core.Tactics.Spatial
     {
         public SectorGraphMap()
         {
-            Transitions = new Dictionary<IGraphNode, RoomTransition>();
+            Transitions = new Dictionary<IGraphNode, SectorTransition>();
         }
 
-        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
+        /// <inheritdoc />
+        public Dictionary<IGraphNode, SectorTransition> Transitions { get; }
 
+        /// <inheritdoc />
+        public int Id { get; set; }
+
+        /// <inheritdoc />
         public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
         {
             //TODO Жуткий костыль. Перепиать код, чтобы его не было. Тесты должны проходить.

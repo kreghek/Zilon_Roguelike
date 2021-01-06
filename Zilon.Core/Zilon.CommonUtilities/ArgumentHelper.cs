@@ -40,7 +40,7 @@ namespace Zilon.CommonUtilities
         /// <returns> Возвращает true, если аргумент присутствует. </returns>
         public static bool HasProgramArgument(string[] args, string testArg)
         {
-            return args?.Select(x => x?.Trim().ToLowerInvariant()).Contains(testArg.ToLowerInvariant()) == true;
+            return args?.Select(x => x?.Trim().ToUpperInvariant()).Contains(testArg.ToUpperInvariant()) == true;
         }
     }
 }

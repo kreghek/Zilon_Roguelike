@@ -405,16 +405,19 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void Monster_Dead(object sender, EventArgs e)
+    private async void Monster_Dead(object sender, EventArgs e)
     {
-        // Используем ReferenceEquals, потому что нам нужно сравнить object и ISurvivalData по ссылке.
-        // Это делаем, чтобы избежать приведения sender к ISurvivalData.
-        var viewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Actor.Person.GetModule<ISurvivalModule>(), sender));
-
-        if (viewModel != null)
+        await Task.Factory.StartNew(() =>
         {
-            ActorViewModels.Remove(viewModel);
-        }
+            // Используем ReferenceEquals, потому что нам нужно сравнить object и ISurvivalData по ссылке.
+            // Это делаем, чтобы избежать приведения sender к ISurvivalData.
+            var viewModel = ActorViewModels.SingleOrDefault(x => ReferenceEquals(x.Actor.Person.GetModule<ISurvivalModule>(), sender));
+
+            if (viewModel != null)
+            {
+                ActorViewModels.Remove(viewModel);
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void CreateStaticObjectViewModels(IEnumerable<MapNodeVM> nodeViewModels)
@@ -488,7 +491,7 @@ public class SectorVM : MonoBehaviour
         _playerState.HoverViewModel = containerViewModel;
     }
 
-    private void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
+    private async void PlayerActorOnOpenedContainer(object sender, OpenContainerEventArgs e)
     {
         var actor = sender as IActor;
 
@@ -497,8 +500,11 @@ public class SectorVM : MonoBehaviour
             Debug.Log($"Не удалось открыть контейнер {e.Container}.");
         }
 
-        var propContainer = e.Container.GetModule<IPropContainer>();
-        ShowFoundPropsModalOrNotFound(actor, propContainer);
+        await Task.Factory.StartNew(() =>
+        {
+            var propContainer = e.Container.GetModule<IPropContainer>();
+            ShowFoundPropsModalOrNotFound(actor, propContainer);
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void ShowFoundPropsModalOrNotFound(IActor actor, IPropContainer propContainer)
@@ -525,9 +531,9 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void Sector_HumanGroupExit(object sender, TransitionUsedEventArgs e)
+    private async void Sector_HumanGroupExit(object sender, TransitionUsedEventArgs e)
     {
-        Task.Factory.StartNew(() =>
+        await Task.Factory.StartNew(() =>
         {
             try
             {
@@ -537,7 +543,7 @@ public class SectorVM : MonoBehaviour
             {
                 Debug.LogError(exception);
             }
-        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Wait();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void HandleSectorTransitionInner()
@@ -674,49 +680,58 @@ public class SectorVM : MonoBehaviour
         _playerState.HoverViewModel = (IActorViewModel)sender;
     }
 
-    private void Actor_UsedProp(object sender, UsedPropEventArgs e)
+    private async void Actor_UsedProp(object sender, UsedPropEventArgs e)
     {
-        if (e.UsedProp.Scheme.Sid != "camp-tools")
+        await Task.Factory.StartNew(() =>
         {
-            return;
-        }
+            if (e.UsedProp.Scheme.Sid != "camp-tools")
+            {
+                return;
+            }
 
-        SleepShadowManager.StartShadowAnimation();
+            SleepShadowManager.StartShadowAnimation();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
-    private void HumanPersonSurvival_Dead(object sender, EventArgs e)
+    private async void HumanPersonSurvival_Dead(object sender, EventArgs e)
     {
-        _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
-        var activeActor = _playerState.ActiveActor.Actor;
-        var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
-        survivalModule.Dead -= HumanPersonSurvival_Dead;
+        await Task.Factory.StartNew(() =>
+        {
+            _container.InstantiateComponentOnNewGameObject<GameOverEffect>(nameof(GameOverEffect));
+            var activeActor = _playerState.ActiveActor.Actor;
+            var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
+            survivalModule.Dead -= HumanPersonSurvival_Dead;
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
-    private void ActorOnUsedAct(object sender, UsedActEventArgs e)
+    private async void ActorOnUsedAct(object sender, UsedActEventArgs e)
     {
-        var actor = GetActorFromEventSender(sender);
-
-        var actorHexNode = actor.Node as HexNode;
-        var targetHexNode = e.TargetNode as HexNode;
-
-        // Визуализируем удар.
-        var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
-
-        var actEffect = e.TacticalAct.Stats.Effect;
-        switch (actEffect)
+        await Task.Factory.StartNew(() =>
         {
-            case TacticalActEffectType.Damage:
-                ProcessDamage(e.TargetNode, e.TacticalAct, actor, actorViewModel);
-                break;
+            var actor = GetActorFromEventSender(sender);
 
-            case TacticalActEffectType.Heal:
-                ProcessHeal(actorViewModel);
-                break;
+            var actorHexNode = actor.Node as HexNode;
+            var targetHexNode = e.TargetNode as HexNode;
 
-            case TacticalActEffectType.Undefined:
-            default:
-                throw new InvalidOperationException($"Неизвестный тип воздействия {actEffect}.");
-        }
+            // Визуализируем удар.
+            var actorViewModel = ActorViewModels.Single(x => x.Actor == actor);
+
+            var actEffect = e.TacticalAct.Stats.Effect;
+            switch (actEffect)
+            {
+                case TacticalActEffectType.Damage:
+                    ProcessDamage(e.TargetNode, e.TacticalAct, actor, actorViewModel);
+                    break;
+
+                case TacticalActEffectType.Heal:
+                    ProcessHeal(actorViewModel);
+                    break;
+
+                case TacticalActEffectType.Undefined:
+                default:
+                    throw new InvalidOperationException($"Неизвестный тип воздействия {actEffect}.");
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void Actor_DepositMined(object sender, MineDepositEventArgs e)
@@ -802,7 +817,7 @@ public class SectorVM : MonoBehaviour
         _playerState.SelectedViewModel = nodeVm;
         _playerState.HoverViewModel = nodeVm;
 
-        if (nodeVm != null)
+        if (_moveCommand.CanExecute())
         {
             _clientCommandExecutor.Push(_moveCommand);
         }

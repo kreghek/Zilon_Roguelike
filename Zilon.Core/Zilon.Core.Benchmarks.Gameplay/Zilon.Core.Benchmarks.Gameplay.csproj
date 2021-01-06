@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,9 +11,14 @@
         <Version>2020.3.0</Version>
         <ExcludeAssets>runtime; build</ExcludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj" />
     <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
     <ProjectReference Include="..\Zilon.Core.Benchmarks.Common\Zilon.Core.Benchmarks.Common.csproj" />
     <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj" />

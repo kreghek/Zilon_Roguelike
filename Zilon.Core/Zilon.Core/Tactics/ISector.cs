@@ -59,7 +59,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="actor"> Актёр, применивший переход. </param>
         /// <param name="transition"> переход, который бы задействован. </param>
-        void UseTransition(IActor actor, RoomTransition transition);
+        void UseTransition(IActor actor, SectorTransition transition);
 
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.

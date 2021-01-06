@@ -5,6 +5,7 @@ using System.Linq;
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -14,7 +15,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly List<IGraphNode> _path;
 
         public MoveTask(IActor actor, IActorTaskContext context, IGraphNode targetNode, ISectorMap map) : this(actor,
-            context, targetNode, map, 1000)
+            context, targetNode, map, GlobeMetrics.OneIterationLength)
         {
         }
 

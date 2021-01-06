@@ -75,6 +75,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
             return injectContext.Container.Resolve<BiomeInitializer>();
         }).AsSingle();
         Container.Bind<IGlobeTransitionHandler>().To<GlobeTransitionHandler>().AsSingle();
+        Container.Bind<ITransitionPool>().To<TransitionPool>().AsSingle();
 
         Container.RegisterGenerationServices();
         Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();

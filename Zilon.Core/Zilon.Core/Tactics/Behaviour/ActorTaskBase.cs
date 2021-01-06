@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.World;
+
 namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
@@ -27,7 +29,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public virtual bool IsComplete { get; protected set; }
 
-        public virtual int Cost => 1000;
+        public virtual int Cost => GlobeMetrics.OneIterationLength;
 
         public abstract void Execute();
     }

@@ -28,6 +28,8 @@ Reasons why you will die:
 - You will catch a disease that will greatly weaken you, that you will not have the strength to fight off even a hungry rat.
 - You write the command "dead" in the text version of the game.
 
+[The Rules](https://last-imperial-vagabond.github.io/LAST_IMPERIAL_VAGABOND.github.io/)
+
 ## Join us
 
 [Project group at VK](https://vk.com/last_imperial_vagabond)
@@ -62,3 +64,9 @@ You are awesome!
 ## Contributing
 
 We will be glad for any contribution to the development and support of the project. During development, we adhere to the [Code of Conduct] (/ CODE_OF_CONDUCT.md) and the [Source Code Conventions] (/ CODE_CONVENTIONS.md).
+
+## License
+
+- Released under [MIT](/LICENSE).
+- Feel free to modify and reuse this project. You are required to include the license when using this code. Copy `LICENSE` to `LICENSE-source` and then modify `LICENSE` with your own name.
+- Please link back to this repo as well.
