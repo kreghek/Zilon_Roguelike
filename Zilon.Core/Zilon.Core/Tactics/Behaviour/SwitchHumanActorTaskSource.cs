@@ -33,6 +33,21 @@ namespace Zilon.Core.Tactics.Behaviour
             _taskSourceControl = ActorTaskSourceControl.Human;
         }
 
+        public void Switch(ActorTaskSourceControl taskSourceControl)
+        {
+            switch (taskSourceControl)
+            {
+                case ActorTaskSourceControl.Undefined:
+                default:
+                    throw new ArgumentException($"Invalid value {taskSourceControl}", nameof(taskSourceControl));
+
+                case ActorTaskSourceControl.Human:
+                case ActorTaskSourceControl.Bot:
+                    _taskSourceControl = taskSourceControl;
+                    break;
+            }
+        }
+
         public void CancelTask(IActorTask cancelledActorTask)
         {
             switch (_taskSourceControl)
@@ -142,21 +157,6 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new InvalidOperationException("Task source is undefined.");
                 default:
                     throw new InvalidOperationException($"Task source {_taskSourceControl} is unknown.");
-            }
-        }
-
-        public void Switch(ActorTaskSourceControl taskSourceControl)
-        {
-            switch (taskSourceControl)
-            {
-                case ActorTaskSourceControl.Undefined:
-                default:
-                    throw new ArgumentException($"Invalid value {taskSourceControl}", nameof(taskSourceControl));
-
-                case ActorTaskSourceControl.Human:
-                case ActorTaskSourceControl.Bot:
-                    _taskSourceControl = taskSourceControl;
-                    break;
             }
         }
     }
