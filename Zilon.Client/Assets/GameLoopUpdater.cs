@@ -66,7 +66,8 @@ class GameLoopUpdater
                 Debug.LogError(exception);
                 return;
             }
-            //await _commandBlockerService.WaitBlockersAsync();
+
+            await _commandBlockerService.WaitBlockersAsync();
         }
     }
 }
