@@ -373,29 +373,6 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
-        private static bool PlayerPersonIsNotInTransitionPool(IGlobe globe, IPerson person)
-        {
-            var globeNodeWithPerson = GetSectorNode(globe, person);
-            var isPlayerPersonInGlobe = globeNodeWithPerson != null;
-            return isPlayerPersonInGlobe;
-        }
-
-        private static ISectorNode GetSectorNode(IGlobe globe, IPerson person)
-        {
-            var sectorNode = globe.SectorNodes.SingleOrDefault(node => IsActorInSector(node, person));
-            if (sectorNode is null)
-            {
-                return null;
-            }
-
-            return sectorNode;
-        }
-
-        private static bool IsActorInSector(ISectorNode node, IPerson mainPerson)
-        {
-            return node.Sector.ActorManager.Items.Any(x => x.Person == mainPerson);
-        }
-
         [UsedImplicitly]
         [When(@"Я забираю из сундука рерурс (.*) в количестве (.*)")]
         public void WhenЯЗабираюИзСундукаРерурсWaterВКоличестве(string resourceSid, int count)
@@ -456,6 +433,22 @@ namespace Zilon.Core.Specs.Steps
             propTransferCommand.Execute();
         }
 
+        private static ISectorNode GetSectorNode(IGlobe globe, IPerson person)
+        {
+            var sectorNode = globe.SectorNodes.SingleOrDefault(node => IsActorInSector(node, person));
+            if (sectorNode is null)
+            {
+                return null;
+            }
+
+            return sectorNode;
+        }
+
+        private static bool IsActorInSector(ISectorNode node, IPerson mainPerson)
+        {
+            return node.Sector.ActorManager.Items.Any(x => x.Person == mainPerson);
+        }
+
         private static bool IsPlayerPersonCanIntent(
             [NotNull] IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource,
             [CanBeNull] ISurvivalModule survivalModule)
@@ -466,6 +459,13 @@ namespace Zilon.Core.Specs.Steps
             }
 
             return !humanTaskSource.CanIntent() && survivalModule?.IsDead == false;
+        }
+
+        private static bool PlayerPersonIsNotInTransitionPool(IGlobe globe, IPerson person)
+        {
+            var globeNodeWithPerson = GetSectorNode(globe, person);
+            var isPlayerPersonInGlobe = globeNodeWithPerson != null;
+            return isPlayerPersonInGlobe;
         }
     }
 }
