@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Services;
 
@@ -16,6 +18,8 @@ using Zilon.Core.Tactics.ActorInteractionEvents;
 
 public sealed class SceneDirector : MonoBehaviour
 {
+    private TaskScheduler _taskScheduler;
+
     [NotNull] [Inject] private readonly ISectorUiState _sectorUiState;
 
     [NotNull] [Inject] private readonly IActorInteractionBus _actorInteractionBus;
@@ -34,6 +38,8 @@ public sealed class SceneDirector : MonoBehaviour
 
     public void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         _actorInteractionBus.NewEvent += ActorInteractionBus_NewEvent;
     }
 
@@ -42,7 +48,15 @@ public sealed class SceneDirector : MonoBehaviour
         _actorInteractionBus.NewEvent -= ActorInteractionBus_NewEvent;
     }
 
-    private void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+    private async void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+    {
+        await Task.Factory.StartNew(() =>
+        {
+            NewEventHandlerInner(e);
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+    }
+
+    private void NewEventHandlerInner(NewActorInteractionEventArgs e)
     {
         var currentLanguage = _uiSettingService.CurrentLanguage;
         switch (e.ActorInteractionEvent)
@@ -181,14 +195,6 @@ public sealed class SceneDirector : MonoBehaviour
         blockSparks.transform.position = targetPosition;
         // Искры летят в сторону атакующего
         blockSparks.transform.LookAt(attackerPosition);
-    }
-
-    private void CreateNumericDamageIndicator(DamageActorInteractionEvent interactionEvent, ActorViewModel damagedActorViewModel)
-    {
-        var damageIndicator = Instantiate(DamageIndicatorPrefab);
-        damageIndicator.CurrentLanguage = _uiSettingService.CurrentLanguage;
-        damageIndicator.transform.SetParent(SectorViewModel.transform);
-        damageIndicator.Init(damagedActorViewModel, interactionEvent.DamageEfficientCalcResult.ResultEfficient);
     }
 
     private void CreateNoDamageIndicator(ActorViewModel actorViewModel, NoDamageIndicatorBase missIndicatorPrefab)
