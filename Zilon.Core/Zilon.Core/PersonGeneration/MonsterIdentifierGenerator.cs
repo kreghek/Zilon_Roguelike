@@ -7,7 +7,7 @@
     {
         private int _currentIdCounter;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public int GetNewId()
         {
             _currentIdCounter++;
