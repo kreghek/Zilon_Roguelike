@@ -114,6 +114,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     return await _humanActorTaskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
 
                 case ActorTaskSourceControl.Bot:
+                    await Task.Delay(100);
                     return await _botActorTaskContext.GetActorTaskAsync(actor, context).ConfigureAwait(false);
 
                 case ActorTaskSourceControl.Undefined:
