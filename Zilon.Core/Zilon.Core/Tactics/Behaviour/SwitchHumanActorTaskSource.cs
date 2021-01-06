@@ -43,7 +43,10 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 case ActorTaskSourceControl.Human:
                 case ActorTaskSourceControl.Bot:
+                    // If bot switched need to drop intention of player.
+                    // Because intention stops game loop for user command.
                     _taskSourceControl = taskSourceControl;
+                    _humanActorTaskSource.DropIntentionWaiting();
                     break;
             }
         }
@@ -70,12 +73,37 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public bool CanIntent()
         {
-            throw new NotImplementedException();
+            switch (_taskSourceControl)
+            {
+                case ActorTaskSourceControl.Human:
+                    return _humanActorTaskSource.CanIntent();
+
+                case ActorTaskSourceControl.Bot:
+                    throw new InvalidOperationException("Intension available only under human control.");
+
+                case ActorTaskSourceControl.Undefined:
+                    //TODO Add common TaskSourceException
+                    throw new InvalidOperationException("Task source is undefined.");
+                default:
+                    throw new InvalidOperationException($"Task source {_taskSourceControl} is unknown.");
+            }
         }
 
         public void DropIntentionWaiting()
         {
-            throw new NotImplementedException();
+            switch (_taskSourceControl)
+            {
+                case ActorTaskSourceControl.Human:
+                    _humanActorTaskSource.DropIntentionWaiting();
+                    break;
+
+                case ActorTaskSourceControl.Bot:
+                    throw new InvalidOperationException("Intension available only under human control.");
+
+                default:
+                    //TODO Add common TaskSourceException
+                    throw new InvalidOperationException("Task source is undefined.");
+            }
         }
 
         public async Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)

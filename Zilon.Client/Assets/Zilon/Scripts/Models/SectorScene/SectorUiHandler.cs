@@ -192,10 +192,9 @@ public class SectorUiHandler : MonoBehaviour
         _clientCommandExecutor.Push(_showPersonModalCommand);
     }
 
-    public void SwitchAutoplay()
+    public void SwitchAutoplay_Handler()
     {
         _actorTaskControlSwitcher.Switch(ActorTaskSourceControl.Bot);
-        NextTurn();
     }
 
     public void ExitGame_Handler()
