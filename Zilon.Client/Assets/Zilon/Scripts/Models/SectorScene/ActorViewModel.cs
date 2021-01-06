@@ -169,8 +169,11 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
 
             if (GraphicRoot.gameObject.activeSelf)
             {
-                _moveCommandBlocker = new MoveCommandBlocker();
-                _commandBlockerService.AddBlocker(_moveCommandBlocker);
+                if (_moveCommandBlocker is null)
+                {
+                    _moveCommandBlocker = new MoveCommandBlocker();
+                    _commandBlockerService.AddBlocker(_moveCommandBlocker);
+                }
             }
             GraphicRoot.ProcessMove(_targetPosition);
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
