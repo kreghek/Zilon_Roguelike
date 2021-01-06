@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.StaticObjectFactories;
+using Zilon.Core.PersonGeneration;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
@@ -32,13 +33,21 @@ namespace Zilon.Core.MapGenerators
                                                       nameof(staticObjectsGeneratorRandomSource));
         }
 
+        public IMonsterIdentifierGenerator MonsterIdentifierGenerator { get; set; }
+
         private IStaticObject CreateStaticObject(ISector sector, HexNode node, IResourceDepositData resourceDepositData)
         {
             var staticObjectPurpose = RollPurpose(resourceDepositData);
 
             var factory = _staticObjectfactoryCollector.SelectFactoryByStaticObjectPurpose(staticObjectPurpose);
 
-            var staticObject = factory.Create(sector, node, default);
+            var id = default(int);
+            if (MonsterIdentifierGenerator != null)
+            {
+                id = MonsterIdentifierGenerator.GetNewId();
+            }
+
+            var staticObject = factory.Create(sector, node, id);
 
             return staticObject;
         }

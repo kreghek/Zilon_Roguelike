@@ -1,15 +1,19 @@
 ﻿using Zilon.Core.Client;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Commands
 {
-    public class NextTurnCommand : ActorCommandBase
+    /// <summary>
+    /// Command to wait some time.
+    /// </summary>
+    public class IdleCommand : ActorCommandBase
     {
         private readonly IPlayer _player;
 
-        public NextTurnCommand(
+        public IdleCommand(
             IPlayer player,
             ISectorUiState playerState) : base(playerState)
         {
@@ -23,11 +27,15 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
+            var intention = new Intention<IdleTask>(actor => CreateIdleTask(actor));
+            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+        }
+
+        private IdleTask CreateIdleTask(IActor actor)
+        {
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
-            var intention =
-                new Intention<IdleTask>(actor => new IdleTask(actor, taskContext, GlobeMetrics.OneIterationLength));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            return new IdleTask(actor, taskContext, GlobeMetrics.OneIterationLength);
         }
     }
 }

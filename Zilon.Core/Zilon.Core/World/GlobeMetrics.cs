@@ -3,6 +3,11 @@
     public static class GlobeMetrics
     {
         /// <summary>
+        /// Duration of idle. Depends on <see cref="OneIterationLength" />.
+        /// </summary>
+        public static int IdleDuration => OneIterationLength / 3;
+
+        /// <summary>
         /// Count of globe update to execute actor tasks to next iteration.
         /// Iteration of the globe is:
         /// - Survival updates.

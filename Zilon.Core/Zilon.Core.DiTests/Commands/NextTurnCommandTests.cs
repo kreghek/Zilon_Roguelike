@@ -26,7 +26,7 @@ namespace Zilon.Core.Tests.Commands
         public void CanExecuteTest()
         {
             // ARRANGE
-            var command = ServiceProvider.GetRequiredService<NextTurnCommand>();
+            var command = ServiceProvider.GetRequiredService<IdleCommand>();
 
             // ACT
             var canExecute = command.CanExecute();
@@ -42,7 +42,7 @@ namespace Zilon.Core.Tests.Commands
         public void ExecuteTest()
         {
             // ARRANGE
-            var command = ServiceProvider.GetRequiredService<NextTurnCommand>();
+            var command = ServiceProvider.GetRequiredService<IdleCommand>();
             var humanTaskSourceMock =
                 ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
@@ -60,7 +60,7 @@ namespace Zilon.Core.Tests.Commands
             var decisionSource = decisionSourceMock.Object;
 
             Container.AddSingleton(factory => decisionSource);
-            Container.AddSingleton<NextTurnCommand>();
+            Container.AddSingleton<IdleCommand>();
         }
     }
 }

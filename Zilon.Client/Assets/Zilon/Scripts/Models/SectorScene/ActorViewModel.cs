@@ -27,6 +27,8 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
 
     private TaskScheduler _taskScheduler;
 
+    private object _lockObj;
+
     [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
 
     [NotNull] [Inject] private readonly IPlayer _player;
@@ -42,6 +44,7 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
     public ActorViewModel()
     {
         _effectList = new List<HitSfx>();
+        _lockObj = new object();
     }
 
     public event EventHandler Selected;
@@ -102,10 +105,13 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
         {
             _moveCounter = null;
 
-            if (_moveCommandBlocker != null)
+            lock (_lockObj)
             {
-                _moveCommandBlocker.Release();
-                _moveCommandBlocker = null;
+                if (_moveCommandBlocker != null)
+                {
+                    _moveCommandBlocker.Release();
+                    _moveCommandBlocker = null;
+                }
             }
         }
     }
@@ -169,8 +175,14 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
 
             if (GraphicRoot.gameObject.activeSelf)
             {
-                _moveCommandBlocker = new MoveCommandBlocker();
-                _commandBlockerService.AddBlocker(_moveCommandBlocker);
+                lock (_lockObj)
+                {
+                    if (_moveCommandBlocker is null)
+                    {
+                        _moveCommandBlocker = new MoveCommandBlocker();
+                        _commandBlockerService.AddBlocker(_moveCommandBlocker);
+                    }
+                }
             }
             GraphicRoot.ProcessMove(_targetPosition);
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
