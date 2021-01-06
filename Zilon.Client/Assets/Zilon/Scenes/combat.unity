@@ -2447,7 +2447,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 227365886}
         m_TargetAssemblyTypeName: SectorUiHandler, Assembly-CSharp
-        m_MethodName: SwitchAutoplay
+        m_MethodName: SwitchAutoplay_Handler
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
