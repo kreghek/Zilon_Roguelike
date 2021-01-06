@@ -330,6 +330,7 @@ namespace Zilon.Core.Specs.Steps
             var humatTaskSource = Context.ServiceProvider
                 .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
+            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
 
             var counter = timeUnitCount;
 
@@ -342,7 +343,8 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
+                        if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false &&
+                            PlayerPersonIsNotInTransitionPool(globe, player.MainPerson))
                         {
                             WhenЯВыполняюПростой();
                         }
@@ -369,6 +371,29 @@ namespace Zilon.Core.Specs.Steps
                     counter--;
                 }
             }
+        }
+
+        private static bool PlayerPersonIsNotInTransitionPool(IGlobe globe, IPerson person)
+        {
+            var globeNodeWithPerson = GetSectorNode(globe, person);
+            var isPlayerPersonInGlobe = globeNodeWithPerson != null;
+            return isPlayerPersonInGlobe;
+        }
+
+        private static ISectorNode GetSectorNode(IGlobe globe, IPerson person)
+        {
+            var sectorNode = globe.SectorNodes.SingleOrDefault(node => IsActorInSector(node, person));
+            if (sectorNode is null)
+            {
+                return null;
+            }
+
+            return sectorNode;
+        }
+
+        private static bool IsActorInSector(ISectorNode node, IPerson mainPerson)
+        {
+            return node.Sector.ActorManager.Items.Any(x => x.Person == mainPerson);
         }
 
         [UsedImplicitly]
