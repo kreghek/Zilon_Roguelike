@@ -407,7 +407,6 @@ public class SectorVM : MonoBehaviour
 
     private async void Monster_Dead(object sender, EventArgs e)
     {
-
         await Task.Factory.StartNew(() =>
         {
             // Используем ReferenceEquals, потому что нам нужно сравнить object и ISurvivalData по ссылке.
@@ -532,9 +531,9 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void Sector_HumanGroupExit(object sender, TransitionUsedEventArgs e)
+    private async void Sector_HumanGroupExit(object sender, TransitionUsedEventArgs e)
     {
-        Task.Factory.StartNew(() =>
+        await Task.Factory.StartNew(() =>
         {
             try
             {
@@ -544,7 +543,7 @@ public class SectorVM : MonoBehaviour
             {
                 Debug.LogError(exception);
             }
-        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Wait();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void HandleSectorTransitionInner()
@@ -818,7 +817,7 @@ public class SectorVM : MonoBehaviour
         _playerState.SelectedViewModel = nodeVm;
         _playerState.HoverViewModel = nodeVm;
 
-        if (nodeVm != null)
+        if (_moveCommand.CanExecute())
         {
             _clientCommandExecutor.Push(_moveCommand);
         }
