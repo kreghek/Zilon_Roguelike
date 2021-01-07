@@ -77,8 +77,6 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
-    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-
     [NotNull] [Inject] private readonly ISchemeService _schemeService;
 
     [NotNull] [Inject] private readonly IPropFactory _propFactory;
@@ -88,21 +86,11 @@ public class SectorVM : MonoBehaviour
     //TODO Вернуть, когда будет придуман туториал
     //[NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
 
-    [NotNull] [Inject] private readonly IScoreManager _scoreManager;
-
-    [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
-
     [Inject] private readonly IAnimationBlockerService _commandBlockerService;
-
-    [Inject] private readonly ILogicStateFactory _logicStateFactory;
 
     [Inject] private readonly ProgressStorageService _progressStorageService;
 
-    [Inject] private readonly IPersonFactory _humanPersonFactory;
-
     [Inject] private readonly UiSettingService _uiSettingService;
-
-    [Inject] private readonly IBiomeInitializer _biomeInitializer;
 
     [Inject]
     private readonly IPlayerEventLogService _playerEventLogService;
@@ -241,11 +229,6 @@ public class SectorVM : MonoBehaviour
         actor.Person.GetModule<ISurvivalModule>().Dead += HumanPersonSurvival_Dead;
         actor.UsedProp += Actor_UsedProp;
         actor.DepositMined += Actor_DepositMined;
-    }
-
-    private void GameLoop_Updated(object sender, EventArgs e)
-    {
-        _inventoryState.SelectedProp = null;
     }
 
     private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)

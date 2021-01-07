@@ -8,6 +8,9 @@ using JetBrains.Annotations;
 
 using UnityEngine;
 
+using Zenject;
+
+using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 
@@ -18,6 +21,10 @@ class GameLoopUpdater
 
     [NotNull] 
     private readonly IAnimationBlockerService _commandBlockerService;
+
+    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
+
+    [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
     private CancellationTokenSource _cancellationTokenSource;
 
@@ -61,13 +68,21 @@ class GameLoopUpdater
             {
                 await _player.Globe.UpdateAsync();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Debug.LogError(exception);
                 return;
             }
 
+            ClearupActionUiState();
+
             await _commandBlockerService.WaitBlockersAsync();
         }
+    }
+
+    private void ClearupActionUiState()
+    {
+        _inventoryState.SelectedProp = null;
+        _playerState.SelectedViewModel = null;
     }
 }
