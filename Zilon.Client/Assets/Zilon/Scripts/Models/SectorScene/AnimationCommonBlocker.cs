@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Services;
 
@@ -16,6 +17,16 @@ namespace Assets.Zilon.Scripts.Models.SectorScene
         private void DoRelease()
         {
             Released?.Invoke(this, new EventArgs());
+        }
+    }
+
+    public sealed class TimeLimitedAnimationBlocker : AnimationCommonBlocker
+    {
+        public TimeLimitedAnimationBlocker()
+        {
+            Task.Delay(5000).ContinueWith(task => {
+                Release();
+            });
         }
     }
 }

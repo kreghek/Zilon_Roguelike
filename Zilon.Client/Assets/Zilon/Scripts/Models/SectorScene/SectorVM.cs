@@ -336,7 +336,9 @@ public class SectorVM : MonoBehaviour
             var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
             var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
 
-            var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
+            var actorGraphicObj = _container.InstantiatePrefab(MonoGraphicPrefab, actorViewModel.transform);
+            var actorGraphic = actorGraphicObj.GetComponent<ActorGraphicBase>();
+
             actorViewModel.SetGraphicRoot(actorGraphic);
             actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
@@ -373,7 +375,10 @@ public class SectorVM : MonoBehaviour
             var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
             var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
             actorViewModel.PlayerState = _playerState;
-            var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
+
+            var actorGraphicObj = _container.InstantiatePrefab(HumanoidGraphicPrefab, actorViewModel.transform);
+            var actorGraphic = actorGraphicObj.GetComponent<ActorGraphicBase>();
+
             actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
             actorViewModel.SetGraphicRoot(actorGraphic);
 
@@ -776,7 +781,7 @@ public class SectorVM : MonoBehaviour
         {
             sfx.EffectSpriteRenderer.sprite = sfx.ShootSprite;
 
-            // Создаём снараяд
+            // Создаём снаряд
             CreateBullet(actor, targetNode);
         }
     }

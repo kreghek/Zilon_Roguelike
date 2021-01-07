@@ -1,17 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Assets.Zilon.Scripts.Services
 {
     class AnimationBlockerService : IAnimationBlockerService
     {
-        private readonly HashSet<ICommandBlocker> _commandBlockers;
+        private readonly ConcurrentDictionary<ICommandBlocker, byte> _commandBlockers;
 
         private TaskCompletionSource<bool> tcs;
 
+        private object _lockObject;
+
         public AnimationBlockerService()
         {
-            _commandBlockers = new HashSet<ICommandBlocker>();
+            _lockObject = new object();
+            _commandBlockers = new ConcurrentDictionary<ICommandBlocker, byte>();
         }
 
         /// <inheritdoc/>
@@ -20,46 +25,58 @@ namespace Assets.Zilon.Scripts.Services
         /// <inheritdoc/>
         public void AddBlocker(ICommandBlocker commandBlocker)
         {
-            commandBlocker.Released += CommandBlocker_Release;
-            _commandBlockers.Add(commandBlocker);
-            tcs = new TaskCompletionSource<bool>();
+            lock (_lockObject)
+            {
+                commandBlocker.Released += CommandBlocker_Release;
+                _commandBlockers.TryAdd(commandBlocker, 0);
+                tcs = new TaskCompletionSource<bool>();
+            }
         }
 
         /// <inheritdoc/>
         public void DropBlockers()
         {
-            foreach (var commandBlocker in _commandBlockers)
+            lock (_lockObject)
             {
-                commandBlocker.Released -= CommandBlocker_Release;
-            }
+                foreach (var commandBlocker in _commandBlockers.Keys.ToArray())
+                {
+                    commandBlocker.Released -= CommandBlocker_Release;
+                }
 
-            _commandBlockers.Clear();
+                _commandBlockers.Clear();
+            }
         }
 
         /// <inheritdoc/>
         public Task WaitBlockersAsync()
         {
-            if (tcs is null)
+            lock (_lockObject)
             {
-                return Task.CompletedTask;
-            }
-            else
-            {
-                return tcs.Task;
+                if (tcs is null)
+                {
+                    return Task.CompletedTask;
+                }
+                else
+                {
+                    return tcs.Task;
+                }
             }
         }
 
         private void CommandBlocker_Release(object sender, System.EventArgs e)
         {
-            var blocker = (ICommandBlocker)sender;
-            blocker.Released -= CommandBlocker_Release;
-            _commandBlockers.Remove(blocker);
-
-            if (!HasBlockers)
+            lock (_lockObject)
             {
-                if (tcs != null)
+                var blocker = (ICommandBlocker)sender;
+                blocker.Released -= CommandBlocker_Release;
+                _commandBlockers.TryRemove(blocker, out var _);
+
+                if (!HasBlockers)
                 {
-                    tcs.SetResult(true);
+                    if (tcs != null)
+                    {
+                        tcs.SetResult(true);
+                    }
                 }
             }
         }

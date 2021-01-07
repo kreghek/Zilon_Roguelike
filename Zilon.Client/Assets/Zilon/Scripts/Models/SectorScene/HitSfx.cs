@@ -14,7 +14,7 @@ public class HitSfx : MonoBehaviour
     private const float _fadeSpeed = 2;
 
     private float _lifetimeCounter;
-    private AnimationCommonBlocker _animationBlocker;
+    private ICommandBlocker _animationBlocker;
 
     [NotNull] public SpriteRenderer EffectSpriteRenderer;
 
@@ -32,7 +32,7 @@ public class HitSfx : MonoBehaviour
 
     public void Start()
     {
-        _animationBlocker = new AnimationCommonBlocker();
+        _animationBlocker = new TimeLimitedAnimationBlocker();
         _animationBlockerService.AddBlocker(_animationBlocker);
     }
 
@@ -44,8 +44,8 @@ public class HitSfx : MonoBehaviour
 
         if (_lifetimeCounter <= 0)
         {
-            HitSfxes.Remove(this);
             _animationBlocker.Release();
+            HitSfxes.Remove(this);
             Destroy(gameObject);
         }
     }

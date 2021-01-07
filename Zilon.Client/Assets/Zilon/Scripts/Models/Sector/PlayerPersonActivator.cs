@@ -67,7 +67,9 @@ public class PlayerPersonActivator : MonoBehaviour
         actorViewModelObj.name = "PlayerActor";
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
 
-        var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
+        var actorGraphicObj = _container.InstantiatePrefab(HumanoidGraphicPrefab, actorViewModel.transform);
+        var actorGraphic = actorGraphicObj.GetComponent<ActorGraphicBase>();
+
         actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
         actorViewModel.SetGraphicRoot(actorGraphic);
 
