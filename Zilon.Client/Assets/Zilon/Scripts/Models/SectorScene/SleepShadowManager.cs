@@ -11,12 +11,23 @@ public class SleepShadowManager : MonoBehaviour
 
     public SleepShadow SleepShadow;
 
-    public void StartShadowAnimation()
+    public SceneLoadShadow SceneLoadShadow;
+
+    public void StartSleepShadowAnimation()
     {
         var sleepBlocker = new AnimationCommonBlocker();
         _commandBlockerService.AddBlocker(sleepBlocker);
 
         var sleepShadow = Instantiate(SleepShadow, transform);
+        sleepShadow.Init(sleepBlocker);
+    }
+
+    public void StartSceneLoadShadowAnimation()
+    {
+        var sleepBlocker = new AnimationCommonBlocker();
+        _commandBlockerService.AddBlocker(sleepBlocker);
+
+        var sleepShadow = Instantiate(SceneLoadShadow, transform);
         sleepShadow.Init(sleepBlocker);
     }
 }

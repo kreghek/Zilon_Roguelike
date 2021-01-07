@@ -308,6 +308,7 @@ Transform:
   - {fileID: 6028569350186225617}
   - {fileID: 1142505917}
   - {fileID: 2075098211}
+  - {fileID: 771209451}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -840,6 +841,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SleepShadow: {fileID: 532727881402498302, guid: b4eb0821e0b13ac4db6ab7a4b6f48e9c,
+    type: 3}
+  SceneLoadShadow: {fileID: 8653188007761605879, guid: c1a84a5390fc5954abf2b32cdf2843e2,
     type: 3}
 --- !u!1 &269743640
 GameObject:
@@ -2013,6 +2016,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 726220368}
   m_CullTransparentMesh: 0
+--- !u!1 &771209450
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 771209451}
+  - component: {fileID: 771209452}
+  m_Layer: 0
+  m_Name: SceneInitiaizer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &771209451
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771209450}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 160909241}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &771209452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771209450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33a61151de1937a4abadf7d7ae0e1364, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SleepShadowManager: {fileID: 261788445}
 --- !u!1 &787514920
 GameObject:
   m_ObjectHideFlags: 0

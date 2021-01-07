@@ -674,7 +674,7 @@ public class SectorVM : MonoBehaviour
                 return;
             }
 
-            SleepShadowManager.StartShadowAnimation();
+            SleepShadowManager.StartSleepShadowAnimation();
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
