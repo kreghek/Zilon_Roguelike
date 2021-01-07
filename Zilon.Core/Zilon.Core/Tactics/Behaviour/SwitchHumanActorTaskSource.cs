@@ -13,6 +13,8 @@ namespace Zilon.Core.Tactics.Behaviour
     public interface IActorTaskControlSwitcher
     {
         void Switch(ActorTaskSourceControl taskSourceControl);
+
+        ActorTaskSourceControl CurrentControl { get; }
     }
 
     public class SwitchHumanActorTaskSource<TContext> : IActorTaskControlSwitcher, IHumanActorTaskSource<TContext>
@@ -21,7 +23,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly IActorTaskSource<TContext> _botActorTaskContext;
         private readonly IHumanActorTaskSource<TContext> _humanActorTaskSource;
 
-        private ActorTaskSourceControl _taskSourceControl;
+        public ActorTaskSourceControl CurrentControl { get; private set; }
 
         public SwitchHumanActorTaskSource(IHumanActorTaskSource<TContext> humanActorTaskSource,
             IActorTaskSource<TContext> botActorTaskContext)
@@ -30,7 +32,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 humanActorTaskSource ?? throw new ArgumentNullException(nameof(humanActorTaskSource));
             _botActorTaskContext = botActorTaskContext ?? throw new ArgumentNullException(nameof(botActorTaskContext));
 
-            _taskSourceControl = ActorTaskSourceControl.Human;
+            CurrentControl = ActorTaskSourceControl.Human;
         }
 
         public void Switch(ActorTaskSourceControl taskSourceControl)
@@ -45,7 +47,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 case ActorTaskSourceControl.Bot:
                     // If bot switched need to drop intention of player.
                     // Because intention stops game loop for user command.
-                    _taskSourceControl = taskSourceControl;
+                    CurrentControl = taskSourceControl;
                     _humanActorTaskSource.DropIntentionWaiting();
                     break;
             }
@@ -53,7 +55,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void CancelTask(IActorTask cancelledActorTask)
         {
-            switch (_taskSourceControl)
+            switch (CurrentControl)
             {
                 case ActorTaskSourceControl.Human:
                     _humanActorTaskSource.CancelTask(cancelledActorTask);
@@ -67,13 +69,13 @@ namespace Zilon.Core.Tactics.Behaviour
                     //TODO Add common TaskSourceException
                     throw new InvalidOperationException("Task source is undefined.");
                 default:
-                    throw new InvalidOperationException($"Task source {_taskSourceControl} is unknown.");
+                    throw new InvalidOperationException($"Task source {CurrentControl} is unknown.");
             }
         }
 
         public bool CanIntent()
         {
-            switch (_taskSourceControl)
+            switch (CurrentControl)
             {
                 case ActorTaskSourceControl.Human:
                     return _humanActorTaskSource.CanIntent();
@@ -85,13 +87,13 @@ namespace Zilon.Core.Tactics.Behaviour
                     //TODO Add common TaskSourceException
                     throw new InvalidOperationException("Task source is undefined.");
                 default:
-                    throw new InvalidOperationException($"Task source {_taskSourceControl} is unknown.");
+                    throw new InvalidOperationException($"Task source {CurrentControl} is unknown.");
             }
         }
 
         public void DropIntentionWaiting()
         {
-            switch (_taskSourceControl)
+            switch (CurrentControl)
             {
                 case ActorTaskSourceControl.Human:
                     _humanActorTaskSource.DropIntentionWaiting();
@@ -108,7 +110,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public async Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
         {
-            switch (_taskSourceControl)
+            switch (CurrentControl)
             {
                 case ActorTaskSourceControl.Human:
                     return await _humanActorTaskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
@@ -121,13 +123,13 @@ namespace Zilon.Core.Tactics.Behaviour
                     //TODO Add common TaskSourceException
                     throw new InvalidOperationException("Task source is undefined.");
                 default:
-                    throw new InvalidOperationException($"Task source {_taskSourceControl} is unknown.");
+                    throw new InvalidOperationException($"Task source {CurrentControl} is unknown.");
             }
         }
 
         public void Intent(IIntention intention, IActor activeActor)
         {
-            if (_taskSourceControl == ActorTaskSourceControl.Human)
+            if (CurrentControl == ActorTaskSourceControl.Human)
             {
                 _humanActorTaskSource.Intent(intention, activeActor);
             }
@@ -139,7 +141,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public async Task IntentAsync(IIntention intention, IActor activeActor)
         {
-            if (_taskSourceControl == ActorTaskSourceControl.Human)
+            if (CurrentControl == ActorTaskSourceControl.Human)
             {
                 await _humanActorTaskSource.IntentAsync(intention, activeActor);
             }
@@ -151,7 +153,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void ProcessTaskComplete(IActorTask actorTask)
         {
-            switch (_taskSourceControl)
+            switch (CurrentControl)
             {
                 case ActorTaskSourceControl.Human:
                     _humanActorTaskSource.ProcessTaskComplete(actorTask);
@@ -165,13 +167,13 @@ namespace Zilon.Core.Tactics.Behaviour
                     //TODO Add common TaskSourceException
                     throw new InvalidOperationException("Task source is undefined.");
                 default:
-                    throw new InvalidOperationException($"Task source {_taskSourceControl} is unknown.");
+                    throw new InvalidOperationException($"Task source {CurrentControl} is unknown.");
             }
         }
 
         public void ProcessTaskExecuted(IActorTask actorTask)
         {
-            switch (_taskSourceControl)
+            switch (CurrentControl)
             {
                 case ActorTaskSourceControl.Human:
                     _humanActorTaskSource.ProcessTaskExecuted(actorTask);
@@ -185,7 +187,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     //TODO Add common TaskSourceException
                     throw new InvalidOperationException("Task source is undefined.");
                 default:
-                    throw new InvalidOperationException($"Task source {_taskSourceControl} is unknown.");
+                    throw new InvalidOperationException($"Task source {CurrentControl} is unknown.");
             }
         }
     }

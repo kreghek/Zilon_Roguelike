@@ -194,7 +194,23 @@ public class SectorUiHandler : MonoBehaviour
 
     public void SwitchAutoplay_Handler()
     {
-        _actorTaskControlSwitcher.Switch(ActorTaskSourceControl.Bot);
+        ActorTaskSourceControl targetControl;
+        switch (_actorTaskControlSwitcher.CurrentControl)
+        {
+            case ActorTaskSourceControl.Human:
+                targetControl = ActorTaskSourceControl.Bot;
+                break;
+
+            case ActorTaskSourceControl.Bot:
+                targetControl = ActorTaskSourceControl.Human;
+                break;
+
+            default:
+                Debug.LogError($"Unknown control value {_actorTaskControlSwitcher.CurrentControl}.");
+                targetControl = ActorTaskSourceControl.Human;
+                break;
+        }
+        _actorTaskControlSwitcher.Switch(targetControl);
     }
 
     public void ExitGame_Handler()
