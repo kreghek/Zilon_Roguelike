@@ -12,9 +12,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
     public interface IActorTaskControlSwitcher
     {
-        void Switch(ActorTaskSourceControl taskSourceControl);
-
         ActorTaskSourceControl CurrentControl { get; }
+        void Switch(ActorTaskSourceControl taskSourceControl);
     }
 
     public class SwitchHumanActorTaskSource<TContext> : IActorTaskControlSwitcher, IHumanActorTaskSource<TContext>
@@ -22,8 +21,6 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly IActorTaskSource<TContext> _botActorTaskContext;
         private readonly IHumanActorTaskSource<TContext> _humanActorTaskSource;
-
-        public ActorTaskSourceControl CurrentControl { get; private set; }
 
         public SwitchHumanActorTaskSource(IHumanActorTaskSource<TContext> humanActorTaskSource,
             IActorTaskSource<TContext> botActorTaskContext)
@@ -34,6 +31,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
             CurrentControl = ActorTaskSourceControl.Human;
         }
+
+        public ActorTaskSourceControl CurrentControl { get; private set; }
 
         public void Switch(ActorTaskSourceControl taskSourceControl)
         {
