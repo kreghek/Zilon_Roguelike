@@ -115,6 +115,10 @@ public class SectorVM : MonoBehaviour
     [Inject]
     private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
 
+    [Inject]
+    [NotNull]
+    private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
+
     public List<ActorViewModel> ActorViewModels { get; }
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
@@ -686,6 +690,9 @@ public class SectorVM : MonoBehaviour
             var activeActor = _playerState.ActiveActor.Actor;
             var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
             survivalModule.Dead -= HumanPersonSurvival_Dead;
+
+            // Disable bot on person death
+            _actorTaskControlSwitcher.Switch(ActorTaskSourceControl.Human);
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
