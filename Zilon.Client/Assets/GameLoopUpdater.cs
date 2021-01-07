@@ -17,13 +17,13 @@ class GameLoopUpdater
     private readonly IPlayer _player;
 
     [NotNull] 
-    private readonly ICommandBlockerService _commandBlockerService;
+    private readonly IAnimationBlockerService _commandBlockerService;
 
     private CancellationTokenSource _cancellationTokenSource;
 
     public bool IsStarted { get; private set; }
 
-    public GameLoopUpdater(IPlayer player, ICommandBlockerService commandBlockerService)
+    public GameLoopUpdater(IPlayer player, IAnimationBlockerService commandBlockerService)
     {
         _commandBlockerService = commandBlockerService ?? throw new ArgumentNullException(nameof(commandBlockerService));
         _player = player ?? throw new ArgumentNullException(nameof(player));

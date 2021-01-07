@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 
 namespace Assets.Zilon.Scripts.Services
 {
-    class CommandBlockerService : ICommandBlockerService
+    class AnimationBlockerService : IAnimationBlockerService
     {
         private readonly HashSet<ICommandBlocker> _commandBlockers;
 
         private TaskCompletionSource<bool> tcs;
 
-        public CommandBlockerService()
+        public AnimationBlockerService()
         {
             _commandBlockers = new HashSet<ICommandBlocker>();
         }

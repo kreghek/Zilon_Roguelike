@@ -92,7 +92,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
 
-    [Inject] private readonly ICommandBlockerService _commandBlockerService;
+    [Inject] private readonly IAnimationBlockerService _commandBlockerService;
 
     [Inject] private readonly ILogicStateFactory _logicStateFactory;
 
@@ -767,7 +767,8 @@ public class SectorVM : MonoBehaviour
 
         actorViewModel.GraphicRoot.ProcessHit(canBeHitViewModel.Position);
 
-        var sfx = Instantiate(HitSfx, transform);
+        var sfxObj = _container.InstantiatePrefab(HitSfx, transform);
+        var sfx = sfxObj.GetComponent<HitSfx>();
         canBeHitViewModel.AddHitEffect(sfx);
 
         // Проверяем, стрелковое оружие или удар ближнего боя

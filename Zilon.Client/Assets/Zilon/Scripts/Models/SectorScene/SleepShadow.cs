@@ -9,11 +9,11 @@ public class SleepShadow : MonoBehaviour
 
     private float _counter;
 
-    public SleepBlocker SleepBlocker { get; private set; }
+    public AnimationCommonBlocker SleepBlocker { get; private set; }
 
     public Image ShadowImage;
 
-    public void Init(SleepBlocker sleepBlocker)
+    public void Init(AnimationCommonBlocker sleepBlocker)
     {
         if (sleepBlocker is null)
         {

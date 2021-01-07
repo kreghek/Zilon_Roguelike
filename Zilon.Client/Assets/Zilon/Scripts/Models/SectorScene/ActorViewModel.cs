@@ -29,7 +29,7 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
 
     private object _lockObj;
 
-    [NotNull] [Inject] private readonly ICommandBlockerService _commandBlockerService;
+    [NotNull] [Inject] private readonly IAnimationBlockerService _commandBlockerService;
 
     [NotNull] [Inject] private readonly IPlayer _player;
 
@@ -39,7 +39,7 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
 
     private Vector3 _targetPosition;
     private float? _moveCounter;
-    private MoveCommandBlocker _moveCommandBlocker;
+    private AnimationCommonBlocker _moveCommandBlocker;
 
     public ActorViewModel()
     {
@@ -179,7 +179,7 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
                 {
                     if (_moveCommandBlocker is null)
                     {
-                        _moveCommandBlocker = new MoveCommandBlocker();
+                        _moveCommandBlocker = new AnimationCommonBlocker();
                         _commandBlockerService.AddBlocker(_moveCommandBlocker);
                     }
                 }

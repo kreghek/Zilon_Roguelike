@@ -5,7 +5,7 @@ namespace Assets.Zilon.Scripts.Services
     /// <summary>
     /// Service to work with animation blocker. Blockers required to corrently animate actions of visible actors.
     /// </summary>
-    interface ICommandBlockerService
+    interface IAnimationBlockerService
     {
         /// <summary>
         /// Add animation blocker.

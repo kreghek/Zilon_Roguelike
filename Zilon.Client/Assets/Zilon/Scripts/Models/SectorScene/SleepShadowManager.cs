@@ -7,13 +7,13 @@ using Zenject;
 
 public class SleepShadowManager : MonoBehaviour
 {
-    [Inject] private readonly ICommandBlockerService _commandBlockerService;
+    [Inject] private readonly IAnimationBlockerService _commandBlockerService;
 
     public SleepShadow SleepShadow;
 
     public void StartShadowAnimation()
     {
-        var sleepBlocker = new SleepBlocker();
+        var sleepBlocker = new AnimationCommonBlocker();
         _commandBlockerService.AddBlocker(sleepBlocker);
 
         var sleepShadow = Instantiate(SleepShadow, transform);
