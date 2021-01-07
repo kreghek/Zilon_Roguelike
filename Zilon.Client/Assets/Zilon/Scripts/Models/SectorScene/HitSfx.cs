@@ -12,7 +12,7 @@ using Zenject;
 public class HitSfx : MonoBehaviour
 {
     private const float _fadeSpeed = 2;
-
+    private const int SFX_DURATION_SECONDS = 1;
     private float _lifetimeCounter;
     private ICommandBlocker _animationBlocker;
 
@@ -27,11 +27,8 @@ public class HitSfx : MonoBehaviour
 
     public HitSfx()
     {
-        _lifetimeCounter = 1;
-    }
+        _lifetimeCounter = SFX_DURATION_SECONDS;
 
-    public void Start()
-    {
         _animationBlocker = new TimeLimitedAnimationBlocker();
         _animationBlockerService.AddBlocker(_animationBlocker);
     }
@@ -44,9 +41,13 @@ public class HitSfx : MonoBehaviour
 
         if (_lifetimeCounter <= 0)
         {
-            _animationBlocker.Release();
             HitSfxes.Remove(this);
             Destroy(gameObject);
         }
+    }
+
+    public void OnDestroy()
+    {
+        _animationBlocker.Release();
     }
 }
