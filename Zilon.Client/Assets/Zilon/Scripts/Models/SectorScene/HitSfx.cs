@@ -14,7 +14,7 @@ public class HitSfx : MonoBehaviour
     private const float _fadeSpeed = 2;
 
     private float _lifetimeCounter;
-    private AnimationCommonBlocker _animationBlocker; 
+    private AnimationCommonBlocker _animationBlocker;
 
     [NotNull] public SpriteRenderer EffectSpriteRenderer;
 
