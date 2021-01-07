@@ -24,7 +24,8 @@ namespace Assets.Zilon.Scripts.Models.SectorScene
     {
         public TimeLimitedAnimationBlocker()
         {
-            Task.Delay(5000).ContinueWith(task => {
+            Task.Delay(5000).ContinueWith(task =>
+            {
                 Release();
             });
         }
