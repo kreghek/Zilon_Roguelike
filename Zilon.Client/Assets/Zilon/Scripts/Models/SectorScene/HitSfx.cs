@@ -25,7 +25,7 @@ public class HitSfx : MonoBehaviour
 
     public IList<HitSfx> HitSfxes { get; set; }
 
-    public HitSfx()
+    public void Start()
     {
         _lifetimeCounter = SFX_DURATION_SECONDS;
 

@@ -93,9 +93,6 @@ public class SectorVM : MonoBehaviour
     [Inject] private readonly UiSettingService _uiSettingService;
 
     [Inject]
-    private readonly IPlayerEventLogService _playerEventLogService;
-
-    [Inject]
     private readonly StaticObjectViewModelSelector _staticObjectViewModelSelector;
 
     [NotNull]
