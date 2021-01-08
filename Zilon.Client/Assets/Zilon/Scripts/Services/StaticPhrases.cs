@@ -95,6 +95,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "tooltip-wait", new MultilangPhrase{ En = "Wait one turn [E]", Ru = "Подождать один ход [E]" } },
                 { "tooltip-person", new MultilangPhrase{ En = "Person window [P]", Ru = "Окно персонажа [P]" } },
                 { "tooltip-transition", new MultilangPhrase{ En = "Go to the next level [T]", Ru = "Перейти на следующий уровень [T]" } },
+                { "tooltip-autoplay", new MultilangPhrase{ En = "Switch autoplay mode [S]", Ru = "Переключить уровень автоигры [S]" } },
                 { "tooltip-open-loot", new MultilangPhrase{ En = "Open loot [O]", Ru = "Открыть лут [O]" } },
                 { "tooltip-exit-title", new MultilangPhrase{ En = "Quit game and go to Main menu", Ru = "Покинуть игру и перейти в главное меню" } },
                 { "tooltip-exit", new MultilangPhrase{ En = "Quit game", Ru = "Покинуть игру" } },
