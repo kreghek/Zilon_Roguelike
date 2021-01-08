@@ -2427,7 +2427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0f6c6862cde4946a152e4b59451b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: tooltip-transition
+  text: tooltip-autoplay
   TextIsKey: 1
 --- !u!114 &818088601
 MonoBehaviour:
