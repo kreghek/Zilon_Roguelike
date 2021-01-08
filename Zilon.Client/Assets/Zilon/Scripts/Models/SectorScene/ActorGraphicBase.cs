@@ -41,6 +41,7 @@ public class ActorGraphicBase : MonoBehaviour
         _rootObject = rootObject;
         _isRootRotting = isRootRotting;
         PlayDeath();
+        FinishHitAnimation();
     }
 
     public virtual void ProcessMove(Vector3 targetPosition)

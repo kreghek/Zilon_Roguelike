@@ -82,7 +82,11 @@ class GameLoopUpdater
 
             ClearupActionUiState();
 
-            await _commandBlockerService.WaitBlockersAsync();
+            var animationBlockerTask = _commandBlockerService.WaitBlockersAsync();
+            var fuseDelayTask = Task.Delay(10_000);
+
+            await Task.WhenAny(animationBlockerTask, fuseDelayTask);
+            _commandBlockerService.DropBlockers();
         }
     }
 
