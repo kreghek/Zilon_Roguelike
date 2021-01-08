@@ -27,7 +27,7 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
 
     private TaskScheduler _taskScheduler;
 
-    private object _lockObj;
+    private readonly object _lockObj;
 
     [NotNull] [Inject] private readonly IAnimationBlockerService _commandBlockerService;
 
@@ -39,7 +39,7 @@ public class ActorViewModel : MonoBehaviour, ICanBeHitSectorObject, IActorViewMo
 
     private Vector3 _targetPosition;
     private float? _moveCounter;
-    private AnimationCommonBlocker _moveCommandBlocker;
+    private ICommandBlocker _moveCommandBlocker;
 
     public ActorViewModel()
     {
