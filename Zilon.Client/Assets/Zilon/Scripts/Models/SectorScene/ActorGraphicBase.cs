@@ -26,11 +26,11 @@ public class ActorGraphicBase : MonoBehaviour
 
     public virtual void ProcessHit(Vector3 targetPosition)
     {
-        //if (_hitAnimationBlocker is null)
-        //{
-        //    _hitAnimationBlocker = new TimeLimitedAnimationBlocker();
-        //    _animationBlockerService.AddBlocker(_hitAnimationBlocker);
-        //}
+        if (_hitAnimationBlocker is null)
+        {
+            _hitAnimationBlocker = new TimeLimitedAnimationBlocker();
+            _animationBlockerService.AddBlocker(_hitAnimationBlocker);
+        }
 
         PlayHit();
         RotateTo(targetPosition);
@@ -100,10 +100,15 @@ public class ActorGraphicBase : MonoBehaviour
         Justification = "Called as animation event handler")]
     private void FinishHitAnimation()
     {
-        //if (_hitAnimationBlocker != null)
-        //{
-        //    _hitAnimationBlocker.Release();
-        //    _hitAnimationBlocker = null;
-        //}
+        if (_hitAnimationBlocker != null)
+        {
+            _hitAnimationBlocker.Release();
+            _hitAnimationBlocker = null;
+        }
+    }
+
+    public void OnDestroy()
+    {
+        FinishHitAnimation();
     }
 }

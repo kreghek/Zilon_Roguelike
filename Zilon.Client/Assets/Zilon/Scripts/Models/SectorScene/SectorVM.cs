@@ -540,9 +540,6 @@ public class SectorVM : MonoBehaviour
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;
 
-        // Отписываемся от событий в этом секторе
-        UnscribeSectorDependentEvents();
-
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
 
