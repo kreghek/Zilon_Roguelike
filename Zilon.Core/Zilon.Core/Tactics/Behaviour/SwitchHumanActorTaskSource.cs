@@ -114,26 +114,22 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public void Intent(IIntention intention, IActor activeActor)
         {
-            if (CurrentControl == ActorTaskSourceControl.Human)
-            {
-                _humanActorTaskSource.Intent(intention, activeActor);
-            }
-            else
+            if (CurrentControl != ActorTaskSourceControl.Human)
             {
                 throw new InvalidOperationException("Intension available only under human control.");
             }
+
+            _humanActorTaskSource.Intent(intention, activeActor);
         }
 
         public async Task IntentAsync(IIntention intention, IActor activeActor)
         {
-            if (CurrentControl == ActorTaskSourceControl.Human)
-            {
-                await _humanActorTaskSource.IntentAsync(intention, activeActor);
-            }
-            else
+            if (CurrentControl != ActorTaskSourceControl.Human)
             {
                 throw new InvalidOperationException("Intension available only under human control.");
             }
+
+            await _humanActorTaskSource.IntentAsync(intention, activeActor);
         }
 
         public void ProcessTaskComplete(IActorTask actorTask)
@@ -175,17 +171,5 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new ActorTaskSourceException($"Task source {CurrentControl} is unknown.");
             }
         }
-    }
-
-
-    [Serializable]
-    public class ActorTaskSourceException : Exception
-    {
-        public ActorTaskSourceException() { }
-        public ActorTaskSourceException(string message) : base(message) { }
-        public ActorTaskSourceException(string message, Exception inner) : base(message, inner) { }
-        protected ActorTaskSourceException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }
