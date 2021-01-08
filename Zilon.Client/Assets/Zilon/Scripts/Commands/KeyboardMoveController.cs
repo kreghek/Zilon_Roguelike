@@ -62,7 +62,7 @@ public class KeyboardMoveController : MonoBehaviour
     private readonly IPlayer _player;
 
     [Inject]
-    private readonly ICommandBlockerService _commandBlockerService;
+    private readonly IAnimationBlockerService _commandBlockerService;
 
     [NotNull]
     [Inject]

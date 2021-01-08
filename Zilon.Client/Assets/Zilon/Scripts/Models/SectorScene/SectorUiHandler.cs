@@ -15,6 +15,7 @@ using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 //TODO Сделать отдельные крипты для каждой кнопки, которые будут содежать обработчики.
 //Тогда этот объект станет не нужным.
@@ -28,6 +29,8 @@ public class SectorUiHandler : MonoBehaviour
     [Inject] private readonly ISectorUiState _playerState;
 
     [Inject] private readonly ICommandManager _clientCommandExecutor;
+
+    [Inject] private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
 
     [Inject(Id = "next-turn-command")] private readonly ICommand _nextTurnCommand;
 
@@ -187,6 +190,27 @@ public class SectorUiHandler : MonoBehaviour
         }
 
         _clientCommandExecutor.Push(_showPersonModalCommand);
+    }
+
+    public void SwitchAutoplay_Handler()
+    {
+        ActorTaskSourceControl targetControl;
+        switch (_actorTaskControlSwitcher.CurrentControl)
+        {
+            case ActorTaskSourceControl.Human:
+                targetControl = ActorTaskSourceControl.Bot;
+                break;
+
+            case ActorTaskSourceControl.Bot:
+                targetControl = ActorTaskSourceControl.Human;
+                break;
+
+            default:
+                Debug.LogError($"Unknown control value {_actorTaskControlSwitcher.CurrentControl}.");
+                targetControl = ActorTaskSourceControl.Human;
+                break;
+        }
+        _actorTaskControlSwitcher.Switch(targetControl);
     }
 
     public void ExitGame_Handler()

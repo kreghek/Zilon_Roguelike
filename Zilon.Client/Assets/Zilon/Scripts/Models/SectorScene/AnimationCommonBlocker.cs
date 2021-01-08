@@ -4,7 +4,7 @@ using Assets.Zilon.Scripts.Services;
 
 namespace Assets.Zilon.Scripts.Models.SectorScene
 {
-    public class SleepBlocker : ICommandBlocker
+    public class AnimationCommonBlocker : ICommandBlocker
     {
         public event EventHandler Released;
 

@@ -1,6 +1,11 @@
 ﻿using System;
 
+using Assets.Zilon.Scripts.Models.SectorScene;
+using Assets.Zilon.Scripts.Services;
+
 using UnityEngine;
+
+using Zenject;
 
 using Zilon.Core.Components;
 
@@ -8,6 +13,9 @@ public class ActorGraphicBase : MonoBehaviour
 {
     private GameObject _rootObject;
     private bool _isRootRotting;
+    private ICommandBlocker _hitAnimationBlocker;
+
+    [Inject] private readonly IAnimationBlockerService _animationBlockerService;
 
     public Animator Animator;
 
@@ -18,6 +26,12 @@ public class ActorGraphicBase : MonoBehaviour
 
     public virtual void ProcessHit(Vector3 targetPosition)
     {
+        if (_hitAnimationBlocker is null)
+        {
+            _hitAnimationBlocker = new TimeLimitedAnimationBlocker();
+            _animationBlockerService.AddBlocker(_hitAnimationBlocker);
+        }
+
         PlayHit();
         RotateTo(targetPosition);
     }
@@ -27,6 +41,7 @@ public class ActorGraphicBase : MonoBehaviour
         _rootObject = rootObject;
         _isRootRotting = isRootRotting;
         PlayDeath();
+        FinishHitAnimation();
     }
 
     public virtual void ProcessMove(Vector3 targetPosition)
@@ -52,7 +67,7 @@ public class ActorGraphicBase : MonoBehaviour
 
     private void PlayHit()
     {
-        Animator.Play("HumanoidAttack");
+        Animator.Play("HumanoidAttack", -1, 0);
     }
 
     private void PlayDeath()
@@ -73,13 +88,28 @@ public class ActorGraphicBase : MonoBehaviour
         }
     }
 
-#pragma warning disable IDE0051 // Remove unused private members
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
+            Justification = "Called as animation event handler")]
     private void StartRotting()
-#pragma warning restore IDE0051 // Remove unused private members
     {
-        // Вызывается, как событие анимации.
         var corpse = gameObject.AddComponent<Rotting>();
         corpse.RootObject = _rootObject;
         corpse.RootRotting = _isRootRotting;
+    }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
+        Justification = "Called as animation event handler")]
+    private void FinishHitAnimation()
+    {
+        if (_hitAnimationBlocker != null)
+        {
+            _hitAnimationBlocker.Release();
+            _hitAnimationBlocker = null;
+        }
+    }
+
+    public void OnDestroy()
+    {
+        FinishHitAnimation();
     }
 }

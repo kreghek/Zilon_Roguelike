@@ -9,11 +9,11 @@ public class SleepShadow : MonoBehaviour
 
     private float _counter;
 
-    public SleepBlocker SleepBlocker { get; private set; }
+    public AnimationCommonBlocker SleepBlocker { get; private set; }
 
     public Image ShadowImage;
 
-    public void Init(SleepBlocker sleepBlocker)
+    public void Init(AnimationCommonBlocker sleepBlocker)
     {
         if (sleepBlocker is null)
         {
@@ -23,18 +23,28 @@ public class SleepShadow : MonoBehaviour
         SleepBlocker = sleepBlocker;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (SleepBlocker is null)
+        {
+            return;
+        }
+
         _counter += Time.deltaTime;
 
         ShadowImage.color = new Color(0, 0, 0, Mathf.Sin(_counter / SLEEP_DURATION_SECONDS * 2 * Mathf.PI));
 
         if (_counter >= SLEEP_DURATION_SECONDS)
         {
-            SleepBlocker.Release();
-
             Destroy(gameObject);
+        }
+    }
+
+    public void OnDestroy()
+    {
+        if (SleepBlocker != null)
+        {
+            SleepBlocker.Release();
         }
     }
 }

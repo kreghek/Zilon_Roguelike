@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 
 using UnityEngine;
 
+using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 
@@ -17,15 +18,27 @@ class GameLoopUpdater
     private readonly IPlayer _player;
 
     [NotNull] 
-    private readonly ICommandBlockerService _commandBlockerService;
+    private readonly IAnimationBlockerService _commandBlockerService;
+
+    [NotNull]
+    private readonly IInventoryState _inventoryState;
+
+    [NotNull]
+    private readonly ISectorUiState _playerState;
 
     private CancellationTokenSource _cancellationTokenSource;
 
     public bool IsStarted { get; private set; }
 
-    public GameLoopUpdater(IPlayer player, ICommandBlockerService commandBlockerService)
+    public GameLoopUpdater(
+        IPlayer player,
+        IAnimationBlockerService commandBlockerService,
+        IInventoryState inventoryState,
+        ISectorUiState playerState)
     {
         _commandBlockerService = commandBlockerService ?? throw new ArgumentNullException(nameof(commandBlockerService));
+        _inventoryState = inventoryState ?? throw new ArgumentNullException(nameof(inventoryState));
+        _playerState = playerState ?? throw new ArgumentNullException(nameof(playerState));
         _player = player ?? throw new ArgumentNullException(nameof(player));
     }
 
@@ -36,7 +49,7 @@ class GameLoopUpdater
         var cancelToken = _cancellationTokenSource.Token;
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-        var updateTask = StartGameLoopUpdate(cancelToken);
+        var updateTask = StartGameLoopUpdateAsync(cancelToken);
 
         updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnFaulted);
         updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnCanceled);
@@ -51,7 +64,7 @@ class GameLoopUpdater
         _cancellationTokenSource.Cancel();
     }
 
-    private async Task StartGameLoopUpdate(CancellationToken cancelToken)
+    private async Task StartGameLoopUpdateAsync(CancellationToken cancelToken)
     {
         while (!_player.MainPerson.GetModule<ISurvivalModule>().IsDead)
         {
@@ -61,13 +74,25 @@ class GameLoopUpdater
             {
                 await _player.Globe.UpdateAsync();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Debug.LogError(exception);
                 return;
             }
 
-            await _commandBlockerService.WaitBlockersAsync();
+            ClearupActionUiState();
+
+            var animationBlockerTask = _commandBlockerService.WaitBlockersAsync();
+            var fuseDelayTask = Task.Delay(10_000);
+
+            await Task.WhenAny(animationBlockerTask, fuseDelayTask);
+            _commandBlockerService.DropBlockers();
         }
+    }
+
+    private void ClearupActionUiState()
+    {
+        _inventoryState.SelectedProp = null;
+        _playerState.SelectedViewModel = null;
     }
 }

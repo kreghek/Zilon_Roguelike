@@ -77,8 +77,6 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
-    [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-
     [NotNull] [Inject] private readonly ISchemeService _schemeService;
 
     [NotNull] [Inject] private readonly IPropFactory _propFactory;
@@ -88,24 +86,11 @@ public class SectorVM : MonoBehaviour
     //TODO Вернуть, когда будет придуман туториал
     //[NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
 
-    [NotNull] [Inject] private readonly IScoreManager _scoreManager;
-
-    [NotNull] [Inject] private readonly IPerkResolver _perkResolver;
-
-    [Inject] private readonly ICommandBlockerService _commandBlockerService;
-
-    [Inject] private readonly ILogicStateFactory _logicStateFactory;
+    [Inject] private readonly IAnimationBlockerService _commandBlockerService;
 
     [Inject] private readonly ProgressStorageService _progressStorageService;
 
-    [Inject] private readonly IPersonFactory _humanPersonFactory;
-
     [Inject] private readonly UiSettingService _uiSettingService;
-
-    [Inject] private readonly IBiomeInitializer _biomeInitializer;
-
-    [Inject]
-    private readonly IPlayerEventLogService _playerEventLogService;
 
     [Inject]
     private readonly StaticObjectViewModelSelector _staticObjectViewModelSelector;
@@ -129,6 +114,10 @@ public class SectorVM : MonoBehaviour
     [NotNull]
     [Inject]
     private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
+
+    [Inject]
+    [NotNull]
+    private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
 
     public List<ActorViewModel> ActorViewModels { get; }
 
@@ -243,11 +232,6 @@ public class SectorVM : MonoBehaviour
         actor.DepositMined += Actor_DepositMined;
     }
 
-    private void GameLoop_Updated(object sender, EventArgs e)
-    {
-        _inventoryState.SelectedProp = null;
-    }
-
     private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
     {
         foreach (var staticObject in e.Items)
@@ -336,7 +320,9 @@ public class SectorVM : MonoBehaviour
             var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
             var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
 
-            var actorGraphic = Instantiate(MonoGraphicPrefab, actorViewModel.transform);
+            var actorGraphicObj = _container.InstantiatePrefab(MonoGraphicPrefab, actorViewModel.transform);
+            var actorGraphic = actorGraphicObj.GetComponent<ActorGraphicBase>();
+
             actorViewModel.SetGraphicRoot(actorGraphic);
             actorGraphic.transform.position = new Vector3(0, /*0.2f*/0, -0.27f);
 
@@ -373,7 +359,10 @@ public class SectorVM : MonoBehaviour
             var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
             var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
             actorViewModel.PlayerState = _playerState;
-            var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
+
+            var actorGraphicObj = _container.InstantiatePrefab(HumanoidGraphicPrefab, actorViewModel.transform);
+            var actorGraphic = actorGraphicObj.GetComponent<ActorGraphicBase>();
+
             actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
             actorViewModel.SetGraphicRoot(actorGraphic);
 
@@ -551,9 +540,6 @@ public class SectorVM : MonoBehaviour
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;
 
-        // Отписываемся от событий в этом секторе
-        UnscribeSectorDependentEvents();
-
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
 
@@ -689,7 +675,7 @@ public class SectorVM : MonoBehaviour
                 return;
             }
 
-            SleepShadowManager.StartShadowAnimation();
+            SleepShadowManager.StartSleepShadowAnimation();
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
@@ -701,6 +687,9 @@ public class SectorVM : MonoBehaviour
             var activeActor = _playerState.ActiveActor.Actor;
             var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
             survivalModule.Dead -= HumanPersonSurvival_Dead;
+
+            // Disable bot on person death
+            _actorTaskControlSwitcher.Switch(ActorTaskSourceControl.Human);
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
@@ -767,7 +756,8 @@ public class SectorVM : MonoBehaviour
 
         actorViewModel.GraphicRoot.ProcessHit(canBeHitViewModel.Position);
 
-        var sfx = Instantiate(HitSfx, transform);
+        var sfxObj = _container.InstantiatePrefab(HitSfx, transform);
+        var sfx = sfxObj.GetComponent<HitSfx>();
         canBeHitViewModel.AddHitEffect(sfx);
 
         // Проверяем, стрелковое оружие или удар ближнего боя
@@ -775,7 +765,7 @@ public class SectorVM : MonoBehaviour
         {
             sfx.EffectSpriteRenderer.sprite = sfx.ShootSprite;
 
-            // Создаём снараяд
+            // Создаём снаряд
             CreateBullet(actor, targetNode);
         }
     }
