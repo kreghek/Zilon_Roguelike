@@ -38,8 +38,8 @@ namespace Zilon.Core.Scoring
         public override int GetHashCode()
         {
             var hashCode = 1190513422;
-            hashCode = hashCode * -1521134295 + Days.GetHashCode();
-            hashCode = hashCode * -1521134295 + Hours.GetHashCode();
+            hashCode = (hashCode * -1521134295) + Days.GetHashCode();
+            hashCode = (hashCode * -1521134295) + Hours.GetHashCode();
             return hashCode;
         }
 
