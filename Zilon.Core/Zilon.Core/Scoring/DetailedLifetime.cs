@@ -5,7 +5,7 @@ namespace Zilon.Core.Scoring
     /// <summary>
     /// Структура для хранения разобранного значения времени жизни персонажа.
     /// </summary>
-    public sealed class DetailedLifetime
+    public struct DetailedLifetime
     {
         /// <summary>
         /// Конструктор объекта.
