@@ -2,6 +2,7 @@
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class TestPropUseSubScheme : IPropUseSubScheme
     {
         public bool Consumable { get; set; }

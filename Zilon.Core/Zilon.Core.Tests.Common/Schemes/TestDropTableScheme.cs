@@ -2,6 +2,7 @@
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class TestDropTableScheme : SchemeBase, IDropTableScheme
     {
         public TestDropTableScheme(int rolls, params IDropTableRecordSubScheme[] records)
