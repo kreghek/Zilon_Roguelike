@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Zilon.Core.Scoring
 {
     /// <summary>
     /// Структура для хранения разобранного значения времени жизни персонажа.
     /// </summary>
-    public struct DetailedLifetime
+    public struct DetailedLifetime: IEquatable<DetailedLifetime>
     {
         /// <summary>
         /// Конструктор объекта.
@@ -33,6 +34,11 @@ namespace Zilon.Core.Scoring
             return obj is DetailedLifetime lifetime &&
                    Days == lifetime.Days &&
                    Hours == lifetime.Hours;
+        }
+
+        public bool Equals(DetailedLifetime other)
+        {
+            return Days == other.Days && Hours == other.Hours;
         }
 
         public override int GetHashCode()
