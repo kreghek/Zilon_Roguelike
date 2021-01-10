@@ -5,10 +5,11 @@
         public UiSettingService()
         {
             CurrentLanguage = Language.Russian;
+            ShowTutorialOnStart = true;
         }
 
         public Language CurrentLanguage { get; set; }
 
-        public Language TargetLanguage { get; set; }
+        public bool ShowTutorialOnStart { get; set; }
     }
 }
