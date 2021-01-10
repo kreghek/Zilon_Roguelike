@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Scoring
+﻿using System.Collections.Generic;
+
+namespace Zilon.Core.Scoring
 {
     /// <summary>
     /// Структура для хранения разобранного значения времени жизни персонажа.
@@ -25,5 +27,30 @@
         /// Количество целых пожитых часов.
         /// </summary>
         public int Hours { get; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DetailedLifetime lifetime &&
+                   Days == lifetime.Days &&
+                   Hours == lifetime.Hours;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1190513422;
+            hashCode = hashCode * -1521134295 + Days.GetHashCode();
+            hashCode = hashCode * -1521134295 + Hours.GetHashCode();
+            return hashCode;
+        }
+
+        public static bool operator ==(DetailedLifetime left, DetailedLifetime right)
+        {
+            return EqualityComparer<DetailedLifetime>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(DetailedLifetime left, DetailedLifetime right)
+        {
+            return !(left == right);
+        }
     }
 }
