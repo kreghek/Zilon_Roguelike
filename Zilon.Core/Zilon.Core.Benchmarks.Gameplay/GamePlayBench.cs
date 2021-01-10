@@ -13,8 +13,8 @@ namespace Zilon.Core.Benchmarks.Move
     [MemoryDiagnoser]
     public class GamePlayBench
     {
-        [Benchmark(Description = "GamePlay")]
-        public async Task Move1Async()
+        [Benchmark(Description = "GamePlay", OperationsPerInvoke = 10)]
+        public async Task GamePlayBenchAsync()
         {
             var serviceContainer = new ServiceCollection();
             var startUp = new Startup();
