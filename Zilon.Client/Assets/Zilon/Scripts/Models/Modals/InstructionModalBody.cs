@@ -53,7 +53,7 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
 
     public void CancelChanges()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     private void ShowPage()
