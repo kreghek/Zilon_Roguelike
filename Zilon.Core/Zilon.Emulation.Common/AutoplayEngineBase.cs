@@ -66,6 +66,7 @@ namespace Zilon.Emulation.Common
                         throw;
                     }
                 }
+
                 iterationCounter++;
             }
 
