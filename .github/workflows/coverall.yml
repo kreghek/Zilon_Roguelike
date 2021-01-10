@@ -24,9 +24,6 @@ jobs:
         test_csproj:
           - Zilon.Core.Specs
           - Zilon.Bot.Players.DevelopmentTests
-        build_configuration:
-          - Debug
-          - Release
         include:
           - test_csproj: Zilon.Core.Specs
             test_category: Functional
@@ -39,14 +36,22 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.x'
-    - name: Generate coverage report ${{ matrix.test_csproj }} in ${{ matrix.build_configuration }}
+    - name: Run ${{ matrix.test_csproj }} in Release
       env:
         ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
         DOTNET_CLI_TELEMETRY_OUTPUT: 1
       run: |
         cd ./Zilon.Core
-        dotnet test ${{ matrix.test_csproj }}/${{ matrix.test_csproj }}.csproj -c ${{ matrix.build_configuration }} /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:Exclude="[*Tests*]"
+        dotnet test ${{ matrix.test_csproj }}/${{ matrix.test_csproj }}.csproj --configuration Release
+    - name: Generate coverage report ${{ matrix.test_csproj }} in Debug
+      env:
+        ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+        DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      run: |
+        cd ./Zilon.Core
+        dotnet test ${{ matrix.test_csproj }}/${{ matrix.test_csproj }}.csproj --configuration Debug /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=lcov /p:Exclude="[*Tests*]"
     - name: Publish coverage report to coveralls.io
       uses: coverallsapp/github-action@v1.1.2
       with:
