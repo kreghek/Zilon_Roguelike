@@ -50,20 +50,23 @@ namespace Zilon.Emulation.Common
             var iterationCounter = 1;
             while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
             {
-                try
+                for (var updateCounter = 0; updateCounter < GlobeMetrics.OneIterationLength; updateCounter++)
                 {
-                    await globe.UpdateAsync().ConfigureAwait(false);
+                    try
+                    {
+                        await globe.UpdateAsync().ConfigureAwait(false);
+                    }
+                    catch (ActorTaskExecutionException exception)
+                    {
+                        CatchActorTaskExecutionException(exception);
+                    }
+                    catch (AggregateException exception)
+                    {
+                        CatchException(exception.InnerException);
+                        throw;
+                    }
                 }
-                catch (ActorTaskExecutionException exception)
-                {
-                    CatchActorTaskExecutionException(exception);
-                }
-                catch (AggregateException exception)
-                {
-                    CatchException(exception.InnerException);
-                    throw;
-                }
-#pragma warning disable CA1031 // Do not catch general exception types
+                iterationCounter++;
             }
 
             ProcessEnd();
