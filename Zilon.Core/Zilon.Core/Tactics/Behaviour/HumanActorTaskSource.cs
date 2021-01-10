@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -79,6 +80,7 @@ namespace Zilon.Core.Tactics.Behaviour
         //TODO Избавиться от синхронного варианта.
         // Сейчас он оставлен прото из-за тестов. Сложностей с удалением нет, кроме рутины.
         [Obsolete("Использовать асинк-вариант вместо этого")]
+        [ExcludeFromCodeCoverage]
         public void Intent(IIntention intention, IActor activeActor)
         {
             IntentAsync(intention, activeActor).Wait();
