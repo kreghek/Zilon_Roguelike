@@ -31,14 +31,8 @@ jobs:
           - Debug
           - Release
         include:
-          - test_csproj: Zilon.Core.Tests
-            test_category: Unit
-          - test_csproj: Zilon.Bot.Players.Tests
-            test_category: Unit
           - test_csproj: Zilon.Core.Specs
             test_category: Functional
-          - test_csproj: Zilon.Core.DiTests
-            test_category: Unit
           - test_csproj: Zilon.Bot.Players.DevelopmentTests
             test_category: Functional
 
