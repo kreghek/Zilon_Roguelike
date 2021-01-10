@@ -1,5 +1,8 @@
-﻿namespace Zilon.Core.Tests.Common
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Tests.Common
 {
+    [ExcludeFromCodeCoverage]
     public static class TestSpecialConstants
     {
         /// <summary>
