@@ -13,7 +13,7 @@ namespace Zilon.Emulation.Common
 {
     public abstract class AutoplayEngineBase
     {
-        private const int ITERATION_LIMIT = 40_000_000;
+        private const int ITERATION_LIMIT = 4000;
         private readonly IGlobeInitializer _globeInitializer;
 
         protected AutoplayEngineBase(BotSettings botSettings,
