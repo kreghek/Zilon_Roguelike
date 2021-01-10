@@ -16,7 +16,8 @@ namespace Zilon.Core.LogicCalculations.Tests
         /// </summary>
         [Test]
         [TestCaseSource(typeof(RuleCalculationsTestCaseSource), nameof(RuleCalculationsTestCaseSource.AllKnownLevels))]
-        public void CalcEfficientByRuleLevel_AllKnownLevels_NotThrowException(int currentModifier, PersonRuleLevel level)
+        public void CalcEfficientByRuleLevel_AllKnownLevels_NotThrowException(int currentModifier,
+            PersonRuleLevel level)
         {
             // ACT
             Action act = () =>
