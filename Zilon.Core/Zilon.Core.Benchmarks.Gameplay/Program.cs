@@ -9,8 +9,8 @@ namespace Zilon.Core.Benchmarks.Move
         {
             BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args,
                 config: ManualConfig.Create(DefaultConfig.Instance)
-                .WithOption(ConfigOptions.DisableOptimizationsValidator, true)
-                .WithOption(ConfigOptions.KeepBenchmarkFiles, true));
+                    .WithOption(ConfigOptions.DisableOptimizationsValidator, true)
+                    .WithOption(ConfigOptions.KeepBenchmarkFiles, true));
         }
     }
 }
