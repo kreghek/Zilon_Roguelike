@@ -22,10 +22,7 @@ jobs:
     strategy:
       matrix:
         test_csproj:
-          - Zilon.Core.Tests
-          - Zilon.Bot.Players.Tests
           - Zilon.Core.Specs
-          - Zilon.Core.DiTests
           - Zilon.Bot.Players.DevelopmentTests
         build_configuration:
           - Debug
