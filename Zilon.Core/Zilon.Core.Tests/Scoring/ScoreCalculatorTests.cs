@@ -16,7 +16,7 @@ namespace Zilon.Core.Scoring.Tests
             // ARRANGE
             var expected = new DetailedLifetime(0, 0);
 
-           // ACT
+            // ACT
             var fact = ScoreCalculator.ConvertTurnsToDetailed(0);
 
             // ASSERT
