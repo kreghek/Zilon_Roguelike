@@ -7,7 +7,7 @@ namespace Zilon.Core.Benchmarks.Move
     {
         private static void Main(string[] args)
         {
-            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args, 
+            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args,
                 config: ManualConfig.Create(DefaultConfig.Instance)
                 .WithOption(ConfigOptions.DisableOptimizationsValidator, true)
                 .WithOption(ConfigOptions.KeepBenchmarkFiles, true));
