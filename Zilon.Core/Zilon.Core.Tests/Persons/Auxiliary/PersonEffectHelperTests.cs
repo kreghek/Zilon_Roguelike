@@ -1,13 +1,17 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Persons.Auxiliary;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+
+using FluentAssertions;
+
 using Moq;
+
+using NUnit.Framework;
+
 using Zilon.Core.PersonModules;
+using Zilon.Core.Persons.Auxiliary;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Scoring;
-using FluentAssertions;
 
 namespace Zilon.Core.Persons.Auxiliary.Tests
 {
@@ -23,7 +27,7 @@ namespace Zilon.Core.Persons.Auxiliary.Tests
             // ARRANGE
 
             var effectModuleMock = new Mock<IEffectsModule>();
-            effectModuleMock.SetupGet(x=>x.Items).Returns(Array.Empty<IPersonEffect>());
+            effectModuleMock.SetupGet(x => x.Items).Returns(Array.Empty<IPersonEffect>());
             var effectModule = effectModuleMock.Object;
 
             var stat = new SurvivalStat(0, 0, 1);
