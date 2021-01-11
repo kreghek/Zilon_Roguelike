@@ -8,5 +8,6 @@ namespace Assets.Zilon.Scripts
         void ApplyChanges();
         void CancelChanges();
         event EventHandler Closed;
+        CloseBehaviourOperation CloseBehaviour { get; }
     }
 }

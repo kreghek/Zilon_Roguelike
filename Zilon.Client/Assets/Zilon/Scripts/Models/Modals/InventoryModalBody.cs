@@ -43,6 +43,8 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public string Caption => "Inventory";
 
+    public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.ApplyChanges;
+
     public void Start()
     {
         CreateSlots();
