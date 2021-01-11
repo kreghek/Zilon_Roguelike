@@ -83,9 +83,6 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly IPlayer _humanPlayer;
 
-    //TODO Вернуть, когда будет придуман туториал
-    //[NotNull] [Inject] private readonly ISectorModalManager _sectorModalManager;
-
     [Inject] private readonly IAnimationBlockerService _commandBlockerService;
 
     [Inject] private readonly ProgressStorageService _progressStorageService;
