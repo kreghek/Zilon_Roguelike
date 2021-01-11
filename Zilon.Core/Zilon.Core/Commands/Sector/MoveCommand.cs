@@ -83,6 +83,25 @@ namespace Zilon.Core.Commands
             PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
         }
 
+        private bool CanExecuteForHover()
+        {
+            var nodeViewModel = GetHoverNodeViewModel();
+            if (nodeViewModel is null)
+            {
+                return false;
+            }
+
+            if (PlayerState.ActiveActor?.Actor is null)
+            {
+                return false;
+            }
+
+            //test
+
+            CreatePath(nodeViewModel);
+            return Path.Any();
+        }
+
         private bool CanExecuteForSelected()
         {
             var nodeViewModel = GetSelectedNodeViewModel();
@@ -182,18 +201,21 @@ namespace Zilon.Core.Commands
         public override bool CanExecute()
         {
             var nodeViewModel = GetHoverNodeViewModel();
-            if (nodeViewModel == null)
+            if (nodeViewModel is null)
             {
                 return false;
             }
 
-            if (!CanExecuteForSelected())
+            var canExecuteForHover = CanExecuteForHover();
+            if (!canExecuteForHover)
             {
                 return false;
             }
 
             CreatePath(nodeViewModel);
-            return Path.Any();
+
+            var pathIsNotEmpty = Path.Any();
+            return pathIsNotEmpty;
         }
 
         /// <summary>
