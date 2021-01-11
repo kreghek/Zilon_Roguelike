@@ -21,8 +21,10 @@ namespace Zilon.Bot.Players.Triggers.Tests
         /// Test checks trigger for persons with fow module.
         /// </summary>
         [Test]
-        [TestCaseSource(typeof(ExploredTriggerTestCaseSource), nameof(ExploredTriggerTestCaseSource.FowModuleTestCases))]
-        public bool Test_PersonHasFowDataModule_ReturnsExpectedResults(IEnumerable<IGraphNode> mapNodes, IEnumerable<SectorMapFowNode> fowNodes)
+        [TestCaseSource(typeof(ExploredTriggerTestCaseSource),
+            nameof(ExploredTriggerTestCaseSource.FowModuleTestCases))]
+        public bool Test_PersonHasFowDataModule_ReturnsExpectedResults(IEnumerable<IGraphNode> mapNodes,
+            IEnumerable<SectorMapFowNode> fowNodes)
         {
             // ARRANGE
 
@@ -43,7 +45,9 @@ namespace Zilon.Bot.Players.Triggers.Tests
             var sectorFowDataMock = new Mock<ISectorFowData>();
             var sectorFowData = sectorFowDataMock.Object;
             fowDataMock.Setup(x => x.GetSectorFowData(It.IsAny<ISector>())).Returns(sectorFowData);
-            sectorFowDataMock.Setup(x => x.GetFowNodeByState(It.Is<SectorMapNodeFowState>(state => state == SectorMapNodeFowState.Explored))).Returns(fowNodes);
+            sectorFowDataMock.Setup(x =>
+                    x.GetFowNodeByState(It.Is<SectorMapNodeFowState>(state => state == SectorMapNodeFowState.Explored)))
+                .Returns(fowNodes);
 
             var context = Mock.Of<ISectorTaskSourceContext>(c => c.Sector == Mock.Of<ISector>(sector =>
                 sector.Map == Mock.Of<ISectorMap>(map =>

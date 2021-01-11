@@ -33,7 +33,8 @@ namespace Zilon.Bot.Players.Tests.Triggers
         }
 
         /// <summary>
-        /// If not all nodes of map are known by fow module then the trigger returns false (there are nodes of map which not explored yet).
+        /// If not all nodes of map are known by fow module then the trigger returns false (there are nodes of map which not
+        /// explored yet).
         /// </summary>
         private static TestCaseData CreateTwoNodesAndNotAllExplored()
         {
