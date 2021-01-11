@@ -22,11 +22,20 @@ jobs:
     strategy:
       matrix:
         test_csproj:
+          - Zilon.Core.Tests
+          - Zilon.Bot.Players.Tests
           - Zilon.Core.Specs
+          - Zilon.Core.DiTests
           - Zilon.Bot.Players.DevelopmentTests
         include:
+          - test_csproj: Zilon.Core.Tests
+            test_category: Unit
+          - test_csproj: Zilon.Bot.Players.Tests
+            test_category: Unit
           - test_csproj: Zilon.Core.Specs
             test_category: Functional
+          - test_csproj: Zilon.Core.DiTests
+            test_category: Unit
           - test_csproj: Zilon.Bot.Players.DevelopmentTests
             test_category: Functional
 
