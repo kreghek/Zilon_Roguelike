@@ -13,6 +13,10 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния.
         }
 
+        /// <summary>
+        /// Checks situation when all nodes of a map are explored (known) by the person.
+        /// </summary>
+        /// <returns>True if all nodes are explored. False otherside.</returns>
         public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
             ILogicStrategyData strategyData)
         {
