@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -6,6 +7,7 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Tests.Common
 {
+    [ExcludeFromCodeCoverage]
     public class TestMaterializedSectorNode : ISectorNode
     {
         public TestMaterializedSectorNode(ISectorSubScheme sectorScheme)

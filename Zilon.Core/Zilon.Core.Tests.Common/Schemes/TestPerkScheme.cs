@@ -3,6 +3,7 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class TestPerkScheme : SchemeBase, IPerkScheme
     {
         public PerkConditionSubScheme[] BaseConditions { get; set; }

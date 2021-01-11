@@ -16,7 +16,7 @@ namespace Zilon.Core.Tests.Common
             _schemeLocator = schemeLocator;
         }
 
-        ISchemeServiceHandler<TScheme> ISchemeServiceHandlerFactory.Create<TScheme>()
+        public ISchemeServiceHandler<TScheme> Create<TScheme>() where TScheme : class, IScheme
         {
             var handler = new SchemeServiceHandler<TScheme>(_schemeLocator);
 

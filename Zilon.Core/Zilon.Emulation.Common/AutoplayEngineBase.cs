@@ -13,7 +13,7 @@ namespace Zilon.Emulation.Common
 {
     public abstract class AutoplayEngineBase
     {
-        private const int ITERATION_LIMIT = 40_000_000;
+        private const int ITERATION_LIMIT = 4000;
         private readonly IGlobeInitializer _globeInitializer;
 
         protected AutoplayEngineBase(BotSettings botSettings,
@@ -50,20 +50,24 @@ namespace Zilon.Emulation.Common
             var iterationCounter = 1;
             while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
             {
-                try
+                for (var updateCounter = 0; updateCounter < GlobeMetrics.OneIterationLength; updateCounter++)
                 {
-                    await globe.UpdateAsync().ConfigureAwait(false);
+                    try
+                    {
+                        await globe.UpdateAsync().ConfigureAwait(false);
+                    }
+                    catch (ActorTaskExecutionException exception)
+                    {
+                        CatchActorTaskExecutionException(exception);
+                    }
+                    catch (AggregateException exception)
+                    {
+                        CatchException(exception.InnerException);
+                        throw;
+                    }
                 }
-                catch (ActorTaskExecutionException exception)
-                {
-                    CatchActorTaskExecutionException(exception);
-                }
-                catch (AggregateException exception)
-                {
-                    CatchException(exception.InnerException);
-                    throw;
-                }
-#pragma warning disable CA1031 // Do not catch general exception types
+
+                iterationCounter++;
             }
 
             ProcessEnd();

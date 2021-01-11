@@ -2,6 +2,7 @@
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class TestSectorRoomMapFactoryOptionsSubScheme : ISectorRoomMapFactoryOptionsSubScheme
     {
         public int RegionCount { get; set; }
