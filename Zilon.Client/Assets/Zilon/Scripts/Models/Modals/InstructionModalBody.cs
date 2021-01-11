@@ -33,6 +33,12 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
             _pageCounter = Pages.Length - 1;
         }
 
+        var isFirstPath = _pageCounter == 0;
+        PrevButton.gameObject.SetActive(!isFirstPath);
+
+        var isLastPage = _pageCounter == Pages.Length - 1;
+        NextButton.gameObject.SetActive(!isLastPage);
+
         ShowPage();
     }
 
@@ -44,6 +50,12 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
         {
             _pageCounter = 0;
         }
+
+        var isFirstPath = _pageCounter == 0;
+        PrevButton.gameObject.SetActive(!isFirstPath);
+
+        var isLastPage = _pageCounter == Pages.Length - 1;
+        NextButton.gameObject.SetActive(!isLastPage);
 
         ShowPage();
     }
