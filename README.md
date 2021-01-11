@@ -14,7 +14,7 @@
 
 This is rogue-like game about the randomly-generated vagabond, which trying to find the randomly-generated home in the randomly-generated world. Project at early stage of development. Development are slowly and with pleasure, but reguraly.
 
-[Russian version of this file](\README_RU.md)
+[Russian version of this file](/README_RU.md)
 
 ## The short game rules
 
