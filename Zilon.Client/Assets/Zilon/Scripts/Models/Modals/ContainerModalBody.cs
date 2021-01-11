@@ -22,6 +22,8 @@ public class ContainerModalBody : ContainerModalBodyBase, IModalWindowHandler
 
     public string Caption => "Loot";
 
+    public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.ApplyChanges;
+
 #pragma warning restore 649
     // ReSharper restore UnassignedField.Global
     // ReSharper restore NotNullMemberIsNotInitialized

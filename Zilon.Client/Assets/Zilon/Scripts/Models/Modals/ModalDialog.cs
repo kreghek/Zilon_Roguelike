@@ -45,8 +45,29 @@ public class ModalDialog : MonoBehaviour
 
     public void Close()
     {
-        WindowHandler.ApplyChanges();
-        AcceptChanges?.Invoke(this, new EventArgs());
+        if (WindowHandler is null)
+        {
+            Debug.LogError("Try to close the modal before assign window handler.");
+            Destroy(gameObject);
+            return;
+        }
+
+        switch (WindowHandler.CloseBehaviour)
+        {
+            case CloseBehaviourOperation.ApplyChanges:
+                WindowHandler.ApplyChanges();
+                AcceptChanges?.Invoke(this, new EventArgs());
+                break;
+
+            case CloseBehaviourOperation.DoNothing:
+                // Do nothing. Just close. By default all changes will lost.
+                break;
+
+            default:
+                Debug.LogError($"Unexpected value {WindowHandler.CloseBehaviour}");
+                break;
+        }
+
         Destroy(gameObject);
     }
 }

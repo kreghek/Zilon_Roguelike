@@ -16,6 +16,8 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
 
     public string Caption => "Tutorial!";
 
+    public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.DoNothing;
+
     public void Start()
     {
         _pageCounter = 0;

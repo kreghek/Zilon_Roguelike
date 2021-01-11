@@ -34,6 +34,7 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
     private readonly ICommandManager _clientCommandExecutor;
 
     public string Caption { get; private set; }
+    public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.DoNothing;
 
     public event EventHandler Closed;
 
