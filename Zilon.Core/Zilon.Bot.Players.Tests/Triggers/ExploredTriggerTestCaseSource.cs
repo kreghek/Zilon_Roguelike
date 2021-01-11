@@ -14,7 +14,8 @@ namespace Zilon.Bot.Players.Tests.Triggers
     {
         public static IEnumerable FowModuleTestCases
         {
-            get {
+            get
+            {
                 yield return CreateOneNodeExploredMap();
                 yield return CreateTwoNodesAndNotAllExplored();
             }

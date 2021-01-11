@@ -45,8 +45,8 @@ namespace Zilon.Bot.Players.Triggers.Tests
             fowDataMock.Setup(x => x.GetSectorFowData(It.IsAny<ISector>())).Returns(sectorFowData);
             sectorFowDataMock.Setup(x => x.GetFowNodeByState(It.Is<SectorMapNodeFowState>(state => state == SectorMapNodeFowState.Explored))).Returns(fowNodes);
 
-            var context = Mock.Of<ISectorTaskSourceContext>(c => c.Sector == Mock.Of<ISector>(sector => 
-                sector.Map == Mock.Of<ISectorMap>(map => 
+            var context = Mock.Of<ISectorTaskSourceContext>(c => c.Sector == Mock.Of<ISector>(sector =>
+                sector.Map == Mock.Of<ISectorMap>(map =>
                     map.Nodes == mapNodes
                 )
             ));
