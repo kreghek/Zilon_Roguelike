@@ -2,6 +2,7 @@
 {
     using Core.Schemes;
 
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class TestMonsterScheme : SchemeBase, IMonsterScheme
     {
         public int BaseScore { get; set; }

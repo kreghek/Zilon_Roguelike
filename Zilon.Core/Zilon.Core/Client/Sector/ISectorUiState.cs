@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour;
@@ -25,6 +26,7 @@ namespace Zilon.Core.Client
         /// Используется для упрощения доступа к источнику команд у текущего активного актёра.
         /// </summary>
         [Obsolete("Because we can gen TaskSource from ActiveActor")]
+        [ExcludeFromCodeCoverage]
         IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace Zilon.Core.Benchmarks.Move
     public class GamePlayBench
     {
         [Benchmark(Description = "GamePlay")]
-        public async Task Move1Async()
+        public async Task GamePlayBenchAsync()
         {
             var serviceContainer = new ServiceCollection();
             var startUp = new Startup();

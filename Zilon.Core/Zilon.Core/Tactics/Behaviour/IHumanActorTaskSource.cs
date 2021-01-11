@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -26,7 +28,8 @@ namespace Zilon.Core.Tactics.Behaviour
         /// </summary>
         /// <param name="intention"> Intention object which will create actor task. </param>
         /// <param name="activeActor"> The player actor task which will act. </param>
-        [System.Obsolete("Use async version instead.")]
+        [Obsolete("Use async version instead.")]
+        [ExcludeFromCodeCoverage]
         void Intent(IIntention intention, IActor activeActor);
 
         /// <summary>

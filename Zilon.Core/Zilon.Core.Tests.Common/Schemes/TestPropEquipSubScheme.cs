@@ -3,6 +3,7 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class TestPropEquipSubScheme : IPropEquipSubScheme
     {
         public string[] ActSids { get; }
