@@ -29,8 +29,23 @@ namespace Zilon.Core.Commands.Sector
         public override bool CanExecute()
         {
             var selectedViewModel = PlayerState.SelectedViewModel ?? PlayerState.HoverViewModel;
-            var targetDeposit = (selectedViewModel as IContainerViewModel)?.StaticObject
-                .GetModuleSafe<IPropDepositModule>();
+            var staticObject = (selectedViewModel as IContainerViewModel)?.StaticObject;
+            if (staticObject is null)
+            {
+                return false;
+            }
+
+            var map = _player.SectorNode.Sector.Map;
+
+            var currentNode = PlayerState.ActiveActor.Actor.Node;
+
+            var distance = map.DistanceBetween(currentNode, staticObject.Node);
+            if (distance > 1)
+            {
+                return false;
+            }
+
+            var targetDeposit = staticObject.GetModuleSafe<IPropDepositModule>();
 
             if (targetDeposit is null)
             {
@@ -74,7 +89,7 @@ namespace Zilon.Core.Commands.Sector
                 var equipedTool = GetEquipedTool(equipmentCarrier, requiredTags);
                 if (equipedTool is null)
                 {
-                    throw new InvalidOperationException("Попытка добычи без инструмента.");
+                    throw new InvalidOperationException("Try to mine without required tools.");
                 }
 
                 var intetion = new Intention<MineTask>(actor =>
