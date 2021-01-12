@@ -33,26 +33,30 @@ namespace Zilon.Core.Players
         /// <summary>
         /// Ссылка на основного персонажа игрока.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public IPerson MainPerson { get; private set; }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public IGlobe Globe { get; private set; }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public void BindPerson(IGlobe globe, IPerson person)
         {
             if (globe is null)
             {
-                throw new System.ArgumentNullException(nameof(globe));
+                throw new ArgumentNullException(nameof(globe));
             }
 
             if (person is null)
             {
-                throw new System.ArgumentNullException(nameof(person));
+                throw new ArgumentNullException(nameof(person));
             }
 
             Globe = globe;
             MainPerson = person;
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public void Reset()
         {
             Globe = null;

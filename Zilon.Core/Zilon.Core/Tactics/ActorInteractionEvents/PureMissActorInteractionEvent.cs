@@ -1,5 +1,6 @@
 ﻿namespace Zilon.Core.Tactics.ActorInteractionEvents
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class PureMissActorInteractionEvent : ActorInteractionEventBase
     {
         public PureMissActorInteractionEvent(IActor actor, IActor targetActor) : base(actor)

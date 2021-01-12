@@ -2,6 +2,7 @@
 
 namespace Zilon.Core.Tactics.ActorInteractionEvents
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class DodgeActorInteractionEvent : ActorInteractionEventBase
     {
         public DodgeActorInteractionEvent(IActor actor, IActor targetActor, PersonDefenceItem personDefenceItem) :

@@ -57,12 +57,12 @@ namespace Zilon.Core.Tactics
             StaticObjectManager.Removed += StaticObjectManager_Remove;
 
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
-
-            PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public NationalUnityEventService NationalUnityEventService { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public string Sid { get; set; }
 
         /// <summary>
@@ -70,6 +70,7 @@ namespace Zilon.Core.Tactics
         /// Набор узлов, где могут располагаться актёры игрока
         /// на начало прохождения сектора.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public IGraphNode[] StartNodes { get; set; }
 
         private void Actor_Moved(object sender, EventArgs e)
@@ -414,11 +415,6 @@ namespace Zilon.Core.Tactics
         /// Карта в основе сектора.
         /// </summary>
         public ISectorMap Map { get; }
-
-        /// <summary>
-        /// Маршруты патрулирования в секторе.
-        /// </summary>
-        public Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
 
         /// <summary>
         /// Менеджер работы с очками.

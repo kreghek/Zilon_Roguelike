@@ -46,7 +46,7 @@ namespace Zilon.Core.Commands.Sector
             var requiredTags = targetDeposit.GetToolTags();
             if (requiredTags.Any())
             {
-                var equipedTool = GetEquipedTool(equipmentCarrier, targetDeposit.GetToolTags());
+                var equipedTool = GetEquipedTool(equipmentCarrier, requiredTags);
                 if (equipedTool is null)
                 {
                     return false;
