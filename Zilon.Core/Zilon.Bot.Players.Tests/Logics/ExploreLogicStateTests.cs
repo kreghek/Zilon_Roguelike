@@ -1,18 +1,22 @@
-﻿using NUnit.Framework;
-using Zilon.Bot.Players.Logics;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+
+using FluentAssertions;
+
 using Moq;
-using Zilon.Core.Tactics.Behaviour.Bots;
+
+using NUnit.Framework;
+
+using Zilon.Bot.Players.Logics;
+using Zilon.Core.Graphs;
+using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using FluentAssertions;
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
-using Zilon.Core.Persons;
-using Zilon.Core.PersonModules;
-using Zilon.Core.Graphs;
-using System.Linq;
 
 namespace Zilon.Bot.Players.Logics.Tests
 {
@@ -26,7 +30,7 @@ namespace Zilon.Bot.Players.Logics.Tests
 
             var mapNodes = new[] { Mock.Of<IGraphNode>(), Mock.Of<IGraphNode>() };
 
-            var decisionSource = Mock.Of<IDecisionSource>(x=>x.SelectTargetRoamingNode(It.IsAny<IEnumerable<IGraphNode>>()) == mapNodes.First());
+            var decisionSource = Mock.Of<IDecisionSource>(x => x.SelectTargetRoamingNode(It.IsAny<IEnumerable<IGraphNode>>()) == mapNodes.First());
 
             var logic = new ExploreLogicState(decisionSource);
 
@@ -40,7 +44,7 @@ namespace Zilon.Bot.Players.Logics.Tests
                 actor.Node == mapNodes.First()
            );
 
-            var context = Mock.Of<ISectorTaskSourceContext>(x=>x.Sector == Mock.Of<ISector>(
+            var context = Mock.Of<ISectorTaskSourceContext>(x => x.Sector == Mock.Of<ISector>(
                 sector => sector.Map == Mock.Of<ISectorMap>(
                     map => map.Nodes == mapNodes &&
                         map.Transitions == new Dictionary<IGraphNode, Core.MapGenerators.SectorTransition>() &&
