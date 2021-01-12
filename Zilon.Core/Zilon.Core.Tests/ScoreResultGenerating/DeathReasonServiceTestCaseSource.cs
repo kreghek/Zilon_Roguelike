@@ -20,8 +20,10 @@ namespace Zilon.Core.ScoreResultGenerating.Tests
         {
             get
             {
-                var languages = Enum.GetValues(typeof(Language)).Cast<Language>().Where(x => x != Language.Undefined).ToArray();
-                var effectTypes = new[] { SurvivalStatType.Hydration, SurvivalStatType.Intoxication, SurvivalStatType.Satiety };
+                var languages = Enum.GetValues(typeof(Language)).Cast<Language>().Where(x => x != Language.Undefined)
+                    .ToArray();
+                var effectTypes = new[]
+                    { SurvivalStatType.Hydration, SurvivalStatType.Intoxication, SurvivalStatType.Satiety };
 
                 var schemeService = CreateSchemeService();
                 var monsterSchemes = schemeService.GetSchemes<IMonsterScheme>();
