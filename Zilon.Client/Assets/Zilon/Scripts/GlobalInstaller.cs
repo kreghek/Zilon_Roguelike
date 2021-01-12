@@ -43,7 +43,6 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
         Container.Bind<IPlayerEventLogService>().To<PlayerEventLogService>().AsSingle();
         Container.Bind<DeathReasonService>().AsSingle();
-        Container.Bind<ProgressStorageService>().AsSingle();
         Container.Bind<ScoreStorage>().AsSingle();
         Container.Bind<IUserTimeProvider>().To<UserTimeProvider>().AsSingle();
 
