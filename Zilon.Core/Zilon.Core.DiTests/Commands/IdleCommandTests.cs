@@ -16,7 +16,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tests.Commands
 {
     [TestFixture]
-    public class NextTurnCommandTests : CommandTestBase
+    public class IdleCommandTests : CommandTestBase
     {
         /// <summary>
         /// Тест проверяет, что можно выполнить выполнить следующий ход.
