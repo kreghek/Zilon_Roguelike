@@ -25,6 +25,9 @@ namespace Zilon.Bot.Players.Logics.Tests
     [Parallelizable(ParallelScope.All)]
     public class ExploreLogicStateTests
     {
+        /// <summary>
+        /// Test checks if there is unknown nodes then the trigger will create move task to explore them.
+        /// </summary>
         [Test]
         public void GetTask_FirstCall_ReturnsMoveTask()
         {
@@ -71,6 +74,7 @@ namespace Zilon.Bot.Players.Logics.Tests
             var factTask = logic.GetTask(actor, context, strategyData);
 
             // ASSERT
+
             factTask.Should().BeOfType<MoveTask>();
         }
     }
