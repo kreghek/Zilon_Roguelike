@@ -93,6 +93,7 @@ namespace Zilon.Core.Scoring
         }
 
         /// <summary>Обнуление текущих очков.</summary>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public void ResetScores()
         {
             BaseScores = 0;
@@ -101,6 +102,7 @@ namespace Zilon.Core.Scoring
             Turns = 0;
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public Scores Scores { get; set; }
     }
 }

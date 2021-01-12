@@ -18,6 +18,7 @@ namespace Zilon.Core.PersonGeneration
         private readonly IPropFactory _propFactory;
         private readonly ISurvivalRandomSource _survivalRandomSource;
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         protected FullPersonFactoryBase(
             ISchemeService schemeService,
             ISurvivalRandomSource survivalRandomSource,

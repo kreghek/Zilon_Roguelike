@@ -36,11 +36,13 @@ namespace Zilon.Core.Scoring
                    Hours == lifetime.Hours;
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public bool Equals(DetailedLifetime other)
         {
             return Days == other.Days && Hours == other.Hours;
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {
             var hashCode = 1190513422;
@@ -49,11 +51,13 @@ namespace Zilon.Core.Scoring
             return hashCode;
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public static bool operator ==(DetailedLifetime left, DetailedLifetime right)
         {
             return EqualityComparer<DetailedLifetime>.Default.Equals(left, right);
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public static bool operator !=(DetailedLifetime left, DetailedLifetime right)
         {
             return !(left == right);

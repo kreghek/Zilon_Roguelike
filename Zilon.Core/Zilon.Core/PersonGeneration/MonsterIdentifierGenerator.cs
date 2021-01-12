@@ -3,6 +3,7 @@
     /// <summary>
     /// Base implementation of identifier provider.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class MonsterIdentifierGenerator : IMonsterIdentifierGenerator
     {
         private int _currentIdCounter;
