@@ -46,6 +46,9 @@ namespace Zilon.Core.ScoreResultGenerating
                 case SurvivalEffectDamageEvent survivalEffectDamageEvent:
                     return GetSurvivalEffectName(survivalEffectDamageEvent, language);
 
+                case EndOfLifeEvent _:
+                    return "End of Life";
+
                 default:
                     throw new InvalidOperationException();
             }
