@@ -27,5 +27,7 @@ namespace Zilon.Bot.Players
         /// Intruder which was detected in trigger.
         /// </summary>
         IActor TriggerIntuder { get; set; }
+        Equipment TargetEquipment { get; set; }
+        int? TargetEquipmentSlot { get; set; }
     }
 }

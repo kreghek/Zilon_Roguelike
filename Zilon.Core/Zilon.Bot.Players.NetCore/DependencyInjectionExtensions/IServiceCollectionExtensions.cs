@@ -13,8 +13,7 @@ namespace Zilon.Bot.Players.NetCore.DependencyInjectionExtensions
         public static void RegisterLogicState(this IServiceCollection serviceRegistry)
         {
             var logicTypes = GetTypes<ILogicState>();
-            var triggerTypes = GetTypes<ILogicStateTrigger>()
-                .Where(x => !typeof(ICompositLogicStateTrigger).IsAssignableFrom(x));
+            var triggerTypes = GetTypes<ILogicStateTrigger>();
 
             var allTypes = logicTypes.Union(triggerTypes);
             foreach (var logicType in allTypes)
