@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -32,17 +31,17 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
         /// Даёт уверенность, что в изоляции поиск пути выполняется. Была ошибка, что не находил путь.
         /// </summary>
         [Test]
-        public async Task Run_FromSpec()
+        public void Run_FromSpec()
         {
             // ARRANGE
 
             // Шаг "Есть карта размером"
 
-            const int mapSize = 3;
+            const int MAPSIZE = 3;
 
             ISectorMap map = new SectorGraphMap<HexNode, HexMapNodeDistanceCalculator>();
 
-            MapFiller.FillSquareMap(map, mapSize);
+            MapFiller.FillSquareMap(map, MAPSIZE);
 
             var mapRegion = new MapRegion(1, map.Nodes.ToArray())
             {
