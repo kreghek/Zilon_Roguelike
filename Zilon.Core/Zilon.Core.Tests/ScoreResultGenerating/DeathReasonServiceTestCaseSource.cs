@@ -15,9 +15,11 @@ using Zilon.Core.Tests.Common;
 namespace Zilon.Core.ScoreResultGenerating.Tests
 {
     public static class DeathReasonServiceTestCaseSource
-    { 
-        public static IEnumerable TestCases {
-            get {
+    {
+        public static IEnumerable TestCases
+        {
+            get
+            {
                 var languages = Enum.GetValues(typeof(Language)).Cast<Language>().Where(x => x != Language.Undefined).ToArray();
                 var effectTypes = new[] { SurvivalStatType.Hydration, SurvivalStatType.Intoxication, SurvivalStatType.Satiety };
 
