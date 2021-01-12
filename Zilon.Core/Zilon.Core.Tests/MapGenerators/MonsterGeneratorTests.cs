@@ -77,8 +77,6 @@ namespace Zilon.Core.Tests.MapGenerators
             var map = await SquareMapFactory.CreateAsync(20).ConfigureAwait(false);
 
             var sectorMock = new Mock<ISector>();
-            var patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
-            sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);
             sectorMock.SetupGet(x => x.ActorManager).Returns(actorManager);
             sectorMock.SetupGet(x => x.StaticObjectManager).Returns(propContainerManager);
             sectorMock.SetupGet(x => x.Map).Returns(map);
