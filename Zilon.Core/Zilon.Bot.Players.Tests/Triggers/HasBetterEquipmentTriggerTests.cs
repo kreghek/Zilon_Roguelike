@@ -35,10 +35,10 @@ namespace Zilon.Bot.Players.Triggers.Tests
             personMock.Setup(x => x.GetModule<IInventoryModule>(nameof(IInventoryModule))).Returns(inventoryModule);
 
             var equipmentModuleMock = new Mock<IEquipmentModule>();
-            equipmentModuleMock.Setup(x => x.Slots).Returns(new[] { new PersonSlotSubScheme {Types = Core.Components.EquipmentSlotTypes.Hand } });
+            equipmentModuleMock.Setup(x => x.Slots).Returns(new[] { new PersonSlotSubScheme { Types = Core.Components.EquipmentSlotTypes.Hand } });
             personMock.Setup(x => x.GetModule<IEquipmentModule>(nameof(IEquipmentModule))).Returns(equipmentModuleMock.Object);
 
-            var actor = Mock.Of<IActor>(x=>x.Person == personMock.Object);
+            var actor = Mock.Of<IActor>(x => x.Person == personMock.Object);
 
             var context = Mock.Of<ISectorTaskSourceContext>();
 
