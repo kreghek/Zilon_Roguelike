@@ -18,7 +18,6 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Commands;
-
 using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.DiTests.Commands
@@ -71,7 +70,8 @@ namespace Zilon.Core.DiTests.Commands
 
             var depositModuleMock = new Mock<IPropDepositModule>();
             depositModuleMock.Setup(x => x.GetToolTags()).Returns(Array.Empty<string>());
-            depositObjectMock.Setup(x => x.GetModule<IPropDepositModule>(nameof(IPropDepositModule))).Returns(depositModuleMock.Object);
+            depositObjectMock.Setup(x => x.GetModule<IPropDepositModule>(nameof(IPropDepositModule)))
+                .Returns(depositModuleMock.Object);
             depositObjectMock.Setup(x => x.HasModule(nameof(IPropDepositModule))).Returns(true);
 
             var targetVm = Mock.Of<IContainerViewModel>(x => x.StaticObject == depositObjectMock.Object);
