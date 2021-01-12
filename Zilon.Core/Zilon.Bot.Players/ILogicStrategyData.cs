@@ -23,11 +23,12 @@ namespace Zilon.Bot.Players
         /// </summary>
         Resource ResourceToReduceHazard { get; set; }
 
+        Equipment TargetEquipment { get; set; }
+        int? TargetEquipmentSlot { get; set; }
+
         /// <summary>
         /// Intruder which was detected in trigger.
         /// </summary>
         IActor TriggerIntuder { get; set; }
-        Equipment TargetEquipment { get; set; }
-        int? TargetEquipmentSlot { get; set; }
     }
 }

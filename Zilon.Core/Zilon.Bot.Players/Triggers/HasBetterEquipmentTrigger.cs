@@ -11,6 +11,11 @@ namespace Zilon.Bot.Players.Triggers
 {
     public sealed class HasBetterEquipmentTrigger : ILogicStateTrigger
     {
+        private static bool IsApplicableForSlot(Equipment equipment, EquipmentSlotTypes slotTypes)
+        {
+            return (equipment.Scheme.Equip.SlotTypes[0] & slotTypes) > 0;
+        }
+
         public void Reset()
         {
             // Нет состояния.
@@ -58,7 +63,8 @@ namespace Zilon.Bot.Players.Triggers
                 {
                     var availableEquipments = from equipment in currentInventoryEquipments
                                               where IsApplicableForSlot(equipment, slotScheme.Types)
-                                              where EquipmentCarrierHelper.CanBeEquiped(equipmentModule, slotIndex, equipment)
+                                              where EquipmentCarrierHelper.CanBeEquiped(equipmentModule, slotIndex,
+                                                  equipment)
                                               select equipment;
 
                     var targetEquipmentFromInventory = availableEquipments.FirstOrDefault();
@@ -72,11 +78,6 @@ namespace Zilon.Bot.Players.Triggers
             }
 
             return false;
-        }
-
-        private static bool IsApplicableForSlot(Equipment equipment, EquipmentSlotTypes slotTypes)
-        {
-            return (equipment.Scheme.Equip.SlotTypes[0] & slotTypes) > 0;
         }
 
         public void Update()

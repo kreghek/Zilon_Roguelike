@@ -4,6 +4,7 @@ using Moq;
 
 using NUnit.Framework;
 
+using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -27,7 +28,8 @@ namespace Zilon.Bot.Players.Triggers.Tests
 
             var inventoryModuleMock = new Mock<IInventoryModule>();
             var equipmentSchemeMock = new Mock<IPropScheme>();
-            var equipmentSubScheme = Mock.Of<IPropEquipSubScheme>(x => x.SlotTypes == new[] { Core.Components.EquipmentSlotTypes.Hand });
+            var equipmentSubScheme =
+                Mock.Of<IPropEquipSubScheme>(x => x.SlotTypes == new[] { EquipmentSlotTypes.Hand });
             equipmentSchemeMock.SetupGet(x => x.Equip).Returns(equipmentSubScheme);
             var equipments = new[] { new Equipment(equipmentSchemeMock.Object) };
             inventoryModuleMock.Setup(x => x.CalcActualItems()).Returns(equipments);
@@ -35,8 +37,10 @@ namespace Zilon.Bot.Players.Triggers.Tests
             personMock.Setup(x => x.GetModule<IInventoryModule>(nameof(IInventoryModule))).Returns(inventoryModule);
 
             var equipmentModuleMock = new Mock<IEquipmentModule>();
-            equipmentModuleMock.Setup(x => x.Slots).Returns(new[] { new PersonSlotSubScheme { Types = Core.Components.EquipmentSlotTypes.Hand } });
-            personMock.Setup(x => x.GetModule<IEquipmentModule>(nameof(IEquipmentModule))).Returns(equipmentModuleMock.Object);
+            equipmentModuleMock.Setup(x => x.Slots)
+                .Returns(new[] { new PersonSlotSubScheme { Types = EquipmentSlotTypes.Hand } });
+            personMock.Setup(x => x.GetModule<IEquipmentModule>(nameof(IEquipmentModule)))
+                .Returns(equipmentModuleMock.Object);
 
             var actor = Mock.Of<IActor>(x => x.Person == personMock.Object);
 
