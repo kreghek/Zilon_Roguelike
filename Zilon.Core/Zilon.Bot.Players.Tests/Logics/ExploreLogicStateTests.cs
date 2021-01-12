@@ -21,10 +21,11 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Logics.Tests
 {
-    [TestFixture()]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class ExploreLogicStateTests
     {
-        [Test()]
+        [Test]
         public void GetTask_FirstCall_ReturnsMoveTask()
         {
             // ARRANGE

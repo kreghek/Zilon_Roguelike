@@ -7,7 +7,7 @@ using Zilon.Core.Scoring;
 
 namespace Zilon.Core.ScoreResultGenerating.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     [Parallelizable(ParallelScope.All)]
     public class DeathReasonServiceTests
     {
