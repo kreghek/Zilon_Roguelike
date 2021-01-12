@@ -10,12 +10,10 @@ namespace Zilon.Core.Commands
     /// <summary>
     /// Базовая команда для всех команд, связанных с изменением состояния актёра.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public abstract class ActorCommandBase : TacticCommandBase
     {
-        [ExcludeFromCodeCoverage]
-        protected ActorCommandBase(
-            ISectorUiState playerState
-        )
+        protected ActorCommandBase(ISectorUiState playerState)
         {
             PlayerState = playerState;
         }

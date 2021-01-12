@@ -10,12 +10,12 @@ namespace Zilon.Core.Commands
     /// <summary>
     /// Команда на отображение модала для отображения контента контейнера.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class ShowInventoryModalCommand : ShowModalCommandBase
     {
         private readonly ISectorUiState _playerState;
 
         [PublicAPI]
-        [ExcludeFromCodeCoverage]
         public ShowInventoryModalCommand(ISectorModalManager modalManager, ISectorUiState playerState) :
             base(modalManager)
         {
