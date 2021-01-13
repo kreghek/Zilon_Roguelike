@@ -28,6 +28,8 @@ namespace Zilon.Emulation.Common
 
         protected IServiceScope ServiceScope { get; set; }
 
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
+
         public async Task<IGlobe> CreateGlobeAsync()
         {
             // Create globe
@@ -73,11 +75,10 @@ namespace Zilon.Emulation.Common
 
             if (iterationCounter >= ITERATION_LIMIT)
             {
-                var playerEventLogService = ServiceScope.ServiceProvider.GetService<IPlayerEventLogService>();
-                if (playerEventLogService != null)
+                if (PlayerEventLogService != null)
                 {
                     var endOfLifeEvent = new EndOfLifeEvent();
-                    playerEventLogService.Log(endOfLifeEvent);
+                    PlayerEventLogService.Log(endOfLifeEvent);
                 }
             }
 
