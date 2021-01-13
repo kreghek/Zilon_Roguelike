@@ -26,7 +26,7 @@ namespace Zilon.Core.DiTests.Commands
     public sealed class MineDepositCommandTests : CommandTestBase
     {
         /// <summary>
-        /// Тест проверяет, что можно атаковать, если не мешают стены.
+        /// Test checks command can execute if selected correct mining deposit.
         /// </summary>
         [Test]
         public void CanExecuteTest()
@@ -42,7 +42,7 @@ namespace Zilon.Core.DiTests.Commands
         }
 
         /// <summary>
-        /// Тест проверяет, что при выполнении команды корректно фисируется намерение игрока на атаку.
+        /// Test checks command generate intention if selected correct mining deposit.
         /// </summary>
         [Test]
         public void ExecuteTest()
