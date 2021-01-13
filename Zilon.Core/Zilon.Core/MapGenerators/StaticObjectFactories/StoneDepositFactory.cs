@@ -4,6 +4,7 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class StoneDepositFactory : PropDepositFactoryBase
     {
         public StoneDepositFactory(

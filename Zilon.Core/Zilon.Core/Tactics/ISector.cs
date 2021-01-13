@@ -30,11 +30,6 @@ namespace Zilon.Core.Tactics
         /// </summary>
         ISectorMap Map { get; }
 
-        /// <summary>
-        /// Маршруты патрулирования в секторе.
-        /// </summary>
-        Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
-
         ILocationScheme Scheme { get; set; }
 
         /// <summary>Менеджер работы с очками.</summary>

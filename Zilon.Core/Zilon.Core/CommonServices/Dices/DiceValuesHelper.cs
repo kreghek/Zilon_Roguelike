@@ -5,15 +5,6 @@ namespace Zilon.Core.CommonServices.Dices
     internal static class DiceValuesHelper
     {
         /// <summary>
-        /// Возвращает случайное число в диапазоне [0..1).
-        /// </summary>
-        public static double GetNextDouble(Random random)
-        {
-            var next = random.NextDouble();
-            return next;
-        }
-
-        /// <summary>
         /// Преобразует выброшенное дробное значение из диапазона [0..1]
         /// в грань n-гранной кости.
         /// </summary>

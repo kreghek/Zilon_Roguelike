@@ -21,10 +21,11 @@ namespace Zilon.Core.ScoreResultGenerating
             switch (language)
             {
                 case Language.Ru:
-                    return monsterPerson.Scheme.Name.Ru;
+                    return monsterPerson.Scheme.Name?.Ru ?? monsterPerson.Scheme.Sid;
 
                 case Language.En:
-                    return monsterPerson.Scheme.Name.En;
+                    return monsterPerson.Scheme.Name?.En ?? monsterPerson.Scheme.Sid;
+
                 default:
                     throw new InvalidOperationException();
             }
@@ -44,6 +45,9 @@ namespace Zilon.Core.ScoreResultGenerating
 
                 case SurvivalEffectDamageEvent survivalEffectDamageEvent:
                     return GetSurvivalEffectName(survivalEffectDamageEvent, language);
+
+                case EndOfLifeEvent _:
+                    return "End of Life";
 
                 default:
                     throw new InvalidOperationException();

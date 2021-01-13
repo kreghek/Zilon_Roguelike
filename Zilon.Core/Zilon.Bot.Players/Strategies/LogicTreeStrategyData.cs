@@ -6,6 +6,7 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players.Strategies
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class LogicTreeStrategyData : ILogicStrategyData
     {
         public LogicTreeStrategyData()
@@ -25,5 +26,11 @@ namespace Zilon.Bot.Players.Strategies
 
         /// <inheritdoc />
         public Resource ResourceToReduceHazard { get; set; }
+
+        /// <inheritdoc />
+        public Equipment TargetEquipment { get; set; }
+
+        /// <inheritdoc />
+        public int? TargetEquipmentSlotIndex { get; set; }
     }
 }

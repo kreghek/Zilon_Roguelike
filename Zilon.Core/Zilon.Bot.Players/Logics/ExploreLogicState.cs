@@ -15,6 +15,7 @@ namespace Zilon.Bot.Players.Logics
     // Есть подозрение, что оно не работает.
     public sealed class ExploreLogicState : MoveLogicStateBase
     {
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public ExploreLogicState(IDecisionSource decisionSource) : base(decisionSource)
         {
         }
@@ -67,19 +68,13 @@ namespace Zilon.Bot.Players.Logics
         {
             var map = sector.Map;
 
-            IEnumerable<IGraphNode> availableNodes;
-
             var frontNodes = WriteObservedNodesOrGetFromFow(actor, strategyData, sector).ToArray();
-            if (frontNodes.Any())
+            if (!frontNodes.Any())
             {
-                availableNodes = frontNodes;
-            }
-            else
-            {
-                availableNodes = strategyData.ObservedNodes;
+                return null;
             }
 
-            var availableNodesArray = availableNodes as HexNode[] ?? availableNodes.ToArray();
+            var availableNodesArray = frontNodes as HexNode[] ?? frontNodes.ToArray();
 
             if (availableNodesArray.Length == 0)
             {
@@ -208,6 +203,15 @@ namespace Zilon.Bot.Players.Logics
             else
             {
                 frontNodes = GetNodesUsingFowModule(strategyData, sector, fowModule);
+            }
+
+            if (!frontNodes.Any())
+            {
+                var closestNode = sector.Map.GetNext(actor.Node).FirstOrDefault();
+                if (closestNode != null)
+                {
+                    frontNodes = new[] { closestNode };
+                }
             }
 
             return frontNodes;

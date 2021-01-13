@@ -85,8 +85,6 @@ public class SectorVM : MonoBehaviour
 
     [Inject] private readonly IAnimationBlockerService _commandBlockerService;
 
-    [Inject] private readonly ProgressStorageService _progressStorageService;
-
     [Inject] private readonly UiSettingService _uiSettingService;
 
     [Inject]
@@ -813,10 +811,5 @@ public class SectorVM : MonoBehaviour
     private void StartLoadScene()
     {
         SceneLoader.gameObject.SetActive(true);
-    }
-
-    private void SaveGameProgress()
-    {
-        _progressStorageService.Save();
     }
 }

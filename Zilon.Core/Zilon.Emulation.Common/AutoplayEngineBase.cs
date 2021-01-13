@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Bot.Sdk;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -22,6 +23,8 @@ namespace Zilon.Emulation.Common
             BotSettings = botSettings;
             _globeInitializer = globeInitializer;
         }
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         protected BotSettings BotSettings { get; }
 
@@ -68,6 +71,15 @@ namespace Zilon.Emulation.Common
                 }
 
                 iterationCounter++;
+            }
+
+            if (iterationCounter >= ITERATION_LIMIT)
+            {
+                if (PlayerEventLogService != null)
+                {
+                    var endOfLifeEvent = new EndOfLifeEvent();
+                    PlayerEventLogService.Log(endOfLifeEvent);
+                }
             }
 
             ProcessEnd();
