@@ -10,13 +10,13 @@ namespace Zilon.Bot.Players.Logics
         public override IActorTask GetTask(IActor actor, ISectorTaskSourceContext context,
             ILogicStrategyData strategyData)
         {
-            if (strategyData.TargetEquipment is null || strategyData.TargetEquipmentSlot is null)
+            if (strategyData.TargetEquipment is null || strategyData.TargetEquipmentSlotIndex is null)
             {
                 throw new InvalidOperationException("Assign TargetEquipment and TargetEquipmentSlot in trigger first.");
             }
 
             var targetEquipmentFromInventory = strategyData.TargetEquipment;
-            var targetSlotIndex = strategyData.TargetEquipmentSlot;
+            var targetSlotIndex = strategyData.TargetEquipmentSlotIndex;
 
             var taskContext = new ActorTaskContext(context.Sector);
 

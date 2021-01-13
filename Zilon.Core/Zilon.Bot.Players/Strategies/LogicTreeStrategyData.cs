@@ -31,6 +31,6 @@ namespace Zilon.Bot.Players.Strategies
         public Equipment TargetEquipment { get; set; }
 
         /// <inheritdoc />
-        public int? TargetEquipmentSlot { get; set; }
+        public int? TargetEquipmentSlotIndex { get; set; }
     }
 }

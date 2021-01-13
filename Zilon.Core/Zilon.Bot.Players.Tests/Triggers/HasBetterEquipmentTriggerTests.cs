@@ -62,7 +62,7 @@ namespace Zilon.Bot.Players.Triggers.Tests
             // ASSERT
             fact.Should().BeTrue();
             strategyDataMock.VerifySet(x => x.TargetEquipment = It.Is<Equipment>(equipment => equipment != null));
-            strategyDataMock.VerifySet(x => x.TargetEquipmentSlot = It.Is<int?>(slot => slot != null));
+            strategyDataMock.VerifySet(x => x.TargetEquipmentSlotIndex = It.Is<int?>(slot => slot != null));
         }
     }
 }

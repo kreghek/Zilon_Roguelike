@@ -50,7 +50,7 @@ namespace Zilon.Bot.Players.Triggers
             if (!currentInventoryEquipments.Any())
             {
                 strategyData.TargetEquipment = null;
-                strategyData.TargetEquipmentSlot = null;
+                strategyData.TargetEquipmentSlotIndex = null;
                 return false;
             }
 
@@ -71,7 +71,7 @@ namespace Zilon.Bot.Players.Triggers
                     if (targetEquipmentFromInventory != null)
                     {
                         strategyData.TargetEquipment = targetEquipmentFromInventory;
-                        strategyData.TargetEquipmentSlot = slotIndex;
+                        strategyData.TargetEquipmentSlotIndex = slotIndex;
                         return true;
                     }
                 }
