@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Zilon.Bot.Players.Logics;
-using Zilon.Core.Persons;
+﻿using Zilon.Bot.Players.Logics;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Triggers
 {

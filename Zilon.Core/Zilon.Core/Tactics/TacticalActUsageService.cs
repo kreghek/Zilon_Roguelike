@@ -141,43 +141,6 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private static bool SectorHasAttackedActor(ISector sector, IAttackTarget target)
-        {
-            if (sector.ActorManager is null)
-            {
-                // In test environment not all sector mocks has actor manager
-                return true;
-            }
-
-            return sector.ActorManager.Items.Any(x => ReferenceEquals(x, target));
-        }
-
-        private static bool SectorHasAttackedStaticObject(ISector sector, IAttackTarget target)
-        {
-            if (sector.StaticObjectManager is null)
-            {
-                // In test environment not all sector mocks has actor manager
-                return true;
-            }
-
-            return sector.StaticObjectManager.Items.Any(x => ReferenceEquals(x, target));
-        }
-
-        private static bool SectorHasAttackTarget(ISector sector, IAttackTarget target)
-        {
-            switch (target)
-            {
-                case IActor actor:
-                    return SectorHasAttackedActor(sector, actor);
-
-                case IStaticObject staticObject:
-                    return SectorHasAttackedStaticObject(sector, staticObject);
-
-                default:
-                    throw new InvalidOperationException($"Unknown attack target type {target.GetType().FullName}.");
-            }
-        }
-
         private static bool SectorHasCurrentActor(ISector sector, IActor actor)
         {
             if (sector.ActorManager is null)
@@ -283,8 +246,8 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(sector));
             }
 
-            Debug.Assert(SectorHasCurrentActor(sector, actor), "Current actor must be in sector");
-            Debug.Assert(SectorHasAttackTarget(sector, target.TargetObject), "Target must be in sector");
+            Debug.Assert(SectorHasCurrentActor(sector, actor), "Current actor must be in current sector");
+            Debug.Assert(ActUsageHelper.SectorHasAttackTarget(sector, target.TargetObject), "Target must be in sector");
 
             foreach (var act in usedActs.Primary)
             {
