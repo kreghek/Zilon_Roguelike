@@ -17,8 +17,11 @@ namespace Zilon.Bot.Players.Triggers.Tests
     [TestFixture]
     public class HasBetterEquipmentTriggerTests
     {
+        /// <summary>
+        /// Test checks equipment from inventory successfully assign to available slot.
+        /// </summary>
         [Test]
-        public void TestTest()
+        public void Test_EmptyPersonAndEquipmentInInventory_EqupmentInSlot()
         {
             // ARRAGE
 
