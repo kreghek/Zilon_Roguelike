@@ -53,6 +53,13 @@ namespace Zilon.Core.Tactics.Behaviour
                 return;
             }
 
+            var stopToUseAct = CheckStopToUseAct();
+            if (stopToUseAct)
+            {
+                //TODO Start acts cooldown, spend resources, etc.
+                return;
+            }
+
             var availableSlotAct = GetSecondaryUsedActs();
 
             var primary = new[] { TacticalAct };
@@ -63,6 +70,32 @@ namespace Zilon.Core.Tactics.Behaviour
             var actTargetInfo = new ActTargetInfo(TargetObject, TargetNode);
 
             _actService.UseOn(Actor, actTargetInfo, usedActs, Context.Sector);
+        }
+
+        private bool CheckStopToUseAct()
+        {
+            var stopToUseAct = false;
+            if (TargetObject is IActor)
+            {
+                var targetObjectInSector = ActUsageHelper.SectorHasAttackTarget(Context.Sector, TargetObject);
+                if (!targetObjectInSector)
+                {
+                    // Actors can leave sector after attacker start to attack but before attacker will ready to execute task.
+                    stopToUseAct = true;
+                }
+            }
+            else
+            {
+                var targetObjectInSector = ActUsageHelper.SectorHasAttackTarget(Context.Sector, TargetObject);
+                if (!targetObjectInSector)
+                {
+                    // Static object can't move. So they can't leave sector after attacker start to attack but before attacker will ready to execute task like actors.
+                    // This means error.
+                    throw new TaskException("Try to attack static object in other sector.");
+                }
+            }
+
+            return stopToUseAct;
         }
 
         private IEnumerable<ITacticalAct> GetSecondaryUsedActs()
