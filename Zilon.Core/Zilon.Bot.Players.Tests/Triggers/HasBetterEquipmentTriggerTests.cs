@@ -15,6 +15,7 @@ using Zilon.Core.Tactics.Behaviour;
 namespace Zilon.Bot.Players.Triggers.Tests
 {
     [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class HasBetterEquipmentTriggerTests
     {
         /// <summary>

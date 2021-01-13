@@ -11,6 +11,9 @@ namespace Zilon.Core.ScoreResultGenerating.Tests
     [Parallelizable(ParallelScope.All)]
     public class DeathReasonServiceTests
     {
+        /// <summary>
+        /// Test checks death reason service correctly describe all available death reason on all available languages.
+        /// </summary>
         [Test]
         [TestCaseSource(typeof(DeathReasonServiceTestCaseSource), nameof(DeathReasonServiceTestCaseSource.TestCases))]
         public void GetDeathReasonSummaryTest(IPlayerEvent playerEvent, Language language)

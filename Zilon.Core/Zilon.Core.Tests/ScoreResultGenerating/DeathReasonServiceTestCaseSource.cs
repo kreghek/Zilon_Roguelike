@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Zilon.Core.Localization;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tests.Common;
 
@@ -54,6 +55,8 @@ namespace Zilon.Core.ScoreResultGenerating.Tests
 
                         yield return new TestCaseData(playerEvent, language);
                     }
+
+                    yield return new TestCaseData(new EndOfLifeEvent(), language);
                 }
             }
         }
