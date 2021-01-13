@@ -24,11 +24,11 @@ namespace Zilon.Emulation.Common
             _globeInitializer = globeInitializer;
         }
 
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
+
         protected BotSettings BotSettings { get; }
 
         protected IServiceScope ServiceScope { get; set; }
-
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public async Task<IGlobe> CreateGlobeAsync()
         {
