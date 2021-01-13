@@ -42,7 +42,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
                 startUp,
                 botSettings,
                 globeInitializer)
-            { 
+            {
                 PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>()
             };
 
