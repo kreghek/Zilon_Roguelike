@@ -63,7 +63,7 @@ namespace Zilon.TextClient
                 .Nodes.Where(x =>
                     x.State == SectorMapNodeFowState.Explored || x.State == SectorMapNodeFowState.Observing)
                 .Select(x => x.Node);
-            
+
             PrintLookLegend();
             Console.WriteLine();
 
