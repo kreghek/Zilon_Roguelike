@@ -56,30 +56,8 @@ namespace Zilon.Core.Tactics.Behaviour
             return isRestricted;
         }
 
-        private static bool CheckPropAllowedByRestrictions(IProp usedProp, IActor actor, IActorTaskContext context)
-        {
-            var restrictions = usedProp.Scheme.Use.Restrictions;
-            if (restrictions != null)
-            {
-                // Prop without restrictions automaticcaly allowed.
-                return true;
-            }
-
-            foreach (var restriction in restrictions.Items)
-            {
-                var isAllowed = CheckPropAllowedByRestriction(restriction.Type, actor, context);
-
-                if (!isAllowed)
-                {
-                    return false;
-                }
-            }
-
-            // No restrictions were fired means usage allowed.
-            return true;
-        }
-
-        private static bool CheckPropAllowedByRestriction(UsageRestrictionType restrictionType, IActor actor, IActorTaskContext context)
+        private static bool CheckPropAllowedByRestriction(UsageRestrictionType restrictionType, IActor actor,
+            IActorTaskContext context)
         {
             switch (restrictionType)
             {
@@ -130,6 +108,29 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new NotSupportedException($"Restriction {restrictionType} is unknown.");
             }
 
+            return true;
+        }
+
+        private static bool CheckPropAllowedByRestrictions(IProp usedProp, IActor actor, IActorTaskContext context)
+        {
+            var restrictions = usedProp.Scheme.Use.Restrictions;
+            if (restrictions != null)
+            {
+                // Prop without restrictions automaticcaly allowed.
+                return true;
+            }
+
+            foreach (var restriction in restrictions.Items)
+            {
+                var isAllowed = CheckPropAllowedByRestriction(restriction.Type, actor, context);
+
+                if (!isAllowed)
+                {
+                    return false;
+                }
+            }
+
+            // No restrictions were fired means usage allowed.
             return true;
         }
 
