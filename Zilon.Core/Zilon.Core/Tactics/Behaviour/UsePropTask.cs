@@ -26,7 +26,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
             if (!isAllow)
             {
-                throw new InvalidOperationException($"Attempt to use the prop {UsedProp} which restricted in current context.");
+                throw new InvalidOperationException(
+                    $"Attempt to use the prop {UsedProp} which restricted in current context.");
             }
 
             Actor.UseProp(UsedProp);
