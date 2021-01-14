@@ -67,57 +67,69 @@ namespace Zilon.Core.Tactics.Behaviour
 
             foreach (var restriction in restrictions.Items)
             {
-                switch (restriction.Type)
+                var isAllowed = CheckPropAllowedByRestriction(restriction.Type, actor, context);
+
+                if (!isAllowed)
                 {
-                    case UsageRestrictionType.Undefined:
-                        throw new InvalidOperationException(
-                            $"Restriction type is {nameof(UsageRestrictionType.Undefined)}.");
-
-                    case UsageRestrictionType.NoStarvation:
-
-                        if (IsRestrictedByStarvation(actor))
-                        {
-                            return false;
-                        }
-
-                        break;
-
-                    case UsageRestrictionType.NoDehydration:
-
-                        if (IsRestrictedByDehydration(actor))
-                        {
-                            return false;
-                        }
-
-                        break;
-
-                    case UsageRestrictionType.NoOverdose:
-
-                        if (IsRestrictedByOverdose(actor))
-                        {
-                            return false;
-                        }
-
-                        break;
-
-                    case UsageRestrictionType.OnlySafeEnvironment:
-
-                        var hostilesinSector = context.Sector.ActorManager.Items
-                            .Where(x => x != actor && actor.Person.Fraction.GetRelation(x.Person.Fraction) !=
-                                FractionRelation.Enmity);
-                        if (hostilesinSector.Any())
-                        {
-                            return false;
-                        }
-
-                        break;
-
-                    default:
-                        throw new NotSupportedException($"Restriction {restriction.Type} is unknown.");
+                    return false;
                 }
             }
 
             // No restrictions were fired means usage allowed.
+            return true;
+        }
+
+        private static bool CheckPropAllowedByRestriction(UsageRestrictionType restrictionType, IActor actor, IActorTaskContext context)
+        {
+            switch (restrictionType)
+            {
+                case UsageRestrictionType.Undefined:
+                    throw new InvalidOperationException(
+                        $"Restriction type is {nameof(UsageRestrictionType.Undefined)}.");
+
+                case UsageRestrictionType.NoStarvation:
+
+                    if (IsRestrictedByStarvation(actor))
+                    {
+                        return false;
+                    }
+
+                    break;
+
+                case UsageRestrictionType.NoDehydration:
+
+                    if (IsRestrictedByDehydration(actor))
+                    {
+                        return false;
+                    }
+
+                    break;
+
+                case UsageRestrictionType.NoOverdose:
+
+                    if (IsRestrictedByOverdose(actor))
+                    {
+                        return false;
+                    }
+
+                    break;
+
+                case UsageRestrictionType.OnlySafeEnvironment:
+
+                    var hostilesinSector = context.Sector.ActorManager.Items
+                        .Where(x => x != actor && actor.Person.Fraction.GetRelation(x.Person.Fraction) !=
+                            FractionRelation.Enmity);
+                    if (hostilesinSector.Any())
+                    {
+                        return false;
+                    }
+
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Restriction {restrictionType} is unknown.");
+            }
+
             return true;
         }
 
