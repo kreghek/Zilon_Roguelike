@@ -110,13 +110,6 @@ namespace Zilon.TextClient
             }
         }
 
-        private static void PrintLookLegend()
-        {
-            Console.WriteLine($"{UiResource.NextNodeMarker} - {UiResource.NextNodeMarkerDescription}");
-            Console.WriteLine($"{UiResource.UndiscoveredNextNodeMarker} - {UiResource.UndiscoveredNextNodeMarkerDescription}");
-            Console.WriteLine($"{UiResource.TransitionNodeMarker} - {UiResource.TransitionNodeMarkerDescription}");
-        }
-
         private static void HandleMoveCommand(IServiceScope serviceScope, ISectorUiState uiState,
             ISectorNode playerActorSectorNode, string inputText)
         {
@@ -158,6 +151,14 @@ namespace Zilon.TextClient
             Console.WriteLine(UiResource.IdleCommandDescription);
             Console.WriteLine(UiResource.DeadCommandDescription);
             Console.WriteLine(UiResource.ExitCommandDescription);
+        }
+
+        private static void PrintLookLegend()
+        {
+            Console.WriteLine($"{UiResource.NextNodeMarker} - {UiResource.NextNodeMarkerDescription}");
+            Console.WriteLine(
+                $"{UiResource.UndiscoveredNextNodeMarker} - {UiResource.UndiscoveredNextNodeMarkerDescription}");
+            Console.WriteLine($"{UiResource.TransitionNodeMarker} - {UiResource.TransitionNodeMarkerDescription}");
         }
 
         private static void PrintState(IActor actor)
