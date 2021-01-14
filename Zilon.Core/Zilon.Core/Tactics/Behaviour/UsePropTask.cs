@@ -37,6 +37,25 @@ namespace Zilon.Core.Tactics.Behaviour
             Actor.UseProp(UsedProp);
         }
 
+        private static bool CheckEffectWithMaxLevel(IActor actor, SurvivalStatType effectType)
+        {
+            var isRestricted = false;
+
+            var effectModule = actor.Person.GetModuleSafe<IEffectsModule>();
+            if (effectModule != null)
+            {
+                var searchingEffect = effectModule.Items.OfType<SurvivalStatHazardEffect>()
+                    .SingleOrDefault(x => x.Type == effectType && x.Level == SurvivalStatHazardLevel.Max);
+
+                if (searchingEffect != null)
+                {
+                    isRestricted = true;
+                }
+            }
+
+            return isRestricted;
+        }
+
         private static bool CheckPropAllowedByRestrictions(IProp usedProp, IActor actor, IActorTaskContext context)
         {
             var restrictions = usedProp.Scheme.Use.Restrictions;
@@ -51,7 +70,8 @@ namespace Zilon.Core.Tactics.Behaviour
                 switch (restriction.Type)
                 {
                     case UsageRestrictionType.Undefined:
-                        throw new InvalidOperationException($"Restriction type is {nameof(UsageRestrictionType.Undefined)}.");
+                        throw new InvalidOperationException(
+                            $"Restriction type is {nameof(UsageRestrictionType.Undefined)}.");
 
                     case UsageRestrictionType.NoStarvation:
 
@@ -83,7 +103,8 @@ namespace Zilon.Core.Tactics.Behaviour
                     case UsageRestrictionType.OnlySafeEnvironment:
 
                         var hostilesinSector = context.Sector.ActorManager.Items
-                            .Where(x => x != actor && actor.Person.Fraction.GetRelation(x.Person.Fraction) != FractionRelation.Enmity);
+                            .Where(x => x != actor && actor.Person.Fraction.GetRelation(x.Person.Fraction) !=
+                                FractionRelation.Enmity);
                         if (hostilesinSector.Any())
                         {
                             return false;
@@ -93,17 +114,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
                     default:
                         throw new NotSupportedException($"Restriction {restriction.Type} is unknown.");
-
                 }
             }
 
             // No restrictions were fired means usage allowed.
             return true;
-        }
-
-        private static bool IsRestrictedByStarvation(IActor actor)
-        {
-            return CheckEffectWithMaxLevel(actor, SurvivalStatType.Satiety);
         }
 
         private static bool IsRestrictedByDehydration(IActor actor)
@@ -116,23 +131,9 @@ namespace Zilon.Core.Tactics.Behaviour
             return CheckEffectWithMaxLevel(actor, SurvivalStatType.Intoxication);
         }
 
-        private static bool CheckEffectWithMaxLevel(IActor actor, SurvivalStatType effectType)
+        private static bool IsRestrictedByStarvation(IActor actor)
         {
-            var isRestricted = false;
-
-            var effectModule = actor.Person.GetModuleSafe<IEffectsModule>();
-            if (effectModule != null)
-            {
-                var searchingEffect = effectModule.Items.OfType<SurvivalStatHazardEffect>()
-                    .SingleOrDefault(x => x.Type == effectType && x.Level == SurvivalStatHazardLevel.Max);
-
-                if (searchingEffect != null)
-                {
-                    isRestricted = true;
-                }
-            }
-
-            return isRestricted;
+            return CheckEffectWithMaxLevel(actor, SurvivalStatType.Satiety);
         }
     }
 }
