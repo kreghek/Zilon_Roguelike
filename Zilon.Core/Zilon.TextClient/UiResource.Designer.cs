@@ -160,6 +160,15 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A cell closest to the player person..
+        /// </summary>
+        internal static string NextNodeMarkerDescription {
+            get {
+                return ResourceManager.GetString("NextNodeMarkerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nodes.
         /// </summary>
         internal static string NodesLabel {
@@ -214,11 +223,29 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A cell with transition to other level..
+        /// </summary>
+        internal static string TransitionNodeMarkerDescription {
+            get {
+                return ResourceManager.GetString("TransitionNodeMarkerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to u.
         /// </summary>
-        internal static string UndiscaveredNodeMarker {
+        internal static string UndiscoveredNextNodeMarker {
             get {
-                return ResourceManager.GetString("UndiscaveredNodeMarker", resourceCulture);
+                return ResourceManager.GetString("UndiscoveredNextNodeMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A cell which have unknown cells near..
+        /// </summary>
+        internal static string UndiscoveredNextNodeMarkerDescription {
+            get {
+                return ResourceManager.GetString("UndiscoveredNextNodeMarkerDescription", resourceCulture);
             }
         }
     }

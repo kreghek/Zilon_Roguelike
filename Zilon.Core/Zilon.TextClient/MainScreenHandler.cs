@@ -63,6 +63,9 @@ namespace Zilon.TextClient
                 .Nodes.Where(x =>
                     x.State == SectorMapNodeFowState.Explored || x.State == SectorMapNodeFowState.Observing)
                 .Select(x => x.Node);
+            
+            PrintLookLegend();
+            Console.WriteLine();
 
             Console.WriteLine($"{UiResource.NodesLabel}:");
             Console.WriteLine();
@@ -84,7 +87,7 @@ namespace Zilon.TextClient
                     .Where(x => !fowNodesAll.Contains(x));
                 if (undiscoveredNodes.Any())
                 {
-                    Console.Write($" {UiResource.UndiscaveredNodeMarker}");
+                    Console.Write($" {UiResource.UndiscoveredNextNodeMarker}");
                 }
 
                 var monsterInNode =
@@ -105,6 +108,13 @@ namespace Zilon.TextClient
 
                 Console.WriteLine();
             }
+        }
+
+        private static void PrintLookLegend()
+        {
+            Console.WriteLine($"{UiResource.NextNodeMarker} - {UiResource.NextNodeMarkerDescription}");
+            Console.WriteLine($"{UiResource.UndiscoveredNextNodeMarker} - {UiResource.UndiscoveredNextNodeMarkerDescription}");
+            Console.WriteLine($"{UiResource.TransitionNodeMarker} - {UiResource.TransitionNodeMarkerDescription}");
         }
 
         private static void HandleMoveCommand(IServiceScope serviceScope, ISectorUiState uiState,

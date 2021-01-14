@@ -150,6 +150,9 @@
   <data name="NextNodeMarker" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="NextNodeMarkerDescription" xml:space="preserve">
+    <value>A cell closest to the player person.</value>
+  </data>
   <data name="NodesLabel" xml:space="preserve">
     <value>Nodes</value>
   </data>
@@ -168,7 +171,13 @@
   <data name="TransitionNodeMarker" xml:space="preserve">
     <value>t</value>
   </data>
-  <data name="UndiscaveredNodeMarker" xml:space="preserve">
+  <data name="TransitionNodeMarkerDescription" xml:space="preserve">
+    <value>A cell with transition to other level.</value>
+  </data>
+  <data name="UndiscoveredNextNodeMarker" xml:space="preserve">
     <value>u</value>
+  </data>
+  <data name="UndiscoveredNextNodeMarkerDescription" xml:space="preserve">
+    <value>A cell which have unknown cells near.</value>
   </data>
 </root>
