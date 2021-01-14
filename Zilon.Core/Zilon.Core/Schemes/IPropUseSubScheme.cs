@@ -30,7 +30,7 @@
     }
 
     public sealed class UsageRestrictionItem
-    { 
+    {
         public UsageRestrictionType Type { get; }
     }
 
@@ -40,7 +40,7 @@
     }
 
     public enum UsageRestrictionType
-    { 
+    {
         Undefined,
 
         /// <summary>
