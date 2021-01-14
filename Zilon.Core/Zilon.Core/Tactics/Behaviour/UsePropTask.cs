@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Props;
 
@@ -21,7 +22,19 @@ namespace Zilon.Core.Tactics.Behaviour
 
         protected override void ExecuteTask()
         {
+            var isAllow = CheckPropRestrictionsNotFired(Actor, Context);
+
+            if (!isAllow)
+            {
+                throw new InvalidOperationException($"Attempt to use the prop {UsedProp} which restricted in current context.");
+            }
+
             Actor.UseProp(UsedProp);
+        }
+
+        private static bool CheckPropRestrictionsNotFired(IActor actor, IActorTaskContext context)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
