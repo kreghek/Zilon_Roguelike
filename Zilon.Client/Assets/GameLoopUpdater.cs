@@ -66,7 +66,8 @@ class GameLoopUpdater
 
     private async Task StartGameLoopUpdateAsync(CancellationToken cancelToken)
     {
-        while (!_player.MainPerson.GetModule<ISurvivalModule>().IsDead)
+        var survivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
+        while (!survivalModule.IsDead)
         {
             cancelToken.ThrowIfCancellationRequested();
 
