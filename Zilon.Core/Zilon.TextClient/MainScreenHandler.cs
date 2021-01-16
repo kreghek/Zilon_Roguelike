@@ -192,7 +192,8 @@ namespace Zilon.TextClient
 
             var processTask = gameLoop.StartProcessAsync(cancellationTokenSource.Token);
             processTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
-            processTask.ContinueWith(task => Console.WriteLine("Game loop stopped."), TaskContinuationOptions.OnlyOnCanceled);
+            processTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
+                TaskContinuationOptions.OnlyOnCanceled);
 
             do
             {
