@@ -8,15 +8,15 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Triggers
 {
     public static class SurvivalHazardTriggerHelper
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods",
-            Justification = "All null checks in the top-level Test method.")]
         public static bool TestHazardAndResource(
             [NotNull] IActor actor,
+            Core.Tactics.Behaviour.ActorTaskContext taskContext,
             [NotNull] ILogicStrategyData strategyData,
             SurvivalStatType statType,
             ConsumeCommonRuleType ruleType)
@@ -27,7 +27,7 @@ namespace Zilon.Bot.Players.Triggers
                 return false;
             }
 
-            var resource = ResourceToReduceHazard(actor, ruleType);
+            var resource = ResourceToReduceHazard(actor, taskContext, ruleType);
             if (resource is null)
             {
                 strategyData.ResourceToReduceHazard = null;
@@ -63,7 +63,7 @@ namespace Zilon.Bot.Players.Triggers
         }
 
         [CanBeNull]
-        private static Resource ResourceToReduceHazard(IActor actor, ConsumeCommonRuleType ruleType)
+        private static Resource ResourceToReduceHazard(IActor actor, ActorTaskContext taskContext, ConsumeCommonRuleType ruleType)
         {
             if (actor is null)
             {
@@ -72,7 +72,11 @@ namespace Zilon.Bot.Players.Triggers
 
             var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
-            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
+
+            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(
+                actor,
+                taskContext,
+                resources,
                 ruleType);
 
             return bestResource;

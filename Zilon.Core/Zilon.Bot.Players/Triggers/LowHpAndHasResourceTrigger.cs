@@ -47,7 +47,13 @@ namespace Zilon.Bot.Players.Triggers
 
             var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
-            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
+            
+            var taskContext = new ActorTaskContext(context.Sector);
+
+            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(
+                actor,
+                taskContext,
+                resources,
                 ConsumeCommonRuleType.Health);
 
             if (bestResource == null)
