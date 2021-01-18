@@ -1,14 +1,14 @@
-name: Linter
+name: Code Linter
 
 # Run this workflow every time a new commit pushed to your repository
-on: push
+on: workflow_dispatch
 
 jobs:
   # Set the job key. The key is displayed as the job name
   # when a job name is not provided
   dotnet-format-lint:
     # Name the Job
-    name: Lint C# code base via dotnet-format
+    name: Clean up C# code base via dotnet-format
     # Set the type of machine to run on
     runs-on: ubuntu-latest
     env:
@@ -37,7 +37,7 @@ jobs:
   # when a job name is not provided
   resharper-core-lint:
     # Name the Job
-    name: Lint C# code base via R#
+    name: Clean up C# code base via R# CLT
     # Set the type of machine to run on
     runs-on: ubuntu-latest
     env:
