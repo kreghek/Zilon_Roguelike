@@ -538,6 +538,8 @@ public class SectorVM : MonoBehaviour
         _interuptCommands = true;
         _commandBlockerService.DropBlockers();
 
+        _commandBlockerService.AddBlocker(new TimeLimitedAnimationBlocker());
+
         var activeActor = actor;
         var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
         survivalModule.Dead -= HumanPersonSurvival_Dead;
