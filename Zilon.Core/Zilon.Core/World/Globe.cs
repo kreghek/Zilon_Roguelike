@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace Zilon.Core.World
         private readonly IList<ISectorNode> _sectorNodes;
 
         private readonly ConcurrentDictionary<IActor, TaskState> _taskDict;
+
         private int _turnCounter;
 
         public Globe(IGlobeTransitionHandler globeTransitionHandler)
@@ -267,6 +269,8 @@ namespace Zilon.Core.World
 
         public async Task UpdateAsync()
         {
+            CheckActorDuplicates();
+
             var actorsWithoutTasks = GetActorsWithoutTasks();
 
             await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
@@ -283,6 +287,21 @@ namespace Zilon.Core.World
                 }
 
                 _globeTransitionHandler.UpdateTransitions();
+            }
+        }
+
+        [Conditional("DEBUG")]
+        private void CheckActorDuplicates()
+        {
+            var actors = SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items).ToArray();
+            var personsInSectors = actors.Select(x => x.Person).Distinct().ToArray();
+            foreach (var person in personsInSectors)
+            {
+                var actorsOfPerson = actors.Where(x => x.Person == person).ToArray();
+                if (actorsOfPerson.Count() > 1)
+                {
+                    Debug.Fail("There are can be two actor of one person.");
+                }
             }
         }
 
