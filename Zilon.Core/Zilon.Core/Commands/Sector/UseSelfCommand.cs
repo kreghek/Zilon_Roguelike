@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
@@ -46,15 +44,12 @@ namespace Zilon.Core.Commands
                 throw new AppException("Попытка использовать предмет, для которого нет информации об использовании.");
             }
 
-            // На использование лагеря отдельная логика.
-            // Отдыхать можно только есть в секторе не осталось монстров.
-            if (prop.Scheme.Sid == "camp-tools")
+            
+            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var isAllowed = UsePropHelper.CheckPropAllowedByRestrictions(prop, PlayerState.ActiveActor.Actor, taskContext);
+            if (!isAllowed)
             {
-                var enemiesInSector = _player.SectorNode.Sector.ActorManager.Items.Where(x => x != CurrentActor);
-                if (enemiesInSector.Any())
-                {
-                    return false;
-                }
+                return false;
             }
 
             return true;
