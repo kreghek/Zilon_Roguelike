@@ -269,8 +269,6 @@ namespace Zilon.Core.World
 
         public async Task UpdateAsync()
         {
-            CheckActorDuplicates();
-
             var actorsWithoutTasks = GetActorsWithoutTasks();
 
             await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
@@ -287,21 +285,6 @@ namespace Zilon.Core.World
                 }
 
                 _globeTransitionHandler.UpdateTransitions();
-            }
-        }
-
-        [Conditional("DEBUG")]
-        private void CheckActorDuplicates()
-        {
-            var actors = SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items).ToArray();
-            var personsInSectors = actors.Select(x => x.Person).Distinct().ToArray();
-            foreach (var person in personsInSectors)
-            {
-                var actorsOfPerson = actors.Where(x => x.Person == person).ToArray();
-                if (actorsOfPerson.Count() > 1)
-                {
-                    Debug.Fail("There are can be two actor of one person.");
-                }
             }
         }
 
