@@ -112,7 +112,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 case UsageRestrictionRule.OnlySafeEnvironment:
 
                     var hostilesinSector = context.Sector.ActorManager.Items
-                        .Where(x => x != actor && actor.Person.Fraction.GetRelation(x.Person.Fraction) !=
+                        .Where(x => x != actor && actor.Person.Fraction.GetRelation(x.Person.Fraction) ==
                             FractionRelation.Enmity);
                     if (hostilesinSector.Any())
                     {
