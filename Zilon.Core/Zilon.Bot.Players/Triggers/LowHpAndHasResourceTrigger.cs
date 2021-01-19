@@ -47,7 +47,7 @@ namespace Zilon.Bot.Players.Triggers
 
             var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
-            
+
             var taskContext = new ActorTaskContext(context.Sector);
 
             var bestResource = ResourceFinder.FindBestConsumableResourceByRule(

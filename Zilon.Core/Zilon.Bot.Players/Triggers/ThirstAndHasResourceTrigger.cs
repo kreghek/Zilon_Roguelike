@@ -13,9 +13,9 @@ namespace Zilon.Bot.Players.Triggers
             var taskContext = new ActorTaskContext(context.Sector);
 
             return SurvivalHazardTriggerHelper.TestHazardAndResource(
-                actor, 
-                taskContext, 
-                strategyData, 
+                actor,
+                taskContext,
+                strategyData,
                 SurvivalStatType.Hydration,
                 ConsumeCommonRuleType.Thirst);
         }

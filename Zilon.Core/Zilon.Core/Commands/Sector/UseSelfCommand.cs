@@ -44,7 +44,7 @@ namespace Zilon.Core.Commands
                 throw new AppException("Попытка использовать предмет, для которого нет информации об использовании.");
             }
 
-            
+
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
             var isAllowed = UsePropHelper.CheckPropAllowedByRestrictions(prop, PlayerState.ActiveActor.Actor, taskContext);
             if (!isAllowed)
