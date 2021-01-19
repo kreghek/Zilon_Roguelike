@@ -33,11 +33,6 @@ namespace Zilon.Bot.Players.Triggers
         {
             foreach (var resource in resources)
             {
-                if (resource.Scheme.Sid == "camp-tools")
-                {
-                    continue;
-                }
-
                 var rule = resource.Scheme.Use?.CommonRules?
                     .SingleOrDefault(x => x.Type == ruleType && x.Direction == PersonRuleDirection.Positive);
 
