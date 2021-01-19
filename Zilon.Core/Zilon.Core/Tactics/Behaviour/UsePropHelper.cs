@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -10,9 +8,11 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
+    /// <summary>
+    /// Helper class to accumulate code for prop usage.
+    /// </summary>
     public static class UsePropHelper
     {
-
         private static bool CheckEffectWithMaxLevel(IActor actor, SurvivalStatType effectType)
         {
             var isRestricted = false;
@@ -87,6 +87,13 @@ namespace Zilon.Core.Tactics.Behaviour
             return true;
         }
 
+        /// <summary>
+        /// Checks a prop allowed to use by restriction rules.
+        /// </summary>
+        /// <param name="usedProp">The prop to use.</param>
+        /// <param name="actor">The actor using the prop.</param>
+        /// <param name="context"> The context of usage. </param>
+        /// <returns>Returns true if usage allowed. Otherwise - false.</returns>
         public static bool CheckPropAllowedByRestrictions(IProp usedProp, IActor actor, IActorTaskContext context)
         {
             var restrictions = usedProp.Scheme.Use.Restrictions;
