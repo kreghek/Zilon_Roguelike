@@ -1,6 +1,6 @@
 name: Code Linter
 
-on: workflow_dispatch
+on: push
 
 jobs:
   # Set the job key. The key is displayed as the job name
