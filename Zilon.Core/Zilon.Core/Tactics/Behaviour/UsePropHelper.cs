@@ -32,16 +32,16 @@ namespace Zilon.Core.Tactics.Behaviour
             return isRestricted;
         }
 
-        private static bool CheckPropAllowedByRestriction(UsageRestrictionType restrictionType, IActor actor,
+        private static bool CheckPropAllowedByRestriction(UsageRestrictionRule restrictionType, IActor actor,
             IActorTaskContext context)
         {
             switch (restrictionType)
             {
-                case UsageRestrictionType.Undefined:
+                case UsageRestrictionRule.Undefined:
                     throw new InvalidOperationException(
-                        $"Restriction type is {nameof(UsageRestrictionType.Undefined)}.");
+                        $"Restriction type is {nameof(UsageRestrictionRule.Undefined)}.");
 
-                case UsageRestrictionType.NoStarvation:
+                case UsageRestrictionRule.NoStarvation:
 
                     if (IsRestrictedByStarvation(actor))
                     {
@@ -50,7 +50,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                     break;
 
-                case UsageRestrictionType.NoDehydration:
+                case UsageRestrictionRule.NoDehydration:
 
                     if (IsRestrictedByDehydration(actor))
                     {
@@ -59,7 +59,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                     break;
 
-                case UsageRestrictionType.NoOverdose:
+                case UsageRestrictionRule.NoOverdose:
 
                     if (IsRestrictedByOverdose(actor))
                     {
@@ -68,7 +68,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                     break;
 
-                case UsageRestrictionType.OnlySafeEnvironment:
+                case UsageRestrictionRule.OnlySafeEnvironment:
 
                     var hostilesinSector = context.Sector.ActorManager.Items
                         .Where(x => x != actor && actor.Person.Fraction.GetRelation(x.Person.Fraction) !=

@@ -23,44 +23,4 @@
         /// </summary>
         IUsageRestrictions Restrictions { get; }
     }
-
-    public interface IUsageRestrictions
-    {
-        UsageRestrictionItem[] Items { get; }
-    }
-
-    public sealed class UsageRestrictionItem
-    {
-        public UsageRestrictionType Type { get; }
-    }
-
-    public sealed class UsageRestrictions : IUsageRestrictions
-    {
-        public UsageRestrictionItem[] Items { get; }
-    }
-
-    public enum UsageRestrictionType
-    {
-        Undefined,
-
-        /// <summary>
-        /// Persons can use this prop only when no monsters near.
-        /// </summary>
-        OnlySafeEnvironment,
-
-        /// <summary>
-        /// Persons can use this prop only when they has no hunger in critical state.
-        /// </summary>
-        NoStarvation,
-
-        /// <summary>
-        /// Persons can use this prop only when they has no thrist in critical state.
-        /// </summary>
-        NoDehydration,
-
-        /// <summary>
-        /// Persons can use this prop only when they has no intoxication in critical state.
-        /// </summary>
-        NoOverdose
-    }
 }
