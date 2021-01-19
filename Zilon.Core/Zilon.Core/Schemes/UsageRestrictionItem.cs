@@ -3,11 +3,11 @@
 namespace Zilon.Core.Schemes
 {
     /// <summary>
-    /// Base implementation of <see cref="IUsageRestrictionItem"/>
+    /// Base implementation of <see cref="IUsageRestrictionItem" />
     /// </summary>
     public sealed class UsageRestrictionItem : IUsageRestrictionItem
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         public UsageRestrictionRule Type { get; private set; }
     }
