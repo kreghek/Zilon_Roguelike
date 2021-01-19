@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.PersonModules;
@@ -27,6 +28,16 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 // Prop without restrictions automaticcaly allowed.
                 return true;
+            }
+
+            if (restrictions.Items is null)
+            {
+                Debug.Fail("The restriction items can not be null.");
+
+                // There are restrictions but items is null. This is incorrect.
+                // We know it restricted but don't know how to check it.
+                // So prop is now allowed at all.
+                return false;
             }
 
             foreach (var restriction in restrictions.Items)

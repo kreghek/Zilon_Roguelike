@@ -1,13 +1,14 @@
-﻿namespace Zilon.Core.Schemes
+﻿using Newtonsoft.Json;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
-    /// Restriction item as a element of a restriction set.
+    /// Base implementation of <see cref="IUsageRestrictionItem"/>
     /// </summary>
-    public sealed class UsageRestrictionItem
+    public sealed class UsageRestrictionItem : IUsageRestrictionItem
     {
-        /// <summary>
-        /// Restriction rule.
-        /// </summary>
-        public UsageRestrictionRule Type { get; }
+        /// <inheritdoc/>
+        [JsonProperty]
+        public UsageRestrictionRule Type { get; private set; }
     }
 }
