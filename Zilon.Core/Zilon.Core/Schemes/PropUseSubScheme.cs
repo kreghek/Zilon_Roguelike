@@ -17,6 +17,7 @@ namespace Zilon.Core.Schemes
 
         /// <inheritdoc/>
         [JsonProperty]
+        [JsonConverter(typeof(ConcreteTypeConverter<UsageRestrictions>))]
         public IUsageRestrictions Restrictions { get; private set; }
     }
 }

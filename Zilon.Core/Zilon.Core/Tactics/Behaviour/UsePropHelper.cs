@@ -90,7 +90,7 @@ namespace Zilon.Core.Tactics.Behaviour
         public static bool CheckPropAllowedByRestrictions(IProp usedProp, IActor actor, IActorTaskContext context)
         {
             var restrictions = usedProp.Scheme.Use.Restrictions;
-            if (restrictions != null)
+            if (restrictions is null)
             {
                 // Prop without restrictions automaticcaly allowed.
                 return true;
