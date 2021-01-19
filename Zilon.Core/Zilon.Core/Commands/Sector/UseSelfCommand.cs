@@ -45,7 +45,8 @@ namespace Zilon.Core.Commands
             }
 
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
-            var isAllowed = UsePropHelper.CheckPropAllowedByRestrictions(prop, PlayerState.ActiveActor.Actor, taskContext);
+            var isAllowed =
+                UsePropHelper.CheckPropAllowedByRestrictions(prop, PlayerState.ActiveActor.Actor, taskContext);
             if (!isAllowed)
             {
                 return false;

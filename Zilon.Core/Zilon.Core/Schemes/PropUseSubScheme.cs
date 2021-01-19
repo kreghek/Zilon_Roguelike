@@ -7,15 +7,15 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public class PropUseSubScheme : SubSchemeBase, IPropUseSubScheme
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         public bool Consumable { get; private set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         public ConsumeCommonRule[] CommonRules { get; private set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<UsageRestrictions>))]
         public IUsageRestrictions Restrictions { get; private set; }

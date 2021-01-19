@@ -16,7 +16,7 @@ namespace Zilon.Bot.Players.Triggers
     {
         public static bool TestHazardAndResource(
             [NotNull] IActor actor,
-            Core.Tactics.Behaviour.ActorTaskContext taskContext,
+            ActorTaskContext taskContext,
             [NotNull] ILogicStrategyData strategyData,
             SurvivalStatType statType,
             ConsumeCommonRuleType ruleType)
@@ -63,7 +63,8 @@ namespace Zilon.Bot.Players.Triggers
         }
 
         [CanBeNull]
-        private static Resource ResourceToReduceHazard(IActor actor, ActorTaskContext taskContext, ConsumeCommonRuleType ruleType)
+        private static Resource ResourceToReduceHazard(IActor actor, ActorTaskContext taskContext,
+            ConsumeCommonRuleType ruleType)
         {
             if (actor is null)
             {

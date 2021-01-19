@@ -13,6 +13,36 @@ namespace Zilon.Core.Tactics.Behaviour
     /// </summary>
     public static class UsePropHelper
     {
+        /// <summary>
+        /// Checks a prop allowed to use by restriction rules.
+        /// </summary>
+        /// <param name="usedProp">The prop to use.</param>
+        /// <param name="actor">The actor using the prop.</param>
+        /// <param name="context"> The context of usage. </param>
+        /// <returns>Returns true if usage allowed. Otherwise - false.</returns>
+        public static bool CheckPropAllowedByRestrictions(IProp usedProp, IActor actor, IActorTaskContext context)
+        {
+            var restrictions = usedProp.Scheme.Use.Restrictions;
+            if (restrictions is null)
+            {
+                // Prop without restrictions automaticcaly allowed.
+                return true;
+            }
+
+            foreach (var restriction in restrictions.Items)
+            {
+                var isAllowed = CheckPropAllowedByRestriction(restriction.Type, actor, context);
+
+                if (!isAllowed)
+                {
+                    return false;
+                }
+            }
+
+            // No restrictions were fired means usage allowed.
+            return true;
+        }
+
         private static bool CheckEffectWithMaxLevel(IActor actor, SurvivalStatType effectType)
         {
             var isRestricted = false;
@@ -84,36 +114,6 @@ namespace Zilon.Core.Tactics.Behaviour
                     throw new NotSupportedException($"Restriction {restrictionType} is unknown.");
             }
 
-            return true;
-        }
-
-        /// <summary>
-        /// Checks a prop allowed to use by restriction rules.
-        /// </summary>
-        /// <param name="usedProp">The prop to use.</param>
-        /// <param name="actor">The actor using the prop.</param>
-        /// <param name="context"> The context of usage. </param>
-        /// <returns>Returns true if usage allowed. Otherwise - false.</returns>
-        public static bool CheckPropAllowedByRestrictions(IProp usedProp, IActor actor, IActorTaskContext context)
-        {
-            var restrictions = usedProp.Scheme.Use.Restrictions;
-            if (restrictions is null)
-            {
-                // Prop without restrictions automaticcaly allowed.
-                return true;
-            }
-
-            foreach (var restriction in restrictions.Items)
-            {
-                var isAllowed = CheckPropAllowedByRestriction(restriction.Type, actor, context);
-
-                if (!isAllowed)
-                {
-                    return false;
-                }
-            }
-
-            // No restrictions were fired means usage allowed.
             return true;
         }
 
