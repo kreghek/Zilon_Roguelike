@@ -18,17 +18,24 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
     public class UsePropHelperTests
     {
         [Test]
-        [TestCaseSource(typeof(UsePropHelperTestCaseSource), nameof(UsePropHelperTestCaseSource.NoCriticalEffectTestCases))]
-        public void CheckPropAllowedByRestrictions_HasMaxSurivalHazardEffect_UsageIsNoAllowed(SurvivalStatType effectStatType, UsageRestrictionRule usageRule)
+        [TestCaseSource(typeof(UsePropHelperTestCaseSource),
+            nameof(UsePropHelperTestCaseSource.NoCriticalEffectTestCases))]
+        public void CheckPropAllowedByRestrictions_HasMaxSurivalHazardEffect_UsageIsNoAllowed(
+            SurvivalStatType effectStatType, UsageRestrictionRule usageRule)
         {
             // ARRANGE
 
             var personMock = new Mock<IPerson>();
 
             var effectsModuleMock = new Mock<IEffectsModule>();
-            var effects = new[] { new SurvivalStatHazardEffect(effectStatType, SurvivalStatHazardLevel.Max, Mock.Of<ISurvivalRandomSource>()) };
+            var effects = new[]
+            {
+                new SurvivalStatHazardEffect(effectStatType, SurvivalStatHazardLevel.Max,
+                    Mock.Of<ISurvivalRandomSource>())
+            };
             effectsModuleMock.Setup(x => x.Items).Returns(effects);
-            personMock.Setup(x => x.GetModule<IEffectsModule>(nameof(IEffectsModule))).Returns(effectsModuleMock.Object);
+            personMock.Setup(x => x.GetModule<IEffectsModule>(nameof(IEffectsModule)))
+                .Returns(effectsModuleMock.Object);
             personMock.Setup(x => x.HasModule(nameof(IEffectsModule))).Returns(true);
 
             var actor = Mock.Of<IActor>(x => x.Person == personMock.Object);
@@ -37,7 +44,8 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             {
                 Use = new TestPropUseSubScheme
                 {
-                    Restrictions = Mock.Of<IUsageRestrictions>(x => x.Items == new[] { Mock.Of<IUsageRestrictionItem>(item => item.Type == usageRule) })
+                    Restrictions = Mock.Of<IUsageRestrictions>(x =>
+                        x.Items == new[] { Mock.Of<IUsageRestrictionItem>(item => item.Type == usageRule) })
                 }
             };
             var prop = new Resource(propScheme, 1);
