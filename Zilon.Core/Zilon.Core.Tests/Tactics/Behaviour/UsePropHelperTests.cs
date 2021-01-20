@@ -26,15 +26,17 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
             var personMock = new Mock<IPerson>();
 
             var effectsModuleMock = new Mock<IEffectsModule>();
-            var effects = new[] { new SurvivalStatHazardEffect(effectStatType, SurvivalStatHazardLevel.Max, Mock.Of<ISurvivalRandomSource>())};
+            var effects = new[] { new SurvivalStatHazardEffect(effectStatType, SurvivalStatHazardLevel.Max, Mock.Of<ISurvivalRandomSource>()) };
             effectsModuleMock.Setup(x => x.Items).Returns(effects);
             personMock.Setup(x => x.GetModule<IEffectsModule>(nameof(IEffectsModule))).Returns(effectsModuleMock.Object);
             personMock.Setup(x => x.HasModule(nameof(IEffectsModule))).Returns(true);
 
             var actor = Mock.Of<IActor>(x => x.Person == personMock.Object);
 
-            var propScheme = new TestPropScheme {
-                Use = new TestPropUseSubScheme {
+            var propScheme = new TestPropScheme
+            {
+                Use = new TestPropUseSubScheme
+                {
                     Restrictions = Mock.Of<IUsageRestrictions>(x => x.Items == new[] { Mock.Of<IUsageRestrictionItem>(item => item.Type == usageRule) })
                 }
             };
@@ -52,9 +54,11 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
     }
 
     public static class UsePropHelperTestCaseSource
-    { 
-        public static IEnumerable NoCriticalEffectTestCases {
-            get {
+    {
+        public static IEnumerable NoCriticalEffectTestCases
+        {
+            get
+            {
                 yield return new TestCaseData(SurvivalStatType.Satiety, UsageRestrictionRule.NoStarvation);
                 yield return new TestCaseData(SurvivalStatType.Hydration, UsageRestrictionRule.NoDehydration);
                 yield return new TestCaseData(SurvivalStatType.Intoxication, UsageRestrictionRule.NoOverdose);
