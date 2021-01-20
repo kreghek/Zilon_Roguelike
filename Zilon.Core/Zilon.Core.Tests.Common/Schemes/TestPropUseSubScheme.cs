@@ -7,6 +7,6 @@ namespace Zilon.Core.Tests.Common.Schemes
     {
         public bool Consumable { get; set; }
         public ConsumeCommonRule[] CommonRules { get; set; }
-        public IUsageRestrictions Restrictions { get; private set; }
+        public IUsageRestrictions Restrictions { get; set; }
     }
 }
