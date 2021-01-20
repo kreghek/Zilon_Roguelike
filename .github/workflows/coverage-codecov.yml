@@ -56,4 +56,3 @@ jobs:
         working-directory: ${{env.TEST_RESULT_PATH}}
         files: ./coverage.cobertura.xml
         fail_ci_if_error: true
-        verbose: true
