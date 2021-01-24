@@ -10,7 +10,13 @@ namespace Zilon.Bot.Players.Triggers
         protected override bool TestInner(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
             ILogicStrategyData strategyData)
         {
-            return SurvivalHazardTriggerHelper.TestHazardAndResource(actor, strategyData, SurvivalStatType.Hydration,
+            var taskContext = new ActorTaskContext(context.Sector);
+
+            return SurvivalHazardTriggerHelper.TestHazardAndResource(
+                actor,
+                taskContext,
+                strategyData,
+                SurvivalStatType.Hydration,
                 ConsumeCommonRuleType.Thirst);
         }
     }
