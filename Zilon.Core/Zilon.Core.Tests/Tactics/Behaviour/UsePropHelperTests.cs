@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-using FluentAssertions;
+﻿using FluentAssertions;
 
 using Moq;
 
@@ -58,19 +56,6 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             // ASSERT
             fact.Should().BeFalse();
-        }
-    }
-
-    public static class UsePropHelperTestCaseSource
-    {
-        public static IEnumerable NoCriticalEffectTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(SurvivalStatType.Satiety, UsageRestrictionRule.NoStarvation);
-                yield return new TestCaseData(SurvivalStatType.Hydration, UsageRestrictionRule.NoDehydration);
-                yield return new TestCaseData(SurvivalStatType.Intoxication, UsageRestrictionRule.NoOverdose);
-            }
         }
     }
 }
