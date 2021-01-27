@@ -2,7 +2,7 @@
 
 set -e
 
-mkdir -p /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/test_mass_sector_generator/maps
+mkdir -p $SECTORS_OUT
 
 TOTAL_EXIT_CODE=0
 for i in $(seq 1 100); do
@@ -12,7 +12,7 @@ for i in $(seq 1 100); do
     --framework netcoreapp3.1 \
 	--configuration Release \
 	--runtime linux-x64 \
-    -- out="/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/test_mass_sector_generator/maps/map-$i.bmp"
+    -- out="$SECTORS_OUT/map-$i.bmp"
 	
   EXIT_CODE=$?
   

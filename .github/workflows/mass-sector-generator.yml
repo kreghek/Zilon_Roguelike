@@ -6,6 +6,8 @@ jobs:
   run:
     name: Run Mass sector generator
     runs-on: ubuntu-latest
+    env:
+      SECTORS_OUT: $GITHUB_WORKSPACE/test_mass_sector_generator/maps
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
@@ -14,9 +16,9 @@ jobs:
           dotnet-version: '3.1.x'
       - name: Launch Mass Sector Generator Script
         env:
-          ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
+          ZILON_LIV_SCHEME_CATALOG: $GITHUB_WORKSPACE/Zilon.Client/Assets/Resources/Schemes
         run: chmod +x BuildServerScripts/sector_mass_generator.sh && BuildServerScripts/sector_mass_generator.sh
       - uses: actions/upload-artifact@v1
         with:
           name: MassSectorGeneration
-          path: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/test_mass_sector_generator/maps
+          path: $SECTORS_OUT
