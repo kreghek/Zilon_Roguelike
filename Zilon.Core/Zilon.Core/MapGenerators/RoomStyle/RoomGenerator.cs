@@ -102,8 +102,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
             var openTransitions = new List<SectorTransition>(availableTransitions);
 
-            var startAssigned = false;
-
             var rolledRoomSizeList = _randomSource.RollRoomSize(roomMinSize, roomMaxSize, roomCount);
 
             for (var i = 0; i < roomCount; i++)
@@ -129,11 +127,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
 
                     room.Transitions.AddRange(roomTransitions);
                     openTransitions.RemoveAll(transition => roomTransitions.Contains(transition));
-                }
-                else if (!startAssigned)
-                {
-                    room.IsStart = true;
-                    startAssigned = true;
                 }
 
                 rooms.Add(room);

@@ -21,11 +21,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public int Height { get; set; }
 
         /// <summary>
-        /// Признак того, что комната является стартовой в секторе.
-        /// </summary>
-        public bool IsStart { get; set; }
-
-        /// <summary>
         /// Узлы данной комнаты.
         /// </summary>
         public List<HexNode> Nodes { get; }

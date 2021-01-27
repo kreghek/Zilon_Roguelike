@@ -78,12 +78,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 regionIdCounter++;
                 map.Regions.Add(region);
 
-                if (room.IsStart)
-                {
-                    region.IsStart = true;
-                    continue;
-                }
-
                 if (room.Transitions?.Any() == true)
                 {
                     region.ExitNodes = (from regionNode in region.Nodes

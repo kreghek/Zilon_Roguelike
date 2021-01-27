@@ -50,8 +50,6 @@ namespace Zilon.Core.MapGenerators.PrimitiveStyle
 
             var mapRegion = new MapRegion(1, map.Nodes.ToArray())
             {
-                IsStart = true,
-                IsOut = true,
                 ExitNodes = new[] { map.Nodes.Last() }
             };
 
