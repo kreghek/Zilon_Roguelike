@@ -12,7 +12,10 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x'
-      - run: chmod +x BuildServerScripts/sector_mass_generator.sh && BuildServerScripts/sector_mass_generator.sh
+      - name: Launch Mass Sector Generator Script
+        env:
+          ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
+        run: chmod +x BuildServerScripts/sector_mass_generator.sh && BuildServerScripts/sector_mass_generator.sh
       - uses: actions/upload-artifact@v1
         with:
           name: MassSectorGeneration
