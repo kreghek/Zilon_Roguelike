@@ -16,4 +16,4 @@ jobs:
       - uses: actions/upload-artifact@v1
         with:
           name: MassSectorGeneration
-          path: /test_mass_sector_generator/maps
+          path: $HOME/test_mass_sector_generator/maps
