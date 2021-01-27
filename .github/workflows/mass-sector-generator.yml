@@ -16,4 +16,4 @@ jobs:
       - uses: actions/upload-artifact@v1
         with:
           name: MassSectorGeneration
-          path: $HOME/test_mass_sector_generator/maps
+          path: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/test_mass_sector_generator/maps
