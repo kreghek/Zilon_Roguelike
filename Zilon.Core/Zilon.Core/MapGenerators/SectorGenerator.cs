@@ -95,7 +95,7 @@ namespace Zilon.Core.MapGenerators
 
             DefineDiseases(sector);
 
-            var gameObjectRegions = map.Regions.Where(x => !x.IsStart).ToArray();
+            var gameObjectRegions = map.Regions.ToArray();
 
             var sectorScheme = sectorNode.SectorScheme;
 

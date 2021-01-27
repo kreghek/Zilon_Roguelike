@@ -25,29 +25,16 @@ namespace Zilon.Core.MassSectorGenerator.SectorValidators
 
                 if (transitions.Any())
                 {
-                    var hasStartRegion = false;
-                    var hasTransitionInregionsNodes = false;
+                    var hasTransitionInRegionsNodes = false;
                     foreach (var region in sector.Map.Regions)
                     {
-                        if (region.IsStart)
-                        {
-                            hasStartRegion = true;
-                        }
-
                         if ((region.ExitNodes?.Any()).GetValueOrDefault())
                         {
-                            hasTransitionInregionsNodes = true;
+                            hasTransitionInRegionsNodes = true;
                         }
                     }
 
-                    if (!hasStartRegion)
-                    {
-                        // Хоть один регион должен быть отмечен, как стартовый.
-                        // Чтобы клиенты знали, где размещать персонажа после генерации.
-                        throw new SectorValidationException("Не задан стартовый регион.");
-                    }
-
-                    if (!hasTransitionInregionsNodes)
+                    if (!hasTransitionInRegionsNodes)
                     {
                         // Переходы должны быть явно обозначены в регионах.
                         //TODO Рассмотреть вариант упрощения

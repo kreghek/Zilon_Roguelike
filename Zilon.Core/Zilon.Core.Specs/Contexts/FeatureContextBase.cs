@@ -179,8 +179,6 @@ namespace Zilon.Core.Specs.Contexts
 
                 var mapRegion = new MapRegion(id: 1, map.Nodes.ToArray())
                 {
-                    IsStart = true,
-                    IsOut = true,
                     ExitNodes = new[] { map.Nodes.Last() }
                 };
 
@@ -208,8 +206,6 @@ namespace Zilon.Core.Specs.Contexts
 
                 var mapRegion = new MapRegion(id: 1, map.Nodes.ToArray())
                 {
-                    IsStart = true,
-                    IsOut = true,
                     ExitNodes = new[] { map.Nodes.Last() }
                 };
 

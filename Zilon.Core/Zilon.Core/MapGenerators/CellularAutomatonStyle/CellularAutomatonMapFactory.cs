@@ -59,7 +59,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             MapRegion[] regionOrderedBySize)
         {
             var startRegion = regionOrderedBySize.First();
-            startRegion.IsStart = true;
 
             var transitionArray = transitions.ToArray();
             // Пропускаем 1, потому что 1 занять стартом.
@@ -77,11 +76,6 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 var transitionNode = transitionRegion.Nodes.First();
 
                 map.Transitions.Add(transitionNode, transition);
-
-                if (transition.SectorNode == null)
-                {
-                    transitionRegion.IsOut = true;
-                }
 
                 transitionRegion.ExitNodes = (from regionNode in transitionRegion.Nodes
                                               where map.Transitions.Keys.Contains(regionNode)

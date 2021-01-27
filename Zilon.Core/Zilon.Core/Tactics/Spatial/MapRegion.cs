@@ -28,10 +28,6 @@ namespace Zilon.Core.Tactics.Spatial
 
         public int Id { get; }
 
-        public bool IsOut { get; set; }
-
-        public bool IsStart { get; set; }
-
         public IGraphNode[] Nodes { get; }
 
         public override string ToString()
