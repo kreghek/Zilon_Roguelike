@@ -1,0 +1,22 @@
+name: Validators
+
+on:
+  push
+  schedule:
+    - cron: '0 0 * * *' # run at 0 AM UTC
+
+jobs:
+  run:
+    name: Run Mass sector generator
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - run: chmod +x BuildServerScripts/sector_mass_generator.sh && BuildServerScripts/sector_mass_generator.sh
+      - uses: actions/upload-artifact@v1
+        with:
+          name: MassSectorGeneration
+          path: /test_mass_sector_generator/maps
