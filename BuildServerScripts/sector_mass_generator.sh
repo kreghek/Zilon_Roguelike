@@ -8,21 +8,29 @@ TOTAL_EXIT_CODE=0
 for i in $(seq 1 100); do
   echo "======= $i ========="
   
-  dotnet run -p Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj \
-    --framework netcoreapp3.1 \
-	--configuration Release \
-	--runtime linux-x64 \
-    -- out="/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/test_mass_sector_generator/maps/map-$i.bmp"
+  # https://stackoverflow.com/questions/22009364/is-there-a-try-catch-command-in-bash
+  { # try
 	
-  EXIT_CODE=$?
-  
-  if [ $EXIT_CODE -eq 0 ]; then
-    echo "Iteration successfull";
-  else
-    TOTAL_EXIT_CODE=1;
-  fi
-  
-  echo "--------------------"
+	set +e # disable fail if some of command is failed
+	
+    dotnet run -p Zilon.Core/Zilon.Core.MassSectorGenerator/Zilon.Core.MassSectorGenerator.csproj \
+      --framework netcoreapp3.1 \
+		--configuration Release \
+		--runtime linux-x64 \
+      -- out="/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/test_mass_sector_generator/maps/map-$i.bmp"
+		
+	set -e
+	
+  } ||  { # catch
+    if [ $? -eq 0 ]
+    then
+      echo "Iteration successfull"
+    else
+      TOTAL_EXIT_CODE=$?
+    fi
+  }
+    
+    echo "--------------------"
 done
 
 if [ $TOTAL_EXIT_CODE -eq 0 ]; then
