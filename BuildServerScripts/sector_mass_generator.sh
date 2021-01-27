@@ -4,7 +4,7 @@ set -e
 
 mkdir -p /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/test_mass_sector_generator/maps
 
-TOTAL_EXIT_CODE=0
+$TOTAL_EXIT_CODE=0
 for i in $(seq 1 100); do
   echo "======= $i ========="
   
@@ -26,7 +26,7 @@ for i in $(seq 1 100); do
     then
       echo "Iteration successfull"
     else
-      TOTAL_EXIT_CODE=$?
+      $TOTAL_EXIT_CODE=$?
     fi
   }
     
