@@ -46,7 +46,7 @@ public class TutorialPageHandler : MonoBehaviour
                 langKey = "ru";
                 break;
 
-            
+
             case Language.English:
                 langKey = "en";
                 break;
