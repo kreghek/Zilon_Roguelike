@@ -1,0 +1,1 @@
+To move or interact with objects, use LMB.

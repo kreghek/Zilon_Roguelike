@@ -1,0 +1,3 @@
+Hunger, thirst and hostile environment are the main threats to survival. In addition, there is toxicity, illness and other unpleasant things that make the character more vulnerable.
+
+There is no health bar or anything like that. If the character is mortally wounded or starving, an effect will appear that says "Fatal wound" or "Starvation". In this case, you need to find food, water, medicine, or a quiet place to rest.
