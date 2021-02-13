@@ -87,7 +87,7 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
 
         var currentLanguage = _uiSettingService.CurrentLanguage;
 
-        DescriptionText.text = GetLocalizedManualText(currentLanguage, $"page{pageIndex+1}");
+        DescriptionText.text = GetLocalizedManualText(currentLanguage, $"page{pageIndex + 1}");
     }
 
     private static string GetLocalizedManualText(Language currentLanguage, string mainKey)
@@ -109,7 +109,7 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
                 {
                     throw new ArgumentException($"Некоректное значение языка {currentLanguage}.");
                 }
-                
+
                 langKey = "en";
 
                 break;
