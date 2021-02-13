@@ -121,7 +121,6 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
                 langKey = "en";
 
                 break;
-
         }
 
         var text = Resources.Load<TextAsset>($@"Tutorial\{mainKey}-{langKey}");
