@@ -10,6 +10,9 @@ using Zenject;
 
 public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
 {
+    private const string MODAL_CAPTION_RU = "Прочти Это Грёбанное Руководство!";
+    private const string MODAL_CAPTION_EN = "Read The Fucking Manual!";
+
     [Inject]
     private readonly UiSettingService _uiSettingService;
 
@@ -26,9 +29,15 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
 
     public event EventHandler Closed;
 
-    public string Caption => "Read The Fucking Manual!"; // Прочти Это Грёбанное Руководство.
+    public string Caption { get; private set; }
 
     public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.DoNothing;
+
+    public void Init()
+    {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+        Caption = GetLocalizedManualCaption(currentLanguage);
+    }
 
     public void Start()
     {
@@ -88,17 +97,17 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
 
         var currentLanguage = _uiSettingService.CurrentLanguage;
 
-        DescriptionImage.sprite = GetManualImage($"page{pageIndex + 1}");
-        DescriptionText.text = GetLocalizedManualText(currentLanguage, $"page{pageIndex + 1}");
+        DescriptionImage.sprite = GetTutorialImage($"page{pageIndex + 1}");
+        DescriptionText.text = GetLocalizedTutorialText(currentLanguage, $"page{pageIndex + 1}");
     }
 
-    private Sprite GetManualImage(string mainKey)
+    private Sprite GetTutorialImage(string mainKey)
     {
         var sprite = Resources.Load<Sprite>($@"Tutorial\{mainKey}");
         return sprite;
     }
 
-    private static string GetLocalizedManualText(Language currentLanguage, string mainKey)
+    private static string GetLocalizedTutorialText(Language currentLanguage, string mainKey)
     {
         string langKey;
         switch (currentLanguage)
@@ -115,7 +124,7 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
             case Language.Undefined:
                 if (Debug.isDebugBuild || Application.isEditor)
                 {
-                    throw new ArgumentException($"Некоректное значение языка {currentLanguage}.");
+                    throw new ArgumentException($"Incorrect language value: {currentLanguage}.");
                 }
 
                 langKey = "en";
@@ -126,5 +135,33 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
         var text = Resources.Load<TextAsset>($@"Tutorial\{mainKey}-{langKey}");
 
         return text.text;
+    }
+
+    private static string GetLocalizedManualCaption(Language currentLanguage)
+    {
+        string localizedCaption;
+        switch (currentLanguage)
+        {
+            case Language.Russian:
+                localizedCaption = MODAL_CAPTION_RU;
+                break;
+
+            case Language.English:
+                localizedCaption = MODAL_CAPTION_EN;
+                break;
+
+            default:
+            case Language.Undefined:
+                if (Debug.isDebugBuild || Application.isEditor)
+                {
+                    throw new ArgumentException($"Incorrect language value: {currentLanguage}.");
+                }
+
+                localizedCaption = MODAL_CAPTION_EN;
+
+                break;
+        }
+
+        return localizedCaption;
     }
 }
