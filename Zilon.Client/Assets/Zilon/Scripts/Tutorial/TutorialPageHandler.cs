@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
 using Assets.Zilon.Scripts.Services;
 
@@ -31,32 +29,32 @@ public class TutorialPageHandler : MonoBehaviour
         string langKey;
         switch (currentLanguage)
         {
-            case Language.Undefined:
-                if (Debug.isDebugBuild)
-                {
-                    throw new ArgumentException($"Некоректное значение языка {currentLanguage}.");
-                }
-                else
-                {
-                    langKey = "en";
-                }
-                break;
-
             case Language.Russian:
                 langKey = "ru";
                 break;
-
 
             case Language.English:
                 langKey = "en";
                 break;
 
+            case Language.Undefined:
             default:
-                langKey = "en";
+                langKey = GetDefaultOrThrowDebugException(currentLanguage);
                 break;
         }
+
         var text = Resources.Load<TextAsset>($@"Tutorial\{mainKey}-{langKey}");
 
         return text.text;
+    }
+
+    private static string GetDefaultOrThrowDebugException(Language currentLanguage)
+    {
+        if (Debug.isDebugBuild)
+        {
+            throw new ArgumentException($"Incorrect UI language value {currentLanguage}.");
+        }
+
+        return "en";
     }
 }
