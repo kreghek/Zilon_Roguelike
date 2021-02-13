@@ -1,45 +1,56 @@
 ﻿using System;
+
 using Assets.Zilon.Scripts;
+using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 using UnityEngine.UI;
 
+using Zenject;
+
 public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
 {
+    [Inject]
+    private readonly UiSettingService _uiSettingService;
+
     private int _pageCounter;
 
-    public GameObject[] Pages;
+    public int PageCount;
+
     public Button NextButton;
     public Button PrevButton;
 
+    public Text DescriptionText;
+    public Text PagesProgressText;
+
     public event EventHandler Closed;
 
-    public string Caption => "Tutorial!";
+    public string Caption => "Read The Fucking Manual!"; // Прочти Это Грёбанное Руководство.
 
     public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.DoNothing;
 
     public void Start()
     {
         _pageCounter = 0;
-        ShowPage();
+        ShowPage(_pageCounter);
     }
 
     public void NextButton_Handler()
     {
         _pageCounter++;
 
-        if (_pageCounter >= Pages.Length)
+        if (_pageCounter >= PageCount)
         {
-            _pageCounter = Pages.Length - 1;
+            _pageCounter = PageCount - 1;
         }
 
         var isFirstPath = _pageCounter == 0;
         PrevButton.gameObject.SetActive(!isFirstPath);
 
-        var isLastPage = _pageCounter == Pages.Length - 1;
+        var isLastPage = _pageCounter == PageCount - 1;
         NextButton.gameObject.SetActive(!isLastPage);
 
-        ShowPage();
+        ShowPage(_pageCounter);
     }
 
     public void PrevButton_Handler()
@@ -54,10 +65,10 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
         var isFirstPath = _pageCounter == 0;
         PrevButton.gameObject.SetActive(!isFirstPath);
 
-        var isLastPage = _pageCounter == Pages.Length - 1;
+        var isLastPage = _pageCounter == PageCount - 1;
         NextButton.gameObject.SetActive(!isLastPage);
 
-        ShowPage();
+        ShowPage(_pageCounter);
     }
 
     public void ApplyChanges()
@@ -70,13 +81,43 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
         throw new NotImplementedException();
     }
 
-    private void ShowPage()
+    private void ShowPage(int pageIndex)
     {
-        for (int i = 0; i < Pages.Length; i++)
-        {
-            var page = Pages[i];
+        PagesProgressText.text = $"{pageIndex + 1}/{PageCount}";
 
-            page.SetActive(i == _pageCounter);
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        DescriptionText.text = GetLocalizedManualText(currentLanguage, $"page{pageIndex+1}");
+    }
+
+    private static string GetLocalizedManualText(Language currentLanguage, string mainKey)
+    {
+        string langKey;
+        switch (currentLanguage)
+        {
+            case Language.Russian:
+                langKey = "ru";
+                break;
+
+            case Language.English:
+                langKey = "en";
+                break;
+
+            default:
+            case Language.Undefined:
+                if (Debug.isDebugBuild || Application.isEditor)
+                {
+                    throw new ArgumentException($"Некоректное значение языка {currentLanguage}.");
+                }
+                
+                langKey = "en";
+
+                break;
+
         }
+
+        var text = Resources.Load<TextAsset>($@"Tutorial\{mainKey}-{langKey}");
+
+        return text.text;
     }
 }
