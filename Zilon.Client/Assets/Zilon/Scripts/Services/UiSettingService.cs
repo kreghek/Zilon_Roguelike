@@ -31,7 +31,8 @@ namespace Assets.Zilon.Scripts.Services
             }
         }
 
-        public Language CurrentLanguage {
+        public Language CurrentLanguage
+        {
             get => _currentLanguage;
             set
             {
