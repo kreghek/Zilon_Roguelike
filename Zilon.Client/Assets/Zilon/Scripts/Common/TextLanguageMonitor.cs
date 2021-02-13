@@ -53,7 +53,6 @@ public class TextLanguageMonitor : MonoBehaviour
 
                 TargetText.text = EnglishString;
                 break;
-
         }
     }
 
