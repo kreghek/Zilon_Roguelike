@@ -102,6 +102,7 @@ MonoBehaviour:
   NextButton: {fileID: 375549849}
   PrevButton: {fileID: 600809914}
   DescriptionText: {fileID: 4724432795714777257}
+  DescriptionImage: {fileID: 1029877827108869522}
   PagesProgressText: {fileID: 3338559523671808116}
 --- !u!114 &4587245603201515021
 MonoBehaviour:
@@ -704,22 +705,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.91764706, g: 0.7529412, b: 0.5254902, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: a8091ce330da38546be2451b8ef9254e, type: 3}
-    m_FontSize: 22
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
-    m_RichText: 1
+    m_RichText: 0
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1

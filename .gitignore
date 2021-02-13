@@ -7,3 +7,8 @@
 /Builds/x86
 /Zilon.Client/Assets/Resources/Schemes/**/*.meta
 /BenchmarkDotNet.Artifacts
+/Zilon.Client/Assets/Resources/Tutorial/page1.jpg.meta
+/Zilon.Client/Assets/Resources/Tutorial/page2.jpg.meta
+/Zilon.Client/Assets/Resources/Tutorial/page3.jpg.meta
+/Zilon.Client/Assets/Resources/Tutorial/page4.jpg.meta
+/Zilon.Client/Assets/Resources/Tutorial/page5.jpg.meta

@@ -21,6 +21,7 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
     public Button PrevButton;
 
     public Text DescriptionText;
+    public Image DescriptionImage;
     public Text PagesProgressText;
 
     public event EventHandler Closed;
@@ -87,7 +88,14 @@ public class InstructionModalBody : MonoBehaviour, IModalWindowHandler
 
         var currentLanguage = _uiSettingService.CurrentLanguage;
 
+        DescriptionImage.sprite = GetManualImage($"page{pageIndex + 1}");
         DescriptionText.text = GetLocalizedManualText(currentLanguage, $"page{pageIndex + 1}");
+    }
+
+    private Sprite GetManualImage(string mainKey)
+    {
+        var sprite = Resources.Load<Sprite>($@"Tutorial\{mainKey}");
+        return sprite;
     }
 
     private static string GetLocalizedManualText(Language currentLanguage, string mainKey)
