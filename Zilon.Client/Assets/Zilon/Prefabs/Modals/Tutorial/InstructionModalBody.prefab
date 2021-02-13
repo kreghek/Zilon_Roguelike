@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 375549851}
   - component: {fileID: 375549850}
   - component: {fileID: 375549849}
+  - component: {fileID: 2955749267244873302}
   m_Layer: 5
   m_Name: NextButton
   m_TagString: Untagged
@@ -266,6 +267,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2955749267244873302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375549847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea559ccbe24718342bba6b1da48073af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetText: {fileID: 525202978}
+  EnglishString: NEXT
+  RussianString: "\u0414\u0410\u041B\u0415\u0415"
 --- !u!1 &525202976
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,6 +504,7 @@ GameObject:
   - component: {fileID: 1184062160}
   - component: {fileID: 1184062162}
   - component: {fileID: 1184062161}
+  - component: {fileID: 944418663841989330}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -556,6 +573,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Prev
+--- !u!114 &944418663841989330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184062159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea559ccbe24718342bba6b1da48073af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetText: {fileID: 1184062161}
+  EnglishString: PREV
+  RussianString: "\u041D\u0410\u0417\u0410\u0414"
 --- !u!1 &903969155891357127
 GameObject:
   m_ObjectHideFlags: 0

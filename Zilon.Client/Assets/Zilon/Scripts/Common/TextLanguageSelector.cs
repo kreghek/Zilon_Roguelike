@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 using Zenject;
 
-public class TextLanguageMonitor : MonoBehaviour
+public class TextLanguageSelector : MonoBehaviour
 {
     [Inject]
     private readonly UiSettingService _uiSettingService;
@@ -21,8 +21,6 @@ public class TextLanguageMonitor : MonoBehaviour
     public void Start()
     {
         InitDefaultTextValue();
-
-        _uiSettingService.CurrentLanguageChanged += UiSettingService_CurrentLanguageChanged;
     }
 
     private void InitDefaultTextValue()
@@ -54,17 +52,5 @@ public class TextLanguageMonitor : MonoBehaviour
                 TargetText.text = EnglishString;
                 break;
         }
-    }
-
-    public void OnDestroy()
-    {
-        _uiSettingService.CurrentLanguageChanged -= UiSettingService_CurrentLanguageChanged;
-    }
-
-    private void UiSettingService_CurrentLanguageChanged(object sender, EventArgs e)
-    {
-        var currentLanguage = _uiSettingService.CurrentLanguage;
-
-        SetTextValueByLanguage(currentLanguage);
     }
 }
