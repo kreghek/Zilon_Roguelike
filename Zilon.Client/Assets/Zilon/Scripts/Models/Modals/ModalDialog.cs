@@ -11,11 +11,24 @@ public class ModalDialog : MonoBehaviour
     public GameObject Body;
     private IModalWindowHandler _windowHandler;
 
+    private void Start()
+    {
+        CaptionText.text = _windowHandler.Caption;
+    }
+
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Close();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (_windowHandler != null)
+        {
+            _windowHandler.Closed -= WindowHandler_Closed;
         }
     }
 
@@ -30,7 +43,6 @@ public class ModalDialog : MonoBehaviour
             }
 
             _windowHandler = value;
-            CaptionText.text = _windowHandler.Caption;
 
             _windowHandler.Closed += WindowHandler_Closed;
         }

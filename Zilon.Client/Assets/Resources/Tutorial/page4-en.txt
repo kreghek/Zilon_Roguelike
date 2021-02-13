@@ -1,0 +1,5 @@
+Steel and gunpowder perfectly clear the way to the exit.
+
+To put on an item, you need to select it in your inventory and drag it to an empty character slot.
+
+Some weapons require you to have ammo in your inventory. The indicator informs about their absence.

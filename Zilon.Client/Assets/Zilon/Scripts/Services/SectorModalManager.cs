@@ -49,7 +49,8 @@ namespace Assets.Zilon.Scripts.Services
 
         public void ShowInstructionModal()
         {
-            CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
+            var modalBody = CreateWindowHandler<InstructionModalBody>(InstructionModalPrefab.gameObject);
+            modalBody.Init();
         }
     }
 }
