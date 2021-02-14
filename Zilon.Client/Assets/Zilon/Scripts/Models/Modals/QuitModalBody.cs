@@ -18,12 +18,24 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
 
     private QuitModalBehaviour _quitModalBehaviour;
 
+    /// <summary>
+    /// Text object to display random quit phrase.
+    /// </summary>
     public Text QuitPhraseText;
 
+    /// <summary>
+    /// Caption to Close game.
+    /// </summary>
     public LocalizedString QuitGameCaption;
 
+    /// <summary>
+    /// Caption to end game session.
+    /// </summary>
     public LocalizedString QuitToTitleMenuCaption;
 
+    /// <summary>
+    /// Multiline string with quit phrases.
+    /// </summary>
     public LocalizedString QuitPhrasesString;
 
     [Inject(Id = "quit-command")]
@@ -45,6 +57,41 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
     {
         await SetQuitCaption();
         await SetQuitPhrase();
+    }
+
+    public void Init(QuitModalBehaviour quitModalBehaviour)
+    {
+        _quitModalBehaviour = quitModalBehaviour;
+
+        switch (quitModalBehaviour)
+        {
+            case QuitModalBehaviour.QuitGame:
+                _targetCommand = _quitCommand;
+                break;
+
+            case QuitModalBehaviour.QuitToTitleMenu:
+                _targetCommand = _quitTitleCommand;
+                break;
+
+            default:
+                if (Debug.isDebugBuild || Application.isEditor)
+                {
+                    throw new InvalidOperationException($"Invalid behaviour for quit modal: {quitModalBehaviour}.");
+                }
+                break;
+        }
+    }
+
+    public void ApplyChanges()
+    {
+        _clientCommandExecutor.Push(_targetCommand);
+    }
+
+    public void CancelChanges()
+    {
+        // ничего не делаем
+        // просто закрываем окно
+        Closed?.Invoke(this, new EventArgs());
     }
 
     private async Task SetQuitCaption()
@@ -86,47 +133,12 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
 
     private static async Task<string> ReadStringFromLocalized(LocalizedString localizedString)
     {
-        var _textsAsyncHandler = localizedString.GetLocalizedString();
-        if (_textsAsyncHandler.IsDone)
+        var _textsAsyncHandle = localizedString.GetLocalizedString();
+        if (_textsAsyncHandle.IsDone)
         {
-            return _textsAsyncHandler.Result;
+            return _textsAsyncHandle.Result;
         }
 
-        return await _textsAsyncHandler.Task;
-    }
-
-    public void Init(QuitModalBehaviour quitModalBehaviour)
-    {
-        _quitModalBehaviour = quitModalBehaviour;
-
-        switch (quitModalBehaviour)
-        {
-            case QuitModalBehaviour.QuitGame:
-                _targetCommand = _quitCommand;
-                break;
-
-            case QuitModalBehaviour.QuitToTitleMenu:
-                _targetCommand = _quitTitleCommand;
-                break;
-
-            default:
-                if (Debug.isDebugBuild || Application.isEditor)
-                {
-                    throw new InvalidOperationException($"Invalid behaviour for quit modal: {quitModalBehaviour}.");
-                }
-                break;
-        }
-    }
-
-    public void ApplyChanges()
-    {
-        _clientCommandExecutor.Push(_targetCommand);
-    }
-
-    public void CancelChanges()
-    {
-        // ничего не делаем
-        // просто закрываем окно
-        Closed?.Invoke(this, new EventArgs());
+        return await _textsAsyncHandle.Task;
     }
 }
