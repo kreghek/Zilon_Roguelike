@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 4331d2206bd9b1e4b98abd447e8e0277
   m_SerializeEntries:
   - m_GUID: 875b5491fe01e8c46aa7576940e80a01
-    m_Address: New StringTableCollection Shared Data
+    m_Address: UI Common StringTableCollection Shared Data
     m_ReadOnly: 0
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
