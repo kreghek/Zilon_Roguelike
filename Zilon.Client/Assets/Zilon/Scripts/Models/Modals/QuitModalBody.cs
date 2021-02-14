@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts;
 
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
 using Zenject;
@@ -13,16 +16,9 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
 {
     private ICommand _targetCommand;
 
-    public Text Text;
+    public Text QuitPhraseText;
 
-    private string[] _texts = new[] {
-        "Give up and go out?",
-        "Is this fate too cruel to continue?",
-        "Easier to run than fight for your destiny?",
-        "Are you sure you want to quit this great game?",
-        "You're trying to say you like work better than me, right?",
-        "Just leave. When you come back, I'll be waiting with a bat."
-    };
+    public LocalizedString QuitPhrasesString;
 
     [Inject(Id = "quit-command")]
     private readonly ICommand _quitCommand;
@@ -38,6 +34,25 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
 
     public event EventHandler Closed;
 
+    public async Task Start()
+    {
+        var _textsAsyncHandler = QuitPhrasesString.GetLocalizedString();
+        string stringRaw;
+        if (_textsAsyncHandler.IsDone)
+        {
+            stringRaw = _textsAsyncHandler.Result;
+        }
+        else
+        {
+            stringRaw = await _textsAsyncHandler.Task;
+        }
+
+        string[] _texts = stringRaw.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+        var textIndex = UnityEngine.Random.Range(0, _texts.Length - 1);
+        QuitPhraseText.text = _texts[textIndex];
+    }
+
     public void Init(string caption, bool closeGame)
     {
         Caption = caption ?? throw new ArgumentNullException(nameof(caption));
@@ -50,9 +65,6 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
         {
             _targetCommand = _quitTitleCommand;
         }
-
-        var textIndex = UnityEngine.Random.Range(0, _texts.Length - 1);
-        Text.text = _texts[textIndex];
     }
 
     public void ApplyChanges()
