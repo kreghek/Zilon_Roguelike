@@ -35,5 +35,21 @@ MonoBehaviour:
       leave. When you come back, I''ll be waiting with a bat.'
     m_Metadata:
       m_Items: []
+  - m_Id: 74693512654848
+    m_Localized: Quit game?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74949352615936
+    m_Localized: End game session?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76560179261440
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77315292393472
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

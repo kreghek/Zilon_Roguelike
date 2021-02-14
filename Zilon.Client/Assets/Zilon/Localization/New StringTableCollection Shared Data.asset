@@ -19,6 +19,22 @@ MonoBehaviour:
     m_Key: QUIT_TEXTS
     m_Metadata:
       m_Items: []
+  - m_Id: 74693512654848
+    m_Key: QUIT_GAME_CAPTION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74949352615936
+    m_Key: QUIT_TO_TITLE_MENU_CAPTION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76560179261440
+    m_Key: QUIT_LABEL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77315292393472
+    m_Key: CANCEL_LABEL
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

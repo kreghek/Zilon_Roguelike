@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Client.Windows;
+﻿using Assets.Zilon.Scripts.Models.Modals;
+
+using Zilon.Core.Client.Windows;
 using Zilon.Core.Persons;
 
 namespace Assets.Zilon.Scripts.Services
@@ -11,12 +13,12 @@ namespace Assets.Zilon.Scripts.Services
 
         public void ShowQuitComfirmationModal()
         {
-            ShowQuitComfirmationModalInner("Quit game?", closeGame: true);
+            ShowQuitComfirmationModalInner(QuitModalBehaviour.QuitGame);
         }
 
         public void ShowQuitTitleComfirmationModal()
         {
-            ShowQuitComfirmationModalInner("End game session?", closeGame: false);
+            ShowQuitComfirmationModalInner(QuitModalBehaviour.QuitToTitleMenu);
         }
 
         public void ShowScoreModal()
@@ -25,10 +27,10 @@ namespace Assets.Zilon.Scripts.Services
             modalBody.Init();
         }
 
-        private void ShowQuitComfirmationModalInner(string caption, bool closeGame)
+        private void ShowQuitComfirmationModalInner(QuitModalBehaviour quitModalBehaviour)
         {
             var modalBody = CreateWindowHandler<QuitModalBody>(QuitModalPrefab.gameObject);
-            modalBody.Init(caption, closeGame);
+            modalBody.Init(quitModalBehaviour);
         }
     }
 }

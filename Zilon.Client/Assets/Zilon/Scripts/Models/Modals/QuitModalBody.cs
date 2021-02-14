@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts;
+using Assets.Zilon.Scripts.Models.Modals;
 
 using UnityEngine;
 using UnityEngine.Localization;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
 using Zenject;
@@ -16,7 +16,13 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
 {
     private ICommand _targetCommand;
 
+    private QuitModalBehaviour _quitModalBehaviour;
+
     public Text QuitPhraseText;
+
+    public LocalizedString QuitGameCaption;
+
+    public LocalizedString QuitToTitleMenuCaption;
 
     public LocalizedString QuitPhrasesString;
 
@@ -30,40 +36,85 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
     private readonly ICommandManager _clientCommandExecutor;
 
     public string Caption { get; private set; }
+
     public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.DoNothing;
 
     public event EventHandler Closed;
 
-    public async Task Start()
+    public async void Start()
     {
-        var _textsAsyncHandler = QuitPhrasesString.GetLocalizedString();
-        string stringRaw;
-        if (_textsAsyncHandler.IsDone)
-        {
-            stringRaw = _textsAsyncHandler.Result;
-        }
-        else
-        {
-            stringRaw = await _textsAsyncHandler.Task;
-        }
-
-        string[] _texts = stringRaw.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-        var textIndex = UnityEngine.Random.Range(0, _texts.Length - 1);
-        QuitPhraseText.text = _texts[textIndex];
+        await SetQuitCaption();
+        await SetQuitPhrase();
     }
 
-    public void Init(string caption, bool closeGame)
+    private async Task SetQuitCaption()
     {
-        Caption = caption ?? throw new ArgumentNullException(nameof(caption));
+        var captionLocalizedString = GetCaptionLocalizedStringByBehaviour(_quitModalBehaviour);
 
-        if (closeGame)
+        Caption = await ReadStringFromLocalized(captionLocalizedString);
+    }
+
+    private LocalizedString GetCaptionLocalizedStringByBehaviour(QuitModalBehaviour quitModalBehaviour)
+    {
+        switch (quitModalBehaviour)
         {
-            _targetCommand = _quitCommand;
+            case QuitModalBehaviour.QuitToTitleMenu:
+                return QuitToTitleMenuCaption;
+
+            case QuitModalBehaviour.QuitGame:
+                return QuitGameCaption;
+
+            default:
+                if (Debug.isDebugBuild || Application.isEditor)
+                {
+                    throw new InvalidOperationException($"Invalid behaviour for quit modal: {quitModalBehaviour}.");
+                }
+                return QuitGameCaption;
         }
-        else
+    }
+
+    private async Task SetQuitPhrase()
+    {
+        var phrasesString = await ReadStringFromLocalized(QuitPhrasesString);
+
+        var quitPhrases = phrasesString.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+        var rolledPhraseIndex = UnityEngine.Random.Range(0, quitPhrases.Length);
+
+        QuitPhraseText.text = quitPhrases[rolledPhraseIndex];
+    }
+
+    private static async Task<string> ReadStringFromLocalized(LocalizedString localizedString)
+    {
+        var _textsAsyncHandler = localizedString.GetLocalizedString();
+        if (_textsAsyncHandler.IsDone)
         {
-            _targetCommand = _quitTitleCommand;
+            return _textsAsyncHandler.Result;
+        }
+        
+        return await _textsAsyncHandler.Task;
+    }
+
+    public void Init(QuitModalBehaviour quitModalBehaviour)
+    {
+        _quitModalBehaviour = quitModalBehaviour;
+
+        switch (quitModalBehaviour)
+        {
+            case QuitModalBehaviour.QuitGame:
+                _targetCommand = _quitCommand;
+                break;
+
+            case QuitModalBehaviour.QuitToTitleMenu:
+                _targetCommand = _quitTitleCommand;
+                break;
+
+            default:
+                if (Debug.isDebugBuild || Application.isEditor)
+                {
+                    throw new InvalidOperationException($"Invalid behaviour for quit modal: {quitModalBehaviour}.");
+                }
+                break;
         }
     }
 
