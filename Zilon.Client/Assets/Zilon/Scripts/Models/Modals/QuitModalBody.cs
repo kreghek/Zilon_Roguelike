@@ -91,7 +91,7 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
         {
             return _textsAsyncHandler.Result;
         }
-        
+
         return await _textsAsyncHandler.Task;
     }
 
