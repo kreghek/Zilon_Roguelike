@@ -1,7 +1,6 @@
 ﻿using Assets.Zilon.Scripts.Models.Modals;
 
 using Zilon.Core.Client.Windows;
-using Zilon.Core.Persons;
 
 namespace Assets.Zilon.Scripts.Services
 {
