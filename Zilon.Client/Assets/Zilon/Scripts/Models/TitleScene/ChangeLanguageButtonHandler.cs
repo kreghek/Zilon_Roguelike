@@ -42,10 +42,18 @@ public class ChangeLanguageButtonHandler : MonoBehaviour
         }
     }
 
-    private void SetLocaleByCode(string localCode)
+    private static void SetLocaleByCode(string targetLocaleCode)
     {
         var locales = LocalizationSettings.AvailableLocales.Locales;
-        var ruLocale = locales.SingleOrDefault(x => string.Equals(x.Identifier.Code, localCode, StringComparison.InvariantCultureIgnoreCase));
-        LocalizationSettings.SelectedLocale = ruLocale;
+        var targetLocale = locales.SingleOrDefault(x => AreCodesEquals(targetLocaleCode, x.Identifier.Code));
+        LocalizationSettings.SelectedLocale = targetLocale;
+    }
+
+    private static bool AreCodesEquals(string targetLocaleCode, string currentLocaleCode)
+    {
+        return string.Equals(
+            currentLocaleCode,
+            targetLocaleCode,
+            StringComparison.InvariantCultureIgnoreCase);
     }
 }
