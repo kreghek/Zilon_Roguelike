@@ -93,8 +93,15 @@ public class SectorUiHandler : MonoBehaviour
 
         if (OpenLootButton != null)
         {
-            var canOpen = GetCanOpenLoot();
-            OpenLootButton.gameObject.SetActive(canOpen);
+            if (_player.Globe is null || _player.MainPerson is null)
+            {
+                OpenLootButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                var canOpen = GetCanOpenLoot();
+                OpenLootButton.gameObject.SetActive(canOpen);
+            }
         }
     }
 
