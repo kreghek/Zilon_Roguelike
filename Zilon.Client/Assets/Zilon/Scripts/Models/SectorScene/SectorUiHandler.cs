@@ -83,7 +83,14 @@ public class SectorUiHandler : MonoBehaviour
 
         if (SectorTransitionMoveButton != null)
         {
-            SectorTransitionMoveButton.interactable = _sectorTransitionMoveCommand.CanExecute();
+            if (_player.Globe is null || _player.MainPerson is null)
+            {
+                SectorTransitionMoveButton.interactable = false;
+            }
+            else
+            {
+                SectorTransitionMoveButton.interactable = _sectorTransitionMoveCommand.CanExecute();
+            }
         }
 
         if (CityQuickExitButton != null)
