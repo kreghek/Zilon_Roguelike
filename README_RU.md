@@ -50,11 +50,9 @@ GamePlay Video
 
 3. **Ознакомьтесь с логами проигрывателя Unity.** Возможно, в них содержится информация о решении вашей проблемы.
 
-| Operating system | Log files |
-|------------------------------|:--------------|
-| Linux | ~/.config/unity3d/CompanyName/ProductName/Player.log |
-| macOS | ~/Library/Logs/Company Name/Product Name/Player.log
-| Windows| C:\Users\username\AppData\LocalLow\CompanyName\ProductName\Player.log |
+- Linux - `see ~/.config/unity3d/CompanyName/ProductName/Player.log`
+- macOS - `~/Library/Logs/CompanyName/ProductName/Player.log`
+- Windows - `C:\Users\[username]\AppData\LocalLow\CompanyName\ProductName\Player.log`
 
 Подробнее о логах написано в документации Unity https://docs.unity3d.com/Manual/LogFiles.html.
 
