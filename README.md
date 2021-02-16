@@ -55,7 +55,7 @@ Please do not despair if you are unable to launch the game or find a bug.
 3. **Review the Unity player logs.** They may contain information on how to solve your problem.
 
 | Operating system | Log files |
-|: ------------------------------ |: -------------- |
+|------------------------------|: -------------- |
 | Linux | ~ / .config / unity3d / CompanyName / ProductName / Player.log |
 | macOS | ~ / Library / Logs / Company Name / Product Name / Player.log
 | Windows | C: \ Users \ username \ AppData \ LocalLow \ CompanyName \ ProductName \ Player.log |

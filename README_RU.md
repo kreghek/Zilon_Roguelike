@@ -51,7 +51,7 @@ GamePlay Video
 3. **Ознакомьтесь с логами проигрывателя Unity.** Возможно, в них содержится информация о решении вашей проблемы.
 
 | Operating system | Log files |
-|:------------------------------|:--------------|
+|------------------------------|:--------------|
 | Linux | ~/.config/unity3d/CompanyName/ProductName/Player.log |
 | macOS | ~/Library/Logs/Company Name/Product Name/Player.log
 | Windows| C:\Users\username\AppData\LocalLow\CompanyName\ProductName\Player.log |
