@@ -37,7 +37,28 @@
 GamePlay Video
 [![Watch the GamePlay Video](https://img.youtube.com/vi/KJJ2ab35eFg/maxresdefault.jpg)](https://www.youtube.com/watch?v=KJJ2ab35eFg)
 
-## Сборка
+## Устранение неисправностей
+
+Пожалуйста, не отчаивайтесь, если вам не удалось запустить игру или вы обнаружили баг.
+
+1. **Убедитесь, что вы запускаете свежую версию игры.** Все релизы доступны в разделе https://github.com/kreghek/Zilon_Roguelike/releases. Мы стараемся исправить все обнаруженные проблемы каждый релиз. Возможно, ваша проблема уже была устранена.
+
+2. **Сообщите о проблеме**, и мы как можно быстрее постараемся вам помочь. Вы можете:
+- Написать о проблеме в обсуждении https://github.com/kreghek/Zilon_Roguelike/discussions/1031.
+- Запостить в соц.сетях https://vk.com/last_imperial_vagabond.
+- Отправить письмо с проблемой на почту kurkutovpa@gmail.com.
+
+3. **Ознакомьтесь с логами проигрывателя Unity.** Возможно, в них содержится информация о решении вашей проблемы.
+
+| Operating system | Log files |
+|:------------------------------|:--------------|
+| Linux | ~/.config/unity3d/CompanyName/ProductName/Player.log |
+| macOS | ~/Library/Logs/Company Name/Product Name/Player.log
+| Windows| C:\Users\username\AppData\LocalLow\CompanyName\ProductName\Player.log |
+
+Подробнее о логах написано в документации Unity https://docs.unity3d.com/Manual/LogFiles.html.
+
+## Сборка и запуск в среде разработки
 
 Мы стремимся к запуску проекта одной кнопкой. Чтобы как можно проще стартануть исследование игры. Но сейчас всё ещё требуются некоторые ручные настройки, прежде чем окружение будет готово.
 

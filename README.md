@@ -41,7 +41,28 @@ Reasons why you will die:
 GamePlay Video
 [![Watch the GamePlay Video](https://img.youtube.com/vi/KJJ2ab35eFg/maxresdefault.jpg)](https://www.youtube.com/watch?v=KJJ2ab35eFg)
 
-## How to build and launch
+## Troubleshooting
+
+Please do not despair if you are unable to launch the game or find a bug.
+
+1. **Make sure you are running the latest version of the game.** All releases are available at https://github.com/kreghek/Zilon_Roguelike/releases. We try to fix all found issues every release. Your problem may have already been fixed.
+
+2. **Report a problem** and we'll try to help you as soon as possible. You can:
+- Post the issue in the discussion https://github.com/kreghek/Zilon_Roguelike/discussions/1031.
+- Post on social networks https://vk.com/last_imperial_vagabond.
+- Send a letter with a problem to kurkutovpa@gmail.com.
+
+3. **Review the Unity player logs.** They may contain information on how to solve your problem.
+
+| Operating system | Log files |
+|: ------------------------------ |: -------------- |
+| Linux | ~ / .config / unity3d / CompanyName / ProductName / Player.log |
+| macOS | ~ / Library / Logs / Company Name / Product Name / Player.log
+| Windows | C: \ Users \ username \ AppData \ LocalLow \ CompanyName \ ProductName \ Player.log |
+
+Read more about logs in the Unity documentation https://docs.unity3d.com/Manual/LogFiles.html.
+
+## How to build and launch for development
 
 We strive to launch a project with one button. But now there are a few manual steps that must be performed before the game can be launched from the editor.
 
