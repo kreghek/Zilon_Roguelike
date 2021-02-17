@@ -17,18 +17,18 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 9940fb0adf11d7a4296d6fc7a233cb5a
   m_SerializeEntries:
-  - m_GUID: 9c7ac8e87fed6494dbe4cf83469edf22
-    m_Address: UI Common StringTableCollection_en
+  - m_GUID: d564f2130a27048478440a06c683020f
+    m_Address: UI Common StringTableCollection_ru-RU
     m_ReadOnly: 1
     m_SerializedLabels:
-    - Locale-en
-    m_MainAsset: {fileID: 11400000, guid: 9c7ac8e87fed6494dbe4cf83469edf22, type: 2}
-    m_TargetAsset: {fileID: 11400000, guid: 9c7ac8e87fed6494dbe4cf83469edf22, type: 2}
-  - m_GUID: 8dfe3e038229b0741bf57532b8478a00
-    m_Address: UI Common StringTableCollection_ru
+    - Locale-ru-RU
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 9b8029728bf7f464fa8680d8702ba9b1
+    m_Address: UI Common StringTableCollection_en-US
     m_ReadOnly: 1
     m_SerializedLabels:
-    - Locale-ru
+    - Locale-en-US
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
   m_ReadOnly: 1

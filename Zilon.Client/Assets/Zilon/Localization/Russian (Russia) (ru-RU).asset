@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1bb1838fe8befb0429646b938e757ff3, type: 3}
-  m_Name: English (en)
+  m_Name: Russian (Russia) (ru-RU)
   m_EditorClassIdentifier: 
   m_Identifier:
-    m_Code: en
+    m_Code: ru-RU
   m_Metadata:
     m_Items: []
   m_CustomFormatCultureCode: 
