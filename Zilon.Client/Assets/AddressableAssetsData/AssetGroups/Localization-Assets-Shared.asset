@@ -20,7 +20,10 @@ MonoBehaviour:
   - m_GUID: ad3de33a5abd60c48a69ad72ee229388
     m_Address: UI Common Shared Data
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - default
+    - Locale-ru-RU
+    - Locale-en-US
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
   m_ReadOnly: 1

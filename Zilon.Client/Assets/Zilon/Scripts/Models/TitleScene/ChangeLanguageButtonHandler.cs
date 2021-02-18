@@ -21,12 +21,12 @@ public class ChangeLanguageButtonHandler : MonoBehaviour
         {
             case Language.English:
                 _uiSettingService.CurrentLanguage = Language.Russian;
-                SetLocaleByCode("ru-RU");
+                SetLocaleByCode(SystemLanguage.Russian);
                 break;
 
             case Language.Russian:
                 _uiSettingService.CurrentLanguage = Language.English;
-                SetLocaleByCode("en-US");
+                SetLocaleByCode(SystemLanguage.English);
                 break;
 
             case Language.Undefined:
@@ -37,23 +37,13 @@ public class ChangeLanguageButtonHandler : MonoBehaviour
                 }
 
                 _uiSettingService.CurrentLanguage = Language.English;
-                SetLocaleByCode("en-US");
+                SetLocaleByCode(SystemLanguage.English);
                 break;
         }
     }
 
-    private static void SetLocaleByCode(string targetLocaleCode)
+    private static void SetLocaleByCode(SystemLanguage targetLanguage)
     {
-        var locales = LocalizationSettings.AvailableLocales.Locales;
-        var targetLocale = locales.SingleOrDefault(x => AreCodesEquals(targetLocaleCode, x.Identifier.Code));
-        LocalizationSettings.SelectedLocale = targetLocale;
-    }
-
-    private static bool AreCodesEquals(string targetLocaleCode, string currentLocaleCode)
-    {
-        return string.Equals(
-            currentLocaleCode,
-            targetLocaleCode,
-            StringComparison.InvariantCultureIgnoreCase);
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(targetLanguage);
     }
 }
