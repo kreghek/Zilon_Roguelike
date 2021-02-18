@@ -17,6 +17,39 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: ad3de33a5abd60c48a69ad72ee229388, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 25587646464
+    m_Localized: 'Give up and go out?
+
+      Is this fate too cruel to continue?
+
+      Easier
+      to run than fight for your destiny?
+
+      Are you sure you want to quit this
+      great game?
+
+      You''re trying to say you like work better than me, right?
+
+      Just
+      leave. When you come back, I''ll be waiting with a bat.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 194899116032
+    m_Localized: Quit game?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 214390046720
+    m_Localized: End game session?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 230282264576
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 252738568192
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

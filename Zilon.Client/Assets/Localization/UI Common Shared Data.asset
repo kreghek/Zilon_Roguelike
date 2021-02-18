@@ -13,8 +13,28 @@ MonoBehaviour:
   m_Name: UI Common Shared Data
   m_EditorClassIdentifier: 
   m_TableCollectionName: UI Common
-  m_TableCollectionNameGuidString: 00000000000000000000000000000000
-  m_Entries: []
+  m_TableCollectionNameGuidString: ad3de33a5abd60c48a69ad72ee229388
+  m_Entries:
+  - m_Id: 25587646464
+    m_Key: QUIT_TEXTS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 194899116032
+    m_Key: QUIT_GAME_CAPTION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 214390046720
+    m_Key: QUIT_TO_TITLE_MENU_CAPTION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 230282264576
+    m_Key: QUIT_LABEL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 252738568192
+    m_Key: CANCEL_LABEL
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
