@@ -6,7 +6,6 @@ jobs:
   buildForSomePlatforms:
     name: Build
     runs-on: ubuntu-latest
-    needs: buildCore
     env:
       UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_1_16 }}
     strategy:
