@@ -13,8 +13,6 @@ jobs:
       matrix:
         projectPath:
           - LocalizationTestProject
-        unityVersion:
-          - 2020.1.16f1
         targetPlatform:
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
     steps:
@@ -31,7 +29,7 @@ jobs:
       - uses: game-ci/unity-builder@v2.0-alpha-6
         with:
           projectPath: ${{ matrix.projectPath }}
-          unityVersion: ${{ matrix.unityVersion }}
+          buildName: LAST
           targetPlatform: ${{ matrix.targetPlatform }}
       - uses: actions/upload-artifact@v1
         with:
