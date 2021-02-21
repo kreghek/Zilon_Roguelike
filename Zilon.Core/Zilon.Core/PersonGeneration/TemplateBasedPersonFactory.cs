@@ -49,6 +49,7 @@ namespace Zilon.Core.PersonGeneration
             }
 
             AddDefaultProps(inventory);
+            AddEquipment(inventory, "rush-sword");
         }
 
         private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
