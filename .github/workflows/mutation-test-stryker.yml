@@ -1,0 +1,36 @@
+name: Mutation Tests using Stryker.NET
+
+on: [push]
+
+env:
+  REPORT_RESULT_PATH: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/StrykerOutput
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test_suite:
+          - Zilon.Core.UnitTests
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+    - name: Run ${{ matrix.test_suite }}
+      env:
+        ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+        DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      run: |
+        cd ./Zilon.Core
+        dotnet stryker --solution-path "${{ matrix.test_suite }}.sln" --coverage-analysis all
+    - name: Publish mutation report of ${{ matrix.test_suite }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: Report${{ matrix.test_suite }}
+        path: ${{ env.REPORT_RESULT_PATH }}
