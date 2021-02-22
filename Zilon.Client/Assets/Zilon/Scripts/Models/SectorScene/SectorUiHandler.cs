@@ -3,7 +3,6 @@
 using JetBrains.Annotations;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using Zenject;
@@ -53,7 +52,6 @@ public class SectorUiHandler : MonoBehaviour
     public Button InventoryButton;
     public Button PersonButton;
     public Button SectorTransitionMoveButton;
-    public Button CityQuickExitButton;
     public Button OpenLootButton;
 
     public SectorVM SectorVM;
@@ -83,27 +81,28 @@ public class SectorUiHandler : MonoBehaviour
 
         if (SectorTransitionMoveButton != null)
         {
-            SectorTransitionMoveButton.interactable = _sectorTransitionMoveCommand.CanExecute();
-        }
-
-        if (CityQuickExitButton != null)
-        {
-            // Это быстрое решение.
-            // Проверяем, если это город, то делаем кнопку выхода видимой.
-            var isInCity = GetIsInCity();
-            CityQuickExitButton.gameObject.SetActive(isInCity);
+            if (_player.Globe is null || _player.MainPerson is null)
+            {
+                SectorTransitionMoveButton.interactable = false;
+            }
+            else
+            {
+                SectorTransitionMoveButton.interactable = _sectorTransitionMoveCommand.CanExecute();
+            }
         }
 
         if (OpenLootButton != null)
         {
-            var canOpen = GetCanOpenLoot();
-            OpenLootButton.gameObject.SetActive(canOpen);
+            if (_player.Globe is null || _player.MainPerson is null)
+            {
+                OpenLootButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                var canOpen = GetCanOpenLoot();
+                OpenLootButton.gameObject.SetActive(canOpen);
+            }
         }
-    }
-
-    private bool GetIsInCity()
-    {
-        return CurrentSector?.Scheme.Sid == "city";
     }
 
     private ISector CurrentSector => _player.SectorNode.Sector;
@@ -153,12 +152,6 @@ public class SectorUiHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.O))
         {
             OpenLoot_Handler();
-        }
-
-        // Отключено, потому что сейчас нет выхода на глобальную карту.
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            CityQuickExit_Handler();
         }
     }
 
@@ -234,21 +227,6 @@ public class SectorUiHandler : MonoBehaviour
         }
 
         _clientCommandExecutor.Push(_sectorTransitionMoveCommand);
-    }
-
-    public void CityQuickExit_Handler()
-    {
-        // Защита от бага.
-        // Пользователь может нажать Q и выйти из сектора на глобальную карту.
-        // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
-        if (_playerState.ActiveActor?.Actor.Person.GetModule<ISurvivalModule>().IsDead != false)
-        {
-            return;
-        }
-
-        // Это быстрое решение.
-        // Тупо загружаем глобальную карту.
-        SceneManager.LoadScene("globe");
     }
 
     public void OpenLoot_Handler()

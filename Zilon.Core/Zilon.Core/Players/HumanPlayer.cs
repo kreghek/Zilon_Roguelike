@@ -14,6 +14,11 @@ namespace Zilon.Core.Players
     {
         private ISectorNode GetSectorNode()
         {
+            if (Globe is null)
+            {
+                throw new InvalidOperationException("Globe is not assigned.");
+            }
+
             var sectorNode = Globe.SectorNodes.SingleOrDefault(IsActorInSector);
             if (sectorNode is null)
             {

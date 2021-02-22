@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Models;
@@ -30,6 +31,7 @@ public class PropInfoPopup : MonoBehaviour
     public Text TagsText;
     public Text DescriptionText;
     public Text StatText;
+    public Text RestrictionsText;
 
     public IPropViewModelDescription PropViewModel { get; set; }
 
@@ -129,6 +131,7 @@ public class PropInfoPopup : MonoBehaviour
     private void WritePropStats(IProp prop)
     {
         StatText.text = null;
+        RestrictionsText.text = null;
         var propScheme = prop.Scheme;
         propScheme = ProcessMimics(prop, propScheme);
 
@@ -140,8 +143,29 @@ public class PropInfoPopup : MonoBehaviour
 
             case Resource resource:
                 WriteResourceStats(resource);
+                WriteResourceUsageRestrictions(resource);
                 break;
         }
+    }
+
+    private void WriteResourceUsageRestrictions(Resource resource)
+    {
+        if (resource.Scheme.Use?.Restrictions?.Items != null)
+        {
+            var ruleArray = resource.Scheme.Use?.Restrictions?.Items.Select(GetUsageRestrictionDescription);
+            var rules = string.Join("\n", ruleArray);
+            RestrictionsText.text = rules;
+        }
+    }
+
+    private string GetUsageRestrictionDescription(IUsageRestrictionItem rule)
+    {
+        var currentLanguage = _uiSettingService.CurrentLanguage;
+
+        var restrictionRuleDescription = StaticPhrases.GetValue(
+            $"rule-restriction-{rule.Type.ToString().ToLower(CultureInfo.InvariantCulture)}", currentLanguage);
+
+        return restrictionRuleDescription;
     }
 
     private void WriteResourceStats(Resource resource)

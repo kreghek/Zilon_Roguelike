@@ -13,9 +13,30 @@ public class ModalDialog : MonoBehaviour
 
     public void Update()
     {
+        UpdateCaption();
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Close();
+        }
+    }
+
+    /// <summary>
+    /// This looks like smell. The caption of the modal assign in Update because actual caption value
+    /// can be calculated in Start of modal body. And we can't make assumption about order of Start execution.
+    /// (this means Start of ModalDialog execute earler that ModalBody-implementation's Start).
+    /// </summary>
+    private void UpdateCaption()
+    {
+        var caption = _windowHandler.Caption;
+        CaptionText.text = caption;
+    }
+
+    private void OnDestroy()
+    {
+        if (_windowHandler != null)
+        {
+            _windowHandler.Closed -= WindowHandler_Closed;
         }
     }
 
@@ -30,7 +51,6 @@ public class ModalDialog : MonoBehaviour
             }
 
             _windowHandler = value;
-            CaptionText.text = _windowHandler.Caption;
 
             _windowHandler.Closed += WindowHandler_Closed;
         }

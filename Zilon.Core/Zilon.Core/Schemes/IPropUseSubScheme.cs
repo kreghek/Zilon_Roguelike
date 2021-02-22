@@ -6,13 +6,21 @@
     public interface IPropUseSubScheme
     {
         /// <summary>
-        /// Общие правила влияния.
+        /// Rules when the prop used.
         /// </summary>
         ConsumeCommonRule[] CommonRules { get; }
 
         /// <summary>
-        /// Признак того, что при использовании будет уменьшен на единицу.
+        /// Marks that when the resource used it reduce count by 1.
         /// </summary>
+        /// <remarks>
+        /// Only for <see cref="Resource" />.
+        /// </remarks>
         bool Consumable { get; }
+
+        /// <summary>
+        /// Rules to use the prop.
+        /// </summary>
+        IUsageRestrictions Restrictions { get; }
     }
 }

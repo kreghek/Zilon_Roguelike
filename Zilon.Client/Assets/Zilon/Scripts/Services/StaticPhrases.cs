@@ -76,6 +76,11 @@ namespace Assets.Zilon.Scripts.Services
                 { "rule-hungerresistance", new MultilangPhrase{ En = "Hunger resistance", Ru = "Сопротивление голоду" } },
                 { "rule-thristresistance", new MultilangPhrase{ En = "Thrist resistance", Ru = "Сопротивление жажде" } },
 
+                { "rule-restriction-onlysafeenvironment", new MultilangPhrase{ En = "Only Safe Environment", Ru = "В безопасности" } },
+                { "rule-restriction-nostarvation", new MultilangPhrase{ En = "No Starvation", Ru = "Нет Голодания" } },
+                { "rule-restriction-nodehydration", new MultilangPhrase{ En = "No Dehydration", Ru = "Нет Обезвоживания" } },
+                { "rule-restriction-nooverdose", new MultilangPhrase{ En = "No Overdose", Ru = "Нет Передозировки" } },
+
                 { "state-hp-healthy", new MultilangPhrase{ En = "Healthy", Ru = "Здоров" } },
                 { "state-hp-slightly-injured", new MultilangPhrase{ En = "Slightly injured", Ru = "Слабо ранен" } },
                 { "state-hp-wounded", new MultilangPhrase{ En = "Wounded", Ru = "Ранен" } },
@@ -111,7 +116,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "indicator-dodge", new MultilangPhrase{ En = "Dodge!", Ru = "Уклонение!" } },
                 { "indicator-found-nothing", new MultilangPhrase{ En = "Found\nNoting!", Ru = "Ничего\nне найдено!" } },
 
-                { "weak-injury", new MultilangPhrase{ En = "Weak injury", Ru = "Легкая рана" } },
+                { "weak-injury", new MultilangPhrase{ En = "Weak injury", Ru = "Легкое ранение" } },
                 { "weak-hunger", new MultilangPhrase{ En = "Weak hunger", Ru = "Слабый голод" } },
                 { "weak-thirst", new MultilangPhrase{ En = "Weak thirst", Ru = "Слабая жажда" } },
                 { "weak-intoxication", new MultilangPhrase{ En = "Weak intoxication", Ru = "Слабая токсикация" } },
@@ -121,7 +126,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "strong-thirst", new MultilangPhrase{ En = "Thirst", Ru = "Жажда" } },
                 { "strong-intoxication", new MultilangPhrase{ En = "Intoxication", Ru = "Токсакация" } },
 
-                { "max-injury", new MultilangPhrase{ En = "Vital wound!", Ru = "Смертельная рана!" } },
+                { "max-injury", new MultilangPhrase{ En = "Deadly wound!", Ru = "Смертельная рана!" } },
                 { "max-hunger", new MultilangPhrase{ En = "Starvation!", Ru = "Голодание!" } },
                 { "max-thirst", new MultilangPhrase{ En = "Dehydration!", Ru = "Обезвоживание!" } },
                 { "max-intoxication", new MultilangPhrase{ En = "Overdose!", Ru = "Передозировка!" } },

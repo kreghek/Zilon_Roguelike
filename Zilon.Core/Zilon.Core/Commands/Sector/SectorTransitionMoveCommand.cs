@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;
@@ -43,9 +44,16 @@ namespace Zilon.Core.Commands
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
         public override bool CanExecute()
         {
-            if (CurrentActor == null)
+            if (CurrentActor is null)
             {
                 return false;
+            }
+
+            if (_player.Globe is null || _player.MainPerson is null)
+            {
+                // We can't check transition if the globe and/or the main person equal null.
+
+                throw new InvalidOperationException("Player object is not initialized.");
             }
 
             var actorNode = CurrentActor.Node;

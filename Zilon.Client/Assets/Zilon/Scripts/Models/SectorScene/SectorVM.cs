@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
@@ -12,18 +13,15 @@ using UnityEngine;
 
 using Zenject;
 
-using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
-using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Scoring;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -156,6 +154,7 @@ public class SectorVM : MonoBehaviour
 
     public bool CanIntent = true;
     private TaskScheduler _taskScheduler;
+    private IGlobe _globe;
 
     private void ExecuteCommands()
     {
@@ -192,6 +191,9 @@ public class SectorVM : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     public void Awake()
     {
+        // Store globe beacause after quit and person death Globe and MainPerson will be erised.
+        _globe = _humanPlayer.Globe;
+
         InitServices();
 
         var nodeViewModels = InitNodeViewModels();
@@ -552,14 +554,12 @@ public class SectorVM : MonoBehaviour
 
     private void UnscribeSectorDependentEvents()
     {
-        foreach (var sectorNode in _humanPlayer.Globe.SectorNodes)
+        foreach (var sectorNode in _globe.SectorNodes)
         {
             foreach (var actor in sectorNode.Sector.ActorManager.Items)
             {
                 actor.UsedAct -= ActorOnUsedAct;
                 actor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
-
-                actor.UsedAct -= ActorOnUsedAct;
                 actor.Person.GetModule<ISurvivalModule>().Dead -= Monster_Dead;
             }
         }

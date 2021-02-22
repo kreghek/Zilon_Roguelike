@@ -1,0 +1,3 @@
+For some unknown reason, you ended up on the floor of a gloomy dungeon. Looking around you do not understand how you got here. But you know exactly your goal - to quickly leave this dark place alive.
+
+At each level there is a transition to the next. All levels are linked to each other. To use a transition, move to the cell with it, click the transition button.
