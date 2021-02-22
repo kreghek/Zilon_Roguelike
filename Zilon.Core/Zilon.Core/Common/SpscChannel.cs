@@ -65,7 +65,7 @@ namespace Zilon.Core.Common
             {
                 if (_receivers.TryTake(out var receiver))
                 {
-                    if (receiver.TrySetResult(obj))
+                    if (!receiver.TrySetResult(obj))
                     {
                         Debug.Fail("Error in concurrency.");
                     }
