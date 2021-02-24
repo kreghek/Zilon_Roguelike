@@ -8,8 +8,9 @@ using Zilon.Core.Tests.Common.Schemes;
 namespace Zilon.Core.Tests
 {
     public static class PerkHelperTestCaseSource
-    { 
-        public static IEnumerable TestCases {
+    {
+        public static IEnumerable TestCases
+        {
             get
             {
                 // IPerkScheme which used to convert level
@@ -24,7 +25,7 @@ namespace Zilon.Core.Tests
         }
 
         private static IPerkScheme CreateTestPerkScheme523()
-        { 
+        {
             return new TestPerkScheme
             {
                 Levels = new[]
