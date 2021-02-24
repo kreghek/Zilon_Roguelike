@@ -20,7 +20,7 @@ namespace Zilon.Core
             {
                 throw new ArgumentNullException(nameof(perkScheme));
             }
-
+            
             if (level == null)
             {
                 return null;
@@ -41,7 +41,7 @@ namespace Zilon.Core
 
             return sum;
         }
-
+        
         /// <summary>
         /// Преобразование суммарного уровня в уровень/подуровень для конкретной схемы перка.
         /// </summary>
@@ -55,26 +55,21 @@ namespace Zilon.Core
             {
                 throw new ArgumentNullException(nameof(perkScheme));
             }
-
-            var levelRemains = totalLevel;
-            var currentLevelPointer = 0;
-            do
-            {
-                if (currentLevelPointer >= perkScheme.Levels.Length)
-                {
-                    level = null;
-                    subLevel = null;
-                    return;
-                }
-
-                var levelScheme = perkScheme.Levels[currentLevelPointer];
-                level = currentLevelPointer + 1;
-                subLevel = Math.Min(levelRemains, levelScheme.MaxValue);
-                currentLevelPointer++;
-
-                var currentLevelCapability = levelScheme.MaxValue;
-                levelRemains -= currentLevelCapability;
-            } while (levelRemains >= 0);
+            
+            var schemeLevels = perkScheme.Levels.Select(x=>x.MaxValue).ToArray();
+            
+            int levelInner;
+            int subInner;
+            
+            ConvertTotalIntoLevelSubsInner(schemeLevels, totalLevel, out levelInner, out subInner);
+            
+            level = levelInner;
+            subLevel = subInner;
+        }
+        
+        private static ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
+        {
+            throw new NotImplemented();
         }
 
         public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
