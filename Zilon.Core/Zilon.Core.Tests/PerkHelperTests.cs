@@ -16,13 +16,11 @@ namespace Zilon.Core.Tests
             int testedTotalLevel, int expectedLevel, int expectedSubLevel)
         {
             // ACT
-            PerkHelper.ConvertTotalLevel(perkScheme, testedTotalLevel,
-                out var factLevel,
-                out var factSubLevel);
+            var perkLevel = PerkHelper.ConvertTotalLevel(perkScheme, testedTotalLevel);
 
             // ASSERT
-            factLevel.Should().Be(expectedLevel);
-            factSubLevel.Should().Be(expectedSubLevel);
+            perkLevel.Primary.Should().Be(expectedLevel);
+            perkLevel.Sub.Should().Be(expectedSubLevel);
         }
     }
 }
