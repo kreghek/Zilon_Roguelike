@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -7,7 +8,7 @@ namespace Zilon.Core
 {
     public static class PerkHelper
     {
-        static ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
+        public static void ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
         {
             var levelMax = 1;
             var currentTotal = total;
@@ -83,10 +84,7 @@ namespace Zilon.Core
 
             var schemeLevels = perkScheme.Levels.Select(x => x.MaxValue).ToArray();
 
-            int levelInner;
-            int subInner;
-
-            ConvertTotalIntoLevelSubsInner(schemeLevels, totalLevel, out levelInner, out subInner);
+            ConvertTotalIntoLevelSubsInner(schemeLevels, totalLevel, out var levelInner, out var subInner);
 
             level = levelInner;
             subLevel = subInner;
