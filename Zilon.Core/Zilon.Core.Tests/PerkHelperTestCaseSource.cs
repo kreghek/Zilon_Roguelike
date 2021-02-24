@@ -46,9 +46,9 @@ namespace Zilon.Core.Tests
 
                 yield return new TestCaseData(null, 0);
                 yield return new TestCaseData(CreateTestPerkScheme523(), 0);
-                yield return new TestCaseData(new TestPerkScheme { Levels = new PerkLevelSubScheme[0] }, 0);
-                yield return new TestCaseData(new TestPerkScheme { Levels = new PerkLevelSubScheme[1] { new PerkLevelSubScheme { MaxValue = 0 } } }, 1);
-                yield return new TestCaseData(new TestPerkScheme { Levels = new PerkLevelSubScheme[1] { new PerkLevelSubScheme { MaxValue = 1 } } }, 2);
+                yield return new TestCaseData(new TestPerkScheme { Levels = System.Array.Empty<PerkLevelSubScheme>() }, 0);
+                yield return new TestCaseData(new TestPerkScheme { Levels = new[] { new PerkLevelSubScheme { MaxValue = 0 } } }, 1);
+                yield return new TestCaseData(new TestPerkScheme { Levels = new[] { new PerkLevelSubScheme { MaxValue = 1 } } }, 2);
             }
         }
 
