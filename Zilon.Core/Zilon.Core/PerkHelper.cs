@@ -71,7 +71,7 @@ namespace Zilon.Core
         {
             var levelMax = 1;
             var currentTotal = total;
-            for(var i = 0; i < scheme.Length; i++)
+            for (var i = 0; i < scheme.Length; i++)
             {
                 if (currentTotal == 0)
                     throw new InvalidOperationException();
