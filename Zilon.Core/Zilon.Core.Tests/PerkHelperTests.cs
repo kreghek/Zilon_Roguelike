@@ -1,12 +1,12 @@
-﻿using Zilon.Core;
-using System;
+﻿using System;
 
 using FluentAssertions;
 
 using NUnit.Framework;
 
-using Zilon.Core.Schemes;
+using Zilon.Core;
 using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests
 {

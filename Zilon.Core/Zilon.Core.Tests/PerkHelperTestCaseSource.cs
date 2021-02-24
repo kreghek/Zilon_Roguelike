@@ -58,7 +58,8 @@ namespace Zilon.Core.Tests
 
         public static IEnumerable GetNextLevelTestCases
         {
-            get {
+            get
+            {
                 // IPerkScheme which used to convert level
                 // Current level
                 // Expected next level
