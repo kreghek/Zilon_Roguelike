@@ -116,11 +116,6 @@ namespace Zilon.Core
 
             for (var i = 0; i < scheme.Length; i++)
             {
-                if (currentTotal == 0)
-                {
-                    throw new InvalidOperationException();
-                }
-
                 if (scheme[i] >= currentTotal)
                 {
                     lvl = levelMax;
