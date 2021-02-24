@@ -43,34 +43,6 @@ namespace Zilon.Core
             return sum;
         }
 
-        private static void ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
-        {
-            var levelMax = 1;
-            var currentTotal = total;
-
-            for (var i = 0; i < scheme.Length; i++)
-            {
-                if (currentTotal == 0)
-                {
-                    throw new InvalidOperationException();
-                }
-
-                if (scheme[i] >= currentTotal)
-                {
-                    lvl = levelMax;
-                    sub = currentTotal;
-                    return;
-                }
-
-                currentTotal -= scheme[i];
-                levelMax++;
-            }
-
-            // This means `total` was be more that sum of levels.
-
-            throw new ArgumentException($"{total} is to big for that schemes: ${string.Join(", ", scheme)}.", nameof(total));
-        }
-
         /// <summary>
         /// Преобразование суммарного уровня в уровень/подуровень для конкретной схемы перка.
         /// </summary>
@@ -135,6 +107,35 @@ namespace Zilon.Core
             }
 
             return new PerkLevel(currentLevel, currentSubLevel);
+        }
+
+        private static void ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
+        {
+            var levelMax = 1;
+            var currentTotal = total;
+
+            for (var i = 0; i < scheme.Length; i++)
+            {
+                if (currentTotal == 0)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                if (scheme[i] >= currentTotal)
+                {
+                    lvl = levelMax;
+                    sub = currentTotal;
+                    return;
+                }
+
+                currentTotal -= scheme[i];
+                levelMax++;
+            }
+
+            // This means `total` was be more that sum of levels.
+
+            throw new ArgumentException($"{total} is to big for that schemes: ${string.Join(", ", scheme)}.",
+                nameof(total));
         }
     }
 }
