@@ -7,6 +7,31 @@ namespace Zilon.Core
 {
     public static class PerkHelper
     {
+        static ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
+        {
+            var levelMax = 1;
+            var currentTotal = total;
+            for (var i = 0; i < scheme.Length; i++)
+            {
+                if (currentTotal == 0)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                if (scheme[i] >= currentTotal)
+                {
+                    lvl = levelMax;
+                    sub = currentTotal;
+                    return;
+                }
+
+                currentTotal -= scheme[i];
+                levelMax++;
+            }
+
+            throw new InvalidOperationException();
+        }
+
         /// <summary>
         /// Преобразование уровня/подуровня в суммарный уровень.
         /// </summary>
@@ -65,26 +90,6 @@ namespace Zilon.Core
 
             level = levelInner;
             subLevel = subInner;
-        }
-
-        private static ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
-        {
-            var levelMax = 1;
-            var currentTotal = total;
-            for (var i = 0; i < scheme.Length; i++)
-            {
-                if (currentTotal == 0)
-                    throw new InvalidOperationException();
-                if (scheme[i] >= currentTotal)
-                {
-                    lvl = levelMax;
-                    sub = currentTotal;
-                    return;
-                }
-                currentTotal -= scheme[i];
-                levelMax++;
-            }
-            throw new InvalidOperationException();
         }
 
         public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
