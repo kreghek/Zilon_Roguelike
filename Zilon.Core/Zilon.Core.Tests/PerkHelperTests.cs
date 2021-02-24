@@ -12,7 +12,8 @@ namespace Zilon.Core.Tests
     {
         [Test]
         [TestCaseSource(typeof(PerkHelperTestCaseSource), nameof(PerkHelperTestCaseSource.TestCases))]
-        public void ConvertTotalLevel_FromTestCases_ReturnsCorrectLevelAndSublevel(IPerkScheme perkScheme, int testedTotalLevel, int expectedLevel, int expectedSubLevel)
+        public void ConvertTotalLevel_FromTestCases_ReturnsCorrectLevelAndSublevel(IPerkScheme perkScheme,
+            int testedTotalLevel, int expectedLevel, int expectedSubLevel)
         {
             // ACT
             PerkHelper.ConvertTotalLevel(perkScheme, testedTotalLevel,
