@@ -81,32 +81,11 @@ namespace Zilon.Core
 
         public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
         {
-            if (perkScheme is null)
-            {
-                throw new ArgumentNullException(nameof(perkScheme));
-            }
+            var currentTotal = ConvertLevel(perkScheme, level.Primary, level.Sub);
+            currentTotal++;
 
-            if (level == null)
-            {
-                return new PerkLevel(0, 0);
-            }
-
-            var currentLevel = level.Primary;
-            var currentSubLevel = level.Sub;
-
-            var currentLevelScheme = perkScheme.Levels[currentLevel];
-
-            if (currentSubLevel + 1 > currentLevelScheme.MaxValue)
-            {
-                currentSubLevel = 0;
-                currentLevel++;
-            }
-            else
-            {
-                currentSubLevel++;
-            }
-
-            return new PerkLevel(currentLevel, currentSubLevel);
+            var nextLevel = ConvertTotalLevel(perkScheme, currentTotal.Value);
+            return nextLevel;
         }
 
         private static void ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
