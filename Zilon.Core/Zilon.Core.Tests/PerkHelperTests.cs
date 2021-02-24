@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+
+using FluentAssertions;
 
 using NUnit.Framework;
 
@@ -11,7 +13,7 @@ namespace Zilon.Core.Tests
     public class PerkHelperTests
     {
         [Test]
-        [TestCaseSource(typeof(PerkHelperTestCaseSource), nameof(PerkHelperTestCaseSource.TestCases))]
+        [TestCaseSource(typeof(PerkHelperTestCaseSource), nameof(PerkHelperTestCaseSource.PositiveTestCases))]
         public void ConvertTotalLevel_FromTestCases_ReturnsCorrectLevelAndSublevel(IPerkScheme perkScheme,
             int testedTotalLevel, int expectedLevel, int expectedSubLevel)
         {
@@ -21,6 +23,21 @@ namespace Zilon.Core.Tests
             // ASSERT
             perkLevel.Primary.Should().Be(expectedLevel);
             perkLevel.Sub.Should().Be(expectedSubLevel);
+        }
+
+        [Test]
+        [TestCaseSource(typeof(PerkHelperTestCaseSource), nameof(PerkHelperTestCaseSource.ExceptonTestCases))]
+        public void ConvertTotalLevel_FromTestCases_ThrowsExceptions(IPerkScheme perkScheme,
+            int testedTotalLevel)
+        {
+            // ACT
+            Action act = () =>
+            {
+                var perkLevel = PerkHelper.ConvertTotalLevel(perkScheme, testedTotalLevel);
+            };
+
+            // ASSERT
+            act.Should().Throw<Exception>();
         }
     }
 }
