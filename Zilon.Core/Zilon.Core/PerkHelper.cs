@@ -43,10 +43,11 @@ namespace Zilon.Core
             return sum;
         }
 
-        public static void ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
+        private static void ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
         {
             var levelMax = 1;
             var currentTotal = total;
+
             for (var i = 0; i < scheme.Length; i++)
             {
                 if (currentTotal == 0)
@@ -65,7 +66,9 @@ namespace Zilon.Core
                 levelMax++;
             }
 
-            throw new InvalidOperationException();
+            // This means `total` was be more that sum of levels.
+
+            throw new ArgumentException($"{total} is to big for that schemes: ${string.Join(", ", scheme)}.", nameof(total));
         }
 
         /// <summary>
@@ -80,6 +83,19 @@ namespace Zilon.Core
             if (perkScheme is null)
             {
                 throw new ArgumentNullException(nameof(perkScheme));
+            }
+
+            if (totalLevel == 0)
+            {
+                throw new ArgumentException("Total must be more that zero.", nameof(totalLevel));
+            }
+
+            foreach (var schemeLevel in perkScheme.Levels)
+            {
+                if (schemeLevel.MaxValue <= 0)
+                {
+                    throw new ArgumentException("Scheme must contains no zeros.", nameof(perkScheme));
+                }
             }
 
             var schemeLevels = perkScheme.Levels.Select(x => x.MaxValue).ToArray();
