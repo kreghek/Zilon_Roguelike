@@ -47,7 +47,8 @@ namespace Zilon.Core.Tests
         [Test]
         [TestCaseSource(typeof(PerkHelperTestCaseSource),
             nameof(PerkHelperTestCaseSource.GetNextLevelTestCases))]
-        public void GetNextLevel_FromTestCases_ReturnsCorrectNextLevel(IPerkScheme perkScheme, PerkLevel currentLevel, PerkLevel expectedNextLevel)
+        public void GetNextLevel_FromTestCases_ReturnsCorrectNextLevel(IPerkScheme perkScheme, PerkLevel currentLevel,
+            PerkLevel expectedNextLevel)
         {
             // ACT
             var nextLevel = PerkHelper.GetNextLevel(perkScheme, currentLevel);
@@ -60,7 +61,8 @@ namespace Zilon.Core.Tests
         [Test]
         [TestCaseSource(typeof(PerkHelperTestCaseSource),
             nameof(PerkHelperTestCaseSource.HasNoNextLevelTestCases))]
-        public void HasNextLevel_FromNegativeTestCases_AlwaysReturnsFalse(IPerkScheme perkScheme, PerkLevel currentLevel)
+        public void HasNextLevel_FromNegativeTestCases_AlwaysReturnsFalse(IPerkScheme perkScheme,
+            PerkLevel currentLevel)
         {
             // ACT
             var factHasNextLevel = PerkHelper.HasNextLevel(perkScheme, currentLevel);
