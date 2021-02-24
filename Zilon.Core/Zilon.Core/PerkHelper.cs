@@ -28,11 +28,11 @@ namespace Zilon.Core
             }
 
             var sum = 0;
-            for (var i = 0; i <= level; i++)
+            for (var i = 1; i <= level; i++)
             {
                 if (i < level)
                 {
-                    sum += perkScheme.Levels[i].MaxValue + 1;
+                    sum += perkScheme.Levels[i-1].MaxValue;
                 }
                 else
                 {
@@ -77,6 +77,19 @@ namespace Zilon.Core
             var perkLevel = new PerkLevel(levelInner, subInner);
 
             return perkLevel;
+        }
+
+        public static bool HasNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        {
+            try
+            {
+                var _ = GetNextLevel(perkScheme, level);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)

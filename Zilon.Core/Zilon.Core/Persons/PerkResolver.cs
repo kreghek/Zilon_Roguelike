@@ -14,20 +14,7 @@ namespace Zilon.Core.Persons
                 return false;
             }
 
-            var nextLevel = PerkHelper.GetNextLevel(perk.Scheme, currentLevel);
-
-            var perkLevels = perk.Scheme.Levels;
-            var maxLevel = perkLevels.Length - 1;
-            var nextLevelOutOfRange = nextLevel.Primary > maxLevel;
-
-            if (nextLevelOutOfRange)
-            {
-                return true;
-            }
-
-            var maxSubLevel = perkLevels[currentLevel.Primary].MaxValue;
-            var currentSubLevelIsMax = currentLevel.Sub >= maxSubLevel;
-            return currentSubLevelIsMax;
+            return !PerkHelper.HasNextLevel(perk.Scheme, currentLevel);
         }
 
         public void ApplyProgress(IJobProgress progress, IEvolutionModule evolutionData)

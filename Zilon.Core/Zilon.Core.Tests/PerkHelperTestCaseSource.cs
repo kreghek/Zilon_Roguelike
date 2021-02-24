@@ -3,6 +3,7 @@ using System.Collections;
 
 using NUnit.Framework;
 
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tests.Common.Schemes;
 
@@ -13,7 +14,7 @@ namespace Zilon.Core.Tests
         /// <summary>
         /// Test cases wich fails ckecks.
         /// </summary>
-        public static IEnumerable ExceptonTestCases
+        public static IEnumerable ConvertTotalLevelExceptonTestCases
         {
             get
             {
@@ -30,7 +31,7 @@ namespace Zilon.Core.Tests
             }
         }
 
-        public static IEnumerable PositiveTestCases
+        public static IEnumerable ConvertTotalLevelPositiveTestCases
         {
             get
             {
@@ -52,6 +53,30 @@ namespace Zilon.Core.Tests
                 yield return new TestCaseData(CreateTestPerkScheme111(), 2, 2, 1);
 
                 yield return new TestCaseData(CreateTestPerkScheme111(), 3, 3, 1);
+            }
+        }
+
+        public static IEnumerable GetNextLevelTestCases
+        {
+            get {
+                // IPerkScheme which used to convert level
+                // Current level
+                // Expected next level
+
+                yield return new TestCaseData(CreateTestPerkScheme523(), new PerkLevel(1, 1), new PerkLevel(1, 2));
+                yield return new TestCaseData(CreateTestPerkScheme523(), new PerkLevel(1, 5), new PerkLevel(2, 1));
+                yield return new TestCaseData(CreateTestPerkScheme523(), new PerkLevel(0, 0), new PerkLevel(1, 1));
+                yield return new TestCaseData(CreateTestPerkScheme111(), new PerkLevel(0, 0), new PerkLevel(1, 1));
+                yield return new TestCaseData(CreateTestPerkScheme111(), new PerkLevel(1, 1), new PerkLevel(2, 1));
+            }
+        }
+
+        public static IEnumerable HasNoNextLevelTestCases
+        {
+            get
+            {
+                yield return new TestCaseData(CreateTestPerkScheme111(), new PerkLevel(3, 1));
+                yield return new TestCaseData(CreateTestPerkScheme523(), new PerkLevel(3, 3));
             }
         }
 

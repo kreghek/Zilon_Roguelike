@@ -1,5 +1,8 @@
-﻿namespace Zilon.Core.Persons
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Persons
 {
+    [ExcludeFromCodeCoverage]
     public sealed class PerkLevel
     {
         public PerkLevel(int primary, int sub)
@@ -17,5 +20,10 @@
         /// Подуровень. Или уровень внутри схемы уровня перка.
         /// </summary>
         public int Sub { get; }
+
+        public override string ToString()
+        {
+            return $"lvl:{Primary} sub:{Sub}";
+        }
     }
 }
