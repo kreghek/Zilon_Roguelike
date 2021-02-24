@@ -69,7 +69,22 @@ namespace Zilon.Core
 
         private static ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
         {
-            throw new NotImplemented();
+            var levelMax = 1;
+            var currentTotal = total;
+            for(var i = 0; i < scheme.Length; i++)
+            {
+                if (currentTotal == 0)
+                    throw new InvalidOperationException();
+                if (scheme[i] >= currentTotal)
+                {
+                    lvl = levelMax;
+                    sub = currentTotal;
+                    return;
+                }
+                currentTotal -= scheme[i];
+                levelMax++;
+            }
+            throw new InvalidOperationException();
         }
 
         public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
