@@ -35,6 +35,10 @@ namespace Zilon.Core.Tests
                     .SetDescription("Fails because subs sum is zero.");
 
                 yield return new TestCaseData(
+                        new TestPerkScheme { Levels = new[] { new PerkLevelSubScheme { MaxValue = -1 } } }, 1)
+                    .SetDescription("Fails because one of the subs is negative.");
+
+                yield return new TestCaseData(
                         new TestPerkScheme { Levels = new[] { new PerkLevelSubScheme { MaxValue = 1 } } }, 2)
                     .SetDescription("Fails because subs sum less that total.");
             }
