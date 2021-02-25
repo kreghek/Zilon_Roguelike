@@ -124,7 +124,8 @@ namespace Zilon.Core
 
             // This means `total` was be more that sum of levels.
 
-            throw new ArgumentException($"Total {total} is too big for that schemes: ${string.Join(", ", scheme)}.", nameof(total));
+            throw new ArgumentException($"Total {total} is too big for that schemes: ${string.Join(", ", scheme)}.",
+                nameof(total));
         }
     }
 }
