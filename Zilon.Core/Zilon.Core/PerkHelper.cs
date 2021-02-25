@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -79,7 +81,8 @@ namespace Zilon.Core
             return perkLevel;
         }
 
-        public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        [NotNull]
+        public static PerkLevel GetNextLevel([NotNull] IPerkScheme perkScheme, [NotNull] PerkLevel level)
         {
             var currentTotal = ConvertLevel(perkScheme, level.Primary, level.Sub);
             currentTotal++;

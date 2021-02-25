@@ -150,13 +150,24 @@ namespace Zilon.Core.PersonModules
                 throw new InvalidOperationException("Указанный перк не является активным для текущего актёра.");
             }
 
-            var nextLevel = PerkHelper.GetNextLevel(perk.Scheme, perk.CurrentLevel);
+            var nextLevel = GetFirstOrNextLevel(perk);
 
             perk.CurrentLevel = nextLevel;
 
             UpdatePerks();
 
             DoPerkArchieved(perk);
+        }
+
+        private static PerkLevel GetFirstOrNextLevel(IPerk perk)
+        {
+            if (perk.CurrentLevel is null)
+            {
+                // Perk is not leveled yet
+                return new PerkLevel(1, 1);
+            }
+
+            return PerkHelper.GetNextLevel(perk.Scheme, perk.CurrentLevel);
         }
     }
 }

@@ -98,7 +98,7 @@ namespace Zilon.Core.PersonModules
                 else
                 {
                     var currentLevel = perk.CurrentLevel;
-                    var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary];
+                    var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary-1];
 
                     if (currentLevelScheme.Rules == null)
                     {

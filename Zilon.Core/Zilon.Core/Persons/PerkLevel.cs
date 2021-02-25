@@ -1,12 +1,22 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core.Persons
 {
-    [ExcludeFromCodeCoverage]
     public sealed class PerkLevel
     {
         public PerkLevel(int primary, int sub)
         {
+            if (primary <= 0)
+            {
+                throw new ArgumentException($"Value must be positive non-zero integer number. Currently is {primary}.", nameof(primary));
+            }
+
+            if (sub <= 0)
+            {
+                throw new ArgumentException($"Value must be positive non-zero integer number. Currently is {sub}.", nameof(sub));
+            }
+
             Primary = primary;
             Sub = sub;
         }
@@ -21,6 +31,7 @@ namespace Zilon.Core.Persons
         /// </summary>
         public int Sub { get; }
 
+        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
             return $"lvl:{Primary} sub:{Sub}";

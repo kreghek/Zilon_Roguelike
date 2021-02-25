@@ -66,8 +66,6 @@ namespace Zilon.Core.Tests
 
                 yield return new TestCaseData(CreateTestPerkScheme523(), new PerkLevel(1, 1), new PerkLevel(1, 2));
                 yield return new TestCaseData(CreateTestPerkScheme523(), new PerkLevel(1, 5), new PerkLevel(2, 1));
-                yield return new TestCaseData(CreateTestPerkScheme523(), new PerkLevel(0, 0), new PerkLevel(1, 1));
-                yield return new TestCaseData(CreateTestPerkScheme111(), new PerkLevel(0, 0), new PerkLevel(1, 1));
                 yield return new TestCaseData(CreateTestPerkScheme111(), new PerkLevel(1, 1), new PerkLevel(2, 1));
             }
         }
