@@ -139,17 +139,17 @@ namespace Zilon.Core.PersonModules
                         continue;
                     }
 
-                    currentLevel = new PerkLevel(0, 0);
+                    currentLevel = new PerkLevel(1, 1);
                 }
 
-                var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary];
+                var currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary - 1];
 
                 if (currentLevelScheme.Rules == null)
                 {
                     continue;
                 }
 
-                for (var i = 0; i <= currentLevel.Sub; i++)
+                for (var i = 1; i <= currentLevel.Sub; i++)
                 {
                     foreach (var rule in currentLevelScheme.Rules)
                     {

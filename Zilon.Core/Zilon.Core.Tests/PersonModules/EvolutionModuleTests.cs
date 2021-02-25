@@ -17,6 +17,7 @@ namespace Zilon.Core.Tests.PersonModules
     {
         /// <summary>
         /// Тест проверяет, что при получении следующего уровня перка, текущий уровень не сбрасывается.
+        /// То есть сначала из нулевого уровня получает 1.1. Затем 1.2.
         /// </summary>
         [Test]
         public void PerkLevelUpTest()
@@ -51,7 +52,7 @@ namespace Zilon.Core.Tests.PersonModules
 
             // ASSERT
             evolutionData.Perks.Length.Should().Be(1);
-            evolutionData.Perks[0].CurrentLevel.Sub.Should().Be(1);
+            evolutionData.Perks[0].CurrentLevel.Sub.Should().Be(2);
         }
     }
 }

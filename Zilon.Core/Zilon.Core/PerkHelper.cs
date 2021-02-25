@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+using JetBrains.Annotations;
+
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -28,11 +30,11 @@ namespace Zilon.Core
             }
 
             var sum = 0;
-            for (var i = 0; i <= level; i++)
+            for (var i = 1; i <= level; i++)
             {
                 if (i < level)
                 {
-                    sum += perkScheme.Levels[i].MaxValue + 1;
+                    sum += perkScheme.Levels[i - 1].MaxValue;
                 }
                 else
                 {
@@ -79,34 +81,27 @@ namespace Zilon.Core
             return perkLevel;
         }
 
-        public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        [NotNull]
+        public static PerkLevel GetNextLevel([NotNull] IPerkScheme perkScheme, [NotNull] PerkLevel level)
         {
-            if (perkScheme is null)
+            var currentTotal = ConvertLevel(perkScheme, level.Primary, level.Sub);
+            currentTotal++;
+
+            var nextLevel = ConvertTotalLevel(perkScheme, currentTotal.Value);
+            return nextLevel;
+        }
+
+        public static bool HasNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        {
+            try
             {
-                throw new ArgumentNullException(nameof(perkScheme));
+                GetNextLevel(perkScheme, level);
+                return true;
             }
-
-            if (level == null)
+            catch
             {
-                return new PerkLevel(0, 0);
+                return false;
             }
-
-            var currentLevel = level.Primary;
-            var currentSubLevel = level.Sub;
-
-            var currentLevelScheme = perkScheme.Levels[currentLevel];
-
-            if (currentSubLevel + 1 > currentLevelScheme.MaxValue)
-            {
-                currentSubLevel = 0;
-                currentLevel++;
-            }
-            else
-            {
-                currentSubLevel++;
-            }
-
-            return new PerkLevel(currentLevel, currentSubLevel);
         }
 
         private static void ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
@@ -129,7 +124,7 @@ namespace Zilon.Core
 
             // This means `total` was be more that sum of levels.
 
-            throw new ArgumentException($"{total} is to big for that schemes: ${string.Join(", ", scheme)}.",
+            throw new ArgumentException($"Total {total} is too big for that schemes: ${string.Join(", ", scheme)}.",
                 nameof(total));
         }
     }

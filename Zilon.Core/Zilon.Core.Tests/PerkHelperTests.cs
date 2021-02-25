@@ -4,6 +4,8 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
+using Zilon.Core;
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests
@@ -13,7 +15,8 @@ namespace Zilon.Core.Tests
     public class PerkHelperTests
     {
         [Test]
-        [TestCaseSource(typeof(PerkHelperTestCaseSource), nameof(PerkHelperTestCaseSource.PositiveTestCases))]
+        [TestCaseSource(typeof(PerkHelperTestCaseSource),
+            nameof(PerkHelperTestCaseSource.ConvertTotalLevelPositiveTestCases))]
         public void ConvertTotalLevel_FromTestCases_ReturnsCorrectLevelAndSublevel(IPerkScheme perkScheme,
             int testedTotalLevel, int expectedLevel, int expectedSubLevel)
         {
@@ -26,18 +29,46 @@ namespace Zilon.Core.Tests
         }
 
         [Test]
-        [TestCaseSource(typeof(PerkHelperTestCaseSource), nameof(PerkHelperTestCaseSource.ExceptonTestCases))]
+        [TestCaseSource(typeof(PerkHelperTestCaseSource),
+            nameof(PerkHelperTestCaseSource.ConvertTotalLevelExceptonTestCases))]
         public void ConvertTotalLevel_FromTestCases_ThrowsExceptions(IPerkScheme perkScheme,
             int testedTotalLevel)
         {
             // ACT
             Action act = () =>
             {
-                var _ = PerkHelper.ConvertTotalLevel(perkScheme, testedTotalLevel);
+                PerkHelper.ConvertTotalLevel(perkScheme, testedTotalLevel);
             };
 
             // ASSERT
-            act.Should().Throw<Exception>();
+            act.Should().Throw<ArgumentException>();
+        }
+
+        [Test]
+        [TestCaseSource(typeof(PerkHelperTestCaseSource),
+            nameof(PerkHelperTestCaseSource.GetNextLevelTestCases))]
+        public void GetNextLevel_FromTestCases_ReturnsCorrectNextLevel(IPerkScheme perkScheme, PerkLevel currentLevel,
+            PerkLevel expectedNextLevel)
+        {
+            // ACT
+            var nextLevel = PerkHelper.GetNextLevel(perkScheme, currentLevel);
+
+            // ASSERT
+            nextLevel.Primary.Should().Be(expectedNextLevel.Primary);
+            nextLevel.Sub.Should().Be(expectedNextLevel.Sub);
+        }
+
+        [Test]
+        [TestCaseSource(typeof(PerkHelperTestCaseSource),
+            nameof(PerkHelperTestCaseSource.HasNoNextLevelTestCases))]
+        public void HasNextLevel_FromNegativeTestCases_AlwaysReturnsFalse(IPerkScheme perkScheme,
+            PerkLevel currentLevel)
+        {
+            // ACT
+            var factHasNextLevel = PerkHelper.HasNextLevel(perkScheme, currentLevel);
+
+            // ASSERT
+            factHasNextLevel.Should().BeFalse();
         }
     }
 }
