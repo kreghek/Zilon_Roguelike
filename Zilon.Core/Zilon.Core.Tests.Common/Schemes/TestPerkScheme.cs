@@ -6,7 +6,7 @@ namespace Zilon.Core.Tests.Common.Schemes
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class TestPerkScheme : SchemeBase, IPerkScheme
     {
-        public string SystemDescription { get; set;}
+        public string SystemDescription { get; set; }
 
         public PerkConditionSubScheme[] BaseConditions { get; set; }
         public string IconSid { get; set; }
