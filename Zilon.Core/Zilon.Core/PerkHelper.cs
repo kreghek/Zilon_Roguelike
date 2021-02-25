@@ -95,7 +95,7 @@ namespace Zilon.Core
         {
             try
             {
-                var _ = GetNextLevel(perkScheme, level);
+                GetNextLevel(perkScheme, level);
                 return true;
             }
             catch
