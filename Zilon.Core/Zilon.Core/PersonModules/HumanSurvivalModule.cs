@@ -423,7 +423,7 @@ namespace Zilon.Core.PersonModules
                     continue;
                 }
 
-                currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary-1];
+                currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary - 1];
 
                 if (currentLevelScheme.Rules == null)
                 {
