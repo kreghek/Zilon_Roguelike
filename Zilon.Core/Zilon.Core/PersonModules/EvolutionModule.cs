@@ -51,6 +51,17 @@ namespace Zilon.Core.PersonModules
             PerkLeveledUp?.Invoke(this, eventArgs);
         }
 
+        private static PerkLevel GetFirstOrNextLevel(IPerk perk)
+        {
+            if (perk.CurrentLevel is null)
+            {
+                // Perk is not leveled yet
+                return new PerkLevel(1, 1);
+            }
+
+            return PerkHelper.GetNextLevel(perk.Scheme, perk.CurrentLevel);
+        }
+
         private IList<IPerk> GetPerks()
         {
             var schemes = _schemeService.GetSchemes<IPerkScheme>()
@@ -157,17 +168,6 @@ namespace Zilon.Core.PersonModules
             UpdatePerks();
 
             DoPerkArchieved(perk);
-        }
-
-        private static PerkLevel GetFirstOrNextLevel(IPerk perk)
-        {
-            if (perk.CurrentLevel is null)
-            {
-                // Perk is not leveled yet
-                return new PerkLevel(1, 1);
-            }
-
-            return PerkHelper.GetNextLevel(perk.Scheme, perk.CurrentLevel);
         }
     }
 }

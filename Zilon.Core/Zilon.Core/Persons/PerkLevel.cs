@@ -9,12 +9,14 @@ namespace Zilon.Core.Persons
         {
             if (primary <= 0)
             {
-                throw new ArgumentException($"Value must be positive non-zero integer number. Currently is {primary}.", nameof(primary));
+                throw new ArgumentException($"Value must be positive non-zero integer number. Currently is {primary}.",
+                    nameof(primary));
             }
 
             if (sub <= 0)
             {
-                throw new ArgumentException($"Value must be positive non-zero integer number. Currently is {sub}.", nameof(sub));
+                throw new ArgumentException($"Value must be positive non-zero integer number. Currently is {sub}.",
+                    nameof(sub));
             }
 
             Primary = primary;
