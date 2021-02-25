@@ -109,7 +109,8 @@ namespace Zilon.Core
             var levelMax = 1;
             var currentTotal = total;
 
-            for (var i = 0; i < scheme.Length; i++)
+//TODO MAKE THIS CODE FAILING BY TESTS
+            for (var i = 0; i <= scheme.Length; i++)
             {
                 if (scheme[i] >= currentTotal)
                 {
