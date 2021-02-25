@@ -37,11 +37,11 @@ namespace Zilon.Core.Tests
             // ACT
             Action act = () =>
             {
-                var _ = PerkHelper.ConvertTotalLevel(perkScheme, testedTotalLevel);
+                PerkHelper.ConvertTotalLevel(perkScheme, testedTotalLevel);
             };
 
             // ASSERT
-            act.Should().Throw<Exception>();
+            act.Should().Throw<ArgumentException>();
         }
 
         [Test]

@@ -109,8 +109,7 @@ namespace Zilon.Core
             var levelMax = 1;
             var currentTotal = total;
 
-            //TODO MAKE THIS CODE FAILING BY TESTS
-            for (var i = 0; i <= scheme.Length; i++)
+            for (var i = 0; i < scheme.Length; i++)
             {
                 if (scheme[i] >= currentTotal)
                 {
@@ -125,8 +124,7 @@ namespace Zilon.Core
 
             // This means `total` was be more that sum of levels.
 
-            throw new ArgumentException($"{total} is to big for that schemes: ${string.Join(", ", scheme)}.",
-                nameof(total));
+            throw new ArgumentException($"Total {total} is too big for that schemes: ${string.Join(", ", scheme)}.", nameof(total));
         }
     }
 }
