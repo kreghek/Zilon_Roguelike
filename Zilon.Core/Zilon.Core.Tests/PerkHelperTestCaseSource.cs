@@ -22,7 +22,8 @@ namespace Zilon.Core.Tests
                 // int testedTotalLevel - the level to convert level/sub in the perk scheme
 
                 yield return new TestCaseData(null, 0)
-                    .SetDescription("fails because scheme is null"); ;
+                    .SetDescription("fails because scheme is null");
+                ;
 
                 yield return new TestCaseData(CreateTestPerkScheme523(), 0)
                     .SetDescription("Fails because total is empty");
@@ -31,11 +32,11 @@ namespace Zilon.Core.Tests
                     .SetDescription("Fails because scheme has no levels.");
 
                 yield return new TestCaseData(
-                    new TestPerkScheme { Levels = new[] { new PerkLevelSubScheme { MaxValue = 0 } } }, 1)
+                        new TestPerkScheme { Levels = new[] { new PerkLevelSubScheme { MaxValue = 0 } } }, 1)
                     .SetDescription("Fails because subs sum is zero.");
 
                 yield return new TestCaseData(
-                    new TestPerkScheme { Levels = new[] { new PerkLevelSubScheme { MaxValue = 1 } } }, 2)
+                        new TestPerkScheme { Levels = new[] { new PerkLevelSubScheme { MaxValue = 1 } } }, 2)
                     .SetDescription("Fails because subs sum less that total.");
             }
         }
