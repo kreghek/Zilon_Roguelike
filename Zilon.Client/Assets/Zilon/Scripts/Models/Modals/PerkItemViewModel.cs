@@ -39,8 +39,8 @@ public sealed class PerkItemViewModel : MonoBehaviour, IPerkViewModel, IPerkView
         if (perk.CurrentLevel != null)
         {
             LevelText.gameObject.SetActive(true);
-            var totalLevel = PerkHelper.ConvertLevel(perk.Scheme, perk.CurrentLevel.Primary, perk.CurrentLevel.Sub);
-            LevelText.text = totalLevel?.ToString();
+            var totalLevel = PerkHelper.ConvertLevelSubsToTotal(perk.Scheme, perk.CurrentLevel.Primary, perk.CurrentLevel.Sub);
+            LevelText.text = totalLevel.ToString();
         }
         else
         {
