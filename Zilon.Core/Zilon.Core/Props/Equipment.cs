@@ -29,6 +29,7 @@ namespace Zilon.Core.Props
         /// Выбрасывает, если на вход подана схема,
         /// не содержащая характеристики экипировки <see cref="P:Zilon.Core.Schemes.PropScheme.Equip" />.
         /// </exception>
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public Equipment(IPropScheme propScheme,
             IEnumerable<ITacticalActScheme> acts) :
             base(propScheme)
@@ -55,10 +56,12 @@ namespace Zilon.Core.Props
             Durable = new Stat(EQUIPMENT_DURABLE, 0, EQUIPMENT_DURABLE);
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public Equipment(IPropScheme propScheme) : this(propScheme, Array.Empty<ITacticalActScheme>())
         {
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public Equipment(IPropScheme propScheme,
             IEnumerable<ITacticalActScheme> acts,
             [NotNull] string name) :
@@ -72,6 +75,7 @@ namespace Zilon.Core.Props
         /// <summary>Прочность предмета.</summary>
         public Stat Durable { get; }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public override string ToString()
         {
             if (_name != null)

@@ -35,6 +35,7 @@ namespace Zilon.Core.Persons
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
             return $"{Scheme} [{Equipment}]";

@@ -39,7 +39,7 @@ namespace Zilon.Core.PersonModules
             _evolutionModule = evolutionModule;
         }
 
-        private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
+        private static IEnumerable<ITacticalAct> CalcActsEnumerator(ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment> equipments,
             IEffectsModule effects,
             IEnumerable<IPerk> perks)
@@ -260,7 +260,7 @@ namespace Zilon.Core.PersonModules
         public IEnumerable<ITacticalAct> CalcCombatActs()
         {
             var perks = GetPerksSafe();
-            return CalcActs(_defaultActScheme, _equipmentModule, _effectsModule, perks);
+            return CalcActsEnumerator(_defaultActScheme, _equipmentModule, _effectsModule, perks);
         }
     }
 }
