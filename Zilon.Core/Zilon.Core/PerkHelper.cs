@@ -24,6 +24,11 @@ namespace Zilon.Core
                 throw new ArgumentNullException(nameof(perkScheme));
             }
 
+            if (perkScheme.Levels?.Length < level)
+            {
+                throw new ArgumentException($"Specified level: {level} is less that levels in scheme: {perkScheme.Levels?.Length}.");
+            }
+
             var sum = 0;
             for (var i = 1; i <= level; i++)
             {
