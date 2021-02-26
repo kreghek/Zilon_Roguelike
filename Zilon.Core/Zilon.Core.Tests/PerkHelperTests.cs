@@ -4,7 +4,6 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
-using Zilon.Core;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -30,7 +29,7 @@ namespace Zilon.Core.Tests
         [Test]
         [TestCaseSource(typeof(PerkHelperTestCaseSource),
             nameof(PerkHelperTestCaseSource.ConvertLevelSubsToTotalExceptionTestCases))]
-        public void ConvertLevelSubsToTotalTest(IPerkScheme perkScheme, int primaryLevel, int subLevel)
+        public void ConvertLevelSubsToTotal_FromExceptionTestCases_ThrowsException(IPerkScheme perkScheme, int primaryLevel, int subLevel)
         {
             // ACT
             Action act = () =>
