@@ -11,6 +11,40 @@ namespace Zilon.Core.Tests
 {
     public static class PerkHelperTestCaseSource
     {
+        public static IEnumerable ConvertLevelSubsToTotalExceptionTestCases
+        {
+            get
+            {
+                // IPerkScheme which used to convert level
+                // level
+                // sub level
+
+                yield return new TestCaseData(null, 1, 1)
+                    .SetDescription("Fails because scheme is null");
+
+                yield return new TestCaseData(CreateTestPerkScheme523(), 3, 4)
+                    .SetDescription("Fails because subs is too big.");
+
+                yield return new TestCaseData(CreateTestPerkScheme523(), 4, 1)
+                    .SetDescription("Fails because primary level is too big.");
+            }
+        }
+
+        public static IEnumerable ConvertLevelSubsToTotalPositiveTestCases
+        {
+            get
+            {
+                // IPerkScheme which used to convert level
+                // level
+                // sub level
+                // Returns expected total
+
+                yield return new TestCaseData(CreateTestPerkScheme523(), 1, 1).Returns(1);
+                yield return new TestCaseData(CreateTestPerkScheme523(), 3, 3).Returns(10);
+                yield return new TestCaseData(CreateTestPerkScheme111(), 3, 1).Returns(3);
+            }
+        }
+
         /// <summary>
         /// Test cases wich fails checks.
         /// </summary>
@@ -66,40 +100,6 @@ namespace Zilon.Core.Tests
                 yield return new TestCaseData(CreateTestPerkScheme111(), 2, 2, 1);
 
                 yield return new TestCaseData(CreateTestPerkScheme111(), 3, 3, 1);
-            }
-        }
-
-        public static IEnumerable ConvertLevelSubsToTotalPositiveTestCases
-        {
-            get
-            {
-                // IPerkScheme which used to convert level
-                // level
-                // sub level
-                // Returns expected total
-
-                yield return new TestCaseData(CreateTestPerkScheme523(), 1, 1).Returns(1);
-                yield return new TestCaseData(CreateTestPerkScheme523(), 3, 3).Returns(10);
-                yield return new TestCaseData(CreateTestPerkScheme111(), 3, 1).Returns(3);
-            }
-        }
-
-        public static IEnumerable ConvertLevelSubsToTotalExceptionTestCases
-        {
-            get
-            {
-                // IPerkScheme which used to convert level
-                // level
-                // sub level
-
-                yield return new TestCaseData(null, 1, 1)
-                    .SetDescription("Fails because scheme is null");
-
-                yield return new TestCaseData(CreateTestPerkScheme523(), 3, 4)
-                    .SetDescription("Fails because subs is too big.");
-
-                yield return new TestCaseData(CreateTestPerkScheme523(), 4, 1)
-                    .SetDescription("Fails because primary level is too big.");
             }
         }
 

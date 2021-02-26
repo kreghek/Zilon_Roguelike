@@ -26,7 +26,8 @@ namespace Zilon.Core
 
             if (perkScheme.Levels?.Length < level)
             {
-                throw new ArgumentException($"Specified level: {level} is less that levels in scheme: {perkScheme.Levels?.Length}.");
+                throw new ArgumentException(
+                    $"Specified level: {level} is less that levels in scheme: {perkScheme.Levels?.Length}.");
             }
 
             var sum = 0;
@@ -41,7 +42,8 @@ namespace Zilon.Core
                 {
                     if (perkLevelSubScheme.MaxValue < subLevel)
                     {
-                        throw new ArgumentException($"Specified sub: {subLevel} is less that sub in scheme: {perkLevelSubScheme.MaxValue}.");
+                        throw new ArgumentException(
+                            $"Specified sub: {subLevel} is less that sub in scheme: {perkLevelSubScheme.MaxValue}.");
                     }
 
                     sum += subLevel;

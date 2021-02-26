@@ -16,6 +16,33 @@ namespace Zilon.Core.Tests
     {
         [Test]
         [TestCaseSource(typeof(PerkHelperTestCaseSource),
+            nameof(PerkHelperTestCaseSource.ConvertLevelSubsToTotalPositiveTestCases))]
+        public int ConvertLevelSubsToTotal_FromPositiveTestCases_ReturnsCorrectFact(IPerkScheme perkScheme,
+            int primaryLevel, int subLevel)
+        {
+            // ACT
+            var factTotal = PerkHelper.ConvertLevelSubsToTotal(perkScheme, primaryLevel, subLevel);
+
+            // ASSERT
+            return factTotal;
+        }
+
+        [Test]
+        [TestCaseSource(typeof(PerkHelperTestCaseSource),
+            nameof(PerkHelperTestCaseSource.ConvertLevelSubsToTotalExceptionTestCases))]
+        public void ConvertLevelSubsToTotalTest(IPerkScheme perkScheme, int primaryLevel, int subLevel)
+        {
+            // ACT
+            Action act = () =>
+            {
+                PerkHelper.ConvertLevelSubsToTotal(perkScheme, primaryLevel, subLevel);
+            };
+
+            act.Should().Throw<Exception>();
+        }
+
+        [Test]
+        [TestCaseSource(typeof(PerkHelperTestCaseSource),
             nameof(PerkHelperTestCaseSource.ConvertTotalLevelPositiveTestCases))]
         public void ConvertTotalLevelToLevelSubs_FromTestCases_ReturnsCorrectLevelAndSublevel(IPerkScheme perkScheme,
             int testedTotalLevel, int expectedLevel, int expectedSubLevel)
@@ -69,32 +96,6 @@ namespace Zilon.Core.Tests
 
             // ASSERT
             factHasNextLevel.Should().BeFalse();
-        }
-
-        [Test]
-        [TestCaseSource(typeof(PerkHelperTestCaseSource),
-            nameof(PerkHelperTestCaseSource.ConvertLevelSubsToTotalPositiveTestCases))]
-        public int ConvertLevelSubsToTotal_FromPositiveTestCases_ReturnsCorrectFact(IPerkScheme perkScheme, int primaryLevel, int subLevel)
-        {
-            // ACT
-            var factTotal = PerkHelper.ConvertLevelSubsToTotal(perkScheme, primaryLevel, subLevel);
-
-            // ASSERT
-            return factTotal;
-        }
-
-        [Test]
-        [TestCaseSource(typeof(PerkHelperTestCaseSource),
-            nameof(PerkHelperTestCaseSource.ConvertLevelSubsToTotalExceptionTestCases))]
-        public void ConvertLevelSubsToTotalTest(IPerkScheme perkScheme, int primaryLevel, int subLevel)
-        {
-            // ACT
-            Action act = () =>
-            {
-                PerkHelper.ConvertLevelSubsToTotal(perkScheme, primaryLevel, subLevel);
-            };
-
-            act.Should().Throw<Exception>();
         }
     }
 }
