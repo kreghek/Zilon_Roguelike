@@ -71,7 +71,8 @@ namespace Zilon.Core.Tests
 
         public static IEnumerable ConvertLevelSubsToTotalPositiveTestCases
         {
-            get {
+            get
+            {
                 // IPerkScheme which used to convert level
                 // level
                 // sub level
