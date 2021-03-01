@@ -102,13 +102,14 @@ namespace Zilon.Core
             }
             catch (ArgumentException exception)
             {
-                switch (exception.ParamName)
+                if (exception.ParamName == "total")
                 {
-                    case "total":
-                        throw new ArgumentException($"Total {totalLevel} is too big", nameof(totalLevel), exception);
 
-                    default:
-                        throw;
+                    throw new ArgumentException($"Total {totalLevel} is too big", nameof(totalLevel), exception);
+                }
+                else
+                {
+                    throw;
                 }
             }
         }
