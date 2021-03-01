@@ -68,7 +68,7 @@ namespace Zilon.Core.Tests
                         new TestPerkScheme
                         {
                             SystemDescription = "Empty levels",
-                            Levels = Array.Empty<PerkLevelSubScheme>() 
+                            Levels = Array.Empty<PerkLevelSubScheme>()
                         },
                         1,
                         SCHEME_ARGUMENT_NAME)
