@@ -57,9 +57,10 @@ namespace Zilon.Core.Tests
 
         [Test]
         [TestCaseSource(typeof(PerkHelperTestCaseSource),
-            nameof(PerkHelperTestCaseSource.ConvertTotalLevelExceptonTestCases))]
-        public void ConvertTotalLevelToLevelSubs_FromTestCases_ThrowsExceptions(IPerkScheme perkScheme,
-            int testedTotalLevel)
+            nameof(PerkHelperTestCaseSource.ConvertTotalLevelArgumentExceptonTestCases))]
+        public void ConvertTotalLevelToLevelSubs_FromTestCases_ThrowsArgumentExceptions(IPerkScheme perkScheme,
+            int testedTotalLevel,
+            string expectedArgumentName)
         {
             // ACT
             Action act = () =>
@@ -68,7 +69,8 @@ namespace Zilon.Core.Tests
             };
 
             // ASSERT
-            act.Should().Throw<ArgumentException>();
+            act.Should().Throw<ArgumentException>().Where(exception => exception.ParamName == expectedArgumentName,
+                $"param name must be {expectedArgumentName}");
         }
 
         [Test]
