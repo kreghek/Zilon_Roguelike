@@ -66,7 +66,10 @@ namespace Zilon.Core.Tests
 
                 yield return new TestCaseData(
                         new TestPerkScheme
-                        { SystemDescription = "Empty levels", Levels = Array.Empty<PerkLevelSubScheme>() },
+                        {
+                            SystemDescription = "Empty levels",
+                            Levels = Array.Empty<PerkLevelSubScheme>() 
+                        },
                         1,
                         SCHEME_ARGUMENT_NAME)
                     .SetDescription("Fails because scheme has no levels.");
