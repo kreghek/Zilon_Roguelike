@@ -69,7 +69,8 @@ namespace Zilon.Core.Tests
             };
 
             // ASSERT
-            act.Should().Throw<ArgumentException>().Where(exception => exception.ParamName == expectedArgumentName, $"param name must be {expectedArgumentName}");
+            act.Should().Throw<ArgumentException>().Where(exception => exception.ParamName == expectedArgumentName,
+                $"param name must be {expectedArgumentName}");
         }
 
         [Test]

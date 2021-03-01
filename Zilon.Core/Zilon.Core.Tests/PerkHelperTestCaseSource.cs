@@ -64,25 +64,38 @@ namespace Zilon.Core.Tests
                 yield return new TestCaseData(CreateTestPerkScheme523(), 0, TOTAL_ARGUMENT_NAME)
                     .SetDescription("Fails because total is empty");
 
-                yield return new TestCaseData(new TestPerkScheme { SystemDescription = "Empty levels", Levels = Array.Empty<PerkLevelSubScheme>() },
-                    1,
-                    SCHEME_ARGUMENT_NAME)
+                yield return new TestCaseData(
+                        new TestPerkScheme
+                            { SystemDescription = "Empty levels", Levels = Array.Empty<PerkLevelSubScheme>() },
+                        1,
+                        SCHEME_ARGUMENT_NAME)
                     .SetDescription("Fails because scheme has no levels.");
 
                 yield return new TestCaseData(
-                        new TestPerkScheme { SystemDescription = "Subs is zero", Levels = new[] { new PerkLevelSubScheme { MaxValue = 0 } } },
+                        new TestPerkScheme
+                        {
+                            SystemDescription = "Subs is zero",
+                            Levels = new[] { new PerkLevelSubScheme { MaxValue = 0 } }
+                        },
                         1,
                         SCHEME_ARGUMENT_NAME)
                     .SetDescription("Fails because subs sum is zero.");
 
                 yield return new TestCaseData(
-                        new TestPerkScheme { SystemDescription = "Subs is negative", Levels = new[] { new PerkLevelSubScheme { MaxValue = -1 } } },
+                        new TestPerkScheme
+                        {
+                            SystemDescription = "Subs is negative",
+                            Levels = new[] { new PerkLevelSubScheme { MaxValue = -1 } }
+                        },
                         1,
                         SCHEME_ARGUMENT_NAME)
                     .SetDescription("Fails because one of the subs is negative.");
 
                 yield return new TestCaseData(
-                        new TestPerkScheme { SystemDescription = "Subs is 1", Levels = new[] { new PerkLevelSubScheme { MaxValue = 1 } } },
+                        new TestPerkScheme
+                        {
+                            SystemDescription = "Subs is 1", Levels = new[] { new PerkLevelSubScheme { MaxValue = 1 } }
+                        },
                         2,
                         TOTAL_ARGUMENT_NAME)
                     .SetDescription("Fails because subs sum less that total.");
