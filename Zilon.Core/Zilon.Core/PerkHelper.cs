@@ -72,6 +72,16 @@ namespace Zilon.Core
                 throw new ArgumentException("Total must be more that zero.", nameof(totalLevel));
             }
 
+            if (perkScheme.Levels is null)
+            {
+                throw new ArgumentException("Scheme's levels must not be null.", nameof(perkScheme));
+            }
+
+            if (perkScheme.Levels.Length == 0)
+            {
+                throw new ArgumentException("Scheme's levels must notbe empty.", nameof(perkScheme));
+            }
+
             foreach (var schemeLevel in perkScheme.Levels)
             {
                 if (schemeLevel.MaxValue <= 0)
@@ -82,11 +92,25 @@ namespace Zilon.Core
 
             var schemeLevels = perkScheme.Levels.Select(x => x.MaxValue).ToArray();
 
-            ConvertTotalIntoLevelSubsInner(schemeLevels, totalLevel, out var levelInner, out var subInner);
+            try
+            {
+                ConvertTotalIntoLevelSubsInner(schemeLevels, totalLevel, out var levelInner, out var subInner);
 
-            var perkLevel = new PerkLevel(levelInner, subInner);
+                var perkLevel = new PerkLevel(levelInner, subInner);
 
-            return perkLevel;
+                return perkLevel;
+            }
+            catch (ArgumentException exception)
+            {
+                switch (exception.ParamName)
+                {
+                    case "total":
+                        throw new ArgumentException($"Total {totalLevel} is too big", nameof(totalLevel), exception);
+
+                    default:
+                        throw;
+                }
+            }
         }
 
         [NotNull]
