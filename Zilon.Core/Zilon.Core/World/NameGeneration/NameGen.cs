@@ -38,7 +38,7 @@ namespace Zilon.Core.World.NameGeneration
             var nameList = serializer.Deserialize<NameList>(jreader);
             if (nameList is null)
             {
-                throw new InvalidOperationException(); 
+                throw new InvalidOperationException();
             }
 
             _male = new List<string>(nameList.Boys);
