@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Graphs;
-
-using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core.PathFinding
 {
