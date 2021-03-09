@@ -54,13 +54,13 @@ namespace Zilon.Core.StaticObjectModules
         public string Key => nameof(IPropContainer);
 
         /// <inheritdoc />
-        public event EventHandler Opened;
+        public event EventHandler? Opened;
 
         /// <inheritdoc />
-        public event EventHandler<PropStoreEventArgs> ItemsAdded;
+        public event EventHandler<PropStoreEventArgs>? ItemsAdded;
 
         /// <inheritdoc />
-        public event EventHandler<PropStoreEventArgs> ItemsRemoved;
+        public event EventHandler<PropStoreEventArgs>? ItemsRemoved;
 
         /// <inheritdoc />
         public void Open()

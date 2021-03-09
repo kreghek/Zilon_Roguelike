@@ -18,15 +18,15 @@ namespace Zilon.Core.Tactics
 {
     public sealed class Actor : IActor
     {
-        private readonly IPerkResolver _perkResolver;
+        private readonly IPerkResolver? _perkResolver;
 
         [ExcludeFromCodeCoverage]
         public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
             [NotNull] IGraphNode node)
         {
-            Person = person ?? throw new ArgumentNullException(nameof(person));
-            TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
-            Node = node ?? throw new ArgumentNullException(nameof(node));
+            Person = person;
+            TaskSource = taskSource;
+            Node = node;
         }
 
         public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
@@ -35,8 +35,6 @@ namespace Zilon.Core.Tactics
         {
             _perkResolver = perkResolver;
         }
-
-        public IPlayer Owner { get; }
 
         [ExcludeFromCodeCoverage]
         public override string ToString()
@@ -327,22 +325,22 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc />
-        public event EventHandler Moved;
+        public event EventHandler? Moved;
 
         /// <inheritdoc />
-        public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+        public event EventHandler<OpenContainerEventArgs>? OpenedContainer;
 
         /// <inheritdoc />
-        public event EventHandler<MineDepositEventArgs> DepositMined;
+        public event EventHandler<MineDepositEventArgs>? DepositMined;
 
         /// <inheritdoc />
-        public event EventHandler<UsedActEventArgs> UsedAct;
+        public event EventHandler<UsedActEventArgs>? UsedAct;
 
         /// <inheritdoc />
-        public event EventHandler<DamageTakenEventArgs> DamageTaken;
+        public event EventHandler<DamageTakenEventArgs>? DamageTaken;
 
         /// <inheritdoc />
-        public event EventHandler<UsedPropEventArgs> UsedProp;
+        public event EventHandler<UsedPropEventArgs>? UsedProp;
 
         /// <inheritdoc />
         /// <summary>

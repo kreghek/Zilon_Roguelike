@@ -45,12 +45,12 @@ namespace Zilon.Core.PathFinding
         /// <param name="goal">The goal node for the AStar algorithm.</param>
         public AStar(IAstarContext context, IGraphNode start, IGraphNode goal)
         {
-            if (start == null)
+            if (start is null)
             {
                 throw new System.ArgumentNullException(nameof(start));
             }
 
-            if (goal == null)
+            if (goal is null)
             {
                 throw new System.ArgumentNullException(nameof(goal));
             }

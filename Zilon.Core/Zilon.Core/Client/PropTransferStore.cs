@@ -163,12 +163,12 @@ namespace Zilon.Core.Client
         /// <remarks>
         /// Это событие не срабатывает, если изменилось количество ресурсов.
         /// </remarks>
-        public event EventHandler<PropStoreEventArgs> Added;
+        public event EventHandler<PropStoreEventArgs>? Added;
 
         /// <summary>
         /// Событие выстреливает, если какой-либо предмет удалён из хранилища.
         /// </summary>
-        public event EventHandler<PropStoreEventArgs> Removed;
+        public event EventHandler<PropStoreEventArgs>? Removed;
 
         /// <summary>
         /// Событие выстреливает, когда один из предметов в хранилище изменяется.
@@ -176,7 +176,7 @@ namespace Zilon.Core.Client
         /// <remarks>
         /// Используется, когда изменяется количество ресурсов в стаке.
         /// </remarks>
-        public event EventHandler<PropStoreEventArgs> Changed;
+        public event EventHandler<PropStoreEventArgs>? Changed;
 
         /// <summary>
         /// Предметы в хранилище.

@@ -15,7 +15,6 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -59,18 +58,15 @@ namespace Zilon.Core.Tactics
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
         }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        public NationalUnityEventService NationalUnityEventService { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        public string Sid { get; set; }
+        [ExcludeFromCodeCoverage]
+        public NationalUnityEventService? NationalUnityEventService { get; set; }
 
         /// <summary>
         /// Стартовые узлы.
         /// Набор узлов, где могут располагаться актёры игрока
         /// на начало прохождения сектора.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public IGraphNode[] StartNodes { get; set; }
 
         private void Actor_Moved(object sender, EventArgs e)
@@ -385,6 +381,11 @@ namespace Zilon.Core.Tactics
 
         private void UpdateScores()
         {
+            if (Scheme is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             if (ScoreManager != null)
             {
                 ScoreManager.CountTurn(Scheme);
@@ -409,7 +410,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
-        public event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
+        public event EventHandler<TransitionUsedEventArgs>? TrasitionUsed;
 
         /// <summary>
         /// Карта в основе сектора.
@@ -419,9 +420,9 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Менеджер работы с очками.
         /// </summary>
-        public IScoreManager ScoreManager { get; set; }
+        public IScoreManager? ScoreManager { get; set; }
 
-        public ILocationScheme Scheme { get; set; }
+        public ILocationScheme? Scheme { get; set; }
         public IActorManager ActorManager { get; }
         public IStaticObjectManager StaticObjectManager { get; }
         public IEnumerable<IDisease> Diseases => _diseases;

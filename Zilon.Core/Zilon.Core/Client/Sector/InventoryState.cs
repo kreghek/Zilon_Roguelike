@@ -18,6 +18,6 @@ namespace Zilon.Core.Client
             }
         }
 
-        public event EventHandler SelectedPropChanged;
+        public event EventHandler? SelectedPropChanged;
     }
 }
