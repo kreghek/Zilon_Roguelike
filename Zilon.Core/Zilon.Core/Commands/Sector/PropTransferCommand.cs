@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;
@@ -43,7 +44,12 @@ namespace Zilon.Core.Commands
 
             var intention = new Intention<TransferPropsTask>(actor =>
                 new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer }));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+            PlayerState.TaskSource.Intent(intention, actor);
         }
     }
 }
