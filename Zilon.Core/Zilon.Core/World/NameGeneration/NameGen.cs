@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -25,21 +26,24 @@ namespace Zilon.Core.World.NameGeneration
         {
             _dice = dice;
 
-            JsonSerializer serializer = new JsonSerializer();
+            var serializer = new JsonSerializer();
 
             var assembly = this.GetType().Assembly;
             var resourceName = "Zilon.Core.World.NameGeneration.names.json";
 
-            using (var stream = assembly.GetManifestResourceStream(resourceName))
-            using (var reader = new StreamReader(stream))
-            using (JsonReader jreader = new JsonTextReader(reader))
-            {
-                var nameList = serializer.Deserialize<NameList>(jreader);
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            using var reader = new StreamReader(stream);
+            using JsonReader jreader = new JsonTextReader(reader);
 
-                _male = new List<string>(nameList.Boys);
-                _female = new List<string>(nameList.Girls);
-                _last = new List<string>(nameList.Last);
+            var nameList = serializer.Deserialize<NameList>(jreader);
+            if (nameList is null)
+            {
+                throw new InvalidOperationException(); 
             }
+
+            _male = new List<string>(nameList.Boys);
+            _female = new List<string>(nameList.Girls);
+            _last = new List<string>(nameList.Last);
         }
 
         /// <summary>

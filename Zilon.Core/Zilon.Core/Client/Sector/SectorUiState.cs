@@ -7,10 +7,10 @@ namespace Zilon.Core.Client
 {
     public class SectorUiState : UiStateBase, ISectorUiState
     {
-        private IActorViewModel _activeActor;
+        private IActorViewModel? _activeActor;
 
         /// <inheritdoc />
-        public IActorViewModel ActiveActor
+        public IActorViewModel? ActiveActor
         {
             get => _activeActor;
             set
@@ -21,12 +21,12 @@ namespace Zilon.Core.Client
         }
 
         /// <inheritdoc />
-        public IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource =>
+        public IHumanActorTaskSource<ISectorTaskSourceContext>? TaskSource =>
             ActiveActor?.Actor?.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>;
 
-        public event EventHandler ActiveActorChanged;
+        public event EventHandler? ActiveActorChanged;
 
         /// <inheritdoc />
-        public ITacticalAct TacticalAct { get; set; }
+        public ITacticalAct? TacticalAct { get; set; }
     }
 }

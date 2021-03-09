@@ -78,7 +78,12 @@ namespace Zilon.Core.Commands.Sector
 
         protected override void ExecuteTacticCommand()
         {
-            var targetStaticObject = (PlayerState.SelectedViewModel as IContainerViewModel).StaticObject;
+            var targetStaticObject = (PlayerState.SelectedViewModel as IContainerViewModel)?.StaticObject;
+            if (targetStaticObject is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var targetDeposit = targetStaticObject.GetModule<IPropDepositModule>();
 
             var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>();
@@ -120,7 +125,7 @@ namespace Zilon.Core.Commands.Sector
             return new MineTask(actor, taskContext, staticObject, toolMineDepositMethod);
         }
 
-        private static Equipment GetEquipedTool(IEquipmentModule equipmentModule, string[] requiredToolTags)
+        private static Equipment? GetEquipedTool(IEquipmentModule equipmentModule, string[] requiredToolTags)
         {
             if (!requiredToolTags.Any())
             {

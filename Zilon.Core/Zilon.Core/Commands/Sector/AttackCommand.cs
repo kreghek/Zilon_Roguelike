@@ -38,7 +38,13 @@ namespace Zilon.Core.Commands
         {
             var map = _player.SectorNode.Sector.Map;
 
-            var currentNode = PlayerState.ActiveActor.Actor.Node;
+            var activeActor = PlayerState.ActiveActor;
+            if (activeActor is null)
+            {
+                return false;
+            }
+
+            var currentNode = activeActor.Actor.Node;
 
             var target = GetTarget(PlayerState);
             if (target is null)
@@ -49,8 +55,13 @@ namespace Zilon.Core.Commands
             var targetNode = target.Node;
 
             var act = PlayerState.TacticalAct;
+            if (act is null)
+            {
+                return false;
+            }
+
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
-                ReferenceEquals(PlayerState.ActiveActor.Actor, target))
+                ReferenceEquals(activeActor.Actor, target))
             {
                 // Лечить можно только самого себя.
                 // Возможно, дальше будут компаньоны и другие НПЦ.
@@ -81,7 +92,7 @@ namespace Zilon.Core.Commands
             if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
             {
                 var hasPropResource = CheckPropResource(
-                    PlayerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>(),
+                    activeActor.Actor.Person.GetModule<IInventoryModule>(),
                     act.Constrains.PropResourceType,
                     act.Constrains.PropResourceCount.Value);
 

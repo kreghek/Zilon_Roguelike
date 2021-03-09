@@ -4,11 +4,11 @@ namespace Zilon.Core.Client
 {
     public class UiStateBase : IUiState
     {
-        private ISelectableViewModel _hoverViewModel;
-        private ISelectableViewModel _selectedViewModel;
+        private ISelectableViewModel? _hoverViewModel;
+        private ISelectableViewModel? _selectedViewModel;
 
         /// <summary>Выбранный объект.</summary>
-        public ISelectableViewModel HoverViewModel
+        public ISelectableViewModel? HoverViewModel
         {
             get => _hoverViewModel;
             set
@@ -19,7 +19,7 @@ namespace Zilon.Core.Client
         }
 
         /// <summary>Зафиксированный выбранный объект.</summary>
-        public ISelectableViewModel SelectedViewModel
+        public ISelectableViewModel? SelectedViewModel
         {
             get => _selectedViewModel;
             set
@@ -30,6 +30,6 @@ namespace Zilon.Core.Client
         }
 
         /// <summary>Выстреливает, когда изменяется <see cref="HoverViewModel" />.</summary>
-        public event EventHandler HoverChanged;
+        public event EventHandler? HoverChanged;
     }
 }

@@ -68,8 +68,8 @@ namespace Zilon.Core.PersonModules
             DoRemoved(effect);
         }
 
-        public event EventHandler<EffectEventArgs> Added;
-        public event EventHandler<EffectEventArgs> Removed;
-        public event EventHandler<EffectEventArgs> Changed;
+        public event EventHandler<EffectEventArgs>? Added;
+        public event EventHandler<EffectEventArgs>? Removed;
+        public event EventHandler<EffectEventArgs>? Changed;
     }
 }
