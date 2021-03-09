@@ -23,7 +23,7 @@ jobs:
       - run: git pull
       - run: dotnet tool install --global dotnet-format --version 5.0.211103
       - name: Format codebase ${{ matrix.codebasePath }}
-        run: dotnet-format -f ${{ matrix.codebasePath }} -v d
+        run: dotnet-format --folder ${{ matrix.codebasePath }} --fix-whitespace --fix-style --verbosity detailed
         working-directory: ${{env.working-directory}}
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
@@ -52,7 +52,7 @@ jobs:
           dotnet-version: '3.1.x'
       - name: Setup ReSharper Command Line Tools
         run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2020.3.3
-      - name: Clean up code
+      - name: Clean up codebase via ReSharper Command Line Tools
         run: jb cleanupcode --profile="Full Cleanup" Zilon.Core.sln
         working-directory: ${{env.working-directory}}
       - name: Commit changes
