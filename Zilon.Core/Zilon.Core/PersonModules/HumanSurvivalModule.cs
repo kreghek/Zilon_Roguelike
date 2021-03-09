@@ -199,7 +199,7 @@ namespace Zilon.Core.PersonModules
                     PersonRuleLevel.Grand => 5,
                     PersonRuleLevel.Absolute => 10,
                     PersonRuleLevel.None => throw new InvalidOperationException("Unknown rule level."),
-                    _ => throw new InvalidOperationException($"The rule level {level} is not supported."),
+                    _ => throw new InvalidOperationException($"The rule level {level} is not supported.")
                 };
                 if (direction == PersonRuleDirection.Negative)
                 {

@@ -35,7 +35,8 @@ namespace Zilon.Core.Props
         {
             if (propScheme.Equip == null)
             {
-                throw new ArgumentException("The scheme is not valid for equipment. It must has not null Equip subscheme.", nameof(propScheme));
+                throw new ArgumentException(
+                    "The scheme is not valid for equipment. It must has not null Equip subscheme.", nameof(propScheme));
             }
 
             _name = string.Empty;
