@@ -144,7 +144,7 @@ namespace Zilon.Core.PersonModules
         }
 
         private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
-            [NotNull] Equipment equipment,
+            [CanBeNull] Equipment? equipment,
             [NotNull] IEffectsModule effects,
             [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
         {

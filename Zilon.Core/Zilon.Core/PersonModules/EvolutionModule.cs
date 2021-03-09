@@ -30,6 +30,8 @@ namespace Zilon.Core.PersonModules
                 new SkillStatItem { Stat = SkillStatType.Melee, Value = 10 }
             };
 
+            Perks = Array.Empty<IPerk>();
+
             UpdatePerks();
         }
 
@@ -124,10 +126,10 @@ namespace Zilon.Core.PersonModules
         public bool IsActive { get; set; }
 
         /// <inheritdoc />
-        public event EventHandler<PerkEventArgs> PerkLeveledUp;
+        public event EventHandler<PerkEventArgs>? PerkLeveledUp;
 
         /// <inheritdoc />
-        public event EventHandler<PerkEventArgs> PerkAdded;
+        public event EventHandler<PerkEventArgs>? PerkAdded;
 
         /// <inheritdoc />
         public void AddBuildInPerks(IEnumerable<IPerk> perks)

@@ -18,22 +18,22 @@ namespace Zilon.Core.PersonModules
     public sealed class HumanSurvivalModule : SurvivalModuleBase
     {
         private readonly IAttributesModule _attributesModule;
-        private readonly IEffectsModule _effectsModule;
-        private readonly IEquipmentModule _equipmentModule;
-        private readonly IEvolutionModule _evolutionModule;
+        private readonly IEffectsModule? _effectsModule;
+        private readonly IEquipmentModule? _equipmentModule;
+        private readonly IEvolutionModule? _evolutionModule;
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
 
         public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource,
             [NotNull] IAttributesModule attributesModule,
-            IEffectsModule effectsModule,
-            IEvolutionModule evolutionModule,
-            IEquipmentModule equipmentModule) : base(GetStats(personScheme, attributesModule))
+            IEffectsModule? effectsModule,
+            IEvolutionModule? evolutionModule,
+            IEquipmentModule? equipmentModule) : base(GetStats(personScheme, attributesModule))
         {
-            _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
-            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
-            _attributesModule = attributesModule ?? throw new ArgumentNullException(nameof(attributesModule));
+            _personScheme = personScheme;
+            _randomSource = randomSource;
+            _attributesModule = attributesModule;
             _effectsModule = effectsModule;
             _evolutionModule = evolutionModule;
             _equipmentModule = equipmentModule;
@@ -54,20 +54,19 @@ namespace Zilon.Core.PersonModules
             personScheme,
             randomSource,
             attributesModule,
-            null,
-            null,
-            null)
+            effectsModule: null,
+            evolutionModule: null,
+            equipmentModule: null)
         {
         }
 
         public HumanSurvivalModule([NotNull] IEnumerable<SurvivalStat> personStats,
-            [NotNull] ISurvivalRandomSource randomSource) : base(
-            personStats)
+            [NotNull] ISurvivalRandomSource randomSource) : base(personStats)
         {
-            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
+            _randomSource = randomSource;
         }
 
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
+        public IPlayerEventLogService? PlayerEventLogService { get; set; }
 
         /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
         public override void ResetStats()

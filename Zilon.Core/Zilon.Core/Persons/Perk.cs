@@ -36,6 +36,6 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Текущий уровень перка.
         /// </summary>
-        public PerkLevel CurrentLevel { get; set; }
+        public PerkLevel? CurrentLevel { get; set; }
     }
 }
