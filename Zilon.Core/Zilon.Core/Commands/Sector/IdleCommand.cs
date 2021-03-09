@@ -28,7 +28,13 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var intention = new Intention<IdleTask>(actor => CreateIdleTask(actor));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var activeActor = PlayerState.ActiveActor?.Actor;
+            if (activeActor is null)
+            {
+                throw new System.InvalidOperationException();
+            }
+
+            PlayerState.TaskSource.Intent(intention, activeActor);
         }
 
         private IdleTask CreateIdleTask(IActor actor)

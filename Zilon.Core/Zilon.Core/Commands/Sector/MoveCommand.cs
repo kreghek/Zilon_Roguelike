@@ -80,7 +80,13 @@ namespace Zilon.Core.Commands
             var currentSector = _player.SectorNode.Sector;
 
             var moveIntetion = new MoveIntention(targetNode, currentSector);
-            PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            PlayerState.TaskSource.Intent(moveIntetion, actor);
         }
 
         private bool CanExecuteForHover()

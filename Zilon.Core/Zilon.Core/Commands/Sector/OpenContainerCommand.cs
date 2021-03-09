@@ -28,7 +28,13 @@ namespace Zilon.Core.Commands
         {
             var map = _player.SectorNode.Sector.Map;
 
-            var currentNode = PlayerState.ActiveActor.Actor.Node;
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                return false;
+            }
+
+            var currentNode = actor.Node;
 
             var targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
@@ -59,7 +65,7 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var targetContainerViewModel = GetSelectedNodeViewModel();
-            if (targetContainerViewModel == null)
+            if (targetContainerViewModel is null)
             {
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевой контейнер не выбран.");
             }
@@ -72,7 +78,13 @@ namespace Zilon.Core.Commands
             }
 
             var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, staticObject));
-            PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            PlayerState.TaskSource.Intent(intetion, actor);
         }
 
         private OpenContainerTask CreateTask(IActor actor, IStaticObject staticObject)
@@ -84,7 +96,7 @@ namespace Zilon.Core.Commands
             return new OpenContainerTask(actor, taskContext, staticObject, openMethod);
         }
 
-        private IContainerViewModel GetSelectedNodeViewModel()
+        private IContainerViewModel? GetSelectedNodeViewModel()
         {
             return PlayerState.HoverViewModel as IContainerViewModel;
         }

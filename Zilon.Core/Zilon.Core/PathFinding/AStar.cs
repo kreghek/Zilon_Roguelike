@@ -2,6 +2,8 @@
 
 using Zilon.Core.Graphs;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Zilon.Core.PathFinding
 {
     /// <summary>
@@ -43,18 +45,10 @@ namespace Zilon.Core.PathFinding
         /// <param name="context"> Контекст выполнения поиска (способности персонажа, служебная информация). </param>
         /// <param name="start">The starting node for the AStar algorithm.</param>
         /// <param name="goal">The goal node for the AStar algorithm.</param>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public AStar(IAstarContext context, IGraphNode start, IGraphNode goal)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            if (start is null)
-            {
-                throw new System.ArgumentNullException(nameof(start));
-            }
-
-            if (goal is null)
-            {
-                throw new System.ArgumentNullException(nameof(goal));
-            }
-
             _openList = new SortedList<int, IGraphNode>(DuplicateComparer.Instance);
             _closedList = new HashSet<IGraphNode>();
             _dataDict = new Dictionary<IGraphNode, AStarData>();
@@ -76,7 +70,7 @@ namespace Zilon.Core.PathFinding
         /// <returns>Returns empty if the algorithm has never been run.</returns>
         public IGraphNode[] GetPath()
         {
-            if (CurrentNode == null)
+            if (CurrentNode is null)
             {
                 return System.Array.Empty<IGraphNode>();
             }
