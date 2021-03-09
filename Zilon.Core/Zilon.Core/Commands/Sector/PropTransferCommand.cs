@@ -49,6 +49,7 @@ namespace Zilon.Core.Commands
             {
                 throw new InvalidOperationException();
             }
+
             PlayerState.TaskSource.Intent(intention, actor);
         }
     }
