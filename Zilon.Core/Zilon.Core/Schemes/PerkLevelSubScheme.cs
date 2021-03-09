@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.ComponentModel;
+
+using Newtonsoft.Json;
 
 using Zilon.Core.Components;
 
@@ -20,6 +22,7 @@ namespace Zilon.Core.Schemes
         [JsonProperty]
         public IJobSubScheme[] Jobs { get; set; }
 
+        [DefaultValue(1)]
         public int MaxValue { get; set; }
 
         public PersonStat PersonLevel { get; set; }

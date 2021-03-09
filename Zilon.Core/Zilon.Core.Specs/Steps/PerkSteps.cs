@@ -55,8 +55,8 @@ namespace Zilon.Core.Specs.Steps
 
             perk.CurrentLevel.Should()
                 .NotBeNull("Перк должен быть прокачен. null в уровне означает непрокаченный перк.");
-            perk.CurrentLevel.Primary.Should().Be(0);
-            perk.CurrentLevel.Sub.Should().Be(0);
+            perk.CurrentLevel.Primary.Should().Be(1);
+            perk.CurrentLevel.Sub.Should().Be(1);
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
 
 using Assets.Zilon.Scripts.Models;
-using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 using UnityEngine.UI;
 
-using Zenject;
-
+using Zilon.Core;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Persons;
 
@@ -41,7 +39,8 @@ public sealed class PerkItemViewModel : MonoBehaviour, IPerkViewModel, IPerkView
         if (perk.CurrentLevel != null)
         {
             LevelText.gameObject.SetActive(true);
-            LevelText.text = $"{perk.CurrentLevel.Primary + 1} +{perk.CurrentLevel.Sub + 1}";
+            var totalLevel = PerkHelper.ConvertLevelSubsToTotal(perk.Scheme, perk.CurrentLevel.Primary, perk.CurrentLevel.Sub);
+            LevelText.text = totalLevel.ToString();
         }
         else
         {

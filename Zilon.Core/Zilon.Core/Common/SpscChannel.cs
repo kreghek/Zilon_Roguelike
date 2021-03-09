@@ -26,9 +26,13 @@ namespace Zilon.Core.Common
 
         public void CancelReceiving()
         {
-            foreach (var receiver in _receivers.ToArray())
+            var receiverListCopy = _receivers.ToArray();
+            foreach (var receiver in receiverListCopy)
             {
+                // Call the receiver to stop.
                 receiver.SetCanceled();
+
+                // Remove the receiver from inner list beacuse it will not await anymore.
                 _receivers.TryTake(out var _);
             }
         }
