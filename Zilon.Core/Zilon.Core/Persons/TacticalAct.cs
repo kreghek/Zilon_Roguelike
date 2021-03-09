@@ -17,15 +17,15 @@ namespace Zilon.Core.Persons
         public TacticalAct([NotNull] ITacticalActScheme scheme,
             [NotNull] Roll efficient,
             [NotNull] Roll toHit,
-            [CanBeNull] Equipment equipment)
+            [CanBeNull] Equipment? equipment)
         {
-            Scheme = scheme ?? throw new System.ArgumentNullException(nameof(scheme));
+            Scheme = scheme;
 
-            Stats = scheme.Stats ?? throw new System.ArgumentNullException(nameof(scheme));
+            Stats = scheme.Stats;
 
-            Efficient = efficient ?? throw new System.ArgumentNullException(nameof(efficient));
+            Efficient = efficient;
 
-            ToHit = toHit ?? throw new System.ArgumentNullException(nameof(toHit));
+            ToHit = toHit;
 
             Equipment = equipment;
 
@@ -53,7 +53,7 @@ namespace Zilon.Core.Persons
         public Roll ToHit { get; }
 
         /// <inheritdoc />
-        public Equipment Equipment { get; }
+        public Equipment? Equipment { get; }
 
         /// <inheritdoc />
         public ITacticalActConstrainsSubScheme Constrains { get; }

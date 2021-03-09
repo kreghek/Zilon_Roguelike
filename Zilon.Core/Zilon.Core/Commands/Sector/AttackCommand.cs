@@ -174,21 +174,21 @@ namespace Zilon.Core.Commands
             return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
         }
 
-        private static IActorViewModel GetCanExecuteActorViewModel(ISectorUiState sectorUiState)
+        private static IActorViewModel? GetCanExecuteActorViewModel(ISectorUiState sectorUiState)
         {
             var hover = sectorUiState.HoverViewModel as IActorViewModel;
             var selected = sectorUiState.SelectedViewModel as IActorViewModel;
             return hover ?? selected;
         }
 
-        private static IContainerViewModel GetCanExecuteStaticObjectViewModel(ISectorUiState sectorUiState)
+        private static IContainerViewModel? GetCanExecuteStaticObjectViewModel(ISectorUiState sectorUiState)
         {
             var hover = sectorUiState.HoverViewModel as IContainerViewModel;
             var selected = sectorUiState.SelectedViewModel as IContainerViewModel;
             return hover ?? selected;
         }
 
-        private static IAttackTarget GetTarget(ISectorUiState sectorUiState)
+        private static IAttackTarget? GetTarget(ISectorUiState sectorUiState)
         {
             var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
             var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
@@ -199,7 +199,7 @@ namespace Zilon.Core.Commands
                 selectedStaticObjectViewModel = null;
             }
 
-            return (IAttackTarget)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.StaticObject;
+            return (IAttackTarget?)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.StaticObject;
         }
     }
 }

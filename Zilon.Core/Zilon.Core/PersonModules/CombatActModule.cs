@@ -40,7 +40,7 @@ namespace Zilon.Core.PersonModules
         }
 
         private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
-            IEnumerable<Equipment> equipments,
+            IEnumerable<Equipment?> equipments,
             IEffectsModule effects,
             IEnumerable<IPerk> perks)
         {
@@ -55,7 +55,7 @@ namespace Zilon.Core.PersonModules
         }
 
         private static IEnumerable<ITacticalAct> CalcActsFromEquipments(
-            IEnumerable<Equipment> equipments,
+            IEnumerable<Equipment?> equipments,
             IEffectsModule effects,
             IEnumerable<IPerk> perks)
         {
@@ -81,7 +81,7 @@ namespace Zilon.Core.PersonModules
         }
 
         private static void CalcPerksBonusesOnTacticalAct([NotNull][ItemNotNull] IEnumerable<IPerk> archievedPerks,
-            [NotNull] Equipment equipment,
+            [CanBeNull] Equipment? equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
@@ -98,6 +98,16 @@ namespace Zilon.Core.PersonModules
                 else
                 {
                     var currentLevel = perk.CurrentLevel;
+                    if (currentLevel is null)
+                    {
+                        continue;
+                    }
+
+                    if (perk.Scheme.Levels is null)
+                    {
+                        continue;
+                    }
+
                     var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary - 1];
 
                     if (currentLevelScheme.Rules == null)
@@ -184,7 +194,7 @@ namespace Zilon.Core.PersonModules
             return perks;
         }
 
-        private static int GetRollModifierByPerkRule(Equipment equipment, int efficientModifierValue,
+        private static int GetRollModifierByPerkRule(Equipment? equipment, int efficientModifierValue,
             PerkRuleSubScheme rule)
         {
             if (string.IsNullOrWhiteSpace(rule.Params))
@@ -217,7 +227,7 @@ namespace Zilon.Core.PersonModules
             return efficientModifierValue;
         }
 
-        private static void GetRuleModifierValue(PerkRuleSubScheme rule, Equipment equipment,
+        private static void GetRuleModifierValue(PerkRuleSubScheme rule, Equipment? equipment,
             ref int toHitModifierValue, ref int efficientModifierValue)
         {
             switch (rule.Type)
@@ -245,7 +255,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void ProcessRulesBonuses(Equipment equipment, ref int toHitModifierValue,
+        private static void ProcessRulesBonuses(Equipment? equipment, ref int toHitModifierValue,
             ref int efficientModifierValue, PerkRuleSubScheme[] rules)
         {
             foreach (var rule in rules)

@@ -28,7 +28,7 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Предмет экипировки, который даёт данное действие.
         /// </summary>
-        Equipment Equipment { get; }
+        Equipment? Equipment { get; }
 
         /// <summary>
         /// Схема действия.

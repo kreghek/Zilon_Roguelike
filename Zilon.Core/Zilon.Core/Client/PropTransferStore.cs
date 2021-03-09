@@ -202,14 +202,19 @@ namespace Zilon.Core.Client
                 case Resource resource:
 
                     // запоминаем предыдущее состояния для событий
-                    var oldProp = (Resource)CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+                    var oldProp = (Resource?)CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
 
                     TransferResource(resource, PropAdded, PropRemoved);
 
                     // Выброс событий
                     var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
 
-                    if (oldProp == null)
+                    if (currentProp is null)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    if (oldProp is null)
                     {
                         Added?.Invoke(this, new PropStoreEventArgs(currentProp));
                     }
@@ -245,6 +250,11 @@ namespace Zilon.Core.Client
 
                     // Выброс событий
                     var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
+                    if (oldProp is null)
+                    {
+                        throw new InvalidOperationException();
+                    }
 
                     if (currentProp != null)
                     {
