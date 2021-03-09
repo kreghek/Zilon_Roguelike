@@ -180,7 +180,7 @@ namespace Zilon.Core.Props
                 Equipment equipment => HasEquipment(equipment),
                 Resource resource => HasResource(resource),
                 Concept concept => HasConcept(concept),
-                _ => throw new InvalidOperationException(),
+                _ => throw new InvalidOperationException()
             };
         }
     }
