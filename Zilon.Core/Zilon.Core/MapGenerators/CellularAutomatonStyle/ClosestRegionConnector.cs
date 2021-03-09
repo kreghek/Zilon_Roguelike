@@ -39,7 +39,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 unitedRegionCoords,
                 out OffsetCoords? currentOpenRegionCoord,
                 out OffsetCoords? currentUnitedRegionCoord,
-                out RegionDraft nearbyOpenRegion);
+                out RegionDraft? nearbyOpenRegion);
 
             // Если координаты, которые нужно соединить, найдены,
             // то прорываем тоннель.

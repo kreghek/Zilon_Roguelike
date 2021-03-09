@@ -55,9 +55,7 @@ namespace Zilon.Core.World
             //TODO Разобраться с этим кодом.
             // https://blog.cdemi.io/async-waiting-inside-c-sharp-locks/
             //Asynchronously wait to enter the Semaphore. If no-one has been granted access to the Semaphore, code execution will proceed, otherwise this thread waits here until the semaphore is released 
-#pragma warning disable CA2007 // Consider calling ConfigureAwait on the awaited task
             await _semaphoreSlim.WaitAsync();
-#pragma warning restore CA2007 // Consider calling ConfigureAwait on the awaited task
             try
             {
                 if (sectorNode.State != SectorNodeState.SectorMaterialized)
@@ -151,12 +149,11 @@ namespace Zilon.Core.World
         {
             // The counter is restriction of transition per globe iteration.
             var counter = TransitionPerGlobeIteration;
-            TransitionPoolItem transitionItem = null;
 
             // Transit persons from pool to target sector levels while the pool is not empty or transition limit reached.
             do
             {
-                transitionItem = _transitionPool.Pop();
+                var transitionItem = _transitionPool.Pop();
 
                 if (transitionItem is null)
                 {

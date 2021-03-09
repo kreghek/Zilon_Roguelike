@@ -192,31 +192,15 @@ namespace Zilon.Core.PersonModules
             if (hpStat != null)
             {
                 var bonus = 0;
-                switch (level)
+                bonus = level switch
                 {
-                    case PersonRuleLevel.Lesser:
-                        bonus = 1;
-                        break;
-
-                    case PersonRuleLevel.Normal:
-                        bonus = 3;
-                        break;
-
-                    case PersonRuleLevel.Grand:
-                        bonus = 5;
-                        break;
-
-                    case PersonRuleLevel.Absolute:
-                        bonus = 10;
-                        break;
-
-                    case PersonRuleLevel.None:
-                        throw new InvalidOperationException("Неопределённое правило.");
-
-                    default:
-                        throw new InvalidOperationException($"Правило {level} не обрабатывается.");
-                }
-
+                    PersonRuleLevel.Lesser => 1,
+                    PersonRuleLevel.Normal => 3,
+                    PersonRuleLevel.Grand => 5,
+                    PersonRuleLevel.Absolute => 10,
+                    PersonRuleLevel.None => throw new InvalidOperationException("Unknown rule level."),
+                    _ => throw new InvalidOperationException($"The rule level {level} is not supported."),
+                };
                 if (direction == PersonRuleDirection.Negative)
                 {
                     bonus *= -1;
@@ -247,7 +231,7 @@ namespace Zilon.Core.PersonModules
             ApplySurvivalBonuses(bonusList);
         }
 
-        private static SurvivalStat CreateStat(
+        private static SurvivalStat? CreateStat(
             SurvivalStatType type,
             PersonSurvivalStatType schemeStatType,
             IPersonSurvivalStatSubScheme[] survivalStats)
@@ -280,7 +264,7 @@ namespace Zilon.Core.PersonModules
             return stat;
         }
 
-        private static SurvivalStat CreateStatFromScheme(IPersonSurvivalStatSubScheme[] survivalStats,
+        private static SurvivalStat? CreateStatFromScheme(IPersonSurvivalStatSubScheme[] survivalStats,
             SurvivalStatType statType,
             PersonSurvivalStatType schemeStatType)
         {
@@ -405,7 +389,7 @@ namespace Zilon.Core.PersonModules
             var archievedPerks = _evolutionModule.GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
-                PerkLevel currentLevel;
+                PerkLevel? currentLevel;
                 PerkLevelSubScheme currentLevelScheme;
 
                 if (archievedPerk.Scheme.IsBuildIn)
@@ -422,7 +406,18 @@ namespace Zilon.Core.PersonModules
                     continue;
                 }
 
-                currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary - 1];
+                var levels = archievedPerk.Scheme.Levels;
+                if (levels is null)
+                {
+                    continue;
+                }
+
+                if (currentLevel is null)
+                {
+                    continue;
+                }
+
+                currentLevelScheme = levels[currentLevel.Primary - 1];
 
                 if (currentLevelScheme.Rules == null)
                 {
@@ -482,20 +477,10 @@ namespace Zilon.Core.PersonModules
         private static IEnumerable<SurvivalStat> GetStats([NotNull] IPersonScheme personScheme,
             [NotNull] IAttributesModule attributesModule)
         {
-            if (personScheme is null)
-            {
-                throw new ArgumentNullException(nameof(personScheme));
-            }
-
-            if (attributesModule is null)
-            {
-                throw new ArgumentNullException(nameof(attributesModule));
-            }
-
-            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null);
+            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null).Cast<SurvivalStat>();
         }
 
-        private static IEnumerable<SurvivalStat> GetStatsIterator([NotNull] IPersonScheme personScheme,
+        private static IEnumerable<SurvivalStat?> GetStatsIterator([NotNull] IPersonScheme personScheme,
             IAttributesModule attributesModule)
         {
             // Устанавливаем характеристики выживания персонажа

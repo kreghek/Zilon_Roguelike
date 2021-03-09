@@ -44,7 +44,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
+        public IPlayerEventLogService? PlayerEventLogService { get; set; }
 
         public SurvivalStatType Type { get; }
 

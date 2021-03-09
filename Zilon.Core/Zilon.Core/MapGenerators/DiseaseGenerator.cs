@@ -59,7 +59,7 @@ namespace Zilon.Core.MapGenerators
                 {
                     var primaryName = _dice.RollFromList(DiseaseNames.Primary);
 
-                    ILocalizedString prefix = null;
+                    ILocalizedString? prefix = null;
 
                     var rollPrefix = _dice.RollD6();
                     if (rollPrefix >= 4)
@@ -67,14 +67,14 @@ namespace Zilon.Core.MapGenerators
                         prefix = _dice.RollFromList(DiseaseNames.PrimaryPreffix);
                     }
 
-                    ILocalizedString secondary = null;
+                    ILocalizedString? secondary = null;
                     var rollSecondary = _dice.RollD6();
                     if (rollSecondary >= 4)
                     {
                         secondary = _dice.RollFromList(DiseaseNames.Secondary);
                     }
 
-                    ILocalizedString subject = null;
+                    ILocalizedString? subject = null;
                     var rollSubject = _dice.RollD6();
                     if (rollSubject >= 6)
                     {
