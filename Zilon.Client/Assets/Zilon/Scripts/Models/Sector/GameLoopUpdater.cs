@@ -13,7 +13,7 @@ using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 
 public interface IGameLoopContext
-{ 
+{
     bool HasNextIteration { get; }
 
     Task UpdateAsync();
