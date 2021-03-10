@@ -12,13 +12,17 @@ using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 
-public sealed class GameLoopUpdater
+public interface IGameLoopContext
+{ 
+    bool HasNextIteration { get; }
+
+    Task UpdateAsync();
+}
+
+public sealed class GameLoopContext : IGameLoopContext
 {
     [NotNull]
     private readonly IPlayer _player;
-
-    [NotNull] 
-    private readonly IAnimationBlockerService _commandBlockerService;
 
     [NotNull]
     private readonly IInventoryState _inventoryState;
@@ -26,20 +30,48 @@ public sealed class GameLoopUpdater
     [NotNull]
     private readonly ISectorUiState _playerState;
 
+    public bool HasNextIteration
+    {
+        get
+        {
+            var survivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
+            var isDead = survivalModule.IsDead;
+            return !isDead;
+        }
+    }
+
+    public async Task UpdateAsync()
+    {
+        await _player.Globe.UpdateAsync();
+
+        ClearupActionUiState();
+    }
+
+    private void ClearupActionUiState()
+    {
+        _inventoryState.SelectedProp = null;
+        _playerState.SelectedViewModel = null;
+    }
+}
+
+public class GameLoopUpdater
+{
+    [NotNull]
+    private readonly IGameLoopContext _gameLoopContext;
+
+    [NotNull]
+    private readonly IAnimationBlockerService _animationBlockerService;
+
     private CancellationTokenSource _cancellationTokenSource;
 
     public bool IsStarted { get; private set; }
 
     public GameLoopUpdater(
-        IPlayer player,
-        IAnimationBlockerService commandBlockerService,
-        IInventoryState inventoryState,
-        ISectorUiState playerState)
+        IGameLoopContext gameLoopContext,
+        IAnimationBlockerService animationBlockerService)
     {
-        _commandBlockerService = commandBlockerService ?? throw new ArgumentNullException(nameof(commandBlockerService));
-        _inventoryState = inventoryState ?? throw new ArgumentNullException(nameof(inventoryState));
-        _playerState = playerState ?? throw new ArgumentNullException(nameof(playerState));
-        _player = player ?? throw new ArgumentNullException(nameof(player));
+        _gameLoopContext = gameLoopContext ?? throw new ArgumentNullException(nameof(gameLoopContext));
+        _animationBlockerService = animationBlockerService ?? throw new ArgumentNullException(nameof(animationBlockerService));
     }
 
     public void Start()
@@ -66,14 +98,13 @@ public sealed class GameLoopUpdater
 
     private async Task StartGameLoopUpdateAsync(CancellationToken cancelToken)
     {
-        var survivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
-        while (!survivalModule.IsDead)
+        while (_gameLoopContext.HasNextIteration)
         {
             cancelToken.ThrowIfCancellationRequested();
 
             try
             {
-                await _player.Globe.UpdateAsync();
+                await _gameLoopContext.UpdateAsync();
             }
             catch (Exception exception)
             {
@@ -81,19 +112,11 @@ public sealed class GameLoopUpdater
                 return;
             }
 
-            ClearupActionUiState();
-
-            var animationBlockerTask = _commandBlockerService.WaitBlockersAsync();
+            var animationBlockerTask = _animationBlockerService.WaitBlockersAsync();
             var fuseDelayTask = Task.Delay(10_000);
 
             await Task.WhenAny(animationBlockerTask, fuseDelayTask);
-            _commandBlockerService.DropBlockers();
+            _animationBlockerService.DropBlockers();
         }
-    }
-
-    private void ClearupActionUiState()
-    {
-        _inventoryState.SelectedProp = null;
-        _playerState.SelectedViewModel = null;
     }
 }
