@@ -50,7 +50,7 @@ namespace Zilon.Core.Commands
             var containerTransfer = new PropTransfer(TransferMachine.Container.PropStore,
                 TransferMachine.Container.PropAdded,
                 TransferMachine.Container.PropRemoved);
-            
+
             var taskContext = new ActorTaskContext(sector);
 
             var intention = new Intention<TransferPropsTask>(actor =>
