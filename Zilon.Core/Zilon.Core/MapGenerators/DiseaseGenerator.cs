@@ -49,7 +49,7 @@ namespace Zilon.Core.MapGenerators
             return rolledSymptoms;
         }
 
-        public IDisease Create()
+        public IDisease? Create()
         {
             var roll = _dice.RollD6();
             if (roll <= 1)

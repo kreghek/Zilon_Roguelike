@@ -73,7 +73,7 @@ namespace Zilon.Core.Scoring
         }
 
         /// <summary>Засчитать один прожитый шаг.</summary>
-        public void CountTurn(ILocationScheme sectorScheme)
+        public void CountTurn(ILocationScheme? sectorScheme)
         {
             Scores.TurnCounter += TURN_INC;
             if (Scores.TurnCounter >= 1)
@@ -84,12 +84,15 @@ namespace Zilon.Core.Scoring
 
             Turns++;
 
-            if (!PlaceTypes.ContainsKey(sectorScheme))
+            if (sectorScheme != null)
             {
-                PlaceTypes.Add(sectorScheme, 0);
-            }
+                if (!PlaceTypes.ContainsKey(sectorScheme))
+                {
+                    PlaceTypes.Add(sectorScheme, 0);
+                }
 
-            PlaceTypes[sectorScheme]++;
+                PlaceTypes[sectorScheme]++;
+            }
         }
 
         /// <summary>Обнуление текущих очков.</summary>

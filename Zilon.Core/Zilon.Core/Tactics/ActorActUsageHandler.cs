@@ -23,28 +23,27 @@ namespace Zilon.Core.Tactics
 
         public ActorActUsageHandler(IPerkResolver perkResolver, ITacticalActUsageRandomSource actUsageRandomSource)
         {
-            _perkResolver = perkResolver ?? throw new ArgumentNullException(nameof(perkResolver));
-            _actUsageRandomSource =
-                actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
+            _perkResolver = perkResolver;
+            _actUsageRandomSource = actUsageRandomSource;
         }
 
         /// <summary>
         /// Шина событий возаимодействия актёров.
         /// </summary>
-        public IActorInteractionBus ActorInteractionBus { get; set; }
+        public IActorInteractionBus? ActorInteractionBus { get; set; }
 
         /// <summary>Сервис для работы с прочностью экипировки.</summary>
-        public IEquipmentDurableService EquipmentDurableService { get; set; }
+        public IEquipmentDurableService? EquipmentDurableService { get; set; }
 
         /// <summary>
         /// Сервис для логирования событий, связанных с персонажем игрока.
         /// </summary>
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
+        public IPlayerEventLogService? PlayerEventLogService { get; set; }
 
         /// <summary>
         /// Сервис для работы с достижениями персонажа.
         /// </summary>
-        public IScoreManager ScoreManager { get; set; }
+        public IScoreManager? ScoreManager { get; set; }
 
         /// <summary>
         /// Расчёт эффективности умения с учётом поглащения бронёй.
@@ -229,27 +228,15 @@ namespace Zilon.Core.Tactics
                 return 0;
             }
 
-            switch (preferredArmor.AbsorbtionLevel)
+            return preferredArmor.AbsorbtionLevel switch
             {
-                case PersonRuleLevel.None:
-                    return 0;
-
-                case PersonRuleLevel.Lesser:
-                    return 1;
-
-                case PersonRuleLevel.Normal:
-                    return 2;
-
-                case PersonRuleLevel.Grand:
-                    return 5;
-
-                case PersonRuleLevel.Absolute:
-                    return 10;
-
-                default:
-                    throw new InvalidOperationException(
-                        $"Неизвестный уровень поглощения брони {preferredArmor.AbsorbtionLevel}.");
-            }
+                PersonRuleLevel.None => 0,
+                PersonRuleLevel.Lesser => 1,
+                PersonRuleLevel.Normal => 2,
+                PersonRuleLevel.Grand => 5,
+                PersonRuleLevel.Absolute => 10,
+                _ => throw new InvalidOperationException($"Unknown armor absorbtion level: {preferredArmor.AbsorbtionLevel}."),
+            };
         }
 
         /// <summary>
@@ -449,7 +436,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessFailedHit(IActor actor, IActor targetActor, PersonDefenceItem prefferedDefenceItem,
+        private void ProcessFailedHit(IActor actor, IActor targetActor, PersonDefenceItem? prefferedDefenceItem,
             int successToHitRoll, int factToHitRoll)
         {
             if (prefferedDefenceItem != null)
@@ -613,7 +600,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(tacticalActRoll));
             }
 
-            UseOnActor(actor, target as IActor, tacticalActRoll);
+            UseOnActor(actor, (IActor)target, tacticalActRoll);
         }
     }
 }

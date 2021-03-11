@@ -29,7 +29,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         ISectorMap Map { get; }
 
-        ILocationScheme Scheme { get; set; }
+        ILocationScheme? Scheme { get; set; }
 
         /// <summary>Менеджер работы с очками.</summary>
         IScoreManager? ScoreManager { get; set; }

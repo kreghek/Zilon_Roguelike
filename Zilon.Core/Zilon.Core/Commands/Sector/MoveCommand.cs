@@ -86,7 +86,13 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException();
             }
 
-            PlayerState.TaskSource.Intent(moveIntetion, actor);
+            var taskSource = PlayerState?.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(moveIntetion, actor);
         }
 
         private bool CanExecuteForHover()
@@ -129,8 +135,19 @@ namespace Zilon.Core.Commands
 
         private bool CheckEnemies()
         {
-            var actor = PlayerState.ActiveActor.Actor;
-            var enemies = _player.SectorNode.Sector.ActorManager.Items
+            var actor = PlayerState?.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var enemies = sector.ActorManager.Items
                 .Where(x => x != actor && x.Person.Fraction != actor.Person.Fraction).ToArray();
 
             foreach (var enemyActor in enemies)
@@ -142,7 +159,7 @@ namespace Zilon.Core.Commands
                     continue;
                 }
 
-                var isAvailable = _player.SectorNode.Sector.Map.TargetIsOnLine(
+                var isAvailable = sector.Map.TargetIsOnLine(
                     actor.Node,
                     enemyActor.Node);
 
@@ -157,10 +174,22 @@ namespace Zilon.Core.Commands
 
         private void CreatePath(IMapNodeViewModel targetNode)
         {
-            var actor = PlayerState.ActiveActor.Actor;
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var startNode = actor.Node;
             var finishNode = targetNode.Node;
-            var map = _player.SectorNode.Sector.Map;
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var map = sector.Map;
 
             Path.Clear();
 
@@ -181,12 +210,12 @@ namespace Zilon.Core.Commands
             RememberFoundPath(astar);
         }
 
-        private IMapNodeViewModel GetHoverNodeViewModel()
+        private IMapNodeViewModel? GetHoverNodeViewModel()
         {
             return PlayerState.HoverViewModel as IMapNodeViewModel;
         }
 
-        private IMapNodeViewModel GetSelectedNodeViewModel()
+        private IMapNodeViewModel? GetSelectedNodeViewModel()
         {
             return PlayerState.SelectedViewModel as IMapNodeViewModel;
         }

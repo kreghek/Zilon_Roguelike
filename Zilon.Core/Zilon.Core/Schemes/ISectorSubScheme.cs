@@ -8,17 +8,17 @@
         /// <summary>
         /// Идентификаторы боссов, встречаемых в секторе.
         /// </summary>
-        string[] ChampionMonsterSids { get; }
+        string?[]? ChampionMonsterSids { get; }
 
         /// <summary>
         /// Таблицы дропа для сундуков.
         /// </summary>
-        string[] ChestDropTableSids { get; }
+        string?[]? ChestDropTableSids { get; }
 
         /// <summary>
         /// Описание сектора.
         /// </summary>
-        LocalizedStringSubScheme Description { get; }
+        LocalizedStringSubScheme? Description { get; }
 
         /// <summary>
         /// Индикатор того, что сектор является стартовым при входе из локации.
@@ -28,7 +28,7 @@
         /// <summary>
         /// параметры генерации карты.
         /// </summary>
-        ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; }
+        ISectorMapFactoryOptionsSubScheme? MapGeneratorOptions { get; }
 
         /// <summary>
         /// Минимальное количество монстров в регионе сектора.
@@ -38,12 +38,12 @@
         /// <summary>
         /// Наименование сектора.
         /// </summary>
-        LocalizedStringSubScheme Name { get; }
+        LocalizedStringSubScheme? Name { get; }
 
         /// <summary>
         /// Идентификаторы редких монстров, встречаемых в секторе.
         /// </summary>
-        string[] RareMonsterSids { get; }
+        string?[]? RareMonsterSids { get; }
 
         /// <summary>
         /// Коэффициент максимального количества сундуков в регионе сектора (комнате)
@@ -60,7 +60,7 @@
         /// <summary>
         /// Идентфиикаторы обычных монстров, встречаемых в секторе.
         /// </summary>
-        string[] RegularMonsterSids { get; }
+        string?[]? RegularMonsterSids { get; }
 
         /// <summary>
         /// Символьный идентфиикатор сектора.
@@ -68,7 +68,7 @@
         /// <remarks>
         /// Нужен для перехода из сектора в сектор.
         /// </remarks>
-        string Sid { get; }
+        string? Sid { get; }
 
         /// <summary>
         /// Максимальное количество сундуков в секторе.
@@ -78,6 +78,6 @@
         /// <summary>
         /// Идентфикаторы связанных секторов в рамках текущей локации.
         /// </summary>
-        ISectorTransitionSubScheme[] TransSectorSids { get; }
+        ISectorTransitionSubScheme?[]? TransSectorSids { get; }
     }
 }

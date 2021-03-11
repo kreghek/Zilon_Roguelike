@@ -5,6 +5,6 @@ namespace Zilon.Core.ScoreResultGenerating
 {
     public interface IDeathReasonService
     {
-        string GetDeathReasonSummary(IPlayerEvent playerEvent, Language language);
+        string? GetDeathReasonSummary(IPlayerEvent playerEvent, Language language);
     }
 }

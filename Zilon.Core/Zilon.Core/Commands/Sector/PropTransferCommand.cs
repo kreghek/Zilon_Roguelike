@@ -50,7 +50,13 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException();
             }
 
-            PlayerState.TaskSource.Intent(intention, actor);
+            var taskSource = PlayerState.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, actor);
         }
     }
 }

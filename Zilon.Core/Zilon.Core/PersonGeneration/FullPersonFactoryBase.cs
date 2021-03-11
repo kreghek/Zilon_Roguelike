@@ -37,7 +37,7 @@ namespace Zilon.Core.PersonGeneration
             Dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
+        public IPlayerEventLogService? PlayerEventLogService { get; set; }
 
         protected static int BodySlotIndex => 1;
 
@@ -106,8 +106,13 @@ namespace Zilon.Core.PersonGeneration
             }
         }
 
-        protected void FillSlot(HumanPerson person, IDropTableScheme dropScheme, int slotIndex)
+        protected void FillSlot(HumanPerson person, IDropTableScheme? dropScheme, int slotIndex)
         {
+            if (dropScheme is null)
+            {
+                return;
+            }
+
             // Генерируем предметы.
             // Выбираем предмет, как экипировку в слот.
             // Если он может быть экипирован, то устанавливаем в слот.

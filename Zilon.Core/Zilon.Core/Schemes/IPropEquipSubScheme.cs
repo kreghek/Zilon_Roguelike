@@ -10,21 +10,21 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Идентификаторы действий, которые позволяет совершать предмет.
         /// </summary>
-        string[] ActSids { get; }
+        string?[]? ActSids { get; }
 
         /// <summary>
         /// Характеристики брони, которую даёт предмет при экипировке.
         /// </summary>
-        IPropArmorItemSubScheme[] Armors { get; }
+        IPropArmorItemSubScheme?[]? Armors { get; }
 
         /// <summary>
         /// Правила, которые будут срабатывать при экипировке предмета.
         /// </summary>
-        PersonRule[] Rules { get; }
+        PersonRule?[]? Rules { get; }
 
         /// <summary>
         /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
-        EquipmentSlotTypes[] SlotTypes { get; }
+        EquipmentSlotTypes?[]? SlotTypes { get; }
     }
 }

@@ -11,7 +11,10 @@ namespace Zilon.Core.PersonModules
 {
     public class EquipmentModule : EquipmentModuleBase
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        // This value was assigned in base class.
         public EquipmentModule([NotNull][ItemNotNull] IEnumerable<PersonSlotSubScheme> slots) : base(slots)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
         }
 

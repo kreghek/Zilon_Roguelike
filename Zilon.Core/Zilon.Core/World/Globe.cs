@@ -127,11 +127,7 @@ namespace Zilon.Core.World
 
                     if (needCreateTask)
                     {
-                        yield return new ActorInSector
-                        {
-                            Actor = actor,
-                            Sector = sector
-                        };
+                        yield return new ActorInSector(actor, sector);
                     }
                 }
             }
@@ -288,8 +284,14 @@ namespace Zilon.Core.World
 
         private sealed class ActorInSector
         {
-            public IActor Actor { get; set; }
-            public ISector Sector { get; set; }
+            public ActorInSector(IActor actor, ISector sector)
+            {
+                Actor = actor;
+                Sector = sector;
+            }
+
+            public IActor Actor { get; }
+            public ISector Sector { get; }
         }
     }
 }

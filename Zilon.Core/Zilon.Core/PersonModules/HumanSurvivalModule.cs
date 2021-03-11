@@ -60,7 +60,9 @@ namespace Zilon.Core.PersonModules
         {
         }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public HumanSurvivalModule([NotNull] IEnumerable<SurvivalStat> personStats,
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
             [NotNull] ISurvivalRandomSource randomSource) : base(personStats)
         {
             _randomSource = randomSource;

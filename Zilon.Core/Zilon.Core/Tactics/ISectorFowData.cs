@@ -14,6 +14,6 @@ namespace Zilon.Core.Tactics
 
         IEnumerable<SectorMapFowNode> GetFowNodeByState(SectorMapNodeFowState targetState);
 
-        SectorMapFowNode GetNode(IGraphNode node);
+        SectorMapFowNode? GetNode(IGraphNode node);
     }
 }

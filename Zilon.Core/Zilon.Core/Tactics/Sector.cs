@@ -61,14 +61,6 @@ namespace Zilon.Core.Tactics
         [ExcludeFromCodeCoverage]
         public NationalUnityEventService? NationalUnityEventService { get; set; }
 
-        /// <summary>
-        /// Стартовые узлы.
-        /// Набор узлов, где могут располагаться актёры игрока
-        /// на начало прохождения сектора.
-        /// </summary>
-        [ExcludeFromCodeCoverage]
-        public IGraphNode[] StartNodes { get; set; }
-
         private void Actor_Moved(object sender, EventArgs e)
         {
             var actor = (IActor)sender;
@@ -381,11 +373,6 @@ namespace Zilon.Core.Tactics
 
         private void UpdateScores()
         {
-            if (Scheme is null)
-            {
-                throw new InvalidOperationException();
-            }
-
             if (ScoreManager != null)
             {
                 ScoreManager.CountTurn(Scheme);

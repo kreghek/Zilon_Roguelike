@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Client;
+﻿using System;
+
+using Zilon.Core.Client;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -34,7 +36,13 @@ namespace Zilon.Core.Commands
                 throw new System.InvalidOperationException();
             }
 
-            PlayerState.TaskSource.Intent(intention, activeActor);
+            var taskSource = PlayerState.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, activeActor);
         }
 
         private IdleTask CreateIdleTask(IActor actor)

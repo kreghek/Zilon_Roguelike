@@ -57,7 +57,13 @@ namespace Zilon.Core.Commands
             }
 
             var actorNode = CurrentActor.Node;
-            var map = _player.SectorNode.Sector.Map;
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var map = sector.Map;
 
             var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
 
@@ -73,7 +79,19 @@ namespace Zilon.Core.Commands
         {
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
             var intention = new Intention<SectorTransitTask>(a => new SectorTransitTask(a, taskContext));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, actor);
         }
     }
 }

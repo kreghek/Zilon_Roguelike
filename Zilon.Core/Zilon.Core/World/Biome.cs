@@ -84,7 +84,7 @@ namespace Zilon.Core.World
 
         public void RemoveNode(IGraphNode node)
         {
-            _nodes.Remove(node as SectorNode);
+            _nodes.Remove((SectorNode)node);
         }
     }
 }

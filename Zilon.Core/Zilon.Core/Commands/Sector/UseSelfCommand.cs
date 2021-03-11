@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;
@@ -45,8 +46,13 @@ namespace Zilon.Core.Commands
             }
 
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
-            var isAllowed =
-                UsePropHelper.CheckPropAllowedByRestrictions(prop, PlayerState.ActiveActor.Actor, taskContext);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var isAllowed = UsePropHelper.CheckPropAllowedByRestrictions(prop, actor, taskContext);
             if (!isAllowed)
             {
                 return false;
@@ -58,12 +64,28 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var propVm = _inventoryState.SelectedProp;
-            var usableProp = propVm.Prop;
+            var usableProp = propVm?.Prop;
+            if (usableProp is null)
+            {
+                throw new InvalidOperationException();
+            }
 
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             var intention = new Intention<UsePropTask>(actor => new UsePropTask(actor, taskContext, usableProp));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var taskSource = PlayerState?.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var actor = PlayerState?.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, actor);
         }
     }
 }

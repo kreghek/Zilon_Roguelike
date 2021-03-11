@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -115,14 +116,34 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var target = GetTarget(PlayerState);
+            if (target is null)
+            {
+                throw new InvalidOperationException();
+            }
 
             var tacticalAct = PlayerState.TacticalAct;
+            if (tacticalAct is null)
+            {
+                throw new InvalidOperationException();
+            }
 
             var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
 
             var intention = new Intention<AttackTask>(a =>
                 new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, actor);
         }
 
         private static void AddResourceOfUsageToList(

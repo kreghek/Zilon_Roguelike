@@ -84,7 +84,13 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException();
             }
 
-            PlayerState.TaskSource.Intent(intetion, actor);
+            var taskSource = PlayerState?.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intetion, actor);
         }
 
         private OpenContainerTask CreateTask(IActor actor, IStaticObject staticObject)

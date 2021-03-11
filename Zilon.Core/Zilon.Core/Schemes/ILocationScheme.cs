@@ -11,6 +11,6 @@
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
-        ISectorSubScheme[] SectorLevels { get; }
+        ISectorSubScheme[]? SectorLevels { get; }
     }
 }

@@ -33,32 +33,15 @@ namespace Zilon.Core.PersonModules
             PersonRuleDirection direction)
         {
             bonusDict.TryGetValue(targetStatType, out float value);
-
-            float q;
-            switch (level)
+            var q = level switch
             {
-                case PersonRuleLevel.Lesser:
-                    q = 0.1f;
-                    break;
-
-                case PersonRuleLevel.Normal:
-                    q = 0.3f;
-                    break;
-
-                case PersonRuleLevel.Grand:
-                    q = 0.5f;
-                    break;
-
-                case PersonRuleLevel.None:
-                    throw new NotSupportedException();
-
-                case PersonRuleLevel.Absolute:
-                    throw new NotSupportedException();
-
-                default:
-                    throw new NotSupportedException($"Неизветный уровень угрозы выживания {level}.");
-            }
-
+                PersonRuleLevel.Lesser => 0.1f,
+                PersonRuleLevel.Normal => 0.3f,
+                PersonRuleLevel.Grand => 0.5f,
+                PersonRuleLevel.None => throw new NotSupportedException(),
+                PersonRuleLevel.Absolute => throw new NotSupportedException(),
+                _ => throw new NotSupportedException($"Неизветный уровень угрозы выживания {level}."),
+            };
             switch (direction)
             {
                 case PersonRuleDirection.Positive:
@@ -211,26 +194,15 @@ namespace Zilon.Core.PersonModules
 
         private static int GetArmorModifierByLevel(PersonRuleLevel level)
         {
-            switch (level)
+            return level switch
             {
-                case PersonRuleLevel.None:
-                    return 0;
-
-                case PersonRuleLevel.Lesser:
-                    return 1;
-
-                case PersonRuleLevel.Normal:
-                    return 2;
-
-                case PersonRuleLevel.Grand:
-                    return 3;
-
-                case PersonRuleLevel.Absolute:
-                    return 5;
-
-                default:
-                    throw new ArgumentException($"Неизвестное значение уровня {level}.", nameof(level));
-            }
+                PersonRuleLevel.None => 0,
+                PersonRuleLevel.Lesser => 1,
+                PersonRuleLevel.Normal => 2,
+                PersonRuleLevel.Grand => 3,
+                PersonRuleLevel.Absolute => 5,
+                _ => throw new ArgumentException($"Неизвестное значение уровня {level}.", nameof(level)),
+            };
         }
 
         private static IEnumerable<PersonArmorItem> GetEquipmentArmors(IEnumerable<IPropArmorItemSubScheme> armors)
@@ -264,20 +236,25 @@ namespace Zilon.Core.PersonModules
 
                 float? rankRaw = null;
                 PersonRuleLevel? armorLevel = null;
-                var minInited = false;
                 foreach (var armor in orderedArmors)
                 {
-                    //т.к. вся броня упорядочена от худшей
-                    // первым будет обработан элемент с худшими показателями
-                    if (!minInited)
+                    // Because all armors are ordered by desc.
+                    // First the armor with minimun level will be processed.
+                    if (armorLevel is null)
                     {
-                        minInited = true;
                         rankRaw = armor.ArmorRank;
                         armorLevel = armor.AbsorbtionLevel;
                     }
                     else
                     {
                         rankRaw += armor.ArmorRank * 0.5f;
+
+                        //if (armorLevel is null)
+                        //{
+                        //    // This is imposile because this branch is unreachible with out init of armorLevel.
+                        //    // But null validation do not know this.
+                        //    continue;
+                        //}
 
                         var levelDiff = GetLevelDiff(armor.AbsorbtionLevel, armorLevel.Value);
                         if (levelDiff > 0)
@@ -287,7 +264,7 @@ namespace Zilon.Core.PersonModules
                     }
                 }
 
-                if (rankRaw != null)
+                if (rankRaw != null && armorLevel != null)
                 {
                     var totalRankRaw = Math.Round(rankRaw.Value);
 

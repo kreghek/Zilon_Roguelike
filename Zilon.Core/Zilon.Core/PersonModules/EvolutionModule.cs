@@ -91,11 +91,22 @@ namespace Zilon.Core.PersonModules
                 }
 
                 //TODO Сейчас можно качнуть только первый уровень перка. Должно быть полноценное развитие.
-                var perk = new Perk
+                var levels = perkScheme.Levels;
+                if (levels is null)
                 {
-                    Scheme = perkScheme,
+                    throw new InvalidOperationException();
+                }
+
+                var level0 = levels[0];
+                if (level0 is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                var perk = new Perk(perkScheme)
+                {
                     CurrentLevel = null,
-                    CurrentJobs = perkScheme.Levels[0].Jobs
+                    CurrentJobs = level0.Jobs
                         .Select(x => (IJob)new PerkJob(x))
                         .ToArray()
                 };
