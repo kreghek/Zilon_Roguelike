@@ -74,7 +74,7 @@ namespace Zilon.Core.Tactics
                 PersonRuleLevel.Normal => 5,
                 PersonRuleLevel.Grand => 6,
                 PersonRuleLevel.Absolute => 8,
-                _ => throw new ArgumentException($"Неизвестное значение {level}.", nameof(level)),
+                _ => throw new ArgumentException($"Неизвестное значение {level}.", nameof(level))
             };
         }
     }

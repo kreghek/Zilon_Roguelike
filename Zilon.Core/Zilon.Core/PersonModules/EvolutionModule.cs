@@ -107,8 +107,8 @@ namespace Zilon.Core.PersonModules
                 {
                     CurrentLevel = null,
                     CurrentJobs = level0.Jobs
-                    .Where(x => x != null)
-                    .Select(x => x!)
+                        .Where(x => x != null)
+                        .Select(x => x!)
                         .Select(x => (IJob)new PerkJob(x))
                         .ToArray()
                 };

@@ -235,7 +235,8 @@ namespace Zilon.Core.Tactics
                 PersonRuleLevel.Normal => 2,
                 PersonRuleLevel.Grand => 5,
                 PersonRuleLevel.Absolute => 10,
-                _ => throw new InvalidOperationException($"Unknown armor absorbtion level: {preferredArmor.AbsorbtionLevel}."),
+                _ => throw new InvalidOperationException(
+                    $"Unknown armor absorbtion level: {preferredArmor.AbsorbtionLevel}.")
             };
         }
 

@@ -22,7 +22,7 @@ namespace Zilon.Core.ScoreResultGenerating
             {
                 Language.Ru => monsterPerson.Scheme.Name?.Ru ?? monsterPerson.Scheme.Sid,
                 Language.En => monsterPerson.Scheme.Name?.En ?? monsterPerson.Scheme.Sid,
-                _ => throw new InvalidOperationException(),
+                _ => throw new InvalidOperationException()
             };
         }
 
@@ -36,9 +36,10 @@ namespace Zilon.Core.ScoreResultGenerating
             return dominateEvent switch
             {
                 PlayerDamagedEvent playerDamagedEvent => GetActorName(playerDamagedEvent, language),
-                SurvivalEffectDamageEvent survivalEffectDamageEvent => GetSurvivalEffectName(survivalEffectDamageEvent, language),
+                SurvivalEffectDamageEvent survivalEffectDamageEvent => GetSurvivalEffectName(survivalEffectDamageEvent,
+                    language),
                 EndOfLifeEvent _ => "End of Life",
-                _ => throw new InvalidOperationException(),
+                _ => throw new InvalidOperationException()
             };
         }
 
@@ -52,21 +53,21 @@ namespace Zilon.Core.ScoreResultGenerating
                     {
                         Language.Ru => "Голод",
                         Language.En => "Hunger",
-                        _ => throw new InvalidOperationException(),
+                        _ => throw new InvalidOperationException()
                     };
                 case SurvivalStatType.Hydration:
                     return language switch
                     {
                         Language.Ru => "Жажда",
                         Language.En => "Thirst",
-                        _ => throw new InvalidOperationException(),
+                        _ => throw new InvalidOperationException()
                     };
                 case SurvivalStatType.Intoxication:
                     return language switch
                     {
                         Language.Ru => "Токсикация",
                         Language.En => "Intoxication",
-                        _ => throw new InvalidOperationException(),
+                        _ => throw new InvalidOperationException()
                     };
                 default:
                     throw new InvalidOperationException();

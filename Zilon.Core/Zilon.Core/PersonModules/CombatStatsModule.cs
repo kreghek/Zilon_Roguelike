@@ -40,7 +40,7 @@ namespace Zilon.Core.PersonModules
                 PersonRuleLevel.Grand => 0.5f,
                 PersonRuleLevel.None => throw new NotSupportedException(),
                 PersonRuleLevel.Absolute => throw new NotSupportedException(),
-                _ => throw new NotSupportedException($"Неизветный уровень угрозы выживания {level}."),
+                _ => throw new NotSupportedException($"Неизветный уровень угрозы выживания {level}.")
             };
             switch (direction)
             {
@@ -201,7 +201,7 @@ namespace Zilon.Core.PersonModules
                 PersonRuleLevel.Normal => 2,
                 PersonRuleLevel.Grand => 3,
                 PersonRuleLevel.Absolute => 5,
-                _ => throw new ArgumentException($"Неизвестное значение уровня {level}.", nameof(level)),
+                _ => throw new ArgumentException($"Неизвестное значение уровня {level}.", nameof(level))
             };
         }
 
