@@ -33,7 +33,7 @@ namespace Zilon.Core.MapGenerators
                                                       nameof(staticObjectsGeneratorRandomSource));
         }
 
-        public IMonsterIdentifierGenerator MonsterIdentifierGenerator { get; set; }
+        public IMonsterIdentifierGenerator? MonsterIdentifierGenerator { get; set; }
 
         private IStaticObject CreateStaticObject(ISector sector, HexNode node, IResourceDepositData resourceDepositData)
         {

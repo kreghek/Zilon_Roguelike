@@ -77,7 +77,13 @@ namespace Zilon.Core.Commands
         /// </summary>
         protected override void ExecuteTacticCommand()
         {
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
             var intention = new Intention<SectorTransitTask>(a => new SectorTransitTask(a, taskContext));
             var actor = PlayerState.ActiveActor?.Actor;
             if (actor is null)

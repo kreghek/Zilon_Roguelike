@@ -31,7 +31,7 @@ namespace Zilon.Core.MapGenerators
 
             var nextSectorNodes = sectorNode.Biome.GetNext(sectorNode);
 
-            return nextSectorNodes.Select(node => new SectorTransition(node as ISectorNode));
+            return nextSectorNodes.Where(x=>x!= null).Select(x=>x!).Select(node => new SectorTransition((ISectorNode)node));
         }
 
         public static bool IsAvailableFor(Matrix<bool> matrix, OffsetCoords coords)

@@ -33,7 +33,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(tacticalActRoll));
             }
 
-            UseOnStaticObject(target as IStaticObject, tacticalActRoll);
+            UseOnStaticObject((IStaticObject)target, tacticalActRoll);
         }
     }
 }

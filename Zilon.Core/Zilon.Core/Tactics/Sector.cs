@@ -148,6 +148,11 @@ namespace Zilon.Core.Tactics
             for (var i = 0; i < dropTableCount; i++)
             {
                 var sid = monsterScheme.DropTableSids[i];
+                if (sid is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
                 schemes[i] = _schemeService.GetScheme<IDropTableScheme>(sid);
             }
 

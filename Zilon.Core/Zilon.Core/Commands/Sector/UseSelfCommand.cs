@@ -45,7 +45,13 @@ namespace Zilon.Core.Commands
                 throw new AppException("Попытка использовать предмет, для которого нет информации об использовании.");
             }
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
             var actor = PlayerState.ActiveActor?.Actor;
             if (actor is null)
             {
@@ -70,7 +76,13 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException();
             }
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
 
             var intention = new Intention<UsePropTask>(actor => new UsePropTask(actor, taskContext, usableProp));
             var taskSource = PlayerState?.TaskSource;

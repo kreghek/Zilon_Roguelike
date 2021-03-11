@@ -77,7 +77,13 @@ namespace Zilon.Core.Commands
 
             var targetNode = selectedNodeVm.Node;
 
-            var currentSector = _player.SectorNode.Sector;
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var currentSector = sector;
 
             var moveIntetion = new MoveIntention(targetNode, currentSector);
             var actor = PlayerState.ActiveActor?.Actor;

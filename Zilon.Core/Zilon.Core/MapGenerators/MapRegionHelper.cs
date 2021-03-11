@@ -24,7 +24,7 @@ namespace Zilon.Core.MapGenerators
         /// Возможно, отфильтрованные от уже занятых узлов.
         /// </param>
         /// <returns> Возвращает узел, который не закрывает проход в регион карты. </returns>
-        public static IGraphNode FindNonBlockedNode(
+        public static IGraphNode? FindNonBlockedNode(
             [NotNull] IGraphNode node,
             [NotNull] IMap map,
             [NotNull][ItemNotNull] IEnumerable<IGraphNode> availableNodes)

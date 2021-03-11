@@ -9,7 +9,7 @@ namespace Zilon.Core.Schemes
     public class SchemeServiceHandler<TSchemeImpl> : ISchemeServiceHandler<TSchemeImpl>
         where TSchemeImpl : class, IScheme
     {
-        private const string SchemePostfix = "Scheme";
+        private const string SCHEME_POSTFIX = "Scheme";
 
         private readonly Dictionary<string, TSchemeImpl> _dict;
         private readonly string _directory;
@@ -33,13 +33,13 @@ namespace Zilon.Core.Schemes
             _dict = new Dictionary<string, TSchemeImpl>();
         }
 
-        public JsonSerializerSettings JsonSerializerSettings { get; set; }
+        public JsonSerializerSettings? JsonSerializerSettings { get; set; }
 
         private static string CalcDirectory()
         {
             var type = typeof(TSchemeImpl);
             var typeName = type.Name;
-            var schemeName = typeName.Substring(0, typeName.Length - SchemePostfix.Length);
+            var schemeName = typeName.Substring(0, typeName.Length - SCHEME_POSTFIX.Length);
 
             if (type.IsInterface)
             {
@@ -53,12 +53,14 @@ namespace Zilon.Core.Schemes
         private TSchemeImpl ParseSchemeFromFile(SchemeFile file)
         {
             // Если явно указаны настройки десериализации, то используем их.
-            if (JsonSerializerSettings == null)
+            if (JsonSerializerSettings is null)
             {
                 return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content);
             }
 
+#pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<TSchemeImpl>(file.Content, JsonSerializerSettings);
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public void LoadSchemes()

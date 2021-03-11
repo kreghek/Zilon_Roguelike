@@ -3,7 +3,7 @@
     /// <summary>
     /// Схема монстра.
     /// </summary>
-    /// <seealso cref="Zilon.Core.Schemes.IScheme" />
+    /// <seealso cref="IScheme" />
     public interface IMonsterScheme : IScheme
     {
         /// <summary>
@@ -19,12 +19,12 @@
         /// <summary>
         /// Характеристики обороны монстра.
         /// </summary>
-        IMonsterDefenseSubScheme Defense { get; }
+        IMonsterDefenseSubScheme? Defense { get; }
 
         /// <summary>
         /// Таблицы дропа, из которых формируется лут с монстра.
         /// </summary>
-        string[] DropTableSids { get; }
+        string?[]? DropTableSids { get; }
 
         /// <summary>
         /// Значение ХП монстра.
@@ -34,11 +34,11 @@
         /// <summary>
         /// Действие, которое монстр выполняет при атаке.
         /// </summary>
-        ITacticalActStatsSubScheme PrimaryAct { get; }
+        ITacticalActStatsSubScheme? PrimaryAct { get; }
 
         /// <summary>
         /// Теги для классификации монстров.
         /// </summary>
-        string[] Tags { get; }
+        string?[]? Tags { get; }
     }
 }

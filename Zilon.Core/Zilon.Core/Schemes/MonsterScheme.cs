@@ -18,13 +18,13 @@
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<MonsterDefenceSubScheme>))]
         [JsonProperty]
-        public IMonsterDefenseSubScheme Defense { get; private set; }
+        public IMonsterDefenseSubScheme? Defense { get; private set; }
 
         /// <summary>
         /// Список идентификаторов таблиц дропа.
         /// </summary>
         [JsonProperty]
-        public string[] DropTableSids { get; private set; }
+        public string?[]? DropTableSids { get; private set; }
 
         /// <summary>
         /// Хитпоинты монстра.
@@ -37,11 +37,11 @@
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<TacticalActStatsSubScheme>))]
         [JsonProperty]
-        public ITacticalActStatsSubScheme PrimaryAct { get; private set; }
+        public ITacticalActStatsSubScheme? PrimaryAct { get; private set; }
 
         /// <inheritdoc />
         [JsonProperty]
-        public string[] Tags { get; private set; }
+        public string?[]? Tags { get; private set; }
 
         /// <inheritdoc />
         [JsonProperty]
