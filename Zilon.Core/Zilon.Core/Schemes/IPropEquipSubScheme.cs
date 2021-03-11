@@ -25,6 +25,6 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
-        EquipmentSlotTypes?[]? SlotTypes { get; }
+        EquipmentSlotTypes[]? SlotTypes { get; }
     }
 }

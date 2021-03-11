@@ -19,7 +19,7 @@ namespace Zilon.Core.Schemes
         /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
         [JsonProperty]
-        public EquipmentSlotTypes?[]? SlotTypes { get; private set; }
+        public EquipmentSlotTypes[]? SlotTypes { get; private set; }
 
         /// <summary>
         /// Характеристики брони, которую даёт предмет при экипировке.
