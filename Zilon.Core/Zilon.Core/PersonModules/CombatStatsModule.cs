@@ -249,13 +249,6 @@ namespace Zilon.Core.PersonModules
                     {
                         rankRaw += armor.ArmorRank * 0.5f;
 
-                        //if (armorLevel is null)
-                        //{
-                        //    // This is imposile because this branch is unreachible with out init of armorLevel.
-                        //    // But null validation do not know this.
-                        //    continue;
-                        //}
-
                         var levelDiff = GetLevelDiff(armor.AbsorbtionLevel, armorLevel.Value);
                         if (levelDiff > 0)
                         {
