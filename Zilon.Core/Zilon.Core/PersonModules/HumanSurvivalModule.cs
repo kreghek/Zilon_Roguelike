@@ -253,12 +253,14 @@ namespace Zilon.Core.PersonModules
             var keySegmentList = new List<SurvivalStatKeySegment>();
             if (statScheme.KeyPoints != null)
             {
+                var keyPoints = statScheme.KeyPoints.Where(x => x != null).Select(x => x!).ToArray();
+
                 AddKeyPointFromScheme(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max,
-                    statScheme.KeyPoints, keySegmentList);
+                    keyPoints, keySegmentList);
                 AddKeyPointFromScheme(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong,
-                    statScheme.KeyPoints, keySegmentList);
+                    keyPoints, keySegmentList);
                 AddKeyPointFromScheme(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser,
-                    statScheme.KeyPoints, keySegmentList);
+                    keyPoints, keySegmentList);
             }
 
             var stat = new SurvivalStat(statScheme.StartValue, statScheme.MinValue, statScheme.MaxValue)
@@ -368,20 +370,30 @@ namespace Zilon.Core.PersonModules
             for (var i = 0; i < equipmentModule.Count(); i++)
             {
                 var equipment = equipmentModule[i];
-                if (equipment == null)
+                if (equipment is null)
                 {
                     continue;
                 }
 
-                var rules = equipment.Scheme.Equip.Rules;
+                var equipScheme = equipment.Scheme.Equip;
+                if (equipScheme is null)
+                {
+                    continue;
+                }
 
-                if (rules == null)
+                var rules = equipScheme.Rules;
+                if (rules is null)
                 {
                     continue;
                 }
 
                 foreach (var rule in rules)
                 {
+                    if (rule is null)
+                    {
+                        continue;
+                    }
+
                     bonusList = ProcessRuleAndChangeBonusList(bonusList, equipmentModule, rule);
                 }
             }
@@ -425,7 +437,9 @@ namespace Zilon.Core.PersonModules
                     continue;
                 }
 
-                currentLevelScheme = levels[currentLevel.Primary - 1];
+                var notNullLevels = ConvertToNotNullLevels(levels);
+
+                currentLevelScheme = notNullLevels[currentLevel.Primary - 1];
 
                 if (currentLevelScheme.Rules == null)
                 {
@@ -436,10 +450,32 @@ namespace Zilon.Core.PersonModules
                 {
                     foreach (var rule in currentLevelScheme.Rules)
                     {
+                        if (rule is null)
+                        {
+                            continue;
+                        }
+
                         bonusList = ProcessRule(bonusList, rule);
                     }
                 }
             }
+        }
+
+        private static PerkLevelSubScheme[] ConvertToNotNullLevels(PerkLevelSubScheme?[] levels)
+        {
+            var notNullLevels = new PerkLevelSubScheme[levels.Length];
+            for (var i1 = 0; i1 < levels.Length; i1++)
+            {
+                var level = levels[i1];
+                if (level is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                notNullLevels[i1] = level;
+            }
+
+            return notNullLevels;
         }
 
         private static int GetConstitutionHpBonus(IAttributesModule attributesModule)
@@ -497,19 +533,21 @@ namespace Zilon.Core.PersonModules
             // Выставляем сытость/упоённость
             if (personScheme.SurvivalStats != null)
             {
-                yield return CreateStatFromScheme(personScheme.SurvivalStats,
+                var survivalStats = personScheme.SurvivalStats.Where(x => x != null).Select(x => x!).ToArray();
+
+                yield return CreateStatFromScheme(survivalStats,
                     SurvivalStatType.Satiety,
                     PersonSurvivalStatType.Satiety);
 
-                yield return CreateStatFromScheme(personScheme.SurvivalStats,
+                yield return CreateStatFromScheme(survivalStats,
                     SurvivalStatType.Hydration,
                     PersonSurvivalStatType.Hydration);
 
-                yield return CreateStatFromScheme(personScheme.SurvivalStats,
+                yield return CreateStatFromScheme(survivalStats,
                     SurvivalStatType.Intoxication,
                     PersonSurvivalStatType.Intoxication);
 
-                yield return CreateStatFromScheme(personScheme.SurvivalStats,
+                yield return CreateStatFromScheme(survivalStats,
                     SurvivalStatType.Wound,
                     PersonSurvivalStatType.Wound);
             }
@@ -673,12 +711,14 @@ namespace Zilon.Core.PersonModules
                 return;
             }
 
+            var notNullKeySegments = stat.KeySegments.Where(x => x != null).Select(x => x!).ToArray();
+
             if (_effectsModule != null)
             {
                 PersonEffectHelper.UpdateSurvivalEffect(
                     _effectsModule,
                     stat,
-                    stat.KeySegments,
+                    notNullKeySegments,
                     _randomSource,
                     PlayerEventLogService);
             }
