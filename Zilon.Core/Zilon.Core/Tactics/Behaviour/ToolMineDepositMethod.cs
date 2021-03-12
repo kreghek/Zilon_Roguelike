@@ -27,7 +27,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var requiredToolTags = deposit.GetToolTags();
 
-            var toolTags = _tool.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ?? Array.Empty<string>();
+            var toolTags = _tool.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                           Array.Empty<string>();
 
             var hasAllTags = EquipmentHelper.HasAllTags(toolTags, requiredToolTags);
             if (!hasAllTags)

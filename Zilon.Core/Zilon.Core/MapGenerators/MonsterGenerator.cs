@@ -111,17 +111,6 @@ namespace Zilon.Core.MapGenerators
             return availableSchemeSids.Where(x => x != null).Select(x => x!).ToArray();
         }
 
-        private static IEnumerable<string?>? GetMonsterSidsByRarity(ISectorSubScheme sectorScheme, int currentRarity)
-        {
-            return currentRarity switch
-            {
-                0 => sectorScheme.RegularMonsterSids,
-                1 => sectorScheme.RareMonsterSids ?? sectorScheme.RegularMonsterSids,
-                2 => sectorScheme.ChampionMonsterSids ?? sectorScheme.RareMonsterSids ?? sectorScheme.RegularMonsterSids,
-                _ => throw new InvalidOperationException(),
-            };
-        }
-
         /// <summary>
         /// Получение редкости текущего монстра.
         /// </summary>
@@ -155,6 +144,18 @@ namespace Zilon.Core.MapGenerators
             }
 
             return currentRarity;
+        }
+
+        private static IEnumerable<string?>? GetMonsterSidsByRarity(ISectorSubScheme sectorScheme, int currentRarity)
+        {
+            return currentRarity switch
+            {
+                0 => sectorScheme.RegularMonsterSids,
+                1 => sectorScheme.RareMonsterSids ?? sectorScheme.RegularMonsterSids,
+                2 => sectorScheme.ChampionMonsterSids ??
+                     sectorScheme.RareMonsterSids ?? sectorScheme.RegularMonsterSids,
+                _ => throw new InvalidOperationException()
+            };
         }
 
         private void RollInfections(ISector sector, List<IActor> resultMonsterActors)

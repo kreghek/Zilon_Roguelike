@@ -126,10 +126,8 @@ namespace Zilon.Core.World
                     {
                         throw new InvalidOperationException();
                     }
-                    else
-                    {
-                        continue;
-                    }
+
+                    continue;
                 }
 
                 var actors = sector.ActorManager.Items.ToArray();
@@ -300,10 +298,8 @@ namespace Zilon.Core.World
                         {
                             throw new InvalidOperationException();
                         }
-                        else
-                        {
-                            continue;
-                        }
+
+                        continue;
                     }
 
                     sector.Update();
