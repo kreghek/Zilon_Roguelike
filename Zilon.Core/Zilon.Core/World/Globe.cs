@@ -120,6 +120,18 @@ namespace Zilon.Core.World
             foreach (var sectorNode in sectorNodes)
             {
                 var sector = sectorNode.Sector;
+                if (sector is null)
+                {
+                    if (sectorNode.State == SectorNodeState.SectorMaterialized)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
                 var actors = sector.ActorManager.Items.ToArray();
                 foreach (var actor in actors)
                 {
@@ -257,8 +269,14 @@ namespace Zilon.Core.World
             }
 
             _sectorNodes.Add(sectorNode);
-            sectorNode.Sector.TrasitionUsed += Sector_TrasitionUsed;
-            sectorNode.Sector.ActorManager.Removed += ActorManager_Removed;
+            var sector = sectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            sector.TrasitionUsed += Sector_TrasitionUsed;
+            sector.ActorManager.Removed += ActorManager_Removed;
         }
 
         public async Task UpdateAsync()
@@ -275,7 +293,20 @@ namespace Zilon.Core.World
 
                 foreach (var sectorNode in _sectorNodes)
                 {
-                    sectorNode.Sector.Update();
+                    var sector = sectorNode.Sector;
+                    if (sector is null)
+                    {
+                        if (sectorNode.State == SectorNodeState.SectorMaterialized)
+                        {
+                            throw new InvalidOperationException();
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
+                    sector.Update();
                 }
 
                 _globeTransitionHandler.UpdateTransitions();

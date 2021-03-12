@@ -17,7 +17,7 @@ namespace Zilon.Core.Persons
         {
             Scheme = scheme;
 
-            Name = scheme.Sid;
+            Name = scheme.Sid ?? throw new InvalidOperationException();
         }
 
         /// <inheritdoc />

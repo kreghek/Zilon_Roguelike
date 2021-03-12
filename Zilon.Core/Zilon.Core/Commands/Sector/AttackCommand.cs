@@ -37,7 +37,13 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var map = _player.SectorNode.Sector.Map;
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var map = sector.Map;
 
             var activeActor = PlayerState.ActiveActor;
             if (activeActor is null)
@@ -76,7 +82,7 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
-            var isInDistance = act.CheckDistance(currentNode, targetNode, _player.SectorNode.Sector.Map);
+            var isInDistance = act.CheckDistance(currentNode, targetNode, sector.Map);
             if (!isInDistance)
             {
                 return false;
@@ -127,7 +133,13 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException();
             }
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
 
             var intention = new Intention<AttackTask>(a =>
                 new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));

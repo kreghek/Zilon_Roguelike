@@ -408,8 +408,18 @@ namespace Zilon.Core.Tactics
 
             var useData = usedProp.Scheme.Use;
 
+            if (useData?.CommonRules is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             foreach (var rule in useData.CommonRules)
             {
+                if (rule is null)
+                {
+                    continue;
+                }
+
                 switch (rule.Direction)
                 {
                     // Если направление не указано, то будет считаться положительное значение

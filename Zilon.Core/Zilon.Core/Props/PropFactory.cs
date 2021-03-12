@@ -38,6 +38,11 @@ namespace Zilon.Core.Props
 
             foreach (var actSchemeSid in actSchemeSids)
             {
+                if (actSchemeSid is null)
+                {
+                    continue;
+                }
+
                 var actScheme = _schemeService.GetScheme<ITacticalActScheme>(actSchemeSid);
 
                 actSchemes.Add(actScheme);

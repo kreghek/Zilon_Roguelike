@@ -40,6 +40,11 @@ namespace Zilon.Core
             for (var i = 1; i <= level; i++)
             {
                 var perkLevelSubScheme = levels[i - 1];
+                if (perkLevelSubScheme is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
                 if (i < level)
                 {
                     sum += perkLevelSubScheme.MaxValue;
@@ -90,13 +95,13 @@ namespace Zilon.Core
 
             foreach (var schemeLevel in perkScheme.Levels)
             {
-                if (schemeLevel.MaxValue <= 0)
+                if (schemeLevel?.MaxValue <= 0)
                 {
                     throw new ArgumentException("Scheme must contains no zeros.", nameof(perkScheme));
                 }
             }
 
-            var schemeLevels = perkScheme.Levels.Select(x => x.MaxValue).ToArray();
+            var schemeLevels = perkScheme.Levels.Select(x => x!.MaxValue).ToArray();
 
             try
             {

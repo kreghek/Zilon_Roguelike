@@ -96,7 +96,13 @@ namespace Zilon.Core.Commands
 
             var equipment = GetInventorySelectedEquipment();
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
 
             var intention = new Intention<EquipTask>(a => new EquipTask(a, taskContext, equipment, SlotIndex.Value));
             var taskSource = PlayerState.TaskSource;

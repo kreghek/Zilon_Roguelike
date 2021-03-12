@@ -47,7 +47,13 @@ namespace Zilon.Core.Commands
 
         private IdleTask CreateIdleTask(IActor actor)
         {
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
 
             return new IdleTask(actor, taskContext, GlobeMetrics.OneIterationLength);
         }

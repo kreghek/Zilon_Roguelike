@@ -9,11 +9,11 @@ namespace Zilon.Core.ScoreResultGenerating
 {
     public class DeathReasonService : IDeathReasonService
     {
-        private static string GetActorName(PlayerDamagedEvent playerDamagedEvent, Language language)
+        private static string? GetDamagerName(PlayerDamagedEvent playerDamagedEvent, Language language)
         {
             var monsterPerson = playerDamagedEvent?.Damager?.Person as MonsterPerson;
 
-            if (monsterPerson == null)
+            if (monsterPerson is null)
             {
                 throw new InvalidOperationException();
             }
@@ -35,7 +35,7 @@ namespace Zilon.Core.ScoreResultGenerating
 
             return dominateEvent switch
             {
-                PlayerDamagedEvent playerDamagedEvent => GetActorName(playerDamagedEvent, language),
+                PlayerDamagedEvent playerDamagedEvent => GetDamagerName(playerDamagedEvent, language),
                 SurvivalEffectDamageEvent survivalEffectDamageEvent => GetSurvivalEffectName(survivalEffectDamageEvent,
                     language),
                 EndOfLifeEvent _ => "End of Life",

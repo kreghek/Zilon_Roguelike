@@ -81,6 +81,11 @@ namespace Zilon.Core.World
 
                 var nextSector = sectorNode.Sector;
 
+                if (nextSector is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
                 var transitionItem =
                     new TransitionPoolItem(actor.Person, actor.TaskSource, nextSector, sector, oldActorNode);
                 _transitionPool.Push(transitionItem);

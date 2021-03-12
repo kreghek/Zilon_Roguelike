@@ -182,7 +182,13 @@ namespace Zilon.Core.Tactics
         {
             var targetIsDeadLast = targetActor.Person.CheckIsDead();
 
-            var offenceType = tacticalActRoll.TacticalAct.Stats.Offence.Type;
+            var offence = tacticalActRoll.TacticalAct.Stats.Offence;
+            if (offence is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var offenceType = offence.Type;
             var usedDefences = GetCurrentDefences(targetActor, offenceType);
 
             var prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
@@ -207,7 +213,7 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private static int GetActApRank(ITacticalAct tacticalAct)
         {
-            return tacticalAct.Stats.Offence.ApRank;
+            return (tacticalAct.Stats.Offence?.ApRank).GetValueOrDefault();
         }
 
         /// <summary>
@@ -220,7 +226,13 @@ namespace Zilon.Core.Tactics
         private static int GetArmorAbsorbtion(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            var offence = usedTacticalAct.Stats.Offence;
+            if (offence is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var actImpact = offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             if (preferredArmor == null)
@@ -249,7 +261,13 @@ namespace Zilon.Core.Tactics
         private static int? GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            var offence = usedTacticalAct.Stats.Offence;
+            if (offence is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var actImpact = offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             return preferredArmor?.ArmorRank;
@@ -270,7 +288,7 @@ namespace Zilon.Core.Tactics
                 .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
         }
 
-        private Equipment GetDamagedEquipment(IActor targetActor)
+        private Equipment? GetDamagedEquipment(IActor targetActor)
         {
             if (targetActor.Person.GetModuleSafe<IEquipmentModule>() is null)
             {
@@ -309,7 +327,13 @@ namespace Zilon.Core.Tactics
         private static int GetSuccessArmorSave(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            var offence = usedTacticalAct.Stats.Offence;
+            if (offence is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var actImpact = offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             if (preferredArmor == null)
@@ -317,7 +341,7 @@ namespace Zilon.Core.Tactics
                 throw new InvalidOperationException($"Не найдена защита {actImpact}.");
             }
 
-            var apRankDiff = usedTacticalAct.Stats.Offence.ApRank - preferredArmor.ArmorRank;
+            var apRankDiff = offence.ApRank - preferredArmor.ArmorRank;
 
             switch (apRankDiff)
             {

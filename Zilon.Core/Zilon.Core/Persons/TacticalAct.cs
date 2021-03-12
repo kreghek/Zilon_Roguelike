@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
 
@@ -20,6 +21,11 @@ namespace Zilon.Core.Persons
             [CanBeNull] Equipment? equipment)
         {
             Scheme = scheme;
+
+            if (scheme.Stats is null)
+            {
+                throw new InvalidOperationException();
+            }
 
             Stats = scheme.Stats;
 
@@ -56,7 +62,7 @@ namespace Zilon.Core.Persons
         public Equipment? Equipment { get; }
 
         /// <inheritdoc />
-        public ITacticalActConstrainsSubScheme Constrains { get; }
+        public ITacticalActConstrainsSubScheme? Constrains { get; }
 
         /// <inheritdoc />
         public int? CurrentCooldown { get; private set; }

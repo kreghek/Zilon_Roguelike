@@ -26,7 +26,13 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var map = _player.SectorNode.Sector.Map;
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var map = sector.Map;
 
             var actor = PlayerState.ActiveActor?.Actor;
             if (actor is null)
@@ -97,7 +103,13 @@ namespace Zilon.Core.Commands
         {
             var openMethod = new HandOpenContainerMethod();
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
 
             return new OpenContainerTask(actor, taskContext, staticObject, openMethod);
         }
