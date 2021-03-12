@@ -194,15 +194,8 @@ namespace Zilon.Core.PersonModules
             if (hpStat != null)
             {
                 var bonus = 0;
-                bonus = level switch
-                {
-                    PersonRuleLevel.Lesser => 1,
-                    PersonRuleLevel.Normal => 3,
-                    PersonRuleLevel.Grand => 5,
-                    PersonRuleLevel.Absolute => 10,
-                    PersonRuleLevel.None => throw new InvalidOperationException("Unknown rule level."),
-                    _ => throw new InvalidOperationException($"The rule level {level} is not supported.")
-                };
+                bonus = GetBonusByLevel(level);
+
                 if (direction == PersonRuleDirection.Negative)
                 {
                     bonus *= -1;
@@ -217,6 +210,19 @@ namespace Zilon.Core.PersonModules
 
                 currentBonus.ValueBonus += bonus;
             }
+        }
+
+        private static int GetBonusByLevel(PersonRuleLevel level)
+        {
+            return level switch
+            {
+                PersonRuleLevel.Lesser => 1,
+                PersonRuleLevel.Normal => 3,
+                PersonRuleLevel.Grand => 5,
+                PersonRuleLevel.Absolute => 10,
+                PersonRuleLevel.None => throw new InvalidOperationException("Unknown rule level."),
+                _ => throw new InvalidOperationException($"The rule level {level} is not supported.")
+            };
         }
 
         private void CalcSurvivalStats()
