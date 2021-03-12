@@ -7,20 +7,31 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public class SchemeFile
     {
-        public SchemeFile(string content, string path, string sid)
+        public SchemeFile(string content, string? path, string sid)
         {
-            Content = content ?? throw new ArgumentNullException(nameof(content));
+            Content = content;
             Path = path ?? throw new ArgumentNullException(nameof(path));
-            Sid = sid ?? throw new ArgumentNullException(nameof(sid));
+            Sid = sid;
+        }
+
+        public SchemeFile(string content, string sid)
+        {
+            Content = content;
+            Sid = sid;
         }
 
         public string Content { get; set; }
-        public string Path { get; set; }
+        public string? Path { get; set; }
         public string Sid { get; set; }
 
         public override string ToString()
         {
-            return $"{Sid} (Size: {Content?.Length}) in \"{Path}\"";
+            if (Path is null)
+            {
+                return $"{Sid} (Size: {Content.Length})";
+            }
+
+            return $"{Sid} (Size: {Content.Length}) in \"{Path}\"";
         }
     }
 }
