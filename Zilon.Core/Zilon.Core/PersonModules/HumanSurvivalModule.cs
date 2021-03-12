@@ -212,19 +212,6 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static int GetBonusByLevel(PersonRuleLevel level)
-        {
-            return level switch
-            {
-                PersonRuleLevel.Lesser => 1,
-                PersonRuleLevel.Normal => 3,
-                PersonRuleLevel.Grand => 5,
-                PersonRuleLevel.Absolute => 10,
-                PersonRuleLevel.None => throw new InvalidOperationException("Unknown rule level."),
-                _ => throw new InvalidOperationException($"The rule level {level} is not supported.")
-            };
-        }
-
         private void CalcSurvivalStats()
         {
             // Расчёт бонусов вынести в отдельный сервис, который покрыть модульными тестами
@@ -237,6 +224,23 @@ namespace Zilon.Core.PersonModules
             FillSurvivalBonusesFromEffects(ref bonusList);
 
             ApplySurvivalBonuses(bonusList);
+        }
+
+        private static PerkLevelSubScheme[] ConvertToNotNullLevels(PerkLevelSubScheme?[] levels)
+        {
+            var notNullLevels = new PerkLevelSubScheme[levels.Length];
+            for (var i1 = 0; i1 < levels.Length; i1++)
+            {
+                var level = levels[i1];
+                if (level is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                notNullLevels[i1] = level;
+            }
+
+            return notNullLevels;
         }
 
         private static SurvivalStat? CreateStat(
@@ -461,21 +465,17 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static PerkLevelSubScheme[] ConvertToNotNullLevels(PerkLevelSubScheme?[] levels)
+        private static int GetBonusByLevel(PersonRuleLevel level)
         {
-            var notNullLevels = new PerkLevelSubScheme[levels.Length];
-            for (var i1 = 0; i1 < levels.Length; i1++)
+            return level switch
             {
-                var level = levels[i1];
-                if (level is null)
-                {
-                    throw new InvalidOperationException();
-                }
-
-                notNullLevels[i1] = level;
-            }
-
-            return notNullLevels;
+                PersonRuleLevel.Lesser => 1,
+                PersonRuleLevel.Normal => 3,
+                PersonRuleLevel.Grand => 5,
+                PersonRuleLevel.Absolute => 10,
+                PersonRuleLevel.None => throw new InvalidOperationException("Unknown rule level."),
+                _ => throw new InvalidOperationException($"The rule level {level} is not supported.")
+            };
         }
 
         private static int GetConstitutionHpBonus(IAttributesModule attributesModule)
