@@ -138,6 +138,11 @@ namespace Zilon.Core.PersonModules
 
                 var currentLevelScheme = levels[currentLevel.Primary - 1];
 
+                if (currentLevelScheme is null)
+                {
+                    continue;
+                }
+
                 if (currentLevelScheme.Rules == null)
                 {
                     continue;
@@ -147,6 +152,11 @@ namespace Zilon.Core.PersonModules
                 {
                     foreach (var rule in currentLevelScheme.Rules)
                     {
+                        if (rule is null)
+                        {
+                            continue;
+                        }
+
                         CalcRuleBonuses(rule, bonusDict);
                     }
                 }
@@ -285,9 +295,11 @@ namespace Zilon.Core.PersonModules
 
                 var equipStats = equipment.Scheme.Equip;
 
-                if (equipStats.Armors != null)
+                var armors = equipStats?.Armors;
+                if (armors != null)
                 {
-                    var currentEquipmentArmors = GetEquipmentArmors(equipStats.Armors);
+                    var notNullArmors = armors.Where(x => x != null).Select(x => x!).ToArray();
+                    var currentEquipmentArmors = GetEquipmentArmors(notNullArmors);
                     equipmentArmors.AddRange(currentEquipmentArmors);
                 }
             }

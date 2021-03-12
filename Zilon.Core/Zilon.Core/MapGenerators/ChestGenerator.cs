@@ -192,9 +192,21 @@ namespace Zilon.Core.MapGenerators
 
         private IDropTableScheme[] GetTrashDropTables(ISectorSubScheme sectorSubScheme)
         {
-            var dropTables = new List<IDropTableScheme>();
-            foreach (var chestDropSid in sectorSubScheme.ChestDropTableSids)
+            var chestDropTableSids = sectorSubScheme.ChestDropTableSids;
+            if (chestDropTableSids is null)
             {
+                return Array.Empty<IDropTableScheme>();
+            }
+
+            var dropTables = new List<IDropTableScheme>();
+            
+            foreach (var chestDropSid in chestDropTableSids)
+            {
+                if (chestDropSid is null)
+                {
+                    continue;
+                }
+
                 var dropTable = _schemeService.GetScheme<IDropTableScheme>(chestDropSid);
                 dropTables.Add(dropTable);
             }

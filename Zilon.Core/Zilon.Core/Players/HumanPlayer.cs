@@ -30,7 +30,13 @@ namespace Zilon.Core.Players
 
         private bool IsActorInSector(ISectorNode node)
         {
-            return node.Sector.ActorManager.Items.Any(x => x.Person == MainPerson);
+            var sector = node.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return sector.ActorManager.Items.Any(x => x.Person == MainPerson);
         }
 
         public ISectorNode SectorNode => GetSectorNode();

@@ -91,7 +91,19 @@ namespace Zilon.Core.PersonModules
                 {
                     if (perk.Scheme.Levels != null)
                     {
-                        var rules = perk.Scheme.Levels[0].Rules;
+                        var perkLevelSubScheme0 = perk.Scheme.Levels[0];
+                        if (perkLevelSubScheme0 is null)
+                        {
+                            continue;
+                        }
+
+                        var rules = perkLevelSubScheme0.Rules;
+
+                        if (rules is null)
+                        {
+                            continue;
+                        }
+
                         ProcessRulesBonuses(equipment, ref toHitModifierValue, ref efficientModifierValue, rules);
                     }
                 }
@@ -110,7 +122,12 @@ namespace Zilon.Core.PersonModules
 
                     var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary - 1];
 
-                    if (currentLevelScheme.Rules == null)
+                    if (currentLevelScheme is null)
+                    {
+                        continue;
+                    }
+
+                    if (currentLevelScheme.Rules is null)
                     {
                         continue;
                     }
@@ -160,11 +177,12 @@ namespace Zilon.Core.PersonModules
         {
             var toHitModifierValue = 0;
             var efficientModifierValue = 0;
-            var efficientRollUnmodified = scheme.Stats.Efficient;
+            var efficientRollUnmodified = scheme.Stats?.Efficient ?? new Roll(1, 1);
             CalcSurvivalHazardOnTacticalAct(effects, ref toHitModifierValue, ref efficientModifierValue);
             CalcPerksBonusesOnTacticalAct(perks, equipment, ref toHitModifierValue, ref efficientModifierValue);
 
             var toHitRoll = CreateTacticalActRoll(6, 1, toHitModifierValue);
+
             var efficientRoll = CreateTacticalActRoll(efficientRollUnmodified.Dice,
                 efficientRollUnmodified.Count,
                 efficientModifierValue);
@@ -197,7 +215,7 @@ namespace Zilon.Core.PersonModules
         private static int GetRollModifierByPerkRule(Equipment? equipment, int efficientModifierValue,
             PerkRuleSubScheme rule)
         {
-            if (string.IsNullOrWhiteSpace(rule.Params))
+            if (rule.Params is null || string.IsNullOrWhiteSpace(rule.Params))
             {
                 efficientModifierValue = RuleCalculations.CalcEfficientByRuleLevel(efficientModifierValue, rule.Level);
             }
@@ -256,10 +274,15 @@ namespace Zilon.Core.PersonModules
         }
 
         private static void ProcessRulesBonuses(Equipment? equipment, ref int toHitModifierValue,
-            ref int efficientModifierValue, PerkRuleSubScheme[] rules)
+            ref int efficientModifierValue, PerkRuleSubScheme?[] rules)
         {
             foreach (var rule in rules)
             {
+                if (rule is null)
+                {
+                    continue;
+                }
+
                 GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
             }
         }

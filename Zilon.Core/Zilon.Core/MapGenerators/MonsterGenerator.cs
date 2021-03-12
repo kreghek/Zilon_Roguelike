@@ -101,34 +101,25 @@ namespace Zilon.Core.MapGenerators
             ISectorSubScheme sectorScheme,
             int currentRarity)
         {
-            IEnumerable<string> availableSchemeSids;
-            switch (currentRarity)
-            {
-                case 0:
-                    availableSchemeSids = sectorScheme.RegularMonsterSids;
-                    break;
+            var availableSchemeSids = GetMonsterSidsByRarity(sectorScheme, currentRarity);
 
-                case 1:
-                    availableSchemeSids = sectorScheme.RareMonsterSids ??
-                                          sectorScheme.RegularMonsterSids;
-                    break;
-
-                case 2:
-                    availableSchemeSids = sectorScheme.ChampionMonsterSids ??
-                                          sectorScheme.RareMonsterSids ??
-                                          sectorScheme.RegularMonsterSids;
-                    break;
-
-                default:
-                    throw new InvalidOperationException();
-            }
-
-            if (availableSchemeSids == null)
+            if (availableSchemeSids is null)
             {
                 throw new InvalidOperationException("Не удалось выбрать доступные схемы для монстров.");
             }
 
-            return availableSchemeSids;
+            return availableSchemeSids.Where(x => x != null).Select(x => x!).ToArray();
+        }
+
+        private static IEnumerable<string?>? GetMonsterSidsByRarity(ISectorSubScheme sectorScheme, int currentRarity)
+        {
+            return currentRarity switch
+            {
+                0 => sectorScheme.RegularMonsterSids,
+                1 => sectorScheme.RareMonsterSids ?? sectorScheme.RegularMonsterSids,
+                2 => sectorScheme.ChampionMonsterSids ?? sectorScheme.RareMonsterSids ?? sectorScheme.RegularMonsterSids,
+                _ => throw new InvalidOperationException(),
+            };
         }
 
         /// <summary>
