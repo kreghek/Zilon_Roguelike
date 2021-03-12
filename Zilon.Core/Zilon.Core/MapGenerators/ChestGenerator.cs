@@ -199,7 +199,7 @@ namespace Zilon.Core.MapGenerators
             }
 
             var dropTables = new List<IDropTableScheme>();
-            
+
             foreach (var chestDropSid in chestDropTableSids)
             {
                 if (chestDropSid is null)

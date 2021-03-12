@@ -39,7 +39,7 @@ namespace Zilon.Core.Persons
 
             var range = act.Stats.Range;
             if (range is null)
-            { 
+            {
                 throw new System.ArgumentNullException(nameof(act.Stats.Range));
             }
 
