@@ -112,16 +112,6 @@ namespace Zilon.TextClient
             }
         }
 
-        private static void PrintLocationName(ISectorNode playerActorSectorNode)
-        {
-            var locationScheme = playerActorSectorNode.Biome.LocationScheme;
-            var scheme = playerActorSectorNode.SectorScheme;
-
-            var sectorName = $"{locationScheme.Name} {scheme.Name}".Trim();
-
-            Console.WriteLine($"Current Level: {sectorName}");
-        }
-
         private static void HandleMoveCommand(IServiceScope serviceScope, ISectorUiState uiState,
             ISectorNode playerActorSectorNode, string inputText)
         {
@@ -163,6 +153,16 @@ namespace Zilon.TextClient
             Console.WriteLine(UiResource.IdleCommandDescription);
             Console.WriteLine(UiResource.DeadCommandDescription);
             Console.WriteLine(UiResource.ExitCommandDescription);
+        }
+
+        private static void PrintLocationName(ISectorNode playerActorSectorNode)
+        {
+            var locationScheme = playerActorSectorNode.Biome.LocationScheme;
+            var scheme = playerActorSectorNode.SectorScheme;
+
+            var sectorName = $"{locationScheme.Name} {scheme.Name}".Trim();
+
+            Console.WriteLine($"Current Level: {sectorName}");
         }
 
         private static void PrintLookLegend()
