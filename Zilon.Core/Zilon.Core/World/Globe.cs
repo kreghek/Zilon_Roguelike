@@ -119,7 +119,13 @@ namespace Zilon.Core.World
             var sectorNodes = _sectorNodes.ToArray();
             foreach (var sectorNode in sectorNodes)
             {
+                if (sectorNode.State != SectorNodeState.SectorMaterialized)
+                {
+                    continue;
+                }
+
                 var sector = sectorNode.Sector;
+
                 var actors = sector.ActorManager.Items.ToArray();
                 foreach (var actor in actors)
                 {
@@ -272,13 +278,20 @@ namespace Zilon.Core.World
             await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
 
             ProcessTasks(_taskDict);
+
             _turnCounter++;
+
             if (_turnCounter >= GlobeMetrics.OneIterationLength)
             {
                 _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
 
                 foreach (var sectorNode in _sectorNodes)
                 {
+                    if (sectorNode.State != SectorNodeState.SectorMaterialized)
+                    {
+                        continue;
+                    }
+
                     sectorNode.Sector.Update();
                 }
 

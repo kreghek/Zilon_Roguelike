@@ -30,6 +30,13 @@ public sealed class GameLoopContext : IGameLoopContext
     [NotNull]
     private readonly ISectorUiState _playerState;
 
+    public GameLoopContext(IPlayer player, IInventoryState inventoryState, ISectorUiState playerState)
+    {
+        _player = player ?? throw new ArgumentNullException(nameof(player));
+        _inventoryState = inventoryState ?? throw new ArgumentNullException(nameof(inventoryState));
+        _playerState = playerState ?? throw new ArgumentNullException(nameof(playerState));
+    }
+
     public bool HasNextIteration
     {
         get
