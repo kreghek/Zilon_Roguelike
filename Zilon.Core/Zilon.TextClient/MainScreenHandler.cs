@@ -64,6 +64,8 @@ namespace Zilon.TextClient
                     x.State == SectorMapNodeFowState.Explored || x.State == SectorMapNodeFowState.Observing)
                 .Select(x => x.Node);
 
+            PrintLocationName(playerActorSectorNode);
+
             PrintLookLegend();
             Console.WriteLine();
 
@@ -108,6 +110,16 @@ namespace Zilon.TextClient
 
                 Console.WriteLine();
             }
+        }
+
+        private static void PrintLocationName(ISectorNode playerActorSectorNode)
+        {
+            var locationScheme = playerActorSectorNode.Biome.LocationScheme;
+            var scheme = playerActorSectorNode.SectorScheme;
+
+            var sectorName = $"{locationScheme.Name} {scheme.Name}".Trim();
+
+            Console.WriteLine($"Current Level: {sectorName}");
         }
 
         private static void HandleMoveCommand(IServiceScope serviceScope, ISectorUiState uiState,
