@@ -6,15 +6,13 @@ using Assets.Zilon.Scripts.Services;
 
 using NUnit.Framework;
 
-using UnityEngine.TestTools;
-
 namespace Tests
 {
-    public class NewTestScript
+    public class GameLoopUpdaterTests
     {
         // A Test behaves as an ordinary method
         [Test]
-        public void GameLoopUpdater_Stop_GameLoopContextIsNotUpdatedAfterUpdaterStoped2()
+        public void Stop_GameLoopContextIsNotUpdatedAfterUpdaterStoped()
         {
             // ARRANGE
 
@@ -73,16 +71,6 @@ namespace Tests
             {
                 return Task.CompletedTask;
             }
-        }
-
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator GameLoopUpdater_Stop_GameLoopContextIsNotUpdatedAfterUpdaterStoped()
-        {
-            // Use the Assert class to test conditions
-
-            yield return null;
         }
     }
 
