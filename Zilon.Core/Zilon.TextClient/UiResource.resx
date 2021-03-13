@@ -121,7 +121,7 @@
     <value>You can not do this</value>
   </data>
   <data name="DeadCommandDescription" xml:space="preserve">
-    <value>- "dead" to dead :)</value>
+    <value>- "dead" to get dead :)</value>
   </data>
   <data name="EffectsLabel" xml:space="preserve">
     <value>Effects</value>
@@ -139,7 +139,7 @@
     <value>Input your command</value>
   </data>
   <data name="LookCommandDescription" xml:space="preserve">
-    <value>- "look" to get detailet info around.</value>
+    <value>- "look" to get detailed info around.</value>
   </data>
   <data name="MonsterNodeMarker" xml:space="preserve">
     <value>monster</value>

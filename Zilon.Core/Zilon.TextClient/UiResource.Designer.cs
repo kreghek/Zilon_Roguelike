@@ -70,7 +70,7 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - &quot;dead&quot; to dead :).
+        ///   Looks up a localized string similar to - &quot;dead&quot; to get dead :).
         /// </summary>
         internal static string DeadCommandDescription {
             get {
@@ -124,7 +124,7 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - &quot;look&quot; to get detailet info around..
+        ///   Looks up a localized string similar to - &quot;look&quot; to get detailed info around..
         /// </summary>
         internal static string LookCommandDescription {
             get {
