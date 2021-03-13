@@ -150,6 +150,7 @@ namespace Zilon.TextClient
             Console.WriteLine(UiResource.MoveCommandDescription);
             Console.WriteLine(UiResource.TransitionCommandDescription);
             Console.WriteLine(UiResource.LookCommandDescription);
+            Console.WriteLine(UiResource.AttackCommandDescription);
             Console.WriteLine(UiResource.IdleCommandDescription);
             Console.WriteLine(UiResource.DeadCommandDescription);
             Console.WriteLine(UiResource.ExitCommandDescription);
@@ -247,6 +248,12 @@ namespace Zilon.TextClient
                 {
                     HandleSectorTransitCommand(serviceScope);
                 }
+                else if (inputText.StartsWith("attack", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var playerActorSectorNode = GetPlayerSectorNode(player, globe);
+
+                    HandleAttackCommand(inputText, serviceScope, uiState, playerActorSectorNode);
+                }
                 else if (inputText.StartsWith("exit", StringComparison.InvariantCultureIgnoreCase))
                 {
                     break;
@@ -255,6 +262,32 @@ namespace Zilon.TextClient
 
             cancellationTokenSource.Cancel();
             return Task.FromResult(GameScreen.Scores);
+        }
+
+        private void HandleAttackCommand(string inputText, IServiceScope serviceScope, ISectorUiState uiState, ISectorNode playerActorSectorNode)
+        {
+            var components = inputText.Split(' ');
+            var targetActorId = int.Parse(components[1], CultureInfo.InvariantCulture);
+
+            var targetActor = playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Id == targetActorId);
+
+            var command = serviceScope.ServiceProvider.GetRequiredService<AttackCommand>();
+
+            uiState.SelectedViewModel = new ActorViewModel { Actor = targetActor };
+
+            var acts = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs();
+            uiState.TacticalAct = acts
+                .OrderBy(x => x.Equipment is null)
+                .First(x => x.Constrains is null);
+
+            if (command.CanExecute())
+            {
+                command.Execute();
+            }
+            else
+            {
+                Console.WriteLine(UiResource.CommandCantExecuteMessage);
+            }
         }
     }
 }

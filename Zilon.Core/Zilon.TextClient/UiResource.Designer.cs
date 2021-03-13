@@ -61,6 +61,15 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to - &quot;attack [id] to attack enemy&quot;.
+        /// </summary>
+        internal static string AttackCommandDescription {
+            get {
+                return ResourceManager.GetString("AttackCommandDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can not do this.
         /// </summary>
         internal static string CommandCantExecuteMessage {
