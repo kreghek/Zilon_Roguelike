@@ -31,6 +31,34 @@ namespace Zilon.TextClient
                     select sectorNode).SingleOrDefault();
         }
 
+        private void HandleAttackCommand(string inputText, IServiceScope serviceScope, ISectorUiState uiState,
+            ISectorNode playerActorSectorNode)
+        {
+            var components = inputText.Split(' ');
+            var targetActorId = int.Parse(components[1], CultureInfo.InvariantCulture);
+
+            var targetActor =
+                playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Id == targetActorId);
+
+            var command = serviceScope.ServiceProvider.GetRequiredService<AttackCommand>();
+
+            uiState.SelectedViewModel = new ActorViewModel { Actor = targetActor };
+
+            var acts = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs();
+            uiState.TacticalAct = acts
+                .OrderBy(x => x.Equipment is null)
+                .First(x => x.Constrains is null);
+
+            if (command.CanExecute())
+            {
+                command.Execute();
+            }
+            else
+            {
+                Console.WriteLine(UiResource.CommandCantExecuteMessage);
+            }
+        }
+
         private static void HandleDeadCommand(IPlayer player)
         {
             var survivalModule = player.MainPerson.GetModule<ISurvivalModule>();
@@ -262,32 +290,6 @@ namespace Zilon.TextClient
 
             cancellationTokenSource.Cancel();
             return Task.FromResult(GameScreen.Scores);
-        }
-
-        private void HandleAttackCommand(string inputText, IServiceScope serviceScope, ISectorUiState uiState, ISectorNode playerActorSectorNode)
-        {
-            var components = inputText.Split(' ');
-            var targetActorId = int.Parse(components[1], CultureInfo.InvariantCulture);
-
-            var targetActor = playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Id == targetActorId);
-
-            var command = serviceScope.ServiceProvider.GetRequiredService<AttackCommand>();
-
-            uiState.SelectedViewModel = new ActorViewModel { Actor = targetActor };
-
-            var acts = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs();
-            uiState.TacticalAct = acts
-                .OrderBy(x => x.Equipment is null)
-                .First(x => x.Constrains is null);
-
-            if (command.CanExecute())
-            {
-                command.Execute();
-            }
-            else
-            {
-                Console.WriteLine(UiResource.CommandCantExecuteMessage);
-            }
         }
     }
 }
