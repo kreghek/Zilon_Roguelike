@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -79,8 +80,10 @@ namespace Zilon.TextClient
             }
         }
 
-        private static void HandleLookCommand(ISectorUiState uiState, ISectorNode playerActorSectorNode)
+        private static void HandleLookCommand(ISectorUiState uiState, ISectorNode playerActorSectorNode, string inputText)
         {
+            var isDetailed = inputText.Equals("look2", StringComparison.InvariantCultureIgnoreCase);
+
             var nextMoveNodes = playerActorSectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node);
             var actorFow = uiState.ActiveActor.Actor.Person.GetModule<IFowData>();
             var fowNodes = actorFow.GetSectorFowData(playerActorSectorNode.Sector)
@@ -99,32 +102,38 @@ namespace Zilon.TextClient
 
             Console.WriteLine($"{UiResource.NodesLabel}:");
             Console.WriteLine();
+
             foreach (var node in fowNodes)
             {
-                Console.Write(node);
+                var sb = new StringBuilder(node.ToString());
+                var poi = false;
 
                 if (nextMoveNodes.Contains(node))
                 {
-                    Console.Write($" {UiResource.NextNodeMarker}");
+                    poi = true;
+                    sb.Append($" {UiResource.NextNodeMarker}");
                 }
 
                 if (playerActorSectorNode.Sector.Map.Transitions.TryGetValue(node, out var _))
                 {
-                    Console.Write($" {UiResource.TransitionNodeMarker}");
+                    poi = true;
+                    sb.Append($" {UiResource.TransitionNodeMarker}");
                 }
 
                 var undiscoveredNodes = playerActorSectorNode.Sector.Map.GetNext(node)
                     .Where(x => !fowNodesAll.Contains(x));
                 if (undiscoveredNodes.Any())
                 {
-                    Console.Write($" {UiResource.UndiscoveredNextNodeMarker}");
+                    poi = true;
+                    sb.Append($" {UiResource.UndiscoveredNextNodeMarker}");
                 }
 
                 var monsterInNode =
                     playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Node == node);
                 if (monsterInNode != null && monsterInNode != uiState.ActiveActor.Actor)
                 {
-                    Console.Write(
+                    poi = true;
+                    sb.Append(
                         $" {UiResource.MonsterNodeMarker} {monsterInNode.Person.Id}:{monsterInNode.Person}");
                 }
 
@@ -132,11 +141,19 @@ namespace Zilon.TextClient
                     playerActorSectorNode.Sector.StaticObjectManager.Items.SingleOrDefault(x => x.Node == node);
                 if (staticObjectInNode != null)
                 {
-                    Console.Write(
+                    poi = true;
+                    sb.Append(
                         $" {UiResource.StaticObjectNodeMarker} {staticObjectInNode.Id}:{staticObjectInNode.Purpose}");
                 }
 
-                Console.WriteLine();
+                if (isDetailed)
+                {
+                    Console.WriteLine(sb.ToString());
+                }
+                else if (poi)
+                {
+                    Console.WriteLine(sb.ToString());
+                }
             }
         }
 
@@ -262,7 +279,7 @@ namespace Zilon.TextClient
                 {
                     var playerActorSectorNode = GetPlayerSectorNode(player, globe);
 
-                    HandleLookCommand(uiState, playerActorSectorNode);
+                    HandleLookCommand(uiState, playerActorSectorNode, inputText);
                 }
                 else if (inputText.StartsWith("idle", StringComparison.InvariantCultureIgnoreCase))
                 {

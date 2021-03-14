@@ -51,7 +51,7 @@ namespace Zilon.Core.World
                 {
                     taskDict.Remove(taskStatePair.Key);
                     state.TaskSource.ProcessTaskComplete(state.Task);
-                    return;
+                    continue;
                 }
 
                 var actor = taskStatePair.Key;
