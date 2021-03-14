@@ -80,7 +80,8 @@ namespace Zilon.TextClient
             }
         }
 
-        private static void HandleLookCommand(ISectorUiState uiState, ISectorNode playerActorSectorNode, string inputText)
+        private static void HandleLookCommand(ISectorUiState uiState, ISectorNode playerActorSectorNode,
+            string inputText)
         {
             var isDetailed = inputText.Equals("look2", StringComparison.InvariantCultureIgnoreCase);
 
