@@ -16,11 +16,11 @@ public class GameLoopUpdaterObject : MonoBehaviour
         }
     }
 
-    public void Destroy()
-    {
-        if (_gameLoopUpdater.IsStarted)
-        {
-            _gameLoopUpdater.Stop();
-        }
-    }
+    //public void Destroy()
+    //{
+    //    if (_gameLoopUpdater.IsStarted)
+    //    {
+    //        _gameLoopUpdater.Stop();
+    //    }
+    //}
 }

@@ -43,18 +43,18 @@ namespace Zilon.Core.World
         private static void ClearUpTasks(IDictionary<IActor, TaskState> taskDict)
         {
             // удаляем выполненные задачи.
-            foreach (var taskStatePair in taskDict.ToArray())
+            var allStateCopyList = taskDict.Values.ToArray();
+            foreach (var state in allStateCopyList)
             {
-                var state = taskStatePair.Value;
+                var actor = state.Actor;
 
                 if (state.TaskComplete)
                 {
-                    taskDict.Remove(taskStatePair.Key);
+                    taskDict.Remove(actor);
                     state.TaskSource.ProcessTaskComplete(state.Task);
-                    return;
+                    continue;
                 }
 
-                var actor = taskStatePair.Key;
                 if (!actor.CanExecuteTasks)
                 {
                     // Песонаж может перестать выполнять задачи по следующим причинам:
@@ -63,7 +63,7 @@ namespace Zilon.Core.World
                     // Их задачи можно прервать, потому что:
                     //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
                     //   * Экономит ресурсы.
-                    taskDict.Remove(taskStatePair.Key);
+                    taskDict.Remove(actor);
                 }
             }
         }
@@ -91,10 +91,10 @@ namespace Zilon.Core.World
                         var state = new TaskState(actor, sector, actorTask, taskSource);
                         if (!_taskDict.TryAdd(actor, state))
                         {
-                            // Это происходит, когда игрок пытается присвоить новую команду,
-                            // когда старая еще не закончена и не может быть заменена.
-                            throw new InvalidOperationException(
-                                "Попытка назначить задачу, когда старая еще не удалена.");
+                            //// Это происходит, когда игрок пытается присвоить новую команду,
+                            //// когда старая еще не закончена и не может быть заменена.
+                            //throw new InvalidOperationException(
+                            //    "Попытка назначить задачу, когда старая еще не удалена.");
                         }
                     }
                     catch (TaskCanceledException)
