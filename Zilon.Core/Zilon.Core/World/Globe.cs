@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Zilon.Core.Tactics;
@@ -68,7 +69,7 @@ namespace Zilon.Core.World
             }
         }
 
-        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList, CancellationToken cancelToken)
         {
             var actorDataListMaterialized = actorDataList.ToArray();
 
@@ -83,11 +84,18 @@ namespace Zilon.Core.World
 
                     var taskSource = actor.TaskSource;
 
-                    var context = new SectorTaskSourceContext(sector);
+                    var context = new SectorTaskSourceContext(sector, cancelToken);
 
                     try
                     {
+                        if (taskSource is IHumanActorTaskSource<SectorTaskSourceContext> humanTaskSource)
+                        {
+                            // Drop intention for human controlled task source.
+                            cancelToken.Register(() => { humanTaskSource.DropIntentionWaiting(); });
+                        }
+
                         var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
+
                         var state = new TaskState(actor, sector, actorTask, taskSource);
                         if (!_taskDict.TryAdd(actor, state))
                         {
@@ -271,11 +279,11 @@ namespace Zilon.Core.World
             sectorNode.Sector.ActorManager.Removed += ActorManager_Removed;
         }
 
-        public async Task UpdateAsync()
+        public async Task UpdateAsync(CancellationToken cancelToken)
         {
             var actorsWithoutTasks = GetActorsWithoutTasks();
 
-            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks, cancelToken).ConfigureAwait(false);
 
             ProcessTasks(_taskDict);
 

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Zilon.Scripts.Models.Sector;
+
+using UnityEngine;
 
 using Zenject;
 

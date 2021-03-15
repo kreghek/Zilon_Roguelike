@@ -2,6 +2,7 @@
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
+using Assets.Zilon.Scripts.Models.Sector;
 using Assets.Zilon.Scripts.Services;
 
 using NUnit.Framework;

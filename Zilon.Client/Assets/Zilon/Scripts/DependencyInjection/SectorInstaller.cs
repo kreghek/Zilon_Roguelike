@@ -1,4 +1,5 @@
 ﻿using Assets.Zilon.Scripts.DependencyInjection;
+using Assets.Zilon.Scripts.Models.Sector;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
