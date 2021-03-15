@@ -98,13 +98,8 @@ namespace Zilon.Core.World
                         var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
 
                         var state = new TaskState(actor, sector, actorTask, taskSource);
-                        if (!_taskDict.TryAdd(actor, state))
-                        {
-                            //// Это происходит, когда игрок пытается присвоить новую команду,
-                            //// когда старая еще не закончена и не может быть заменена.
-                            //throw new InvalidOperationException(
-                            //    "Попытка назначить задачу, когда старая еще не удалена.");
-                        }
+
+                        _taskDict.AddOrUpdate(actor, state, (a, t) => state);
                     }
                     catch (TaskCanceledException)
                     {
