@@ -2,7 +2,7 @@
 
 public class TransitionDelayHandler : MonoBehaviour
 {
-    private float _counterSeconds = 5;
+    private float _counterSeconds = 1;
 
     public SceneLoader SceneLoader;
 
