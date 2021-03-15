@@ -17,12 +17,4 @@ public class GameLoopUpdaterObject : MonoBehaviour
             _gameLoopUpdater.Start();
         }
     }
-
-    //public void Destroy()
-    //{
-    //    if (_gameLoopUpdater.IsStarted)
-    //    {
-    //        _gameLoopUpdater.Stop();
-    //    }
-    //}
 }
