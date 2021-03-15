@@ -69,7 +69,8 @@ namespace Zilon.Core.World
             }
         }
 
-        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList, CancellationToken cancelToken)
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList,
+            CancellationToken cancelToken)
         {
             var actorDataListMaterialized = actorDataList.ToArray();
 
