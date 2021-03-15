@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Models.Sector;
 using Assets.Zilon.Scripts.Services;
@@ -45,7 +46,7 @@ namespace Tests
 
             public bool HasNextIteration => true;
 
-            public async Task UpdateAsync()
+            public async Task UpdateAsync(CancellationToken cancellationToken)
             {
                 IsUpdated = true;
                 await Task.Delay(1);

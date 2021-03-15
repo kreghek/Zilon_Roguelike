@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using JetBrains.Annotations;
@@ -42,9 +43,9 @@ namespace Assets.Zilon.Scripts.Models.Sector
         }
 
         /// <inheritdoc/>
-        public async Task UpdateAsync()
+        public async Task UpdateAsync(CancellationToken cancellationToken)
         {
-            await _player.Globe.UpdateAsync();
+            await _player.Globe.UpdateAsync(cancellationToken);
 
             ClearupActionUiState();
         }

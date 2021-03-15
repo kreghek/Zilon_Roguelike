@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Assets.Zilon.Scripts.Models.Sector
 {
@@ -16,6 +17,6 @@ namespace Assets.Zilon.Scripts.Models.Sector
         /// Update the game loop to next iteration.
         /// </summary>
         /// <returns></returns>
-        Task UpdateAsync();
+        Task UpdateAsync(CancellationToken cancellationToken);
     }
 }
