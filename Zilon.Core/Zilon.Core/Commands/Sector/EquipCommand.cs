@@ -34,7 +34,7 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            if (_inventoryState.SelectedProp == null)
+            if (_inventoryState.SelectedProp is null)
             {
                 return true;
             }
