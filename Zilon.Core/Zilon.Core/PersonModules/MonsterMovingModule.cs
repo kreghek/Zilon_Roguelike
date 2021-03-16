@@ -30,8 +30,21 @@ namespace Zilon.Core.PersonModules
                 moveSpeedFactor = 1;
             }
 
-            var costFactor = 1f / moveSpeedFactor;
-            return (int)Math.Round(BASE_MOVE_SPEED * costFactor);
+            var baseMoveSpeedFloat = (float)BASE_MOVE_SPEED;
+            var moveCostFloat = baseMoveSpeedFloat / moveSpeedFactor;
+            var moveCost = (int)Math.Round(moveCostFloat);
+
+            if (moveCost < GlobeMetrics.MinMonsterMoveCost)
+            {
+                return GlobeMetrics.MinMonsterMoveCost;
+            }
+
+            if (moveCost > GlobeMetrics.MaxMonsterMoveCost)
+            {
+                return GlobeMetrics.MaxMonsterMoveCost;
+            }
+
+            return moveCost;
         }
     }
 }
