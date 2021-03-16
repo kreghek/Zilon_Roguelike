@@ -1,16 +1,16 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
 
-using System.Collections;
+using NUnit.Framework;
 
 using Zilon.Core.World;
 
 namespace Zilon.Core.PersonModules.Tests
 {
     public static class MonsterMovingModuleTestCaseSource
-    { 
+    {
         public static IEnumerable PositiveTestCases
         {
-            get 
+            get
             {
                 // Factor
                 // Returns move cost
