@@ -125,7 +125,7 @@ namespace Zilon.Core.Persons
 
         private void ProcessJob(IJob job, List<IJob> modifiedJobs)
         {
-            if (job.Scheme.Data == null)
+            if (job.Scheme.Data is null)
             {
                 AddProgress(job, modifiedJobs);
             }
@@ -166,19 +166,19 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static bool WeaponHasTag(string tag, ITacticalAct _tacticalAct)
+        private static bool WeaponHasTag(string tag, ITacticalAct tacticalAct)
         {
-            if (_tacticalAct.Equipment == null)
+            if (tacticalAct.Equipment == null)
             {
                 return false;
             }
 
-            if (_tacticalAct.Equipment.Scheme.Tags != null)
+            if (tacticalAct.Equipment.Scheme.Tags != null)
             {
                 return false;
             }
 
-            return _tacticalAct.Equipment.Scheme.Tags.Contains(tag);
+            return tacticalAct.Equipment.Scheme.Tags.Contains(tag);
         }
 
         public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
