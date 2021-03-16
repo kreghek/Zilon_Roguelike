@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -68,7 +69,10 @@ namespace Zilon.Core.Common
             {
                 if (_receivers.TryTake(out var receiver))
                 {
-                    receiver.SetResult(obj);
+                    if (!receiver.TrySetResult(obj))
+                    {
+                        Debug.Fail("Error in concurrency.");
+                    }
                 }
                 else
                 {

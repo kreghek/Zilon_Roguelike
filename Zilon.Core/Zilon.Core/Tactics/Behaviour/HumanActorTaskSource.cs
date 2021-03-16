@@ -73,7 +73,16 @@ namespace Zilon.Core.Tactics.Behaviour
             // Этот источник команд ждёт, пока игрок не укажет задачу.
             // Задача генерируется из намерения. Это значит, что ждать нужно, пока не будет задано намерение.
 
-            return await _actorTaskReceiver.ReceiveAsync(_cancellationTokenSource.Token).ConfigureAwait(false);
+            if (context.CancellationToken is null)
+            {
+                return await _actorTaskReceiver.ReceiveAsync(_cancellationTokenSource.Token).ConfigureAwait(false);
+            }
+
+            using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token,
+                context.CancellationToken.Value))
+            {
+                return await _actorTaskReceiver.ReceiveAsync(linkedCts.Token).ConfigureAwait(false);
+            }
         }
 
         /// <inheritdoc />

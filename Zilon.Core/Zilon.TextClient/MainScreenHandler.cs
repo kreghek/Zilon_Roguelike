@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,6 +32,34 @@ namespace Zilon.TextClient
                     select sectorNode).SingleOrDefault();
         }
 
+        private void HandleAttackCommand(string inputText, IServiceScope serviceScope, ISectorUiState uiState,
+            ISectorNode playerActorSectorNode)
+        {
+            var components = inputText.Split(' ');
+            var targetActorId = int.Parse(components[1], CultureInfo.InvariantCulture);
+
+            var targetActor =
+                playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Id == targetActorId);
+
+            var command = serviceScope.ServiceProvider.GetRequiredService<AttackCommand>();
+
+            uiState.SelectedViewModel = new ActorViewModel { Actor = targetActor };
+
+            var acts = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs();
+            uiState.TacticalAct = acts
+                .OrderBy(x => x.Equipment is null)
+                .First(x => x.Constrains is null);
+
+            if (command.CanExecute())
+            {
+                command.Execute();
+            }
+            else
+            {
+                Console.WriteLine(UiResource.CommandCantExecuteMessage);
+            }
+        }
+
         private static void HandleDeadCommand(IPlayer player)
         {
             var survivalModule = player.MainPerson.GetModule<ISurvivalModule>();
@@ -51,8 +80,11 @@ namespace Zilon.TextClient
             }
         }
 
-        private static void HandleLookCommand(ISectorUiState uiState, ISectorNode playerActorSectorNode)
+        private static void HandleLookCommand(ISectorUiState uiState, ISectorNode playerActorSectorNode,
+            string inputText)
         {
+            var isDetailed = inputText.Equals("look2", StringComparison.InvariantCultureIgnoreCase);
+
             var nextMoveNodes = playerActorSectorNode.Sector.Map.GetNext(uiState.ActiveActor.Actor.Node);
             var actorFow = uiState.ActiveActor.Actor.Person.GetModule<IFowData>();
             var fowNodes = actorFow.GetSectorFowData(playerActorSectorNode.Sector)
@@ -64,34 +96,45 @@ namespace Zilon.TextClient
                     x.State == SectorMapNodeFowState.Explored || x.State == SectorMapNodeFowState.Observing)
                 .Select(x => x.Node);
 
+            PrintLocationName(playerActorSectorNode);
+
+            PrintLookLegend();
+            Console.WriteLine();
+
             Console.WriteLine($"{UiResource.NodesLabel}:");
             Console.WriteLine();
+
             foreach (var node in fowNodes)
             {
-                Console.Write(node);
+                var sb = new StringBuilder(node.ToString());
+                var poi = false;
 
                 if (nextMoveNodes.Contains(node))
                 {
-                    Console.Write($" {UiResource.NextNodeMarker}");
+                    poi = true;
+                    sb.Append($" {UiResource.NextNodeMarker}");
                 }
 
                 if (playerActorSectorNode.Sector.Map.Transitions.TryGetValue(node, out var _))
                 {
-                    Console.Write($" {UiResource.TransitionNodeMarker}");
+                    poi = true;
+                    sb.Append($" {UiResource.TransitionNodeMarker}");
                 }
 
                 var undiscoveredNodes = playerActorSectorNode.Sector.Map.GetNext(node)
                     .Where(x => !fowNodesAll.Contains(x));
                 if (undiscoveredNodes.Any())
                 {
-                    Console.Write($" {UiResource.UndiscaveredNodeMarker}");
+                    poi = true;
+                    sb.Append($" {UiResource.UndiscoveredNextNodeMarker}");
                 }
 
                 var monsterInNode =
                     playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Node == node);
                 if (monsterInNode != null && monsterInNode != uiState.ActiveActor.Actor)
                 {
-                    Console.Write(
+                    poi = true;
+                    sb.Append(
                         $" {UiResource.MonsterNodeMarker} {monsterInNode.Person.Id}:{monsterInNode.Person}");
                 }
 
@@ -99,11 +142,19 @@ namespace Zilon.TextClient
                     playerActorSectorNode.Sector.StaticObjectManager.Items.SingleOrDefault(x => x.Node == node);
                 if (staticObjectInNode != null)
                 {
-                    Console.Write(
+                    poi = true;
+                    sb.Append(
                         $" {UiResource.StaticObjectNodeMarker} {staticObjectInNode.Id}:{staticObjectInNode.Purpose}");
                 }
 
-                Console.WriteLine();
+                if (isDetailed)
+                {
+                    Console.WriteLine(sb.ToString());
+                }
+                else if (poi)
+                {
+                    Console.WriteLine(sb.ToString());
+                }
             }
         }
 
@@ -145,9 +196,28 @@ namespace Zilon.TextClient
             Console.WriteLine(UiResource.MoveCommandDescription);
             Console.WriteLine(UiResource.TransitionCommandDescription);
             Console.WriteLine(UiResource.LookCommandDescription);
+            Console.WriteLine(UiResource.AttackCommandDescription);
             Console.WriteLine(UiResource.IdleCommandDescription);
             Console.WriteLine(UiResource.DeadCommandDescription);
             Console.WriteLine(UiResource.ExitCommandDescription);
+        }
+
+        private static void PrintLocationName(ISectorNode playerActorSectorNode)
+        {
+            var locationScheme = playerActorSectorNode.Biome.LocationScheme;
+            var scheme = playerActorSectorNode.SectorScheme;
+
+            var sectorName = $"{locationScheme.Name} {scheme.Name}".Trim();
+
+            Console.WriteLine($"Current Level: {sectorName}");
+        }
+
+        private static void PrintLookLegend()
+        {
+            Console.WriteLine($"{UiResource.NextNodeMarker} - {UiResource.NextNodeMarkerDescription}");
+            Console.WriteLine(
+                $"{UiResource.UndiscoveredNextNodeMarker} - {UiResource.UndiscoveredNextNodeMarkerDescription}");
+            Console.WriteLine($"{UiResource.TransitionNodeMarker} - {UiResource.TransitionNodeMarkerDescription}");
         }
 
         private static void PrintState(IActor actor)
@@ -178,9 +248,11 @@ namespace Zilon.TextClient
             // Play
 
             using var cancellationTokenSource = new CancellationTokenSource();
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            gameLoop.StartProcessAsync(cancellationTokenSource.Token);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+            var processTask = gameLoop.StartProcessAsync(cancellationTokenSource.Token);
+            processTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
+            processTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
+                TaskContinuationOptions.OnlyOnCanceled);
 
             do
             {
@@ -208,7 +280,7 @@ namespace Zilon.TextClient
                 {
                     var playerActorSectorNode = GetPlayerSectorNode(player, globe);
 
-                    HandleLookCommand(uiState, playerActorSectorNode);
+                    HandleLookCommand(uiState, playerActorSectorNode, inputText);
                 }
                 else if (inputText.StartsWith("idle", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -221,6 +293,12 @@ namespace Zilon.TextClient
                 else if (inputText.StartsWith("transit", StringComparison.InvariantCultureIgnoreCase))
                 {
                     HandleSectorTransitCommand(serviceScope);
+                }
+                else if (inputText.StartsWith("attack", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var playerActorSectorNode = GetPlayerSectorNode(player, globe);
+
+                    HandleAttackCommand(inputText, serviceScope, uiState, playerActorSectorNode);
                 }
                 else if (inputText.StartsWith("exit", StringComparison.InvariantCultureIgnoreCase))
                 {

@@ -61,6 +61,15 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to - &quot;attack [id] to attack enemy&quot;.
+        /// </summary>
+        internal static string AttackCommandDescription {
+            get {
+                return ResourceManager.GetString("AttackCommandDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can not do this.
         /// </summary>
         internal static string CommandCantExecuteMessage {
@@ -70,7 +79,7 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - &quot;dead&quot; to dead :).
+        ///   Looks up a localized string similar to - &quot;dead&quot; to get dead :).
         /// </summary>
         internal static string DeadCommandDescription {
             get {
@@ -124,7 +133,7 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - &quot;look&quot; to get detailet info around..
+        ///   Looks up a localized string similar to - &quot;look&quot; to get detailed info around..
         /// </summary>
         internal static string LookCommandDescription {
             get {
@@ -156,6 +165,15 @@ namespace Zilon.TextClient {
         internal static string NextNodeMarker {
             get {
                 return ResourceManager.GetString("NextNodeMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A cell closest to the player person..
+        /// </summary>
+        internal static string NextNodeMarkerDescription {
+            get {
+                return ResourceManager.GetString("NextNodeMarkerDescription", resourceCulture);
             }
         }
         
@@ -214,11 +232,29 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A cell with transition to other level..
+        /// </summary>
+        internal static string TransitionNodeMarkerDescription {
+            get {
+                return ResourceManager.GetString("TransitionNodeMarkerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to u.
         /// </summary>
-        internal static string UndiscaveredNodeMarker {
+        internal static string UndiscoveredNextNodeMarker {
             get {
-                return ResourceManager.GetString("UndiscaveredNodeMarker", resourceCulture);
+                return ResourceManager.GetString("UndiscoveredNextNodeMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A cell which have unknown cells near..
+        /// </summary>
+        internal static string UndiscoveredNextNodeMarkerDescription {
+            get {
+                return ResourceManager.GetString("UndiscoveredNextNodeMarkerDescription", resourceCulture);
             }
         }
     }

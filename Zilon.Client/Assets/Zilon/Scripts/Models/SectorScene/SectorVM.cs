@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Assets.Zilon.Scripts.Models.Sector;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
@@ -111,6 +112,9 @@ public class SectorVM : MonoBehaviour
     [Inject]
     [NotNull]
     private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
+
+    [Inject]
+    private readonly GameLoopUpdater _gameLoopUpdater;
 
     public List<ActorViewModel> ActorViewModels { get; }
 
@@ -685,6 +689,9 @@ public class SectorVM : MonoBehaviour
 
             // Disable bot on person death
             _actorTaskControlSwitcher.Switch(ActorTaskSourceControl.Human);
+
+            // Cancel game loop updating.
+            _gameLoopUpdater.Stop();
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 

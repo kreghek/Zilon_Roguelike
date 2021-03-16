@@ -2,7 +2,7 @@
 
 namespace Assets.Zilon.Scripts.Services
 {
-    interface ICommandBlocker
+    public interface ICommandBlocker
     {
         event EventHandler Released;
         void Release();

@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+﻿#if UNITY_EDITOR && !UNITY_INCLUDE_TESTS
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
