@@ -39,8 +39,7 @@ namespace Zilon.Core.World
         private void CreateNextSectorNodes(ISectorNode sectorNode, IBiome biom)
         {
             var nextSectorLevels = biom.LocationScheme.SectorLevels
-                .Where(x => sectorNode.SectorScheme.TransSectorSids.Select(trans => trans.SectorLevelSid)
-                    .Contains(x.Sid));
+                .Where(x => IsHasTransitionToNextLevel(sectorNode, x));
 
             foreach (var nextSectorLevelScheme in nextSectorLevels)
             {
@@ -53,7 +52,9 @@ namespace Zilon.Core.World
 
             // Если в секторе есть переход в другой биом, то
             // Генерируем новый биом, стартовый узел и организуем связь с текущим узлом.
-            if (sectorNode.SectorScheme.TransSectorSids.Any(x => x.SectorLevelSid is null))
+            var isTransitionToNextBiom =
+                sectorNode.SectorScheme.TransSectorSids.Any(sid => sid?.SectorLevelSid is null);
+            if (isTransitionToNextBiom)
             {
                 var nextBiomeCount = NEXT_BIOME_COUNT;
 
@@ -76,6 +77,14 @@ namespace Zilon.Core.World
         {
             var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
             await CreateAndAddSectorByScheme(biome, startSectorScheme).ConfigureAwait(false);
+        }
+
+        private static bool IsHasTransitionToNextLevel(ISectorNode sectorNode, ISectorSubScheme x)
+        {
+            return sectorNode.SectorScheme.TransSectorSids
+                .Where(x => x != null).Select(x => x!)
+                .Select(trans => trans.SectorLevelSid)
+                .Contains(x.Sid);
         }
 
         private SectorNode RollAndBindBiome()

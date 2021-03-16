@@ -33,15 +33,13 @@ namespace Zilon.Core.Props
             IEnumerable<ITacticalActScheme> acts) :
             base(propScheme)
         {
-            if (propScheme is null)
-            {
-                throw new ArgumentNullException(nameof(propScheme));
-            }
-
             if (propScheme.Equip == null)
             {
-                throw new ArgumentException("Не корректная схема.", nameof(propScheme));
+                throw new ArgumentException(
+                    "The scheme is not valid for equipment. It must has not null Equip subscheme.", nameof(propScheme));
             }
+
+            _name = string.Empty;
 
             if (acts != null)
             {
@@ -64,7 +62,7 @@ namespace Zilon.Core.Props
             [NotNull] string name) :
             this(propScheme, acts)
         {
-            _name = name ?? throw new ArgumentNullException(nameof(name));
+            _name = name;
         }
 
         public IEnumerable<ITacticalActScheme> Acts { get; }

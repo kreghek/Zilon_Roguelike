@@ -4,6 +4,6 @@ namespace Zilon.Core.MapGenerators
 {
     public interface IDiseaseGenerator
     {
-        IDisease Create();
+        IDisease? Create();
     }
 }

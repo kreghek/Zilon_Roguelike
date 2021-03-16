@@ -28,7 +28,7 @@ namespace Zilon.Core.Schemes
         /// Символьный идентификатор схемы используются для ссылок на схему.
         /// Например, в БД или из контента других схем.
         /// </remarks>
-        public string Sid { get; set; }
+        public string? Sid { get; set; }
 
         /// <inheritdoc />
         /// <summary>
@@ -38,7 +38,7 @@ namespace Zilon.Core.Schemes
         /// В конкретных реализациях схем используется по-разному.
         /// </remarks>
         [JsonProperty]
-        public virtual LocalizedStringSubScheme Name { get; protected set; }
+        public virtual LocalizedStringSubScheme? Name { get; protected set; }
 
         /// <inheritdoc />
         /// <summary>
@@ -48,7 +48,7 @@ namespace Zilon.Core.Schemes
         /// Абстрактное описание. Для конкретных схем используется по-разному.
         /// </remarks>
         [JsonProperty]
-        public virtual LocalizedStringSubScheme Description { get; protected set; }
+        public virtual LocalizedStringSubScheme? Description { get; protected set; }
 
         /// <inheritdoc />
         /// <summary>

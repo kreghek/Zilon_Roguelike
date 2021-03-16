@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -36,9 +37,21 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var map = _player.SectorNode.Sector.Map;
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
 
-            var currentNode = PlayerState.ActiveActor.Actor.Node;
+            var map = sector.Map;
+
+            var activeActor = PlayerState.ActiveActor;
+            if (activeActor is null)
+            {
+                return false;
+            }
+
+            var currentNode = activeActor.Actor.Node;
 
             var target = GetTarget(PlayerState);
             if (target is null)
@@ -49,8 +62,13 @@ namespace Zilon.Core.Commands
             var targetNode = target.Node;
 
             var act = PlayerState.TacticalAct;
+            if (act is null)
+            {
+                return false;
+            }
+
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
-                ReferenceEquals(PlayerState.ActiveActor.Actor, target))
+                ReferenceEquals(activeActor.Actor, target))
             {
                 // Лечить можно только самого себя.
                 // Возможно, дальше будут компаньоны и другие НПЦ.
@@ -64,7 +82,7 @@ namespace Zilon.Core.Commands
                 return false;
             }
 
-            var isInDistance = act.CheckDistance(currentNode, targetNode, _player.SectorNode.Sector.Map);
+            var isInDistance = act.CheckDistance(currentNode, targetNode, sector.Map);
             if (!isInDistance)
             {
                 return false;
@@ -81,7 +99,7 @@ namespace Zilon.Core.Commands
             if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
             {
                 var hasPropResource = CheckPropResource(
-                    PlayerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>(),
+                    activeActor.Actor.Person.GetModule<IInventoryModule>(),
                     act.Constrains.PropResourceType,
                     act.Constrains.PropResourceCount.Value);
 
@@ -104,14 +122,40 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var target = GetTarget(PlayerState);
+            if (target is null)
+            {
+                throw new InvalidOperationException();
+            }
 
             var tacticalAct = PlayerState.TacticalAct;
+            if (tacticalAct is null)
+            {
+                throw new InvalidOperationException();
+            }
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
 
             var intention = new Intention<AttackTask>(a =>
                 new AttackTask(a, taskContext, target, tacticalAct, _tacticalActUsageService));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, actor);
         }
 
         private static void AddResourceOfUsageToList(
@@ -174,21 +218,21 @@ namespace Zilon.Core.Commands
             return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
         }
 
-        private static IActorViewModel GetCanExecuteActorViewModel(ISectorUiState sectorUiState)
+        private static IActorViewModel? GetCanExecuteActorViewModel(ISectorUiState sectorUiState)
         {
             var hover = sectorUiState.HoverViewModel as IActorViewModel;
             var selected = sectorUiState.SelectedViewModel as IActorViewModel;
             return hover ?? selected;
         }
 
-        private static IContainerViewModel GetCanExecuteStaticObjectViewModel(ISectorUiState sectorUiState)
+        private static IContainerViewModel? GetCanExecuteStaticObjectViewModel(ISectorUiState sectorUiState)
         {
             var hover = sectorUiState.HoverViewModel as IContainerViewModel;
             var selected = sectorUiState.SelectedViewModel as IContainerViewModel;
             return hover ?? selected;
         }
 
-        private static IAttackTarget GetTarget(ISectorUiState sectorUiState)
+        private static IAttackTarget? GetTarget(ISectorUiState sectorUiState)
         {
             var selectedActorViewModel = GetCanExecuteActorViewModel(sectorUiState);
             var selectedStaticObjectViewModel = GetCanExecuteStaticObjectViewModel(sectorUiState);
@@ -199,7 +243,7 @@ namespace Zilon.Core.Commands
                 selectedStaticObjectViewModel = null;
             }
 
-            return (IAttackTarget)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.StaticObject;
+            return (IAttackTarget?)selectedActorViewModel?.Actor ?? selectedStaticObjectViewModel?.StaticObject;
         }
     }
 }

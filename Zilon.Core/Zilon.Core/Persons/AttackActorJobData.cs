@@ -14,12 +14,12 @@ namespace Zilon.Core.Persons
         /// Теги монстров, которые должны быть у атакованного.
         /// </summary>
         [JsonProperty]
-        public string[] MonsterTags { get; private set; }
+        public string[]? MonsterTags { get; private set; }
 
         /// <summary>
         /// Теги оружия, которым произведено действие, чтобы работа была засчитана.
         /// </summary>
         [JsonProperty]
-        public string[] WeaponTags { get; private set; }
+        public string[]? WeaponTags { get; private set; }
     }
 }

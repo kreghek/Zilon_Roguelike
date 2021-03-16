@@ -18,22 +18,22 @@ namespace Zilon.Core.PersonModules
     public sealed class HumanSurvivalModule : SurvivalModuleBase
     {
         private readonly IAttributesModule _attributesModule;
-        private readonly IEffectsModule _effectsModule;
-        private readonly IEquipmentModule _equipmentModule;
-        private readonly IEvolutionModule _evolutionModule;
+        private readonly IEffectsModule? _effectsModule;
+        private readonly IEquipmentModule? _equipmentModule;
+        private readonly IEvolutionModule? _evolutionModule;
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
 
         public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource,
             [NotNull] IAttributesModule attributesModule,
-            IEffectsModule effectsModule,
-            IEvolutionModule evolutionModule,
-            IEquipmentModule equipmentModule) : base(GetStats(personScheme, attributesModule))
+            IEffectsModule? effectsModule,
+            IEvolutionModule? evolutionModule,
+            IEquipmentModule? equipmentModule) : base(GetStats(personScheme, attributesModule))
         {
-            _personScheme = personScheme ?? throw new ArgumentNullException(nameof(personScheme));
-            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
-            _attributesModule = attributesModule ?? throw new ArgumentNullException(nameof(attributesModule));
+            _personScheme = personScheme;
+            _randomSource = randomSource;
+            _attributesModule = attributesModule;
             _effectsModule = effectsModule;
             _evolutionModule = evolutionModule;
             _equipmentModule = equipmentModule;
@@ -54,20 +54,21 @@ namespace Zilon.Core.PersonModules
             personScheme,
             randomSource,
             attributesModule,
-            null,
-            null,
-            null)
+            effectsModule: null,
+            evolutionModule: null,
+            equipmentModule: null)
         {
         }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public HumanSurvivalModule([NotNull] IEnumerable<SurvivalStat> personStats,
-            [NotNull] ISurvivalRandomSource randomSource) : base(
-            personStats)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+            [NotNull] ISurvivalRandomSource randomSource) : base(personStats)
         {
-            _randomSource = randomSource ?? throw new ArgumentNullException(nameof(randomSource));
+            _randomSource = randomSource;
         }
 
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
+        public IPlayerEventLogService? PlayerEventLogService { get; set; }
 
         /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
         public override void ResetStats()
@@ -193,30 +194,7 @@ namespace Zilon.Core.PersonModules
             if (hpStat != null)
             {
                 var bonus = 0;
-                switch (level)
-                {
-                    case PersonRuleLevel.Lesser:
-                        bonus = 1;
-                        break;
-
-                    case PersonRuleLevel.Normal:
-                        bonus = 3;
-                        break;
-
-                    case PersonRuleLevel.Grand:
-                        bonus = 5;
-                        break;
-
-                    case PersonRuleLevel.Absolute:
-                        bonus = 10;
-                        break;
-
-                    case PersonRuleLevel.None:
-                        throw new InvalidOperationException("Неопределённое правило.");
-
-                    default:
-                        throw new InvalidOperationException($"Правило {level} не обрабатывается.");
-                }
+                bonus = GetBonusByLevel(level);
 
                 if (direction == PersonRuleDirection.Negative)
                 {
@@ -248,7 +226,24 @@ namespace Zilon.Core.PersonModules
             ApplySurvivalBonuses(bonusList);
         }
 
-        private static SurvivalStat CreateStat(
+        private static PerkLevelSubScheme[] ConvertToNotNullLevels(PerkLevelSubScheme?[] levels)
+        {
+            var notNullLevels = new PerkLevelSubScheme[levels.Length];
+            for (var i1 = 0; i1 < levels.Length; i1++)
+            {
+                var level = levels[i1];
+                if (level is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                notNullLevels[i1] = level;
+            }
+
+            return notNullLevels;
+        }
+
+        private static SurvivalStat? CreateStat(
             SurvivalStatType type,
             PersonSurvivalStatType schemeStatType,
             IPersonSurvivalStatSubScheme[] survivalStats)
@@ -262,12 +257,14 @@ namespace Zilon.Core.PersonModules
             var keySegmentList = new List<SurvivalStatKeySegment>();
             if (statScheme.KeyPoints != null)
             {
+                var keyPoints = statScheme.KeyPoints.Where(x => x != null).Select(x => x!).ToArray();
+
                 AddKeyPointFromScheme(SurvivalStatHazardLevel.Max, PersonSurvivalStatKeypointLevel.Max,
-                    statScheme.KeyPoints, keySegmentList);
+                    keyPoints, keySegmentList);
                 AddKeyPointFromScheme(SurvivalStatHazardLevel.Strong, PersonSurvivalStatKeypointLevel.Strong,
-                    statScheme.KeyPoints, keySegmentList);
+                    keyPoints, keySegmentList);
                 AddKeyPointFromScheme(SurvivalStatHazardLevel.Lesser, PersonSurvivalStatKeypointLevel.Lesser,
-                    statScheme.KeyPoints, keySegmentList);
+                    keyPoints, keySegmentList);
             }
 
             var stat = new SurvivalStat(statScheme.StartValue, statScheme.MinValue, statScheme.MaxValue)
@@ -281,7 +278,7 @@ namespace Zilon.Core.PersonModules
             return stat;
         }
 
-        private static SurvivalStat CreateStatFromScheme(IPersonSurvivalStatSubScheme[] survivalStats,
+        private static SurvivalStat? CreateStatFromScheme(IPersonSurvivalStatSubScheme[] survivalStats,
             SurvivalStatType statType,
             PersonSurvivalStatType schemeStatType)
         {
@@ -377,20 +374,30 @@ namespace Zilon.Core.PersonModules
             for (var i = 0; i < equipmentModule.Count(); i++)
             {
                 var equipment = equipmentModule[i];
-                if (equipment == null)
+                if (equipment is null)
                 {
                     continue;
                 }
 
-                var rules = equipment.Scheme.Equip.Rules;
+                var equipScheme = equipment.Scheme.Equip;
+                if (equipScheme is null)
+                {
+                    continue;
+                }
 
-                if (rules == null)
+                var rules = equipScheme.Rules;
+                if (rules is null)
                 {
                     continue;
                 }
 
                 foreach (var rule in rules)
                 {
+                    if (rule is null)
+                    {
+                        continue;
+                    }
+
                     bonusList = ProcessRuleAndChangeBonusList(bonusList, equipmentModule, rule);
                 }
             }
@@ -406,7 +413,7 @@ namespace Zilon.Core.PersonModules
             var archievedPerks = _evolutionModule.GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
-                PerkLevel currentLevel;
+                PerkLevel? currentLevel;
                 PerkLevelSubScheme currentLevelScheme;
 
                 if (archievedPerk.Scheme.IsBuildIn)
@@ -423,7 +430,20 @@ namespace Zilon.Core.PersonModules
                     continue;
                 }
 
-                currentLevelScheme = archievedPerk.Scheme.Levels[currentLevel.Primary - 1];
+                var levels = archievedPerk.Scheme.Levels;
+                if (levels is null)
+                {
+                    continue;
+                }
+
+                if (currentLevel is null)
+                {
+                    continue;
+                }
+
+                var notNullLevels = ConvertToNotNullLevels(levels);
+
+                currentLevelScheme = notNullLevels[currentLevel.Primary - 1];
 
                 if (currentLevelScheme.Rules == null)
                 {
@@ -434,10 +454,28 @@ namespace Zilon.Core.PersonModules
                 {
                     foreach (var rule in currentLevelScheme.Rules)
                     {
+                        if (rule is null)
+                        {
+                            continue;
+                        }
+
                         bonusList = ProcessRule(bonusList, rule);
                     }
                 }
             }
+        }
+
+        private static int GetBonusByLevel(PersonRuleLevel level)
+        {
+            return level switch
+            {
+                PersonRuleLevel.Lesser => 1,
+                PersonRuleLevel.Normal => 3,
+                PersonRuleLevel.Grand => 5,
+                PersonRuleLevel.Absolute => 10,
+                PersonRuleLevel.None => throw new InvalidOperationException("Unknown rule level."),
+                _ => throw new InvalidOperationException($"The rule level {level} is not supported.")
+            };
         }
 
         private static int GetConstitutionHpBonus(IAttributesModule attributesModule)
@@ -483,20 +521,10 @@ namespace Zilon.Core.PersonModules
         private static IEnumerable<SurvivalStat> GetStats([NotNull] IPersonScheme personScheme,
             [NotNull] IAttributesModule attributesModule)
         {
-            if (personScheme is null)
-            {
-                throw new ArgumentNullException(nameof(personScheme));
-            }
-
-            if (attributesModule is null)
-            {
-                throw new ArgumentNullException(nameof(attributesModule));
-            }
-
-            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null);
+            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null).Cast<SurvivalStat>();
         }
 
-        private static IEnumerable<SurvivalStat> GetStatsIterator([NotNull] IPersonScheme personScheme,
+        private static IEnumerable<SurvivalStat?> GetStatsIterator([NotNull] IPersonScheme personScheme,
             IAttributesModule attributesModule)
         {
             // Устанавливаем характеристики выживания персонажа
@@ -505,19 +533,21 @@ namespace Zilon.Core.PersonModules
             // Выставляем сытость/упоённость
             if (personScheme.SurvivalStats != null)
             {
-                yield return CreateStatFromScheme(personScheme.SurvivalStats,
+                var survivalStats = personScheme.SurvivalStats.Where(x => x != null).Select(x => x!).ToArray();
+
+                yield return CreateStatFromScheme(survivalStats,
                     SurvivalStatType.Satiety,
                     PersonSurvivalStatType.Satiety);
 
-                yield return CreateStatFromScheme(personScheme.SurvivalStats,
+                yield return CreateStatFromScheme(survivalStats,
                     SurvivalStatType.Hydration,
                     PersonSurvivalStatType.Hydration);
 
-                yield return CreateStatFromScheme(personScheme.SurvivalStats,
+                yield return CreateStatFromScheme(survivalStats,
                     SurvivalStatType.Intoxication,
                     PersonSurvivalStatType.Intoxication);
 
-                yield return CreateStatFromScheme(personScheme.SurvivalStats,
+                yield return CreateStatFromScheme(survivalStats,
                     SurvivalStatType.Wound,
                     PersonSurvivalStatType.Wound);
             }
@@ -681,12 +711,14 @@ namespace Zilon.Core.PersonModules
                 return;
             }
 
+            var notNullKeySegments = stat.KeySegments.Where(x => x != null).Select(x => x!).ToArray();
+
             if (_effectsModule != null)
             {
                 PersonEffectHelper.UpdateSurvivalEffect(
                     _effectsModule,
                     stat,
-                    stat.KeySegments,
+                    notNullKeySegments,
                     _randomSource,
                     PlayerEventLogService);
             }

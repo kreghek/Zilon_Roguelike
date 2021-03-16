@@ -13,7 +13,7 @@ namespace Zilon.Core.Schemes
         [JsonProperty]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
-        public string[] RegularMonsterSids { get; private set; }
+        public string?[]? RegularMonsterSids { get; private set; }
 
         /// <summary>
         /// Идентификаторы редких монстров, встречаемых в секторе.
@@ -21,7 +21,7 @@ namespace Zilon.Core.Schemes
         [JsonProperty]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
-        public string[] RareMonsterSids { get; private set; }
+        public string?[]? RareMonsterSids { get; private set; }
 
         /// <summary>
         /// Идентификаторы боссов, встречаемых в секторе.
@@ -29,7 +29,7 @@ namespace Zilon.Core.Schemes
         [JsonProperty]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
-        public string[] ChampionMonsterSids { get; private set; }
+        public string?[]? ChampionMonsterSids { get; private set; }
 
         /// <summary>
         /// Количество монстров в секторе.
@@ -52,7 +52,7 @@ namespace Zilon.Core.Schemes
         [JsonProperty]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
-        public string[] ChestDropTableSids { get; private set; }
+        public string?[]? ChestDropTableSids { get; private set; }
 
 
         /// <summary>
@@ -62,19 +62,19 @@ namespace Zilon.Core.Schemes
         /// Нужен для перехода из сектора в сектор.
         /// </remarks>
         [JsonProperty]
-        public string Sid { get; private set; }
+        public string? Sid { get; private set; }
 
         /// <summary>
         /// Наименование сектора.
         /// </summary>
         [JsonProperty]
-        public LocalizedStringSubScheme Name { get; private set; }
+        public LocalizedStringSubScheme? Name { get; private set; }
 
         /// <summary>
         /// Описание сектора.
         /// </summary>
         [JsonProperty]
-        public LocalizedStringSubScheme Description { get; private set; }
+        public LocalizedStringSubScheme? Description { get; private set; }
 
         /// <summary>
         /// Идентфикаторы связанных секторов в рамках текущей локации.
@@ -84,7 +84,7 @@ namespace Zilon.Core.Schemes
         [JsonConverter(typeof(ConcreteTypeConverter<SectorTransitionSubScheme[]>))]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
-        public ISectorTransitionSubScheme[] TransSectorSids { get; private set; }
+        public ISectorTransitionSubScheme?[]? TransSectorSids { get; private set; }
 
         /// <summary>
         /// Индикатор того, что сектор является стартовым при входе из локации.
@@ -101,6 +101,6 @@ namespace Zilon.Core.Schemes
 
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<SectorMapFactoryOptionsSubSchemeBase>))]
-        public ISectorMapFactoryOptionsSubScheme MapGeneratorOptions { get; private set; }
+        public ISectorMapFactoryOptionsSubScheme? MapGeneratorOptions { get; private set; }
     }
 }

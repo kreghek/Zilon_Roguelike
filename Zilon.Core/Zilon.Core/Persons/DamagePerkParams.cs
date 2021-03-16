@@ -2,6 +2,6 @@
 {
     public sealed class DamagePerkParams
     {
-        public string[] WeaponTags { get; set; }
+        public string[]? WeaponTags { get; set; }
     }
 }

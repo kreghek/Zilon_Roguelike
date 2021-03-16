@@ -6,6 +6,6 @@ namespace Zilon.Core.Schemes
     {
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<MonsterDefenceItemSubScheme[]>))]
-        public IMonsterDefenceItemSubScheme[] Defenses { get; private set; }
+        public IMonsterDefenceItemSubScheme?[]? Defenses { get; private set; }
     }
 }

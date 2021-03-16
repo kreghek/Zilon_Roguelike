@@ -41,12 +41,12 @@ namespace Zilon.Core.Props
         /// <remarks>
         /// Это событие не срабатывает, если изменилось количество ресурсов.
         /// </remarks>
-        event EventHandler<PropStoreEventArgs> Added;
+        event EventHandler<PropStoreEventArgs>? Added;
 
         /// <summary>
         /// Событие выстреливает, если какой-либо предмет удалён из хранилища.
         /// </summary>
-        event EventHandler<PropStoreEventArgs> Removed;
+        event EventHandler<PropStoreEventArgs>? Removed;
 
         /// <summary>
         /// Событие выстреливает, когда один из предметов в хранилище изменяется.
@@ -54,6 +54,6 @@ namespace Zilon.Core.Props
         /// <remarks>
         /// Используется, когда изменяется количество ресурсов в стаке.
         /// </remarks>
-        event EventHandler<PropStoreEventArgs> Changed;
+        event EventHandler<PropStoreEventArgs>? Changed;
     }
 }

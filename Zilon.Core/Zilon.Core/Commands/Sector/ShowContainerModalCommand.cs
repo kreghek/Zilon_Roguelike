@@ -27,7 +27,9 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
+            var activeActor = _playerState.ActiveActor!;
+
+            var inventory = activeActor.Actor.Person.GetModule<IInventoryModule>();
 
             var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
             var container = targetContainerViewModel?.StaticObject;
@@ -38,9 +40,11 @@ namespace Zilon.Core.Commands
 
         public override void Execute()
         {
-            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
-            var targetContainerViewModel = (IContainerViewModel)_playerState.HoverViewModel;
-            var container = targetContainerViewModel.StaticObject;
+            var activeActor = _playerState.ActiveActor!;
+
+            var inventory = activeActor.Actor.Person.GetModule<IInventoryModule>();
+            var targetContainerViewModel = (IContainerViewModel?)_playerState.HoverViewModel;
+            var container = targetContainerViewModel!.StaticObject;
             var containerContent = container.GetModule<IPropContainer>().Content;
             var transferMachine = new PropTransferMachine(inventory, containerContent);
 

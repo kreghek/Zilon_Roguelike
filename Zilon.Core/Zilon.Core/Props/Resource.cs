@@ -62,6 +62,6 @@ namespace Zilon.Core.Props
             Changed?.Invoke(this, new EventArgs());
         }
 
-        public event EventHandler<EventArgs> Changed;
+        public event EventHandler<EventArgs>? Changed;
     }
 }

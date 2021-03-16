@@ -13,7 +13,7 @@ namespace Zilon.Core.Common
 
         [JsonConstructor]
         [ExcludeFromCodeCoverage]
-        public Roll(int dice, int count, RollModifiers modifiers)
+        public Roll(int dice, int count, RollModifiers? modifiers)
         {
             Dice = dice;
             Count = count;
@@ -23,6 +23,7 @@ namespace Zilon.Core.Common
         public int Count { get; }
 
         public int Dice { get; }
-        public RollModifiers Modifiers { get; }
+
+        public RollModifiers? Modifiers { get; }
     }
 }
