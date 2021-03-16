@@ -24,13 +24,27 @@ namespace Zilon.Core.PersonModules
 
         public int CalculateCost()
         {
-            var moveSpeed = _monsterScheme.BaseMoveSpeed;
-            if (moveSpeed == 0)
+            var moveSpeedFactor = _monsterScheme.MoveSpeedFactor.GetValueOrDefault();
+            if (moveSpeedFactor == 0)
             {
-                moveSpeed = BASE_MOVE_SPEED;
+                moveSpeedFactor = 1;
             }
 
-            return moveSpeed;
+            var baseMoveSpeedFloat = (float)BASE_MOVE_SPEED;
+            var moveCostFloat = baseMoveSpeedFloat / moveSpeedFactor;
+            var moveCost = (int)Math.Round(moveCostFloat);
+
+            if (moveCost < GlobeMetrics.MinMonsterMoveCost)
+            {
+                return GlobeMetrics.MinMonsterMoveCost;
+            }
+
+            if (moveCost > GlobeMetrics.MaxMonsterMoveCost)
+            {
+                return GlobeMetrics.MaxMonsterMoveCost;
+            }
+
+            return moveCost;
         }
     }
 }
