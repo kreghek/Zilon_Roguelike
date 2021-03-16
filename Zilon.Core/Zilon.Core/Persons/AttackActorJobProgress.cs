@@ -43,7 +43,7 @@ namespace Zilon.Core.Persons
             modifiedJobs.Add(job);
         }
 
-        private static IMonsterScheme GetPersonScheme(IActor targetActor)
+        private static IMonsterScheme? GetPersonScheme(IActor targetActor)
         {
             var monsterPerson = targetActor.Person as MonsterPerson;
             return monsterPerson?.Scheme;
@@ -52,6 +52,12 @@ namespace Zilon.Core.Persons
         private void ProcessAttackBySpecifiedWeapons(IJob job, List<IJob> modifiedJobs, AttackActorJobData jobData)
         {
             Debug.Assert(jobData.WeaponTags.Any(), "Должно быть указано не менее одного тега.");
+
+            if (jobData.WeaponTags is null)
+            {
+                return;
+            }
+
             if (!jobData.WeaponTags.Any())
             {
                 return;
@@ -83,13 +89,19 @@ namespace Zilon.Core.Persons
         private void ProcessAttackToSpecifiedMonster(IJob job, List<IJob> modifiedJobs, AttackActorJobData jobData)
         {
             Debug.Assert(jobData.WeaponTags.Any(), "Должно быть указано не менее одного тега.");
+
+            if (jobData.MonsterTags is null)
+            {
+                return;
+            }
+
             if (!jobData.MonsterTags.Any())
             {
                 return;
             }
 
             var monsterHasAllTags = true;
-            foreach (var tag in jobData.WeaponTags)
+            foreach (var tag in jobData.MonsterTags)
             {
                 Debug.Assert(!string.IsNullOrWhiteSpace(tag), "Теги не могут быть пустыми.");
                 if (string.IsNullOrWhiteSpace(tag))

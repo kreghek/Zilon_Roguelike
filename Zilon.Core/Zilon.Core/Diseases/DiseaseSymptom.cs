@@ -7,7 +7,7 @@ namespace Zilon.Core.Diseases
     /// </summary>
     public class DiseaseSymptom
     {
-        public ILocalizedString Name { get; set; }
+        public ILocalizedString? Name { get; set; }
 
         public DiseaseSymptomType Rule { get; set; }
     }

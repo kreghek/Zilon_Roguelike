@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+
+using FluentAssertions;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -109,7 +111,7 @@ namespace Zilon.Core.Tests.Commands
                     }
                 }
             };
-            var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
+            var equipment = new Equipment(propScheme, Array.Empty<TacticalActScheme>());
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();
             equipmentViewModelMock.SetupGet(x => x.Prop).Returns(equipment);

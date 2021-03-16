@@ -29,10 +29,10 @@ namespace Zilon.Core.Tactics
         /// </summary>
         ISectorMap Map { get; }
 
-        ILocationScheme Scheme { get; set; }
+        ILocationScheme? Scheme { get; set; }
 
         /// <summary>Менеджер работы с очками.</summary>
-        IScoreManager ScoreManager { get; set; }
+        IScoreManager? ScoreManager { get; set; }
 
         IStaticObjectManager StaticObjectManager { get; }
 
@@ -58,6 +58,6 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
-        event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
+        event EventHandler<TransitionUsedEventArgs>? TrasitionUsed;
     }
 }

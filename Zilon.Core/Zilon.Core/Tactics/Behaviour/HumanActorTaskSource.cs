@@ -19,7 +19,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly ISender<IActorTask> _actorTaskSender;
         private readonly SpscChannel<IActorTask> _spscChannel;
         private CancellationTokenSource _cancellationTokenSource;
-        private IActor _currentActorIntention;
+        private IActor? _currentActorIntention;
         private bool _intentionWait;
 
         public HumanActorTaskSource()

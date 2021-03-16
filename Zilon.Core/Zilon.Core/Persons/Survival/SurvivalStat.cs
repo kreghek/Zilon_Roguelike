@@ -35,7 +35,7 @@ namespace Zilon.Core.Persons.Survival
         /// <summary>
         /// Ключевые сегменты характеристики.
         /// </summary>
-        public SurvivalStatKeySegment[] KeySegments { get; set; }
+        public SurvivalStatKeySegment?[]? KeySegments { get; set; }
 
 
         /// <summary>

@@ -16,18 +16,19 @@ namespace Zilon.Core.Schemes
     /// </remarks>
     public sealed class PerkLevelSubScheme : SubSchemeBase
     {
-        public PerkConditionSubScheme[] Conditions { get; set; }
+        public PerkConditionSubScheme?[]? Conditions { get; set; }
 
         [JsonConverter(typeof(ConcreteTypeConverter<JobSubScheme[]>))]
         [JsonProperty]
-        public IJobSubScheme[] Jobs { get; set; }
+        public IJobSubScheme?[]? Jobs { get; set; }
 
         [DefaultValue(1)]
         public int MaxValue { get; set; }
 
-        public PersonStat PersonLevel { get; set; }
-        public PerkRuleSubScheme[] Rules { get; set; }
+        public PersonStat? PersonLevel { get; set; }
 
-        public PropSet[] Sources { get; set; }
+        public PerkRuleSubScheme?[]? Rules { get; set; }
+
+        public PropSet?[]? Sources { get; set; }
     }
 }

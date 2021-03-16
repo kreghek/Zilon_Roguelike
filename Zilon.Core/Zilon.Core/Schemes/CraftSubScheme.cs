@@ -10,7 +10,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Инструменты, требуемые для создания предмета.
         /// </summary>
-        public InstrumentLevelFunctionSubScheme[] InstrumentFunctions { get; set; }
+        public InstrumentLevelFunctionSubScheme[]? InstrumentFunctions { get; set; }
 
         /// <summary>
         /// Количество мастеров, тредуемых для изготовления предмета.
@@ -25,16 +25,16 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Компетенции, требуемые для создания предмета.
         /// </summary>
-        public ProfessionRequirementSubScheme[] Professions { get; set; }
+        public ProfessionRequirementSubScheme[]? Professions { get; set; }
 
         /// <summary>
         /// Ресурсы (черновики), которые требуются для прототипирования.
         /// </summary>
-        public PropSet[] PrototypeSources { get; set; }
+        public PropSet[]? PrototypeSources { get; set; }
 
         /// <summary>
         /// Исходные ресурсы.
         /// </summary>
-        public PropSet[] Sources { get; set; }
+        public PropSet[]? Sources { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace Zilon.Core.StaticObjectModules
         }
 
         /// <inheritdoc />
-        public event EventHandler Mined;
+        public event EventHandler? Mined;
 
         /// <inheritdoc />
         public string[] GetToolTags()

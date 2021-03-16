@@ -121,6 +121,6 @@ namespace Zilon.Core.Common
         /// <summary>
         /// Выстреливает каждый раз, когда значение характеристики изменяется.
         /// </summary>
-        public event EventHandler Changed;
+        public event EventHandler? Changed;
     }
 }

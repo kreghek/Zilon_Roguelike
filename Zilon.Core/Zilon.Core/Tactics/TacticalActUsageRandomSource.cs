@@ -86,7 +86,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="armorEquipments">Доступные предметы экипировки.</param>
         /// <returns>Случайный экипированный предмет, который был повреждён.</returns>
-        public Equipment RollDamagedEquipment(IEnumerable<Equipment> armorEquipments)
+        public Equipment? RollDamagedEquipment(IEnumerable<Equipment> armorEquipments)
         {
             var count = armorEquipments.Count();
             if (count == 0)
