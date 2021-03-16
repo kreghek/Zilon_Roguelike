@@ -10,7 +10,8 @@ namespace Zilon.Core.PersonModules.Tests
     public sealed class MonsterMovingModuleTests
     {
         [Test]
-        [TestCaseSource(typeof(MonsterMovingModuleTestCaseSource), nameof(MonsterMovingModuleTestCaseSource.PositiveTestCases))]
+        [TestCaseSource(typeof(MonsterMovingModuleTestCaseSource),
+            nameof(MonsterMovingModuleTestCaseSource.PositiveTestCases))]
         public int CalculateCost_PositivesFromTestCases_ExpectedValues(float moveFactor)
         {
             // ARRANGE
