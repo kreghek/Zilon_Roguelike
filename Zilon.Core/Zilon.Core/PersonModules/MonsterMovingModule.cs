@@ -24,13 +24,14 @@ namespace Zilon.Core.PersonModules
 
         public int CalculateCost()
         {
-            var moveSpeed = _monsterScheme.BaseMoveSpeed;
-            if (moveSpeed == 0)
+            var moveSpeedFactor = _monsterScheme.MoveSpeedFactor.GetValueOrDefault();
+            if (moveSpeedFactor == 0)
             {
-                moveSpeed = BASE_MOVE_SPEED;
+                moveSpeedFactor = 1;
             }
 
-            return moveSpeed;
+            var costFactor = 1f / moveSpeedFactor;
+            return (int)Math.Round(BASE_MOVE_SPEED * costFactor);
         }
     }
 }

@@ -45,6 +45,6 @@
 
         /// <inheritdoc />
         [JsonProperty]
-        public int BaseMoveSpeed { get; }
+        public float? MoveSpeedFactor { get; }
     }
 }
