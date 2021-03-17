@@ -233,12 +233,15 @@ public class SectorVM : MonoBehaviour
         actor.DepositMined += Actor_DepositMined;
     }
 
-    private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+    private async void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
     {
-        foreach (var staticObject in e.Items)
+        await Task.Factory.StartNew(() =>
         {
-            CreateStaticObjectViewModel(_nodeViewModels, staticObject);
-        }
+            foreach (var staticObject in e.Items)
+            {
+                CreateStaticObjectViewModel(_nodeViewModels, staticObject);
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void InitServices()
