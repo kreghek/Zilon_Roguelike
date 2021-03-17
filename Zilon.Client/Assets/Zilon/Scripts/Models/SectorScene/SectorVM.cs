@@ -433,8 +433,8 @@ public class SectorVM : MonoBehaviour
         var containerPosition = nodeViewModelUnderStaticObject.transform.position + new Vector3(0, 0, -1);
         staticObjectViewModel.WorldPosition = containerPosition;
         staticObjectViewModel.StaticObject = staticObject;
-        staticObjectViewModel.Selected += Container_Selected;
-        staticObjectViewModel.MouseEnter += ContainerViewModel_MouseEnter;
+        staticObjectViewModel.Selected += StaticObjectViewModel_Selected;
+        staticObjectViewModel.MouseEnter += StaticObjectViewModel_MouseEnter;
 
         _staticObjectViewModels.Add(staticObjectViewModel);
     }
@@ -445,14 +445,13 @@ public class SectorVM : MonoBehaviour
         return prefab;
     }
 
-    private void Container_Selected(object sender, EventArgs e)
+    private void StaticObjectViewModel_Selected(object sender, EventArgs e)
     {
         var containerViewModel = sender as StaticObjectViewModel;
 
-        _playerState.HoverViewModel = containerViewModel;
         _playerState.SelectedViewModel = containerViewModel;
 
-        if (containerViewModel == null)
+        if (containerViewModel is null)
         {
             return;
         }
@@ -474,7 +473,7 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void ContainerViewModel_MouseEnter(object sender, EventArgs e)
+    private void StaticObjectViewModel_MouseEnter(object sender, EventArgs e)
     {
         var containerViewModel = sender as ContainerVm;
 
