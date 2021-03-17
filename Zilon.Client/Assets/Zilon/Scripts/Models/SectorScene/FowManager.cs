@@ -99,7 +99,7 @@ public class FowManager : MonoBehaviour
 
     private void ProcessNodeFow(ISectorFowData sectorFowData)
     {
-        if (_nodeViewModels == null)
+        if (_nodeViewModels is null)
         {
             return;
         }
@@ -108,7 +108,8 @@ public class FowManager : MonoBehaviour
         {
             var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == nodeViewModel.Node);
 
-            var fowState = (fowNode?.State).GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
+            var fowStateUnsafe = fowNode?.State;
+            var fowState = fowStateUnsafe.GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
 
             var fowController = nodeViewModel.GetComponent<FowNodeController>();
 
@@ -121,7 +122,7 @@ public class FowManager : MonoBehaviour
 
     private void ProcessActorFow(ISectorFowData sectorFowData)
     {
-        if (_nodeViewModels == null)
+        if (_nodeViewModels is null)
         {
             return;
         }
