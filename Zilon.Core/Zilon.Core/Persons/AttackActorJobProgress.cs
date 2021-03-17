@@ -131,49 +131,54 @@ namespace Zilon.Core.Persons
             }
             else
             {
-                foreach (var dataItem in job.Scheme.Data)
+                AddProgressUsingAdditionalData(job, modifiedJobs, job.Scheme.Data);
+            }
+        }
+
+        private void AddProgressUsingAdditionalData(IJob job, List<IJob> modifiedJobs, string[] dataList)
+        {
+            foreach (var dataItem in dataList)
+            {
+                Debug.Assert(!string.IsNullOrWhiteSpace(dataItem), "Данные работы не должны быть пустыми.");
+                if (string.IsNullOrWhiteSpace(dataItem))
                 {
-                    Debug.Assert(!string.IsNullOrWhiteSpace(dataItem), "Данные работы не должны быть пустыми.");
-                    if (string.IsNullOrWhiteSpace(dataItem))
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    var jobData = JsonConvert.DeserializeObject<AttackActorJobData>(dataItem);
+                var jobData = JsonConvert.DeserializeObject<AttackActorJobData>(dataItem);
 
-                    Debug.Assert(jobData.MonsterTags != null || jobData.WeaponTags != null,
-                        "В данных работ должны быть указаны теги, на основе которых фильтруются работы.");
+                Debug.Assert(jobData.MonsterTags != null || jobData.WeaponTags != null,
+                    "В данных работ должны быть указаны теги, на основе которых фильтруются работы.");
 
-                    if (jobData.WeaponTags != null)
-                    {
-                        // Засчитываем прогресс, если у оружия, которым было произведено действие,
-                        // есть все указанные теги.
+                if (jobData.WeaponTags != null)
+                {
+                    // Засчитываем прогресс, если у оружия, которым было произведено действие,
+                    // есть все указанные теги.
 
-                        ProcessAttackBySpecifiedWeapons(job, modifiedJobs, jobData);
-                    }
-                    else if (jobData.MonsterTags != null)
-                    {
-                        // Засчитываем прогресс, если у атакуемого актёра
-                        // есть все указанные теги.
+                    ProcessAttackBySpecifiedWeapons(job, modifiedJobs, jobData);
+                }
+                else if (jobData.MonsterTags != null)
+                {
+                    // Засчитываем прогресс, если у атакуемого актёра
+                    // есть все указанные теги.
 
-                        ProcessAttackToSpecifiedMonster(job, modifiedJobs, jobData);
-                    }
-                    else
-                    {
-                        Debug.Assert(true, "Все варианты данных должны обрабатываться.");
-                    }
+                    ProcessAttackToSpecifiedMonster(job, modifiedJobs, jobData);
+                }
+                else
+                {
+                    Debug.Assert(true, "Все варианты данных должны обрабатываться.");
                 }
             }
         }
 
         private static bool WeaponHasTag(string tag, ITacticalAct tacticalAct)
         {
-            if (tacticalAct.Equipment == null)
+            if (tacticalAct.Equipment is null)
             {
                 return false;
             }
 
-            if (tacticalAct.Equipment.Scheme.Tags != null)
+            if (tacticalAct.Equipment.Scheme.Tags is null)
             {
                 return false;
             }
