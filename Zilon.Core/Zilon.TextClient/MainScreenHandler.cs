@@ -40,7 +40,7 @@ namespace Zilon.TextClient
 
             if (components.Length == 3)
             {
-                switch (components[2].ToUpper())
+                switch (components[2].ToUpper(CultureInfo.InvariantCulture))
                 {
                     case "A":
                         SelectActor(uiState, playerActorSectorNode, targetId);
