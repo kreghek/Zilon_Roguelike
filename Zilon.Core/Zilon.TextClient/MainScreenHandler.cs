@@ -40,15 +40,18 @@ namespace Zilon.TextClient
 
             if (components.Length == 3)
             {
-                switch (components[2])
+                switch (components[2].ToUpper())
                 {
-                    default:
-                    case "a":
+                    case "A":
                         SelectActor(uiState, playerActorSectorNode, targetId);
                         break;
 
-                    case "s":
+                    case "S":
                         SelectStaticObject(uiState, playerActorSectorNode, targetId);
+                        break;
+
+                    default:
+                        SelectActor(uiState, playerActorSectorNode, targetId);
                         break;
                 }
             }
