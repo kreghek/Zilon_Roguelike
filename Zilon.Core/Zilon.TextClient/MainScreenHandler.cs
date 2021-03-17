@@ -32,24 +32,31 @@ namespace Zilon.TextClient
                     select sectorNode).SingleOrDefault();
         }
 
-        private void HandleAttackCommand(string inputText, IServiceScope serviceScope, ISectorUiState uiState,
+        private static void HandleAttackCommand(string inputText, IServiceScope serviceScope, ISectorUiState uiState,
             ISectorNode playerActorSectorNode)
         {
             var components = inputText.Split(' ');
-            var targetActorId = int.Parse(components[1], CultureInfo.InvariantCulture);
+            var targetId = int.Parse(components[1], CultureInfo.InvariantCulture);
 
-            var targetActor =
-                playerActorSectorNode.Sector.ActorManager.Items.SingleOrDefault(x => x.Id == targetActorId);
+            switch (components[2])
+            {
+                case "a":
+                    SelectActor(uiState, playerActorSectorNode, targetId);
+                    break;
 
-            var command = serviceScope.ServiceProvider.GetRequiredService<AttackCommand>();
+                case "s":
+                    SelectStaticObject(uiState, playerActorSectorNode, targetId);
+                    break;
+            }
 
-            uiState.SelectedViewModel = new ActorViewModel { Actor = targetActor };
+            
 
             var acts = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs();
             uiState.TacticalAct = acts
                 .OrderBy(x => x.Equipment is null)
                 .First(x => x.Constrains is null);
 
+            var command = serviceScope.ServiceProvider.GetRequiredService<AttackCommand>();
             if (command.CanExecute())
             {
                 command.Execute();
@@ -58,6 +65,24 @@ namespace Zilon.TextClient
             {
                 Console.WriteLine(UiResource.CommandCantExecuteMessage);
             }
+        }
+
+        private static void SelectActor(ISectorUiState uiState, ISectorNode playerActorSectorNode, int targetId)
+        {
+            var actorManager = playerActorSectorNode.Sector.ActorManager;
+
+            var targetObject = actorManager.Items.SingleOrDefault(x => x.Id == targetId);
+
+            uiState.SelectedViewModel = new ActorViewModel { Actor = targetObject };
+        }
+
+        private static void SelectStaticObject(ISectorUiState uiState, ISectorNode playerActorSectorNode, int targetId)
+        {
+            var entitiesManager = playerActorSectorNode.Sector.StaticObjectManager;
+
+            var targetObject = entitiesManager.Items.SingleOrDefault(x => x.Id == targetId);
+
+            uiState.SelectedViewModel = new StaticObjectViewModel { StaticObject = targetObject };
         }
 
         private static void HandleDeadCommand(IPlayer player)

@@ -61,7 +61,7 @@ namespace Zilon.TextClient {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - &quot;attack [id] to attack enemy&quot;.
+        ///   Looks up a localized string similar to - &quot;attack [id] a&quot; to attack enemy (or &quot;s&quot;to attack object).
         /// </summary>
         internal static string AttackCommandDescription {
             get {
