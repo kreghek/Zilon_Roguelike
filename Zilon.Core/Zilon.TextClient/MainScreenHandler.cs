@@ -38,15 +38,23 @@ namespace Zilon.TextClient
             var components = inputText.Split(' ');
             var targetId = int.Parse(components[1], CultureInfo.InvariantCulture);
 
-            switch (components[2])
+            if (components.Length == 3)
             {
-                case "a":
-                    SelectActor(uiState, playerActorSectorNode, targetId);
-                    break;
+                switch (components[2])
+                {
+                    default:
+                    case "a":
+                        SelectActor(uiState, playerActorSectorNode, targetId);
+                        break;
 
-                case "s":
-                    SelectStaticObject(uiState, playerActorSectorNode, targetId);
-                    break;
+                    case "s":
+                        SelectStaticObject(uiState, playerActorSectorNode, targetId);
+                        break;
+                }
+            }
+            else
+            {
+                SelectActor(uiState, playerActorSectorNode, targetId);
             }
 
             var acts = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs();
