@@ -49,7 +49,7 @@ namespace Zilon.TextClient
                     break;
             }
 
-            
+
 
             var acts = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs();
             uiState.TacticalAct = acts
