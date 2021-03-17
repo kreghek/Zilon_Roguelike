@@ -33,7 +33,7 @@ namespace Zilon.Core.Props
             IEnumerable<ITacticalActScheme> acts) :
             base(propScheme)
         {
-            if (propScheme.Equip == null)
+            if (propScheme.Equip is null)
             {
                 throw new ArgumentException(
                     "The scheme is not valid for equipment. It must has not null Equip subscheme.", nameof(propScheme));
