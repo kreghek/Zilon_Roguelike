@@ -5,7 +5,7 @@ namespace Zilon.TextClient
 {
     internal class StaticObjectViewModel : IContainerViewModel
     {
-        public IStaticObject StaticObject { get; set; }
         public object Item => StaticObject;
+        public IStaticObject StaticObject { get; set; }
     }
 }

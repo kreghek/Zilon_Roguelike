@@ -49,8 +49,6 @@ namespace Zilon.TextClient
                     break;
             }
 
-
-
             var acts = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs();
             uiState.TacticalAct = acts
                 .OrderBy(x => x.Equipment is null)
@@ -65,24 +63,6 @@ namespace Zilon.TextClient
             {
                 Console.WriteLine(UiResource.CommandCantExecuteMessage);
             }
-        }
-
-        private static void SelectActor(ISectorUiState uiState, ISectorNode playerActorSectorNode, int targetId)
-        {
-            var actorManager = playerActorSectorNode.Sector.ActorManager;
-
-            var targetObject = actorManager.Items.SingleOrDefault(x => x.Id == targetId);
-
-            uiState.SelectedViewModel = new ActorViewModel { Actor = targetObject };
-        }
-
-        private static void SelectStaticObject(ISectorUiState uiState, ISectorNode playerActorSectorNode, int targetId)
-        {
-            var entitiesManager = playerActorSectorNode.Sector.StaticObjectManager;
-
-            var targetObject = entitiesManager.Items.SingleOrDefault(x => x.Id == targetId);
-
-            uiState.SelectedViewModel = new StaticObjectViewModel { StaticObject = targetObject };
         }
 
         private static void HandleDeadCommand(IPlayer player)
@@ -258,6 +238,24 @@ namespace Zilon.TextClient
             }
 
             Console.WriteLine($"Position: {actor.Node}");
+        }
+
+        private static void SelectActor(ISectorUiState uiState, ISectorNode playerActorSectorNode, int targetId)
+        {
+            var actorManager = playerActorSectorNode.Sector.ActorManager;
+
+            var targetObject = actorManager.Items.SingleOrDefault(x => x.Id == targetId);
+
+            uiState.SelectedViewModel = new ActorViewModel { Actor = targetObject };
+        }
+
+        private static void SelectStaticObject(ISectorUiState uiState, ISectorNode playerActorSectorNode, int targetId)
+        {
+            var entitiesManager = playerActorSectorNode.Sector.StaticObjectManager;
+
+            var targetObject = entitiesManager.Items.SingleOrDefault(x => x.Id == targetId);
+
+            uiState.SelectedViewModel = new StaticObjectViewModel { StaticObject = targetObject };
         }
 
         /// <inheritdoc />
