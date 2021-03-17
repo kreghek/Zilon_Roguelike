@@ -38,10 +38,6 @@ namespace Zilon.Core.Persons.Tests
                     new[] { PropTags.Equipment.WeaponClass.Pole },
                     0).Returns(1);
 
-                yield return new TestCaseData(new[] { PropTags.Equipment.WeaponClass.Shield },
-                    new[] { PropTags.Equipment.WeaponClass.Shield },
-                    0).Returns(1);
-
                 yield return new TestCaseData(new[] { PropTags.Equipment.WeaponClass.Staff },
                     new[] { PropTags.Equipment.WeaponClass.Staff },
                     0).Returns(1);

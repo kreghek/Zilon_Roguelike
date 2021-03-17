@@ -32,7 +32,6 @@
                 public static string Mace => "mace";
                 public static string Pistol => "pistol";
                 public static string Pole => "pole";
-                public static string Shield => "shield";
                 public static string Staff => "staff";
                 public static string Sword => "sword";
                 public static string Wand => "Wand";
