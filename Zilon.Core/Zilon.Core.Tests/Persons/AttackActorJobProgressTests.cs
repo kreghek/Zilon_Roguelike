@@ -28,7 +28,8 @@ namespace Zilon.Core.Persons.Tests
 
             var actor = Mock.Of<IActor>();
 
-            var act = Mock.Of<ITacticalAct>(a => a.Equipment == new Equipment(new TestPropScheme {
+            var act = Mock.Of<ITacticalAct>(a => a.Equipment == new Equipment(new TestPropScheme
+            {
                 Equip = Mock.Of<IPropEquipSubScheme>(),
                 Tags = equipmentTags
             }));
@@ -44,7 +45,7 @@ namespace Zilon.Core.Persons.Tests
                         // because there is no interface to make test object with setter
                         JsonConvert.SerializeObject(new { WeaponTags = jobWeaponTags })
                     }
-                ) && 
+                ) &&
                 job.Progress == currentJobProgress)
             };
 
@@ -58,16 +59,17 @@ namespace Zilon.Core.Persons.Tests
     }
 
     public static class AttackActorJobProgressTestCaseSource
-    { 
+    {
         public static IEnumerable PositiveTestCasesForWeaponUsage
         {
-            get {
+            get
+            {
                 // Params:
                 // Tactical Act Equipment tags
                 // Job weapon tags
                 // Current job progress
                 // returns expected progress
-                
+
                 yield return new TestCaseData(new[] { PropTags.Equipment.WeaponClass.Mace },
                 new[] { PropTags.Equipment.WeaponClass.Mace },
                 0).Returns(1);
