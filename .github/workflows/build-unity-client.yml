@@ -7,7 +7,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_2_5 }}
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_3_0 }}
     strategy:
       fail-fast: false
       matrix:
