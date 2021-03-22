@@ -1,6 +1,16 @@
 name: Build Unity Client
 
-on: [push]
+on:
+  pull_request:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
 
 jobs:
   buildCore:
@@ -35,7 +45,10 @@ jobs:
         projectPath:
           - Zilon.Client
         targetPlatform:
+          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows # Build a Windows standalone.
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
     steps:
       - uses: actions/checkout@v2
         with:
