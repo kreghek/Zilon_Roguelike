@@ -1,6 +1,16 @@
 name: Build Unity Client
 
-on: [push]
+on:
+  pull_request:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
 
 jobs:
   buildCore:
