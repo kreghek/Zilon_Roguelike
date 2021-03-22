@@ -15,6 +15,7 @@
             return IsObstacle == other.IsObstacle;
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {
             return -1199661580 + IsObstacle.GetHashCode();

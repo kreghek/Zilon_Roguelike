@@ -75,7 +75,6 @@ namespace Zilon.Core.World
                 {
                     // Пока ничего не делаем
                     Console.WriteLine(exception);
-                    Console.WriteLine(sector.GetHashCode());
                     Console.WriteLine(actor);
                 }
 

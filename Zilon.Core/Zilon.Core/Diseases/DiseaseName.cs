@@ -47,6 +47,7 @@ namespace Zilon.Core.Diseases
             return obj is DiseaseName name && Equals(name);
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {
 #nullable disable

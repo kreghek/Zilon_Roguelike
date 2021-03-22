@@ -29,7 +29,7 @@ jobs:
         DOTNET_CLI_TELEMETRY_OUTPUT: 1
       run: |
         cd ./Zilon.Core/Zilon.Core.Tests
-        dotnet stryker --project-file=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Core/Zilon.Core/Zilon.Core.csproj --ignore-methods "['ToString', 'ConfigureAwait', '*Exception.ctor', 'Equals', 'GetHashCode']" --excluded-mutations "['string']" --log-file
+        dotnet stryker --project-file=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Core/Zilon.Core/Zilon.Core.csproj --ignore-methods "['ConfigureAwait', '*Exception.ctor']" --excluded-mutations "['string']"
     - name: Publish mutation report
       uses: actions/upload-artifact@v2
       with:
