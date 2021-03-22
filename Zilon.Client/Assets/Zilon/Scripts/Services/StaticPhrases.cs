@@ -57,6 +57,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "prop-tag-shield", new MultilangPhrase{ En = "shield", Ru = "щит" } },
                 { "prop-tag-wand", new MultilangPhrase{ En = "wand", Ru = "жезл" } },
                 { "prop-tag-pick-axe", new MultilangPhrase{ En = "pick axe", Ru = "кирка" } },
+                { "prop-tag-shovel", new MultilangPhrase{ En = "shovel", Ru = "лопата" } },
 
                 { "impact-kinetic", new MultilangPhrase{ En = "kinetic", Ru = "кинетический" } },
                 { "impact-psy", new MultilangPhrase{ En = "psy", Ru = "пси" } },
