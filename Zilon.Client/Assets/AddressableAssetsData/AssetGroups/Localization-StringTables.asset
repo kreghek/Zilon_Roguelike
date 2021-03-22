@@ -15,20 +15,20 @@ MonoBehaviour:
   m_GroupName: Localization-StringTables
   m_Data:
     m_SerializedData: []
-  m_GUID: 5624a861bf8035547bb0f22add9ba2bc
+  m_GUID: 9940fb0adf11d7a4296d6fc7a233cb5a
   m_SerializeEntries:
-  - m_GUID: b951bad7a51ac2a4ab17be72ac6b3b77
-    m_Address: UI Common_en-US
+  - m_GUID: 9c7ac8e87fed6494dbe4cf83469edf22
+    m_Address: UI Common StringTableCollection_en
     m_ReadOnly: 1
     m_SerializedLabels:
-    - Locale-en-US
+    - Locale-en
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
-  - m_GUID: 5adfc74e6e9285647b55be1e7db6503a
-    m_Address: UI Common_ru-RU
+  - m_GUID: 8dfe3e038229b0741bf57532b8478a00
+    m_Address: UI Common StringTableCollection_ru
     m_ReadOnly: 1
     m_SerializedLabels:
-    - Locale-ru-RU
+    - Locale-ru
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
   m_ReadOnly: 1
