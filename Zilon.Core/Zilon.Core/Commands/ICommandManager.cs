@@ -7,9 +7,9 @@ namespace Zilon.Core.Commands
     [PublicAPI]
     public interface ICommandManager
     {
-        ICommand Pop();
+        ICommand? Pop();
         void Push(ICommand command);
 
-        event EventHandler CommandPushed;
+        event EventHandler? CommandPushed;
     }
 }

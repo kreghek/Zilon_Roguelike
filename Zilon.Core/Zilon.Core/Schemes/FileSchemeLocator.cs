@@ -9,7 +9,7 @@ namespace Zilon.Core.Schemes
 {
     public class FileSchemeLocator : ISchemeLocator
     {
-        private const string schemeCatalogEnvVariable = "ZILON_LIV_SCHEME_CATALOG";
+        private const string SCHEME_CATALOG_ENV_VARIABLE = "ZILON_LIV_SCHEME_CATALOG";
         private readonly string _schemeCatalog;
 
         [ExcludeFromCodeCoverage]
@@ -28,10 +28,10 @@ namespace Zilon.Core.Schemes
         [ExcludeFromCodeCoverage]
         public static FileSchemeLocator CreateFromEnvVariable()
         {
-            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
+            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(SCHEME_CATALOG_ENV_VARIABLE);
             if (string.IsNullOrWhiteSpace(schemeCatalogFromEnvVariable))
             {
-                throw new InvalidOperationException($"Переменная окружения {schemeCatalogEnvVariable} не задана.");
+                throw new InvalidOperationException($"Переменная окружения {SCHEME_CATALOG_ENV_VARIABLE} не задана.");
             }
 
             return new FileSchemeLocator(schemeCatalogFromEnvVariable);
@@ -64,12 +64,7 @@ namespace Zilon.Core.Schemes
                 var serialized = File.ReadAllText(filePath);
                 string fileFolder = GetRelativePath(path, filePath, sid);
 
-                var schemeFile = new SchemeFile
-                {
-                    Sid = sid,
-                    Path = fileFolder,
-                    Content = serialized
-                };
+                var schemeFile = new SchemeFile(serialized, fileFolder, sid);
 
                 result.Add(schemeFile);
             }

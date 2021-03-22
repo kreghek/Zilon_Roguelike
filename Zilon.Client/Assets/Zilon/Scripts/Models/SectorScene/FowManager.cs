@@ -29,6 +29,14 @@ public class FowManager : MonoBehaviour
 
     public void Update()
     {
+        if (_player.MainPerson == null || _player.Globe == null)
+        {
+            // Do not try to update FoW because there is no main person for which FoW update needs.
+            // It may be beacause main person erise after new game and death.
+
+            return;
+        }
+
         if (_fowUpdateCounter >= UPDATE_FOW_DELAY)
         {
             UpdateFowState();
@@ -91,7 +99,7 @@ public class FowManager : MonoBehaviour
 
     private void ProcessNodeFow(ISectorFowData sectorFowData)
     {
-        if (_nodeViewModels == null)
+        if (_nodeViewModels is null)
         {
             return;
         }
@@ -100,7 +108,8 @@ public class FowManager : MonoBehaviour
         {
             var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == nodeViewModel.Node);
 
-            var fowState = (fowNode?.State).GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
+            var fowStateUnsafe = fowNode?.State;
+            var fowState = fowStateUnsafe.GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
 
             var fowController = nodeViewModel.GetComponent<FowNodeController>();
 
@@ -113,7 +122,7 @@ public class FowManager : MonoBehaviour
 
     private void ProcessActorFow(ISectorFowData sectorFowData)
     {
-        if (_nodeViewModels == null)
+        if (_nodeViewModels is null)
         {
             return;
         }

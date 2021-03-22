@@ -188,40 +188,39 @@ namespace Zilon.Core.Tactics.Spatial
 
         public void SaveToFile(string fileName)
         {
-            const int cellWidth = 4;
+            const int CELLWIDTH = 4;
 
             var matrix = _segmentDict.First().Value;
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
+            using System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
+
+            file.Write(" ".PadLeft(CELLWIDTH, ' '));
+            for (var x = 0; x < _segmentSize; x++)
             {
-                file.Write(" ".PadLeft(cellWidth, ' '));
+                file.Write($"{x,3}".PadRight(CELLWIDTH, ' '));
+            }
+
+            file.WriteLine();
+
+            for (var y = 0; y < _segmentSize; y++)
+            {
+                file.Write($"{y,3}".PadLeft(CELLWIDTH, ' '));
                 for (var x = 0; x < _segmentSize; x++)
                 {
-                    file.Write($"{x,3}".PadRight(cellWidth, ' '));
+                    if (matrix[x, y] != null)
+                    {
+                        file.Write(" ".PadLeft(CELLWIDTH, ' '));
+                    }
+                    else
+                    {
+                        file.Write("x".PadLeft(CELLWIDTH, ' '));
+                    }
                 }
 
                 file.WriteLine();
-
-                for (var y = 0; y < _segmentSize; y++)
-                {
-                    file.Write($"{y,3}".PadLeft(cellWidth, ' '));
-                    for (var x = 0; x < _segmentSize; x++)
-                    {
-                        if (matrix[x, y] != null)
-                        {
-                            file.Write(" ".PadLeft(cellWidth, ' '));
-                        }
-                        else
-                        {
-                            file.Write("x".PadLeft(cellWidth, ' '));
-                        }
-                    }
-
-                    file.WriteLine();
-                }
             }
         }
 
-        protected HexNode GetByCoords(int x, int y)
+        protected HexNode? GetByCoords(int x, int y)
         {
             var segmentKey = new SegmentKey(0, 0);
             var segment = _segmentDict[segmentKey];

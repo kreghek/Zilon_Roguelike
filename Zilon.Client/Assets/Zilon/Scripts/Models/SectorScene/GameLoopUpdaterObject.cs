@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Zilon.Scripts.Models.Sector;
+
+using UnityEngine;
 
 using Zenject;
 
@@ -13,14 +15,6 @@ public class GameLoopUpdaterObject : MonoBehaviour
         if (!_gameLoopUpdater.IsStarted)
         {
             _gameLoopUpdater.Start();
-        }
-    }
-
-    public void Destroy()
-    {
-        if (_gameLoopUpdater.IsStarted)
-        {
-            _gameLoopUpdater.Stop();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
 {
@@ -7,10 +9,15 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class Perk : IPerk
     {
+        public Perk(IPerkScheme scheme)
+        {
+            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
+        }
+
         /// <summary>
         /// Достигнутые уровени перка.
         /// </summary>
-        public PerkLevelSubScheme[] ArchievedLevelSchemes { get; set; }
+        public PerkLevelSubScheme[]? ArchievedLevelSchemes { get; set; }
 
         /// <summary>
         /// Признак того, что целевой уровень перка проплачен.
@@ -20,7 +27,7 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Схема уровеня перка, которая прокачивается.
         /// </summary>
-        public PerkLevelSubScheme TargetLevelScheme { get; set; }
+        public PerkLevelSubScheme? TargetLevelScheme { get; set; }
 
         /// <summary>
         /// Схема перка.
@@ -31,11 +38,11 @@ namespace Zilon.Core.Persons
         /// Аккумулированные работы по перку.
         /// Засчитываются в зависимости от области действия работ перка.
         /// </summary>
-        public IJob[] CurrentJobs { get; set; }
+        public IJob[]? CurrentJobs { get; set; }
 
         /// <summary>
         /// Текущий уровень перка.
         /// </summary>
-        public PerkLevel CurrentLevel { get; set; }
+        public PerkLevel? CurrentLevel { get; set; }
     }
 }

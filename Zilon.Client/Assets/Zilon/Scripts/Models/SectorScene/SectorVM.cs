@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Assets.Zilon.Scripts.Models.Sector;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
@@ -12,18 +14,15 @@ using UnityEngine;
 
 using Zenject;
 
-using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
-using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
-using Zilon.Core.Scoring;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -114,6 +113,9 @@ public class SectorVM : MonoBehaviour
     [NotNull]
     private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
 
+    [Inject]
+    private readonly GameLoopUpdater _gameLoopUpdater;
+
     public List<ActorViewModel> ActorViewModels { get; }
 
     public IEnumerable<MapNodeVM> NodeViewModels => _nodeViewModels;
@@ -156,6 +158,7 @@ public class SectorVM : MonoBehaviour
 
     public bool CanIntent = true;
     private TaskScheduler _taskScheduler;
+    private IGlobe _globe;
 
     private void ExecuteCommands()
     {
@@ -192,6 +195,9 @@ public class SectorVM : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     public void Awake()
     {
+        // Store globe beacause after quit and person death Globe and MainPerson will be erised.
+        _globe = _humanPlayer.Globe;
+
         InitServices();
 
         var nodeViewModels = InitNodeViewModels();
@@ -227,12 +233,15 @@ public class SectorVM : MonoBehaviour
         actor.DepositMined += Actor_DepositMined;
     }
 
-    private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+    private async void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
     {
-        foreach (var staticObject in e.Items)
+        await Task.Factory.StartNew(() =>
         {
-            CreateStaticObjectViewModel(_nodeViewModels, staticObject);
-        }
+            foreach (var staticObject in e.Items)
+            {
+                CreateStaticObjectViewModel(_nodeViewModels, staticObject);
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void InitServices()
@@ -427,8 +436,8 @@ public class SectorVM : MonoBehaviour
         var containerPosition = nodeViewModelUnderStaticObject.transform.position + new Vector3(0, 0, -1);
         staticObjectViewModel.WorldPosition = containerPosition;
         staticObjectViewModel.StaticObject = staticObject;
-        staticObjectViewModel.Selected += Container_Selected;
-        staticObjectViewModel.MouseEnter += ContainerViewModel_MouseEnter;
+        staticObjectViewModel.Selected += StaticObjectViewModel_Selected;
+        staticObjectViewModel.MouseEnter += StaticObjectViewModel_MouseEnter;
 
         _staticObjectViewModels.Add(staticObjectViewModel);
     }
@@ -439,14 +448,13 @@ public class SectorVM : MonoBehaviour
         return prefab;
     }
 
-    private void Container_Selected(object sender, EventArgs e)
+    private void StaticObjectViewModel_Selected(object sender, EventArgs e)
     {
         var containerViewModel = sender as StaticObjectViewModel;
 
-        _playerState.HoverViewModel = containerViewModel;
         _playerState.SelectedViewModel = containerViewModel;
 
-        if (containerViewModel == null)
+        if (containerViewModel is null)
         {
             return;
         }
@@ -468,7 +476,7 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void ContainerViewModel_MouseEnter(object sender, EventArgs e)
+    private void StaticObjectViewModel_MouseEnter(object sender, EventArgs e)
     {
         var containerViewModel = sender as ContainerVm;
 
@@ -552,14 +560,12 @@ public class SectorVM : MonoBehaviour
 
     private void UnscribeSectorDependentEvents()
     {
-        foreach (var sectorNode in _humanPlayer.Globe.SectorNodes)
+        foreach (var sectorNode in _globe.SectorNodes)
         {
             foreach (var actor in sectorNode.Sector.ActorManager.Items)
             {
                 actor.UsedAct -= ActorOnUsedAct;
                 actor.Person.GetModule<ISurvivalModule>().Dead -= HumanPersonSurvival_Dead;
-
-                actor.UsedAct -= ActorOnUsedAct;
                 actor.Person.GetModule<ISurvivalModule>().Dead -= Monster_Dead;
             }
         }
@@ -685,6 +691,9 @@ public class SectorVM : MonoBehaviour
 
             // Disable bot on person death
             _actorTaskControlSwitcher.Switch(ActorTaskSourceControl.Human);
+
+            // Cancel game loop updating.
+            _gameLoopUpdater.Stop();
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 

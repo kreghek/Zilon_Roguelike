@@ -8,7 +8,7 @@
         /// <summary>
         /// Дополнительный дроп к текущему.
         /// </summary>
-        IDropTableScheme[] Extra { get; }
+        IDropTableScheme[]? Extra { get; }
 
         /// <summary>
         /// Максимальное количество ресурсов.
@@ -32,7 +32,7 @@
         /// <remarks>
         /// Если указано null, то никакой предмет не дропается. null - это ничего не дропнулось.
         /// </remarks>
-        string SchemeSid { get; }
+        string? SchemeSid { get; }
 
         /// <summary>
         /// Вес записи в таблице дропа.

@@ -64,31 +64,31 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Происходит, когда актёр переместился.
         /// </summary>
-        event EventHandler Moved;
+        event EventHandler? Moved;
 
         /// <summary>
         /// Происходит, когда актёр открывает контейнер в секторе.
         /// </summary>
-        event EventHandler<OpenContainerEventArgs> OpenedContainer;
+        event EventHandler<OpenContainerEventArgs>? OpenedContainer;
 
         /// <summary>
         /// Происходит, когда актёр выполняет добычу ресурса в секторе.
         /// </summary>
-        event EventHandler<MineDepositEventArgs> DepositMined;
+        event EventHandler<MineDepositEventArgs>? DepositMined;
 
         /// <summary>
         /// Происходит, когда актёр выполняет действие.
         /// </summary>
-        event EventHandler<UsedActEventArgs> UsedAct;
+        event EventHandler<UsedActEventArgs>? UsedAct;
 
         /// <summary>
         /// Происходит, когда актёр получает урон.
         /// </summary>
-        event EventHandler<DamageTakenEventArgs> DamageTaken;
+        event EventHandler<DamageTakenEventArgs>? DamageTaken;
 
         /// <summary>
         /// Выстреливает, когда актёр использует предмет.
         /// </summary>
-        event EventHandler<UsedPropEventArgs> UsedProp;
+        event EventHandler<UsedPropEventArgs>? UsedProp;
     }
 }

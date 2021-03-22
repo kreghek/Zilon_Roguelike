@@ -21,7 +21,7 @@ namespace Zilon.Core.World
         }
 
         /// <inheritdoc />
-        public TransitionPoolItem Pop()
+        public TransitionPoolItem? Pop()
         {
             if (!_queue.TryDequeue(out var item))
             {

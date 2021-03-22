@@ -16,7 +16,7 @@ namespace Zilon.Core.Schemes
         [JsonConverter(typeof(ConcreteTypeConverter<PersonSurvivalStatKeySegmentSubScheme[]>))]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Реализация интерфейса")]
-        public IPersonSurvivalStatKeySegmentSubScheme[] KeyPoints { get; private set; }
+        public IPersonSurvivalStatKeySegmentSubScheme?[]? KeyPoints { get; private set; }
 
         /// <inheritdoc />
         [JsonProperty]

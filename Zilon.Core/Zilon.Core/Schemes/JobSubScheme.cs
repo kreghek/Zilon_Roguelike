@@ -32,6 +32,6 @@ namespace Zilon.Core.Schemes
         /// Дополнительные данные по работе.
         /// </summary>
         [JsonProperty]
-        public string[] Data { get; private set; }
+        public string[]? Data { get; private set; }
     }
 }

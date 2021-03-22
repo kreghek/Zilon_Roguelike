@@ -38,7 +38,7 @@ namespace Zilon.Core.Tests.Persons
                         },
                         // Указываем минимальный подуровень.
                         // Чтобы при попытке прокачки не наткнуться на левелкап.
-                        MaxValue = 1
+                        MaxValue = 2
                     }
                 }
             };
@@ -60,8 +60,8 @@ namespace Zilon.Core.Tests.Persons
                 .Returns(perkScheme);
             perkMock.SetupGet(x => x.CurrentLevel)
                 // Перки, которые могут прокачиваться, должны обладать уровнем.
-                // (0, 0) это минимальный уровень.
-                .Returns(new PerkLevel(0, 0));
+                // (1, 1) это минимальный уровень.
+                .Returns(new PerkLevel(1, 1));
             var perk = perkMock.Object;
 
             var perks = new[]
@@ -95,7 +95,7 @@ namespace Zilon.Core.Tests.Persons
                 {
                     new PerkLevelSubScheme
                     {
-                        MaxValue = 0,
+                        MaxValue = 1,
                         Jobs = new IJobSubScheme[]
                         {
                             new TestJobSubScheme
@@ -124,7 +124,7 @@ namespace Zilon.Core.Tests.Persons
             perkMock.SetupGet(x => x.Scheme)
                 .Returns(perkScheme);
             perkMock.SetupGet(x => x.CurrentLevel)
-                .Returns(new PerkLevel(0, 0));
+                .Returns(new PerkLevel(1, 1));
             var perk = perkMock.Object;
 
             var perks = new[]

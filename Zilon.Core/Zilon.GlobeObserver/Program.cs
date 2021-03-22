@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -90,7 +91,7 @@ namespace Zilon.GlobeObserver
         {
             for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
             {
-                await globe.UpdateAsync().ConfigureAwait(false);
+                await globe.UpdateAsync(CancellationToken.None).ConfigureAwait(false);
             }
         }
     }

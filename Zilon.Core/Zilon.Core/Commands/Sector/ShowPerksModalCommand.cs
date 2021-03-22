@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
 
@@ -30,7 +31,13 @@ namespace Zilon.Core.Commands
 
         public override void Execute()
         {
-            ModalManager.ShowPerksModal(_playerState.ActiveActor.Actor);
+            var actor = _playerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            ModalManager.ShowPerksModal(actor);
         }
     }
 }

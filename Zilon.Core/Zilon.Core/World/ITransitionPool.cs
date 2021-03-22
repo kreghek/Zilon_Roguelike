@@ -9,7 +9,7 @@
         /// Get a transition info from the pool. Or null if the pool is empty.
         /// </summary>
         /// <returns></returns>
-        TransitionPoolItem Pop();
+        TransitionPoolItem? Pop();
 
         /// <summary>
         /// Add information about a person and target sector level.

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts;
+using Assets.Zilon.Scripts.Models.Modals;
 
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.UI;
 
 using Zenject;
@@ -13,16 +16,27 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
 {
     private ICommand _targetCommand;
 
-    public Text Text;
+    private QuitModalBehaviour _quitModalBehaviour;
 
-    private string[] _texts = new[] {
-        "Give up and go out?",
-        "Is this fate too cruel to continue?",
-        "Easier to run than fight for your destiny?",
-        "Are you sure you want to quit this great game?",
-        "You're trying to say you like work better than me, right?",
-        "Just leave. When you come back, I'll be waiting with a bat."
-    };
+    /// <summary>
+    /// Text object to display random quit phrase.
+    /// </summary>
+    public Text QuitPhraseText;
+
+    /// <summary>
+    /// Caption to Close game.
+    /// </summary>
+    public LocalizedString QuitGameCaption;
+
+    /// <summary>
+    /// Caption to end game session.
+    /// </summary>
+    public LocalizedString QuitToTitleMenuCaption;
+
+    /// <summary>
+    /// Multiline string with quit phrases.
+    /// </summary>
+    public LocalizedString QuitPhrasesString;
 
     [Inject(Id = "quit-command")]
     private readonly ICommand _quitCommand;
@@ -34,25 +48,38 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
     private readonly ICommandManager _clientCommandExecutor;
 
     public string Caption { get; private set; }
+
     public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.DoNothing;
 
     public event EventHandler Closed;
 
-    public void Init(string caption, bool closeGame)
+    public async void Start()
     {
-        Caption = caption ?? throw new ArgumentNullException(nameof(caption));
+        await SetQuitCaption();
+        await SetQuitPhrase();
+    }
 
-        if (closeGame)
-        {
-            _targetCommand = _quitCommand;
-        }
-        else
-        {
-            _targetCommand = _quitTitleCommand;
-        }
+    public void Init(QuitModalBehaviour quitModalBehaviour)
+    {
+        _quitModalBehaviour = quitModalBehaviour;
 
-        var textIndex = UnityEngine.Random.Range(0, _texts.Length - 1);
-        Text.text = _texts[textIndex];
+        switch (quitModalBehaviour)
+        {
+            case QuitModalBehaviour.QuitGame:
+                _targetCommand = _quitCommand;
+                break;
+
+            case QuitModalBehaviour.QuitToTitleMenu:
+                _targetCommand = _quitTitleCommand;
+                break;
+
+            default:
+                if (Debug.isDebugBuild || Application.isEditor)
+                {
+                    throw new InvalidOperationException($"Invalid behaviour for quit modal: {quitModalBehaviour}.");
+                }
+                break;
+        }
     }
 
     public void ApplyChanges()
@@ -65,5 +92,53 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
         // ничего не делаем
         // просто закрываем окно
         Closed?.Invoke(this, new EventArgs());
+    }
+
+    private async Task SetQuitCaption()
+    {
+        var captionLocalizedString = GetCaptionLocalizedStringByBehaviour(_quitModalBehaviour);
+
+        Caption = await ReadStringFromLocalized(captionLocalizedString);
+    }
+
+    private LocalizedString GetCaptionLocalizedStringByBehaviour(QuitModalBehaviour quitModalBehaviour)
+    {
+        switch (quitModalBehaviour)
+        {
+            case QuitModalBehaviour.QuitToTitleMenu:
+                return QuitToTitleMenuCaption;
+
+            case QuitModalBehaviour.QuitGame:
+                return QuitGameCaption;
+
+            default:
+                if (Debug.isDebugBuild || Application.isEditor)
+                {
+                    throw new InvalidOperationException($"Invalid behaviour for quit modal: {quitModalBehaviour}.");
+                }
+                return QuitGameCaption;
+        }
+    }
+
+    private async Task SetQuitPhrase()
+    {
+        var phrasesString = await ReadStringFromLocalized(QuitPhrasesString);
+
+        var quitPhrases = phrasesString.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+        var rolledPhraseIndex = UnityEngine.Random.Range(0, quitPhrases.Length);
+
+        QuitPhraseText.text = quitPhrases[rolledPhraseIndex];
+    }
+
+    private static async Task<string> ReadStringFromLocalized(LocalizedString localizedString)
+    {
+        var _textsAsyncHandle = localizedString.GetLocalizedString();
+        if (_textsAsyncHandle.IsDone)
+        {
+            return _textsAsyncHandle.Result;
+        }
+
+        return await _textsAsyncHandle.Task;
     }
 }

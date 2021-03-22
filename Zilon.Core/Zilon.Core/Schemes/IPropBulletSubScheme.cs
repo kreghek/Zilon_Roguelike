@@ -2,6 +2,6 @@
 {
     public interface IPropBulletSubScheme
     {
-        string Caliber { get; }
+        string? Caliber { get; }
     }
 }

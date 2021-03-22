@@ -14,7 +14,6 @@ using UnityEngine.UI;
 /// </remarks>
 public class SceneLoader : MonoBehaviour
 {
-
     private bool loadScene = false;
 
     public string scene;
@@ -54,19 +53,16 @@ public class SceneLoader : MonoBehaviour
 
     }
 
-
     // The coroutine runs on its own at the same time as Update() and takes an integer indicating which scene to load.
     private IEnumerator LoadNewScene()
     {
         // Start an asynchronous operation to load the scene that was passed to the LoadNewScene coroutine.
-        AsyncOperation async = SceneManager.LoadSceneAsync(scene);
+        var async = SceneManager.LoadSceneAsync(scene);
 
         // While the asynchronous operation to load the new scene is not yet complete, continue waiting until it's done.
         while (!async.isDone)
         {
             yield return null;
         }
-
     }
-
 }

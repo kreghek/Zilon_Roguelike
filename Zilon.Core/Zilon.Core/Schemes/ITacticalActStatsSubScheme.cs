@@ -13,7 +13,7 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Эффективность действия.
         /// </summary>
-        Roll Efficient { get; }
+        Roll? Efficient { get; }
 
         /// <summary>
         /// Количество ударов при совершении действия.
@@ -32,12 +32,12 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Характеристики атакующей способности действия.
         /// </summary>
-        ITacticalActOffenceSubScheme Offence { get; }
+        ITacticalActOffenceSubScheme? Offence { get; }
 
         /// <summary>
         /// Дистанция, в котором возможно использования действия.
         /// </summary>
-        Range<int> Range { get; }
+        Range<int>? Range { get; }
 
         /// <summary>
         /// Доступные цели действия.

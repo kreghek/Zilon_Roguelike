@@ -163,12 +163,12 @@ namespace Zilon.Core.Client
         /// <remarks>
         /// Это событие не срабатывает, если изменилось количество ресурсов.
         /// </remarks>
-        public event EventHandler<PropStoreEventArgs> Added;
+        public event EventHandler<PropStoreEventArgs>? Added;
 
         /// <summary>
         /// Событие выстреливает, если какой-либо предмет удалён из хранилища.
         /// </summary>
-        public event EventHandler<PropStoreEventArgs> Removed;
+        public event EventHandler<PropStoreEventArgs>? Removed;
 
         /// <summary>
         /// Событие выстреливает, когда один из предметов в хранилище изменяется.
@@ -176,7 +176,7 @@ namespace Zilon.Core.Client
         /// <remarks>
         /// Используется, когда изменяется количество ресурсов в стаке.
         /// </remarks>
-        public event EventHandler<PropStoreEventArgs> Changed;
+        public event EventHandler<PropStoreEventArgs>? Changed;
 
         /// <summary>
         /// Предметы в хранилище.
@@ -202,14 +202,19 @@ namespace Zilon.Core.Client
                 case Resource resource:
 
                     // запоминаем предыдущее состояния для событий
-                    var oldProp = (Resource)CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+                    var oldProp = (Resource?)CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
 
                     TransferResource(resource, PropAdded, PropRemoved);
 
                     // Выброс событий
                     var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
 
-                    if (oldProp == null)
+                    if (currentProp is null)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    if (oldProp is null)
                     {
                         Added?.Invoke(this, new PropStoreEventArgs(currentProp));
                     }
@@ -245,6 +250,11 @@ namespace Zilon.Core.Client
 
                     // Выброс событий
                     var currentProp = CalcActualItems()?.SingleOrDefault(x => x.Scheme == prop.Scheme);
+
+                    if (oldProp is null)
+                    {
+                        throw new InvalidOperationException();
+                    }
 
                     if (currentProp != null)
                     {

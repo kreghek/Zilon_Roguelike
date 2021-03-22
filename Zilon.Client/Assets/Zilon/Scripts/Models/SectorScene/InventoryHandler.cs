@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Models;
 using Assets.Zilon.Scripts.Models.Modals;
@@ -18,8 +20,10 @@ using Zilon.Core.Tactics;
 
 public class InventoryHandler : MonoBehaviour
 {
-    private IActor _actor;
     private readonly List<PropItemVm> _propViewModels;
+
+    private IActor _actor;
+    private TaskScheduler _taskScheduler;
 
     public Transform InventoryItemsParent;
     public PropItemVm PropItemPrefab;
@@ -37,8 +41,6 @@ public class InventoryHandler : MonoBehaviour
     [NotNull] [Inject] private readonly ICommandManager _commandManager;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
-    public event EventHandler Closed;
-
     public InventoryHandler()
     {
         _propViewModels = new List<PropItemVm>();
@@ -46,6 +48,8 @@ public class InventoryHandler : MonoBehaviour
 
     public void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         CreateSlots();
         StartUpControls();
 
@@ -87,17 +91,20 @@ public class InventoryHandler : MonoBehaviour
         }
     }
 
-    private void InventoryState_SelectedPropChanged(object sender, EventArgs e)
+    private async void InventoryState_SelectedPropChanged(object sender, EventArgs e)
     {
-        foreach (var propViewModel in _propViewModels)
+        await Task.Factory.StartNew(() =>
         {
-            var isSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
-            propViewModel.SetSelectedState(isSelected);
-        }
+            foreach (var propViewModel in _propViewModels)
+            {
+                var isSelected = ReferenceEquals(propViewModel, _inventoryState.SelectedProp);
+                propViewModel.SetSelectedState(isSelected);
+            }
 
-        PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
+            PropInfoPopup.SetPropViewModel(_inventoryState.SelectedProp as IPropViewModelDescription);
 
-        UpdateUseControlsState(_inventoryState.SelectedProp as PropItemVm);
+            UpdateUseControlsState(_inventoryState.SelectedProp as PropItemVm);
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     public void OnDestroy()
@@ -293,7 +300,7 @@ public class InventoryHandler : MonoBehaviour
 
     private void UpdateUseControlsState(PropItemVm currentItemViewModel)
     {
-        if (currentItemViewModel?.Prop == null)
+        if (currentItemViewModel?.Prop is null)
         {
             UseButton.SetActive(false);
             ReadButton.SetActive(false);
