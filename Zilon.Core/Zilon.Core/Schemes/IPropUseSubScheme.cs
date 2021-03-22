@@ -8,7 +8,7 @@
         /// <summary>
         /// Rules when the prop used.
         /// </summary>
-        ConsumeCommonRule[] CommonRules { get; }
+        ConsumeCommonRule?[]? CommonRules { get; }
 
         /// <summary>
         /// Marks that when the resource used it reduce count by 1.
@@ -21,6 +21,6 @@
         /// <summary>
         /// Rules to use the prop.
         /// </summary>
-        IUsageRestrictions Restrictions { get; }
+        IUsageRestrictions? Restrictions { get; }
     }
 }

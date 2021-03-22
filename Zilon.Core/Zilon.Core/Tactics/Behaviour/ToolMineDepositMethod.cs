@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Zilon.Core.Common;
 using Zilon.Core.Props;
@@ -25,7 +26,11 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var requiredToolTags = deposit.GetToolTags();
-            var hasAllTags = EquipmentHelper.HasAllTags(_tool.Scheme.Tags, requiredToolTags);
+
+            var toolTags = _tool.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                           Array.Empty<string>();
+
+            var hasAllTags = EquipmentHelper.HasAllTags(toolTags, requiredToolTags);
             if (!hasAllTags)
             {
                 throw new InvalidOperationException("Попытка выполнить добычу ресурса не подходящим инструментом.");

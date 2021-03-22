@@ -21,7 +21,7 @@
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "используется для десериализации с внешнего источника.")]
-        IPersonSurvivalStatKeySegmentSubScheme[] KeyPoints { get; }
+        IPersonSurvivalStatKeySegmentSubScheme?[]? KeyPoints { get; }
 
         /// <summary>
         /// Максимальное значение характеристики.

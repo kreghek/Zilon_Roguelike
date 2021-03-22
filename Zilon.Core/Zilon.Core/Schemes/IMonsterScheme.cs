@@ -1,44 +1,48 @@
 ﻿namespace Zilon.Core.Schemes
 {
     /// <summary>
-    /// Схема монстра.
+    /// Monster schematic.
     /// </summary>
-    /// <seealso cref="Zilon.Core.Schemes.IScheme" />
+    /// <seealso cref="IScheme" />
     public interface IMonsterScheme : IScheme
     {
         /// <summary>
-        /// Базовая скорость передвижения монстра.
-        /// </summary>
-        int BaseMoveSpeed { get; }
-
-        /// <summary>
-        /// Базовые очки, начисляемые за убиство монстра.
+        /// Base points awarded for killing a monster.
         /// </summary>
         int BaseScore { get; }
 
         /// <summary>
-        /// Характеристики обороны монстра.
+        /// The characteristics of the monster's defense.
         /// </summary>
-        IMonsterDefenseSubScheme Defense { get; }
+        IMonsterDefenseSubScheme? Defense { get; }
 
         /// <summary>
-        /// Таблицы дропа, из которых формируется лут с монстра.
+        /// Tables of drop, from which the loot from the monster is formed.
         /// </summary>
-        string[] DropTableSids { get; }
+        string?[]? DropTableSids { get; }
 
         /// <summary>
-        /// Значение ХП монстра.
+        /// The HP value of the monster.
         /// </summary>
         int Hp { get; }
 
         /// <summary>
-        /// Действие, которое монстр выполняет при атаке.
+        /// The coefficient of the speed of movement of the monster.
         /// </summary>
-        ITacticalActStatsSubScheme PrimaryAct { get; }
+        /// <remarks>
+        /// The higher the value, the faster the monster.
+        /// With a coefficient of 2, the monster manages to move twice in one iteration of the sector.
+        /// </remarks>
+        float? MoveSpeedFactor { get; }
 
         /// <summary>
-        /// Теги для классификации монстров.
+        /// The action the monster performs when attacking.
         /// </summary>
-        string[] Tags { get; }
+        ITacticalActStatsSubScheme? PrimaryAct { get; }
+
+        /// <summary>
+        /// Tags for classifying monsters.
+        /// </summary>
+        string?[]? Tags { get; }
     }
 }

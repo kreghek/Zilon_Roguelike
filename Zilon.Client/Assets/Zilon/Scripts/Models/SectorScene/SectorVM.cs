@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Assets.Zilon.Scripts.Models.Sector;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
@@ -111,6 +112,9 @@ public class SectorVM : MonoBehaviour
     [Inject]
     [NotNull]
     private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
+
+    [Inject]
+    private readonly GameLoopUpdater _gameLoopUpdater;
 
     public List<ActorViewModel> ActorViewModels { get; }
 
@@ -229,12 +233,15 @@ public class SectorVM : MonoBehaviour
         actor.DepositMined += Actor_DepositMined;
     }
 
-    private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+    private async void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
     {
-        foreach (var staticObject in e.Items)
+        await Task.Factory.StartNew(() =>
         {
-            CreateStaticObjectViewModel(_nodeViewModels, staticObject);
-        }
+            foreach (var staticObject in e.Items)
+            {
+                CreateStaticObjectViewModel(_nodeViewModels, staticObject);
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void InitServices()
@@ -429,8 +436,8 @@ public class SectorVM : MonoBehaviour
         var containerPosition = nodeViewModelUnderStaticObject.transform.position + new Vector3(0, 0, -1);
         staticObjectViewModel.WorldPosition = containerPosition;
         staticObjectViewModel.StaticObject = staticObject;
-        staticObjectViewModel.Selected += Container_Selected;
-        staticObjectViewModel.MouseEnter += ContainerViewModel_MouseEnter;
+        staticObjectViewModel.Selected += StaticObjectViewModel_Selected;
+        staticObjectViewModel.MouseEnter += StaticObjectViewModel_MouseEnter;
 
         _staticObjectViewModels.Add(staticObjectViewModel);
     }
@@ -441,14 +448,13 @@ public class SectorVM : MonoBehaviour
         return prefab;
     }
 
-    private void Container_Selected(object sender, EventArgs e)
+    private void StaticObjectViewModel_Selected(object sender, EventArgs e)
     {
         var containerViewModel = sender as StaticObjectViewModel;
 
-        _playerState.HoverViewModel = containerViewModel;
         _playerState.SelectedViewModel = containerViewModel;
 
-        if (containerViewModel == null)
+        if (containerViewModel is null)
         {
             return;
         }
@@ -470,7 +476,7 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    private void ContainerViewModel_MouseEnter(object sender, EventArgs e)
+    private void StaticObjectViewModel_MouseEnter(object sender, EventArgs e)
     {
         var containerViewModel = sender as ContainerVm;
 
@@ -685,6 +691,9 @@ public class SectorVM : MonoBehaviour
 
             // Disable bot on person death
             _actorTaskControlSwitcher.Switch(ActorTaskSourceControl.Human);
+
+            // Cancel game loop updating.
+            _gameLoopUpdater.Stop();
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 

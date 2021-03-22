@@ -48,7 +48,7 @@ namespace Zilon.Core.Persons.Survival
             Changed?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler Changed;
+        public event EventHandler? Changed;
 
         public EffectRule[] GetRules()
         {

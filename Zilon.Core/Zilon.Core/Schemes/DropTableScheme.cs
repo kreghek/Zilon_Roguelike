@@ -12,7 +12,7 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<DropTableRecordSubScheme[]>))]
         [JsonProperty]
-        public IDropTableRecordSubScheme[] Records { get; private set; }
+        public IDropTableRecordSubScheme[]? Records { get; private set; }
 
         /// <summary>
         /// Количество бросков на проверку выпавшей записи.

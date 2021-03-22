@@ -29,6 +29,7 @@ namespace Zilon.TextClient
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
             serviceContainer.AddScoped<MoveCommand>();
             serviceContainer.AddScoped<IdleCommand>();
+            serviceContainer.AddScoped<AttackCommand>();
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
             serviceContainer.AddScoped<SectorTransitionMoveCommand>();
 

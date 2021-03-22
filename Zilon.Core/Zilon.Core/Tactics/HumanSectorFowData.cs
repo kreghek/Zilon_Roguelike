@@ -70,7 +70,7 @@ namespace Zilon.Core.Tactics
             return targetList;
         }
 
-        public SectorMapFowNode GetNode(IGraphNode node)
+        public SectorMapFowNode? GetNode(IGraphNode node)
         {
             if (_nodes.TryGetValue(node, out var sectorMapFowNode))
             {

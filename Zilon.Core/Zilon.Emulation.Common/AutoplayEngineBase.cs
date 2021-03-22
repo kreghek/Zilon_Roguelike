@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -57,7 +58,7 @@ namespace Zilon.Emulation.Common
                 {
                     try
                     {
-                        await globe.UpdateAsync().ConfigureAwait(false);
+                        await globe.UpdateAsync(CancellationToken.None).ConfigureAwait(false);
                     }
                     catch (ActorTaskExecutionException exception)
                     {

@@ -22,7 +22,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="armorEquipments">Доступные предметы экипировки.</param>
         /// <returns> Случайный экипированный предмет, который был повреждён. </returns>
-        Equipment RollDamagedEquipment(IEnumerable<Equipment> armorEquipments);
+        Equipment? RollDamagedEquipment(IEnumerable<Equipment> armorEquipments);
 
         /// <summary>
         /// Выбирает значение эффективности действия по указанным характеристикам броска.

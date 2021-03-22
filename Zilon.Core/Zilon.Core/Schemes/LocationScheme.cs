@@ -14,6 +14,6 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<SectorSubScheme[]>))]
         [JsonProperty]
-        public ISectorSubScheme[] SectorLevels { get; private set; }
+        public ISectorSubScheme[]? SectorLevels { get; private set; }
     }
 }

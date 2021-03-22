@@ -50,7 +50,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
-        private static SectorMapFowNode GetFowNodeByMapNode(ISectorFowData fowData, IGraphNode observingNode)
+        private static SectorMapFowNode? GetFowNodeByMapNode(ISectorFowData fowData, IGraphNode observingNode)
         {
             return fowData.GetNode(observingNode);
         }

@@ -12,7 +12,7 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Подсхема с ограничениями на использование действий.
         /// </summary>
-        ITacticalActConstrainsSubScheme Constrains { get; }
+        ITacticalActConstrainsSubScheme? Constrains { get; }
 
         /// <summary>
         /// Текущее состояние КД на использование.
@@ -28,12 +28,12 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Предмет экипировки, который даёт данное действие.
         /// </summary>
-        Equipment Equipment { get; }
+        Equipment? Equipment { get; }
 
         /// <summary>
         /// Схема действия.
         /// </summary>
-        ITacticalActScheme Scheme { get; }
+        ITacticalActScheme? Scheme { get; }
 
         /// <summary>
         /// Схема основных характеристик тактического действия.

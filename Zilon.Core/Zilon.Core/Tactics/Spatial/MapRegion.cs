@@ -21,10 +21,10 @@ namespace Zilon.Core.Tactics.Spatial
         public MapRegion(int id, [NotNull][ItemNotNull] IGraphNode[] nodes)
         {
             Id = id;
-            Nodes = nodes ?? throw new ArgumentNullException(nameof(nodes));
+            Nodes = nodes;
         }
 
-        public IGraphNode[] ExitNodes { get; set; }
+        public IGraphNode[]? ExitNodes { get; set; }
 
         public int Id { get; }
 

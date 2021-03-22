@@ -5,7 +5,33 @@ on: push
 jobs:
   # Set the job key. The key is displayed as the job name
   # when a job name is not provided
-  dotnet-format-lint:
+  dotnet-format-core-lint:
+    # Name the Job
+    name: Clean up C# code base via dotnet-format
+    # Set the type of machine to run on
+    runs-on: ubuntu-latest
+    env:
+      working-directory : ./
+    strategy:
+      matrix:
+        solution:
+        - Zilon.Core
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - run: git pull
+      - run: dotnet tool install --global dotnet-format --version 5.0.211103
+      - name: Format codebase ${{ matrix.solution }}
+        run: dotnet-format Zilon.Core/${{ matrix.solution }}.sln --fix-whitespace --fix-style --verbosity detailed
+        working-directory: ${{env.working-directory}}
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v5
+        with:
+          message: "[Bot] Automated dotnet-format update"
+          add: "*.cs"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  dotnet-format-client-lint:
     # Name the Job
     name: Clean up C# code base via dotnet-format
     # Set the type of machine to run on
@@ -16,14 +42,13 @@ jobs:
       matrix:
         codebasePath:
         - Zilon.Client/Assets/Zilon/Scripts
-        - Zilon.Core/
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - run: git pull
-      - run: dotnet tool install --global dotnet-format --version 4.1.131201
-      - name: format codebase ${{ matrix.codebasePath }}
-        run: dotnet-format -f ${{ matrix.codebasePath }} -v d
+      - run: dotnet tool install --global dotnet-format --version 5.0.211103
+      - name: Format codebase ${{ matrix.codebasePath }}
+        run: dotnet-format --folder ${{ matrix.codebasePath }} --fix-whitespace --verbosity detailed
         working-directory: ${{env.working-directory}}
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
@@ -41,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       working-directory : ./Zilon.Core/
-    needs: [dotnet-format-lint]
+    needs: [dotnet-format-core-lint, dotnet-format-client-lint]
 
     steps:
       - uses: actions/checkout@v2
@@ -51,8 +76,8 @@ jobs:
         with:
           dotnet-version: '3.1.x'
       - name: Setup ReSharper Command Line Tools
-        run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2020.3.0
-      - name: Clean up code
+        run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2020.3.3
+      - name: Clean up codebase via ReSharper Command Line Tools
         run: jb cleanupcode --profile="Full Cleanup" Zilon.Core.sln
         working-directory: ${{env.working-directory}}
       - name: Commit changes

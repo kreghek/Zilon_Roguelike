@@ -16,7 +16,7 @@ namespace Zilon.Core.Schemes
 
         /// <inheritdoc />
         [JsonProperty]
-        public string PropResourceType { get; private set; }
+        public string? PropResourceType { get; private set; }
 
         /// <inheritdoc />
         [JsonProperty]

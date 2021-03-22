@@ -13,11 +13,11 @@ namespace Zilon.Core.Schemes
 
         /// <inheritdoc />
         [JsonProperty]
-        public ConsumeCommonRule[] CommonRules { get; private set; }
+        public ConsumeCommonRule?[]? CommonRules { get; private set; }
 
         /// <inheritdoc />
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<UsageRestrictions>))]
-        public IUsageRestrictions Restrictions { get; private set; }
+        public IUsageRestrictions? Restrictions { get; private set; }
     }
 }
