@@ -55,12 +55,12 @@ namespace Zilon.Core.PersonModules
         /// <summary>
         /// Происходит, если персонаж умирает.
         /// </summary>
-        event EventHandler Dead;
+        event EventHandler? Dead;
 
         /// <summary>
         /// Событие, которое происходит, если значение характеристики
         /// изменяется.
         /// </summary>
-        event EventHandler<SurvivalStatChangedEventArgs> StatChanged;
+        event EventHandler<SurvivalStatChangedEventArgs>? StatChanged;
     }
 }

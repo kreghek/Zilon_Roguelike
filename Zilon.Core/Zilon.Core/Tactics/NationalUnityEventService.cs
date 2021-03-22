@@ -29,7 +29,7 @@ namespace Zilon.Core.Tactics
             _userTimeProvider = userTimeProvider;
         }
 
-        public IGlobe Globe { get; set; }
+        public IGlobe? Globe { get; set; }
 
         public void RollAndCreateUnityGroupIntoSector(ISector sector)
         {
@@ -47,6 +47,8 @@ namespace Zilon.Core.Tactics
             // If globe has no interventionists then spawn they.
             // Next randomly spawns interventionists or militia.
             var interventionistsCount = Globe.SectorNodes.Select(x => x.Sector)
+                .Where(x => x != null)
+                .Select(x => x!)
                 .SelectMany(x => x.ActorManager.Items)
                 .Where(x => x.Person.Fraction == Fractions.InterventionistFraction)
                 .Count();

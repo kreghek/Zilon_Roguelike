@@ -1,6 +1,6 @@
 ﻿namespace Assets.Zilon.Scripts.Services
 {
-    enum Language
+    public enum Language
     {
         Undefined = 0,
         Russian,

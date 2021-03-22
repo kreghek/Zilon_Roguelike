@@ -1,0 +1,39 @@
+name: Mutation Tests using Stryker.NET
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Nightly
+
+env:
+  REPORT_RESULT_PATH: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Core/Zilon.Core.Tests/StrykerOutput
+
+jobs:
+
+  test:
+    name: Mutation Tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+    - name: Setup Stryker
+      run: |
+        dotnet tool install -g dotnet-stryker --version 0.22.0
+    - name: Kill the mutants!
+      env:
+        ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+        DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      run: |
+        cd ./Zilon.Core/Zilon.Core.Tests
+        dotnet stryker --project-file=/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Core/Zilon.Core/Zilon.Core.csproj --ignore-methods "['ToString', 'ConfigureAwait', '*Exception.ctor', 'Equals', 'GetHashCode']" --excluded-mutations "['string']"
+    - name: Publish mutation report
+      uses: actions/upload-artifact@v2
+      with:
+        name: Report
+        path: ${{ env.REPORT_RESULT_PATH }}

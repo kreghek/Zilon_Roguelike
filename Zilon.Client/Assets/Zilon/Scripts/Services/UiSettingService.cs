@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Zilon.Scripts.Services
 {
-    class UiSettingService
+    public class UiSettingService
     {
         private Language _currentLanguage;
 

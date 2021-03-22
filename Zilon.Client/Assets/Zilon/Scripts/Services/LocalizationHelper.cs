@@ -2,7 +2,7 @@
 
 namespace Assets.Zilon.Scripts.Services
 {
-    static class LocalizationHelper
+    public static class LocalizationHelper
     {
         public static string GetValue(Language currentLanguage, ILocalizedString localizedString)
         {

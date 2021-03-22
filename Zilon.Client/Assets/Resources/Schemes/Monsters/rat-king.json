@@ -4,6 +4,7 @@
     "En": "Rat King"
   },
   "Hp": 12,
+  "MoveSpeedFactor": 0.5,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 6,

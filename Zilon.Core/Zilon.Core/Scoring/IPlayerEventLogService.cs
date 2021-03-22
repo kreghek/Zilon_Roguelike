@@ -13,7 +13,7 @@ namespace Zilon.Core.Scoring
         /// Вернуть последнее зарегистрированние событие.
         /// </summary>
         /// <returns></returns>
-        IPlayerEvent GetPlayerEvent();
+        IPlayerEvent? GetPlayerEvent();
 
         /// <summary>
         /// Зафиксировать событие.

@@ -30,7 +30,7 @@ namespace Zilon.Core.Props
 
             if (scheme.Equip.ActSids == null)
             {
-                return new Equipment(scheme, null);
+                return new Equipment(scheme, Array.Empty<ITacticalActScheme>());
             }
 
             var actSchemes = new List<ITacticalActScheme>();
@@ -38,6 +38,11 @@ namespace Zilon.Core.Props
 
             foreach (var actSchemeSid in actSchemeSids)
             {
+                if (actSchemeSid is null)
+                {
+                    continue;
+                }
+
                 var actScheme = _schemeService.GetScheme<ITacticalActScheme>(actSchemeSid);
 
                 actSchemes.Add(actScheme);

@@ -45,6 +45,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "prop-tag-weapon", new MultilangPhrase{ En = "weapon", Ru = "оружие" } },
                 { "prop-tag-armor", new MultilangPhrase{ En = "armor", Ru = "броня" } },
                 { "prop-tag-ranged", new MultilangPhrase{ En = "ranged", Ru = "дистанционное" } },
+                { "prop-tag-tool", new MultilangPhrase{ En = "tool", Ru = "инструмент" } },
 
                 { "prop-tag-pole", new MultilangPhrase{ En = "pole", Ru = "древковое" } },
                 { "prop-tag-sword", new MultilangPhrase{ En = "sword", Ru = "меч" } },
@@ -55,6 +56,8 @@ namespace Assets.Zilon.Scripts.Services
                 { "prop-tag-staff", new MultilangPhrase{ En = "staff", Ru = "посох" } },
                 { "prop-tag-shield", new MultilangPhrase{ En = "shield", Ru = "щит" } },
                 { "prop-tag-wand", new MultilangPhrase{ En = "wand", Ru = "жезл" } },
+                { "prop-tag-pick-axe", new MultilangPhrase{ En = "pick axe", Ru = "кирка" } },
+                { "prop-tag-shovel", new MultilangPhrase{ En = "shovel", Ru = "лопата" } },
 
                 { "impact-kinetic", new MultilangPhrase{ En = "kinetic", Ru = "кинетический" } },
                 { "impact-psy", new MultilangPhrase{ En = "psy", Ru = "пси" } },

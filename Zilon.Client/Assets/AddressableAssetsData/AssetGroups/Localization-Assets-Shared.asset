@@ -15,15 +15,12 @@ MonoBehaviour:
   m_GroupName: Localization-Assets-Shared
   m_Data:
     m_SerializedData: []
-  m_GUID: 81c68591eb34ff6479fcd273c9add764
+  m_GUID: 4331d2206bd9b1e4b98abd447e8e0277
   m_SerializeEntries:
-  - m_GUID: ad3de33a5abd60c48a69ad72ee229388
-    m_Address: UI Common Shared Data
+  - m_GUID: 875b5491fe01e8c46aa7576940e80a01
+    m_Address: UI Common StringTableCollection Shared Data
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    - Locale-ru-RU
-    - Locale-en-US
+    m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
   m_ReadOnly: 1

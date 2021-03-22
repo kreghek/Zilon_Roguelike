@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <returns>Returns true if usage allowed. Otherwise - false.</returns>
         public static bool CheckPropAllowedByRestrictions(IProp usedProp, IActor actor, IActorTaskContext context)
         {
-            var restrictions = usedProp.Scheme.Use.Restrictions;
+            var restrictions = usedProp.Scheme.Use?.Restrictions;
             if (restrictions is null)
             {
                 // Prop without restrictions automaticcaly allowed.
@@ -42,6 +42,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
             foreach (var restriction in restrictions.Items)
             {
+                if (restriction is null)
+                {
+                    continue;
+                }
+
                 var isAllowed = CheckPropAllowedByRestriction(restriction.Type, actor, context);
 
                 if (!isAllowed)

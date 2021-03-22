@@ -4,6 +4,7 @@
     "En": "Rat Mutant"
   },
   "Hp": 8,
+  "MoveSpeedFactor": 0.8,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,

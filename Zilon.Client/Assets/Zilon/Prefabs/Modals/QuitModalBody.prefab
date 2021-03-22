@@ -63,23 +63,23 @@ MonoBehaviour:
   QuitPhraseText: {fileID: 9195318587137655872}
   QuitGameCaption:
     m_TableReference:
-      m_TableCollectionName: GUID:ad3de33a5abd60c48a69ad72ee229388
+      m_TableCollectionName: GUID:875b5491fe01e8c46aa7576940e80a01
     m_TableEntryReference:
-      m_KeyId: 194899116032
+      m_KeyId: 74693512654848
       m_Key: 
     m_FallbackState: 0
   QuitToTitleMenuCaption:
     m_TableReference:
-      m_TableCollectionName: GUID:ad3de33a5abd60c48a69ad72ee229388
+      m_TableCollectionName: GUID:875b5491fe01e8c46aa7576940e80a01
     m_TableEntryReference:
-      m_KeyId: 214390046720
+      m_KeyId: 74949352615936
       m_Key: 
     m_FallbackState: 0
   QuitPhrasesString:
     m_TableReference:
-      m_TableCollectionName: GUID:ad3de33a5abd60c48a69ad72ee229388
+      m_TableCollectionName: GUID:875b5491fe01e8c46aa7576940e80a01
     m_TableEntryReference:
-      m_KeyId: 25587646464
+      m_KeyId: 14353559552
       m_Key: 
     m_FallbackState: 0
 --- !u!1 &1326416103402299346
@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 1138008915207369965}
   - component: {fileID: 9195318587137655872}
   m_Layer: 5
-  m_Name: QuitPhraseText
+  m_Name: QuitPhaseText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -304,8 +304,9 @@ GameObject:
   - component: {fileID: 3057393902023019995}
   - component: {fileID: 5574524817743371986}
   - component: {fileID: 4276479012803715172}
+  - component: {fileID: 3377651141374068654}
   m_Layer: 5
-  m_Name: Text
+  m_Name: CancelButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -372,6 +373,41 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Cancel
+--- !u!114 &3377651141374068654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3291995772617299478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:875b5491fe01e8c46aa7576940e80a01
+    m_TableEntryReference:
+      m_KeyId: 77315292393472
+      m_Key: 
+    m_FallbackState: 0
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4276479012803715172}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Text, UnityEngine.UI
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4213108922752981667
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,8 +551,9 @@ GameObject:
   - component: {fileID: 642334491463016902}
   - component: {fileID: 746184570216454334}
   - component: {fileID: 2030379563363906918}
+  - component: {fileID: 7867657183773894684}
   m_Layer: 5
-  m_Name: Text
+  m_Name: QuitButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -583,3 +620,38 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Quit
+--- !u!114 &7867657183773894684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6811779677842278090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:875b5491fe01e8c46aa7576940e80a01
+    m_TableEntryReference:
+      m_KeyId: 76560179261440
+      m_Key: 
+    m_FallbackState: 0
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2030379563363906918}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Text, UnityEngine.UI
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

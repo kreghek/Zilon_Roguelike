@@ -42,10 +42,13 @@ namespace Zilon.Core.PersonGeneration
             FillSlot(person, offWeaponDropScheme, OffHandSlotIndex);
 
             var startPropDropScheme = rolledTemplate.InventoryProps;
-            var startProps = DropResolver.Resolve(new[] { startPropDropScheme });
-            foreach (var prop in startProps)
+            if (startPropDropScheme != null)
             {
-                AddPropToInventory(inventory, prop);
+                var startProps = DropResolver.Resolve(new[] { startPropDropScheme });
+                foreach (var prop in startProps)
+                {
+                    AddPropToInventory(inventory, prop);
+                }
             }
 
             AddDefaultProps(inventory);

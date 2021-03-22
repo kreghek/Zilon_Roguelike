@@ -44,7 +44,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
+        public IPlayerEventLogService? PlayerEventLogService { get; set; }
 
         public SurvivalStatType Type { get; }
 
@@ -101,7 +101,7 @@ namespace Zilon.Core.Persons
             return _rules;
         }
 
-        public event EventHandler Changed;
+        public event EventHandler? Changed;
 
         /// <summary>
         /// Применяет эффект к указанным данным.

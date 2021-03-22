@@ -61,7 +61,7 @@ namespace Zilon.Core.StaticObjectModules
         public bool IsParentStaticObjectDestroyed { get; private set; }
 
         /// <inheritdoc />
-        public event EventHandler Destroyed;
+        public event EventHandler? Destroyed;
 
         public void Destroy()
         {

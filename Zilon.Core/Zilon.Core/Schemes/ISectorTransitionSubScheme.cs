@@ -2,6 +2,6 @@
 {
     public interface ISectorTransitionSubScheme : ISubScheme
     {
-        string SectorLevelSid { get; }
+        string? SectorLevelSid { get; }
     }
 }

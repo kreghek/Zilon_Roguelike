@@ -12,7 +12,7 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<TacticalActOffenceSubScheme>))]
-        public ITacticalActOffenceSubScheme Offence { get; private set; }
+        public ITacticalActOffenceSubScheme? Offence { get; private set; }
 
         /// <summary>
         /// Эффект, который оказывает действие.
@@ -24,13 +24,13 @@ namespace Zilon.Core.Schemes
         /// Эффективность действия.
         /// </summary>
         [JsonProperty]
-        public Roll Efficient { get; private set; }
+        public Roll? Efficient { get; private set; }
 
         /// <summary>
         /// Дистанция, в котором возможно использования действия.
         /// </summary>
         [JsonProperty]
-        public Range<int> Range { get; private set; }
+        public Range<int>? Range { get; private set; }
 
         /// <summary>
         /// Количество ударов при совершении действия.

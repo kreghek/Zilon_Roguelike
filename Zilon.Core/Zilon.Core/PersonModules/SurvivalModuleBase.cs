@@ -119,7 +119,7 @@ namespace Zilon.Core.PersonModules
         /// Событие, которое происходит, если значение характеристики
         /// пересекает ключевое значение (мин/макс/четверти/0).
         /// </summary>
-        public event EventHandler<SurvivalStatChangedEventArgs> StatChanged;
+        public event EventHandler<SurvivalStatChangedEventArgs>? StatChanged;
 
         /// <summary>Признак того, что персонаж мёртв.</summary>
         public bool IsDead { get; private set; }
@@ -128,7 +128,7 @@ namespace Zilon.Core.PersonModules
         public bool IsActive { get; set; }
 
         /// <summary>Происходит, если персонаж умирает.</summary>
-        public event EventHandler Dead;
+        public event EventHandler? Dead;
 
         /// <summary>Пополнение запаса характеристики.</summary>
         /// <param name="type">Тип характеритсики, которая будет произведено влияние.</param>
