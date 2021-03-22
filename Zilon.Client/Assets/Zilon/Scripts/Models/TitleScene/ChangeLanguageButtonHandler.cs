@@ -10,6 +10,9 @@ using Zenject;
 
 public class ChangeLanguageButtonHandler : MonoBehaviour
 {
+    private const string RU_LOCALE_CODE = "ru";
+    private const string EN_LOCALE_CODE = "en";
+
     [Inject]
     private readonly UiSettingService _uiSettingService;
 
@@ -21,12 +24,12 @@ public class ChangeLanguageButtonHandler : MonoBehaviour
         {
             case Language.English:
                 _uiSettingService.CurrentLanguage = Language.Russian;
-                SetLocaleByCode("ru");
+                SetLocaleByCode(RU_LOCALE_CODE);
                 break;
 
             case Language.Russian:
                 _uiSettingService.CurrentLanguage = Language.English;
-                SetLocaleByCode("en");
+                SetLocaleByCode(EN_LOCALE_CODE);
                 break;
 
             case Language.Undefined:
@@ -37,7 +40,7 @@ public class ChangeLanguageButtonHandler : MonoBehaviour
                 }
 
                 _uiSettingService.CurrentLanguage = Language.English;
-                SetLocaleByCode("en");
+                SetLocaleByCode(EN_LOCALE_CODE);
                 break;
         }
     }
