@@ -10,29 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
-  m_Name: UI Common StringTableCollection_en
+  m_Name: UI Common StringTableCollection_en-US
   m_EditorClassIdentifier: 
   m_LocaleId:
-    m_Code: en
+    m_Code: en-US
   m_SharedData: {fileID: 11400000, guid: 875b5491fe01e8c46aa7576940e80a01, type: 2}
   m_Metadata:
     m_Items: []
   m_TableData:
   - m_Id: 14353559552
-    m_Localized: 'Give up and go out?
-
-      Is this fate too cruel to continue?
-
-      Easier
-      to run than fight for your destiny?
-
-      Are you sure you want to quit this
-      great game?
-
-      You''re trying to say you like work better than me, right?
-
-      Just
-      leave. When you come back, I''ll be waiting with a bat.'
+    m_Localized: "Give up and go out?\nIs this fate too cruel to continue?\nEasier\r
+      to run than fight for your destiny?\nAre you sure you want to quit this\r great
+      game?\nYou're trying to say you like work better than me, right?\nJust\r leave.
+      When you come back, I''ll be waiting with a bat."
     m_Metadata:
       m_Items: []
   - m_Id: 74693512654848
