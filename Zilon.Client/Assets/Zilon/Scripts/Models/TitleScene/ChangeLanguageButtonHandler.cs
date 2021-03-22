@@ -10,8 +10,8 @@ using Zenject;
 
 public class ChangeLanguageButtonHandler : MonoBehaviour
 {
-    private const string RU_LOCALE_CODE = "ru-RU";
-    private const string EN_LOCALE_CODE = "en-US";
+    private const string RU_LOCALE_CODE = "ru";
+    private const string EN_LOCALE_CODE = "en";
 
     [Inject]
     private readonly UiSettingService _uiSettingService;
