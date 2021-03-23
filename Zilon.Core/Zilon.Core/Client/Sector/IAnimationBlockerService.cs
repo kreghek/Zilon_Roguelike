@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Assets.Zilon.Scripts.Services
+namespace Zilon.Core.Client.Sector
 {
     /// <summary>
     /// Service to work with animation blocker. Blockers required to corrently animate actions of visible actors.

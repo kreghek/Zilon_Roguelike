@@ -1,15 +1,14 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Assets.Zilon.Scripts.Services
+namespace Zilon.Core.Client.Sector
 {
-    class AnimationBlockerService : IAnimationBlockerService
+    public class AnimationBlockerService : IAnimationBlockerService
     {
         private readonly ConcurrentDictionary<ICommandBlocker, byte> _commandBlockers;
 
-        private TaskCompletionSource<bool> tcs;
+        private TaskCompletionSource<bool> _tcs;
 
         private object _lockObject;
 
@@ -29,7 +28,7 @@ namespace Assets.Zilon.Scripts.Services
             {
                 commandBlocker.Released += CommandBlocker_Release;
                 _commandBlockers.TryAdd(commandBlocker, 0);
-                tcs = new TaskCompletionSource<bool>();
+                _tcs = new TaskCompletionSource<bool>();
             }
         }
 
@@ -52,13 +51,13 @@ namespace Assets.Zilon.Scripts.Services
         {
             lock (_lockObject)
             {
-                if (tcs is null)
+                if (_tcs is null)
                 {
                     return Task.CompletedTask;
                 }
                 else
                 {
-                    return tcs.Task;
+                    return _tcs.Task;
                 }
             }
         }
@@ -73,9 +72,9 @@ namespace Assets.Zilon.Scripts.Services
 
                 if (!HasBlockers)
                 {
-                    if (tcs != null)
+                    if (_tcs != null)
                     {
-                        tcs.SetResult(true);
+                        _tcs.SetResult(true);
                     }
                 }
             }

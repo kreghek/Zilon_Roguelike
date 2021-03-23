@@ -83,7 +83,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly IPlayer _humanPlayer;
 
-    [Inject] private readonly IAnimationBlockerService _commandBlockerService;
+    [Inject] private readonly IAnimationBlockerService _animationBlockerService;
 
     [Inject] private readonly UiSettingService _uiSettingService;
 
@@ -144,16 +144,18 @@ public class SectorVM : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     public void Update()
     {
-        if (!_commandBlockerService.HasBlockers)
+        if (_animationBlockerService.HasBlockers)
         {
-            try
-            {
-                ExecuteCommands();
-            }
-            catch (Exception exception)
-            {
-                Debug.LogError(exception);
-            }
+            return;
+        }
+
+        try
+        {
+            ExecuteCommands();
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError(exception);
         }
     }
 
@@ -166,13 +168,6 @@ public class SectorVM : MonoBehaviour
             if (command != null)
             {
                 command.Execute();
-
-                var hasCommandBlockers = _commandBlockerService.HasBlockers && _humanActorTaskSource.CanIntent();
-
-                if (hasCommandBlockers)
-                {
-                    return;
-                }
 
                 if (command is IRepeatableCommand repeatableCommand)
                 {
@@ -209,7 +204,7 @@ public class SectorVM : MonoBehaviour
         FowManager.InitViewModels(nodeViewModels, ActorViewModels, _staticObjectViewModels);
 
         //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
-        _commandBlockerService.DropBlockers();
+        _animationBlockerService.DropBlockers();
 
         // Изначально канвас отключен.
         // Эта операция нужна, чтобы Start у всяких панелей выполнялся после инициализации
@@ -306,7 +301,7 @@ public class SectorVM : MonoBehaviour
 
     private void MapNodeVm_MouseEnter(object sender, EventArgs e)
     {
-        var blocked = _commandBlockerService.HasBlockers;
+        var blocked = _animationBlockerService.HasBlockers;
         if (!blocked)
         {
             _playerState.HoverViewModel = (IMapNodeViewModel)sender;
@@ -540,7 +535,7 @@ public class SectorVM : MonoBehaviour
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;
 
-        _commandBlockerService.DropBlockers();
+        _animationBlockerService.DropBlockers();
 
         var activeActor = actor;
         var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();

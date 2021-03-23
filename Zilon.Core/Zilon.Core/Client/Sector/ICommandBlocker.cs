@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.Zilon.Scripts.Services
+namespace Zilon.Core.Client.Sector
 {
     public interface ICommandBlocker
     {
