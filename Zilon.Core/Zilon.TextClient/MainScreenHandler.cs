@@ -283,7 +283,8 @@ namespace Zilon.TextClient
             var gameLoopUpdateContext = new GameLoopContext(player, inventoryState, playerState);
             var gameLoop = new GameLoopUpdater(gameLoopUpdateContext, animationBlockerService);
 
-            var commandLoop = new CommandLoopUpdater(player, commandManager);
+            var commandLoopContext = new CommandLoopContext(player, (IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource);
+            var commandLoop = new CommandLoopUpdater(commandLoopContext, commandManager);
 
             var globe = player.Globe;
 
@@ -314,16 +315,14 @@ namespace Zilon.TextClient
 
             do
             {
-                var uiState = serviceScope.ServiceProvider.GetRequiredService<ISectorUiState>();
-
                 var playerActor = (from sectorNode in globe.SectorNodes
                                    from actor in sectorNode.Sector.ActorManager.Items
                                    where actor.Person == player.MainPerson
                                    select actor).SingleOrDefault();
 
-                uiState.ActiveActor = new ActorViewModel { Actor = playerActor };
+                playerState.ActiveActor = new ActorViewModel { Actor = playerActor };
 
-                PrintState(uiState.ActiveActor.Actor);
+                PrintState(playerState.ActiveActor.Actor);
                 PrintCommandDescriptions();
 
                 Console.WriteLine($"{UiResource.InputPrompt}:");
@@ -332,13 +331,13 @@ namespace Zilon.TextClient
                 {
                     var playerActorSectorNode = GetPlayerSectorNode(player, globe);
 
-                    HandleMoveCommand(serviceScope, uiState, commandManager, playerActorSectorNode, inputText);
+                    HandleMoveCommand(serviceScope, playerState, commandManager, playerActorSectorNode, inputText);
                 }
                 else if (inputText.StartsWith("look", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var playerActorSectorNode = GetPlayerSectorNode(player, globe);
 
-                    HandleLookCommand(uiState, playerActorSectorNode, inputText);
+                    HandleLookCommand(playerState, playerActorSectorNode, inputText);
                 }
                 else if (inputText.StartsWith("idle", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -356,7 +355,7 @@ namespace Zilon.TextClient
                 {
                     var playerActorSectorNode = GetPlayerSectorNode(player, globe);
 
-                    HandleAttackCommand(inputText, serviceScope, uiState, playerActorSectorNode, commandManager);
+                    HandleAttackCommand(inputText, serviceScope, playerState, playerActorSectorNode, commandManager);
                 }
                 else if (inputText.StartsWith("exit", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -367,7 +366,7 @@ namespace Zilon.TextClient
                 {
                     while (true)
                     {
-                        if (((HumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource).CanIntent()
+                        if (((IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource).CanIntent()
                             && !commandLoop.HasPendingCommands())
                         {
                             break;

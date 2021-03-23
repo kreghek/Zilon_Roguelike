@@ -4,23 +4,24 @@ using System.Threading.Tasks;
 
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
-using Zilon.Core.Players;
 
 namespace Zilon.Core.Client.Sector
 {
     public class CommandLoopUpdater : ICommandLoopUpdater
     {
+        private readonly ICommandLoopContext _commandLoopContext;
         private readonly ICommandManager _commandManager;
 
-        private readonly object _lockObj = new object();
-        private readonly IPlayer _player;
+        private readonly object _lockObj;
 
         private bool _hasPendingCommand;
 
-        public CommandLoopUpdater(IPlayer player, ICommandManager commandManager)
+        public CommandLoopUpdater(ICommandLoopContext commandLoopContext, ICommandManager commandManager)
         {
-            _player = player ?? throw new ArgumentNullException(nameof(player));
+            _commandLoopContext = commandLoopContext ?? throw new ArgumentNullException(nameof(commandLoopContext));
             _commandManager = commandManager ?? throw new ArgumentNullException(nameof(commandManager));
+
+            _lockObj = new object();
         }
 
         private void ExecuteCommandsInner(ICommand? lastCommand)
@@ -62,9 +63,10 @@ namespace Zilon.Core.Client.Sector
                     }
                     else
                     {
+                        _hasPendingCommand = false;
+
                         if (lastCommand != null)
                         {
-                            _hasPendingCommand = false;
                             CommandProcessed?.Invoke(this, EventArgs.Empty);
                             lastCommand = null;
                         }
@@ -94,23 +96,15 @@ namespace Zilon.Core.Client.Sector
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            var mainPerson = _player.MainPerson;
-            if (mainPerson is null)
-            {
-                throw new InvalidOperationException("Main person is not defined to process commands.");
-            }
-
             IsStarted = true;
 
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
-                var playerPersonSurvivalModule = mainPerson.GetModule<ISurvivalModule>();
-
                 ICommand? lastCommand = null;
 
-                while (!playerPersonSurvivalModule.IsDead)
+                while (_commandLoopContext.HasNextIteration)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    await _commandLoopContext.WaitForGlobeUpdate(cancellationToken).ConfigureAwait(false);
 
                     try
                     {
