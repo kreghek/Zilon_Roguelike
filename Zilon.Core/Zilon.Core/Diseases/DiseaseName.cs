@@ -42,6 +42,7 @@ namespace Zilon.Core.Diseases
         /// </summary>
         public ILocalizedString? Subject { get; }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
             return obj is DiseaseName name && Equals(name);
@@ -59,16 +60,19 @@ namespace Zilon.Core.Diseases
 #nullable restore
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public static bool operator ==(DiseaseName left, DiseaseName right)
         {
             return left.Equals(right);
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public static bool operator !=(DiseaseName left, DiseaseName right)
         {
             return !(left == right);
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public bool Equals(DiseaseName other)
         {
 #nullable disable
