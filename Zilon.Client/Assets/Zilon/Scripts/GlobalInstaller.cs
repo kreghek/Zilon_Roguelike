@@ -4,6 +4,7 @@ using Assets.Zilon.Scripts.Services;
 
 using Zenject;
 
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
