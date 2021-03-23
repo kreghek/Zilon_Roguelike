@@ -11,9 +11,9 @@ namespace Zilon.Core.Client.Sector
         event EventHandler? CommandAutoExecuted;
 
         event EventHandler? CommandProcessed;
-        
+
         bool HasPendingCommands();
-        
+
         Task StartAsync(CancellationToken cancellationToken);
 
         bool IsStarted { get; }
