@@ -276,26 +276,30 @@ namespace Zilon.TextClient
             var animationBlockerService = serviceScope.ServiceProvider.GetRequiredService<IAnimationBlockerService>();
             var humanTaskSource = serviceScope.ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
 
-            var gameLoop = new GameLoop(player.Globe, player);
+            var playerState = serviceScope.ServiceProvider.GetRequiredService<ISectorUiState>();
+            var inventoryState = serviceScope.ServiceProvider.GetRequiredService<IInventoryState>();
 
-            var commandLoop = new CommandLoop(player, commandManager);
+            var gameLoopUpdateContext = new GameLoopContext(player, inventoryState, playerState);
+            var gameLoop = new GameLoopUpdater(gameLoopUpdateContext, animationBlockerService);
+
+            var commandLoop = new CommandLoopUpdater(player, commandManager);
 
             var globe = player.Globe;
 
             // Play
 
             using var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
 
-            var processTask = gameLoop.StartProcessAsync(cancellationTokenSource.Token);
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            processTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted).ConfigureAwait(false);
-            processTask.ContinueWith(task => Console.WriteLine("Game loop stopped."), TaskContinuationOptions.OnlyOnCanceled).ConfigureAwait(false);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            gameLoop.ErrorOccured += (s, e) => { Console.WriteLine(e.Exception); };
+            gameLoop.Start();
 
-            var commandLoopTask = commandLoop.StartAsync(cancellationTokenSource.Token);
+            commandLoop.ErrorOccured += (s, e) => { Console.WriteLine(e.Exception); };
+            commandLoop.CommandAutoExecuted += (s, e) => { Console.WriteLine("Auto execute last command"); };
+            var commandLoopTask = commandLoop.StartAsync(cancellationToken);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted).ConfigureAwait(false);
-            commandLoopTask.ContinueWith(task => Console.WriteLine("Game loop stopped."), TaskContinuationOptions.OnlyOnCanceled).ConfigureAwait(false);
+            commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
+            commandLoopTask.ContinueWith(task => Console.WriteLine("Game loop stopped."), TaskContinuationOptions.OnlyOnCanceled);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             var lastGlobeIterationMarker = globe.CurrentIteration;

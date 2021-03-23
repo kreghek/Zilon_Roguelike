@@ -8,7 +8,10 @@ namespace Zilon.Core.Client.Sector
     {
         event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
 
+        event EventHandler? CommandAutoExecuted;
+        
         bool HasPendingCommands();
+        
         Task StartAsync(CancellationToken cancellationToken);
     }
 }

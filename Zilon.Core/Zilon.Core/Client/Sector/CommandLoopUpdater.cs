@@ -8,12 +8,13 @@ using Zilon.Core.Players;
 
 namespace Zilon.Core.Client.Sector
 {
-    internal class CommandLoopUpdater : ICommandLoopUpdater
+    public class CommandLoopUpdater : ICommandLoopUpdater
     {
         private readonly IPlayer _player;
         private readonly ICommandManager _commandManager;
 
         public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
+        public event EventHandler? CommandAutoExecuted;
 
         public CommandLoopUpdater(IPlayer player, ICommandManager commandManager)
         {
@@ -73,11 +74,11 @@ namespace Zilon.Core.Client.Sector
                             if (repeatableCommand.CanRepeat())
                             {
                                 _commandManager.Push(repeatableCommand);
-                                Console.WriteLine("Auto execute last command");
+                                CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
                             }
                             else
                             {
-                                _hasPendingCommand = true;
+                                _hasPendingCommand = false;
                             }
                         }
                         else

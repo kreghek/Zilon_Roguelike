@@ -64,7 +64,7 @@ namespace Zilon.Core.Client.Sector
         private void ClearupActionUiState()
         {
             _inventoryState.SelectedProp = null;
-            _playerState.SelectedViewModel = null;
+            //_playerState.SelectedViewModel = null;
         }
     }
 }
