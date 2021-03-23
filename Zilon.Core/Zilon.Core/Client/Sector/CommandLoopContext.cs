@@ -10,13 +10,14 @@ namespace Zilon.Core.Client.Sector
 {
     public sealed class CommandLoopContext : ICommandLoopContext
     {
-        private readonly IPlayer _player;
         private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
+        private readonly IPlayer _player;
 
         public CommandLoopContext(IPlayer player, IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
-            _humanActorTaskSource = humanActorTaskSource ?? throw new ArgumentNullException(nameof(humanActorTaskSource));
+            _humanActorTaskSource =
+                humanActorTaskSource ?? throw new ArgumentNullException(nameof(humanActorTaskSource));
         }
 
         public bool HasNextIteration
