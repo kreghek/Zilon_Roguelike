@@ -78,11 +78,11 @@ namespace Zilon.Core.Tactics.Behaviour
                 return await _actorTaskReceiver.ReceiveAsync(_cancellationTokenSource.Token).ConfigureAwait(false);
             }
 
-            using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token,
-                context.CancellationToken.Value))
-            {
-                return await _actorTaskReceiver.ReceiveAsync(linkedCts.Token).ConfigureAwait(false);
-            }
+            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
+                _cancellationTokenSource.Token,
+                context.CancellationToken.Value);
+
+            return await _actorTaskReceiver.ReceiveAsync(linkedCts.Token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
