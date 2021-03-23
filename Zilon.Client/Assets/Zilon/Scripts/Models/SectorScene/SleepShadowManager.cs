@@ -1,9 +1,10 @@
 ﻿using Assets.Zilon.Scripts.Models.SectorScene;
-using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 
 using Zenject;
+
+using Zilon.Core.Client.Sector;
 
 public class SleepShadowManager : MonoBehaviour
 {

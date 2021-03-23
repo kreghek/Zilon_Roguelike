@@ -57,14 +57,6 @@ namespace Zilon.Core.Client.Sector
             }
 
             await globe.UpdateAsync(cancellationToken);
-
-            ClearupActionUiState();
-        }
-
-        private void ClearupActionUiState()
-        {
-            _inventoryState.SelectedProp = null;
-            //_playerState.SelectedViewModel = null;
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Models.SectorScene;
-using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
 
@@ -14,6 +13,7 @@ using UnityEngine.EventSystems;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;

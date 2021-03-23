@@ -13,8 +13,11 @@ namespace Zilon.Core.Client.Sector
         private readonly IPlayer _player;
         private readonly ICommandManager _commandManager;
 
+        private bool _isStarted;
+
         public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
         public event EventHandler? CommandAutoExecuted;
+        public event EventHandler? CommandProcessed;
 
         public CommandLoopUpdater(IPlayer player, ICommandManager commandManager)
         {
@@ -30,16 +33,21 @@ namespace Zilon.Core.Client.Sector
                 throw new InvalidOperationException("Main person is not defined to process commands.");
             }
 
+            _isStarted = true;
+
             return Task.Run(() =>
             {
                 var playerPersonSurvivalModule = mainPerson.GetModule<ISurvivalModule>();
+
+                ICommand? lastCommand = null;
+
                 while (!playerPersonSurvivalModule.IsDead)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
                     try
                     {
-                        ExecuteCommands();
+                        ExecuteCommandsInner(lastCommand);
                     }
                     catch (Exception exception)
                     {
@@ -53,7 +61,9 @@ namespace Zilon.Core.Client.Sector
 
         private readonly object _lockObj = new object();
 
-        private void ExecuteCommands()
+        public bool IsStarted => _isStarted;
+
+        private void ExecuteCommandsInner(ICommand? lastCommand)
         {
             lock (_lockObj)
             {
@@ -79,28 +89,40 @@ namespace Zilon.Core.Client.Sector
                             else
                             {
                                 _hasPendingCommand = false;
+                                CommandProcessed?.Invoke(this, EventArgs.Empty);
                             }
                         }
                         else
                         {
                             _hasPendingCommand = false;
+                            CommandProcessed?.Invoke(this, EventArgs.Empty);
                         }
+
+                        lastCommand = command;
                     }
                     else
                     {
-                        _hasPendingCommand = false;
+                        if (lastCommand != null)
+                        {
+                            _hasPendingCommand = false;
+                            CommandProcessed?.Invoke(this, EventArgs.Empty);
+                            lastCommand = null;
+                        }
                     }
                 }
                 catch (Exception exception)
                 {
                     errorOccured = true;
-                    throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+                    ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+                    lastCommand = null;
                 }
                 finally
                 {
                     if (errorOccured)
                     {
                         _hasPendingCommand = false;
+                        CommandProcessed?.Invoke(this, EventArgs.Empty);
+                        lastCommand = null;
                     }
                 }
             }

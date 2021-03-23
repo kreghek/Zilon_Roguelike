@@ -296,6 +296,11 @@ namespace Zilon.TextClient
 
             commandLoop.ErrorOccured += (s, e) => { Console.WriteLine(e.Exception); };
             commandLoop.CommandAutoExecuted += (s, e) => { Console.WriteLine("Auto execute last command"); };
+            commandLoop.CommandProcessed += (s, e) =>
+            {
+                inventoryState.SelectedProp = null;
+                playerState.SelectedViewModel = null;
+            };
             var commandLoopTask = commandLoop.StartAsync(cancellationToken);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);

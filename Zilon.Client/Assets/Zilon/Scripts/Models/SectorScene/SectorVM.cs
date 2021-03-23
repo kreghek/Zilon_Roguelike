@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Assets.Zilon.Scripts.Models.Sector;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
@@ -116,7 +115,7 @@ public class SectorVM : MonoBehaviour
     private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
 
     [Inject]
-    private readonly GameLoopUpdater _gameLoopUpdater;
+    private readonly IGameLoopUpdater _gameLoopUpdater;
 
     public List<ActorViewModel> ActorViewModels { get; }
 
@@ -141,49 +140,6 @@ public class SectorVM : MonoBehaviour
     // ReSharper restore NotNullMemberIsNotInitialized
     // ReSharper restore MemberCanBePrivate.Global
 #pragma warning restore 649
-
-    // ReSharper disable once UnusedMember.Local
-    public void Update()
-    {
-        if (_animationBlockerService.HasBlockers)
-        {
-            return;
-        }
-
-        try
-        {
-            ExecuteCommands();
-        }
-        catch (Exception exception)
-        {
-            Debug.LogError(exception);
-        }
-    }
-
-    private void ExecuteCommands()
-    {
-        var command = _clientCommandExecutor.Pop();
-
-        try
-        {
-            if (command != null)
-            {
-                command.Execute();
-
-                if (command is IRepeatableCommand repeatableCommand)
-                {
-                    if (repeatableCommand.CanRepeat())
-                    {
-                        _clientCommandExecutor.Push(repeatableCommand);
-                    }
-                }
-            }
-        }
-        catch (Exception exception)
-        {
-            throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
-        }
-    }
 
     // ReSharper disable once UnusedMember.Local
     public void Awake()

@@ -1,10 +1,10 @@
 ﻿using Assets.Zilon.Scripts.DependencyInjection;
-using Assets.Zilon.Scripts.Models.Sector;
 using Assets.Zilon.Scripts.Services;
 
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
@@ -15,8 +15,9 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 {
     public override void InstallBindings()
     {
-        Container.Bind<GameLoopUpdater>().AsSingle();
+        Container.Bind<IGameLoopUpdater>().To<GameLoopUpdater>().AsSingle();
         Container.Bind<IGameLoopContext>().To<GameLoopContext>().AsSingle();
+        Container.Bind<ICommandLoopUpdater>().To<CommandLoopUpdater>().AsSingle();
 
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
 

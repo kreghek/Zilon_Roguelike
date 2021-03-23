@@ -1,10 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-using Assets.Zilon.Scripts.Models.Sector;
-using Assets.Zilon.Scripts.Services;
-
 using NUnit.Framework;
+
+using Zilon.Core.Client.Sector;
 
 namespace Tests
 {

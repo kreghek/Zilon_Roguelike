@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Commands;
-using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
 
@@ -12,6 +11,7 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
