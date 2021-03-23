@@ -7,7 +7,6 @@ using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
@@ -67,7 +66,7 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var selectedNodeVm = GetSelectedNodeViewModel();
-            if (selectedNodeVm == null)
+            if (selectedNodeVm is null)
             {
                 throw new InvalidOperationException(
                     "Невозможно выполнить команду на перемещение, если не указан целевой узел.");

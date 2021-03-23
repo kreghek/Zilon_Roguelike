@@ -39,7 +39,8 @@ public class SectorVM : MonoBehaviour
     private readonly List<StaticObjectViewModel> _staticObjectViewModels;
     private IStaticObjectManager _staticObjectManager;
 
-    private bool _interuptCommands;
+    private TaskScheduler _taskScheduler;
+    private IGlobe _globe;
 
 #pragma warning disable 649
     // ReSharper disable MemberCanBePrivate.Global
@@ -156,10 +157,6 @@ public class SectorVM : MonoBehaviour
         }
     }
 
-    public bool CanIntent = true;
-    private TaskScheduler _taskScheduler;
-    private IGlobe _globe;
-
     private void ExecuteCommands()
     {
         var command = _clientCommandExecutor.Pop();
@@ -170,20 +167,20 @@ public class SectorVM : MonoBehaviour
             {
                 command.Execute();
 
-                CanIntent = false;
+                var hasCommandBlockers = _commandBlockerService.HasBlockers;
 
-                if (_interuptCommands)
+                if (hasCommandBlockers)
                 {
                     return;
                 }
 
-                //if (command is IRepeatableCommand repeatableCommand && CanIntent)
-                //{
-                //    if (repeatableCommand.CanRepeat())
-                //    {
-                //        _clientCommandExecutor.Push(repeatableCommand);
-                //    }
-                //}
+                if (command is IRepeatableCommand repeatableCommand)
+                {
+                    if (repeatableCommand.CanRepeat())
+                    {
+                        _clientCommandExecutor.Push(repeatableCommand);
+                    }
+                }
             }
         }
         catch (Exception exception)
@@ -543,7 +540,6 @@ public class SectorVM : MonoBehaviour
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;
 
-        _interuptCommands = true;
         _commandBlockerService.DropBlockers();
 
         var activeActor = actor;

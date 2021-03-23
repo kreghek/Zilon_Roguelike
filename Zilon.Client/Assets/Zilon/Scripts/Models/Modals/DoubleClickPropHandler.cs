@@ -18,6 +18,7 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
     [Inject] private readonly ICommandManager _commandManager;
     [Inject] private readonly IInventoryState _inventoryState;
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
+    [Inject] private readonly IAnimationBlockerService animationBlockerService;
 
     [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
@@ -25,6 +26,11 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (animationBlockerService.HasBlockers)
+        {
+            return;
+        }
+
         if ((_lastClick + INTERVAL) > Time.time)
         {
             _inventoryState.SelectedProp = PropItemViewModel;

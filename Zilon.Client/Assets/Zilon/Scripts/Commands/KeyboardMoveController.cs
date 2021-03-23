@@ -62,7 +62,7 @@ public class KeyboardMoveController : MonoBehaviour
     private readonly IPlayer _player;
 
     [Inject]
-    private readonly IAnimationBlockerService _commandBlockerService;
+    private readonly IAnimationBlockerService _animationBlockerService;
 
     [NotNull]
     [Inject]
@@ -86,7 +86,7 @@ public class KeyboardMoveController : MonoBehaviour
             return;
         }
 
-        if (!_commandBlockerService.HasBlockers)
+        if (!_animationBlockerService.HasBlockers)
         {
             var direction = GetDirectionByKeyboard();
 

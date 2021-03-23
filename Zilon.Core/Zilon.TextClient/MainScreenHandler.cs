@@ -40,7 +40,8 @@ namespace Zilon.TextClient
 
             if (components.Length == 3)
             {
-                switch (components[2].ToUpper(CultureInfo.InvariantCulture))
+                var targetMarker = components[2].ToUpper(CultureInfo.InvariantCulture);
+                switch (targetMarker)
                 {
                     case "A":
                         SelectActor(uiState, playerActorSectorNode, targetId);
