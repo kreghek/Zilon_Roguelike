@@ -6,14 +6,16 @@ using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 
-namespace Zilon.TextClient
+namespace Zilon.Core.Client.Sector
 {
-    internal class CommandLoop
+    internal class CommandLoopUpdater : ICommandLoopUpdater
     {
         private readonly IPlayer _player;
         private readonly ICommandManager _commandManager;
 
-        public CommandLoop(IPlayer player, ICommandManager commandManager)
+        public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
+
+        public CommandLoopUpdater(IPlayer player, ICommandManager commandManager)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
             _commandManager = commandManager ?? throw new ArgumentNullException(nameof(commandManager));
@@ -21,9 +23,15 @@ namespace Zilon.TextClient
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            var mainPerson = _player.MainPerson;
+            if (mainPerson is null)
+            {
+                throw new InvalidOperationException("Main person is not defined to process commands.");
+            }
+
             return Task.Run(() =>
             {
-                var playerPersonSurvivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
+                var playerPersonSurvivalModule = mainPerson.GetModule<ISurvivalModule>();
                 while (!playerPersonSurvivalModule.IsDead)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -34,7 +42,7 @@ namespace Zilon.TextClient
                     }
                     catch (Exception exception)
                     {
-                        Console.WriteLine(exception);
+                        ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
                     }
                 }
             }, cancellationToken);
@@ -42,7 +50,7 @@ namespace Zilon.TextClient
 
         private bool _hasPendingCommand;
 
-        private object _lockObj = new object();
+        private readonly object _lockObj = new object();
 
         private void ExecuteCommands()
         {

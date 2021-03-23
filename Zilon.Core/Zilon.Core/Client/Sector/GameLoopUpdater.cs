@@ -4,13 +4,9 @@ using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
-using UnityEngine;
-
-using Zilon.Core.Client.Sector;
-
-namespace Assets.Zilon.Scripts.Models.Sector
+namespace Zilon.Core.Client.Sector
 {
-    public class GameLoopUpdater
+    public class GameLoopUpdater : IDisposable, IGameLoopUpdater
     {
         [NotNull]
         private readonly IGameLoopContext _gameLoopContext;
@@ -18,9 +14,11 @@ namespace Assets.Zilon.Scripts.Models.Sector
         [NotNull]
         private readonly IAnimationBlockerService _animationBlockerService;
 
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource? _cancellationTokenSource;
 
         public bool IsStarted { get; private set; }
+
+        public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
 
         public GameLoopUpdater(
             IGameLoopContext gameLoopContext,
@@ -47,7 +45,14 @@ namespace Assets.Zilon.Scripts.Models.Sector
 
         public void Stop()
         {
-            _cancellationTokenSource.Cancel();
+            if (_cancellationTokenSource is null)
+            {
+                // Means Start was not called.
+            }
+            else
+            {
+                _cancellationTokenSource.Cancel();
+            }
         }
 
         private async Task StartGameLoopUpdateAsync(CancellationToken cancelToken)
@@ -62,16 +67,20 @@ namespace Assets.Zilon.Scripts.Models.Sector
                 }
                 catch (Exception exception)
                 {
-                    Debug.LogError(exception);
-                    return;
+                    ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
                 }
 
                 var animationBlockerTask = _animationBlockerService.WaitBlockersAsync();
-                var fuseDelayTask = Task.Delay(10_000);
+                var fuseDelayTask = Task.Delay(10_000, cancelToken);
 
                 await Task.WhenAny(animationBlockerTask, fuseDelayTask).ConfigureAwait(false);
                 _animationBlockerService.DropBlockers();
             }
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }
