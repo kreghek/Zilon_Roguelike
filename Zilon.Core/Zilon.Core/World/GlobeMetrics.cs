@@ -1,5 +1,12 @@
 ﻿namespace Zilon.Core.World
 {
+    /// <summary>
+    /// Common metrics and restrictions of a globe. Looks like The Globe Laws.
+    /// </summary>
+    /// <remarks>
+    /// This class only for constant values. Do not place calculation methods here.
+    /// </remarks>
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class GlobeMetrics
     {
         /// <summary>
