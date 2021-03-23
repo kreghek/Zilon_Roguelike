@@ -8,25 +8,52 @@ namespace Zilon.Core.Client.Sector
 {
     public class GameLoopUpdater : IDisposable, IGameLoopUpdater
     {
-        [NotNull]
-        private readonly IGameLoopContext _gameLoopContext;
+        [NotNull] private readonly IAnimationBlockerService _animationBlockerService;
 
-        [NotNull]
-        private readonly IAnimationBlockerService _animationBlockerService;
+        [NotNull] private readonly IGameLoopContext _gameLoopContext;
 
         private CancellationTokenSource? _cancellationTokenSource;
-
-        public bool IsStarted { get; private set; }
-
-        public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
 
         public GameLoopUpdater(
             IGameLoopContext gameLoopContext,
             IAnimationBlockerService animationBlockerService)
         {
             _gameLoopContext = gameLoopContext ?? throw new ArgumentNullException(nameof(gameLoopContext));
-            _animationBlockerService = animationBlockerService ?? throw new ArgumentNullException(nameof(animationBlockerService));
+            _animationBlockerService = animationBlockerService ??
+                                       throw new ArgumentNullException(nameof(animationBlockerService));
         }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task StartGameLoopUpdateAsync(CancellationToken cancelToken)
+        {
+            while (_gameLoopContext.HasNextIteration)
+            {
+                cancelToken.ThrowIfCancellationRequested();
+
+                try
+                {
+                    await _gameLoopContext.UpdateAsync(cancelToken);
+                }
+                catch (Exception exception)
+                {
+                    ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+                }
+
+                var animationBlockerTask = _animationBlockerService.WaitBlockersAsync();
+                var fuseDelayTask = Task.Delay(10_000, cancelToken);
+
+                await Task.WhenAny(animationBlockerTask, fuseDelayTask).ConfigureAwait(false);
+                _animationBlockerService.DropBlockers();
+            }
+        }
+
+        public bool IsStarted { get; private set; }
+
+        public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
 
         public void Start()
         {
@@ -53,34 +80,6 @@ namespace Zilon.Core.Client.Sector
             {
                 _cancellationTokenSource.Cancel();
             }
-        }
-
-        private async Task StartGameLoopUpdateAsync(CancellationToken cancelToken)
-        {
-            while (_gameLoopContext.HasNextIteration)
-            {
-                cancelToken.ThrowIfCancellationRequested();
-
-                try
-                {
-                    await _gameLoopContext.UpdateAsync(cancelToken);
-                }
-                catch (Exception exception)
-                {
-                    ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
-                }
-
-                var animationBlockerTask = _animationBlockerService.WaitBlockersAsync();
-                var fuseDelayTask = Task.Delay(10_000, cancelToken);
-
-                await Task.WhenAny(animationBlockerTask, fuseDelayTask).ConfigureAwait(false);
-                _animationBlockerService.DropBlockers();
-            }
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -10,58 +10,18 @@ namespace Zilon.Core.Client.Sector
 {
     public class CommandLoopUpdater : ICommandLoopUpdater
     {
-        private readonly IPlayer _player;
         private readonly ICommandManager _commandManager;
 
-        private bool _isStarted;
+        private readonly object _lockObj = new object();
+        private readonly IPlayer _player;
 
-        public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
-        public event EventHandler? CommandAutoExecuted;
-        public event EventHandler? CommandProcessed;
+        private bool _hasPendingCommand;
 
         public CommandLoopUpdater(IPlayer player, ICommandManager commandManager)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
             _commandManager = commandManager ?? throw new ArgumentNullException(nameof(commandManager));
         }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            var mainPerson = _player.MainPerson;
-            if (mainPerson is null)
-            {
-                throw new InvalidOperationException("Main person is not defined to process commands.");
-            }
-
-            _isStarted = true;
-
-            return Task.Run(() =>
-            {
-                var playerPersonSurvivalModule = mainPerson.GetModule<ISurvivalModule>();
-
-                ICommand? lastCommand = null;
-
-                while (!playerPersonSurvivalModule.IsDead)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    try
-                    {
-                        ExecuteCommandsInner(lastCommand);
-                    }
-                    catch (Exception exception)
-                    {
-                        ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
-                    }
-                }
-            }, cancellationToken);
-        }
-
-        private bool _hasPendingCommand;
-
-        private readonly object _lockObj = new object();
-
-        public bool IsStarted => _isStarted;
 
         private void ExecuteCommandsInner(ICommand? lastCommand)
         {
@@ -127,6 +87,44 @@ namespace Zilon.Core.Client.Sector
                 }
             }
         }
+
+        public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
+        public event EventHandler? CommandAutoExecuted;
+        public event EventHandler? CommandProcessed;
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            var mainPerson = _player.MainPerson;
+            if (mainPerson is null)
+            {
+                throw new InvalidOperationException("Main person is not defined to process commands.");
+            }
+
+            IsStarted = true;
+
+            return Task.Run(() =>
+            {
+                var playerPersonSurvivalModule = mainPerson.GetModule<ISurvivalModule>();
+
+                ICommand? lastCommand = null;
+
+                while (!playerPersonSurvivalModule.IsDead)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    try
+                    {
+                        ExecuteCommandsInner(lastCommand);
+                    }
+                    catch (Exception exception)
+                    {
+                        ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+                    }
+                }
+            }, cancellationToken);
+        }
+
+        public bool IsStarted { get; private set; }
 
         public bool HasPendingCommands()
         {

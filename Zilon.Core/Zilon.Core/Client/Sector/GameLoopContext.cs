@@ -14,14 +14,11 @@ namespace Zilon.Core.Client.Sector
     /// </summary>
     public sealed class GameLoopContext : IGameLoopContext
     {
-        [NotNull]
-        private readonly IPlayer _player;
+        [NotNull] private readonly IInventoryState _inventoryState;
 
-        [NotNull]
-        private readonly IInventoryState _inventoryState;
+        [NotNull] private readonly IPlayer _player;
 
-        [NotNull]
-        private readonly ISectorUiState _playerState;
+        [NotNull] private readonly ISectorUiState _playerState;
 
         public GameLoopContext(IPlayer player, IInventoryState inventoryState, ISectorUiState playerState)
         {
@@ -30,7 +27,7 @@ namespace Zilon.Core.Client.Sector
             _playerState = playerState ?? throw new ArgumentNullException(nameof(playerState));
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool HasNextIteration
         {
             get
@@ -47,7 +44,7 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task UpdateAsync(CancellationToken cancellationToken)
         {
             var globe = _player.Globe;

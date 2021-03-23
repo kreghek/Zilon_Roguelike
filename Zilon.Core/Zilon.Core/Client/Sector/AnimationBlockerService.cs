@@ -8,58 +8,14 @@ namespace Zilon.Core.Client.Sector
     {
         private readonly ConcurrentDictionary<ICommandBlocker, byte> _commandBlockers;
 
-        private TaskCompletionSource<bool> _tcs;
+        private readonly object _lockObject;
 
-        private object _lockObject;
+        private TaskCompletionSource<bool> _tcs;
 
         public AnimationBlockerService()
         {
             _lockObject = new object();
             _commandBlockers = new ConcurrentDictionary<ICommandBlocker, byte>();
-        }
-
-        /// <inheritdoc/>
-        public bool HasBlockers { get => _commandBlockers.Count > 0; }
-
-        /// <inheritdoc/>
-        public void AddBlocker(ICommandBlocker commandBlocker)
-        {
-            lock (_lockObject)
-            {
-                commandBlocker.Released += CommandBlocker_Release;
-                _commandBlockers.TryAdd(commandBlocker, 0);
-                _tcs = new TaskCompletionSource<bool>();
-            }
-        }
-
-        /// <inheritdoc/>
-        public void DropBlockers()
-        {
-            lock (_lockObject)
-            {
-                foreach (var commandBlocker in _commandBlockers.Keys.ToArray())
-                {
-                    commandBlocker.Released -= CommandBlocker_Release;
-                }
-
-                _commandBlockers.Clear();
-            }
-        }
-
-        /// <inheritdoc/>
-        public Task WaitBlockersAsync()
-        {
-            lock (_lockObject)
-            {
-                if (_tcs is null)
-                {
-                    return Task.CompletedTask;
-                }
-                else
-                {
-                    return _tcs.Task;
-                }
-            }
         }
 
         private void CommandBlocker_Release(object sender, System.EventArgs e)
@@ -77,6 +33,48 @@ namespace Zilon.Core.Client.Sector
                         _tcs.SetResult(true);
                     }
                 }
+            }
+        }
+
+        /// <inheritdoc />
+        public bool HasBlockers => _commandBlockers.Count > 0;
+
+        /// <inheritdoc />
+        public void AddBlocker(ICommandBlocker commandBlocker)
+        {
+            lock (_lockObject)
+            {
+                commandBlocker.Released += CommandBlocker_Release;
+                _commandBlockers.TryAdd(commandBlocker, 0);
+                _tcs = new TaskCompletionSource<bool>();
+            }
+        }
+
+        /// <inheritdoc />
+        public void DropBlockers()
+        {
+            lock (_lockObject)
+            {
+                foreach (var commandBlocker in _commandBlockers.Keys.ToArray())
+                {
+                    commandBlocker.Released -= CommandBlocker_Release;
+                }
+
+                _commandBlockers.Clear();
+            }
+        }
+
+        /// <inheritdoc />
+        public Task WaitBlockersAsync()
+        {
+            lock (_lockObject)
+            {
+                if (_tcs is null)
+                {
+                    return Task.CompletedTask;
+                }
+
+                return _tcs.Task;
             }
         }
     }

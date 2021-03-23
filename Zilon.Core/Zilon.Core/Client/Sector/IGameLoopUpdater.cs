@@ -6,9 +6,9 @@ namespace Zilon.Core.Client.Sector
     {
         bool IsStarted { get; }
 
-        event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
-
         void Start();
         void Stop();
+
+        event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
     }
 }

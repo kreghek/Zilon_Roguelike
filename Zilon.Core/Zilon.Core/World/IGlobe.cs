@@ -6,13 +6,12 @@ namespace Zilon.Core.World
 {
     public interface IGlobe
     {
+        IGlobeIterationMarker CurrentIteration { get; }
         IEnumerable<ISectorNode> SectorNodes { get; }
 
         void AddSectorNode(ISectorNode sectorNode);
 
         Task UpdateAsync(CancellationToken cancelToken);
-
-        IGlobeIterationMarker CurrentIteration { get; }
     }
 
     public interface IGlobeIterationMarker
@@ -22,12 +21,6 @@ namespace Zilon.Core.World
 
     public sealed class GlobeIterationMarker : IGlobeIterationMarker
     {
-        public string Name
-        {
-            get
-            {
-                return GetHashCode().ToString();
-            }
-        }
+        public string Name => GetHashCode().ToString();
     }
 }

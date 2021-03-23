@@ -187,18 +187,6 @@ namespace Zilon.TextClient
             PushCommandToExecution(commandManager, command);
         }
 
-        private static void PushCommandToExecution(ICommandManager commandManager, ICommand command)
-        {
-            if (command.CanExecute())
-            {
-                commandManager.Push(command);
-            }
-            else
-            {
-                Console.WriteLine(UiResource.CommandCantExecuteMessage);
-            }
-        }
-
         private static void HandleSectorTransitCommand(IServiceScope serviceScope, ICommandManager commandManager)
         {
             var command = serviceScope.ServiceProvider.GetRequiredService<SectorTransitionMoveCommand>();
@@ -249,6 +237,18 @@ namespace Zilon.TextClient
             Console.WriteLine($"Position: {actor.Node}");
         }
 
+        private static void PushCommandToExecution(ICommandManager commandManager, ICommand command)
+        {
+            if (command.CanExecute())
+            {
+                commandManager.Push(command);
+            }
+            else
+            {
+                Console.WriteLine(UiResource.CommandCantExecuteMessage);
+            }
+        }
+
         private static void SelectActor(ISectorUiState uiState, ISectorNode playerActorSectorNode, int targetId)
         {
             var actorManager = playerActorSectorNode.Sector.ActorManager;
@@ -274,7 +274,8 @@ namespace Zilon.TextClient
             var player = serviceScope.ServiceProvider.GetRequiredService<IPlayer>();
             var commandManager = serviceScope.ServiceProvider.GetRequiredService<ICommandManager>();
             var animationBlockerService = serviceScope.ServiceProvider.GetRequiredService<IAnimationBlockerService>();
-            var humanTaskSource = serviceScope.ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
+            var humanTaskSource = serviceScope.ServiceProvider
+                .GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
 
             var playerState = serviceScope.ServiceProvider.GetRequiredService<ISectorUiState>();
             var inventoryState = serviceScope.ServiceProvider.GetRequiredService<IInventoryState>();
@@ -303,8 +304,10 @@ namespace Zilon.TextClient
             };
             var commandLoopTask = commandLoop.StartAsync(cancellationToken);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
-            commandLoopTask.ContinueWith(task => Console.WriteLine("Game loop stopped."), TaskContinuationOptions.OnlyOnCanceled);
+            commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception),
+                TaskContinuationOptions.OnlyOnFaulted);
+            commandLoopTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
+                TaskContinuationOptions.OnlyOnCanceled);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             var lastGlobeIterationMarker = globe.CurrentIteration;
@@ -365,7 +368,7 @@ namespace Zilon.TextClient
                     while (true)
                     {
                         if (((HumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource).CanIntent()
-                        && !commandLoop.HasPendingCommands())
+                            && !commandLoop.HasPendingCommands())
                         {
                             break;
                         }
@@ -373,7 +376,6 @@ namespace Zilon.TextClient
                 }).ConfigureAwait(false);
 
                 await animationBlockerService.WaitBlockersAsync().ConfigureAwait(false);
-
             } while (!player.MainPerson.GetModule<ISurvivalModule>().IsDead);
 
             cancellationTokenSource.Cancel();

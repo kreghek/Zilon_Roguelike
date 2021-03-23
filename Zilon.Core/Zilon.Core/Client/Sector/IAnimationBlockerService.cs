@@ -8,24 +8,24 @@ namespace Zilon.Core.Client.Sector
     public interface IAnimationBlockerService
     {
         /// <summary>
+        /// Check there are any blockers was added but not released.
+        /// </summary>
+        bool HasBlockers { get; }
+
+        /// <summary>
         /// Add animation blocker.
         /// </summary>
         /// <param name="commandBlocker"> Blocker created by game object which start some animation. </param>
         void AddBlocker(ICommandBlocker commandBlocker);
 
         /// <summary>
-        /// Waits until all animation blocker will be released in async manner.
-        /// </summary>
-        Task WaitBlockersAsync();
-
-        /// <summary>
-        /// Check there are any blockers was added but not released.
-        /// </summary>
-        bool HasBlockers { get; }
-
-        /// <summary>
         /// Delete all blocker forced.
         /// </summary>
         void DropBlockers();
+
+        /// <summary>
+        /// Waits until all animation blocker will be released in async manner.
+        /// </summary>
+        Task WaitBlockersAsync();
     }
 }

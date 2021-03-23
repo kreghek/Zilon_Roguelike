@@ -25,10 +25,8 @@ namespace Zilon.Core.Commands
                 {
                     return command;
                 }
-                else
-                {
-                    return null;
-                }
+
+                return null;
             }
 
             return null;
