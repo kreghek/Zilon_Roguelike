@@ -167,7 +167,7 @@ public class SectorVM : MonoBehaviour
             {
                 command.Execute();
 
-                var hasCommandBlockers = _commandBlockerService.HasBlockers;
+                var hasCommandBlockers = _commandBlockerService.HasBlockers && _humanActorTaskSource.CanIntent();
 
                 if (hasCommandBlockers)
                 {
