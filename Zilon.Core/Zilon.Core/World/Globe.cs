@@ -268,6 +268,8 @@ namespace Zilon.Core.World
 
         public IEnumerable<ISectorNode> SectorNodes => _sectorNodes;
 
+        public IGlobeIterationMarker CurrentIteration => _currentIterationMarker;
+
         public void AddSectorNode(ISectorNode sectorNode)
         {
             if (sectorNode is null)
@@ -285,6 +287,8 @@ namespace Zilon.Core.World
             sector.TrasitionUsed += Sector_TrasitionUsed;
             sector.ActorManager.Removed += ActorManager_Removed;
         }
+
+        private IGlobeIterationMarker _currentIterationMarker = new GlobeIterationMarker();
 
         public async Task UpdateAsync(CancellationToken cancelToken)
         {
@@ -318,6 +322,8 @@ namespace Zilon.Core.World
 
                 _globeTransitionHandler.UpdateTransitions();
             }
+
+            _currentIterationMarker = new GlobeIterationMarker();
         }
 
         private sealed class ActorInSector

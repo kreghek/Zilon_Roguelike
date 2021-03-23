@@ -40,28 +40,68 @@ namespace Zilon.TextClient
             }, cancellationToken);
         }
 
+        private bool _hasPendingCommand;
+
+        private object _lockObj = new object();
+
         private void ExecuteCommands()
         {
-            var command = _commandManager.Pop();
-
-            try
+            lock (_lockObj)
             {
-                if (command != null)
-                {
-                    command.Execute();
+                _hasPendingCommand = true;
 
-                    if (command is IRepeatableCommand repeatableCommand)
+                var errorOccured = false;
+
+                var command = _commandManager.Pop();
+
+                try
+                {
+                    if (command != null)
                     {
-                        if (repeatableCommand.CanRepeat())
+                        command.Execute();
+
+                        if (command is IRepeatableCommand repeatableCommand)
                         {
-                            _commandManager.Push(repeatableCommand);
+                            if (repeatableCommand.CanRepeat())
+                            {
+                                _commandManager.Push(repeatableCommand);
+                                Console.WriteLine("Auto execute last command");
+                            }
+                            else
+                            {
+                                _hasPendingCommand = true;
+                            }
                         }
+                        else
+                        {
+                            _hasPendingCommand = false;
+                        }
+                    }
+                    else
+                    {
+                        _hasPendingCommand = false;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    errorOccured = true;
+                    throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+                }
+                finally
+                {
+                    if (errorOccured)
+                    {
+                        _hasPendingCommand = false;
                     }
                 }
             }
-            catch (Exception exception)
+        }
+
+        public bool HasPendingCommands()
+        {
+            lock (_lockObj)
             {
-                throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
+                return _hasPendingCommand;
             }
         }
     }

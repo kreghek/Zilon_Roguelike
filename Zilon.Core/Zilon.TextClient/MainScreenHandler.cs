@@ -9,10 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
@@ -266,11 +268,13 @@ namespace Zilon.TextClient
         }
 
         /// <inheritdoc />
-        public Task<GameScreen> StartProcessingAsync(GameState gameState)
+        public async Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
             var serviceScope = gameState.ServiceScope;
             var player = serviceScope.ServiceProvider.GetRequiredService<IPlayer>();
             var commandManager = serviceScope.ServiceProvider.GetRequiredService<ICommandManager>();
+            var animationBlockerService = serviceScope.ServiceProvider.GetRequiredService<IAnimationBlockerService>();
+            var humanTaskSource = serviceScope.ServiceProvider.GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
 
             var gameLoop = new GameLoop(player.Globe, player);
 
@@ -283,14 +287,18 @@ namespace Zilon.TextClient
             using var cancellationTokenSource = new CancellationTokenSource();
 
             var processTask = gameLoop.StartProcessAsync(cancellationTokenSource.Token);
-            processTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
-            processTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
-                TaskContinuationOptions.OnlyOnCanceled);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            processTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted).ConfigureAwait(false);
+            processTask.ContinueWith(task => Console.WriteLine("Game loop stopped."), TaskContinuationOptions.OnlyOnCanceled).ConfigureAwait(false);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             var commandLoopTask = commandLoop.StartAsync(cancellationTokenSource.Token);
-            commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
-            commandLoopTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
-                TaskContinuationOptions.OnlyOnCanceled);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted).ConfigureAwait(false);
+            commandLoopTask.ContinueWith(task => Console.WriteLine("Game loop stopped."), TaskContinuationOptions.OnlyOnCanceled).ConfigureAwait(false);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+            var lastGlobeIterationMarker = globe.CurrentIteration;
 
             do
             {
@@ -342,10 +350,25 @@ namespace Zilon.TextClient
                 {
                     break;
                 }
+
+                await Task.Run(() =>
+                {
+                    while (true)
+                    {
+                        if (((HumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource).CanIntent()
+                        && !commandLoop.HasPendingCommands())
+                        {
+                            break;
+                        }
+                    }
+                }).ConfigureAwait(false);
+
+                await animationBlockerService.WaitBlockersAsync().ConfigureAwait(false);
+
             } while (!player.MainPerson.GetModule<ISurvivalModule>().IsDead);
 
             cancellationTokenSource.Cancel();
-            return Task.FromResult(GameScreen.Scores);
+            return GameScreen.Scores;
         }
     }
 }
