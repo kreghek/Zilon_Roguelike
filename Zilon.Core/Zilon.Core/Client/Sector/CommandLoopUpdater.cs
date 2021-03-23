@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Zilon.Core.Commands;
-using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Client.Sector
 {
@@ -104,7 +103,7 @@ namespace Zilon.Core.Client.Sector
 
                 while (_commandLoopContext.HasNextIteration)
                 {
-                    await _commandLoopContext.WaitForGlobeUpdate(cancellationToken).ConfigureAwait(false);
+                    await _commandLoopContext.WaitForUpdate(cancellationToken).ConfigureAwait(false);
 
                     try
                     {

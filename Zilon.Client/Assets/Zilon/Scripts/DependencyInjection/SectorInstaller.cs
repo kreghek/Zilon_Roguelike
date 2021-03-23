@@ -18,6 +18,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<IGameLoopUpdater>().To<GameLoopUpdater>().AsSingle();
         Container.Bind<IGameLoopContext>().To<GameLoopContext>().AsSingle();
         Container.Bind<ICommandLoopUpdater>().To<CommandLoopUpdater>().AsSingle();
+        Container.Bind<ICommandLoopContext>().To<CommandLoopContext>().AsSingle();
 
         Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
 

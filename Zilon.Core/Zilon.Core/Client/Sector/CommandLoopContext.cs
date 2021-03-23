@@ -35,9 +35,10 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        public Task WaitForGlobeUpdate(CancellationToken cancellationToken)
+        public Task WaitForUpdate(CancellationToken cancellationToken)
         {
-            return Task.Run(async ()=> {
+            return Task.Run(async () =>
+            {
                 while (true)
                 {
                     if (_humanActorTaskSource.CanIntent())
@@ -45,7 +46,7 @@ namespace Zilon.Core.Client.Sector
                         break;
                     }
 
-                    await Task.Delay(1);
+                    await Task.Delay(100).ConfigureAwait(false);
                 }
             }, cancellationToken);
         }

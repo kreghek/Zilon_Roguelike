@@ -7,6 +7,6 @@ namespace Zilon.Core.Client.Sector
     { 
         bool HasNextIteration { get; }
 
-        Task WaitForGlobeUpdate(CancellationToken cancellationToken);
+        Task WaitForUpdate(CancellationToken cancellationToken);
     }
 }
