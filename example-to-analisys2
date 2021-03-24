@@ -1,0 +1,449 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            CreateWorld();
+            RedrawWorld();
+            var sw = new Stopwatch();
+            while (_playerInput?.Key != ConsoleKey.Escape)
+            {
+                if (Console.KeyAvailable)
+                    _playerInput = Console.ReadKey(true);
+                else
+                {
+                    _playerInput = null;
+                }
+
+                Process(sw.ElapsedMilliseconds);
+                if (!sw.IsRunning)
+                    sw.Start();
+            }
+        }
+
+        private static void RedrawWorld()
+        {
+            Console.Clear();
+            Console.CursorVisible = false;
+
+            if (_player.IsAlive)
+            {
+                Console.CursorLeft = _player.Left;
+
+                Console.CursorTop = _player.Top;
+
+                Console.ForegroundColor = ConsoleColor.Green;
+
+                Console.Write('P');
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.CursorLeft = 1;
+                Console.CursorTop = 1;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(_gameState.ToString());
+                Console.ResetColor();
+            }
+
+            var aliveEnemies = _enemies.Where(x => x.IsAlive).ToList();
+
+            if (aliveEnemies.Count == 0)
+            {
+                Console.CursorLeft = 1;
+                Console.CursorTop = 1;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(_gameState.ToString());
+                Console.ResetColor();
+                return;
+            }
+
+            foreach (var ai in aliveEnemies)
+            {
+                Console.CursorLeft = ai.Left;
+
+                Console.CursorTop = ai.Top;
+
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                Console.Write('E');
+                Console.ResetColor();
+            }
+        }
+
+        private static void CreateWorld()
+        {
+            _gameState = GameState.Done;
+            _player = new Person
+            {
+                Top = 12,
+                Left = 30,
+                IsAlive = true
+            };
+
+            var aiCount = 2;
+            var screenHeight = 23;
+            var step = screenHeight / aiCount;
+
+            _enemies = new List<Person>(aiCount);
+
+            for (var i = 0; i < aiCount; i++)
+            {
+                _enemies.Add(new Person
+                {
+                    IsAlive = true,
+                    Left = 50,
+                    Top = step * i + step / 2
+                });
+            }
+
+            _playerActionProducer = new PlayerActionProducer(_player);
+
+            worldActionProduccer = new WorldActionProducer(_enemies, player);
+        }
+
+        private static ConsoleKeyInfo? _playerInput;
+        private static IWorldActionProducer _worldActionProduccer;
+        private static bool _waitPlayer;
+        private static IPlayerActionProducer _playerActionProducer;
+        private static GameState _gameState;
+
+        private static Person _player;
+        private static List<Person> _enemies;
+
+        /// <summary>
+        ///     Предположим, это юньковский периодический метод.
+        /// </summary>
+        /// <param name="delta"></param>
+        static void Process(double delta)
+        {
+            if (_gameState != GameState.Done)
+                return;
+            
+            if (_waitPlayer)
+            {
+                PlayerAction();
+                return;
+            }
+
+            WorldAction();
+        }
+
+        static void ComputeState()
+        {
+            if (!_player.IsAlive)
+                _gameState = GameState.PlayerLose;
+            else if (!_enemies.Any(x => x.IsAlive))
+                _gameState = GameState.PlayerWin;
+        }
+
+        static void WorldAction()
+        {
+            if (_worldActionProduccer.MoveNext())
+            {
+                var current = _worldActionProduccer.Current;
+                current.Executed += Current_Executed;
+                current.Execute();
+                current.Executed -= Current_Executed;
+            }
+            else
+            {
+                _worldActionProduccer.Reset();
+                _waitPlayer = true;
+            }
+        }
+
+        private static void Current_Executed(object sender, EventArgs e)
+        {
+            if (!(sender is MoveAction ma))
+                return;
+
+            var allPersons = enemies.Concat(new[] { player }).Where(x => x.IsAlive && x != ma.Consumer);
+            if (!(ma.Consumer is IMaterialObject mo))
+                return;
+
+            foreach (var person in allPersons)
+            {
+                if (mo.Left == person.Left && mo.Top == person.Top)
+                    person.IsAlive = false;
+            }
+
+            ComputeState();
+            RedrawWorld();
+        }
+
+        static void PlayerAction()
+        {
+            if (_playerInput is null)
+                return;
+
+            var playerAction = _playerActionProducer.Produce(_playerInput.Value); // сюда передать какой то инпут игрока. Если он соответствует какому то действию, то оно вернется.
+            if (playerAction != null)
+            {
+                playerAction.Executed += Current_Executed;
+                playerAction.Execute();
+                playerAction.Executed -= Current_Executed;
+                RedrawWorld();
+                _waitPlayer = false;
+            }
+        }
+    }
+
+    public enum GameState
+    {
+        Done,
+        PlayerWin,
+        PlayerLose
+    }
+
+    public interface IAlive
+    {
+        bool IsAlive { get; set; }
+    }
+
+    public interface IAction
+    {
+        event EventHandler<EventArgs> Executed;
+        void Execute();
+    }
+
+    public interface IWorldActionProducer : IEnumerator<IAction>
+    {
+
+    }
+
+    public interface IPlayerActionProducer
+    {
+        IAction Produce(ConsoleKeyInfo playerInput);
+    }
+
+    public class PlayerActionProducer : IPlayerActionProducer
+    {
+        private readonly Person _player;
+
+        public PlayerActionProducer(Person player)
+        {
+            _player = player;
+        }
+        public IAction Produce(ConsoleKeyInfo playerInput)
+        {
+            return ActionBuilder.Build(_player, playerInput);
+        }
+    }
+
+    public class MoveAction : IAction
+    {
+        public IRunner Consumer { get; }
+        private readonly RunDirection _direction;
+
+        public MoveAction(IRunner consumer, RunDirection direction)
+        {
+            Consumer = consumer;
+            _direction = direction;
+        }
+
+        public event EventHandler<EventArgs> Executed;
+
+        public void Execute()
+        {
+            Consumer.Run(_direction);
+            Executed?.Invoke(this, null);
+        }
+    }
+
+    public enum RunDirection
+    {
+        Left,
+        Right,
+        Up,
+        Down
+    }
+
+    public interface IRunner
+    {
+        void Run(RunDirection direction);
+    }
+
+    public interface IMaterialObject
+    {
+        public int Left { get; set; }
+        public int Top { get; set; }
+    }
+
+    public class Person : IRunner, IMaterialObject, IAlive
+    {
+        public void Run(RunDirection direction)
+        {
+            switch (direction)
+            {
+                case RunDirection.Left:
+                    Left -= 1;
+                    break;
+                case RunDirection.Right:
+                    Left += 1;
+                    break;
+                case RunDirection.Up:
+                    Top -= 1;
+                    break;
+                case RunDirection.Down:
+                    Top += 1;
+                    break;
+            }
+        }
+
+        public int Left { get; set; }
+        public int Top { get; set; }
+        public bool IsAlive { get; set; }
+    }
+
+    public class ActionBuilder
+    {
+        public static IAction Build(object consumer, object anything)
+        {
+            if (consumer is IRunner runner)
+            {
+                RunDirection? direction = null;
+                if (anything is ConsoleKeyInfo keyInfo)
+                {
+                    
+                    switch (keyInfo.Key)
+                    {
+                        case ConsoleKey.LeftArrow:
+                            direction = RunDirection.Left;
+                            break;
+                        case ConsoleKey.RightArrow:
+                            direction = RunDirection.Right;
+                            break;
+                        case ConsoleKey.UpArrow:
+                            direction = RunDirection.Up;
+                            break;
+                        case ConsoleKey.DownArrow:
+                            direction = RunDirection.Down;
+                            break;
+                    }
+                    
+                }
+                else if (anything is RunDirection sendedDirection)
+                    direction = sendedDirection;
+                else if (anything is SrcDst srcDst)
+                {
+                    var deltaX = srcDst.Destination.Left - srcDst.Source.Left;
+                    var deltaY = srcDst.Destination.Top - srcDst.Source.Top;
+
+                    if (Math.Abs(deltaX) < Math.Abs(deltaY))
+                    {
+                        if (srcDst.Source.Left > srcDst.Destination.Left)
+                            direction = RunDirection.Left;
+                        else
+                            direction = RunDirection.Right;
+                    }
+                    else
+                    {
+                        if (srcDst.Source.Top > srcDst.Destination.Top)
+                            direction = RunDirection.Up;
+                        else
+                            direction = RunDirection.Down;
+                    }
+                }
+
+                if (direction is null)
+                    throw new InvalidOperationException();
+
+                return new MoveAction(runner, direction.Value);
+            }
+
+            return null;
+        }
+    }
+
+    public class SrcDst
+    {
+        public IMaterialObject Source { get; set; }
+        public IMaterialObject Destination { get; set; }
+    }
+
+    public class WorldActionProducer : IWorldActionProducer
+    {
+        private List<Person> _ai;
+        private readonly Person _player;
+
+        private int _i;
+
+        public WorldActionProducer(List<Person> ai, Person player)
+        {
+            _ai = ai;
+            _player = player;
+            _i = -1;
+        }
+
+        public bool MoveNext()
+        {
+            _i++;
+            if (i >= ai.Count)
+                return false;
+
+            if (!_ai[_i].IsAlive)
+                return MoveNext();
+
+            return true;
+        }
+
+        public void Reset()
+        {
+            _i = -1;
+        }
+
+        public IAction Current
+        {
+            get
+            {
+                RunDirection? direction;
+
+                var srcDir = (IMaterialObject) _ai[_i];
+                var dstDir = (IMaterialObject) _player;
+
+                var deltaX = dstDir.Left - srcDir.Left;
+                var deltaY = dstDir.Top - srcDir.Top;
+
+                if (Math.Abs(deltaX) >= Math.Abs(deltaY))
+                {
+                    if (srcDir.Left > dstDir.Left)
+                        direction = RunDirection.Left;
+                    else
+                        direction = RunDirection.Right;
+                }
+                else
+                {
+                    if (srcDir.Top > dstDir.Top)
+                        direction = RunDirection.Up;
+                    else
+                        direction = RunDirection.Down;
+                }
+
+                if (direction is null)
+                    throw new InvalidOperationException();
+
+                return ActionBuilder.Build(_ai[_i], direction.Value);
+            }
+        }
+
+        object? IEnumerator.Current => Current;
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+буква Р на экране- игрок. Перемещай его стрелочками. Е - враги. Твоя задача сходить на клетку с Е. Если ты сходишь на клетку с Е, то ты убьешь его. Если Е сходит на клетку с тобой, то ты проиграл. Е движутся к тебе по тупому алгоритму. Е может случайно убить Е
+
+Ескейп - выход
