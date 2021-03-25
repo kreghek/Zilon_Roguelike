@@ -32,7 +32,15 @@ public class CommandLoopUpdaterObject : MonoBehaviour
 
     private void CommandLoopUpdater_ErrorOccured(object sender, ErrorOccuredEventArgs e)
     {
-        Debug.LogError(e.Exception);
+        if (e is CommandErrorOccuredEventArgs commandEventArgs)
+        {
+            Debug.LogError(commandEventArgs.Command.GetType());
+            Debug.LogError(commandEventArgs.Exception);
+        }
+        else
+        {
+            Debug.LogError(e.Exception);
+        }
     }
 
     public void OnDestroy()

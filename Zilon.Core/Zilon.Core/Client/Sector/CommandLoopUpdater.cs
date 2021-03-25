@@ -25,6 +25,8 @@ namespace Zilon.Core.Client.Sector
 
         private void ExecuteCommandsInner(ICommand? lastCommand)
         {
+            ICommand? commandWithError = null;
+
             lock (_lockObj)
             {
                 _hasPendingCommand = true;
@@ -37,11 +39,19 @@ namespace Zilon.Core.Client.Sector
                 {
                     if (command != null)
                     {
-                        command.Execute();
+                        try
+                        {
+                            command.Execute();
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            commandWithError = command;
+                            throw;
+                        }
 
                         if (command is IRepeatableCommand repeatableCommand)
                         {
-                            if (repeatableCommand.CanRepeat())
+                            if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute())
                             {
                                 _commandManager.Push(repeatableCommand);
                                 CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
@@ -70,6 +80,21 @@ namespace Zilon.Core.Client.Sector
                             lastCommand = null;
                         }
                     }
+                }
+                catch (InvalidOperationException exception)
+                {
+                    errorOccured = true;
+
+                    if (commandWithError != null)
+                    {
+                        ErrorOccured?.Invoke(this, new CommandErrorOccuredEventArgs(commandWithError, exception));
+                    }
+                    else
+                    {
+                        ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+                    }
+
+                    lastCommand = null;
                 }
                 catch (Exception exception)
                 {

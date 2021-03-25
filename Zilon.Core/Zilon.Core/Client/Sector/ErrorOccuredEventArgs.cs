@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Client.Sector
 {
-    public sealed class ErrorOccuredEventArgs : EventArgs
+    public class ErrorOccuredEventArgs : EventArgs
     {
         public ErrorOccuredEventArgs(Exception exception)
         {
