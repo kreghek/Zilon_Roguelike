@@ -25,7 +25,10 @@ namespace Zilon.Core.Client.Sector
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Dispose();
+            }
         }
 
         private async Task StartGameLoopUpdateAsync(CancellationToken cancelToken)
@@ -72,13 +75,13 @@ namespace Zilon.Core.Client.Sector
 
         public void Stop()
         {
-            if (_cancellationTokenSource is null)
+            if (_cancellationTokenSource != null)
             {
-                // Means Start was not called.
+                _cancellationTokenSource.Cancel();
             }
             else
             {
-                _cancellationTokenSource.Cancel();
+                // Means Start was not called.
             }
         }
     }
