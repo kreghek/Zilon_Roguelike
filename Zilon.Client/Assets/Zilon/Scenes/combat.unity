@@ -307,9 +307,9 @@ Transform:
   m_Children:
   - {fileID: 6028569350186225617}
   - {fileID: 1142505917}
-  - {fileID: 2075098211}
   - {fileID: 771209451}
   - {fileID: 1675583400}
+  - {fileID: 2075098211}
   - {fileID: 543797633}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -1883,7 +1883,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 160909241}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &771209452
 MonoBehaviour:
@@ -4414,7 +4414,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 160909241}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1675583401
 MonoBehaviour:
@@ -6340,7 +6340,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3071069527876206838}
   m_Direction: 2
   m_Value: 1.0000002
-  m_Size: 0.6138
+  m_Size: 0.6137999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7154,12 +7154,12 @@ PrefabInstance:
     - target: {fileID: 6502786928740009726, guid: 629f6237efafb03498f8e4df9b8ae94a,
         type: 3}
       propertyPath: m_Name
-      value: GameLoopUpdater
+      value: GlobeLoopUpdater
       objectReference: {fileID: 0}
     - target: {fileID: 6502786928740009727, guid: 629f6237efafb03498f8e4df9b8ae94a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6502786928740009727, guid: 629f6237efafb03498f8e4df9b8ae94a,
         type: 3}
