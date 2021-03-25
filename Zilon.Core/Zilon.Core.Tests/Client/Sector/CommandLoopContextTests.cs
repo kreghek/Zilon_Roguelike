@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +8,6 @@ using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.Client.Sector;
 using Zilon.Core.Common;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -18,11 +15,14 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client.Sector.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class CommandLoopContextTests
     {
-        [Test()]
-        [Timeout(1000)]
+        /// <summary>
+        /// The test checks WaitForUpdate releses the awaiting then CanIntent() returns true.
+        /// </summary>
+        [Test]
+        [Timeout(5000)]
         public async Task WaitForUpdateTest_WaitUntilCanIndentGetsTrueAfter200ms_WaitForUpdateReleased()
         {
             // ARRANGE
@@ -60,8 +60,12 @@ namespace Zilon.Core.Client.Sector.Tests
             factUpdateResult.Should().BeTrue();
         }
 
-        [Test()]
-        public async Task WaitForUpdateTest_WaitUntilCanIndentWhichIsNotGetsTrue_WaitForUpdateTimeoutStopped()
+        /// <summary>
+        /// The test checks WaitForUpdate don't relese the awaiting then CanIntent() dont'n return true.
+        /// </summary>
+        [Test]
+        [Timeout(5000)]
+        public void WaitForUpdateTest_WaitUntilCanIndentWhichIsNotGetsTrue_WaitForUpdateTimeoutStopped()
         {
             // ARRANGE
 
