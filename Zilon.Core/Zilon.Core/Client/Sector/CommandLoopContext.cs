@@ -27,7 +27,7 @@ namespace Zilon.Core.Client.Sector
                 var mainPerson = _player.MainPerson;
                 if (mainPerson is null)
                 {
-                    throw new InvalidOperationException("Main person is not defined to process commands.");
+                    throw new InvalidOperationException("The main person is not defined to process commands.");
                 }
 
                 var playerPersonSurvivalModule = mainPerson.GetModule<ISurvivalModule>();
