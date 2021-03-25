@@ -79,10 +79,6 @@ namespace Zilon.Core.Client.Sector
             {
                 _cancellationTokenSource.Cancel();
             }
-            else
-            {
-                // Means Start was not called.
-            }
         }
     }
 }
