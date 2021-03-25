@@ -33,6 +33,8 @@ namespace Zilon.Core.World
                 globeTransitionHandler ?? throw new ArgumentNullException(nameof(globeTransitionHandler));
         }
 
+        public IGlobeIterationMarker CurrentIteration { get; private set; } = new GlobeIterationMarker();
+
         private void ActorManager_Removed(object sender, ManagerItemsChangedEventArgs<IActor> e)
         {
             // Remove all current tasks
@@ -268,8 +270,6 @@ namespace Zilon.Core.World
         }
 
         public IEnumerable<ISectorNode> SectorNodes => _sectorNodes;
-
-        public IGlobeIterationMarker CurrentIteration { get; private set; } = new GlobeIterationMarker();
 
         public void AddSectorNode(ISectorNode sectorNode)
         {
