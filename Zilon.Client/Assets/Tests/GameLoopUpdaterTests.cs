@@ -19,7 +19,7 @@ namespace Tests
 
             var animationBlocker = new TestAnimationBlocker();
 
-            var gameLoopUpdater = new GameLoopUpdater(context, animationBlocker);
+            var gameLoopUpdater = new GlobeLoopUpdater(context, animationBlocker);
 
             // ACT
 

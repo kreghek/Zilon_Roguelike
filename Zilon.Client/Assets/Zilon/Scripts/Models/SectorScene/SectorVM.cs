@@ -115,7 +115,7 @@ public class SectorVM : MonoBehaviour
     private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
 
     [Inject]
-    private readonly IGameLoopUpdater _gameLoopUpdater;
+    private readonly IGlobeLoopUpdater _globeLoopUpdater;
 
     public List<ActorViewModel> ActorViewModels { get; }
 
@@ -641,7 +641,7 @@ public class SectorVM : MonoBehaviour
             _actorTaskControlSwitcher.Switch(ActorTaskSourceControl.Human);
 
             // Cancel game loop updating.
-            _gameLoopUpdater.Stop();
+            _globeLoopUpdater.Stop();
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
