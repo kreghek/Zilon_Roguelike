@@ -1,16 +1,20 @@
-﻿using NUnit.Framework;
-using Zilon.Core.Client.Sector;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Moq;
-using Zilon.Core.Players;
-using Zilon.Core.Persons;
-using Zilon.Core.Tactics.Behaviour;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
+
 using FluentAssertions;
+
+using Moq;
+
+using NUnit.Framework;
+
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Common;
+using Zilon.Core.Persons;
+using Zilon.Core.Players;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Client.Sector.Tests
 {
@@ -34,14 +38,16 @@ namespace Zilon.Core.Client.Sector.Tests
 
             // ACT
 
-            var updateTask = Task.Run(async () => {
+            var updateTask = Task.Run(async () =>
+            {
                 await commandLoopContext.WaitForUpdate(CancellationToken.None);
 
                 return true;
             });
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            Task.Run(async () => {
+            Task.Run(async () =>
+            {
                 await Task.Delay(200);
 
                 canIndent = true;
@@ -69,11 +75,13 @@ namespace Zilon.Core.Client.Sector.Tests
 
             // ACT
 
-            var updateTask = Task.Run(async () => {
+            var updateTask = Task.Run(async () =>
+            {
                 await commandLoopContext.WaitForUpdate(CancellationToken.None);
             });
 
-            Func<Task> act = async () => {
+            Func<Task> act = async () =>
+            {
                 await updateTask.TimeoutAfter(1000);
             };
 
