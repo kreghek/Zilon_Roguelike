@@ -6,7 +6,7 @@ using Zilon.Core.Commands;
 
 namespace Zilon.Core.Client.Sector
 {
-    public class CommandLoopUpdater : ICommandLoopUpdater
+    public sealed class CommandLoopUpdater : ICommandLoopUpdater
     {
         private readonly ICommandLoopContext _commandLoopContext;
         private readonly ICommandManager _commandManager;

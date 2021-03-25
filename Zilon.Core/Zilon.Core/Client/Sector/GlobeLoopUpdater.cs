@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace Zilon.Core.Client.Sector
 {
-    public class GlobeLoopUpdater : IDisposable, IGlobeLoopUpdater
+    public sealed class GlobeLoopUpdater : IDisposable, IGlobeLoopUpdater
     {
         [NotNull] private readonly IAnimationBlockerService _animationBlockerService;
 
