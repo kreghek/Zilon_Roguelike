@@ -7,7 +7,7 @@ using Zilon.Core.Client.Sector;
 
 namespace Tests
 {
-    public class GameLoopUpdaterTests
+    public class GlobeLoopUpdaterTests
     {
         // A Test behaves as an ordinary method
         [Test]
