@@ -67,7 +67,6 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var player = Mock.Of<IPlayer>(player => player.MainPerson == Mock.Of<IPerson>());
 
-            var canIndent = false;
             var taskSourceMock = new Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var taskSource = taskSourceMock.Object;
 

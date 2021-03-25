@@ -47,7 +47,7 @@ namespace Zilon.Core.Client.Sector
                     break;
                 }
 
-                await Task.Delay(100, cancellationToken).ConfigureAwait(false);
+                await Task.Yield();
             }
         }
     }
