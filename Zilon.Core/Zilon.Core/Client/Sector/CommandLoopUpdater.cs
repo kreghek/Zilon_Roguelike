@@ -96,12 +96,6 @@ namespace Zilon.Core.Client.Sector
 
                     lastCommand = null;
                 }
-                catch (Exception exception)
-                {
-                    errorOccured = true;
-                    ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
-                    lastCommand = null;
-                }
                 finally
                 {
                     if (errorOccured)
