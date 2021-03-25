@@ -281,7 +281,7 @@ namespace Zilon.TextClient
             var inventoryState = serviceScope.ServiceProvider.GetRequiredService<IInventoryState>();
 
             var gameLoopUpdateContext = new GameLoopContext(player, inventoryState, playerState);
-            var gameLoop = new GameLoopUpdater(gameLoopUpdateContext, animationBlockerService);
+            var gameLoop = new GlobeLoopUpdater(gameLoopUpdateContext, animationBlockerService);
 
             var commandLoopContext =
                 new CommandLoopContext(player, (IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource);

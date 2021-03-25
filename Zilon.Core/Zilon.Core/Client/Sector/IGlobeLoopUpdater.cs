@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Client.Sector
 {
-    public interface IGameLoopUpdater
+    public interface IGlobeLoopUpdater
     {
         bool IsStarted { get; }
 

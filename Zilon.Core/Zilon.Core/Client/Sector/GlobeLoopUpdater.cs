@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace Zilon.Core.Client.Sector
 {
-    public class GameLoopUpdater : IDisposable, IGameLoopUpdater
+    public class GlobeLoopUpdater : IDisposable, IGlobeLoopUpdater
     {
         [NotNull] private readonly IAnimationBlockerService _animationBlockerService;
 
@@ -14,7 +14,7 @@ namespace Zilon.Core.Client.Sector
 
         private CancellationTokenSource? _cancellationTokenSource;
 
-        public GameLoopUpdater(
+        public GlobeLoopUpdater(
             IGameLoopContext gameLoopContext,
             IAnimationBlockerService animationBlockerService)
         {
