@@ -10,7 +10,7 @@ namespace Zilon.Core.Client.Sector
 
         private readonly object _lockObject;
 
-        private TaskCompletionSource<bool> _tcs;
+        private TaskCompletionSource<bool>? _tcs;
 
         public AnimationBlockerService()
         {
@@ -26,18 +26,15 @@ namespace Zilon.Core.Client.Sector
                 blocker.Released -= CommandBlocker_Release;
                 _commandBlockers.TryRemove(blocker, out var _);
 
-                if (!HasBlockers)
+                if (!HasBlockers && _tcs != null)
                 {
-                    if (_tcs != null)
-                    {
-                        _tcs.SetResult(true);
-                    }
+                    _tcs.SetResult(true);
                 }
             }
         }
 
         /// <inheritdoc />
-        public bool HasBlockers => _commandBlockers.Count > 0;
+        public bool HasBlockers => !_commandBlockers.IsEmpty;
 
         /// <inheritdoc />
         public void AddBlocker(ICommandBlocker commandBlocker)
