@@ -40,7 +40,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var updateTask = Task.Run(async () =>
             {
-                await commandLoopContext.WaitForUpdate(CancellationToken.None);
+                await commandLoopContext.WaitForUpdate(CancellationToken.None).ConfigureAwait(false);
 
                 return true;
             });
@@ -48,13 +48,13 @@ namespace Zilon.Core.Client.Sector.Tests
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
             {
-                await Task.Delay(200);
+                await Task.Delay(200).ConfigureAwait(false);
 
                 canIndent = true;
             });
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            var factUpdateResult = await updateTask;
+            var factUpdateResult = await updateTask.ConfigureAwait(false);
 
             // ASSERT
             factUpdateResult.Should().BeTrue();
@@ -80,12 +80,12 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var updateTask = Task.Run(async () =>
             {
-                await commandLoopContext.WaitForUpdate(CancellationToken.None);
+                await commandLoopContext.WaitForUpdate(CancellationToken.None).ConfigureAwait(false);
             });
 
             Func<Task> act = async () =>
             {
-                await updateTask.TimeoutAfter(1000);
+                await updateTask.TimeoutAfter(1000).ConfigureAwait(false);
             };
 
             // ASSERT
