@@ -312,8 +312,6 @@ namespace Zilon.TextClient
                 TaskContinuationOptions.OnlyOnCanceled);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            var lastGlobeIterationMarker = globe.CurrentIteration;
-
             do
             {
                 var playerActor = (from sectorNode in globe.SectorNodes
