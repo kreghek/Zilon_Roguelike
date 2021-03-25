@@ -71,7 +71,7 @@ jobs:
 
       # Unity tests
       - name: Run tests
-        uses: game-ci/unity-test-runner@v2
+        uses: game-ci/unity-test-runner@v2.0-alpha-4
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           projectPath: ${{ matrix.projectPath }}
