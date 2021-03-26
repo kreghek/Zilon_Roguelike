@@ -10,11 +10,18 @@ using Zilon.Core.Commands;
 
 namespace Zilon.Core.Client.Sector.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     [Parallelizable(ParallelScope.All)]
     public class CommandLoopUpdaterTests
     {
-        [Test()]
+        /// <summary>
+        /// The test checks the command executes if it in the command pool.
+        /// 
+        /// 1. Start the <see cref="CommandLoopUpdater"/>.
+        /// 2. Push the command into the pool. And wait some times.
+        /// 3. Command processing loop pops command from pool and executes it.        /// 
+        /// </summary>
+        [Test]
         [Timeout(1000)]
         public async Task StartAsync_CommandInPool_ExecutesCommand()
         {
@@ -40,6 +47,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             commandPool.Push(command);
 
+            // Delay to take some time to command loop updater to perform some iterations.
             await Task.Delay(100);
 
             // ASSERT
@@ -49,18 +57,31 @@ namespace Zilon.Core.Client.Sector.Tests
 
         private sealed class TestCommandPool : ICommandPool
         {
+            private readonly object _lockObject;
+
             private ICommand _storedCommand;
+
+            public TestCommandPool()
+            {
+                _lockObject = new object();
+            }
 
             public ICommand Pop()
             {
-                var commandToPop = _storedCommand;
-                _storedCommand = null;
-                return commandToPop;
+                lock (_lockObject)
+                {
+                    var commandToPop = _storedCommand;
+                    _storedCommand = null;
+                    return commandToPop;
+                }
             }
 
             public void Push(ICommand command)
             {
-                _storedCommand = command;
+                lock (_lockObject)
+                {
+                    _storedCommand = command;
+                }
             }
 
             public event EventHandler CommandPushed;
