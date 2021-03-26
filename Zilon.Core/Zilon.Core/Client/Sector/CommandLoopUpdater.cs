@@ -112,25 +112,27 @@ namespace Zilon.Core.Client.Sector
         public event EventHandler? CommandAutoExecuted;
         public event EventHandler? CommandProcessed;
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             IsStarted = true;
-
-            ICommand? lastCommand = null;
-
-            while (_commandLoopContext.HasNextIteration)
+            return Task.Run(async () =>
             {
-                await _commandLoopContext.WaitForUpdate(cancellationToken).ConfigureAwait(false);
+                ICommand? lastCommand = null;
 
-                try
+                while (_commandLoopContext.HasNextIteration)
                 {
-                    ExecuteCommandsInner(lastCommand);
+                    await _commandLoopContext.WaitForUpdate(cancellationToken).ConfigureAwait(false);
+
+                    try
+                    {
+                        ExecuteCommandsInner(lastCommand);
+                    }
+                    catch (Exception exception)
+                    {
+                        ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+                    }
                 }
-                catch (Exception exception)
-                {
-                    ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
-                }
-            }
+            });
         }
 
         public bool IsStarted { get; private set; }
