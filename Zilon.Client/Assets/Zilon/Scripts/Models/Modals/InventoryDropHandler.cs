@@ -14,18 +14,24 @@ public class InventoryDropHandler : UIBehaviour, IDropHandler
 {
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
     [Inject] private readonly IInventoryState _inventoryState;
-    [Inject] private readonly ICommandManager _commandManager;
+    [Inject] private readonly ICommandPool _comamndPool;
 
     public void OnDrop(PointerEventData eventData)
     {
-        var droppedInventorySlot = eventData.pointerDrag?.GetComponent<InventorySlotVm>();
+        var slotViewModelObject = eventData.pointerDrag;
+        if (slotViewModelObject is null)
+        {
+            return;
+        }
+
+        var droppedInventorySlot = slotViewModelObject.GetComponent<InventorySlotVm>();
         if (droppedInventorySlot != null)
         {
             var equipCommand = _specialCommandManager.GetEquipCommand(droppedInventorySlot.SlotIndex);
 
             _inventoryState.SelectedProp = null;
 
-            _commandManager.Push(equipCommand);
+            _comamndPool.Push(equipCommand);
 
             return;
         }

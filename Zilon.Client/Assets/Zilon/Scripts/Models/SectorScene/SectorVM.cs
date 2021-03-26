@@ -73,7 +73,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly DiContainer _container;
 
-    [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
+    [NotNull] [Inject] private readonly ICommandPool _commandPool;
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
@@ -412,16 +412,16 @@ public class SectorVM : MonoBehaviour
             containerViewModel.Container.GetModule<IPropContainer>().IsActive &&
             _openContainerCommand.CanExecute())
         {
-            _clientCommandExecutor.Push(_openContainerCommand);
+            _commandPool.Push(_openContainerCommand);
         }
         else if (containerViewModel.Container.HasModule<IPropDepositModule>() &&
             _mineDepositCommand.CanExecute())
         {
-            _clientCommandExecutor.Push(_mineDepositCommand);
+            _commandPool.Push(_mineDepositCommand);
         }
         else if (_attackCommand.CanExecute())
         {
-            _clientCommandExecutor.Push(_attackCommand);
+            _commandPool.Push(_attackCommand);
         }
     }
 
@@ -589,7 +589,7 @@ public class SectorVM : MonoBehaviour
 
         if (actorViewModel != null)
         {
-            _clientCommandExecutor.Push(_attackCommand);
+            _commandPool.Push(_attackCommand);
         }
     }
 
@@ -606,7 +606,7 @@ public class SectorVM : MonoBehaviour
 
         if (_attackCommand.CanExecute())
         {
-            _clientCommandExecutor.Push(_attackCommand);
+            _commandPool.Push(_attackCommand);
         }
     }
 
@@ -761,7 +761,7 @@ public class SectorVM : MonoBehaviour
 
         if (_moveCommand.CanExecute())
         {
-            _clientCommandExecutor.Push(_moveCommand);
+            _commandPool.Push(_moveCommand);
         }
     }
 

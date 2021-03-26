@@ -21,7 +21,7 @@ using Zilon.Core.Tactics;
 
 public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
-    [Inject] private readonly ICommandManager _comamndManager;
+    [Inject] private readonly ICommandPool _comamndPool;
     [Inject] private readonly IInventoryState _inventoryState;
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
 
@@ -146,7 +146,7 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
 
     public void ApplyEquipment()
     {
-        _comamndManager.Push(_equipCommand);
+        _comamndPool.Push(_equipCommand);
     }
 
 

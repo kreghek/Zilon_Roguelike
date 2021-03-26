@@ -66,7 +66,7 @@ public class KeyboardMoveController : MonoBehaviour
 
     [NotNull]
     [Inject]
-    private readonly ICommandManager _clientCommandExecutor;
+    private readonly ICommandPool _commandPool;
 
     [NotNull]
     [Inject(Id = "move-command")]
@@ -115,7 +115,7 @@ public class KeyboardMoveController : MonoBehaviour
 
             if (targetNodeViewModel != null)
             {
-                _clientCommandExecutor.Push(_moveCommand);
+                _commandPool.Push(_moveCommand);
             }
         }
     }

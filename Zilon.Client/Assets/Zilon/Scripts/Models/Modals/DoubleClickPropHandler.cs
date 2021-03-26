@@ -16,7 +16,7 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
     private const float INTERVAL = 0.4f;
 
     [Inject] private readonly ISectorUiState _playerState;
-    [Inject] private readonly ICommandManager _commandManager;
+    [Inject] private readonly ICommandPool _commandPool;
     [Inject] private readonly IInventoryState _inventoryState;
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
     [Inject] private readonly IAnimationBlockerService animationBlockerService;
@@ -71,7 +71,7 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
             var equipCommand = _specialCommandManager.GetEquipCommand(slotIndex);
             if (equipCommand.CanExecute())
             {
-                _commandManager.Push(equipCommand);
+                _commandPool.Push(equipCommand);
 
                 break;
             }
@@ -80,6 +80,6 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
 
     private void UseProp()
     {
-        _commandManager.Push(_useSelfCommand);
+        _commandPool.Push(_useSelfCommand);
     }
 }

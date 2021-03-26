@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Models;
 using Assets.Zilon.Scripts.Models.Modals;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
@@ -38,7 +39,7 @@ public class InventoryHandler : MonoBehaviour
     [NotNull] [Inject] private readonly DiContainer _diContainer;
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject] private readonly ICommandManager _commandManager;
+    [NotNull] [Inject] private readonly ICommandPool _commandPool;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
     public InventoryHandler()
@@ -339,7 +340,7 @@ public class InventoryHandler : MonoBehaviour
 
     public void UseButton_Handler()
     {
-        _commandManager.Push(_useSelfCommand);
+        _commandPool.Push(_useSelfCommand);
     }
 
     public void ReadButton_Handler()

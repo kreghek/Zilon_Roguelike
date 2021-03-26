@@ -27,7 +27,7 @@ public class SectorUiHandler : MonoBehaviour
 
     [Inject] private readonly ISectorUiState _playerState;
 
-    [Inject] private readonly ICommandManager _clientCommandExecutor;
+    [Inject] private readonly ICommandPool _commandPool;
 
     [Inject] private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
 
@@ -162,7 +162,7 @@ public class SectorUiHandler : MonoBehaviour
             return;
         }
 
-        _clientCommandExecutor.Push(_nextTurnCommand);
+        _commandPool.Push(_nextTurnCommand);
     }
 
     public void ShowInventoryButton_Handler()
@@ -172,7 +172,7 @@ public class SectorUiHandler : MonoBehaviour
             return;
         }
 
-        _clientCommandExecutor.Push(_showInventoryCommand);
+        _commandPool.Push(_showInventoryCommand);
     }
 
     public void ShowPersonModalButton_Handler()
@@ -182,7 +182,7 @@ public class SectorUiHandler : MonoBehaviour
             return;
         }
 
-        _clientCommandExecutor.Push(_showPersonModalCommand);
+        _commandPool.Push(_showPersonModalCommand);
     }
 
     public void SwitchAutoplay_Handler()
@@ -208,12 +208,12 @@ public class SectorUiHandler : MonoBehaviour
 
     public void ExitGame_Handler()
     {
-        _clientCommandExecutor.Push(_quitRequestCommand);
+        _commandPool.Push(_quitRequestCommand);
     }
 
     public void ExitTitle_Handler()
     {
-        _clientCommandExecutor.Push(_quitRequestTitleCommand);
+        _commandPool.Push(_quitRequestTitleCommand);
     }
 
     public void SectorTransitionMoveButton_Handler()
@@ -226,7 +226,7 @@ public class SectorUiHandler : MonoBehaviour
             return;
         }
 
-        _clientCommandExecutor.Push(_sectorTransitionMoveCommand);
+        _commandPool.Push(_sectorTransitionMoveCommand);
     }
 
     public void OpenLoot_Handler()
@@ -238,7 +238,7 @@ public class SectorUiHandler : MonoBehaviour
         {
             var viewModel = GetLootViewModel(lootInNode);
             _playerState.SelectedViewModel = viewModel;
-            _clientCommandExecutor.Push(_openContainerCommand);
+            _commandPool.Push(_openContainerCommand);
         }
     }
 
