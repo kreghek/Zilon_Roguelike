@@ -26,7 +26,7 @@ namespace Zilon.Core.Client.Sector
         private ICommand? ExecuteCommandsInner(ICommand? lastCommand)
         {
             ICommand? commandWithError = null;
-            ICommand? newLastCommand;
+            ICommand? newLastCommand = null;
 
             lock (_lockObj)
             {
