@@ -18,7 +18,6 @@ namespace Zilon.Core.Client.Sector.Tests
     {
         /// <summary>
         /// The test checks the command executes if it in the command pool.
-        /// 
         /// 1. Start the <see cref="CommandLoopUpdater" />. It can perform some idle iteration without command.
         /// 2. Push the command into the pool. And wait until ICommand.Execute() will be called.
         /// 3. Command processing loop pops the command from pool and executes it.
@@ -64,7 +63,6 @@ namespace Zilon.Core.Client.Sector.Tests
 
         /// <summary>
         /// The test checks the command executes if it in the command pool.
-        /// 
         /// 1. Push the command into the pool.
         /// 2. Start the <see cref="CommandLoopUpdater" />. It must takes the command from pool during first iteration.
         /// 3. Wait until Execute() called.
@@ -130,7 +128,11 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
             var eventRaised = false;
-            commandLoopUpdater.CommandProcessed += (s, e) => { eventRaised = true; tcs.SetResult(true); };
+            commandLoopUpdater.CommandProcessed += (s, e) =>
+            {
+                eventRaised = true;
+                tcs.SetResult(true);
+            };
 
             // ACT
             using var monitor = commandLoopUpdater.Monitor();
@@ -171,7 +173,11 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
             var eventRaised = false;
-            commandLoopUpdater.ErrorOccured += (s, e) => { eventRaised = true; tcs.SetResult(true); };
+            commandLoopUpdater.ErrorOccured += (s, e) =>
+            {
+                eventRaised = true;
+                tcs.SetResult(true);
+            };
 
             // ACT
             using var monitor = commandLoopUpdater.Monitor();
