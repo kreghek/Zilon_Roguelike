@@ -148,6 +148,57 @@ namespace Zilon.Core.Client.Sector.Tests
         }
 
         /// <summary>
+        /// The test checks the command executes twice if it is repeatable and can repeat once.
+        /// Note! Command must be abel to repeate and execute. Do not think that ability to repeat automaticaly means command can
+        /// execute.
+        /// </summary>
+        [Test]
+        [Timeout(5000)]
+        public async Task StartAsync_CommandIsRepeatableOnce_ExecutesCommandTwice()
+        {
+            // ARRANGE
+
+            var contextMock = new Mock<ICommandLoopContext>();
+            contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
+            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(Task.CompletedTask);
+            var context = contextMock.Object;
+
+            var tcs = new TaskCompletionSource<bool>();
+            var testTask = tcs.Task;
+
+            var repeatIteration = 0;
+            var commandMock = new Mock<IRepeatableCommand>();
+            commandMock.Setup(x => x.Execute()).Callback(() =>
+            {
+                if (repeatIteration >= 1)
+                {
+                    tcs.SetResult(true);
+                }
+            });
+            commandMock.Setup(x => x.CanRepeat()).Callback(() => { repeatIteration++; })
+                .Returns(() => repeatIteration <= 1);
+
+            var command = commandMock.Object;
+
+            var commandPool = new TestCommandPool();
+            commandPool.Push(command);
+
+            var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
+
+            // ACT
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+            await testTask;
+
+            // ASSERT
+
+            commandMock.Verify(x => x.Execute(), Times.Exactly(2));
+        }
+
+        /// <summary>
         /// The test checks the event of the command processed was raised then the command throws exception.
         /// </summary>
         [Test]
@@ -190,55 +241,6 @@ namespace Zilon.Core.Client.Sector.Tests
             // ASSERT
 
             eventRaised.Should().BeTrue();
-        }
-
-        /// <summary>
-        /// The test checks the command executes twice if it is repeatable and can repeat once.
-        /// Note! Command must be abel to repeate and execute. Do not think that ability to repeat automaticaly means command can execute.
-        /// </summary>
-        [Test]
-        [Timeout(5000)]
-        public async Task StartAsync_CommandIsRepeatableOnce_ExecutesCommandTwice()
-        {
-            // ARRANGE
-
-            var contextMock = new Mock<ICommandLoopContext>();
-            contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(Task.CompletedTask);
-            var context = contextMock.Object;
-
-            var tcs = new TaskCompletionSource<bool>();
-            var testTask = tcs.Task;
-
-            var repeatIteration = 0;
-            var commandMock = new Mock<IRepeatableCommand>();
-            commandMock.Setup(x => x.Execute()).Callback(() =>
-            {
-                if (repeatIteration >= 1)
-                {
-                    tcs.SetResult(true);
-                }
-            });
-            commandMock.Setup(x => x.CanRepeat()).Callback(() => { repeatIteration++; }).Returns(() => repeatIteration <= 1);
-
-            var command = commandMock.Object;
-
-            var commandPool = new TestCommandPool();
-            commandPool.Push(command);
-
-            var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
-
-            // ACT
-
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
-            await testTask;
-
-            // ASSERT
-
-            commandMock.Verify(x => x.Execute(), Times.Exactly(2));
         }
 
         private sealed class TestCommandPool : ICommandPool
