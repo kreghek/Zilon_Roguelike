@@ -163,7 +163,7 @@ namespace Zilon.Core.Client.Sector.Tests
             var testTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
-            commandMock.Setup(x => x.Execute()).Callback(()=> { throw new InvalidOperationException(); });
+            commandMock.Setup(x => x.Execute()).Callback(() => { throw new InvalidOperationException(); });
             var command = commandMock.Object;
 
             var commandPool = new TestCommandPool();
