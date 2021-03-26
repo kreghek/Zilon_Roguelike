@@ -26,6 +26,7 @@ namespace Zilon.Core.Client.Sector
         private ICommand? ExecuteCommandsInner(ICommand? lastCommand)
         {
             ICommand? commandWithError = null;
+            ICommand? newLastCommand;
 
             lock (_lockObj)
             {
@@ -68,7 +69,7 @@ namespace Zilon.Core.Client.Sector
                             CommandProcessed?.Invoke(this, EventArgs.Empty);
                         }
 
-                        lastCommand = command;
+                        newLastCommand = command;
                     }
                     else
                     {
@@ -77,7 +78,7 @@ namespace Zilon.Core.Client.Sector
                         if (lastCommand != null)
                         {
                             CommandProcessed?.Invoke(this, EventArgs.Empty);
-                            lastCommand = null;
+                            newLastCommand = null;
                         }
                     }
                 }
@@ -94,7 +95,7 @@ namespace Zilon.Core.Client.Sector
                         ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
                     }
 
-                    lastCommand = null;
+                    newLastCommand = null;
                 }
                 finally
                 {
@@ -102,12 +103,12 @@ namespace Zilon.Core.Client.Sector
                     {
                         _hasPendingCommand = false;
                         CommandProcessed?.Invoke(this, EventArgs.Empty);
-                        lastCommand = null;
+                        newLastCommand = null;
                     }
                 }
             }
 
-            return lastCommand;
+            return newLastCommand;
         }
 
         public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;

@@ -54,7 +54,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandPool.Push(command);
 
             // Delay to take some time to command loop updater to perform some iterations.
-            await testTask;
+            await testTask.ConfigureAwait(false);
 
             // ASSERT
 
@@ -96,7 +96,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            await testTask;
+            await testTask.ConfigureAwait(false);
 
             // ASSERT
 
@@ -192,7 +192,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            await testTask;
+            await testTask.ConfigureAwait(false);
 
             // ASSERT
 
@@ -237,7 +237,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            await testTask;
+            await testTask.ConfigureAwait(false);
 
             // ASSERT
 
