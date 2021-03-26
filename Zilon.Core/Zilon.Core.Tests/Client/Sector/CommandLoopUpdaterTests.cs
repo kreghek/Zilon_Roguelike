@@ -21,7 +21,7 @@ namespace Zilon.Core.Client.Sector.Tests
         /// 3. Command processing loop pops command from pool and executes it.
         /// </summary>
         [Test]
-        [Timeout(1000)]
+        [Timeout(5000)]
         public async Task StartAsync_CommandInPool_ExecutesCommand()
         {
             // ARRANGE
@@ -47,8 +47,6 @@ namespace Zilon.Core.Client.Sector.Tests
             commandPool.Push(command);
 
             // Delay to take some time to command loop updater to perform some iterations.
-            await Task.Delay(100);
-            await Task.Delay(100);
             await Task.Delay(100);
 
             // ASSERT
