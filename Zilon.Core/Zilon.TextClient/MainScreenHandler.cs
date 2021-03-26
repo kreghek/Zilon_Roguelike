@@ -35,7 +35,7 @@ namespace Zilon.TextClient
         }
 
         private static void HandleAttackCommand(string inputText, IServiceScope serviceScope, ISectorUiState uiState,
-            ISectorNode playerActorSectorNode, ICommandManager commandManager)
+            ISectorNode playerActorSectorNode, ICommandPool commandManager)
         {
             var components = inputText.Split(' ');
             var targetId = int.Parse(components[1], CultureInfo.InvariantCulture);
@@ -78,7 +78,7 @@ namespace Zilon.TextClient
             survivalModule.SetStatForce(Core.Persons.SurvivalStatType.Health, 0);
         }
 
-        private static void HandleIdleCommand(IServiceScope serviceScope, ICommandManager commandManager)
+        private static void HandleIdleCommand(IServiceScope serviceScope, ICommandPool commandManager)
         {
             var command = serviceScope.ServiceProvider.GetRequiredService<IdleCommand>();
 
@@ -166,7 +166,7 @@ namespace Zilon.TextClient
         private static void HandleMoveCommand(
             IServiceScope serviceScope,
             ISectorUiState uiState,
-            ICommandManager commandManager,
+            ICommandPool commandManager,
             ISectorNode playerActorSectorNode,
             string inputText)
         {
@@ -187,7 +187,7 @@ namespace Zilon.TextClient
             PushCommandToExecution(commandManager, command);
         }
 
-        private static void HandleSectorTransitCommand(IServiceScope serviceScope, ICommandManager commandManager)
+        private static void HandleSectorTransitCommand(IServiceScope serviceScope, ICommandPool commandManager)
         {
             var command = serviceScope.ServiceProvider.GetRequiredService<SectorTransitionMoveCommand>();
             PushCommandToExecution(commandManager, command);
@@ -237,7 +237,7 @@ namespace Zilon.TextClient
             Console.WriteLine($"Position: {actor.Node}");
         }
 
-        private static void PushCommandToExecution(ICommandManager commandManager, ICommand command)
+        private static void PushCommandToExecution(ICommandPool commandManager, ICommand command)
         {
             if (command.CanExecute())
             {
@@ -272,7 +272,7 @@ namespace Zilon.TextClient
         {
             var serviceScope = gameState.ServiceScope;
             var player = serviceScope.ServiceProvider.GetRequiredService<IPlayer>();
-            var commandManager = serviceScope.ServiceProvider.GetRequiredService<ICommandManager>();
+            var commandManager = serviceScope.ServiceProvider.GetRequiredService<ICommandPool>();
             var animationBlockerService = serviceScope.ServiceProvider.GetRequiredService<IAnimationBlockerService>();
             var humanTaskSource = serviceScope.ServiceProvider
                 .GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();

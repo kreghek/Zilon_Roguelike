@@ -9,16 +9,16 @@ namespace Zilon.Core.Client.Sector
     public sealed class CommandLoopUpdater : ICommandLoopUpdater
     {
         private readonly ICommandLoopContext _commandLoopContext;
-        private readonly ICommandManager _commandManager;
+        private readonly ICommandPool _commandPool;
 
         private readonly object _lockObj;
 
         private bool _hasPendingCommand;
 
-        public CommandLoopUpdater(ICommandLoopContext commandLoopContext, ICommandManager commandManager)
+        public CommandLoopUpdater(ICommandLoopContext commandLoopContext, ICommandPool commandPool)
         {
             _commandLoopContext = commandLoopContext ?? throw new ArgumentNullException(nameof(commandLoopContext));
-            _commandManager = commandManager ?? throw new ArgumentNullException(nameof(commandManager));
+            _commandPool = commandPool ?? throw new ArgumentNullException(nameof(commandPool));
 
             _lockObj = new object();
         }
@@ -33,7 +33,7 @@ namespace Zilon.Core.Client.Sector
 
                 var errorOccured = false;
 
-                var command = _commandManager.Pop();
+                var command = _commandPool.Pop();
 
                 try
                 {
@@ -53,7 +53,7 @@ namespace Zilon.Core.Client.Sector
                         {
                             if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute())
                             {
-                                _commandManager.Push(repeatableCommand);
+                                _commandPool.Push(repeatableCommand);
                                 CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
                             }
                             else
@@ -112,28 +112,25 @@ namespace Zilon.Core.Client.Sector
         public event EventHandler? CommandAutoExecuted;
         public event EventHandler? CommandProcessed;
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             IsStarted = true;
 
-            return Task.Run(async () =>
+            ICommand? lastCommand = null;
+
+            while (_commandLoopContext.HasNextIteration)
             {
-                ICommand? lastCommand = null;
+                await _commandLoopContext.WaitForUpdate(cancellationToken).ConfigureAwait(false);
 
-                while (_commandLoopContext.HasNextIteration)
+                try
                 {
-                    await _commandLoopContext.WaitForUpdate(cancellationToken).ConfigureAwait(false);
-
-                    try
-                    {
-                        ExecuteCommandsInner(lastCommand);
-                    }
-                    catch (Exception exception)
-                    {
-                        ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
-                    }
+                    ExecuteCommandsInner(lastCommand);
                 }
-            }, cancellationToken);
+                catch (Exception exception)
+                {
+                    ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+                }
+            }
         }
 
         public bool IsStarted { get; private set; }
