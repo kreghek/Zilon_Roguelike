@@ -35,7 +35,6 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var testTask = tcs.Task;
 
-
             var commandMock = new Mock<ICommand>();
             commandMock.Setup(x => x.Execute()).Callback(() => tcs.SetResult(true));
             var command = commandMock.Object;
