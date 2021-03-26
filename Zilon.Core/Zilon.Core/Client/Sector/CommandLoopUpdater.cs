@@ -134,7 +134,7 @@ namespace Zilon.Core.Client.Sector
                         ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
                     }
                 }
-            });
+            }, cancellationToken);
         }
 
         public bool IsStarted { get; private set; }
