@@ -18,7 +18,7 @@ namespace Zilon.Core.Client.Sector.Tests
         /// The test checks the command executes if it in the command pool.
         /// 1. Start the <see cref="CommandLoopUpdater" />.
         /// 2. Push the command into the pool. And wait some times.
-        /// 3. Command processing loop pops command from pool and executes it.        ///
+        /// 3. Command processing loop pops command from pool and executes it.
         /// </summary>
         [Test]
         [Timeout(1000)]
