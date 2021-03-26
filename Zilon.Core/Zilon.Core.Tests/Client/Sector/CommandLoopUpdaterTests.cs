@@ -49,8 +49,6 @@ namespace Zilon.Core.Client.Sector.Tests
 
         private sealed class TestCommandPool : ICommandPool
         {
-            public event EventHandler CommandPushed;
-
             private ICommand _storedCommand;
 
             public ICommand Pop()
@@ -64,6 +62,8 @@ namespace Zilon.Core.Client.Sector.Tests
             {
                 _storedCommand = command;
             }
+
+            public event EventHandler CommandPushed;
         }
     }
 }
