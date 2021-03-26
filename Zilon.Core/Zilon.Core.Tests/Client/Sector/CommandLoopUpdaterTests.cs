@@ -31,7 +31,13 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(Task.CompletedTask);
             var context = contextMock.Object;
 
+            var tcs = new TaskCompletionSource<bool>();
+
+            var testTask = tcs.Task;
+
+
             var commandMock = new Mock<ICommand>();
+            commandMock.Setup(x => x.Execute()).Callback(() => tcs.SetResult(true));
             var command = commandMock.Object;
 
             var commandPool = new TestCommandPool();
@@ -47,7 +53,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandPool.Push(command);
 
             // Delay to take some time to command loop updater to perform some iterations.
-            await Task.Delay(100);
+            await testTask;
 
             // ASSERT
 

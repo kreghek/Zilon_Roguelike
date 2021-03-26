@@ -23,7 +23,7 @@ namespace Zilon.Core.Client.Sector
             _lockObj = new object();
         }
 
-        private void ExecuteCommandsInner(ICommand? lastCommand)
+        private ICommand? ExecuteCommandsInner(ICommand? lastCommand)
         {
             ICommand? commandWithError = null;
 
@@ -106,6 +106,8 @@ namespace Zilon.Core.Client.Sector
                     }
                 }
             }
+
+            return lastCommand;
         }
 
         public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
@@ -125,7 +127,7 @@ namespace Zilon.Core.Client.Sector
 
                     try
                     {
-                        ExecuteCommandsInner(lastCommand);
+                        lastCommand = ExecuteCommandsInner(lastCommand);
                     }
                     catch (Exception exception)
                     {
