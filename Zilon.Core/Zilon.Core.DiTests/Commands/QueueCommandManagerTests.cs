@@ -23,7 +23,7 @@ namespace Zilon.Core.Tests.Commands
             // ARRANGE
             var commands = GetTwoCommands();
 
-            var commandManager = new QueueCommandManager();
+            var commandManager = new QueueCommandPool();
             foreach (var command in commands)
             {
                 commandManager.Push(command);
@@ -44,7 +44,7 @@ namespace Zilon.Core.Tests.Commands
             // ARRANGE
             var commands = GetOneCommand();
 
-            var commandManager = new QueueCommandManager();
+            var commandManager = new QueueCommandPool();
             foreach (var command in commands)
             {
                 commandManager.Push(command);
@@ -67,7 +67,7 @@ namespace Zilon.Core.Tests.Commands
             var command1 = new Mock<ICommand>().Object;
             var command2 = new Mock<ICommand>().Object;
 
-            var commandManager = new QueueCommandManager();
+            var commandManager = new QueueCommandPool();
 
             // ACT
 
@@ -87,7 +87,7 @@ namespace Zilon.Core.Tests.Commands
             factCommand2.Should().Be(command2);
         }
 
-        private static void AssertPopCommands(ICommand[] commands, QueueCommandManager commandManager)
+        private static void AssertPopCommands(ICommand[] commands, QueueCommandPool commandManager)
         {
             foreach (var expectedCommand in commands)
             {

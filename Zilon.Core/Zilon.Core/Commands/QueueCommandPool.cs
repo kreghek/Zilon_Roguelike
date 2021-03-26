@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace Zilon.Core.Commands
 {
-    public class QueueCommandManager : ICommandPool
+    public class QueueCommandPool : ICommandPool
     {
         private readonly ConcurrentQueue<ICommand> _queue;
 
         [ExcludeFromCodeCoverage]
-        public QueueCommandManager()
+        public QueueCommandPool()
         {
             _queue = new ConcurrentQueue<ICommand>();
         }

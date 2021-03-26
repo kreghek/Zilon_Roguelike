@@ -33,7 +33,7 @@ namespace Zilon.TextClient
             serviceContainer.AddScoped<AttackCommand>();
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
             serviceContainer.AddScoped<SectorTransitionMoveCommand>();
-            serviceContainer.AddScoped<ICommandPool, QueueCommandManager>();
+            serviceContainer.AddScoped<ICommandPool, QueueCommandPool>();
             serviceContainer.AddScoped<IAnimationBlockerService, AnimationBlockerService>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();

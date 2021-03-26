@@ -140,7 +140,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            await testTask;
+            await testTask.ConfigureAwait(false);
 
             // ASSERT
 

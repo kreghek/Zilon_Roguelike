@@ -20,7 +20,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
         Container.Bind<ICommandLoopUpdater>().To<CommandLoopUpdater>().AsSingle();
         Container.Bind<ICommandLoopContext>().To<CommandLoopContext>().AsSingle();
 
-        Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
+        Container.Bind<ICommandPool>().To<QueueCommandPool>().AsSingle();
 
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
 
