@@ -49,6 +49,7 @@ namespace Zilon.Core.Client.Sector.Tests
             // Delay to take some time to command loop updater to perform some iterations.
             await Task.Delay(100);
             await Task.Delay(100);
+            await Task.Delay(100);
 
             // ASSERT
 
