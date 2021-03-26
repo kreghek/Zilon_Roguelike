@@ -177,6 +177,7 @@ namespace Zilon.Core.Client.Sector.Tests
             });
             commandMock.Setup(x => x.CanRepeat()).Callback(() => { repeatIteration++; })
                 .Returns(() => repeatIteration <= 1);
+            commandMock.Setup(x => x.CanExecute()).Returns(true);
 
             var command = commandMock.Object;
 
@@ -223,10 +224,10 @@ namespace Zilon.Core.Client.Sector.Tests
             commandPool.Push(command);
 
             var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
-            var eventRaised = false;
+            ErrorOccuredEventArgs raisedErrorArgs = null;
             commandLoopUpdater.ErrorOccured += (s, e) =>
             {
-                eventRaised = true;
+                raisedErrorArgs = e;
                 tcs.SetResult(true);
             };
 
@@ -240,7 +241,8 @@ namespace Zilon.Core.Client.Sector.Tests
 
             // ASSERT
 
-            eventRaised.Should().BeTrue();
+            raisedErrorArgs.Should().NotBeNull();
+            raisedErrorArgs.Should().BeOfType<CommandErrorOccuredEventArgs>();
         }
 
         private sealed class TestCommandPool : ICommandPool
