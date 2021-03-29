@@ -27,6 +27,13 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IInventoryState, InventoryState>();
         }
 
+        public static void RegisterCommandLoopServices(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<ICommandLoopUpdater, CommandLoopUpdater>();
+            serviceCollection.AddSingleton<ICommandLoopContext, CommandLoopContext>();
+            serviceCollection.AddSingleton<ICommandPool, QueueCommandPool>();
+        }
+
         public static void RegisterCommands(this ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<MoveCommand>();
@@ -57,13 +64,6 @@ namespace Zilon.Core.Specs.Contexts
         {
             serviceCollection.AddSingleton<IGlobeLoopUpdater, GlobeLoopUpdater>();
             serviceCollection.AddSingleton<IGlobeLoopContext, GlobeLoopContext>();
-        }
-
-        public static void RegisterCommandLoopServices(this IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<ICommandLoopUpdater, CommandLoopUpdater>();
-            serviceCollection.AddSingleton<ICommandLoopContext, CommandLoopContext>();
-            serviceCollection.AddSingleton<ICommandPool, QueueCommandPool>();
         }
 
         public static void RegisterPlayerServices(this ServiceCollection serviceCollection)

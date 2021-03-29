@@ -330,9 +330,6 @@ namespace Zilon.Core.Specs.Steps
         {
             var globeLoop = Context.ServiceProvider.GetRequiredService<IGlobeLoopUpdater>();
 
-
-
-
             var globe = Context.Globe;
             var humatTaskSource = Context.ServiceProvider
                 .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
