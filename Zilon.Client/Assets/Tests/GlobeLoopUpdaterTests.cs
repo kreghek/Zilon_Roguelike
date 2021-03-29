@@ -39,7 +39,7 @@ namespace Tests
             Assert.IsFalse(context.IsUpdated);
         }
 
-        sealed class TestGameLoopContext : IGameLoopContext
+        sealed class TestGameLoopContext : IGlobeLoopContext
         {
             public bool IsUpdated { get; set; }
 
