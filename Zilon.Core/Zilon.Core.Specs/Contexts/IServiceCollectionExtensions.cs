@@ -3,6 +3,7 @@
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -50,6 +51,19 @@ namespace Zilon.Core.Specs.Contexts
             {
                 return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
             });
+        }
+
+        public static void RegisterGlobeLoopServices(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IGlobeLoopUpdater, GlobeLoopUpdater>();
+            serviceCollection.AddSingleton<IGlobeLoopContext, GlobeLoopContext>();
+        }
+
+        public static void RegisterCommandLoopServices(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<ICommandLoopUpdater, CommandLoopUpdater>();
+            serviceCollection.AddSingleton<ICommandLoopContext, CommandLoopContext>();
+            serviceCollection.AddSingleton<ICommandPool, QueueCommandPool>();
         }
 
         public static void RegisterPlayerServices(this ServiceCollection serviceCollection)

@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TechTalk.SpecFlow;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
@@ -327,6 +328,11 @@ namespace Zilon.Core.Specs.Steps
         [When(@"В мире проходит (.*) итерация")]
         public async Task WhenЯЖдуЕдиницВремениAsync(int timeUnitCount)
         {
+            var globeLoop = Context.ServiceProvider.GetRequiredService<IGlobeLoopUpdater>();
+
+
+
+
             var globe = Context.Globe;
             var humatTaskSource = Context.ServiceProvider
                 .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();

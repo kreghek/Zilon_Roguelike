@@ -12,7 +12,7 @@ namespace Zilon.Core.Client.Sector
     /// <summary>
     /// Work implementation of the game context.
     /// </summary>
-    public sealed class GameLoopContext : IGameLoopContext
+    public sealed class GlobeLoopContext : IGlobeLoopContext
     {
         [NotNull] private readonly IInventoryState _inventoryState;
 
@@ -20,7 +20,7 @@ namespace Zilon.Core.Client.Sector
 
         [NotNull] private readonly ISectorUiState _playerState;
 
-        public GameLoopContext(IPlayer player, IInventoryState inventoryState, ISectorUiState playerState)
+        public GlobeLoopContext(IPlayer player, IInventoryState inventoryState, ISectorUiState playerState)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
             _inventoryState = inventoryState ?? throw new ArgumentNullException(nameof(inventoryState));

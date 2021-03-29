@@ -158,6 +158,8 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.RegisterPlayerServices();
             serviceCollection.RegisterClientServices();
             serviceCollection.RegisterCommands();
+            serviceCollection.RegisterGlobeLoopServices();
+            serviceCollection.RegisterCommandLoopServices();
 
             RegisterAuxServices(serviceCollection);
 

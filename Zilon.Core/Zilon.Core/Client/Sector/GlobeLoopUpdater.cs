@@ -10,12 +10,12 @@ namespace Zilon.Core.Client.Sector
     {
         [NotNull] private readonly IAnimationBlockerService _animationBlockerService;
 
-        [NotNull] private readonly IGameLoopContext _gameLoopContext;
+        [NotNull] private readonly IGlobeLoopContext _gameLoopContext;
 
         private CancellationTokenSource? _cancellationTokenSource;
 
         public GlobeLoopUpdater(
-            IGameLoopContext gameLoopContext,
+            IGlobeLoopContext gameLoopContext,
             IAnimationBlockerService animationBlockerService)
         {
             _gameLoopContext = gameLoopContext ?? throw new ArgumentNullException(nameof(gameLoopContext));
