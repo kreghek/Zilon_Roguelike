@@ -30,7 +30,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var contextMock = new Mock<ICommandLoopContext>();
             contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(Task.CompletedTask);
+            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(async () => await Task.Yield());
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -75,7 +75,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var contextMock = new Mock<ICommandLoopContext>();
             contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(Task.CompletedTask);
+            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(async () => await Task.Yield());
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -114,7 +114,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var contextMock = new Mock<ICommandLoopContext>();
             contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(Task.CompletedTask);
+            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(async () => await Task.Yield());
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -160,7 +160,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var contextMock = new Mock<ICommandLoopContext>();
             contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(Task.CompletedTask);
+            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(async () => await Task.Yield());
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -210,7 +210,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var contextMock = new Mock<ICommandLoopContext>();
             contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(Task.CompletedTask);
+            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(async () => await Task.Yield());
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -224,10 +224,10 @@ namespace Zilon.Core.Client.Sector.Tests
             commandPool.Push(command);
 
             var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
-            ErrorOccuredEventArgs raisedErrorArgs = null;
+            ErrorOccuredEventArgs expectedRaisedErrorArgs = null;
             commandLoopUpdater.ErrorOccured += (s, e) =>
             {
-                raisedErrorArgs = e;
+                expectedRaisedErrorArgs = e;
                 tcs.SetResult(true);
             };
 
@@ -241,8 +241,8 @@ namespace Zilon.Core.Client.Sector.Tests
 
             // ASSERT
 
-            raisedErrorArgs.Should().NotBeNull();
-            raisedErrorArgs.Should().BeOfType<CommandErrorOccuredEventArgs>();
+            expectedRaisedErrorArgs.Should().NotBeNull();
+            expectedRaisedErrorArgs.Should().BeOfType<CommandErrorOccuredEventArgs>();
         }
 
         private sealed class TestCommandPool : ICommandPool
