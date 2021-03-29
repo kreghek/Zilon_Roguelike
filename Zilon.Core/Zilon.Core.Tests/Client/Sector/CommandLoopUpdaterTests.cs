@@ -54,7 +54,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandPool.Push(command);
 
             // Delay to take some time to command loop updater to perform some iterations.
-            await testTask.ConfigureAwait(false);
+           await testTask.ConfigureAwait(false);
 
             // ASSERT
 
@@ -79,7 +79,7 @@ namespace Zilon.Core.Client.Sector.Tests
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
-            var testTask = tcs.Task;
+            var waitCommandExecutedTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
             commandMock.Setup(x => x.Execute()).Callback(() => tcs.SetResult(true));
@@ -96,7 +96,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            await testTask.ConfigureAwait(false);
+            await waitCommandExecutedTask.ConfigureAwait(false);
 
             // ASSERT
 
@@ -118,7 +118,7 @@ namespace Zilon.Core.Client.Sector.Tests
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
-            var testTask = tcs.Task;
+            var eventTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
             var command = commandMock.Object;
@@ -128,10 +128,8 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
 
-            var expectedEventRaised = false;
             commandLoopUpdater.CommandProcessed += (s, e) =>
             {
-                expectedEventRaised = true;
                 tcs.SetResult(true);
             };
 
@@ -140,11 +138,11 @@ namespace Zilon.Core.Client.Sector.Tests
             commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            await testTask.ConfigureAwait(false);
-
             // ASSERT
 
-            expectedEventRaised.Should().BeTrue();
+            var expectedEventWasRaised = await eventTask.ConfigureAwait(false);
+
+            expectedEventWasRaised.Should().BeTrue();
         }
 
         /// <summary>
@@ -164,7 +162,7 @@ namespace Zilon.Core.Client.Sector.Tests
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
-            var testTask = tcs.Task;
+            var waitCommandExecutedTask = tcs.Task;
 
             var repeatIteration = 0;
             var commandMock = new Mock<IRepeatableCommand>();
@@ -192,7 +190,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            await testTask.ConfigureAwait(false);
+            await waitCommandExecutedTask.ConfigureAwait(false);
 
             // ASSERT
 
@@ -214,7 +212,7 @@ namespace Zilon.Core.Client.Sector.Tests
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
-            var testTask = tcs.Task;
+            var eventWasInvokedTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
             commandMock.Setup(x => x.Execute()).Callback(() => { throw new InvalidOperationException(); });
@@ -237,11 +235,11 @@ namespace Zilon.Core.Client.Sector.Tests
             commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
-            await testTask.ConfigureAwait(false);
+            var expectedEventWasRaised = await eventWasInvokedTask.ConfigureAwait(false);
 
             // ASSERT
 
-            expectedRaisedErrorArgs.Should().NotBeNull();
+            expectedEventWasRaised.Should().BeTrue();
             expectedRaisedErrorArgs.Should().BeOfType<CommandErrorOccuredEventArgs>();
         }
 
