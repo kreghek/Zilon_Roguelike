@@ -134,6 +134,8 @@ namespace Zilon.Core.Client.Sector
                     {
                         ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
                     }
+
+                    await Task.Yield();
                 }
             }, cancellationToken);
         }
