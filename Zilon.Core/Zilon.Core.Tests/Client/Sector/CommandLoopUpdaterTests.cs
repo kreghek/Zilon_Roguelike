@@ -127,10 +127,8 @@ namespace Zilon.Core.Client.Sector.Tests
             commandPool.Push(command);
 
             var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
-            var eventRaised = false;
             commandLoopUpdater.CommandProcessed += (s, e) =>
             {
-                eventRaised = true;
                 tcs.SetResult(true);
             };
 
@@ -144,7 +142,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             // ASSERT
 
-            eventRaised.Should().BeTrue();
+            monitor.Should().Raise(nameof(commandLoopUpdater.CommandProcessed));
         }
 
         /// <summary>
