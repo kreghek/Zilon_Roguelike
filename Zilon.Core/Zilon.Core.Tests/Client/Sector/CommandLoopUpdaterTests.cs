@@ -54,7 +54,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandPool.Push(command);
 
             // Delay to take some time to command loop updater to perform some iterations.
-           await testTask.ConfigureAwait(false);
+            await testTask.ConfigureAwait(false);
 
             // ASSERT
 
