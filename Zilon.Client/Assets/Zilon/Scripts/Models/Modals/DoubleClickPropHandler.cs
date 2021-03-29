@@ -19,7 +19,7 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
     [Inject] private readonly ICommandPool _commandPool;
     [Inject] private readonly IInventoryState _inventoryState;
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
-    [Inject] private readonly IAnimationBlockerService animationBlockerService;
+    [Inject] private readonly IAnimationBlockerService _animationBlockerService;
 
     [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
@@ -27,7 +27,7 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (animationBlockerService.HasBlockers)
+        if (_animationBlockerService.HasBlockers)
         {
             return;
         }
