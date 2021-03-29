@@ -127,13 +127,15 @@ namespace Zilon.Core.Client.Sector.Tests
             commandPool.Push(command);
 
             var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
+
+            var expectedEventRaised = false;
             commandLoopUpdater.CommandProcessed += (s, e) =>
             {
+                expectedEventRaised = true;
                 tcs.SetResult(true);
             };
 
             // ACT
-            using var monitor = commandLoopUpdater.Monitor();
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -142,7 +144,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             // ASSERT
 
-            monitor.Should().Raise(nameof(commandLoopUpdater.CommandProcessed));
+            expectedEventRaised.Should().BeTrue();
         }
 
         /// <summary>
