@@ -20,21 +20,6 @@ namespace Zilon.Core.Client.Sector
                 humanActorTaskSource ?? throw new ArgumentNullException(nameof(humanActorTaskSource));
         }
 
-        public async Task WaitForUpdate(CancellationToken cancellationToken)
-        {
-            while (true)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                if (_humanActorTaskSource.CanIntent())
-                {
-                    break;
-                }
-
-                await Task.Yield();
-            }
-        }
-
         public bool HasNextIteration
         {
             get
