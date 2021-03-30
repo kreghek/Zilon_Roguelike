@@ -2,8 +2,7 @@
 {
     public interface ICommandLoopContext
     {
-        bool HasNextIteration { get; }
-
         bool CanPlayerGiveCommand { get; }
+        bool HasNextIteration { get; }
     }
 }
