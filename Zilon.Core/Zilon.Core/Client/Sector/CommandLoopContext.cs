@@ -36,6 +36,16 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
+        public bool CanPlayerGiveCommand
+        {
+            get
+            {
+                var canIndentoToTaskSource = _humanActorTaskSource.CanIntent();
+                var animationsAreComplete = true; // Implement this using IAnimationBlockerService.
+                return canIndentoToTaskSource && animationsAreComplete;
+            }
+        }
+
         public async Task WaitForUpdate(CancellationToken cancellationToken)
         {
             while (true)
