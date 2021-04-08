@@ -1,10 +1,10 @@
-﻿namespace Zilon.Core.Persons
+﻿namespace Zilon.Core.Skills
 {
     /// <summary>
     /// Интерфейс для сущностей, выполнение которых зависит от работ (перки, квесты).
     /// </summary>
-    public interface IJobExecutable
+    public interface IJobExecutable<TJobScheme> where TJobScheme: IMinimalJobSubScheme
     {
-        IJob[]? CurrentJobs { get; }
+        IJob<TJobScheme>[]? CurrentJobs { get; }
     }
 }

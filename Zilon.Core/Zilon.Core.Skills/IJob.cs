@@ -1,11 +1,9 @@
-﻿using Zilon.Core.Schemes;
-
-namespace Zilon.Core
+﻿namespace Zilon.Core.Skills
 {
     /// <summary>
     /// Интерфейс произвольной работы и её текущего состояния.
     /// </summary>
-    public interface IJob
+    public interface IJob<TScheme> where TScheme: IMinimalJobSubScheme
     {
         /// <summary>
         /// Признак того, что работа завершена.
@@ -20,6 +18,6 @@ namespace Zilon.Core
         /// <summary>
         /// Схема текущей работы.
         /// </summary>
-        IJobSubScheme Scheme { get; }
+        TScheme Scheme { get; }
     }
 }

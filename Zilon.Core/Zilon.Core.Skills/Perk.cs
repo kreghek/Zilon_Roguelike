@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Schemes;
+using Zilon.Core.Skills;
 
 namespace Zilon.Core.Persons
 {

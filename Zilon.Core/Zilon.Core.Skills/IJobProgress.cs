@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using Zilon.Core.Skills;
+
 namespace Zilon.Core.Persons
 {
     /// <summary>
@@ -8,13 +10,13 @@ namespace Zilon.Core.Persons
     /// <remarks>
     /// Используется, чтобы зафиксировать выполнение работы или её части.
     /// </remarks>
-    public interface IJobProgress
+    public interface IJobProgress<TJobScheme> where TJobScheme : IMinimalJobSubScheme
     {
         /// <summary>
         /// Применяет прогресс к указанным работам.
         /// </summary>
         /// <param name="currentJobs"> Текущий набор работ, к которым необходимо применить прогресс. </param>
         /// <returns> Возвращает набор работ, которые были изменены. </returns>
-        IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs);
+        IJob<TJobScheme>[] ApplyToJobs(IEnumerable<IJob<TJobScheme>> currentJobs);
     }
 }
