@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Schemes
 {
-    public interface IJobSubScheme: IMinimalJobSubScheme
+    public interface IJobSubScheme : IMinimalJobSubScheme
     {
         string[]? Data { get; }
         JobScope Scope { get; }

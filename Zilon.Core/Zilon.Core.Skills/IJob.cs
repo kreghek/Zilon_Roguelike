@@ -3,7 +3,7 @@
     /// <summary>
     /// Интерфейс произвольной работы и её текущего состояния.
     /// </summary>
-    public interface IJob<TScheme> where TScheme: IMinimalJobSubScheme
+    public interface IJob<TScheme> where TScheme : IMinimalJobSubScheme
     {
         /// <summary>
         /// Признак того, что работа завершена.
