@@ -16,7 +16,7 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
     public override void InstallBindings()
     {
         Container.Bind<IGlobeLoopUpdater>().To<GlobeLoopUpdater>().AsSingle();
-        Container.Bind<IGameLoopContext>().To<GameLoopContext>().AsSingle();
+        Container.Bind<IGlobeLoopContext>().To<GlobeLoopContext>().AsSingle();
         Container.Bind<ICommandLoopUpdater>().To<CommandLoopUpdater>().AsSingle();
         Container.Bind<ICommandLoopContext>().To<CommandLoopContext>().AsSingle();
 
