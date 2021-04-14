@@ -36,18 +36,13 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        public async Task WaitForUpdate(CancellationToken cancellationToken)
+        public bool CanPlayerGiveCommand
         {
-            while (true)
+            get
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                if (_humanActorTaskSource.CanIntent())
-                {
-                    break;
-                }
-
-                await Task.Yield();
+                var canIndentoToTaskSource = _humanActorTaskSource.CanIntent();
+                var animationsAreComplete = true; // Implement this using IAnimationBlockerService.
+                return canIndentoToTaskSource && animationsAreComplete;
             }
         }
     }

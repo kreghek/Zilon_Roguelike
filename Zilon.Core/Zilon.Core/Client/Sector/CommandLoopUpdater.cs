@@ -124,7 +124,10 @@ namespace Zilon.Core.Client.Sector
 
                 while (_commandLoopContext.HasNextIteration)
                 {
-                    await _commandLoopContext.WaitForUpdate(cancellationToken).ConfigureAwait(false);
+                    if (!_commandLoopContext.CanPlayerGiveCommand)
+                    {
+                        continue;
+                    }
 
                     try
                     {
