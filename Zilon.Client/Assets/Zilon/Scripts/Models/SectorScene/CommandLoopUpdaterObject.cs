@@ -51,7 +51,7 @@ public class CommandLoopUpdaterObject : MonoBehaviour
                 }
             }
         }
-        catch(Exception exception)
+        catch (Exception exception)
         {
             Debug.LogError(exception);
         }
