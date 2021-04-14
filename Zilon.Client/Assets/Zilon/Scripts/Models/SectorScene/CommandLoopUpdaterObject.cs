@@ -57,7 +57,7 @@ public class CommandLoopUpdaterObject : MonoBehaviour
         }
         catch
         {
-            
+
         }
     }
 
@@ -66,70 +66,70 @@ public class CommandLoopUpdaterObject : MonoBehaviour
         ICommand commandWithError = null;
         ICommand newLastCommand = null;
 
-        
-            _hasPendingCommand = true;
 
-            var errorOccured = false;
+        _hasPendingCommand = true;
 
-            var command = _commandPool.Pop();
+        var errorOccured = false;
 
-            try
+        var command = _commandPool.Pop();
+
+        try
+        {
+            if (command != null)
             {
-                if (command != null)
+                try
                 {
-                    try
-                    {
-                        command.Execute();
-                    }
-                    catch
-                    {
-                        commandWithError = command;
-                        throw;
-                    }
+                    command.Execute();
+                }
+                catch
+                {
+                    commandWithError = command;
+                    throw;
+                }
 
-                    if (command is IRepeatableCommand repeatableCommand)
+                if (command is IRepeatableCommand repeatableCommand)
+                {
+                    if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute())
                     {
-                        if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute())
-                        {
-                            _commandPool.Push(repeatableCommand);
-                        }
-                        else
-                        {
-                            _hasPendingCommand = false;
-                        }
+                        _commandPool.Push(repeatableCommand);
                     }
                     else
                     {
                         _hasPendingCommand = false;
                     }
-
-                    newLastCommand = command;
                 }
                 else
                 {
                     _hasPendingCommand = false;
-
-                    if (lastCommand != null)
-                    {
-                        newLastCommand = null;
-                    }
                 }
-            }
-            catch
-            {
-                errorOccured = true;
 
-                newLastCommand = null;
+                newLastCommand = command;
             }
-            finally
+            else
             {
-                if (errorOccured)
+                _hasPendingCommand = false;
+
+                if (lastCommand != null)
                 {
-                    _hasPendingCommand = false;
                     newLastCommand = null;
                 }
             }
-        
+        }
+        catch
+        {
+            errorOccured = true;
+
+            newLastCommand = null;
+        }
+        finally
+        {
+            if (errorOccured)
+            {
+                _hasPendingCommand = false;
+                newLastCommand = null;
+            }
+        }
+
 
         return newLastCommand;
     }
