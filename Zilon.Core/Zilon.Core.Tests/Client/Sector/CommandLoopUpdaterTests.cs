@@ -30,7 +30,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var contextMock = new Mock<ICommandLoopContext>();
             contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(async () => await Task.Yield());
+            contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -75,7 +75,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var contextMock = new Mock<ICommandLoopContext>();
             contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(async () => await Task.Yield());
+            contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -114,7 +114,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var contextMock = new Mock<ICommandLoopContext>();
             contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(async () => await Task.Yield());
+            contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -158,7 +158,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var contextMock = new Mock<ICommandLoopContext>();
             contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(async () => await Task.Yield());
+            contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();
@@ -208,7 +208,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var contextMock = new Mock<ICommandLoopContext>();
             contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.Setup(x => x.WaitForUpdate(CancellationToken.None)).Returns(async () => await Task.Yield());
+            contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
             var tcs = new TaskCompletionSource<bool>();

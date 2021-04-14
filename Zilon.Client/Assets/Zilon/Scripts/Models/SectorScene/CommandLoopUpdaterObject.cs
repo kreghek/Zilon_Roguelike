@@ -1,4 +1,4 @@
-﻿using System.Threading;
+﻿using System;
 
 using UnityEngine;
 
@@ -6,11 +6,15 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
 
 public class CommandLoopUpdaterObject : MonoBehaviour
 {
     [Inject]
-    private readonly ICommandLoopUpdater _commandLoopUpdater;
+    private readonly ICommandLoopContext _commandLoopContext;
+
+    [Inject]
+    private readonly ICommandPool _commandPool;
 
     [Inject]
     private readonly ISectorUiState _sectorUiState;
@@ -18,35 +22,39 @@ public class CommandLoopUpdaterObject : MonoBehaviour
     [Inject]
     private readonly IInventoryState _inventoryState;
 
-    // Start is called before the first frame update
-    public void Start()
+    public void Update()
     {
-        if (!_commandLoopUpdater.IsStarted)
+        if (!_commandLoopContext.HasNextIteration)
         {
-            _commandLoopUpdater.CommandProcessed += CommandLoopUpdater_CommandProcessed;
-            _commandLoopUpdater.ErrorOccured += CommandLoopUpdater_ErrorOccured;
-
-            _commandLoopUpdater.StartAsync(CancellationToken.None);
+            return;
         }
-    }
 
-    private void CommandLoopUpdater_ErrorOccured(object sender, ErrorOccuredEventArgs e)
-    {
-        if (e is CommandErrorOccuredEventArgs commandEventArgs)
+        if (!_commandLoopContext.CanPlayerGiveCommand)
         {
-            Debug.LogError(commandEventArgs.Command.GetType());
-            Debug.LogError(commandEventArgs.Exception);
+            return;
         }
-        else
-        {
-            Debug.LogError(e.Exception);
-        }
-    }
 
-    public void OnDestroy()
-    {
-        _commandLoopUpdater.CommandProcessed -= CommandLoopUpdater_CommandProcessed;
-        _commandLoopUpdater.ErrorOccured -= CommandLoopUpdater_ErrorOccured;
+        var command = _commandPool.Pop();
+
+        try
+        {
+            if (command != null)
+            {
+                command.Execute();
+
+                if (command is IRepeatableCommand repeatableCommand)
+                {
+                    if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute())
+                    {
+                        _commandPool.Push(repeatableCommand);
+                    }
+                }
+            }
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError(exception);
+        }
     }
 
     private void CommandLoopUpdater_CommandProcessed(object sender, System.EventArgs e)
