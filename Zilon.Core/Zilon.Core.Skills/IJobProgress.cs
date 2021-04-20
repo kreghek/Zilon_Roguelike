@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using Zilon.Core.Skills;
-
-namespace Zilon.Core.Persons
+namespace Zilon.Core.Skills
 {
     /// <summary>
     /// Интерфейс для прогресса по работе.

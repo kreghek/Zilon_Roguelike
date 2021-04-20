@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Skills;
 
 namespace Zilon.Core.Tests
 {

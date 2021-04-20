@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 
-using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 
-namespace Zilon.Core.Persons
+namespace Zilon.Core.Skills
 {
-    public class PerkResolver : IPerkResolver
+    public class PerkResolver<TJobScheme> : IPerkResolver<TJobScheme> where TJobScheme : IMinimalJobSubScheme
     {
-        private static bool CheckLevelCap(IPerk perk)
+        private static bool CheckLevelCap(ISkill<TJobScheme> perk)
         {
             var currentLevel = perk.CurrentLevel;
             if (currentLevel == null)

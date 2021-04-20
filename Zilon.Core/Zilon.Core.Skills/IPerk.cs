@@ -6,7 +6,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Information about perk - archieved or potentially.
     /// </summary>
-    public interface IPerk<TJobScheme> : IJobExecutable<TJobScheme> where TJobScheme : IMinimalJobSubScheme
+    public interface ISkill<TJobScheme> : IJobExecutable<TJobScheme> where TJobScheme : IMinimalJobSubScheme
     {
         /// <summary>
         /// Current perk level. Null current level means perk is not archieved.
@@ -16,10 +16,10 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Perk scheme.
         /// </summary>
-        IMinimalPerkScheme Scheme { get; }
+        IMinimalSkillScheme Scheme { get; }
     }
 
-    public interface IMinimalPerkScheme
+    public interface IMinimalSkillScheme
     {
         IPerkConditionSubScheme[]? BaseConditions { get; set; }
         string? IconSid { get; set; }
@@ -29,7 +29,7 @@ namespace Zilon.Core.Persons
         int Order { get; set; }
         PerkRuleSubScheme?[]? Rules { get; set; }
         PropSet?[]? Sources { get; set; }
-        PerkConditionSubScheme?[]? VisibleConditions { get; set; }
+        IPerkConditionSubScheme?[]? VisibleConditions { get; set; }
     }
 
     /// <summary>
