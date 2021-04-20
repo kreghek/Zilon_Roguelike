@@ -55,7 +55,7 @@ namespace Zilon.Core.Tests.Persons
                 .Returns(new[] { perkJob });
             var progress = progressMock.Object;
 
-            var perkMock = new Mock<ISkill>();
+            var perkMock = new Mock<IPerk>();
             perkMock.SetupGet(x => x.Scheme)
                 .Returns(perkScheme);
             perkMock.SetupGet(x => x.CurrentLevel)
@@ -79,7 +79,7 @@ namespace Zilon.Core.Tests.Persons
             perkResolver.ApplyProgress(progress, evolutionModule);
 
             // ASSERT
-            evolutionModuleMock.Verify(x => x.PerkLevelUp(It.IsAny<ISkill>()));
+            evolutionModuleMock.Verify(x => x.PerkLevelUp(It.IsAny<IPerk>()));
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Zilon.Core.Tests.Persons
                 .Returns(new[] { perkJob });
             var progress = progressMock.Object;
 
-            var perkMock = new Mock<ISkill>();
+            var perkMock = new Mock<IPerk>();
             perkMock.SetupGet(x => x.Scheme)
                 .Returns(perkScheme);
             perkMock.SetupGet(x => x.CurrentLevel)
@@ -142,7 +142,7 @@ namespace Zilon.Core.Tests.Persons
             perkResolver.ApplyProgress(progress, evolutionModule);
 
             // ASSERT
-            evolutionModuleMock.Verify(x => x.PerkLevelUp(It.IsAny<ISkill>()), Times.Never);
+            evolutionModuleMock.Verify(x => x.PerkLevelUp(It.IsAny<IPerk>()), Times.Never);
         }
     }
 }

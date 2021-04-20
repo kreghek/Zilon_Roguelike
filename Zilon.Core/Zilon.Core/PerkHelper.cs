@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
-namespace Zilon.Core.Skills
+namespace Zilon.Core
 {
     public static class PerkHelper
     {
@@ -17,7 +17,7 @@ namespace Zilon.Core.Skills
         /// <param name="level">Уровень перка.</param>
         /// <param name="subLevel">Подуровень перка.</param>
         /// <returns></returns>
-        public static int ConvertLevelSubsToTotal(IMinimalSkillScheme perkScheme, int level, int subLevel)
+        public static int ConvertLevelSubsToTotal(IPerkScheme perkScheme, int level, int subLevel)
         {
             if (perkScheme is null)
             {

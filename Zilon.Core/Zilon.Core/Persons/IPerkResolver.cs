@@ -1,6 +1,8 @@
-﻿namespace Zilon.Core.Skills
+﻿using Zilon.Core.PersonModules;
+
+namespace Zilon.Core.Persons
 {
-    public interface IPerkResolver<TJobScheme> where TJobScheme : IMinimalJobSubScheme
+    public interface IPerkResolver
     {
         /// <summary>
         /// Применяет прогресс к текущим работам.
@@ -8,6 +10,6 @@
         /// <param name="progress"> Объект прогресса. </param>
         /// <param name="evolutionData"> Данные о развитии персонажа. </param>
         /// <returns> Возвращает true, если все работы выполнены. </returns>
-        void ApplyProgress(IJobProgress<TJobScheme> progress, ISkillManager skillManager);
+        void ApplyProgress(IJobProgress progress, IEvolutionModule evolutionData);
     }
 }

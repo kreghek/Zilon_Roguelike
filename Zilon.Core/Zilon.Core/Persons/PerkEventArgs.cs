@@ -6,12 +6,12 @@ namespace Zilon.Core.Persons
 {
     public class PerkEventArgs : EventArgs
     {
-        public PerkEventArgs(ISkill perk)
+        public PerkEventArgs(IPerk perk)
         {
             Perk = perk;
         }
 
         [PublicAPI]
-        public ISkill Perk { get; }
+        public IPerk Perk { get; }
     }
 }

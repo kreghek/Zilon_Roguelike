@@ -21,7 +21,7 @@ namespace Zilon.Core.Persons
             _schemeService = schemeService;
         }
 
-        public ISkill[] Generate()
+        public IPerk[] Generate()
         {
             var allBuildInPerks = _schemeService.GetSchemes<IPerkScheme>().Where(x => x.IsBuildIn).ToArray();
 
@@ -30,7 +30,7 @@ namespace Zilon.Core.Persons
 
             var startPerkCount = _dice.Roll(minPerkCount, maxPerkCount);
 
-            var traitList = new List<ISkill>();
+            var traitList = new List<IPerk>();
             var openTraitSchemeList = new List<IPerkScheme>(allBuildInPerks);
 
             for (var i = 0; i < startPerkCount; i++)

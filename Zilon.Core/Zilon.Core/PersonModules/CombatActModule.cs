@@ -42,7 +42,7 @@ namespace Zilon.Core.PersonModules
         private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment?> equipments,
             IEffectsModule effects,
-            IEnumerable<ISkill> perks)
+            IEnumerable<IPerk> perks)
         {
             var defaultAct = CreateTacticalAct(defaultActScheme, null, effects, perks);
             yield return defaultAct;
@@ -57,7 +57,7 @@ namespace Zilon.Core.PersonModules
         private static IEnumerable<ITacticalAct> CalcActsFromEquipments(
             IEnumerable<Equipment?> equipments,
             IEffectsModule effects,
-            IEnumerable<ISkill> perks)
+            IEnumerable<IPerk> perks)
         {
             if (equipments == null)
             {
@@ -80,7 +80,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void CalcPerksBonusesOnTacticalAct([NotNull][ItemNotNull] IEnumerable<ISkill> archievedPerks,
+        private static void CalcPerksBonusesOnTacticalAct([NotNull][ItemNotNull] IEnumerable<IPerk> archievedPerks,
             [CanBeNull] Equipment? equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
@@ -173,7 +173,7 @@ namespace Zilon.Core.PersonModules
         private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
             [CanBeNull] Equipment? equipment,
             [NotNull] IEffectsModule effects,
-            [NotNull][ItemNotNull] IEnumerable<ISkill> perks)
+            [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
             var efficientModifierValue = 0;
@@ -201,12 +201,12 @@ namespace Zilon.Core.PersonModules
             return new Roll(dice, count, modifier);
         }
 
-        private IEnumerable<ISkill> GetPerksSafe()
+        private IEnumerable<IPerk> GetPerksSafe()
         {
             var perks = _evolutionModule?.GetArchievedPerks();
             if (perks == null)
             {
-                perks = Array.Empty<ISkill>();
+                perks = Array.Empty<IPerk>();
             }
 
             return perks;

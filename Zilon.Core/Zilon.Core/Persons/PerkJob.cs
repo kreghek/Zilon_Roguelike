@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Schemes;
-using Zilon.Core.Skills;
 
 namespace Zilon.Core.Persons
 {

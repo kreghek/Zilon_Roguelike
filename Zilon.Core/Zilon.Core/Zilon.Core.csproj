@@ -34,7 +34,4 @@
             <Version>5.0.2</Version>
         </PackageReference>
     </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\Zilon.Core.Skills\Zilon.Core.Skills.csproj" />
-    </ItemGroup>
 </Project>

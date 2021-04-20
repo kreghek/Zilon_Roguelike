@@ -35,7 +35,7 @@ namespace Zilon.Core.Persons.Tests
 
             var progress = new AttackActorJobProgress(actor, act);
 
-            var jobs = new[]
+            var jobs = new IJob[]
             {
                 Mock.Of<IJob>(job => job.Scheme == Mock.Of<IJobSubScheme>(
                                          scheme => scheme.Type == JobType.AttacksActor

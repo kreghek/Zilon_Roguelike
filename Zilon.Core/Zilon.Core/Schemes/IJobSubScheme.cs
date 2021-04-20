@@ -1,11 +1,10 @@
-﻿using Zilon.Core.Skills;
-
-namespace Zilon.Core.Schemes
+﻿namespace Zilon.Core.Schemes
 {
-    public interface IJobSubScheme : IMinimalJobSubScheme
+    public interface IJobSubScheme
     {
         string[]? Data { get; }
         JobScope Scope { get; }
         JobType Type { get; }
+        int Value { get; }
     }
 }
