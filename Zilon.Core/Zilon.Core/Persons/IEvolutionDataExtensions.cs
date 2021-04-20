@@ -22,7 +22,7 @@ namespace Zilon.Core.Persons
         /// Полученными перками считаются перки, которые прокачены хотя бы на один уровень или встроенные перки
         /// (те, которые нельзя прокачать, только получить при рождении или за заслуги).
         /// </remarks>
-        public static IEnumerable<IPerk> GetArchievedPerks([NotNull] this IEvolutionModule evolutionModule)
+        public static IEnumerable<ISkill> GetArchievedPerks([NotNull] this IEvolutionModule evolutionModule)
         {
             if (evolutionModule == null)
             {
@@ -32,7 +32,7 @@ namespace Zilon.Core.Persons
             var archievedPerks = evolutionModule.Perks?.Where(x => x.CurrentLevel != null || x.Scheme.IsBuildIn);
             if (archievedPerks == null)
             {
-                archievedPerks = Array.Empty<IPerk>();
+                archievedPerks = Array.Empty<ISkill>();
             }
 
             return archievedPerks;

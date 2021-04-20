@@ -5,6 +5,7 @@ using System.Linq;
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Skills;
 
 namespace Zilon.Core.PersonModules
 {
@@ -13,7 +14,7 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public sealed class EvolutionModule : IEvolutionModule
     {
-        private readonly List<IPerk> _buildInPerks;
+        private readonly List<ISkill> _buildInPerks;
         private readonly ISchemeService _schemeService;
 
         public EvolutionModule(ISchemeService schemeService)
@@ -22,7 +23,7 @@ namespace Zilon.Core.PersonModules
 
             _schemeService = schemeService;
 
-            _buildInPerks = new List<IPerk>();
+            _buildInPerks = new List<ISkill>();
 
             Stats = new[]
             {
@@ -30,7 +31,7 @@ namespace Zilon.Core.PersonModules
                 new SkillStatItem { Stat = SkillStatType.Melee, Value = 10 }
             };
 
-            Perks = Array.Empty<IPerk>();
+            Perks = Array.Empty<ISkill>();
 
             UpdatePerks();
         }
@@ -40,20 +41,20 @@ namespace Zilon.Core.PersonModules
         /// Используется для восстановления персонажа из сохранения.
         /// </summary>
         /// <param name="perks"> Набор перков с их состоянием, который нужно восстановить. </param>
-        public void SetPerksForced(IEnumerable<IPerk> perks)
+        public void SetPerksForced(IEnumerable<ISkill> perks)
         {
             Perks = perks.ToArray();
 
             UpdatePerks();
         }
 
-        private void DoPerkArchieved(IPerk perk)
+        private void DoPerkArchieved(ISkill perk)
         {
             var eventArgs = new PerkEventArgs(perk);
             PerkLeveledUp?.Invoke(this, eventArgs);
         }
 
-        private static PerkLevel GetFirstOrNextLevel(IPerk perk)
+        private static PerkLevel GetFirstOrNextLevel(ISkill perk)
         {
             if (perk.CurrentLevel is null)
             {
@@ -64,7 +65,7 @@ namespace Zilon.Core.PersonModules
             return PerkHelper.GetNextLevel(perk.Scheme, perk.CurrentLevel);
         }
 
-        private IList<IPerk> GetPerks()
+        private IList<ISkill> GetPerks()
         {
             var schemes = _schemeService.GetSchemes<IPerkScheme>()
                 // Для развития годятся только те перки, которые не врождённые.
@@ -76,7 +77,7 @@ namespace Zilon.Core.PersonModules
                 // Такие схемы лучше проверять в тестах на валидацию схем.
                 .Where(x => x.Levels != null);
 
-            var perks = new List<IPerk>(_buildInPerks);
+            var perks = new List<ISkill>(_buildInPerks);
             if (Perks != null)
             {
                 perks.AddRange(Perks);
@@ -130,7 +131,7 @@ namespace Zilon.Core.PersonModules
         public SkillStatItem[] Stats { get; }
 
         /// <inheritdoc />
-        public IPerk[] Perks { get; private set; }
+        public ISkill[] Perks { get; private set; }
 
         /// <inheritdoc />
         public string Key => nameof(IEvolutionModule);
@@ -145,7 +146,7 @@ namespace Zilon.Core.PersonModules
         public event EventHandler<PerkEventArgs>? PerkAdded;
 
         /// <inheritdoc />
-        public void AddBuildInPerks(IEnumerable<IPerk> perks)
+        public void AddBuildInPerks(IEnumerable<ISkill> perks)
         {
             if (perks is null)
             {
@@ -163,7 +164,7 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <inheritdoc />
-        public void PerkLevelUp(IPerk perk)
+        public void PerkLevelUp(ISkill perk)
         {
             if (perk is null)
             {

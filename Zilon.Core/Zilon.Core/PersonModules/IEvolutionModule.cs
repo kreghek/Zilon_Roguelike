@@ -14,7 +14,7 @@ namespace Zilon.Core.PersonModules
         /// <summary>
         /// Текущие перки.
         /// </summary>
-        IPerk[] Perks { get; }
+        ISkill[] Perks { get; }
 
         /// <summary>
         /// Перечень навыков.
@@ -29,13 +29,13 @@ namespace Zilon.Core.PersonModules
         /// Метод нужен, потому что реализация этого интерфейса сама собирает данные о доступных перках.
         /// И реализации нужно знать, какие перки врожденные, а какие приобретаются по мере развития персонажа.
         /// </remarks>
-        void AddBuildInPerks(IEnumerable<IPerk> perks);
+        void AddBuildInPerks(IEnumerable<ISkill> perks);
 
         /// <summary>
         /// Указывает, что один из активных перков считается прокачанным.
         /// </summary>
         /// <param name="perk"> Активный перк, который следует считать достигнутым. </param>
-        void PerkLevelUp(IPerk perk);
+        void PerkLevelUp(ISkill perk);
 
         /// <summary>
         /// Выстреливает, когда один из перков повышается на уровень.

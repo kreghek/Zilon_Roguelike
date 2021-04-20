@@ -2,6 +2,6 @@
 {
     public interface IPersonPerkInitializator
     {
-        IPerk[] Generate();
+        ISkill[] Generate();
     }
 }

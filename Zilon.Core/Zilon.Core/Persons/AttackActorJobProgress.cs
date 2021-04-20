@@ -20,6 +20,27 @@ namespace Zilon.Core.Persons
             _tacticalAct = tacticalAct;
         }
 
+        public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
+        {
+            if (currentJobs is null)
+            {
+                throw new System.ArgumentNullException(nameof(currentJobs));
+            }
+
+            var modifiedJobs = new List<IJob>();
+            foreach (var job in currentJobs)
+            {
+                if (job.Scheme.Type != JobType.AttacksActor)
+                {
+                    continue;
+                }
+
+                ProcessJob(job, modifiedJobs);
+            }
+
+            return modifiedJobs.ToArray();
+        }
+
         private static bool ActorHasTag(string tag, IActor targetActor)
         {
             var monsterPersonScheme = GetPersonScheme(targetActor);
@@ -184,27 +205,6 @@ namespace Zilon.Core.Persons
             }
 
             return tacticalAct.Equipment.Scheme.Tags.Contains(tag);
-        }
-
-        public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
-        {
-            if (currentJobs is null)
-            {
-                throw new System.ArgumentNullException(nameof(currentJobs));
-            }
-
-            var modifiedJobs = new List<IJob>();
-            foreach (var job in currentJobs)
-            {
-                if (job.Scheme.Type != JobType.AttacksActor)
-                {
-                    continue;
-                }
-
-                ProcessJob(job, modifiedJobs);
-            }
-
-            return modifiedJobs.ToArray();
         }
     }
 }

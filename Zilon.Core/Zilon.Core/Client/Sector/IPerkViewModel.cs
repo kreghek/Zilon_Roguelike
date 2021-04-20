@@ -10,6 +10,6 @@ namespace Zilon.Core.Client.Sector
         /// <summary>
         /// Объект перка.
         /// </summary>
-        IPerk Perk { get; }
+        ISkill Perk { get; }
     }
 }
