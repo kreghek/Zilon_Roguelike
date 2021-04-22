@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.World;
 
@@ -59,9 +62,16 @@ namespace CDT.LIV.MonoGameClient.Scenes
                         var globeInitializer = serviceScope.GetRequiredService<IGlobeInitializer>();
                         var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
 
-                        var sectors = globe.SectorNodes.Select(x => x.Sector);
+                        var player = serviceScope.GetRequiredService<IPlayer>();
 
-                        var persons = sectors.SelectMany(x => x.ActorManager.Items);
+                        var gameLoop = new GameLoop(player.Globe, player);
+
+                        var processTask = gameLoop.StartProcessAsync(CancellationToken.None);
+                        processTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
+                        processTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
+                            TaskContinuationOptions.OnlyOnCanceled);
+
+
                     });
 
                     generateGlobeTask.ContinueWith((task) =>
@@ -74,6 +84,29 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
                     }, TaskContinuationOptions.OnlyOnFaulted);
                 }
+            }
+        }
+    }
+
+    internal class GameLoop
+    {
+        private readonly IGlobe _globe;
+        private readonly IPlayer _player;
+
+        public GameLoop(IGlobe globe, IPlayer player)
+        {
+            _globe = globe ?? throw new ArgumentNullException(nameof(globe));
+            _player = player ?? throw new ArgumentNullException(nameof(player));
+        }
+
+        public async Task StartProcessAsync(CancellationToken cancellationToken)
+        {
+            var playerPersonSurvivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
+            while (!playerPersonSurvivalModule.IsDead)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                await _globe.UpdateAsync(CancellationToken.None).ConfigureAwait(false);
             }
         }
     }

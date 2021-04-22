@@ -3,10 +3,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
+using Zilon.Core;
+using Zilon.Core.Client;
+using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
 namespace CDT.LIV.MonoGameClient.Scenes
 {
@@ -65,5 +70,61 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
             _spriteBatch.End();
         }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            var mouseState = Mouse.GetState();
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                var x = mouseState.X % UNIT_SIZE;
+                var y = mouseState.Y % (UNIT_SIZE / 2);
+
+                var serviceScope = ((LivGame)Game).ServiceProvider;
+
+                var uiState = serviceScope.GetRequiredService<ISectorUiState>();
+                var player = serviceScope.GetRequiredService<IPlayer>();
+                var globe = player.Globe;
+
+                var playerActor = (from sectorNode in globe.SectorNodes
+                                   from actor in sectorNode.Sector.ActorManager.Items
+                                   where actor.Person == player.MainPerson
+                                   select actor).SingleOrDefault();
+
+                uiState.ActiveActor = new ActorViewModel { Actor = playerActor };
+
+                var playerActorSectorNode = GetPlayerSectorNode(player, globe);
+
+                ISectorMap map = playerActorSectorNode.Sector.Map;
+
+                var offsetCoords = new OffsetCoords(x, y);
+
+                var targetNode = map.Nodes.OfType<HexNode>()
+                    .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
+
+                var command = serviceScope.GetRequiredService<MoveCommand>();
+
+                uiState.SelectedViewModel = new NodeViewModel { Node = targetNode };
+
+                if (command.CanExecute())
+                {
+                    command.Execute();
+                }
+            }
+        }
+        private static ISectorNode GetPlayerSectorNode(IPlayer player, IGlobe globe)
+        {
+            return (from sectorNode in globe.SectorNodes
+                    from actor in sectorNode.Sector.ActorManager.Items
+                    where actor.Person == player.MainPerson
+                    select sectorNode).SingleOrDefault();
+        }
+    }
+
+    internal class NodeViewModel : IMapNodeViewModel
+    {
+        public object Item => Node;
+        public HexNode Node { get; set; }
     }
 }

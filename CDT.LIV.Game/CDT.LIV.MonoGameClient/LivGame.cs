@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CDT.LIV.MonoGameClient
 {
-
     public class LivGame : Game
     {
         private GraphicsDeviceManager _graphics;
