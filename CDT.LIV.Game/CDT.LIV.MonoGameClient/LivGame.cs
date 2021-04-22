@@ -1,5 +1,6 @@
 ﻿using CDT.LIV.MonoGameClient.Scenes;
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,23 +12,21 @@ namespace CDT.LIV.MonoGameClient
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private readonly ServiceProvider _serviceProvider;
 
-        public LivGame()
+        public ServiceProvider ServiceProvider => _serviceProvider;
+
+        public LivGame(Microsoft.Extensions.DependencyInjection.ServiceProvider serviceProvider)
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            _serviceProvider = serviceProvider;
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
-            var sceneManager = new SceneManager(this);
-            var titleScene = new TitleScene(this);
-            sceneManager.ActiveScene = titleScene;
-
-            Components.Add(sceneManager);
 
             base.Initialize();
         }
@@ -36,7 +35,11 @@ namespace CDT.LIV.MonoGameClient
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            var sceneManager = new SceneManager(this);
+            var titleScene = new TitleScene(this, _spriteBatch);
+            sceneManager.ActiveScene = titleScene;
+
+            Components.Add(sceneManager);
         }
 
         protected override void Update(GameTime gameTime)
