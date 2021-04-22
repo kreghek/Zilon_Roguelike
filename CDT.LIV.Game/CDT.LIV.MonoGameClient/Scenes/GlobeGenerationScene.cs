@@ -51,6 +51,8 @@ namespace CDT.LIV.MonoGameClient.Scenes
             {
                 if (!_generationWasStarted)
                 {
+                    _generationWasStarted = true;
+
                     var generateGlobeTask = Task.Run(async () =>
                     {
                         var serviceScope = ((LivGame)Game).ServiceProvider;

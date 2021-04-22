@@ -16,7 +16,7 @@ namespace CDT.LIV.MonoGameClient
 
         public ServiceProvider ServiceProvider => _serviceProvider;
 
-        public LivGame(Microsoft.Extensions.DependencyInjection.ServiceProvider serviceProvider)
+        public LivGame(ServiceProvider serviceProvider)
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";

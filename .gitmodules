@@ -1,0 +1,3 @@
+[submodule "Zilon.Core"]
+	path = Zilon.Core
+	url = https://github.com/kreghek/Zilon_Roguelike

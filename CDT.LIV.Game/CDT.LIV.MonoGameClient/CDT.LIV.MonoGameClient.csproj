@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -37,32 +37,11 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="JsonSubTypes">
-      <HintPath>Libs\JsonSubTypes.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Libs\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Drawing.Common">
-      <HintPath>Libs\System.Drawing.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Zilon.Bot.Players">
-      <HintPath>Libs\Zilon.Bot.Players.dll</HintPath>
-    </Reference>
-    <Reference Include="Zilon.Bot.Players.NetCore">
-      <HintPath>Libs\Zilon.Bot.Players.NetCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Zilon.Bot.Sdk">
-      <HintPath>Libs\Zilon.Bot.Sdk.dll</HintPath>
-    </Reference>
-    <Reference Include="Zilon.Core">
-      <HintPath>Libs\Zilon.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Zilon.DependencyInjection">
-      <HintPath>Libs\Zilon.DependencyInjection.dll</HintPath>
-    </Reference>
-    <Reference Include="Zilon.Emulation.Common">
-      <HintPath>Libs\Zilon.Emulation.Common.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\Zilon.Core\Zilon.Core\Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj" />
+    <ProjectReference Include="..\..\Zilon.Core\Zilon.Core\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
+    <ProjectReference Include="..\..\Zilon.Core\Zilon.Core\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj" />
+    <ProjectReference Include="..\..\Zilon.Core\Zilon.Core\Zilon.Core\Zilon.Core.csproj" />
+    <ProjectReference Include="..\..\Zilon.Core\Zilon.Core\Zilon.DependencyInjection\Zilon.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\Zilon.Core\Zilon.Core\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj" />
   </ItemGroup>
 </Project>
