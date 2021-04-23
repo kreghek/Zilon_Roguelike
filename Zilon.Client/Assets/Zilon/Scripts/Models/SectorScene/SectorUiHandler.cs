@@ -64,6 +64,13 @@ public class SectorUiHandler : MonoBehaviour
 
     private void UpdateButtonStates()
     {
+        var playerPersonIsNotInTransitionPool = _player.Globe.SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items).Any(x => x.Person == _player.MainPerson);
+        var playerPersonIsInTransitionPool = !playerPersonIsNotInTransitionPool;
+        if (playerPersonIsInTransitionPool)
+        {
+            return;
+        }
+
         if (NextTurnButton != null)
         {
             NextTurnButton.interactable = _nextTurnCommand.CanExecute();

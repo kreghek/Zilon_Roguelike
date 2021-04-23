@@ -53,7 +53,7 @@ public class CommandLoopUpdaterObject : MonoBehaviour
         }
         catch (Exception exception)
         {
-            Debug.LogError(exception);
+            Debug.LogError($"Error in command loop during execution of {command.GetType()}:\n" + exception);
         }
     }
 
