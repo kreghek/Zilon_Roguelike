@@ -21,7 +21,7 @@ namespace Zilon.Core.Schemes
 
             if (!Directory.Exists(schemeLocatorFullPath))
             {
-                throw new System.ArgumentException($"Директория каталога {schemeLocatorFullPath} не найдена.");
+                throw new ArgumentException($"Директория каталога {schemeLocatorFullPath} не найдена.");
             }
         }
 
@@ -53,7 +53,7 @@ namespace Zilon.Core.Schemes
             var path = Path.Combine(schemeLocatorFullPath, directory);
             if (!Directory.Exists(path))
             {
-                return System.Array.Empty<SchemeFile>();
+                return Array.Empty<SchemeFile>();
             }
 
             var files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);

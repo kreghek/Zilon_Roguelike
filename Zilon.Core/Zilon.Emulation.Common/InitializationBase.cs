@@ -298,12 +298,7 @@ namespace Zilon.Emulation.Common
         {
             container.AddSingleton<ISchemeLocator>(factory =>
             {
-                //TODO Организовать отдельный общий метод/класс/фабрику для конструирования локатора схем.
-                // Подобные конструкции распределены по всему проекту: в тестах, бенчах, окружении ботов.
-                // Следует их объединить в одном месте.
-                var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
-
-                var schemeLocator = new FileSchemeLocator(schemePath);
+                var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
 
                 return schemeLocator;
             });
