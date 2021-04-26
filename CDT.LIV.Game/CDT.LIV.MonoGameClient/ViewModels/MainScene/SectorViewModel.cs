@@ -48,7 +48,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             foreach (var actor in _sector.ActorManager.Items)
             {
-                var actorViewModel = new ActorViewModel(game, _spriteBatch);
+                var actorViewModel = new ActorViewModel(game, actor, _spriteBatch);
                 actorViewModel.Actor = actor;
                 
                 if (actor.Person == _player.MainPerson)
