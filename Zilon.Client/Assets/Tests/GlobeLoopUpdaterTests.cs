@@ -15,7 +15,7 @@ namespace Tests
         {
             // ARRANGE
 
-            var context = new TestGameLoopContext();
+            var context = new TestGlobeLoopContext();
 
             var animationBlocker = new TestAnimationBlocker();
 
@@ -39,7 +39,7 @@ namespace Tests
             Assert.IsFalse(context.IsUpdated);
         }
 
-        sealed class TestGameLoopContext : IGlobeLoopContext
+        sealed class TestGlobeLoopContext : IGlobeLoopContext
         {
             public bool IsUpdated { get; set; }
 
