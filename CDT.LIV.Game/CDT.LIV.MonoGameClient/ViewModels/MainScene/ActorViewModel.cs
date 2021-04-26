@@ -2,7 +2,7 @@
 using Zilon.Core.Client;
 using Zilon.Core.Tactics;
 
-namespace CDT.LIV.MonoGameClient.Scenes
+namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     internal class ActorViewModel : IActorViewModel
     {
