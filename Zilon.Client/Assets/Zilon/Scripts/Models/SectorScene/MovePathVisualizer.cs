@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+
+using UnityEngine;
 
 using Zenject;
 
@@ -45,7 +47,7 @@ public class MovePathVisualizer : MonoBehaviour
         }
 
         // Old path was cleared at start of the method.
-        foreach (var pathNode in path)
+        foreach (var pathNode in path.ToArray())
         {
             var hexPathNode = (HexNode)pathNode;
             var worldPosition = HexHelper.ConvertToWorld(hexPathNode.OffsetCoords);

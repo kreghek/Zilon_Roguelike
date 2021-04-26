@@ -9,10 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
@@ -33,14 +35,15 @@ namespace Zilon.TextClient
         }
 
         private static void HandleAttackCommand(string inputText, IServiceScope serviceScope, ISectorUiState uiState,
-            ISectorNode playerActorSectorNode)
+            ISectorNode playerActorSectorNode, ICommandPool commandManager)
         {
             var components = inputText.Split(' ');
             var targetId = int.Parse(components[1], CultureInfo.InvariantCulture);
 
             if (components.Length == 3)
             {
-                switch (components[2].ToUpper(CultureInfo.InvariantCulture))
+                var targetMarker = components[2].ToUpper(CultureInfo.InvariantCulture);
+                switch (targetMarker)
                 {
                     case "A":
                         SelectActor(uiState, playerActorSectorNode, targetId);
@@ -66,14 +69,7 @@ namespace Zilon.TextClient
                 .First(x => x.Constrains is null);
 
             var command = serviceScope.ServiceProvider.GetRequiredService<AttackCommand>();
-            if (command.CanExecute())
-            {
-                command.Execute();
-            }
-            else
-            {
-                Console.WriteLine(UiResource.CommandCantExecuteMessage);
-            }
+            PushCommandToExecution(commandManager, command);
         }
 
         private static void HandleDeadCommand(IPlayer player)
@@ -82,18 +78,11 @@ namespace Zilon.TextClient
             survivalModule.SetStatForce(Core.Persons.SurvivalStatType.Health, 0);
         }
 
-        private static void HandleIdleCommand(IServiceScope serviceScope)
+        private static void HandleIdleCommand(IServiceScope serviceScope, ICommandPool commandManager)
         {
             var command = serviceScope.ServiceProvider.GetRequiredService<IdleCommand>();
 
-            if (command.CanExecute())
-            {
-                command.Execute();
-            }
-            else
-            {
-                Console.WriteLine(UiResource.CommandCantExecuteMessage);
-            }
+            PushCommandToExecution(commandManager, command);
         }
 
         private static void HandleLookCommand(ISectorUiState uiState, ISectorNode playerActorSectorNode,
@@ -174,8 +163,12 @@ namespace Zilon.TextClient
             }
         }
 
-        private static void HandleMoveCommand(IServiceScope serviceScope, ISectorUiState uiState,
-            ISectorNode playerActorSectorNode, string inputText)
+        private static void HandleMoveCommand(
+            IServiceScope serviceScope,
+            ISectorUiState uiState,
+            ICommandPool commandManager,
+            ISectorNode playerActorSectorNode,
+            string inputText)
         {
             var components = inputText.Split(' ');
             var x = int.Parse(components[1], CultureInfo.InvariantCulture);
@@ -191,20 +184,13 @@ namespace Zilon.TextClient
 
             uiState.SelectedViewModel = new NodeViewModel { Node = targetNode };
 
-            if (command.CanExecute())
-            {
-                command.Execute();
-            }
-            else
-            {
-                Console.WriteLine(UiResource.CommandCantExecuteMessage);
-            }
+            PushCommandToExecution(commandManager, command);
         }
 
-        private static void HandleSectorTransitCommand(IServiceScope serviceScope)
+        private static void HandleSectorTransitCommand(IServiceScope serviceScope, ICommandPool commandManager)
         {
             var command = serviceScope.ServiceProvider.GetRequiredService<SectorTransitionMoveCommand>();
-            command.Execute();
+            PushCommandToExecution(commandManager, command);
         }
 
         private static void PrintCommandDescriptions()
@@ -251,6 +237,18 @@ namespace Zilon.TextClient
             Console.WriteLine($"Position: {actor.Node}");
         }
 
+        private static void PushCommandToExecution(ICommandPool commandManager, ICommand command)
+        {
+            if (command.CanExecute())
+            {
+                commandManager.Push(command);
+            }
+            else
+            {
+                Console.WriteLine(UiResource.CommandCantExecuteMessage);
+            }
+        }
+
         private static void SelectActor(ISectorUiState uiState, ISectorNode playerActorSectorNode, int targetId)
         {
             var actorManager = playerActorSectorNode.Sector.ActorManager;
@@ -270,36 +268,60 @@ namespace Zilon.TextClient
         }
 
         /// <inheritdoc />
-        public Task<GameScreen> StartProcessingAsync(GameState gameState)
+        public async Task<GameScreen> StartProcessingAsync(GameState gameState)
         {
             var serviceScope = gameState.ServiceScope;
             var player = serviceScope.ServiceProvider.GetRequiredService<IPlayer>();
+            var commandManager = serviceScope.ServiceProvider.GetRequiredService<ICommandPool>();
+            var animationBlockerService = serviceScope.ServiceProvider.GetRequiredService<IAnimationBlockerService>();
+            var humanTaskSource = serviceScope.ServiceProvider
+                .GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
 
-            var gameLoop = new GameLoop(player.Globe, player);
+            var playerState = serviceScope.ServiceProvider.GetRequiredService<ISectorUiState>();
+            var inventoryState = serviceScope.ServiceProvider.GetRequiredService<IInventoryState>();
+
+            var gameLoopUpdateContext = new GlobeLoopContext(player, inventoryState, playerState);
+            var gameLoop = new GlobeLoopUpdater(gameLoopUpdateContext, animationBlockerService);
+
+            var commandLoopContext =
+                new CommandLoopContext(player, (IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource);
+            var commandLoop = new CommandLoopUpdater(commandLoopContext, commandManager);
 
             var globe = player.Globe;
 
             // Play
 
             using var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
 
-            var processTask = gameLoop.StartProcessAsync(cancellationTokenSource.Token);
-            processTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
-            processTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
+            gameLoop.ErrorOccured += (s, e) => { Console.WriteLine(e.Exception); };
+            gameLoop.Start();
+
+            commandLoop.ErrorOccured += (s, e) => { Console.WriteLine(e.Exception); };
+            commandLoop.CommandAutoExecuted += (s, e) => { Console.WriteLine("Auto execute last command"); };
+            commandLoop.CommandProcessed += (s, e) =>
+            {
+                inventoryState.SelectedProp = null;
+                playerState.SelectedViewModel = null;
+            };
+            var commandLoopTask = commandLoop.StartAsync(cancellationToken);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception),
+                TaskContinuationOptions.OnlyOnFaulted);
+            commandLoopTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
                 TaskContinuationOptions.OnlyOnCanceled);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             do
             {
-                var uiState = serviceScope.ServiceProvider.GetRequiredService<ISectorUiState>();
-
                 var playerActor = (from sectorNode in globe.SectorNodes
                                    from actor in sectorNode.Sector.ActorManager.Items
                                    where actor.Person == player.MainPerson
                                    select actor).SingleOrDefault();
 
-                uiState.ActiveActor = new ActorViewModel { Actor = playerActor };
+                playerState.ActiveActor = new ActorViewModel { Actor = playerActor };
 
-                PrintState(uiState.ActiveActor.Actor);
+                PrintState(playerState.ActiveActor.Actor);
                 PrintCommandDescriptions();
 
                 Console.WriteLine($"{UiResource.InputPrompt}:");
@@ -308,17 +330,17 @@ namespace Zilon.TextClient
                 {
                     var playerActorSectorNode = GetPlayerSectorNode(player, globe);
 
-                    HandleMoveCommand(serviceScope, uiState, playerActorSectorNode, inputText);
+                    HandleMoveCommand(serviceScope, playerState, commandManager, playerActorSectorNode, inputText);
                 }
                 else if (inputText.StartsWith("look", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var playerActorSectorNode = GetPlayerSectorNode(player, globe);
 
-                    HandleLookCommand(uiState, playerActorSectorNode, inputText);
+                    HandleLookCommand(playerState, playerActorSectorNode, inputText);
                 }
                 else if (inputText.StartsWith("idle", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    HandleIdleCommand(serviceScope);
+                    HandleIdleCommand(serviceScope, commandManager);
                 }
                 else if (inputText.StartsWith("dead", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -326,22 +348,36 @@ namespace Zilon.TextClient
                 }
                 else if (inputText.StartsWith("transit", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    HandleSectorTransitCommand(serviceScope);
+                    HandleSectorTransitCommand(serviceScope, commandManager);
                 }
                 else if (inputText.StartsWith("attack", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var playerActorSectorNode = GetPlayerSectorNode(player, globe);
 
-                    HandleAttackCommand(inputText, serviceScope, uiState, playerActorSectorNode);
+                    HandleAttackCommand(inputText, serviceScope, playerState, playerActorSectorNode, commandManager);
                 }
                 else if (inputText.StartsWith("exit", StringComparison.InvariantCultureIgnoreCase))
                 {
                     break;
                 }
+
+                await Task.Run(() =>
+                {
+                    while (true)
+                    {
+                        if (((IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource).CanIntent()
+                            && !commandLoop.HasPendingCommands())
+                        {
+                            break;
+                        }
+                    }
+                }).ConfigureAwait(false);
+
+                await animationBlockerService.WaitBlockersAsync().ConfigureAwait(false);
             } while (!player.MainPerson.GetModule<ISurvivalModule>().IsDead);
 
             cancellationTokenSource.Cancel();
-            return Task.FromResult(GameScreen.Scores);
+            return GameScreen.Scores;
         }
     }
 }

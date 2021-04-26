@@ -1,14 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-using Assets.Zilon.Scripts.Models.Sector;
-using Assets.Zilon.Scripts.Services;
-
 using NUnit.Framework;
+
+using Zilon.Core.Client.Sector;
 
 namespace Tests
 {
-    public class GameLoopUpdaterTests
+    public class GlobeLoopUpdaterTests
     {
         // A Test behaves as an ordinary method
         [Test]
@@ -16,11 +15,11 @@ namespace Tests
         {
             // ARRANGE
 
-            var context = new TestGameLoopContext();
+            var context = new TestGlobeLoopContext();
 
             var animationBlocker = new TestAnimationBlocker();
 
-            var gameLoopUpdater = new GameLoopUpdater(context, animationBlocker);
+            var gameLoopUpdater = new GlobeLoopUpdater(context, animationBlocker);
 
             // ACT
 
@@ -40,7 +39,7 @@ namespace Tests
             Assert.IsFalse(context.IsUpdated);
         }
 
-        sealed class TestGameLoopContext : IGameLoopContext
+        sealed class TestGlobeLoopContext : IGlobeLoopContext
         {
             public bool IsUpdated { get; set; }
 

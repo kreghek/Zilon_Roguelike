@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Zilon.Core.Commands
 {
-    public class QueueCommandManager : ICommandManager
+    public class QueueCommandPool : ICommandPool
     {
-        private readonly Queue<ICommand> _queue;
+        private readonly ConcurrentQueue<ICommand> _queue;
 
         [ExcludeFromCodeCoverage]
-        public QueueCommandManager()
+        public QueueCommandPool()
         {
-            _queue = new Queue<ICommand>();
+            _queue = new ConcurrentQueue<ICommand>();
         }
 
         public event EventHandler? CommandPushed;
@@ -21,7 +21,12 @@ namespace Zilon.Core.Commands
         {
             if (_queue.Any())
             {
-                return _queue.Dequeue();
+                if (_queue.TryDequeue(out var command))
+                {
+                    return command;
+                }
+
+                return null;
             }
 
             return null;

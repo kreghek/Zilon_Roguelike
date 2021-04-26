@@ -11,7 +11,7 @@ using Zilon.Core.Props;
 
 public class PropDropHandler : MonoBehaviour, IDropHandler
 {
-    [NotNull] [Inject] private readonly ICommandManager _commandManager;
+    [NotNull] [Inject] private readonly ICommandPool _commandPool;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
@@ -51,6 +51,6 @@ public class PropDropHandler : MonoBehaviour, IDropHandler
 
     private void UseProp()
     {
-        _commandManager.Push(_useSelfCommand);
+        _commandPool.Push(_useSelfCommand);
     }
 }

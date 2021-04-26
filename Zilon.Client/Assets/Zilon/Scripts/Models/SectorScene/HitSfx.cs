@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using Assets.Zilon.Scripts.Models.SectorScene;
-using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
 
@@ -9,10 +8,13 @@ using UnityEngine;
 
 using Zenject;
 
+using Zilon.Core.Client.Sector;
+
 public class HitSfx : MonoBehaviour
 {
-    private const float _fadeSpeed = 2;
+    private const float FADE_SPEED = 2;
     private const int SFX_DURATION_SECONDS = 1;
+
     private float _lifetimeCounter;
     private ICommandBlocker _animationBlocker;
 
@@ -36,7 +38,7 @@ public class HitSfx : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-        _lifetimeCounter -= Time.deltaTime * _fadeSpeed;
+        _lifetimeCounter -= Time.deltaTime * FADE_SPEED;
         EffectSpriteRenderer.color = new Color(1, 1, 1, _lifetimeCounter);
 
         if (_lifetimeCounter <= 0)

@@ -1,17 +1,16 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Assets.Zilon.Scripts.Services
+namespace Zilon.Core.Client.Sector
 {
-    class AnimationBlockerService : IAnimationBlockerService
+    public class AnimationBlockerService : IAnimationBlockerService
     {
         private readonly ConcurrentDictionary<ICommandBlocker, byte> _commandBlockers;
 
-        private TaskCompletionSource<bool> tcs;
+        private readonly object _lockObject;
 
-        private object _lockObject;
+        private TaskCompletionSource<bool>? _tcs;
 
         public AnimationBlockerService()
         {
@@ -19,21 +18,36 @@ namespace Assets.Zilon.Scripts.Services
             _commandBlockers = new ConcurrentDictionary<ICommandBlocker, byte>();
         }
 
-        /// <inheritdoc/>
-        public bool HasBlockers { get => _commandBlockers.Count > 0; }
+        private void CommandBlocker_Release(object sender, System.EventArgs e)
+        {
+            lock (_lockObject)
+            {
+                var blocker = (ICommandBlocker)sender;
+                blocker.Released -= CommandBlocker_Release;
+                _commandBlockers.TryRemove(blocker, out var _);
 
-        /// <inheritdoc/>
+                if (!HasBlockers && _tcs != null)
+                {
+                    _tcs.SetResult(true);
+                }
+            }
+        }
+
+        /// <inheritdoc />
+        public bool HasBlockers => !_commandBlockers.IsEmpty;
+
+        /// <inheritdoc />
         public void AddBlocker(ICommandBlocker commandBlocker)
         {
             lock (_lockObject)
             {
                 commandBlocker.Released += CommandBlocker_Release;
                 _commandBlockers.TryAdd(commandBlocker, 0);
-                tcs = new TaskCompletionSource<bool>();
+                _tcs = new TaskCompletionSource<bool>();
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void DropBlockers()
         {
             lock (_lockObject)
@@ -47,37 +61,17 @@ namespace Assets.Zilon.Scripts.Services
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public Task WaitBlockersAsync()
         {
             lock (_lockObject)
             {
-                if (tcs is null)
+                if (_tcs is null)
                 {
                     return Task.CompletedTask;
                 }
-                else
-                {
-                    return tcs.Task;
-                }
-            }
-        }
 
-        private void CommandBlocker_Release(object sender, System.EventArgs e)
-        {
-            lock (_lockObject)
-            {
-                var blocker = (ICommandBlocker)sender;
-                blocker.Released -= CommandBlocker_Release;
-                _commandBlockers.TryRemove(blocker, out var _);
-
-                if (!HasBlockers)
-                {
-                    if (tcs != null)
-                    {
-                        tcs.SetResult(true);
-                    }
-                }
+                return _tcs.Task;
             }
         }
     }

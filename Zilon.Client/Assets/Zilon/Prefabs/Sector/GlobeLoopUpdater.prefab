@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6502786928740009727}
   - component: {fileID: 6502786928740009720}
   m_Layer: 0
-  m_Name: GameLoopUpdater
+  m_Name: GlobeLoopUpdater
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,6 +40,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6502786928740009726}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0da4991814c0e7342a0d52d4406abc7b, type: 3}
+  m_Script: {fileID: 11500000, guid: 09fb40db0449da041a977b9656dcdce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

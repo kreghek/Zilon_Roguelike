@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Players;
@@ -32,6 +33,8 @@ namespace Zilon.TextClient
             serviceContainer.AddScoped<AttackCommand>();
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
             serviceContainer.AddScoped<SectorTransitionMoveCommand>();
+            serviceContainer.AddScoped<ICommandPool, QueueCommandPool>();
+            serviceContainer.AddScoped<IAnimationBlockerService, AnimationBlockerService>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 

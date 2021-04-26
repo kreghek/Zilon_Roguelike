@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 using UnityEngine;
 
@@ -104,9 +102,11 @@ public class FowManager : MonoBehaviour
             return;
         }
 
+        var fowNodesMaterialized = sectorFowData.Nodes.ToArray();
+
         foreach (var nodeViewModel in _nodeViewModels)
         {
-            var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == nodeViewModel.Node);
+            var fowNode = fowNodesMaterialized.SingleOrDefault(x => x.Node == nodeViewModel.Node);
 
             var fowStateUnsafe = fowNode?.State;
             var fowState = fowStateUnsafe.GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
@@ -127,9 +127,11 @@ public class FowManager : MonoBehaviour
             return;
         }
 
+        var fowNodesMaterialized = sectorFowData.Nodes.ToArray();
+
         foreach (var actorViewModel in _actorViewModels.ToArray())
         {
-            var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == actorViewModel.Actor.Node);
+            var fowNode = fowNodesMaterialized.SingleOrDefault(x => x.Node == actorViewModel.Actor.Node);
 
             var fowState = (fowNode?.State).GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
 
@@ -149,9 +151,11 @@ public class FowManager : MonoBehaviour
             return;
         }
 
+        var fowNodesMaterialized = sectorFowData.Nodes.ToArray();
+
         foreach (var containerViewModel in _staticObjectViewModels.ToArray())
         {
-            var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == containerViewModel.Container.Node);
+            var fowNode = fowNodesMaterialized.SingleOrDefault(x => x.Node == containerViewModel.Container.Node);
 
             var fowState = (fowNode?.State).GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
 

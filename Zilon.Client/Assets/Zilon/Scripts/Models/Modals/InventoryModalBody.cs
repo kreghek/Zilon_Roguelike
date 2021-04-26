@@ -31,7 +31,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
     [NotNull] [Inject] private readonly DiContainer _diContainer;
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
     [NotNull] [Inject] private readonly IInventoryState _inventoryState;
-    [NotNull] [Inject] private readonly ICommandManager _commandManager;
+    [NotNull] [Inject] private readonly ICommandPool _commandPool;
     [NotNull] [Inject(Id = "use-self-command")] private readonly ICommand _useSelfCommand;
 
     public event EventHandler Closed;
@@ -215,7 +215,7 @@ public class InventoryModalBody : MonoBehaviour, IModalWindowHandler
 
     public void UseButton_Handler()
     {
-        _commandManager.Push(_useSelfCommand);
+        _commandPool.Push(_useSelfCommand);
     }
 
     public void ReadButton_Handler()

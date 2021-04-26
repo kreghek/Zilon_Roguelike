@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Assets.Zilon.Scripts.Models.Sector
+namespace Zilon.Core.Client.Sector
 {
     /// <summary>
     /// The context of the game loop updates.
     /// </summary>
-    public interface IGameLoopContext
+    public interface IGlobeLoopContext
     {
         /// <summary>
         /// Indicates the game loop has next iteration.

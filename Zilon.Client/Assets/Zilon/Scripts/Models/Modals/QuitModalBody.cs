@@ -45,7 +45,7 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
     private readonly ICommand _quitTitleCommand;
 
     [Inject]
-    private readonly ICommandManager _clientCommandExecutor;
+    private readonly ICommandPool _commandPool;
 
     public string Caption { get; private set; }
 
@@ -84,7 +84,7 @@ public class QuitModalBody : MonoBehaviour, IModalWindowHandler
 
     public void ApplyChanges()
     {
-        _clientCommandExecutor.Push(_targetCommand);
+        _commandPool.Push(_targetCommand);
     }
 
     public void CancelChanges()

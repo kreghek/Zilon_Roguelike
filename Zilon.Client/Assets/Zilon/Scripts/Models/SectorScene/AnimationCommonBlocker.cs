@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Assets.Zilon.Scripts.Services;
+using Zilon.Core.Client.Sector;
 
 namespace Assets.Zilon.Scripts.Models.SectorScene
 {

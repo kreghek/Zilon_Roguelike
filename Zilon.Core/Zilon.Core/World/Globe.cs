@@ -20,6 +20,7 @@ namespace Zilon.Core.World
         private readonly IList<ISectorNode> _sectorNodes;
 
         private readonly ConcurrentDictionary<IActor, TaskState> _taskDict;
+
         private int _turnCounter;
 
         public Globe(IGlobeTransitionHandler globeTransitionHandler)

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Assets.Zilon.Scripts.Models.Sector;
 using Assets.Zilon.Scripts.Models.SectorScene;
 using Assets.Zilon.Scripts.Services;
 
@@ -15,6 +14,7 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
@@ -39,7 +39,8 @@ public class SectorVM : MonoBehaviour
     private readonly List<StaticObjectViewModel> _staticObjectViewModels;
     private IStaticObjectManager _staticObjectManager;
 
-    private bool _interuptCommands;
+    private TaskScheduler _taskScheduler;
+    private IGlobe _globe;
 
 #pragma warning disable 649
     // ReSharper disable MemberCanBePrivate.Global
@@ -72,7 +73,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly DiContainer _container;
 
-    [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
+    [NotNull] [Inject] private readonly ICommandPool _commandPool;
 
     [NotNull] [Inject] private readonly ISectorUiState _playerState;
 
@@ -82,7 +83,7 @@ public class SectorVM : MonoBehaviour
 
     [NotNull] [Inject] private readonly IPlayer _humanPlayer;
 
-    [Inject] private readonly IAnimationBlockerService _commandBlockerService;
+    [Inject] private readonly IAnimationBlockerService _animationBlockerService;
 
     [Inject] private readonly UiSettingService _uiSettingService;
 
@@ -114,7 +115,7 @@ public class SectorVM : MonoBehaviour
     private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
 
     [Inject]
-    private readonly GameLoopUpdater _gameLoopUpdater;
+    private readonly IGlobeLoopUpdater _globeLoopUpdater;
 
     public List<ActorViewModel> ActorViewModels { get; }
 
@@ -141,58 +142,6 @@ public class SectorVM : MonoBehaviour
 #pragma warning restore 649
 
     // ReSharper disable once UnusedMember.Local
-    public void Update()
-    {
-        if (!_commandBlockerService.HasBlockers)
-        {
-            try
-            {
-                ExecuteCommands();
-            }
-            catch (Exception exception)
-            {
-                Debug.LogError(exception);
-            }
-        }
-    }
-
-    public bool CanIntent = true;
-    private TaskScheduler _taskScheduler;
-    private IGlobe _globe;
-
-    private void ExecuteCommands()
-    {
-        var command = _clientCommandExecutor.Pop();
-
-        try
-        {
-            if (command != null)
-            {
-                command.Execute();
-
-                CanIntent = false;
-
-                if (_interuptCommands)
-                {
-                    return;
-                }
-
-                //if (command is IRepeatableCommand repeatableCommand && CanIntent)
-                //{
-                //    if (repeatableCommand.CanRepeat())
-                //    {
-                //        _clientCommandExecutor.Push(repeatableCommand);
-                //    }
-                //}
-            }
-        }
-        catch (Exception exception)
-        {
-            throw new InvalidOperationException($"Не удалось выполнить команду {command}.", exception);
-        }
-    }
-
-    // ReSharper disable once UnusedMember.Local
     public void Awake()
     {
         // Store globe beacause after quit and person death Globe and MainPerson will be erised.
@@ -212,7 +161,7 @@ public class SectorVM : MonoBehaviour
         FowManager.InitViewModels(nodeViewModels, ActorViewModels, _staticObjectViewModels);
 
         //TODO Разобраться, почему остаются блоки от перемещения при использовании перехода
-        _commandBlockerService.DropBlockers();
+        _animationBlockerService.DropBlockers();
 
         // Изначально канвас отключен.
         // Эта операция нужна, чтобы Start у всяких панелей выполнялся после инициализации
@@ -309,7 +258,7 @@ public class SectorVM : MonoBehaviour
 
     private void MapNodeVm_MouseEnter(object sender, EventArgs e)
     {
-        var blocked = _commandBlockerService.HasBlockers;
+        var blocked = _animationBlockerService.HasBlockers;
         if (!blocked)
         {
             _playerState.HoverViewModel = (IMapNodeViewModel)sender;
@@ -463,16 +412,16 @@ public class SectorVM : MonoBehaviour
             containerViewModel.Container.GetModule<IPropContainer>().IsActive &&
             _openContainerCommand.CanExecute())
         {
-            _clientCommandExecutor.Push(_openContainerCommand);
+            _commandPool.Push(_openContainerCommand);
         }
         else if (containerViewModel.Container.HasModule<IPropDepositModule>() &&
             _mineDepositCommand.CanExecute())
         {
-            _clientCommandExecutor.Push(_mineDepositCommand);
+            _commandPool.Push(_mineDepositCommand);
         }
         else if (_attackCommand.CanExecute())
         {
-            _clientCommandExecutor.Push(_attackCommand);
+            _commandPool.Push(_attackCommand);
         }
     }
 
@@ -543,8 +492,7 @@ public class SectorVM : MonoBehaviour
         // Персонаж игрока выходит из сектора.
         var actor = _playerState.ActiveActor.Actor;
 
-        _interuptCommands = true;
-        _commandBlockerService.DropBlockers();
+        _animationBlockerService.DropBlockers();
 
         var activeActor = actor;
         var survivalModule = activeActor.Person.GetModule<ISurvivalModule>();
@@ -641,7 +589,7 @@ public class SectorVM : MonoBehaviour
 
         if (actorViewModel != null)
         {
-            _clientCommandExecutor.Push(_attackCommand);
+            _commandPool.Push(_attackCommand);
         }
     }
 
@@ -658,7 +606,7 @@ public class SectorVM : MonoBehaviour
 
         if (_attackCommand.CanExecute())
         {
-            _clientCommandExecutor.Push(_attackCommand);
+            _commandPool.Push(_attackCommand);
         }
     }
 
@@ -693,7 +641,7 @@ public class SectorVM : MonoBehaviour
             _actorTaskControlSwitcher.Switch(ActorTaskSourceControl.Human);
 
             // Cancel game loop updating.
-            _gameLoopUpdater.Stop();
+            _globeLoopUpdater.Stop();
         }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
@@ -813,7 +761,7 @@ public class SectorVM : MonoBehaviour
 
         if (_moveCommand.CanExecute())
         {
-            _clientCommandExecutor.Push(_moveCommand);
+            _commandPool.Push(_moveCommand);
         }
     }
 

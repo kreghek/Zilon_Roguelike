@@ -7,6 +7,7 @@ using UnityEngine;
 
 using Zenject;
 
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Components;
 
 public class ActorGraphicBase : MonoBehaviour

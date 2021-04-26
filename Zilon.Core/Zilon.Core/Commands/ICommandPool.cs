@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace Zilon.Core.Commands
 {
     [PublicAPI]
-    public interface ICommandManager
+    public interface ICommandPool
     {
         ICommand? Pop();
         void Push(ICommand command);

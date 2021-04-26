@@ -34,7 +34,7 @@ jobs:
           path: bin
 
   buildForSomePlatforms:
-    name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
+    name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     needs: buildCore
     env:
@@ -50,30 +50,38 @@ jobs:
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
           - StandaloneLinux64 # Build a Linux 64-bit standalone.
     steps:
+      # Checkout
       - uses: actions/checkout@v2
         with:
           lfs: true
+
+      # Deploy external plugins which are not from Unity Package manager
       - uses: actions/checkout@v2
         with:
           repository: kreghek/Zilon_Roguelike_Plugins
           path: ${{ matrix.projectPath }}/Assets/Plugins/
+
+      # Deploy core libs
       - name: Download core libs from artifatcs
         uses: actions/download-artifact@v2
         with:
           name: CoreLibs
           path: ${{ matrix.projectPath }}/Assets/Plugins
-      - uses: actions/cache@v1.1.0
+
+      # Cache
+      - uses: actions/cache@v2
         with:
           path: ${{ matrix.projectPath }}/Library
           key: Library-${{ matrix.projectPath }}-${{ matrix.targetPlatform }}
-          restore-keys: |
-            Library-${{ matrix.projectPath }}-
-            Library-
+
+      # Build
       - uses: game-ci/unity-builder@224f973562d7dc72505715af6c034f0eb5298069
         with:
           projectPath: ${{ matrix.projectPath }}
           buildName: LAST
           targetPlatform: ${{ matrix.targetPlatform }}
+
+      # Output Unity game
       - uses: actions/upload-artifact@v1
         with:
           name: LAST.${{ matrix.targetPlatform }}
