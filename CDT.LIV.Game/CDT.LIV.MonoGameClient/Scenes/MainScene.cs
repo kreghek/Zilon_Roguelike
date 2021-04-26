@@ -36,6 +36,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
             var serviceScope = ((LivGame)Game).ServiceProvider;
 
             var player = serviceScope.GetRequiredService<IPlayer>();
+            var uiState = serviceScope.GetRequiredService<ISectorUiState>();
 
             _spriteBatch.Begin();
 
@@ -49,7 +50,15 @@ namespace CDT.LIV.MonoGameClient.Scenes
             foreach (HexNode node in player.SectorNode.Sector.Map.Nodes)
             {
                 var worldCoords = HexHelper.ConvertToWorld(node.OffsetCoords);
-                _spriteBatch.Draw(hexSprite, new Rectangle((int)(worldCoords[0] * UNIT_SIZE), (int)(worldCoords[1] * UNIT_SIZE / 2), UNIT_SIZE, UNIT_SIZE / 2), Color.White);
+
+                if (uiState.HoverViewModel != null && node == uiState.HoverViewModel.Item)
+                {
+                    _spriteBatch.Draw(hexSprite, new Rectangle((int)(worldCoords[0] * UNIT_SIZE), (int)(worldCoords[1] * UNIT_SIZE / 2), UNIT_SIZE, UNIT_SIZE / 2), Color.CornflowerBlue);
+                }
+                else
+                {
+                    _spriteBatch.Draw(hexSprite, new Rectangle((int)(worldCoords[0] * UNIT_SIZE), (int)(worldCoords[1] * UNIT_SIZE / 2), UNIT_SIZE, UNIT_SIZE / 2), Color.White);
+                }
             }
 
             _spriteBatch.Draw(personBodySprite,
@@ -75,38 +84,48 @@ namespace CDT.LIV.MonoGameClient.Scenes
         {
             base.Update(gameTime);
 
-            var mouseState = Mouse.GetState();
-            if (mouseState.LeftButton == ButtonState.Pressed)
+            var mouseState = Mouse.GetState(Game.Window);
+
+            var x = mouseState.X / UNIT_SIZE;
+            var y = mouseState.Y / (UNIT_SIZE / 2);
+
+            var offsetCoords = new OffsetCoords(x, y);
+
+            var serviceScope = ((LivGame)Game).ServiceProvider;
+            var uiState = serviceScope.GetRequiredService<ISectorUiState>();
+
+            var player = serviceScope.GetRequiredService<IPlayer>();
+            var globe = player.Globe;
+
+            var playerActorSectorNode = GetPlayerSectorNode(player, globe);
+
+            var map = playerActorSectorNode.Sector.Map;
+
+            var hoverNode = map.Nodes.OfType<HexNode>()
+                .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
+
+            if (hoverNode != null)
             {
-                var x = mouseState.X % UNIT_SIZE;
-                var y = mouseState.Y % (UNIT_SIZE / 2);
+                uiState.HoverViewModel = new NodeViewModel { Node = hoverNode };
+            }
+            else
+            {
+                uiState.HoverViewModel = null;
+            }
 
-                var serviceScope = ((LivGame)Game).ServiceProvider;
-
-                var uiState = serviceScope.GetRequiredService<ISectorUiState>();
-                var player = serviceScope.GetRequiredService<IPlayer>();
-                var globe = player.Globe;
-
+            if (mouseState.LeftButton == ButtonState.Pressed && uiState.HoverViewModel != null)
+            {
                 var playerActor = (from sectorNode in globe.SectorNodes
                                    from actor in sectorNode.Sector.ActorManager.Items
                                    where actor.Person == player.MainPerson
                                    select actor).SingleOrDefault();
 
                 uiState.ActiveActor = new ActorViewModel { Actor = playerActor };
+                
 
-                var playerActorSectorNode = GetPlayerSectorNode(player, globe);
-
-                ISectorMap map = playerActorSectorNode.Sector.Map;
-
-                var offsetCoords = new OffsetCoords(x, y);
-
-                var targetNode = map.Nodes.OfType<HexNode>()
-                    .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
+                uiState.SelectedViewModel = uiState.HoverViewModel;
 
                 var command = serviceScope.GetRequiredService<MoveCommand>();
-
-                uiState.SelectedViewModel = new NodeViewModel { Node = targetNode };
-
                 if (command.CanExecute())
                 {
                     command.Execute();
