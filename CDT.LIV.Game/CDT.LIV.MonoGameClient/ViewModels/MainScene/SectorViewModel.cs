@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -35,10 +36,16 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _player = serviceScope.GetRequiredService<IPlayer>();
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
-            _sector = GetPlayerSectorNode(_player, _player.Globe).Sector;
+            var sector = GetPlayerSectorNode(_player).Sector;
 
-            var playerActor = (from sectorNode in _player.Globe.SectorNodes
-                               from actor in sectorNode.Sector.ActorManager.Items
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            _sector = sector;
+
+            var playerActor = (from actor in _sector.ActorManager.Items
                                where actor.Person == _player.MainPerson
                                select actor).SingleOrDefault();
 
@@ -49,8 +56,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             foreach (var actor in _sector.ActorManager.Items)
             {
                 var actorViewModel = new ActorViewModel(game, actor, _spriteBatch);
-                actorViewModel.Actor = actor;
-                
+
                 if (actor.Person == _player.MainPerson)
                 {
                     _uiState.ActiveActor = actorViewModel;
@@ -61,8 +67,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             foreach (var staticObject in _sector.StaticObjectManager.Items)
             {
-                var staticObjectModel = new StaticObjectViewModel(game, _spriteBatch);
-                staticObjectModel.StaticObject = staticObject;
+                var staticObjectModel = new StaticObjectViewModel(game, staticObject, _spriteBatch);
+
                 _gameObjects.Add(staticObjectModel);
             }
         }
@@ -99,13 +105,13 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             {
                 if (_uiState.HoverViewModel is null)
                 {
-                    _uiState.HoverViewModel = new NodeViewModel { Node = hoverNode };
+                    _uiState.HoverViewModel = new NodeViewModel(hoverNode);
                 }
                 else
                 {
                     if (_uiState.HoverViewModel.Item != hoverNode)
                     {
-                        _uiState.HoverViewModel = new NodeViewModel { Node = hoverNode };
+                        _uiState.HoverViewModel = new NodeViewModel(hoverNode);
                     }
                 }
             }
@@ -128,12 +134,19 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private static ISectorNode GetPlayerSectorNode(IPlayer player, IGlobe globe)
+        private static ISectorNode GetPlayerSectorNode(IPlayer player)
         {
-          return (from sectorNode in globe.SectorNodes
-                    from actor in sectorNode.Sector.ActorManager.Items
+            if (player.Globe is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return (from sectorNode in player.Globe.SectorNodes
+                    let sector = sectorNode.Sector
+                    where sector != null
+                    from actor in sector.ActorManager.Items
                     where actor.Person == player.MainPerson
-                    select sectorNode).SingleOrDefault();
+                    select sectorNode).Single();
         }
     }
 }

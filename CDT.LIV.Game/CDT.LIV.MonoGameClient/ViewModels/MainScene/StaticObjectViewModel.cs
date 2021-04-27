@@ -15,14 +15,15 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private Game _game;
         private SpriteBatch _spriteBatch;
 
-        public StaticObjectViewModel(Game game, SpriteBatch spriteBatch)
+        public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
         {
             _game = game;
+            StaticObject = staticObject;
             _spriteBatch = spriteBatch;
         }
 
         public IStaticObject StaticObject { get; set; }
-        public object Item { get; }
+        public object Item => StaticObject;
 
         public override void Draw(GameTime gameTime)
         {

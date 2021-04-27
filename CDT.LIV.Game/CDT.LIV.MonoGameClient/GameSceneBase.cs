@@ -84,6 +84,6 @@ namespace CDT.LIV.MonoGameClient
             base.Draw(gameTime);
         }
 
-        public GameSceneBase TargetScene { get; set; }
+        public GameSceneBase? TargetScene { get; set; }
     }
 }

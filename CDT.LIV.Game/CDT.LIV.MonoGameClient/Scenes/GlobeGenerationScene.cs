@@ -62,14 +62,26 @@ namespace CDT.LIV.MonoGameClient.Scenes
                         var globeInitializer = serviceScope.GetRequiredService<IGlobeInitializer>();
                         var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
 
+                        if (globe is null)
+                        {
+                            throw new InvalidOperationException();
+                        }
+
                         var player = serviceScope.GetRequiredService<IPlayer>();
 
-                        var gameLoop = new GameLoop(player.Globe, player);
+                        if (player is null)
+                        {
+                            throw new InvalidOperationException();
+                        }
+
+                        var gameLoop = new GameLoop(globe, player);
 
                         var processTask = gameLoop.StartProcessAsync(CancellationToken.None);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         processTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
                         processTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
                             TaskContinuationOptions.OnlyOnCanceled);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
 
                     });
@@ -101,6 +113,11 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
         public async Task StartProcessAsync(CancellationToken cancellationToken)
         {
+            if (_player.MainPerson is null)
+            {
+                return;
+            }
+
             var playerPersonSurvivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
             while (!playerPersonSurvivalModule.IsDead)
             {

@@ -9,8 +9,8 @@ namespace CDT.LIV.MonoGameClient
 {
     public class LivGame : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private GraphicsDeviceManager? _graphics;
+        private SpriteBatch? _spriteBatch;
         private readonly ServiceProvider _serviceProvider;
 
         public ServiceProvider ServiceProvider => _serviceProvider;

@@ -8,7 +8,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
     class MainScene : GameSceneBase
     {
         private readonly SpriteBatch _spriteBatch;
-        private SectorViewModel _sectorViewModel;
+        private SectorViewModel? _sectorViewModel;
 
         public MainScene(Game game, SpriteBatch spriteBatch) : base(game)
         {

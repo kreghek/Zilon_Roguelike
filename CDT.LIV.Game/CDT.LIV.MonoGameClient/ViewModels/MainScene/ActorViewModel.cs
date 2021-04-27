@@ -64,6 +64,16 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                         }
                     }
                 }
+
+                if (_personHeadSprite is null)
+                {
+                    _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/Head");
+                }
+
+                if (_personBodySprite is null)
+                {
+                    _personBodySprite = _game.Content.Load<Texture2D>("Sprites/Body");
+                }
             }
         }
 
