@@ -95,10 +95,14 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             var mouseState = Mouse.GetState();
 
-            var x = (mouseState.X) / UNIT_SIZE;
-            var y = (mouseState.Y) / (UNIT_SIZE / 2);
+            var inverseTransform = Matrix.Invert(_camera.Transform);
 
-            var offsetCoords = new OffsetCoords(x, y);
+            var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseTransform);
+
+            var x = (mouseInWorld.X) / UNIT_SIZE;
+            var y = (mouseInWorld.Y) / (UNIT_SIZE / 2);
+
+            var offsetCoords = new OffsetCoords((int)x, (int)y);
 
             var map = _sector.Map;
 
