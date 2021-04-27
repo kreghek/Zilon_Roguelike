@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+
+using CDT.LIV.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,6 +22,10 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly SpriteBatch _spriteBatch;
         private readonly Texture2D _personHeadSprite;
         private readonly Texture2D _personBodySprite;
+
+        private double _idleAnimationCounter;
+
+        private Container _rootSprite;
 
         public ActorViewModel(Game game, IActor actor, SpriteBatch spriteBatch)
         {
@@ -75,6 +82,19 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     _personBodySprite = _game.Content.Load<Texture2D>("Sprites/Body");
                 }
             }
+
+            _rootSprite = new Container();
+            _rootSprite.AddChild(new Sprite(_personBodySprite)
+            {
+                Position = new Vector2(10, -10),
+                ScaleScalar = 0.25f,
+            });
+
+            _rootSprite.AddChild(new Sprite(_personHeadSprite)
+            {
+                Position = new Vector2(10, -0),
+                ScaleScalar = 0.25f
+            });
         }
 
         public IActor Actor { get; set; }
@@ -82,32 +102,25 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {
+            _idleAnimationCounter += gameTime.ElapsedGameTime.TotalSeconds;
+
+            _rootSprite.Rotation = (float)Math.Sin(_idleAnimationCounter);
+
             _spriteBatch.Begin(transformMatrix: transform);
 
-            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
-
-            _spriteBatch.Draw(_personBodySprite,
-               new Rectangle(
-                   (int)(playerActorWorldCoords[0] * UNIT_SIZE),
-                   (int)(playerActorWorldCoords[1] * UNIT_SIZE / 2 - UNIT_SIZE * 0.45f),
-                   UNIT_SIZE,
-                   UNIT_SIZE),
-               Color.White);
-
-            _spriteBatch.Draw(_personHeadSprite,
-                new Rectangle(
-                    (int)(playerActorWorldCoords[0] * UNIT_SIZE + UNIT_SIZE * 0.25f),
-                    (int)(playerActorWorldCoords[1] * UNIT_SIZE / 2 - UNIT_SIZE * 0.5f),
-                    (int)(UNIT_SIZE * 0.5),
-                    (int)(UNIT_SIZE * 0.5)),
-                Color.White);
+            _rootSprite.Draw(_spriteBatch);
 
             _spriteBatch.End();
         }
 
         public override void Update(GameTime gameTime)
         {
-            
+            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
+
+            _rootSprite.Position = new Vector2(
+                (int)(playerActorWorldCoords[0] * UNIT_SIZE),
+                (int)(playerActorWorldCoords[1] * UNIT_SIZE / 2)
+                );
         }
     }
 }

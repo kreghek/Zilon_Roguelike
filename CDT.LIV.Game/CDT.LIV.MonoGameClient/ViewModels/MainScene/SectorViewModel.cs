@@ -93,11 +93,17 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         {
             base.Update(gameTime);
 
+            var gameObjectsFixedList = _gameObjects.ToArray();
+            foreach (var gameObject in gameObjectsFixedList)
+            {
+                gameObject.Update(gameTime);
+            }
+
             var mouseState = Mouse.GetState();
 
-            var inverseTransform = Matrix.Invert(_camera.Transform);
+            var inverseCameraTransform = Matrix.Invert(_camera.Transform);
 
-            var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseTransform);
+            var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
 
             var x = (mouseInWorld.X) / UNIT_SIZE;
             var y = (mouseInWorld.Y) / (UNIT_SIZE / 2);
