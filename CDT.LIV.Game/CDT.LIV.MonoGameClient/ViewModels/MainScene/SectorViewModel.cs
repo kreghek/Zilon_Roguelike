@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using CDT.LIV.MonoGameClient.Scenes;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,6 +22,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
     {
         private const int UNIT_SIZE = 50;
 
+        private readonly Camera _camera;
         private readonly SpriteBatch _spriteBatch;
         private readonly IPlayer _player;
         private readonly ISectorUiState _uiState;
@@ -28,8 +31,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly MapViewModel _mapViewModel;
         private readonly List<GameObjectBase> _gameObjects;
 
-        public SectorViewModel(Game game, SpriteBatch spriteBatch) : base(game)
+        public SectorViewModel(Game game, Scenes.Camera _camera, SpriteBatch spriteBatch) : base(game)
         {
+            this._camera = _camera;
             _spriteBatch = spriteBatch;
 
             var serviceScope = ((LivGame)Game).ServiceProvider;
@@ -77,11 +81,11 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         {
             base.Draw(gameTime);
 
-            _mapViewModel.Draw();
+            _mapViewModel.Draw(_camera.Transform);
 
             foreach (var gameObject in _gameObjects)
             {
-                gameObject.Draw(gameTime);
+                gameObject.Draw(gameTime, _camera.Transform);
             }
         }
 

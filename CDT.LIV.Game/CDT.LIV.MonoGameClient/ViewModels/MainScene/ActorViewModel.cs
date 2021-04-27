@@ -80,9 +80,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         public IActor Actor { get; set; }
         public object Item => Actor;
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, Matrix transform)
         {
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(transformMatrix: transform);
 
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
 

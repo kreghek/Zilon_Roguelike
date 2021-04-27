@@ -14,26 +14,27 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private Game _game;
         private SpriteBatch _spriteBatch;
+        private readonly Texture2D _personHeadSprite;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
         {
             _game = game;
             StaticObject = staticObject;
             _spriteBatch = spriteBatch;
+
+            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/Head");
         }
 
         public IStaticObject StaticObject { get; set; }
         public object Item => StaticObject;
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, Matrix transform)
         {
-            var personHeadSprite = _game.Content.Load<Texture2D>("Sprites/Head");
-
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(transformMatrix: transform);
 
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
 
-            _spriteBatch.Draw(personHeadSprite,
+            _spriteBatch.Draw(_personHeadSprite,
                 new Rectangle(
                     (int)(playerActorWorldCoords[0] * UNIT_SIZE + UNIT_SIZE * 0.25f),
                     (int)(playerActorWorldCoords[1] * UNIT_SIZE / 2),

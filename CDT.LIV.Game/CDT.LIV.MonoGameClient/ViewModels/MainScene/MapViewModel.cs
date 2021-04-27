@@ -29,9 +29,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _sector = sector;
         }
 
-        public void Draw()
+        public void Draw(Matrix transform)
         {
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(transformMatrix: transform);
             foreach (HexNode node in _sector.Map.Nodes)
             {
                 var worldCoords = HexHelper.ConvertToWorld(node.OffsetCoords);
