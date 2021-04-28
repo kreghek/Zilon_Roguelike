@@ -36,11 +36,6 @@ namespace Zilon.Core.Commands
 
         public void Push(ICommand command)
         {
-            if (_queue.Any())
-            {
-                throw new Exception();
-            }
-
             _queue.Enqueue(command);
             CommandPushed?.Invoke(this, EventArgs.Empty);
         }

@@ -175,7 +175,7 @@ namespace Zilon.Core.Client.Sector.Tests
             });
             commandMock.Setup(x => x.CanRepeat()).Callback(() => { repeatIteration++; })
                 .Returns(() => repeatIteration <= 1);
-            commandMock.Setup(x => x.CanExecute()).Returns(true);
+            commandMock.Setup(x => x.CanExecute()).Returns(new CanExecuteCheckResult { IsSuccess = true });
 
             var command = commandMock.Object;
 
@@ -248,6 +248,8 @@ namespace Zilon.Core.Client.Sector.Tests
             private readonly object _lockObject;
 
             private ICommand _storedCommand;
+
+            public bool IsEmpty { get; }
 
             public TestCommandPool()
             {

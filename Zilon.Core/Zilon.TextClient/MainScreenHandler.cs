@@ -239,7 +239,7 @@ namespace Zilon.TextClient
 
         private static void PushCommandToExecution(ICommandPool commandManager, ICommand command)
         {
-            if (command.CanExecute())
+            if (command.CanExecute().IsSuccess)
             {
                 commandManager.Push(command);
             }

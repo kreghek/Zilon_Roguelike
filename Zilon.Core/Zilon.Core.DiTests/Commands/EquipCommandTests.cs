@@ -59,7 +59,7 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().BeFalse();
+            canExecute.IsSuccess.Should().BeFalse();
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().BeTrue();
+            canExecute.IsSuccess.Should().BeTrue();
         }
 
         /// <summary>
