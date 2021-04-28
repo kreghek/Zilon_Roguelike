@@ -35,7 +35,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public void Update(GameTime gameTime)
         {
-            _moveCounter -= gameTime.ElapsedGameTime.TotalSeconds * 0.5;
+            _moveCounter -= gameTime.ElapsedGameTime.TotalSeconds * 3;
 
             _rootSprite.Position = Vector2.Lerp(_startPosition, _targetPosition, 1 - (float)_moveCounter);
 

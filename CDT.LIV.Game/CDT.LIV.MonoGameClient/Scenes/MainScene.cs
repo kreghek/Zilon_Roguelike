@@ -42,13 +42,13 @@ namespace CDT.LIV.MonoGameClient.Scenes
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
 
                 Components.Add(_sectorViewModel);
+
+                Init();
             }
 
             if (_camera != null && _uiState.ActiveActor != null)
             {
                 _camera.Follow(_uiState.ActiveActor, Game);
-
-                Init();
             }
         }
 
@@ -61,17 +61,17 @@ namespace CDT.LIV.MonoGameClient.Scenes
             using var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
 
-            globeLoopUpdater.ErrorOccured += (s, e) => { Console.WriteLine(e.Exception); };
+            globeLoopUpdater.ErrorOccured += (s, e) => 
+            { 
+                Console.WriteLine(e.Exception.ToString()); 
+            };
 
-            var player = serviceScope.GetRequiredService<IPlayer>();
-            var commandPool = serviceScope.GetRequiredService<ICommandPool>();
-            var humanTaskSource = serviceScope
-                .GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
-            var commandLoopContext =
-                new CommandLoopContext(player, (IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource);
-            var commandLoop = new CommandLoopUpdater(commandLoopContext, commandPool);
+            var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
 
-            commandLoop.ErrorOccured += (s, e) => { Console.WriteLine(e.Exception); };
+            commandLoop.ErrorOccured += (s, e) => 
+            { 
+                Console.WriteLine(e.Exception.ToString());
+            };
             commandLoop.CommandAutoExecuted += (s, e) => { Console.WriteLine("Auto execute last command"); };
             var playerState = serviceScope.GetRequiredService<ISectorUiState>();
             var inventoryState = serviceScope.GetRequiredService<IInventoryState>();

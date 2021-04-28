@@ -29,10 +29,13 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly ISectorUiState _uiState;
         private readonly ICommandPool _commandPool;
         private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly ICommandLoopUpdater _commandLoopUpdater;
         private readonly Zilon.Core.Tactics.ISector _sector;
 
         private readonly MapViewModel _mapViewModel;
         private readonly List<GameObjectBase> _gameObjects;
+
+        private bool _leftMousePressed;
 
         public SectorViewModel(Game game, Camera _camera, SpriteBatch spriteBatch) : base(game)
         {
@@ -45,6 +48,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
             _commandPool = serviceScope.GetRequiredService<ICommandPool>();
             _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            _commandLoopUpdater = serviceScope.GetRequiredService<ICommandLoopUpdater>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -105,7 +109,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 gameObject.Update(gameTime);
             }
 
-            if (!_animationBlockerService.HasBlockers)
+            if (_uiState.CanPlayerGivesCommand)
             {
                 var mouseState = Mouse.GetState();
 
@@ -142,17 +146,27 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     _uiState.HoverViewModel = null;
                 }
 
-                if (mouseState.LeftButton == ButtonState.Pressed && _uiState.HoverViewModel != null)
+                if (!_leftMousePressed 
+                    && mouseState.LeftButton == ButtonState.Pressed
+                    && _uiState.HoverViewModel != null 
+                    && _uiState.CanPlayerGivesCommand)
                 {
+                    _leftMousePressed = true;
+
                     _uiState.SelectedViewModel = _uiState.HoverViewModel;
 
                     var serviceScope = ((LivGame)Game).ServiceProvider;
 
                     var command = serviceScope.GetRequiredService<MoveCommand>();
-                    if (command.CanExecute())
+                    if (command.CanExecute().IsSuccess)
                     {
                         _commandPool.Push(command);
                     }
+                }
+
+                if (_leftMousePressed && mouseState.LeftButton == ButtonState.Released)
+                {
+                    _leftMousePressed = false;
                 }
             }
         }
