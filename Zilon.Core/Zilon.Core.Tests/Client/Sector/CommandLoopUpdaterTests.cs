@@ -249,12 +249,12 @@ namespace Zilon.Core.Client.Sector.Tests
 
             private ICommand _storedCommand;
 
-            public bool IsEmpty { get; }
-
             public TestCommandPool()
             {
                 _lockObject = new object();
             }
+
+            public bool IsEmpty { get; }
 
             public ICommand Pop()
             {
