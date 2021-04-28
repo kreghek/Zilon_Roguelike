@@ -9,12 +9,13 @@ namespace Zilon.Core.Client
 {
     public class SectorUiState : UiStateBase, ISectorUiState
     {
-        private IActorViewModel? _activeActor;
-        private readonly ICommandPool _commandPool;
         private readonly IAnimationBlockerService _animationBlockerService;
         private readonly ICommandLoopUpdater _commandLoopUpdater;
+        private readonly ICommandPool _commandPool;
+        private IActorViewModel? _activeActor;
 
-        public SectorUiState(ICommandPool commandPool, IAnimationBlockerService animationBlockerService, ICommandLoopUpdater commandLoopUpdater)
+        public SectorUiState(ICommandPool commandPool, IAnimationBlockerService animationBlockerService,
+            ICommandLoopUpdater commandLoopUpdater)
         {
             _commandPool = commandPool;
             _animationBlockerService = animationBlockerService;
@@ -42,6 +43,7 @@ namespace Zilon.Core.Client
         public ITacticalAct? TacticalAct { get; set; }
 
         /// <inheritdoc />
-        public bool CanPlayerGivesCommand => _commandPool.IsEmpty && !_animationBlockerService.HasBlockers && !_commandLoopUpdater.HasPendingCommands();
+        public bool CanPlayerGivesCommand => _commandPool.IsEmpty && !_animationBlockerService.HasBlockers &&
+                                             !_commandLoopUpdater.HasPendingCommands();
     }
 }

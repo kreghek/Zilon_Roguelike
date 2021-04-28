@@ -91,7 +91,8 @@ namespace Zilon.Core.Commands
             var targetIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
             if (!targetIsOnLine)
             {
-                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Target is not on line of sight." };
+                return new CanExecuteCheckResult
+                    { IsSuccess = false, FailureReason = "Target is not on line of sight." };
             }
 
             // Проверка наличия ресурсов для выполнения действия
@@ -105,7 +106,8 @@ namespace Zilon.Core.Commands
 
                 if (!hasPropResource)
                 {
-                    return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Has not enought resources to perform act." };
+                    return new CanExecuteCheckResult
+                        { IsSuccess = false, FailureReason = "Has not enought resources to perform act." };
                 }
             }
 

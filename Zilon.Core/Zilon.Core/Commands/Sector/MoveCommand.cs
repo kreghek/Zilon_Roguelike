@@ -17,8 +17,6 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
-        private int _interationIndex;
-
         private readonly IPlayer _player;
 
         /// <summary>
@@ -61,9 +59,6 @@ namespace Zilon.Core.Commands
         /// Текущий путь, по которому будет перемещаться персонаж.
         /// </summary>
         public IList<IGraphNode> Path { get; }
-
-        /// <inheritdoc/>
-        public int RepeatIteration => _interationIndex;
 
         /// <summary>
         /// Выполнение команды на перемещение и обновление игрового цикла.
@@ -226,6 +221,9 @@ namespace Zilon.Core.Commands
             }
         }
 
+        /// <inheritdoc />
+        public int RepeatIteration { get; private set; }
+
         /// <summary>
         /// Определяем, может ли команда выполниться.
         /// </summary>
@@ -249,7 +247,8 @@ namespace Zilon.Core.Commands
 
             if (!pathIsNotEmpty)
             {
-                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Found path is correct or empty." };
+                return new CanExecuteCheckResult
+                    { IsSuccess = false, FailureReason = "Found path is correct or empty." };
             }
 
             return new CanExecuteCheckResult { IsSuccess = true };
@@ -265,10 +264,10 @@ namespace Zilon.Core.Commands
             return canRepeat;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void IncreaceIteration()
         {
-            _interationIndex++;
+            RepeatIteration++;
         }
     }
 }
