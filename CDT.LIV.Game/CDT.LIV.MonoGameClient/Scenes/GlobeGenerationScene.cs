@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Zilon.Core.Client.Sector;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.World;
@@ -74,16 +75,9 @@ namespace CDT.LIV.MonoGameClient.Scenes
                             throw new InvalidOperationException();
                         }
 
-                        var gameLoop = new GameLoop(globe, player);
+                        var gameLoop = serviceScope.GetRequiredService<IGlobeLoopUpdater>();
 
-                        var processTask = gameLoop.StartProcessAsync(CancellationToken.None);
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                        processTask.ContinueWith(task => Console.WriteLine(task.Exception), TaskContinuationOptions.OnlyOnFaulted);
-                        processTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
-                            TaskContinuationOptions.OnlyOnCanceled);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
-
+                        gameLoop.Start();
                     });
 
                     generateGlobeTask.ContinueWith((task) =>
@@ -96,34 +90,6 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
                     }, TaskContinuationOptions.OnlyOnFaulted);
                 }
-            }
-        }
-    }
-
-    internal class GameLoop
-    {
-        private readonly IGlobe _globe;
-        private readonly IPlayer _player;
-
-        public GameLoop(IGlobe globe, IPlayer player)
-        {
-            _globe = globe ?? throw new ArgumentNullException(nameof(globe));
-            _player = player ?? throw new ArgumentNullException(nameof(player));
-        }
-
-        public async Task StartProcessAsync(CancellationToken cancellationToken)
-        {
-            if (_player.MainPerson is null)
-            {
-                return;
-            }
-
-            var playerPersonSurvivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
-            while (!playerPersonSurvivalModule.IsDead)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                await _globe.UpdateAsync(CancellationToken.None).ConfigureAwait(false);
             }
         }
     }

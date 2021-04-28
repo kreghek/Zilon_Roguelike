@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
@@ -26,12 +27,14 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly SpriteBatch _spriteBatch;
         private readonly IPlayer _player;
         private readonly ISectorUiState _uiState;
+        private readonly ICommandPool _commandPool;
+        private readonly IAnimationBlockerService _animationBlockerService;
         private readonly Zilon.Core.Tactics.ISector _sector;
 
         private readonly MapViewModel _mapViewModel;
         private readonly List<GameObjectBase> _gameObjects;
 
-        public SectorViewModel(Game game, Scenes.Camera _camera, SpriteBatch spriteBatch) : base(game)
+        public SectorViewModel(Game game, Camera _camera, SpriteBatch spriteBatch) : base(game)
         {
             this._camera = _camera;
             _spriteBatch = spriteBatch;
@@ -40,6 +43,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _player = serviceScope.GetRequiredService<IPlayer>();
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
+            _commandPool = serviceScope.GetRequiredService<ICommandPool>();
+            _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
             var sector = GetPlayerSectorNode(_player).Sector;
 
             if (sector is null)
@@ -99,51 +105,54 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 gameObject.Update(gameTime);
             }
 
-            var mouseState = Mouse.GetState();
-
-            var inverseCameraTransform = Matrix.Invert(_camera.Transform);
-
-            var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
-
-            var x = (mouseInWorld.X) / UNIT_SIZE;
-            var y = (mouseInWorld.Y) / (UNIT_SIZE / 2);
-
-            var offsetCoords = new OffsetCoords((int)x, (int)y);
-
-            var map = _sector.Map;
-
-            var hoverNode = map.Nodes.OfType<HexNode>()
-                .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
-
-            if (hoverNode != null)
+            if (!_animationBlockerService.HasBlockers)
             {
-                if (_uiState.HoverViewModel is null)
+                var mouseState = Mouse.GetState();
+
+                var inverseCameraTransform = Matrix.Invert(_camera.Transform);
+
+                var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
+
+                var x = (mouseInWorld.X) / UNIT_SIZE;
+                var y = (mouseInWorld.Y) / (UNIT_SIZE / 2);
+
+                var offsetCoords = new OffsetCoords((int)x, (int)y);
+
+                var map = _sector.Map;
+
+                var hoverNode = map.Nodes.OfType<HexNode>()
+                    .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
+
+                if (hoverNode != null)
                 {
-                    _uiState.HoverViewModel = new NodeViewModel(hoverNode);
-                }
-                else
-                {
-                    if (_uiState.HoverViewModel.Item != hoverNode)
+                    if (_uiState.HoverViewModel is null)
                     {
                         _uiState.HoverViewModel = new NodeViewModel(hoverNode);
                     }
+                    else
+                    {
+                        if (_uiState.HoverViewModel.Item != hoverNode)
+                        {
+                            _uiState.HoverViewModel = new NodeViewModel(hoverNode);
+                        }
+                    }
                 }
-            }
-            else
-            {
-                _uiState.HoverViewModel = null;
-            }
-
-            if (mouseState.LeftButton == ButtonState.Pressed && _uiState.HoverViewModel != null)
-            {
-                _uiState.SelectedViewModel = _uiState.HoverViewModel;
-
-                var serviceScope = ((LivGame)Game).ServiceProvider;
-
-                var command = serviceScope.GetRequiredService<MoveCommand>();
-                if (command.CanExecute())
+                else
                 {
-                    command.Execute();
+                    _uiState.HoverViewModel = null;
+                }
+
+                if (mouseState.LeftButton == ButtonState.Pressed && _uiState.HoverViewModel != null)
+                {
+                    _uiState.SelectedViewModel = _uiState.HoverViewModel;
+
+                    var serviceScope = ((LivGame)Game).ServiceProvider;
+
+                    var command = serviceScope.GetRequiredService<MoveCommand>();
+                    if (command.CanExecute())
+                    {
+                        _commandPool.Push(command);
+                    }
                 }
             }
         }

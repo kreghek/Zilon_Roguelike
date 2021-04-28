@@ -6,6 +6,7 @@ using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Players;
@@ -39,6 +40,11 @@ namespace CDT.LIV.MonoGameClient
             serviceContainer.AddScoped<AttackCommand>();
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
             serviceContainer.AddScoped<SectorTransitionMoveCommand>();
+            serviceContainer.AddScoped<ICommandPool, QueueCommandPool>();
+            serviceContainer.AddScoped<IAnimationBlockerService, AnimationBlockerService>();
+
+            serviceContainer.AddSingleton<IGlobeLoopUpdater, GlobeLoopUpdater>();
+            serviceContainer.AddSingleton<IGlobeLoopContext, GlobeLoopContext>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 
