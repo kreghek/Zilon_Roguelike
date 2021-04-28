@@ -17,6 +17,8 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
+        private int _interationIndex;
+
         private readonly IPlayer _player;
 
         /// <summary>
@@ -60,6 +62,9 @@ namespace Zilon.Core.Commands
         /// </summary>
         public IList<IGraphNode> Path { get; }
 
+        /// <inheritdoc/>
+        public int RepeatIteration => _interationIndex;
+
         /// <summary>
         /// Выполнение команды на перемещение и обновление игрового цикла.
         /// </summary>
@@ -98,25 +103,6 @@ namespace Zilon.Core.Commands
             }
 
             taskSource.Intent(moveIntetion, actor);
-        }
-
-        private bool CanExecuteForHover()
-        {
-            var nodeViewModel = GetHoverNodeViewModel();
-            if (nodeViewModel is null)
-            {
-                return false;
-            }
-
-            if (PlayerState.ActiveActor?.Actor is null)
-            {
-                return false;
-            }
-
-            //test
-
-            CreatePath(nodeViewModel);
-            return Path.Any();
         }
 
         private bool CanExecuteForSelected()
@@ -188,6 +174,12 @@ namespace Zilon.Core.Commands
             var startNode = actor.Node;
             var finishNode = targetNode.Node;
 
+            if (startNode == finishNode)
+            {
+                Path.Clear();
+                return;
+            }
+
             var sector = _player.SectorNode.Sector;
             if (sector is null)
             {
@@ -238,24 +230,29 @@ namespace Zilon.Core.Commands
         /// Определяем, может ли команда выполниться.
         /// </summary>
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
             var nodeViewModel = GetHoverNodeViewModel();
             if (nodeViewModel is null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "No hover node." };
             }
 
-            var canExecuteForHover = CanExecuteForHover();
-            if (!canExecuteForHover)
+            if (PlayerState.ActiveActor?.Actor is null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Active actor is not assigned." };
             }
 
             CreatePath(nodeViewModel);
 
             var pathIsNotEmpty = Path.Any();
-            return pathIsNotEmpty;
+
+            if (!pathIsNotEmpty)
+            {
+                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Found path is correct or empty." };
+            }
+
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         /// <summary>
@@ -266,6 +263,12 @@ namespace Zilon.Core.Commands
         {
             var canRepeat = CanExecuteForSelected() && CheckEnemies();
             return canRepeat;
+        }
+
+        /// <inheritdoc/>
+        public void IncreaceIteration()
+        {
+            _interationIndex++;
         }
     }
 }

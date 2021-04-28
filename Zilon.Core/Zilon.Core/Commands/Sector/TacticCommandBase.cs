@@ -13,15 +13,15 @@ namespace Zilon.Core.Commands
         /// <returns>Возвращает реакцию на изменения.</returns>
         protected abstract void ExecuteTacticCommand();
 
-        public abstract bool CanExecute();
+        public abstract CanExecuteCheckResult CanExecute();
 
         public void Execute()
         {
-            var canExecute = CanExecute();
-            if (!canExecute)
+            var canExecuteCheckResult = CanExecute();
+            if (!canExecuteCheckResult.IsSuccess)
             {
                 throw new InvalidOperationException(
-                    "Попытка выполнить команду, которую нельзя выполнять в данный момент.");
+                    $"Attempt to execute the inapplicable command. Reason: {canExecuteCheckResult.FailureReason}.");
             }
 
             ExecuteTacticCommand();

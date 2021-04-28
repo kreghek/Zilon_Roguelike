@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -8,6 +10,16 @@ namespace Zilon.Core.Client
     public class SectorUiState : UiStateBase, ISectorUiState
     {
         private IActorViewModel? _activeActor;
+        private readonly ICommandPool _commandPool;
+        private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly ICommandLoopUpdater _commandLoopUpdater;
+
+        public SectorUiState(ICommandPool commandPool, IAnimationBlockerService animationBlockerService, ICommandLoopUpdater commandLoopUpdater)
+        {
+            _commandPool = commandPool;
+            _animationBlockerService = animationBlockerService;
+            _commandLoopUpdater = commandLoopUpdater;
+        }
 
         /// <inheritdoc />
         public IActorViewModel? ActiveActor
@@ -28,5 +40,8 @@ namespace Zilon.Core.Client
 
         /// <inheritdoc />
         public ITacticalAct? TacticalAct { get; set; }
+
+        /// <inheritdoc />
+        public bool CanPlayerGivesCommand => _commandPool.IsEmpty && !_animationBlockerService.HasBlockers && !_commandLoopUpdater.HasPendingCommands();
     }
 }

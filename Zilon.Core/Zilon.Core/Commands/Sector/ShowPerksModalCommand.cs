@@ -24,9 +24,9 @@ namespace Zilon.Core.Commands
             _playerState = playerState;
         }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
-            return true;
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         public override void Execute()

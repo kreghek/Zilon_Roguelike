@@ -12,5 +12,9 @@
         /// Возвращает true - если команду можно повторить. Иначе, false.
         /// </returns>
         bool CanRepeat();
+
+        int RepeatIteration { get; }
+
+        void IncreaceIteration();
     }
 }

@@ -35,5 +35,7 @@ namespace Zilon.Core.Client
         /// UI-элементов, отображающих статус персонажа игрока.
         /// </summary>
         event EventHandler? ActiveActorChanged;
+
+        bool CanPlayerGivesCommand { get; }
     }
 }

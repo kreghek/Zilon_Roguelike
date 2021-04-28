@@ -10,6 +10,8 @@ namespace Zilon.Core.Commands
         ICommand? Pop();
         void Push(ICommand command);
 
+        bool IsEmpty { get; }
+
         event EventHandler? CommandPushed;
     }
 }
