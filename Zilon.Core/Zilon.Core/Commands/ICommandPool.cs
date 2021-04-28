@@ -7,6 +7,7 @@ namespace Zilon.Core.Commands
     [PublicAPI]
     public interface ICommandPool
     {
+        bool IsEmpty { get; }
         ICommand? Pop();
         void Push(ICommand command);
 

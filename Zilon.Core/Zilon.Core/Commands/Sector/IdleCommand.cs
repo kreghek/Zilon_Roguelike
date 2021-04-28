@@ -22,9 +22,9 @@ namespace Zilon.Core.Commands
             _player = player;
         }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
-            return true;
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         protected override void ExecuteTacticCommand()
@@ -33,7 +33,7 @@ namespace Zilon.Core.Commands
             var activeActor = PlayerState.ActiveActor?.Actor;
             if (activeActor is null)
             {
-                throw new System.InvalidOperationException();
+                throw new InvalidOperationException();
             }
 
             var taskSource = PlayerState.TaskSource;

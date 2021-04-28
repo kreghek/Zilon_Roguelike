@@ -5,6 +5,8 @@
     /// </summary>
     public interface IRepeatableCommand : ICommand
     {
+        int RepeatIteration { get; }
+
         /// <summary>
         /// Метод определяет, может ли команда выполнить очередное повторение.
         /// </summary>
@@ -12,5 +14,7 @@
         /// Возвращает true - если команду можно повторить. Иначе, false.
         /// </returns>
         bool CanRepeat();
+
+        void IncreaceIteration();
     }
 }

@@ -32,17 +32,17 @@ namespace Zilon.Core.Commands
 
         public int? SlotIndex { get; set; }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
             if (_inventoryState.SelectedProp is null)
             {
-                return true;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var equipment = GetInventorySelectedEquipment();
             if (equipment is null && _inventoryState.SelectedProp != null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             // Сломанную экипировку нельзя надевать
@@ -50,7 +50,7 @@ namespace Zilon.Core.Commands
             // Реорганизовать этот код в более понятный.
             if (equipment != null && equipment.Durable.Value <= 0)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             if (SlotIndex == null)
@@ -64,7 +64,7 @@ namespace Zilon.Core.Commands
             var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipment!, slot);
             if (!canEquipInSlot)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var canEquipDual = EquipmentCarrierHelper.CheckDualCompability(equipmentCarrier,
@@ -72,7 +72,7 @@ namespace Zilon.Core.Commands
                 SlotIndex.Value);
             if (!canEquipDual)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var canEquipShield = EquipmentCarrierHelper.CheckShieldCompability(equipmentCarrier,
@@ -81,10 +81,10 @@ namespace Zilon.Core.Commands
 
             if (!canEquipShield)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
-            return true;
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         protected override void ExecuteTacticCommand()

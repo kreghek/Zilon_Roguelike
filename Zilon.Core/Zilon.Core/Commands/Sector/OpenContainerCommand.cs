@@ -24,7 +24,7 @@ namespace Zilon.Core.Commands
             _player = player;
         }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
             var sector = _player.SectorNode.Sector;
             if (sector is null)
@@ -37,7 +37,7 @@ namespace Zilon.Core.Commands
             var actor = PlayerState.ActiveActor?.Actor;
             if (actor is null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var currentNode = actor.Node;
@@ -45,7 +45,7 @@ namespace Zilon.Core.Commands
             var targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var container = targetContainerViewModel.StaticObject;
@@ -56,16 +56,16 @@ namespace Zilon.Core.Commands
             var distance = map.DistanceBetween(currentNode, targetNode);
             if (distance > requiredDistance)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var containerIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
             if (!containerIsOnLine)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
-            return true;
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         protected override void ExecuteTacticCommand()

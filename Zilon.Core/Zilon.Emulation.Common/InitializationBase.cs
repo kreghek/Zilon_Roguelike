@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
@@ -268,8 +269,12 @@ namespace Zilon.Emulation.Common
 
         private static void RegisterClientServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<ISectorUiState, SectorUiState>();
-            serviceCollection.AddSingleton<IInventoryState, InventoryState>();
+            serviceCollection.AddScoped<ISectorUiState, SectorUiState>();
+            serviceCollection.AddScoped<IInventoryState, InventoryState>();
+            serviceCollection.AddScoped<IAnimationBlockerService, AnimationBlockerService>();
+
+            serviceCollection.AddScoped<ICommandLoopContext, CommandLoopContext>();
+            serviceCollection.AddScoped<ICommandLoopUpdater, CommandLoopUpdater>();
         }
 
         private static void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)

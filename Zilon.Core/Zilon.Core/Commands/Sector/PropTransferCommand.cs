@@ -25,9 +25,9 @@ namespace Zilon.Core.Commands
 
         public PropTransferMachine? TransferMachine { get; set; }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
-            return true;
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         protected override void ExecuteTacticCommand()

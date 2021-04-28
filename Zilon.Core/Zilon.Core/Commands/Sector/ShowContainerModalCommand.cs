@@ -25,7 +25,7 @@ namespace Zilon.Core.Commands
             _playerState = playerState;
         }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
             var activeActor = _playerState.ActiveActor!;
 
@@ -35,7 +35,7 @@ namespace Zilon.Core.Commands
             var container = targetContainerViewModel?.StaticObject;
             var containerContent = container?.GetModule<IPropContainer>().Content;
 
-            return inventory != null && containerContent != null;
+            return new CanExecuteCheckResult { IsSuccess = inventory != null && containerContent != null };
         }
 
         public override void Execute()
