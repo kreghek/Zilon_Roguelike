@@ -92,7 +92,7 @@ namespace Zilon.Core.Commands
             if (!targetIsOnLine)
             {
                 return new CanExecuteCheckResult
-                    { IsSuccess = false, FailureReason = "Target is not on line of sight." };
+                { IsSuccess = false, FailureReason = "Target is not on line of sight." };
             }
 
             // Проверка наличия ресурсов для выполнения действия
@@ -107,7 +107,7 @@ namespace Zilon.Core.Commands
                 if (!hasPropResource)
                 {
                     return new CanExecuteCheckResult
-                        { IsSuccess = false, FailureReason = "Has not enought resources to perform act." };
+                    { IsSuccess = false, FailureReason = "Has not enought resources to perform act." };
                 }
             }
 
