@@ -30,7 +30,7 @@ public class MovePathVisualizer : MonoBehaviour
         var moveCommand = (MoveCommand)_moveCommand;
         var canMove = _moveCommand.CanExecute();
 
-        if (!canMove)
+        if (!canMove.IsSuccess)
         {
             // If the player person can move then just returns.
             // There is no path will show because visualization cleared at start of the method.

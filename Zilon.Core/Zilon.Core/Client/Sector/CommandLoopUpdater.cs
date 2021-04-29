@@ -127,7 +127,7 @@ namespace Zilon.Core.Client.Sector
                 {
                     if (!_commandLoopContext.CanPlayerGiveCommand)
                     {
-                        await Task.Delay(100);
+                        await Task.Delay(100).ConfigureAwait(false);
                         continue;
                     }
 
@@ -140,7 +140,7 @@ namespace Zilon.Core.Client.Sector
                         ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
                     }
 
-                    await Task.Delay(100);
+                    await Task.Delay(100).ConfigureAwait(false);
                 }
             }, cancellationToken);
         }

@@ -27,9 +27,9 @@ namespace Assets.Zilon.Scripts.Commands
         [NotNull]
         private readonly IAnimationBlockerService _commandBlockerService;
 
-        public bool CanExecute()
+        public CanExecuteCheckResult CanExecute()
         {
-            return true;
+            return CanExecuteCheckResult.CreateSuccessful();
         }
 
         public void Execute()

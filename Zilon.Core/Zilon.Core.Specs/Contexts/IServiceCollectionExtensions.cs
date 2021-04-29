@@ -3,6 +3,7 @@
 using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.RoomStyle;
@@ -22,8 +23,13 @@ namespace Zilon.Core.Specs.Contexts
     {
         public static void RegisterClientServices(this ServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<ISectorUiState, SectorUiState>();
-            serviceCollection.AddSingleton<IInventoryState, InventoryState>();
+            serviceCollection.AddScoped<ISectorUiState, SectorUiState>();
+            serviceCollection.AddScoped<IInventoryState, InventoryState>();
+            serviceCollection.AddScoped<IAnimationBlockerService, AnimationBlockerService>();
+
+            serviceCollection.AddScoped<ICommandLoopContext, CommandLoopContext>();
+            serviceCollection.AddScoped<ICommandLoopUpdater, CommandLoopUpdater>();
+            serviceCollection.AddScoped<ICommandPool, QueueCommandPool>();
         }
 
         public static void RegisterCommands(this ServiceCollection serviceCollection)

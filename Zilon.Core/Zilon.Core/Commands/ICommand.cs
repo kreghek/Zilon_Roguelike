@@ -19,10 +19,4 @@
         /// </summary>
         void Execute();
     }
-
-    public struct CanExecuteCheckResult
-    {
-        public string FailureReason { get; set; }
-        public bool IsSuccess { get; set; }
-    }
 }

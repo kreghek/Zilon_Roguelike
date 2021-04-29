@@ -69,7 +69,7 @@ public class DoubleClickPropHandler : MonoBehaviour, IPointerDownHandler
         for (var slotIndex = 0; slotIndex < personSlots.Length; slotIndex++)
         {
             var equipCommand = _specialCommandManager.GetEquipCommand(slotIndex);
-            if (equipCommand.CanExecute())
+            if (equipCommand.CanExecute().IsSuccess)
             {
                 _commandPool.Push(equipCommand);
 

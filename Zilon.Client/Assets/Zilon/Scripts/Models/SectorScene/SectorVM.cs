@@ -410,16 +410,16 @@ public class SectorVM : MonoBehaviour
 
         if (containerViewModel.Container.HasModule<IPropContainer>() &&
             containerViewModel.Container.GetModule<IPropContainer>().IsActive &&
-            _openContainerCommand.CanExecute())
+            _openContainerCommand.CanExecute().IsSuccess)
         {
             _commandPool.Push(_openContainerCommand);
         }
         else if (containerViewModel.Container.HasModule<IPropDepositModule>() &&
-            _mineDepositCommand.CanExecute())
+            _mineDepositCommand.CanExecute().IsSuccess)
         {
             _commandPool.Push(_mineDepositCommand);
         }
-        else if (_attackCommand.CanExecute())
+        else if (_attackCommand.CanExecute().IsSuccess)
         {
             _commandPool.Push(_attackCommand);
         }
@@ -604,7 +604,7 @@ public class SectorVM : MonoBehaviour
 
         _playerState.SelectedViewModel = actorViewModel;
 
-        if (_attackCommand.CanExecute())
+        if (_attackCommand.CanExecute().IsSuccess)
         {
             _commandPool.Push(_attackCommand);
         }
@@ -759,7 +759,7 @@ public class SectorVM : MonoBehaviour
         _playerState.SelectedViewModel = nodeVm;
         _playerState.HoverViewModel = nodeVm;
 
-        if (_moveCommand.CanExecute())
+        if (_moveCommand.CanExecute().IsSuccess)
         {
             _commandPool.Push(_moveCommand);
         }

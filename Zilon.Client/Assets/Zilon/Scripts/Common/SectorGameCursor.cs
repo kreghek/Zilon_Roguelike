@@ -68,14 +68,14 @@ public class SectorGameCursor : MonoBehaviour
         }
         else if (_playerState.HoverViewModel is IMapNodeViewModel)
         {
-            if (!_moveCommand.CanExecute())
+            if (!_moveCommand.CanExecute().IsSuccess)
             {
                 SpriteRenderer.sprite = CantMoveCursorSprite;
             }
         }
         else if (_playerState.HoverViewModel is IActorViewModel)
         {
-            if (_attackCommand.CanExecute())
+            if (_attackCommand.CanExecute().IsSuccess)
             {
                 SpriteRenderer.sprite = AttackCursorSprite;
             }

@@ -38,7 +38,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
 
-            moveCommand.CanExecute().Should().BeTrue();
+            moveCommand.CanExecute().IsSuccess.Should().BeTrue();
         }
 
         [Then(@"Команда на перемещение не может выполняться")]
@@ -46,7 +46,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
 
-            moveCommand.CanExecute().Should().BeFalse();
+            moveCommand.CanExecute().IsSuccess.Should().BeFalse();
         }
 
         [When(@"Выполняется команда на перемещение")]

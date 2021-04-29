@@ -301,7 +301,7 @@ public class InventoryHandler : MonoBehaviour
 
     private void UpdateUseControlsState(PropItemVm currentItemViewModel)
     {
-        if (currentItemViewModel?.Prop is null)
+        if (currentItemViewModel is null || currentItemViewModel.Prop is null)
         {
             UseButton.SetActive(false);
             ReadButton.SetActive(false);
@@ -310,7 +310,7 @@ public class InventoryHandler : MonoBehaviour
 
         if (currentItemViewModel.SelectAsDrag
             && currentItemViewModel.Prop.Scheme.Use != null
-            && _useSelfCommand.CanExecute())
+            && _useSelfCommand.CanExecute().IsSuccess)
         {
             UseButton.SetActive(false);
             ReadButton.SetActive(false);
@@ -323,10 +323,10 @@ public class InventoryHandler : MonoBehaviour
 
             var currentItem = currentItemViewModel.Prop;
 
-            var canUseProp = currentItem.Scheme.Use != null && _useSelfCommand.CanExecute();
+            var canUseProp = currentItem.Scheme.Use != null && _useSelfCommand.CanExecute().IsSuccess;
             UseButton.SetActive(canUseProp);
 
-            var canRead = CanRead() && _useSelfCommand.CanExecute();
+            var canRead = CanRead() && _useSelfCommand.CanExecute().IsSuccess;
             ReadButton.SetActive(canRead);
         }
     }
