@@ -24,5 +24,15 @@
     {
         public string FailureReason { get; set; }
         public bool IsSuccess { get; set; }
+
+        public static CanExecuteCheckResult CreateFailed(string failureReason)
+        {
+            return new CanExecuteCheckResult { IsSuccess = false, FailureReason = failureReason };
+        }
+
+        public static CanExecuteCheckResult CreateSuccessful()
+        {
+            return new CanExecuteCheckResult { IsSuccess = true };
+        }
     }
 }
