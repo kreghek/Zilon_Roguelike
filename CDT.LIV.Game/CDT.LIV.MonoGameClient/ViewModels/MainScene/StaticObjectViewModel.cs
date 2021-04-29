@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -27,6 +28,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public IStaticObject StaticObject { get; set; }
         public object Item => StaticObject;
+
+        public override bool HiddenByFow => false;
+        public override IGraphNode Node => StaticObject.Node;
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {

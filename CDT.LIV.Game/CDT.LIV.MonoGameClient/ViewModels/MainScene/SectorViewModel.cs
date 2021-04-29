@@ -13,6 +13,7 @@ using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
@@ -63,7 +64,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                                where actor.Person == _player.MainPerson
                                select actor).SingleOrDefault();
 
-            _mapViewModel = new MapViewModel(game, _uiState, _sector, spriteBatch);
+            _mapViewModel = new MapViewModel(game, _player, _uiState, _sector, spriteBatch);
             
             _gameObjects = new List<GameObjectBase>();
 
@@ -93,8 +94,33 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _mapViewModel.Draw(_camera.Transform);
 
+            if (_player.MainPerson is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var fowData = _player.MainPerson.GetModule<IFowData>();
+            var visibleFowNodeData = fowData.GetSectorFowData(_sector);
+
+            if (visibleFowNodeData is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             foreach (var gameObject in _gameObjects)
             {
+                var fowNode = visibleFowNodeData.Nodes.SingleOrDefault(x=>x.Node == gameObject.Node);
+
+                if (fowNode is null)
+                {
+                    continue;
+                }
+
+                if (fowNode.State != Zilon.Core.Tactics.SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
+                {
+                    continue;
+                }
+
                 gameObject.Draw(gameTime, _camera.Transform);
             }
         }

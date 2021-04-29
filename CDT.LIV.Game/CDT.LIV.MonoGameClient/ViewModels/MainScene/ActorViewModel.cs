@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -121,6 +122,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public IActor Actor { get; set; }
         public object Item => Actor;
+
+        public override bool HiddenByFow => true;
+        public override IGraphNode Node => Actor.Node;
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {
