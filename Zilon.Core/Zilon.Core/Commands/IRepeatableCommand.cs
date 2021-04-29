@@ -5,6 +5,9 @@
     /// </summary>
     public interface IRepeatableCommand : ICommand
     {
+        /// <summary>
+        /// Iteration of command in auto-execution. Used to debug.
+        /// </summary>
         int RepeatIteration { get; }
 
         /// <summary>
@@ -15,6 +18,9 @@
         /// </returns>
         bool CanRepeat();
 
+        /// <summary>
+        /// Fix next iteration of command in aut-execution. Used to debug in <see cref="CommandLoopUpdater"/>.
+        /// </summary>
         void IncreaceIteration();
     }
 }
