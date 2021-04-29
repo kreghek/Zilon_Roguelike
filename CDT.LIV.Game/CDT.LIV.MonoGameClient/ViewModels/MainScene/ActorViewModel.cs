@@ -3,11 +3,14 @@ using System.Linq;
 
 using CDT.LIV.MonoGameClient.Engine;
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -25,7 +28,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private double _idleAnimationCounter;
 
-        private Container _rootSprite;
+        private readonly Container _rootSprite;
+
+        private ActorMoveEngine? _actorMoveEngine;
 
         public ActorViewModel(Game game, IActor actor, SpriteBatch spriteBatch)
         {
@@ -95,10 +100,31 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 Position = new Vector2(10, -0),
                 ScaleScalar = 0.25f
             });
+
+            Actor.Moved += Actor_Moved;
+        }
+
+        private void Actor_Moved(object? sender, EventArgs e)
+        {
+            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
+            var newPosition = new Vector2(
+                (int)(playerActorWorldCoords[0] * UNIT_SIZE),
+                (int)(playerActorWorldCoords[1] * UNIT_SIZE / 2)
+                );
+
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+            var moveEngine = new ActorMoveEngine(_rootSprite, newPosition, animationBlockerService);
+            _actorMoveEngine = moveEngine;
         }
 
         public IActor Actor { get; set; }
         public object Item => Actor;
+
+        public override bool HiddenByFow => true;
+        public override IGraphNode Node => Actor.Node;
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {
@@ -115,12 +141,22 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public override void Update(GameTime gameTime)
         {
-            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
-
-            _rootSprite.Position = new Vector2(
-                (int)(playerActorWorldCoords[0] * UNIT_SIZE),
-                (int)(playerActorWorldCoords[1] * UNIT_SIZE / 2)
-                );
+            if (_actorMoveEngine != null)
+            {
+                _actorMoveEngine.Update(gameTime);
+                if (_actorMoveEngine.IsComplete)
+                {
+                    _actorMoveEngine = null;
+                }
+            }
+            else
+            {
+                var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
+                _rootSprite.Position = new Vector2(
+                    (int)(playerActorWorldCoords[0] * UNIT_SIZE),
+                    (int)(playerActorWorldCoords[1] * UNIT_SIZE / 2)
+                    );
+            }
         }
     }
 }
