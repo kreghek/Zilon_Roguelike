@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Zilon.Core.Commands
 {
-    public struct CanExecuteCheckResult: IEquatable<CanExecuteCheckResult>
+    public struct CanExecuteCheckResult : IEquatable<CanExecuteCheckResult>
     {
         public string FailureReason { get; set; }
         public bool IsSuccess { get; set; }
