@@ -31,8 +31,8 @@ namespace Zilon.Core.Commands
         public override int GetHashCode()
         {
             var hashCode = 1458907301;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FailureReason);
-            hashCode = hashCode * -1521134295 + IsSuccess.GetHashCode();
+            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(FailureReason);
+            hashCode = (hashCode * -1521134295) + IsSuccess.GetHashCode();
             return hashCode;
         }
 
