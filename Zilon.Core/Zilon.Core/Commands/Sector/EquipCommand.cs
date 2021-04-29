@@ -36,11 +36,17 @@ namespace Zilon.Core.Commands
         {
             if (_inventoryState.SelectedProp is null)
             {
-                return new CanExecuteCheckResult { IsSuccess = false };
+                // Means equipment will be unequiped from the slot (specified in command).
+                return CanExecuteCheckResult.CreateSuccessful();
             }
 
-            var equipment = GetInventorySelectedEquipment();
-            if (equipment is null && _inventoryState.SelectedProp != null)
+            if (SlotIndex is null)
+            {
+                throw new InvalidOperationException("Для команды не указан слот.");
+            }
+
+            var equipmentFromInventory = GetSelectedEquipmentInInventory();
+            if (equipmentFromInventory is null && _inventoryState.SelectedProp != null)
             {
                 return new CanExecuteCheckResult { IsSuccess = false };
             }
@@ -48,27 +54,22 @@ namespace Zilon.Core.Commands
             // Сломанную экипировку нельзя надевать
             //TODO Тут есть замечание, что equipment не проверяется.
             // Реорганизовать этот код в более понятный.
-            if (equipment != null && equipment.Durable.Value <= 0)
+            if (equipmentFromInventory != null && equipmentFromInventory.Durable.Value <= 0)
             {
                 return new CanExecuteCheckResult { IsSuccess = false };
-            }
-
-            if (SlotIndex == null)
-            {
-                throw new InvalidOperationException("Для команды не указан слот.");
             }
 
             var equipmentCarrier = PlayerState.ActiveActor!.Actor.Person.GetModule<IEquipmentModule>();
             var slot = equipmentCarrier.Slots[SlotIndex.Value];
 
-            var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipment!, slot);
+            var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipmentFromInventory!, slot);
             if (!canEquipInSlot)
             {
                 return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var canEquipDual = EquipmentCarrierHelper.CheckDualCompability(equipmentCarrier,
-                equipment!,
+                equipmentFromInventory!,
                 SlotIndex.Value);
             if (!canEquipDual)
             {
@@ -76,7 +77,7 @@ namespace Zilon.Core.Commands
             }
 
             var canEquipShield = EquipmentCarrierHelper.CheckShieldCompability(equipmentCarrier,
-                equipment!,
+                equipmentFromInventory!,
                 SlotIndex.Value);
 
             if (!canEquipShield)
@@ -89,12 +90,12 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
-            if (SlotIndex == null)
+            if (SlotIndex is null)
             {
                 throw new InvalidOperationException("Для команды не указан слот.");
             }
 
-            var equipment = GetInventorySelectedEquipment();
+            var equipment = GetSelectedEquipmentInInventory();
 
             var sector = _player.SectorNode.Sector;
             if (sector is null)
@@ -120,10 +121,10 @@ namespace Zilon.Core.Commands
             taskSource.Intent(intention, activeActor);
         }
 
-        private Equipment? GetInventorySelectedEquipment()
+        private Equipment? GetSelectedEquipmentInInventory()
         {
             var propVieModel = _inventoryState.SelectedProp;
-            if (propVieModel == null)
+            if (propVieModel is null)
             {
                 return null;
             }
