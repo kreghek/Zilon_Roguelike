@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
@@ -275,6 +276,7 @@ namespace Zilon.Emulation.Common
 
             serviceCollection.AddScoped<ICommandLoopContext, CommandLoopContext>();
             serviceCollection.AddScoped<ICommandLoopUpdater, CommandLoopUpdater>();
+            serviceCollection.AddScoped<ICommandPool, QueueCommandPool>();
         }
 
         private static void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
@@ -289,6 +291,9 @@ namespace Zilon.Emulation.Common
             {
                 return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
             });
+
+            serviceCollection.AddSingleton<IGlobeLoopUpdater, GlobeLoopUpdater>();
+            serviceCollection.AddSingleton<IGlobeLoopContext, GlobeLoopContext>();
         }
 
         private static void RegisterPlayerServices(IServiceCollection serviceCollection)
