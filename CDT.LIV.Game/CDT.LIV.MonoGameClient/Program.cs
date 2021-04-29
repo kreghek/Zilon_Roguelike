@@ -30,10 +30,6 @@ namespace CDT.LIV.MonoGameClient
             serviceContainer.AddScoped<AttackCommand>();
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
             serviceContainer.AddScoped<SectorTransitionMoveCommand>();
-            serviceContainer.AddScoped<ICommandPool, QueueCommandPool>();
-
-            serviceContainer.AddSingleton<IGlobeLoopUpdater, GlobeLoopUpdater>();
-            serviceContainer.AddSingleton<IGlobeLoopContext, GlobeLoopContext>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 
