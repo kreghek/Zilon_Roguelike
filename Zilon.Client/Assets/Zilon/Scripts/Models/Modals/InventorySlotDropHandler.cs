@@ -21,7 +21,7 @@ public class InventorySlotDropHandler : UIBehaviour, IDropHandler
 
         var equipCommand = _specialCommandManager.GetEquipCommand(slotIndex);
 
-        if (equipCommand.CanExecute())
+        if (equipCommand.CanExecute().IsSuccess)
         {
             var propItemViewModelObject = eventData.pointerDrag;
             if (propItemViewModelObject is null)

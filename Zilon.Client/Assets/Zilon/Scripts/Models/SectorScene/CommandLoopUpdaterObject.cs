@@ -44,7 +44,7 @@ public class CommandLoopUpdaterObject : MonoBehaviour
 
                 if (command is IRepeatableCommand repeatableCommand)
                 {
-                    if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute())
+                    if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
                     {
                         _commandPool.Push(repeatableCommand);
                     }
