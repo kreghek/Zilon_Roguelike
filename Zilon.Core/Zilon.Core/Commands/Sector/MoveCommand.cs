@@ -7,7 +7,6 @@ using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
@@ -67,7 +66,7 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var selectedNodeVm = GetSelectedNodeViewModel();
-            if (selectedNodeVm == null)
+            if (selectedNodeVm is null)
             {
                 throw new InvalidOperationException(
                     "Невозможно выполнить команду на перемещение, если не указан целевой узел.");
@@ -77,10 +76,47 @@ namespace Zilon.Core.Commands
 
             var targetNode = selectedNodeVm.Node;
 
-            var currentSector = _player.SectorNode.Sector;
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var currentSector = sector;
 
             var moveIntetion = new MoveIntention(targetNode, currentSector);
-            PlayerState.TaskSource.Intent(moveIntetion, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState?.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(moveIntetion, actor);
+        }
+
+        private bool CanExecuteForHover()
+        {
+            var nodeViewModel = GetHoverNodeViewModel();
+            if (nodeViewModel is null)
+            {
+                return false;
+            }
+
+            if (PlayerState.ActiveActor?.Actor is null)
+            {
+                return false;
+            }
+
+            //test
+
+            CreatePath(nodeViewModel);
+            return Path.Any();
         }
 
         private bool CanExecuteForSelected()
@@ -104,8 +140,19 @@ namespace Zilon.Core.Commands
 
         private bool CheckEnemies()
         {
-            var actor = PlayerState.ActiveActor.Actor;
-            var enemies = _player.SectorNode.Sector.ActorManager.Items
+            var actor = PlayerState?.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var enemies = sector.ActorManager.Items
                 .Where(x => x != actor && x.Person.Fraction != actor.Person.Fraction).ToArray();
 
             foreach (var enemyActor in enemies)
@@ -117,7 +164,7 @@ namespace Zilon.Core.Commands
                     continue;
                 }
 
-                var isAvailable = _player.SectorNode.Sector.Map.TargetIsOnLine(
+                var isAvailable = sector.Map.TargetIsOnLine(
                     actor.Node,
                     enemyActor.Node);
 
@@ -132,10 +179,22 @@ namespace Zilon.Core.Commands
 
         private void CreatePath(IMapNodeViewModel targetNode)
         {
-            var actor = PlayerState.ActiveActor.Actor;
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var startNode = actor.Node;
             var finishNode = targetNode.Node;
-            var map = _player.SectorNode.Sector.Map;
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var map = sector.Map;
 
             Path.Clear();
 
@@ -156,12 +215,12 @@ namespace Zilon.Core.Commands
             RememberFoundPath(astar);
         }
 
-        private IMapNodeViewModel GetHoverNodeViewModel()
+        private IMapNodeViewModel? GetHoverNodeViewModel()
         {
             return PlayerState.HoverViewModel as IMapNodeViewModel;
         }
 
-        private IMapNodeViewModel GetSelectedNodeViewModel()
+        private IMapNodeViewModel? GetSelectedNodeViewModel()
         {
             return PlayerState.SelectedViewModel as IMapNodeViewModel;
         }
@@ -182,18 +241,21 @@ namespace Zilon.Core.Commands
         public override bool CanExecute()
         {
             var nodeViewModel = GetHoverNodeViewModel();
-            if (nodeViewModel == null)
+            if (nodeViewModel is null)
             {
                 return false;
             }
 
-            if (!CanExecuteForSelected())
+            var canExecuteForHover = CanExecuteForHover();
+            if (!canExecuteForHover)
             {
                 return false;
             }
 
             CreatePath(nodeViewModel);
-            return Path.Any();
+
+            var pathIsNotEmpty = Path.Any();
+            return pathIsNotEmpty;
         }
 
         /// <summary>

@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Core.Commands
@@ -46,15 +45,23 @@ namespace Zilon.Core.Commands
                 throw new AppException("Попытка использовать предмет, для которого нет информации об использовании.");
             }
 
-            // На использование лагеря отдельная логика.
-            // Отдыхать можно только есть в секторе не осталось монстров.
-            if (prop.Scheme.Sid == "camp-tools")
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
             {
-                var enemiesInSector = _player.SectorNode.Sector.ActorManager.Items.Where(x => x != CurrentActor);
-                if (enemiesInSector.Any())
-                {
-                    return false;
-                }
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var isAllowed = UsePropHelper.CheckPropAllowedByRestrictions(prop, actor, taskContext);
+            if (!isAllowed)
+            {
+                return false;
             }
 
             return true;
@@ -63,12 +70,34 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var propVm = _inventoryState.SelectedProp;
-            var usableProp = propVm.Prop;
+            var usableProp = propVm?.Prop;
+            if (usableProp is null)
+            {
+                throw new InvalidOperationException();
+            }
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
 
             var intention = new Intention<UsePropTask>(actor => new UsePropTask(actor, taskContext, usableProp));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var taskSource = PlayerState?.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var actor = PlayerState?.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, actor);
         }
     }
 }

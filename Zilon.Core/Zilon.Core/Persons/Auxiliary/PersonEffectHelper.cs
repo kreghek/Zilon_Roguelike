@@ -29,7 +29,7 @@ namespace Zilon.Core.Persons.Auxiliary
             [NotNull] SurvivalStat stat,
             [NotNull][ItemNotNull] SurvivalStatKeySegment[] keySegments,
             [NotNull] ISurvivalRandomSource survivalRandomSource,
-            [NotNull] IPlayerEventLogService playerEventLogService)
+            [CanBeNull] IPlayerEventLogService? playerEventLogService)
         {
             ThrowExceptionIfArgumentsInvalid(currentEffects, stat, keySegments, survivalRandomSource);
 

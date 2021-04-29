@@ -68,7 +68,7 @@ namespace Zilon.Core.Tactics
             DoRemoved(entityArray);
         }
 
-        public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Added;
-        public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>> Removed;
+        public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>>? Added;
+        public event EventHandler<ManagerItemsChangedEventArgs<TSectorEntity>>? Removed;
     }
 }

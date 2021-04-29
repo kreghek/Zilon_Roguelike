@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Zilon.Core.Graphs;
@@ -56,6 +57,11 @@ namespace Zilon.Core.World
             var startPersons = await _personInitializer.CreateStartPersonsAsync(globe).ConfigureAwait(false);
 
             var sector = startSectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var personCounter = 0;
             foreach (var person in startPersons)
             {

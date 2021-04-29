@@ -9,45 +9,38 @@ namespace Zilon.Core.ScoreResultGenerating
 {
     public class DeathReasonService : IDeathReasonService
     {
-        private static string GetActorName(PlayerDamagedEvent playerDamagedEvent, Language language)
+        private static string? GetDamagerName(PlayerDamagedEvent playerDamagedEvent, Language language)
         {
             var monsterPerson = playerDamagedEvent?.Damager?.Person as MonsterPerson;
 
-            if (monsterPerson == null)
+            if (monsterPerson is null)
             {
                 throw new InvalidOperationException();
             }
 
-            switch (language)
+            return language switch
             {
-                case Language.Ru:
-                    return monsterPerson.Scheme.Name.Ru;
-
-                case Language.En:
-                    return monsterPerson.Scheme.Name.En;
-                default:
-                    throw new InvalidOperationException();
-            }
+                Language.Ru => monsterPerson.Scheme.Name?.Ru ?? monsterPerson.Scheme.Sid,
+                Language.En => monsterPerson.Scheme.Name?.En ?? monsterPerson.Scheme.Sid,
+                _ => throw new InvalidOperationException()
+            };
         }
 
-        private static string GetDeathReasonString(IPlayerEvent dominateEvent, Language language)
+        private static string? GetDeathReasonString(IPlayerEvent dominateEvent, Language language)
         {
             if (dominateEvent is null)
             {
                 return null;
             }
 
-            switch (dominateEvent)
+            return dominateEvent switch
             {
-                case PlayerDamagedEvent playerDamagedEvent:
-                    return GetActorName(playerDamagedEvent, language);
-
-                case SurvivalEffectDamageEvent survivalEffectDamageEvent:
-                    return GetSurvivalEffectName(survivalEffectDamageEvent, language);
-
-                default:
-                    throw new InvalidOperationException();
-            }
+                PlayerDamagedEvent playerDamagedEvent => GetDamagerName(playerDamagedEvent, language),
+                SurvivalEffectDamageEvent survivalEffectDamageEvent => GetSurvivalEffectName(survivalEffectDamageEvent,
+                    language),
+                EndOfLifeEvent _ => "End of Life",
+                _ => throw new InvalidOperationException()
+            };
         }
 
         private static string GetSurvivalEffectName(SurvivalEffectDamageEvent survivalEffectDamageEvent,
@@ -56,44 +49,32 @@ namespace Zilon.Core.ScoreResultGenerating
             switch (survivalEffectDamageEvent.Effect.Type)
             {
                 case SurvivalStatType.Satiety:
-                    switch (language)
+                    return language switch
                     {
-                        case Language.Ru:
-                            return "Голод";
-                        case Language.En:
-                            return "Hunger";
-                        default:
-                            throw new InvalidOperationException();
-                    }
-
+                        Language.Ru => "Голод",
+                        Language.En => "Hunger",
+                        _ => throw new InvalidOperationException()
+                    };
                 case SurvivalStatType.Hydration:
-                    switch (language)
+                    return language switch
                     {
-                        case Language.Ru:
-                            return "Жажда";
-                        case Language.En:
-                            return "Thirst";
-                        default:
-                            throw new InvalidOperationException();
-                    }
-
+                        Language.Ru => "Жажда",
+                        Language.En => "Thirst",
+                        _ => throw new InvalidOperationException()
+                    };
                 case SurvivalStatType.Intoxication:
-                    switch (language)
+                    return language switch
                     {
-                        case Language.Ru:
-                            return "Токсикация";
-                        case Language.En:
-                            return "Intoxication";
-                        default:
-                            throw new InvalidOperationException();
-                    }
-
+                        Language.Ru => "Токсикация",
+                        Language.En => "Intoxication",
+                        _ => throw new InvalidOperationException()
+                    };
                 default:
                     throw new InvalidOperationException();
             }
         }
 
-        public string GetDeathReasonSummary(IPlayerEvent playerEvent, Language language)
+        public string? GetDeathReasonSummary(IPlayerEvent playerEvent, Language language)
         {
             if (playerEvent is null)
             {

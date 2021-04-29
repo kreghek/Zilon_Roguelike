@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.PersonModules
 {
@@ -10,8 +11,8 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public sealed class MonsterMovingModule : IMovingModule
     {
-        private const int BASE_MOVE_SPEED = 1000;
         private readonly IMonsterScheme _monsterScheme;
+        private readonly int BASE_MOVE_SPEED = GlobeMetrics.OneIterationLength;
 
         public MonsterMovingModule(IMonsterScheme monsterScheme)
         {
@@ -23,13 +24,27 @@ namespace Zilon.Core.PersonModules
 
         public int CalculateCost()
         {
-            var moveSpeed = _monsterScheme.BaseMoveSpeed;
-            if (moveSpeed == 0)
+            var moveSpeedFactor = _monsterScheme.MoveSpeedFactor.GetValueOrDefault();
+            if (moveSpeedFactor == 0)
             {
-                moveSpeed = BASE_MOVE_SPEED;
+                moveSpeedFactor = 1;
             }
 
-            return moveSpeed;
+            var baseMoveSpeedFloat = (float)BASE_MOVE_SPEED;
+            var moveCostFloat = baseMoveSpeedFloat / moveSpeedFactor;
+            var moveCost = (int)Math.Round(moveCostFloat);
+
+            if (moveCost < GlobeMetrics.MinMonsterMoveCost)
+            {
+                return GlobeMetrics.MinMonsterMoveCost;
+            }
+
+            if (moveCost > GlobeMetrics.MaxMonsterMoveCost)
+            {
+                return GlobeMetrics.MaxMonsterMoveCost;
+            }
+
+            return moveCost;
         }
     }
 }

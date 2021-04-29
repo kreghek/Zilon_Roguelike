@@ -37,10 +37,8 @@ namespace Zilon.Core.Tactics
             ITacticalActUsageRandomSource actUsageRandomSource,
             IActUsageHandlerSelector actUsageHandlerSelector)
         {
-            _actUsageRandomSource =
-                actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
-            _actUsageHandlerSelector = actUsageHandlerSelector ??
-                                       throw new ArgumentNullException(nameof(actUsageHandlerSelector));
+            _actUsageRandomSource = actUsageRandomSource;
+            _actUsageHandlerSelector = actUsageHandlerSelector;
         }
 
         public TacticalActUsageService(
@@ -48,12 +46,11 @@ namespace Zilon.Core.Tactics
             IActUsageHandlerSelector actUsageHandlerSelector,
             IEquipmentDurableService equipmentDurableService) : this(actUsageRandomSource, actUsageHandlerSelector)
         {
-            EquipmentDurableService = equipmentDurableService ??
-                                      throw new ArgumentNullException(nameof(equipmentDurableService));
+            EquipmentDurableService = equipmentDurableService;
         }
 
         /// <summary>Сервис для работы с прочностью экипировки.</summary>
-        public IEquipmentDurableService EquipmentDurableService { get; set; }
+        public IEquipmentDurableService? EquipmentDurableService { get; set; }
 
         /// <summary>
         /// Возвращает случайное значение эффективность действия.
@@ -118,12 +115,12 @@ namespace Zilon.Core.Tactics
         {
             var propResources = from prop in actor.Person.GetModule<IInventoryModule>().CalcActualItems()
                                 where prop is Resource
-                                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
+                                where prop.Scheme.Bullet?.Caliber == act.Constrains?.PropResourceType
                                 select prop;
 
             if (propResources.FirstOrDefault() is Resource propResource)
             {
-                if (propResource.Count >= act.Constrains.PropResourceCount)
+                if (propResource.Count >= act.Constrains?.PropResourceCount)
                 {
                     var usedResource = new Resource(propResource.Scheme, act.Constrains.PropResourceCount.Value);
                     actor.Person.GetModule<IInventoryModule>().Remove(usedResource);
@@ -138,43 +135,6 @@ namespace Zilon.Core.Tactics
             {
                 throw new InvalidOperationException(
                     $"Не хватает ресурса {act.Constrains?.PropResourceType} для использования действия {act}.");
-            }
-        }
-
-        private static bool SectorHasAttackedActor(ISector sector, IAttackTarget target)
-        {
-            if (sector.ActorManager is null)
-            {
-                // In test environment not all sector mocks has actor manager
-                return true;
-            }
-
-            return sector.ActorManager.Items.Any(x => ReferenceEquals(x, target));
-        }
-
-        private static bool SectorHasAttackedStaticObject(ISector sector, IAttackTarget target)
-        {
-            if (sector.StaticObjectManager is null)
-            {
-                // In test environment not all sector mocks has actor manager
-                return true;
-            }
-
-            return sector.StaticObjectManager.Items.Any(x => ReferenceEquals(x, target));
-        }
-
-        private static bool SectorHasAttackTarget(ISector sector, IAttackTarget target)
-        {
-            switch (target)
-            {
-                case IActor actor:
-                    return SectorHasAttackedActor(sector, actor);
-
-                case IStaticObject staticObject:
-                    return SectorHasAttackedStaticObject(sector, staticObject);
-
-                default:
-                    throw new InvalidOperationException($"Unknown attack target type {target.GetType().FullName}.");
             }
         }
 
@@ -283,8 +243,8 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(sector));
             }
 
-            Debug.Assert(SectorHasCurrentActor(sector, actor), "Current actor must be in sector");
-            Debug.Assert(SectorHasAttackTarget(sector, target.TargetObject), "Target must be in sector");
+            Debug.Assert(SectorHasCurrentActor(sector, actor), "Current actor must be in current sector");
+            Debug.Assert(ActUsageHelper.SectorHasAttackTarget(sector, target.TargetObject), "Target must be in sector");
 
             foreach (var act in usedActs.Primary)
             {

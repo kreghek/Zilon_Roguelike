@@ -60,6 +60,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         Size[] RollRoomSize(int minSize, int maxSize, int count);
 
         HexNode RollTransitionNode(IEnumerable<HexNode> openRoomNodes);
-        IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions);
+        IEnumerable<SectorTransition> RollTransitions(IEnumerable<SectorTransition> openTransitions);
     }
 }

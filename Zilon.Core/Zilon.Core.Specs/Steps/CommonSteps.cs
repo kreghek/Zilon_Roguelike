@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -45,6 +46,24 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
+        [Given(@"the player actor in the map node \((\d+), (\d+)\)")]
+        public void GivenThePlayerActorWithPersonHumanClassInTheNode(int nodeX, int nodeY)
+        {
+            var personSid = "human-person";
+            var sectorToAdd = Context.Globe.SectorNodes.First().Sector;
+            Context.AddHumanActor(personSid, sectorToAdd, new OffsetCoords(nodeX, nodeY));
+        }
+
+        [UsedImplicitly]
+        [Given(@"Есть актёр игрока класса (.+) в ячейке \((.*), (.*)\)")]
+        [Given(@"the player actor with class (.+) in the map node \((\d+), (\d+)\)")]
+        public void GivenThePlayerActorWithSpecifiedClassInTheNode(string personSid, int nodeX, int nodeY)
+        {
+            var sectorToAdd = Context.Globe.SectorNodes.First().Sector;
+            Context.AddHumanActor(personSid, sectorToAdd, new OffsetCoords(nodeX, nodeY));
+        }
+
+        [UsedImplicitly]
         [Given(@"Актёр игрока имеет Hp: (.*)")]
         public void GivenАктёрИмеетHp(int startHp)
         {
@@ -60,18 +79,10 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [Given(@"Есть актёр игрока класса (.*) в ячейке \((.*), (.*)\)")]
-        public void GivenЕстьАктёрИгрокаКлассаCaptainВЯчейке(string personSid, int nodeX, int nodeY)
-        {
-            var sectorToAdd = Context.Globe.SectorNodes.First().Sector;
-            Context.AddHumanActor(personSid, sectorToAdd, new OffsetCoords(nodeX, nodeY));
-        }
-
-        [UsedImplicitly]
         [Given(@"Есть карта размером (\d*)")]
         public async Task GivenЕстьКартаРазмеромAsync(int mapSize)
         {
-            await Context.CreateGlobeAsync(mapSize).ConfigureAwait(false);
+            await Context.CreateSingleMapGlobeAsync(mapSize).ConfigureAwait(false);
         }
 
         [UsedImplicitly]
@@ -256,7 +267,7 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (IsPlayerPersonCanIntent(humanTaskSource, survivalModule) && counter > 0)
                 {
-                    await globe.UpdateAsync()
+                    await globe.UpdateAsync(CancellationToken.None)
                         .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
                         .ConfigureAwait(false);
 
@@ -267,7 +278,7 @@ namespace Zilon.Core.Specs.Steps
             {
                 while (counter > 0)
                 {
-                    await globe.UpdateAsync()
+                    await globe.UpdateAsync(CancellationToken.None)
                         .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
                         .ConfigureAwait(false);
 
@@ -304,18 +315,23 @@ namespace Zilon.Core.Specs.Steps
         [When(@"Я выполняю простой")]
         public void WhenЯВыполняюПростой()
         {
-            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+            var idleCommand = Context.ServiceProvider.GetRequiredService<IdleCommand>();
             idleCommand.Execute();
         }
 
         [When(@"Я жду (.*) итераций")]
         [When(@"В мире проходит (.*) итераций")]
+        [When(@"Я жду (.*) итерации")]
+        [When(@"В мире проходит (.*) итерации")]
+        [When(@"Я жду (.*) итерацию")]
+        [When(@"В мире проходит (.*) итерация")]
         public async Task WhenЯЖдуЕдиницВремениAsync(int timeUnitCount)
         {
             var globe = Context.Globe;
             var humatTaskSource = Context.ServiceProvider
                 .GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             var playerState = Context.ServiceProvider.GetRequiredService<ISectorUiState>();
+            var player = Context.ServiceProvider.GetRequiredService<IPlayer>();
 
             var counter = timeUnitCount;
 
@@ -328,12 +344,13 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
+                        if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false &&
+                            PlayerPersonIsNotInTransitionPool(globe, player.MainPerson))
                         {
                             WhenЯВыполняюПростой();
                         }
 
-                        await globe.UpdateAsync()
+                        await globe.UpdateAsync(CancellationToken.None)
                             .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
                             .ConfigureAwait(false);
                     }
@@ -347,7 +364,7 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        await globe.UpdateAsync()
+                        await globe.UpdateAsync(CancellationToken.None)
                             .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
                             .ConfigureAwait(false);
                     }
@@ -417,6 +434,22 @@ namespace Zilon.Core.Specs.Steps
             propTransferCommand.Execute();
         }
 
+        private static ISectorNode GetSectorNode(IGlobe globe, IPerson person)
+        {
+            var sectorNode = globe.SectorNodes.SingleOrDefault(node => IsActorInSector(node, person));
+            if (sectorNode is null)
+            {
+                return null;
+            }
+
+            return sectorNode;
+        }
+
+        private static bool IsActorInSector(ISectorNode node, IPerson mainPerson)
+        {
+            return node.Sector.ActorManager.Items.Any(x => x.Person == mainPerson);
+        }
+
         private static bool IsPlayerPersonCanIntent(
             [NotNull] IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource,
             [CanBeNull] ISurvivalModule survivalModule)
@@ -427,6 +460,13 @@ namespace Zilon.Core.Specs.Steps
             }
 
             return !humanTaskSource.CanIntent() && survivalModule?.IsDead == false;
+        }
+
+        private static bool PlayerPersonIsNotInTransitionPool(IGlobe globe, IPerson person)
+        {
+            var globeNodeWithPerson = GetSectorNode(globe, person);
+            var isPlayerPersonInGlobe = globeNodeWithPerson != null;
+            return isPlayerPersonInGlobe;
         }
     }
 }

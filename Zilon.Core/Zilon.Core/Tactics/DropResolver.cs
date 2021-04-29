@@ -79,6 +79,11 @@ namespace Zilon.Core.Tactics
         {
             try
             {
+                if (record.SchemeSid is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
                 var scheme = _schemeService.GetScheme<IPropScheme>(record.SchemeSid);
                 var propClass = GetPropClass(scheme);
 
@@ -186,6 +191,11 @@ namespace Zilon.Core.Tactics
                         continue;
                     }
 
+                    if (records is null)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
                     var recMods = GetModRecords(records, modificators);
 
                     var totalWeight = recMods.Sum(x => x.ModifiedWeight);
@@ -203,7 +213,7 @@ namespace Zilon.Core.Tactics
                         var rolledWeight = _randomSource.RollWeight(totalWeight);
                         var recMod = DropRoller.GetRecord(recMods, rolledWeight);
 
-                        if (recMod.Record.SchemeSid == null)
+                        if (recMod.Record?.SchemeSid == null)
                         {
                             continue;
                         }

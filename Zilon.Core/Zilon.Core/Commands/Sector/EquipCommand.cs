@@ -34,7 +34,7 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            if (_inventoryState.SelectedProp == null)
+            if (_inventoryState.SelectedProp is null)
             {
                 return true;
             }
@@ -58,17 +58,17 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Для команды не указан слот.");
             }
 
-            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>();
+            var equipmentCarrier = PlayerState.ActiveActor!.Actor.Person.GetModule<IEquipmentModule>();
             var slot = equipmentCarrier.Slots[SlotIndex.Value];
 
-            var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipment, slot);
+            var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipment!, slot);
             if (!canEquipInSlot)
             {
                 return false;
             }
 
             var canEquipDual = EquipmentCarrierHelper.CheckDualCompability(equipmentCarrier,
-                equipment,
+                equipment!,
                 SlotIndex.Value);
             if (!canEquipDual)
             {
@@ -76,7 +76,7 @@ namespace Zilon.Core.Commands
             }
 
             var canEquipShield = EquipmentCarrierHelper.CheckShieldCompability(equipmentCarrier,
-                equipment,
+                equipment!,
                 SlotIndex.Value);
 
             if (!canEquipShield)
@@ -96,13 +96,31 @@ namespace Zilon.Core.Commands
 
             var equipment = GetInventorySelectedEquipment();
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
 
             var intention = new Intention<EquipTask>(a => new EquipTask(a, taskContext, equipment, SlotIndex.Value));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var taskSource = PlayerState.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var activeActor = PlayerState.ActiveActor?.Actor;
+            if (activeActor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, activeActor);
         }
 
-        private Equipment GetInventorySelectedEquipment()
+        private Equipment? GetInventorySelectedEquipment()
         {
             var propVieModel = _inventoryState.SelectedProp;
             if (propVieModel == null)

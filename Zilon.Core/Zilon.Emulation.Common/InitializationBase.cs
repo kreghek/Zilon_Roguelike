@@ -56,7 +56,13 @@ namespace Zilon.Emulation.Common
 
         protected virtual void RegisterChestGeneratorRandomSource(IServiceCollection serviceRegistry)
         {
-            serviceRegistry.AddScoped<IStaticObstaclesGenerator, StaticObstaclesGenerator>();
+            serviceRegistry.AddScoped<StaticObstaclesGenerator>();
+            serviceRegistry.AddScoped<IStaticObstaclesGenerator, StaticObstaclesGenerator>(serviceProvider =>
+            {
+                var service = serviceProvider.GetRequiredService<StaticObstaclesGenerator>();
+                service.MonsterIdentifierGenerator = serviceProvider.GetService<IMonsterIdentifierGenerator>();
+                return service;
+            });
             serviceRegistry.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
             serviceRegistry.AddScoped<IChestGenerator, ChestGenerator>();
             serviceRegistry.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
@@ -79,7 +85,14 @@ namespace Zilon.Emulation.Common
                 var generator = new MonsterGenerator(schemeService, monsterFactory, randomSource, actorTaskSource);
                 return generator;
             });
-            serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
+            serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>(serviceProvider =>
+            {
+                var identifierGenerator = serviceProvider.GetService<IMonsterIdentifierGenerator>();
+                return new MonsterPersonFactory
+                {
+                    MonsterIdentifierGenerator = identifierGenerator
+                };
+            });
             serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
         }
 
@@ -266,6 +279,7 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
             serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceCollection.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
+            serviceCollection.AddSingleton<ITransitionPool, TransitionPool>();
             serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider =>
             {
                 return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
@@ -284,12 +298,7 @@ namespace Zilon.Emulation.Common
         {
             container.AddSingleton<ISchemeLocator>(factory =>
             {
-                //TODO Организовать отдельный общий метод/класс/фабрику для конструирования локатора схем.
-                // Подобные конструкции распределены по всему проекту: в тестах, бенчах, окружении ботов.
-                // Следует их объединить в одном месте.
-                var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
-
-                var schemeLocator = new FileSchemeLocator(schemePath);
+                var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
 
                 return schemeLocator;
             });

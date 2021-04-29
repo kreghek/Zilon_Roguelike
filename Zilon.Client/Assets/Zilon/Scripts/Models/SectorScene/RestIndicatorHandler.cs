@@ -25,6 +25,13 @@ public class RestIndicatorHandler : MonoBehaviour
 
     public void Update()
     {
+        var playerPersonIsNotInTransitionPool = _humanPlayer.Globe.SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items).Any(x => x.Person == _humanPlayer.MainPerson);
+        var playerPersonIsInTransitionPool = !playerPersonIsNotInTransitionPool;
+        if (playerPersonIsInTransitionPool)
+        {
+            return;
+        }
+
         if (_humanPlayer.MainPerson is null)
         {
             // In start of the game until initialization was not complete yet.

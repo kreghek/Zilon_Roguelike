@@ -12,8 +12,8 @@ namespace Zilon.Core.PersonModules
         void Add(IPersonEffect effect);
         void Remove(IPersonEffect effect);
 
-        event EventHandler<EffectEventArgs> Added;
-        event EventHandler<EffectEventArgs> Changed;
-        event EventHandler<EffectEventArgs> Removed;
+        event EventHandler<EffectEventArgs>? Added;
+        event EventHandler<EffectEventArgs>? Changed;
+        event EventHandler<EffectEventArgs>? Removed;
     }
 }

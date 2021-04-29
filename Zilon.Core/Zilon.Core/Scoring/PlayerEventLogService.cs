@@ -4,19 +4,25 @@ using Zilon.Core.Players;
 
 namespace Zilon.Core.Scoring
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class PlayerEventLogService : IPlayerEventLogService
     {
-        private IPlayerEvent _playerEvent;
+        private IPlayerEvent? _playerEvent;
 
         public PlayerEventLogService(IPlayer player)
         {
-            Player = player ?? throw new ArgumentNullException(nameof(player));
+            Player = player;
         }
 
         public IPlayer Player { get; }
 
-        public IPlayerEvent GetPlayerEvent()
+        public IPlayerEvent? GetPlayerEvent()
         {
+            if (_playerEvent is null)
+            {
+                return null;
+            }
+
             return _playerEvent;
         }
 

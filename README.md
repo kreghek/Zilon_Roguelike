@@ -9,12 +9,14 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/b4b300bf5efc3d73a268/maintainability)](https://codeclimate.com/github/kreghek/Zilon_Roguelike/maintainability)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kreghek_Zilon_Roguelike&metric=alert_status)](https://sonarcloud.io/dashboard?id=kreghek_Zilon_Roguelike)
 [![Coverage Status](https://coveralls.io/repos/github/kreghek/Zilon_Roguelike/badge.svg?branch=master)](https://coveralls.io/github/kreghek/Zilon_Roguelike?branch=master)
+[![codecov](https://codecov.io/gh/kreghek/Zilon_Roguelike/branch/master/graph/badge.svg?token=mSMGtnXFOZ)](https://codecov.io/gh/kreghek/Zilon_Roguelike)
+![GitHub branch checks state](https://img.shields.io/github/checks-status/kreghek/Zilon_Roguelike/master?label=Github%20Actions)
 
 ![Poster A3 horizontal](https://user-images.githubusercontent.com/2405499/58764985-41faf600-8598-11e9-9220-277923ca7f5b.png)
 
 This is rogue-like game about the randomly-generated vagabond, which trying to find the randomly-generated home in the randomly-generated world. Project at early stage of development. Development are slowly and with pleasure, but reguraly.
 
-[Russian version of this file](\README_RU.md)
+[Russian version of this file](/README_RU.md)
 
 ## The short game rules
 
@@ -27,6 +29,8 @@ Reasons why you will die:
 - You will die from high intoxication because you are badly injured and you use too much medicine.
 - You will catch a disease that will greatly weaken you, that you will not have the strength to fight off even a hungry rat.
 - You write the command "dead" in the text version of the game.
+
+[The Rules](https://last-imperial-vagabond.github.io/LAST_IMPERIAL_VAGABOND.github.io/)
 
 ## Join us
 
@@ -61,4 +65,10 @@ You are awesome!
 
 ## Contributing
 
-We will be glad for any contribution to the development and support of the project. During development, we adhere to the [Code of Conduct] (/ CODE_OF_CONDUCT.md) and the [Source Code Conventions] (/ CODE_CONVENTIONS.md).
+We will be glad for any contribution to the development and support of the project. During development, we adhere to the [Code of Conduct](/CODE_OF_CONDUCT.md) and the [Source Code Conventions](/CODE_CONVENTIONS.md).
+
+## License
+
+- Released under [MIT](/LICENSE).
+- Feel free to modify and reuse this project. You are required to include the license when using this code. Copy `LICENSE` to `LICENSE-source` and then modify `LICENSE` with your own name.
+- Please link back to this repo as well.

@@ -77,10 +77,9 @@ namespace Zilon.Core.Tests.MapGenerators
             var map = await SquareMapFactory.CreateAsync(20).ConfigureAwait(false);
 
             var sectorMock = new Mock<ISector>();
-            var patrolRoutes = new Dictionary<IActor, IPatrolRoute>();
-            sectorMock.SetupGet(x => x.PatrolRoutes).Returns(patrolRoutes);
             sectorMock.SetupGet(x => x.ActorManager).Returns(actorManager);
             sectorMock.SetupGet(x => x.StaticObjectManager).Returns(propContainerManager);
+            sectorMock.SetupGet(x => x.Map).Returns(map);
             var sector = sectorMock.Object;
 
             var monsterRegions = new List<MapRegion>
@@ -108,7 +107,7 @@ namespace Zilon.Core.Tests.MapGenerators
             rareCount.Should().Be(10);
         }
 
-        private IMonsterScheme CreateMonsterScheme(string sid)
+        private static IMonsterScheme CreateMonsterScheme(string sid)
         {
             var scheme = new TestMonsterScheme
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -202,11 +203,11 @@ namespace Zilon.Core.Specs.Steps
                     {
                         if (humatTaskSource.CanIntent() && survivalModule?.IsDead == false)
                         {
-                            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+                            var idleCommand = Context.ServiceProvider.GetRequiredService<IdleCommand>();
                             idleCommand.Execute();
                         }
 
-                        await globe.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
+                        await globe.UpdateAsync(CancellationToken.None).TimeoutAfter(1000).ConfigureAwait(false);
                     }
 
                     counter--;
@@ -218,7 +219,7 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        await globe.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
+                        await globe.UpdateAsync(CancellationToken.None).TimeoutAfter(1000).ConfigureAwait(false);
                     }
 
                     counter--;

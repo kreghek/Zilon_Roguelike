@@ -10,12 +10,10 @@ namespace Zilon.Core.Commands
     /// <summary>
     /// Базовая команда для всех команд, связанных с изменением состояния актёра.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public abstract class ActorCommandBase : TacticCommandBase
     {
-        [ExcludeFromCodeCoverage]
-        protected ActorCommandBase(
-            ISectorUiState playerState
-        )
+        protected ActorCommandBase(ISectorUiState playerState)
         {
             PlayerState = playerState;
         }
@@ -24,13 +22,13 @@ namespace Zilon.Core.Commands
         /// Текущий активный актёр.
         /// </summary>
         [CanBeNull]
-        public IActor CurrentActor => PlayerState.ActiveActor?.Actor;
+        public IActor? CurrentActor => PlayerState.ActiveActor?.Actor;
 
         /// <summary>
         /// Модель представления текущего актёра.
         /// </summary>
         [CanBeNull]
-        public IActorViewModel CurrentActorViewModel => PlayerState.ActiveActor;
+        public IActorViewModel? CurrentActorViewModel => PlayerState.ActiveActor;
 
         protected ISectorUiState PlayerState { get; }
     }

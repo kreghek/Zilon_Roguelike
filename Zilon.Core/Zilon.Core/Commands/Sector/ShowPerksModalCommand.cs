@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
 
@@ -11,12 +12,12 @@ namespace Zilon.Core.Commands
     /// <summary>
     /// Команда на отображение модала для отображения контента контейнера.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class ShowPerksModalCommand : ShowModalCommandBase
     {
         private readonly ISectorUiState _playerState;
 
         [PublicAPI]
-        [ExcludeFromCodeCoverage]
         public ShowPerksModalCommand(ISectorModalManager sectorManager, ISectorUiState playerState) :
             base(sectorManager)
         {
@@ -30,7 +31,13 @@ namespace Zilon.Core.Commands
 
         public override void Execute()
         {
-            ModalManager.ShowPerksModal(_playerState.ActiveActor.Actor);
+            var actor = _playerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            ModalManager.ShowPerksModal(actor);
         }
     }
 }

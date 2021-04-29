@@ -38,6 +38,11 @@ namespace Zilon.Core.Persons
             }
 
             var range = act.Stats.Range;
+            if (range is null)
+            {
+                throw new System.ArgumentNullException(nameof(act.Stats.Range));
+            }
+
             var distance = map.DistanceBetween(currentNode, targetNode);
             var isInDistance = range.Contains(distance);
             return isInDistance;

@@ -21,6 +21,8 @@ public class PerksModalBody : MonoBehaviour, IModalWindowHandler
 
     public string Caption => "Character";
 
+    public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.ApplyChanges;
+
     public void OnDestroy()
     {
         ClearParentContent(PerkItemsParent);

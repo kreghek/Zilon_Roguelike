@@ -23,9 +23,7 @@ namespace Zilon.Bot.Players.Strategies
             CurrentState = _stateTree.StartState;
         }
 
-        public bool WriteStateChanges { get; set; }
-
-        private void ResetLogicStates(LogicStateTree logicStateTree)
+        private static void ResetLogicStates(LogicStateTree logicStateTree)
         {
             foreach (var transition in logicStateTree.Transitions)
             {
@@ -62,7 +60,7 @@ namespace Zilon.Bot.Players.Strategies
             return transitionWasPerformed;
         }
 
-        private void UpdateCurrentTriggers(IEnumerable<ILogicStateTrigger> currentLogicTriggers)
+        private static void UpdateCurrentTriggers(IEnumerable<ILogicStateTrigger> currentLogicTriggers)
         {
             foreach (var trigger in currentLogicTriggers)
             {
@@ -94,16 +92,12 @@ namespace Zilon.Bot.Players.Strategies
 
             if (transitionWasPerformed)
             {
-                if (WriteStateChanges)
-                {
-                    Console.WriteLine(newState);
-                }
-
                 CurrentState = newState;
                 ResetLogicStates(_stateTree);
             }
 
             var actorTask = CurrentState.GetTask(Actor, context, _strategyData);
+
             var currentTriggers = _stateTree.Transitions[CurrentState].Select(x => x.Trigger);
             UpdateCurrentTriggers(currentTriggers);
 

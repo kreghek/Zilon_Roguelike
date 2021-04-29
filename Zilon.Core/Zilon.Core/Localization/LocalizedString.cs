@@ -6,9 +6,9 @@
     public class LocalizedString : ILocalizedString
     {
         /// <inheritdoc />
-        public string En { get; set; }
+        public string? En { get; set; }
 
         /// <inheritdoc />
-        public string Ru { get; set; }
+        public string? Ru { get; set; }
     }
 }

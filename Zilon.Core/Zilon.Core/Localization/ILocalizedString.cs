@@ -8,11 +8,11 @@
         /// <summary>
         /// Английский вариант.
         /// </summary>
-        string En { get; }
+        string? En { get; }
 
         /// <summary>
         /// Русский вариант.
         /// </summary>
-        string Ru { get; }
+        string? Ru { get; }
     }
 }

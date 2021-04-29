@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 using BenchmarkDotNet.Attributes;
 
@@ -16,7 +17,7 @@ namespace Zilon.Core.Benchmarks.CreateSector
         private ServiceProvider _serviceProvider;
 
         [Benchmark(Description = "Create CA Sector")]
-        public async System.Threading.Tasks.Task CreateSectorAsync()
+        public async Task CreateSectorAsync()
         {
             var sectorGenerator = _serviceProvider.GetRequiredService<ISectorGenerator>();
             var biomInitializer = _serviceProvider.GetRequiredService<IBiomeInitializer>();

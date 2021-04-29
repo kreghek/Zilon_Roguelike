@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
 
@@ -10,12 +11,12 @@ namespace Zilon.Core.Commands
     /// <summary>
     /// Команда на отображение модала для отображения контента контейнера.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class ShowInventoryModalCommand : ShowModalCommandBase
     {
         private readonly ISectorUiState _playerState;
 
         [PublicAPI]
-        [ExcludeFromCodeCoverage]
         public ShowInventoryModalCommand(ISectorModalManager modalManager, ISectorUiState playerState) :
             base(modalManager)
         {
@@ -29,7 +30,13 @@ namespace Zilon.Core.Commands
 
         public override void Execute()
         {
-            ModalManager.ShowInventoryModal(_playerState.ActiveActor.Actor);
+            var actor = _playerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            ModalManager.ShowInventoryModal(actor);
         }
     }
 }

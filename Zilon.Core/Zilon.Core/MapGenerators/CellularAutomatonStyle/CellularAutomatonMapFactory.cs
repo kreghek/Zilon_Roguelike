@@ -30,7 +30,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         }
 
         private static ISectorMap CreateSectorMap(Matrix<bool> matrix, RegionDraft[] draftRegions,
-            IEnumerable<RoomTransition> transitions)
+            IEnumerable<SectorTransition> transitions)
         {
             // Создание графа карты сектора на основе карты клеточного автомата.
             ISectorMap map = new SectorHexMap();
@@ -55,7 +55,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return map;
         }
 
-        private static void CreateTransitionInSmallestRegion(IEnumerable<RoomTransition> transitions, ISectorMap map,
+        private static void CreateTransitionInSmallestRegion(IEnumerable<SectorTransition> transitions, ISectorMap map,
             MapRegion[] regionOrderedBySize)
         {
             var startRegion = regionOrderedBySize.First();

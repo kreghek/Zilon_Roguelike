@@ -15,7 +15,6 @@ using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -57,20 +56,10 @@ namespace Zilon.Core.Tactics
             StaticObjectManager.Removed += StaticObjectManager_Remove;
 
             Map = map ?? throw new ArgumentException("Не передана карта сектора.", nameof(map));
-
-            PatrolRoutes = new Dictionary<IActor, IPatrolRoute>();
         }
 
-        public NationalUnityEventService NationalUnityEventService { get; set; }
-
-        public string Sid { get; set; }
-
-        /// <summary>
-        /// Стартовые узлы.
-        /// Набор узлов, где могут располагаться актёры игрока
-        /// на начало прохождения сектора.
-        /// </summary>
-        public IGraphNode[] StartNodes { get; set; }
+        [ExcludeFromCodeCoverage]
+        public NationalUnityEventService? NationalUnityEventService { get; set; }
 
         private void Actor_Moved(object sender, EventArgs e)
         {
@@ -124,7 +113,7 @@ namespace Zilon.Core.Tactics
             ProcessMonsterDeath(actor);
         }
 
-        private void DoActorExit([NotNull] IActor actor, [NotNull] RoomTransition roomTransition)
+        private void DoActorExit([NotNull] IActor actor, [NotNull] SectorTransition roomTransition)
         {
             var e = new TransitionUsedEventArgs(actor, roomTransition);
             TrasitionUsed?.Invoke(this, e);
@@ -159,6 +148,11 @@ namespace Zilon.Core.Tactics
             for (var i = 0; i < dropTableCount; i++)
             {
                 var sid = monsterScheme.DropTableSids[i];
+                if (sid is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
                 schemes[i] = _schemeService.GetScheme<IDropTableScheme>(sid);
             }
 
@@ -408,7 +402,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
-        public event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
+        public event EventHandler<TransitionUsedEventArgs>? TrasitionUsed;
 
         /// <summary>
         /// Карта в основе сектора.
@@ -416,16 +410,11 @@ namespace Zilon.Core.Tactics
         public ISectorMap Map { get; }
 
         /// <summary>
-        /// Маршруты патрулирования в секторе.
-        /// </summary>
-        public Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
-
-        /// <summary>
         /// Менеджер работы с очками.
         /// </summary>
-        public IScoreManager ScoreManager { get; set; }
+        public IScoreManager? ScoreManager { get; set; }
 
-        public ILocationScheme Scheme { get; set; }
+        public ILocationScheme? Scheme { get; set; }
         public IActorManager ActorManager { get; }
         public IStaticObjectManager StaticObjectManager { get; }
         public IEnumerable<IDisease> Diseases => _diseases;
@@ -460,7 +449,7 @@ namespace Zilon.Core.Tactics
             UpdateNationalUnityEvent();
         }
 
-        public void UseTransition(IActor actor, RoomTransition transition)
+        public void UseTransition(IActor actor, SectorTransition transition)
         {
             DoActorExit(actor, transition);
         }

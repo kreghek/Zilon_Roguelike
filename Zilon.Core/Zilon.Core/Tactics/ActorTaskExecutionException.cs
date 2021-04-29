@@ -42,6 +42,6 @@ namespace Zilon.Core.Tactics
         {
         }
 
-        public IActorTaskSource<ISectorTaskSourceContext> ActorTaskSource { get; }
+        public IActorTaskSource<ISectorTaskSourceContext>? ActorTaskSource { get; }
     }
 }

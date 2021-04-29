@@ -4,10 +4,10 @@ using Assets.Zilon.Scripts.Services;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.Commands;
 using Zilon.Core.Props;
-using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 
@@ -15,9 +15,12 @@ public class SectorInstaller : MonoInstaller<SectorInstaller>
 {
     public override void InstallBindings()
     {
-        Container.Bind<GameLoopUpdater>().AsSingle();
+        Container.Bind<IGlobeLoopUpdater>().To<GlobeLoopUpdater>().AsSingle();
+        Container.Bind<IGlobeLoopContext>().To<GlobeLoopContext>().AsSingle();
+        Container.Bind<ICommandLoopUpdater>().To<CommandLoopUpdater>().AsSingle();
+        Container.Bind<ICommandLoopContext>().To<CommandLoopContext>().AsSingle();
 
-        Container.Bind<ICommandManager>().To<QueueCommandManager>().AsSingle();
+        Container.Bind<ICommandPool>().To<QueueCommandPool>().AsSingle();
 
         Container.Bind<ISectorUiState>().To<SectorUiState>().AsSingle();
 

@@ -17,7 +17,7 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="sectorNode"> Схема сектора. </param>
         /// <returns> Набор объектов переходов. </returns>
-        public static IEnumerable<RoomTransition> CreateTransitions(ISectorNode sectorNode)
+        public static IEnumerable<SectorTransition> CreateTransitions(ISectorNode sectorNode)
         {
             if (sectorNode is null)
             {
@@ -26,12 +26,13 @@ namespace Zilon.Core.MapGenerators
 
             if (sectorNode.State != SectorNodeState.SchemeKnown)
             {
-                throw new ArgumentException("Узел сектора должен быть материализован", nameof(sectorNode));
+                throw new ArgumentException($"Sector node {sectorNode} is not materialized.", nameof(sectorNode));
             }
 
-            var next = sectorNode.Biome.GetNext(sectorNode);
+            var nextSectorNodes = sectorNode.Biome.GetNext(sectorNode);
 
-            return next.Select(node => new RoomTransition(node as ISectorNode));
+            return nextSectorNodes.Where(x => x != null).Select(x => x!)
+                .Select(node => new SectorTransition((ISectorNode)node));
         }
 
         public static bool IsAvailableFor(Matrix<bool> matrix, OffsetCoords coords)

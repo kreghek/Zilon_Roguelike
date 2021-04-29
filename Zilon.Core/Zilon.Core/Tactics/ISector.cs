@@ -5,7 +5,6 @@ using Zilon.Core.Diseases;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
-using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
@@ -30,15 +29,10 @@ namespace Zilon.Core.Tactics
         /// </summary>
         ISectorMap Map { get; }
 
-        /// <summary>
-        /// Маршруты патрулирования в секторе.
-        /// </summary>
-        Dictionary<IActor, IPatrolRoute> PatrolRoutes { get; }
-
-        ILocationScheme Scheme { get; set; }
+        ILocationScheme? Scheme { get; set; }
 
         /// <summary>Менеджер работы с очками.</summary>
-        IScoreManager ScoreManager { get; set; }
+        IScoreManager? ScoreManager { get; set; }
 
         IStaticObjectManager StaticObjectManager { get; }
 
@@ -59,11 +53,11 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="actor"> Актёр, применивший переход. </param>
         /// <param name="transition"> переход, который бы задействован. </param>
-        void UseTransition(IActor actor, RoomTransition transition);
+        void UseTransition(IActor actor, SectorTransition transition);
 
         /// <summary>
         /// Событие выстреливает, когда группа актёров игрока покинула сектор.
         /// </summary>
-        event EventHandler<TransitionUsedEventArgs> TrasitionUsed;
+        event EventHandler<TransitionUsedEventArgs>? TrasitionUsed;
     }
 }

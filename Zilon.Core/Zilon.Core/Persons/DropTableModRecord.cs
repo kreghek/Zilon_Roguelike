@@ -18,6 +18,6 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Запись таблицы дропа.
         /// </summary>
-        public IDropTableRecordSubScheme Record { get; set; }
+        public IDropTableRecordSubScheme? Record { get; set; }
     }
 }

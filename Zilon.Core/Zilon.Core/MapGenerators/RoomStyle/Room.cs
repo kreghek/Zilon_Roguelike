@@ -12,7 +12,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         public Room()
         {
             Nodes = new List<HexNode>();
-            Transitions = new List<RoomTransition>();
+            Transitions = new List<SectorTransition>();
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// Этот набор является подмножеством идентфикаторов секторов
         /// из схемы строящегося сектора
         /// </remarks>
-        public List<RoomTransition> Transitions { get; }
+        public List<SectorTransition> Transitions { get; }
 
         /// <summary>
         /// Ширина комнаты.

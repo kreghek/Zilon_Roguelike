@@ -28,7 +28,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc />
-        public SectorMapFowNode GetNode(IGraphNode node)
+        public SectorMapFowNode? GetNode(IGraphNode node)
         {
             // Возвращаем null, потому что этот объект не предполагает хранение чего-либо.
             return null;

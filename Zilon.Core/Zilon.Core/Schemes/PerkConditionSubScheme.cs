@@ -16,7 +16,7 @@ namespace Zilon.Core.Schemes
         /// Доступно для указанных классов.
         /// </summary>
         [ExcludeFromCodeCoverage]
-        public string[] ClassesRequired { get; set; }
+        public string?[]? ClassesRequired { get; set; }
 
         /// <summary>
         /// Требует уровень персонажа не ниже указанного.
@@ -40,12 +40,12 @@ namespace Zilon.Core.Schemes
         /// Требует наличия родительского перка.
         /// </summary>
         [ExcludeFromCodeCoverage]
-        public string ParentPerkSid { get; set; }
+        public string? ParentPerkSid { get; set; }
 
         /// <summary>
         /// Требует наличия предмета у персонажа.
         /// </summary>
         [ExcludeFromCodeCoverage]
-        public PropSet PropRequired { get; set; }
+        public PropSet? PropRequired { get; set; }
     }
 }

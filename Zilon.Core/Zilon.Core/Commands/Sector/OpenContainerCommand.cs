@@ -26,9 +26,21 @@ namespace Zilon.Core.Commands
 
         public override bool CanExecute()
         {
-            var map = _player.SectorNode.Sector.Map;
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
 
-            var currentNode = PlayerState.ActiveActor.Actor.Node;
+            var map = sector.Map;
+
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                return false;
+            }
+
+            var currentNode = actor.Node;
 
             var targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
@@ -59,7 +71,7 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var targetContainerViewModel = GetSelectedNodeViewModel();
-            if (targetContainerViewModel == null)
+            if (targetContainerViewModel is null)
             {
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевой контейнер не выбран.");
             }
@@ -72,19 +84,37 @@ namespace Zilon.Core.Commands
             }
 
             var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, staticObject));
-            PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState?.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intetion, actor);
         }
 
         private OpenContainerTask CreateTask(IActor actor, IStaticObject staticObject)
         {
             var openMethod = new HandOpenContainerMethod();
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
 
             return new OpenContainerTask(actor, taskContext, staticObject, openMethod);
         }
 
-        private IContainerViewModel GetSelectedNodeViewModel()
+        private IContainerViewModel? GetSelectedNodeViewModel()
         {
             return PlayerState.HoverViewModel as IContainerViewModel;
         }

@@ -4,6 +4,7 @@ using Assets.Zilon.Scripts.Services;
 
 using Zenject;
 
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
@@ -43,7 +44,6 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
         Container.Bind<IScoreManager>().To<ScoreManager>().AsSingle();
         Container.Bind<IPlayerEventLogService>().To<PlayerEventLogService>().AsSingle();
         Container.Bind<DeathReasonService>().AsSingle();
-        Container.Bind<ProgressStorageService>().AsSingle();
         Container.Bind<ScoreStorage>().AsSingle();
         Container.Bind<IUserTimeProvider>().To<UserTimeProvider>().AsSingle();
 
@@ -75,6 +75,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
             return injectContext.Container.Resolve<BiomeInitializer>();
         }).AsSingle();
         Container.Bind<IGlobeTransitionHandler>().To<GlobeTransitionHandler>().AsSingle();
+        Container.Bind<ITransitionPool>().To<TransitionPool>().AsSingle();
 
         Container.RegisterGenerationServices();
         Container.Bind<IActorInteractionBus>().To<ActorInteractionBus>().AsSingle();
@@ -84,7 +85,7 @@ public class GlobalInstaller : MonoInstaller<GlobalInstaller>
 
         Container.Bind<ISchemeLocator>().FromInstance(SchemeLocator).AsSingle();
 
-        Container.Bind<ICommandBlockerService>().To<CommandBlockerService>().AsSingle();
+        Container.Bind<IAnimationBlockerService>().To<AnimationBlockerService>().AsSingle();
 
         Container.Bind<ICommand>().WithId("quit-command").To<QuitCommand>().AsSingle();
         Container.Bind<ICommand>().WithId("quit-title-command").To<QuitTitleCommand>().AsSingle();

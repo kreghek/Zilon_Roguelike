@@ -46,6 +46,8 @@ public class ScoreModalBody : MonoBehaviour, IModalWindowHandler
 
     public string Caption => "Scores";
 
+    public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.DoNothing;
+
     public event EventHandler Closed;
 
     public void Init()

@@ -26,21 +26,23 @@ namespace Zilon.Core.PersonModules
 
             if (!source.HasModule<TPersonModule>())
             {
+#pragma warning disable CS8603 // Possible null reference return.
                 return default;
+#pragma warning restore CS8603 // Possible null reference return.
             }
 
             return source.GetModule<TPersonModule>();
         }
 
         /// <inheritdoc />
-        public static bool HasModule<TPersonModule>(this IPerson staticObject) where TPersonModule : IPersonModule
+        public static bool HasModule<TPersonModule>(this IPerson person) where TPersonModule : IPersonModule
         {
-            if (staticObject is null)
+            if (person is null)
             {
-                throw new ArgumentNullException(nameof(staticObject));
+                throw new ArgumentNullException(nameof(person));
             }
 
-            return staticObject.HasModule(typeof(TPersonModule).Name);
+            return person.HasModule(typeof(TPersonModule).Name);
         }
     }
 }

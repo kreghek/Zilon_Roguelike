@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Zilon.Core.Tactics;
@@ -19,6 +20,7 @@ namespace Zilon.Core.World
         private readonly IList<ISectorNode> _sectorNodes;
 
         private readonly ConcurrentDictionary<IActor, TaskState> _taskDict;
+
         private int _turnCounter;
 
         public Globe(IGlobeTransitionHandler globeTransitionHandler)
@@ -40,82 +42,160 @@ namespace Zilon.Core.World
             }
         }
 
-        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
+        private static void ClearUpTasks(IDictionary<IActor, TaskState> taskDict)
+        {
+            // удаляем выполненные задачи.
+            var allStateCopyList = taskDict.Values.ToArray();
+            foreach (var state in allStateCopyList)
+            {
+                var actor = state.Actor;
+
+                if (state.TaskComplete)
+                {
+                    taskDict.Remove(actor);
+                    state.TaskSource.ProcessTaskComplete(state.Task);
+                    continue;
+                }
+
+                if (!actor.CanExecuteTasks)
+                {
+                    // Песонаж может перестать выполнять задачи по следующим причинам:
+                    // 1. Персонажи, у которых есть модуль выживания, могут умереть.
+                    // Мертвые персонажы не выполняют задач.
+                    // Их задачи можно прервать, потому что:
+                    //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
+                    //   * Экономит ресурсы.
+                    taskDict.Remove(actor);
+                }
+            }
+        }
+
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList,
+            CancellationToken cancelToken)
         {
             var actorDataListMaterialized = actorDataList.ToArray();
-            foreach (var actorDataItem in actorDataListMaterialized)
+
+            var actorGrouppedBySector = actorDataListMaterialized.GroupBy(x => x.Sector).ToArray();
+
+            foreach (var sectorGroup in actorGrouppedBySector)
             {
-                var actor = actorDataItem.Actor;
-                var sector = actorDataItem.Sector;
-
-                var taskSource = actor.TaskSource;
-
-                var context = new SectorTaskSourceContext(sector);
-
-                //TODO Это можно делать параллельно. Одновременно должны думать сразу все актёры.
-                // Делается легко, через Parallel.ForEach, но из-за этого часто заваливаются тесты и даже не видно причины отказа.
-                var actorTaskTask = taskSource.GetActorTaskAsync(actor, context);
-
-                try
+                foreach (var actorDataItem in sectorGroup)
                 {
-                    var actorTask = await actorTaskTask.ConfigureAwait(false);
-                    var state = new TaskState(actor, actorTask, taskSource);
-                    if (!_taskDict.TryAdd(actor, state))
+                    var actor = actorDataItem.Actor;
+                    var sector = actorDataItem.Sector;
+
+                    var taskSource = actor.TaskSource;
+
+                    var context = new SectorTaskSourceContext(sector, cancelToken);
+
+                    try
                     {
-                        // Это происходит, когда игрок пытается присвоить новую команду,
-                        // когда старая еще не закончена и не может быть заменена.
-                        throw new InvalidOperationException("Попытка назначить задачу, когда старая еще не удалена.");
+                        if (taskSource is IHumanActorTaskSource<SectorTaskSourceContext> humanTaskSource)
+                        {
+                            // Drop intention for human controlled task source.
+                            cancelToken.Register(() => { humanTaskSource.DropIntentionWaiting(); });
+                        }
+
+                        var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
+
+                        var state = new TaskState(actor, sector, actorTask, taskSource);
+
+                        _taskDict.AddOrUpdate(actor, state, (a, t) => state);
                     }
-                }
-                catch (TaskCanceledException)
-                {
-                    // Do nothing for his actor. His task was cancelled.
-                    _taskDict.TryRemove(actor, out var _);
+                    catch (TaskCanceledException)
+                    {
+                        // Do nothing for his actor. His task was cancelled.
+                        _taskDict.TryRemove(actor, out var _);
+                    }
                 }
             }
         }
 
         private IEnumerable<ActorInSector> GetActorsWithoutTasks()
         {
+            return GetActorsWithoutTasksEnumerator().ToArray();
+        }
+
+        private IEnumerable<ActorInSector> GetActorsWithoutTasksEnumerator()
+        {
             // _sectorNodes фиксируем в отдельный массив.
             // потому что по мере выполнения задач актёров, может быть переход в новый узел мира.
             // Мир при том расширится и список поменяется. А это приведёт к ошибке, что коллекция в foreach изменяется.
-            foreach (var sectorNode in _sectorNodes.ToArray())
+            var sectorNodes = _sectorNodes.ToArray();
+            foreach (var sectorNode in sectorNodes)
             {
-                var sector = sectorNode.Sector;
-                foreach (var actor in sector.ActorManager.Items.ToArray())
+                if (sectorNode.State != SectorNodeState.SectorMaterialized)
                 {
-                    if (!sector.ActorManager.Items.Contains(actor))
+                    continue;
+                }
+
+                var sector = sectorNode.Sector;
+                if (sector is null)
+                {
+                    if (sectorNode.State == SectorNodeState.SectorMaterialized)
                     {
-                        // Это может произойти, когда в процессе исполнения задач,
-                        // актёр вышел из сектора. Соответственно, его уже нет в списке актёров сектора.
-
-                        RemoveActorTaskState(actor);
-
-                        continue;
+                        throw new InvalidOperationException();
                     }
 
-                    if (_taskDict.TryGetValue(actor, out _))
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    yield return new ActorInSector { Actor = actor, Sector = sector };
+                var actors = sector.ActorManager.Items.ToArray();
+                foreach (var actor in actors)
+                {
+                    var needCreateTask = IsActorNeedsInTask(sector, actor);
+
+                    if (needCreateTask)
+                    {
+                        yield return new ActorInSector(actor, sector);
+                    }
                 }
             }
         }
 
-        private static void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
+        private static List<TaskState[]> GroupTaskStates(ICollection<TaskState> states)
         {
-            var states = taskDict.Values;
-            // Все актёры еще раз сортируются, чтобы зафиксировать поведение для тестов.
-            // Может быть ситуация, когда найдено одновременно два актёра без задач (в самом начале теста, например).
-            // В этом случае порядок элементов, полученных из states, не фиксирован.
-            // В тестах мжет быть важно, в каком порядке ходят актёры, чтобы корректно обрабатывать коллизии.
-            // Поэтому тут выполняется еще одна сортировка, от которой, по-хорошему нужно избавиться.
-            // Лучше сразу иметь список states с сортировкой по приоритету при добавлении элемента.
-            var orderedStates = states.OrderBy(x => x.Actor.Person.Id);
-            foreach (var state in orderedStates)
+            var statesGroupedBySector = states.GroupBy(x => x.Sector).ToArray();
+            var materializedSectorList = MaterializeSectorStates(statesGroupedBySector);
+            return materializedSectorList;
+        }
+
+        private bool IsActorNeedsInTask(ISector sector, IActor actor)
+        {
+            if (!sector.ActorManager.Items.Contains(actor))
+            {
+                // Это может произойти, когда в процессе исполнения задач,
+                // актёр вышел из сектора. Соответственно, его уже нет в списке актёров сектора.
+
+                RemoveActorTaskState(actor);
+
+                return false;
+            }
+
+            if (_taskDict.TryGetValue(actor, out _))
+            {
+                // Actor has task yet.
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private static List<TaskState[]> MaterializeSectorStates(IGrouping<ISector, TaskState>[] statesGroupedBySector)
+        {
+            var materializedSectorList = new List<TaskState[]>();
+            foreach (var sectorStates in statesGroupedBySector)
+            {
+                materializedSectorList.Add(sectorStates.ToArray());
+            }
+
+            return materializedSectorList;
+        }
+
+        private static void ProcessActorStates(IEnumerable<TaskState> states)
+        {
+            foreach (var state in states)
             {
                 if (!state.Actor.CanExecuteTasks)
                 {
@@ -137,29 +217,20 @@ namespace Zilon.Core.World
                     state.TaskSource.ProcessTaskExecuted(state.Task);
                 }
             }
+        }
 
-            // удаляем выполненные задачи.
-            foreach (var taskStatePair in taskDict.ToArray())
+        private static void ProcessTasks(IDictionary<IActor, TaskState> taskDict)
+        {
+            var states = taskDict.Values;
+            var materializedSectorList = GroupTaskStates(states);
+
+            foreach (var sectorStates in materializedSectorList)
             {
-                var state = taskStatePair.Value;
-                if (state.TaskComplete)
-                {
-                    taskDict.Remove(taskStatePair.Key);
-                    state.TaskSource.ProcessTaskComplete(state.Task);
-                }
-
-                var actor = taskStatePair.Key;
-                if (!actor.CanExecuteTasks)
-                {
-                    // Песонаж может перестать выполнять задачи по следующим причинам:
-                    // 1. Персонажи, у которых есть модуль выживания, могут умереть.
-                    // Мертвые персонажы не выполняют задач.
-                    // Их задачи можно прервать, потому что:
-                    //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
-                    //   * Экономит ресурсы.
-                    taskDict.Remove(taskStatePair.Key);
-                }
+                var orderedStates = SortActorStates(sectorStates);
+                ProcessActorStates(orderedStates);
             }
+
+            ClearUpTasks(taskDict);
         }
 
         private void RemoveActorTaskState(IActor actor)
@@ -180,7 +251,20 @@ namespace Zilon.Core.World
         private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)
         {
             var sector = (ISector)sender;
-            await _globeTransitionHandler.ProcessAsync(this, sector, e.Actor, e.Transition).ConfigureAwait(false);
+            await _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition)
+                .ConfigureAwait(false);
+        }
+
+        private static TaskState[] SortActorStates(IEnumerable<TaskState> sectorStates)
+        {
+            // Все актёры еще раз сортируются, чтобы зафиксировать поведение для тестов.
+            // Может быть ситуация, когда найдено одновременно два актёра без задач (в самом начале теста, например).
+            // В этом случае порядок элементов, полученных из states, не фиксирован.
+            // В тестах мжет быть важно, в каком порядке ходят актёры, чтобы корректно обрабатывать коллизии.
+            // Поэтому тут выполняется еще одна сортировка, от которой, по-хорошему нужно избавиться.
+            // Лучше сразу иметь список states с сортировкой по приоритету при добавлении элемента.
+
+            return sectorStates.OrderBy(x => x.Actor.Person.Id).ToArray();
         }
 
         public IEnumerable<ISectorNode> SectorNodes => _sectorNodes;
@@ -193,33 +277,60 @@ namespace Zilon.Core.World
             }
 
             _sectorNodes.Add(sectorNode);
-            sectorNode.Sector.TrasitionUsed += Sector_TrasitionUsed;
-            sectorNode.Sector.ActorManager.Removed += ActorManager_Removed;
+            var sector = sectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            sector.TrasitionUsed += Sector_TrasitionUsed;
+            sector.ActorManager.Removed += ActorManager_Removed;
         }
 
-        public async Task UpdateAsync()
+        public async Task UpdateAsync(CancellationToken cancelToken)
         {
             var actorsWithoutTasks = GetActorsWithoutTasks();
 
-            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks, cancelToken).ConfigureAwait(false);
 
             ProcessTasks(_taskDict);
+
             _turnCounter++;
+
             if (_turnCounter >= GlobeMetrics.OneIterationLength)
             {
                 _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
 
                 foreach (var sectorNode in _sectorNodes)
                 {
-                    sectorNode.Sector.Update();
+                    var sector = sectorNode.Sector;
+                    if (sector is null)
+                    {
+                        if (sectorNode.State == SectorNodeState.SectorMaterialized)
+                        {
+                            throw new InvalidOperationException();
+                        }
+
+                        continue;
+                    }
+
+                    sector.Update();
                 }
+
+                _globeTransitionHandler.UpdateTransitions();
             }
         }
 
         private sealed class ActorInSector
         {
-            public IActor Actor { get; set; }
-            public ISector Sector { get; set; }
+            public ActorInSector(IActor actor, ISector sector)
+            {
+                Actor = actor;
+                Sector = sector;
+            }
+
+            public IActor Actor { get; }
+            public ISector Sector { get; }
         }
     }
 }

@@ -5,10 +5,10 @@ namespace Zilon.Core.Client
 {
     public class InventoryState : IInventoryState
     {
-        private IPropItemViewModel _selectedProp;
+        private IPropItemViewModel? _selectedProp;
 
         [ExcludeFromCodeCoverage]
-        public IPropItemViewModel SelectedProp
+        public IPropItemViewModel? SelectedProp
         {
             get => _selectedProp;
             set
@@ -18,6 +18,6 @@ namespace Zilon.Core.Client
             }
         }
 
-        public event EventHandler SelectedPropChanged;
+        public event EventHandler? SelectedPropChanged;
     }
 }

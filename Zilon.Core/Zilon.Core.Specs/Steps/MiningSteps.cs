@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -95,7 +96,7 @@ namespace Zilon.Core.Specs.Steps
 
         public void WhenЯВыполняюПростой()
         {
-            var idleCommand = Context.ServiceProvider.GetRequiredService<NextTurnCommand>();
+            var idleCommand = Context.ServiceProvider.GetRequiredService<IdleCommand>();
             idleCommand.Execute();
         }
 
@@ -122,7 +123,7 @@ namespace Zilon.Core.Specs.Steps
                             WhenЯВыполняюПростой();
                         }
 
-                        await globe.UpdateAsync()
+                        await globe.UpdateAsync(CancellationToken.None)
                             .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
                             .ConfigureAwait(false);
                     }
@@ -136,7 +137,7 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        await globe.UpdateAsync()
+                        await globe.UpdateAsync(CancellationToken.None)
                             .TimeoutAfter(TestSpecialConstants.ShortOperationTimeoutMs)
                             .ConfigureAwait(false);
                     }

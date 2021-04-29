@@ -2,6 +2,7 @@
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class TestJobSubScheme : IJobSubScheme
     {
         public string[] Data { get; }

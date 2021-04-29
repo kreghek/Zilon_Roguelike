@@ -158,7 +158,7 @@ namespace Zilon.Core.Persons
                 throw new System.ArgumentNullException(nameof(slot));
             }
 
-            var invalidSlot = (slot.Types & equipment.Scheme.Equip.SlotTypes[0]) == 0;
+            var invalidSlot = (slot.Types & equipment.Scheme.Equip?.SlotTypes?[0]) == 0;
             if (invalidSlot)
             {
                 return false;

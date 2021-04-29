@@ -8,6 +8,6 @@ namespace Zilon.Core.MapGenerators
     {
         ISectorMapFactoryOptionsSubScheme OptionsSubScheme { get; }
 
-        IEnumerable<RoomTransition> Transitions { get; }
+        IEnumerable<SectorTransition> Transitions { get; }
     }
 }

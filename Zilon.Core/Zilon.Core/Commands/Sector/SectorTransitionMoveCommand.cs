@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;
@@ -43,13 +44,26 @@ namespace Zilon.Core.Commands
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
         public override bool CanExecute()
         {
-            if (CurrentActor == null)
+            if (CurrentActor is null)
             {
                 return false;
             }
 
+            if (_player.Globe is null || _player.MainPerson is null)
+            {
+                // We can't check transition if the globe and/or the main person equal null.
+
+                throw new InvalidOperationException("Player object is not initialized.");
+            }
+
             var actorNode = CurrentActor.Node;
-            var map = _player.SectorNode.Sector.Map;
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var map = sector.Map;
 
             var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
 
@@ -63,9 +77,27 @@ namespace Zilon.Core.Commands
         /// </summary>
         protected override void ExecuteTacticCommand()
         {
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
             var intention = new Intention<SectorTransitTask>(a => new SectorTransitTask(a, taskContext));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, actor);
         }
     }
 }

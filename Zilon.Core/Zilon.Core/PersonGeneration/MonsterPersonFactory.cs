@@ -9,12 +9,24 @@ namespace Zilon.Core.PersonGeneration
 {
     public sealed class MonsterPersonFactory : IMonsterPersonFactory
     {
+        public IMonsterIdentifierGenerator? MonsterIdentifierGenerator { get; set; }
+
         public IPerson Create(IMonsterScheme monsterScheme)
         {
             var monsterPerson = new MonsterPerson(monsterScheme);
 
+            if (MonsterIdentifierGenerator != null)
+            {
+                monsterPerson.Id = MonsterIdentifierGenerator.GetNewId();
+            }
+
             var movingModule = new MonsterMovingModule(monsterScheme);
             monsterPerson.AddModule(movingModule);
+
+            if (monsterScheme?.PrimaryAct is null)
+            {
+                throw new InvalidOperationException();
+            }
 
             var Acts = new ITacticalAct[]
             {
@@ -26,6 +38,8 @@ namespace Zilon.Core.PersonGeneration
             monsterPerson.AddModule(combaActModule);
 
             var defenses = monsterScheme.Defense?.Defenses?
+                .Where(x => x != null)
+                .Select(x => x!)
                 .Select(x => new PersonDefenceItem(x.Type, x.Level))
                 .ToArray();
 

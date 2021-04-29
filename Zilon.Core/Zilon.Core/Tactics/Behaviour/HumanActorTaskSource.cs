@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly ISender<IActorTask> _actorTaskSender;
         private readonly SpscChannel<IActorTask> _spscChannel;
         private CancellationTokenSource _cancellationTokenSource;
-        private IActor _currentActorIntention;
+        private IActor? _currentActorIntention;
         private bool _intentionWait;
 
         public HumanActorTaskSource()
@@ -72,13 +73,23 @@ namespace Zilon.Core.Tactics.Behaviour
             // Этот источник команд ждёт, пока игрок не укажет задачу.
             // Задача генерируется из намерения. Это значит, что ждать нужно, пока не будет задано намерение.
 
-            return await _actorTaskReceiver.ReceiveAsync(_cancellationTokenSource.Token).ConfigureAwait(false);
+            if (context.CancellationToken is null)
+            {
+                return await _actorTaskReceiver.ReceiveAsync(_cancellationTokenSource.Token).ConfigureAwait(false);
+            }
+
+            using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
+                _cancellationTokenSource.Token,
+                context.CancellationToken.Value);
+
+            return await _actorTaskReceiver.ReceiveAsync(linkedCts.Token).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         //TODO Избавиться от синхронного варианта.
         // Сейчас он оставлен прото из-за тестов. Сложностей с удалением нет, кроме рутины.
         [Obsolete("Использовать асинк-вариант вместо этого")]
+        [ExcludeFromCodeCoverage]
         public void Intent(IIntention intention, IActor activeActor)
         {
             IntentAsync(intention, activeActor).Wait();

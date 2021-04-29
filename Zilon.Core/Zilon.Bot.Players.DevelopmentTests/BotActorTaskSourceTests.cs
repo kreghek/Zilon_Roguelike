@@ -41,7 +41,10 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var autoPlayEngine = new AutoplayEngine(
                 startUp,
                 botSettings,
-                globeInitializer);
+                globeInitializer)
+            {
+                PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>()
+            };
 
             var globe = await autoPlayEngine.CreateGlobeAsync().ConfigureAwait(false);
             var followedPerson = player.MainPerson;

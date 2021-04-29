@@ -19,11 +19,7 @@ public class SchemeLocator : MonoBehaviour, ISchemeLocator
             var content = schemeAsset.text;
 
             // Итоговый файл
-            var file = new SchemeFile
-            {
-                Sid = sid,
-                Content = content
-            };
+            var file = new SchemeFile(content, sid);
 
             result.Add(file);
         }

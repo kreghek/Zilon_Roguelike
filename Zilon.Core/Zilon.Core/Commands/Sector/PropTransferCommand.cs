@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;
@@ -22,7 +23,7 @@ namespace Zilon.Core.Commands
             _player = player;
         }
 
-        public PropTransferMachine TransferMachine { get; set; }
+        public PropTransferMachine? TransferMachine { get; set; }
 
         public override bool CanExecute()
         {
@@ -31,6 +32,17 @@ namespace Zilon.Core.Commands
 
         protected override void ExecuteTacticCommand()
         {
+            if (TransferMachine is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var inventoryTransfer = new PropTransfer(TransferMachine.Inventory.PropStore,
                 TransferMachine.Inventory.PropAdded,
                 TransferMachine.Inventory.PropRemoved);
@@ -39,11 +51,23 @@ namespace Zilon.Core.Commands
                 TransferMachine.Container.PropAdded,
                 TransferMachine.Container.PropRemoved);
 
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var taskContext = new ActorTaskContext(sector);
 
             var intention = new Intention<TransferPropsTask>(actor =>
                 new TransferPropsTask(actor, taskContext, new[] { inventoryTransfer, containerTransfer }));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, actor);
         }
     }
 }

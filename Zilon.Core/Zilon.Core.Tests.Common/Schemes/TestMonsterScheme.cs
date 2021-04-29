@@ -2,6 +2,7 @@
 {
     using Core.Schemes;
 
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class TestMonsterScheme : SchemeBase, IMonsterScheme
     {
         public int BaseScore { get; set; }
@@ -20,6 +21,6 @@
         public string[] Tags { get; set; }
 
         /// <inheritdoc />
-        public int BaseMoveSpeed { get; }
+        public float? MoveSpeedFactor { get; }
     }
 }

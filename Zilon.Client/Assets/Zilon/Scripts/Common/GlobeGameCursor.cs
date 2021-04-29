@@ -3,14 +3,12 @@
 public class GlobeGameCursor : MonoBehaviour
 {
     public Sprite DefaultCursorSprite;
-    public Sprite AttackCursorSprite;
-    public Sprite InteractiveCursorSprite;
-    public Sprite CantMoveCursorSprite;
     public SpriteRenderer SpriteRenderer;
 
     public void Start()
     {
         Cursor.visible = false;
+        SpriteRenderer.sprite = DefaultCursorSprite;
     }
 
 
@@ -20,8 +18,8 @@ public class GlobeGameCursor : MonoBehaviour
         transform.localPosition = cursorPosition + new Vector3(0, 0, 11);
     }
 
-    public void FixedUpdate()
+    public void OnDestroy()
     {
-        SpriteRenderer.sprite = DefaultCursorSprite;
+        Cursor.visible = true;
     }
 }

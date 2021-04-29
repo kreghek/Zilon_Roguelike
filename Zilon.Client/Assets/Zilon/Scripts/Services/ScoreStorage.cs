@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 
 using UnityEngine;
 
-using Zilon.Core.ProgressStoring;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 
@@ -28,13 +27,11 @@ namespace Assets.Zilon.Scripts.Services
                 CreateScoresTableIfNotExists(connection);
 
                 var fragSum = scores.Frags.Sum(x => x.Value);
-                var scoreStorageData = ScoresStorageData.Create(scores);
-                var summarySerialized = JsonConvert.SerializeObject(scoreStorageData);
                 var textSummary = TextSummaryHelper.CreateTextSummary(scores);
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, DeathReason, Turns, Frags, Summary, TextSummary)
-                    VALUES ('{personName}', 'preffix', 'mode', {scores.BaseScores}, '{deathReason}', {scores.Turns}, {fragSum}, '{summarySerialized}', '{textSummary}')";
+                    command.CommandText = $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, DeathReason, Turns, Frags, TextSummary)
+                    VALUES ('{personName}', 'preffix', 'mode', {scores.BaseScores}, '{deathReason}', {scores.Turns}, {fragSum}, '{textSummary}')";
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
                 }

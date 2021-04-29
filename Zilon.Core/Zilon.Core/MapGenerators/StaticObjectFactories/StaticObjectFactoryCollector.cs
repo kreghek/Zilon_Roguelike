@@ -7,6 +7,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
     /// <summary>
     /// Base implementation of <see cref="IStaticObjectFactoryCollector" />.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class StaticObjectFactoryCollector : IStaticObjectFactoryCollector
     {
         private readonly IStaticObjectFactory[] _factories;

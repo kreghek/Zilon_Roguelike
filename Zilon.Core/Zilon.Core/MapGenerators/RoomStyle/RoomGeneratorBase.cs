@@ -82,6 +82,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// Возвращает набор созданных комнат.
         /// </returns>
         public abstract IEnumerable<Room> GenerateRoomsInGrid(int roomCount, int roomMinSize, int roomMaxSize,
-            IEnumerable<RoomTransition> availableTransitions);
+            IEnumerable<SectorTransition> availableTransitions);
     }
 }

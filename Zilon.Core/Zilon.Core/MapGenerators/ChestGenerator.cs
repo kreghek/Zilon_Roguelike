@@ -33,7 +33,7 @@ namespace Zilon.Core.MapGenerators
         private static bool CheckMap(ISector sector, HexNode containerNode)
         {
             var map = sector.Map;
-            var currentStaticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node);
+            var currentStaticObjectsNodes = sector.StaticObjectManager.Items.Select(x => x.Node).OfType<HexNode>();
 
             var allNonObstacleNodes = map.Nodes.OfType<HexNode>().ToArray();
             var allNonContainerNodes = allNonObstacleNodes.Where(x => !currentStaticObjectsNodes.Contains(x));
@@ -192,9 +192,21 @@ namespace Zilon.Core.MapGenerators
 
         private IDropTableScheme[] GetTrashDropTables(ISectorSubScheme sectorSubScheme)
         {
-            var dropTables = new List<IDropTableScheme>();
-            foreach (var chestDropSid in sectorSubScheme.ChestDropTableSids)
+            var chestDropTableSids = sectorSubScheme.ChestDropTableSids;
+            if (chestDropTableSids is null)
             {
+                return Array.Empty<IDropTableScheme>();
+            }
+
+            var dropTables = new List<IDropTableScheme>();
+
+            foreach (var chestDropSid in chestDropTableSids)
+            {
+                if (chestDropSid is null)
+                {
+                    continue;
+                }
+
                 var dropTable = _schemeService.GetScheme<IDropTableScheme>(chestDropSid);
                 dropTables.Add(dropTable);
             }
