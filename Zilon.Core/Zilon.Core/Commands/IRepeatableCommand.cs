@@ -19,7 +19,7 @@
         bool CanRepeat();
 
         /// <summary>
-        /// Fix next iteration of command in aut-execution. Used to debug in <see cref="CommandLoopUpdater"/>.
+        /// Fix next iteration of command in aut-execution. Used to debug in <see cref="CommandLoopUpdater" />.
         /// </summary>
         void IncreaceIteration();
     }
