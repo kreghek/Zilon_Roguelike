@@ -20,7 +20,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     public class SectorViewModel : DrawableGameComponent
     {
-        private const int UNIT_SIZE = 50;
+        private const int UNIT_SIZE = 32;
 
         private readonly Camera _camera;
         private readonly SpriteBatch _spriteBatch;

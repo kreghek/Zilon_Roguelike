@@ -10,7 +10,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     class StaticObjectViewModel : GameObjectBase, IContainerViewModel
     {
-        private const int UNIT_SIZE = 50;
+        private const int UNIT_SIZE = 32;
 
         private Game _game;
         private SpriteBatch _spriteBatch;

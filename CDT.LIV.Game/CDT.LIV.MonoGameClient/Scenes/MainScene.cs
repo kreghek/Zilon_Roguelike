@@ -47,7 +47,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
     public class Camera
     {
-        private const int UNIT_SIZE = 50;
+        private const int UNIT_SIZE = 32;
 
         public Matrix Transform { get; private set; }
 
