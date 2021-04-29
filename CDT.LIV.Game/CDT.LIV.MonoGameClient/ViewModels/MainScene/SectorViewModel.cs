@@ -11,8 +11,8 @@ using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core;
 using Zilon.Core.Client;
-using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
+using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
@@ -29,13 +29,13 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly IPlayer _player;
         private readonly ISectorUiState _uiState;
         private readonly ICommandPool _commandPool;
-        private readonly IAnimationBlockerService _animationBlockerService;
-        private readonly ICommandLoopUpdater _commandLoopUpdater;
         private readonly Zilon.Core.Tactics.ISector _sector;
 
         private readonly MapViewModel _mapViewModel;
         private readonly List<GameObjectBase> _gameObjects;
 
+        private readonly Texture2D _cursorTexture;
+        private readonly Texture2D _cursorTexture2;
         private bool _leftMousePressed;
 
         public SectorViewModel(Game game, Camera _camera, SpriteBatch spriteBatch) : base(game)
@@ -48,8 +48,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _player = serviceScope.GetRequiredService<IPlayer>();
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
             _commandPool = serviceScope.GetRequiredService<ICommandPool>();
-            _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-            _commandLoopUpdater = serviceScope.GetRequiredService<ICommandLoopUpdater>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -86,6 +84,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 _gameObjects.Add(staticObjectModel);
             }
+
+            _cursorTexture = Game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
+            _cursorTexture2 = Game.Content.Load<Texture2D>("Sprites/hex");
         }
 
         public override void Draw(GameTime gameTime)
@@ -123,6 +124,40 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 gameObject.Draw(gameTime, _camera.Transform);
             }
+
+
+
+
+
+            var mouseState = Mouse.GetState();
+            _spriteBatch.Begin(transformMatrix: _camera.Transform);
+
+            var inverseCameraTransform = Matrix.Invert(_camera.Transform);
+
+            var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
+
+            _spriteBatch.Draw(_cursorTexture, new Vector2(mouseInWorld.X, mouseInWorld.Y), Color.White);
+
+            var mouseCubeInWorld = PixelToHex(mouseInWorld.X, mouseInWorld.Y);
+
+            var offsetMouseInWorld = HexHelper.ConvertToOffset(mouseCubeInWorld);
+
+            //var x = (mouseInWorld.X) / UNIT_SIZE;
+            //var y = (mouseInWorld.Y) / (UNIT_SIZE * 0.5f);
+
+            _spriteBatch.Draw(_cursorTexture2, new Rectangle((int)offsetMouseInWorld.X * UNIT_SIZE, (int)offsetMouseInWorld.Y * UNIT_SIZE / 2, UNIT_SIZE, UNIT_SIZE /2), Color.Black);
+
+            _spriteBatch.End();
+        }
+
+        private CubeCoords PixelToHex(float x, float y)
+        {
+            // see https://habr.com/ru/post/319644/
+
+            var q = (x * (3 * 3) / 3 - y / 3) / UNIT_SIZE;
+            var r = y * 2 / 3 / UNIT_SIZE;
+
+            return new CubeCoords((int)q, (int)(-q - r), (int)r);
         }
 
         public override void Update(GameTime gameTime)
@@ -150,8 +185,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 var map = _sector.Map;
 
-                var hoverNode = map.Nodes.OfType<HexNode>()
-                    .SingleOrDefault(node => node.OffsetCoords == offsetCoords);
+                var hoverNodes = map.Nodes.OfType<HexNode>()
+                    .Where(node => new Rectangle(node.OffsetCoords.X - UNIT_SIZE / 2, node.OffsetCoords.Y - UNIT_SIZE / 4, UNIT_SIZE, UNIT_SIZE/2).Intersects(new Rectangle(offsetCoords.X, offsetCoords.Y, 1, 1)));
+                var hoverNode = hoverNodes.FirstOrDefault();
 
                 if (hoverNode != null)
                 {
