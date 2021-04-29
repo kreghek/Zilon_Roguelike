@@ -15,6 +15,8 @@ namespace Zilon.Core.Commands
             _queue = new ConcurrentQueue<ICommand>();
         }
 
+        public bool IsEmpty => !_queue.Any();
+
         public event EventHandler? CommandPushed;
 
         public ICommand? Pop()

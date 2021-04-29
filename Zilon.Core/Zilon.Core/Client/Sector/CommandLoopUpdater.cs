@@ -23,7 +23,7 @@ namespace Zilon.Core.Client.Sector
             _lockObj = new object();
         }
 
-        private ICommand? ExecuteCommandsInner(ICommand? lastCommand)
+        private ICommand? TryExecuteCommand(ICommand? lastCommand)
         {
             ICommand? commandWithError = null;
             ICommand? newLastCommand = null;
@@ -52,8 +52,9 @@ namespace Zilon.Core.Client.Sector
 
                         if (command is IRepeatableCommand repeatableCommand)
                         {
-                            if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute())
+                            if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
                             {
+                                repeatableCommand.IncreaceIteration();
                                 _commandPool.Push(repeatableCommand);
                                 CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
                             }
@@ -126,19 +127,20 @@ namespace Zilon.Core.Client.Sector
                 {
                     if (!_commandLoopContext.CanPlayerGiveCommand)
                     {
+                        await Task.Delay(100).ConfigureAwait(false);
                         continue;
                     }
 
                     try
                     {
-                        lastCommand = ExecuteCommandsInner(lastCommand);
+                        lastCommand = TryExecuteCommand(lastCommand: lastCommand);
                     }
                     catch (Exception exception)
                     {
                         ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
                     }
 
-                    await Task.Yield();
+                    await Task.Delay(100).ConfigureAwait(false);
                 }
             }, cancellationToken);
         }

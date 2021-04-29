@@ -42,11 +42,11 @@ namespace Zilon.Core.Commands
         /// Определяем, может ли команда выполниться.
         /// </summary>
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
             if (CurrentActor is null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             if (_player.Globe is null || _player.MainPerson is null)
@@ -69,7 +69,12 @@ namespace Zilon.Core.Commands
 
             var actorOnTransition = detectedTransition != null;
 
-            return actorOnTransition;
+            if (!actorOnTransition)
+            {
+                return new CanExecuteCheckResult { IsSuccess = false };
+            }
+
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         /// <summary>

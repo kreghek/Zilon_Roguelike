@@ -19,6 +19,8 @@ namespace Zilon.Core.Client
         /// </summary>
         IActorViewModel? ActiveActor { get; set; }
 
+        bool CanPlayerGivesCommand { get; }
+
         ITacticalAct? TacticalAct { get; set; }
 
         /// <summary>

@@ -26,12 +26,12 @@ namespace Zilon.Core.Commands
             _inventoryState = inventoryState;
         }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
             var propVm = _inventoryState.SelectedProp;
             if (propVm == null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var prop = propVm.Prop;
@@ -61,10 +61,10 @@ namespace Zilon.Core.Commands
             var isAllowed = UsePropHelper.CheckPropAllowedByRestrictions(prop, actor, taskContext);
             if (!isAllowed)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
-            return true;
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         protected override void ExecuteTacticCommand()

@@ -125,7 +125,7 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
     {
         var canEquip = _equipCommand.CanExecute();
         var selectedProp = _inventoryState.SelectedProp;
-        var denySlot = !canEquip && selectedProp != null;
+        var denySlot = !canEquip.IsSuccess && selectedProp != null;
         DenyBorder.SetActive(denySlot);
     }
 

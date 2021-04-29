@@ -6,9 +6,9 @@ namespace Assets.Zilon.Scripts.Commands
 {
     sealed class QuitCommand : ICommand
     {
-        public bool CanExecute()
+        public CanExecuteCheckResult CanExecute()
         {
-            return true;
+            return CanExecuteCheckResult.CreateSuccessful();
         }
 
         public void Execute()

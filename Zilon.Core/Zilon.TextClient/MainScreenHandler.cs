@@ -239,7 +239,7 @@ namespace Zilon.TextClient
 
         private static void PushCommandToExecution(ICommandPool commandManager, ICommand command)
         {
-            if (command.CanExecute())
+            if (command.CanExecute().IsSuccess)
             {
                 commandManager.Push(command);
             }
@@ -272,7 +272,7 @@ namespace Zilon.TextClient
         {
             var serviceScope = gameState.ServiceScope;
             var player = serviceScope.ServiceProvider.GetRequiredService<IPlayer>();
-            var commandManager = serviceScope.ServiceProvider.GetRequiredService<ICommandPool>();
+            var commandPool = serviceScope.ServiceProvider.GetRequiredService<ICommandPool>();
             var animationBlockerService = serviceScope.ServiceProvider.GetRequiredService<IAnimationBlockerService>();
             var humanTaskSource = serviceScope.ServiceProvider
                 .GetRequiredService<IActorTaskSource<ISectorTaskSourceContext>>();
@@ -280,12 +280,12 @@ namespace Zilon.TextClient
             var playerState = serviceScope.ServiceProvider.GetRequiredService<ISectorUiState>();
             var inventoryState = serviceScope.ServiceProvider.GetRequiredService<IInventoryState>();
 
-            var gameLoopUpdateContext = new GlobeLoopContext(player, inventoryState, playerState);
-            var gameLoop = new GlobeLoopUpdater(gameLoopUpdateContext, animationBlockerService);
+            var globeLoopUpdateContext = new GlobeLoopContext(player, inventoryState, playerState);
+            var globeLoop = new GlobeLoopUpdater(globeLoopUpdateContext, animationBlockerService);
 
             var commandLoopContext =
                 new CommandLoopContext(player, (IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource);
-            var commandLoop = new CommandLoopUpdater(commandLoopContext, commandManager);
+            var commandLoop = new CommandLoopUpdater(commandLoopContext, commandPool);
 
             var globe = player.Globe;
 
@@ -294,8 +294,8 @@ namespace Zilon.TextClient
             using var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
 
-            gameLoop.ErrorOccured += (s, e) => { Console.WriteLine(e.Exception); };
-            gameLoop.Start();
+            globeLoop.ErrorOccured += (s, e) => { Console.WriteLine(e.Exception); };
+            globeLoop.Start();
 
             commandLoop.ErrorOccured += (s, e) => { Console.WriteLine(e.Exception); };
             commandLoop.CommandAutoExecuted += (s, e) => { Console.WriteLine("Auto execute last command"); };
@@ -330,7 +330,7 @@ namespace Zilon.TextClient
                 {
                     var playerActorSectorNode = GetPlayerSectorNode(player, globe);
 
-                    HandleMoveCommand(serviceScope, playerState, commandManager, playerActorSectorNode, inputText);
+                    HandleMoveCommand(serviceScope, playerState, commandPool, playerActorSectorNode, inputText);
                 }
                 else if (inputText.StartsWith("look", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -340,7 +340,7 @@ namespace Zilon.TextClient
                 }
                 else if (inputText.StartsWith("idle", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    HandleIdleCommand(serviceScope, commandManager);
+                    HandleIdleCommand(serviceScope, commandPool);
                 }
                 else if (inputText.StartsWith("dead", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -348,13 +348,13 @@ namespace Zilon.TextClient
                 }
                 else if (inputText.StartsWith("transit", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    HandleSectorTransitCommand(serviceScope, commandManager);
+                    HandleSectorTransitCommand(serviceScope, commandPool);
                 }
                 else if (inputText.StartsWith("attack", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var playerActorSectorNode = GetPlayerSectorNode(player, globe);
 
-                    HandleAttackCommand(inputText, serviceScope, playerState, playerActorSectorNode, commandManager);
+                    HandleAttackCommand(inputText, serviceScope, playerState, playerActorSectorNode, commandPool);
                 }
                 else if (inputText.StartsWith("exit", StringComparison.InvariantCultureIgnoreCase))
                 {

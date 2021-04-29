@@ -73,17 +73,17 @@ public class SectorUiHandler : MonoBehaviour
 
         if (NextTurnButton != null)
         {
-            NextTurnButton.interactable = _nextTurnCommand.CanExecute();
+            NextTurnButton.interactable = _nextTurnCommand.CanExecute().IsSuccess;
         }
 
         if (InventoryButton != null)
         {
-            InventoryButton.interactable = _showInventoryCommand.CanExecute();
+            InventoryButton.interactable = _showInventoryCommand.CanExecute().IsSuccess;
         }
 
         if (PersonButton != null)
         {
-            PersonButton.interactable = _showPersonModalCommand.CanExecute();
+            PersonButton.interactable = _showPersonModalCommand.CanExecute().IsSuccess;
         }
 
         if (SectorTransitionMoveButton != null)
@@ -94,7 +94,7 @@ public class SectorUiHandler : MonoBehaviour
             }
             else
             {
-                SectorTransitionMoveButton.interactable = _sectorTransitionMoveCommand.CanExecute();
+                SectorTransitionMoveButton.interactable = _sectorTransitionMoveCommand.CanExecute().IsSuccess;
             }
         }
 

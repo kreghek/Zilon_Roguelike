@@ -106,7 +106,7 @@ namespace Zilon.Core.Specs.Steps
 
             inventoryState.SelectedProp = targetEquipmentVeiwModel;
 
-            equipCommand.CanExecute().Should().BeFalse();
+            equipCommand.CanExecute().IsSuccess.Should().BeFalse();
         }
 
         [When(@"Снимаю экипировку из слота (\d+)")]
