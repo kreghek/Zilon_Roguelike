@@ -233,12 +233,12 @@ namespace Zilon.Core.Commands
             var nodeViewModel = GetHoverNodeViewModel();
             if (nodeViewModel is null)
             {
-                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "No hover node." };
+                return CanExecuteCheckResult.CreateFailed("No hover node.");
             }
 
             if (PlayerState.ActiveActor?.Actor is null)
             {
-                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Active actor is not assigned." };
+                return CanExecuteCheckResult.CreateFailed("Active actor is not assigned.");
             }
 
             CreatePath(nodeViewModel);
@@ -247,11 +247,10 @@ namespace Zilon.Core.Commands
 
             if (!pathIsNotEmpty)
             {
-                return new CanExecuteCheckResult
-                    { IsSuccess = false, FailureReason = "Found path is correct or empty." };
+                return CanExecuteCheckResult.CreateFailed("Found path is correct or empty." );
             }
 
-            return new CanExecuteCheckResult { IsSuccess = true };
+            return CanExecuteCheckResult.CreateSuccessful();
         }
 
         /// <summary>

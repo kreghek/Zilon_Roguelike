@@ -48,7 +48,7 @@ namespace Zilon.Core.Commands
             var activeActor = PlayerState.ActiveActor;
             if (activeActor is null)
             {
-                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Active actor is not assigned." };
+                return CanExecuteCheckResult.CreateFailed("Active actor is not assigned.");
             }
 
             var currentNode = activeActor.Actor.Node;
@@ -56,7 +56,7 @@ namespace Zilon.Core.Commands
             var target = GetTarget(PlayerState);
             if (target is null)
             {
-                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Invalid target." };
+                return CanExecuteCheckResult.CreateFailed("Invalid target.");
             }
 
             var targetNode = target.Node;
@@ -64,7 +64,7 @@ namespace Zilon.Core.Commands
             var act = PlayerState.TacticalAct;
             if (act is null)
             {
-                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Act is not assigned." };
+                return CanExecuteCheckResult.CreateFailed("Act is not assigned.");
             }
 
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
@@ -73,26 +73,25 @@ namespace Zilon.Core.Commands
                 // Лечить можно только самого себя.
                 // Возможно, дальше будут компаньоны и другие НПЦ.
                 // Тогда эту проверку нужно будет доработать.
-                return new CanExecuteCheckResult { IsSuccess = true };
+                return CanExecuteCheckResult.CreateSuccessful();
             }
 
             // Проверка, что цель достаточно близка по дистации и видна.
             if (act.Stats.Range == null)
             {
-                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Act range is not valid." };
+                return CanExecuteCheckResult.CreateFailed("Act range is not valid.");
             }
 
             var isInDistance = act.CheckDistance(currentNode, targetNode, sector.Map);
             if (!isInDistance)
             {
-                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Target is out of range." };
+                return CanExecuteCheckResult.CreateFailed("Target is out of range.");
             }
 
             var targetIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
             if (!targetIsOnLine)
             {
-                return new CanExecuteCheckResult
-                    { IsSuccess = false, FailureReason = "Target is not on line of sight." };
+                return CanExecuteCheckResult.CreateFailed("Target is not on line of sight.");
             }
 
             // Проверка наличия ресурсов для выполнения действия
@@ -106,8 +105,7 @@ namespace Zilon.Core.Commands
 
                 if (!hasPropResource)
                 {
-                    return new CanExecuteCheckResult
-                        { IsSuccess = false, FailureReason = "Has not enought resources to perform act." };
+                    return CanExecuteCheckResult.CreateFailed("Has not enought resources to perform act.");
                 }
             }
 
@@ -115,10 +113,10 @@ namespace Zilon.Core.Commands
 
             if (act.CurrentCooldown > 0)
             {
-                return new CanExecuteCheckResult { IsSuccess = false, FailureReason = "Act cooldown is not over." };
+                return CanExecuteCheckResult.CreateFailed("Act cooldown is not over.");
             }
 
-            return new CanExecuteCheckResult { IsSuccess = true };
+            return CanExecuteCheckResult.CreateSuccessful();
         }
 
         protected override void ExecuteTacticCommand()
