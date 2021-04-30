@@ -13,12 +13,12 @@ namespace Zilon.Core.Tests.Common.TestCases
                 // Params:
                 // world x coordinate
                 // world Y coordinate
-                // hex width in the world
-                // hex height in the world
+                // hex size in the world. Size is distance from center to a edge.
 
-                yield return new TestCaseData(0, 0, 1, 1).Returns(new OffsetCoords(0, 0));
-                yield return new TestCaseData(0, 0, 50, 50).Returns(new OffsetCoords(0, 0));
-                yield return new TestCaseData(50, 0, 50, 50).Returns(new OffsetCoords(1, 0));
+                yield return new TestCaseData(0, 0, 1).Returns(new OffsetCoords(0, 0));
+                yield return new TestCaseData(0, 0, 50).Returns(new OffsetCoords(0, 0));
+                yield return new TestCaseData(50, 50, 50).Returns(new OffsetCoords(0, 1));
+                yield return new TestCaseData(3 * 50, 50, 50).Returns(new OffsetCoords(1, 1));
             }
         }
     }

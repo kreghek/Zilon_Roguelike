@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace Zilon.Core.Common
 {
@@ -40,15 +41,53 @@ namespace Zilon.Core.Common
             return ConvertToWorld(coords.X, coords.Y);
         }
 
-        public static OffsetCoords ConvertWorldToOffset(int worldX, int worldY, int width, int height)
+        public static AxialCoords ConvertWorldToAxial(int worldX, int worldY, int size)
         {
             // see https://habr.com/ru/post/319644/
 
-            var q = (worldX * System.Math.Sqrt(3) / 3 - worldY / 3) / width;
-            var r = worldY * 2 / 3 / height;
+            var q = ((float)System.Math.Sqrt(3) / 3f * worldX - worldY / 3f) / size;
+            var r = (2f / 3f * worldY) / size;
 
-            var cube = new CubeCoords((int)q, (int)(-q - r), (int)r);
-            return ConvertToOffset(cube);
+            var axialCoords = new AxialCoords(q, r);
+
+            return axialCoords;
+        }
+
+        public static OffsetCoords ConvertAxialToOffset(AxialCoords axialCoords)
+        {
+            var roundQ = (int)Math.Round(axialCoords.Q, MidpointRounding.ToEven);
+            var roundR = (int)Math.Round(axialCoords.R, MidpointRounding.ToEven);
+
+            var x = roundQ - roundR + (roundR % 2 == 0 ? 0 : 1);
+            var y = roundR;
+            return new OffsetCoords(x, y);
+        }
+
+        public static OffsetCoords ConvertWorldToOffset(int worldX, int worldY, int size)
+        {
+            var axialCoords = ConvertWorldToAxial(worldX, worldY, size);
+            var offsetCoords = ConvertAxialToOffset(axialCoords);
+            return offsetCoords;
+        }
+
+        public static CubeCoords ConvertAxialToCube(AxialCoords axialCoords)
+        {
+            var x = axialCoords.Q;
+            var z = axialCoords.R;
+            var y = -x - z;
+            return new CubeCoords((int)x, (int)y, (int)z);
+        }
+
+        public struct AxialCoords
+        {
+            public AxialCoords(float q, float r)
+            {
+                Q = q;
+                R = r;
+            }
+
+            public float Q { get; set; }
+            public float R { get; set; }
         }
 
         /// <summary>

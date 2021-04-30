@@ -65,10 +65,10 @@ namespace Zilon.Core.Tests.Common
         [Test]
         [TestCaseSource(typeof(HexHelperTestCases),
             nameof(HexHelperTestCases.TestCases))]
-        public OffsetCoords ConvertWorldToOffsetTest(int worldX, int worldY, int width, int height)
+        public OffsetCoords ConvertWorldToOffsetTest(int worldX, int worldY, int size)
         {
             // ACT
-            var factOffsetCoords = HexHelper.ConvertWorldToOffset(worldX, worldY, width, height);
+            var factOffsetCoords = HexHelper.ConvertWorldToOffset(worldX, worldY, size);
 
             // ASSERT
             return factOffsetCoords;
