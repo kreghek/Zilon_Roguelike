@@ -76,8 +76,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 _spriteBatch.Draw(
                     _hexSprite,
                     new Rectangle(
-                        (int)(worldCoords[0] * UNIT_SIZE),
-                        (int)(worldCoords[1] * UNIT_SIZE / 2),
+                        (int)(worldCoords[0] * UNIT_SIZE - UNIT_SIZE / 2),
+                        (int)(worldCoords[1] * UNIT_SIZE / 2 - UNIT_SIZE / 4),
                         UNIT_SIZE,
                         UNIT_SIZE / 2),
                     nodeColor);

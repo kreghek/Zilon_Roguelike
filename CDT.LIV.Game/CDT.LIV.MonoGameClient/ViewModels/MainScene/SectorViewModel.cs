@@ -93,7 +93,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         {
             base.Draw(gameTime);
 
-            _mapViewModel.Draw(_camera.Transform);
+            _mapViewModel.Draw(/*_camera.Transform*/Matrix.Identity);
 
             if (_player.MainPerson is null)
             {
@@ -122,7 +122,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     continue;
                 }
 
-                gameObject.Draw(gameTime, _camera.Transform);
+                gameObject.Draw(gameTime, Matrix.Identity);
             }
 
 
@@ -130,20 +130,21 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
 
             var mouseState = Mouse.GetState();
-            _spriteBatch.Begin(transformMatrix: _camera.Transform);
+            _spriteBatch.Begin(transformMatrix: Matrix.Identity);
 
-            var inverseCameraTransform = Matrix.Invert(_camera.Transform);
+            var inverseCameraTransform = Matrix.Invert(Matrix.Identity);
 
             var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
 
             _spriteBatch.Draw(_cursorTexture, new Vector2(mouseInWorld.X, mouseInWorld.Y), Color.White);
 
-            var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y, UNIT_SIZE, UNIT_SIZE / 2);
+            var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y / 2, UNIT_SIZE);
+            var worldOffsetMouse = HexHelper.ConvertToWorld(offsetMouseInWorld);
 
             //var x = (mouseInWorld.X) / UNIT_SIZE;
             //var y = (mouseInWorld.Y) / (UNIT_SIZE * 0.5f);
 
-            _spriteBatch.Draw(_cursorTexture2, new Rectangle((int)offsetMouseInWorld.X * UNIT_SIZE, (int)offsetMouseInWorld.Y * UNIT_SIZE / 2, UNIT_SIZE, UNIT_SIZE /2), Color.Black);
+            _spriteBatch.Draw(_cursorTexture2, new Rectangle((int)worldOffsetMouse[0] * UNIT_SIZE, (int)worldOffsetMouse[1] * UNIT_SIZE / 2, UNIT_SIZE, UNIT_SIZE /2), Color.Black);
 
             _spriteBatch.End();
         }
