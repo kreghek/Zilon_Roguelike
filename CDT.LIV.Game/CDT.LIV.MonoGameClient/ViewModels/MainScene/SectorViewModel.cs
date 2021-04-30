@@ -137,12 +137,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
 
             _spriteBatch.Draw(_cursorTexture, new Vector2(mouseInWorld.X, mouseInWorld.Y), Color.White);
-            _spriteBatch.End();
 
-            _spriteBatch.Begin();
-            var mouseCubeInWorld = PixelToHex(mouseInWorld.X, mouseInWorld.Y / 2);
-
-            var offsetMouseInWorld = HexHelper.ConvertToOffset(mouseCubeInWorld);
+            var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y, UNIT_SIZE, UNIT_SIZE / 2);
 
             //var x = (mouseInWorld.X) / UNIT_SIZE;
             //var y = (mouseInWorld.Y) / (UNIT_SIZE * 0.5f);
@@ -150,16 +146,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _spriteBatch.Draw(_cursorTexture2, new Rectangle((int)offsetMouseInWorld.X * UNIT_SIZE, (int)offsetMouseInWorld.Y * UNIT_SIZE / 2, UNIT_SIZE, UNIT_SIZE /2), Color.Black);
 
             _spriteBatch.End();
-        }
-
-        private CubeCoords PixelToHex(float x, float y)
-        {
-            // see https://habr.com/ru/post/319644/
-
-            var q = (x * Math.Sqrt(3) / 3f - y / 3f) / UNIT_SIZE;
-            var r = y * 2f / 3f / UNIT_SIZE;
-
-            return new CubeCoords((int)q, (int)(-q - r), (int)r);
         }
 
         public override void Update(GameTime gameTime)
