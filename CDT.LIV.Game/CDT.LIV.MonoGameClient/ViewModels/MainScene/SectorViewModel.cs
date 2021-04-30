@@ -137,8 +137,10 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
 
             _spriteBatch.Draw(_cursorTexture, new Vector2(mouseInWorld.X, mouseInWorld.Y), Color.White);
+            _spriteBatch.End();
 
-            var mouseCubeInWorld = PixelToHex(mouseInWorld.X, mouseInWorld.Y);
+            _spriteBatch.Begin();
+            var mouseCubeInWorld = PixelToHex(mouseInWorld.X, mouseInWorld.Y / 2);
 
             var offsetMouseInWorld = HexHelper.ConvertToOffset(mouseCubeInWorld);
 
@@ -154,8 +156,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         {
             // see https://habr.com/ru/post/319644/
 
-            var q = (x * (3 * 3) / 3 - y / 3) / UNIT_SIZE;
-            var r = y * 2 / 3 / UNIT_SIZE;
+            var q = (x * Math.Sqrt(3) / 3f - y / 3f) / UNIT_SIZE;
+            var r = y * 2f / 3f / UNIT_SIZE;
 
             return new CubeCoords((int)q, (int)(-q - r), (int)r);
         }
