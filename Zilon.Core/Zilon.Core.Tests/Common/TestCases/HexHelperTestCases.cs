@@ -10,9 +10,15 @@ namespace Zilon.Core.Tests.Common.TestCases
         {
             get
             {
-                yield return new TestCaseData(0, 0, 1).Returns(new OffsetCoords(0, 0));
-                yield return new TestCaseData(0, 0, 50).Returns(new OffsetCoords(0, 0));
-                yield return new TestCaseData(50, 0, 50).Returns(new OffsetCoords(1, 0));
+                // Params:
+                // world x coordinate
+                // world Y coordinate
+                // hex width in the world
+                // hex height in the world
+
+                yield return new TestCaseData(0, 0, 1, 1).Returns(new OffsetCoords(0, 0));
+                yield return new TestCaseData(0, 0, 50, 50).Returns(new OffsetCoords(0, 0));
+                yield return new TestCaseData(50, 0, 50, 50).Returns(new OffsetCoords(1, 0));
             }
         }
     }

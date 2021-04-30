@@ -40,12 +40,12 @@ namespace Zilon.Core.Common
             return ConvertToWorld(coords.X, coords.Y);
         }
 
-        public static OffsetCoords ConvertWorldToOffset(int worldX, int worldY, float size)
+        public static OffsetCoords ConvertWorldToOffset(int worldX, int worldY, int width, int height)
         {
             // see https://habr.com/ru/post/319644/
 
-            var q = (worldX * System.Math.Sqrt(3) / 3 - worldY / 3) / size;
-            var r = worldY * 2 / 3 / size;
+            var q = (worldX * System.Math.Sqrt(3) / 3 - worldY / 3) / width;
+            var r = worldY * 2 / 3 / height;
 
             var cube = new CubeCoords((int)q, (int)(-q - r), (int)r);
             return ConvertToOffset(cube);
