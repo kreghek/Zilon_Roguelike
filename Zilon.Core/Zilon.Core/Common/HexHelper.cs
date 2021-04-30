@@ -18,7 +18,7 @@ namespace Zilon.Core.Common
             var roundQ = (int)Math.Round(axialCoords.Q, MidpointRounding.ToEven);
             var roundR = (int)Math.Round(axialCoords.R, MidpointRounding.ToEven);
 
-            var x = roundQ - roundR + (roundR % 2 == 0 ? 0 : 1);
+            var x = roundQ + roundR / 2;
             var y = roundR;
             return new OffsetCoords(x, y);
         }
@@ -63,9 +63,9 @@ namespace Zilon.Core.Common
         {
             // see https://habr.com/ru/post/319644/
 
-            var q = ((float)System.Math.Sqrt(3) / 3f * worldX - worldY / 3f) / size;
+            static float sqrt(float a) => (float)Math.Sqrt(a);
+            var q = (sqrt(3) / 3f * worldX - worldY / 3f) / size;
             var r = (2f / 3f * worldY) / size;
-
             var axialCoords = new AxialCoords(q, r);
 
             return axialCoords;
