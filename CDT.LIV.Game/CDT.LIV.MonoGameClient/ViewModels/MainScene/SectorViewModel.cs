@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using CDT.LIV.MonoGameClient.Engine;
 using CDT.LIV.MonoGameClient.Scenes;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +37,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private readonly Texture2D _cursorTexture;
         private readonly Texture2D _cursorTexture2;
+        private readonly SpriteFont _font;
         private bool _leftMousePressed;
 
         public SectorViewModel(Game game, Camera _camera, SpriteBatch spriteBatch) : base(game)
@@ -87,6 +89,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _cursorTexture = Game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
             _cursorTexture2 = Game.Content.Load<Texture2D>("Sprites/hex");
+            _font = Game.Content.Load<SpriteFont>("Fonts/Main");
         }
 
         public override void Draw(GameTime gameTime)
@@ -138,14 +141,28 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _spriteBatch.Draw(_cursorTexture, new Vector2(mouseInWorld.X, mouseInWorld.Y), Color.White);
 
-            var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y / 2, UNIT_SIZE);
+            var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseState.X, (int)mouseState.Y * 2, UNIT_SIZE / 2);
             var worldOffsetMouse = HexHelper.ConvertToWorld(offsetMouseInWorld);
 
-            //var x = (mouseInWorld.X) / UNIT_SIZE;
-            //var y = (mouseInWorld.Y) / (UNIT_SIZE * 0.5f);
+            var hexSize = UNIT_SIZE / 2;
+            var sprite = new Sprite(_cursorTexture2,
+                size: new Point(
+                    (int)(hexSize * System.Math.Sqrt(3)),
+                    hexSize * 2 / 2
+                    ),
+                color: Color.Black);
 
-            _spriteBatch.Draw(_cursorTexture2, new Rectangle((int)worldOffsetMouse[0] * UNIT_SIZE, (int)worldOffsetMouse[1] * UNIT_SIZE / 2, UNIT_SIZE, UNIT_SIZE /2), Color.Black);
+            sprite.Position = new Vector2(
+                (float)(worldOffsetMouse[0] * hexSize * System.Math.Sqrt(3)),
+                (float)(worldOffsetMouse[1] * hexSize * 2 / 2)
+                );
 
+            //sprite.Draw(_spriteBatch);
+
+            _spriteBatch.End();
+
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_font, $"{mouseState.X}:{mouseState.Y}", new Vector2(0, 0), Color.White);
             _spriteBatch.End();
         }
 
@@ -167,15 +184,12 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
 
-                var x = (mouseInWorld.X) / UNIT_SIZE;
-                var y = (mouseInWorld.Y) / (UNIT_SIZE / 2);
-
-                var offsetCoords = new OffsetCoords((int)x, (int)y);
+                var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseState.X, (int)mouseState.Y * 2, UNIT_SIZE / 2);
 
                 var map = _sector.Map;
 
                 var hoverNodes = map.Nodes.OfType<HexNode>()
-                    .Where(node => new Rectangle(node.OffsetCoords.X - UNIT_SIZE / 2, node.OffsetCoords.Y - UNIT_SIZE / 4, UNIT_SIZE, UNIT_SIZE/2).Intersects(new Rectangle(offsetCoords.X, offsetCoords.Y, 1, 1)));
+                    .Where(node => node.OffsetCoords == offsetMouseInWorld);
                 var hoverNode = hoverNodes.FirstOrDefault();
 
                 if (hoverNode != null)
