@@ -248,7 +248,7 @@ namespace Zilon.Core.Commands
             if (!pathIsNotEmpty)
             {
                 return new CanExecuteCheckResult
-                { IsSuccess = false, FailureReason = "Found path is correct or empty." };
+                    { IsSuccess = false, FailureReason = "Found path is correct or empty." };
             }
 
             return new CanExecuteCheckResult { IsSuccess = true };

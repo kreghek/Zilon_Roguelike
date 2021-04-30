@@ -5,6 +5,24 @@ namespace Zilon.Core.Common
 {
     public static class HexHelper
     {
+        public static CubeCoords ConvertAxialToCube(AxialCoords axialCoords)
+        {
+            var x = axialCoords.Q;
+            var z = axialCoords.R;
+            var y = -x - z;
+            return new CubeCoords((int)x, (int)y, (int)z);
+        }
+
+        public static OffsetCoords ConvertAxialToOffset(AxialCoords axialCoords)
+        {
+            var roundQ = (int)Math.Round(axialCoords.Q, MidpointRounding.ToEven);
+            var roundR = (int)Math.Round(axialCoords.R, MidpointRounding.ToEven);
+
+            var x = roundQ - roundR + (roundR % 2 == 0 ? 0 : 1);
+            var y = roundR;
+            return new OffsetCoords(x, y);
+        }
+
         public static CubeCoords ConvertToCube(int offsetX, int offsetY)
         {
             var x = offsetX - ((offsetY - (offsetY & 1)) / 2);
@@ -53,41 +71,11 @@ namespace Zilon.Core.Common
             return axialCoords;
         }
 
-        public static OffsetCoords ConvertAxialToOffset(AxialCoords axialCoords)
-        {
-            var roundQ = (int)Math.Round(axialCoords.Q, MidpointRounding.ToEven);
-            var roundR = (int)Math.Round(axialCoords.R, MidpointRounding.ToEven);
-
-            var x = roundQ - roundR + (roundR % 2 == 0 ? 0 : 1);
-            var y = roundR;
-            return new OffsetCoords(x, y);
-        }
-
         public static OffsetCoords ConvertWorldToOffset(int worldX, int worldY, int size)
         {
             var axialCoords = ConvertWorldToAxial(worldX, worldY, size);
             var offsetCoords = ConvertAxialToOffset(axialCoords);
             return offsetCoords;
-        }
-
-        public static CubeCoords ConvertAxialToCube(AxialCoords axialCoords)
-        {
-            var x = axialCoords.Q;
-            var z = axialCoords.R;
-            var y = -x - z;
-            return new CubeCoords((int)x, (int)y, (int)z);
-        }
-
-        public struct AxialCoords
-        {
-            public AxialCoords(float q, float r)
-            {
-                Q = q;
-                R = r;
-            }
-
-            public float Q { get; set; }
-            public float R { get; set; }
         }
 
         /// <summary>
@@ -156,6 +144,18 @@ namespace Zilon.Core.Common
             };
 
             return offsets;
+        }
+
+        public struct AxialCoords
+        {
+            public AxialCoords(float q, float r)
+            {
+                Q = q;
+                R = r;
+            }
+
+            public float Q { get; set; }
+            public float R { get; set; }
         }
     }
 }
