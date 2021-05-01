@@ -18,7 +18,7 @@ namespace Zilon.Core.Common
             var roundQ = (int)Math.Round(axialCoords.Q, MidpointRounding.ToEven);
             var roundR = (int)Math.Round(axialCoords.R, MidpointRounding.ToEven);
 
-            var x = roundQ + roundR / 2;
+            var x = roundQ + (roundR / 2);
             var y = roundR;
             return new OffsetCoords(x, y);
         }
