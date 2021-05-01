@@ -64,8 +64,11 @@ namespace Zilon.Core.Common
             // see https://habr.com/ru/post/319644/
 
             static float sqrt(float a) => (float)Math.Sqrt(a);
-            var q = (sqrt(3) / 3f * worldX - worldY / 3f) / size;
-            var r = (2f / 3f * worldY) / size;
+
+            var xDiv3 = worldX / 3f;
+            var yDiv3 = worldY / 3f;
+            var q = ((xDiv3 * sqrt(3)) - yDiv3) / size;
+            var r = (yDiv3 * 2f) / size;
             var axialCoords = new AxialCoords(q, r);
 
             return axialCoords;

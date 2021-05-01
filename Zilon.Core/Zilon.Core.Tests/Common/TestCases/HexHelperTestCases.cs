@@ -31,8 +31,8 @@ namespace Zilon.Core.Tests.Common.TestCases
                 yield return new TestCaseData(stepLeft(50), 0, 50).Returns(new OffsetCoords(1, 0));
 
                 yield return new TestCaseData(stepLeft(50) / 2, stepTop(50), 50).Returns(new OffsetCoords(0, 1));
-                yield return new TestCaseData(stepLeft(50) + stepLeft(50) / 2, stepTop(50), 50).Returns(new OffsetCoords(1, 1));
-                yield return new TestCaseData(3 * stepLeft(50) + stepLeft(50) / 2, stepTop(50), 50).Returns(new OffsetCoords(3, 1));
+                yield return new TestCaseData(stepLeft(50) + (stepLeft(50) / 2), stepTop(50), 50).Returns(new OffsetCoords(1, 1));
+                yield return new TestCaseData((3 * stepLeft(50)) + (stepLeft(50) / 2), stepTop(50), 50).Returns(new OffsetCoords(3, 1));
 
                 yield return new TestCaseData(0, 2 * stepTop(50), 50).Returns(new OffsetCoords(0, 2));
 
