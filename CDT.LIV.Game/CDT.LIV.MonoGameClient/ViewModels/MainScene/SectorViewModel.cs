@@ -96,7 +96,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         {
             base.Draw(gameTime);
 
-            _mapViewModel.Draw(/*_camera.Transform*/Matrix.Identity);
+            _mapViewModel.Draw(_camera.Transform);
 
             if (_player.MainPerson is null)
             {
@@ -125,7 +125,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     continue;
                 }
 
-                gameObject.Draw(gameTime, Matrix.Identity);
+                gameObject.Draw(gameTime, _camera.Transform);
             }
 
 
@@ -133,15 +133,15 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
 
             var mouseState = Mouse.GetState();
-            _spriteBatch.Begin(transformMatrix: Matrix.Identity);
+            _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
-            var inverseCameraTransform = Matrix.Invert(Matrix.Identity);
+            var inverseCameraTransform = Matrix.Invert(_camera.Transform);
 
             var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
 
             _spriteBatch.Draw(_cursorTexture, new Vector2(mouseInWorld.X, mouseInWorld.Y), Color.White);
 
-            var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseState.X, (int)mouseState.Y * 2, UNIT_SIZE / 2);
+            var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2, UNIT_SIZE / 2);
             var worldOffsetMouse = HexHelper.ConvertToWorld(offsetMouseInWorld);
 
             var hexSize = UNIT_SIZE / 2;
@@ -184,7 +184,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
 
-                var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseState.X, (int)mouseState.Y * 2, UNIT_SIZE / 2);
+                var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2, UNIT_SIZE / 2);
 
                 var map = _sector.Map;
 
