@@ -63,7 +63,10 @@ namespace Zilon.Core.Common
         {
             // see https://habr.com/ru/post/319644/
 
-            static float sqrt(float a) => (float)Math.Sqrt(a);
+            static float sqrt(float a)
+            {
+                return (float)Math.Sqrt(a);
+            }
 
             var xDiv3 = worldX / 3f;
             var yDiv3 = worldY / 3f;
