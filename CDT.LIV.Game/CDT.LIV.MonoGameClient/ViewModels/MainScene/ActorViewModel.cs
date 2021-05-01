@@ -106,10 +106,11 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private void Actor_Moved(object? sender, EventArgs e)
         {
+            var hexSize = UNIT_SIZE / 2;
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
             var newPosition = new Vector2(
-                (int)(playerActorWorldCoords[0] * UNIT_SIZE),
-                (int)(playerActorWorldCoords[1] * UNIT_SIZE / 2)
+                (float)(playerActorWorldCoords[0] * hexSize * System.Math.Sqrt(3)),
+                (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
                 );
 
             var serviceScope = ((LivGame)_game).ServiceProvider;
@@ -151,11 +152,14 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             }
             else
             {
+                var hexSize = UNIT_SIZE / 2;
                 var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
-                _rootSprite.Position = new Vector2(
-                    (int)(playerActorWorldCoords[0] * UNIT_SIZE),
-                    (int)(playerActorWorldCoords[1] * UNIT_SIZE / 2)
+                var newPosition = new Vector2(
+                    (float)(playerActorWorldCoords[0] * hexSize * System.Math.Sqrt(3)),
+                    (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
                     );
+
+                _rootSprite.Position = newPosition;
             }
         }
     }
