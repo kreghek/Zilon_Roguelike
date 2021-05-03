@@ -33,7 +33,7 @@ namespace Zilon.Core.Tests.Common.TestCases
                 {
                     return round(size * 2 * 3f / 4f);
                 }
-                
+
                 const int HEX_SIZE = 50;
 
                 // Params:
