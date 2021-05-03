@@ -175,7 +175,7 @@ namespace Zilon.Core.Common
             [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
             public bool Equals(AxialCoords other)
             {
-                const float EPSILON = 0.000001f;
+                const float EPSILON = 1E-12f;
                 return NearlyEqual(Q, other.Q, EPSILON) && NearlyEqual(R, other.R, EPSILON);
             }
 
@@ -197,27 +197,31 @@ namespace Zilon.Core.Common
                 return !(left == right);
             }
 
-            private static boolean NearlyEqual(float a, float b, float epsilon)
+            /// <summary>
+            /// Tests floatings. Implementation from https://stackoverflow.com/a/3875619/1280047
+            /// </summary>
+            private static bool NearlyEqual(double a, double b, double epsilon)
             {
-                final float absA = Math.abs(a);
-                final float absB = Math.abs(b);
-                final float diff = Math.abs(a - b);
+                const double MIN_NORMAL = 2.2250738585072014E-308d;
+                var absA = Math.Abs(a);
+                var absB = Math.Abs(b);
+                var diff = Math.Abs(a - b);
 
-                if (a == b)
-                {
-                    // shortcut, handles infinities
+                if (a.Equals(b))
+                { // shortcut, handles infinities
                     return true;
                 }
-
-                if (a == 0 || b == 0 || absA + absB < Float.MIN_NORMAL)
+                else if (a == 0 || b == 0 || absA + absB < MIN_NORMAL)
                 {
                     // a or b is zero or both are extremely close to it
                     // relative error is less meaningful here
-                    return diff < (epsilon * Float.MIN_NORMAL);
+                    return diff < (epsilon * MIN_NORMAL);
+                }
+                else
+                { // use relative error
+                    return diff / (absA + absB) < epsilon;
                 }
 
-                // use relative error
-                return diff / (absA + absB) < epsilon;
             }
         }
     }
