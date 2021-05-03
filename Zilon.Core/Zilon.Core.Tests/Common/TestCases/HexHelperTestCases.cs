@@ -33,6 +33,8 @@ namespace Zilon.Core.Tests.Common.TestCases
                 {
                     return round(size * 2 * 3f / 4f);
                 }
+                
+                const int HEX_SIZE = 50;
 
                 // Params:
                 // world x coordinate
@@ -40,18 +42,18 @@ namespace Zilon.Core.Tests.Common.TestCases
                 // hex size in the world. Size is distance from center to a edge.
 
                 yield return new TestCaseData(0, 0, 1).Returns(new OffsetCoords(0, 0));
-                yield return new TestCaseData(0, 0, 50).Returns(new OffsetCoords(0, 0));
-                yield return new TestCaseData(stepLeft(50), 0, 50).Returns(new OffsetCoords(1, 0));
+                yield return new TestCaseData(0, 0, HEX_SIZE).Returns(new OffsetCoords(0, 0));
+                yield return new TestCaseData(stepLeft(HEX_SIZE), 0, HEX_SIZE).Returns(new OffsetCoords(1, 0));
 
-                yield return new TestCaseData(stepLeft(50) / 2, stepTop(50), 50).Returns(new OffsetCoords(0, 1));
-                yield return new TestCaseData(stepLeft(50) + (stepLeft(50) / 2), stepTop(50), 50).Returns(
+                yield return new TestCaseData(stepLeft(HEX_SIZE) / 2, stepTop(HEX_SIZE), HEX_SIZE).Returns(new OffsetCoords(0, 1));
+                yield return new TestCaseData(stepLeft(HEX_SIZE) + (stepLeft(HEX_SIZE) / 2), stepTop(HEX_SIZE), HEX_SIZE).Returns(
                     new OffsetCoords(1, 1));
-                yield return new TestCaseData((3 * stepLeft(50)) + (stepLeft(50) / 2), stepTop(50), 50).Returns(
+                yield return new TestCaseData((3 * stepLeft(HEX_SIZE)) + (stepLeft(HEX_SIZE) / 2), stepTop(HEX_SIZE), HEX_SIZE).Returns(
                     new OffsetCoords(3, 1));
 
-                yield return new TestCaseData(0, 2 * stepTop(50), 50).Returns(new OffsetCoords(0, 2));
+                yield return new TestCaseData(0, 2 * stepTop(HEX_SIZE), HEX_SIZE).Returns(new OffsetCoords(0, 2));
 
-                yield return new TestCaseData(0, 4 * stepTop(50), 50).Returns(new OffsetCoords(0, 4));
+                yield return new TestCaseData(0, 4 * stepTop(HEX_SIZE), HEX_SIZE).Returns(new OffsetCoords(0, 4));
             }
         }
     }
