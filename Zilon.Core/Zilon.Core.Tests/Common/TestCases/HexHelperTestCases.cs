@@ -45,10 +45,13 @@ namespace Zilon.Core.Tests.Common.TestCases
                 yield return new TestCaseData(0, 0, HEX_SIZE).Returns(new OffsetCoords(0, 0));
                 yield return new TestCaseData(stepLeft(HEX_SIZE), 0, HEX_SIZE).Returns(new OffsetCoords(1, 0));
 
-                yield return new TestCaseData(stepLeft(HEX_SIZE) / 2, stepTop(HEX_SIZE), HEX_SIZE).Returns(new OffsetCoords(0, 1));
-                yield return new TestCaseData(stepLeft(HEX_SIZE) + (stepLeft(HEX_SIZE) / 2), stepTop(HEX_SIZE), HEX_SIZE).Returns(
+                yield return new TestCaseData(stepLeft(HEX_SIZE) / 2, stepTop(HEX_SIZE), HEX_SIZE).Returns(
+                    new OffsetCoords(0, 1));
+                yield return new TestCaseData(stepLeft(HEX_SIZE) + (stepLeft(HEX_SIZE) / 2), stepTop(HEX_SIZE),
+                    HEX_SIZE).Returns(
                     new OffsetCoords(1, 1));
-                yield return new TestCaseData((3 * stepLeft(HEX_SIZE)) + (stepLeft(HEX_SIZE) / 2), stepTop(HEX_SIZE), HEX_SIZE).Returns(
+                yield return new TestCaseData((3 * stepLeft(HEX_SIZE)) + (stepLeft(HEX_SIZE) / 2), stepTop(HEX_SIZE),
+                    HEX_SIZE).Returns(
                     new OffsetCoords(3, 1));
 
                 yield return new TestCaseData(0, 2 * stepTop(HEX_SIZE), HEX_SIZE).Returns(new OffsetCoords(0, 2));
