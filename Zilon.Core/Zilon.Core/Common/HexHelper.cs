@@ -175,7 +175,7 @@ namespace Zilon.Core.Common
             [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
             public bool Equals(AxialCoords other)
             {
-                const float EPSILON = 0, 000001f;
+                const float EPSILON = 0.000001f;
                 return NearlyEqual(Q, other.Q, EPSILON) && NearlyEqual(R, other.R, EPSILON);
             }
 
