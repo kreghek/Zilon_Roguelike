@@ -11,7 +11,7 @@ namespace Zilon.Core.Common
             {
                 return (int)Math.Round(a, MidpointRounding.ToEven);
             }
-            
+
             var roundQ = round(axialCoords.Q);
             var roundR = round(axialCoords.R);
 
@@ -149,7 +149,7 @@ namespace Zilon.Core.Common
             return offsets;
         }
 
-        private struct AxialCoords: IEquatable<AxialCoords>
+        private struct AxialCoords : IEquatable<AxialCoords>
         {
             public AxialCoords(float q, float r)
             {
@@ -159,42 +159,42 @@ namespace Zilon.Core.Common
 
             public float Q { get; set; }
             public float R { get; set; }
-            
+
             [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        public override int GetHashCode()
-        {
-            unchecked
+            public override int GetHashCode()
             {
-                var hashCode = 1861411795;
-                hashCode = (hashCode * -1521134295) + Q.GetHashCode();
-                hashCode = (hashCode * -1521134295) + R.GetHashCode();
-                return hashCode;
+                unchecked
+                {
+                    var hashCode = 1861411795;
+                    hashCode = (hashCode * -1521134295) + Q.GetHashCode();
+                    hashCode = (hashCode * -1521134295) + R.GetHashCode();
+                    return hashCode;
+                }
             }
-        }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        public bool Equals(AxialCoords other)
-        {
-            return Q == other.Q && R == other.R;
-        }
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            public bool Equals(AxialCoords other)
+            {
+                return Q == other.Q && R == other.R;
+            }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        public override bool Equals(object obj)
-        {
-            return obj is AxialCoords coords && Equals(coords);
-        }
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            public override bool Equals(object obj)
+            {
+                return obj is AxialCoords coords && Equals(coords);
+            }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        public static bool operator ==(AxialCoords left, AxialCoords right)
-        {
-            return left.Equals(right);
-        }
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            public static bool operator ==(AxialCoords left, AxialCoords right)
+            {
+                return left.Equals(right);
+            }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        public static bool operator !=(AxialCoords left, AxialCoords right)
-        {
-            return !(left == right);
-        }
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            public static bool operator !=(AxialCoords left, AxialCoords right)
+            {
+                return !(left == right);
+            }
         }
     }
 }
