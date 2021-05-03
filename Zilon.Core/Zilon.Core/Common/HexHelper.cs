@@ -175,8 +175,8 @@ namespace Zilon.Core.Common
             [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
             public bool Equals(AxialCoords other)
             {
-const float EPSILON = 0,000001f;
-                return NearlyEqual(Q, other.Q,EPSILON ) && NearlyEqual( R, other.R, EPSILON) ;
+                const float EPSILON = 0,000001f;
+                return NearlyEqual(Q, other.Q, EPSILON) && NearlyEqual(R, other.R, EPSILON);
             }
 
             [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
@@ -196,21 +196,27 @@ const float EPSILON = 0,000001f;
             {
                 return !(left == right);
             }
-private static boolean NearlyEqual(float a, float b, float epsilon) {
-    final float absA = Math.abs(a);
-    final float absB = Math.abs(b);
-    final float diff = Math.abs(a - b);
+            private static boolean NearlyEqual(float a, float b, float epsilon)
+            {
+                final float absA = Math.abs(a);
+                final float absB = Math.abs(b);
+                final float diff = Math.abs(a - b);
 
-    if (a == b) { // shortcut, handles infinities
-        return true;
-    } else if (a == 0 || b == 0 || absA + absB < Float.MIN_NORMAL) {
-        // a or b is zero or both are extremely close to it
-        // relative error is less meaningful here
-        return diff < (epsilon * Float.MIN_NORMAL);
-    } else { // use relative error
-        return diff / (absA + absB) < epsilon;
-    }
-}
+                if (a == b)
+                { // shortcut, handles infinities
+                    return true;
+                }
+                else if (a == 0 || b == 0 || absA + absB < Float.MIN_NORMAL)
+                {
+                    // a or b is zero or both are extremely close to it
+                    // relative error is less meaningful here
+                    return diff < (epsilon * Float.MIN_NORMAL);
+                }
+                else
+                { // use relative error
+                    return diff / (absA + absB) < epsilon;
+                }
+            }
         }
     }
 }
