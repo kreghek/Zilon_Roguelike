@@ -111,9 +111,11 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
-            foreach (var gameObject in _gameObjects)
+            var gameObjectsMaterialized = _gameObjects.ToArray();
+            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
+            foreach (var gameObject in gameObjectsMaterialized)
             {
-                var fowNode = visibleFowNodeData.Nodes.SingleOrDefault(x=>x.Node == gameObject.Node);
+                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
 
                 if (fowNode is null)
                 {

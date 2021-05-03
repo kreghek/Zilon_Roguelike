@@ -95,13 +95,13 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _rootSprite.AddChild(new Sprite(_personBodySprite)
             {
                 Position = new Vector2(0, 0),
-                Origin = new Vector2(0, 1)
+                Origin = new Vector2(0.5f, 1)
             });
 
             _rootSprite.AddChild(new Sprite(_personHeadSprite)
             {
-                Position = new Vector2(12, -32),
-                Origin = new Vector2(0, 1)
+                Position = new Vector2(0, -32),
+                Origin = new Vector2(0.5f, 1)
             });
 
             Actor.Moved += Actor_Moved;

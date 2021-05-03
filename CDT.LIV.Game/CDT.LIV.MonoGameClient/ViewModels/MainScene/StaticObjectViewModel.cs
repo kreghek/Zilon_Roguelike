@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CDT.LIV.MonoGameClient.Engine;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
@@ -15,6 +17,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private Game _game;
         private SpriteBatch _spriteBatch;
+        private readonly Container _rootSprite;
         private readonly Texture2D _personHeadSprite;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
@@ -24,6 +27,17 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _spriteBatch = spriteBatch;
 
             _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/Head");
+
+            var worldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
+
+            var hexSize = UNIT_SIZE / 2;
+            var staticObjectPosition = new Vector2(
+                (float)(worldCoords[0] * hexSize * System.Math.Sqrt(3)),
+                (float)(worldCoords[1] * hexSize * 2 / 2)
+                );
+
+            _rootSprite = new Container();
+            _rootSprite.AddChild(new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 1), position: staticObjectPosition, color: Color.Black));
         }
 
         public IStaticObject StaticObject { get; set; }
@@ -36,15 +50,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         {
             _spriteBatch.Begin(transformMatrix: transform);
 
-            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
-
-            _spriteBatch.Draw(_personHeadSprite,
-                new Rectangle(
-                    (int)(playerActorWorldCoords[0] * UNIT_SIZE + UNIT_SIZE * 0.25f),
-                    (int)(playerActorWorldCoords[1] * UNIT_SIZE / 2),
-                    (int)(UNIT_SIZE * 0.5),
-                    (int)(UNIT_SIZE * 0.5)),
-                Color.Black);
+            _rootSprite.Draw(_spriteBatch);
 
             _spriteBatch.End();
         }

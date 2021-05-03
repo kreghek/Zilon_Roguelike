@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 using CDT.LIV.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
@@ -44,21 +43,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 _rootSprite.Position = _targetPosition;
                 _moveBlocker.Release();
             }
-        }
-    }
-
-    public sealed class AnimationCommonBlocker : ICommandBlocker
-    {
-        public event EventHandler? Released;
-
-        public void Release()
-        {
-            DoRelease();
-        }
-
-        private void DoRelease()
-        {
-            Released?.Invoke(this, new EventArgs());
         }
     }
 }
