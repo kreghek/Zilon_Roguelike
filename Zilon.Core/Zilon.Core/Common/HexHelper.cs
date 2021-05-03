@@ -5,21 +5,6 @@ namespace Zilon.Core.Common
 {
     public static class HexHelper
     {
-        private static OffsetCoords ConvertAxialToOffset(AxialCoords axialCoords)
-        {
-            static int round(float a)
-            {
-                return (int)Math.Round(a, MidpointRounding.ToEven);
-            }
-
-            var roundQ = round(axialCoords.Q);
-            var roundR = round(axialCoords.R);
-
-            var x = roundQ + (roundR / 2);
-            var y = roundR;
-            return new OffsetCoords(x, y);
-        }
-
         public static CubeCoords ConvertToCube(int offsetX, int offsetY)
         {
             var x = offsetX - ((offsetY - (offsetY & 1)) / 2);
@@ -54,24 +39,6 @@ namespace Zilon.Core.Common
         public static float[] ConvertToWorld(OffsetCoords coords)
         {
             return ConvertToWorld(coords.X, coords.Y);
-        }
-
-        private static AxialCoords ConvertWorldToAxial(int worldX, int worldY, int size)
-        {
-            // see https://habr.com/ru/post/319644/
-
-            static float sqrt(float a)
-            {
-                return (float)Math.Sqrt(a);
-            }
-
-            var xDiv3 = worldX / 3f;
-            var yDiv3 = worldY / 3f;
-            var q = ((xDiv3 * sqrt(3)) - yDiv3) / size;
-            var r = (yDiv3 * 2f) / size;
-            var axialCoords = new AxialCoords(q, r);
-
-            return axialCoords;
         }
 
         public static OffsetCoords ConvertWorldToOffset(int worldX, int worldY, int size)
@@ -147,6 +114,39 @@ namespace Zilon.Core.Common
             };
 
             return offsets;
+        }
+
+        private static OffsetCoords ConvertAxialToOffset(AxialCoords axialCoords)
+        {
+            static int round(float a)
+            {
+                return (int)Math.Round(a, MidpointRounding.ToEven);
+            }
+
+            var roundQ = round(axialCoords.Q);
+            var roundR = round(axialCoords.R);
+
+            var x = roundQ + (roundR / 2);
+            var y = roundR;
+            return new OffsetCoords(x, y);
+        }
+
+        private static AxialCoords ConvertWorldToAxial(int worldX, int worldY, int size)
+        {
+            // see https://habr.com/ru/post/319644/
+
+            static float sqrt(float a)
+            {
+                return (float)Math.Sqrt(a);
+            }
+
+            var xDiv3 = worldX / 3f;
+            var yDiv3 = worldY / 3f;
+            var q = ((xDiv3 * sqrt(3)) - yDiv3) / size;
+            var r = (yDiv3 * 2f) / size;
+            var axialCoords = new AxialCoords(q, r);
+
+            return axialCoords;
         }
 
         private struct AxialCoords : IEquatable<AxialCoords>
