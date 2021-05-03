@@ -1,5 +1,7 @@
 ﻿using System;
 
+using CDT.LIV.MonoGameClient.Engine;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -73,14 +75,21 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 }
 
                 var worldCoords = HexHelper.ConvertToWorld(node.OffsetCoords);
-                _spriteBatch.Draw(
-                    _hexSprite,
-                    new Rectangle(
-                        (int)(worldCoords[0] * UNIT_SIZE),
-                        (int)(worldCoords[1] * UNIT_SIZE / 2),
-                        UNIT_SIZE,
-                        UNIT_SIZE / 2),
-                    nodeColor);
+                var hexSize = UNIT_SIZE / 2;
+                var sprite = new Sprite(_hexSprite,
+                    size: new Point(
+                        (int)(hexSize * System.Math.Sqrt(3)),
+                        hexSize * 2 / 2
+                        ),
+                    color: nodeColor);
+
+                sprite.Position = new Vector2(
+                    (float)(worldCoords[0] * hexSize * System.Math.Sqrt(3)),
+                    (float)(worldCoords[1] * hexSize * 2 / 2)
+                    );
+
+                sprite.Draw(_spriteBatch);
+
             }
             _spriteBatch.End();
         }

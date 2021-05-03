@@ -19,6 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Sdk", "..\Zilon.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Bot.Players.NetCore", "..\Zilon.Core\Zilon.Core\Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj", "{3B2D9371-9CB8-4A4C-818F-A6C7E5753DF5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{92CCA7F2-15ED-46C1-8CBA-07B5516A7200}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Tests", "..\Zilon.Core\Zilon.Core\Zilon.Core.Tests\Zilon.Core.Tests.csproj", "{F20FB1F2-D7AF-4DD5-BE82-5E3F91271015}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Tests.Common", "..\Zilon.Core\Zilon.Core\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj", "{9EE89740-8C04-45DD-A8C4-633D4ACF0E81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +59,14 @@ Global
 		{3B2D9371-9CB8-4A4C-818F-A6C7E5753DF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B2D9371-9CB8-4A4C-818F-A6C7E5753DF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B2D9371-9CB8-4A4C-818F-A6C7E5753DF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F20FB1F2-D7AF-4DD5-BE82-5E3F91271015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F20FB1F2-D7AF-4DD5-BE82-5E3F91271015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F20FB1F2-D7AF-4DD5-BE82-5E3F91271015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F20FB1F2-D7AF-4DD5-BE82-5E3F91271015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EE89740-8C04-45DD-A8C4-633D4ACF0E81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EE89740-8C04-45DD-A8C4-633D4ACF0E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EE89740-8C04-45DD-A8C4-633D4ACF0E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EE89740-8C04-45DD-A8C4-633D4ACF0E81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +78,9 @@ Global
 		{98E42579-F820-4D04-B8FF-5B7ED49BFD44} = {C4FA925D-5569-4A24-B697-62559AFB2382}
 		{4A5EEE38-A6A0-4C6D-A03B-B7CBFF15C23B} = {C4FA925D-5569-4A24-B697-62559AFB2382}
 		{3B2D9371-9CB8-4A4C-818F-A6C7E5753DF5} = {C4FA925D-5569-4A24-B697-62559AFB2382}
+		{92CCA7F2-15ED-46C1-8CBA-07B5516A7200} = {C4FA925D-5569-4A24-B697-62559AFB2382}
+		{F20FB1F2-D7AF-4DD5-BE82-5E3F91271015} = {92CCA7F2-15ED-46C1-8CBA-07B5516A7200}
+		{9EE89740-8C04-45DD-A8C4-633D4ACF0E81} = {92CCA7F2-15ED-46C1-8CBA-07B5516A7200}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C6F0D5F-8454-4321-9BAE-6704099A5909}
