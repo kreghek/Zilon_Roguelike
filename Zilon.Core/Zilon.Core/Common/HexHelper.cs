@@ -5,18 +5,15 @@ namespace Zilon.Core.Common
 {
     public static class HexHelper
     {
-        public static CubeCoords ConvertAxialToCube(AxialCoords axialCoords)
+        private static OffsetCoords ConvertAxialToOffset(AxialCoords axialCoords)
         {
-            var x = axialCoords.Q;
-            var z = axialCoords.R;
-            var y = -x - z;
-            return new CubeCoords((int)x, (int)y, (int)z);
-        }
-
-        public static OffsetCoords ConvertAxialToOffset(AxialCoords axialCoords)
-        {
-            var roundQ = (int)Math.Round(axialCoords.Q, MidpointRounding.ToEven);
-            var roundR = (int)Math.Round(axialCoords.R, MidpointRounding.ToEven);
+            static int round(float a)
+            {
+                return (int)Math.Round(a, MidpointRounding.ToEven);
+            }
+            
+            var roundQ = round(axialCoords.Q);
+            var roundR = round(axialCoords.R);
 
             var x = roundQ + (roundR / 2);
             var y = roundR;
@@ -59,7 +56,7 @@ namespace Zilon.Core.Common
             return ConvertToWorld(coords.X, coords.Y);
         }
 
-        public static AxialCoords ConvertWorldToAxial(int worldX, int worldY, int size)
+        private static AxialCoords ConvertWorldToAxial(int worldX, int worldY, int size)
         {
             // see https://habr.com/ru/post/319644/
 
@@ -152,7 +149,7 @@ namespace Zilon.Core.Common
             return offsets;
         }
 
-        public struct AxialCoords
+        private struct AxialCoords: IEquatable<AxialCoords>
         {
             public AxialCoords(float q, float r)
             {
@@ -162,6 +159,42 @@ namespace Zilon.Core.Common
 
             public float Q { get; set; }
             public float R { get; set; }
+            
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = 1861411795;
+                hashCode = (hashCode * -1521134295) + Q.GetHashCode();
+                hashCode = (hashCode * -1521134295) + R.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        public bool Equals(AxialCoords other)
+        {
+            return Q == other.Q && R == other.R;
+        }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        public override bool Equals(object obj)
+        {
+            return obj is AxialCoords coords && Equals(coords);
+        }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        public static bool operator ==(AxialCoords left, AxialCoords right)
+        {
+            return left.Equals(right);
+        }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        public static bool operator !=(AxialCoords left, AxialCoords right)
+        {
+            return !(left == right);
+        }
         }
     }
 }
