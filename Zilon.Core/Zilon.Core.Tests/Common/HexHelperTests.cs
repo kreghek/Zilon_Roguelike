@@ -3,6 +3,7 @@
 using NUnit.Framework;
 
 using Zilon.Core.Common;
+using Zilon.Core.Tests.Common.TestCases;
 using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
 namespace Zilon.Core.Tests.Common
@@ -59,6 +60,18 @@ namespace Zilon.Core.Tests.Common
 
             // ASSERT
             return factCubeCoords;
+        }
+
+        [Test]
+        [TestCaseSource(typeof(HexHelperTestCases),
+            nameof(HexHelperTestCases.TestCases))]
+        public OffsetCoords ConvertWorldToOffsetTest(int worldX, int worldY, int size)
+        {
+            // ACT
+            var factOffsetCoords = HexHelper.ConvertWorldToOffset(worldX, worldY, size);
+
+            // ASSERT
+            return factOffsetCoords;
         }
     }
 }

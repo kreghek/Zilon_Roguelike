@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace Zilon.Core.Common
 {
@@ -38,6 +39,13 @@ namespace Zilon.Core.Common
         public static float[] ConvertToWorld(OffsetCoords coords)
         {
             return ConvertToWorld(coords.X, coords.Y);
+        }
+
+        public static OffsetCoords ConvertWorldToOffset(int worldX, int worldY, int size)
+        {
+            var axialCoords = ConvertWorldToAxial(worldX, worldY, size);
+            var offsetCoords = ConvertAxialToOffset(axialCoords);
+            return offsetCoords;
         }
 
         /// <summary>
@@ -106,6 +114,115 @@ namespace Zilon.Core.Common
             };
 
             return offsets;
+        }
+
+        private static OffsetCoords ConvertAxialToOffset(AxialCoords axialCoords)
+        {
+            static int round(float a)
+            {
+                return (int)Math.Round(a, MidpointRounding.ToEven);
+            }
+
+            var roundQ = round(axialCoords.Q);
+            var roundR = round(axialCoords.R);
+
+            var x = roundQ + (roundR / 2);
+            var y = roundR;
+            return new OffsetCoords(x, y);
+        }
+
+        private static AxialCoords ConvertWorldToAxial(int worldX, int worldY, int size)
+        {
+            // see https://habr.com/ru/post/319644/
+
+            static float sqrt(float a)
+            {
+                return (float)Math.Sqrt(a);
+            }
+
+            var xDiv3 = worldX / 3f;
+            var yDiv3 = worldY / 3f;
+            var q = ((xDiv3 * sqrt(3)) - yDiv3) / size;
+            var r = (yDiv3 * 2f) / size;
+            var axialCoords = new AxialCoords(q, r);
+
+            return axialCoords;
+        }
+
+        private struct AxialCoords : IEquatable<AxialCoords>
+        {
+            public AxialCoords(float q, float r)
+            {
+                Q = q;
+                R = r;
+            }
+
+            public float Q { get; set; }
+            public float R { get; set; }
+
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    var hashCode = 1861411795;
+                    hashCode = (hashCode * -1521134295) + Q.GetHashCode();
+                    hashCode = (hashCode * -1521134295) + R.GetHashCode();
+                    return hashCode;
+                }
+            }
+
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            public bool Equals(AxialCoords other)
+            {
+                const float EPSILON = 1E-12f;
+                return NearlyEqual(Q, other.Q, EPSILON) && NearlyEqual(R, other.R, EPSILON);
+            }
+
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            public override bool Equals(object obj)
+            {
+                return obj is AxialCoords coords && Equals(coords);
+            }
+
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            public static bool operator ==(AxialCoords left, AxialCoords right)
+            {
+                return left.Equals(right);
+            }
+
+            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            public static bool operator !=(AxialCoords left, AxialCoords right)
+            {
+                return !(left == right);
+            }
+
+            /// <summary>
+            /// Tests floatings. Implementation from https://stackoverflow.com/a/3875619/1280047
+            /// </summary>
+            private static bool NearlyEqual(double a, double b, double epsilon)
+            {
+                const double MIN_NORMAL = 2.2250738585072014E-308d;
+                var absA = Math.Abs(a);
+                var absB = Math.Abs(b);
+                var diff = Math.Abs(a - b);
+
+                if (a.Equals(b))
+                {
+                    // shortcut, handles infinities
+                    return true;
+                }
+
+                if (a == 0 || b == 0 || absA + absB < MIN_NORMAL)
+                {
+                    // a or b is zero or both are extremely close to it
+                    // relative error is less meaningful here
+                    return diff < (epsilon * MIN_NORMAL);
+                }
+
+                // use relative error
+                return diff / (absA + absB) < epsilon;
+            }
         }
     }
 }
