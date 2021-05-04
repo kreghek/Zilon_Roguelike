@@ -19,7 +19,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     internal class ActorViewModel : GameObjectBase, IActorViewModel
     {
-        private const int UNIT_SIZE = 50;
+        private const int UNIT_SIZE = 32;
 
         private readonly Game _game;
         private readonly SpriteBatch _spriteBatch;
@@ -40,65 +40,68 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
 
-            if (equipmentModule is null)
-            {
-                _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/Head");
-                _personBodySprite = _game.Content.Load<Texture2D>("Sprites/Body");
-            }
-            else
-            {
-                for (var i = 0; i < equipmentModule.Count(); i++)
-                {
-                    var equipment = equipmentModule[i];
-                    var slot = equipmentModule.Slots[i];
+            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
+            _personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
 
-                    if (slot.Types.HasFlag(Zilon.Core.Components.EquipmentSlotTypes.Head))
-                    {
-                        if (equipment is null)
-                        {
-                            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/Head");
-                        }
-                        else
-                        {
-                            _personHeadSprite = _game.Content.Load<Texture2D>($"Sprites/equipments/{equipment.Scheme.Sid}");
-                        }
-                    }
+            //if (equipmentModule is null)
+            //{
+            //    _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
+            //    _personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
+            //}
+            //else
+            //{
+            //    for (var i = 0; i < equipmentModule.Count(); i++)
+            //    {
+            //        var equipment = equipmentModule[i];
+            //        var slot = equipmentModule.Slots[i];
 
-                    if (slot.Types.HasFlag(Zilon.Core.Components.EquipmentSlotTypes.Body))
-                    {
-                        if (equipment is null)
-                        {
-                            _personBodySprite = _game.Content.Load<Texture2D>("Sprites/Body");
-                        }
-                        else
-                        {
-                            _personBodySprite = _game.Content.Load<Texture2D>($"Sprites/equipments/{equipment.Scheme.Sid}");
-                        }
-                    }
-                }
+            //        if (slot.Types.HasFlag(Zilon.Core.Components.EquipmentSlotTypes.Head))
+            //        {
+            //            if (equipment is null)
+            //            {
+            //                _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
+            //            }
+            //            else
+            //            {
+            //                _personHeadSprite = _game.Content.Load<Texture2D>($"Sprites/equipments/{equipment.Scheme.Sid}");
+            //            }
+            //        }
 
-                if (_personHeadSprite is null)
-                {
-                    _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/Head");
-                }
+            //        if (slot.Types.HasFlag(Zilon.Core.Components.EquipmentSlotTypes.Body))
+            //        {
+            //            if (equipment is null)
+            //            {
+            //                _personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
+            //            }
+            //            else
+            //            {
+            //                _personBodySprite = _game.Content.Load<Texture2D>($"Sprites/equipments/{equipment.Scheme.Sid}");
+            //            }
+            //        }
+            //    }
 
-                if (_personBodySprite is null)
-                {
-                    _personBodySprite = _game.Content.Load<Texture2D>("Sprites/Body");
-                }
-            }
+            //if (_personHeadSprite is null)
+            //    {
+            //        _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
+            //    }
+
+            //    if (_personBodySprite is null)
+            //    {
+            //        _personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
+            //    }
+            //}
 
             _rootSprite = new Container();
             _rootSprite.AddChild(new Sprite(_personBodySprite)
             {
-                Position = new Vector2(10, -10),
-                ScaleScalar = 0.25f,
+                Position = new Vector2(0, 0),
+                Origin = new Vector2(0.5f, 1)
             });
 
             _rootSprite.AddChild(new Sprite(_personHeadSprite)
             {
-                Position = new Vector2(10, -0),
-                ScaleScalar = 0.25f
+                Position = new Vector2(-6, -32),
+                Origin = new Vector2(0.5f, 1)
             });
 
             Actor.Moved += Actor_Moved;
@@ -129,7 +132,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {
-            _idleAnimationCounter += gameTime.ElapsedGameTime.TotalSeconds;
+            //_idleAnimationCounter += gameTime.ElapsedGameTime.TotalSeconds;
 
             _rootSprite.Rotation = (float)Math.Sin(_idleAnimationCounter);
 

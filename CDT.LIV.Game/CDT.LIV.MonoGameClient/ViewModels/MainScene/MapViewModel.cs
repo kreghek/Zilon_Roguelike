@@ -16,7 +16,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     class MapViewModel : DrawableGameComponent
     {
-        private const int UNIT_SIZE = 50;
+        private const int UNIT_SIZE = 32;
         private readonly Texture2D _hexSprite;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISector _sector;

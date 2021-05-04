@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using CDT.LIV.MonoGameClient.Engine;
 using CDT.LIV.MonoGameClient.Scenes;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +9,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -23,7 +21,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     public class SectorViewModel : DrawableGameComponent
     {
-        private const int UNIT_SIZE = 50;
+        private const int UNIT_SIZE = 32;
 
         private readonly Camera _camera;
         private readonly SpriteBatch _spriteBatch;
@@ -88,7 +86,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             }
 
             _cursorTexture = Game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
-            _cursorTexture2 = Game.Content.Load<Texture2D>("Sprites/hex");
             _font = Game.Content.Load<SpriteFont>("Fonts/Main");
         }
 
@@ -111,9 +108,11 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
-            foreach (var gameObject in _gameObjects)
+            var gameObjectsMaterialized = _gameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
+            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
+            foreach (var gameObject in gameObjectsMaterialized)
             {
-                var fowNode = visibleFowNodeData.Nodes.SingleOrDefault(x=>x.Node == gameObject.Node);
+                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
 
                 if (fowNode is null)
                 {
@@ -128,40 +127,11 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 gameObject.Draw(gameTime, _camera.Transform);
             }
 
-
-
-
+            // Print mouse position and draw cursor itself
 
             var mouseState = Mouse.GetState();
-            _spriteBatch.Begin(transformMatrix: _camera.Transform);
-
-            var inverseCameraTransform = Matrix.Invert(_camera.Transform);
-
-            var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
-
-            _spriteBatch.Draw(_cursorTexture, new Vector2(mouseInWorld.X, mouseInWorld.Y), Color.White);
-
-            var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2, UNIT_SIZE / 2);
-            var worldOffsetMouse = HexHelper.ConvertToWorld(offsetMouseInWorld);
-
-            var hexSize = UNIT_SIZE / 2;
-            var sprite = new Sprite(_cursorTexture2,
-                size: new Point(
-                    (int)(hexSize * System.Math.Sqrt(3)),
-                    hexSize * 2 / 2
-                    ),
-                color: Color.Black);
-
-            sprite.Position = new Vector2(
-                (float)(worldOffsetMouse[0] * hexSize * System.Math.Sqrt(3)),
-                (float)(worldOffsetMouse[1] * hexSize * 2 / 2)
-                );
-
-            //sprite.Draw(_spriteBatch);
-
-            _spriteBatch.End();
-
             _spriteBatch.Begin();
+            _spriteBatch.Draw(_cursorTexture, new Vector2(mouseState.X, mouseState.Y), Color.White);
             _spriteBatch.DrawString(_font, $"{mouseState.X}:{mouseState.Y}", new Vector2(0, 0), Color.White);
             _spriteBatch.End();
         }

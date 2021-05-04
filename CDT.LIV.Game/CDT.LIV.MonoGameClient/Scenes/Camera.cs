@@ -8,7 +8,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
 {
     public class Camera
     {
-        private const int UNIT_SIZE = 50;
+        private const int UNIT_SIZE = 32;
 
         public Matrix Transform { get; private set; }
 
@@ -16,9 +16,15 @@ namespace CDT.LIV.MonoGameClient.Scenes
         {
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)(target.Actor.Node)).OffsetCoords);
 
+            var hexSize = UNIT_SIZE / 2;
+            var actorPosition = new Vector2(
+                (float)(playerActorWorldCoords[0] * hexSize * System.Math.Sqrt(3)),
+                (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                );
+
             var position = Matrix.CreateTranslation(
-              -playerActorWorldCoords[0] * UNIT_SIZE,
-              -playerActorWorldCoords[1] * UNIT_SIZE / 2,
+              -actorPosition.X,
+              -actorPosition.Y,
               0);
 
             var offset = Matrix.CreateTranslation(
