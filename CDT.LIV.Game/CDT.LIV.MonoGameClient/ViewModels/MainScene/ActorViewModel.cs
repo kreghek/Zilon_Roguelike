@@ -100,7 +100,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _rootSprite.AddChild(new Sprite(_personHeadSprite)
             {
-                Position = new Vector2(0, -32),
+                Position = new Vector2(-6, -32),
                 Origin = new Vector2(0.5f, 1)
             });
 

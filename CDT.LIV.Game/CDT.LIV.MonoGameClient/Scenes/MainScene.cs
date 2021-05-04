@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -62,17 +63,17 @@ namespace CDT.LIV.MonoGameClient.Scenes
             var cancellationToken = cancellationTokenSource.Token;
 
             globeLoopUpdater.ErrorOccured += (s, e) => 
-            { 
-                Console.WriteLine(e.Exception.ToString()); 
+            {
+                Debug.WriteLine(e.Exception.ToString()); 
             };
 
             var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
 
             commandLoop.ErrorOccured += (s, e) => 
             { 
-                Console.WriteLine(e.Exception.ToString());
+                Debug.WriteLine(e.Exception.ToString());
             };
-            commandLoop.CommandAutoExecuted += (s, e) => { Console.WriteLine("Auto execute last command"); };
+            commandLoop.CommandAutoExecuted += (s, e) => { Debug.WriteLine("Auto execute last command"); };
             var playerState = serviceScope.GetRequiredService<ISectorUiState>();
             var inventoryState = serviceScope.GetRequiredService<IInventoryState>();
             commandLoop.CommandProcessed += (s, e) =>
@@ -81,9 +82,9 @@ namespace CDT.LIV.MonoGameClient.Scenes
                 playerState.SelectedViewModel = null;
             };
             var commandLoopTask = commandLoop.StartAsync(cancellationToken);
-            commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception),
+            commandLoopTask.ContinueWith(task => Debug.WriteLine(task.Exception),
                 TaskContinuationOptions.OnlyOnFaulted);
-            commandLoopTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
+            commandLoopTask.ContinueWith(task => Debug.WriteLine("Game loop stopped."),
                 TaskContinuationOptions.OnlyOnCanceled);
         }
     }
