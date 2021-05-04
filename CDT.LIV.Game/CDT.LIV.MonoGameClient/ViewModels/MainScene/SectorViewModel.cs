@@ -88,7 +88,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             }
 
             _cursorTexture = Game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
-            _cursorTexture2 = Game.Content.Load<Texture2D>("Sprites/hex");
             _font = Game.Content.Load<SpriteFont>("Fonts/Main");
         }
 
@@ -130,36 +129,11 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 gameObject.Draw(gameTime, _camera.Transform);
             }
 
+            // Print mouse position and draw cursor itself
+
             var mouseState = Mouse.GetState();
-            _spriteBatch.Begin(transformMatrix: _camera.Transform);
-
-            var inverseCameraTransform = Matrix.Invert(_camera.Transform);
-
-            var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
-
-            _spriteBatch.Draw(_cursorTexture, new Vector2(mouseInWorld.X, mouseInWorld.Y), Color.White);
-
-            var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2, UNIT_SIZE / 2);
-            var worldOffsetMouse = HexHelper.ConvertToWorld(offsetMouseInWorld);
-
-            var hexSize = UNIT_SIZE / 2;
-            var sprite = new Sprite(_cursorTexture2,
-                size: new Point(
-                    (int)(hexSize * System.Math.Sqrt(3)),
-                    hexSize * 2 / 2
-                    ),
-                color: Color.Black);
-
-            sprite.Position = new Vector2(
-                (float)(worldOffsetMouse[0] * hexSize * System.Math.Sqrt(3)),
-                (float)(worldOffsetMouse[1] * hexSize * 2 / 2)
-                );
-
-            //sprite.Draw(_spriteBatch);
-
-            _spriteBatch.End();
-
             _spriteBatch.Begin();
+            _spriteBatch.Draw(_cursorTexture, new Vector2(mouseState.X, mouseState.Y), Color.White);
             _spriteBatch.DrawString(_font, $"{mouseState.X}:{mouseState.Y}", new Vector2(0, 0), Color.White);
             _spriteBatch.End();
         }
