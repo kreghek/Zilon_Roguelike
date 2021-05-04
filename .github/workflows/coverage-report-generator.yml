@@ -52,7 +52,7 @@ jobs:
         name: Report${{ matrix.test_suite }}
         path: ${{ env.REPORT_RESULT_PATH }}
 
-test_debug:
+  test_debug:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
