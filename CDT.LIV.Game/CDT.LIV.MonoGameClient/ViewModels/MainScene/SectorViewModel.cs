@@ -130,10 +130,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 gameObject.Draw(gameTime, _camera.Transform);
             }
 
-
-
-
-
             var mouseState = Mouse.GetState();
             _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
