@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using CDT.LIV.MonoGameClient.Engine;
 using CDT.LIV.MonoGameClient.Scenes;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +9,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -110,7 +108,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
-            var gameObjectsMaterialized = _gameObjects.ToArray();
+            var gameObjectsMaterialized = _gameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
             var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
             foreach (var gameObject in gameObjectsMaterialized)
             {
