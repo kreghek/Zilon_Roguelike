@@ -247,7 +247,7 @@ namespace Zilon.Core.Commands
 
             if (!pathIsNotEmpty)
             {
-                return CanExecuteCheckResult.CreateFailed("Found path is correct or empty.");
+                return CanExecuteCheckResult.CreateFailed("Found path is not correct or empty.");
             }
 
             return CanExecuteCheckResult.CreateSuccessful();
@@ -259,7 +259,7 @@ namespace Zilon.Core.Commands
         /// <returns> Возвращает true, если команду можно повторить. </returns>
         public bool CanRepeat()
         {
-            var canRepeat = CanExecuteForSelected() && CheckEnemies();
+            var canRepeat = CheckEnemies();
             return canRepeat;
         }
 
