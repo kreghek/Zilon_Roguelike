@@ -58,6 +58,8 @@ namespace Zilon.Core.Client.Sector
 
                     if (command is IRepeatableCommand repeatableCommand)
                     {
+                        // This is dirty solution.
+                        // It is necesary because CanRepeate and CanExecute can perform early that globe updates its state.
                         await Task.Delay(100).ConfigureAwait(false);
 
                         if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
