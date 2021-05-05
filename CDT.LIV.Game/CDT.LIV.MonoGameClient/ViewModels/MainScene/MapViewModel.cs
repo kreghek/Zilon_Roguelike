@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,12 +18,13 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
-    class MapViewModel : DrawableGameComponent
+    class MapViewModel
     {
         private const float MAP_UPDATE_DELAY_SECONDS = 0.05f;
+        private const int UNIT_SIZE = 32;
+
         private double _updateCounter = MAP_UPDATE_DELAY_SECONDS;
 
-        private const int UNIT_SIZE = 32;
         private readonly Texture2D _hexSprite;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISector _sector;
@@ -33,9 +33,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private ConcurrentDictionary<OffsetCoords, Sprite> _hexSprites;
 
-        public MapViewModel(Game game, IPlayer player, ISectorUiState uiState, ISector sector, SpriteBatch spriteBatch) : base(game)
+        public MapViewModel(Game game, IPlayer player, ISectorUiState uiState, ISector sector, SpriteBatch spriteBatch)
         {
-            _hexSprite = Game.Content.Load<Texture2D>("Sprites/hex");
+            _hexSprite = game.Content.Load<Texture2D>("Sprites/hex");
 
             _spriteBatch = spriteBatch;
             _player = player;
