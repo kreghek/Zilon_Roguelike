@@ -31,7 +31,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly List<GameObjectBase> _gameObjects;
         private readonly CommandInput _commandInput;
         private readonly Texture2D _cursorTexture;
-        private readonly SpriteFont _font;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch) : base(game)
         {
@@ -86,7 +85,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _commandInput = commandInput;
 
             _cursorTexture = Game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
-            _font = Game.Content.Load<SpriteFont>("Fonts/Main");
         }
 
         public override void Draw(GameTime gameTime)
@@ -132,7 +130,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var mouseState = Mouse.GetState();
             _spriteBatch.Begin();
             _spriteBatch.Draw(_cursorTexture, new Vector2(mouseState.X, mouseState.Y), Color.White);
-            _spriteBatch.DrawString(_font, $"{mouseState.X}:{mouseState.Y}", new Vector2(0, 0), Color.White);
             _spriteBatch.End();
         }
 
