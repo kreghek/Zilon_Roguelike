@@ -11,7 +11,7 @@ namespace Zilon.Core.Client.Sector
         private readonly ICommandLoopContext _commandLoopContext;
         private readonly ICommandPool _commandPool;
 
-        private readonly object _lockObj;
+        private readonly SemaphoreSlim _semaphoreSlim;
 
         private bool _hasPendingCommand;
 
@@ -20,15 +20,16 @@ namespace Zilon.Core.Client.Sector
             _commandLoopContext = commandLoopContext ?? throw new ArgumentNullException(nameof(commandLoopContext));
             _commandPool = commandPool ?? throw new ArgumentNullException(nameof(commandPool));
 
-            _lockObj = new object();
+            _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
-        private ICommand? TryExecuteCommand(ICommand? lastCommand)
+        private async Task<ICommand?> TryExecuteCommandAsync(ICommand? lastCommand)
         {
             ICommand? commandWithError = null;
             ICommand? newLastCommand = null;
 
-            lock (_lockObj)
+            await _semaphoreSlim.WaitAsync();
+            try
             {
                 _hasPendingCommand = true;
 
@@ -52,6 +53,8 @@ namespace Zilon.Core.Client.Sector
 
                         if (command is IRepeatableCommand repeatableCommand)
                         {
+                            await Task.Delay(500).ConfigureAwait(false);
+
                             if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
                             {
                                 repeatableCommand.IncreaceIteration();
@@ -108,6 +111,10 @@ namespace Zilon.Core.Client.Sector
                     }
                 }
             }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
 
             return newLastCommand;
         }
@@ -133,7 +140,7 @@ namespace Zilon.Core.Client.Sector
 
                     try
                     {
-                        lastCommand = TryExecuteCommand(lastCommand: lastCommand);
+                        lastCommand = await TryExecuteCommandAsync(lastCommand: lastCommand).ConfigureAwait(false);
                     }
                     catch (Exception exception)
                     {
@@ -149,9 +156,14 @@ namespace Zilon.Core.Client.Sector
 
         public bool HasPendingCommands()
         {
-            lock (_lockObj)
+            _semaphoreSlim.WaitAsync().Wait();
+            try
             {
                 return _hasPendingCommand;
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
             }
         }
     }
