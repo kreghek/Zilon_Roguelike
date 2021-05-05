@@ -8,11 +8,12 @@ namespace Zilon.Core.Client.Sector
 {
     public sealed class CommandLoopContext : ICommandLoopContext
     {
-        private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
         private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
         private readonly IPlayer _player;
 
-        public CommandLoopContext(IPlayer player, IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource, IAnimationBlockerService animationBlockerService)
+        public CommandLoopContext(IPlayer player, IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
+            IAnimationBlockerService animationBlockerService)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
             _humanActorTaskSource =
