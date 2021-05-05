@@ -304,7 +304,7 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
         }
 
-        private static void RegisterSchemeService(IServiceCollection container)
+        protected virtual void RegisterSchemeService(IServiceCollection container)
         {
             container.AddSingleton<ISchemeLocator>(factory =>
             {
