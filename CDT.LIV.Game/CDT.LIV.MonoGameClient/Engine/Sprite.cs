@@ -121,7 +121,7 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// <summary>
         /// Parent entity.
         /// </summary>
-        protected Renderable _parent { get; set; } = null;
+        protected Renderable? _parent { get; set; } = null;
 
         /// <summary>
         /// Local transformations (color, position, rotation..).
@@ -158,7 +158,7 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// <summary>
         /// String identifier you can attach to renderable entities.
         /// </summary>
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         /// <summary>
         /// Should we flip drawing on X axis?
@@ -294,14 +294,6 @@ namespace CDT.LIV.MonoGameClient.Engine
         }
 
         /// <summary>
-        /// Remove this renderable from its parent.
-        /// </summary>
-        public void RemoveFromParent()
-        {
-            _parent.RemoveChild(this);
-        }
-
-        /// <summary>
         /// Draw this renderable entity.
         /// This will also update transformations if needed.
         /// </summary>
@@ -422,13 +414,6 @@ namespace CDT.LIV.MonoGameClient.Engine
         public bool EnableRotationFlip = false;
 
         /// <summary>
-        /// Create the new sprite entity.
-        /// </summary>
-        public Sprite() : base()
-        {
-        }
-
-        /// <summary>
         /// Create the new sprite entity with params.
         /// </summary>
         /// <param name="texture">Texture to use for this sprite.</param>
@@ -438,7 +423,7 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// <param name="color">Sprite color.</param>
         /// <param name="zindex">Sprite zindex.</param>
         /// <param name="parent">Parent container.</param>
-        public Sprite(Texture2D texture, Point? size = null, Vector2? origin = null, Vector2? position = null, Color? color = null, float zindex = 0f, Renderable parent = null) : base()
+        public Sprite(Texture2D texture, Point? size = null, Vector2? origin = null, Vector2? position = null, Color? color = null, float zindex = 0f, Renderable? parent = null) : base()
         {
             Size = size ?? Point.Zero;
             Texture = texture;

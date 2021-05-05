@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,9 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
-using Zilon.Core.Commands;
-using Zilon.Core.Players;
-using Zilon.Core.Tactics.Behaviour;
 
 namespace CDT.LIV.MonoGameClient.Scenes
 {
@@ -44,7 +40,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
                 Components.Add(_sectorViewModel);
 
-                Init();
+                StartBackgroundLoops();
             }
 
             if (_camera != null && _uiState.ActiveActor != null)
@@ -53,7 +49,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
             }
         }
 
-        private void Init()
+        private void StartBackgroundLoops()
         {
             var serviceScope = ((LivGame)Game).ServiceProvider;
 
