@@ -25,7 +25,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly SpriteBatch _spriteBatch;
         private readonly IPlayer _player;
         private readonly ISectorUiState _uiState;
-        private readonly ICommandPool _commandPool;
         private readonly Zilon.Core.Tactics.ISector _sector;
 
         private readonly MapViewModel _mapViewModel;
@@ -43,7 +42,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _player = serviceScope.GetRequiredService<IPlayer>();
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
-            _commandPool = serviceScope.GetRequiredService<ICommandPool>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -82,7 +80,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             }
 
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)Game).ServiceProvider);
-            var commandInput = new CommandInput(_uiState, _commandPool, _camera, _sector, commandFactory);
+
+            var commandPool = serviceScope.GetRequiredService<ICommandPool>();
+            var commandInput = new CommandInput(_uiState, commandPool, _camera, _sector, commandFactory);
             _commandInput = commandInput;
 
             _cursorTexture = Game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
@@ -139,6 +139,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            _mapViewModel.Update(gameTime);
 
             var gameObjectsFixedList = _gameObjects.ToArray();
             foreach (var gameObject in gameObjectsFixedList)

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using CDT.LIV.MonoGameClient.Scenes;
 
@@ -39,9 +40,16 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _commandFactory = commandFactory;
         }
 
-        public void Update() {
+        public void Update()
+        {
             if (_uiState.CanPlayerGivesCommand)
             {
+                var wasHotKey = HandleHotKeys();
+                if (wasHotKey)
+                {
+                    return;
+                }
+
                 var mouseState = Mouse.GetState();
 
                 var inverseCameraTransform = Matrix.Invert(_camera.Transform);
@@ -52,8 +60,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 var map = _sector.Map;
 
-                var hoverNodes = map.Nodes.OfType<HexNode>()
-                    .Where(node => node.OffsetCoords == offsetMouseInWorld);
+                var hoverNodes = map.Nodes.OfType<HexNode>().Where(node => node.OffsetCoords == offsetMouseInWorld);
                 var hoverNode = hoverNodes.FirstOrDefault();
 
                 if (hoverNode != null)
@@ -96,6 +103,21 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     _leftMousePressed = false;
                 }
             }
+        }
+
+        private bool HandleHotKeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.T))
+            {
+                var transitionCommand = _commandFactory.GetCommand<SectorTransitionMoveCommand>();
+
+                _commandPool.Push(transitionCommand);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

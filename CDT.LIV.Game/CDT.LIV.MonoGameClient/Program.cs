@@ -25,11 +25,9 @@ namespace CDT.LIV.MonoGameClient
             serviceContainer.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceContainer.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
-            serviceContainer.AddScoped<MoveCommand>();
-            serviceContainer.AddScoped<IdleCommand>();
-            serviceContainer.AddScoped<AttackCommand>();
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
-            serviceContainer.AddScoped<SectorTransitionMoveCommand>();
+
+            RegisterCommands(serviceContainer);
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 
@@ -39,6 +37,14 @@ namespace CDT.LIV.MonoGameClient
             game.IsMouseVisible = false;
 
             game.Run();
+        }
+
+        private static void RegisterCommands(ServiceCollection serviceContainer)
+        {
+            serviceContainer.AddScoped<MoveCommand>();
+            serviceContainer.AddScoped<IdleCommand>();
+            serviceContainer.AddScoped<AttackCommand>();
+            serviceContainer.AddScoped<SectorTransitionMoveCommand>();
         }
     }
 }
