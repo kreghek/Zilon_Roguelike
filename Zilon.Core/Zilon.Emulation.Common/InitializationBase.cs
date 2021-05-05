@@ -109,6 +109,20 @@ namespace Zilon.Emulation.Common
             });
         }
 
+        protected virtual void RegisterSchemeService(IServiceCollection container)
+        {
+            container.AddSingleton<ISchemeLocator>(factory =>
+            {
+                var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
+
+                return schemeLocator;
+            });
+
+            container.AddSingleton<ISchemeService, SchemeService>();
+
+            container.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
+        }
+
         private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider,
             ActorActUsageHandler handler)
         {
@@ -302,20 +316,6 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IPlayerEventLogService, PlayerEventLogService>();
             serviceCollection.AddSingleton<DeathReasonService>();
             serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
-        }
-
-        protected virtual void RegisterSchemeService(IServiceCollection container)
-        {
-            container.AddSingleton<ISchemeLocator>(factory =>
-            {
-                var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
-
-                return schemeLocator;
-            });
-
-            container.AddSingleton<ISchemeService, SchemeService>();
-
-            container.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
         }
 
         private void RegisterScopedSectorService(IServiceCollection container)

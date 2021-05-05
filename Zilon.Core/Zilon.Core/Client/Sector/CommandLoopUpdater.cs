@@ -68,7 +68,6 @@ namespace Zilon.Core.Client.Sector
                         }
                         else
                         {
-
                             await _semaphoreSlim.WaitAsync();
                             try
                             {
