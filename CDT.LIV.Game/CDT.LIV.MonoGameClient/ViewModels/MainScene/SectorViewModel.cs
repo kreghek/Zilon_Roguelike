@@ -21,8 +21,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     public class SectorViewModel : DrawableGameComponent
     {
-        private const int UNIT_SIZE = 32;
-
         private readonly Camera _camera;
         private readonly SpriteBatch _spriteBatch;
         private readonly IPlayer _player;
@@ -32,15 +30,13 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private readonly MapViewModel _mapViewModel;
         private readonly List<GameObjectBase> _gameObjects;
-
+        private readonly CommandInput _commandInput;
         private readonly Texture2D _cursorTexture;
-        private readonly Texture2D _cursorTexture2;
         private readonly SpriteFont _font;
-        private bool _leftMousePressed;
 
-        public SectorViewModel(Game game, Camera _camera, SpriteBatch spriteBatch) : base(game)
+        public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch) : base(game)
         {
-            this._camera = _camera;
+            _camera = camera;
             _spriteBatch = spriteBatch;
 
             var serviceScope = ((LivGame)Game).ServiceProvider;
@@ -84,6 +80,10 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 _gameObjects.Add(staticObjectModel);
             }
+
+            var commandFactory = new ServiceProviderCommandFactory(((LivGame)Game).ServiceProvider);
+            var commandInput = new CommandInput(_uiState, _commandPool, _camera, _sector, commandFactory);
+            _commandInput = commandInput;
 
             _cursorTexture = Game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
             _font = Game.Content.Load<SpriteFont>("Fonts/Main");
@@ -146,64 +146,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 gameObject.Update(gameTime);
             }
 
-            if (_uiState.CanPlayerGivesCommand)
-            {
-                var mouseState = Mouse.GetState();
-
-                var inverseCameraTransform = Matrix.Invert(_camera.Transform);
-
-                var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
-
-                var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2, UNIT_SIZE / 2);
-
-                var map = _sector.Map;
-
-                var hoverNodes = map.Nodes.OfType<HexNode>()
-                    .Where(node => node.OffsetCoords == offsetMouseInWorld);
-                var hoverNode = hoverNodes.FirstOrDefault();
-
-                if (hoverNode != null)
-                {
-                    if (_uiState.HoverViewModel is null)
-                    {
-                        _uiState.HoverViewModel = new NodeViewModel(hoverNode);
-                    }
-                    else
-                    {
-                        if (_uiState.HoverViewModel.Item != hoverNode)
-                        {
-                            _uiState.HoverViewModel = new NodeViewModel(hoverNode);
-                        }
-                    }
-                }
-                else
-                {
-                    _uiState.HoverViewModel = null;
-                }
-
-                if (!_leftMousePressed 
-                    && mouseState.LeftButton == ButtonState.Pressed
-                    && _uiState.HoverViewModel != null 
-                    && _uiState.CanPlayerGivesCommand)
-                {
-                    _leftMousePressed = true;
-
-                    _uiState.SelectedViewModel = _uiState.HoverViewModel;
-
-                    var serviceScope = ((LivGame)Game).ServiceProvider;
-
-                    var command = serviceScope.GetRequiredService<MoveCommand>();
-                    if (command.CanExecute().IsSuccess)
-                    {
-                        _commandPool.Push(command);
-                    }
-                }
-
-                if (_leftMousePressed && mouseState.LeftButton == ButtonState.Released)
-                {
-                    _leftMousePressed = false;
-                }
-            }
+            _commandInput.Update();
         }
 
         private static ISectorNode GetPlayerSectorNode(IPlayer player)
