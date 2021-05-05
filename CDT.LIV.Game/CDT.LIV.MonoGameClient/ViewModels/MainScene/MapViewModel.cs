@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using CDT.LIV.MonoGameClient.Engine;
@@ -6,6 +9,7 @@ using CDT.LIV.MonoGameClient.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
@@ -27,7 +31,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly IPlayer _player;
         private readonly ISectorUiState _uiState;
 
-        private Sprite[,] _hexSprites = new Sprite[1000, 1000];
+        private ConcurrentDictionary<OffsetCoords, Sprite> _hexSprites;
 
         public MapViewModel(Game game, IPlayer player, ISectorUiState uiState, ISector sector, SpriteBatch spriteBatch) : base(game)
         {
@@ -37,6 +41,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _player = player;
             _uiState = uiState;
             _sector = sector;
+
+            _hexSprites = new ConcurrentDictionary<OffsetCoords, Sprite>();
         }
 
         private void UpdateSpriteMatrix(GameTime gameTime)
@@ -86,18 +92,17 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     nodeColor = Color.Lerp(nodeColor, new Color(0, 0, 0, 0), 0.5f);
                 }
 
-                var currentHexSprite = _hexSprites[node.OffsetCoords.X, node.OffsetCoords.Y];
-                if (currentHexSprite is null)
+                if (!_hexSprites.TryGetValue(node.OffsetCoords, out var currentHexSprite))
                 {
                     var worldCoords = HexHelper.ConvertToWorld(node.OffsetCoords);
                     var hexSize = UNIT_SIZE / 2;
 
                     var newSprite = new Sprite(_hexSprite,
-                    size: new Point(
-                        (int)(hexSize * Math.Sqrt(3)),
-                        hexSize * 2 / 2
-                        ),
-                    color: nodeColor)
+                        size: new Point(
+                            (int)(hexSize * Math.Sqrt(3)),
+                            hexSize * 2 / 2
+                            ),
+                        color: nodeColor)
                     {
                         Position = new Vector2(
                         (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
@@ -105,7 +110,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                         )
                     };
 
-                    _hexSprites[node.OffsetCoords.X, node.OffsetCoords.Y] = newSprite;
+                    _hexSprites.AddOrUpdate(node.OffsetCoords, newSprite, (offsetCoords, sprite) => { return sprite; });
                     currentHexSprite = newSprite;
                 }
 
@@ -122,16 +127,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         {
             _spriteBatch.Begin(transformMatrix: transform);
 
-            for (var x = 0; x < 1000; x++)
-            {
-                for (var y = 0; y < 1000; y++)
-                {
-                    var sprite = _hexSprites[x, y];
-                    if (sprite != null)
-                    {
-                        sprite.Draw(_spriteBatch);
-                    }
-                }
+            foreach (var hexSprite in _hexSprites.Values.ToArray())
+            { 
+                hexSprite.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
