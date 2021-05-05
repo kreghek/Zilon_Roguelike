@@ -78,15 +78,16 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 var hexSize = UNIT_SIZE / 2;
                 var sprite = new Sprite(_hexSprite,
                     size: new Point(
-                        (int)(hexSize * System.Math.Sqrt(3)),
+                        (int)(hexSize * Math.Sqrt(3)),
                         hexSize * 2 / 2
                         ),
-                    color: nodeColor);
-
-                sprite.Position = new Vector2(
-                    (float)(worldCoords[0] * hexSize * System.Math.Sqrt(3)),
+                    color: nodeColor)
+                {
+                    Position = new Vector2(
+                    (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
                     (float)(worldCoords[1] * hexSize * 2 / 2)
-                    );
+                    )
+                };
 
                 sprite.Draw(_spriteBatch);
 
