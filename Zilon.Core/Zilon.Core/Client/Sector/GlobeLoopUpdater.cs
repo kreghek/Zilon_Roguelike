@@ -14,15 +14,16 @@ namespace Zilon.Core.Client.Sector
 
         private CancellationTokenSource? _cancellationTokenSource;
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public GlobeLoopUpdater(
             IGlobeLoopContext gameLoopContext,
             IAnimationBlockerService animationBlockerService)
         {
-            _gameLoopContext = gameLoopContext ?? throw new ArgumentNullException(nameof(gameLoopContext));
-            _animationBlockerService = animationBlockerService ??
-                                       throw new ArgumentNullException(nameof(animationBlockerService));
+            _gameLoopContext = gameLoopContext;
+            _animationBlockerService = animationBlockerService;
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public void Dispose()
         {
             if (_cancellationTokenSource != null)
@@ -73,6 +74,7 @@ namespace Zilon.Core.Client.Sector
             IsStarted = true;
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public void Stop()
         {
             if (_cancellationTokenSource != null)

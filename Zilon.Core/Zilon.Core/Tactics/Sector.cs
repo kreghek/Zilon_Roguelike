@@ -346,7 +346,7 @@ namespace Zilon.Core.Tactics
             if (fowModule != null)
             {
                 var fowData = fowModule.GetSectorFowData(this);
-                const int DISTANCE_OF_SIGN = 5;
+                const int DISTANCE_OF_SIGN = 15;
                 var fowContext = new FowContext(Map, StaticObjectManager);
                 FowHelper.UpdateFowData(fowData, fowContext, actor.Node, DISTANCE_OF_SIGN);
             }

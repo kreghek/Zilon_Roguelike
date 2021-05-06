@@ -14,17 +14,12 @@ namespace Zilon.Core.Client.Sector
     /// </summary>
     public sealed class GlobeLoopContext : IGlobeLoopContext
     {
-        [NotNull] private readonly IInventoryState _inventoryState;
-
         [NotNull] private readonly IPlayer _player;
 
-        [NotNull] private readonly ISectorUiState _playerState;
-
-        public GlobeLoopContext(IPlayer player, IInventoryState inventoryState, ISectorUiState playerState)
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        public GlobeLoopContext(IPlayer player)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
-            _inventoryState = inventoryState ?? throw new ArgumentNullException(nameof(inventoryState));
-            _playerState = playerState ?? throw new ArgumentNullException(nameof(playerState));
         }
 
         /// <inheritdoc />
