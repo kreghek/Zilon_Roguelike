@@ -36,7 +36,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (command != null)
                 {
-                    await SetHasPending(true).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(true).ConfigureAwait(false);
 
                     try
                     {
@@ -61,14 +61,14 @@ namespace Zilon.Core.Client.Sector
                         }
                         else
                         {
-                            await SetHasPending(false).ConfigureAwait(false);
+                            await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
 
                             CommandProcessed?.Invoke(this, EventArgs.Empty);
                         }
                     }
                     else
                     {
-                        await SetHasPending(false).ConfigureAwait(false);
+                        await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
 
                         CommandProcessed?.Invoke(this, EventArgs.Empty);
                     }
@@ -77,7 +77,7 @@ namespace Zilon.Core.Client.Sector
                 }
                 else
                 {
-                    await SetHasPending(false).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
 
                     if (lastCommand != null)
                     {
@@ -105,7 +105,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (errorOccured)
                 {
-                    await SetHasPending(false).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
 
                     CommandProcessed?.Invoke(this, EventArgs.Empty);
                     newLastCommand = null;
@@ -115,7 +115,7 @@ namespace Zilon.Core.Client.Sector
             return newLastCommand;
         }
 
-        private async Task SetHasPending(bool v)
+        private async Task SetHasPendingCommandsAsync(bool v)
         {
             await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
             try
