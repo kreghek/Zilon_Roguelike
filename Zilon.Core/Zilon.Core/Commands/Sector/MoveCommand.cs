@@ -100,25 +100,6 @@ namespace Zilon.Core.Commands
             taskSource.Intent(moveIntetion, actor);
         }
 
-        private bool CanExecuteForSelected()
-        {
-            var nodeViewModel = GetSelectedNodeViewModel();
-            if (nodeViewModel is null)
-            {
-                return false;
-            }
-
-            if (PlayerState.ActiveActor?.Actor is null)
-            {
-                return false;
-            }
-
-            //test
-
-            CreatePath(nodeViewModel);
-            return Path.Any();
-        }
-
         private bool CheckEnemies()
         {
             var actor = PlayerState?.ActiveActor?.Actor;
