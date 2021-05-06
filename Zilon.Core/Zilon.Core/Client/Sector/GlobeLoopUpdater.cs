@@ -18,9 +18,8 @@ namespace Zilon.Core.Client.Sector
             IGlobeLoopContext gameLoopContext,
             IAnimationBlockerService animationBlockerService)
         {
-            _gameLoopContext = gameLoopContext ?? throw new ArgumentNullException(nameof(gameLoopContext));
-            _animationBlockerService = animationBlockerService ??
-                                       throw new ArgumentNullException(nameof(animationBlockerService));
+            _gameLoopContext = gameLoopContext;
+            _animationBlockerService = animationBlockerService;
         }
 
         public void Dispose()
