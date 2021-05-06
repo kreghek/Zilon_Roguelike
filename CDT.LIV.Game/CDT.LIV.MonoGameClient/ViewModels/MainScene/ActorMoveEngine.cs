@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 using CDT.LIV.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
@@ -35,8 +37,12 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         public void Update(GameTime gameTime)
         {
             _moveCounter -= gameTime.ElapsedGameTime.TotalSeconds * 3;
+            var t = 1 - (float)_moveCounter;
+            var stepAmplitude = 12f;
+            var stepFrequncy = 2f;
+            var unitVector = Vector2.UnitY * -1f;
 
-            _rootSprite.Position = Vector2.Lerp(_startPosition, _targetPosition, 1 - (float)_moveCounter);
+            _rootSprite.Position = Vector2.Lerp(_startPosition, _targetPosition, t) + (float)Math.Abs(Math.Sin(t * Math.PI * stepFrequncy)) * unitVector * stepAmplitude;
 
             if (IsComplete)
             {
