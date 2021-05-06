@@ -11,7 +11,7 @@ namespace Zilon.Core.Client.Sector
         private readonly ICommandLoopContext _commandLoopContext;
         private readonly ICommandPool _commandPool;
 
-        private readonly object _lockObj;
+        private readonly SemaphoreSlim _semaphoreSlim;
 
         private bool _hasPendingCommand;
 
@@ -20,92 +20,134 @@ namespace Zilon.Core.Client.Sector
             _commandLoopContext = commandLoopContext ?? throw new ArgumentNullException(nameof(commandLoopContext));
             _commandPool = commandPool ?? throw new ArgumentNullException(nameof(commandPool));
 
-            _lockObj = new object();
+            _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
-        private ICommand? TryExecuteCommand(ICommand? lastCommand)
+        private async Task<ICommand?> TryExecuteCommandAsync(ICommand? lastCommand)
         {
             ICommand? commandWithError = null;
             ICommand? newLastCommand = null;
 
-            lock (_lockObj)
+            var errorOccured = false;
+
+            var command = _commandPool.Pop();
+
+            try
             {
-                _hasPendingCommand = true;
-
-                var errorOccured = false;
-
-                var command = _commandPool.Pop();
-
-                try
+                if (command != null)
                 {
-                    if (command != null)
+                    await _semaphoreSlim.WaitAsync();
+                    try
                     {
-                        try
-                        {
-                            command.Execute();
-                        }
-                        catch (InvalidOperationException)
-                        {
-                            commandWithError = command;
-                            throw;
-                        }
+                        _hasPendingCommand = true;
+                    }
+                    finally
+                    {
+                        _semaphoreSlim.Release();
+                    }
 
-                        if (command is IRepeatableCommand repeatableCommand)
+                    try
+                    {
+                        command.Execute();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        commandWithError = command;
+                        throw;
+                    }
+
+                    if (command is IRepeatableCommand repeatableCommand)
+                    {
+                        await Task.Delay(100).ConfigureAwait(false);
+
+                        if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
                         {
-                            if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
-                            {
-                                repeatableCommand.IncreaceIteration();
-                                _commandPool.Push(repeatableCommand);
-                                CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
-                            }
-                            else
-                            {
-                                _hasPendingCommand = false;
-                                CommandProcessed?.Invoke(this, EventArgs.Empty);
-                            }
+                            repeatableCommand.IncreaceIteration();
+                            _commandPool.Push(repeatableCommand);
+                            CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
                         }
                         else
                         {
-                            _hasPendingCommand = false;
+                            await _semaphoreSlim.WaitAsync();
+                            try
+                            {
+                                _hasPendingCommand = false;
+                            }
+                            finally
+                            {
+                                _semaphoreSlim.Release();
+                            }
+
                             CommandProcessed?.Invoke(this, EventArgs.Empty);
                         }
-
-                        newLastCommand = command;
                     }
                     else
                     {
-                        _hasPendingCommand = false;
-
-                        if (lastCommand != null)
+                        await _semaphoreSlim.WaitAsync();
+                        try
                         {
-                            CommandProcessed?.Invoke(this, EventArgs.Empty);
-                            newLastCommand = null;
+                            _hasPendingCommand = false;
                         }
-                    }
-                }
-                catch (InvalidOperationException exception)
-                {
-                    errorOccured = true;
+                        finally
+                        {
+                            _semaphoreSlim.Release();
+                        }
 
-                    if (commandWithError != null)
-                    {
-                        ErrorOccured?.Invoke(this, new CommandErrorOccuredEventArgs(commandWithError, exception));
-                    }
-                    else
-                    {
-                        ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+                        CommandProcessed?.Invoke(this, EventArgs.Empty);
                     }
 
-                    newLastCommand = null;
+                    newLastCommand = command;
                 }
-                finally
+                else
                 {
-                    if (errorOccured)
+                    await _semaphoreSlim.WaitAsync();
+                    try
                     {
                         _hasPendingCommand = false;
+                    }
+                    finally
+                    {
+                        _semaphoreSlim.Release();
+                    }
+
+                    if (lastCommand != null)
+                    {
                         CommandProcessed?.Invoke(this, EventArgs.Empty);
                         newLastCommand = null;
                     }
+                }
+            }
+            catch (InvalidOperationException exception)
+            {
+                errorOccured = true;
+
+                if (commandWithError != null)
+                {
+                    ErrorOccured?.Invoke(this, new CommandErrorOccuredEventArgs(commandWithError, exception));
+                }
+                else
+                {
+                    ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+                }
+
+                newLastCommand = null;
+            }
+            finally
+            {
+                if (errorOccured)
+                {
+                    await _semaphoreSlim.WaitAsync();
+                    try
+                    {
+                        _hasPendingCommand = false;
+                    }
+                    finally
+                    {
+                        _semaphoreSlim.Release();
+                    }
+
+                    CommandProcessed?.Invoke(this, EventArgs.Empty);
+                    newLastCommand = null;
                 }
             }
 
@@ -133,7 +175,7 @@ namespace Zilon.Core.Client.Sector
 
                     try
                     {
-                        lastCommand = TryExecuteCommand(lastCommand: lastCommand);
+                        lastCommand = await TryExecuteCommandAsync(lastCommand: lastCommand).ConfigureAwait(false);
                     }
                     catch (Exception exception)
                     {
@@ -149,9 +191,14 @@ namespace Zilon.Core.Client.Sector
 
         public bool HasPendingCommands()
         {
-            lock (_lockObj)
+            _semaphoreSlim.WaitAsync().Wait();
+            try
             {
                 return _hasPendingCommand;
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
             }
         }
     }

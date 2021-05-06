@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
@@ -10,14 +8,17 @@ namespace Zilon.Core.Client.Sector
 {
     public sealed class CommandLoopContext : ICommandLoopContext
     {
+        private readonly IAnimationBlockerService _animationBlockerService;
         private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
         private readonly IPlayer _player;
 
-        public CommandLoopContext(IPlayer player, IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource)
+        public CommandLoopContext(IPlayer player, IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
+            IAnimationBlockerService animationBlockerService)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
             _humanActorTaskSource =
                 humanActorTaskSource ?? throw new ArgumentNullException(nameof(humanActorTaskSource));
+            _animationBlockerService = animationBlockerService;
         }
 
         public bool HasNextIteration
@@ -41,7 +42,7 @@ namespace Zilon.Core.Client.Sector
             get
             {
                 var canIndentoToTaskSource = _humanActorTaskSource.CanIntent();
-                var animationsAreComplete = true; // Implement this using IAnimationBlockerService.
+                var animationsAreComplete = !_animationBlockerService.HasBlockers;
                 return canIndentoToTaskSource && animationsAreComplete;
             }
         }
