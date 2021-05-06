@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -86,8 +87,8 @@ namespace CDT.LIV.MonoGameClient.Scenes
                     }, TaskContinuationOptions.OnlyOnRanToCompletion);
 
                     generateGlobeTask.ContinueWith(task => 
-                    { 
-
+                    {
+                        Debug.WriteLine(task.Exception);
                     }, TaskContinuationOptions.OnlyOnFaulted);
                 }
             }
