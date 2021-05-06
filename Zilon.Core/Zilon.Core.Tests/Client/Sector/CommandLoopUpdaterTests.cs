@@ -146,49 +146,6 @@ namespace Zilon.Core.Client.Sector.Tests
         }
 
         /// <summary>
-        /// The test checks the event of error raises if command throws exception.
-        /// </summary>
-        [Test]
-        [Timeout(5000)]
-        public async Task StartAsync_CommandExecutesWithException_RaisesErrorOccuredEvent()
-        {
-            // ARRANGE
-
-            var contextMock = new Mock<ICommandLoopContext>();
-            contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
-            contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
-            var context = contextMock.Object;
-
-            var tcs = new TaskCompletionSource<bool>();
-            var eventTask = tcs.Task;
-
-            var commandMock = new Mock<ICommand>();
-            commandMock.Setup(x => x.Execute()).Throws(new InvalidOperationException());
-            var command = commandMock.Object;
-
-            var commandPool = new TestCommandPool();
-            commandPool.Push(command);
-
-            var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
-
-            commandLoopUpdater.ErrorOccured += (s, e) =>
-            {
-                tcs.SetResult(true);
-            };
-
-            // ACT
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            commandLoopUpdater.StartAsync(CancellationToken.None).ConfigureAwait(false);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
-            // ASSERT
-
-            var expectedEventWasRaised = await eventTask.ConfigureAwait(false);
-
-            expectedEventWasRaised.Should().BeTrue();
-        }
-
-        /// <summary>
         /// The test checks the command executes twice if it is repeatable and can repeat once.
         /// Note! Command must be abel to repeate and execute. Do not think that ability to repeat automaticaly means command can
         /// execute.
@@ -258,7 +215,7 @@ namespace Zilon.Core.Client.Sector.Tests
             var eventWasInvokedTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
-            commandMock.Setup(x => x.Execute()).Callback(() => { throw new InvalidOperationException(); });
+            commandMock.Setup(x => x.Execute()).Throws(new InvalidOperationException());
             var command = commandMock.Object;
 
             var commandPool = new TestCommandPool();
