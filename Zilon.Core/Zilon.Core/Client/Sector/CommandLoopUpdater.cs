@@ -59,15 +59,7 @@ namespace Zilon.Core.Client.Sector
                     if (command is IRepeatableCommand repeatableCommand)
                     {
                         // It is necesary because CanRepeate and CanExecute can perform early that globe updates its state.
-                        while (true)
-                        {
-                            await Task.Delay(100).ConfigureAwait(false);
-
-                            if (_commandLoopContext.CanPlayerGiveCommand)
-                            {
-                                break;
-                            }
-                        }
+                        await WaitGlobeIterationPerformedAsync();
 
                         if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
                         {
@@ -161,6 +153,22 @@ namespace Zilon.Core.Client.Sector
             }
 
             return newLastCommand;
+        }
+
+        private async Task WaitGlobeIterationPerformedAsync()
+        {
+            var fuseCounter = 100;
+            while (fuseCounter > 0)
+            {
+                await Task.Delay(100).ConfigureAwait(false);
+
+                if (_commandLoopContext.CanPlayerGiveCommand)
+                {
+                    break;
+                }
+
+                fuseCounter--;
+            }
         }
 
         public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
