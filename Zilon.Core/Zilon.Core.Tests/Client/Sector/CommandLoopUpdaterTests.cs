@@ -223,10 +223,14 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
             ErrorOccuredEventArgs expectedRaisedErrorArgs = null;
+            var raiseCount = 0;
             commandLoopUpdater.ErrorOccured += (s, e) =>
             {
                 expectedRaisedErrorArgs = e;
-                Console.WriteLine(e);
+
+                // Count raises to prevent errors with multiple events.
+                raiseCount++;
+
                 tcs.SetResult(true);
             };
 
@@ -242,6 +246,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             expectedEventWasRaised.Should().BeTrue();
             expectedRaisedErrorArgs.Should().BeOfType<CommandErrorOccuredEventArgs>();
+            raiseCount.Should().Be(1);
         }
 
         private sealed class TestCommandPool : ICommandPool

@@ -30,8 +30,10 @@ namespace Zilon.Core.Client.Sector
             {
                 ErrorOccured?.Invoke(this, new CommandErrorOccuredEventArgs(commandWithError, exception));
             }
-
-            ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+            else
+            {
+                ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+            }
         }
 
         private async Task HandleRepeateAsync(ICommand? command)
