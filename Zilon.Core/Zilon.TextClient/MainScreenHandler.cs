@@ -283,8 +283,8 @@ namespace Zilon.TextClient
             var globeLoopUpdateContext = new GlobeLoopContext(player, inventoryState, playerState);
             var globeLoop = new GlobeLoopUpdater(globeLoopUpdateContext, animationBlockerService);
 
-            var commandLoopContext =
-                new CommandLoopContext(player, (IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource);
+            var humanTaskSourceCasted = (IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource;
+            var commandLoopContext = new CommandLoopContext(player, humanTaskSourceCasted, animationBlockerService);
             var commandLoop = new CommandLoopUpdater(commandLoopContext, commandPool);
 
             var globe = player.Globe;
