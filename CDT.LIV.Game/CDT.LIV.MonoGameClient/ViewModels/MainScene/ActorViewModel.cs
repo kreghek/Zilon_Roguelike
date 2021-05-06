@@ -112,7 +112,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var hexSize = UNIT_SIZE / 2;
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
             var newPosition = new Vector2(
-                (float)(playerActorWorldCoords[0] * hexSize * System.Math.Sqrt(3)),
+                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
                 (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
                 );
 
@@ -158,7 +158,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 var hexSize = UNIT_SIZE / 2;
                 var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
                 var newPosition = new Vector2(
-                    (float)(playerActorWorldCoords[0] * hexSize * System.Math.Sqrt(3)),
+                    (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
                     (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
                     );
 
