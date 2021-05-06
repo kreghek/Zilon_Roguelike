@@ -29,6 +29,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _targetPosition = targetPosition;
             _animationBlockerService = animationBlockerService;
 
+            _rootSprite.FlipX = (_startPosition - _targetPosition).X < 0;
+
             _moveBlocker = new AnimationCommonBlocker();
 
             _animationBlockerService.AddBlocker(_moveBlocker);
