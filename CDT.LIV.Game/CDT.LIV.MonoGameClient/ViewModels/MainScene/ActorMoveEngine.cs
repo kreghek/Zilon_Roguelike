@@ -40,7 +40,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         {
             _moveCounter -= gameTime.ElapsedGameTime.TotalSeconds * 3;
             var t = 1 - (float)_moveCounter;
-            var stepAmplitude = 12f;
+            var stepAmplitude = 4f;
             var stepFrequncy = 2f;
             var unitVector = Vector2.UnitY * -1f;
 
