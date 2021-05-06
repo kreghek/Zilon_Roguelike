@@ -16,7 +16,6 @@ namespace Zilon.Core.Client.Sector
     {
         [NotNull] private readonly IPlayer _player;
 
-
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public GlobeLoopContext(IPlayer player)
         {
