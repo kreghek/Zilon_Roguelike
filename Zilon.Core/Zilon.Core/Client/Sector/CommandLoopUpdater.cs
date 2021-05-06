@@ -17,8 +17,8 @@ namespace Zilon.Core.Client.Sector
 
         public CommandLoopUpdater(ICommandLoopContext commandLoopContext, ICommandPool commandPool)
         {
-            _commandLoopContext = commandLoopContext ?? throw new ArgumentNullException(nameof(commandLoopContext));
-            _commandPool = commandPool ?? throw new ArgumentNullException(nameof(commandPool));
+            _commandLoopContext = commandLoopContext;
+            _commandPool = commandPool;
 
             _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
@@ -58,7 +58,16 @@ namespace Zilon.Core.Client.Sector
 
                     if (command is IRepeatableCommand repeatableCommand)
                     {
-                        await Task.Delay(100).ConfigureAwait(false);
+                        // It is necesary because CanRepeate and CanExecute can perform early that globe updates its state.
+                        while (true)
+                        {
+                            await Task.Delay(100).ConfigureAwait(false);
+
+                            if (_commandLoopContext.CanPlayerGiveCommand)
+                            {
+                                break;
+                            }
+                        }
 
                         if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
                         {

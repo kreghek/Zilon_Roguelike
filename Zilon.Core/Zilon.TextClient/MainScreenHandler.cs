@@ -280,11 +280,11 @@ namespace Zilon.TextClient
             var playerState = serviceScope.ServiceProvider.GetRequiredService<ISectorUiState>();
             var inventoryState = serviceScope.ServiceProvider.GetRequiredService<IInventoryState>();
 
-            var globeLoopUpdateContext = new GlobeLoopContext(player, inventoryState, playerState);
+            var globeLoopUpdateContext = new GlobeLoopContext(player);
             var globeLoop = new GlobeLoopUpdater(globeLoopUpdateContext, animationBlockerService);
 
-            var commandLoopContext =
-                new CommandLoopContext(player, (IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource);
+            var humanTaskSourceCasted = (IHumanActorTaskSource<ISectorTaskSourceContext>)humanTaskSource;
+            var commandLoopContext = new CommandLoopContext(player, humanTaskSourceCasted, animationBlockerService);
             var commandLoop = new CommandLoopUpdater(commandLoopContext, commandPool);
 
             var globe = player.Globe;
