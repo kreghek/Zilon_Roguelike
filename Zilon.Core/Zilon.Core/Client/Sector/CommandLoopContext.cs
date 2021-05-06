@@ -21,6 +21,7 @@ namespace Zilon.Core.Client.Sector
             _animationBlockerService = animationBlockerService;
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public bool HasNextIteration
         {
             get
@@ -37,6 +38,7 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public bool CanPlayerGiveCommand
         {
             get

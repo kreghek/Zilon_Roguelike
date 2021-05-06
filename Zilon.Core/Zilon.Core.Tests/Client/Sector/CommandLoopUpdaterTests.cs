@@ -215,7 +215,7 @@ namespace Zilon.Core.Client.Sector.Tests
             var eventWasInvokedTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
-            commandMock.Setup(x => x.Execute()).Callback(() => { throw new InvalidOperationException(); });
+            commandMock.Setup(x => x.Execute()).Throws<InvalidOperationException>();
             var command = commandMock.Object;
 
             var commandPool = new TestCommandPool();
@@ -223,9 +223,14 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
             ErrorOccuredEventArgs expectedRaisedErrorArgs = null;
+            var raiseCount = 0;
             commandLoopUpdater.ErrorOccured += (s, e) =>
             {
                 expectedRaisedErrorArgs = e;
+
+                // Count raises to prevent errors with multiple events.
+                raiseCount++;
+
                 tcs.SetResult(true);
             };
 
@@ -241,6 +246,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             expectedEventWasRaised.Should().BeTrue();
             expectedRaisedErrorArgs.Should().BeOfType<CommandErrorOccuredEventArgs>();
+            raiseCount.Should().Be(1);
         }
 
         private sealed class TestCommandPool : ICommandPool

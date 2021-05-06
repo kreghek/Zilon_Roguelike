@@ -15,6 +15,7 @@ namespace Zilon.Core.Client.Sector
 
         private bool _hasPendingCommand;
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public CommandLoopUpdater(ICommandLoopContext commandLoopContext, ICommandPool commandPool)
         {
             _commandLoopContext = commandLoopContext;
@@ -23,7 +24,47 @@ namespace Zilon.Core.Client.Sector
             _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
-        private async Task SetHasPending(bool v)
+        private void DoErrorOccured(ICommand? commandWithError, InvalidOperationException exception)
+        {
+            if (commandWithError != null)
+            {
+                ErrorOccured?.Invoke(this, new CommandErrorOccuredEventArgs(commandWithError, exception));
+            }
+            else
+            {
+                ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
+            }
+        }
+
+        private async Task HandleRepeatableAsync(ICommand? command)
+        {
+            if (command is IRepeatableCommand repeatableCommand)
+            {
+                // It is necesary because CanRepeate and CanExecute can perform early that globe updates its state.
+                await WaitGlobeIterationPerformedAsync().ConfigureAwait(false);
+
+                if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
+                {
+                    repeatableCommand.IncreaceIteration();
+                    _commandPool.Push(repeatableCommand);
+                    CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
+                }
+                else
+                {
+                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+
+                    CommandProcessed?.Invoke(this, EventArgs.Empty);
+                }
+            }
+            else
+            {
+                await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+
+                CommandProcessed?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private async Task SetHasPendingCommandsAsync(bool v)
         {
             await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
             try
@@ -49,7 +90,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (command != null)
                 {
-                    await SetHasPending(true).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(true).ConfigureAwait(false);
 
                     try
                     {
@@ -61,36 +102,13 @@ namespace Zilon.Core.Client.Sector
                         throw;
                     }
 
-                    if (command is IRepeatableCommand repeatableCommand)
-                    {
-                        // It is necesary because CanRepeate and CanExecute can perform early that globe updates its state.
-                        await WaitGlobeIterationPerformedAsync().ConfigureAwait(false);
-
-                        if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
-                        {
-                            repeatableCommand.IncreaceIteration();
-                            _commandPool.Push(repeatableCommand);
-                            CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
-                        }
-                        else
-                        {
-                            await SetHasPending(false).ConfigureAwait(false);
-
-                            CommandProcessed?.Invoke(this, EventArgs.Empty);
-                        }
-                    }
-                    else
-                    {
-                        await SetHasPending(false).ConfigureAwait(false);
-
-                        CommandProcessed?.Invoke(this, EventArgs.Empty);
-                    }
+                    await HandleRepeatableAsync(command).ConfigureAwait(false);
 
                     newLastCommand = command;
                 }
                 else
                 {
-                    await SetHasPending(false).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
 
                     if (lastCommand != null)
                     {
@@ -102,15 +120,7 @@ namespace Zilon.Core.Client.Sector
             catch (InvalidOperationException exception)
             {
                 errorOccured = true;
-
-                if (commandWithError != null)
-                {
-                    ErrorOccured?.Invoke(this, new CommandErrorOccuredEventArgs(commandWithError, exception));
-                }
-                else
-                {
-                    ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
-                }
+                DoErrorOccured(commandWithError, exception);
 
                 newLastCommand = null;
             }
@@ -118,7 +128,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (errorOccured)
                 {
-                    await SetHasPending(false).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
 
                     CommandProcessed?.Invoke(this, EventArgs.Empty);
                     newLastCommand = null;
@@ -133,6 +143,7 @@ namespace Zilon.Core.Client.Sector
             var fuseCounter = 100;
             while (fuseCounter > 0)
             {
+                await Task.Yield();
                 await Task.Delay(100).ConfigureAwait(false);
 
                 if (_commandLoopContext.CanPlayerGiveCommand)
@@ -159,6 +170,8 @@ namespace Zilon.Core.Client.Sector
                 {
                     if (!_commandLoopContext.CanPlayerGiveCommand)
                     {
+                        // If player can't gives command right now the loop sleep some time (100ms).
+                        // Because this can wait a little to start new attempt of command execution.
                         await Task.Delay(100).ConfigureAwait(false);
                         continue;
                     }
