@@ -36,7 +36,7 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        private async Task HandleRepeateAsync(ICommand? command)
+        private async Task HandleRepeatableAsync(ICommand? command)
         {
             if (command is IRepeatableCommand repeatableCommand)
             {
@@ -102,7 +102,7 @@ namespace Zilon.Core.Client.Sector
                         throw;
                     }
 
-                    await HandleRepeateAsync(command).ConfigureAwait(false);
+                    await HandleRepeatableAsync(command).ConfigureAwait(false);
 
                     newLastCommand = command;
                 }
@@ -143,6 +143,7 @@ namespace Zilon.Core.Client.Sector
             var fuseCounter = 100;
             while (fuseCounter > 0)
             {
+                await Task.Yield();
                 await Task.Delay(100).ConfigureAwait(false);
 
                 if (_commandLoopContext.CanPlayerGiveCommand)
@@ -169,6 +170,8 @@ namespace Zilon.Core.Client.Sector
                 {
                     if (!_commandLoopContext.CanPlayerGiveCommand)
                     {
+                        // If player can't gives command right now the loop sleep some time (100ms).
+                        // Because this can wait a little to start new attempt of command execution.
                         await Task.Delay(100).ConfigureAwait(false);
                         continue;
                     }
