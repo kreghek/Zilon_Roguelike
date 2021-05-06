@@ -15,6 +15,8 @@ namespace Zilon.Core.Client.Sector
 
         private bool _hasPendingCommand;
 
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public CommandLoopUpdater(ICommandLoopContext commandLoopContext, ICommandPool commandPool)
         {
             _commandLoopContext = commandLoopContext;
