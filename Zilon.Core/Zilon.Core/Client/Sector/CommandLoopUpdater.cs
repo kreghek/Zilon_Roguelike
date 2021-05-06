@@ -36,7 +36,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (command != null)
                 {
-                    await _semaphoreSlim.WaitAsync();
+                    await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
                     try
                     {
                         _hasPendingCommand = true;
@@ -59,7 +59,7 @@ namespace Zilon.Core.Client.Sector
                     if (command is IRepeatableCommand repeatableCommand)
                     {
                         // It is necesary because CanRepeate and CanExecute can perform early that globe updates its state.
-                        await WaitGlobeIterationPerformedAsync();
+                        await WaitGlobeIterationPerformedAsync().ConfigureAwait(false);
 
                         if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
                         {
