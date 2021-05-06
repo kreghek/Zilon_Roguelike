@@ -33,8 +33,6 @@ namespace CDT.LIV.MonoGameClient
 
             using var game = new LivGame(serviceProvider);
 
-            game.IsMouseVisible = false;
-
             game.Run();
         }
 
