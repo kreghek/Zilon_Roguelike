@@ -26,11 +26,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly Texture2D _personHeadSprite;
         private readonly Texture2D _personBodySprite;
 
-        private double _idleAnimationCounter;
-
         private readonly Container _rootSprite;
 
-        private ActorMoveEngine? _actorMoveEngine;
+        private IActorStateEngine _actorStateEngine;
 
         public ActorViewModel(Game game, IActor actor, SpriteBatch spriteBatch)
         {
@@ -104,7 +102,18 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 Origin = new Vector2(0.5f, 1)
             });
 
+            var hexSize = UNIT_SIZE / 2;
+            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
+            var newPosition = new Vector2(
+                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                );
+
+            _rootSprite.Position = newPosition;
+
             Actor.Moved += Actor_Moved;
+
+            _actorStateEngine = new ActorIdleEngine(_rootSprite);
         }
 
         private void Actor_Moved(object? sender, EventArgs e)
@@ -112,7 +121,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var hexSize = UNIT_SIZE / 2;
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
             var newPosition = new Vector2(
-                (float)(playerActorWorldCoords[0] * hexSize * System.Math.Sqrt(3)),
+                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
                 (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
                 );
 
@@ -121,7 +130,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
             var moveEngine = new ActorMoveEngine(_rootSprite, newPosition, animationBlockerService);
-            _actorMoveEngine = moveEngine;
+            _actorStateEngine = moveEngine;
         }
 
         public IActor Actor { get; set; }
@@ -132,10 +141,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {
-            //_idleAnimationCounter += gameTime.ElapsedGameTime.TotalSeconds;
-
-            _rootSprite.Rotation = (float)Math.Sin(_idleAnimationCounter);
-
             _spriteBatch.Begin(transformMatrix: transform);
 
             _rootSprite.Draw(_spriteBatch);
@@ -145,24 +150,22 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public override void Update(GameTime gameTime)
         {
-            if (_actorMoveEngine != null)
+            if (_actorStateEngine != null)
             {
-                _actorMoveEngine.Update(gameTime);
-                if (_actorMoveEngine.IsComplete)
+                _actorStateEngine.Update(gameTime);
+                if (_actorStateEngine.IsComplete)
                 {
-                    _actorMoveEngine = null;
-                }
-            }
-            else
-            {
-                var hexSize = UNIT_SIZE / 2;
-                var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
-                var newPosition = new Vector2(
-                    (float)(playerActorWorldCoords[0] * hexSize * System.Math.Sqrt(3)),
-                    (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
-                    );
+                    _actorStateEngine = new ActorIdleEngine(_rootSprite);
 
-                _rootSprite.Position = newPosition;
+                    var hexSize = UNIT_SIZE / 2;
+                    var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
+                    var newPosition = new Vector2(
+                        (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                        (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                        );
+
+                    _rootSprite.Position = newPosition;
+                }
             }
         }
     }

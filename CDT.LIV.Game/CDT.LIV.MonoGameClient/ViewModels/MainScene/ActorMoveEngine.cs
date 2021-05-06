@@ -9,7 +9,7 @@ using Zilon.Core.Client.Sector;
 
 namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
-    public class ActorMoveEngine
+    public sealed class ActorMoveEngine: IActorStateEngine
     {
         private double _moveCounter = 1f;
 
