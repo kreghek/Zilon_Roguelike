@@ -23,8 +23,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private readonly Game _game;
         private readonly SpriteBatch _spriteBatch;
-        private readonly Texture2D _personHeadSprite;
-        private readonly Texture2D _personBodySprite;
 
         private readonly Container _rootSprite;
 
@@ -38,68 +36,42 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
 
-            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
-            _personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
-
-            //if (equipmentModule is null)
-            //{
-            //    _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
-            //    _personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
-            //}
-            //else
-            //{
-            //    for (var i = 0; i < equipmentModule.Count(); i++)
-            //    {
-            //        var equipment = equipmentModule[i];
-            //        var slot = equipmentModule.Slots[i];
-
-            //        if (slot.Types.HasFlag(Zilon.Core.Components.EquipmentSlotTypes.Head))
-            //        {
-            //            if (equipment is null)
-            //            {
-            //                _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
-            //            }
-            //            else
-            //            {
-            //                _personHeadSprite = _game.Content.Load<Texture2D>($"Sprites/equipments/{equipment.Scheme.Sid}");
-            //            }
-            //        }
-
-            //        if (slot.Types.HasFlag(Zilon.Core.Components.EquipmentSlotTypes.Body))
-            //        {
-            //            if (equipment is null)
-            //            {
-            //                _personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
-            //            }
-            //            else
-            //            {
-            //                _personBodySprite = _game.Content.Load<Texture2D>($"Sprites/equipments/{equipment.Scheme.Sid}");
-            //            }
-            //        }
-            //    }
-
-            //if (_personHeadSprite is null)
-            //    {
-            //        _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
-            //    }
-
-            //    if (_personBodySprite is null)
-            //    {
-            //        _personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
-            //    }
-            //}
+            var personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
+            var personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
+            var personLegsSprite = _game.Content.Load<Texture2D>("Sprites/legs_idle");
+            var personArmLeftSprite = _game.Content.Load<Texture2D>("Sprites/arm-left-simple");
+            var personArmRightSprite = _game.Content.Load<Texture2D>("Sprites/arm-right-simple");
 
             _rootSprite = new Container();
-            _rootSprite.AddChild(new Sprite(_personBodySprite)
+
+            _rootSprite.AddChild(new Sprite(personArmLeftSprite)
+            {
+                Position = new Vector2(-10, -20),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
+
+            _rootSprite.AddChild(new Sprite(personLegsSprite)
             {
                 Position = new Vector2(0, 0),
+                Origin = new Vector2(0.5f, 0.75f)
+            });
+
+            _rootSprite.AddChild(new Sprite(personBodySprite)
+            {
+                Position = new Vector2(3, -22),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
+
+            _rootSprite.AddChild(new Sprite(personHeadSprite)
+            {
+                Position = new Vector2(-0, -20),
                 Origin = new Vector2(0.5f, 1)
             });
 
-            _rootSprite.AddChild(new Sprite(_personHeadSprite)
+            _rootSprite.AddChild(new Sprite(personArmRightSprite)
             {
-                Position = new Vector2(-6, -32),
-                Origin = new Vector2(0.5f, 1)
+                Position = new Vector2(13, -20),
+                Origin = new Vector2(0.5f, 0.5f)
             });
 
             var hexSize = UNIT_SIZE / 2;
