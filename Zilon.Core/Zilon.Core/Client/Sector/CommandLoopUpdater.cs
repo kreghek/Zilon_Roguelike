@@ -36,15 +36,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (command != null)
                 {
-                    await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
-                    try
-                    {
-                        _hasPendingCommand = true;
-                    }
-                    finally
-                    {
-                        _semaphoreSlim.Release();
-                    }
+                    await SetHasPending(true).ConfigureAwait(false);
 
                     try
                     {
@@ -69,30 +61,14 @@ namespace Zilon.Core.Client.Sector
                         }
                         else
                         {
-                            await _semaphoreSlim.WaitAsync();
-                            try
-                            {
-                                _hasPendingCommand = false;
-                            }
-                            finally
-                            {
-                                _semaphoreSlim.Release();
-                            }
+                            await SetHasPending(false).ConfigureAwait(false);
 
                             CommandProcessed?.Invoke(this, EventArgs.Empty);
                         }
                     }
                     else
                     {
-                        await _semaphoreSlim.WaitAsync();
-                        try
-                        {
-                            _hasPendingCommand = false;
-                        }
-                        finally
-                        {
-                            _semaphoreSlim.Release();
-                        }
+                        await SetHasPending(false).ConfigureAwait(false);
 
                         CommandProcessed?.Invoke(this, EventArgs.Empty);
                     }
@@ -101,15 +77,7 @@ namespace Zilon.Core.Client.Sector
                 }
                 else
                 {
-                    await _semaphoreSlim.WaitAsync();
-                    try
-                    {
-                        _hasPendingCommand = false;
-                    }
-                    finally
-                    {
-                        _semaphoreSlim.Release();
-                    }
+                    await SetHasPending(false).ConfigureAwait(false);
 
                     if (lastCommand != null)
                     {
@@ -137,15 +105,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (errorOccured)
                 {
-                    await _semaphoreSlim.WaitAsync();
-                    try
-                    {
-                        _hasPendingCommand = false;
-                    }
-                    finally
-                    {
-                        _semaphoreSlim.Release();
-                    }
+                    await SetHasPending(false).ConfigureAwait(false);
 
                     CommandProcessed?.Invoke(this, EventArgs.Empty);
                     newLastCommand = null;
@@ -153,6 +113,19 @@ namespace Zilon.Core.Client.Sector
             }
 
             return newLastCommand;
+        }
+
+        private async Task SetHasPending(bool v)
+        {
+            await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                _hasPendingCommand = v;
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
         }
 
         private async Task WaitGlobeIterationPerformedAsync()
