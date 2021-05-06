@@ -215,7 +215,7 @@ namespace Zilon.Core.Client.Sector.Tests
             var eventWasInvokedTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
-            commandMock.Setup(x => x.Execute()).Throws(new InvalidOperationException());
+            commandMock.Setup(x => x.Execute()).Throws<InvalidOperationException>();
             var command = commandMock.Object;
 
             var commandPool = new TestCommandPool();
@@ -226,6 +226,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandLoopUpdater.ErrorOccured += (s, e) =>
             {
                 expectedRaisedErrorArgs = e;
+                Console.WriteLine(e);
                 tcs.SetResult(true);
             };
 
