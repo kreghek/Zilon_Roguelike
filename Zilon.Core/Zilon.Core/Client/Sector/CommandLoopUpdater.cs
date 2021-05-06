@@ -48,30 +48,7 @@ namespace Zilon.Core.Client.Sector
                         throw;
                     }
 
-                    if (command is IRepeatableCommand repeatableCommand)
-                    {
-                        // It is necesary because CanRepeate and CanExecute can perform early that globe updates its state.
-                        await WaitGlobeIterationPerformedAsync().ConfigureAwait(false);
-
-                        if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
-                        {
-                            repeatableCommand.IncreaceIteration();
-                            _commandPool.Push(repeatableCommand);
-                            CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
-                        }
-                        else
-                        {
-                            await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
-
-                            CommandProcessed?.Invoke(this, EventArgs.Empty);
-                        }
-                    }
-                    else
-                    {
-                        await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
-
-                        CommandProcessed?.Invoke(this, EventArgs.Empty);
-                    }
+                    await HandleRepeateAsync(command).ConfigureAwait(false);
 
                     newLastCommand = command;
                 }
@@ -89,15 +66,7 @@ namespace Zilon.Core.Client.Sector
             catch (InvalidOperationException exception)
             {
                 errorOccured = true;
-
-                if (commandWithError != null)
-                {
-                    ErrorOccured?.Invoke(this, new CommandErrorOccuredEventArgs(commandWithError, exception));
-                }
-                else
-                {
-                    ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
-                }
+                DoErrorOccured(commandWithError, exception);
 
                 newLastCommand = null;
             }
@@ -113,6 +82,44 @@ namespace Zilon.Core.Client.Sector
             }
 
             return newLastCommand;
+        }
+
+        private async Task HandleRepeateAsync(ICommand? command)
+        {
+            if (command is IRepeatableCommand repeatableCommand)
+            {
+                // It is necesary because CanRepeate and CanExecute can perform early that globe updates its state.
+                await WaitGlobeIterationPerformedAsync().ConfigureAwait(false);
+
+                if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
+                {
+                    repeatableCommand.IncreaceIteration();
+                    _commandPool.Push(repeatableCommand);
+                    CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
+                }
+                else
+                {
+                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+
+                    CommandProcessed?.Invoke(this, EventArgs.Empty);
+                }
+            }
+            else
+            {
+                await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+
+                CommandProcessed?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private void DoErrorOccured(ICommand? commandWithError, InvalidOperationException exception)
+        {
+            if (commandWithError != null)
+            {
+                ErrorOccured?.Invoke(this, new CommandErrorOccuredEventArgs(commandWithError, exception));
+            }
+
+            ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
         }
 
         private async Task SetHasPendingCommandsAsync(bool v)
