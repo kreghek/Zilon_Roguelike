@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics.Spatial;
@@ -19,7 +18,7 @@ using Zilon.Core.World;
 
 namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
-    public class SectorViewModel : DrawableGameComponent
+    public class SectorViewModel
     {
         private readonly Camera _camera;
         private readonly SpriteBatch _spriteBatch;
@@ -32,12 +31,14 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly CommandInput _commandInput;
         private readonly Texture2D _cursorTexture;
 
-        public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch) : base(game)
+        public Zilon.Core.Tactics.ISector Sector => _sector;
+
+        public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
             _camera = camera;
             _spriteBatch = spriteBatch;
 
-            var serviceScope = ((LivGame)Game).ServiceProvider;
+            var serviceScope = ((LivGame)game).ServiceProvider;
 
             _player = serviceScope.GetRequiredService<IPlayer>();
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
@@ -78,19 +79,17 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 _gameObjects.Add(staticObjectModel);
             }
 
-            var commandFactory = new ServiceProviderCommandFactory(((LivGame)Game).ServiceProvider);
+            var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
             var commandInput = new CommandInput(_uiState, commandPool, _camera, _sector, commandFactory);
             _commandInput = commandInput;
 
-            _cursorTexture = Game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
+            _cursorTexture = game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
-            base.Draw(gameTime);
-
             _mapViewModel.Draw(_camera.Transform);
 
             if (_player.MainPerson is null)
@@ -133,10 +132,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _spriteBatch.End();
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
             _mapViewModel.Update(gameTime);
 
             var gameObjectsFixedList = _gameObjects.ToArray();

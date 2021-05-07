@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +12,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
+using Zilon.Core.Players;
+using Zilon.Core.Tactics;
+using Zilon.Core.World;
 
 namespace CDT.LIV.MonoGameClient.Scenes
 {
@@ -17,15 +22,22 @@ namespace CDT.LIV.MonoGameClient.Scenes
     {
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
+        private readonly IPlayer _player;
         private SectorViewModel? _sectorViewModel;
-        private Camera? _camera;
+        private Camera _camera;
+
+        private ISector? _currentSector; 
 
         public MainScene(Game game, SpriteBatch spriteBatch) : base(game)
         {
             _spriteBatch = spriteBatch;
 
             var serviceScope = ((LivGame)Game).ServiceProvider;
+
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
+            _player = serviceScope.GetRequiredService<IPlayer>();
+
+            _camera = new Camera();
         }
 
         public override void Update(GameTime gameTime)
@@ -34,18 +46,51 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
             if (_sectorViewModel is null)
             {
-                _camera = new Camera();
-
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
 
-                Components.Add(_sectorViewModel);
+                _currentSector = _sectorViewModel.Sector;
 
                 StartBackgroundLoops();
             }
 
-            if (_camera != null && _uiState.ActiveActor != null)
+            if (_uiState.ActiveActor != null)
             {
-                _camera.Follow(_uiState.ActiveActor, Game);
+                var sectorNode = GetPlayerSectorNode(_player);
+
+                if (sectorNode != null)
+                {
+                    _camera.Follow(_uiState.ActiveActor, Game);
+                }
+
+                if (sectorNode != null && sectorNode.Sector != _currentSector)
+                { 
+
+                }
+            }
+        }
+
+        private static ISectorNode? GetPlayerSectorNode(IPlayer player)
+        {
+            if (player.Globe is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return (from sectorNode in player.Globe.SectorNodes
+                    let sector = sectorNode.Sector
+                    where sector != null
+                    from actor in sector.ActorManager.Items
+                    where actor.Person == player.MainPerson
+                    select sectorNode).SingleOrDefault();
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+
+            if (_sectorViewModel != null)
+            {
+                _sectorViewModel.Draw(gameTime);
             }
         }
 
