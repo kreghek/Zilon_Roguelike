@@ -8,6 +8,13 @@ namespace Zilon.Core.World
     public interface ITransitionPool
     {
         /// <summary>
+        /// Checks a person in transition pool.
+        /// </summary>
+        /// <param name="person"> The person to check. </param>
+        /// <returns> Returns <c>true</c> if the person is the pool. This means the persin is not in any sector. </returns>
+        bool CheckPersonInTransition(IPerson person);
+
+        /// <summary>
         /// Get a transition info from the pool. Or null if the pool is empty.
         /// </summary>
         /// <returns></returns>
@@ -18,12 +25,5 @@ namespace Zilon.Core.World
         /// </summary>
         /// <param name="poolItem"> The pool item is the dat about transition. </param>
         void Push(TransitionPoolItem poolItem);
-
-        /// <summary>
-        /// Checks a person in transition pool.
-        /// </summary>
-        /// <param name="person"> The person to check. </param>
-        /// <returns> Returns <c>true</c> if the person is the pool. This means the persin is not in any sector. </returns>
-        bool CheckPersonInTransition(IPerson person);
     }
 }
