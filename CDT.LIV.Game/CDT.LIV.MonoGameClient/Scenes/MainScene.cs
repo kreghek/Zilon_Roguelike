@@ -13,7 +13,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Players;
-using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace CDT.LIV.MonoGameClient.Scenes
@@ -23,10 +22,10 @@ namespace CDT.LIV.MonoGameClient.Scenes
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
         private readonly IPlayer _player;
-        private SectorViewModel? _sectorViewModel;
-        private Camera _camera;
+        private readonly ITransitionPool _transitionPool;
+        private readonly Camera _camera;
 
-        private ISector? _currentSector; 
+        private SectorViewModel? _sectorViewModel;
 
         public MainScene(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -36,6 +35,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
             _player = serviceScope.GetRequiredService<IPlayer>();
+            _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
 
             _camera = new Camera();
         }
@@ -47,13 +47,17 @@ namespace CDT.LIV.MonoGameClient.Scenes
             if (_sectorViewModel is null)
             {
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
+            }
+            _sectorViewModel.Update(gameTime);
 
-                _currentSector = _sectorViewModel.Sector;
-
-                StartBackgroundLoops();
+            if (_player.MainPerson is null)
+            {
+                throw new InvalidOperationException();
             }
 
-            if (_uiState.ActiveActor != null)
+            var isInTransition = _transitionPool.CheckPersonInTransition(_player.MainPerson);
+
+            if (_uiState.ActiveActor != null && !isInTransition)
             {
                 var sectorNode = GetPlayerSectorNode(_player);
 
@@ -61,11 +65,10 @@ namespace CDT.LIV.MonoGameClient.Scenes
                 {
                     _camera.Follow(_uiState.ActiveActor, Game);
                 }
-
-                if (sectorNode != null && sectorNode.Sector != _currentSector)
-                { 
-
-                }
+            }
+            else
+            {
+                TargetScene = new TransitionScene(Game, _spriteBatch);
             }
         }
 
@@ -92,41 +95,6 @@ namespace CDT.LIV.MonoGameClient.Scenes
             {
                 _sectorViewModel.Draw(gameTime);
             }
-        }
-
-        private void StartBackgroundLoops()
-        {
-            var serviceScope = ((LivGame)Game).ServiceProvider;
-
-            var globeLoopUpdater = serviceScope.GetRequiredService<IGlobeLoopUpdater>();
-
-            using var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
-
-            globeLoopUpdater.ErrorOccured += (s, e) => 
-            {
-                Debug.WriteLine(e.Exception.ToString()); 
-            };
-
-            var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
-
-            commandLoop.ErrorOccured += (s, e) => 
-            { 
-                Debug.WriteLine(e.Exception.ToString());
-            };
-            commandLoop.CommandAutoExecuted += (s, e) => { Debug.WriteLine("Auto execute last command"); };
-            var playerState = serviceScope.GetRequiredService<ISectorUiState>();
-            var inventoryState = serviceScope.GetRequiredService<IInventoryState>();
-            commandLoop.CommandProcessed += (s, e) =>
-            {
-                inventoryState.SelectedProp = null;
-                playerState.SelectedViewModel = null;
-            };
-            var commandLoopTask = commandLoop.StartAsync(cancellationToken);
-            commandLoopTask.ContinueWith(task => Debug.WriteLine(task.Exception),
-                TaskContinuationOptions.OnlyOnFaulted);
-            commandLoopTask.ContinueWith(task => Debug.WriteLine("Game loop stopped."),
-                TaskContinuationOptions.OnlyOnCanceled);
         }
     }
 }
