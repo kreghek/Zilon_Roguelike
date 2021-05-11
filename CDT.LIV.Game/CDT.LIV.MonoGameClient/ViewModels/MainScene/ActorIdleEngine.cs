@@ -21,7 +21,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public ActorIdleEngine(Container rootSprite, Container graphicsRoot)
         {
-            _startPosition = rootSprite.Position;
+            _startPosition = graphicsRoot.Position;
             _sourceStartPosition = _startPosition;
             _targetVector = GetUnitRandomVector();
             _rootSprite = rootSprite;
@@ -53,7 +53,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 _startPosition = _targetVector;
                 if (_toCenter)
                 {
-                    _targetVector = _sourceStartPosition;
+                    _targetVector = Vector2.Zero;
                 }
                 else
                 {
