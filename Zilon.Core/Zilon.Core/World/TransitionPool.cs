@@ -12,18 +12,21 @@ namespace Zilon.Core.World
     {
         private readonly ConcurrentQueue<TransitionPoolItem> _queue;
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public TransitionPool()
         {
             _queue = new ConcurrentQueue<TransitionPoolItem>();
         }
 
         /// <inheritdoc />
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public void Push(TransitionPoolItem poolItem)
         {
             _queue.Enqueue(poolItem);
         }
 
         /// <inheritdoc />
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public TransitionPoolItem? Pop()
         {
             if (!_queue.TryDequeue(out var item))
