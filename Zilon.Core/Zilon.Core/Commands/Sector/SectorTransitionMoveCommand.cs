@@ -103,6 +103,8 @@ namespace Zilon.Core.Commands
             }
 
             taskSource.Intent(intention, actor);
+
+            // Drop waiting because the globe must not wait the person which is not in a sector.
             taskSource.DropIntentionWaiting();
         }
     }
