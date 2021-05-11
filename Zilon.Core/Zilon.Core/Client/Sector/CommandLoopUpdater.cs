@@ -172,6 +172,7 @@ namespace Zilon.Core.Client.Sector
                     {
                         // If player can't gives command right now the loop sleep some time (100ms).
                         // Because this can wait a little to start new attempt of command execution.
+                        await Task.Yield();
                         await Task.Delay(100).ConfigureAwait(false);
                         continue;
                     }
@@ -185,6 +186,7 @@ namespace Zilon.Core.Client.Sector
                         ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
                     }
 
+                    await Task.Yield();
                     await Task.Delay(100).ConfigureAwait(false);
                 }
             }, cancellationToken);
