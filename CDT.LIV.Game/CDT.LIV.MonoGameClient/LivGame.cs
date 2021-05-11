@@ -1,9 +1,16 @@
-﻿using CDT.LIV.MonoGameClient.Scenes;
+﻿using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+
+using CDT.LIV.MonoGameClient.Scenes;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 
 namespace CDT.LIV.MonoGameClient
 {
@@ -28,6 +35,38 @@ namespace CDT.LIV.MonoGameClient
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
+            InitGlobeLoop();
+
+            InitCommandLoop();
+        }
+
+        private void InitCommandLoop()
+        {
+            var commandLoop = _serviceProvider.GetRequiredService<ICommandLoopUpdater>();
+
+            commandLoop.ErrorOccured += (s, e) =>
+            {
+                Debug.WriteLine(e.Exception.ToString());
+            };
+            commandLoop.CommandAutoExecuted += (s, e) => { Debug.WriteLine("Auto execute last command"); };
+            var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
+            var inventoryState = _serviceProvider.GetRequiredService<IInventoryState>();
+            commandLoop.CommandProcessed += (s, e) =>
+            {
+                inventoryState.SelectedProp = null;
+                playerState.SelectedViewModel = null;
+            };
+        }
+
+        private void InitGlobeLoop()
+        {
+            var globeLoop = _serviceProvider.GetRequiredService<IGlobeLoopUpdater>();
+
+            globeLoop.ErrorOccured += (s, e) =>
+            {
+                Debug.WriteLine(e.Exception.ToString());
+            };
         }
 
         protected override void LoadContent()

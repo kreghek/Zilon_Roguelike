@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +9,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client.Sector;
-using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.World;
 
@@ -69,16 +67,17 @@ namespace CDT.LIV.MonoGameClient.Scenes
                             throw new InvalidOperationException();
                         }
 
-                        var player = serviceScope.GetRequiredService<IPlayer>();
-
-                        if (player is null)
-                        {
-                            throw new InvalidOperationException();
-                        }
-
                         var gameLoop = serviceScope.GetRequiredService<IGlobeLoopUpdater>();
 
                         gameLoop.Start();
+
+                        var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
+                        var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
+                        commandLoopTask.ContinueWith(task => Debug.WriteLine(task.Exception),
+                            TaskContinuationOptions.OnlyOnFaulted);
+                        commandLoopTask.ContinueWith(task => Debug.WriteLine("Game loop stopped."),
+                            TaskContinuationOptions.OnlyOnCanceled);
+
                     });
 
                     generateGlobeTask.ContinueWith((task) =>
