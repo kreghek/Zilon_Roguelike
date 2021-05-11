@@ -14,7 +14,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private double _moveCounter = 1f;
 
         private readonly Container _rootSprite;
-
+        private readonly Container _graphicsRoot;
+        private readonly Sprite _shadowSprite;
         private Vector2 _targetPosition;
         private readonly IAnimationBlockerService _animationBlockerService;
         private readonly ICommandBlocker _moveBlocker;
@@ -22,9 +23,11 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public bool IsComplete => _moveCounter <= 0;
 
-        public ActorMoveEngine(Container rootSprite, Vector2 targetPosition, IAnimationBlockerService animationBlockerService)
+        public ActorMoveEngine(Container rootSprite, Container graphicsRoot, Sprite shadowSprite, Vector2 targetPosition, IAnimationBlockerService animationBlockerService)
         {
             _rootSprite = rootSprite;
+            _graphicsRoot = graphicsRoot;
+            _shadowSprite = shadowSprite;
             _startPosition = rootSprite.Position;
             _targetPosition = targetPosition;
             _animationBlockerService = animationBlockerService;
@@ -43,12 +46,16 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var stepAmplitude = 4f;
             var stepFrequncy = 2f;
             var unitVector = Vector2.UnitY * -1f;
+            var stepCurrentValue = (float)Math.Abs(Math.Sin(t * Math.PI * stepFrequncy));
 
-            _rootSprite.Position = Vector2.Lerp(_startPosition, _targetPosition, t) + (float)Math.Abs(Math.Sin(t * Math.PI * stepFrequncy)) * unitVector * stepAmplitude;
+            _rootSprite.Position = Vector2.Lerp(_startPosition, _targetPosition, t);
+            _graphicsRoot.Position = stepCurrentValue * unitVector * stepAmplitude;
+            _shadowSprite.ScaleScalar = stepCurrentValue * 0.5f + 0.5f;
 
             if (IsComplete)
             {
                 _rootSprite.Position = _targetPosition;
+                _shadowSprite.ScaleScalar = 1;
                 _moveBlocker.Release();
             }
         }
