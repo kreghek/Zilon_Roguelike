@@ -1,4 +1,7 @@
 ﻿using System.Collections.Concurrent;
+using System.Linq;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.World
 {
@@ -29,6 +32,14 @@ namespace Zilon.Core.World
             }
 
             return item;
+        }
+
+        /// <inheritdoc />
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        public bool CheckPersonInTransition(IPerson person)
+        {
+            var transition = _queue.ToArray().SingleOrDefault(x => x.Person == person);
+            return transition != null;
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Zilon.Core.Client.Sector
 {
     public sealed class CommandLoopUpdater : ICommandLoopUpdater
     {
+        private const int WAIT_FOR_CHANGES_MILLISECONDS = 100;
         private readonly ICommandLoopContext _commandLoopContext;
         private readonly ICommandPool _commandPool;
 
@@ -144,7 +145,7 @@ namespace Zilon.Core.Client.Sector
             while (fuseCounter > 0)
             {
                 await Task.Yield();
-                await Task.Delay(100).ConfigureAwait(false);
+                await Task.Delay(WAIT_FOR_CHANGES_MILLISECONDS).ConfigureAwait(false);
 
                 if (_commandLoopContext.CanPlayerGiveCommand)
                 {
@@ -172,7 +173,8 @@ namespace Zilon.Core.Client.Sector
                     {
                         // If player can't gives command right now the loop sleep some time (100ms).
                         // Because this can wait a little to start new attempt of command execution.
-                        await Task.Delay(100).ConfigureAwait(false);
+                        await Task.Yield();
+                        await Task.Delay(WAIT_FOR_CHANGES_MILLISECONDS).ConfigureAwait(false);
                         continue;
                     }
 
@@ -185,7 +187,8 @@ namespace Zilon.Core.Client.Sector
                         ErrorOccured?.Invoke(this, new ErrorOccuredEventArgs(exception));
                     }
 
-                    await Task.Delay(100).ConfigureAwait(false);
+                    await Task.Yield();
+                    await Task.Delay(WAIT_FOR_CHANGES_MILLISECONDS).ConfigureAwait(false);
                 }
             }, cancellationToken);
         }

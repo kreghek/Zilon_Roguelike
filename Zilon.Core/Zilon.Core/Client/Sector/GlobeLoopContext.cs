@@ -23,6 +23,7 @@ namespace Zilon.Core.Client.Sector
         }
 
         /// <inheritdoc />
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public bool HasNextIteration
         {
             get
