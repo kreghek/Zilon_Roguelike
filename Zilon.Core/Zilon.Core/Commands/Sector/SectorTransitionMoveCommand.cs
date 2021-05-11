@@ -103,6 +103,7 @@ namespace Zilon.Core.Commands
             }
 
             taskSource.Intent(intention, actor);
+            taskSource.DropIntentionWaiting();
         }
     }
 }
