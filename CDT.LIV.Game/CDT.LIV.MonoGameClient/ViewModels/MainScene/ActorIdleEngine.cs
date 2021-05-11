@@ -12,18 +12,20 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private Random _random = new Random();
         private const double IDLE_CYCLE_DURATION_SECONDS = 0.75;
         private readonly Container _rootSprite;
+        private readonly Container _graphicsRoot;
         private double _idleAnimationCounter;
         private Vector2 _startPosition;
         private Vector2 _sourceStartPosition;
         private Vector2 _targetVector;
         private bool _toCenter;
 
-        public ActorIdleEngine(Container rootSprite)
+        public ActorIdleEngine(Container rootSprite, Container graphicsRoot)
         {
-            _startPosition = rootSprite.Position;
+            _startPosition = graphicsRoot.Position;
             _sourceStartPosition = _startPosition;
             _targetVector = GetUnitRandomVector();
             _rootSprite = rootSprite;
+            _graphicsRoot = graphicsRoot;
         }
 
         private Vector2 GetUnitRandomVector()
@@ -34,7 +36,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             var amplitude = 3f;
 
-            return new Vector2((float)x, (float)y) * amplitude + _sourceStartPosition;
+            return new Vector2((float)x, (float)y) * amplitude;
         }
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 _startPosition = _targetVector;
                 if (_toCenter)
                 {
-                    _targetVector = _sourceStartPosition;
+                    _targetVector = Vector2.Zero;
                 }
                 else
                 {
@@ -67,7 +69,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 var positionFloat = Vector2.Lerp(_startPosition, _targetVector, (float)t);
                 // Round vector to exclude sprite smooth then sprite is not in integer position
                 var positionInt = new Vector2((int)positionFloat.X, (int)positionFloat.Y);
-                _rootSprite.Position = positionInt;
+                _graphicsRoot.Position = positionInt;
             }
         }
     }

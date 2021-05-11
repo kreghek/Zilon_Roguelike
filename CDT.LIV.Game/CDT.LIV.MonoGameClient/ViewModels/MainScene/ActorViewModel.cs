@@ -25,6 +25,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly SpriteBatch _spriteBatch;
 
         private readonly Container _rootSprite;
+        private readonly Sprite _shadowSprite;
+        private readonly Container _graphicsRoot;
 
         private IActorStateEngine _actorStateEngine;
 
@@ -41,38 +43,56 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var personLegsSprite = _game.Content.Load<Texture2D>("Sprites/legs_idle");
             var personArmLeftSprite = _game.Content.Load<Texture2D>("Sprites/arm-left-simple");
             var personArmRightSprite = _game.Content.Load<Texture2D>("Sprites/arm-right-simple");
+            var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
 
             _rootSprite = new Container();
+            _shadowSprite = new Sprite(shadowTexture)
+            {
+                Position = new Vector2(0, 0),
+                Origin = new Vector2(0.5f, 0.5f),
+                Color = new Color(Color.White, 0.75f)
+            };
 
-            _rootSprite.AddChild(new Sprite(personArmLeftSprite)
+            _rootSprite.AddChild(_shadowSprite);
+
+            var graphicsRoot = new Container 
+            {
+                
+            };
+
+            _rootSprite.AddChild(graphicsRoot);
+
+            graphicsRoot.AddChild(new Sprite(personArmLeftSprite)
             {
                 Position = new Vector2(-10, -20),
                 Origin = new Vector2(0.5f, 0.5f)
             });
 
-            _rootSprite.AddChild(new Sprite(personLegsSprite)
+            graphicsRoot.AddChild(new Sprite(personLegsSprite)
             {
                 Position = new Vector2(0, 0),
                 Origin = new Vector2(0.5f, 0.75f)
             });
 
-            _rootSprite.AddChild(new Sprite(personBodySprite)
+            graphicsRoot.AddChild(new Sprite(personBodySprite)
             {
                 Position = new Vector2(3, -22),
                 Origin = new Vector2(0.5f, 0.5f)
             });
 
-            _rootSprite.AddChild(new Sprite(personHeadSprite)
+            graphicsRoot.AddChild(new Sprite(personHeadSprite)
             {
                 Position = new Vector2(-0, -20),
                 Origin = new Vector2(0.5f, 1)
             });
 
-            _rootSprite.AddChild(new Sprite(personArmRightSprite)
+            graphicsRoot.AddChild(new Sprite(personArmRightSprite)
             {
                 Position = new Vector2(13, -20),
                 Origin = new Vector2(0.5f, 0.5f)
             });
+
+            _graphicsRoot = graphicsRoot;
 
             var hexSize = UNIT_SIZE / 2;
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
@@ -85,7 +105,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             Actor.Moved += Actor_Moved;
 
-            _actorStateEngine = new ActorIdleEngine(_rootSprite);
+            _actorStateEngine = new ActorIdleEngine(_rootSprite, _graphicsRoot);
         }
 
         private void Actor_Moved(object? sender, EventArgs e)
@@ -101,7 +121,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-            var moveEngine = new ActorMoveEngine(_rootSprite, newPosition, animationBlockerService);
+            var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot, _shadowSprite, newPosition, animationBlockerService);
             _actorStateEngine = moveEngine;
         }
 
@@ -127,7 +147,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 _actorStateEngine.Update(gameTime);
                 if (_actorStateEngine.IsComplete)
                 {
-                    _actorStateEngine = new ActorIdleEngine(_rootSprite);
+                    _actorStateEngine = new ActorIdleEngine(_rootSprite, _graphicsRoot);
 
                     var hexSize = UNIT_SIZE / 2;
                     var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
