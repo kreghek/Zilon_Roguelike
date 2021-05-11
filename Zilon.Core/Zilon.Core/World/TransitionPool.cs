@@ -35,6 +35,7 @@ namespace Zilon.Core.World
         }
 
         /// <inheritdoc />
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public bool CheckPersonInTransition(IPerson person)
         {
             var transition = _queue.ToArray().SingleOrDefault(x => x.Person == person);
