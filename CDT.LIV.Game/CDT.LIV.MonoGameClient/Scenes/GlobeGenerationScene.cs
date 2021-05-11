@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -69,6 +70,13 @@ namespace CDT.LIV.MonoGameClient.Scenes
                         var gameLoop = serviceScope.GetRequiredService<IGlobeLoopUpdater>();
 
                         gameLoop.Start();
+
+                        var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
+                        var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
+                        commandLoopTask.ContinueWith(task => Debug.WriteLine(task.Exception),
+                            TaskContinuationOptions.OnlyOnFaulted);
+                        commandLoopTask.ContinueWith(task => Debug.WriteLine("Game loop stopped."),
+                            TaskContinuationOptions.OnlyOnCanceled);
 
                     });
 

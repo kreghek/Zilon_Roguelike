@@ -57,11 +57,6 @@ namespace CDT.LIV.MonoGameClient
                 inventoryState.SelectedProp = null;
                 playerState.SelectedViewModel = null;
             };
-            var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
-            commandLoopTask.ContinueWith(task => Debug.WriteLine(task.Exception),
-                TaskContinuationOptions.OnlyOnFaulted);
-            commandLoopTask.ContinueWith(task => Debug.WriteLine("Game loop stopped."),
-                TaskContinuationOptions.OnlyOnCanceled);
         }
 
         private void InitGlobeLoop()

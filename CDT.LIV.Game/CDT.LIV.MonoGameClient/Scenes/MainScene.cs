@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace CDT.LIV.MonoGameClient.Scenes
@@ -26,6 +27,9 @@ namespace CDT.LIV.MonoGameClient.Scenes
         private readonly Camera _camera;
 
         private SectorViewModel? _sectorViewModel;
+        private ISector? _currentSector;
+
+        private bool _isTransitionPerforming;
 
         public MainScene(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -47,6 +51,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
             if (_sectorViewModel is null)
             {
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
+                _currentSector = _sectorViewModel.Sector;
             }
             _sectorViewModel.Update(gameTime);
 
@@ -63,12 +68,24 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
                 if (sectorNode != null)
                 {
-                    _camera.Follow(_uiState.ActiveActor, Game);
+                    if (_currentSector == sectorNode.Sector)
+                    {
+                        _camera.Follow(_uiState.ActiveActor, Game);
+                    }
+                    else if (!_isTransitionPerforming)
+                    {
+                        _isTransitionPerforming = true;
+                        TargetScene = new TransitionScene(Game, _spriteBatch);
+                    }
                 }
             }
             else
             {
-                TargetScene = new TransitionScene(Game, _spriteBatch);
+                if (!_isTransitionPerforming)
+                {
+                    _isTransitionPerforming = true;
+                    TargetScene = new TransitionScene(Game, _spriteBatch);
+                }
             }
         }
 

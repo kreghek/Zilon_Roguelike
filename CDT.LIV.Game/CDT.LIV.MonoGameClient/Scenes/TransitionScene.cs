@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -35,9 +36,29 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
             if (!_transitionPool.CheckPersonInTransition(_player.MainPerson) && !_targetSceneInitialized)
             {
-                TargetScene = new MainScene(Game, _spriteBatch);
-                _targetSceneInitialized = true;
+                var playerPersonSectorNode = GetPlayerSectorNode(_player);
+
+                if (playerPersonSectorNode != null)
+                {
+                    TargetScene = new MainScene(Game, _spriteBatch);
+                    _targetSceneInitialized = true;
+                }
             }
+        }
+
+        private static ISectorNode? GetPlayerSectorNode(IPlayer player)
+        {
+            if (player.Globe is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return (from sectorNode in player.Globe.SectorNodes
+                    let sector = sectorNode.Sector
+                    where sector != null
+                    from actor in sector.ActorManager.Items
+                    where actor.Person == player.MainPerson
+                    select sectorNode).SingleOrDefault();
         }
     }
 }
