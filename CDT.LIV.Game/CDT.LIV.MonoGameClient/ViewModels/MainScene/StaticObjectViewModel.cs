@@ -36,8 +36,22 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 (float)(worldCoords[1] * hexSize * 2 / 2)
                 );
 
-            _rootSprite = new Container();
-            _rootSprite.AddChild(new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 1), position: staticObjectPosition, color: Color.Black));
+            _rootSprite = new Container
+            {
+                Position = staticObjectPosition
+            };
+
+            var graphicsRoot = new Container();
+            _rootSprite.AddChild(graphicsRoot);
+
+            graphicsRoot.AddChild(new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 1), color: Color.Black));
+
+            var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
+            graphicsRoot.AddChild(new Sprite(shadowTexture){
+                Position = new Vector2(0, 0),
+                Origin = new Vector2(0.5f, 0.5f),
+                Color = new Color(Color.White, 0.75f)
+            });
         }
 
         public IStaticObject StaticObject { get; set; }
