@@ -47,7 +47,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             graphicsRoot.AddChild(new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 1), color: Color.Black));
 
             var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
-            graphicsRoot.AddChild(new Sprite(shadowTexture){
+            _rootSprite.AddChild(new Sprite(shadowTexture){
                 Position = new Vector2(0, 0),
                 Origin = new Vector2(0.5f, 0.5f),
                 Color = new Color(Color.White, 0.75f)
