@@ -147,7 +147,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
                 );
 
-            //if (Visible)
+            if (Visible)
             {
                 var serviceScope = ((LivGame)_game).ServiceProvider;
 
@@ -156,10 +156,10 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot, _shadowSprite, newPosition, animationBlockerService);
                 _actorStateEngine = moveEngine;
             }
-            //else
-            //{
-            //    _rootSprite.Position = newPosition;
-            //}
+            else
+            {
+                _rootSprite.Position = newPosition;
+            }
         }
 
         public IActor Actor { get; set; }

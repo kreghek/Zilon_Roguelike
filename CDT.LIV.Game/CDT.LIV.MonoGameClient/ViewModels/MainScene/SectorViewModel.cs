@@ -166,21 +166,19 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
             foreach (var gameObject in gameObjectsFixedList)
             {
-                //gameObject.Visible = false;
+                gameObject.Visible = true;
 
-                //var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
+                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
+                
+                if (fowNode is null)
+                {
+                    gameObject.Visible = false;
+                }
 
-                //if (fowNode is null)
-                //{
-                //    continue;
-                //}
-
-                //if (fowNode.State != Zilon.Core.Tactics.SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
-                //{
-                //    continue;
-                //}
-
-                //gameObject.Visible = true;
+                if (fowNode != null && fowNode.State != Zilon.Core.Tactics.SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
+                {
+                    gameObject.Visible = false;
+                }
 
                 gameObject.Update(gameTime);
             }
