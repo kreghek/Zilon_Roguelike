@@ -18,7 +18,8 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+	"IsMelee": true
   },
   "DropTableSids": [
     "survival",
