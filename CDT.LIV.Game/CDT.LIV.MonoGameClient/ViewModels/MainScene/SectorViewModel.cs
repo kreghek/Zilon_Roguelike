@@ -79,6 +79,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 _gameObjects.Add(staticObjectModel);
             }
 
+            _sector.ActorManager.Removed += ActorManager_Removed;
+
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
@@ -86,6 +88,11 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _commandInput = commandInput;
 
             _cursorTexture = game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
+        }
+
+        private void ActorManager_Removed(object? sender, Zilon.Core.Tactics.ManagerItemsChangedEventArgs<Zilon.Core.Tactics.IActor> e)
+        {
+            _gameObjects.RemoveAll(x=>x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor));
         }
 
         public void Draw(GameTime gameTime)
