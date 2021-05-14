@@ -142,7 +142,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 gameObject.Update(gameTime);
             }
 
-            _commandInput.Update();
+            _commandInput.Update(_gameObjects);
         }
 
         private static ISectorNode GetPlayerSectorNode(IPlayer player)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using CDT.LIV.MonoGameClient.Scenes;
@@ -9,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -40,7 +42,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _commandFactory = commandFactory;
         }
 
-        public void Update()
+        public void Update(IEnumerable<GameObjectBase> gameObjects)
         {
             if (_uiState.CanPlayerGivesCommand)
             {
@@ -65,16 +67,25 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 if (hoverNode != null)
                 {
-                    if (_uiState.HoverViewModel is null)
+                    var actorsInThisNode = _sector.ActorManager.Items.SingleOrDefault(x => ReferenceEquals(x.Node, hoverNode));
+                    if (actorsInThisNode is null)
                     {
-                        _uiState.HoverViewModel = new NodeViewModel(hoverNode);
-                    }
-                    else
-                    {
-                        if (_uiState.HoverViewModel.Item != hoverNode)
+                        if (_uiState.HoverViewModel is null)
                         {
                             _uiState.HoverViewModel = new NodeViewModel(hoverNode);
                         }
+                        else
+                        {
+                            if (_uiState.HoverViewModel.Item != hoverNode)
+                            {
+                                _uiState.HoverViewModel = new NodeViewModel(hoverNode);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var actorViewModel = gameObjects.OfType<IActorViewModel>().SingleOrDefault(x => x.Actor == actorsInThisNode);
+                        _uiState.HoverViewModel = actorViewModel;
                     }
                 }
                 else
@@ -91,7 +102,29 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                     _uiState.SelectedViewModel = _uiState.HoverViewModel;
 
-                    var command = _commandFactory.GetCommand<MoveCommand>();
+                    ICommand command;
+                    switch (_uiState.SelectedViewModel)
+                    {
+                        case IActorViewModel:
+                            var activeActor = _uiState.ActiveActor;
+                            if (activeActor is null)
+                            {
+                                throw new InvalidOperationException();
+                            }
+
+                            _uiState.TacticalAct = activeActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+
+                            command = _commandFactory.GetCommand<AttackCommand>();
+                            break;
+
+                        case IMapNodeViewModel:
+                            command = _commandFactory.GetCommand<MoveCommand>();
+                            break;
+
+                        default:
+                            throw new InvalidOperationException($"Object of unknown type (${_uiState.SelectedViewModel.GetType()}) was selected.");
+                    }
+
                     if (command.CanExecute().IsSuccess)
                     {
                         _commandPool.Push(command);
