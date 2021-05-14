@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using CDT.LIV.MonoGameClient.Scenes;
@@ -42,7 +41,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _commandFactory = commandFactory;
         }
 
-        public void Update(IEnumerable<GameObjectBase> gameObjects)
+        public void Update(SectorViewModelContext sectorViewModelContext)
         {
             if (_uiState.CanPlayerGivesCommand)
             {
@@ -84,7 +83,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     }
                     else
                     {
-                        var actorViewModel = gameObjects.OfType<IActorViewModel>().SingleOrDefault(x => x.Actor == actorsInThisNode);
+                        var actorViewModel = sectorViewModelContext.GameObjects.OfType<IActorViewModel>().SingleOrDefault(x => x.Actor == actorsInThisNode);
                         _uiState.HoverViewModel = actorViewModel;
                     }
                 }

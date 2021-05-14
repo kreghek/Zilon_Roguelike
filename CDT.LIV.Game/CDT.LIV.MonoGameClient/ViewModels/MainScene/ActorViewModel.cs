@@ -12,6 +12,7 @@ using Zilon.Core.Client.Sector;
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -22,6 +23,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private const int UNIT_SIZE = 32;
 
         private readonly Game _game;
+        private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly SpriteBatch _spriteBatch;
 
         private readonly Container _rootSprite;
@@ -30,10 +32,11 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private IActorStateEngine _actorStateEngine;
 
-        public ActorViewModel(Game game, IActor actor, SpriteBatch spriteBatch)
+        public ActorViewModel(Game game, IActor actor, SectorViewModelContext sectorViewModelContext, SpriteBatch spriteBatch)
         {
             _game = game;
             Actor = actor;
+            _sectorViewModelContext = sectorViewModelContext;
             _spriteBatch = spriteBatch;
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
@@ -104,8 +107,35 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _rootSprite.Position = newPosition;
 
             Actor.Moved += Actor_Moved;
+            Actor.UsedAct += Actor_UsedAct;
 
-            _actorStateEngine = new ActorIdleEngine(_rootSprite, _graphicsRoot);
+            _actorStateEngine = new ActorIdleEngine(_graphicsRoot);
+        }
+
+        private void Actor_UsedAct(object? sender, UsedActEventArgs e)
+        {
+            var stats = e.TacticalAct.Stats;
+            if (stats is null)
+            {
+                throw new InvalidOperationException("The act has no stats to select visualization.");
+            }
+
+            if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
+            {
+                var serviceScope = ((LivGame)_game).ServiceProvider;
+
+                var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+                var hexSize = UNIT_SIZE / 2;
+                var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)e.TargetNode).OffsetCoords);
+                var newPosition = new Vector2(
+                    (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                    (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                    );
+
+                var targetSpritePosition = newPosition;
+                _actorStateEngine = new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService);
+            }
         }
 
         private void Actor_Moved(object? sender, EventArgs e)
@@ -117,12 +147,19 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
                 );
 
-            var serviceScope = ((LivGame)_game).ServiceProvider;
+            //if (Visible)
+            {
+                var serviceScope = ((LivGame)_game).ServiceProvider;
 
-            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+                var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-            var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot, _shadowSprite, newPosition, animationBlockerService);
-            _actorStateEngine = moveEngine;
+                var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot, _shadowSprite, newPosition, animationBlockerService);
+                _actorStateEngine = moveEngine;
+            }
+            //else
+            //{
+            //    _rootSprite.Position = newPosition;
+            //}
         }
 
         public IActor Actor { get; set; }
@@ -147,7 +184,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 _actorStateEngine.Update(gameTime);
                 if (_actorStateEngine.IsComplete)
                 {
-                    _actorStateEngine = new ActorIdleEngine(_rootSprite, _graphicsRoot);
+                    _actorStateEngine = new ActorIdleEngine(_graphicsRoot);
 
                     var hexSize = UNIT_SIZE / 2;
                     var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);

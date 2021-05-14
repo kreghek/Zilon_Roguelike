@@ -9,23 +9,22 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     public sealed class ActorIdleEngine : IActorStateEngine
     {
-        private Random _random = new Random();
+        private readonly Random _random;
         private const double IDLE_CYCLE_DURATION_SECONDS = 0.75;
-        private readonly Container _rootSprite;
         private readonly Container _graphicsRoot;
         private double _idleAnimationCounter;
         private Vector2 _startPosition;
-        private Vector2 _sourceStartPosition;
         private Vector2 _targetVector;
         private bool _toCenter;
 
-        public ActorIdleEngine(Container rootSprite, Container graphicsRoot)
+        public ActorIdleEngine(Container graphicsRoot)
         {
-            _startPosition = graphicsRoot.Position;
-            _sourceStartPosition = _startPosition;
-            _targetVector = GetUnitRandomVector();
-            _rootSprite = rootSprite;
             _graphicsRoot = graphicsRoot;
+
+            _random = new Random();
+
+            _startPosition = graphicsRoot.Position;
+            _targetVector = GetUnitRandomVector();
         }
 
         private Vector2 GetUnitRandomVector()

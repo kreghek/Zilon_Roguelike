@@ -68,7 +68,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
-            Parallel.ForEach(visibleFowNodeData.Nodes, (fowNode) =>
+            var materializedNodes = visibleFowNodeData.Nodes.ToArray();
+
+            Parallel.ForEach(materializedNodes, (fowNode) =>
             {
                 var node = (HexNode)fowNode.Node;
 
