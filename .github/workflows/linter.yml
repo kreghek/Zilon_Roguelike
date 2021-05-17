@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         solution:
-        - CDT.LIV.Game
+        - Game
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
@@ -63,7 +63,7 @@ jobs:
     strategy:
       matrix:
         solution:
-        - CDT.LIV.Game
+        - Game
       fail-fast: false
 
     steps:
@@ -71,10 +71,16 @@ jobs:
         with:
           submodules: 'true'
       
-      - name: Setup .NET Core
+      - name: Setup .NET5
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '5.0.100'
+
+      - name: Setup .NET 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1'
+          
       - name: Setup ReSharper Command Line Tools
         run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
       - name: Clean up codebase via ReSharper Command Line Tools
