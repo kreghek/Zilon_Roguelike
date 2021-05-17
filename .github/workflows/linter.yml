@@ -37,7 +37,7 @@ jobs:
       
       - run: dotnet tool install --global dotnet-format --version 5.0.211103
       - name: Format codebase ${{ matrix.solution }}
-        run: dotnet-format ${{ matrix.solution }}.sln --fix-whitespace --fix-style --verbosity detailed
+        run: dotnet format ${{ matrix.solution }}.sln --fix-whitespace --fix-style --verbosity detailed --exclude '*/Zilon.Core/*.cs'
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:
