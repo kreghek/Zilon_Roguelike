@@ -61,5 +61,5 @@ jobs:
       - name: Upload client into artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: LIV.Game
-          path: bin
+          name: LIV.Game.${{ matrix.runtime }}
+          path: /CDT.LIV.Game/bin
