@@ -51,7 +51,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       
       - name: Publish
-        run: dotnet publish --configuration ${{ matrix.configuration }} --framework net5 --output bin --runtime ${{ matrix.runtime }}
+        run: dotnet publish --configuration ${{ matrix.configuration }} --framework net5 --output bin --runtime ${{ matrix.runtime }} --self-contained --no-restore
         
       - run: ls /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/
 
