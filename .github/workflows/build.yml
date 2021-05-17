@@ -41,13 +41,6 @@ jobs:
         with:
           dotnet-version: '3.1'
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
       - name: Publish
         run: dotnet publish CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient.csproj --configuration ${{ matrix.configuration }} --output bin --runtime ${{ matrix.runtime }} --self-contained
         
