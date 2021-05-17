@@ -42,7 +42,7 @@ jobs:
           dotnet-version: '3.1'
 
       - name: Publish
-        run: dotnet publish CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient.csproj --configuration ${{ matrix.configuration }} --output bin --runtime ${{ matrix.runtime }} --self-contained
+        run: dotnet publish CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient.csproj --configuration ${{ matrix.configuration }} --framework net5.0 --runtime ${{ matrix.runtime }} --output bin --self-contained
         
       - name: Copy schemes
         run: cp -a /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/. /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/CDT.LIV.Game/bin/Content/Schemes/
