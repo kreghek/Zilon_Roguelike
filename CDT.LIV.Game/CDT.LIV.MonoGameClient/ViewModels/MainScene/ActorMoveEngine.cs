@@ -11,7 +11,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     public sealed class ActorMoveEngine: IActorStateEngine
     {
-        private double _moveCounter = 1f;
+        private const float ANIMATION_DURATION_SECONDS = 1f;
+
+        private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
         private readonly Container _rootSprite;
         private readonly Container _graphicsRoot;
@@ -21,7 +23,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly ICommandBlocker _moveBlocker;
         private Vector2 _startPosition;
 
-        public bool IsComplete => _moveCounter <= 0;
+        public bool IsComplete => _animationCounterSeconds <= 0;
 
         public ActorMoveEngine(Container rootSprite, Container graphicsRoot, Sprite shadowSprite, Vector2 targetPosition, IAnimationBlockerService animationBlockerService)
         {
@@ -41,14 +43,14 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public void Update(GameTime gameTime)
         {
-            _moveCounter -= gameTime.ElapsedGameTime.TotalSeconds * 3;
-            var t = 1 - (float)_moveCounter;
+            _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3;
+            var t = 1 - _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
             var stepAmplitude = 4f;
             var stepFrequncy = 2f;
             var unitVector = Vector2.UnitY * -1f;
             var stepCurrentValue = (float)Math.Abs(Math.Sin(t * Math.PI * stepFrequncy));
 
-            _rootSprite.Position = Vector2.Lerp(_startPosition, _targetPosition, t);
+            _rootSprite.Position = Vector2.Lerp(_startPosition, _targetPosition, (float)t);
             _graphicsRoot.Position = stepCurrentValue * unitVector * stepAmplitude;
             _shadowSprite.ScaleScalar = stepCurrentValue * 0.5f + 0.5f;
 

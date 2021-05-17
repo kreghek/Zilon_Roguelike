@@ -15,10 +15,12 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
     {
         private const int UNIT_SIZE = 32;
 
-        private Game _game;
-        private SpriteBatch _spriteBatch;
+        private readonly Game _game;
+        private readonly SpriteBatch _spriteBatch;
         private readonly Container _rootSprite;
         private readonly Texture2D _personHeadSprite;
+
+        public override Vector2 HitEffectPosition => Vector2.UnitY * -24;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
         {

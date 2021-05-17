@@ -9,9 +9,12 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         public abstract bool HiddenByFow { get; }
 
         public abstract IGraphNode Node { get; }
+        public bool Visible { get; internal set; }
 
         public abstract void Draw(GameTime gameTime, Matrix transform);
 
         public abstract void Update(GameTime gameTime);
+
+        public abstract Vector2 HitEffectPosition { get; }
     }
 }
