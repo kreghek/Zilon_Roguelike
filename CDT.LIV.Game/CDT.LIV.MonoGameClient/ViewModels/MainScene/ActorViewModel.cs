@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 
 using CDT.LIV.MonoGameClient.Engine;
 
@@ -18,54 +18,6 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class HitEffect
-    {
-        private readonly LivGame _game;
-        private readonly Sprite _hitSprite;
-        private double _counter;
-        private const double EFFECT_DISPLAY_DURATION_SECONDS = 0.3f;
-        public bool IsComplete => _counter <= 0;
-
-        public HitEffect(LivGame game, Vector2 targetSpritePosition)
-        {
-            _game = game;
-
-            _hitSprite = new Sprite(_game.Content.Load<Texture2D>("Sprites/effects/hit"))
-            {
-                Position = targetSpritePosition + Vector2.UnitY * 16
-            };
-
-            _counter = EFFECT_DISPLAY_DURATION_SECONDS;
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            _counter -= gameTime.ElapsedGameTime.TotalSeconds;
-            if (!IsComplete)
-            {
-                _hitSprite.Color = new Color(Color.White, (float)(_counter / EFFECT_DISPLAY_DURATION_SECONDS) * 0.5f + 0.5f);
-            }
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            if (!IsComplete)
-            {
-                _hitSprite.Draw(spriteBatch);
-            }
-        }
-    }
-
-    public sealed class EffectManager
-    {
-        public List<HitEffect> HitEffects { get; }
-
-        public EffectManager()
-        {
-            HitEffects = new List<HitEffect>();
-        }
-    }
-
     internal class ActorViewModel : GameObjectBase, IActorViewModel
     {
         private const int UNIT_SIZE = 32;
@@ -101,7 +53,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             {
                 Position = new Vector2(0, 0),
                 Origin = new Vector2(0.5f, 0.5f),
-                Color = new Color(Color.White, 0.75f)
+                Color = new Color(Color.White, 0.5f)
             };
 
             _rootSprite.AddChild(_shadowSprite);
@@ -186,7 +138,10 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     var targetSpritePosition = newPosition;
                     _actorStateEngine = new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService);
 
-                    _sectorViewModelContext.EffectManager.HitEffects.Add(new HitEffect((LivGame)_game, targetSpritePosition));
+                    var targetGameObject = _sectorViewModelContext.GameObjects.Single(x => x.Node == e.TargetNode);
+                    _sectorViewModelContext.EffectManager.HitEffects.Add(new HitEffect((LivGame)_game,
+                        targetSpritePosition + targetGameObject.HitEffectPosition,
+                        targetSpritePosition - _rootSprite.Position));
                 }
             }
         }
@@ -220,6 +175,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         public override bool HiddenByFow => true;
         public override IGraphNode Node => Actor.Node;
+
+        public override Vector2 HitEffectPosition => Vector2.UnitY * -24;
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {

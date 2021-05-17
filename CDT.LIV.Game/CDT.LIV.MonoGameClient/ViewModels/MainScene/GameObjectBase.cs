@@ -14,5 +14,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         public abstract void Draw(GameTime gameTime, Matrix transform);
 
         public abstract void Update(GameTime gameTime);
+
+        public abstract Vector2 HitEffectPosition { get; }
     }
 }
