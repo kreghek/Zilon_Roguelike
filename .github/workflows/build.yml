@@ -62,4 +62,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: LIV.Game.${{ matrix.runtime }}
-          path: /CDT.LIV.Game/bin
+          path: CDT.LIV.Game/bin
