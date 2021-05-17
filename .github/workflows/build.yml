@@ -19,6 +19,15 @@ jobs:
       run:
         shell: bash
         working-directory: ${{ env.WORKING_DIRECTORY }}
+    strategy:
+      matrix:
+        project:
+          - Zilon.TextClient
+        configuration:
+          - Release
+        runtime:
+          - win10-x64
+          - ubuntu.16.10-x64
 
     steps:
       - uses: actions/checkout@v2
@@ -40,3 +49,15 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
+        
+      - name: Copy schemes
+        run: cp -R /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/*.json /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/CDT.LIV.Game/CDT.LIV.MonoGameClient/bin/Release/net5/Content/Schemes/
+        
+      - name: Publish
+        run: dotnet publish --configuration ${{ matrix.configuration }} --framework net5 --output bin --runtime ${{ matrix.runtime }}
+        
+      - name: Upload client into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: LIV.Game
+          path: bin
