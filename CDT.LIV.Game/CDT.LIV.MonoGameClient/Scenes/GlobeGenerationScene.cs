@@ -20,6 +20,9 @@ namespace CDT.LIV.MonoGameClient.Scenes
         private readonly SpriteBatch _spriteBatch;
         private readonly MainScene _mainScene;
 
+        public static string? _lastError = "";
+
+
         public GlobeGenerationScene(Game game, SpriteBatch spriteBatch) : base(game)
         {
             _spriteBatch = spriteBatch;
@@ -35,6 +38,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
             _spriteBatch.DrawString(font, "Генерация мира", new Vector2(100, 100), Color.White);
+            _spriteBatch.DrawString(font, _lastError, new Vector2(100, 120), Color.White);
 
             _spriteBatch.End();
         }
@@ -73,9 +77,9 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
                         var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
                         var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
-                        commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception),
+                        commandLoopTask.ContinueWith(task => _lastError += task.Exception.ToString(),
                             TaskContinuationOptions.OnlyOnFaulted);
-                        commandLoopTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
+                        commandLoopTask.ContinueWith(task => _lastError += "Game loop stopped.",
                             TaskContinuationOptions.OnlyOnCanceled);
 
                     });
