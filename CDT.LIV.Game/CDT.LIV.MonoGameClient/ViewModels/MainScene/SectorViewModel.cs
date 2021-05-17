@@ -20,12 +20,15 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     public sealed class SectorViewModelContext
     {
-        public SectorViewModelContext()
+        public SectorViewModelContext(EffectManager effectManager)
         {
             GameObjects = new List<GameObjectBase>();
+            EffectManager = effectManager;
         }
 
         public List<GameObjectBase> GameObjects { get; }
+
+        public EffectManager EffectManager { get; }
     }
 
     public sealed class SectorViewModel
@@ -69,7 +72,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _mapViewModel = new MapViewModel(game, _player, _uiState, _sector, spriteBatch);
 
-            _viewModelContext = new SectorViewModelContext();
+            _viewModelContext = new SectorViewModelContext(new EffectManager());
 
             foreach (var actor in _sector.ActorManager.Items)
             {
@@ -142,6 +145,15 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 gameObject.Draw(gameTime, _camera.Transform);
             }
 
+            _spriteBatch.Begin(transformMatrix: _camera.Transform);
+
+            foreach (var hitEffect in _viewModelContext.EffectManager.HitEffects.ToArray())
+            {
+                hitEffect.Draw(_spriteBatch);
+            }
+
+            _spriteBatch.End();
+
             // Print mouse position and draw cursor itself
 
             var mouseState = Mouse.GetState();
@@ -181,6 +193,16 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 }
 
                 gameObject.Update(gameTime);
+            }
+
+            foreach (var hitEffect in _viewModelContext.EffectManager.HitEffects.ToArray())
+            {
+                hitEffect.Update(gameTime);
+
+                if (hitEffect.IsComplete)
+                {
+                    _viewModelContext.EffectManager.HitEffects.Remove(hitEffect);
+                }
             }
 
             _commandInput.Update(_viewModelContext);

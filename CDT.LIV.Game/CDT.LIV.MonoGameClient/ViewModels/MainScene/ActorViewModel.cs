@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 
 using CDT.LIV.MonoGameClient.Engine;
 
@@ -18,6 +18,54 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
+    public sealed class HitEffect
+    {
+        private readonly LivGame _game;
+        private readonly Sprite _hitSprite;
+        private double _counter;
+        private const double EFFECT_DISPLAY_DURATION_SECONDS = 0.3f;
+        public bool IsComplete => _counter <= 0;
+
+        public HitEffect(LivGame game, Vector2 targetSpritePosition)
+        {
+            _game = game;
+
+            _hitSprite = new Sprite(_game.Content.Load<Texture2D>("Sprites/effects/hit"))
+            {
+                Position = targetSpritePosition + Vector2.UnitY * 16
+            };
+
+            _counter = EFFECT_DISPLAY_DURATION_SECONDS;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            _counter -= gameTime.ElapsedGameTime.TotalSeconds;
+            if (!IsComplete)
+            {
+                _hitSprite.Color = new Color(Color.White, (float)(_counter / EFFECT_DISPLAY_DURATION_SECONDS) * 0.5f + 0.5f);
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            if (!IsComplete)
+            {
+                _hitSprite.Draw(spriteBatch);
+            }
+        }
+    }
+
+    public sealed class EffectManager
+    {
+        public List<HitEffect> HitEffects { get; }
+
+        public EffectManager()
+        {
+            HitEffects = new List<HitEffect>();
+        }
+    }
+
     internal class ActorViewModel : GameObjectBase, IActorViewModel
     {
         private const int UNIT_SIZE = 32;
@@ -120,21 +168,26 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException("The act has no stats to select visualization.");
             }
 
-            if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
+            if (Visible)
             {
-                var serviceScope = ((LivGame)_game).ServiceProvider;
+                if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
+                {
+                    var serviceScope = ((LivGame)_game).ServiceProvider;
 
-                var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+                    var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-                var hexSize = UNIT_SIZE / 2;
-                var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)e.TargetNode).OffsetCoords);
-                var newPosition = new Vector2(
-                    (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                    (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
-                    );
+                    var hexSize = UNIT_SIZE / 2;
+                    var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)e.TargetNode).OffsetCoords);
+                    var newPosition = new Vector2(
+                        (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                        (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                        );
 
-                var targetSpritePosition = newPosition;
-                _actorStateEngine = new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService);
+                    var targetSpritePosition = newPosition;
+                    _actorStateEngine = new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService);
+
+                    _sectorViewModelContext.EffectManager.HitEffects.Add(new HitEffect((LivGame)_game, targetSpritePosition));
+                }
             }
         }
 
