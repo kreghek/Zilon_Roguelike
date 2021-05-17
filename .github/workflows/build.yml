@@ -53,7 +53,7 @@ jobs:
       - run: ls /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/
 
       - name: Copy schemes
-        run: cp -R /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/ /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/CDT.LIV.Game/CDT.LIV.MonoGameClient/bin/Release/net5/Content/Schemes/
+        run: cp -a /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/. /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/CDT.LIV.Game/CDT.LIV.MonoGameClient/bin/Release/net5/Content/Schemes/
         
       - name: Publish
         run: dotnet publish --configuration ${{ matrix.configuration }} --framework net5 --output bin --runtime ${{ matrix.runtime }}
