@@ -21,13 +21,11 @@ jobs:
         working-directory: ${{ env.WORKING_DIRECTORY }}
     strategy:
       matrix:
-        project:
-          - Zilon.TextClient
         configuration:
           - Release
         runtime:
-          - win10-x64
-          - ubuntu.16.10-x64
+          - win-x64
+          - linux-x64
 
     steps:
       - uses: actions/checkout@v2
@@ -43,6 +41,14 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1'
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
 
       - name: Install dependencies
         run: dotnet restore
