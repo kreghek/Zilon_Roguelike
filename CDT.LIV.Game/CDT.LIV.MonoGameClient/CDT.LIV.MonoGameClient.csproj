@@ -4,6 +4,8 @@
     <TargetFramework>net5</TargetFramework>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishTrimmed>true</PublishTrimmed>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
