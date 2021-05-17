@@ -4,7 +4,6 @@
     <TargetFramework>net5</TargetFramework>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
-    <PublishSingleFile>true</PublishSingleFile>
     <!-- PublishTrimmed have to be false. Because GH Actions thrws error about optimization until trimming is true. -->
     <PublishTrimmed>false</PublishTrimmed>
     <Nullable>enable</Nullable>

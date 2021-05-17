@@ -51,7 +51,7 @@ jobs:
             ${{ runner.os }}-nuget
 
       - name: Publish
-        run: dotnet publish CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient.csproj --configuration ${{ matrix.configuration }} --framework net5 --output bin --runtime ${{ matrix.runtime }} --self-contained
+        run: dotnet publish CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient.csproj --configuration ${{ matrix.configuration }} --framework net5 --output bin --runtime ${{ matrix.runtime }} --self-contained /p:PublishSingleFile=true
         
       - run: ls /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/
 

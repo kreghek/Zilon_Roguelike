@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -47,7 +48,7 @@ namespace CDT.LIV.MonoGameClient
 
             commandLoop.ErrorOccured += (s, e) =>
             {
-                Debug.WriteLine(e.Exception.ToString());
+                Console.WriteLine(e.Exception.ToString());
             };
             commandLoop.CommandAutoExecuted += (s, e) => { Debug.WriteLine("Auto execute last command"); };
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();

@@ -73,9 +73,9 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
                         var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
                         var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
-                        commandLoopTask.ContinueWith(task => Debug.WriteLine(task.Exception),
+                        commandLoopTask.ContinueWith(task => Console.WriteLine(task.Exception),
                             TaskContinuationOptions.OnlyOnFaulted);
-                        commandLoopTask.ContinueWith(task => Debug.WriteLine("Game loop stopped."),
+                        commandLoopTask.ContinueWith(task => Console.WriteLine("Game loop stopped."),
                             TaskContinuationOptions.OnlyOnCanceled);
 
                     });
