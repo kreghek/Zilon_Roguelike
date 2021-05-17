@@ -49,7 +49,8 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
-        
+      
+      - run: ls /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/
       - name: Copy schemes
         run: cp -R /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/*.json /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/CDT.LIV.Game/CDT.LIV.MonoGameClient/bin/Release/net5/Content/Schemes/
         
