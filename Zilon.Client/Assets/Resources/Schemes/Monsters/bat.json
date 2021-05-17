@@ -19,7 +19,7 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-	"IsMelee": true
+    "IsMelee": true
   },
   "DropTableSids": [
     "survival",

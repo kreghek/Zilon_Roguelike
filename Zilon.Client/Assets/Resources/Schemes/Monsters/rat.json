@@ -19,7 +19,7 @@
     },
     "Effect": "Damage",
     "Targets": "Enemy",
-	"IsMelee": true
+    "IsMelee": true
   },
   "DropTableSids": [
     "survival",
