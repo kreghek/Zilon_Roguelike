@@ -32,6 +32,12 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Checkout submodules
+        uses: textbook/git-checkout-submodule-action@v2.1.1
+        with:
+          remote: true
+      
       - run: dotnet tool install --global dotnet-format --version 5.0.211103
       - name: Format codebase ${{ matrix.solution }}
         run: dotnet-format ${{ matrix.solution }}.sln --fix-whitespace --fix-style --verbosity detailed
@@ -65,6 +71,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Checkout submodules
+        uses: textbook/git-checkout-submodule-action@v2.1.1
+        with:
+          remote: true
+      
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
