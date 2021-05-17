@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
-using JetBrains.Annotations;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -41,7 +40,7 @@ namespace Zilon.Core.PersonModules
         /// Конструирует экземпляр модуля работы с экипировкой типа <see cref="EquipmentCarrierBase" />.
         /// </summary>
         /// <param name="slots">Набор слотов, на основе которого создаётся модель работы с экипировкой.</param>
-        protected EquipmentModuleBase([NotNull][ItemNotNull] IReadOnlyCollection<PersonSlotSubScheme> slots)
+        protected EquipmentModuleBase([NotNull] IReadOnlyCollection<PersonSlotSubScheme> slots)
         {
             if (slots == null)
             {
@@ -130,7 +129,7 @@ namespace Zilon.Core.PersonModules
         /// могут изыматся из слотов в инвентарь или уничтожаться.
         /// Если указано null, то экипировка изымается из указанного слота.
         /// </remarks>
-        [CanBeNull]
+        [MaybeNull]
         public virtual Equipment? this[int index]
         {
             get => _equipment[index];

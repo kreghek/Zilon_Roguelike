@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Zilon.Core.Components
@@ -9,7 +7,6 @@ namespace Zilon.Core.Components
     /// Тип правила персонажа.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    [PublicAPI]
     public enum PersonRuleType
     {
         Undefined,

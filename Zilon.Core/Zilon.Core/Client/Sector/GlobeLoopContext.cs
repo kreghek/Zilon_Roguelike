@@ -2,8 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 
@@ -14,7 +12,7 @@ namespace Zilon.Core.Client.Sector
     /// </summary>
     public sealed class GlobeLoopContext : IGlobeLoopContext
     {
-        [NotNull] private readonly IPlayer _player;
+        private readonly IPlayer _player;
 
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public GlobeLoopContext(IPlayer player)

@@ -1,7 +1,5 @@
 ﻿using System;
 
-using JetBrains.Annotations;
-
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class MineTask : OneTurnActorTaskBase
@@ -9,10 +7,10 @@ namespace Zilon.Core.Tactics.Behaviour
         private readonly IMineDepositMethod _method;
         private readonly IStaticObject _staticObject;
 
-        public MineTask([NotNull] IActor actor,
-            [NotNull] IActorTaskContext context,
-            [NotNull] IStaticObject staticObject,
-            [NotNull] IMineDepositMethod method) : base(actor, context)
+        public MineTask(IActor actor,
+            IActorTaskContext context,
+            IStaticObject staticObject,
+            IMineDepositMethod method) : base(actor, context)
         {
             _staticObject = staticObject ?? throw new ArgumentNullException(nameof(staticObject));
             _method = method ?? throw new ArgumentNullException(nameof(method));

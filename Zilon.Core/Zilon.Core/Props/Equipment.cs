@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Common;
 using Zilon.Core.Schemes;
 
@@ -59,7 +57,7 @@ namespace Zilon.Core.Props
 
         public Equipment(IPropScheme propScheme,
             IEnumerable<ITacticalActScheme> acts,
-            [NotNull] string name) :
+            string name) :
             this(propScheme, acts)
         {
             _name = name;

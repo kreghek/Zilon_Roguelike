@@ -1,12 +1,9 @@
-﻿using JetBrains.Annotations;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Zilon.Core.Components
 {
     [JsonConverter(typeof(StringEnumConverter))]
-    [PublicAPI]
     public enum DefenceType
     {
         /// <summary>

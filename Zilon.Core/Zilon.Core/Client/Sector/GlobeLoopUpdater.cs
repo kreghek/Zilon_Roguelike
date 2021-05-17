@@ -2,15 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using JetBrains.Annotations;
-
 namespace Zilon.Core.Client.Sector
 {
     public sealed class GlobeLoopUpdater : IDisposable, IGlobeLoopUpdater
     {
-        [NotNull] private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly IAnimationBlockerService _animationBlockerService;
 
-        [NotNull] private readonly IGlobeLoopContext _gameLoopContext;
+        private readonly IGlobeLoopContext _gameLoopContext;
 
         private CancellationTokenSource? _cancellationTokenSource;
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 
@@ -16,7 +14,6 @@ namespace Zilon.Core.Commands
     {
         private readonly ISectorUiState _playerState;
 
-        [PublicAPI]
         public ShowInventoryModalCommand(ISectorModalManager modalManager, ISectorUiState playerState) :
             base(modalManager)
         {
