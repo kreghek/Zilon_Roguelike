@@ -25,7 +25,6 @@ jobs:
           - Release
         runtime:
           - win-x64
-          - linux-x64
 
     steps:
       - uses: actions/checkout@v2
@@ -45,16 +44,13 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ~/.nuget/packages
-          # Look to see if there is a cache hit for the corresponding requirements file
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget
+            ${{ runner.os }}-nuget-
 
       - name: Publish
-        run: dotnet publish CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient.csproj --configuration ${{ matrix.configuration }} --framework net5 --output bin --runtime ${{ matrix.runtime }} --self-contained
+        run: dotnet publish CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient.csproj --configuration ${{ matrix.configuration }} --output bin --runtime ${{ matrix.runtime }} --self-contained
         
-      - run: ls /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/
-
       - name: Copy schemes
         run: cp -a /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/. /home/runner/work/CDT.LIV.MonoGameClient/CDT.LIV.MonoGameClient/CDT.LIV.Game/bin/Content/Schemes/
         
