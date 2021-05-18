@@ -6,9 +6,8 @@ namespace CDT.LIV.MonoGameClient.Scenes
 {
     internal class TitleScene : GameSceneBase
     {
-        private readonly SpriteBatch _spriteBatch;
-
         private readonly GlobeGenerationScene _globeGenerationScene;
+        private readonly SpriteBatch _spriteBatch;
 
         public TitleScene(Game game, SpriteBatch spriteBatch) : base(game)
         {

@@ -17,10 +17,10 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private readonly Container _rootSprite;
         private readonly Sprite _shadowSprite;
-
-        private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
+
+        private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
         public ActorMoveEngine(Container rootSprite, Container graphicsRoot, Sprite shadowSprite,
             Vector2 targetPosition, IAnimationBlockerService animationBlockerService)
