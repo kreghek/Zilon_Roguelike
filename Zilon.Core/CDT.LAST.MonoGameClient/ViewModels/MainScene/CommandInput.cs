@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 
-using CDT.LIV.MonoGameClient.Scenes;
+using CDT.LAST.MonoGameClient.Scenes;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;

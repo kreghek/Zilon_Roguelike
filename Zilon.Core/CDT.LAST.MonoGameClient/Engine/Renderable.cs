@@ -3,7 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CDT.LIV.MonoGameClient.Engine
+namespace CDT.LAST.MonoGameClient.Engine
 {
     /// <summary>
     /// A renderable entity.
@@ -241,7 +241,7 @@ namespace CDT.LIV.MonoGameClient.Engine
                 _worldTrans = _parent != null ? SpriteTransformation.Compose(_parent._worldTrans, _localTrans) : _localTrans;
 
                 // calculate final zindex
-                _finalZindex = (_parent != null ? _parent._finalZindex + Zindex : Zindex);
+                _finalZindex = _parent != null ? _parent._finalZindex + Zindex : Zindex;
 
                 // notify all childrens that they also need update
                 foreach (var child in _children)

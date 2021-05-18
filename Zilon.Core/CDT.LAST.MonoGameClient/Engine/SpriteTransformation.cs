@@ -1,7 +1,6 @@
-﻿
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
-namespace CDT.LIV.MonoGameClient.Engine
+namespace CDT.LAST.MonoGameClient.Engine
 {
     /// <summary>
     /// Renderable transformations - position, scale, rotation, color, etc.
@@ -41,7 +40,7 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// <returns>Cloned transformations.</returns>
         public SpriteTransformation Clone()
         {
-            SpriteTransformation ret = new SpriteTransformation();
+            var ret = new SpriteTransformation();
             ret.Color = Color;
             ret.Rotation = Rotation;
             ret.Scale = Scale;
@@ -57,8 +56,8 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// <returns>Merged transformation.</returns>
         public static SpriteTransformation Compose(SpriteTransformation a, SpriteTransformation b)
         {
-            SpriteTransformation result = new SpriteTransformation();
-            Vector2 transformedPosition = a.TransformVector(b.Position);
+            var result = new SpriteTransformation();
+            var transformedPosition = a.TransformVector(b.Position);
             result.Position = transformedPosition;
             result.Rotation = a.Rotation + b.Rotation;
             result.Scale = a.Scale * b.Scale;
@@ -90,10 +89,10 @@ namespace CDT.LIV.MonoGameClient.Engine
         public static Color MultiplyColors(Color a, Color b)
         {
             return new Color(
-                ((float)a.R / 255f) * ((float)b.R / 255f),
-                ((float)a.G / 255f) * ((float)b.G / 255f),
-                ((float)a.B / 255f) * ((float)b.B / 255f),
-                ((float)a.A / 255f) * ((float)b.A / 255f));
+                a.R / 255f * (b.R / 255f),
+                a.G / 255f * (b.G / 255f),
+                a.B / 255f * (b.B / 255f),
+                a.A / 255f * (b.A / 255f));
         }
 
         /// <summary>
@@ -103,7 +102,7 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// <returns>Transformed vector.</returns>
         public Vector2 TransformVector(Vector2 point)
         {
-            Vector2 result = Vector2.Transform(point, Matrix.CreateRotationZ(Rotation * System.Math.Sign(Scale.X)));
+            var result = Vector2.Transform(point, Matrix.CreateRotationZ(Rotation * System.Math.Sign(Scale.X)));
             result *= Scale;
             result += Position;
             return result;

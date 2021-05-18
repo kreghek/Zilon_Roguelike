@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using CDT.LIV.MonoGameClient.ViewModels.MainScene;
+using CDT.LAST.MonoGameClient.Scenes;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;

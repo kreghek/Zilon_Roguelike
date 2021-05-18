@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 
-using CDT.LIV.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Engine;
+using CDT.LIV.MonoGameClient;
+using CDT.LIV.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -12,11 +14,12 @@ using Zilon.Core.Client.Sector;
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class ActorViewModel : GameObjectBase, IActorViewModel
     {
@@ -42,11 +45,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
 
-            var personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
-            var personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
-            var personLegsSprite = _game.Content.Load<Texture2D>("Sprites/legs_idle");
-            var personArmLeftSprite = _game.Content.Load<Texture2D>("Sprites/arm-left-simple");
-            var personArmRightSprite = _game.Content.Load<Texture2D>("Sprites/arm-right-simple");
             var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
 
             _rootSprite = new SpriteContainer();
@@ -59,41 +57,22 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _rootSprite.AddChild(_shadowSprite);
 
-            var graphicsRoot = new SpriteContainer();
-
-            _rootSprite.AddChild(graphicsRoot);
-
-            graphicsRoot.AddChild(new Sprite(personArmLeftSprite)
+            if (Actor.Person is HumanPerson)
             {
-                Position = new Vector2(-10, -20),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
+                var graphicsRoot = new HumanoidGraphics(game.Content);
 
-            graphicsRoot.AddChild(new Sprite(personLegsSprite)
+                _rootSprite.AddChild(graphicsRoot);
+
+                _graphicsRoot = graphicsRoot;
+            }
+            else
             {
-                Position = new Vector2(0, 0),
-                Origin = new Vector2(0.5f, 0.75f)
-            });
+                var graphicsRoot = new AnimalGraphics(game.Content);
 
-            graphicsRoot.AddChild(new Sprite(personBodySprite)
-            {
-                Position = new Vector2(3, -22),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
+                _rootSprite.AddChild(graphicsRoot);
 
-            graphicsRoot.AddChild(new Sprite(personHeadSprite)
-            {
-                Position = new Vector2(-0, -20),
-                Origin = new Vector2(0.5f, 1)
-            });
-
-            graphicsRoot.AddChild(new Sprite(personArmRightSprite)
-            {
-                Position = new Vector2(13, -20),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
-
-            _graphicsRoot = graphicsRoot;
+                _graphicsRoot = graphicsRoot;
+            }
 
             var hexSize = UNIT_SIZE / 2;
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);

@@ -1,4 +1,4 @@
-﻿using CDT.LIV.MonoGameClient.Engine;
+﻿using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,7 +26,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             StaticObject = staticObject;
             _spriteBatch = spriteBatch;
 
-            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/Head");
+            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/game-objects/human/head");
 
             var worldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
 

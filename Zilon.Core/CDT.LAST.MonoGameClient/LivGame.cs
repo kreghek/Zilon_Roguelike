@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
+using CDT.LAST.MonoGameClient.Scenes;
 using CDT.LIV.MonoGameClient.Scenes;
 
 using Microsoft.Extensions.DependencyInjection;

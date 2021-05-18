@@ -3,7 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CDT.LIV.MonoGameClient.Engine
+namespace CDT.LAST.MonoGameClient.Engine
 {
     /// <summary>
     /// Basic sprite entity (renderable image).
@@ -91,7 +91,7 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// <param name="spritesCount">Number of sprites on X and Y axis.</param>
         public void SetSourceFromSpritesheet(Point index, Point spritesCount)
         {
-            Point size = Texture.Bounds.Size / spritesCount;
+            var size = Texture.Bounds.Size / spritesCount;
             SourceRectangle = new Rectangle(index * size, size);
         }
 
@@ -103,7 +103,7 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// <param name="rectSize">Size of the rectangle to set based on number of sprites in sheet.</param>
         public void SetSourceFromSpritesheet(Point index, Point spritesCount, Point rectSize)
         {
-            Point size = Texture.Bounds.Size / spritesCount;
+            var size = Texture.Bounds.Size / spritesCount;
             SourceRectangle = new Rectangle(index * size, size * rectSize);
         }
 
@@ -134,10 +134,10 @@ namespace CDT.LIV.MonoGameClient.Engine
             }
 
             // calculate origin point
-            Vector2 origin = new Vector2(_srcRect.Width * Origin.X, _srcRect.Height * Origin.Y);
+            var origin = new Vector2(_srcRect.Width * Origin.X, _srcRect.Height * Origin.Y);
 
             // get scale from transformations
-            Vector2 scale = WorldTransformations.Scale;
+            var scale = WorldTransformations.Scale;
 
             // take desired size into consideration
             if (Size.X != 0)
@@ -154,7 +154,7 @@ namespace CDT.LIV.MonoGameClient.Engine
             if (scale.X < 0 || scale.Y < 0)
             {
                 var rotationVector = EnableRotationFlip
-                    ? new Vector2((float)Math.Cos(rotation), (float)System.Math.Sin(rotation))
+                    ? new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation))
                     : Vector2.One;
                 if (scale.X < 0)
                 {
@@ -171,7 +171,7 @@ namespace CDT.LIV.MonoGameClient.Engine
                 // fix rotation
                 if (EnableRotationFlip)
                 {
-                    rotation = (float)System.Math.Atan2(rotationVector.Y, rotationVector.X);
+                    rotation = (float)Math.Atan2(rotationVector.Y, rotationVector.X);
                 }
             }
 
@@ -194,7 +194,7 @@ namespace CDT.LIV.MonoGameClient.Engine
                 color: WorldTransformations.Color,
                 rotation: rotation,
                 origin: origin,
-                scale: new Vector2(System.Math.Abs(scale.X), System.Math.Abs(scale.Y)),
+                scale: new Vector2(Math.Abs(scale.X), Math.Abs(scale.Y)),
                 effects: effects,
                 layerDepth: zindex);
         }

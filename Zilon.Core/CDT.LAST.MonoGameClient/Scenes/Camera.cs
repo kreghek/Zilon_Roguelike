@@ -4,7 +4,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
-namespace CDT.LIV.MonoGameClient.Scenes
+namespace CDT.LAST.MonoGameClient.Scenes
 {
     public class Camera
     {
@@ -14,7 +14,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
         public void Follow(IActorViewModel target, Game game)
         {
-            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)(target.Actor.Node)).OffsetCoords);
+            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)target.Actor.Node).OffsetCoords);
 
             var hexSize = UNIT_SIZE / 2;
             var actorPosition = new Vector2(

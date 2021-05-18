@@ -1,6 +1,6 @@
 ﻿using System;
 
-using CDT.LIV.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
 
@@ -12,10 +12,10 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
     {
         private const float ANIMATION_DURATION_SECONDS = 1f;
         private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly SpriteContainer _rootSprite;
         private readonly SpriteContainer _graphicsRoot;
         private readonly ICommandBlocker _moveBlocker;
 
-        private readonly SpriteContainer _rootSprite;
         private readonly Sprite _shadowSprite;
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
