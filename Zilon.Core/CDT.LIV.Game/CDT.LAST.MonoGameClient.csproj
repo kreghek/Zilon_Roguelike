@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5</TargetFramework>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <TieredCompilation>false</TieredCompilation>
+    <!-- PublishTrimmed have to be false. Because GH Actions thrws error about optimization until trimming is true. -->
+    <PublishTrimmed>false</PublishTrimmed>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Content\bin\**" />
+    <Compile Remove="Content\obj\**" />
+    <EmbeddedResource Remove="Content\bin\**" />
+    <EmbeddedResource Remove="Content\obj\**" />
+    <None Remove="Content\bin\**" />
+    <None Remove="Content\obj\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Icon.ico" />
+    <EmbeddedResource Include="Icon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <MonoGameContentReference Include="Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
+    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj" />
+    <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
+    <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj" />
+    <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
+    <ProjectReference Include="..\Zilon.DependencyInjection\Zilon.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj" />
+  </ItemGroup>
+</Project>

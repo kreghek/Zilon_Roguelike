@@ -76,6 +76,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.DependencyInjection",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.Gameplay", "Zilon.Core.Benchmarks.Gameplay\Zilon.Core.Benchmarks.Gameplay.csproj", "{31F0494C-E77B-45E5-A565-2F77E3E0D631}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDT.LAST.MonoGameClient", "CDT.LIV.Game\CDT.LAST.MonoGameClient.csproj", "{D884F0DA-85FA-4E14-A5C3-55712F63D8DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -174,6 +176,10 @@ Global
 		{31F0494C-E77B-45E5-A565-2F77E3E0D631}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31F0494C-E77B-45E5-A565-2F77E3E0D631}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31F0494C-E77B-45E5-A565-2F77E3E0D631}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D884F0DA-85FA-4E14-A5C3-55712F63D8DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D884F0DA-85FA-4E14-A5C3-55712F63D8DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D884F0DA-85FA-4E14-A5C3-55712F63D8DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D884F0DA-85FA-4E14-A5C3-55712F63D8DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -198,6 +204,7 @@ Global
 		{A5564869-FEFE-4A4F-ABA0-1C6E0C53B5B3} = {C6FA8EA5-A468-41E0-B315-25AA2443F293}
 		{17EF4DE9-8F84-46ED-9597-FF824672921A} = {C6FA8EA5-A468-41E0-B315-25AA2443F293}
 		{31F0494C-E77B-45E5-A565-2F77E3E0D631} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
+		{D884F0DA-85FA-4E14-A5C3-55712F63D8DF} = {C6FA8EA5-A468-41E0-B315-25AA2443F293}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CFF0449A-4E54-4D58-A6EB-852BCB6866BE}
