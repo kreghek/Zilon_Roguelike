@@ -89,7 +89,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
                         TargetScene = _mainScene;
                     }, TaskContinuationOptions.OnlyOnRanToCompletion);
 
-                    generateGlobeTask.ContinueWith(task => 
+                    generateGlobeTask.ContinueWith(task =>
                     {
                         Debug.WriteLine(task.Exception);
                     }, TaskContinuationOptions.OnlyOnFaulted);

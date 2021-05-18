@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,17 +8,15 @@ using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
+using Zilon.Core.Schemes;
 using Zilon.Emulation.Common;
 
 using HumanActorTaskSource =
     Zilon.Core.Tactics.Behaviour.HumanActorTaskSource<Zilon.Core.Tactics.Behaviour.ISectorTaskSourceContext>;
-using IHumanActorTaskSource =
-    Zilon.Core.Tactics.Behaviour.IHumanActorTaskSource<Zilon.Core.Tactics.Behaviour.ISectorTaskSourceContext>;
 using IActorTaskSource =
     Zilon.Core.Tactics.Behaviour.IActorTaskSource<Zilon.Core.Tactics.Behaviour.ISectorTaskSourceContext>;
-using Zilon.Core.Schemes;
-using System.Reflection;
-using System.IO;
+using IHumanActorTaskSource =
+    Zilon.Core.Tactics.Behaviour.IHumanActorTaskSource<Zilon.Core.Tactics.Behaviour.ISectorTaskSourceContext>;
 
 namespace CDT.LIV.MonoGameClient
 {

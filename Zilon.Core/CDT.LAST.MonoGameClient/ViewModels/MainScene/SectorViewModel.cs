@@ -181,7 +181,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 gameObject.Visible = true;
 
                 var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
-                
+
                 if (fowNode is null)
                 {
                     gameObject.Visible = false;

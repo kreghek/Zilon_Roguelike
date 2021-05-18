@@ -130,7 +130,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _spriteBatch.Begin(transformMatrix: transform);
 
             foreach (var hexSprite in _hexSprites.Values.ToArray())
-            { 
+            {
                 hexSprite.Draw(_spriteBatch);
             }
 

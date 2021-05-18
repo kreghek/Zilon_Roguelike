@@ -58,9 +58,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _rootSprite.AddChild(_shadowSprite);
 
-            var graphicsRoot = new Container 
+            var graphicsRoot = new Container
             {
-                
+
             };
 
             _rootSprite.AddChild(graphicsRoot);

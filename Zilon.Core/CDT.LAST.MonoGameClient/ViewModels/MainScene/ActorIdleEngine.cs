@@ -64,7 +64,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             else
             {
                 var t = _idleAnimationCounter / IDLE_CYCLE_DURATION_SECONDS;
-                
+
                 var positionFloat = Vector2.Lerp(_startPosition, _targetVector, (float)t);
                 // Round vector to exclude sprite smooth then sprite is not in integer position
                 var positionInt = new Vector2((int)positionFloat.X, (int)positionFloat.Y);
