@@ -1,5 +1,4 @@
-﻿
-using CDT.LAST.MonoGameClient.Engine;
+﻿using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,8 +9,8 @@ namespace CDT.LAST.MonoGameClient.Scenes
     internal class TitleScene : GameSceneBase
     {
         private readonly GlobeGenerationScene _globeGenerationScene;
-        private readonly Button _startButton;
         private readonly SpriteBatch _spriteBatch;
+        private readonly Button _startButton;
 
         public TitleScene(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -26,11 +25,6 @@ namespace CDT.LAST.MonoGameClient.Scenes
             {
                 Click = StartButtonClickHandler
             };
-        }
-
-        private void StartButtonClickHandler()
-        {
-            TargetScene = _globeGenerationScene;
         }
 
         public override void Draw(GameTime gameTime)
@@ -62,6 +56,11 @@ namespace CDT.LAST.MonoGameClient.Scenes
             }
 
             _startButton.Update();
+        }
+
+        private void StartButtonClickHandler()
+        {
+            TargetScene = _globeGenerationScene;
         }
     }
 }

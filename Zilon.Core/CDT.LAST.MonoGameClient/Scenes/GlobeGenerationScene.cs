@@ -18,8 +18,8 @@ namespace CDT.LAST.MonoGameClient.Scenes
     internal class GlobeGenerationScene : GameSceneBase
     {
         public static string? _lastError = "";
-        private readonly MainScene _mainScene;
         private readonly Button _generateButton;
+        private readonly MainScene _mainScene;
         private readonly SpriteBatch _spriteBatch;
         private bool _generationWasStarted;
 
@@ -36,6 +36,37 @@ namespace CDT.LAST.MonoGameClient.Scenes
             {
                 Click = GenerateButtonClickHandler
             };
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+
+            _spriteBatch.Begin();
+
+            var font = Game.Content.Load<SpriteFont>("Fonts/Main");
+
+            _spriteBatch.DrawString(font, "Генерация мира", new Vector2(100, 100), Color.White);
+            _spriteBatch.DrawString(font, _lastError, new Vector2(100, 120), Color.White);
+            _generateButton.Draw(_spriteBatch);
+
+            _spriteBatch.End();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            // Poll for current keyboard state
+            var state = Keyboard.GetState();
+
+            // If they hit esc, exit
+            if (state.IsKeyDown(Keys.Escape))
+            {
+                Game.Exit();
+            }
+
+            _generateButton.Update();
         }
 
         private void GenerateButtonClickHandler()
@@ -77,37 +108,6 @@ namespace CDT.LAST.MonoGameClient.Scenes
                     Debug.WriteLine(task.Exception);
                 }, TaskContinuationOptions.OnlyOnFaulted);
             }
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
-
-            _spriteBatch.Begin();
-
-            var font = Game.Content.Load<SpriteFont>("Fonts/Main");
-
-            _spriteBatch.DrawString(font, "Генерация мира", new Vector2(100, 100), Color.White);
-            _spriteBatch.DrawString(font, _lastError, new Vector2(100, 120), Color.White);
-            _generateButton.Draw(_spriteBatch);
-
-            _spriteBatch.End();
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-
-            // Poll for current keyboard state
-            var state = Keyboard.GetState();
-
-            // If they hit esc, exit
-            if (state.IsKeyDown(Keys.Escape))
-            {
-                Game.Exit();
-            }
-
-            _generateButton.Update();
         }
     }
 }

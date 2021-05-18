@@ -1,6 +1,6 @@
 ﻿namespace CDT.LAST.MonoGameClient.Engine
 {
-    enum UiButtonState
+    internal enum UiButtonState
     {
         Undefined,
         OutOfButton,

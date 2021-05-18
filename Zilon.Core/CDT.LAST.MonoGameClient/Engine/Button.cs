@@ -6,16 +6,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CDT.LAST.MonoGameClient.Engine
 {
-    class Button
+    internal class Button
     {
-        private UiButtonState _buttonState;
         private readonly SpriteFont _font;
         private readonly Rectangle _rect;
-
-        public string Name { get; }
-        public Texture2D Texture { get; }
-
-        public Action? Click { get; set; }
+        private UiButtonState _buttonState;
 
         public Button(string name, Texture2D texture, SpriteFont font, Rectangle rect)
         {
@@ -26,14 +21,32 @@ namespace CDT.LAST.MonoGameClient.Engine
             _buttonState = UiButtonState.OutOfButton;
         }
 
-        private bool CheckMouseOver()
+        public Action? Click { get; set; }
+
+        public string Name { get; }
+        public Texture2D Texture { get; }
+
+        public void Draw(SpriteBatch spriteBatch)
         {
-            var mouseState = Mouse.GetState();
-            var mousePosition = mouseState.Position;
+            var color = Color.White;
+            if (_buttonState == UiButtonState.OutOfButton)
+            {
+            }
+            else if (_buttonState == UiButtonState.Hover)
+            {
+                color = Color.Lerp(color, Color.Wheat, 0.25f);
+            }
+            else if (_buttonState == UiButtonState.Pressed)
+            {
+                color = Color.Lerp(color, Color.Wheat, 0.75f);
+            }
+            else
+            {
+                color = Color.Red;
+            }
 
-            var mouseRect = new Rectangle(mousePosition.X, mousePosition.Y, 1, 1);
-
-            return _rect.Intersects(mouseRect);
+            spriteBatch.Draw(Texture, _rect, color);
+            spriteBatch.DrawString(_font, Name, new Vector2(_rect.Left, _rect.Top), Color.Gray);
         }
 
         public void Update()
@@ -60,28 +73,15 @@ namespace CDT.LAST.MonoGameClient.Engine
                 _buttonState = UiButtonState.OutOfButton;
             }
         }
-        public void Draw(SpriteBatch spriteBatch)
+
+        private bool CheckMouseOver()
         {
-            var color = Color.White;
-            if (_buttonState == UiButtonState.OutOfButton)
-            {
+            var mouseState = Mouse.GetState();
+            var mousePosition = mouseState.Position;
 
-            }
-            else if (_buttonState == UiButtonState.Hover)
-            {
-                color = Color.Lerp(color, Color.Wheat, 0.25f);
-            }
-            else if (_buttonState == UiButtonState.Pressed)
-            {
-                color = Color.Lerp(color, Color.Wheat, 0.75f);
-            }
-            else
-            {
-                color = Color.Red;
-            }
+            var mouseRect = new Rectangle(mousePosition.X, mousePosition.Y, 1, 1);
 
-            spriteBatch.Draw(Texture, _rect, color);
-            spriteBatch.DrawString(_font, Name, new Vector2(_rect.Left, _rect.Top), Color.Gray);
+            return _rect.Intersects(mouseRect);
         }
     }
 }

@@ -15,10 +15,10 @@ namespace CDT.LAST.MonoGameClient
 {
     public class LivGame : Game
     {
-        private readonly ServiceProvider _serviceProvider;
         private readonly GraphicsDeviceManager _graphics;
-        private SpriteBatch? _spriteBatch;
+        private readonly ServiceProvider _serviceProvider;
         private Texture2D? _cursorTexture;
+        private SpriteBatch? _spriteBatch;
 
         public LivGame(ServiceProvider serviceProvider)
         {
