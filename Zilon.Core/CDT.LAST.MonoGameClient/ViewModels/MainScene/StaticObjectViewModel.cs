@@ -26,7 +26,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             StaticObject = staticObject;
             _spriteBatch = spriteBatch;
 
-            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/game-objects/human/head");
+            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/game-objects/environment/Grass");
 
             var worldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
 
@@ -41,18 +41,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Position = staticObjectPosition
             };
 
-            var graphicsRoot = new SpriteContainer();
-            _rootSprite.AddChild(graphicsRoot);
-
-            graphicsRoot.AddChild(new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 1), color: Color.Black));
-
             var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
             _rootSprite.AddChild(new Sprite(shadowTexture)
             {
                 Position = new Vector2(0, 0),
                 Origin = new Vector2(0.5f, 0.5f),
-                Color = new Color(Color.White, 0.75f)
+                Color = new Color(Color.White, 0.5f)
             });
+
+            var graphicsRoot = new SpriteContainer();
+            _rootSprite.AddChild(graphicsRoot);
+
+            graphicsRoot.AddChild(new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 0.75f), color: Color.White));
         }
 
         public override bool HiddenByFow => false;

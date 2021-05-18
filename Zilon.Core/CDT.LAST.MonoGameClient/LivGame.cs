@@ -83,6 +83,21 @@ namespace CDT.LAST.MonoGameClient
 
             // TODO: Add your update logic here
 
+            if (Keyboard.GetState().IsKeyDown(Keys.F))
+            {
+                _graphics.IsFullScreen = true;
+                _graphics.PreferredBackBufferWidth = 1920;
+                _graphics.PreferredBackBufferHeight = 1080;
+                _graphics.ApplyChanges();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.G))
+            {
+                _graphics.IsFullScreen = false;
+                _graphics.PreferredBackBufferWidth = 800;
+                _graphics.PreferredBackBufferHeight = 480;
+                _graphics.ApplyChanges();
+            }
+
             base.Update(gameTime);
         }
 
