@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Scenes;
@@ -19,19 +18,6 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class SectorViewModelContext
-    {
-        public SectorViewModelContext(EffectManager effectManager)
-        {
-            GameObjects = new List<GameObjectBase>();
-            EffectManager = effectManager;
-        }
-
-        public EffectManager EffectManager { get; }
-
-        public List<GameObjectBase> GameObjects { get; }
-    }
-
     public sealed class SectorViewModel
     {
         private readonly Camera _camera;
