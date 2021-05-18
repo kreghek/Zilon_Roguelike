@@ -238,7 +238,9 @@ namespace CDT.LAST.MonoGameClient.Engine
             if (_needUpdateTransformations)
             {
                 // create world transformations (merged with parent)
-                _worldTrans = _parent != null ? SpriteTransformation.Compose(_parent._worldTrans, _localTrans) : _localTrans;
+                _worldTrans = _parent != null
+                    ? SpriteTransformation.Compose(_parent._worldTrans, _localTrans)
+                    : _localTrans;
 
                 // calculate final zindex
                 _finalZindex = _parent != null ? _parent._finalZindex + Zindex : Zindex;
