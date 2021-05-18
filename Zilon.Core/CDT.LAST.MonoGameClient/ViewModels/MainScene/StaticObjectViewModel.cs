@@ -17,7 +17,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private readonly Game _game;
         private readonly Texture2D _personHeadSprite;
-        private readonly Container _rootSprite;
+        private readonly SpriteContainer _rootSprite;
         private readonly SpriteBatch _spriteBatch;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
@@ -36,12 +36,12 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 (float)(worldCoords[1] * hexSize * 2 / 2)
             );
 
-            _rootSprite = new Container
+            _rootSprite = new SpriteContainer
             {
                 Position = staticObjectPosition
             };
 
-            var graphicsRoot = new Container();
+            var graphicsRoot = new SpriteContainer();
             _rootSprite.AddChild(graphicsRoot);
 
             graphicsRoot.AddChild(new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 1), color: Color.Black));

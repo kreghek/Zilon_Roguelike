@@ -14,14 +14,14 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private readonly ICommandBlocker _animationBlocker;
         private readonly IAnimationBlockerService _animationBlockerService;
 
-        private readonly Container _rootContainer;
+        private readonly SpriteContainer _rootContainer;
 
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
-        public ActorMeleeAttackEngine(Container rootContainer, Vector2 targetPosition,
+        public ActorMeleeAttackEngine(SpriteContainer rootContainer, Vector2 targetPosition,
             IAnimationBlockerService animationBlockerService)
         {
             _rootContainer = rootContainer;

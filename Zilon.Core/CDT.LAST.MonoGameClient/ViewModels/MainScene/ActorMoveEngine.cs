@@ -12,17 +12,17 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
     {
         private const float ANIMATION_DURATION_SECONDS = 1f;
         private readonly IAnimationBlockerService _animationBlockerService;
-        private readonly Container _graphicsRoot;
+        private readonly SpriteContainer _graphicsRoot;
         private readonly ICommandBlocker _moveBlocker;
 
-        private readonly Container _rootSprite;
+        private readonly SpriteContainer _rootSprite;
         private readonly Sprite _shadowSprite;
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
-        public ActorMoveEngine(Container rootSprite, Container graphicsRoot, Sprite shadowSprite,
+        public ActorMoveEngine(SpriteContainer rootSprite, SpriteContainer graphicsRoot, Sprite shadowSprite,
             Vector2 targetPosition, IAnimationBlockerService animationBlockerService)
         {
             _rootSprite = rootSprite;

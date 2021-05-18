@@ -23,9 +23,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private const int UNIT_SIZE = 32;
 
         private readonly Game _game;
-        private readonly Container _graphicsRoot;
+        private readonly SpriteContainer _graphicsRoot;
 
-        private readonly Container _rootSprite;
+        private readonly SpriteContainer _rootSprite;
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly Sprite _shadowSprite;
         private readonly SpriteBatch _spriteBatch;
@@ -49,7 +49,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var personArmRightSprite = _game.Content.Load<Texture2D>("Sprites/arm-right-simple");
             var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
 
-            _rootSprite = new Container();
+            _rootSprite = new SpriteContainer();
             _shadowSprite = new Sprite(shadowTexture)
             {
                 Position = new Vector2(0, 0),
@@ -59,7 +59,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _rootSprite.AddChild(_shadowSprite);
 
-            var graphicsRoot = new Container();
+            var graphicsRoot = new SpriteContainer();
 
             _rootSprite.AddChild(graphicsRoot);
 

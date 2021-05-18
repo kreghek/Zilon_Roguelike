@@ -9,14 +9,14 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
     public sealed class ActorIdleEngine : IActorStateEngine
     {
         private const double IDLE_CYCLE_DURATION_SECONDS = 0.75;
-        private readonly Container _graphicsRoot;
+        private readonly SpriteContainer _graphicsRoot;
         private readonly Random _random;
         private double _idleAnimationCounter;
         private Vector2 _startPosition;
         private Vector2 _targetVector;
         private bool _toCenter;
 
-        public ActorIdleEngine(Container graphicsRoot)
+        public ActorIdleEngine(SpriteContainer graphicsRoot)
         {
             _graphicsRoot = graphicsRoot;
 
