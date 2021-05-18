@@ -20,8 +20,9 @@ namespace CDT.LAST.MonoGameClient.Scenes
             _globeGenerationScene = new GlobeGenerationScene(game, spriteBatch);
 
             var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
+            var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
-            _startButton = new Button("start", buttonTexture, 100, 100)
+            _startButton = new Button("start", buttonTexture, font, new Rectangle(150, 150, 100, 20))
             {
                 Click = StartButtonClickHandler
             };

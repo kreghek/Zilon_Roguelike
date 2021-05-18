@@ -9,50 +9,31 @@ namespace CDT.LAST.MonoGameClient.Engine
     class Button
     {
         private UiButtonState _buttonState;
-        private readonly int _buttonX;
-        private readonly int _buttonY;
-
-        public int ButtonX
-        {
-            get
-            {
-                return _buttonX;
-            }
-        }
-
-        public int ButtonY
-        {
-            get
-            {
-                return _buttonY;
-            }
-        }
+        private readonly SpriteFont _font;
+        private readonly Rectangle _rect;
 
         public string Name { get; }
         public Texture2D Texture { get; }
 
         public Action? Click { get; set; }
 
-        public Button(string name, Texture2D texture, int buttonX, int buttonY)
+        public Button(string name, Texture2D texture, SpriteFont font, Rectangle rect)
         {
             Name = name;
             Texture = texture;
-            _buttonX = buttonX;
-            _buttonY = buttonY;
+            _font = font;
+            _rect = rect;
             _buttonState = UiButtonState.OutOfButton;
         }
 
         private bool CheckMouseOver()
         {
             var mouseState = Mouse.GetState();
-
             var mousePosition = mouseState.Position;
-            if (mousePosition.X > _buttonX && mousePosition.X < _buttonX + Texture.Width &&
-                mousePosition.Y > _buttonY && mousePosition.Y < _buttonY + Texture.Height)
-            {
-                return true;
-            }
-            return false;
+
+            var mouseRect = new Rectangle(mousePosition.X, mousePosition.Y, 1, 1);
+
+            return _rect.Intersects(mouseRect);
         }
 
         public void Update()
@@ -99,7 +80,8 @@ namespace CDT.LAST.MonoGameClient.Engine
                 color = Color.Red;
             }
 
-            spriteBatch.Draw(Texture, new Rectangle(ButtonX, ButtonY, Texture.Width, Texture.Height), color);
+            spriteBatch.Draw(Texture, _rect, color);
+            spriteBatch.DrawString(_font, Name, new Vector2(_rect.Left, _rect.Top), Color.Gray);
         }
     }
 }
