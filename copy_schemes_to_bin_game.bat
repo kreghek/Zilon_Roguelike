@@ -1,1 +1,0 @@
-XCOPY ".\Zilon.Core\Zilon.Client\Assets\Resources\Schemes\*.json" ".\CDT.LIV.Game\CDT.LIV.MonoGameClient\bin\Debug\net5\Content\Schemes\" /S
