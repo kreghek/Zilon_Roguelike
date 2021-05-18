@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,14 +6,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CDT.LAST.MonoGameClient.Engine
 {
-    enum UiButtonState
-    {
-        Undefined,
-        OutOfButton,
-        Hover,
-        Pressed
-    }
-
     class Button
     {
         private UiButtonState _buttonState;
@@ -41,8 +32,6 @@ namespace CDT.LAST.MonoGameClient.Engine
         public Texture2D Texture { get; }
 
         public Action? Click { get; set; }
-
-        private MouseState _lastMouseState;
 
         public Button(string name, Texture2D texture, int buttonX, int buttonY)
         {
