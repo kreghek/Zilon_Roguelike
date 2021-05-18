@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Scenes;
@@ -7,7 +6,6 @@ using CDT.LAST.MonoGameClient.Scenes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
@@ -19,24 +17,10 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class SectorViewModelContext
-    {
-        public SectorViewModelContext(EffectManager effectManager)
-        {
-            GameObjects = new List<GameObjectBase>();
-            EffectManager = effectManager;
-        }
-
-        public EffectManager EffectManager { get; }
-
-        public List<GameObjectBase> GameObjects { get; }
-    }
-
     public sealed class SectorViewModel
     {
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;
-        private readonly Texture2D _cursorTexture;
 
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
@@ -98,8 +82,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
             var commandInput = new CommandInput(_uiState, commandPool, _camera, Sector, commandFactory);
             _commandInput = commandInput;
-
-            _cursorTexture = game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
         }
 
         public ISector Sector { get; }
@@ -148,13 +130,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 hitEffect.Draw(_spriteBatch);
             }
 
-            _spriteBatch.End();
-
-            // Print mouse position and draw cursor itself
-
-            var mouseState = Mouse.GetState();
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(_cursorTexture, new Vector2(mouseState.X, mouseState.Y), Color.White);
             _spriteBatch.End();
         }
 

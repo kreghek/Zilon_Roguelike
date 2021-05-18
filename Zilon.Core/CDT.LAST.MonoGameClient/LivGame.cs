@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 using CDT.LAST.MonoGameClient.Scenes;
 
@@ -14,8 +15,9 @@ namespace CDT.LAST.MonoGameClient
 {
     public class LivGame : Game
     {
+        private readonly GraphicsDeviceManager _graphics;
         private readonly ServiceProvider _serviceProvider;
-        private GraphicsDeviceManager? _graphics;
+        private Texture2D? _cursorTexture;
         private SpriteBatch? _spriteBatch;
 
         public LivGame(ServiceProvider serviceProvider)
@@ -32,9 +34,19 @@ namespace CDT.LAST.MonoGameClient
         {
             GraphicsDevice.Clear(Color.DarkGray);
 
-            // TODO: Add your drawing code here
+            if (_spriteBatch is null)
+            {
+                throw new InvalidOperationException();
+            }
 
             base.Draw(gameTime);
+
+            // Print mouse position and draw cursor itself
+
+            var mouseState = Mouse.GetState();
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(_cursorTexture, new Vector2(mouseState.X, mouseState.Y), Color.White);
+            _spriteBatch.End();
         }
 
         protected override void Initialize()
@@ -51,6 +63,8 @@ namespace CDT.LAST.MonoGameClient
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            _cursorTexture = Content.Load<Texture2D>("Sprites/ui/walk-cursor");
 
             var sceneManager = new SceneManager(this);
             var titleScene = new TitleScene(this, _spriteBatch);

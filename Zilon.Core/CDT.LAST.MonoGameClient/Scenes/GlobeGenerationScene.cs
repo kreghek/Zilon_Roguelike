@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
+using CDT.LAST.MonoGameClient.Engine;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,6 +18,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
     internal class GlobeGenerationScene : GameSceneBase
     {
         public static string? _lastError = "";
+        private readonly Button _generateButton;
         private readonly MainScene _mainScene;
         private readonly SpriteBatch _spriteBatch;
         private bool _generationWasStarted;
@@ -25,6 +28,14 @@ namespace CDT.LAST.MonoGameClient.Scenes
         {
             _spriteBatch = spriteBatch;
             _mainScene = new MainScene(game, spriteBatch);
+
+            var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
+            var font = Game.Content.Load<SpriteFont>("Fonts/Main");
+
+            _generateButton = new Button("generate", buttonTexture, font, new Rectangle(150, 150, 100, 20))
+            {
+                Click = GenerateButtonClickHandler
+            };
         }
 
         public override void Draw(GameTime gameTime)
@@ -37,6 +48,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
 
             _spriteBatch.DrawString(font, "Генерация мира", new Vector2(100, 100), Color.White);
             _spriteBatch.DrawString(font, _lastError, new Vector2(100, 120), Color.White);
+            _generateButton.Draw(_spriteBatch);
 
             _spriteBatch.End();
         }
@@ -54,45 +66,47 @@ namespace CDT.LAST.MonoGameClient.Scenes
                 Game.Exit();
             }
 
-            if (state.IsKeyDown(Keys.Up))
+            _generateButton.Update();
+        }
+
+        private void GenerateButtonClickHandler()
+        {
+            if (!_generationWasStarted)
             {
-                if (!_generationWasStarted)
+                _generationWasStarted = true;
+
+                var generateGlobeTask = Task.Run(async () =>
                 {
-                    _generationWasStarted = true;
+                    var serviceScope = ((LivGame)Game).ServiceProvider;
+                    var globeInitializer = serviceScope.GetRequiredService<IGlobeInitializer>();
+                    var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
 
-                    var generateGlobeTask = Task.Run(async () =>
+                    if (globe is null)
                     {
-                        var serviceScope = ((LivGame)Game).ServiceProvider;
-                        var globeInitializer = serviceScope.GetRequiredService<IGlobeInitializer>();
-                        var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
+                        throw new InvalidOperationException();
+                    }
 
-                        if (globe is null)
-                        {
-                            throw new InvalidOperationException();
-                        }
+                    var gameLoop = serviceScope.GetRequiredService<IGlobeLoopUpdater>();
 
-                        var gameLoop = serviceScope.GetRequiredService<IGlobeLoopUpdater>();
+                    gameLoop.Start();
 
-                        gameLoop.Start();
+                    var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
+                    var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
+                    commandLoopTask.ContinueWith(task => _lastError += task.Exception.ToString(),
+                        TaskContinuationOptions.OnlyOnFaulted);
+                    commandLoopTask.ContinueWith(task => _lastError += "Game loop stopped.",
+                        TaskContinuationOptions.OnlyOnCanceled);
+                });
 
-                        var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
-                        var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
-                        commandLoopTask.ContinueWith(task => _lastError += task.Exception.ToString(),
-                            TaskContinuationOptions.OnlyOnFaulted);
-                        commandLoopTask.ContinueWith(task => _lastError += "Game loop stopped.",
-                            TaskContinuationOptions.OnlyOnCanceled);
-                    });
+                generateGlobeTask.ContinueWith(task =>
+                {
+                    TargetScene = _mainScene;
+                }, TaskContinuationOptions.OnlyOnRanToCompletion);
 
-                    generateGlobeTask.ContinueWith(task =>
-                    {
-                        TargetScene = _mainScene;
-                    }, TaskContinuationOptions.OnlyOnRanToCompletion);
-
-                    generateGlobeTask.ContinueWith(task =>
-                    {
-                        Debug.WriteLine(task.Exception);
-                    }, TaskContinuationOptions.OnlyOnFaulted);
-                }
+                generateGlobeTask.ContinueWith(task =>
+                {
+                    Debug.WriteLine(task.Exception);
+                }, TaskContinuationOptions.OnlyOnFaulted);
             }
         }
     }
