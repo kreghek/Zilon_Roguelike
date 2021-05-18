@@ -20,43 +20,43 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             AddChild(new Sprite(legFarFrontSprite)
             {
-                Position = new Vector2(0, 0),
+                Position = new Vector2(0, -12),
                 Origin = new Vector2(0.5f, 0.5f)
             });
 
             AddChild(new Sprite(legFarHindSprite)
             {
-                Position = new Vector2(-10, 0),
+                Position = new Vector2(0, -12),
                 Origin = new Vector2(0.5f, 0.5f)
             });
 
             AddChild(new Sprite(bodySprite)
             {
-                Position = new Vector2(0, -8),
+                Position = new Vector2(0, -12),
                 Origin = new Vector2(0.5f, 0.5f)
             });
 
             AddChild(new Sprite(headSprite)
             {
-                Position = new Vector2(-8, -20),
+                Position = new Vector2(-0, -12),
                 Origin = new Vector2(0.5f, 0.5f)
             });
 
             AddChild(new Sprite(tailSprite)
             {
-                Position = new Vector2(8, -20),
+                Position = new Vector2(0, -12),
                 Origin = new Vector2(0.5f, 0.5f)
             });
 
             AddChild(new Sprite(legCloseFrontSprite)
             {
-                Position = new Vector2(0, 0),
+                Position = new Vector2(0, -12),
                 Origin = new Vector2(0.5f, 0.5f)
             });
 
             AddChild(new Sprite(legCloseHindSprite)
             {
-                Position = new Vector2(-10, 0),
+                Position = new Vector2(0, -12),
                 Origin = new Vector2(0.5f, 0.5f)
             });
         }
