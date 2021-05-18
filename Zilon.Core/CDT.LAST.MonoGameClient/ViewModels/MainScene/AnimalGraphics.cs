@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class AnimalGraphics : SpriteContainer
+    public sealed class AnimalGraphics : SpriteContainer, IActorGraphics
     {
         public AnimalGraphics(ContentManager contentManager)
         {
@@ -60,5 +60,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Origin = new Vector2(0.5f, 0.5f)
             });
         }
+
+        public SpriteContainer RootSprite => this;
+        public Vector2 HitEffectPosition => Vector2.UnitY * -12;
     }
 }

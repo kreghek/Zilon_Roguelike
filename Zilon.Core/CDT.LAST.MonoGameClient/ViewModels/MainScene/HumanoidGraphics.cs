@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class HumanoidGraphics : SpriteContainer
+    public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
     {
         public HumanoidGraphics(ContentManager contentManager)
         {
@@ -46,5 +46,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Origin = new Vector2(0.5f, 0.5f)
             });
         }
+
+        public SpriteContainer RootSprite => this;
+        public Vector2 HitEffectPosition => Vector2.UnitY * -24;
     }
 }

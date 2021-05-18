@@ -26,7 +26,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private const int UNIT_SIZE = 32;
 
         private readonly Game _game;
-        private readonly SpriteContainer _graphicsRoot;
+        private readonly IActorGraphics _graphicsRoot;
 
         private readonly SpriteContainer _rootSprite;
         private readonly SectorViewModelContext _sectorViewModelContext;
@@ -87,12 +87,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.Moved += Actor_Moved;
             Actor.UsedAct += Actor_UsedAct;
 
-            _actorStateEngine = new ActorIdleEngine(_graphicsRoot);
+            _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
 
         public override bool HiddenByFow => true;
 
-        public override Vector2 HitEffectPosition => Vector2.UnitY * -24;
+        public override Vector2 HitEffectPosition => _graphicsRoot.HitEffectPosition;
         public override IGraphNode Node => Actor.Node;
 
         public override void Draw(GameTime gameTime, Matrix transform)
@@ -111,7 +111,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _actorStateEngine.Update(gameTime);
                 if (_actorStateEngine.IsComplete)
                 {
-                    _actorStateEngine = new ActorIdleEngine(_graphicsRoot);
+                    _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
 
                     var hexSize = UNIT_SIZE / 2;
                     var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
@@ -140,7 +140,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-                var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot, _shadowSprite, newPosition,
+                var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot.RootSprite, _shadowSprite, newPosition,
                     animationBlockerService);
                 _actorStateEngine = moveEngine;
             }
