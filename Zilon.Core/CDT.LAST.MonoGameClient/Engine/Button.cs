@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 namespace CDT.LAST.MonoGameClient.Engine
 {
     enum UiButtonState
-    { 
+    {
         Undefined,
         OutOfButton,
         Hover,
