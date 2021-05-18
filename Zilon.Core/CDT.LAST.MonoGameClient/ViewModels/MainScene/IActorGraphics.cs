@@ -6,7 +6,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public interface IActorGraphics
     {
-        SpriteContainer RootSprite { get; }
         Vector2 HitEffectPosition { get; }
+        SpriteContainer RootSprite { get; }
     }
 }
