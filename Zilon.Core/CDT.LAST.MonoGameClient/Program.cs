@@ -7,7 +7,7 @@ using Zilon.Core.PersonGeneration;
 using Zilon.Core.Players;
 using Zilon.Core.World;
 
-namespace CDT.LIV.MonoGameClient
+namespace CDT.LAST.MonoGameClient
 {
     public static class Program
     {

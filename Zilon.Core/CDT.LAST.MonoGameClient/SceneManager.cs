@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace CDT.LIV.MonoGameClient
+namespace CDT.LAST.MonoGameClient
 {
     internal class SceneManager : DrawableGameComponent
     {

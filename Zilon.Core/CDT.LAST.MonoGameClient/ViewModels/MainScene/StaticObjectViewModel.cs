@@ -9,7 +9,7 @@ using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class StaticObjectViewModel : GameObjectBase, IContainerViewModel
     {

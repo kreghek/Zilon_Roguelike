@@ -3,9 +3,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-using CDT.LIV.MonoGameClient;
-using CDT.LIV.MonoGameClient.Scenes;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

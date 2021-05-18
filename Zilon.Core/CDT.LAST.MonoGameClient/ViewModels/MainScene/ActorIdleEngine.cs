@@ -4,7 +4,7 @@ using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class ActorIdleEngine : IActorStateEngine
     {

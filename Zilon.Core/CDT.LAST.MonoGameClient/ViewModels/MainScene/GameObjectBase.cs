@@ -2,7 +2,7 @@
 
 using Zilon.Core.Graphs;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public abstract class GameObjectBase
     {

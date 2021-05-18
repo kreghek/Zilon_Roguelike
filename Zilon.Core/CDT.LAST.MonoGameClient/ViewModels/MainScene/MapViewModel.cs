@@ -16,7 +16,7 @@ using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class MapViewModel
     {

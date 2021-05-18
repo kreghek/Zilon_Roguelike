@@ -3,7 +3,7 @@
 using Zilon.Core.Client;
 using Zilon.Core.Tactics.Spatial;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class NodeViewModel : IMapNodeViewModel
     {

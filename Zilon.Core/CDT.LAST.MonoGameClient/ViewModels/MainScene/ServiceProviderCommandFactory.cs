@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core.Commands;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class ServiceProviderCommandFactory
     {

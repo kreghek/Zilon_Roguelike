@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Scenes;
-using CDT.LIV.MonoGameClient;
-using CDT.LIV.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;

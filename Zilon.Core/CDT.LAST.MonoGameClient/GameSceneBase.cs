@@ -2,7 +2,7 @@
 
 using Microsoft.Xna.Framework;
 
-namespace CDT.LIV.MonoGameClient
+namespace CDT.LAST.MonoGameClient
 {
     /// <summary>
     /// This is the base class for all game scenes.
@@ -35,10 +35,10 @@ namespace CDT.LIV.MonoGameClient
         public override void Draw(GameTime gameTime)
         {
             // Draw the child GameComponents (if drawable)
-            for (int i = 0; i < components.Count; i++)
+            for (var i = 0; i < components.Count; i++)
             {
-                GameComponent gc = components[i];
-                if ((gc is DrawableGameComponent) &&
+                var gc = components[i];
+                if (gc is DrawableGameComponent &&
                     ((DrawableGameComponent)gc).Visible)
                 {
                     ((DrawableGameComponent)gc).Draw(gameTime);
@@ -73,7 +73,7 @@ namespace CDT.LIV.MonoGameClient
         public override void Update(GameTime gameTime)
         {
             // Update the child GameComponents
-            for (int i = 0; i < components.Count; i++)
+            for (var i = 0; i < components.Count; i++)
             {
                 if (components[i].Enabled)
                 {

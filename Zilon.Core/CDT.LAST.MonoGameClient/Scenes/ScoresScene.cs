@@ -1,6 +1,4 @@
-﻿using CDT.LIV.MonoGameClient;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace CDT.LAST.MonoGameClient.Scenes
 {

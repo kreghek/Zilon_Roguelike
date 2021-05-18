@@ -18,7 +18,7 @@ using IActorTaskSource =
 using IHumanActorTaskSource =
     Zilon.Core.Tactics.Behaviour.IHumanActorTaskSource<Zilon.Core.Tactics.Behaviour.ISectorTaskSourceContext>;
 
-namespace CDT.LIV.MonoGameClient
+namespace CDT.LAST.MonoGameClient
 {
     internal sealed class StartUp : InitializationBase
     {
