@@ -4,11 +4,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CDT.LIV.MonoGameClient.Scenes
 {
-    class TitleScene : GameSceneBase
+    internal class TitleScene : GameSceneBase
     {
         private readonly SpriteBatch _spriteBatch;
 
-        private GlobeGenerationScene _globeGenerationScene;
+        private readonly GlobeGenerationScene _globeGenerationScene;
 
         public TitleScene(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -39,7 +39,9 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
             // If they hit esc, exit
             if (state.IsKeyDown(Keys.Escape))
+            {
                 Game.Exit();
+            }
 
             if (state.IsKeyDown(Keys.Up))
             {

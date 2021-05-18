@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 using CDT.LIV.MonoGameClient.Engine;
 
@@ -9,9 +8,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     public sealed class ActorIdleEngine : IActorStateEngine
     {
-        private readonly Random _random;
         private const double IDLE_CYCLE_DURATION_SECONDS = 0.75;
         private readonly Container _graphicsRoot;
+        private readonly Random _random;
         private double _idleAnimationCounter;
         private Vector2 _startPosition;
         private Vector2 _targetVector;
@@ -58,6 +57,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 {
                     _targetVector = GetUnitRandomVector();
                 }
+
                 _targetVector = GetUnitRandomVector();
                 _idleAnimationCounter = 0;
             }

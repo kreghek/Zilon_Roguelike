@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {

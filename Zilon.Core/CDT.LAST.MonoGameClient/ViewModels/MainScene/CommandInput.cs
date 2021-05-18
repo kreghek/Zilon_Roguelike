@@ -18,12 +18,12 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
     public sealed class CommandInput
     {
         private const int UNIT_SIZE = 32;
+        private readonly Camera _camera;
+        private readonly ServiceProviderCommandFactory _commandFactory;
+        private readonly ICommandPool _commandPool;
+        private readonly ISector _sector;
 
         private readonly ISectorUiState _uiState;
-        private readonly ICommandPool _commandPool;
-        private readonly Camera _camera;
-        private readonly ISector _sector;
-        private readonly ServiceProviderCommandFactory _commandFactory;
 
         private bool _leftMousePressed;
 
@@ -57,7 +57,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
 
-                var offsetMouseInWorld = HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2, UNIT_SIZE / 2);
+                var offsetMouseInWorld =
+                    HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2, UNIT_SIZE / 2);
 
                 var map = _sector.Map;
 
@@ -66,7 +67,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 if (hoverNode != null)
                 {
-                    var actorsInThisNode = _sector.ActorManager.Items.SingleOrDefault(x => ReferenceEquals(x.Node, hoverNode));
+                    var actorsInThisNode =
+                        _sector.ActorManager.Items.SingleOrDefault(x => ReferenceEquals(x.Node, hoverNode));
                     if (actorsInThisNode is null)
                     {
                         if (_uiState.HoverViewModel is null)
@@ -83,7 +85,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     }
                     else
                     {
-                        var actorViewModel = sectorViewModelContext.GameObjects.OfType<IActorViewModel>().SingleOrDefault(x => x.Actor == actorsInThisNode);
+                        var actorViewModel = sectorViewModelContext.GameObjects.OfType<IActorViewModel>()
+                            .SingleOrDefault(x => x.Actor == actorsInThisNode);
                         _uiState.HoverViewModel = actorViewModel;
                     }
                 }
@@ -111,7 +114,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                                 throw new InvalidOperationException();
                             }
 
-                            _uiState.TacticalAct = activeActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+                            _uiState.TacticalAct = activeActor.Actor.Person.GetModule<ICombatActModule>()
+                                .CalcCombatActs().First();
 
                             command = _commandFactory.GetCommand<AttackCommand>();
                             break;
@@ -121,7 +125,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                             break;
 
                         default:
-                            throw new InvalidOperationException($"Object of unknown type (${_uiState.SelectedViewModel.GetType()}) was selected.");
+                            throw new InvalidOperationException(
+                                $"Object of unknown type (${_uiState.SelectedViewModel.GetType()}) was selected.");
                     }
 
                     if (command.CanExecute().IsSuccess)

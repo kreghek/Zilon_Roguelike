@@ -13,6 +13,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
@@ -26,26 +27,23 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             EffectManager = effectManager;
         }
 
-        public List<GameObjectBase> GameObjects { get; }
-
         public EffectManager EffectManager { get; }
+
+        public List<GameObjectBase> GameObjects { get; }
     }
 
     public sealed class SectorViewModel
     {
         private readonly Camera _camera;
-        private readonly SpriteBatch _spriteBatch;
-        private readonly IPlayer _player;
-        private readonly ISectorUiState _uiState;
-        private readonly Zilon.Core.Tactics.ISector _sector;
-
-        private readonly MapViewModel _mapViewModel;
         private readonly CommandInput _commandInput;
         private readonly Texture2D _cursorTexture;
 
-        private readonly SectorViewModelContext _viewModelContext;
+        private readonly MapViewModel _mapViewModel;
+        private readonly IPlayer _player;
+        private readonly SpriteBatch _spriteBatch;
+        private readonly ISectorUiState _uiState;
 
-        public Zilon.Core.Tactics.ISector Sector => _sector;
+        private readonly SectorViewModelContext _viewModelContext;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
@@ -64,17 +62,17 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
-            _sector = sector;
+            Sector = sector;
 
-            var playerActor = (from actor in _sector.ActorManager.Items
+            var playerActor = (from actor in Sector.ActorManager.Items
                                where actor.Person == _player.MainPerson
                                select actor).SingleOrDefault();
 
-            _mapViewModel = new MapViewModel(game, _player, _uiState, _sector, spriteBatch);
+            _mapViewModel = new MapViewModel(game, _player, _uiState, Sector, spriteBatch);
 
             _viewModelContext = new SectorViewModelContext(new EffectManager());
 
-            foreach (var actor in _sector.ActorManager.Items)
+            foreach (var actor in Sector.ActorManager.Items)
             {
                 var actorViewModel = new ActorViewModel(game, actor, _viewModelContext, _spriteBatch);
 
@@ -86,28 +84,25 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 _viewModelContext.GameObjects.Add(actorViewModel);
             }
 
-            foreach (var staticObject in _sector.StaticObjectManager.Items)
+            foreach (var staticObject in Sector.StaticObjectManager.Items)
             {
                 var staticObjectModel = new StaticObjectViewModel(game, staticObject, _spriteBatch);
 
                 _viewModelContext.GameObjects.Add(staticObjectModel);
             }
 
-            _sector.ActorManager.Removed += ActorManager_Removed;
+            Sector.ActorManager.Removed += ActorManager_Removed;
 
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
-            var commandInput = new CommandInput(_uiState, commandPool, _camera, _sector, commandFactory);
+            var commandInput = new CommandInput(_uiState, commandPool, _camera, Sector, commandFactory);
             _commandInput = commandInput;
 
             _cursorTexture = game.Content.Load<Texture2D>("Sprites/ui/walk-cursor");
         }
 
-        private void ActorManager_Removed(object? sender, Zilon.Core.Tactics.ManagerItemsChangedEventArgs<Zilon.Core.Tactics.IActor> e)
-        {
-            _viewModelContext.GameObjects.RemoveAll(x => x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor));
-        }
+        public ISector Sector { get; }
 
         public void Draw(GameTime gameTime)
         {
@@ -119,14 +114,15 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             }
 
             var fowData = _player.MainPerson.GetModule<IFowData>();
-            var visibleFowNodeData = fowData.GetSectorFowData(_sector);
+            var visibleFowNodeData = fowData.GetSectorFowData(Sector);
 
             if (visibleFowNodeData is null)
             {
                 throw new InvalidOperationException();
             }
 
-            var gameObjectsMaterialized = _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
+            var gameObjectsMaterialized =
+                _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
             var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
             foreach (var gameObject in gameObjectsMaterialized)
             {
@@ -137,7 +133,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     continue;
                 }
 
-                if (fowNode.State != Zilon.Core.Tactics.SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
+                if (fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
                 {
                     continue;
                 }
@@ -170,7 +166,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             }
 
             var fowData = _player.MainPerson.GetModule<IFowData>();
-            var visibleFowNodeData = fowData.GetSectorFowData(_sector);
+            var visibleFowNodeData = fowData.GetSectorFowData(Sector);
 
             _mapViewModel.Update(gameTime);
 
@@ -187,7 +183,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     gameObject.Visible = false;
                 }
 
-                if (fowNode != null && fowNode.State != Zilon.Core.Tactics.SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
+                if (fowNode != null && fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
                 {
                     gameObject.Visible = false;
                 }
@@ -206,6 +202,12 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             }
 
             _commandInput.Update(_viewModelContext);
+        }
+
+        private void ActorManager_Removed(object? sender, ManagerItemsChangedEventArgs<IActor> e)
+        {
+            _viewModelContext.GameObjects.RemoveAll(x =>
+                x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor));
         }
 
         private static ISectorNode GetPlayerSectorNode(IPlayer player)

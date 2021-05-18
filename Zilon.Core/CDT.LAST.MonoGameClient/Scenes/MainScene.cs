@@ -18,18 +18,18 @@ using Zilon.Core.World;
 
 namespace CDT.LIV.MonoGameClient.Scenes
 {
-    class MainScene : GameSceneBase
+    internal class MainScene : GameSceneBase
     {
-        private readonly SpriteBatch _spriteBatch;
-        private readonly ISectorUiState _uiState;
-        private readonly IPlayer _player;
-        private readonly ITransitionPool _transitionPool;
         private readonly Camera _camera;
-
-        private SectorViewModel? _sectorViewModel;
+        private readonly IPlayer _player;
+        private readonly SpriteBatch _spriteBatch;
+        private readonly ITransitionPool _transitionPool;
+        private readonly ISectorUiState _uiState;
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
+
+        private SectorViewModel? _sectorViewModel;
 
         public MainScene(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -44,6 +44,16 @@ namespace CDT.LIV.MonoGameClient.Scenes
             _camera = new Camera();
         }
 
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+
+            if (_sectorViewModel != null)
+            {
+                _sectorViewModel.Draw(gameTime);
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -53,6 +63,7 @@ namespace CDT.LIV.MonoGameClient.Scenes
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
                 _currentSector = _sectorViewModel.Sector;
             }
+
             _sectorViewModel.Update(gameTime);
 
             if (_player.MainPerson is null)
@@ -102,16 +113,6 @@ namespace CDT.LIV.MonoGameClient.Scenes
                     from actor in sector.ActorManager.Items
                     where actor.Person == player.MainPerson
                     select sectorNode).SingleOrDefault();
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
-
-            if (_sectorViewModel != null)
-            {
-                _sectorViewModel.Draw(gameTime);
-            }
         }
     }
 }

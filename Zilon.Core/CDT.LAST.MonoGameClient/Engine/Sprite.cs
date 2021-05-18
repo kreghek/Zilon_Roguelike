@@ -11,10 +11,22 @@ namespace CDT.LIV.MonoGameClient.Engine
     /// </summary>
     public class Transformation
     {
+        // identity transformation object.
+
+        /// <summary>
+        /// Drawing color (work as tint color).
+        /// </summary>
+        public Color Color = Color.White;
+
         /// <summary>
         /// Transformation position.
         /// </summary>
         public Vector2 Position = Vector2.Zero;
+
+        /// <summary>
+        /// Transformation rotation.
+        /// </summary>
+        public float Rotation;
 
         /// <summary>
         /// Transformation scale.
@@ -22,22 +34,9 @@ namespace CDT.LIV.MonoGameClient.Engine
         public Vector2 Scale = Vector2.One;
 
         /// <summary>
-        /// Transformation rotation.
-        /// </summary>
-        public float Rotation = 0;
-
-        /// <summary>
-        /// Drawing color (work as tint color).
-        /// </summary>
-        public Color Color = Color.White;
-
-        // identity transformation object.
-        private static readonly Transformation _identity = new Transformation();
-
-        /// <summary>
         /// Get the identity transformations.
         /// </summary>
-        public static Transformation Identity { get { return _identity; } }
+        public static Transformation Identity { get; } = new Transformation();
 
         /// <summary>
         /// Clone the transformations.
@@ -51,21 +50,6 @@ namespace CDT.LIV.MonoGameClient.Engine
             ret.Scale = Scale;
             ret.Position = Position;
             return ret;
-        }
-
-        /// <summary>
-        /// Multiply two colors and return the result.
-        /// </summary>
-        /// <param name="a">Color a to multiply.</param>
-        /// <param name="b">Color b to multiply.</param>
-        /// <returns>Result color.</returns>
-        public static Color MultiplyColors(Color a, Color b)
-        {
-            return new Color(
-                ((float)a.R / 255f) * ((float)b.R / 255f),
-                ((float)a.G / 255f) * ((float)b.G / 255f),
-                ((float)a.B / 255f) * ((float)b.B / 255f),
-                ((float)a.A / 255f) * ((float)b.A / 255f));
         }
 
         /// <summary>
@@ -92,11 +76,27 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// <param name="key2">Transformations to.</param>
         /// <param name="amount">How much to lerp.</param>
         /// <param name="result">Out transformations.</param>
-        public static void Lerp(ref Transformation key1, ref Transformation key2, float amount, ref Transformation result)
+        public static void Lerp(ref Transformation key1, ref Transformation key2, float amount,
+            ref Transformation result)
         {
             result.Position = Vector2.Lerp(key1.Position, key2.Position, amount);
             result.Scale = Vector2.Lerp(key1.Scale, key2.Scale, amount);
             result.Rotation = MathHelper.Lerp(key1.Rotation, key2.Rotation, amount);
+        }
+
+        /// <summary>
+        /// Multiply two colors and return the result.
+        /// </summary>
+        /// <param name="a">Color a to multiply.</param>
+        /// <param name="b">Color b to multiply.</param>
+        /// <returns>Result color.</returns>
+        public static Color MultiplyColors(Color a, Color b)
+        {
+            return new Color(
+                ((float)a.R / 255f) * ((float)b.R / 255f),
+                ((float)a.G / 255f) * ((float)b.G / 255f),
+                ((float)a.B / 255f) * ((float)b.B / 255f),
+                ((float)a.A / 255f) * ((float)b.A / 255f));
         }
 
         /// <summary>
@@ -119,14 +119,20 @@ namespace CDT.LIV.MonoGameClient.Engine
     public class Renderable
     {
         /// <summary>
-        /// Parent entity.
+        /// Child entities.
         /// </summary>
-        protected Renderable? _parent { get; set; } = null;
+        protected List<Renderable> _children = new List<Renderable>();
+
+        // currently calculated z-index, including parents.
+        private float _finalZindex;
 
         /// <summary>
         /// Local transformations (color, position, rotation..).
         /// </summary>
         protected Transformation _localTrans = new Transformation();
+
+        // do we need to update transformations?
+        private bool _needUpdateTransformations = false;
 
         /// <summary>
         /// World transformations (local transformations + parent's world transformations).
@@ -134,94 +140,7 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// </summary>
         private Transformation _worldTrans = new Transformation();
 
-        /// <summary>
-        /// Get final world transformations.
-        /// </summary>
-        public Transformation WorldTransformations { get { return _worldTrans; } }
-
-        /// <summary>
-        /// Is the entity currently visible?
-        /// </summary>
-        public bool Visible { get; set; } = true;
-
-        // currently calculated z-index, including parents.
-        private float _finalZindex = 0f;
-
-        // do we need to update transformations?
-        private bool _needUpdateTransformations = false;
-
-        /// <summary>
-        /// Child entities.
-        /// </summary>
-        protected List<Renderable> _children = new List<Renderable>();
-
-        /// <summary>
-        /// String identifier you can attach to renderable entities.
-        /// </summary>
-        public string? Identifier { get; set; }
-
-        /// <summary>
-        /// Should we flip drawing on X axis?
-        /// </summary>
-        public bool FlipX
-        {
-            set
-            {
-                _localTrans.Scale.X = System.Math.Abs(_localTrans.Scale.X) * (value ? -1f : 1f);
-                UpdateTransformations();
-            }
-            get
-            {
-                return _localTrans.Scale.X < 0f;
-            }
-        }
-
-        /// <summary>
-        /// Should we flip drawing on Y axis?
-        /// </summary>
-        public bool FlipY
-        {
-            set
-            {
-                _localTrans.Scale.Y = System.Math.Abs(_localTrans.Scale.Y) * (value ? -1f : 1f);
-                UpdateTransformations();
-            }
-            get
-            {
-                return _localTrans.Scale.Y < 0f;
-            }
-        }
-
-        /// <summary>
-        /// Renderable position.
-        /// </summary>
-        public Vector2 Position { get { return _localTrans.Position; } set { _localTrans.Position = value; UpdateTransformations(); } }
-
-        /// <summary>
-        /// Renderable scale.
-        /// </summary>
-        public Vector2 Scale { get { return _localTrans.Scale; } set { _localTrans.Scale = value; UpdateTransformations(); } }
-
-        /// <summary>
-        /// Renderable scale as a single scalar (in oppose to a vector).
-        /// </summary>
-        public float ScaleScalar { get { return _localTrans.Scale.X; } set { Scale = Vector2.One * value; } }
-
-        /// <summary>
-        /// Renderable rotation (radians).
-        /// </summary>
-        public float Rotation { get { return _localTrans.Rotation; } set { _localTrans.Rotation = value; UpdateTransformations(); } }
-
-        /// <summary>
-        /// Renderable z-index (relative to parent).
-        /// </summary>
-        public float Zindex { get { return _zindex; } set { _zindex = value; UpdateTransformations(); } }
-        private float _zindex = 0f;
-
-        /// <summary>
-        /// Renderable tint color.
-        /// </summary>
-        public Color Color { get { return _localTrans.Color; } set { _localTrans.Color = value; UpdateTransformations(); } }
+        private float _zindex;
 
         /// <summary>
         /// If true, will normalize Z-index to always be between 0-1 values (note: this divide the final z-index by max float).
@@ -236,12 +155,149 @@ namespace CDT.LIV.MonoGameClient.Engine
         }
 
         /// <summary>
-        /// Called whenever one of the transformations properties change and we need to update world transformations.
+        /// Clone an existing renderable object.
         /// </summary>
-        protected void UpdateTransformations()
+        /// <param name="copyFrom">Object to copy properties from.</param>
+        /// <param name="includeChildren">If true, will also clone children.</param>
+        public Renderable(Renderable copyFrom, bool includeChildren)
         {
-            _needUpdateTransformations = true;
+            // copy basics
+            Visible = copyFrom.Visible;
+            Zindex = copyFrom.Zindex;
+            _localTrans = copyFrom._localTrans.Clone();
+
+            // clone children
+            if (includeChildren)
+            {
+                foreach (var child in copyFrom._children)
+                {
+                    AddChild(child.Clone(true));
+                }
+            }
+
+            // update transformations
+            UpdateTransformations();
         }
+
+        /// <summary>
+        /// Renderable tint color.
+        /// </summary>
+        public Color Color
+        {
+            get => _localTrans.Color;
+            set
+            {
+                _localTrans.Color = value;
+                UpdateTransformations();
+            }
+        }
+
+        /// <summary>
+        /// Should we flip drawing on X axis?
+        /// </summary>
+        public bool FlipX
+        {
+            set
+            {
+                _localTrans.Scale.X = System.Math.Abs(_localTrans.Scale.X) * (value ? -1f : 1f);
+                UpdateTransformations();
+            }
+            get => _localTrans.Scale.X < 0f;
+        }
+
+        /// <summary>
+        /// Should we flip drawing on Y axis?
+        /// </summary>
+        public bool FlipY
+        {
+            set
+            {
+                _localTrans.Scale.Y = System.Math.Abs(_localTrans.Scale.Y) * (value ? -1f : 1f);
+                UpdateTransformations();
+            }
+            get => _localTrans.Scale.Y < 0f;
+        }
+
+        /// <summary>
+        /// String identifier you can attach to renderable entities.
+        /// </summary>
+        public string? Identifier { get; set; }
+
+        /// <summary>
+        /// Renderable position.
+        /// </summary>
+        public Vector2 Position
+        {
+            get => _localTrans.Position;
+            set
+            {
+                _localTrans.Position = value;
+                UpdateTransformations();
+            }
+        }
+
+        /// <summary>
+        /// Renderable rotation (radians).
+        /// </summary>
+        public float Rotation
+        {
+            get => _localTrans.Rotation;
+            set
+            {
+                _localTrans.Rotation = value;
+                UpdateTransformations();
+            }
+        }
+
+        /// <summary>
+        /// Renderable scale.
+        /// </summary>
+        public Vector2 Scale
+        {
+            get => _localTrans.Scale;
+            set
+            {
+                _localTrans.Scale = value;
+                UpdateTransformations();
+            }
+        }
+
+        /// <summary>
+        /// Renderable scale as a single scalar (in oppose to a vector).
+        /// </summary>
+        public float ScaleScalar
+        {
+            get => _localTrans.Scale.X;
+            set => Scale = Vector2.One * value;
+        }
+
+        /// <summary>
+        /// Is the entity currently visible?
+        /// </summary>
+        public bool Visible { get; set; } = true;
+
+        /// <summary>
+        /// Get final world transformations.
+        /// </summary>
+        public Transformation WorldTransformations => _worldTrans;
+
+        /// <summary>
+        /// Renderable z-index (relative to parent).
+        /// </summary>
+        public float Zindex
+        {
+            get => _zindex;
+            set
+            {
+                _zindex = value;
+                UpdateTransformations();
+            }
+        }
+
+        /// <summary>
+        /// Parent entity.
+        /// </summary>
+        protected Renderable? _parent { get; set; }
 
         /// <summary>
         /// Add a child entity to this renderable.
@@ -264,33 +320,13 @@ namespace CDT.LIV.MonoGameClient.Engine
         }
 
         /// <summary>
-        /// Get child by index.
+        /// Clone this renderable object.
         /// </summary>
-        /// <param name="index">Child index to get.</param>
-        /// <returns>Return child.</returns>
-        public Renderable GetChild(int index)
+        /// <param name="includeChildren">If true, will include children in clone.</param>
+        /// <returns>Cloned object.</returns>
+        public virtual Renderable Clone(bool includeChildren)
         {
-            return _children[index];
-        }
-
-        /// <summary>
-        /// Remove a child entity from this renderable.
-        /// </summary>
-        /// <param name="child">Child entity to remove.</param>
-        public void RemoveChild(Renderable child)
-        {
-            // if child don't belong to this entity throw exception
-            if (child._parent != this)
-            {
-                throw new System.Exception("Renderable to remove is not a child of this renderable!");
-            }
-
-            // remove child
-            _children.Remove(child);
-            child._parent = null;
-
-            // update child transformations (since now it no longer got a parent)
-            child.UpdateTransformations();
+            return new Renderable(this, includeChildren);
         }
 
         /// <summary>
@@ -336,6 +372,36 @@ namespace CDT.LIV.MonoGameClient.Engine
         }
 
         /// <summary>
+        /// Get child by index.
+        /// </summary>
+        /// <param name="index">Child index to get.</param>
+        /// <returns>Return child.</returns>
+        public Renderable GetChild(int index)
+        {
+            return _children[index];
+        }
+
+        /// <summary>
+        /// Remove a child entity from this renderable.
+        /// </summary>
+        /// <param name="child">Child entity to remove.</param>
+        public void RemoveChild(Renderable child)
+        {
+            // if child don't belong to this entity throw exception
+            if (child._parent != this)
+            {
+                throw new System.Exception("Renderable to remove is not a child of this renderable!");
+            }
+
+            // remove child
+            _children.Remove(child);
+            child._parent = null;
+
+            // update child transformations (since now it no longer got a parent)
+            child.UpdateTransformations();
+        }
+
+        /// <summary>
         /// Do the object-specific drawing function.
         /// Implement per renderable type.
         /// </summary>
@@ -347,38 +413,11 @@ namespace CDT.LIV.MonoGameClient.Engine
         }
 
         /// <summary>
-        /// Clone this renderable object.
+        /// Called whenever one of the transformations properties change and we need to update world transformations.
         /// </summary>
-        /// <param name="includeChildren">If true, will include children in clone.</param>
-        /// <returns>Cloned object.</returns>
-        virtual public Renderable Clone(bool includeChildren)
+        protected void UpdateTransformations()
         {
-            return new Renderable(this, includeChildren);
-        }
-
-        /// <summary>
-        /// Clone an existing renderable object.
-        /// </summary>
-        /// <param name="copyFrom">Object to copy properties from.</param>
-        /// <param name="includeChildren">If true, will also clone children.</param>
-        public Renderable(Renderable copyFrom, bool includeChildren)
-        {
-            // copy basics
-            Visible = copyFrom.Visible;
-            Zindex = copyFrom.Zindex;
-            _localTrans = copyFrom._localTrans.Clone();
-
-            // clone children
-            if (includeChildren)
-            {
-                foreach (var child in copyFrom._children)
-                {
-                    AddChild(child.Clone(true));
-                }
-            }
-
-            // update transformations
-            UpdateTransformations();
+            _needUpdateTransformations = true;
         }
     }
 
@@ -389,29 +428,19 @@ namespace CDT.LIV.MonoGameClient.Engine
     public class Sprite : Renderable
     {
         /// <summary>
+        /// If true, will also flip rotation on X and Y axis when there's a flip.
+        /// </summary>
+        public bool EnableRotationFlip = false;
+
+        /// <summary>
         /// Sprite origin / source, eg pivot point for rotation etc.
         /// </summary>
         public Vector2 Origin = Vector2.One * 0.5f;
 
         /// <summary>
-        /// Texture to draw.
-        /// </summary>
-        public Texture2D Texture { get; set; }
-
-        /// <summary>
-        /// Size, in pixels, we want this sprite to be when rendered.
-        /// </summary>
-        public Point Size { get; set; }
-
-        /// <summary>
         /// Optional texture source rectangle.
         /// </summary>
         public Rectangle? SourceRectangle;
-
-        /// <summary>
-        /// If true, will also flip rotation on X and Y axis when there's a flip.
-        /// </summary>
-        public bool EnableRotationFlip = false;
 
         /// <summary>
         /// Create the new sprite entity with params.
@@ -423,7 +452,8 @@ namespace CDT.LIV.MonoGameClient.Engine
         /// <param name="color">Sprite color.</param>
         /// <param name="zindex">Sprite zindex.</param>
         /// <param name="parent">Parent container.</param>
-        public Sprite(Texture2D texture, Point? size = null, Vector2? origin = null, Vector2? position = null, Color? color = null, float zindex = 0f, Renderable? parent = null) : base()
+        public Sprite(Texture2D texture, Point? size = null, Vector2? origin = null, Vector2? position = null,
+            Color? color = null, float zindex = 0f, Renderable? parent = null)
         {
             Size = size ?? Point.Zero;
             Texture = texture;
@@ -432,17 +462,9 @@ namespace CDT.LIV.MonoGameClient.Engine
             Color = color ?? Color.White;
             Zindex = zindex;
             if (parent != null)
-            { parent.AddChild(this); }
-        }
-
-        /// <summary>
-        /// Clone this sprite object.
-        /// </summary>
-        /// <param name="includeChildren">If true, will include children in clone.</param>
-        /// <returns>Cloned object.</returns>
-        override public Renderable Clone(bool includeChildren)
-        {
-            return new Sprite(this, includeChildren);
+            {
+                parent.AddChild(this);
+            }
         }
 
         /// <summary>
@@ -456,6 +478,26 @@ namespace CDT.LIV.MonoGameClient.Engine
             Origin = copyFrom.Origin;
             Texture = copyFrom.Texture;
             Size = copyFrom.Size;
+        }
+
+        /// <summary>
+        /// Size, in pixels, we want this sprite to be when rendered.
+        /// </summary>
+        public Point Size { get; set; }
+
+        /// <summary>
+        /// Texture to draw.
+        /// </summary>
+        public Texture2D Texture { get; set; }
+
+        /// <summary>
+        /// Clone this sprite object.
+        /// </summary>
+        /// <param name="includeChildren">If true, will include children in clone.</param>
+        /// <returns>Cloned object.</returns>
+        public override Renderable Clone(bool includeChildren)
+        {
+            return new Sprite(this, includeChildren);
         }
 
         /// <summary>
@@ -498,9 +540,14 @@ namespace CDT.LIV.MonoGameClient.Engine
             // if source rect is 0,0, set to texture default size
             var _srcRect = SourceRectangle ?? new Rectangle(0, 0, 0, 0);
             if (_srcRect.Width == 0)
-            { _srcRect.Width = Texture.Width; }
+            {
+                _srcRect.Width = Texture.Width;
+            }
+
             if (_srcRect.Height == 0)
-            { _srcRect.Height = Texture.Height; }
+            {
+                _srcRect.Height = Texture.Height;
+            }
 
             // calculate origin point
             Vector2 origin = new Vector2(_srcRect.Width * Origin.X, _srcRect.Height * Origin.Y);
@@ -522,12 +569,15 @@ namespace CDT.LIV.MonoGameClient.Engine
             var effects = SpriteEffects.None;
             if (scale.X < 0 || scale.Y < 0)
             {
-                var rotationVector = EnableRotationFlip ? new Vector2((float)System.Math.Cos(rotation), (float)System.Math.Sin(rotation)) : Vector2.One;
+                var rotationVector = EnableRotationFlip
+                    ? new Vector2((float)System.Math.Cos(rotation), (float)System.Math.Sin(rotation))
+                    : Vector2.One;
                 if (scale.X < 0)
                 {
                     effects |= SpriteEffects.FlipHorizontally;
                     rotationVector.X = -rotationVector.X;
                 }
+
                 if (scale.Y < 0)
                 {
                     effects |= SpriteEffects.FlipVertically;
@@ -545,7 +595,10 @@ namespace CDT.LIV.MonoGameClient.Engine
             if (NormalizeZindex)
             {
                 if (zindex < 0f)
+                {
                     zindex = 0f;
+                }
+
                 zindex /= float.MaxValue;
             }
 
@@ -569,11 +622,5 @@ namespace CDT.LIV.MonoGameClient.Engine
     /// </summary>
     public class Container : Renderable
     {
-        /// <summary>
-        /// Create the new container.
-        /// </summary>
-        public Container() : base()
-        {
-        }
     }
 }

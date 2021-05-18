@@ -11,16 +11,14 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
-    class StaticObjectViewModel : GameObjectBase, IContainerViewModel
+    internal class StaticObjectViewModel : GameObjectBase, IContainerViewModel
     {
         private const int UNIT_SIZE = 32;
 
         private readonly Game _game;
-        private readonly SpriteBatch _spriteBatch;
-        private readonly Container _rootSprite;
         private readonly Texture2D _personHeadSprite;
-
-        public override Vector2 HitEffectPosition => Vector2.UnitY * -24;
+        private readonly Container _rootSprite;
+        private readonly SpriteBatch _spriteBatch;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
         {
@@ -36,7 +34,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var staticObjectPosition = new Vector2(
                 (float)(worldCoords[0] * hexSize * System.Math.Sqrt(3)),
                 (float)(worldCoords[1] * hexSize * 2 / 2)
-                );
+            );
 
             _rootSprite = new Container
             {
@@ -57,10 +55,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             });
         }
 
-        public IStaticObject StaticObject { get; set; }
-        public object Item => StaticObject;
-
         public override bool HiddenByFow => false;
+
+        public override Vector2 HitEffectPosition => Vector2.UnitY * -24;
         public override IGraphNode Node => StaticObject.Node;
 
         public override void Draw(GameTime gameTime, Matrix transform)
@@ -75,5 +72,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         public override void Update(GameTime gameTime)
         {
         }
+
+        public IStaticObject StaticObject { get; set; }
+        public object Item => StaticObject;
     }
 }

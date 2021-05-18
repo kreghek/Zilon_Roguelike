@@ -18,20 +18,20 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
-    class MapViewModel
+    internal class MapViewModel
     {
         private const float MAP_UPDATE_DELAY_SECONDS = 0.05f;
         private const int UNIT_SIZE = 32;
 
-        private double _updateCounter = MAP_UPDATE_DELAY_SECONDS;
-
         private readonly Texture2D _hexSprite;
-        private readonly SpriteBatch _spriteBatch;
-        private readonly ISector _sector;
         private readonly IPlayer _player;
+        private readonly ISector _sector;
+        private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
 
         private ConcurrentDictionary<OffsetCoords, Sprite> _hexSprites;
+
+        private double _updateCounter = MAP_UPDATE_DELAY_SECONDS;
 
         public MapViewModel(Game game, IPlayer player, ISectorUiState uiState, ISector sector, SpriteBatch spriteBatch)
         {
@@ -43,6 +43,23 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _sector = sector;
 
             _hexSprites = new ConcurrentDictionary<OffsetCoords, Sprite>();
+        }
+
+        public void Draw(Matrix transform)
+        {
+            _spriteBatch.Begin(transformMatrix: transform);
+
+            foreach (var hexSprite in _hexSprites.Values.ToArray())
+            {
+                hexSprite.Draw(_spriteBatch);
+            }
+
+            _spriteBatch.End();
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            UpdateSpriteMatrix(gameTime);
         }
 
         private void UpdateSpriteMatrix(GameTime gameTime)
@@ -70,7 +87,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             var materializedNodes = visibleFowNodeData.Nodes.ToArray();
 
-            Parallel.ForEach(materializedNodes, (fowNode) =>
+            Parallel.ForEach(materializedNodes, fowNode =>
             {
                 var node = (HexNode)fowNode.Node;
 
@@ -103,12 +120,12 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                         size: new Point(
                             (int)(hexSize * Math.Sqrt(3)),
                             hexSize * 2 / 2
-                            ),
+                        ),
                         color: nodeColor)
                     {
                         Position = new Vector2(
-                        (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
-                        (float)(worldCoords[1] * hexSize * 2 / 2)
+                            (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
+                            (float)(worldCoords[1] * hexSize * 2 / 2)
                         )
                     };
 
@@ -118,23 +135,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 currentHexSprite.Color = nodeColor;
             });
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            UpdateSpriteMatrix(gameTime);
-        }
-
-        public void Draw(Matrix transform)
-        {
-            _spriteBatch.Begin(transformMatrix: transform);
-
-            foreach (var hexSprite in _hexSprites.Values.ToArray())
-            {
-                hexSprite.Draw(_spriteBatch);
-            }
-
-            _spriteBatch.End();
         }
     }
 }

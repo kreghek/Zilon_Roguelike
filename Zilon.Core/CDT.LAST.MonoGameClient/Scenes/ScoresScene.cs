@@ -2,7 +2,7 @@
 
 namespace CDT.LIV.MonoGameClient.Scenes
 {
-    class ScoresScene : GameSceneBase
+    internal class ScoresScene : GameSceneBase
     {
         public ScoresScene(Game game) : base(game)
         {

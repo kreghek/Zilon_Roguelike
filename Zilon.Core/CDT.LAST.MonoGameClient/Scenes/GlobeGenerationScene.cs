@@ -14,13 +14,12 @@ using Zilon.Core.World;
 
 namespace CDT.LIV.MonoGameClient.Scenes
 {
-    class GlobeGenerationScene : GameSceneBase
+    internal class GlobeGenerationScene : GameSceneBase
     {
-        private bool _generationWasStarted;
-        private readonly SpriteBatch _spriteBatch;
-        private readonly MainScene _mainScene;
-
         public static string? _lastError = "";
+        private readonly MainScene _mainScene;
+        private readonly SpriteBatch _spriteBatch;
+        private bool _generationWasStarted;
 
 
         public GlobeGenerationScene(Game game, SpriteBatch spriteBatch) : base(game)
@@ -52,7 +51,9 @@ namespace CDT.LIV.MonoGameClient.Scenes
 
             // If they hit esc, exit
             if (state.IsKeyDown(Keys.Escape))
+            {
                 Game.Exit();
+            }
 
             if (state.IsKeyDown(Keys.Up))
             {
@@ -81,10 +82,9 @@ namespace CDT.LIV.MonoGameClient.Scenes
                             TaskContinuationOptions.OnlyOnFaulted);
                         commandLoopTask.ContinueWith(task => _lastError += "Game loop stopped.",
                             TaskContinuationOptions.OnlyOnCanceled);
-
                     });
 
-                    generateGlobeTask.ContinueWith((task) =>
+                    generateGlobeTask.ContinueWith(task =>
                     {
                         TargetScene = _mainScene;
                     }, TaskContinuationOptions.OnlyOnRanToCompletion);

@@ -2,7 +2,7 @@
 
 namespace CDT.LIV.MonoGameClient
 {
-    class SceneManager : DrawableGameComponent
+    internal class SceneManager : DrawableGameComponent
     {
         public SceneManager(Game game) : base(game)
         {

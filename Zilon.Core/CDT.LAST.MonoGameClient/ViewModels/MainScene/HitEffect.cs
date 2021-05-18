@@ -1,5 +1,4 @@
-﻿
-using CDT.LIV.MonoGameClient.Engine;
+﻿using CDT.LIV.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,12 +7,11 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 {
     public sealed class HitEffect
     {
-        private readonly LivGame _game;
+        private const double EFFECT_DISPLAY_DURATION_SECONDS = 0.3f;
         private readonly Vector2 _direction;
+        private readonly LivGame _game;
         private readonly Sprite _hitSprite;
         private double _counter;
-        private const double EFFECT_DISPLAY_DURATION_SECONDS = 0.3f;
-        public bool IsComplete => _counter <= 0;
 
         public HitEffect(LivGame game, Vector2 targetSpritePosition, Vector2 direction)
         {
@@ -34,6 +32,16 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _counter = EFFECT_DISPLAY_DURATION_SECONDS;
         }
 
+        public bool IsComplete => _counter <= 0;
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            if (!IsComplete)
+            {
+                _hitSprite.Draw(spriteBatch);
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
             _counter -= gameTime.ElapsedGameTime.TotalSeconds;
@@ -41,14 +49,6 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             {
                 //_hitSprite.Color = new Color(Color.White, /*(float)(_counter / EFFECT_DISPLAY_DURATION_SECONDS) * 0.5f +*/ 0.25f);
                 _hitSprite.ScaleScalar = 1 - (float)(_counter / EFFECT_DISPLAY_DURATION_SECONDS);
-            }
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            if (!IsComplete)
-            {
-                _hitSprite.Draw(spriteBatch);
             }
         }
     }

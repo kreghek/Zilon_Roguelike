@@ -10,11 +10,11 @@ using Zilon.Core.World;
 
 namespace CDT.LIV.MonoGameClient.Scenes
 {
-    class TransitionScene : GameSceneBase
+    internal class TransitionScene : GameSceneBase
     {
         private readonly IPlayer _player;
-        private readonly ITransitionPool _transitionPool;
         private readonly SpriteBatch _spriteBatch;
+        private readonly ITransitionPool _transitionPool;
 
         private bool _targetSceneInitialized;
 

@@ -20,12 +20,12 @@ namespace CDT.LIV.MonoGameClient.Scenes
             var actorPosition = new Vector2(
                 (float)(playerActorWorldCoords[0] * hexSize * System.Math.Sqrt(3)),
                 (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
-                );
+            );
 
             var position = Matrix.CreateTranslation(
-              -actorPosition.X,
-              -actorPosition.Y,
-              0);
+                -actorPosition.X,
+                -actorPosition.Y,
+                0);
 
             var offset = Matrix.CreateTranslation(
                 game.GraphicsDevice.Viewport.Width / 2,

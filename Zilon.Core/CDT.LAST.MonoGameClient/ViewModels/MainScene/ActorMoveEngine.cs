@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 using CDT.LIV.MonoGameClient.Engine;
 
@@ -12,20 +11,19 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
     public sealed class ActorMoveEngine : IActorStateEngine
     {
         private const float ANIMATION_DURATION_SECONDS = 1f;
-
-        private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
+        private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly Container _graphicsRoot;
+        private readonly ICommandBlocker _moveBlocker;
 
         private readonly Container _rootSprite;
-        private readonly Container _graphicsRoot;
         private readonly Sprite _shadowSprite;
-        private Vector2 _targetPosition;
-        private readonly IAnimationBlockerService _animationBlockerService;
-        private readonly ICommandBlocker _moveBlocker;
-        private Vector2 _startPosition;
 
-        public bool IsComplete => _animationCounterSeconds <= 0;
+        private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
+        private readonly Vector2 _startPosition;
+        private readonly Vector2 _targetPosition;
 
-        public ActorMoveEngine(Container rootSprite, Container graphicsRoot, Sprite shadowSprite, Vector2 targetPosition, IAnimationBlockerService animationBlockerService)
+        public ActorMoveEngine(Container rootSprite, Container graphicsRoot, Sprite shadowSprite,
+            Vector2 targetPosition, IAnimationBlockerService animationBlockerService)
         {
             _rootSprite = rootSprite;
             _graphicsRoot = graphicsRoot;
@@ -40,6 +38,8 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _animationBlockerService.AddBlocker(_moveBlocker);
         }
+
+        public bool IsComplete => _animationCounterSeconds <= 0;
 
         public void Update(GameTime gameTime)
         {

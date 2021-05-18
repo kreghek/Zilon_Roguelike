@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 using CDT.LIV.MonoGameClient.Engine;
 
@@ -12,17 +11,18 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
     public sealed class ActorMeleeAttackEngine : IActorStateEngine
     {
         private const double ANIMATION_DURATION_SECONDS = 0.5;
+        private readonly ICommandBlocker _animationBlocker;
+        private readonly IAnimationBlockerService _animationBlockerService;
+
+        private readonly Container _rootContainer;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
-        private readonly Container _rootContainer;
-        private readonly IAnimationBlockerService _animationBlockerService;
-        private readonly ICommandBlocker _animationBlocker;
+        private readonly Vector2 _startPosition;
+        private readonly Vector2 _targetPosition;
 
-        private Vector2 _startPosition;
-        private Vector2 _targetPosition;
-
-        public ActorMeleeAttackEngine(Container rootContainer, Vector2 targetPosition, IAnimationBlockerService animationBlockerService)
+        public ActorMeleeAttackEngine(Container rootContainer, Vector2 targetPosition,
+            IAnimationBlockerService animationBlockerService)
         {
             _rootContainer = rootContainer;
             _animationBlockerService = animationBlockerService;

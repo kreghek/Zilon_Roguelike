@@ -34,7 +34,8 @@ namespace CDT.LIV.MonoGameClient
             serviceCollection.AddSingleton<LogicStateTreePatterns>();
 
             serviceCollection.AddSingleton<IHumanActorTaskSource, HumanActorTaskSource>();
-            serviceCollection.AddSingleton<IActorTaskSource>(provider => provider.GetRequiredService<IHumanActorTaskSource>());
+            serviceCollection.AddSingleton<IActorTaskSource>(provider =>
+                provider.GetRequiredService<IHumanActorTaskSource>());
         }
 
         protected override void RegisterSchemeService(IServiceCollection container)

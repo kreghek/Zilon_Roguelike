@@ -23,12 +23,29 @@ namespace CDT.LIV.MonoGameClient
         }
 
         /// <summary>
-        /// Show the scene
+        /// Components of Game Scene
         /// </summary>
-        public virtual void Show()
+        public List<GameComponent> Components => components;
+
+        public GameSceneBase? TargetScene { get; set; }
+
+        /// <summary>
+        /// Allows the game component draw your content in game screen
+        /// </summary>
+        public override void Draw(GameTime gameTime)
         {
-            Visible = true;
-            Enabled = true;
+            // Draw the child GameComponents (if drawable)
+            for (int i = 0; i < components.Count; i++)
+            {
+                GameComponent gc = components[i];
+                if ((gc is DrawableGameComponent) &&
+                    ((DrawableGameComponent)gc).Visible)
+                {
+                    ((DrawableGameComponent)gc).Draw(gameTime);
+                }
+            }
+
+            base.Draw(gameTime);
         }
 
         /// <summary>
@@ -41,11 +58,12 @@ namespace CDT.LIV.MonoGameClient
         }
 
         /// <summary>
-        /// Components of Game Scene
+        /// Show the scene
         /// </summary>
-        public List<GameComponent> Components
+        public virtual void Show()
         {
-            get { return components; }
+            Visible = true;
+            Enabled = true;
         }
 
         /// <summary>
@@ -65,25 +83,5 @@ namespace CDT.LIV.MonoGameClient
 
             base.Update(gameTime);
         }
-
-        /// <summary>
-        /// Allows the game component draw your content in game screen
-        /// </summary>
-        public override void Draw(GameTime gameTime)
-        {
-            // Draw the child GameComponents (if drawable)
-            for (int i = 0; i < components.Count; i++)
-            {
-                GameComponent gc = components[i];
-                if ((gc is DrawableGameComponent) &&
-                    ((DrawableGameComponent)gc).Visible)
-                {
-                    ((DrawableGameComponent)gc).Draw(gameTime);
-                }
-            }
-            base.Draw(gameTime);
-        }
-
-        public GameSceneBase? TargetScene { get; set; }
     }
 }

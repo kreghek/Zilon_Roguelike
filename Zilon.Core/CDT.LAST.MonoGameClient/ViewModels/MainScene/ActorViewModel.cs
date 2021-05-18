@@ -23,16 +23,17 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
         private const int UNIT_SIZE = 32;
 
         private readonly Game _game;
-        private readonly SectorViewModelContext _sectorViewModelContext;
-        private readonly SpriteBatch _spriteBatch;
+        private readonly Container _graphicsRoot;
 
         private readonly Container _rootSprite;
+        private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly Sprite _shadowSprite;
-        private readonly Container _graphicsRoot;
+        private readonly SpriteBatch _spriteBatch;
 
         private IActorStateEngine _actorStateEngine;
 
-        public ActorViewModel(Game game, IActor actor, SectorViewModelContext sectorViewModelContext, SpriteBatch spriteBatch)
+        public ActorViewModel(Game game, IActor actor, SectorViewModelContext sectorViewModelContext,
+            SpriteBatch spriteBatch)
         {
             _game = game;
             Actor = actor;
@@ -58,10 +59,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _rootSprite.AddChild(_shadowSprite);
 
-            var graphicsRoot = new Container
-            {
-
-            };
+            var graphicsRoot = new Container();
 
             _rootSprite.AddChild(graphicsRoot);
 
@@ -102,7 +100,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             var newPosition = new Vector2(
                 (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
                 (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
-                );
+            );
 
             _rootSprite.Position = newPosition;
 
@@ -112,71 +110,10 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot);
         }
 
-        private void Actor_UsedAct(object? sender, UsedActEventArgs e)
-        {
-            var stats = e.TacticalAct.Stats;
-            if (stats is null)
-            {
-                throw new InvalidOperationException("The act has no stats to select visualization.");
-            }
-
-            if (Visible)
-            {
-                if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
-                {
-                    var serviceScope = ((LivGame)_game).ServiceProvider;
-
-                    var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-
-                    var hexSize = UNIT_SIZE / 2;
-                    var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)e.TargetNode).OffsetCoords);
-                    var newPosition = new Vector2(
-                        (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                        (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
-                        );
-
-                    var targetSpritePosition = newPosition;
-                    _actorStateEngine = new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService);
-
-                    var targetGameObject = _sectorViewModelContext.GameObjects.Single(x => x.Node == e.TargetNode);
-                    _sectorViewModelContext.EffectManager.HitEffects.Add(new HitEffect((LivGame)_game,
-                        targetSpritePosition + targetGameObject.HitEffectPosition,
-                        targetSpritePosition - _rootSprite.Position));
-                }
-            }
-        }
-
-        private void Actor_Moved(object? sender, EventArgs e)
-        {
-            var hexSize = UNIT_SIZE / 2;
-            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
-            var newPosition = new Vector2(
-                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
-                );
-
-            if (Visible)
-            {
-                var serviceScope = ((LivGame)_game).ServiceProvider;
-
-                var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-
-                var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot, _shadowSprite, newPosition, animationBlockerService);
-                _actorStateEngine = moveEngine;
-            }
-            else
-            {
-                _rootSprite.Position = newPosition;
-            }
-        }
-
-        public IActor Actor { get; set; }
-        public object Item => Actor;
-
         public override bool HiddenByFow => true;
-        public override IGraphNode Node => Actor.Node;
 
         public override Vector2 HitEffectPosition => Vector2.UnitY * -24;
+        public override IGraphNode Node => Actor.Node;
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {
@@ -201,11 +138,74 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                     var newPosition = new Vector2(
                         (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
                         (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
-                        );
+                    );
 
                     _rootSprite.Position = newPosition;
                 }
             }
         }
+
+        private void Actor_Moved(object? sender, EventArgs e)
+        {
+            var hexSize = UNIT_SIZE / 2;
+            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
+            var newPosition = new Vector2(
+                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+            );
+
+            if (Visible)
+            {
+                var serviceScope = ((LivGame)_game).ServiceProvider;
+
+                var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+                var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot, _shadowSprite, newPosition,
+                    animationBlockerService);
+                _actorStateEngine = moveEngine;
+            }
+            else
+            {
+                _rootSprite.Position = newPosition;
+            }
+        }
+
+        private void Actor_UsedAct(object? sender, UsedActEventArgs e)
+        {
+            var stats = e.TacticalAct.Stats;
+            if (stats is null)
+            {
+                throw new InvalidOperationException("The act has no stats to select visualization.");
+            }
+
+            if (Visible)
+            {
+                if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
+                {
+                    var serviceScope = ((LivGame)_game).ServiceProvider;
+
+                    var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+                    var hexSize = UNIT_SIZE / 2;
+                    var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)e.TargetNode).OffsetCoords);
+                    var newPosition = new Vector2(
+                        (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                        (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                    );
+
+                    var targetSpritePosition = newPosition;
+                    _actorStateEngine =
+                        new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService);
+
+                    var targetGameObject = _sectorViewModelContext.GameObjects.Single(x => x.Node == e.TargetNode);
+                    _sectorViewModelContext.EffectManager.HitEffects.Add(new HitEffect((LivGame)_game,
+                        targetSpritePosition + targetGameObject.HitEffectPosition,
+                        targetSpritePosition - _rootSprite.Position));
+                }
+            }
+        }
+
+        public IActor Actor { get; set; }
+        public object Item => Actor;
     }
 }

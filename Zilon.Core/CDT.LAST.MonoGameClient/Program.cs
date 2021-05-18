@@ -12,7 +12,7 @@ namespace CDT.LIV.MonoGameClient
     public static class Program
     {
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             var serviceContainer = new ServiceCollection();
             var startUp = new StartUp();
@@ -29,7 +29,6 @@ namespace CDT.LIV.MonoGameClient
             RegisterCommands(serviceContainer);
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
-
 
             using var game = new LivGame(serviceProvider);
 
