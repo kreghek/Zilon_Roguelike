@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,15 +7,25 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CDT.LAST.MonoGameClient.Engine
 {
+    enum UiButtonState
+    { 
+        Undefined,
+        OutOfButton,
+        Hover,
+        Pressed
+    }
+
     class Button
     {
-        int buttonX, buttonY;
+        private UiButtonState _buttonState;
+        private readonly int _buttonX;
+        private readonly int _buttonY;
 
         public int ButtonX
         {
             get
             {
-                return buttonX;
+                return _buttonX;
             }
         }
 
@@ -26,23 +33,24 @@ namespace CDT.LAST.MonoGameClient.Engine
         {
             get
             {
-                return buttonY;
+                return _buttonY;
             }
         }
 
         public string Name { get; }
         public Texture2D Texture { get; }
 
-        public Action Click { get; set; }
+        public Action? Click { get; set; }
 
-        private MouseState _lastMousState;
+        private MouseState _lastMouseState;
 
         public Button(string name, Texture2D texture, int buttonX, int buttonY)
         {
             Name = name;
             Texture = texture;
-            this.buttonX = buttonX;
-            this.buttonY = buttonY;
+            _buttonX = buttonX;
+            _buttonY = buttonY;
+            _buttonState = UiButtonState.OutOfButton;
         }
 
         private bool CheckMouseOver()
@@ -50,8 +58,8 @@ namespace CDT.LAST.MonoGameClient.Engine
             var mouseState = Mouse.GetState();
 
             var mousePosition = mouseState.Position;
-            if (mousePosition.X > buttonX && mousePosition.X < buttonX + Texture.Width &&
-                mousePosition.Y > buttonY && mousePosition.Y < buttonY + Texture.Height)
+            if (mousePosition.X > _buttonX && mousePosition.X < _buttonX + Texture.Width &&
+                mousePosition.Y > _buttonY && mousePosition.Y < _buttonY + Texture.Height)
             {
                 return true;
             }
@@ -61,15 +69,48 @@ namespace CDT.LAST.MonoGameClient.Engine
         public void Update()
         {
             var mouseState = Mouse.GetState();
-            if (CheckMouseOver() && _lastMousState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
+            if (CheckMouseOver())
             {
-                _lastMousState = mouseState;
-                Click?.Invoke();
+                if (_buttonState == UiButtonState.Hover && mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    _buttonState = UiButtonState.Pressed;
+                }
+                else if (mouseState.LeftButton == ButtonState.Released && _buttonState == UiButtonState.Pressed)
+                {
+                    _buttonState = UiButtonState.Hover;
+                    Click?.Invoke();
+                }
+                else if (mouseState.LeftButton == ButtonState.Released)
+                {
+                    _buttonState = UiButtonState.Hover;
+                }
+            }
+            else
+            {
+                _buttonState = UiButtonState.OutOfButton;
             }
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, new Rectangle(ButtonX, ButtonY, Texture.Width, Texture.Height), Color.White);
+            var color = Color.White;
+            if (_buttonState == UiButtonState.OutOfButton)
+            {
+
+            }
+            else if (_buttonState == UiButtonState.Hover)
+            {
+                color = Color.Lerp(color, Color.Wheat, 0.25f);
+            }
+            else if (_buttonState == UiButtonState.Pressed)
+            {
+                color = Color.Lerp(color, Color.Wheat, 0.75f);
+            }
+            else
+            {
+                color = Color.Red;
+            }
+
+            spriteBatch.Draw(Texture, new Rectangle(ButtonX, ButtonY, Texture.Width, Texture.Height), color);
         }
     }
 }
