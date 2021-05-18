@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace CDT.LIV.MonoGameClient.Scenes
+namespace CDT.LAST.MonoGameClient.Scenes
 {
     internal class ScoresScene : GameSceneBase
     {

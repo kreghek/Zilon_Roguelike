@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-using CDT.LIV.MonoGameClient.Scenes;
+using CDT.LAST.MonoGameClient.Scenes;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -13,7 +13,7 @@ using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class CommandInput
     {

@@ -1,4 +1,4 @@
-﻿using CDT.LIV.MonoGameClient.Engine;
+﻿using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,7 +9,7 @@ using Zilon.Core.Graphs;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class StaticObjectViewModel : GameObjectBase, IContainerViewModel
     {
@@ -17,7 +17,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
         private readonly Game _game;
         private readonly Texture2D _personHeadSprite;
-        private readonly Container _rootSprite;
+        private readonly SpriteContainer _rootSprite;
         private readonly SpriteBatch _spriteBatch;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
@@ -26,7 +26,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             StaticObject = staticObject;
             _spriteBatch = spriteBatch;
 
-            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/Head");
+            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/game-objects/human/head");
 
             var worldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
 
@@ -36,12 +36,12 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 (float)(worldCoords[1] * hexSize * 2 / 2)
             );
 
-            _rootSprite = new Container
+            _rootSprite = new SpriteContainer
             {
                 Position = staticObjectPosition
             };
 
-            var graphicsRoot = new Container();
+            var graphicsRoot = new SpriteContainer();
             _rootSprite.AddChild(graphicsRoot);
 
             graphicsRoot.AddChild(new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 1), color: Color.Black));

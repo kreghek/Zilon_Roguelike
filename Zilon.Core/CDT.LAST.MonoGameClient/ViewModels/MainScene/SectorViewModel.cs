@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using CDT.LIV.MonoGameClient.Scenes;
+using CDT.LAST.MonoGameClient.Scenes;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -17,7 +17,7 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class SectorViewModelContext
     {

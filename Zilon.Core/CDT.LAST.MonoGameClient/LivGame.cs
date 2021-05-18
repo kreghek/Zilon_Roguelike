@@ -1,9 +1,6 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
-using CDT.LIV.MonoGameClient.Scenes;
+using CDT.LAST.MonoGameClient.Scenes;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -13,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
 
-namespace CDT.LIV.MonoGameClient
+namespace CDT.LAST.MonoGameClient
 {
     public class LivGame : Game
     {

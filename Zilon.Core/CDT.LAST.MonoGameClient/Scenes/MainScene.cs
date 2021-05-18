@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-using CDT.LIV.MonoGameClient.ViewModels.MainScene;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
-using Zilon.Core.Client.Sector;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
-namespace CDT.LIV.MonoGameClient.Scenes
+namespace CDT.LAST.MonoGameClient.Scenes
 {
     internal class MainScene : GameSceneBase
     {

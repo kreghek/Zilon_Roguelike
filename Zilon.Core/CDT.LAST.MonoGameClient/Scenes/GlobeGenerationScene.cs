@@ -9,10 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client.Sector;
-using Zilon.Core.Players;
 using Zilon.Core.World;
 
-namespace CDT.LIV.MonoGameClient.Scenes
+namespace CDT.LAST.MonoGameClient.Scenes
 {
     internal class GlobeGenerationScene : GameSceneBase
     {

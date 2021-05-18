@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace CDT.LIV.MonoGameClient.Scenes
+namespace CDT.LAST.MonoGameClient.Scenes
 {
     internal class TitleScene : GameSceneBase
     {

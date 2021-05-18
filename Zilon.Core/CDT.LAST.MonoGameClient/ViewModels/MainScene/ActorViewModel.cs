@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-using CDT.LIV.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -12,20 +12,21 @@ using Zilon.Core.Client.Sector;
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
-namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class ActorViewModel : GameObjectBase, IActorViewModel
     {
         private const int UNIT_SIZE = 32;
 
         private readonly Game _game;
-        private readonly Container _graphicsRoot;
+        private readonly IActorGraphics _graphicsRoot;
 
-        private readonly Container _rootSprite;
+        private readonly SpriteContainer _rootSprite;
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly Sprite _shadowSprite;
         private readonly SpriteBatch _spriteBatch;
@@ -42,14 +43,9 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
 
-            var personHeadSprite = _game.Content.Load<Texture2D>("Sprites/head");
-            var personBodySprite = _game.Content.Load<Texture2D>("Sprites/body");
-            var personLegsSprite = _game.Content.Load<Texture2D>("Sprites/legs_idle");
-            var personArmLeftSprite = _game.Content.Load<Texture2D>("Sprites/arm-left-simple");
-            var personArmRightSprite = _game.Content.Load<Texture2D>("Sprites/arm-right-simple");
             var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
 
-            _rootSprite = new Container();
+            _rootSprite = new SpriteContainer();
             _shadowSprite = new Sprite(shadowTexture)
             {
                 Position = new Vector2(0, 0),
@@ -59,41 +55,23 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
             _rootSprite.AddChild(_shadowSprite);
 
-            var graphicsRoot = new Container();
-
-            _rootSprite.AddChild(graphicsRoot);
-
-            graphicsRoot.AddChild(new Sprite(personArmLeftSprite)
+            var isHumanGraphics = Actor.Person is HumanPerson;
+            if (isHumanGraphics)
             {
-                Position = new Vector2(-10, -20),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
+                var graphicsRoot = new HumanoidGraphics(game.Content);
 
-            graphicsRoot.AddChild(new Sprite(personLegsSprite)
+                _rootSprite.AddChild(graphicsRoot);
+
+                _graphicsRoot = graphicsRoot;
+            }
+            else
             {
-                Position = new Vector2(0, 0),
-                Origin = new Vector2(0.5f, 0.75f)
-            });
+                var graphicsRoot = new AnimalGraphics(game.Content);
 
-            graphicsRoot.AddChild(new Sprite(personBodySprite)
-            {
-                Position = new Vector2(3, -22),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
+                _rootSprite.AddChild(graphicsRoot);
 
-            graphicsRoot.AddChild(new Sprite(personHeadSprite)
-            {
-                Position = new Vector2(-0, -20),
-                Origin = new Vector2(0.5f, 1)
-            });
-
-            graphicsRoot.AddChild(new Sprite(personArmRightSprite)
-            {
-                Position = new Vector2(13, -20),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
-
-            _graphicsRoot = graphicsRoot;
+                _graphicsRoot = graphicsRoot;
+            }
 
             var hexSize = UNIT_SIZE / 2;
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
@@ -107,12 +85,12 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
             Actor.Moved += Actor_Moved;
             Actor.UsedAct += Actor_UsedAct;
 
-            _actorStateEngine = new ActorIdleEngine(_graphicsRoot);
+            _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
 
         public override bool HiddenByFow => true;
 
-        public override Vector2 HitEffectPosition => Vector2.UnitY * -24;
+        public override Vector2 HitEffectPosition => _graphicsRoot.HitEffectPosition;
         public override IGraphNode Node => Actor.Node;
 
         public override void Draw(GameTime gameTime, Matrix transform)
@@ -131,7 +109,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
                 _actorStateEngine.Update(gameTime);
                 if (_actorStateEngine.IsComplete)
                 {
-                    _actorStateEngine = new ActorIdleEngine(_graphicsRoot);
+                    _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
 
                     var hexSize = UNIT_SIZE / 2;
                     var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
@@ -160,7 +138,7 @@ namespace CDT.LIV.MonoGameClient.ViewModels.MainScene
 
                 var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-                var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot, _shadowSprite, newPosition,
+                var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot.RootSprite, _shadowSprite, newPosition,
                     animationBlockerService);
                 _actorStateEngine = moveEngine;
             }
