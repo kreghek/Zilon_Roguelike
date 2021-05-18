@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-using CDT.LIV.MonoGameClient.Scenes;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

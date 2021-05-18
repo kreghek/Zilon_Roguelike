@@ -6,6 +6,7 @@ using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;

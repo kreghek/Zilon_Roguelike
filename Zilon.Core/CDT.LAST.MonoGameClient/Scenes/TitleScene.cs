@@ -1,4 +1,6 @@
 ﻿
+using CDT.LAST.MonoGameClient.Engine;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,6 +10,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
     internal class TitleScene : GameSceneBase
     {
         private readonly GlobeGenerationScene _globeGenerationScene;
+        private readonly Button _startButton;
         private readonly SpriteBatch _spriteBatch;
 
         public TitleScene(Game game, SpriteBatch spriteBatch) : base(game)
@@ -15,6 +18,18 @@ namespace CDT.LAST.MonoGameClient.Scenes
             _spriteBatch = spriteBatch;
 
             _globeGenerationScene = new GlobeGenerationScene(game, spriteBatch);
+
+            var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
+
+            _startButton = new Button("start", buttonTexture, 100, 100)
+            {
+                Click = StartButtonClickHandler
+            };
+        }
+
+        private void StartButtonClickHandler()
+        {
+            TargetScene = _globeGenerationScene;
         }
 
         public override void Draw(GameTime gameTime)
@@ -23,9 +38,11 @@ namespace CDT.LAST.MonoGameClient.Scenes
 
             _spriteBatch.Begin();
 
+            _startButton.Draw(_spriteBatch);
+
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
-            _spriteBatch.DrawString(font, "Title", new Vector2(100, 100), Color.White);
+            _spriteBatch.DrawString(font, "Title", new Vector2(50, 100), Color.White);
 
             _spriteBatch.End();
         }
@@ -43,10 +60,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
                 Game.Exit();
             }
 
-            if (state.IsKeyDown(Keys.Up))
-            {
-                TargetScene = _globeGenerationScene;
-            }
+            _startButton.Update();
         }
     }
 }
