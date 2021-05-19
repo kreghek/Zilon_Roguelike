@@ -14,8 +14,8 @@ on:
       - 'v*.*.*'
 
 jobs:
-  buildRelease:
-    name: Build release text client
+  build:
+    name: Build clients in Release mode
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -24,50 +24,6 @@ jobs:
           - CDT.LAST.MonoGameClient
         configuration:
           - Release
-        runtime:
-          - win-x64
-          - linux-x64
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup .NET5
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.100'
-
-      - name: Setup .NET 3.1
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '3.1'
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
-        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net5 --output bin --runtime ${{ matrix.runtime }} --self-contained true /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
-        
-      - if: contains(['MonoGameClient'],matrix.project)
-        name: Copy schemes
-        run: cp -a /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/. /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/CDT.LIV.Game/bin/Content/Schemes/
-      
-      - uses: actions/upload-artifact@v1
-        with:
-          name: ${{ matrix.project }}
-          path: bin
-  buildDebug:
-    name: Build debug text client
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project:
-          - Zilon.TextClient
-          - CDT.LAST.MonoGameClient
-        configuration:
           - Debug
         runtime:
           - win-x64
@@ -93,14 +49,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
+      - if: contains(['Release'],matrix.configuration)
+        name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
+        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net5 --output bin --runtime ${{ matrix.runtime }} --self-contained true /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+
+      - if: contains(['Debug'],matrix.configuration)
+        name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
         run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework netcoreapp3.1 --output bin --runtime ${{ matrix.runtime }} --no-self-contained
-      
+
       - if: contains(['MonoGameClient'],matrix.project)
         name: Copy schemes
         run: cp -a /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Core/Zilon.Client/Assets/Resources/Schemes/. /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/CDT.LIV.Game/bin/Content/Schemes/
       
       - uses: actions/upload-artifact@v1
         with:
-          name: ${{ matrix.project }}
+          name: ${{ matrix.project }}-Release
           path: bin
