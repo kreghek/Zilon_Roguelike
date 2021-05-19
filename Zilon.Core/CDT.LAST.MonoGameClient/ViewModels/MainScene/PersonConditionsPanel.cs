@@ -16,8 +16,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal class PersonConditionsPanel
     {
         private readonly Texture2D _conditionBackgroundTexture;
-        private readonly Dictionary<string, Texture2D> _conditionIconTextureDict;
         private readonly Texture2D _conditionHintBackgroundTexture;
+        private readonly Dictionary<string, Texture2D> _conditionIconTextureDict;
         private readonly SpriteFont _hintTitleFont;
         private readonly ISectorUiState _uiState;
         private IPersonEffect? _selectedCondition;
@@ -26,9 +26,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             _uiState = uiState;
 
-            _conditionBackgroundTexture = game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/ConditionIconBackground");
+            _conditionBackgroundTexture =
+                game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/ConditionIconBackground");
 
-            var conditionIconTextureSids = new[] {
+            var conditionIconTextureSids = new[]
+            {
                 "HungerLesser",
                 "HungerStrong",
                 "HungerCritical",
@@ -46,7 +48,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _conditionIconTextureDict = conditionIconTextureSids.ToDictionary(
                 sid => sid,
                 sid => game.Content.Load<Texture2D>($"Sprites/ui/PersonConditions/{sid}ConditionIcon"));
-            _conditionHintBackgroundTexture = game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/ConditionHintBackground");
+            _conditionHintBackgroundTexture =
+                game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/ConditionHintBackground");
             _hintTitleFont = game.Content.Load<SpriteFont>("Fonts/HintTitle");
         }
 
@@ -72,40 +75,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             DrawHintIfSelected(spriteBatch, effectsModule);
-        }
-
-        private string GetConditionSid(IPersonEffect personCondition)
-        {
-            switch (personCondition)
-            {
-                case SurvivalStatHazardEffect statEffect:
-                    return $"{statEffect.Type}{statEffect.Level}";
-
-                case DiseaseSymptomEffect:
-                    return $"DiseaseSymptom";
-
-                default:
-                    Debug.Fail("Every condition must have icon.");
-                    return "HungerLesser";
-            }
-        }
-
-        private void DrawHintIfSelected(SpriteBatch spriteBatch, IEffectsModule effectsModule)
-        {
-            if (_selectedCondition != null)
-            {
-                var effectTitle = _selectedCondition.ToString();
-                var titleTextSizeVector = _hintTitleFont.MeasureString(effectTitle);
-                var selectedEffectIndex = effectsModule.Items.ToList().IndexOf(_selectedCondition);
-                var hintXPosition = selectedEffectIndex * 18;
-
-                var hintRectangle = new Rectangle(hintXPosition, 18,
-                    (int)titleTextSizeVector.X + 4, (int)titleTextSizeVector.Y + 4);
-
-                spriteBatch.Draw(_conditionHintBackgroundTexture, hintRectangle, Color.DarkSlateGray);
-
-                spriteBatch.DrawString(_hintTitleFont, effectTitle, new Vector2(hintRectangle.Left + 2, hintRectangle.Top + 2), Color.Wheat);
-            }
         }
 
         public void Update()
@@ -136,6 +105,41 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             else
             {
                 _selectedCondition = null;
+            }
+        }
+
+        private void DrawHintIfSelected(SpriteBatch spriteBatch, IEffectsModule effectsModule)
+        {
+            if (_selectedCondition != null)
+            {
+                var effectTitle = _selectedCondition.ToString();
+                var titleTextSizeVector = _hintTitleFont.MeasureString(effectTitle);
+                var selectedEffectIndex = effectsModule.Items.ToList().IndexOf(_selectedCondition);
+                var hintXPosition = selectedEffectIndex * 18;
+
+                var hintRectangle = new Rectangle(hintXPosition, 18,
+                    (int)titleTextSizeVector.X + 4, (int)titleTextSizeVector.Y + 4);
+
+                spriteBatch.Draw(_conditionHintBackgroundTexture, hintRectangle, Color.DarkSlateGray);
+
+                spriteBatch.DrawString(_hintTitleFont, effectTitle,
+                    new Vector2(hintRectangle.Left + 2, hintRectangle.Top + 2), Color.Wheat);
+            }
+        }
+
+        private string GetConditionSid(IPersonEffect personCondition)
+        {
+            switch (personCondition)
+            {
+                case SurvivalStatHazardEffect statEffect:
+                    return $"{statEffect.Type}{statEffect.Level}";
+
+                case DiseaseSymptomEffect:
+                    return "DiseaseSymptom";
+
+                default:
+                    Debug.Fail("Every condition must have icon.");
+                    return "HungerLesser";
             }
         }
     }
