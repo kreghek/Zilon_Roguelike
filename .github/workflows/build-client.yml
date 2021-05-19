@@ -57,7 +57,7 @@ jobs:
 
       - name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
         if: ${{ contains('Debug', matrix.configuration) }}
-        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework netcoreapp3.1 --output bin --runtime ${{ matrix.runtime }} --no-self-contained
+        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net5 --output bin --runtime ${{ matrix.runtime }} --no-self-contained
 
       - name: Copy scheme catalog into bin directory for ${{ matrix.project }}
         if: ${{ contains('MonoGameClient', matrix.project) }}
