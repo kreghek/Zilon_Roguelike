@@ -182,7 +182,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         // This situation can be then the target actor moved before the attack reaches the target.
                     }
                     else
-                    { 
+                    {
                         _sectorViewModelContext.EffectManager.HitEffects.Add(new HitEffect((LivGame)_game,
                             targetSpritePosition + targetGameObject.HitEffectPosition,
                             targetSpritePosition - _rootSprite.Position));
