@@ -82,6 +82,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
                     if (_currentSector == sectorNode.Sector)
                     {
                         _camera.Follow(_uiState.ActiveActor, Game);
+                        _personEffectsPanel.Update();
                     }
                     else if (!_isTransitionPerforming)
                     {
