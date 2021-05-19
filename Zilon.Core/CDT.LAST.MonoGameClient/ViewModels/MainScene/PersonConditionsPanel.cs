@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,13 +9,14 @@ using Microsoft.Xna.Framework.Input;
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Persons.Survival;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class PersonConditionsPanel
     {
         private readonly Texture2D _conditionBackgroundTexture;
-        private readonly Texture2D _conditionIconTexture;
+        private readonly Dictionary<string, Texture2D> _conditionIconTextureDict;
         private readonly Texture2D _conditionHintBackgroundTexture;
         private readonly SpriteFont _hintTitleFont;
         private readonly ISectorUiState _uiState;
@@ -24,7 +27,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _uiState = uiState;
 
             _conditionBackgroundTexture = game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/ConditionIconBackground");
-            _conditionIconTexture = game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/HungerLesserConditionIcon");
+
+            var conditionIconTextureSids = new[] {
+                "HungerLesser",
+                "HungerStrong",
+                "HungerCritical",
+
+                "ThristLesser",
+                "ThristStrong",
+                "ThristCritical",
+
+                "IntoxicationLesser",
+                "IntoxicationStrong",
+                "IntoxicationCritical",
+
+                "DiseaseSymptom"
+            };
+            _conditionIconTextureDict = conditionIconTextureSids.ToDictionary(
+                sid=>sid,
+                sid=> game.Content.Load<Texture2D>($"Sprites/ui/PersonConditions/{sid}ConditionIcon"));
             _conditionHintBackgroundTexture = game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/ConditionHintBackground");
             _hintTitleFont = game.Content.Load<SpriteFont>("Fonts/HintTitle");
         }
@@ -44,11 +65,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 var x = effectIndex * 18;
                 spriteBatch.Draw(_conditionBackgroundTexture, new Rectangle(x, 0, 16, 16), Color.Yellow);
-                spriteBatch.Draw(_conditionIconTexture, new Vector2(x, 0), Color.DarkSlateGray);
+                var conditionIconSid = GetConditionSid(effect);
+                var conditionIconTexture = _conditionIconTextureDict[conditionIconSid];
+                spriteBatch.Draw(conditionIconTexture, new Vector2(x, 0), Color.DarkSlateGray);
                 effectIndex++;
             }
 
             DrawHintIfSelected(spriteBatch, effectsModule);
+        }
+
+        private string GetConditionSid(IPersonEffect personCondition)
+        {
+            switch (personCondition)
+            {
+                case SurvivalStatHazardEffect statEffect:
+                    return $"{statEffect.Type}{statEffect.Level}";
+
+                case DiseaseSymptomEffect:
+                    return $"DiseaseSymptom";
+
+                default:
+                    Debug.Fail("Every condition must have icon.");
+                    return "HungerLesser";
+            }
         }
 
         private void DrawHintIfSelected(SpriteBatch spriteBatch, IEffectsModule effectsModule)

@@ -1827,6 +1827,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/PersonConditions/ConditionHintBackground.png
 
+#begin Sprites/ui/PersonConditions/ConditionHintBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/ConditionHintBackground.png
+
 #begin Sprites/ui/PersonConditions/ConditionIconBackground.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1839,6 +1851,42 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/PersonConditions/ConditionIconBackground.png
 
+#begin Sprites/ui/PersonConditions/ConditionIconBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/ConditionIconBackground.png
+
+#begin Sprites/ui/PersonConditions/DiseaseSymptomConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/DiseaseSymptomConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/HungerCriticalConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/HungerCriticalConditionIcon.png
+
 #begin Sprites/ui/PersonConditions/HungerLesserConditionIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1850,6 +1898,102 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/PersonConditions/HungerLesserConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/HungerLesserConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/HungerLesserConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/HungerStrongConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/HungerStrongConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/IntoxicationCriticalConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/IntoxicationCriticalConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/IntoxicationLesserConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/IntoxicationLesserConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/IntoxicationStrongConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/IntoxicationStrongConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/ThristCriticalConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/ThristCriticalConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/ThristLesserConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/ThristLesserConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/ThristStrongConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/ThristStrongConditionIcon.png
 
 #begin Sprites/ui/walk-cursor.png
 /importer:TextureImporter
