@@ -44,8 +44,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 "DiseaseSymptom"
             };
             _conditionIconTextureDict = conditionIconTextureSids.ToDictionary(
-                sid=>sid,
-                sid=> game.Content.Load<Texture2D>($"Sprites/ui/PersonConditions/{sid}ConditionIcon"));
+                sid => sid,
+                sid => game.Content.Load<Texture2D>($"Sprites/ui/PersonConditions/{sid}ConditionIcon"));
             _conditionHintBackgroundTexture = game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/ConditionHintBackground");
             _hintTitleFont = game.Content.Load<SpriteFont>("Fonts/HintTitle");
         }
