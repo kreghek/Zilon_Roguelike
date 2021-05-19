@@ -6,7 +6,6 @@ using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;
@@ -18,6 +17,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
     internal class MainScene : GameSceneBase
     {
         private readonly Camera _camera;
+        private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -39,6 +39,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
 
             _camera = new Camera();
+            _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
         }
 
         public override void Draw(GameTime gameTime)
@@ -49,6 +50,8 @@ namespace CDT.LAST.MonoGameClient.Scenes
             {
                 _sectorViewModel.Draw(gameTime);
             }
+
+            DrawHud();
         }
 
         public override void Update(GameTime gameTime)
@@ -79,6 +82,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
                     if (_currentSector == sectorNode.Sector)
                     {
                         _camera.Follow(_uiState.ActiveActor, Game);
+                        _personEffectsPanel.Update();
                     }
                     else if (!_isTransitionPerforming)
                     {
@@ -95,6 +99,13 @@ namespace CDT.LAST.MonoGameClient.Scenes
                     TargetScene = new TransitionScene(Game, _spriteBatch);
                 }
             }
+        }
+
+        private void DrawHud()
+        {
+            _spriteBatch.Begin();
+            _personEffectsPanel.Draw(_spriteBatch);
+            _spriteBatch.End();
         }
 
         private static ISectorNode? GetPlayerSectorNode(IPlayer player)
