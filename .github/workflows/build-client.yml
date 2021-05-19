@@ -15,7 +15,7 @@ on:
 
 jobs:
   build:
-    name: Build clients in Release mode
+    name: Build client ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
