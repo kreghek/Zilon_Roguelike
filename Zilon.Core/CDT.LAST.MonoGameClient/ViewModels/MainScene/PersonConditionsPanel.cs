@@ -15,17 +15,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class PersonConditionsPanel
     {
+        private const int ICON_SIZE = 16;
+        private const int ICON_SPACING = 2;
+
         private readonly Texture2D _conditionBackgroundTexture;
         private readonly Texture2D _conditionHintBackgroundTexture;
         private readonly Dictionary<string, Texture2D> _conditionIconTextureDict;
         private readonly SpriteFont _hintTitleFont;
         private readonly ISectorUiState _uiState;
+        private readonly int _screenX;
+        private readonly int _screenY;
         private IPersonEffect? _selectedCondition;
+        private int? _selectedConditionIconIndex;
 
-        public PersonConditionsPanel(Game game, ISectorUiState uiState)
+        public PersonConditionsPanel(Game game, ISectorUiState uiState, int screenX, int screenY)
         {
             _uiState = uiState;
-
+            _screenX = screenX;
+            _screenY = screenY;
             _conditionBackgroundTexture =
                 game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/ConditionIconBackground");
 
@@ -70,15 +77,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var effectIndex = 0;
             foreach (var effect in effectsModule.Items)
             {
-                var x = effectIndex * 18;
-                spriteBatch.Draw(_conditionBackgroundTexture, new Rectangle(x, 0, 16, 16), Color.Yellow);
-                var conditionIconSid = GetConditionSid(effect);
-                var conditionIconTexture = _conditionIconTextureDict[conditionIconSid];
-                spriteBatch.Draw(conditionIconTexture, new Vector2(x, 0), Color.DarkSlateGray);
+                var iconX = effectIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
+
+                DrawIconBackground(spriteBatch, iconX);
+
+                DrawIcon(spriteBatch, effect, iconX);
+
                 effectIndex++;
             }
 
             DrawHintIfSelected(spriteBatch, effectsModule);
+        }
+
+        private void DrawIcon(SpriteBatch spriteBatch, IPersonEffect effect, int iconX)
+        {
+            var conditionIconSid = GetConditionSid(effect);
+            var conditionIconTexture = _conditionIconTextureDict[conditionIconSid];
+            spriteBatch.Draw(conditionIconTexture, new Vector2(iconX, _screenY), Color.DarkSlateGray);
+        }
+
+        private void DrawIconBackground(SpriteBatch spriteBatch, int iconX)
+        {
+            spriteBatch.Draw(_conditionBackgroundTexture, new Rectangle(iconX, _screenY, ICON_SIZE, ICON_SIZE), Color.Yellow);
         }
 
         public void Update()
@@ -95,8 +115,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var effectRectangles = effectsModule.Items.Select((x, index) => new
             {
-                UiRect = new Rectangle(index * 18 - 2, 0, 16, 16),
-                Effect = x
+                UiRect = new Rectangle(index * (ICON_SIZE + ICON_SPACING) - ICON_SPACING + _screenX, _screenY, ICON_SIZE, ICON_SIZE),
+                Condition = x,
+                IconIndex = index
             });
             var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
 
@@ -104,30 +125,34 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             if (effectUnderMouse != null)
             {
-                _selectedCondition = effectUnderMouse.Effect;
+                _selectedCondition = effectUnderMouse.Condition;
+                _selectedConditionIconIndex = effectUnderMouse.IconIndex;
             }
             else
             {
                 _selectedCondition = null;
+                _selectedConditionIconIndex = null;
             }
         }
 
         private void DrawHintIfSelected(SpriteBatch spriteBatch, IEffectsModule effectsModule)
         {
-            if (_selectedCondition != null)
+            if (_selectedCondition != null && _selectedConditionIconIndex != null)
             {
                 var effectTitle = _selectedCondition.ToString();
                 var titleTextSizeVector = _hintTitleFont.MeasureString(effectTitle);
-                var selectedEffectIndex = effectsModule.Items.ToList().IndexOf(_selectedCondition);
-                var hintXPosition = selectedEffectIndex * 18;
+                var selectedEffectIndex = _selectedConditionIconIndex.Value;
+                var hintXPosition = selectedEffectIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
 
-                var hintRectangle = new Rectangle(hintXPosition, 18,
-                    (int)titleTextSizeVector.X + 4, (int)titleTextSizeVector.Y + 4);
+                const int Y_POSITION_UNDER_ICON_SEQUENCE = ICON_SIZE + ICON_SPACING;
+                const int HINT_TEXT_SPACING = 8;
+                var hintRectangle = new Rectangle(hintXPosition, Y_POSITION_UNDER_ICON_SEQUENCE + _screenY,
+                    (int)titleTextSizeVector.X + HINT_TEXT_SPACING * 2, (int)titleTextSizeVector.Y + HINT_TEXT_SPACING * 2);
 
                 spriteBatch.Draw(_conditionHintBackgroundTexture, hintRectangle, Color.DarkSlateGray);
 
                 spriteBatch.DrawString(_hintTitleFont, effectTitle,
-                    new Vector2(hintRectangle.Left + 2, hintRectangle.Top + 2), Color.Wheat);
+                    new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING), Color.Wheat);
             }
         }
 

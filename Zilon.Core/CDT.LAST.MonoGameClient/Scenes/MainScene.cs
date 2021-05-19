@@ -39,7 +39,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
 
             _camera = new Camera();
-            _personEffectsPanel = new PersonConditionsPanel(game, _uiState);
+            _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
         }
 
         public override void Draw(GameTime gameTime)

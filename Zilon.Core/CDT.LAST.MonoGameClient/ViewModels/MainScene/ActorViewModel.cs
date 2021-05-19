@@ -175,10 +175,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _actorStateEngine =
                         new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService);
 
-                    var targetGameObject = _sectorViewModelContext.GameObjects.Single(x => x.Node == e.TargetNode);
-                    _sectorViewModelContext.EffectManager.HitEffects.Add(new HitEffect((LivGame)_game,
-                        targetSpritePosition + targetGameObject.HitEffectPosition,
-                        targetSpritePosition - _rootSprite.Position));
+                    var targetGameObject = _sectorViewModelContext.GameObjects.SingleOrDefault(x => x.Node == e.TargetNode);
+                    if (targetGameObject is null)
+                    {
+                        // This means the attacker is miss.
+                        // This situation can be then the target actor moved before the attack reaches the target.
+                    }
+                    else
+                    { 
+                        _sectorViewModelContext.EffectManager.HitEffects.Add(new HitEffect((LivGame)_game,
+                            targetSpritePosition + targetGameObject.HitEffectPosition,
+                            targetSpritePosition - _rootSprite.Position));
+                    }
                 }
             }
         }
