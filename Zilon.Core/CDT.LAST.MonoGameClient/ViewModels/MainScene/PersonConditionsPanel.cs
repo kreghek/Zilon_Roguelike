@@ -43,6 +43,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 "IntoxicationStrong",
                 "IntoxicationCritical",
 
+                "HealthLesser",
+                "HealthStrong",
+                "HealthCritical",
+
                 "DiseaseSymptom"
             };
             _conditionIconTextureDict = conditionIconTextureSids.ToDictionary(

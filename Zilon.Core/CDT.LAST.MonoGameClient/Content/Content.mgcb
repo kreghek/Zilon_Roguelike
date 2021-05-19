@@ -1875,6 +1875,42 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/PersonConditions/DiseaseSymptomConditionIcon.png
 
+#begin Sprites/ui/PersonConditions/HealthCriticalConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/HealthCriticalConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/HealthLesserConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/HealthLesserConditionIcon.png
+
+#begin Sprites/ui/PersonConditions/HealthStrongConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/HealthStrongConditionIcon.png
+
 #begin Sprites/ui/PersonConditions/HungerCriticalConditionIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
