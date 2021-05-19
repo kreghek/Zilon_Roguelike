@@ -165,7 +165,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             switch (personCondition)
             {
                 case SurvivalStatHazardEffect statEffect:
-                    return $"{statEffect.Type}{statEffect.Level}";
+                    // Code smell to adjust code to sprite names.
+                    var levelString = statEffect.Level == SurvivalStatHazardLevel.Max ? "Critical" : statEffect.Level.ToString();
+                    return $"{statEffect.Type}{levelString}";
 
                 case DiseaseSymptomEffect:
                     return "DiseaseSymptom";
