@@ -22,9 +22,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Texture2D _conditionHintBackgroundTexture;
         private readonly Dictionary<string, Texture2D> _conditionIconTextureDict;
         private readonly SpriteFont _hintTitleFont;
-        private readonly ISectorUiState _uiState;
         private readonly int _screenX;
         private readonly int _screenY;
+        private readonly ISectorUiState _uiState;
         private IPersonEffect? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
@@ -89,18 +89,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             DrawHintIfSelected(spriteBatch, effectsModule);
         }
 
-        private void DrawIcon(SpriteBatch spriteBatch, IPersonEffect effect, int iconX)
-        {
-            var conditionIconSid = GetConditionSid(effect);
-            var conditionIconTexture = _conditionIconTextureDict[conditionIconSid];
-            spriteBatch.Draw(conditionIconTexture, new Vector2(iconX, _screenY), Color.DarkSlateGray);
-        }
-
-        private void DrawIconBackground(SpriteBatch spriteBatch, int iconX)
-        {
-            spriteBatch.Draw(_conditionBackgroundTexture, new Rectangle(iconX, _screenY, ICON_SIZE, ICON_SIZE), Color.Yellow);
-        }
-
         public void Update()
         {
             var person = _uiState.ActiveActor?.Actor?.Person;
@@ -115,7 +103,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var effectRectangles = effectsModule.Items.Select((x, index) => new
             {
-                UiRect = new Rectangle(index * (ICON_SIZE + ICON_SPACING) - ICON_SPACING + _screenX, _screenY, ICON_SIZE, ICON_SIZE),
+                UiRect = new Rectangle(index * (ICON_SIZE + ICON_SPACING) - ICON_SPACING + _screenX, _screenY,
+                    ICON_SIZE, ICON_SIZE),
                 Condition = x,
                 IconIndex = index
             });
@@ -147,13 +136,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 const int Y_POSITION_UNDER_ICON_SEQUENCE = ICON_SIZE + ICON_SPACING;
                 const int HINT_TEXT_SPACING = 8;
                 var hintRectangle = new Rectangle(hintXPosition, Y_POSITION_UNDER_ICON_SEQUENCE + _screenY,
-                    (int)titleTextSizeVector.X + HINT_TEXT_SPACING * 2, (int)titleTextSizeVector.Y + HINT_TEXT_SPACING * 2);
+                    (int)titleTextSizeVector.X + HINT_TEXT_SPACING * 2,
+                    (int)titleTextSizeVector.Y + HINT_TEXT_SPACING * 2);
 
                 spriteBatch.Draw(_conditionHintBackgroundTexture, hintRectangle, Color.DarkSlateGray);
 
                 spriteBatch.DrawString(_hintTitleFont, effectTitle,
-                    new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING), Color.Wheat);
+                    new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                    Color.Wheat);
             }
+        }
+
+        private void DrawIcon(SpriteBatch spriteBatch, IPersonEffect effect, int iconX)
+        {
+            var conditionIconSid = GetConditionSid(effect);
+            var conditionIconTexture = _conditionIconTextureDict[conditionIconSid];
+            spriteBatch.Draw(conditionIconTexture, new Vector2(iconX, _screenY), Color.DarkSlateGray);
+        }
+
+        private void DrawIconBackground(SpriteBatch spriteBatch, int iconX)
+        {
+            spriteBatch.Draw(_conditionBackgroundTexture, new Rectangle(iconX, _screenY, ICON_SIZE, ICON_SIZE),
+                Color.Yellow);
         }
 
         private static string GetConditionSid(IPersonEffect personCondition)

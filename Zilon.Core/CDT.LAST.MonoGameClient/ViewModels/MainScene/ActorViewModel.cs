@@ -175,7 +175,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _actorStateEngine =
                         new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService);
 
-                    var targetGameObject = _sectorViewModelContext.GameObjects.SingleOrDefault(x => x.Node == e.TargetNode);
+                    var targetGameObject =
+                        _sectorViewModelContext.GameObjects.SingleOrDefault(x => x.Node == e.TargetNode);
                     if (targetGameObject is null)
                     {
                         // This means the attacker is miss.
