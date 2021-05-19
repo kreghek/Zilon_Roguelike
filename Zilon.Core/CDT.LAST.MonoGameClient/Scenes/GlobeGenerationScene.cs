@@ -69,7 +69,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
             _generateButton.Update();
         }
 
-        private void GenerateButtonClickHandler()
+        private async void GenerateButtonClickHandler()
         {
             if (!_generationWasStarted)
             {
@@ -98,15 +98,17 @@ namespace CDT.LAST.MonoGameClient.Scenes
                         TaskContinuationOptions.OnlyOnCanceled);
                 });
 
-                generateGlobeTask.ContinueWith(task =>
-                {
-                    TargetScene = _mainScene;
-                }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                await generateGlobeTask!;
 
-                generateGlobeTask.ContinueWith(task =>
-                {
-                    Debug.WriteLine(task.Exception);
-                }, TaskContinuationOptions.OnlyOnFaulted);
+                //generateGlobeTask.ContinueWith(task =>
+                //{
+                //    TargetScene = _mainScene;
+                //}, TaskContinuationOptions.OnlyOnRanToCompletion);
+
+                //generateGlobeTask.ContinueWith(task =>
+                //{
+                //    Debug.WriteLine(task.Exception);
+                //}, TaskContinuationOptions.OnlyOnFaulted);
             }
         }
     }
