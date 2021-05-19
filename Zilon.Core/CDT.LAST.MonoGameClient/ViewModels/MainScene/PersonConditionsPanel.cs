@@ -127,7 +127,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private string GetConditionSid(IPersonEffect personCondition)
+        private static string GetConditionSid(IPersonEffect personCondition)
         {
             switch (personCondition)
             {
