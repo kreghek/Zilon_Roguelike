@@ -1,0 +1,12 @@
+{
+  "Equip": {
+    "ActSids": [
+      "burst"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "En": "Minigun",
+    "Ru": "Ручной пулемёт"
+  }
+}

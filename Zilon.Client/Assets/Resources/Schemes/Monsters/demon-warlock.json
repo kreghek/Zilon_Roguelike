@@ -1,0 +1,43 @@
+{
+  "Name": {
+    "Ru": "Чернокнижник демонов",
+    "En": "Demon warlock"
+  },
+  "Hp": 5,
+  "PrimaryAct": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
+  },
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "ShadowDefence",
+        "Level": "Lesser"
+      }
+    ]
+  },
+  "DropTableSids": [
+    "survival",
+    "champion-loot",
+    "demon",
+    "default",
+    "default-evil-hour"
+  ],
+  "BaseScore": 50,
+  "Tags": [
+    "demon",
+    "unclean"
+  ]
+}

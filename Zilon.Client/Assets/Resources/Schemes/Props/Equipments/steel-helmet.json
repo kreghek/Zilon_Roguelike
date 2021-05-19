@@ -1,0 +1,29 @@
+{
+  "Tags": [ "armor" ],
+  "Equip": {
+    "SlotTypes": [ "Head" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 1
+      }
+    ],
+	"Rules": [
+	  {
+	    "Type": "HungerResistance",
+		"Level": "Lesser",
+		"Direction": "Negative"
+	  },
+	  {
+	    "Type": "ThristResistance",
+		"Level": "Lesser",
+		"Direction": "Negative"
+	  }
+	]
+  },
+  "Name": {
+    "En": "Steel helmet",
+    "Ru": "Стальной шлем"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "sword" ],
+  "Equip": {
+    "ActSids": [
+      "sawing"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Бензопила",
+	"En": "Chainsaw"
+  }
+}

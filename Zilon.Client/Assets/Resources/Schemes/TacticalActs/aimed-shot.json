@@ -1,0 +1,23 @@
+{
+  "Name": {
+    "Ru": "Прицельный выстрел"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 6,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy",
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Concentrated",
+      "Impact": "Kinetic",
+      "ApRank": 4
+    }
+  }
+}

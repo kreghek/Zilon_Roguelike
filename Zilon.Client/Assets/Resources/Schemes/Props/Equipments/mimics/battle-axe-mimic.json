@@ -1,0 +1,14 @@
+{
+  "Tags": [ "weapon", "axe" ],
+  "Equip": {
+    "ActSids": [
+      "chop"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Боевой топор",
+	"En": "Battle axe"
+  },
+  "IsMimicFor": "battle-axe"
+}

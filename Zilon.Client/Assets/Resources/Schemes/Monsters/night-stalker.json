@@ -1,0 +1,44 @@
+{
+  "Name": {
+    "Ru": "Ночной убийца",
+    "En": "Night stalker"
+  },
+  "Hp": 8,
+  "PrimaryAct": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 2
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
+  },
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "TacticalDefence",
+        "Level": "Lesser"
+      }
+    ]
+  },
+  "DropTableSids": [
+    "survival",
+    "default",
+    "champion-loot",
+    "default-evil-hour"
+  ],
+  "BaseScore": 200,
+  "Tags": [
+    "eldritch",
+    "human",
+    "flying",
+    "rare"
+  ]
+}

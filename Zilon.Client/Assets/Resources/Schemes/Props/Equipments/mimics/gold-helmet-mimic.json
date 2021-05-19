@@ -1,0 +1,25 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Head" ],
+    "Armors": [
+    ],
+	
+	"Rules": [
+	  {
+	    "Type": "HungerResistance",
+		"Level": "Normal",
+		"Direction": "Negative"
+	  },
+	  {
+	    "Type": "ThristResistance",
+		"Level": "Normal",
+		"Direction": "Negative"
+	  }
+	]
+  },
+  "Name": {
+    "En": "Gold helmet mimic",
+	  "Ru": "Лже Золотой шлем"
+  },
+  "IsMimicFor": "gold-helmet"
+}

@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "ranged", "pistol" ],
+  "Equip": {
+    "ActSids": [
+      "shot"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Пистолет",
+	"En": "Pistol"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Aux" ],
+    "Rules": [
+	  {
+	    "Type": "ThristResistance",
+		"Level": "Normal"
+	  }
+	]
+  },
+  "Name": {
+    "En": "Thrist moderator",
+    "Ru": "Модератор жажды"
+  }
+}

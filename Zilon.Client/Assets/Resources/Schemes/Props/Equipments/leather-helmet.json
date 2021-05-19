@@ -1,0 +1,17 @@
+{
+  "Tags": [ "armor" ],
+  "Equip": {
+    "SlotTypes": [ "Head" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 2
+      }
+    ]
+  },
+  "Name": {
+    "En": "Leather helmet",
+    "Ru": "Кожанный шлем"
+  }
+}

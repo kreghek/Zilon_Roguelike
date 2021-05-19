@@ -1,0 +1,62 @@
+{
+  "Rolls": 1,
+  "Records": [
+    {
+      "SchemeSid": "short-sword",
+
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "knitted-hat",
+
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "leather-helmet",
+
+      "Weight": 10
+    },
+
+	{
+      "SchemeSid": "mace",
+
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "leather-jacket",
+
+      "Weight": 10
+    },
+
+	{
+      "SchemeSid": "tribal-spear",
+
+      "Weight": 10
+    },
+	{
+      "SchemeSid": "tactical-helmet",
+
+      "Weight": 5
+    },
+	
+	
+	{
+      "SchemeSid": "arrow",
+      "MinCount": 3,
+      "MaxCount": 5,
+      "Weight": 5
+    },
+    {
+      "SchemeSid": "arrow",
+      "MinCount": 6,
+      "MaxCount": 10,
+      "Weight": 2
+    },
+
+
+    {
+      "SchemeSid": null,
+      "Weight": 32000
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "Name": {
+    "Ru": "Мантикора",
+    "En": "Manticore"
+  },
+  "Hp": 60,
+  "PrimaryAct": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 2
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
+  },
+  "DropTableSids": [
+    "survival",
+    "default",
+    "default-evil-hour"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "beast",
+    "flying",
+    "rare"
+  ]
+}

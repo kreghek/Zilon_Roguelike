@@ -1,0 +1,15 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Aux" ],
+    "Rules": [
+	  {
+	    "Type": "HealthIfNoBody",
+		"Level": "Lesser"
+	  }
+	]
+  },
+  "Name": {
+    "En": "Fire opal necklace",
+    "Ru": "Ожерелье с огненным опалом"
+  }
+}

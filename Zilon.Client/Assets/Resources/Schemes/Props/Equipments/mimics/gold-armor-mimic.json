@@ -1,0 +1,30 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Body" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 1
+      }
+    ],
+	
+	"Rules": [
+	  {
+	    "Type": "HungerResistance",
+		"Level": "Normal",
+		"Direction": "Negative"
+	  },
+	  {
+	    "Type": "ThristResistance",
+		"Level": "Normal",
+		"Direction": "Negative"
+	  }
+	]
+  },
+  "Name": {
+    "En": "Gold Armor Mimic",
+	"Ru": "Лже Золотая броня"
+  },
+  "IsMimicFor": "gold-armor"
+}

@@ -1,0 +1,23 @@
+{
+  "Rolls": 1,
+  "Records": [
+	{
+      "SchemeSid": "vege-milk",
+	  "MinCount": 1,
+	  "MaxCount": 1,
+      "Weight": 5
+    },
+	
+	{
+      "SchemeSid": "tomaton",
+	  "MinCount": 1,
+	  "MaxCount": 1,
+      "Weight": 5
+    },
+	
+	{
+      "SchemeSid": null,
+      "Weight": 1
+    }
+  ]
+}

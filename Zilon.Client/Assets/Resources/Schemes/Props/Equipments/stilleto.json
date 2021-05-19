@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon" ],
+  "Equip": {
+    "ActSids": [
+      "thrust"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "En": "Stilletor",
+    "Ru": "Стиллет"
+  }
+}

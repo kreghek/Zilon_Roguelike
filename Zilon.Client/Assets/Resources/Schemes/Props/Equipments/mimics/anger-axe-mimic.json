@@ -1,0 +1,14 @@
+{
+  "Tags": [ "weapon", "axe" ],
+  "Equip": {
+    "ActSids": [
+      "chop-mimic"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Ложный Топор гнева",
+	"En": "Anger axe mimic"
+  },
+  "IsMimicFor": "anger-axe"
+}

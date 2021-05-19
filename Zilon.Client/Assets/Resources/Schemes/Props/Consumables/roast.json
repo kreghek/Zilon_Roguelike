@@ -1,0 +1,37 @@
+{
+  "Name": {
+    "En": "Roast",
+    "Ru": "Жаркое"
+  },
+  "Use": {
+    "Consumable": true,
+    "CommonRules": [
+      {
+        "Type": "Satiety",
+        "Level": "Normal"
+      },
+	  {
+        "Type": "Health",
+        "Level": "Lesser"
+      }
+    ]
+  },
+  
+  "Craft": {
+    "Sources": [
+      {
+        "PropSid": "raw-meat",
+        "Count": 2
+      },
+      {
+        "PropSid": "water-bottle",
+        "Count": 1
+      },
+	  {
+        "PropSid": "strong-fuel",
+        "Count": 1
+      },
+    ],
+    "ProductOutput": 1
+  }
+}

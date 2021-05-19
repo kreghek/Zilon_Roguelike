@@ -1,0 +1,44 @@
+{
+  "Name": {
+    "Ru": "Архидемон",
+    "En": "Archdemon"
+  },
+  "Hp": 100,
+  "PrimaryAct": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 3
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy",
+    "Offence": {
+      "Type": "Shadow",
+      "Impact": "Psy"
+    }
+  },
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "ShadowDefence",
+        "Level": "Normal"
+      }
+    ]
+  },
+  "DropTableSids": [
+    "survival",
+    "champion-loot",
+    "demon",
+    "default",
+    "default-evil-hour"
+  ],
+  "BaseScore": 600,
+  "Tags": [
+    "demon",
+    "unclean",
+    "rare"
+  ]
+}

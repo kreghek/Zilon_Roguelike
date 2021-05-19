@@ -1,0 +1,15 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Aux" ],
+    "Rules": [
+	  {
+	    "Type": "HungerResistance",
+		"Level": "Normal"
+	  }
+	]
+  },
+  "Name": {
+    "En": "Hunger moderator",
+    "Ru": "Модератор голода"
+  }
+}

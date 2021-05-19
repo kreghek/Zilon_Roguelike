@@ -1,0 +1,13 @@
+{
+  "Tags": [ "weapon", "tool", "pick-axe" ],
+  "Equip": {
+    "ActSids": [
+      "chop"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Кирка",
+	"En": "Pick axe"
+  }
+}

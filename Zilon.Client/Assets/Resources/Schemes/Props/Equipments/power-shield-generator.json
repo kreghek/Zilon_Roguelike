@@ -1,0 +1,16 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Aux" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Normal",
+        "ArmorRank": 10
+      }
+    ]
+  },
+  "Name": {
+    "En": "Power shield generator",
+    "Ru": "Генератор силового щита"
+  }
+}

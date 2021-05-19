@@ -1,0 +1,43 @@
+{
+  "Craft": {
+    "PrototypeSources": [
+      {
+        "PropSid": "lesser-draft"
+      }
+    ],
+    "InstrumentFunctions": [
+      {
+        "Function": 2,
+        "Level": 1
+      },
+      {
+        "Function": 8,
+        "Level": 1
+      }
+    ],
+    "Professions": [
+      {
+        "Profession": "Blacksmith",
+        "MinLevel": 2,
+        "MaxLevel": 3
+      },
+      {
+        "Profession": "Engineer",
+        "MinLevel": 1,
+        "MaxLevel": 2
+      }
+    ],
+    "Sources": [
+      {
+        "PropSid": "gun-frame"
+      },
+      {
+        "PropSid": "detail"
+      }
+    ],
+    "ProductOutput": 1
+  },
+  "Name": {
+    "En": "Machinegun frame"
+  }
+}

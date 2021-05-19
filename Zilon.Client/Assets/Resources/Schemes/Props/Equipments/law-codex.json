@@ -1,0 +1,22 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Aux" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 2
+      },
+	  {
+        "Impact": "Psy",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 2
+      }
+    ]
+  },
+  
+  "Name": {
+    "En": "Law Codex",
+    "Ru": "Кодекс Закона"
+  }
+}

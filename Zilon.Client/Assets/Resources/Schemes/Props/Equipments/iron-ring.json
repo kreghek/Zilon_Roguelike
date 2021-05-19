@@ -1,0 +1,16 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Aux" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 10
+      }
+    ]
+  },
+  "Name": {
+    "En": "Iron ring",
+    "Ru": "Железное кольцо"
+  }
+}

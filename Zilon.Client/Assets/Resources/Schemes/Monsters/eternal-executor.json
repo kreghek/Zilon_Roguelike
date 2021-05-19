@@ -1,0 +1,33 @@
+{
+  "Name": {
+    "Ru": "Вечный палач",
+    "En": "Eternal executer"
+  },
+  "Hp": 10,
+  "PrimaryAct": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
+  },
+  "DropTableSids": [
+    "survival",
+    "default",
+    "default-evil-hour"
+  ],
+  "BaseScore": 75,
+  "Tags": [
+    "eldritch",
+    "human"
+  ]
+}

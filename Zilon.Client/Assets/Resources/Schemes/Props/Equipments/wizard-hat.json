@@ -1,0 +1,17 @@
+{
+  "Tags": [ "armor" ],
+  "Equip": {
+    "SlotTypes": [ "Head" ],
+    "Armors": [
+      {
+        "Impact": "Psy",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 1
+      }
+    ]
+  },
+  "Name": {
+    "En": "Wizard hat",
+    "Ru": "Шапка чародея"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "Tags": [ "armor" ],
+  "Equip": {
+    "SlotTypes": [ "Body" ],
+    "Armors": [
+      {
+        "Impact": "Psy",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 3
+      },
+	  {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 2
+      }
+    ]
+  },
+  "Name": {
+    "En": "Master robe",
+    "Ru": "Роба магистра"
+  }
+}

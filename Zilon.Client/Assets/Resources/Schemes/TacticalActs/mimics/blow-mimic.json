@@ -1,0 +1,25 @@
+{
+  "Name": {
+    "Ru": "Ложный Удар",
+	"En": "Mimic Blow"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 2,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Concentrated",
+      "Impact":  "Kinetic",
+	  "ApRank": 1
+    }
+  },
+  "IsMimicFor": "blow"
+}

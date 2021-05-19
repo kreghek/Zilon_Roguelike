@@ -1,0 +1,17 @@
+{
+  "Tags": [ "shield" ],
+  "Equip": {
+    "SlotTypes": [ "Hand" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Normal",
+        "ArmorRank": 10
+      }
+    ]
+  },
+  "Name": {
+    "En": "Wood shield",
+    "Ru": "Деревянный щит"
+  }
+}

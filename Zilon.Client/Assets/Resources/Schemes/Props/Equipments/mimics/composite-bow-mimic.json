@@ -1,0 +1,14 @@
+{
+  "Tags": [ "weapon", "ranged", "bow" ],
+  "Equip": {
+    "ActSids": [
+      "bow-shot-mimic"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Лже Композитный лук",
+	"En": "Composite bow mimic"
+  },
+  "IsMimicFor": "composite-bow"
+}

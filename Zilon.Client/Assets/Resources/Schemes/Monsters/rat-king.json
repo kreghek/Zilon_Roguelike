@@ -1,0 +1,45 @@
+{
+  "Name": {
+    "Ru": "Крысиный король",
+    "En": "Rat King"
+  },
+  "Hp": 12,
+  "MoveSpeedFactor": 0.5,
+  "PrimaryAct": {
+    "Efficient": {
+      "Dice": 6,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy"
+  },
+  "Defense": {
+    "Defenses": [
+      {
+        "Type": "TacticalDefence",
+        "Level": "Lesser"
+      }
+    ]
+  },
+  "DropTableSids": [
+    "survival",
+    "default",
+    "champion-loot",
+    "default-evil-hour"
+  ],
+  "BaseScore": 250,
+  "Tags": [
+    "rare",
+    "mutant",
+    "beast",
+    "unclean"
+  ]
+}

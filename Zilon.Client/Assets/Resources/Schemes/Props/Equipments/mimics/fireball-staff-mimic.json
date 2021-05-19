@@ -1,0 +1,14 @@
+{
+  "Tags": [ "weapon", "ranged", "wand" ],
+  "Equip": {
+    "ActSids": [
+      "fireball-mimic"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "En": "Fireball Staff Mimic",
+    "Ru": "Огненный лже-посох"
+  },
+  "IsMimicFor": "fireball-staff"
+}

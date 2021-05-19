@@ -1,0 +1,33 @@
+{
+  "Name": {
+    "En": "Kalin Cheese",
+    "Ru": "Калинский сыр"
+  },
+  "Use": {
+    "Consumable": true,
+    "CommonRules": [
+      {
+        "Type": "Satiety",
+        "Level": "Lesser"
+      },
+	  {
+        "Type": "Health",
+        "Level": "Lesser"
+      }
+    ]
+  },
+  
+  "Craft": {
+    "Sources": [
+      {
+        "PropSid": "acid",
+        "Count": 1
+      },
+      {
+        "PropSid": "vege-milk",
+        "Count": 1
+      },
+    ],
+    "ProductOutput": 1
+  }
+}
