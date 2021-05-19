@@ -6,7 +6,6 @@ using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;
@@ -18,6 +17,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
     internal class MainScene : GameSceneBase
     {
         private readonly Camera _camera;
+        private readonly PersonEffectPanel _personEffectsPanel;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -39,6 +39,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
 
             _camera = new Camera();
+            _personEffectsPanel = new PersonEffectPanel(game, _uiState);
         }
 
         public override void Draw(GameTime gameTime)
@@ -49,6 +50,15 @@ namespace CDT.LAST.MonoGameClient.Scenes
             {
                 _sectorViewModel.Draw(gameTime);
             }
+
+            DrawHud();
+        }
+
+        private void DrawHud()
+        {
+            _spriteBatch.Begin();
+            _personEffectsPanel.Draw(_spriteBatch);
+            _spriteBatch.End();
         }
 
         public override void Update(GameTime gameTime)
