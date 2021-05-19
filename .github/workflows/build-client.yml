@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - master
+      - monogame-client
     tags:
       - 'v*.*.*'
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - master
+      - monogame-client
     tags:
       - 'v*.*.*'
 
