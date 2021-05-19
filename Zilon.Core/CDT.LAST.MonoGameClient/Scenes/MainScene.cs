@@ -17,7 +17,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
     internal class MainScene : GameSceneBase
     {
         private readonly Camera _camera;
-        private readonly PersonEffectPanel _personEffectsPanel;
+        private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -39,7 +39,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
 
             _camera = new Camera();
-            _personEffectsPanel = new PersonEffectPanel(game, _uiState);
+            _personEffectsPanel = new PersonConditionsPanel(game, _uiState);
         }
 
         public override void Draw(GameTime gameTime)

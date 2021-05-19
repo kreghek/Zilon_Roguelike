@@ -13,24 +13,19 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Fonts/HintTitle.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/HintTitle.spritefont
+
 #begin Fonts/Main.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Main.spritefont
-
-#begin Sprites/game-objects/environment/Grass.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/game-objects/environment/Grass.png
 
 #begin Sprites/effects/hit.png
 /importer:TextureImporter
@@ -1628,6 +1623,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/equipments/wooden-shield.png
 
+#begin Sprites/game-objects/environment/Grass.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/environment/Grass.png
+
 #begin Sprites/game-objects/human/arm-left-simple.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1808,6 +1815,42 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/button.png
 
+#begin Sprites/ui/PersonConditions/ConditionHintBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/ConditionHintBackground.png
+
+#begin Sprites/ui/PersonConditions/ConditionIconBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/ConditionIconBackground.png
+
+#begin Sprites/ui/PersonConditions/HungerLesserConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/HungerLesserConditionIcon.png
+
 #begin Sprites/ui/walk-cursor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1820,26 +1863,3 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/walk-cursor.png
 
-#begin Sprites/ui/Effects/EffectBackground.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/ui/Effects/EffectBackground.png
-
-#begin Sprites/ui/Effects/HungerLesserEffect.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/ui/Effects/HungerLesserEffect.png
