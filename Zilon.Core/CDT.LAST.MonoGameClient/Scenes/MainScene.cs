@@ -54,13 +54,6 @@ namespace CDT.LAST.MonoGameClient.Scenes
             DrawHud();
         }
 
-        private void DrawHud()
-        {
-            _spriteBatch.Begin();
-            _personEffectsPanel.Draw(_spriteBatch);
-            _spriteBatch.End();
-        }
-
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -105,6 +98,13 @@ namespace CDT.LAST.MonoGameClient.Scenes
                     TargetScene = new TransitionScene(Game, _spriteBatch);
                 }
             }
+        }
+
+        private void DrawHud()
+        {
+            _spriteBatch.Begin();
+            _personEffectsPanel.Draw(_spriteBatch);
+            _spriteBatch.End();
         }
 
         private static ISectorNode? GetPlayerSectorNode(IPlayer player)

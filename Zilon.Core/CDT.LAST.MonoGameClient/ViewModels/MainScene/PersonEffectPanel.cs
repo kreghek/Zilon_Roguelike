@@ -6,11 +6,11 @@ using Zilon.Core.PersonModules;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    class PersonEffectPanel
+    internal class PersonEffectPanel
     {
-        private readonly ISectorUiState _uiState;
         private readonly Texture2D _effectBackgroundTexture;
         private readonly Texture2D _effectIconTexture;
+        private readonly ISectorUiState _uiState;
 
         public PersonEffectPanel(Game game, ISectorUiState uiState)
         {
