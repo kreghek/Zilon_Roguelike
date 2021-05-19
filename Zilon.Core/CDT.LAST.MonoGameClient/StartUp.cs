@@ -40,9 +40,20 @@ namespace CDT.LAST.MonoGameClient
 
         protected override void RegisterSchemeService(IServiceCollection container)
         {
-            container.AddSingleton<ISchemeLocator>(factory =>
+            container.AddSingleton((Func<IServiceProvider, ISchemeLocator>)(factory =>
             {
-                var gamePath = Assembly.GetExecutingAssembly().Location;
+                var mainModule = System.Diagnostics.Process.GetCurrentProcess().MainModule;
+                if (mainModule is null)
+                {
+                    throw new InvalidOperationException("Error during main module calculation.");
+                }
+
+                var gamePath = mainModule.FileName;
+                if (gamePath is null)
+                {
+                    throw new InvalidOperationException("Error during current path calculation.");
+                }
+
                 var gamePathFileInfo = new FileInfo(gamePath);
                 var contentDirectory = gamePathFileInfo.Directory?.FullName!;
                 var catalogPath = Path.Combine(contentDirectory, "Content", "Schemes");
@@ -50,7 +61,7 @@ namespace CDT.LAST.MonoGameClient
                 var schemeLocator = new FileSchemeLocator(catalogPath);
 
                 return schemeLocator;
-            });
+            }));
 
             container.AddSingleton<ISchemeService, SchemeService>();
 

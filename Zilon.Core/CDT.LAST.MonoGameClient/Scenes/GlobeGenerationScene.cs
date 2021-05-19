@@ -47,7 +47,12 @@ namespace CDT.LAST.MonoGameClient.Scenes
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
             _spriteBatch.DrawString(font, "Генерация мира", new Vector2(100, 100), Color.White);
-            _spriteBatch.DrawString(font, _lastError, new Vector2(100, 120), Color.White);
+
+            if (_lastError != null)
+            {
+                _spriteBatch.DrawString(font, _lastError, new Vector2(100, 120), Color.White);
+            }
+
             _generateButton.Draw(_spriteBatch);
 
             _spriteBatch.End();
@@ -69,7 +74,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
             _generateButton.Update();
         }
 
-        private void GenerateButtonClickHandler()
+        private async void GenerateButtonClickHandler()
         {
             if (!_generationWasStarted)
             {
@@ -98,15 +103,9 @@ namespace CDT.LAST.MonoGameClient.Scenes
                         TaskContinuationOptions.OnlyOnCanceled);
                 });
 
-                generateGlobeTask.ContinueWith(task =>
-                {
-                    TargetScene = _mainScene;
-                }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                await generateGlobeTask!;
 
-                generateGlobeTask.ContinueWith(task =>
-                {
-                    Debug.WriteLine(task.Exception);
-                }, TaskContinuationOptions.OnlyOnFaulted);
+                TargetScene = _mainScene;
             }
         }
     }

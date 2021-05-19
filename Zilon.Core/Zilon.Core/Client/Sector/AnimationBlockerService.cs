@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,8 +19,13 @@ namespace Zilon.Core.Client.Sector
             _commandBlockers = new ConcurrentDictionary<ICommandBlocker, byte>();
         }
 
-        private void CommandBlocker_Release(object sender, System.EventArgs e)
+        private void CommandBlocker_Release(object? sender, EventArgs e)
         {
+            if (sender is null)
+            {
+                throw new InvalidOperationException("Unexpectible event.");
+            }
+
             lock (_lockObject)
             {
                 var blocker = (ICommandBlocker)sender;
