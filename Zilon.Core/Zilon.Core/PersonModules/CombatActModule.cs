@@ -41,13 +41,13 @@ namespace Zilon.Core.PersonModules
 
         private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment?> equipments,
-            IConditionModule сondition,
+            IConditionModule сonditionModule,
             IEnumerable<IPerk> perks)
         {
-            var defaultAct = CreateTacticalAct(defaultActScheme, null, сondition, perks);
+            var defaultAct = CreateTacticalAct(defaultActScheme, null, сonditionModule, perks);
             yield return defaultAct;
 
-            var equipmentActs = CalcActsFromEquipments(equipments, сondition, perks);
+            var equipmentActs = CalcActsFromEquipments(equipments, сonditionModule, perks);
             foreach (var act in equipmentActs)
             {
                 yield return act;
@@ -172,13 +172,13 @@ namespace Zilon.Core.PersonModules
 
         private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
             [CanBeNull] Equipment? equipment,
-            [NotNull] IConditionModule сondition,
+            [NotNull] IConditionModule сonditionModule,
             [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
             var efficientModifierValue = 0;
             var efficientRollUnmodified = scheme.Stats?.Efficient ?? new Roll(1, 1);
-            CalcSurvivalHazardOnTacticalAct(сondition, ref toHitModifierValue, ref efficientModifierValue);
+            CalcSurvivalHazardOnTacticalAct(сonditionModule, ref toHitModifierValue, ref efficientModifierValue);
             CalcPerksBonusesOnTacticalAct(perks, equipment, ref toHitModifierValue, ref efficientModifierValue);
 
             var toHitRoll = CreateTacticalActRoll(6, 1, toHitModifierValue);
