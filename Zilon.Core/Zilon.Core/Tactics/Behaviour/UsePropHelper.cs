@@ -88,49 +88,25 @@ namespace Zilon.Core.Tactics.Behaviour
                         $"Restriction type is {nameof(UsageRestrictionRule.Undefined)}.");
 
                 case UsageRestrictionRule.NoStarvation:
-
-                    if (IsRestrictedByStarvation(actor))
-                    {
-                        return false;
-                    }
-
-                    break;
-
+                    return !IsRestrictedByStarvation(actor);
+                    
                 case UsageRestrictionRule.NoDehydration:
-
-                    if (IsRestrictedByDehydration(actor))
-                    {
-                        return false;
-                    }
-
-                    break;
-
+                    return !IsRestrictedByDehydration(actor);
+                    
                 case UsageRestrictionRule.NoOverdose:
-
-                    if (IsRestrictedByOverdose(actor))
-                    {
-                        return false;
-                    }
-
-                    break;
+                    return !IsRestrictedByOverdose(actor);
 
                 case UsageRestrictionRule.OnlySafeEnvironment:
 
                     var hostilesinSector = context.Sector.ActorManager.Items
                         .Where(x => x != actor && actor.Person.Fraction.GetRelation(x.Person.Fraction) ==
                             FractionRelation.Enmity);
-                    if (hostilesinSector.Any())
-                    {
-                        return false;
-                    }
-
-                    break;
+                    
+                    return !hostilesinSector.Any();
 
                 default:
                     throw new NotSupportedException($"Restriction {restrictionType} is unknown.");
             }
-
-            return true;
         }
 
         private static bool IsRestrictedByDehydration(IActor actor)
