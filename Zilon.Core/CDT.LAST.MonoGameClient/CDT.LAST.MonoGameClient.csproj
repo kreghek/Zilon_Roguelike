@@ -9,8 +9,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Content\bin\**" />
@@ -44,16 +45,16 @@
     <ProjectReference Include="..\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="MainScreenResource.Designer.cs">
+    <Compile Update="MainScreenResource.en.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>MainScreenResource.resx</DependentUpon>
+      <DependentUpon>MainScreenResource.en.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="MainScreenResource.resx">
+    <EmbeddedResource Update="MainScreenResource.en.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainScreenResource.Designer.cs</LastGenOutput>
+      <LastGenOutput>MainScreenResource.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>
