@@ -117,43 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DiseaseSymptomConditionTitle" xml:space="preserve">
-    <value>Disease</value>
-  </data>
-  <data name="HungerCriticalConditionTitle" xml:space="preserve">
-    <value>Starvation!</value>
-  </data>
-  <data name="HungerLesserConditionTitle" xml:space="preserve">
-    <value>Easy hunger</value>
-  </data>
-  <data name="HungerStrongConditionTitle" xml:space="preserve">
-    <value>Hunger</value>
-  </data>
-  <data name="IntoxicationCriticalConditionTitle" xml:space="preserve">
-    <value>INTOXICATION!</value>
-  </data>
-  <data name="IntoxicationLesserConditionTitle" xml:space="preserve">
-    <value>Easy intoxication</value>
-  </data>
-  <data name="IntoxicationStrongConditionTitle" xml:space="preserve">
-    <value>Intoxication</value>
-  </data>
-  <data name="ThristCriticalConditionTitle" xml:space="preserve">
-    <value>Dehydration!</value>
-  </data>
-  <data name="ThristLesserConditionTitle" xml:space="preserve">
-    <value>Easy thrist</value>
-  </data>
-  <data name="ThristStrongConditionTitle" xml:space="preserve">
-    <value>Thrist</value>
-  </data>
-  <data name="WoundCriticalConditionTitle" xml:space="preserve">
-    <value>Mortal wound!</value>
-  </data>
-  <data name="WoundLesserConditionTitle" xml:space="preserve">
-    <value>Lesser wound</value>
+  <data name="StartGameButtonTitle" xml:space="preserve">
+    <value>Старт</value>
   </data>
   <data name="WoundStrongConditionTitle" xml:space="preserve">
-    <value>Strong wound</value>
+    <value>Серьзная рана</value>
+  </data>
+  <data name="WoundLesserConditionTitle" xml:space="preserve">
+    <value>Легкая рана</value>
+  </data>
+  <data name="WoundCriticalConditionTitle" xml:space="preserve">
+    <value>Смертельная рана!</value>
+  </data>
+  <data name="ThristStrongConditionTitle" xml:space="preserve">
+    <value>Жажда</value>
+  </data>
+  <data name="ThristLesserConditionTitle" xml:space="preserve">
+    <value>Легкая жажда</value>
+  </data>
+  <data name="ThristCriticalConditionTitle" xml:space="preserve">
+    <value>Обезвоживание!</value>
+  </data>
+  <data name="IntoxicationStrongConditionTitle" xml:space="preserve">
+    <value>Токсикация</value>
+  </data>
+  <data name="IntoxicationLesserConditionTitle" xml:space="preserve">
+    <value>Легкая токсикация</value>
+  </data>
+  <data name="IntoxicationCriticalConditionTitle" xml:space="preserve">
+    <value>ТОКСИКАЦИЯ!</value>
+  </data>
+  <data name="HungerStrongConditionTitle" xml:space="preserve">
+    <value>Голод</value>
+  </data>
+  <data name="HungerLesserConditionTitle" xml:space="preserve">
+    <value>Легкий голод</value>
+  </data>
+  <data name="HungerCriticalConditionTitle" xml:space="preserve">
+    <value>Голодание!</value>
+  </data>
+  <data name="DiseaseSymptomConditionTitle" xml:space="preserve">
+    <value>Болезнь</value>
+  </data>
+  <data name="GenerateGlobeButtonTitle" xml:space="preserve">
+    <value>Генерировать</value>
   </data>
 </root>

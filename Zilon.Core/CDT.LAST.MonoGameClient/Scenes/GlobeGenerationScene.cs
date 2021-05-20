@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Resources;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -32,7 +33,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
             var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
-            _generateButton = new Button("generate", buttonTexture, font, new Rectangle(150, 150, 100, 20))
+            _generateButton = new Button(UiResources.GenerateGlobeButtonTitle, buttonTexture, font, new Rectangle(150, 150, 100, 20))
             {
                 Click = GenerateButtonClickHandler
             };

@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Linq;
 
+using CDT.LAST.MonoGameClient.Resources;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -205,13 +207,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     switch (statEffect.Level)
                     {
                         case SurvivalStatHazardLevel.Lesser:
-                            return MainScreenResource.WoundLesserConditionTitle;
+                            return UiResources.WoundLesserConditionTitle;
 
                         case SurvivalStatHazardLevel.Strong:
-                            return MainScreenResource.WoundStrongConditionTitle;
+                            return UiResources.WoundStrongConditionTitle;
 
                         case SurvivalStatHazardLevel.Max:
-                            return MainScreenResource.WoundCriticalConditionTitle;
+                            return UiResources.WoundCriticalConditionTitle;
 
                         default:
                             Debug.Fail(
@@ -223,13 +225,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     switch (statEffect.Level)
                     {
                         case SurvivalStatHazardLevel.Lesser:
-                            return MainScreenResource.HungerLesserConditionTitle;
+                            return UiResources.HungerLesserConditionTitle;
 
                         case SurvivalStatHazardLevel.Strong:
-                            return MainScreenResource.HungerStrongConditionTitle;
+                            return UiResources.HungerStrongConditionTitle;
 
                         case SurvivalStatHazardLevel.Max:
-                            return MainScreenResource.HungerCriticalConditionTitle;
+                            return UiResources.HungerCriticalConditionTitle;
 
                         default:
                             Debug.Fail(

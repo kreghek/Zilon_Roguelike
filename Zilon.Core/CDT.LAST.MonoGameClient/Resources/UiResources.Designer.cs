@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CDT.LAST.MonoGameClient {
+namespace CDT.LAST.MonoGameClient.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace CDT.LAST.MonoGameClient {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class MainScreenResource {
+    internal class UiResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal MainScreenResource() {
+        internal UiResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace CDT.LAST.MonoGameClient {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CDT.LAST.MonoGameClient.MainScreenResource", typeof(MainScreenResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CDT.LAST.MonoGameClient.Resources.UiResources", typeof(UiResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -66,6 +66,15 @@ namespace CDT.LAST.MonoGameClient {
         internal static string DiseaseSymptomConditionTitle {
             get {
                 return ResourceManager.GetString("DiseaseSymptomConditionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate.
+        /// </summary>
+        internal static string GenerateGlobeButtonTitle {
+            get {
+                return ResourceManager.GetString("GenerateGlobeButtonTitle", resourceCulture);
             }
         }
         
@@ -120,6 +129,15 @@ namespace CDT.LAST.MonoGameClient {
         internal static string IntoxicationStrongConditionTitle {
             get {
                 return ResourceManager.GetString("IntoxicationStrongConditionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        internal static string StartGameButtonTitle {
+            get {
+                return ResourceManager.GetString("StartGameButtonTitle", resourceCulture);
             }
         }
         
