@@ -57,7 +57,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
 
                 var offsetMouseInWorld =
-                    HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2, (int)(MapMetrics.UnitSize / 2));
+                    HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2,
+                        (int)(MapMetrics.UnitSize / 2));
 
                 var map = _sector.Map;
 
