@@ -147,22 +147,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private static string GetConditionTitle(IPersonEffect personCondition)
-        {
-            switch (personCondition)
-            {
-                case SurvivalStatHazardEffect statEffect:
-                    return GetSurvivalConditionTitle(statEffect);
-
-                case DiseaseSymptomEffect:
-                    return string.Empty;
-
-                default:
-                    Debug.Fail($"All person conditions must have localized titles. Unknown person effect: {personCondition}.");
-                    return string.Empty;
-            }
-        }
-
         private void DrawIcon(SpriteBatch spriteBatch, IPersonEffect effect, int iconX)
         {
             var conditionIconSid = GetConditionSid(effect);
@@ -196,6 +180,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private static string GetConditionTitle(IPersonEffect personCondition)
+        {
+            switch (personCondition)
+            {
+                case SurvivalStatHazardEffect statEffect:
+                    return GetSurvivalConditionTitle(statEffect);
+
+                case DiseaseSymptomEffect:
+                    return string.Empty;
+
+                default:
+                    Debug.Fail(
+                        $"All person conditions must have localized titles. Unknown person effect: {personCondition}.");
+                    return string.Empty;
+            }
+        }
+
         private static string GetSurvivalConditionTitle(SurvivalStatHazardEffect statEffect)
         {
             switch (statEffect.Type)
@@ -213,7 +214,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                             return MainScreenResource.WoundCriticalConditionTitle;
 
                         default:
-                            Debug.Fail($"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
+                            Debug.Fail(
+                                $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
                             return string.Empty;
                     }
 
@@ -230,12 +232,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                             return MainScreenResource.HungerCriticalConditionTitle;
 
                         default:
-                            Debug.Fail($"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
+                            Debug.Fail(
+                                $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
                             return string.Empty;
                     }
 
                 default:
-                    Debug.Fail($"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
+                    Debug.Fail(
+                        $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
                     return string.Empty;
             }
         }
