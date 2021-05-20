@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -44,20 +45,20 @@ namespace Zilon.Core.Players
         /// <summary>
         /// Ссылка на основного персонажа игрока.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public IPerson? MainPerson { get; private set; }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public IGlobe? Globe { get; private set; }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public void BindPerson(IGlobe globe, IPerson person)
         {
             Globe = globe;
             MainPerson = person;
         }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public void Reset()
         {
             Globe = null;

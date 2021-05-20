@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
@@ -18,7 +19,7 @@ namespace Zilon.Core.PersonGeneration
         private readonly IPropFactory _propFactory;
         private readonly ISurvivalRandomSource _survivalRandomSource;
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         protected FullPersonFactoryBase(
             ISchemeService schemeService,
             ISurvivalRandomSource survivalRandomSource,

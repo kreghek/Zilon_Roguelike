@@ -1,4 +1,6 @@
-﻿using CDT.LAST.MonoGameClient.Engine;
+﻿using System;
+
+using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -32,8 +34,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var hexSize = UNIT_SIZE / 2;
             var staticObjectPosition = new Vector2(
-                (float)(worldCoords[0] * hexSize * System.Math.Sqrt(3)),
-                (float)(worldCoords[1] * hexSize * 2 / 2)
+                (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
+                worldCoords[1] * hexSize * 2 / 2
             );
 
             _rootSprite = new SpriteContainer

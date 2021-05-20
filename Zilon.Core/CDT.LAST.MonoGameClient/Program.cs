@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +16,10 @@ namespace CDT.LAST.MonoGameClient
         [STAThread]
         private static void Main()
         {
+            var newCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = newCulture;
+            Thread.CurrentThread.CurrentUICulture = newCulture;
+
             var serviceContainer = new ServiceCollection();
             var startUp = new StartUp();
             startUp.RegisterServices(serviceContainer);

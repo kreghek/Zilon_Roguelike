@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
     /// Расширения класса Matrix{T}.
@@ -15,7 +17,7 @@
         {
             if (matrix is null)
             {
-                throw new System.ArgumentNullException(nameof(matrix));
+                throw new ArgumentNullException(nameof(matrix));
             }
 
             var sumVerticalMargin = vertical * 2;

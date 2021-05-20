@@ -173,7 +173,7 @@ namespace Zilon.Core.Commands
             var isRequiredResourceType = string.Equals(
                 bulletData.Caliber,
                 usedPropResourceType,
-                System.StringComparison.InvariantCulture);
+                StringComparison.InvariantCulture);
 
             if (!isRequiredResourceType)
             {

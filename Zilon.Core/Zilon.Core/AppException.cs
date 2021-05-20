@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 
 namespace Zilon.Core
 {
@@ -13,8 +14,8 @@ namespace Zilon.Core
         public AppException(string message, Exception inner) : base(message, inner) { }
 
         protected AppException(
-            System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext context) : base(info, context)
+            SerializationInfo info,
+            StreamingContext context) : base(info, context)
         {
         }
     }

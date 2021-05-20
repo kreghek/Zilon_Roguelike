@@ -99,6 +99,8 @@ namespace Zilon.Core.Persons
             return _rules;
         }
 
+        public event EventHandler? Changed;
+
         /// <summary>
         /// Применяет эффект к указанным данным.
         /// </summary>
@@ -121,7 +123,5 @@ namespace Zilon.Core.Persons
                 }
             }
         }
-
-        public event EventHandler? Changed;
     }
 }

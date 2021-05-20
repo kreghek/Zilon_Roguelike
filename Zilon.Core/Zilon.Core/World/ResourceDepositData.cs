@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Zilon.Core.World
 {
@@ -6,7 +7,7 @@ namespace Zilon.Core.World
     {
         public ResourceDepositData(IEnumerable<ResourceDepositDataItem> items)
         {
-            Items = items ?? throw new System.ArgumentNullException(nameof(items));
+            Items = items ?? throw new ArgumentNullException(nameof(items));
         }
 
         public IEnumerable<ResourceDepositDataItem> Items { get; }

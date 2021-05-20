@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -42,7 +43,7 @@ namespace CDT.LAST.MonoGameClient
         {
             container.AddSingleton((Func<IServiceProvider, ISchemeLocator>)(factory =>
             {
-                var mainModule = System.Diagnostics.Process.GetCurrentProcess().MainModule;
+                var mainModule = Process.GetCurrentProcess().MainModule;
                 if (mainModule is null)
                 {
                     throw new InvalidOperationException("Error during main module calculation.");

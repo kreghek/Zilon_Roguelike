@@ -9,8 +9,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Content\bin\**" />
@@ -42,5 +42,18 @@
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
     <ProjectReference Include="..\Zilon.DependencyInjection\Zilon.DependencyInjection.csproj" />
     <ProjectReference Include="..\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\UiResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UiResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\UiResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UiResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

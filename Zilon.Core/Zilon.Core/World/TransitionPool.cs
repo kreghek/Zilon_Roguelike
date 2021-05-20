@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -12,21 +13,21 @@ namespace Zilon.Core.World
     {
         private readonly ConcurrentQueue<TransitionPoolItem> _queue;
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public TransitionPool()
         {
             _queue = new ConcurrentQueue<TransitionPoolItem>();
         }
 
         /// <inheritdoc />
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public void Push(TransitionPoolItem poolItem)
         {
             _queue.Enqueue(poolItem);
         }
 
         /// <inheritdoc />
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public TransitionPoolItem? Pop()
         {
             if (!_queue.TryDequeue(out var item))
@@ -38,7 +39,7 @@ namespace Zilon.Core.World
         }
 
         /// <inheritdoc />
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public bool CheckPersonInTransition(IPerson person)
         {
             var transition = _queue.ToArray().SingleOrDefault(x => x.Person == person);

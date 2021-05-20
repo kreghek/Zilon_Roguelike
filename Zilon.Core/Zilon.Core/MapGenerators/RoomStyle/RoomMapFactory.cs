@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         [ExcludeFromCodeCoverage]
         public RoomMapFactory([NotNull] IRoomGenerator roomGenerator)
         {
-            _roomGenerator = roomGenerator ?? throw new System.ArgumentNullException(nameof(roomGenerator));
+            _roomGenerator = roomGenerator ?? throw new ArgumentNullException(nameof(roomGenerator));
         }
 
         private static ISectorMap CreateMapInstance()
@@ -39,14 +40,14 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             if (generationOptions is null)
             {
-                throw new System.ArgumentNullException(nameof(generationOptions));
+                throw new ArgumentNullException(nameof(generationOptions));
             }
 
             var roomFactoryOptions = generationOptions.OptionsSubScheme as ISectorRoomMapFactoryOptionsSubScheme;
 
             if (roomFactoryOptions is null)
             {
-                throw new System.ArgumentException("Не задана схема генерации в настройках", nameof(generationOptions));
+                throw new ArgumentException("Не задана схема генерации в настройках", nameof(generationOptions));
             }
 
             var map = CreateMapInstance();

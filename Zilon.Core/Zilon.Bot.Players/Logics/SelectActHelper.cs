@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -18,7 +19,7 @@ namespace Zilon.Bot.Players.Logics
         {
             if (acts is null)
             {
-                throw new System.ArgumentNullException(nameof(acts));
+                throw new ArgumentNullException(nameof(acts));
             }
 
             var availableActs = acts

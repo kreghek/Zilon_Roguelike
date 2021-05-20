@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Localization;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Localization;
 
 namespace Zilon.Core.Diseases
 {
@@ -7,7 +9,7 @@ namespace Zilon.Core.Diseases
     /// </summary>
     public static class DiseaseSymptoms
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Справочные данные.")]
         public static DiseaseSymptom[] Symptoms =>
             new[]

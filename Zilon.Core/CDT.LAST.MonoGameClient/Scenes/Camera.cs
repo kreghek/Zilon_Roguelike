@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+
+using Microsoft.Xna.Framework;
 
 using Zilon.Core.Client;
 using Zilon.Core.Common;
@@ -18,8 +20,8 @@ namespace CDT.LAST.MonoGameClient.Scenes
 
             var hexSize = UNIT_SIZE / 2;
             var actorPosition = new Vector2(
-                (float)(playerActorWorldCoords[0] * hexSize * System.Math.Sqrt(3)),
-                (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                playerActorWorldCoords[1] * hexSize * 2 / 2
             );
 
             var position = Matrix.CreateTranslation(

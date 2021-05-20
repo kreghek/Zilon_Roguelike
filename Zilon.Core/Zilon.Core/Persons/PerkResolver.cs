@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.PersonModules;
 
@@ -21,7 +22,7 @@ namespace Zilon.Core.Persons
         {
             if (progress is null)
             {
-                throw new System.ArgumentNullException(nameof(progress));
+                throw new ArgumentNullException(nameof(progress));
             }
 
             if (evolutionData == null)

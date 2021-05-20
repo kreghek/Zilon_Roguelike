@@ -53,7 +53,7 @@ namespace Zilon.Core.Common
         /// <param name="t">Параметр интерполяции.</param>
         private static void AddPointToList(CubeCoords a, CubeCoords b, List<CubeCoords> list, float t)
         {
-            LerpCube(a, b, t, out float cubeX, out float cubeY, out float cubeZ);
+            LerpCube(a, b, t, out var cubeX, out var cubeY, out var cubeZ);
             var point = RoundCube(cubeX, cubeY, cubeZ);
             list.Add(point);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,14 +15,14 @@ namespace Zilon.Core.Client.Sector
     {
         private readonly IPlayer _player;
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public GlobeLoopContext(IPlayer player)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
         }
 
         /// <inheritdoc />
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public bool HasNextIteration
         {
             get

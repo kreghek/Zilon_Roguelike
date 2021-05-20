@@ -30,16 +30,16 @@ namespace Zilon.Core.Tactics.Behaviour
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
+        private bool CurrentActorSetAndIsDead()
+        {
+            return (_currentActorIntention?.Person?.GetModuleSafe<ISurvivalModule>()?.IsDead).GetValueOrDefault();
+        }
+
         /// <inheritdoc />
         public void Dispose()
         {
             _spscChannel.Dispose();
             _cancellationTokenSource.Dispose();
-        }
-
-        private bool CurrentActorSetAndIsDead()
-        {
-            return (_currentActorIntention?.Person?.GetModuleSafe<ISurvivalModule>()?.IsDead).GetValueOrDefault();
         }
 
         /// <inheritdoc />

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+
+using Microsoft.Xna.Framework;
 
 namespace CDT.LAST.MonoGameClient.Engine
 {
@@ -102,7 +104,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <returns>Transformed vector.</returns>
         public Vector2 TransformVector(Vector2 point)
         {
-            var result = Vector2.Transform(point, Matrix.CreateRotationZ(Rotation * System.Math.Sign(Scale.X)));
+            var result = Vector2.Transform(point, Matrix.CreateRotationZ(Rotation * Math.Sign(Scale.X)));
             result *= Scale;
             result += Position;
             return result;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
@@ -15,7 +16,7 @@ namespace Zilon.Core.World
 
         public ResourceMaterializationMap(IDice dice)
         {
-            _dice = dice ?? throw new System.ArgumentNullException(nameof(dice));
+            _dice = dice ?? throw new ArgumentNullException(nameof(dice));
 
             _map = new Dictionary<ISectorNode, IResourceDepositData>();
         }
@@ -139,7 +140,7 @@ namespace Zilon.Core.World
         {
             if (sectorNode is null)
             {
-                throw new System.ArgumentNullException(nameof(sectorNode));
+                throw new ArgumentNullException(nameof(sectorNode));
             }
 
             // Алгоритм.

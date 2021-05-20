@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Common;
+﻿using System;
+
+using Zilon.Core.Common;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
@@ -11,10 +13,10 @@ namespace Zilon.Core.Persons
     {
         public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
         {
-            Stats = stats ?? throw new System.ArgumentNullException(nameof(stats));
+            Stats = stats ?? throw new ArgumentNullException(nameof(stats));
             if (stats.Efficient is null)
             {
-                throw new System.ArgumentException($"{stats.Efficient} is null.", nameof(stats));
+                throw new ArgumentException($"{stats.Efficient} is null.", nameof(stats));
             }
 
             Efficient = stats.Efficient;

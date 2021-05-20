@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
@@ -19,17 +20,17 @@ namespace Zilon.Bot.Players.Logics
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (staticObjectManager is null)
             {
-                throw new System.ArgumentNullException(nameof(staticObjectManager));
+                throw new ArgumentNullException(nameof(staticObjectManager));
             }
 
             if (map is null)
             {
-                throw new System.ArgumentNullException(nameof(map));
+                throw new ArgumentNullException(nameof(map));
             }
 
             var containerStaticObjects = staticObjectManager.Items
@@ -100,10 +101,10 @@ namespace Zilon.Bot.Players.Logics
         {
             var inventoryTransfer = new PropTransfer(actor.Person.GetModule<IInventoryModule>(),
                 container.GetModule<IPropContainer>().Content.CalcActualItems(),
-                System.Array.Empty<IProp>());
+                Array.Empty<IProp>());
 
             var containerTransfer = new PropTransfer(container.GetModule<IPropContainer>().Content,
-                System.Array.Empty<IProp>(),
+                Array.Empty<IProp>(),
                 container.GetModule<IPropContainer>().Content.CalcActualItems());
 
             var taskContext = new ActorTaskContext(sector);

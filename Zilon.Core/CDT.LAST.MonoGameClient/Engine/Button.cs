@@ -12,9 +12,9 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly Rectangle _rect;
         private UiButtonState _buttonState;
 
-        public Button(string name, Texture2D texture, SpriteFont font, Rectangle rect)
+        public Button(string title, Texture2D texture, SpriteFont font, Rectangle rect)
         {
-            Name = name;
+            Title = title;
             Texture = texture;
             _font = font;
             _rect = rect;
@@ -22,9 +22,9 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         public Action? Click { get; set; }
-
-        public string Name { get; }
         public Texture2D Texture { get; }
+
+        public string Title { get; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -46,7 +46,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             }
 
             spriteBatch.Draw(Texture, _rect, color);
-            spriteBatch.DrawString(_font, Name, new Vector2(_rect.Left, _rect.Top), Color.Gray);
+            spriteBatch.DrawString(_font, Title, new Vector2(_rect.Left, _rect.Top), Color.Gray);
         }
 
         public void Update()
