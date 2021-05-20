@@ -88,13 +88,7 @@ namespace Zilon.Core.Tactics.Behaviour
                         $"Restriction type is {nameof(UsageRestrictionRule.Undefined)}.");
 
                 case UsageRestrictionRule.NoStarvation:
-
-                    if (IsRestrictedByStarvation(actor))
-                    {
-                        return false;
-                    }
-
-                    break;
+                    return !IsRestrictedByStarvation(actor);
 
                 case UsageRestrictionRule.NoDehydration:
 
