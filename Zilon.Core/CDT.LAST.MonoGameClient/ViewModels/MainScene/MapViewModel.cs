@@ -24,12 +24,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private const int UNIT_SIZE = 32;
 
         private readonly Texture2D _hexSprite;
+
+        private readonly ConcurrentDictionary<OffsetCoords, Sprite> _hexSprites;
         private readonly IPlayer _player;
         private readonly ISector _sector;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
-
-        private readonly ConcurrentDictionary<OffsetCoords, Sprite> _hexSprites;
 
         private double _updateCounter = MAP_UPDATE_DELAY_SECONDS;
 
