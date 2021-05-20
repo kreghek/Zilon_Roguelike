@@ -27,7 +27,8 @@ namespace CDT.LAST.MonoGameClient.Scenes
             var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
-            _startButton = new Button(UiResources.StartGameButtonTitle, buttonTexture, font, new Rectangle(150, 150, 100, 20))
+            _startButton = new Button(UiResources.StartGameButtonTitle, buttonTexture, font,
+                new Rectangle(150, 150, 100, 20))
             {
                 Click = StartButtonClickHandler
             };
@@ -36,23 +37,6 @@ namespace CDT.LAST.MonoGameClient.Scenes
             {
                 Click = SwitchLanguageButtonClickHandler
             };
-        }
-
-        private void SwitchLanguageButtonClickHandler()
-        {
-            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
-            if (string.Equals(currentLanguage.TwoLetterISOLanguageName, "en", StringComparison.InvariantCultureIgnoreCase))
-            {
-                var newCulture = new CultureInfo("ru-RU");
-                Thread.CurrentThread.CurrentCulture = newCulture;
-                Thread.CurrentThread.CurrentUICulture = newCulture;
-            }
-            else
-            {
-                var newCulture = new CultureInfo("en-US");
-                Thread.CurrentThread.CurrentCulture = newCulture;
-                Thread.CurrentThread.CurrentUICulture = newCulture;
-            }
         }
 
         public override void Draw(GameTime gameTime)
@@ -67,7 +51,8 @@ namespace CDT.LAST.MonoGameClient.Scenes
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
             _spriteBatch.DrawString(font, "Title", new Vector2(50, 100), Color.White);
-            _spriteBatch.DrawString(font, Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName, new Vector2(150, 100), Color.White);
+            _spriteBatch.DrawString(font, Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName,
+                new Vector2(150, 100), Color.White);
 
             _spriteBatch.End();
         }
@@ -92,6 +77,24 @@ namespace CDT.LAST.MonoGameClient.Scenes
         private void StartButtonClickHandler()
         {
             TargetScene = _globeGenerationScene;
+        }
+
+        private void SwitchLanguageButtonClickHandler()
+        {
+            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
+            if (string.Equals(currentLanguage.TwoLetterISOLanguageName, "en",
+                StringComparison.InvariantCultureIgnoreCase))
+            {
+                var newCulture = new CultureInfo("ru-RU");
+                Thread.CurrentThread.CurrentCulture = newCulture;
+                Thread.CurrentThread.CurrentUICulture = newCulture;
+            }
+            else
+            {
+                var newCulture = new CultureInfo("en-US");
+                Thread.CurrentThread.CurrentCulture = newCulture;
+                Thread.CurrentThread.CurrentUICulture = newCulture;
+            }
         }
     }
 }

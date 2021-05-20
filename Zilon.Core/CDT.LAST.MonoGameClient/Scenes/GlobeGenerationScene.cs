@@ -33,7 +33,8 @@ namespace CDT.LAST.MonoGameClient.Scenes
             var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
-            _generateButton = new Button(UiResources.GenerateGlobeButtonTitle, buttonTexture, font, new Rectangle(150, 150, 100, 20))
+            _generateButton = new Button(UiResources.GenerateGlobeButtonTitle, buttonTexture, font,
+                new Rectangle(150, 150, 100, 20))
             {
                 Click = GenerateButtonClickHandler
             };

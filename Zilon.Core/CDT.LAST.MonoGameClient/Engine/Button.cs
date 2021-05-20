@@ -22,9 +22,9 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         public Action? Click { get; set; }
+        public Texture2D Texture { get; }
 
         public string Title { get; }
-        public Texture2D Texture { get; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
