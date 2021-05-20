@@ -59,25 +59,6 @@ namespace Zilon.Core.Tactics.Behaviour
             return true;
         }
 
-        private static bool CheckСonditionWithMaxLevel(IActor actor, SurvivalStatType effectType)
-        {
-            var isRestricted = false;
-
-            var сonditionModule = actor.Person.GetModuleSafe<IConditionModule>();
-            if (сonditionModule != null)
-            {
-                var searchingСondition = сonditionModule.Items.OfType<SurvivalStatHazardEffect>()
-                    .SingleOrDefault(x => x.Type == effectType && x.Level == SurvivalStatHazardLevel.Max);
-
-                if (searchingСondition != null)
-                {
-                    isRestricted = true;
-                }
-            }
-
-            return isRestricted;
-        }
-
         private static bool CheckPropAllowedByRestriction(UsageRestrictionRule restrictionType, IActor actor,
             IActorTaskContext context)
         {
@@ -107,6 +88,25 @@ namespace Zilon.Core.Tactics.Behaviour
                 default:
                     throw new NotSupportedException($"Restriction {restrictionType} is unknown.");
             }
+        }
+
+        private static bool CheckСonditionWithMaxLevel(IActor actor, SurvivalStatType effectType)
+        {
+            var isRestricted = false;
+
+            var сonditionModule = actor.Person.GetModuleSafe<IConditionModule>();
+            if (сonditionModule != null)
+            {
+                var searchingСondition = сonditionModule.Items.OfType<SurvivalStatHazardEffect>()
+                    .SingleOrDefault(x => x.Type == effectType && x.Level == SurvivalStatHazardLevel.Max);
+
+                if (searchingСondition != null)
+                {
+                    isRestricted = true;
+                }
+            }
+
+            return isRestricted;
         }
 
         private static bool IsRestrictedByDehydration(IActor actor)

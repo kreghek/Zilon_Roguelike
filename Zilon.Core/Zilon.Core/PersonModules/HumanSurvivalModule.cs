@@ -18,11 +18,11 @@ namespace Zilon.Core.PersonModules
     public sealed class HumanSurvivalModule : SurvivalModuleBase
     {
         private readonly IAttributesModule _attributesModule;
-        private readonly IConditionModule? _сonditionModule;
         private readonly IEquipmentModule? _equipmentModule;
         private readonly IEvolutionModule? _evolutionModule;
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
+        private readonly IConditionModule? _сonditionModule;
 
         public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource,

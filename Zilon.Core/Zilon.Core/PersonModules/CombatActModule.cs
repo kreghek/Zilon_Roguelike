@@ -21,9 +21,9 @@ namespace Zilon.Core.PersonModules
     public sealed class CombatActModule : ICombatActModule
     {
         private readonly ITacticalActScheme _defaultActScheme;
-        private readonly IConditionModule _сonditionModule;
         private readonly IEquipmentModule _equipmentModule;
         private readonly IEvolutionModule _evolutionModule;
+        private readonly IConditionModule _сonditionModule;
 
         public CombatActModule(
             ITacticalActScheme defaultActScheme,
