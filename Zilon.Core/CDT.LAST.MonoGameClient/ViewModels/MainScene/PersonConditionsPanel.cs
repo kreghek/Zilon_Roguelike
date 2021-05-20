@@ -74,10 +74,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
-            var effectsModule = person.GetModule<IEffectsModule>();
+            var conditionsModule = person.GetModule<IConditionModule>();
 
             var effectIndex = 0;
-            foreach (var effect in effectsModule.Items)
+            foreach (var effect in conditionsModule.Items)
             {
                 var iconX = effectIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
 
@@ -99,11 +99,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
-            var effectsModule = person.GetModule<IEffectsModule>();
+            var conditionsModule = person.GetModule<IConditionModule>();
 
             var mouseState = Mouse.GetState();
 
-            var effectRectangles = effectsModule.Items.Select((x, index) => new
+            var effectRectangles = conditionsModule.Items.Select((x, index) => new
             {
                 UiRect = new Rectangle(index * (ICON_SIZE + ICON_SPACING) - ICON_SPACING + _screenX, _screenY,
                     ICON_SIZE, ICON_SIZE),
