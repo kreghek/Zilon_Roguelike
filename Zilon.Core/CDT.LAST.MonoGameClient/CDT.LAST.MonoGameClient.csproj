@@ -43,4 +43,17 @@
     <ProjectReference Include="..\Zilon.DependencyInjection\Zilon.DependencyInjection.csproj" />
     <ProjectReference Include="..\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="MainScreenResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MainScreenResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="MainScreenResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainScreenResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

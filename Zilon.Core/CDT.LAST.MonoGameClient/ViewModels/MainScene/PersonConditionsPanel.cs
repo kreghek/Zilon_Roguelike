@@ -86,7 +86,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 effectIndex++;
             }
 
-            DrawHintIfSelected(spriteBatch, effectsModule);
+            DrawHintIfSelected(spriteBatch);
         }
 
         public void Update()
@@ -124,11 +124,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void DrawHintIfSelected(SpriteBatch spriteBatch, IEffectsModule effectsModule)
+        private void DrawHintIfSelected(SpriteBatch spriteBatch)
         {
             if (_selectedCondition != null && _selectedConditionIconIndex != null)
             {
-                var effectTitle = _selectedCondition.ToString();
+                var effectTitle = GetConditionTitle(_selectedCondition);
                 var titleTextSizeVector = _hintTitleFont.MeasureString(effectTitle);
                 var selectedEffectIndex = _selectedConditionIconIndex.Value;
                 var hintXPosition = selectedEffectIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
@@ -144,6 +144,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 spriteBatch.DrawString(_hintTitleFont, effectTitle,
                     new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                     Color.Wheat);
+            }
+        }
+
+        private static string GetConditionTitle(IPersonEffect personCondition)
+        {
+            switch (personCondition)
+            {
+                case SurvivalStatHazardEffect statEffect:
+                    return GetSurvivalConditionTitle(statEffect);
+
+                case DiseaseSymptomEffect:
+                    return string.Empty;
+
+                default:
+                    Debug.Fail($"All person conditions must have localized titles. Unknown person effect: {personCondition}.");
+                    return string.Empty;
             }
         }
 
@@ -177,6 +193,50 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 default:
                     Debug.Fail("Every condition must have icon.");
                     return "HungerLesser";
+            }
+        }
+
+        private static string GetSurvivalConditionTitle(SurvivalStatHazardEffect statEffect)
+        {
+            switch (statEffect.Type)
+            {
+                case SurvivalStatType.Health:
+                    switch (statEffect.Level)
+                    {
+                        case SurvivalStatHazardLevel.Lesser:
+                            return MainScreenResource.WoundLesserConditionTitle;
+
+                        case SurvivalStatHazardLevel.Strong:
+                            return MainScreenResource.WoundStrongConditionTitle;
+
+                        case SurvivalStatHazardLevel.Max:
+                            return MainScreenResource.WoundCriticalConditionTitle;
+
+                        default:
+                            Debug.Fail($"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
+                            return string.Empty;
+                    }
+
+                case SurvivalStatType.Satiety:
+                    switch (statEffect.Level)
+                    {
+                        case SurvivalStatHazardLevel.Lesser:
+                            return MainScreenResource.HungerLesserConditionTitle;
+
+                        case SurvivalStatHazardLevel.Strong:
+                            return MainScreenResource.HungerStrongConditionTitle;
+
+                        case SurvivalStatHazardLevel.Max:
+                            return MainScreenResource.HungerCriticalConditionTitle;
+
+                        default:
+                            Debug.Fail($"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
+                            return string.Empty;
+                    }
+
+                default:
+                    Debug.Fail($"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
+                    return string.Empty;
             }
         }
     }
