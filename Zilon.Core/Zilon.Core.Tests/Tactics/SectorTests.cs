@@ -133,8 +133,8 @@ namespace Zilon.Core.Tests.Tactics
             personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalData);
             personMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule)))).Returns(true);
 
-            var effectCollection = new EffectsModule();
-            personMock.Setup(x => x.GetModule<IEffectsModule>(It.IsAny<string>())).Returns(effectCollection);
+            var сonditionCollection = new ConditionModule();
+            personMock.Setup(x => x.GetModule<IConditionModule>(It.IsAny<string>())).Returns(сonditionCollection);
 
             return actorMock;
         }

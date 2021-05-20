@@ -79,7 +79,7 @@ public class PersonEffectHandler : MonoBehaviour
             return;
         }
 
-        var effects = person.GetModule<IEffectsModule>();
+        var effects = person.GetModule<IConditionModule>();
 
         foreach (var effect in effects.Items)
         {

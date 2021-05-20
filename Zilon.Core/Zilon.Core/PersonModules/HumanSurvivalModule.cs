@@ -18,23 +18,23 @@ namespace Zilon.Core.PersonModules
     public sealed class HumanSurvivalModule : SurvivalModuleBase
     {
         private readonly IAttributesModule _attributesModule;
-        private readonly IEffectsModule? _effectsModule;
         private readonly IEquipmentModule? _equipmentModule;
         private readonly IEvolutionModule? _evolutionModule;
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
+        private readonly IConditionModule? _сonditionModule;
 
         public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
             [NotNull] ISurvivalRandomSource randomSource,
             [NotNull] IAttributesModule attributesModule,
-            IEffectsModule? effectsModule,
+            IConditionModule? сonditionModule,
             IEvolutionModule? evolutionModule,
             IEquipmentModule? equipmentModule) : base(GetStats(personScheme, attributesModule))
         {
             _personScheme = personScheme;
             _randomSource = randomSource;
             _attributesModule = attributesModule;
-            _effectsModule = effectsModule;
+            _сonditionModule = сonditionModule;
             _evolutionModule = evolutionModule;
             _equipmentModule = equipmentModule;
 
@@ -54,7 +54,7 @@ namespace Zilon.Core.PersonModules
             personScheme,
             randomSource,
             attributesModule,
-            effectsModule: null,
+            сonditionModule: null,
             evolutionModule: null,
             equipmentModule: null)
         {
@@ -306,14 +306,14 @@ namespace Zilon.Core.PersonModules
 
         private void FillSurvivalBonusesFromEffects([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
         {
-            if (_effectsModule is null)
+            if (_сonditionModule is null)
             {
                 return;
             }
 
-            foreach (var effect in _effectsModule.Items)
+            foreach (var сondition in _сonditionModule.Items)
             {
-                switch (effect)
+                switch (сondition)
                 {
                     case DiseaseSymptomEffect diseaseSymptomEffect:
 
@@ -357,7 +357,7 @@ namespace Zilon.Core.PersonModules
                         break;
 
                     default:
-                        throw new InvalidOperationException($"Неизвестный тип эффекта {effect.GetType()}");
+                        throw new InvalidOperationException($"Неизвестный тип эффекта {сondition.GetType()}");
                 }
             }
         }
@@ -673,11 +673,11 @@ namespace Zilon.Core.PersonModules
                 _equipmentModule.EquipmentChanged += OtherModule_StateChanged;
             }
 
-            if (_effectsModule != null)
+            if (_сonditionModule != null)
             {
-                _effectsModule.Added += OtherModule_StateChanged;
-                _effectsModule.Removed += OtherModule_StateChanged;
-                _effectsModule.Changed += OtherModule_StateChanged;
+                _сonditionModule.Added += OtherModule_StateChanged;
+                _сonditionModule.Removed += OtherModule_StateChanged;
+                _сonditionModule.Changed += OtherModule_StateChanged;
             }
 
             if (_evolutionModule != null)
@@ -713,10 +713,10 @@ namespace Zilon.Core.PersonModules
 
             var notNullKeySegments = stat.KeySegments.Where(x => x != null).Select(x => x!).ToArray();
 
-            if (_effectsModule != null)
+            if (_сonditionModule != null)
             {
-                PersonEffectHelper.UpdateSurvivalEffect(
-                    _effectsModule,
+                PersonConditionHelper.UpdateSurvivalСondition(
+                    _сonditionModule,
                     stat,
                     notNullKeySegments,
                     _randomSource,
