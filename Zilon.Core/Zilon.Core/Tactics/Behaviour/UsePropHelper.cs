@@ -90,7 +90,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
-        private static bool CheckСonditionWithMaxLevel(IActor actor, SurvivalStatType effectType)
+        private static bool CheckConditionWithMaxLevel(IActor actor, SurvivalStatType effectType)
         {
             var isRestricted = false;
 
@@ -111,17 +111,17 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private static bool IsRestrictedByDehydration(IActor actor)
         {
-            return CheckСonditionWithMaxLevel(actor, SurvivalStatType.Hydration);
+            return CheckConditionWithMaxLevel(actor, SurvivalStatType.Hydration);
         }
 
         private static bool IsRestrictedByOverdose(IActor actor)
         {
-            return CheckСonditionWithMaxLevel(actor, SurvivalStatType.Intoxication);
+            return CheckConditionWithMaxLevel(actor, SurvivalStatType.Intoxication);
         }
 
         private static bool IsRestrictedByStarvation(IActor actor)
         {
-            return CheckСonditionWithMaxLevel(actor, SurvivalStatType.Satiety);
+            return CheckConditionWithMaxLevel(actor, SurvivalStatType.Satiety);
         }
     }
 }
