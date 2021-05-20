@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Triggers
@@ -24,22 +26,22 @@ namespace Zilon.Bot.Players.Triggers
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (context is null)
             {
-                throw new System.ArgumentNullException(nameof(context));
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (currentState is null)
             {
-                throw new System.ArgumentNullException(nameof(currentState));
+                throw new ArgumentNullException(nameof(currentState));
             }
 
             if (strategyData is null)
             {
-                throw new System.ArgumentNullException(nameof(strategyData));
+                throw new ArgumentNullException(nameof(strategyData));
             }
 
             return TestInner(actor, context, currentState, strategyData);

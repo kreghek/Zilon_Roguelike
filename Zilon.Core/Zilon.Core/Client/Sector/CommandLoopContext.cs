@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
@@ -21,7 +22,7 @@ namespace Zilon.Core.Client.Sector
             _animationBlockerService = animationBlockerService;
         }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public bool HasNextIteration
         {
             get
@@ -38,7 +39,7 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public bool CanPlayerGiveCommand
         {
             get

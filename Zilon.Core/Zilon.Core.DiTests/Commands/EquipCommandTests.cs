@@ -39,8 +39,7 @@ namespace Zilon.Core.Tests.Commands
                     Consumable = true,
                     CommonRules = new[]
                     {
-                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser,
-                            PersonRuleDirection.Positive)
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser)
                     }
                 }
             };

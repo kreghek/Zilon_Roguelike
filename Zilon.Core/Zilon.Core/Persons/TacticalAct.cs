@@ -35,7 +35,7 @@ namespace Zilon.Core.Persons
 
             Constrains = scheme.Constrains;
 
-            CurrentCooldown = scheme.Constrains?.Cooldown != null ? 0 : (int?)null;
+            CurrentCooldown = scheme.Constrains?.Cooldown != null ? 0 : null;
         }
 
         /// <inheritdoc />

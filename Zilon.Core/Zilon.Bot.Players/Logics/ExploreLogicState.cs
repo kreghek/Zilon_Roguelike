@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Zilon.Core.Graphs;
@@ -15,7 +16,7 @@ namespace Zilon.Bot.Players.Logics
     // Есть подозрение, что оно не работает.
     public sealed class ExploreLogicState : MoveLogicStateBase
     {
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public ExploreLogicState(IDecisionSource decisionSource) : base(decisionSource)
         {
         }

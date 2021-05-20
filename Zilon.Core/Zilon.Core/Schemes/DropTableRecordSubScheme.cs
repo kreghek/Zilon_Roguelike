@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Newtonsoft.Json;
 
@@ -24,11 +25,11 @@ namespace Zilon.Core.Schemes
         {
             //TODO Этот конструктор должен быть в тестовой реализации записи дропа.
             // После удаления конструктора убрать и безпараметровый и проверить загрузку схем
-            SchemeSid = schemeSid ?? throw new System.ArgumentNullException(nameof(schemeSid));
+            SchemeSid = schemeSid ?? throw new ArgumentNullException(nameof(schemeSid));
 
             if (weight <= 0)
             {
-                throw new System.ArgumentNullException(nameof(weight),
+                throw new ArgumentNullException(nameof(weight),
                     "Вес записи в таблице дропа должен быть положительным.");
             }
 
@@ -39,7 +40,7 @@ namespace Zilon.Core.Schemes
         /// Схема предмета.
         /// </summary>
         [JsonProperty]
-        public string? SchemeSid { get; private set; }
+        public string? SchemeSid { get; }
 
         /// <summary>
         /// Вес записи в таблице дропа.
@@ -48,7 +49,7 @@ namespace Zilon.Core.Schemes
         /// Чем выше, тем веротянее будет выбрана данная запись при разрешении дропа.
         /// </remarks>
         [JsonProperty]
-        public int Weight { get; private set; }
+        public int Weight { get; }
 
         /// <summary>
         /// Минимальное количество ресурса.

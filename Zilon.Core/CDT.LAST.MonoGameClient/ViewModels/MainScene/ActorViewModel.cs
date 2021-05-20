@@ -77,7 +77,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
             var newPosition = new Vector2(
                 (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                playerActorWorldCoords[1] * hexSize * 2 / 2
             );
 
             _rootSprite.Position = newPosition;
@@ -115,7 +115,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
                     var newPosition = new Vector2(
                         (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                        (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                        playerActorWorldCoords[1] * hexSize * 2 / 2
                     );
 
                     _rootSprite.Position = newPosition;
@@ -129,7 +129,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
             var newPosition = new Vector2(
                 (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                playerActorWorldCoords[1] * hexSize * 2 / 2
             );
 
             if (Visible)
@@ -168,7 +168,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)e.TargetNode).OffsetCoords);
                     var newPosition = new Vector2(
                         (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                        (float)(playerActorWorldCoords[1] * hexSize * 2 / 2)
+                        playerActorWorldCoords[1] * hexSize * 2 / 2
                     );
 
                     var targetSpritePosition = newPosition;

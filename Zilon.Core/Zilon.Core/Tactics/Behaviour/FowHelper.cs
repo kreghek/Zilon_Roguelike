@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Graphs;
@@ -22,17 +23,17 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (fowData is null)
             {
-                throw new System.ArgumentNullException(nameof(fowData));
+                throw new ArgumentNullException(nameof(fowData));
             }
 
             if (fowContext is null)
             {
-                throw new System.ArgumentNullException(nameof(fowContext));
+                throw new ArgumentNullException(nameof(fowContext));
             }
 
             if (baseNode is null)
             {
-                throw new System.ArgumentNullException(nameof(baseNode));
+                throw new ArgumentNullException(nameof(baseNode));
             }
 
             // Все наблюдаемые из базового узла узлы карты.

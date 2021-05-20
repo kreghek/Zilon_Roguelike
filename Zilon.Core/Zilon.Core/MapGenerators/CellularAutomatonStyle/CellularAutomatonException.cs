@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
@@ -30,8 +31,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// Констрктор.
         /// </summary>
         protected CellularAutomatonException(
-            System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext context) : base(info, context)
+            SerializationInfo info,
+            StreamingContext context) : base(info, context)
         {
         }
     }

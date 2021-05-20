@@ -23,7 +23,7 @@ namespace Zilon.Core.PersonModules
         public int CalculateCost()
         {
             var dexterityAttribute = _attributesModule.GetAttribute(PersonAttributeType.Dexterity);
-            int significantValue = (int)Math.Ceiling(dexterityAttribute.Value);
+            var significantValue = (int)Math.Ceiling(dexterityAttribute.Value);
             var diffValue = significantValue - BASE_DEXTERITY;
             return BASE_COST - (diffValue * COST_PER_DEXTERITY_UNIT);
         }

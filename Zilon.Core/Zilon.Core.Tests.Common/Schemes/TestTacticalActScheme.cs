@@ -1,8 +1,10 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public class TestTacticalActScheme : SchemeBase, ITacticalActScheme
     {
         public ITacticalActConstrainsSubScheme Constrains { get; set; }

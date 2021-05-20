@@ -29,7 +29,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
 
-        private ConcurrentDictionary<OffsetCoords, Sprite> _hexSprites;
+        private readonly ConcurrentDictionary<OffsetCoords, Sprite> _hexSprites;
 
         private double _updateCounter = MAP_UPDATE_DELAY_SECONDS;
 
@@ -125,7 +125,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     {
                         Position = new Vector2(
                             (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
-                            (float)(worldCoords[1] * hexSize * 2 / 2)
+                            worldCoords[1] * hexSize * 2 / 2
                         )
                     };
 

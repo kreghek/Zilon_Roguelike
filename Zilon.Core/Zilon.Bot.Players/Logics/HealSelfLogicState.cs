@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Bot.Players.Triggers;
 using Zilon.Core.PersonModules;
@@ -17,12 +18,12 @@ namespace Zilon.Bot.Players.Logics
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (context is null)
             {
-                throw new System.ArgumentNullException(nameof(context));
+                throw new ArgumentNullException(nameof(context));
             }
 
             var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats

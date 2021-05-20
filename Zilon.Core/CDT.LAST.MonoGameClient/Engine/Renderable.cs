@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -24,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         protected SpriteTransformation _localTrans = new SpriteTransformation();
 
         // do we need to update transformations?
-        private bool _needUpdateTransformations = false;
+        private bool _needUpdateTransformations;
 
         /// <summary>
         /// World transformations (local transformations + parent's world transformations).
@@ -91,7 +92,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         {
             set
             {
-                _localTrans.Scale.X = System.Math.Abs(_localTrans.Scale.X) * (value ? -1f : 1f);
+                _localTrans.Scale.X = Math.Abs(_localTrans.Scale.X) * (value ? -1f : 1f);
                 UpdateTransformations();
             }
             get => _localTrans.Scale.X < 0f;
@@ -104,7 +105,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         {
             set
             {
-                _localTrans.Scale.Y = System.Math.Abs(_localTrans.Scale.Y) * (value ? -1f : 1f);
+                _localTrans.Scale.Y = Math.Abs(_localTrans.Scale.Y) * (value ? -1f : 1f);
                 UpdateTransformations();
             }
             get => _localTrans.Scale.Y < 0f;
@@ -200,7 +201,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             // if child already got a parent throw exception
             if (child._parent != null)
             {
-                throw new System.Exception("Renderable to add as child already have a parent!");
+                throw new Exception("Renderable to add as child already have a parent!");
             }
 
             // add child
@@ -284,7 +285,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             // if child don't belong to this entity throw exception
             if (child._parent != this)
             {
-                throw new System.Exception("Renderable to remove is not a child of this renderable!");
+                throw new Exception("Renderable to remove is not a child of this renderable!");
             }
 
             // remove child
