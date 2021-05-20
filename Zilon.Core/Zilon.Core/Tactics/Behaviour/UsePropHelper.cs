@@ -89,10 +89,10 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 case UsageRestrictionRule.NoStarvation:
                     return !IsRestrictedByStarvation(actor);
-                    
+
                 case UsageRestrictionRule.NoDehydration:
                     return !IsRestrictedByDehydration(actor);
-                    
+
                 case UsageRestrictionRule.NoOverdose:
                     return !IsRestrictedByOverdose(actor);
 
@@ -101,7 +101,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     var hostilesinSector = context.Sector.ActorManager.Items
                         .Where(x => x != actor && actor.Person.Fraction.GetRelation(x.Person.Fraction) ==
                             FractionRelation.Enmity);
-                    
+
                     return !hostilesinSector.Any();
 
                 default:
