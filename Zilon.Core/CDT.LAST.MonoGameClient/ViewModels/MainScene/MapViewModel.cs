@@ -21,7 +21,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal class MapViewModel
     {
         private const float MAP_UPDATE_DELAY_SECONDS = 0.05f;
-        private const int UNIT_SIZE = 32;
 
         private readonly Texture2D _hexSprite;
 
@@ -114,12 +113,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 if (!_hexSprites.TryGetValue(node.OffsetCoords, out var currentHexSprite))
                 {
                     var worldCoords = HexHelper.ConvertToWorld(node.OffsetCoords);
-                    var hexSize = UNIT_SIZE / 2;
+                    var hexSize = MapMetrics.UnitSize / 2;
 
                     var newSprite = new Sprite(_hexSprite,
                         size: new Point(
                             (int)(hexSize * Math.Sqrt(3)),
-                            hexSize * 2 / 2
+                            (int)(hexSize * 2 / 2)
                         ),
                         color: nodeColor)
                     {
