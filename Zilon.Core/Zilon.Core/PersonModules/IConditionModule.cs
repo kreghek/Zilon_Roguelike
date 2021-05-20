@@ -5,7 +5,7 @@ using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
-    public interface IEffectsModule : IPersonModule
+    public interface IConditionModule : IPersonModule
     {
         IEnumerable<IPersonEffect> Items { get; }
 

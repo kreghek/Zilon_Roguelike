@@ -21,33 +21,33 @@ namespace Zilon.Core.PersonModules
     public sealed class CombatActModule : ICombatActModule
     {
         private readonly ITacticalActScheme _defaultActScheme;
-        private readonly IEffectsModule _effectsModule;
+        private readonly IConditionModule _сonditionModule;
         private readonly IEquipmentModule _equipmentModule;
         private readonly IEvolutionModule _evolutionModule;
 
         public CombatActModule(
             ITacticalActScheme defaultActScheme,
             IEquipmentModule equipmentModule,
-            IEffectsModule effectsModule,
+            IConditionModule сonditionModule,
             IEvolutionModule evolutionModule)
         {
             IsActive = true;
 
             _defaultActScheme = defaultActScheme;
             _equipmentModule = equipmentModule;
-            _effectsModule = effectsModule;
+            _сonditionModule = сonditionModule;
             _evolutionModule = evolutionModule;
         }
 
         private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment?> equipments,
-            IEffectsModule effects,
+            IConditionModule сondition,
             IEnumerable<IPerk> perks)
         {
-            var defaultAct = CreateTacticalAct(defaultActScheme, null, effects, perks);
+            var defaultAct = CreateTacticalAct(defaultActScheme, null, сondition, perks);
             yield return defaultAct;
 
-            var equipmentActs = CalcActsFromEquipments(equipments, effects, perks);
+            var equipmentActs = CalcActsFromEquipments(equipments, сondition, perks);
             foreach (var act in equipmentActs)
             {
                 yield return act;
@@ -56,7 +56,7 @@ namespace Zilon.Core.PersonModules
 
         private static IEnumerable<ITacticalAct> CalcActsFromEquipments(
             IEnumerable<Equipment?> equipments,
-            IEffectsModule effects,
+            IConditionModule сondition,
             IEnumerable<IPerk> perks)
         {
             if (equipments == null)
@@ -73,7 +73,7 @@ namespace Zilon.Core.PersonModules
 
                 foreach (var actScheme in equipment.Acts)
                 {
-                    var act = CreateTacticalAct(actScheme, equipment, effects, perks);
+                    var act = CreateTacticalAct(actScheme, equipment, сondition, perks);
 
                     yield return act;
                 }
@@ -141,11 +141,11 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void CalcSurvivalHazardOnTacticalAct(IEffectsModule effects,
+        private static void CalcSurvivalHazardOnTacticalAct(IConditionModule сondition,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
-            var greaterSurvivalEffect = effects.Items.OfType<SurvivalStatHazardEffect>()
+            var greaterSurvivalEffect = сondition.Items.OfType<SurvivalStatHazardEffect>()
                 .OrderByDescending(x => x.Level).FirstOrDefault();
 
             if (greaterSurvivalEffect == null)
@@ -172,13 +172,13 @@ namespace Zilon.Core.PersonModules
 
         private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
             [CanBeNull] Equipment? equipment,
-            [NotNull] IEffectsModule effects,
+            [NotNull] IConditionModule сondition,
             [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
             var efficientModifierValue = 0;
             var efficientRollUnmodified = scheme.Stats?.Efficient ?? new Roll(1, 1);
-            CalcSurvivalHazardOnTacticalAct(effects, ref toHitModifierValue, ref efficientModifierValue);
+            CalcSurvivalHazardOnTacticalAct(сondition, ref toHitModifierValue, ref efficientModifierValue);
             CalcPerksBonusesOnTacticalAct(perks, equipment, ref toHitModifierValue, ref efficientModifierValue);
 
             var toHitRoll = CreateTacticalActRoll(6, 1, toHitModifierValue);
@@ -293,7 +293,7 @@ namespace Zilon.Core.PersonModules
         public IEnumerable<ITacticalAct> CalcCombatActs()
         {
             var perks = GetPerksSafe();
-            return CalcActs(_defaultActScheme, _equipmentModule, _effectsModule, perks);
+            return CalcActs(_defaultActScheme, _equipmentModule, _сonditionModule, perks);
         }
     }
 }

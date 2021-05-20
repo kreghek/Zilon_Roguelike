@@ -278,9 +278,9 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                var effects = actor.Person.GetModuleSafe<IEffectsModule>();
+                var сonditions = actor.Person.GetModuleSafe<IConditionModule>();
 
-                if (effects is null)
+                if (сonditions is null)
                 {
                     continue;
                 }
@@ -291,9 +291,9 @@ namespace Zilon.Core.Tactics
                 // Но раньше никогда этой ошибки не было ни в тестах, ни на клиенте.
                 // Чтобы решить этот TODO, необходимо подобрать набор тестов, в результате которых
                 // Items изменяется. Они должны падать, если убрать ToArray и выполняться, если его вернуть.
-                foreach (var effect in effects.Items.ToArray())
+                foreach (var сondition in сonditions.Items.ToArray())
                 {
-                    if (effect is ISurvivalStatEffect actorEffect &&
+                    if (сondition is ISurvivalStatEffect actorEffect &&
                         actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                     {
                         actorEffect.Apply(actor.Person.GetModule<ISurvivalModule>());
