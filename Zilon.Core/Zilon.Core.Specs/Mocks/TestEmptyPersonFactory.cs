@@ -41,25 +41,25 @@ namespace Zilon.Core.Specs.Mocks
             var equipmentModule = new EquipmentModule(personScheme.Slots);
             person.AddModule(equipmentModule);
 
-            var effectsModule = new EffectsModule();
-            person.AddModule(effectsModule);
+            var сonditionModule = new ConditionModule();
+            person.AddModule(сonditionModule);
 
             var evolutionModule = new EvolutionModule(_schemeService);
             person.AddModule(evolutionModule);
 
             var survivalModule = new HumanSurvivalModule(personScheme, _survivalRandomSource, attributesModule,
-                effectsModule, evolutionModule, equipmentModule);
+                сonditionModule, evolutionModule, equipmentModule);
             person.AddModule(survivalModule);
 
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
             var combatActModule =
-                new CombatActModule(defaultActScheme, equipmentModule, effectsModule, evolutionModule);
+                new CombatActModule(defaultActScheme, equipmentModule, сonditionModule, evolutionModule);
             person.AddModule(combatActModule);
 
             var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
             person.AddModule(combatStatsModule);
 
-            var diseaseModule = new DiseaseModule(effectsModule);
+            var diseaseModule = new DiseaseModule(сonditionModule);
             person.AddModule(diseaseModule);
 
             return person;

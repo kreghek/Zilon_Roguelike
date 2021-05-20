@@ -44,13 +44,13 @@ namespace Zilon.Bot.Players.Triggers
                 throw new ArgumentNullException(nameof(actor));
             }
 
-            var effectsModule = actor.Person.GetModuleSafe<IEffectsModule>();
-            if (effectsModule is null)
+            var сonditionModule = actor.Person.GetModuleSafe<IConditionModule>();
+            if (сonditionModule is null)
             {
                 return false;
             }
 
-            var hazardEffect = effectsModule.Items.OfType<SurvivalStatHazardEffect>()
+            var hazardEffect = сonditionModule.Items.OfType<SurvivalStatHazardEffect>()
                 .SingleOrDefault(x => x.Type == survivalStatType && x.Level == SurvivalStatHazardLevel.Strong);
             if (hazardEffect == null)
             {

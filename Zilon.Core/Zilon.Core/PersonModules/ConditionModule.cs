@@ -5,11 +5,11 @@ using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
-    public class EffectsModule : IEffectsModule
+    public class ConditionModule : IConditionModule
     {
         private readonly List<IPersonEffect> _items;
 
-        public EffectsModule()
+        public ConditionModule()
         {
             _items = new List<IPersonEffect>();
             IsActive = true;
@@ -33,14 +33,14 @@ namespace Zilon.Core.PersonModules
             Removed?.Invoke(this, args);
         }
 
-        private void Effect_Changed(object sender, EventArgs e)
+        private void Сondition_Changed(object sender, EventArgs e)
         {
             var effect = (IPersonEffect)sender;
             DoChanged(effect);
         }
 
         public IEnumerable<IPersonEffect> Items => _items;
-        public string Key => nameof(IEffectsModule);
+        public string Key => nameof(IConditionModule);
         public bool IsActive { get; set; }
 
         public void Add(IPersonEffect effect)
@@ -52,7 +52,7 @@ namespace Zilon.Core.PersonModules
 
             _items.Add(effect);
 
-            effect.Changed += Effect_Changed;
+            effect.Changed += Сondition_Changed;
             DoAdd(effect);
         }
 
@@ -64,7 +64,7 @@ namespace Zilon.Core.PersonModules
             }
 
             _items.Remove(effect);
-            effect.Changed -= Effect_Changed;
+            effect.Changed -= Сondition_Changed;
             DoRemoved(effect);
         }
 
