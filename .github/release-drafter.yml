@@ -11,10 +11,14 @@ categories:
       - 'bugfix'
       - 'bug'
   - title: '🧰 Codebase improvements'
-    label: 'code improvement'
+    labels:
+      - 'code improvement'
+      - 'continuous integration'
+      - 'documentarium'
 change-template: |
-  - **$TITLE** (#$NUMBER)
-    $BODY
+  ### $TITLE (#$NUMBER)
+  
+  $BODY
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
 version-resolver:
   major:
@@ -30,6 +34,7 @@ version-resolver:
 include-labels:
   - 'release-significant'
 prerelease: true
+sort-direction: ascending
 template: |
   ## What's news
 

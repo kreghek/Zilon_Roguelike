@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Bot.Sdk;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -13,12 +15,8 @@ namespace Zilon.Emulation.Common
 {
     public abstract class AutoplayEngineBase
     {
-        private const int ITERATION_LIMIT = 40_000_000;
+        private const int ITERATION_LIMIT = 4000;
         private readonly IGlobeInitializer _globeInitializer;
-
-        protected IServiceScope ServiceScope { get; set; }
-
-        protected BotSettings BotSettings { get; }
 
         protected AutoplayEngineBase(BotSettings botSettings,
             IGlobeInitializer globeInitializer)
@@ -26,6 +24,12 @@ namespace Zilon.Emulation.Common
             BotSettings = botSettings;
             _globeInitializer = globeInitializer;
         }
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
+
+        protected BotSettings BotSettings { get; }
+
+        protected IServiceScope ServiceScope { get; set; }
 
         public async Task<IGlobe> CreateGlobeAsync()
         {
@@ -50,38 +54,48 @@ namespace Zilon.Emulation.Common
             var iterationCounter = 1;
             while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
             {
-                try
+                for (var updateCounter = 0; updateCounter < GlobeMetrics.OneIterationLength; updateCounter++)
                 {
-                    await globe.UpdateAsync().ConfigureAwait(false);
+                    try
+                    {
+                        await globe.UpdateAsync(CancellationToken.None).ConfigureAwait(false);
+                    }
+                    catch (ActorTaskExecutionException exception)
+                    {
+                        CatchActorTaskExecutionException(exception);
+                    }
+                    catch (AggregateException exception)
+                    {
+                        CatchException(exception.InnerException);
+                        throw;
+                    }
                 }
-                catch (ActorTaskExecutionException exception)
+
+                iterationCounter++;
+            }
+
+            if (iterationCounter >= ITERATION_LIMIT)
+            {
+                if (PlayerEventLogService != null)
                 {
-                    CatchActorTaskExecutionException(exception);
-                }
-                catch (AggregateException exception)
-                {
-                    CatchException(exception.InnerException);
-                    throw;
-                }
-#pragma warning disable CA1031 // Do not catch general exception types
-                catch (Exception exception)
-#pragma warning restore CA1031 // Do not catch general exception types
-                {
-                    CatchException(exception);
-                    throw;
+                    var endOfLifeEvent = new EndOfLifeEvent();
+                    PlayerEventLogService.Log(endOfLifeEvent);
                 }
             }
 
             ProcessEnd();
         }
 
-        protected abstract void CatchException(Exception exception);
-
         protected abstract void CatchActorTaskExecutionException(ActorTaskExecutionException exception);
 
-        protected abstract void ProcessEnd();
+        protected virtual void CatchException(Exception exception)
+        {
+            Console.WriteLine(exception);
+        }
 
         protected abstract void ConfigBotAux();
+
+        protected abstract void ProcessEnd();
 
         protected abstract void ProcessSectorExit();
     }

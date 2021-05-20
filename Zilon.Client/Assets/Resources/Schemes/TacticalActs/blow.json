@@ -1,7 +1,7 @@
 {
   "Name": {
     "Ru": "Удар",
-	"En": "Blow"
+    "En": "Blow"
   },
   "Stats": {
     "Efficient": {
@@ -12,13 +12,13 @@
       "Min": 1,
       "Max": 1
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
       "Type": "Concentrated",
-      "Impact":  "Kinetic",
-	  "ApRank": 2
+      "Impact": "Kinetic",
+      "ApRank": 2
     }
   }
 }

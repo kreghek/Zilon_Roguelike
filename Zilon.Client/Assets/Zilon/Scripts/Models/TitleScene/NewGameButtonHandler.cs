@@ -1,5 +1,4 @@
 ﻿using Assets.Zilon.Scripts.Models.TitleScene;
-using Assets.Zilon.Scripts.Services;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,14 +13,9 @@ public class NewGameButtonHandler : MonoBehaviour
     [Inject] private readonly IScoreManager _scoreManager;
     [Inject] private readonly IPlayer _humanPlayer;
 
-    [Inject]
-    ProgressStorageService _progressStorageService;
-
-    // Start is called before the first frame update
     public void PlayHandler()
     {
         GameProgressHelper.ResetGameState(_scoreManager, _humanPlayer);
-        _progressStorageService.Destroy();
-        SceneManager.LoadScene("combat");
+        SceneManager.LoadScene("globe-selection");
     }
 }

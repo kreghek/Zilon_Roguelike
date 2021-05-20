@@ -31,7 +31,7 @@ namespace Zilon.Tournament.ApiGate.Controllers
 
                 using (var command = connection.CreateCommand())
                 {
-                    command.CommandText = $@"SELECT [Name]
+                    command.CommandText = @"SELECT [Name]
                             ,[Mode]
                             ,MIN([MinScores])*1.0 AS MinScores
                             ,AVG([AvgScores]) AS AvgScores
@@ -92,8 +92,6 @@ namespace Zilon.Tournament.ApiGate.Controllers
                         }
                     }
                 }
-
-
             }
 
             return resultList;

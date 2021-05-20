@@ -19,13 +19,13 @@ namespace Zilon.Core.PersonModules
             _acts = acts.ToArray();
         }
 
-        /// <inheritdoc/>
-        public string Key { get => nameof(ICombatActModule); }
+        /// <inheritdoc />
+        public string Key => nameof(ICombatActModule);
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool IsActive { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IEnumerable<ITacticalAct> CalcCombatActs()
         {
             return _acts;

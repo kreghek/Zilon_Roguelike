@@ -1,7 +1,7 @@
 {
   "Name": {
     "Ru": "Укол",
-	"En": "Pierce"
+    "En": "Pierce"
   },
   "Stats": {
     "Efficient": {
@@ -12,13 +12,13 @@
       "Min": 1,
       "Max": 1
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
       "Type": "Fury",
-      "Impact":  "Kinetic",
-	  "ApRank": 3
+      "Impact": "Kinetic",
+      "ApRank": 3
     }
   }
 }

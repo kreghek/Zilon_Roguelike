@@ -6,21 +6,6 @@ namespace Zilon.Core.PersonModules
 {
     public static class IPersonExtensions
     {
-        public static TPersonModule GetModuleSafe<TPersonModule>(this IPerson source) where TPersonModule : IPersonModule
-        {
-            if (source is null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            if (!source.HasModule<TPersonModule>())
-            {
-                return default;
-            }
-
-            return source.GetModule<TPersonModule>();
-        }
-
         public static TPersonModule GetModule<TPersonModule>(this IPerson person) where TPersonModule : IPersonModule
         {
             if (person is null)
@@ -31,15 +16,33 @@ namespace Zilon.Core.PersonModules
             return person.GetModule<TPersonModule>(typeof(TPersonModule).Name);
         }
 
-        /// <inheritdoc/>
-        public static bool HasModule<TPersonModule>(this IPerson staticObject) where TPersonModule : IPersonModule
+        public static TPersonModule GetModuleSafe<TPersonModule>(this IPerson source)
+            where TPersonModule : IPersonModule
         {
-            if (staticObject is null)
+            if (source is null)
             {
-                throw new ArgumentNullException(nameof(staticObject));
+                throw new ArgumentNullException(nameof(source));
             }
 
-            return staticObject.HasModule(typeof(TPersonModule).Name);
+            if (!source.HasModule<TPersonModule>())
+            {
+#pragma warning disable CS8603 // Possible null reference return.
+                return default;
+#pragma warning restore CS8603 // Possible null reference return.
+            }
+
+            return source.GetModule<TPersonModule>();
+        }
+
+        /// <inheritdoc />
+        public static bool HasModule<TPersonModule>(this IPerson person) where TPersonModule : IPersonModule
+        {
+            if (person is null)
+            {
+                throw new ArgumentNullException(nameof(person));
+            }
+
+            return person.HasModule(typeof(TPersonModule).Name);
         }
     }
 }

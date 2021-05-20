@@ -22,7 +22,7 @@ namespace Assets.Zilon.Scripts.Models.Modals
 
         [NotNull] public Transform ContainerItemsParent;
 
-        [NotNull] [Inject] private readonly ICommandManager _clientCommandExecutor;
+        [NotNull] [Inject] private readonly ICommandPool _commandPool;
 
         [NotNull] [Inject(Id = "prop-transfer-command")] private readonly ICommand _propTransferCommand;
 
@@ -112,7 +112,7 @@ namespace Assets.Zilon.Scripts.Models.Modals
                     PropTransferMachineStore.Inventory);
             }
 
-            _clientCommandExecutor.Push(_propTransferCommand);
+            _commandPool.Push(_propTransferCommand);
         }
     }
 }

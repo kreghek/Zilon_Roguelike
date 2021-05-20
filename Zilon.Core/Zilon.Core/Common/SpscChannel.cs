@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,8 +8,8 @@ namespace Zilon.Core.Common
 {
     public sealed class SpscChannel<T> : ISender<T>, IReceiver<T>, IDisposable
     {
-        private readonly SemaphoreSlim _semaphore;
         private readonly IProducerConsumerCollection<TaskCompletionSource<T>> _receivers;
+        private readonly SemaphoreSlim _semaphore;
         private readonly IProducerConsumerCollection<T> _values;
 
         public SpscChannel()
@@ -18,31 +19,28 @@ namespace Zilon.Core.Common
             _values = new ConcurrentQueue<T>();
         }
 
-        public async Task SendAsync(T obj)
+        public void Dispose()
         {
-            await _semaphore.WaitAsync().ConfigureAwait(false);
+            _semaphore.Dispose();
+        }
 
-            try
+        public void CancelReceiving()
+        {
+            var receiverListCopy = _receivers.ToArray();
+            foreach (var receiver in receiverListCopy)
             {
-                if (_receivers.TryTake(out var receiver))
-                {
-                    receiver.SetResult(obj);
-                }
-                else
-                {
-                    _values.TryAdd(obj);
-                }
-            }
-            finally
-            {
-                _semaphore.Release();
+                // Call the receiver to stop.
+                receiver.SetCanceled();
+
+                // Remove the receiver from inner list beacuse it will not await anymore.
+                _receivers.TryTake(out var _);
             }
         }
 
-        public async Task<T> ReceiveAsync()
+        public async Task<T> ReceiveAsync(CancellationToken cancellationToken)
         {
             TaskCompletionSource<T> source;
-            await _semaphore.WaitAsync().ConfigureAwait(false);
+            await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
             try
             {
                 if (_values.TryTake(out var value))
@@ -63,9 +61,28 @@ namespace Zilon.Core.Common
             return await source.Task.ConfigureAwait(false);
         }
 
-        public void Dispose()
+        public async Task SendAsync(T obj, CancellationToken cancellationToken)
         {
-            _semaphore.Dispose();
+            await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
+
+            try
+            {
+                if (_receivers.TryTake(out var receiver))
+                {
+                    if (!receiver.TrySetResult(obj))
+                    {
+                        Debug.Fail("Error in concurrency.");
+                    }
+                }
+                else
+                {
+                    _values.TryAdd(obj);
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
     }
 }

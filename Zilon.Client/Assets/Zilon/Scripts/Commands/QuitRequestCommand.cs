@@ -9,9 +9,9 @@ namespace Assets.Zilon.Scripts.Commands
     {
         [Inject] ISectorModalManager _sectorModalManager;
 
-        public bool CanExecute()
+        public CanExecuteCheckResult CanExecute()
         {
-            return true;
+            return CanExecuteCheckResult.CreateSuccessful();
         }
 
         public void Execute()

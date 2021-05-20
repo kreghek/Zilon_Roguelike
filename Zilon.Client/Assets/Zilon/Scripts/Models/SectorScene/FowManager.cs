@@ -7,7 +7,6 @@ using Zenject;
 
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 
@@ -28,6 +27,14 @@ public class FowManager : MonoBehaviour
 
     public void Update()
     {
+        if (_player.MainPerson == null || _player.Globe == null)
+        {
+            // Do not try to update FoW because there is no main person for which FoW update needs.
+            // It may be beacause main person erise after new game and death.
+
+            return;
+        }
+
         if (_fowUpdateCounter >= UPDATE_FOW_DELAY)
         {
             UpdateFowState();
@@ -90,16 +97,19 @@ public class FowManager : MonoBehaviour
 
     private void ProcessNodeFow(ISectorFowData sectorFowData)
     {
-        if (_nodeViewModels == null)
+        if (_nodeViewModels is null)
         {
             return;
         }
 
+        var fowNodesMaterialized = sectorFowData.Nodes.ToArray();
+
         foreach (var nodeViewModel in _nodeViewModels)
         {
-            var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == nodeViewModel.Node);
+            var fowNode = fowNodesMaterialized.SingleOrDefault(x => x.Node == nodeViewModel.Node);
 
-            var fowState = (fowNode?.State).GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
+            var fowStateUnsafe = fowNode?.State;
+            var fowState = fowStateUnsafe.GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
 
             var fowController = nodeViewModel.GetComponent<FowNodeController>();
 
@@ -112,14 +122,16 @@ public class FowManager : MonoBehaviour
 
     private void ProcessActorFow(ISectorFowData sectorFowData)
     {
-        if (_nodeViewModels == null)
+        if (_nodeViewModels is null)
         {
             return;
         }
 
+        var fowNodesMaterialized = sectorFowData.Nodes.ToArray();
+
         foreach (var actorViewModel in _actorViewModels.ToArray())
         {
-            var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == actorViewModel.Actor.Node);
+            var fowNode = fowNodesMaterialized.SingleOrDefault(x => x.Node == actorViewModel.Actor.Node);
 
             var fowState = (fowNode?.State).GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
 
@@ -139,9 +151,11 @@ public class FowManager : MonoBehaviour
             return;
         }
 
+        var fowNodesMaterialized = sectorFowData.Nodes.ToArray();
+
         foreach (var containerViewModel in _staticObjectViewModels.ToArray())
         {
-            var fowNode = sectorFowData.Nodes.SingleOrDefault(x => x.Node == containerViewModel.Container.Node);
+            var fowNode = fowNodesMaterialized.SingleOrDefault(x => x.Node == containerViewModel.Container.Node);
 
             var fowState = (fowNode?.State).GetValueOrDefault(SectorMapNodeFowState.TerraIncognita);
 

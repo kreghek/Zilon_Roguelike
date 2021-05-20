@@ -1,4 +1,5 @@
 ﻿using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -7,12 +8,12 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <summary>
         /// Минимальное время простоя.
         /// </summary>
-        private const int _idleMin = 2;
+        private const int IDLE_MIN = 2;
 
         /// <summary>
         /// Максимальное время простоя.
         /// </summary>
-        private const int _idleMax = 5;
+        private const int IDLE_MAX = 5;
 
         /// <summary>
         /// Текущий счётчик простоя.
@@ -31,7 +32,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 throw new System.ArgumentNullException(nameof(decisionSource));
             }
 
-            _counter = decisionSource.SelectIdleDuration(_idleMin, _idleMax);
+            _counter = decisionSource.SelectIdleDuration(IDLE_MIN, IDLE_MAX);
         }
 
         public IdleTask(IActor actor, IActorTaskContext context, int duration) : base(actor, context)
@@ -43,6 +44,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
             _counter = duration;
         }
+
+        public override int Cost => GlobeMetrics.IdleDuration;
 
         public override void Execute()
         {

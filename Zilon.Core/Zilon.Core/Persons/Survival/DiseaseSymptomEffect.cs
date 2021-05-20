@@ -27,7 +27,7 @@ namespace Zilon.Core.Persons.Survival
             HoldDisease(disease);
         }
 
-        public IList<IDisease> Diseases { get => _diseases; }
+        public IList<IDisease> Diseases => _diseases;
 
         public DiseaseSymptom Symptom { get; }
 
@@ -48,7 +48,7 @@ namespace Zilon.Core.Persons.Survival
             Changed?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler Changed;
+        public event EventHandler? Changed;
 
         public EffectRule[] GetRules()
         {

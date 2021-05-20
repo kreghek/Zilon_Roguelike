@@ -8,6 +8,8 @@ public class WinModalBody : MonoBehaviour, IModalWindowHandler
 {
     public string Caption => "Critical error!!";
 
+    public CloseBehaviourOperation CloseBehaviour => CloseBehaviourOperation.DoNothing;
+
     public event EventHandler Closed;
 
     public void ApplyChanges()

@@ -28,7 +28,8 @@ namespace Zilon.Core.Schemes
 
             if (weight <= 0)
             {
-                throw new System.ArgumentNullException(nameof(weight), "Вес записи в таблице дропа должен быть положительным.");
+                throw new System.ArgumentNullException(nameof(weight),
+                    "Вес записи в таблице дропа должен быть положительным.");
             }
 
             Weight = weight;
@@ -38,7 +39,7 @@ namespace Zilon.Core.Schemes
         /// Схема предмета.
         /// </summary>
         [JsonProperty]
-        public string SchemeSid { get; private set; }
+        public string? SchemeSid { get; private set; }
 
         /// <summary>
         /// Вес записи в таблице дропа.
@@ -66,6 +67,6 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<DropTableScheme[]>))]
-        public IDropTableScheme[] Extra { get; private set; }
+        public IDropTableScheme[]? Extra { get; private set; }
     }
 }

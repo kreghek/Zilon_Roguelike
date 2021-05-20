@@ -1,22 +1,22 @@
 {
   "Name": {
     "Ru": "Хладнокровие",
-	"En": "Equanimity"
+    "En": "Equanimity"
   },
-  "Levels":[
+  "Levels": [
     {
-	  "Rules": [
-	    {
-		  "Type": "ToHit",
-		  "Level": "Lesser"
-		}
-	  ],
-	  "Jobs": [
-	    {
-		  "Type": "AttacksActor",
-		  "Value": 600
-		}
-	  ]
-	}
+      "Rules": [
+        {
+          "Type": "ToHit",
+          "Level": "Lesser"
+        }
+      ],
+      "Jobs": [
+        {
+          "Type": "AttacksActor",
+          "Value": 600
+        }
+      ]
+    }
   ]
 }

@@ -17,10 +17,17 @@ namespace Zilon.Core.Tactics
             int successToHitRoll,
             int factToHitRoll)
         {
-            PrefferedDefenceItem = prefferedDefenceItem ?? throw new ArgumentNullException(nameof(prefferedDefenceItem));
+            PrefferedDefenceItem =
+                prefferedDefenceItem ?? throw new ArgumentNullException(nameof(prefferedDefenceItem));
             SuccessToHitRoll = successToHitRoll;
             FactToHitRoll = factToHitRoll;
         }
+
+        /// <summary>
+        /// Фактический бросок, который был выполнен для пробития обороны.
+        /// </summary>
+        [PublicAPI]
+        public int FactToHitRoll { get; }
 
         /// <summary>
         /// Оборона, которая была использована.
@@ -33,11 +40,5 @@ namespace Zilon.Core.Tactics
         /// </summary>
         [PublicAPI]
         public int SuccessToHitRoll { get; }
-
-        /// <summary>
-        /// Фактический бросок, который был выполнен для пробития обороны.
-        /// </summary>
-        [PublicAPI]
-        public int FactToHitRoll { get; }
     }
 }

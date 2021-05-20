@@ -6,7 +6,7 @@ using Zilon.Emulation.Common;
 
 namespace Zilon.Core.Benchmarks.CreateSector
 {
-    class Startup : InitializationBase
+    internal class Startup : InitializationBase
     {
         public Startup() : base(123)
         {

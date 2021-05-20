@@ -9,7 +9,7 @@ namespace Zilon.Core.Tactics
     {
         /// <summary>
         /// Тип цели, которую может принять обработчик.
-        /// Либо <see cref="IActor"/>, либо <see cref="IStaticObject"/>
+        /// Либо <see cref="IActor" />, либо <see cref="IStaticObject" />
         /// </summary>
         Type TargetType { get; }
 

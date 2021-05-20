@@ -6,13 +6,13 @@
     public interface IGraphEdge
     {
         /// <summary>
-        /// Соединённые узлы карты.
-        /// </summary>
-        IGraphNode[] Nodes { get; }
-
-        /// <summary>
         /// Стоимость ребра.
         /// </summary>
         int Cost { get; }
+
+        /// <summary>
+        /// Соединённые узлы карты.
+        /// </summary>
+        IGraphNode[] Nodes { get; }
     }
 }

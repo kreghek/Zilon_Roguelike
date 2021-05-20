@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics
             _actUsageHandlers = actUsageHandlers;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IActUsageHandler GetHandler(IAttackTarget attackTarget)
         {
             if (attackTarget is null)

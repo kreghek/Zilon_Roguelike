@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Diseases;
@@ -11,55 +10,22 @@ namespace Zilon.Core.PersonModules
     /// <summary>
     /// Базовая реализация моделя болезней персонажа.
     /// </summary>
-    public class DiseaseModule : IDiseaseModule
+    public class DiseaseModule : DiseaseModuleBase
     {
-        private readonly List<IDiseaseProcess> _diseases;
+        private readonly IConditionModule _сonditionModule;
 
-        public DiseaseModule()
+        public DiseaseModule(IConditionModule сonditionModule)
         {
-            _diseases = new List<IDiseaseProcess>();
-            IsActive = true;
+            _сonditionModule = сonditionModule ?? throw new ArgumentNullException(nameof(сonditionModule));
         }
 
-        /// <inheritdoc/>
-        public IEnumerable<IDiseaseProcess> Diseases { get => _diseases; }
-        public string Key { get => nameof(IDiseaseModule); }
-        public bool IsActive { get; set; }
-
-        /// <inheritdoc/>
-        public void Infect(IDisease disease)
+        protected override void UpdateDeseaseProcess(IDiseaseProcess diseaseProcess)
         {
-            var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
-
-            if (currentProcess is null)
+            if (diseaseProcess is null)
             {
-                currentProcess = new DiseaseProcess(disease);
-                _diseases.Add(currentProcess);
-            }
-        }
-
-        /// <inheritdoc/>
-        public void RemoveDisease(IDisease disease)
-        {
-            var currentProcess = _diseases.SingleOrDefault(x => x.Disease == disease);
-            _diseases.Remove(currentProcess);
-        }
-
-        public void Update(IEffectsModule personEffects)
-        {
-            if (personEffects is null)
-            {
-                throw new ArgumentNullException(nameof(personEffects));
+                throw new ArgumentNullException(nameof(diseaseProcess));
             }
 
-            foreach (var diseaseProcess in Diseases.ToArray())
-            {
-                UpdateDeseaseProcess(personEffects, diseaseProcess);
-            }
-        }
-
-        private void UpdateDeseaseProcess(IEffectsModule personEffects, IDiseaseProcess diseaseProcess)
-        {
             diseaseProcess.Update();
 
             // Если есть болезнь, то назначаем эффекты на симпомы этой болезни.
@@ -85,11 +51,11 @@ namespace Zilon.Core.PersonModules
             // Затем, остаток, обрабатываем, как спад (выздоровление).
             if (diseaseProcess.Value < 0.5f)
             {
-                UpdatePowerUp(personEffects, disease, symptoms, currentPower, symptomPowerSegment);
+                UpdatePowerUp(_сonditionModule, disease, symptoms, currentPower, symptomPowerSegment);
             }
             else
             {
-                UpdatePowerDown(personEffects, disease, symptoms, currentPower, symptomPowerSegment);
+                UpdatePowerDown(_сonditionModule, disease, symptoms, currentPower, symptomPowerSegment);
             }
 
             // Если процесс болезни прошёл, то удаляем болезнь из модуля персонажа.
@@ -100,24 +66,32 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void UpdatePowerDown(IEffectsModule personEffects, IDisease disease, DiseaseSymptom[] symptoms, float currentPower, float symptomPowerSegment)
+        private static void AddDiseaseEffectForSymptom(
+            IConditionModule сonditionModule,
+            IDisease disease,
+            DiseaseSymptom symptom)
         {
-            var activeSymptomCount = (int)Math.Floor(currentPower / symptomPowerSegment);
+            var currentSymptomEffect = сonditionModule.Items.OfType<DiseaseSymptomEffect>()
+                .SingleOrDefault(x => x.Symptom == symptom);
 
-            // Начинаем снимать все эффекты, которые за пределами количества.
-
-            var symptomLowerIndex = activeSymptomCount;
-
-            for (var i = symptomLowerIndex; i < symptoms.Length; i++)
+            if (currentSymptomEffect is null)
             {
-                var currentSymptom = symptoms[i];
-                RemoveDiseaseEffectForSimptom(personEffects, disease, currentSymptom);
+                // При создании эффекта уже фиксируется болезнь, которая его удерживает.
+                currentSymptomEffect = new DiseaseSymptomEffect(disease, symptom);
+                сonditionModule.Add(currentSymptomEffect);
+            }
+            else
+            {
+                currentSymptomEffect.HoldDisease(disease);
             }
         }
 
-        private static void RemoveDiseaseEffectForSimptom(IEffectsModule personEffects, IDisease disease, DiseaseSymptom symptom)
+        private static void RemoveDiseaseEffectForSimptom(
+            IConditionModule сonditionModule,
+            IDisease disease,
+            DiseaseSymptom symptom)
         {
-            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
+            var currentSymptomEffect = сonditionModule.Items.OfType<DiseaseSymptomEffect>()
                 .SingleOrDefault(x => x.Symptom == symptom);
 
             if (currentSymptomEffect is null)
@@ -131,11 +105,32 @@ namespace Zilon.Core.PersonModules
 
             if (!currentSymptomEffect.Diseases.Any())
             {
-                personEffects.Remove(currentSymptomEffect);
+                сonditionModule.Remove(currentSymptomEffect);
             }
         }
 
-        private static void UpdatePowerUp(IEffectsModule personEffects, IDisease disease, DiseaseSymptom[] symptoms, float currentPower, float symptomPowerSegment)
+        private static void UpdatePowerDown(
+            IConditionModule сonditionModule,
+            IDisease disease,
+            DiseaseSymptom[] symptoms,
+            float currentPower,
+            float symptomPowerSegment)
+        {
+            var activeSymptomCount = (int)Math.Floor(currentPower / symptomPowerSegment);
+
+            // Начинаем снимать все эффекты, которые за пределами количества.
+
+            var symptomLowerIndex = activeSymptomCount;
+
+            for (var i = symptomLowerIndex; i < symptoms.Length; i++)
+            {
+                var currentSymptom = symptoms[i];
+                RemoveDiseaseEffectForSimptom(сonditionModule, disease, currentSymptom);
+            }
+        }
+
+        private static void UpdatePowerUp(IConditionModule сonditionModule, IDisease disease, DiseaseSymptom[] symptoms,
+            float currentPower, float symptomPowerSegment)
         {
             if (currentPower <= 0.25f)
             {
@@ -153,24 +148,7 @@ namespace Zilon.Core.PersonModules
             for (var i = 0; i < activeSymptomCount; i++)
             {
                 var currentSymptom = symptoms[i];
-                AddDiseaseEffectForSymptom(personEffects, disease, currentSymptom);
-            }
-        }
-
-        private static void AddDiseaseEffectForSymptom(IEffectsModule personEffects, IDisease disease, DiseaseSymptom symptom)
-        {
-            var currentSymptomEffect = personEffects.Items.OfType<DiseaseSymptomEffect>()
-                .SingleOrDefault(x => x.Symptom == symptom);
-
-            if (currentSymptomEffect is null)
-            {
-                // При создании эффекта уже фиксируется болезнь, которая его удерживает.
-                currentSymptomEffect = new DiseaseSymptomEffect(disease, symptom);
-                personEffects.Add(currentSymptomEffect);
-            }
-            else
-            {
-                currentSymptomEffect.HoldDisease(disease);
+                AddDiseaseEffectForSymptom(сonditionModule, disease, currentSymptom);
             }
         }
     }

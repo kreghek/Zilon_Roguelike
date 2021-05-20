@@ -10,9 +10,11 @@ namespace Zilon.Bot.Players
             NextState = nextState ?? throw new ArgumentNullException(nameof(nextState));
         }
 
-        public ILogicStateTrigger Trigger { get; }
         public ILogicState NextState { get; }
 
+        public ILogicStateTrigger Trigger { get; }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public override string ToString()
         {
             return $"{Trigger}: {NextState}";

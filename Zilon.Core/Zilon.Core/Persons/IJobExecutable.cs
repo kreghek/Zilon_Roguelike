@@ -5,6 +5,6 @@
     /// </summary>
     public interface IJobExecutable
     {
-        IJob[] CurrentJobs { get; }
+        IJob[]? CurrentJobs { get; }
     }
 }

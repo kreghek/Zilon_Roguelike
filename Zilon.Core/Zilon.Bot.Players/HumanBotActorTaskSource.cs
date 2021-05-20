@@ -2,15 +2,17 @@
 
 using Zilon.Bot.Players.Strategies;
 using Zilon.Bot.Sdk;
+using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public sealed class HumanBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext>, IPluggableActorTaskSource<TContext> where TContext : class, ISectorTaskSourceContext
+    public sealed class HumanBotActorTaskSource<TContext> : BotActorTaskSourceBase<TContext>,
+        IPluggableActorTaskSource<TContext> where TContext : class, ISectorTaskSourceContext
     {
-        private IBotSettings _botSettings;
         private readonly LogicStateTreePatterns _logicStateTreePatterns;
+        private IBotSettings _botSettings;
 
         public HumanBotActorTaskSource(LogicStateTreePatterns logicStateTreePatterns)
         {
@@ -26,10 +28,12 @@ namespace Zilon.Bot.Players
 
             if (_botSettings == null)
             {
-                return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot)
+                if (actor.Person is HumanPerson)
                 {
-                    WriteStateChanges = true
-                };
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot);
+                }
+
+                return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster);
             }
 
             var normalizedMode = _botSettings.Mode?.Trim().ToUpperInvariant();
@@ -37,28 +41,16 @@ namespace Zilon.Bot.Players
             {
                 case "":
                 case null:
-                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot)
-                    {
-                        WriteStateChanges = true
-                    };
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.DefaultHumanBot);
 
                 case "JOE":
-                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.JoeHumanBot)
-                    {
-                        WriteStateChanges = true
-                    };
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.JoeHumanBot);
 
                 case "DUNCAN":
-                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.DuncanHumanBot)
-                    {
-                        WriteStateChanges = true
-                    };
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.DuncanHumanBot);
 
                 case "MONSTER":
-                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster)
-                    {
-                        WriteStateChanges = true
-                    };
+                    return new LogicTreeStrategy(actor, _logicStateTreePatterns.Monster);
 
                 default:
                     throw new NotSupportedException();

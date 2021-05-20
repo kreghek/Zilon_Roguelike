@@ -23,7 +23,8 @@ namespace Zilon.Core.Tests.CommonServices
         public void GetRecord_RollIn1stBorder_Has1stRecord()
         {
             // ARRANGE
-            var records = new[] {
+            var records = new[]
+            {
                 new DropTableRecordSubScheme("trophy1", 16),
                 new DropTableRecordSubScheme("trophy2", 64)
             };
@@ -36,12 +37,8 @@ namespace Zilon.Core.Tests.CommonServices
                 ModifiedWeight = x.Weight
             }).ToArray();
 
-
-
             // ACT
             var recordMod = DropRoller.GetRecord(recMods, roll);
-
-
 
             // ASSERT
             recordMod.Record.SchemeSid.Should().Be("trophy1");

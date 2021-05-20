@@ -17,19 +17,18 @@ namespace Zilon.Core.Persons
             {
                 // Фракция монстров нападает на всех, кроме монстров.
                 // У монстров нет друзей.
-                return FractionRelation.Enemy;
+                return FractionRelation.Enmity;
             }
-            else if (this != Fractions.MonsterFraction && targetFraction == Fractions.MonsterFraction)
+
+            if (this != Fractions.MonsterFraction && targetFraction == Fractions.MonsterFraction)
             {
                 // С монтсрами никто не дружит.
                 // Все фракции считают их врагами.
-                return FractionRelation.Enemy;
+                return FractionRelation.Enmity;
             }
-            else
-            {
-                // Все фракции, кроме монстров, друг к другу относятся нейтрально.
-                return FractionRelation.Neutral;
-            }
+
+            // Все фракции, кроме монстров, друг к другу относятся нейтрально.
+            return FractionRelation.Neutral;
         }
     }
 }

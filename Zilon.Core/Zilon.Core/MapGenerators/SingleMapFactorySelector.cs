@@ -19,7 +19,7 @@ namespace Zilon.Core.MapGenerators
             _mapFactory = mapFactory ?? throw new System.ArgumentNullException(nameof(mapFactory));
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IMapFactory GetMapFactory(ISectorNode sectorNode)
         {
             return _mapFactory;

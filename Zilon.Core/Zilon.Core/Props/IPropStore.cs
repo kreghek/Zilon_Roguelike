@@ -12,15 +12,15 @@ namespace Zilon.Core.Props
     public interface IPropStore
     {
         /// <summary>
-        /// Предметы в инвентаре.
-        /// </summary>
-        IProp[] CalcActualItems();
-
-        /// <summary>
         /// Добавление предмета в хранилище.
         /// </summary>
         /// <param name="prop"> Целевой предмет. </param>
         void Add(IProp prop);
+
+        /// <summary>
+        /// Предметы в инвентаре.
+        /// </summary>
+        IProp[] CalcActualItems();
 
         /// <summary>
         /// Проверяет, что предмет есть в хранилище.
@@ -41,12 +41,12 @@ namespace Zilon.Core.Props
         /// <remarks>
         /// Это событие не срабатывает, если изменилось количество ресурсов.
         /// </remarks>
-        event EventHandler<PropStoreEventArgs> Added;
+        event EventHandler<PropStoreEventArgs>? Added;
 
         /// <summary>
         /// Событие выстреливает, если какой-либо предмет удалён из хранилища.
         /// </summary>
-        event EventHandler<PropStoreEventArgs> Removed;
+        event EventHandler<PropStoreEventArgs>? Removed;
 
         /// <summary>
         /// Событие выстреливает, когда один из предметов в хранилище изменяется.
@@ -54,6 +54,6 @@ namespace Zilon.Core.Props
         /// <remarks>
         /// Используется, когда изменяется количество ресурсов в стаке.
         /// </remarks>
-        event EventHandler<PropStoreEventArgs> Changed;
+        event EventHandler<PropStoreEventArgs>? Changed;
     }
 }

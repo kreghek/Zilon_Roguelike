@@ -4,15 +4,18 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class StoneDepositFactory : PropDepositFactoryBase
     {
         public StoneDepositFactory(
             ISchemeService schemeService,
-            IDropResolver dropResolver) : base(toolTags: new[] { "pick-axe" }, dropTableSchemeSid: "stone-deposit", PropContainerPurpose.StoneDeposits, schemeService, dropResolver)
+            IDropResolver dropResolver) : base(toolTags: new[] { "pick-axe" }, dropTableSchemeSid: "stone-deposit",
+            PropContainerPurpose.StoneDeposits, schemeService, dropResolver)
         {
         }
 
-        protected override int ExhausingValue { get => 10; }
-        protected override DepositMiningDifficulty Difficulty { get => DepositMiningDifficulty.Moderately; }
+        protected override DepositMiningDifficulty Difficulty => DepositMiningDifficulty.Moderately;
+
+        protected override int ExhausingValue => 10;
     }
 }

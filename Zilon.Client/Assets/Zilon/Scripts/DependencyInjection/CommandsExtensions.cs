@@ -18,7 +18,7 @@ namespace Assets.Zilon.Scripts.DependencyInjection
             diContainer.Bind<ICommand>().WithId("attack-command").To<AttackCommand>().AsSingle();
             diContainer.Bind<ICommand>().WithId("mine-deposit-command").To<MineDepositCommand>().AsSingle();
             diContainer.Bind<ICommand>().WithId("open-container-command").To<OpenContainerCommand>().AsSingle();
-            diContainer.Bind<ICommand>().WithId("next-turn-command").To<NextTurnCommand>().AsSingle();
+            diContainer.Bind<ICommand>().WithId("next-turn-command").To<IdleCommand>().AsSingle();
             diContainer.Bind<ICommand>().WithId("use-self-command").To<UseSelfCommand>().AsSingle();
             diContainer.Bind<ICommand>().WithId("sector-transition-move-command").To<SectorTransitionMoveCommand>().AsSingle();
         }

@@ -9,16 +9,6 @@ namespace Zilon.Core.Schemes
     public interface ITacticalActOffenceSubScheme
     {
         /// <summary>
-        /// Тип действия.
-        /// </summary>
-        OffenseType Type { get; }
-
-        /// <summary>
-        /// Тип воздействия.
-        /// </summary>
-        ImpactType Impact { get; }
-
-        /// <summary>
         /// Ранг пробития брони.
         /// </summary>
         /// <remarks>
@@ -26,5 +16,15 @@ namespace Zilon.Core.Schemes
         /// то цень не пробрасывает спас-бросок за броню.
         /// </remarks>
         int ApRank { get; }
+
+        /// <summary>
+        /// Тип воздействия.
+        /// </summary>
+        ImpactType Impact { get; }
+
+        /// <summary>
+        /// Тип действия.
+        /// </summary>
+        OffenseType Type { get; }
     }
 }

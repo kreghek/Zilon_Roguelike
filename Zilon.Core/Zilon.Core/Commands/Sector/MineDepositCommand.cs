@@ -14,8 +14,8 @@ namespace Zilon.Core.Commands.Sector
 {
     public sealed class MineDepositCommand : ActorCommandBase
     {
-        private readonly IPlayer _player;
         private readonly IMineDepositMethodRandomSource _mineDepositMethodRandomSource;
+        private readonly IPlayer _player;
 
         public MineDepositCommand(
             IPlayer player,
@@ -26,48 +26,91 @@ namespace Zilon.Core.Commands.Sector
             _mineDepositMethodRandomSource = mineDepositMethodRandomSource;
         }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
             var selectedViewModel = PlayerState.SelectedViewModel ?? PlayerState.HoverViewModel;
-            var targetDeposit = (selectedViewModel as IContainerViewModel)?.StaticObject.GetModuleSafe<IPropDepositModule>();
+            var staticObject = (selectedViewModel as IContainerViewModel)?.StaticObject;
+            if (staticObject is null)
+            {
+                return new CanExecuteCheckResult { IsSuccess = false };
+            }
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var map = sector.Map;
+
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var currentNode = actor.Node;
+
+            var distance = map.DistanceBetween(currentNode, staticObject.Node);
+            if (distance > 1)
+            {
+                return new CanExecuteCheckResult { IsSuccess = false };
+            }
+
+            var targetDeposit = staticObject.GetModuleSafe<IPropDepositModule>();
 
             if (targetDeposit is null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
-            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.GetModuleSafe<IEquipmentModule>();
+            var equipmentCarrier = actor.Person.GetModuleSafe<IEquipmentModule>();
             if (equipmentCarrier is null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var requiredTags = targetDeposit.GetToolTags();
             if (requiredTags.Any())
             {
-                var equipedTool = GetEquipedTool(equipmentCarrier, targetDeposit.GetToolTags());
+                var equipedTool = GetEquipedTool(equipmentCarrier, requiredTags);
                 if (equipedTool is null)
                 {
-                    return false;
+                    return new CanExecuteCheckResult { IsSuccess = false };
                 }
 
-                return true;
+                return new CanExecuteCheckResult { IsSuccess = true };
             }
-            else
-            {
-                // Если для добычи не указаны теги, то предполагается,
-                // что добывать можно "руками".
-                // То есть никакого инструмента не требуется.
-                return true;
-            }
+
+            // Если для добычи не указаны теги, то предполагается,
+            // что добывать можно "руками".
+            // То есть никакого инструмента не требуется.
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         protected override void ExecuteTacticCommand()
         {
-            var targetStaticObject = (PlayerState.SelectedViewModel as IContainerViewModel).StaticObject;
+            var targetStaticObject = (PlayerState?.SelectedViewModel as IContainerViewModel)?.StaticObject;
+            if (targetStaticObject is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var targetDeposit = targetStaticObject.GetModule<IPropDepositModule>();
 
-            var equipmentCarrier = PlayerState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>();
+            var actor = PlayerState?.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState?.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var equipmentCarrier = actor.Person.GetModule<IEquipmentModule>();
             var requiredTags = targetDeposit.GetToolTags();
 
             if (requiredTags.Any())
@@ -75,23 +118,50 @@ namespace Zilon.Core.Commands.Sector
                 var equipedTool = GetEquipedTool(equipmentCarrier, requiredTags);
                 if (equipedTool is null)
                 {
-                    throw new InvalidOperationException("Попытка добычи без инструмента.");
+                    throw new InvalidOperationException("Try to mine without required tools.");
                 }
-                else
-                {
-                    var intetion = new Intention<MineTask>(actor => CreateTaskByInstrument(actor, targetStaticObject, equipedTool));
-                    PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
-                }
+
+                var intetion = new Intention<MineTask>(actor =>
+                    CreateTaskByInstrument(actor, targetStaticObject, equipedTool));
+                taskSource.Intent(intetion, actor);
             }
             else
             {
                 // Добыча руками, если никаких тегов инструмента не задано.
                 var intetion = new Intention<MineTask>(actor => CreateTaskByHands(actor, targetStaticObject));
-                PlayerState.TaskSource.Intent(intetion, PlayerState.ActiveActor.Actor);
+                taskSource.Intent(intetion, actor);
             }
         }
 
-        private static Equipment GetEquipedTool(IEquipmentModule equipmentModule, string[] requiredToolTags)
+        private MineTask CreateTaskByHands(IActor actor, IStaticObject staticObject)
+        {
+            var handMineDepositMethod = new HandMineDepositMethod(_mineDepositMethodRandomSource);
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
+            return new MineTask(actor, taskContext, staticObject, handMineDepositMethod);
+        }
+
+        private MineTask CreateTaskByInstrument(IActor actor, IStaticObject staticObject, Equipment equipedTool)
+        {
+            var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool, _mineDepositMethodRandomSource);
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
+            return new MineTask(actor, taskContext, staticObject, toolMineDepositMethod);
+        }
+
+        private static Equipment? GetEquipedTool(IEquipmentModule equipmentModule, string[] requiredToolTags)
         {
             if (!requiredToolTags.Any())
             {
@@ -108,7 +178,14 @@ namespace Zilon.Core.Commands.Sector
                     continue;
                 }
 
-                var hasAllTags = EquipmentHelper.HasAllTags(equipment.Scheme.Tags, requiredToolTags);
+                if (equipment.Scheme.Tags is null)
+                {
+                    continue;
+                }
+
+                var equipmentTags = equipment.Scheme.Tags.Where(x => x != null).Select(x => x!).ToArray();
+
+                var hasAllTags = EquipmentHelper.HasAllTags(equipmentTags, requiredToolTags);
                 if (hasAllTags)
                 {
                     // This equipment has all required tags.
@@ -117,22 +194,6 @@ namespace Zilon.Core.Commands.Sector
             }
 
             return null;
-        }
-
-        private MineTask CreateTaskByInstrument(IActor actor, IStaticObject staticObject, Equipment equipedTool)
-        {
-            var toolMineDepositMethod = new ToolMineDepositMethod(equipedTool, _mineDepositMethodRandomSource);
-
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
-            return new MineTask(actor, taskContext, staticObject, toolMineDepositMethod);
-        }
-
-        private MineTask CreateTaskByHands(IActor actor, IStaticObject staticObject)
-        {
-            var handMineDepositMethod = new HandMineDepositMethod(_mineDepositMethodRandomSource);
-
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
-            return new MineTask(actor, taskContext, staticObject, handMineDepositMethod);
         }
     }
 }

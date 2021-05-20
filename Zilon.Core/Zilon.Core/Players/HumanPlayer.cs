@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.Persons;
 using Zilon.Core.World;
@@ -11,30 +12,52 @@ namespace Zilon.Core.Players
     /// <seealso cref="PlayerBase" />
     public class HumanPlayer : IPlayer
     {
-        public ISectorNode SectorNode { get => Globe.SectorNodes.Single(node => node.Sector.ActorManager.Items.Any(x => x.Person == MainPerson)); }
+        private ISectorNode GetSectorNode()
+        {
+            if (Globe is null)
+            {
+                throw new InvalidOperationException("Globe is not assigned.");
+            }
+
+            var sectorNode = Globe.SectorNodes.SingleOrDefault(IsActorInSector);
+            if (sectorNode is null)
+            {
+                throw new InvalidOperationException("There is no sector with the player person.");
+            }
+
+            return sectorNode;
+        }
+
+        private bool IsActorInSector(ISectorNode node)
+        {
+            var sector = node.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return sector.ActorManager.Items.Any(x => x.Person == MainPerson);
+        }
+
+        public ISectorNode SectorNode => GetSectorNode();
 
         /// <summary>
         /// Ссылка на основного персонажа игрока.
         /// </summary>
-        public IPerson MainPerson { get; private set; }
-        public IGlobe Globe { get; private set; }
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        public IPerson? MainPerson { get; private set; }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        public IGlobe? Globe { get; private set; }
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public void BindPerson(IGlobe globe, IPerson person)
         {
-            if (globe is null)
-            {
-                throw new System.ArgumentNullException(nameof(globe));
-            }
-
-            if (person is null)
-            {
-                throw new System.ArgumentNullException(nameof(person));
-            }
-
             Globe = globe;
             MainPerson = person;
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public void Reset()
         {
             Globe = null;

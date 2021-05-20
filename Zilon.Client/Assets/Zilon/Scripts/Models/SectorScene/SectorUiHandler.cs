@@ -3,7 +3,6 @@
 using JetBrains.Annotations;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using Zenject;
@@ -15,6 +14,7 @@ using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 //TODO Сделать отдельные крипты для каждой кнопки, которые будут содежать обработчики.
 //Тогда этот объект станет не нужным.
@@ -27,7 +27,9 @@ public class SectorUiHandler : MonoBehaviour
 
     [Inject] private readonly ISectorUiState _playerState;
 
-    [Inject] private readonly ICommandManager _clientCommandExecutor;
+    [Inject] private readonly ICommandPool _commandPool;
+
+    [Inject] private readonly IActorTaskControlSwitcher _actorTaskControlSwitcher;
 
     [Inject(Id = "next-turn-command")] private readonly ICommand _nextTurnCommand;
 
@@ -50,7 +52,6 @@ public class SectorUiHandler : MonoBehaviour
     public Button InventoryButton;
     public Button PersonButton;
     public Button SectorTransitionMoveButton;
-    public Button CityQuickExitButton;
     public Button OpenLootButton;
 
     public SectorVM SectorVM;
@@ -63,44 +64,52 @@ public class SectorUiHandler : MonoBehaviour
 
     private void UpdateButtonStates()
     {
+        var playerPersonIsNotInTransitionPool = _player.Globe.SectorNodes.Select(x => x.Sector).SelectMany(x => x.ActorManager.Items).Any(x => x.Person == _player.MainPerson);
+        var playerPersonIsInTransitionPool = !playerPersonIsNotInTransitionPool;
+        if (playerPersonIsInTransitionPool)
+        {
+            return;
+        }
+
         if (NextTurnButton != null)
         {
-            NextTurnButton.interactable = _nextTurnCommand.CanExecute();
+            NextTurnButton.interactable = _nextTurnCommand.CanExecute().IsSuccess;
         }
 
         if (InventoryButton != null)
         {
-            InventoryButton.interactable = _showInventoryCommand.CanExecute();
+            InventoryButton.interactable = _showInventoryCommand.CanExecute().IsSuccess;
         }
 
         if (PersonButton != null)
         {
-            PersonButton.interactable = _showPersonModalCommand.CanExecute();
+            PersonButton.interactable = _showPersonModalCommand.CanExecute().IsSuccess;
         }
 
         if (SectorTransitionMoveButton != null)
         {
-            SectorTransitionMoveButton.interactable = _sectorTransitionMoveCommand.CanExecute();
-        }
-
-        if (CityQuickExitButton != null)
-        {
-            // Это быстрое решение.
-            // Проверяем, если это город, то делаем кнопку выхода видимой.
-            var isInCity = GetIsInCity();
-            CityQuickExitButton.gameObject.SetActive(isInCity);
+            if (_player.Globe is null || _player.MainPerson is null)
+            {
+                SectorTransitionMoveButton.interactable = false;
+            }
+            else
+            {
+                SectorTransitionMoveButton.interactable = _sectorTransitionMoveCommand.CanExecute().IsSuccess;
+            }
         }
 
         if (OpenLootButton != null)
         {
-            var canOpen = GetCanOpenLoot();
-            OpenLootButton.gameObject.SetActive(canOpen);
+            if (_player.Globe is null || _player.MainPerson is null)
+            {
+                OpenLootButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                var canOpen = GetCanOpenLoot();
+                OpenLootButton.gameObject.SetActive(canOpen);
+            }
         }
-    }
-
-    private bool GetIsInCity()
-    {
-        return CurrentSector?.Scheme.Sid == "city";
     }
 
     private ISector CurrentSector => _player.SectorNode.Sector;
@@ -151,12 +160,6 @@ public class SectorUiHandler : MonoBehaviour
         {
             OpenLoot_Handler();
         }
-
-        // Отключено, потому что сейчас нет выхода на глобальную карту.
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            CityQuickExit_Handler();
-        }
     }
 
     public void NextTurn()
@@ -166,7 +169,7 @@ public class SectorUiHandler : MonoBehaviour
             return;
         }
 
-        _clientCommandExecutor.Push(_nextTurnCommand);
+        _commandPool.Push(_nextTurnCommand);
     }
 
     public void ShowInventoryButton_Handler()
@@ -176,7 +179,7 @@ public class SectorUiHandler : MonoBehaviour
             return;
         }
 
-        _clientCommandExecutor.Push(_showInventoryCommand);
+        _commandPool.Push(_showInventoryCommand);
     }
 
     public void ShowPersonModalButton_Handler()
@@ -186,17 +189,38 @@ public class SectorUiHandler : MonoBehaviour
             return;
         }
 
-        _clientCommandExecutor.Push(_showPersonModalCommand);
+        _commandPool.Push(_showPersonModalCommand);
+    }
+
+    public void SwitchAutoplay_Handler()
+    {
+        ActorTaskSourceControl targetControl;
+        switch (_actorTaskControlSwitcher.CurrentControl)
+        {
+            case ActorTaskSourceControl.Human:
+                targetControl = ActorTaskSourceControl.Bot;
+                break;
+
+            case ActorTaskSourceControl.Bot:
+                targetControl = ActorTaskSourceControl.Human;
+                break;
+
+            default:
+                Debug.LogError($"Unknown control value {_actorTaskControlSwitcher.CurrentControl}.");
+                targetControl = ActorTaskSourceControl.Human;
+                break;
+        }
+        _actorTaskControlSwitcher.Switch(targetControl);
     }
 
     public void ExitGame_Handler()
     {
-        _clientCommandExecutor.Push(_quitRequestCommand);
+        _commandPool.Push(_quitRequestCommand);
     }
 
     public void ExitTitle_Handler()
     {
-        _clientCommandExecutor.Push(_quitRequestTitleCommand);
+        _commandPool.Push(_quitRequestTitleCommand);
     }
 
     public void SectorTransitionMoveButton_Handler()
@@ -209,22 +233,7 @@ public class SectorUiHandler : MonoBehaviour
             return;
         }
 
-        _clientCommandExecutor.Push(_sectorTransitionMoveCommand);
-    }
-
-    public void CityQuickExit_Handler()
-    {
-        // Защита от бага.
-        // Пользователь может нажать Q и выйти из сектора на глобальную карту.
-        // Даже если мертв. Будет проявляться, когда пользователь вводит имя после смерти.
-        if (_playerState.ActiveActor?.Actor.Person.GetModule<ISurvivalModule>().IsDead != false)
-        {
-            return;
-        }
-
-        // Это быстрое решение.
-        // Тупо загружаем глобальную карту.
-        SceneManager.LoadScene("globe");
+        _commandPool.Push(_sectorTransitionMoveCommand);
     }
 
     public void OpenLoot_Handler()
@@ -236,7 +245,7 @@ public class SectorUiHandler : MonoBehaviour
         {
             var viewModel = GetLootViewModel(lootInNode);
             _playerState.SelectedViewModel = viewModel;
-            _clientCommandExecutor.Push(_openContainerCommand);
+            _commandPool.Push(_openContainerCommand);
         }
     }
 

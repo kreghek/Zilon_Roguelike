@@ -22,21 +22,22 @@ namespace Zilon.Core.World
             _player = player ?? throw new ArgumentNullException(nameof(player));
         }
 
+        /// <summary>
+        /// Создаёт персонажа.
+        /// </summary>
+        /// <returns> Возвращает созданного персонажа. </returns>
+        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory,
+            IFraction fraction)
+        {
+            var startPerson = personFactory.Create(personSchemeSid, fraction);
+            return startPerson;
+        }
+
         public Task<IEnumerable<IPerson>> CreateStartPersonsAsync(IGlobe globe)
         {
             var person = CreateStartPerson(PERSON_SCHEME_SID, _personFactory, Fractions.MainPersonFraction);
             _player.BindPerson(globe, person);
             return Task.FromResult(new[] { person }.AsEnumerable());
-        }
-
-        /// <summary>
-        /// Создаёт персонажа.
-        /// </summary>
-        /// <returns> Возвращает созданного персонажа. </returns>
-        private static IPerson CreateStartPerson(string personSchemeSid, IPersonFactory personFactory, IFraction fraction)
-        {
-            var startPerson = personFactory.Create(personSchemeSid, fraction);
-            return startPerson;
         }
     }
 }

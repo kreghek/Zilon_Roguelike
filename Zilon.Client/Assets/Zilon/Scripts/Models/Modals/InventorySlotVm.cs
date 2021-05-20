@@ -21,7 +21,7 @@ using Zilon.Core.Tactics;
 
 public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModelDescription
 {
-    [Inject] private readonly ICommandManager _comamndManager;
+    [Inject] private readonly ICommandPool _comamndPool;
     [Inject] private readonly IInventoryState _inventoryState;
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
 
@@ -125,7 +125,7 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
     {
         var canEquip = _equipCommand.CanExecute();
         var selectedProp = _inventoryState.SelectedProp;
-        var denySlot = !canEquip && selectedProp != null;
+        var denySlot = !canEquip.IsSuccess && selectedProp != null;
         DenyBorder.SetActive(denySlot);
     }
 
@@ -146,7 +146,7 @@ public class InventorySlotVm : MonoBehaviour, IPropItemViewModel, IPropViewModel
 
     public void ApplyEquipment()
     {
-        _comamndManager.Push(_equipCommand);
+        _comamndPool.Push(_equipCommand);
     }
 
 

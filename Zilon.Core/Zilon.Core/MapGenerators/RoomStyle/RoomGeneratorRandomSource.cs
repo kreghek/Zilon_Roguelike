@@ -32,7 +32,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает целевые комнаты для соединения.
         /// </returns>
-        [NotNull, ItemNotNull]
+        [NotNull]
+        [ItemNotNull]
         public Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms)
         {
             var openRooms = new List<Room>(availableRooms);
@@ -224,7 +225,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return openRoomNodes.ElementAt(index);
         }
 
-        public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
+        public IEnumerable<SectorTransition> RollTransitions(IEnumerable<SectorTransition> openTransitions)
         {
             var index = _dice.Roll(0, openTransitions.Count() - 1);
             return new[] { openTransitions.ElementAt(index) };

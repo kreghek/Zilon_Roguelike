@@ -9,7 +9,7 @@ namespace Zilon.Core.Tests.Tactics
     [Parallelizable(ParallelScope.All)]
     public class StaticObjectManagerTests : CommonManagerTestsBase<IStaticObject>
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override ISectorEntityManager<IStaticObject> CreateManager()
         {
             var staticObjectManager = new StaticObjectManager();

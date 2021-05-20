@@ -11,15 +11,20 @@ namespace Zilon.Core.Tactics.Spatial
     {
         private readonly TNodeDistanceCalculator _nodeDistanceCalculator;
 
-        public Dictionary<IGraphNode, RoomTransition> Transitions { get; }
-
         public SectorGraphMap()
         {
             _nodeDistanceCalculator = new TNodeDistanceCalculator();
 
-            Transitions = new Dictionary<IGraphNode, RoomTransition>();
+            Transitions = new Dictionary<IGraphNode, SectorTransition>();
         }
 
+        /// <inheritdoc />
+        public Dictionary<IGraphNode, SectorTransition> Transitions { get; }
+
+        /// <inheritdoc />
+        public int Id { get; set; }
+
+        /// <inheritdoc />
         public override int DistanceBetween(IGraphNode currentNode, IGraphNode targetNode)
         {
             var distance = _nodeDistanceCalculator.GetDistance((TNode)currentNode, (TNode)targetNode);

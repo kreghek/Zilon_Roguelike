@@ -3,6 +3,7 @@
 using NUnit.Framework;
 
 using Zilon.Core.Common;
+using Zilon.Core.Tests.Common.TestCases;
 using Zilon.Core.Tests.Tactics.Spatial.TestCases;
 
 namespace Zilon.Core.Tests.Common
@@ -23,12 +24,8 @@ namespace Zilon.Core.Tests.Common
             // ARRANGE
             var expectedCubeCoords = new CubeCoords(cubeX, cubeY, cubeZ);
 
-
-
             // ACT
             var factCubeCoords = HexHelper.ConvertToCube(offsetX, offsetY);
-
-
 
             // ASSERT
             factCubeCoords.Should().BeEquivalentTo(expectedCubeCoords);
@@ -43,12 +40,8 @@ namespace Zilon.Core.Tests.Common
             var cubeCoords = new CubeCoords(cubeX, cubeY, cubeZ);
             var expectedOffset = new OffsetCoords(offsetX, offsetY);
 
-
-
             // ACT
             var factOffsetCoords = HexHelper.ConvertToOffset(cubeCoords);
-
-
 
             // ASSERT
             factOffsetCoords.Should().BeEquivalentTo(expectedOffset);
@@ -62,13 +55,23 @@ namespace Zilon.Core.Tests.Common
         {
             // ARRANGE
 
-
             // ACT
             var factCubeCoords = HexHelper.ConvertToWorld(offsetX, offsetY);
 
-
             // ASSERT
             return factCubeCoords;
+        }
+
+        [Test]
+        [TestCaseSource(typeof(HexHelperTestCases),
+            nameof(HexHelperTestCases.TestCases))]
+        public OffsetCoords ConvertWorldToOffsetTest(int worldX, int worldY, int size)
+        {
+            // ACT
+            var factOffsetCoords = HexHelper.ConvertWorldToOffset(worldX, worldY, size);
+
+            // ASSERT
+            return factOffsetCoords;
         }
     }
 }

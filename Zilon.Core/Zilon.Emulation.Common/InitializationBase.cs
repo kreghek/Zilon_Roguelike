@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
@@ -22,13 +24,12 @@ using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
+using Zilon.DependencyInjection;
 
 namespace Zilon.Emulation.Common
 {
     public abstract class InitializationBase
     {
-        public int? DiceSeed { get; set; }
-
         protected InitializationBase()
         {
         }
@@ -37,6 +38,10 @@ namespace Zilon.Emulation.Common
         {
             DiceSeed = diceSeed;
         }
+
+        public int? DiceSeed { get; set; }
+
+        public abstract void ConfigureAux(IServiceProvider serviceFactory);
 
         public virtual void RegisterServices(IServiceCollection serviceCollection)
         {
@@ -49,19 +54,24 @@ namespace Zilon.Emulation.Common
             RegisterGlobeInitializationServices(serviceCollection);
         }
 
-        public abstract void ConfigureAux(IServiceProvider serviceFactory);
+        protected abstract void RegisterBot(IServiceCollection serviceCollection);
 
-        private static void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
+        protected virtual void RegisterChestGeneratorRandomSource(IServiceCollection serviceRegistry)
         {
-            serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
-            serviceCollection.AddSingleton<IBiomeInitializer, BiomeInitializer>();
-            serviceCollection.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
-            serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
-            serviceCollection.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
-            serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider =>
+            serviceRegistry.AddScoped<StaticObstaclesGenerator>();
+            serviceRegistry.AddScoped<IStaticObstaclesGenerator, StaticObstaclesGenerator>(serviceProvider =>
             {
-                return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
+                var service = serviceProvider.GetRequiredService<StaticObstaclesGenerator>();
+                service.MonsterIdentifierGenerator = serviceProvider.GetService<IMonsterIdentifierGenerator>();
+                return service;
             });
+            serviceRegistry.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
+            serviceRegistry.AddScoped<IChestGenerator, ChestGenerator>();
+            serviceRegistry.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
+
+            serviceRegistry.RegisterStaticObjectFactoringFromCore();
+
+            serviceRegistry.AddSingleton<IStaticObjectsGeneratorRandomSource, StaticObjectsGeneratorRandomSource>();
         }
 
         protected virtual void RegisterMonsterGeneratorRandomSource(IServiceCollection serviceRegistry)
@@ -71,52 +81,39 @@ namespace Zilon.Emulation.Common
                 var schemeService = serviceProvider.GetRequiredService<ISchemeService>();
                 var monsterFactory = serviceProvider.GetRequiredService<IMonsterPersonFactory>();
                 var randomSource = serviceProvider.GetRequiredService<IMonsterGeneratorRandomSource>();
-                var actorTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+                var actorTaskSource =
+                    serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
 
                 var generator = new MonsterGenerator(schemeService, monsterFactory, randomSource, actorTaskSource);
                 return generator;
             });
-            serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>();
+            serviceRegistry.AddSingleton<IMonsterPersonFactory, MonsterPersonFactory>(serviceProvider =>
+            {
+                var identifierGenerator = serviceProvider.GetService<IMonsterIdentifierGenerator>();
+                return new MonsterPersonFactory
+                {
+                    MonsterIdentifierGenerator = identifierGenerator
+                };
+            });
             serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
         }
 
-        protected virtual void RegisterChestGeneratorRandomSource(IServiceCollection serviceRegistry)
+        protected virtual void RegisterPersonFactory(IServiceCollection container)
         {
-            serviceRegistry.AddScoped<IStaticObstaclesGenerator, StaticObstaclesGenerator>();
-            serviceRegistry.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
-            serviceRegistry.AddScoped<IChestGenerator, ChestGenerator>();
-            serviceRegistry.AddSingleton<IChestGeneratorRandomSource, ChestGeneratorRandomSource>();
-            serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory =>
+            container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
+            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
             {
-                var factories = diFactory.GetServices<IStaticObjectFactory>().ToArray();
-                return new StaticObjectFactoryCollector(factories);
+                var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
+                factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+                return factory;
             });
-            serviceRegistry.AddSingleton<IStaticObjectFactory, StoneDepositFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, OreDepositFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, TrashHeapFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, CherryBrushFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, PitFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectFactory, PuddleFactory>();
-            serviceRegistry.AddSingleton<IStaticObjectsGeneratorRandomSource, StaticObjectsGeneratorRandomSource>();
         }
 
-        private void RegisterSectorServices(IServiceCollection serviceRegistry)
-        {
-            RegisterClientServices(serviceRegistry);
-            RegisterScopedSectorService(serviceRegistry);
-            RegisterBot(serviceRegistry);
-        }
-
-        private static void RegisterSchemeService(IServiceCollection container)
+        protected virtual void RegisterSchemeService(IServiceCollection container)
         {
             container.AddSingleton<ISchemeLocator>(factory =>
             {
-                //TODO Организовать отдельный общий метод/класс/фабрику для конструирования локатора схем.
-                // Подобные конструкции распределены по всему проекту: в тестах, бенчах, окружении ботов.
-                // Следует их объединить в одном месте.
-                var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
-
-                var schemeLocator = new FileSchemeLocator(schemePath);
+                var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
 
                 return schemeLocator;
             });
@@ -126,31 +123,98 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
         }
 
-        private void RegisterScopedSectorService(IServiceCollection container)
+        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider,
+            ActorActUsageHandler handler)
         {
-            //TODO сделать генераторы независимыми от сектора.
-            // Такое время жизни, потому что в зависимостях есть менеджеры.
-            container.AddScoped<ISectorGenerator, SectorGenerator>();
-            container.AddSingleton<IBiomeInitializer, BiomeInitializer>();
-            container.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
-            container.AddSingleton<IResourceMaterializationMap, ResourceMaterializationMap>();
-            RegisterMonsterGeneratorRandomSource(container);
-            RegisterChestGeneratorRandomSource(container);
-            container.AddScoped<SectorFactory>();  // TOOD Костфль, чтобы не заполнять конструктор сервиса руками. 
-            container.AddScoped<ISectorFactory, SectorFactory>(serviceProvider =>
+            // Указание необязательных зависимостей
+            handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
+
+            handler.ActorInteractionBus = serviceProvider.GetService<IActorInteractionBus>();
+
+            handler.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
+
+            handler.ScoreManager = serviceProvider.GetService<IScoreManager>();
+        }
+
+        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider,
+            TacticalActUsageService tacticalActUsageService)
+        {
+            // Указание необязательных зависимостей
+            tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
+        }
+
+        /// <summary>
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
+        /// </summary>
+        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
+        private ExpDice CreateRandomSeedAndExpDice()
+        {
+            ExpDice dice;
+            if (DiceSeed == null)
             {
-                var sectorFactory = serviceProvider.GetRequiredService<SectorFactory>();
-                var scoreManager = serviceProvider.GetService<IScoreManager>();
-                sectorFactory.ScoreManager = scoreManager;
-                return sectorFactory;
-            });
-            RegisterActUsageServices(container);
-            container.AddScoped<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
-            container.AddScoped<IActorTaskSourceCollector, ActorTaskSourceCollector>(serviceProvider =>
+                var diceSeedFact = new Random().Next(int.MaxValue);
+                DiceSeed = diceSeedFact;
+                dice = new ExpDice(diceSeedFact);
+            }
+            else
             {
-                var monsterTaskSource = serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
-                return new ActorTaskSourceCollector(monsterTaskSource);
-            });
+                dice = new ExpDice(DiceSeed.Value);
+            }
+
+            return dice;
+        }
+
+        /// <summary>
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
+        /// </summary>
+        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
+        private GaussDice CreateRandomSeedAndGaussDice()
+        {
+            GaussDice dice;
+            if (DiceSeed == null)
+            {
+                var diceSeedFact = new Random().Next(int.MaxValue);
+                DiceSeed = diceSeedFact;
+                dice = new GaussDice(diceSeedFact);
+            }
+            else
+            {
+                dice = new GaussDice(DiceSeed.Value);
+            }
+
+            return dice;
+        }
+
+        /// <summary>
+        /// Создаёт кость и фиксирует зерно рандома.
+        /// Если Зерно рандома не задано, то оно выбирается случайно.
+        /// </summary>
+        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
+        private LinearDice CreateRandomSeedAndLinearDice()
+        {
+            LinearDice dice;
+            if (DiceSeed == null)
+            {
+                var diceSeedFact = new Random().Next(int.MaxValue);
+                DiceSeed = diceSeedFact;
+                dice = new LinearDice(diceSeedFact);
+            }
+            else
+            {
+                dice = new LinearDice(DiceSeed.Value);
+            }
+
+            return dice;
+        }
+
+        private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceProvider factory)
+        {
+            var localLinearDice = factory.GetRequiredService<LinearDice>();
+            var localRoomSizeDice = factory.GetRequiredService<ExpDice>();
+            var randomSource = new RoomGeneratorRandomSource(localLinearDice, localRoomSizeDice);
+            return randomSource;
         }
 
         private static void RegisterActUsageServices(IServiceCollection container)
@@ -182,24 +246,6 @@ namespace Zilon.Emulation.Common
 
                 return tacticalActUsageService;
             });
-        }
-
-        private static void ConfigurateTacticalActUsageService(IServiceProvider serviceProvider, TacticalActUsageService tacticalActUsageService)
-        {
-            // Указание необязательных зависимостей
-            tacticalActUsageService.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
-        }
-
-        private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider, ActorActUsageHandler handler)
-        {
-            // Указание необязательных зависимостей
-            handler.EquipmentDurableService = serviceProvider.GetService<IEquipmentDurableService>();
-
-            handler.ActorInteractionBus = serviceProvider.GetService<IActorInteractionBus>();
-
-            handler.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
-
-            handler.ScoreManager = serviceProvider.GetService<IScoreManager>();
         }
 
         /// <summary>
@@ -236,95 +282,32 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IDiseaseGenerator, DiseaseGenerator>();
         }
 
-        protected virtual void RegisterPersonFactory(IServiceCollection container)
-        {
-            container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
-            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
-            {
-                var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
-                factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
-                return factory;
-            });
-        }
-
-        private static IRoomGeneratorRandomSource CreateRoomGeneratorRandomSource(IServiceProvider factory)
-        {
-            var localLinearDice = factory.GetRequiredService<LinearDice>();
-            var localRoomSizeDice = factory.GetRequiredService<ExpDice>();
-            var randomSource = new RoomGeneratorRandomSource(localLinearDice, localRoomSizeDice);
-            return randomSource;
-        }
-
-        /// <summary>
-        /// Создаёт кость и фиксирует зерно рандома.
-        /// Если Зерно рандома не задано, то оно выбирается случайно.
-        /// </summary>
-        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
-        private LinearDice CreateRandomSeedAndLinearDice()
-        {
-            LinearDice dice;
-            if (DiceSeed == null)
-            {
-                var diceSeedFact = new Random().Next(int.MaxValue);
-                DiceSeed = diceSeedFact;
-                dice = new LinearDice(diceSeedFact);
-            }
-            else
-            {
-                dice = new LinearDice(DiceSeed.Value);
-            }
-
-            return dice;
-        }
-
-        /// <summary>
-        /// Создаёт кость и фиксирует зерно рандома.
-        /// Если Зерно рандома не задано, то оно выбирается случайно.
-        /// </summary>
-        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
-        private GaussDice CreateRandomSeedAndGaussDice()
-        {
-            GaussDice dice;
-            if (DiceSeed == null)
-            {
-                var diceSeedFact = new Random().Next(int.MaxValue);
-                DiceSeed = diceSeedFact;
-                dice = new GaussDice(diceSeedFact);
-            }
-            else
-            {
-                dice = new GaussDice(DiceSeed.Value);
-            }
-
-            return dice;
-        }
-
-        /// <summary>
-        /// Создаёт кость и фиксирует зерно рандома.
-        /// Если Зерно рандома не задано, то оно выбирается случайно.
-        /// </summary>
-        /// <returns> Экземпляр кости на основе выбранного или указанного ерна рандома. </returns>
-        private ExpDice CreateRandomSeedAndExpDice()
-        {
-            ExpDice dice;
-            if (DiceSeed == null)
-            {
-                var diceSeedFact = new Random().Next(int.MaxValue);
-                DiceSeed = diceSeedFact;
-                dice = new ExpDice(diceSeedFact);
-            }
-            else
-            {
-                dice = new ExpDice(DiceSeed.Value);
-            }
-
-            return dice;
-        }
-
         private static void RegisterClientServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<ISectorUiState, SectorUiState>();
-            serviceCollection.AddSingleton<IInventoryState, InventoryState>();
+            serviceCollection.AddScoped<ISectorUiState, SectorUiState>();
+            serviceCollection.AddScoped<IInventoryState, InventoryState>();
+            serviceCollection.AddScoped<IAnimationBlockerService, AnimationBlockerService>();
+
+            serviceCollection.AddScoped<ICommandLoopContext, CommandLoopContext>();
+            serviceCollection.AddScoped<ICommandLoopUpdater, CommandLoopUpdater>();
+            serviceCollection.AddScoped<ICommandPool, QueueCommandPool>();
+        }
+
+        private static void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSingleton<IGlobeInitializer, GlobeInitializer>();
+            serviceCollection.AddSingleton<IBiomeInitializer, BiomeInitializer>();
+            serviceCollection.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
+            serviceCollection.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
+            serviceCollection.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
+            serviceCollection.AddSingleton<ITransitionPool, TransitionPool>();
+            serviceCollection.AddSingleton<IGlobeExpander>(serviceProvider =>
+            {
+                return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
+            });
+
+            serviceCollection.AddSingleton<IGlobeLoopUpdater, GlobeLoopUpdater>();
+            serviceCollection.AddSingleton<IGlobeLoopContext, GlobeLoopContext>();
         }
 
         private static void RegisterPlayerServices(IServiceCollection serviceCollection)
@@ -335,6 +318,39 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
         }
 
-        protected abstract void RegisterBot(IServiceCollection serviceCollection);
+        private void RegisterScopedSectorService(IServiceCollection container)
+        {
+            //TODO сделать генераторы независимыми от сектора.
+            // Такое время жизни, потому что в зависимостях есть менеджеры.
+            container.AddScoped<ISectorGenerator, SectorGenerator>();
+            container.AddSingleton<IBiomeInitializer, BiomeInitializer>();
+            container.AddSingleton<IBiomeSchemeRoller, BiomeSchemeRoller>();
+            container.AddSingleton<IResourceMaterializationMap, ResourceMaterializationMap>();
+            RegisterMonsterGeneratorRandomSource(container);
+            RegisterChestGeneratorRandomSource(container);
+            container.AddScoped<SectorFactory>(); // TOOD Костфль, чтобы не заполнять конструктор сервиса руками. 
+            container.AddScoped<ISectorFactory, SectorFactory>(serviceProvider =>
+            {
+                var sectorFactory = serviceProvider.GetRequiredService<SectorFactory>();
+                var scoreManager = serviceProvider.GetService<IScoreManager>();
+                sectorFactory.ScoreManager = scoreManager;
+                return sectorFactory;
+            });
+            RegisterActUsageServices(container);
+            container.AddScoped<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+            container.AddScoped<IActorTaskSourceCollector, ActorTaskSourceCollector>(serviceProvider =>
+            {
+                var monsterTaskSource =
+                    serviceProvider.GetRequiredService<MonsterBotActorTaskSource<ISectorTaskSourceContext>>();
+                return new ActorTaskSourceCollector(monsterTaskSource);
+            });
+        }
+
+        private void RegisterSectorServices(IServiceCollection serviceRegistry)
+        {
+            RegisterClientServices(serviceRegistry);
+            RegisterScopedSectorService(serviceRegistry);
+            RegisterBot(serviceRegistry);
+        }
     }
 }

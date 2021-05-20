@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 using Zilon.Bot.Sdk;
+using Zilon.Core.Localization;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -40,7 +41,10 @@ namespace Zilon.Bot.Players.DevelopmentTests
             var autoPlayEngine = new AutoplayEngine(
                 startUp,
                 botSettings,
-                globeInitializer);
+                globeInitializer)
+            {
+                PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>()
+            };
 
             var globe = await autoPlayEngine.CreateGlobeAsync().ConfigureAwait(false);
             var followedPerson = player.MainPerson;
@@ -55,7 +59,8 @@ namespace Zilon.Bot.Players.DevelopmentTests
         private static void PrintPersonBacklog(IPerson humanPerson)
         {
             Console.WriteLine("Build In Traits:");
-            var buildinTraits = humanPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn).ToArray();
+            var buildinTraits = humanPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn)
+                .ToArray();
             foreach (var buildInTrait in buildinTraits)
             {
                 Console.WriteLine(buildInTrait.Scheme.Name.En);
@@ -117,7 +122,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             {
                 var deathReason = deathReasonService.GetDeathReasonSummary(
                     lastEvent,
-                    Core.Localization.Language.En);
+                    Language.En);
 
                 Console.WriteLine($"Death Reason: {deathReason}");
             }

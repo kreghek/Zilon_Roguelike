@@ -12,7 +12,8 @@ namespace Zilon.Core.Schemes
             return true;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue,
+            JsonSerializer serializer)
         {
             if (serializer is null)
             {
@@ -23,8 +24,13 @@ namespace Zilon.Core.Schemes
             return serializer.Deserialize<TConcrete>(reader);
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
             if (serializer is null)
             {
                 throw new ArgumentNullException(nameof(serializer));

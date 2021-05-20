@@ -9,18 +9,19 @@ namespace Zilon.Core.Schemes
     public interface IPersonScheme : IScheme
     {
         [NotNull]
-        string DefaultAct { get; set; }
+        string? DefaultAct { get; set; }
 
         int Hp { get; set; }
 
-        [NotNull, ItemNotNull]
-        PersonSlotSubScheme[] Slots { get; set; }
+        [NotNull]
+        [ItemNotNull]
+        PersonSlotSubScheme?[]? Slots { get; set; }
 
         /// <summary>
         /// Характеристики выживания персонажа.
         /// Такие, как запас сытости/гидратации.
         /// </summary>
         [NotNull]
-        IPersonSurvivalStatSubScheme[] SurvivalStats { get; }
+        IPersonSurvivalStatSubScheme?[]? SurvivalStats { get; }
     }
 }

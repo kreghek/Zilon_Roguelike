@@ -27,6 +27,14 @@
         "Level": "Grand",
 		"Direction": "Negative"
       }
-    ]
+    ],
+	"Restrictions":{
+	  "Items":[
+	   { "Type": "OnlySafeEnvironment" },
+	   { "Type": "NoStarvation" },
+	   { "Type": "NoDehydration" },
+	   { "Type": "NoOverdose" },
+	  ]
+	}
   }
 }

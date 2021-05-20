@@ -9,7 +9,7 @@
     public sealed class RoomInteriorObjectMeta
     {
         /// <summary>
-        /// Конструирует объект <see cref="RoomInteriorObjectMeta"/>.
+        /// Конструирует объект <see cref="RoomInteriorObjectMeta" />.
         /// </summary>
         /// <param name="coords">Локальные координаты элемента интерьера внутри комнаты.</param>
         /// <exception cref="System.ArgumentNullException">coords</exception>

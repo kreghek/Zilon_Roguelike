@@ -27,14 +27,14 @@ Scenario Outline: Успешный удар двумя оружиями.
 	And Актёр игрока экипирован предметом <propSid2> в слот Index: <slotIndex2>
 	And Задаём броски для использования действий
 	When Актёр игрока атакует монстра Id:<monsterId>
-	And Жду 1000 единиц времени
+	And В мире проходит <timeUnitCount> итераций
 	# При нанесении урона будет взято среднее значение между максимальной и
 	# минимальной эффективностью действия. Для 1D6 это будет 3 (int от 3.5)
 	Then Монстр Id:<monsterId> имеет Hp <expectedMonsterHp>
 
 Examples: 
-| personSid    | monsterSid | monsterId | monsterNodeX | monsterNodeY | propSid1    | slotIndex1 | propSid2    | slotIndex2 | expectedMonsterHp |
-| human-person | skorolon   | 1000      | 0            | 1            | short-sword | 2          | short-sword | 3          | 4                 |
+| personSid    | monsterSid | monsterId | monsterNodeX | monsterNodeY | propSid1    | slotIndex1 | propSid2    | slotIndex2 | expectedMonsterHp | timeUnitCount |
+| human-person | skorolon   | 1000      | 0            | 1            | short-sword | 2          | short-sword | 3          | 4                 | 1             |
 
 @fight @dev1
 Scenario Outline: Удары "руками".

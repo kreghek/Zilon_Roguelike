@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -10,11 +12,11 @@ namespace Zilon.Core.World
 {
     public sealed class GlobeInitializer : IGlobeInitializer
     {
+        private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
         private readonly IBiomeInitializer _biomeInitializer;
         private readonly IGlobeTransitionHandler _globeTransitionHandler;
-        private readonly ISchemeService _schemeService;
-        private readonly IActorTaskSource<ISectorTaskSourceContext> _actorTaskSource;
         private readonly IPersonInitializer _personInitializer;
+        private readonly ISchemeService _schemeService;
 
         public GlobeInitializer(
             IBiomeInitializer biomeInitializer,
@@ -28,6 +30,16 @@ namespace Zilon.Core.World
             _schemeService = schemeService;
             _actorTaskSource = actorTaskSource;
             _personInitializer = personInitializer;
+        }
+
+        private static IActor CreateActor(
+            IPerson humanPerson,
+            IGraphNode startNode,
+            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
+        {
+            var actor = new Actor(humanPerson, actorTaskSource, startNode);
+
+            return actor;
         }
 
         public async Task<IGlobe> CreateGlobeAsync(string startLocationSchemeSid)
@@ -45,6 +57,11 @@ namespace Zilon.Core.World
             var startPersons = await _personInitializer.CreateStartPersonsAsync(globe).ConfigureAwait(false);
 
             var sector = startSectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var personCounter = 0;
             foreach (var person in startPersons)
             {
@@ -59,16 +76,6 @@ namespace Zilon.Core.World
             }
 
             return globe;
-        }
-
-        private static IActor CreateActor(
-            IPerson humanPerson,
-            Graphs.IGraphNode startNode,
-            IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
-        {
-            var actor = new Actor(humanPerson, actorTaskSource, startNode);
-
-            return actor;
         }
     }
 }

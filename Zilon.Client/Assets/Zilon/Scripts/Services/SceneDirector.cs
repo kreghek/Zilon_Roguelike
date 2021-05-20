@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Assets.Zilon.Scripts.Services;
 
@@ -15,6 +18,8 @@ using Zilon.Core.Tactics.ActorInteractionEvents;
 
 public sealed class SceneDirector : MonoBehaviour
 {
+    private TaskScheduler _taskScheduler;
+
     [NotNull] [Inject] private readonly ISectorUiState _sectorUiState;
 
     [NotNull] [Inject] private readonly IActorInteractionBus _actorInteractionBus;
@@ -33,6 +38,8 @@ public sealed class SceneDirector : MonoBehaviour
 
     public void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         _actorInteractionBus.NewEvent += ActorInteractionBus_NewEvent;
     }
 
@@ -41,7 +48,15 @@ public sealed class SceneDirector : MonoBehaviour
         _actorInteractionBus.NewEvent -= ActorInteractionBus_NewEvent;
     }
 
-    private void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+    private async void ActorInteractionBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+    {
+        await Task.Factory.StartNew(() =>
+        {
+            NewEventHandlerInner(e);
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
+    }
+
+    private void NewEventHandlerInner(NewActorInteractionEventArgs e)
     {
         var currentLanguage = _uiSettingService.CurrentLanguage;
         switch (e.ActorInteractionEvent)
@@ -76,25 +91,33 @@ public sealed class SceneDirector : MonoBehaviour
 
     private string GetDamageLog(Language currentLanguage, DamageActorInteractionEvent interactionEvent)
     {
-        string damageTemplate;
-        MonsterPerson logPerson;
-        if (interactionEvent.Actor == _sectorUiState.ActiveActor.Actor)
+        try
         {
-            damageTemplate = StaticPhrases.GetValue("log-player-damage-template", currentLanguage);
-            logPerson = interactionEvent.TargetActor.Person as MonsterPerson;
-        }
-        else
-        {
-            damageTemplate = StaticPhrases.GetValue("log-monster-damage-template", currentLanguage);
-            logPerson = interactionEvent.Actor.Person as MonsterPerson;
-        }
+            string damageTemplate;
+            MonsterPerson logPerson;
+            if (interactionEvent.Actor == _sectorUiState.ActiveActor.Actor)
+            {
+                damageTemplate = StaticPhrases.GetValue("log-player-damage-template", currentLanguage);
+                logPerson = interactionEvent.TargetActor.Person as MonsterPerson;
+            }
+            else
+            {
+                damageTemplate = StaticPhrases.GetValue("log-monster-damage-template", currentLanguage);
+                logPerson = interactionEvent.Actor.Person as MonsterPerson;
+            }
 
-        var logActorDisplayName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, logPerson.Scheme.Name);
-        var damageLog = string.Format(
-                damageTemplate,
-                logActorDisplayName,
-                interactionEvent.DamageEfficientCalcResult.ResultEfficient);
-        return damageLog;
+            var logActorDisplayName = LocalizationHelper.GetValueOrDefaultNoname(currentLanguage, logPerson.Scheme.Name);
+            var damageLog = string.Format(
+                    damageTemplate,
+                    logActorDisplayName,
+                    interactionEvent.DamageEfficientCalcResult.ResultEfficient);
+            return damageLog;
+        }
+        catch (NullReferenceException)
+        {
+            //TODO Some error. Fix it after release
+            return string.Empty;
+        }
     }
 
     private void CreateDamageIndication(DamageActorInteractionEvent interactionEvent)
@@ -172,14 +195,6 @@ public sealed class SceneDirector : MonoBehaviour
         blockSparks.transform.position = targetPosition;
         // Искры летят в сторону атакующего
         blockSparks.transform.LookAt(attackerPosition);
-    }
-
-    private void CreateNumericDamageIndicator(DamageActorInteractionEvent interactionEvent, ActorViewModel damagedActorViewModel)
-    {
-        var damageIndicator = Instantiate(DamageIndicatorPrefab);
-        damageIndicator.CurrentLanguage = _uiSettingService.CurrentLanguage;
-        damageIndicator.transform.SetParent(SectorViewModel.transform);
-        damageIndicator.Init(damagedActorViewModel, interactionEvent.DamageEfficientCalcResult.ResultEfficient);
     }
 
     private void CreateNoDamageIndicator(ActorViewModel actorViewModel, NoDamageIndicatorBase missIndicatorPrefab)

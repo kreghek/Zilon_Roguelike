@@ -4,6 +4,7 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class TestTacticalActStatsSubScheme : SubSchemeBase, ITacticalActStatsSubScheme
     {
         public TestTacticalActStatsSubScheme()

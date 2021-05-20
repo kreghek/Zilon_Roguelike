@@ -45,6 +45,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "prop-tag-weapon", new MultilangPhrase{ En = "weapon", Ru = "оружие" } },
                 { "prop-tag-armor", new MultilangPhrase{ En = "armor", Ru = "броня" } },
                 { "prop-tag-ranged", new MultilangPhrase{ En = "ranged", Ru = "дистанционное" } },
+                { "prop-tag-tool", new MultilangPhrase{ En = "tool", Ru = "инструмент" } },
 
                 { "prop-tag-pole", new MultilangPhrase{ En = "pole", Ru = "древковое" } },
                 { "prop-tag-sword", new MultilangPhrase{ En = "sword", Ru = "меч" } },
@@ -55,6 +56,8 @@ namespace Assets.Zilon.Scripts.Services
                 { "prop-tag-staff", new MultilangPhrase{ En = "staff", Ru = "посох" } },
                 { "prop-tag-shield", new MultilangPhrase{ En = "shield", Ru = "щит" } },
                 { "prop-tag-wand", new MultilangPhrase{ En = "wand", Ru = "жезл" } },
+                { "prop-tag-pick-axe", new MultilangPhrase{ En = "pick axe", Ru = "кирка" } },
+                { "prop-tag-shovel", new MultilangPhrase{ En = "shovel", Ru = "лопата" } },
 
                 { "impact-kinetic", new MultilangPhrase{ En = "kinetic", Ru = "кинетический" } },
                 { "impact-psy", new MultilangPhrase{ En = "psy", Ru = "пси" } },
@@ -76,6 +79,11 @@ namespace Assets.Zilon.Scripts.Services
                 { "rule-hungerresistance", new MultilangPhrase{ En = "Hunger resistance", Ru = "Сопротивление голоду" } },
                 { "rule-thristresistance", new MultilangPhrase{ En = "Thrist resistance", Ru = "Сопротивление жажде" } },
 
+                { "rule-restriction-onlysafeenvironment", new MultilangPhrase{ En = "Only Safe Environment", Ru = "В безопасности" } },
+                { "rule-restriction-nostarvation", new MultilangPhrase{ En = "No Starvation", Ru = "Нет Голодания" } },
+                { "rule-restriction-nodehydration", new MultilangPhrase{ En = "No Dehydration", Ru = "Нет Обезвоживания" } },
+                { "rule-restriction-nooverdose", new MultilangPhrase{ En = "No Overdose", Ru = "Нет Передозировки" } },
+
                 { "state-hp-healthy", new MultilangPhrase{ En = "Healthy", Ru = "Здоров" } },
                 { "state-hp-slightly-injured", new MultilangPhrase{ En = "Slightly injured", Ru = "Слабо ранен" } },
                 { "state-hp-wounded", new MultilangPhrase{ En = "Wounded", Ru = "Ранен" } },
@@ -95,6 +103,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "tooltip-wait", new MultilangPhrase{ En = "Wait one turn [E]", Ru = "Подождать один ход [E]" } },
                 { "tooltip-person", new MultilangPhrase{ En = "Person window [P]", Ru = "Окно персонажа [P]" } },
                 { "tooltip-transition", new MultilangPhrase{ En = "Go to the next level [T]", Ru = "Перейти на следующий уровень [T]" } },
+                { "tooltip-autoplay", new MultilangPhrase{ En = "Switch autoplay mode [S]", Ru = "Переключить уровень автоигры [S]" } },
                 { "tooltip-open-loot", new MultilangPhrase{ En = "Open loot [O]", Ru = "Открыть лут [O]" } },
                 { "tooltip-exit-title", new MultilangPhrase{ En = "Quit game and go to Main menu", Ru = "Покинуть игру и перейти в главное меню" } },
                 { "tooltip-exit", new MultilangPhrase{ En = "Quit game", Ru = "Покинуть игру" } },
@@ -110,7 +119,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "indicator-dodge", new MultilangPhrase{ En = "Dodge!", Ru = "Уклонение!" } },
                 { "indicator-found-nothing", new MultilangPhrase{ En = "Found\nNoting!", Ru = "Ничего\nне найдено!" } },
 
-                { "weak-injury", new MultilangPhrase{ En = "Weak injury", Ru = "Легкая рана" } },
+                { "weak-injury", new MultilangPhrase{ En = "Weak injury", Ru = "Легкое ранение" } },
                 { "weak-hunger", new MultilangPhrase{ En = "Weak hunger", Ru = "Слабый голод" } },
                 { "weak-thirst", new MultilangPhrase{ En = "Weak thirst", Ru = "Слабая жажда" } },
                 { "weak-intoxication", new MultilangPhrase{ En = "Weak intoxication", Ru = "Слабая токсикация" } },
@@ -120,7 +129,7 @@ namespace Assets.Zilon.Scripts.Services
                 { "strong-thirst", new MultilangPhrase{ En = "Thirst", Ru = "Жажда" } },
                 { "strong-intoxication", new MultilangPhrase{ En = "Intoxication", Ru = "Токсакация" } },
 
-                { "max-injury", new MultilangPhrase{ En = "Vital wound!", Ru = "Смертельная рана!" } },
+                { "max-injury", new MultilangPhrase{ En = "Deadly wound!", Ru = "Смертельная рана!" } },
                 { "max-hunger", new MultilangPhrase{ En = "Starvation!", Ru = "Голодание!" } },
                 { "max-thirst", new MultilangPhrase{ En = "Dehydration!", Ru = "Обезвоживание!" } },
                 { "max-intoxication", new MultilangPhrase{ En = "Overdose!", Ru = "Передозировка!" } },

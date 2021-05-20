@@ -1,0 +1,88 @@
+name: Build Unity Client
+
+on:
+  pull_request:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  buildCore:
+    name: Build core libs
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        core_project:
+          - Zilon.Core
+          - Zilon.Bot.Players
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - run: dotnet publish Zilon.Core/${{ matrix.core_project }}/${{ matrix.core_project }}.csproj -c Release -f netstandard2.0 -o bin
+      - uses: actions/upload-artifact@v1
+        with:
+          name: CoreLibs
+          path: bin
+
+  buildForSomePlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    needs: buildCore
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_3_0 }}
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - Zilon.Client
+        targetPlatform:
+          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows # Build a Windows standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+    steps:
+      # Checkout
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      # Deploy external plugins which are not from Unity Package manager
+      - uses: actions/checkout@v2
+        with:
+          repository: kreghek/Zilon_Roguelike_Plugins
+          path: ${{ matrix.projectPath }}/Assets/Plugins/
+
+      # Deploy core libs
+      - name: Download core libs from artifatcs
+        uses: actions/download-artifact@v2
+        with:
+          name: CoreLibs
+          path: ${{ matrix.projectPath }}/Assets/Plugins
+
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}-${{ matrix.targetPlatform }}
+
+      # Build
+      - uses: game-ci/unity-builder@224f973562d7dc72505715af6c034f0eb5298069
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          buildName: LAST
+          targetPlatform: ${{ matrix.targetPlatform }}
+
+      # Output Unity game
+      - uses: actions/upload-artifact@v1
+        with:
+          name: LAST.${{ matrix.targetPlatform }}
+          path: build

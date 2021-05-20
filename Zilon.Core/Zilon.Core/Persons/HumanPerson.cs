@@ -13,32 +13,32 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class HumanPerson : PersonBase
     {
-        /// <inheritdoc/>
+        public HumanPerson([NotNull] IPersonScheme scheme, IFraction fraction) : base(fraction)
+        {
+            Scheme = scheme;
+
+            Name = scheme.Sid ?? throw new InvalidOperationException();
+        }
+
+        /// <inheritdoc />
         public override int Id { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string Name { get; }
 
         /// <summary>
         /// Temporary property to show template name.
         /// </summary>
-        public ILocalizedString PersonEquipmentTemplate { get; set; }
+        public ILocalizedString? PersonEquipmentTemplate { get; set; }
 
-        /// <inheritdoc/>
+        public override PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
+
+        public IPlayerEventLogService? PlayerEventLogService { get; set; }
+
+        /// <inheritdoc />
         public IPersonScheme Scheme { get; }
 
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
-
-        public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
-
-        public HumanPerson([NotNull] IPersonScheme scheme, IFraction fraction) : base(fraction)
-        {
-            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
-
-            Name = scheme.Sid;
-        }
-
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override string ToString()
         {
             return $"{Name}";

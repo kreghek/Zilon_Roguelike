@@ -37,21 +37,21 @@
         {
           "Level": "Max",
           "Start": 0,
-		  "End": 0.14
+          "End": 0.01
         },
         {
           "Level": "Strong",
-          "Start": 0.14,
-		  "End": 0.75
+          "Start": 0.1,
+          "End": 0.75
         },
         {
           "Level": "Lesser",
           "Start": 0.75,
-		  "End": 0.86
+          "End": 0.86
         }
       ]
     },
-	{
+    {
       "Type": "Hydration",
       "MinValue": -1200,
       "MaxValue": 130,
@@ -60,21 +60,21 @@
         {
           "Level": "Max",
           "Start": 0,
-		  "End": 0.14
+          "End": 0.01
         },
         {
           "Level": "Strong",
-          "Start": 0.14,
-		  "End": 0.75
+          "Start": 0.01,
+          "End": 0.75
         },
         {
           "Level": "Lesser",
           "Start": 0.75,
-		  "End": 0.86
+          "End": 0.86
         }
       ]
     },
-	{
+    {
       "Type": "Intoxication",
       "MinValue": 0,
       "MaxValue": 130,
@@ -83,21 +83,21 @@
         {
           "Level": "Lesser",
           "Start": 0.23,
-		  "End": 0.46
+          "End": 0.46
         },
         {
           "Level": "Strong",
           "Start": 0.46,
-		  "End": 0.85
+          "End": 0.85
         },
         {
           "Level": "Max",
           "Start": 0.85,
-		  "End": 1
+          "End": 1
         }
       ]
     },
-	{
+    {
       "Type": "Wound",
       "MinValue": 0,
       "MaxValue": 50,

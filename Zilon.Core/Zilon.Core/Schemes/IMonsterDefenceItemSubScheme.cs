@@ -8,13 +8,13 @@ namespace Zilon.Core.Schemes
     public interface IMonsterDefenceItemSubScheme : ISubScheme
     {
         /// <summary>
-        /// Тип обороны.
-        /// </summary>
-        DefenceType Type { get; }
-
-        /// <summary>
         /// Уровень обороны.
         /// </summary>
         PersonRuleLevel Level { get; }
+
+        /// <summary>
+        /// Тип обороны.
+        /// </summary>
+        DefenceType Type { get; }
     }
 }

@@ -13,8 +13,6 @@ namespace Zilon.Core.Tests.CommonServices.Dices
     [Parallelizable(ParallelScope.All)]
     public abstract class DiceTestsBase
     {
-        protected abstract IDice CreateDice(int seed);
-
         /// <summary>
         /// Тест проверяет, что при разных зернах генерации не происходит ошибки получения случайного числа.
         /// </summary>
@@ -37,6 +35,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
                 {
                     seq[i] = dice.Roll(n);
                 }
+
                 var gr = seq.GroupBy(x => x);
                 var freq = gr.ToDictionary(x => x.Key, x => x.Count()).OrderBy(x => x.Key);
                 foreach (var fr in freq)
@@ -50,5 +49,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
             seq.Min().Should().BeGreaterOrEqualTo(1);
             seq.Max().Should().BeLessOrEqualTo(n);
         }
+
+        protected abstract IDice CreateDice(int seed);
     }
 }

@@ -1,0 +1,33 @@
+name: Benchmarks
+
+on:
+  schedule:
+    - cron:  '0 0 * * *'
+
+jobs:
+  buildCore:
+    name: Run benchs
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        bench_project:
+          - Zilon.Core.Benchmarks.Gameplay
+        include:
+          - bench_project: Zilon.Core.Benchmarks.Gameplay
+          - bench_filter: GamePlayBench
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - name: Run DotNetBenchmark ${{ matrix.bench_project }}
+        env:
+          ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          DOTNET_CLI_TELEMETRY_OUTPUT: 1
+        run: dotnet run --project Zilon.Core/${{ matrix.bench_project }}/${{ matrix.bench_project }}.csproj --configuration Release --filter *${{ matrix.bench_filter }}*
+      - uses: actions/upload-artifact@v1
+        with:
+          name: benchs
+          path: BenchmarkDotNet.Artifacts/results

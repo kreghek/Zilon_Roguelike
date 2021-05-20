@@ -9,20 +9,20 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public sealed class LocalizedStringSubScheme : ILocalizedString
     {
-        /// <summary>
-        /// Английский вариант.
-        /// </summary>
-        public string En { get; set; }
-
-        /// <summary>
-        /// Русский вариант.
-        /// </summary>
-        public string Ru { get; set; }
-
         [ExcludeFromCodeCoverage]
         public override string ToString()
         {
             return $"{Ru ?? En}";
         }
+
+        /// <summary>
+        /// Английский вариант.
+        /// </summary>
+        public string? En { get; set; }
+
+        /// <summary>
+        /// Русский вариант.
+        /// </summary>
+        public string? Ru { get; set; }
     }
 }

@@ -39,12 +39,8 @@ namespace Zilon.Core.Tests.Schemes
 }
 ";
 
-
-
             // ACT
             var factPropScheme = JsonConvert.DeserializeObject<PropScheme>(sourceText);
-
-
 
             // ASSERT
             factPropScheme.Equip.Armors[0].Impact.Should().Be(ImpactType.Kinetic);
@@ -74,12 +70,8 @@ namespace Zilon.Core.Tests.Schemes
 }
 ";
 
-
-
             // ACT
             var factPropScheme = JsonConvert.DeserializeObject<PropScheme>(sourceText);
-
-
 
             // ASSERT
             factPropScheme.Tags.Should().BeEquivalentTo("weapon", "ranged");

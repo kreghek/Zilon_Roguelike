@@ -9,11 +9,6 @@ namespace Zilon.Core.Common
     public sealed class OrientedRange<T> : Range<T> where T : IComparable
     {
         /// <summary>
-        /// Направление диапазона.
-        /// </summary>
-        public bool IsAcs { get; }
-
-        /// <summary>
         /// Конструктор.
         /// </summary>
         /// <param name="min"> Минимальное значение диапазона. </param>
@@ -23,5 +18,10 @@ namespace Zilon.Core.Common
         {
             IsAcs = isAcs;
         }
+
+        /// <summary>
+        /// Направление диапазона.
+        /// </summary>
+        public bool IsAcs { get; }
     }
 }

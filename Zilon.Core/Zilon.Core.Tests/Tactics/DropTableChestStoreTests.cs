@@ -31,12 +31,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var store = new DropTableChestStore(new DropTableScheme[0], dropResolver);
 
-
-
             // ACT
             var props = store.CalcActualItems();
-
-
 
             // ASSERT
             props.Length.Should().Be(1);
@@ -61,12 +57,8 @@ namespace Zilon.Core.Tests.Tactics
             var store = new DropTableChestStore(new DropTableScheme[0], dropResolver);
             var firstProps = store.CalcActualItems();
 
-
-
             // ACT
             var secondProps = store.CalcActualItems();
-
-
 
             // ASSERT
             dropResolverMock.Verify(x => x.Resolve(It.IsAny<DropTableScheme[]>()), Times.Once);

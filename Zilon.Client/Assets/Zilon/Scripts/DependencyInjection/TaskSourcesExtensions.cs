@@ -17,8 +17,21 @@ namespace Assets.Zilon.Scripts.DependencyInjection
     {
         public static void RegisterActorTaskSourcesServices(this DiContainer diContainer)
         {
-            diContainer.Bind<IHumanActorTaskSource<ISectorTaskSourceContext>>().To<HumanActorTaskSource<ISectorTaskSourceContext>>().AsSingle();
-            diContainer.Bind<IActorTaskSource<ISectorTaskSourceContext>>().To<MonsterBotActorTaskSource<ISectorTaskSourceContext>>().AsSingle();
+            diContainer.Bind<IHumanActorTaskSource<ISectorTaskSourceContext>>()
+                .FromMethod(injectContext =>
+                {
+                    var humanTaskSource = new HumanActorTaskSource<ISectorTaskSourceContext>();
+                    var botTaskSource = injectContext.Container.Resolve<IActorTaskSource<ISectorTaskSourceContext>>();
+
+                    var switchTaskSource = new SwitchHumanActorTaskSource<ISectorTaskSourceContext>(humanTaskSource, botTaskSource);
+                    return switchTaskSource;
+                }).AsSingle();
+            diContainer.Bind<IActorTaskControlSwitcher>().FromMethod(injectContext =>
+            {
+                var taskSource = injectContext.Container.Resolve<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+                return (SwitchHumanActorTaskSource<ISectorTaskSourceContext>)taskSource;
+            }).AsSingle();
+            diContainer.Bind<IActorTaskSource<ISectorTaskSourceContext>>().To<HumanBotActorTaskSource<ISectorTaskSourceContext>>().AsSingle();
             diContainer.Bind<IActorTaskSourceCollector>().FromMethod(injectContext =>
             {
                 var botTaskSource = injectContext.Container.Resolve<IActorTaskSource<ISectorTaskSourceContext>>();

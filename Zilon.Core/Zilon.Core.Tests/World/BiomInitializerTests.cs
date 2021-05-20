@@ -93,7 +93,7 @@ namespace Zilon.Core.World.Tests
             {
                 var nextNodes = scanNode.Biome.GetNext(scanNode).OfType<SectorNode>();
                 scanNode = nextNodes.SingleOrDefault(x => x.State == SectorNodeState.SectorMaterialized
-                && !materializedSectorNodes.Contains(x));
+                                                          && !materializedSectorNodes.Contains(x));
 
                 if (scanNode is null)
                 {
@@ -109,71 +109,92 @@ namespace Zilon.Core.World.Tests
 
         private static ILocationScheme[] CreateBiomSchemes()
         {
-            return new ILocationScheme[] {
-                new TestLocationScheme{
+            return new ILocationScheme[]
+            {
+                new TestLocationScheme
+                {
                     Sid = "intro",
-                    SectorLevels = new []{
-                        new TestSectorSubScheme{
+                    SectorLevels = new[]
+                    {
+                        new TestSectorSubScheme
+                        {
                             Sid = "intro-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "intro-2" } }
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme { SectorLevelSid = "intro-2" } }
                         },
-                        new TestSectorSubScheme{
+                        new TestSectorSubScheme
+                        {
                             Sid = "intro-2",
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
                         }
                     }
                 },
 
-                new TestLocationScheme{
+                new TestLocationScheme
+                {
                     Sid = "d1",
-                    SectorLevels = new []{
-                        new TestSectorSubScheme{
+                    SectorLevels = new[]
+                    {
+                        new TestSectorSubScheme
+                        {
                             Sid = "d1-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d1-2" } }
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme { SectorLevelSid = "d1-2" } }
                         },
-                        new TestSectorSubScheme{
+                        new TestSectorSubScheme
+                        {
                             Sid = "d1-2",
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
                         }
                     }
                 },
 
-                new TestLocationScheme{
+                new TestLocationScheme
+                {
                     Sid = "d2",
-                    SectorLevels = new []{
-                        new TestSectorSubScheme{
+                    SectorLevels = new[]
+                    {
+                        new TestSectorSubScheme
+                        {
                             Sid = "d2-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
                         }
                     }
                 },
 
-                new TestLocationScheme{
+                new TestLocationScheme
+                {
                     Sid = "d3",
-                    SectorLevels = new []{
-                        new TestSectorSubScheme{
+                    SectorLevels = new[]
+                    {
+                        new TestSectorSubScheme
+                        {
                             Sid = "d3-1",
                             IsStart = true,
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" },
-                                new TestSectorTransitionSubScheme { SectorLevelSid ="d3-4" } }
+                            TransSectorSids = new[]
+                            {
+                                new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" },
+                                new TestSectorTransitionSubScheme { SectorLevelSid = "d3-4" }
+                            }
                         },
 
-                        new TestSectorSubScheme{
+                        new TestSectorSubScheme
+                        {
                             Sid = "d3-3",
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d3-2" } }
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme { SectorLevelSid = "d3-2" } }
                         },
 
-                        new TestSectorSubScheme{
+                        new TestSectorSubScheme
+                        {
                             Sid = "d3-4",
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" } }
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme { SectorLevelSid = "d3-3" } }
                         },
 
-                        new TestSectorSubScheme{
+                        new TestSectorSubScheme
+                        {
                             Sid = "d3-2",
-                            TransSectorSids = new[]{ new TestSectorTransitionSubScheme() }
+                            TransSectorSids = new[] { new TestSectorTransitionSubScheme() }
                         }
                     }
                 }

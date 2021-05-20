@@ -1,4 +1,7 @@
-﻿using JetBrains.Annotations;
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+using JetBrains.Annotations;
 
 using UnityEngine;
 
@@ -25,9 +28,13 @@ public class PersonEffectHandler : MonoBehaviour
 
     public DiseaseEffectViewModel DiseaseEffectPrefab;
 
+    private TaskScheduler _taskScheduler;
+
     [UsedImplicitly]
     public void Start()
     {
+        _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
         UpdateEffects();
 
         var person = _player.MainPerson;
@@ -50,9 +57,12 @@ public class PersonEffectHandler : MonoBehaviour
         }
     }
 
-    private void Survival_StatChanged(object sender, SurvivalStatChangedEventArgs e)
+    private async void Survival_StatChanged(object sender, SurvivalStatChangedEventArgs e)
     {
-        UpdateEffects();
+        await Task.Factory.StartNew(() =>
+        {
+            UpdateEffects();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void UpdateEffects()
@@ -69,7 +79,7 @@ public class PersonEffectHandler : MonoBehaviour
             return;
         }
 
-        var effects = person.GetModule<IEffectsModule>();
+        var effects = person.GetModule<IConditionModule>();
 
         foreach (var effect in effects.Items)
         {

@@ -10,10 +10,10 @@ namespace Zilon.Core.Benchmarks.Fow
 {
     public class FowDataBench
     {
-        private int _radius;
-        private HumanSectorFowData _fowData;
         private HexNode _baseNode;
         private TestFowContext _fowContextMock;
+        private HumanSectorFowData _fowData;
+        private int _radius;
 
         [Benchmark(Description = "Calc fow Empty room")]
         public void CalcFow()
@@ -24,9 +24,9 @@ namespace Zilon.Core.Benchmarks.Fow
         [IterationSetup]
         public void Setup()
         {
-            int mapSize = 1000;
-            int baseX = 50;
-            int baseY = 50;
+            var mapSize = 1000;
+            var baseX = 50;
+            var baseY = 50;
             _radius = 5;
 
             // ARRANGE

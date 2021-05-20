@@ -25,26 +25,30 @@ namespace Zilon.Core.Commands
             _playerState = playerState;
         }
 
-        public override void Execute()
+        public override CanExecuteCheckResult CanExecute()
         {
-            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
-            var targetContainerViewModel = (IContainerViewModel)_playerState.HoverViewModel;
-            var container = targetContainerViewModel.StaticObject;
-            var containerContent = container.GetModule<IPropContainer>().Content;
-            var transferMachine = new PropTransferMachine(inventory, containerContent);
+            var activeActor = _playerState.ActiveActor!;
 
-            ModalManager.ShowContainerModal(transferMachine);
-        }
-
-        public override bool CanExecute()
-        {
-            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
+            var inventory = activeActor.Actor.Person.GetModule<IInventoryModule>();
 
             var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
             var container = targetContainerViewModel?.StaticObject;
             var containerContent = container?.GetModule<IPropContainer>().Content;
 
-            return inventory != null && containerContent != null;
+            return new CanExecuteCheckResult { IsSuccess = inventory != null && containerContent != null };
+        }
+
+        public override void Execute()
+        {
+            var activeActor = _playerState.ActiveActor!;
+
+            var inventory = activeActor.Actor.Person.GetModule<IInventoryModule>();
+            var targetContainerViewModel = (IContainerViewModel?)_playerState.HoverViewModel;
+            var container = targetContainerViewModel!.StaticObject;
+            var containerContent = container.GetModule<IPropContainer>().Content;
+            var transferMachine = new PropTransferMachine(inventory, containerContent);
+
+            ModalManager.ShowContainerModal(transferMachine);
         }
     }
 }

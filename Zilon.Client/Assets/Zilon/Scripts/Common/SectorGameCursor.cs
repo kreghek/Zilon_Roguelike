@@ -33,14 +33,14 @@ public class SectorGameCursor : MonoBehaviour
         _playerState.HoverChanged += PlayerState_HoverChanged;
     }
 
-    private void PlayerState_HoverChanged(object sender, System.EventArgs e)
+    private async void PlayerState_HoverChanged(object sender, EventArgs e)
     {
         if (_playerState.HoverViewModel == null)
         {
             return;
         }
 
-        Task.Factory.StartNew(() =>
+        await Task.Factory.StartNew(() =>
         {
             try
             {
@@ -50,7 +50,7 @@ public class SectorGameCursor : MonoBehaviour
             {
                 Debug.LogError(exception);
             }
-        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler).Wait();
+        }, CancellationToken.None, TaskCreationOptions.None, _taskScheduler);
     }
 
     private void HoverChangedHandlerInner()
@@ -68,14 +68,14 @@ public class SectorGameCursor : MonoBehaviour
         }
         else if (_playerState.HoverViewModel is IMapNodeViewModel)
         {
-            if (!_moveCommand.CanExecute())
+            if (!_moveCommand.CanExecute().IsSuccess)
             {
                 SpriteRenderer.sprite = CantMoveCursorSprite;
             }
         }
         else if (_playerState.HoverViewModel is IActorViewModel)
         {
-            if (_attackCommand.CanExecute())
+            if (_attackCommand.CanExecute().IsSuccess)
             {
                 SpriteRenderer.sprite = AttackCursorSprite;
             }

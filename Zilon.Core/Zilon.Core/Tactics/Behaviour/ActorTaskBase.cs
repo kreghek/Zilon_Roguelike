@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
 
+using Zilon.Core.World;
+
 namespace Zilon.Core.Tactics.Behaviour
 {
     /// <summary>
@@ -23,11 +25,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
         protected IActor Actor { get; }
 
+        protected IActorTaskContext Context { get; }
+
         public virtual bool IsComplete { get; protected set; }
 
-        public virtual int Cost { get => 1000; }
-
-        protected IActorTaskContext Context { get; }
+        public virtual int Cost => GlobeMetrics.OneIterationLength;
 
         public abstract void Execute();
     }

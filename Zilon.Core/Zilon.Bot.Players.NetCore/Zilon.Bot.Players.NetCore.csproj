@@ -5,12 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.9" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
     <ProjectReference Include="..\Zilon.Bot.Sdk\Zilon.Bot.Sdk.csproj" />
+    <ProjectReference Include="..\Zilon.DependencyInjection\Zilon.DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>

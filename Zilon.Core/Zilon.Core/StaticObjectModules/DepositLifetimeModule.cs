@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 
+using Zilon.Core.Props;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.StaticObjectModules
@@ -10,10 +11,10 @@ namespace Zilon.Core.StaticObjectModules
     /// </summary>
     public class DepositLifetimeModule : ILifetimeModule
     {
-        private readonly IStaticObjectManager _staticObjectManager;
-        private readonly IStaticObject _parentStaticObject;
-        private readonly IPropDepositModule _depositModule;
         private readonly IPropContainer _containerModule;
+        private readonly IPropDepositModule _depositModule;
+        private readonly IStaticObject _parentStaticObject;
+        private readonly IStaticObjectManager _staticObjectManager;
 
         public DepositLifetimeModule(IStaticObjectManager staticObjectManager, IStaticObject parentStaticObject)
         {
@@ -27,44 +28,48 @@ namespace Zilon.Core.StaticObjectModules
             _containerModule.ItemsRemoved += ContainerModule_ItemsRemoved;
         }
 
-        private void DepositModule_Mined(object sender, EventArgs e)
-        {
-            CheckAndDestroy();
-        }
-
-        private void ContainerModule_ItemsRemoved(object sender, Props.PropStoreEventArgs e)
-        {
-            CheckAndDestroy();
-        }
-
         private void CheckAndDestroy()
         {
-            if (_depositModule.IsExhausted && !_containerModule.Content.CalcActualItems().Any())
+            var minedProps = _containerModule.Content.CalcActualItems();
+            if (_depositModule.IsExhausted && !minedProps.Any())
             {
                 Destroy();
             }
         }
 
-        /// <inheritdoc/>
-        public string Key { get => nameof(ILifetimeModule); }
+        private void ContainerModule_ItemsRemoved(object sender, PropStoreEventArgs e)
+        {
+            CheckAndDestroy();
+        }
 
-        /// <inheritdoc/>
+        private void DepositModule_Mined(object sender, EventArgs e)
+        {
+            CheckAndDestroy();
+        }
+
+        private void DoDestroyed()
+        {
+            Destroyed?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <inheritdoc />
+        public string Key => nameof(ILifetimeModule);
+
+        /// <inheritdoc />
         public bool IsActive { get; set; }
 
-        /// <inheritdoc/>
-        public event EventHandler Destroyed;
+        public bool IsParentStaticObjectDestroyed { get; private set; }
+
+        /// <inheritdoc />
+        public event EventHandler? Destroyed;
 
         public void Destroy()
         {
             _depositModule.Mined -= DepositModule_Mined;
             _containerModule.ItemsRemoved -= ContainerModule_ItemsRemoved;
             _staticObjectManager.Remove(_parentStaticObject);
+            IsParentStaticObjectDestroyed = true;
             DoDestroyed();
-        }
-
-        private void DoDestroyed()
-        {
-            Destroyed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -35,6 +35,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         IEnumerable<Room> GenerateRoomsInGrid(int roomCount,
             int roomMinSize,
             int roomMaxSize,
-            IEnumerable<RoomTransition> availableTransitions);
+            IEnumerable<SectorTransition> availableTransitions);
     }
 }

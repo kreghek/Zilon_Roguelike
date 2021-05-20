@@ -20,30 +20,23 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public IGraphNode TargetNode { get; }
 
-        public IActorTask CreateActorTask([NotNull] IActor actor)
-        {
-            return CreateTaskInner(actor);
-        }
-
-        private MoveTask CreateTaskInner(IActor actor)
+        private MoveTask CreateMoveTaskInner(IActor actor)
         {
             var taskContext = new ActorTaskContext(_sector);
 
-            return CreateMoveTask(actor, taskContext);
-        }
-
-        private MoveTask CreateMoveTask(IActor actor, ActorTaskContext taskContext)
-        {
             var movingModule = actor.Person.GetModuleSafe<IMovingModule>();
             if (movingModule is null)
             {
                 return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map);
             }
-            else
-            {
-                var moveCost = movingModule.CalculateCost();
-                return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map, moveCost);
-            }
+
+            var moveCost = movingModule.CalculateCost();
+            return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map, moveCost);
+        }
+
+        public IActorTask CreateActorTask([NotNull] IActor actor)
+        {
+            return CreateMoveTaskInner(actor);
         }
     }
 }

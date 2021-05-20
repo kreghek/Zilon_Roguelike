@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Assets.Zilon.Scripts.Commands;
-using Assets.Zilon.Scripts.Services;
 
 using JetBrains.Annotations;
 
@@ -12,6 +11,7 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
 using Zilon.Core.Graphs;
@@ -62,11 +62,11 @@ public class KeyboardMoveController : MonoBehaviour
     private readonly IPlayer _player;
 
     [Inject]
-    private readonly ICommandBlockerService _commandBlockerService;
+    private readonly IAnimationBlockerService _animationBlockerService;
 
     [NotNull]
     [Inject]
-    private readonly ICommandManager _clientCommandExecutor;
+    private readonly ICommandPool _commandPool;
 
     [NotNull]
     [Inject(Id = "move-command")]
@@ -86,7 +86,7 @@ public class KeyboardMoveController : MonoBehaviour
             return;
         }
 
-        if (!_commandBlockerService.HasBlockers)
+        if (!_animationBlockerService.HasBlockers)
         {
             var direction = GetDirectionByKeyboard();
 
@@ -115,7 +115,7 @@ public class KeyboardMoveController : MonoBehaviour
 
             if (targetNodeViewModel != null)
             {
-                _clientCommandExecutor.Push(_moveCommand);
+                _commandPool.Push(_moveCommand);
             }
         }
     }

@@ -3,7 +3,7 @@
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 {
     /// <summary>
-    ///  Контроллируемое исключение, выбрасываемое при работе с клеточным автоматом.
+    /// Контроллируемое исключение, выбрасываемое при работе с клеточным автоматом.
     /// </summary>
     /// <remarks>
     /// Это исключение должно быть перехвачено как можно раньше и обработано.
@@ -30,7 +30,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// Констрктор.
         /// </summary>
         protected CellularAutomatonException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+            System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context)
+        {
+        }
     }
 }

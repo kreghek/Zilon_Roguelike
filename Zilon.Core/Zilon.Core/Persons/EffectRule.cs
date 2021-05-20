@@ -10,8 +10,8 @@ namespace Zilon.Core.Persons
             Level = level;
         }
 
-        public RollEffectType? RollType { get; }
-
         public PersonRuleLevel Level { get; }
+
+        public RollEffectType? RollType { get; }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class TestLocationScheme : SchemeBase, ILocationScheme
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",

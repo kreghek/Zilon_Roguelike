@@ -8,19 +8,14 @@ namespace Zilon.Core.Schemes
     public class PerkRuleSubScheme : SubSchemeBase
     {
         /// <summary>
-        /// Тип правила.
+        /// Направление влияния правила.
         /// </summary>
-        public PersonRuleType Type { get; set; }
+        public PersonRuleDirection Direction { get; set; }
 
         /// <summary>
         /// Степень влияния правила.
         /// </summary>
         public PersonRuleLevel Level { get; set; }
-
-        /// <summary>
-        /// Направление влияния правила.
-        /// </summary>
-        public PersonRuleDirection Direction { get; set; }
 
         /// <summary>
         /// Параметры правила.
@@ -30,6 +25,11 @@ namespace Zilon.Core.Schemes
         /// Например, на тип правила Увеличение урона указывает теги предметов, действия которых
         /// будут с увеличением урона.
         /// </remarks>
-        public string Params { get; set; }
+        public string? Params { get; set; }
+
+        /// <summary>
+        /// Тип правила.
+        /// </summary>
+        public PersonRuleType Type { get; set; }
     }
 }

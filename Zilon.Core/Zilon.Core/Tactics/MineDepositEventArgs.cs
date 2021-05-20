@@ -10,6 +10,13 @@ namespace Zilon.Core.Tactics
     /// </summary>
     public sealed class MineDepositEventArgs : EventArgs
     {
+        [ExcludeFromCodeCoverage]
+        public MineDepositEventArgs(IStaticObject deposit, [NotNull] IMineDepositResult result)
+        {
+            Deposit = deposit ?? throw new ArgumentNullException(nameof(deposit));
+            Result = result ?? throw new ArgumentNullException(nameof(result));
+        }
+
         /// <summary>
         /// Контейнер, который пытались открыть.
         /// </summary>
@@ -21,12 +28,5 @@ namespace Zilon.Core.Tactics
         /// </summary>
         [PublicAPI]
         public IMineDepositResult Result { get; }
-
-        [ExcludeFromCodeCoverage]
-        public MineDepositEventArgs(IStaticObject deposit, [NotNull] IMineDepositResult result)
-        {
-            Deposit = deposit ?? throw new ArgumentNullException(nameof(deposit));
-            Result = result ?? throw new ArgumentNullException(nameof(result));
-        }
     }
 }

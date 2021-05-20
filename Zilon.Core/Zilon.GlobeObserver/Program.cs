@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -9,9 +11,18 @@ using Zilon.Core.World;
 
 namespace Zilon.GlobeObserver
 {
-    static class Program
+    internal static class Program
     {
-        static async Task Main()
+        private static async Task<IGlobe> GenerateGlobeAsync(ServiceProvider serviceProvider)
+        {
+            // Create globe
+            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
+            var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
+
+            return globe;
+        }
+
+        private static async Task Main()
         {
             var serviceContainer = new ServiceCollection();
             var startUp = new StartUp();
@@ -25,37 +36,39 @@ namespace Zilon.GlobeObserver
             do
             {
                 Console.WriteLine("Iteratin count:");
-                var iterationCount = int.Parse(Console.ReadLine());
+
+                var input = Console.ReadLine();
+
+                if (string.Equals(input, "stop", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    // Stop to generate the world and print results.
+
+                    PrintReport(globe);
+
+                    break;
+                }
+
+                var iterationCount = int.Parse(input, CultureInfo.InvariantCulture);
+
                 for (var i = 0; i < iterationCount; i++)
                 {
-                    for (var iterationPassIndex = 0; iterationPassIndex < GlobeMetrics.OneIterationLength; iterationPassIndex++)
-                    {
-                        await globe.UpdateAsync();
-                    }
+                    await RunGlobeIteration(globe).ConfigureAwait(false);
 
                     globeIterationCounter++;
 
-                    var hasActors = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Any(x => x.Person.Fraction != Fractions.MonsterFraction);
+                    var hasActors = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items)
+                        .Any(x => x.Person.Fraction != Fractions.MonsterFraction);
                     if (!hasActors)
                     {
-                        // Все персонажи-немонстры вымерли.
+                        // There is no human persons.
+                        // We can stop update the globe, because monsters can't change the world. Only humans.
                         break;
                     }
                 }
 
                 Console.WriteLine($"Globe Iteration: {globeIterationCounter}");
                 PrintReport(globe);
-
             } while (true);
-        }
-
-        private static async Task<IGlobe> GenerateGlobeAsync(ServiceProvider serviceProvider)
-        {
-            // Create globe
-            var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
-            var globe = await globeInitializer.CreateGlobeAsync("intro");
-
-            return globe;
         }
 
         private static void PrintReport(IGlobe globe)
@@ -66,10 +79,19 @@ namespace Zilon.GlobeObserver
             var actorCount = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).Count();
             Console.WriteLine($"Actors: {actorCount}");
 
-            var fractions = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items).GroupBy(x => x.Person.Fraction);
+            var fractions = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items)
+                .GroupBy(x => x.Person.Fraction);
             foreach (var fractionGroup in fractions)
             {
                 Console.WriteLine($"Fraction {fractionGroup.Key.Name}: {fractionGroup.Count()}");
+            }
+        }
+
+        private static async Task RunGlobeIteration(IGlobe globe)
+        {
+            for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
+            {
+                await globe.UpdateAsync(CancellationToken.None).ConfigureAwait(false);
             }
         }
     }

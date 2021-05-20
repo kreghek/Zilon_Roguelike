@@ -45,9 +45,10 @@ namespace Zilon.Core.Specs.Contexts
             var inventoryState = ServiceProvider.GetRequiredService<IInventoryState>();
             var actor = GetActiveActor();
 
-            var selectedProp = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            var selectedProp = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
+                .First(x => x.Scheme.Sid == propSid);
 
-            var viewModel = new TestPropItemViewModel()
+            var viewModel = new TestPropItemViewModel
             {
                 Prop = selectedProp
             };

@@ -10,7 +10,7 @@ using Zilon.Core.Commands;
 public class InventorySlotDropHandler : UIBehaviour, IDropHandler
 {
     [Inject] private readonly SpecialCommandManager _specialCommandManager;
-    [Inject] private readonly ICommandManager _commandManager;
+    [Inject] private readonly ICommandPool _commandPool;
     [Inject] private readonly IInventoryState _inventoryState;
 
     public InventorySlotVm InventorySlotViewModel;
@@ -21,25 +21,31 @@ public class InventorySlotDropHandler : UIBehaviour, IDropHandler
 
         var equipCommand = _specialCommandManager.GetEquipCommand(slotIndex);
 
-        if (equipCommand.CanExecute())
+        if (equipCommand.CanExecute().IsSuccess)
         {
-            var droppedPropItem = eventData.pointerDrag?.GetComponent<PropItemVm>();
+            var propItemViewModelObject = eventData.pointerDrag;
+            if (propItemViewModelObject is null)
+            {
+                return;
+            }
+
+            var droppedPropItem = propItemViewModelObject.GetComponent<PropItemVm>();
             if (droppedPropItem != null)
             {
                 // Значит экипировка произошла из инвентаря.
                 _inventoryState.SelectedProp = droppedPropItem;
 
-                _commandManager.Push(equipCommand);
+                _commandPool.Push(equipCommand);
 
                 return;
             }
 
-            var droppedInventorySlot = eventData.pointerDrag?.GetComponent<InventorySlotVm>();
+            var droppedInventorySlot = propItemViewModelObject.GetComponent<InventorySlotVm>();
             if (droppedInventorySlot != null)
             {
                 _inventoryState.SelectedProp = droppedInventorySlot;
 
-                _commandManager.Push(equipCommand);
+                _commandPool.Push(equipCommand);
 
                 return;
             }

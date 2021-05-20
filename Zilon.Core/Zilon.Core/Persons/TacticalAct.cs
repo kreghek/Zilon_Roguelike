@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
 
@@ -17,15 +18,20 @@ namespace Zilon.Core.Persons
         public TacticalAct([NotNull] ITacticalActScheme scheme,
             [NotNull] Roll efficient,
             [NotNull] Roll toHit,
-            [CanBeNull] Equipment equipment)
+            [CanBeNull] Equipment? equipment)
         {
-            Scheme = scheme ?? throw new System.ArgumentNullException(nameof(scheme));
+            Scheme = scheme;
 
-            Stats = scheme.Stats ?? throw new System.ArgumentNullException(nameof(scheme));
+            if (scheme.Stats is null)
+            {
+                throw new InvalidOperationException();
+            }
 
-            Efficient = efficient ?? throw new System.ArgumentNullException(nameof(efficient));
+            Stats = scheme.Stats;
 
-            ToHit = toHit ?? throw new System.ArgumentNullException(nameof(toHit));
+            Efficient = efficient;
+
+            ToHit = toHit;
 
             Equipment = equipment;
 
@@ -34,40 +40,40 @@ namespace Zilon.Core.Persons
             CurrentCooldown = scheme.Constrains?.Cooldown != null ? 0 : (int?)null;
         }
 
-        /// <inheritdoc/>
-        public ITacticalActStatsSubScheme Stats { get; }
-
-        /// <inheritdoc/>
-        public ITacticalActScheme Scheme { get; }
-
-        /// <inheritdoc/>
-        public Roll Efficient { get; }
-
-        /// <inheritdoc/>
-        public Roll ToHit { get; }
-
-        /// <inheritdoc/>
-        public Equipment Equipment { get; }
-
-        /// <inheritdoc/>
-        public ITacticalActConstrainsSubScheme Constrains { get; }
-
-        /// <inheritdoc/>
-        public int? CurrentCooldown { get; private set; }
-
-        /// <inheritdoc/>
-        public void StartCooldownIfItIs()
-        {
-            CurrentCooldown = Constrains?.Cooldown;
-        }
-
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override string ToString()
         {
             return $"{Scheme} [{Equipment}]";
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
+        public ITacticalActStatsSubScheme Stats { get; }
+
+        /// <inheritdoc />
+        public ITacticalActScheme Scheme { get; }
+
+        /// <inheritdoc />
+        public Roll Efficient { get; }
+
+        /// <inheritdoc />
+        public Roll ToHit { get; }
+
+        /// <inheritdoc />
+        public Equipment? Equipment { get; }
+
+        /// <inheritdoc />
+        public ITacticalActConstrainsSubScheme? Constrains { get; }
+
+        /// <inheritdoc />
+        public int? CurrentCooldown { get; private set; }
+
+        /// <inheritdoc />
+        public void StartCooldownIfItIs()
+        {
+            CurrentCooldown = Constrains?.Cooldown;
+        }
+
+        /// <inheritdoc />
         public void UpdateCooldown()
         {
             if (CurrentCooldown is null)

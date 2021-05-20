@@ -19,12 +19,26 @@ namespace Zilon.Core.Specs.Steps
         {
         }
 
+        [Then(@"Актёр находится в ячейке \((.*), (.*)\)")]
+        public void ThenАктёрНаходитсяВЯчейке(int expectedOffsetX, int expectedOffsetY)
+        {
+            var actor = Context.GetActiveActor();
+
+            var node = actor.Node;
+
+            var hexNode = (HexNode)node;
+
+            var expectedOffsetCoords = new OffsetCoords(expectedOffsetX, expectedOffsetY);
+            var factOffsetCoords = hexNode.OffsetCoords;
+            factOffsetCoords.Should().Be(expectedOffsetCoords);
+        }
+
         [Then(@"Команда на перемещение может выполняться")]
         public void ThenКомандаНаПеремещениеМожетВыполняться()
         {
             var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
 
-            moveCommand.CanExecute().Should().BeTrue();
+            moveCommand.CanExecute().IsSuccess.Should().BeTrue();
         }
 
         [Then(@"Команда на перемещение не может выполняться")]
@@ -32,7 +46,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var moveCommand = Context.ServiceProvider.GetRequiredService<MoveCommand>();
 
-            moveCommand.CanExecute().Should().BeFalse();
+            moveCommand.CanExecute().IsSuccess.Should().BeFalse();
         }
 
         [When(@"Выполняется команда на перемещение")]
@@ -54,20 +68,6 @@ namespace Zilon.Core.Specs.Steps
             {
                 Console.WriteLine(exception.ToString());
             }
-        }
-
-        [Then(@"Актёр находится в ячейке \((.*), (.*)\)")]
-        public void ThenАктёрНаходитсяВЯчейке(int expectedOffsetX, int expectedOffsetY)
-        {
-            var actor = Context.GetActiveActor();
-
-            var node = actor.Node;
-
-            var hexNode = (HexNode)node;
-
-            var expectedOffsetCoords = new OffsetCoords(expectedOffsetX, expectedOffsetY);
-            var factOffsetCoords = hexNode.OffsetCoords;
-            factOffsetCoords.Should().Be(expectedOffsetCoords);
         }
     }
 }

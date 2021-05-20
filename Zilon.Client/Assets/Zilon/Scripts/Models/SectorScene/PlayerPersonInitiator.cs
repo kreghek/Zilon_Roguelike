@@ -8,14 +8,11 @@ using UnityEngine;
 using Zenject;
 
 using Zilon.Core.Client;
-using Zilon.Core.Client.Windows;
 using Zilon.Core.PersonModules;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Behaviour;
 
 public class PlayerPersonInitiator : MonoBehaviour
 {
@@ -44,14 +41,6 @@ public class PlayerPersonInitiator : MonoBehaviour
     [NotNull]
     [Inject]
     private readonly IPropFactory _propFactory;
-
-    [NotNull]
-    [Inject]
-    private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
-
-    [NotNull]
-    [Inject]
-    private readonly ISectorModalManager _sectorModalManager;
 
     public ActorViewModel InitPlayerActor(IEnumerable<MapNodeVM> nodeViewModels, List<ActorViewModel> ActorViewModels)
     {
@@ -83,19 +72,13 @@ public class PlayerPersonInitiator : MonoBehaviour
     private ActorViewModel CreateHumanActorViewModel([NotNull] IActorManager actorManager,
         [NotNull] IEnumerable<MapNodeVM> nodeVMs)
     {
-        bool showCreationModal = GetCreationModal();
-
-        if (showCreationModal)
-        {
-            ShowCreatePersonModal(_humanPlayer.MainPerson);
-        }
-
         var actor = actorManager.Items.Single(x => x.Person == _humanPlayer.MainPerson);
 
         var actorViewModelObj = _container.InstantiatePrefab(ActorPrefab, transform);
         var actorViewModel = actorViewModelObj.GetComponent<ActorViewModel>();
         actorViewModel.PlayerState = _playerState;
-        var actorGraphic = Instantiate(HumanoidGraphicPrefab, actorViewModel.transform);
+        var actorGraphicObj = _container.InstantiatePrefab(HumanoidGraphicPrefab, actorViewModel.transform);
+        var actorGraphic = actorGraphicObj.GetComponent<ActorGraphicBase>();
         actorGraphic.transform.position = new Vector3(0, 0.2f, -0.27f);
         actorViewModel.SetGraphicRoot(actorGraphic);
 
@@ -121,17 +104,6 @@ public class PlayerPersonInitiator : MonoBehaviour
         }
 
         AddResourceToCurrentPerson("camp-tools");
-    }
-
-    private bool GetCreationModal()
-    {
-        // Считывать из настроек в клиентской части.
-        return true;
-    }
-
-    private void ShowCreatePersonModal(IPerson playerPerson)
-    {
-        _sectorModalManager.ShowCreatePersonModal(playerPerson);
     }
 
     //TODO Вынести в отдельный сервис. Этот функционал может обрасти логикой и может быть использован в ботах и тестах.

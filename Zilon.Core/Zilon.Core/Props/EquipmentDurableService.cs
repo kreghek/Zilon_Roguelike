@@ -18,7 +18,7 @@ namespace Zilon.Core.Props
         private readonly IEquipmentDurableServiceRandomSource _randomSource;
 
         /// <summary>
-        /// Создаёт экземпляр <see cref="EquipmentDurableService"/>.
+        /// Создаёт экземпляр <see cref="EquipmentDurableService" />.
         /// </summary>
         /// <param name="randomSource">Источник рандома для сервиса.</param>
         public EquipmentDurableService(IEquipmentDurableServiceRandomSource randomSource)
@@ -26,10 +26,38 @@ namespace Zilon.Core.Props
             _randomSource = randomSource;
         }
 
+        private static void UnequipIfDurableIsOver(Equipment equipment, IPerson equipmentOwner)
+        {
+            if (equipment.Durable.Value <= 0)
+            {
+                var equipmentCarrier = equipmentOwner.GetModule<IEquipmentModule>();
+                if (equipmentCarrier == null)
+                {
+                    return;
+                }
+
+                int? slotIndex = null;
+                for (var i = 0; i < equipmentCarrier.Slots.Length; i++)
+                {
+                    var prop = equipmentCarrier[i];
+                    if (prop == equipment)
+                    {
+                        slotIndex = i;
+                        break;
+                    }
+                }
+
+                if (slotIndex != null)
+                {
+                    equipmentOwner.UnequipProp(slotIndex.Value);
+                }
+            }
+        }
+
         /// <summary>Определяет, может ли экипировка быть отремонтирована.</summary>
         /// <param name="equipment">Целевая экипировка.</param>
         /// <returns>
-        ///   <c>true</c> если ремонт возможет; Иначе, <c>false</c> (не подлежит восстановлению, на утилизацию).
+        /// <c>true</c> если ремонт возможет; Иначе, <c>false</c> (не подлежит восстановлению, на утилизацию).
         /// </returns>
         public bool CanBeRepaired(Equipment equipment)
         {
@@ -92,34 +120,6 @@ namespace Zilon.Core.Props
             }
 
             UnequipIfDurableIsOver(equipment, equipmentOwner);
-        }
-
-        private static void UnequipIfDurableIsOver(Equipment equipment, IPerson equipmentOwner)
-        {
-            if (equipment.Durable.Value <= 0)
-            {
-                var equipmentCarrier = equipmentOwner.GetModule<IEquipmentModule>();
-                if (equipmentCarrier == null)
-                {
-                    return;
-                }
-
-                int? slotIndex = null;
-                for (var i = 0; i < equipmentCarrier.Slots.Length; i++)
-                {
-                    var prop = equipmentCarrier[i];
-                    if (prop == equipment)
-                    {
-                        slotIndex = i;
-                        break;
-                    }
-                }
-
-                if (slotIndex != null)
-                {
-                    equipmentOwner.UnequipProp(slotIndex.Value);
-                }
-            }
         }
     }
 }

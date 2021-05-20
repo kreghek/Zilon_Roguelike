@@ -1,5 +1,13 @@
-﻿namespace Zilon.Core.MapGenerators.StaticObjectFactories
+﻿using System;
+
+using Zilon.Core.Tactics;
+
+namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
+    /// <summary>
+    /// Base implementation of <see cref="IStaticObjectFactoryCollector" />.
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class StaticObjectFactoryCollector : IStaticObjectFactoryCollector
     {
         private readonly IStaticObjectFactory[] _factories;
@@ -9,9 +17,20 @@
             _factories = factories;
         }
 
-        public IStaticObjectFactory[] GetFactories()
+        /// <inheritdoc />
+        public IStaticObjectFactory SelectFactoryByStaticObjectPurpose(PropContainerPurpose purpose)
         {
-            return _factories;
+            foreach (var factory in _factories)
+            {
+                if (factory.Purpose != purpose)
+                {
+                    continue;
+                }
+
+                return factory;
+            }
+
+            throw new InvalidOperationException($"Not found factory for purpose {purpose}.");
         }
     }
 }
