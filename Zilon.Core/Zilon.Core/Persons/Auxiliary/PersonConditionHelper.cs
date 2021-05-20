@@ -14,7 +14,7 @@ namespace Zilon.Core.Persons.Auxiliary
     /// <summary>
     /// Вспомогательный класс для работы с эффектами персонажа.
     /// </summary>
-    public static class PersonСonditionHelper
+    public static class PersonConditionHelper
     {
         /// <summary>
         /// Обновление эффекта модуля выживания.

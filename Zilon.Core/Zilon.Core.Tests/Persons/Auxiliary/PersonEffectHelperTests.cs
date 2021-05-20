@@ -38,7 +38,7 @@ namespace Zilon.Core.Persons.Auxiliary.Tests
             // ACT
             using var monitor = сonditionModule.Monitor();
 
-            PersonСonditionHelper.UpdateSurvivalСondition(сonditionModule, stat, segments, randomSource,
+            PersonConditionHelper.UpdateSurvivalСondition(сonditionModule, stat, segments, randomSource,
                 eventLogService);
 
             // ARRANGE

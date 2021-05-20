@@ -715,7 +715,7 @@ namespace Zilon.Core.PersonModules
 
             if (_сonditionModule != null)
             {
-                PersonСonditionHelper.UpdateSurvivalСondition(
+                PersonConditionHelper.UpdateSurvivalСondition(
                     _сonditionModule,
                     stat,
                     notNullKeySegments,
