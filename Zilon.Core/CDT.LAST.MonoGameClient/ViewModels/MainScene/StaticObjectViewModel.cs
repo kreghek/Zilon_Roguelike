@@ -15,8 +15,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class StaticObjectViewModel : GameObjectBase, IContainerViewModel
     {
-        private const int UNIT_SIZE = 32;
-
         private readonly Game _game;
         private readonly Texture2D _personHeadSprite;
         private readonly SpriteContainer _rootSprite;
@@ -32,7 +30,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var worldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
 
-            var hexSize = UNIT_SIZE / 2;
+            var hexSize = MapMetrics.UnitSize / 2;
             var staticObjectPosition = new Vector2(
                 (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
                 worldCoords[1] * hexSize * 2 / 2

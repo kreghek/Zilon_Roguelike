@@ -21,7 +21,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal class MapViewModel
     {
         private const float MAP_UPDATE_DELAY_SECONDS = 0.05f;
-        private const int UNIT_SIZE = 32;
 
         private readonly Texture2D _hexSprite;
 
@@ -114,15 +113,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 if (!_hexSprites.TryGetValue(node.OffsetCoords, out var currentHexSprite))
                 {
                     var worldCoords = HexHelper.ConvertToWorld(node.OffsetCoords);
-                    var hexSize = UNIT_SIZE / 2;
+                    var hexSize = MapMetrics.UnitSize / 2;
 
-                    var newSprite = new Sprite(_hexSprite,
-                        size: new Point(
-                            (int)(hexSize * Math.Sqrt(3)),
-                            hexSize * 2 / 2
-                        ),
-                        color: nodeColor)
+                    // Remember. Hex width is less that size (radius).
+                    // It equals R*Sqrt(3)/2. So sprite width is R*Sqrt(3)/2*2 or R*Sqrt(3). It's about 28 pixels.
+                    // You should make sprite 28*16.
+                    var newSprite = new Sprite(_hexSprite)
                     {
+                        Color = nodeColor,
                         Position = new Vector2(
                             (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
                             worldCoords[1] * hexSize * 2 / 2

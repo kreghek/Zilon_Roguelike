@@ -21,8 +21,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class ActorViewModel : GameObjectBase, IActorViewModel
     {
-        private const int UNIT_SIZE = 32;
-
         private readonly Game _game;
         private readonly IActorGraphics _graphicsRoot;
 
@@ -73,7 +71,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _graphicsRoot = graphicsRoot;
             }
 
-            var hexSize = UNIT_SIZE / 2;
+            var hexSize = MapMetrics.UnitSize / 2;
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
             var newPosition = new Vector2(
                 (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
@@ -111,7 +109,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 {
                     _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
 
-                    var hexSize = UNIT_SIZE / 2;
+                    var hexSize = MapMetrics.UnitSize / 2;
                     var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
                     var newPosition = new Vector2(
                         (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
@@ -125,7 +123,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void Actor_Moved(object? sender, EventArgs e)
         {
-            var hexSize = UNIT_SIZE / 2;
+            var hexSize = MapMetrics.UnitSize / 2;
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
             var newPosition = new Vector2(
                 (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
@@ -164,7 +162,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-                    var hexSize = UNIT_SIZE / 2;
+                    var hexSize = MapMetrics.UnitSize / 2;
                     var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)e.TargetNode).OffsetCoords);
                     var newPosition = new Vector2(
                         (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),

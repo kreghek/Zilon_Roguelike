@@ -17,7 +17,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class CommandInput
     {
-        private const int UNIT_SIZE = 32;
         private readonly Camera _camera;
         private readonly ServiceProviderCommandFactory _commandFactory;
         private readonly ICommandPool _commandPool;
@@ -58,7 +57,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
 
                 var offsetMouseInWorld =
-                    HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2, UNIT_SIZE / 2);
+                    HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2,
+                        (int)(MapMetrics.UnitSize / 2));
 
                 var map = _sector.Map;
 

@@ -1,5 +1,7 @@
 ﻿using System;
 
+using CDT.LAST.MonoGameClient.ViewModels.MainScene;
+
 using Microsoft.Xna.Framework;
 
 using Zilon.Core.Client;
@@ -10,15 +12,13 @@ namespace CDT.LAST.MonoGameClient.Scenes
 {
     public class Camera
     {
-        private const int UNIT_SIZE = 32;
-
         public Matrix Transform { get; private set; }
 
         public void Follow(IActorViewModel target, Game game)
         {
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)target.Actor.Node).OffsetCoords);
 
-            var hexSize = UNIT_SIZE / 2;
+            var hexSize = MapMetrics.UnitSize / 2;
             var actorPosition = new Vector2(
                 (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
                 playerActorWorldCoords[1] * hexSize * 2 / 2
