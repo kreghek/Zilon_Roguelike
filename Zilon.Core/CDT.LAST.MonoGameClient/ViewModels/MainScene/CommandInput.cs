@@ -65,7 +65,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var hoverNodes = map.Nodes.OfType<HexNode>().Where(node => node.OffsetCoords == offsetMouseInWorld);
                 var hoverNode = hoverNodes.FirstOrDefault();
 
-                GetViewModelByNode(sectorViewModelContext, _uiState.HoverViewModel, hoverNode);
+                _uiState.HoverViewModel = GetViewModelByNode(sectorViewModelContext, _uiState.HoverViewModel, hoverNode);
 
                 if (!_leftMousePressed
                     && mouseState.LeftButton == ButtonState.Pressed
@@ -75,8 +75,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _leftMousePressed = true;
 
                     _uiState.SelectedViewModel = _uiState.HoverViewModel;
-                    var command =
-                        SelectCommandBySelectedViewModel(_uiState.SelectedViewModel, _commandFactory, _uiState);
+                    var command = SelectCommandBySelectedViewModel(
+                        _uiState.SelectedViewModel,
+                        _commandFactory,
+                        _uiState);
 
                     if (command.CanExecute().IsSuccess)
                     {
