@@ -11,6 +11,9 @@ on:
       - opened
       - synchronize
       - reopened
+env:
+    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   sonarcloud:
@@ -26,5 +29,5 @@ jobs:
           sonarProjectName:  Zilon Roguelike
           # The name of the SonarQube organization in SonarCloud. For hosted SonarQube, skip this setting.
           sonarOrganization: kreghek
-          dotnetBuildArguments: Zilon.Core/Zilon.Core.SonarScanner.sln -c Release
+          dotnetBuildArguments: Zilon.Core/Zilon.Core.sln
           dotnetDisableTests: true
