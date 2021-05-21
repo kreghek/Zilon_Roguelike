@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.Tactics.Spatial;
 
@@ -10,7 +11,7 @@ namespace Zilon.Core.Tactics
         {
             if (map is null)
             {
-                throw new System.ArgumentNullException(nameof(map));
+                throw new ArgumentNullException(nameof(map));
             }
 
             var foundFromStart = from node in map.Nodes

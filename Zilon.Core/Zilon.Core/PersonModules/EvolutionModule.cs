@@ -139,12 +139,6 @@ namespace Zilon.Core.PersonModules
         public bool IsActive { get; set; }
 
         /// <inheritdoc />
-        public event EventHandler<PerkEventArgs>? PerkLeveledUp;
-
-        /// <inheritdoc />
-        public event EventHandler<PerkEventArgs>? PerkAdded;
-
-        /// <inheritdoc />
         public void AddBuildInPerks(IEnumerable<IPerk> perks)
         {
             if (perks is null)
@@ -184,5 +178,11 @@ namespace Zilon.Core.PersonModules
 
             DoPerkArchieved(perk);
         }
+
+        /// <inheritdoc />
+        public event EventHandler<PerkEventArgs>? PerkLeveledUp;
+
+        /// <inheritdoc />
+        public event EventHandler<PerkEventArgs>? PerkAdded;
     }
 }

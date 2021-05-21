@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Persons
@@ -22,7 +20,7 @@ namespace Zilon.Core.Persons
         /// Полученными перками считаются перки, которые прокачены хотя бы на один уровень или встроенные перки
         /// (те, которые нельзя прокачать, только получить при рождении или за заслуги).
         /// </remarks>
-        public static IEnumerable<IPerk> GetArchievedPerks([NotNull] this IEvolutionModule evolutionModule)
+        public static IEnumerable<IPerk> GetArchievedPerks(this IEvolutionModule evolutionModule)
         {
             if (evolutionModule == null)
             {

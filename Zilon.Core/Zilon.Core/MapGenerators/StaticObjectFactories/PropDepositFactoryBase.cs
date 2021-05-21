@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -14,7 +15,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
         private readonly ISchemeService _schemeService;
         private readonly string[] _toolTags;
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         protected PropDepositFactoryBase(
             string[] toolTags,
             string dropTableSchemeSid,
@@ -33,7 +34,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
 
         protected abstract int ExhausingValue { get; }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public PropContainerPurpose Purpose { get; }
 
         public IStaticObject Create(ISector sector, HexNode node, int id)

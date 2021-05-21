@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.PersonModules;
@@ -13,7 +11,6 @@ namespace Zilon.Core.Commands
     /// <summary>
     /// Команда на отображение модального окна для отображения контента контейнера.
     /// </summary>
-    [PublicAPI]
     public class ShowContainerModalCommand : ShowModalCommandBase
     {
         private readonly ISectorUiState _playerState;

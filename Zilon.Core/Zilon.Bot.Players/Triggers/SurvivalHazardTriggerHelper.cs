@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -15,9 +13,9 @@ namespace Zilon.Bot.Players.Triggers
     public static class SurvivalHazardTriggerHelper
     {
         public static bool TestHazardAndResource(
-            [NotNull] IActor actor,
+            IActor actor,
             ActorTaskContext taskContext,
-            [NotNull] ILogicStrategyData strategyData,
+            ILogicStrategyData strategyData,
             SurvivalStatType statType,
             ConsumeCommonRuleType ruleType)
         {
@@ -62,7 +60,6 @@ namespace Zilon.Bot.Players.Triggers
             return true;
         }
 
-        [CanBeNull]
         private static Resource ResourceToReduceHazard(IActor actor, ActorTaskContext taskContext,
             ConsumeCommonRuleType ruleType)
         {

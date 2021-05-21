@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Scoring;
@@ -17,7 +15,7 @@ namespace Zilon.Core.Persons
 
         public SurvivalStatHazardEffect(SurvivalStatType type,
             SurvivalStatHazardLevel level,
-            [NotNull] ISurvivalRandomSource survivalRandomSource)
+            ISurvivalRandomSource survivalRandomSource)
         {
             Type = type;
             Level = level;

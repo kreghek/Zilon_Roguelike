@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.Props;
@@ -6,7 +7,7 @@ using Zilon.Core.Tactics;
 
 namespace Zilon.Bot.Players.Strategies
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public sealed class LogicTreeStrategyData : ILogicStrategyData
     {
         public LogicTreeStrategyData()

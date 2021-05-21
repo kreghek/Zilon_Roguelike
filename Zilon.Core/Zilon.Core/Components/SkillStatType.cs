@@ -1,10 +1,7 @@
-﻿using JetBrains.Annotations;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Zilon.Core.Components
 {
-    [PublicAPI]
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum SkillStatType
     {

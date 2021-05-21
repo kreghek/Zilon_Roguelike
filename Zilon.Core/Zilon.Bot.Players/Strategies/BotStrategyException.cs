@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Zilon.Bot.Players.Strategies
 {
@@ -16,8 +17,8 @@ namespace Zilon.Bot.Players.Strategies
         }
 
         protected BotStrategyException(
-            System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext context) : base(info, context)
+            SerializationInfo info,
+            StreamingContext context) : base(info, context)
         {
         }
 

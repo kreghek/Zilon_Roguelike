@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Components;
 using Zilon.Core.Diseases;
 using Zilon.Core.Persons;
@@ -24,9 +22,9 @@ namespace Zilon.Core.PersonModules
         private readonly ISurvivalRandomSource _randomSource;
         private readonly IConditionModule? _сonditionModule;
 
-        public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
-            [NotNull] ISurvivalRandomSource randomSource,
-            [NotNull] IAttributesModule attributesModule,
+        public HumanSurvivalModule(IPersonScheme personScheme,
+            ISurvivalRandomSource randomSource,
+            IAttributesModule attributesModule,
             IConditionModule? сonditionModule,
             IEvolutionModule? evolutionModule,
             IEquipmentModule? equipmentModule) : base(GetStats(personScheme, attributesModule))
@@ -48,9 +46,9 @@ namespace Zilon.Core.PersonModules
             CalcSurvivalStats();
         }
 
-        public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
-            [NotNull] ISurvivalRandomSource randomSource,
-            [NotNull] IAttributesModule attributesModule) : this(
+        public HumanSurvivalModule(IPersonScheme personScheme,
+            ISurvivalRandomSource randomSource,
+            IAttributesModule attributesModule) : this(
             personScheme,
             randomSource,
             attributesModule,
@@ -61,9 +59,9 @@ namespace Zilon.Core.PersonModules
         }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public HumanSurvivalModule([NotNull] IEnumerable<SurvivalStat> personStats,
+        public HumanSurvivalModule(IEnumerable<SurvivalStat> personStats,
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-            [NotNull] ISurvivalRandomSource randomSource) : base(personStats)
+            ISurvivalRandomSource randomSource) : base(personStats)
         {
             _randomSource = randomSource;
         }
@@ -304,7 +302,7 @@ namespace Zilon.Core.PersonModules
             InvokeStatChangedEvent(this, args);
         }
 
-        private void FillSurvivalBonusesFromEffects([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEffects(ref List<SurvivalStatBonus> bonusList)
         {
             if (_сonditionModule is null)
             {
@@ -362,7 +360,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromEquipments([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEquipments(ref List<SurvivalStatBonus> bonusList)
         {
             if (_equipmentModule is null)
             {
@@ -403,7 +401,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromPerks([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromPerks(ref List<SurvivalStatBonus> bonusList)
         {
             if (_evolutionModule is null)
             {
@@ -518,13 +516,13 @@ namespace Zilon.Core.PersonModules
             return stat.DownPassRoll;
         }
 
-        private static IEnumerable<SurvivalStat> GetStats([NotNull] IPersonScheme personScheme,
-            [NotNull] IAttributesModule attributesModule)
+        private static IEnumerable<SurvivalStat> GetStats(IPersonScheme personScheme,
+            IAttributesModule attributesModule)
         {
-            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null).Cast<SurvivalStat>();
+            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null);
         }
 
-        private static IEnumerable<SurvivalStat?> GetStatsIterator([NotNull] IPersonScheme personScheme,
+        private static IEnumerable<SurvivalStat?> GetStatsIterator(IPersonScheme personScheme,
             IAttributesModule attributesModule)
         {
             // Устанавливаем характеристики выживания персонажа
@@ -702,7 +700,7 @@ namespace Zilon.Core.PersonModules
             return hpStat;
         }
 
-        private void Stat_Changed(object sender, EventArgs e)
+        private void Stat_Changed(object? sender, EventArgs e)
         {
             var stat = (SurvivalStat)sender;
 

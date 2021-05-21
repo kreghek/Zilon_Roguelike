@@ -32,7 +32,7 @@ namespace Zilon.Core.PersonModules
             PersonRuleLevel level,
             PersonRuleDirection direction)
         {
-            bonusDict.TryGetValue(targetStatType, out float value);
+            bonusDict.TryGetValue(targetStatType, out var value);
             var q = level switch
             {
                 PersonRuleLevel.Lesser => 0.1f,
@@ -113,7 +113,7 @@ namespace Zilon.Core.PersonModules
             var archievedPerks = _evolutionModule.GetArchievedPerks();
             foreach (var archievedPerk in archievedPerks)
             {
-                PerkLevel? currentLevel = archievedPerk.CurrentLevel;
+                var currentLevel = archievedPerk.CurrentLevel;
 
                 if (archievedPerk.Scheme.IsBuildIn)
                 {

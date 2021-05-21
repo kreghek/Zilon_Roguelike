@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-using JetBrains.Annotations;
-
 namespace Zilon.Core.Schemes
 {
     public class FileSchemeLocator : ISchemeLocator
@@ -13,7 +11,7 @@ namespace Zilon.Core.Schemes
         private readonly string _schemeCatalog;
 
         [ExcludeFromCodeCoverage]
-        public FileSchemeLocator([NotNull] string schemeCatalog)
+        public FileSchemeLocator(string schemeCatalog)
         {
             _schemeCatalog = schemeCatalog ?? throw new ArgumentNullException(nameof(schemeCatalog));
 

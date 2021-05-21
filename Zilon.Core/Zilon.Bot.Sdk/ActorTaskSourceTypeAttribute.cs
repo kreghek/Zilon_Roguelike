@@ -2,7 +2,7 @@
 
 namespace Zilon.Bot.Sdk
 {
-    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property)]
     public sealed class ActorTaskSourceTypeAttribute : Attribute
     {
     }

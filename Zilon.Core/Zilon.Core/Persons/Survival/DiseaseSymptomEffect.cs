@@ -48,11 +48,11 @@ namespace Zilon.Core.Persons.Survival
             Changed?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler? Changed;
-
         public EffectRule[] GetRules()
         {
             return new[] { new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser) };
         }
+
+        public event EventHandler? Changed;
     }
 }

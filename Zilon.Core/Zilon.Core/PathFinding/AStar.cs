@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Graphs;
@@ -52,7 +53,7 @@ namespace Zilon.Core.PathFinding
             _closedList = new HashSet<IGraphNode>();
             _dataDict = new Dictionary<IGraphNode, AStarData>();
 
-            _context = context ?? throw new System.ArgumentNullException(nameof(context));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
 
             Reset(start, goal);
         }
@@ -71,7 +72,7 @@ namespace Zilon.Core.PathFinding
         {
             if (CurrentNode is null)
             {
-                return System.Array.Empty<IGraphNode>();
+                return Array.Empty<IGraphNode>();
             }
 
             var next = CurrentNode;

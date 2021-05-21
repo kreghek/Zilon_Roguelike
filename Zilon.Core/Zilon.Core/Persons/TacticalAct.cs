@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Common;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -18,7 +16,7 @@ namespace Zilon.Core.Persons
         public TacticalAct([NotNull] ITacticalActScheme scheme,
             [NotNull] Roll efficient,
             [NotNull] Roll toHit,
-            [CanBeNull] Equipment? equipment)
+            [MaybeNull] Equipment? equipment)
         {
             Scheme = scheme;
 
@@ -37,7 +35,7 @@ namespace Zilon.Core.Persons
 
             Constrains = scheme.Constrains;
 
-            CurrentCooldown = scheme.Constrains?.Cooldown != null ? 0 : (int?)null;
+            CurrentCooldown = scheme.Constrains?.Cooldown != null ? 0 : null;
         }
 
         /// <inheritdoc />

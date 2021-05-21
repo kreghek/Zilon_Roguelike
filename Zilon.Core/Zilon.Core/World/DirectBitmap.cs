@@ -17,13 +17,30 @@ namespace Zilon.Core.World
                 BitsHandle.AddrOfPinnedObject());
         }
 
-        public Bitmap Bitmap { get; private set; }
-        public int[] Bits { get; private set; }
+        public Bitmap Bitmap { get; }
+        public int[] Bits { get; }
         public bool Disposed { get; private set; }
-        public int Height { get; private set; }
-        public int Width { get; private set; }
+        public int Height { get; }
+        public int Width { get; }
 
-        protected GCHandle BitsHandle { get; private set; }
+        protected GCHandle BitsHandle { get; }
+
+        public Color GetPixel(int x, int y)
+        {
+            var index = x + (y * Width);
+            var col = Bits[index];
+            var result = Color.FromArgb(col);
+
+            return result;
+        }
+
+        public void SetPixel(int x, int y, Color colour)
+        {
+            var index = x + (y * Width);
+            var col = colour.ToArgb();
+
+            Bits[index] = col;
+        }
 
         public void Dispose()
         {
@@ -35,23 +52,6 @@ namespace Zilon.Core.World
             Disposed = true;
             Bitmap.Dispose();
             BitsHandle.Free();
-        }
-
-        public Color GetPixel(int x, int y)
-        {
-            int index = x + (y * Width);
-            int col = Bits[index];
-            var result = Color.FromArgb(col);
-
-            return result;
-        }
-
-        public void SetPixel(int x, int y, System.Drawing.Color colour)
-        {
-            int index = x + (y * Width);
-            int col = colour.ToArgb();
-
-            Bits[index] = col;
         }
     }
 }

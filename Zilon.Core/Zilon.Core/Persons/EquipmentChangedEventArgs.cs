@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Props;
 
 namespace Zilon.Core.Persons
@@ -19,13 +17,10 @@ namespace Zilon.Core.Persons
             SlotIndex = slotIndex;
         }
 
-        [PublicAPI]
         public Equipment? Equipment { get; }
 
-        [PublicAPI]
         public Equipment? OldEquipment { get; }
 
-        [PublicAPI]
         public int SlotIndex { get; }
     }
 }

@@ -20,7 +20,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.x'
+        dotnet-version: '5.0.100'
     - name: Setup Stryker
       run: |
         dotnet tool install -g dotnet-stryker --version 0.22.0

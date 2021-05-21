@@ -1,10 +1,12 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.MapGenerators.StaticObjectFactories
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public sealed class StoneDepositFactory : PropDepositFactoryBase
     {
         public StoneDepositFactory(

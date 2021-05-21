@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -31,7 +28,7 @@ namespace Zilon.Core.Tactics
 
         public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
             [NotNull] IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
+            IPerkResolver? perkResolver) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
         }

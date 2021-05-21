@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
-using JetBrains.Annotations;
 
 using Newtonsoft.Json;
 
@@ -80,8 +79,8 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void CalcPerksBonusesOnTacticalAct([NotNull][ItemNotNull] IEnumerable<IPerk> archievedPerks,
-            [CanBeNull] Equipment? equipment,
+        private static void CalcPerksBonusesOnTacticalAct([NotNull] IEnumerable<IPerk> archievedPerks,
+            [MaybeNull] Equipment? equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
@@ -171,9 +170,9 @@ namespace Zilon.Core.PersonModules
         }
 
         private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
-            [CanBeNull] Equipment? equipment,
+            [MaybeNull] Equipment? equipment,
             [NotNull] IConditionModule сonditionModule,
-            [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
+            [NotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
             var efficientModifierValue = 0;

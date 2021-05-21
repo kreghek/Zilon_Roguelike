@@ -60,9 +60,6 @@ namespace Zilon.Core.StaticObjectModules
 
         public bool IsParentStaticObjectDestroyed { get; private set; }
 
-        /// <inheritdoc />
-        public event EventHandler? Destroyed;
-
         public void Destroy()
         {
             _depositModule.Mined -= DepositModule_Mined;
@@ -71,5 +68,8 @@ namespace Zilon.Core.StaticObjectModules
             IsParentStaticObjectDestroyed = true;
             DoDestroyed();
         }
+
+        /// <inheritdoc />
+        public event EventHandler? Destroyed;
     }
 }

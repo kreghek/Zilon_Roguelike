@@ -37,9 +37,9 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             FindClosestNodesBetweenOpenAndUnited(
                 openRegions,
                 unitedRegionCoords,
-                out OffsetCoords? currentOpenRegionCoord,
-                out OffsetCoords? currentUnitedRegionCoord,
-                out RegionDraft? nearbyOpenRegion);
+                out var currentOpenRegionCoord,
+                out var currentUnitedRegionCoord,
+                out var nearbyOpenRegion);
 
             // Если координаты, которые нужно соединить, найдены,
             // то прорываем тоннель.
