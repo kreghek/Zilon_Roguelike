@@ -20,6 +20,8 @@ jobs:
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      
       - name: sonarscan-dotnet
         uses: highbyte/sonarscan-dotnet@v2.1.1-beta
         with:
@@ -29,5 +31,5 @@ jobs:
           sonarProjectName:  Zilon Roguelike
           # The name of the SonarQube organization in SonarCloud. For hosted SonarQube, skip this setting.
           sonarOrganization: kreghek
-          dotnetBuildArguments: ./Zilon.Core.sln
+          dotnetBuildArguments: ./Zilon.Core/Zilon.Core.sln
           dotnetDisableTests: true
