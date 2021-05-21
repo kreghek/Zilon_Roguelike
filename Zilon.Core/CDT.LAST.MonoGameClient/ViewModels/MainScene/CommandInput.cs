@@ -65,7 +65,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var hoverNodes = map.Nodes.OfType<HexNode>().Where(node => node.OffsetCoords == offsetMouseInWorld);
                 var hoverNode = hoverNodes.FirstOrDefault();
 
-                _uiState.HoverViewModel = GetViewModelByNode(sectorViewModelContext, _uiState.HoverViewModel, hoverNode);
+                _uiState.HoverViewModel =
+                    GetViewModelByNode(sectorViewModelContext, _uiState.HoverViewModel, hoverNode);
 
                 if (!_leftMousePressed
                     && mouseState.LeftButton == ButtonState.Pressed
