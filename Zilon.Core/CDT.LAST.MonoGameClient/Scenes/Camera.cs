@@ -30,8 +30,8 @@ namespace CDT.LAST.MonoGameClient.Scenes
                 0);
 
             var offset = Matrix.CreateTranslation(
-                game.GraphicsDevice.Viewport.Width / 2,
-                game.GraphicsDevice.Viewport.Height / 2,
+                (float)game.GraphicsDevice.Viewport.Width / 2,
+                (float)game.GraphicsDevice.Viewport.Height / 2,
                 0);
 
             Transform = position * offset;

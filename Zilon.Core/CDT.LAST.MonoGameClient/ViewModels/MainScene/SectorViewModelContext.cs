@@ -1,17 +1,28 @@
 ﻿using System.Collections.Generic;
 
+using Zilon.Core.Tactics;
+
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class SectorViewModelContext
     {
-        public SectorViewModelContext(EffectManager effectManager)
+        private readonly ISector _sector;
+
+        public SectorViewModelContext(ISector sector)
         {
+            _sector = sector;
+
             GameObjects = new List<GameObjectBase>();
-            EffectManager = effectManager;
+            EffectManager = new EffectManager();
         }
 
         public EffectManager EffectManager { get; }
 
         public List<GameObjectBase> GameObjects { get; }
+
+        public IEnumerable<IActor> GetActors()
+        {
+            return _sector.ActorManager.Items;
+        }
     }
 }

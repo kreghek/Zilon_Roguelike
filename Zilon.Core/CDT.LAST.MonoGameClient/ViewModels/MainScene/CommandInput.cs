@@ -65,35 +65,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var hoverNodes = map.Nodes.OfType<HexNode>().Where(node => node.OffsetCoords == offsetMouseInWorld);
                 var hoverNode = hoverNodes.FirstOrDefault();
 
-                if (hoverNode != null)
-                {
-                    var actorsInThisNode =
-                        _sector.ActorManager.Items.SingleOrDefault(x => ReferenceEquals(x.Node, hoverNode));
-                    if (actorsInThisNode is null)
-                    {
-                        if (_uiState.HoverViewModel is null)
-                        {
-                            _uiState.HoverViewModel = new NodeViewModel(hoverNode);
-                        }
-                        else
-                        {
-                            if (_uiState.HoverViewModel.Item != hoverNode)
-                            {
-                                _uiState.HoverViewModel = new NodeViewModel(hoverNode);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var actorViewModel = sectorViewModelContext.GameObjects.OfType<IActorViewModel>()
-                            .SingleOrDefault(x => x.Actor == actorsInThisNode);
-                        _uiState.HoverViewModel = actorViewModel;
-                    }
-                }
-                else
-                {
-                    _uiState.HoverViewModel = null;
-                }
+                GetViewModelByNode(sectorViewModelContext, _uiState.HoverViewModel, hoverNode);
 
                 if (!_leftMousePressed
                     && mouseState.LeftButton == ButtonState.Pressed
@@ -103,31 +75,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _leftMousePressed = true;
 
                     _uiState.SelectedViewModel = _uiState.HoverViewModel;
-
-                    ICommand command;
-                    switch (_uiState.SelectedViewModel)
-                    {
-                        case IActorViewModel:
-                            var activeActor = _uiState.ActiveActor;
-                            if (activeActor is null)
-                            {
-                                throw new InvalidOperationException();
-                            }
-
-                            _uiState.TacticalAct = activeActor.Actor.Person.GetModule<ICombatActModule>()
-                                .CalcCombatActs().First();
-
-                            command = _commandFactory.GetCommand<AttackCommand>();
-                            break;
-
-                        case IMapNodeViewModel:
-                            command = _commandFactory.GetCommand<MoveCommand>();
-                            break;
-
-                        default:
-                            throw new InvalidOperationException(
-                                $"Object of unknown type (${_uiState.SelectedViewModel.GetType()}) was selected.");
-                    }
+                    var command =
+                        SelectCommandBySelectedViewModel(_uiState.SelectedViewModel, _commandFactory, _uiState);
 
                     if (command.CanExecute().IsSuccess)
                     {
@@ -140,6 +89,38 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _leftMousePressed = false;
                 }
             }
+        }
+
+        private static ISelectableViewModel? GetViewModelByNode(SectorViewModelContext sectorViewModelContext,
+            ISelectableViewModel? currentSelectedViewModel,
+            HexNode? hoverNode)
+        {
+            if (hoverNode != null)
+            {
+                var actorsInThisNode =
+                    sectorViewModelContext.GetActors().SingleOrDefault(x => ReferenceEquals(x.Node, hoverNode));
+                if (actorsInThisNode is null)
+                {
+                    if (currentSelectedViewModel is null)
+                    {
+                        return new NodeViewModel(hoverNode);
+                    }
+
+                    if (currentSelectedViewModel.Item != hoverNode)
+                    {
+                        return new NodeViewModel(hoverNode);
+                    }
+
+                    return currentSelectedViewModel;
+                }
+
+                var actorViewModel = sectorViewModelContext.GameObjects.OfType<IActorViewModel>()
+                    .SingleOrDefault(x => x.Actor == actorsInThisNode);
+
+                return actorViewModel;
+            }
+
+            return null;
         }
 
         private bool HandleHotKeys()
@@ -155,6 +136,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             return false;
+        }
+
+        private static ICommand SelectCommandBySelectedViewModel(ISelectableViewModel selectedViewModel,
+            ServiceProviderCommandFactory commandFactory, ISectorUiState _uiState)
+        {
+            switch (selectedViewModel)
+            {
+                case IActorViewModel:
+                    var activeActor = _uiState.ActiveActor;
+                    if (activeActor is null)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    _uiState.TacticalAct = activeActor.Actor.Person.GetModule<ICombatActModule>()
+                        .CalcCombatActs().First();
+
+                    return commandFactory.GetCommand<AttackCommand>();
+
+                case IMapNodeViewModel:
+                    return commandFactory.GetCommand<MoveCommand>();
+
+                default:
+                    throw new InvalidOperationException(
+                        $"Object of unknown type (${selectedViewModel.GetType()}) was selected.");
+            }
         }
     }
 }

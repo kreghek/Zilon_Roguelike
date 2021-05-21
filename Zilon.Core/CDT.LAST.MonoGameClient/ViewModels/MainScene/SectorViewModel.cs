@@ -54,7 +54,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _mapViewModel = new MapViewModel(game, _player, _uiState, Sector, spriteBatch);
 
-            _viewModelContext = new SectorViewModelContext(new EffectManager());
+            _viewModelContext = new SectorViewModelContext(sector);
 
             foreach (var actor in Sector.ActorManager.Items)
             {

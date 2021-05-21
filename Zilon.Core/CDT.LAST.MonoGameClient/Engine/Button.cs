@@ -21,7 +21,6 @@ namespace CDT.LAST.MonoGameClient.Engine
             _buttonState = UiButtonState.OutOfButton;
         }
 
-        public Action? Click { get; set; }
         public Texture2D Texture { get; }
 
         public string Title { get; }
@@ -61,7 +60,7 @@ namespace CDT.LAST.MonoGameClient.Engine
                 else if (mouseState.LeftButton == ButtonState.Released && _buttonState == UiButtonState.Pressed)
                 {
                     _buttonState = UiButtonState.Hover;
-                    Click?.Invoke();
+                    OnClick?.Invoke(this, EventArgs.Empty);
                 }
                 else if (mouseState.LeftButton == ButtonState.Released)
                 {
@@ -83,5 +82,7 @@ namespace CDT.LAST.MonoGameClient.Engine
 
             return _rect.Intersects(mouseRect);
         }
+
+        public event EventHandler? OnClick;
     }
 }

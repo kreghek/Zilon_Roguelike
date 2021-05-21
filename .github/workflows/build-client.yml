@@ -62,7 +62,7 @@ jobs:
       - name: Copy scheme catalog into bin directory for ${{ matrix.project }}
         if: ${{ contains(matrix.project, 'MonoGameClient') }}
         run: cp -a /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes/. /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/bin/Content/Schemes/
-      
+
       - uses: actions/upload-artifact@v1
         with:
           name: ${{ matrix.project }}-${{ matrix.configuration }}-${{ matrix.runtime }}
