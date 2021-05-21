@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using FluentAssertions;
 
@@ -25,8 +26,8 @@ namespace Zilon.Core.Tests.CommonServices
             // ARRANGE
             var records = new[]
             {
-                new DropTableRecordSubScheme("trophy1", 16),
-                new DropTableRecordSubScheme("trophy2", 64)
+                new TestDropTableRecordSubScheme("trophy1", 16),
+                new TestDropTableRecordSubScheme("trophy2", 64)
             };
 
             var roll = 16;
@@ -42,6 +43,28 @@ namespace Zilon.Core.Tests.CommonServices
 
             // ASSERT
             recordMod.Record.SchemeSid.Should().Be("trophy1");
+        }
+
+        private sealed class TestDropTableRecordSubScheme : IDropTableRecordSubScheme
+        {
+            public TestDropTableRecordSubScheme(string schemeSid, int weight)
+            {
+                SchemeSid = schemeSid ?? throw new ArgumentNullException(nameof(schemeSid));
+
+                if (weight <= 0)
+                {
+                    throw new ArgumentNullException(nameof(weight),
+                        "Вес записи в таблице дропа должен быть положительным.");
+                }
+
+                Weight = weight;
+            }
+
+            public IDropTableScheme[] Extra { get; }
+            public int MaxCount { get; }
+            public int MinCount { get; }
+            public string SchemeSid { get; }
+            public int Weight { get; }
         }
     }
 }
