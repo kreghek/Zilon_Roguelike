@@ -117,6 +117,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     var newSprite = new Sprite(_hexSprite)
                     {
+                        Size = new Point(
+                            (int)Math.Round(hexSize * 2 / Math.Sqrt(3) * 2, MidpointRounding.ToEven),
+                            (int)Math.Round(hexSize * 2 / 2, MidpointRounding.ToEven)
+                        ),
                         Color = nodeColor,
                         Position = new Vector2(
                             (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
