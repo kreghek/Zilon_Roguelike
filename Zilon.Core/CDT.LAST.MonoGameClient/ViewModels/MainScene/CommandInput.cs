@@ -75,7 +75,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _leftMousePressed = true;
 
                     _uiState.SelectedViewModel = _uiState.HoverViewModel;
-                    var command = SelectCommandBySelectedViewModel(_uiState.SelectedViewModel, _commandFactory, _uiState);
+                    var command =
+                        SelectCommandBySelectedViewModel(_uiState.SelectedViewModel, _commandFactory, _uiState);
 
                     if (command.CanExecute().IsSuccess)
                     {
@@ -90,7 +91,55 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private static ICommand SelectCommandBySelectedViewModel(ISelectableViewModel selectedViewModel, ServiceProviderCommandFactory commandFactory, ISectorUiState _uiState)
+        private static ISelectableViewModel? GetViewModelByNode(SectorViewModelContext sectorViewModelContext,
+            ISelectableViewModel? currentSelectedViewModel,
+            HexNode? hoverNode)
+        {
+            if (hoverNode != null)
+            {
+                var actorsInThisNode =
+                    sectorViewModelContext.GetActors().SingleOrDefault(x => ReferenceEquals(x.Node, hoverNode));
+                if (actorsInThisNode is null)
+                {
+                    if (currentSelectedViewModel is null)
+                    {
+                        return new NodeViewModel(hoverNode);
+                    }
+
+                    if (currentSelectedViewModel.Item != hoverNode)
+                    {
+                        return new NodeViewModel(hoverNode);
+                    }
+
+                    return currentSelectedViewModel;
+                }
+
+                var actorViewModel = sectorViewModelContext.GameObjects.OfType<IActorViewModel>()
+                    .SingleOrDefault(x => x.Actor == actorsInThisNode);
+
+                return actorViewModel;
+            }
+
+            return null;
+        }
+
+        private bool HandleHotKeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.T))
+            {
+                var transitionCommand = _commandFactory.GetCommand<SectorTransitionMoveCommand>();
+
+                _commandPool.Push(transitionCommand);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private static ICommand SelectCommandBySelectedViewModel(ISelectableViewModel selectedViewModel,
+            ServiceProviderCommandFactory commandFactory, ISectorUiState _uiState)
         {
             switch (selectedViewModel)
             {
@@ -113,61 +162,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     throw new InvalidOperationException(
                         $"Object of unknown type (${selectedViewModel.GetType()}) was selected.");
             }
-        }
-
-        private static ISelectableViewModel? GetViewModelByNode(SectorViewModelContext sectorViewModelContext,
-            ISelectableViewModel? currentSelectedViewModel,
-            HexNode? hoverNode)
-        {
-            if (hoverNode != null)
-            {
-                var actorsInThisNode =
-                    sectorViewModelContext.GetActors().SingleOrDefault(x => ReferenceEquals(x.Node, hoverNode));
-                if (actorsInThisNode is null)
-                {
-                    if (currentSelectedViewModel is null)
-                    {
-                        return new NodeViewModel(hoverNode);
-                    }
-                    else
-                    {
-                        if (currentSelectedViewModel.Item != hoverNode)
-                        {
-                            return new NodeViewModel(hoverNode);
-                        }
-                        else
-                        {
-                            return currentSelectedViewModel;
-                        }
-                    }
-                }
-                else
-                {
-                    var actorViewModel = sectorViewModelContext.GameObjects.OfType<IActorViewModel>()
-                        .SingleOrDefault(x => x.Actor == actorsInThisNode);
-
-                    return actorViewModel;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        private bool HandleHotKeys()
-        {
-            var keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.T))
-            {
-                var transitionCommand = _commandFactory.GetCommand<SectorTransitionMoveCommand>();
-
-                _commandPool.Push(transitionCommand);
-
-                return true;
-            }
-
-            return false;
         }
     }
 }
