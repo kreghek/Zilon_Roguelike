@@ -28,15 +28,12 @@ namespace CDT.LAST.MonoGameClient.Scenes
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
             _startButton = new Button(UiResources.StartGameButtonTitle, buttonTexture, font,
-                new Rectangle(150, 150, 100, 20))
-            {
-                Click = StartButtonClickHandler
-            };
+                new Rectangle(150, 150, 100, 20));
+            _startButton.OnClick += StartButtonClickHandler;
 
-            _switchLanguageButton = new Button("Switch lang", buttonTexture, font, new Rectangle(150, 200, 100, 20))
-            {
-                Click = SwitchLanguageButtonClickHandler
-            };
+            _switchLanguageButton = new Button("Switch lang", buttonTexture, font, new Rectangle(150, 200, 100, 20));
+
+            _switchLanguageButton.OnClick += SwitchLanguageButtonClickHandler;
         }
 
         public override void Draw(GameTime gameTime)
@@ -74,12 +71,12 @@ namespace CDT.LAST.MonoGameClient.Scenes
             _switchLanguageButton.Update();
         }
 
-        private void StartButtonClickHandler()
+        private void StartButtonClickHandler(object? sender, EventArgs e)
         {
             TargetScene = _globeGenerationScene;
         }
 
-        private void SwitchLanguageButtonClickHandler()
+        private void SwitchLanguageButtonClickHandler(object? sender, EventArgs e)
         {
             var currentLanguage = Thread.CurrentThread.CurrentUICulture;
             if (string.Equals(currentLanguage.TwoLetterISOLanguageName, "en",

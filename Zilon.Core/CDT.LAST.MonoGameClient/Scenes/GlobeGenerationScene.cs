@@ -34,10 +34,9 @@ namespace CDT.LAST.MonoGameClient.Scenes
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
             _generateButton = new Button(UiResources.GenerateGlobeButtonTitle, buttonTexture, font,
-                new Rectangle(150, 150, 100, 20))
-            {
-                Click = GenerateButtonClickHandler
-            };
+                new Rectangle(150, 150, 100, 20));
+
+            _generateButton.OnClick += GenerateButtonClickHandlerAsync;
         }
 
         public override void Draw(GameTime gameTime)
@@ -76,7 +75,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
             _generateButton.Update();
         }
 
-        private async void GenerateButtonClickHandler()
+        private async void GenerateButtonClickHandlerAsync(object? sender, EventArgs e)
         {
             if (!_generationWasStarted)
             {
