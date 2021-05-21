@@ -115,12 +115,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     var worldCoords = HexHelper.ConvertToWorld(node.OffsetCoords);
                     var hexSize = MapMetrics.UnitSize / 2;
 
+                    // Remember. Hex width is less that size (radius).
+                    // It equals R*Sqrt(3)/2. So sprite width is R*Sqrt(3)/2*2 or R*Sqrt(3). It's about 28 pixels.
+                    // You should make sprite 28*16.
                     var newSprite = new Sprite(_hexSprite)
                     {
-                        Size = new Point(
-                            (int)Math.Round(hexSize * 2 / Math.Sqrt(3) * 2, MidpointRounding.ToEven),
-                            (int)Math.Round(hexSize * 2 / 2, MidpointRounding.ToEven)
-                        ),
                         Color = nodeColor,
                         Position = new Vector2(
                             (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
