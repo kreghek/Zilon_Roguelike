@@ -116,13 +116,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     var worldCoords = HexHelper.ConvertToWorld(node.OffsetCoords);
                     var hexSize = UNIT_SIZE / 2;
 
-                    var newSprite = new Sprite(_hexSprite,
-                        size: new Point(
-                            (int)(hexSize * Math.Sqrt(3)),
-                            hexSize * 2 / 2
-                        ),
-                        color: nodeColor)
+                    var newSprite = new Sprite(_hexSprite)
                     {
+                        Color = nodeColor,
                         Position = new Vector2(
                             (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
                             worldCoords[1] * hexSize * 2 / 2
