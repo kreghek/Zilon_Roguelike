@@ -21,8 +21,6 @@ namespace CDT.LAST.MonoGameClient.Engine
             _buttonState = UiButtonState.OutOfButton;
         }
 
-        public event EventHandler? OnClick;
-
         public Texture2D Texture { get; }
 
         public string Title { get; }
@@ -84,5 +82,7 @@ namespace CDT.LAST.MonoGameClient.Engine
 
             return _rect.Intersects(mouseRect);
         }
+
+        public event EventHandler? OnClick;
     }
 }
