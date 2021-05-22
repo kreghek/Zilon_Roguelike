@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,21 +13,21 @@ using Microsoft.Xna.Framework.Input;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.World;
 
-namespace CDT.LAST.MonoGameClient.Scenes
+namespace CDT.LAST.MonoGameClient.Screens
 {
-    internal class GlobeGenerationScene : GameSceneBase
+    internal class GlobeSelectionScreen : GameSceneBase
     {
         public static string? _lastError = "";
         private readonly Button _generateButton;
-        private readonly MainScene _mainScene;
+        private readonly MainScreen _mainScene;
         private readonly SpriteBatch _spriteBatch;
         private bool _generationWasStarted;
 
 
-        public GlobeGenerationScene(Game game, SpriteBatch spriteBatch) : base(game)
+        public GlobeSelectionScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
             _spriteBatch = spriteBatch;
-            _mainScene = new MainScene(game, spriteBatch);
+            _mainScene = new MainScreen(game, spriteBatch);
 
             var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 
+using CDT.LAST.MonoGameClient.Scenes;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -12,9 +13,9 @@ using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
-namespace CDT.LAST.MonoGameClient.Scenes
+namespace CDT.LAST.MonoGameClient.Screens
 {
-    internal class MainScene : GameSceneBase
+    internal class MainScreen : GameSceneBase
     {
         private readonly Camera _camera;
         private readonly PersonConditionsPanel _personEffectsPanel;
@@ -28,7 +29,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
 
         private SectorViewModel? _sectorViewModel;
 
-        public MainScene(Game game, SpriteBatch spriteBatch) : base(game)
+        public MainScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
             _spriteBatch = spriteBatch;
 
@@ -87,7 +88,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
                     else if (!_isTransitionPerforming)
                     {
                         _isTransitionPerforming = true;
-                        TargetScene = new TransitionScene(Game, _spriteBatch);
+                        TargetScene = new TransitionScreen(Game, _spriteBatch);
                     }
                 }
             }
@@ -96,7 +97,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
                 if (!_isTransitionPerforming)
                 {
                     _isTransitionPerforming = true;
-                    TargetScene = new TransitionScene(Game, _spriteBatch);
+                    TargetScene = new TransitionScreen(Game, _spriteBatch);
                 }
             }
         }
