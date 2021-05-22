@@ -184,6 +184,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private static string GetConditionTitle(IPersonCondition personCondition)
+        {
+            switch (personCondition)
+            {
+                case SurvivalStatHazardCondition statEffect:
+                    return GetSurvivalConditionTitle(statEffect);
+
+                case DiseaseSymptomCondition:
+                    return string.Empty;
+
+                default:
+                    Debug.Fail(
+                        $"All person conditions must have localized titles. Unknown person effect: {personCondition}.");
+                    return string.Empty;
+            }
+        }
+
         private static string GetStatHazardConditionIcon(SurvivalStatType type)
         {
             switch (type)
@@ -204,23 +221,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 default:
                     Debug.Fail($"Unknown condition type {type}.");
                     return "Empty";
-            }
-        }
-
-        private static string GetConditionTitle(IPersonCondition personCondition)
-        {
-            switch (personCondition)
-            {
-                case SurvivalStatHazardCondition statEffect:
-                    return GetSurvivalConditionTitle(statEffect);
-
-                case DiseaseSymptomCondition:
-                    return string.Empty;
-
-                default:
-                    Debug.Fail(
-                        $"All person conditions must have localized titles. Unknown person effect: {personCondition}.");
-                    return string.Empty;
             }
         }
 

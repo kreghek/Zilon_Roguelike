@@ -114,7 +114,8 @@ namespace Zilon.Core.Specs.Steps
             }
             else
             {
-                var сonditions = actor.Person.GetModule<IConditionsModule>().Items.OfType<SurvivalStatHazardCondition>();
+                var сonditions = actor.Person.GetModule<IConditionsModule>().Items
+                    .OfType<SurvivalStatHazardCondition>();
                 сonditions.Should().BeEmpty();
             }
         }

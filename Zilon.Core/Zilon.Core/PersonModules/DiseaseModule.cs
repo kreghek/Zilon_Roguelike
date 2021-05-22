@@ -129,7 +129,8 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void UpdatePowerUp(IConditionsModule сonditionModule, IDisease disease, DiseaseSymptom[] symptoms,
+        private static void UpdatePowerUp(IConditionsModule сonditionModule, IDisease disease,
+            DiseaseSymptom[] symptoms,
             float currentPower, float symptomPowerSegment)
         {
             if (currentPower <= 0.25f)
