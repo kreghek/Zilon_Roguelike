@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-using CDT.LAST.MonoGameClient.Scenes;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;

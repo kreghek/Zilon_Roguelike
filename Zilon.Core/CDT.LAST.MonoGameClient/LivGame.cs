@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 
-using CDT.LAST.MonoGameClient.Scenes;
 using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Extensions.DependencyInjection;
