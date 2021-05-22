@@ -17,7 +17,6 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class GlobeSelectionScreen : GameSceneBase
     {
-        public static string? _lastError = "";
         private readonly Button _generateButton;
         private readonly MainScreen _mainScene;
         private readonly SpriteBatch _spriteBatch;
@@ -46,11 +45,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
             _spriteBatch.DrawString(font, "Генерация мира", new Vector2(100, 100), Color.White);
-
-            if (_lastError != null)
-            {
-                _spriteBatch.DrawString(font, _lastError, new Vector2(100, 120), Color.White);
-            }
 
             _generateButton.Draw(_spriteBatch);
 
@@ -96,10 +90,6 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                     var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
                     var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
-                    commandLoopTask.ContinueWith(task => _lastError += task.Exception.ToString(),
-                        TaskContinuationOptions.OnlyOnFaulted);
-                    commandLoopTask.ContinueWith(task => _lastError += "Game loop stopped.",
-                        TaskContinuationOptions.OnlyOnCanceled);
                 });
 
                 await generateGlobeTask!;

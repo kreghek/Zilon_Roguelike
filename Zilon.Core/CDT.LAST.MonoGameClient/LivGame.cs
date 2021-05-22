@@ -105,14 +105,6 @@ namespace CDT.LAST.MonoGameClient
         {
             var commandLoop = _serviceProvider.GetRequiredService<ICommandLoopUpdater>();
 
-            commandLoop.ErrorOccured += (s, e) =>
-            {
-                GlobeSelectionScreen._lastError += e.Exception.ToString();
-            };
-            commandLoop.CommandAutoExecuted += (s, e) =>
-            {
-                GlobeSelectionScreen._lastError += "Auto execute last command";
-            };
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var inventoryState = _serviceProvider.GetRequiredService<IInventoryState>();
             commandLoop.CommandProcessed += (s, e) =>
