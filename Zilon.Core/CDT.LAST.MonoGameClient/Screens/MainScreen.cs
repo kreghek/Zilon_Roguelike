@@ -133,18 +133,20 @@ namespace CDT.LAST.MonoGameClient.Screens
                 {
                     case ActorTaskSourceControl.Human:
                         controlSwitcher.Switch(ActorTaskSourceControl.Bot);
-                        _autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOnTitle);
+                        _autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle,
+                            UiResources.SwitchAutomodeButtonOnTitle);
                         break;
 
                     case ActorTaskSourceControl.Bot:
                         controlSwitcher.Switch(ActorTaskSourceControl.Human);
-                        _autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOffTitle);
+                        _autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle,
+                            UiResources.SwitchAutomodeButtonOffTitle);
                         break;
 
                     default:
-                        throw new InvalidOperationException("Unknown actor task control {controlSwitcher.CurrentControl}.");
+                        throw new InvalidOperationException(
+                            "Unknown actor task control {controlSwitcher.CurrentControl}.");
                 }
-
             }
         }
 
