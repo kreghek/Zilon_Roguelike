@@ -44,6 +44,14 @@ namespace Zilon.Core.Client.Sector
         {
             get
             {
+                if (_humanActorTaskSource is IActorTaskControlSwitcher controlSwitcher)
+                {
+                    if (controlSwitcher.CurrentControl != ActorTaskSourceControl.Human)
+                    {
+                        return false;
+                    }
+                }
+
                 var canIndentoToTaskSource = _humanActorTaskSource.CanIntent();
                 var animationsAreComplete = !_animationBlockerService.HasBlockers;
                 return canIndentoToTaskSource && animationsAreComplete;

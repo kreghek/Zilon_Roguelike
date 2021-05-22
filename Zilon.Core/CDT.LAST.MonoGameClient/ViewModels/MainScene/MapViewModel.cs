@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 
 using CDT.LAST.MonoGameClient.Engine;
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
@@ -25,6 +27,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Texture2D _hexSprite;
 
         private readonly ConcurrentDictionary<OffsetCoords, Sprite> _hexSprites;
+        private readonly Game _game;
         private readonly IPlayer _player;
         private readonly ISector _sector;
         private readonly SpriteBatch _spriteBatch;
@@ -37,11 +40,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _hexSprite = game.Content.Load<Texture2D>("Sprites/hex");
 
             _spriteBatch = spriteBatch;
+            _game = game;
             _player = player;
             _uiState = uiState;
             _sector = sector;
 
             _hexSprites = new ConcurrentDictionary<OffsetCoords, Sprite>();
+
+            sector.TrasitionUsed += Sector_TrasitionUsed;
+        }
+
+        private void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
+        {
+            if (e.Actor.Person == _player.MainPerson)
+            {
+                var blockerService = ((LivGame)_game).ServiceProvider.GetRequiredService<IAnimationBlockerService>();
+                blockerService.DropBlockers();
+                _sector.TrasitionUsed -= Sector_TrasitionUsed;
+            }
         }
 
         public void Draw(Matrix transform)

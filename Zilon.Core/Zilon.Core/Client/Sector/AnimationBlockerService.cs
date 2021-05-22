@@ -35,6 +35,7 @@ namespace Zilon.Core.Client.Sector
                 if (!HasBlockers && _tcs != null)
                 {
                     _tcs.SetResult(true);
+                    _tcs = null;
                 }
             }
         }
@@ -49,7 +50,11 @@ namespace Zilon.Core.Client.Sector
             {
                 commandBlocker.Released += CommandBlocker_Release;
                 _commandBlockers.TryAdd(commandBlocker, 0);
-                _tcs = new TaskCompletionSource<bool>();
+
+                if (_tcs is null)
+                {
+                    _tcs = new TaskCompletionSource<bool>();
+                }
             }
         }
 
@@ -64,6 +69,10 @@ namespace Zilon.Core.Client.Sector
                 }
 
                 _commandBlockers.Clear();
+                if (_tcs != null && _tcs.TrySetResult(true))
+                {
+                }
+                _tcs = null;
             }
         }
 

@@ -243,7 +243,13 @@ namespace Zilon.Core.World
             {
                 if (actor.TaskSource is IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource)
                 {
-                    humanTaskSource.DropIntentionWaiting();
+                    if (actor.TaskSource is IActorTaskControlSwitcher controlSwitcher)
+                    {
+                        if (controlSwitcher.CurrentControl == ActorTaskSourceControl.Human)
+                        {
+                            humanTaskSource.DropIntentionWaiting();
+                        }
+                    }
                 }
             }
         }

@@ -30,7 +30,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _startPosition = rootContainer.Position;
             _targetPosition = Vector2.Lerp(_startPosition, targetPosition, 0.6f);
 
-            _animationBlocker = new AnimationCommonBlocker();
+            _animationBlocker = new AnimationCommonBlocker() { DebugName = "Attack" };
 
             _animationBlockerService.AddBlocker(_animationBlocker);
 
