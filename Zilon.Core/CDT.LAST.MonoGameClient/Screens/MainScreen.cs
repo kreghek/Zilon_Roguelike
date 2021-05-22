@@ -18,11 +18,11 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class MainScreen : GameSceneBase
     {
+        private readonly Button _autoplayModeButton;
+        private readonly SpriteFont _buttonFont;
+        private readonly Texture2D _buttonTexture;
         private readonly Camera _camera;
         private readonly PersonConditionsPanel _personEffectsPanel;
-        private readonly Texture2D _buttonTexture;
-        private readonly SpriteFont _buttonFont;
-        private readonly Button _autoplayModeButton;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -53,20 +53,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                 "t",
                 _buttonTexture,
                 _buttonFont,
-                new Rectangle(game.GraphicsDevice.Viewport.Width / 2 - 16, game.GraphicsDevice.Viewport.Height - 16, 32, 32)
-                );
+                new Rectangle(game.GraphicsDevice.Viewport.Width / 2 - 16, game.GraphicsDevice.Viewport.Height - 16, 32,
+                    32)
+            );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
-        }
-
-        private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
-        {
-            var serviceScope = ((LivGame)Game).ServiceProvider;
-
-            var humanTaskSource = serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-            if (humanTaskSource is IActorTaskControlSwitcher controlSwitcher)
-            {
-                controlSwitcher.Switch(ActorTaskSourceControl.Bot);
-            }
         }
 
         public override void Draw(GameTime gameTime)
@@ -128,6 +118,17 @@ namespace CDT.LAST.MonoGameClient.Screens
                     _isTransitionPerforming = true;
                     TargetScene = new TransitionScreen(Game, _spriteBatch);
                 }
+            }
+        }
+
+        private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
+        {
+            var serviceScope = ((LivGame)Game).ServiceProvider;
+
+            var humanTaskSource = serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            if (humanTaskSource is IActorTaskControlSwitcher controlSwitcher)
+            {
+                controlSwitcher.Switch(ActorTaskSourceControl.Bot);
             }
         }
 

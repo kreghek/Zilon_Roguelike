@@ -35,12 +35,13 @@ namespace CDT.LAST.MonoGameClient
             serviceCollection.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
             serviceCollection.AddSingleton<LogicStateTreePatterns>();
 
-            serviceCollection.AddSingleton<IHumanActorTaskSource>((serviceProvider) =>
+            serviceCollection.AddSingleton<IHumanActorTaskSource>(serviceProvider =>
             {
                 var humanTaskSource = new HumanActorTaskSource();
                 var botTaskSource = serviceProvider.GetRequiredService<IActorTaskSource>();
 
-                var switchTaskSource = new SwitchHumanActorTaskSource<ISectorTaskSourceContext>(humanTaskSource, botTaskSource);
+                var switchTaskSource =
+                    new SwitchHumanActorTaskSource<ISectorTaskSourceContext>(humanTaskSource, botTaskSource);
                 return switchTaskSource;
             });
             serviceCollection.AddSingleton<IActorTaskSource>(provider =>
