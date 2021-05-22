@@ -2,6 +2,7 @@
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -128,7 +129,22 @@ namespace CDT.LAST.MonoGameClient.Screens
             var humanTaskSource = serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             if (humanTaskSource is IActorTaskControlSwitcher controlSwitcher)
             {
-                controlSwitcher.Switch(ActorTaskSourceControl.Bot);
+                switch(controlSwitcher.CurrentControl)
+                {
+                    case ActorTaskSourceControl.Human:
+                        controlSwitcher.Switch(ActorTaskSourceControl.Bot);
+                        _autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOnTitle);
+                        break;
+
+                    case ActorTaskSourceControl.Bot:
+                        controlSwitcher.Switch(ActorTaskSourceControl.Human);
+                        _autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOffTitle);
+                        break;
+
+                    default:
+                        throw new InvalidOperationException("Unknown actor task control {controlSwitcher.CurrentControl}.");
+                }
+                
             }
         }
 
