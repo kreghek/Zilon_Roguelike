@@ -23,7 +23,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly SpriteBatch _spriteBatch;
         private bool _generationWasStarted;
 
-
         public GlobeSelectionScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
             _spriteBatch = spriteBatch;
