@@ -34,8 +34,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _rootSprite.FlipX = (_startPosition - _targetPosition).X < 0;
 
-            _moveBlocker = new AnimationCommonBlocker
-                { DebugName = $"Move {DebugName}" };
+            _moveBlocker = new AnimationCommonBlocker();
 
             _animationBlockerService.AddBlocker(_moveBlocker);
         }
