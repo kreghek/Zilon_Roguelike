@@ -138,7 +138,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot.RootSprite, _shadowSprite, newPosition,
                     animationBlockerService)
-                { 
+                {
                     DebugName = Actor.Person.ToString()
                 };
                 _actorStateEngine = moveEngine;
@@ -175,7 +175,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     var targetSpritePosition = newPosition;
                     _actorStateEngine =
                         new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService)
-                        { 
+                        {
                             DebugName = Actor.Person.ToString()
                         };
 

@@ -79,7 +79,8 @@ namespace Zilon.Core.Client.Sector.Tests
             var blocker = blockerMock.Object;
 
             var isBlockerReallyReleased = false;
-            blocker.Released += (s, e) => {
+            blocker.Released += (s, e) =>
+            {
                 isBlockerReallyReleased = true;
             };
 
