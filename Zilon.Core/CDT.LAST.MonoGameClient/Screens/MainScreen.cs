@@ -129,7 +129,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             var humanTaskSource = serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             if (humanTaskSource is IActorTaskControlSwitcher controlSwitcher)
             {
-                switch(controlSwitcher.CurrentControl)
+                switch (controlSwitcher.CurrentControl)
                 {
                     case ActorTaskSourceControl.Human:
                         controlSwitcher.Switch(ActorTaskSourceControl.Bot);
@@ -144,7 +144,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     default:
                         throw new InvalidOperationException("Unknown actor task control {controlSwitcher.CurrentControl}.");
                 }
-                
+
             }
         }
 
