@@ -8,6 +8,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         public string? DebugName { get; set; }
 
+        public override string? ToString()
+        {
+            return DebugName;
+        }
+
         private void DoRelease()
         {
             Released?.Invoke(this, new EventArgs());
@@ -18,11 +23,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public void Release()
         {
             DoRelease();
-        }
-
-        public override string? ToString()
-        {
-            return DebugName;
         }
     }
 }

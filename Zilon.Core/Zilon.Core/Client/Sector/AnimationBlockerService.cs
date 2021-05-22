@@ -65,7 +65,7 @@ namespace Zilon.Core.Client.Sector
         /// <inheritdoc />
         public void DropBlockers()
         {
-            Console.WriteLine($"Drop blockers.");
+            Console.WriteLine("Drop blockers.");
             lock (_lockObject)
             {
                 foreach (var commandBlocker in _commandBlockers.Keys.ToArray())
@@ -89,11 +89,11 @@ namespace Zilon.Core.Client.Sector
             {
                 if (_tcs is null)
                 {
-                    Console.WriteLine($"Wait blockers (null).");
+                    Console.WriteLine("Wait blockers (null).");
                     return Task.CompletedTask;
                 }
 
-                Console.WriteLine($"Wait blockers.");
+                Console.WriteLine("Wait blockers.");
                 return _tcs.Task;
             }
         }
