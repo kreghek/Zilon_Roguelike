@@ -52,9 +52,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 "IntoxicationStrong",
                 "IntoxicationCritical",
 
-                "HealthLesser",
-                "HealthStrong",
-                "HealthCritical",
+                "WoundLesser",
+                "WoundStrong",
+                "WoundCritical",
 
                 "DiseaseSymptom"
             };
@@ -166,12 +166,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             switch (personCondition)
             {
-                case SurvivalStatHazardEffect statEffect:
-                    // Code smell to adjust code to sprite names.
-                    var levelString = statEffect.Level == SurvivalStatHazardLevel.Max
+                case SurvivalStatHazardEffect statCondition:
+
+                    var typeString = GetStatHazardConditionIcon(statCondition.Type);
+
+                    var levelString = statCondition.Level == SurvivalStatHazardLevel.Max
                         ? "Critical"
-                        : statEffect.Level.ToString();
-                    return $"{statEffect.Type}{levelString}";
+                        : statCondition.Level.ToString();
+                    return $"{typeString}{levelString}";
 
                 case DiseaseSymptomEffect:
                     return "DiseaseSymptom";
@@ -179,6 +181,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 default:
                     Debug.Fail("Every condition must have icon.");
                     return "HungerLesser";
+            }
+        }
+
+        private static string GetStatHazardConditionIcon(SurvivalStatType type)
+        {
+            switch (type)
+            {
+                case SurvivalStatType.Health:
+                    return "Wound";
+
+                case SurvivalStatType.Satiety:
+                    return "Hunger";
+
+                case SurvivalStatType.Hydration:
+                    return "Thrist";
+
+                case SurvivalStatType.Intoxication:
+                    return "Intoxication";
+
+                case SurvivalStatType.Undefined:
+                default:
+                    Debug.Fail($"Unknown condition type {type}.");
+                    return "Empty";
             }
         }
 
