@@ -176,8 +176,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     var targetSpritePosition = newPosition;
                     _actorStateEngine =
                         new ActorMeleeAttackEngine(
-                            _rootSprite, 
-                            targetSpritePosition, 
+                            _rootSprite,
+                            targetSpritePosition,
                             animationBlockerService);
 
                     var targetGameObject =
