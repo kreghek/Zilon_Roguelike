@@ -264,6 +264,42 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                             return string.Empty;
                     }
 
+                case SurvivalStatType.Hydration:
+                    switch (statEffect.Level)
+                    {
+                        case SurvivalStatHazardLevel.Lesser:
+                            return UiResources.ThristLesserConditionTitle;
+
+                        case SurvivalStatHazardLevel.Strong:
+                            return UiResources.ThristStrongConditionTitle;
+
+                        case SurvivalStatHazardLevel.Max:
+                            return UiResources.ThristCriticalConditionTitle;
+
+                        default:
+                            Debug.Fail(
+                                $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
+                            return string.Empty;
+                    }
+
+                case SurvivalStatType.Intoxication:
+                    switch (statEffect.Level)
+                    {
+                        case SurvivalStatHazardLevel.Lesser:
+                            return UiResources.IntoxicationLesserConditionTitle;
+
+                        case SurvivalStatHazardLevel.Strong:
+                            return UiResources.IntoxicationStrongConditionTitle;
+
+                        case SurvivalStatHazardLevel.Max:
+                            return UiResources.IntoxicationCriticalConditionTitle;
+
+                        default:
+                            Debug.Fail(
+                                $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
+                            return string.Empty;
+                    }
+
                 default:
                     Debug.Fail(
                         $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
