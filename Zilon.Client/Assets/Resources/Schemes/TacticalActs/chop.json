@@ -15,7 +15,7 @@
     "Effect": "Damage",
     "Targets": "Enemy",
     "HitCount": 1,
-	"IsMelee": true,
+    "IsMelee": true,
     "Offence": {
       "Type": "Fury",
       "Impact": "Kinetic",
