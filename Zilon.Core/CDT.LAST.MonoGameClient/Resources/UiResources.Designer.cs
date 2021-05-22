@@ -142,6 +142,33 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        internal static string SwitchAutomodeButtonOffTitle {
+            get {
+                return ResourceManager.GetString("SwitchAutomodeButtonOffTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On.
+        /// </summary>
+        internal static string SwitchAutomodeButtonOnTitle {
+            get {
+                return ResourceManager.GetString("SwitchAutomodeButtonOnTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autoplay: {0}.
+        /// </summary>
+        internal static string SwitchAutomodeButtonTitle {
+            get {
+                return ResourceManager.GetString("SwitchAutomodeButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dehydration!.
         /// </summary>
         internal static string ThristCriticalConditionTitle {

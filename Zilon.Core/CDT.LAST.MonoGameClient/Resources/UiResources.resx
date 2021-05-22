@@ -162,4 +162,13 @@
   <data name="GenerateGlobeButtonTitle" xml:space="preserve">
     <value>Generate</value>
   </data>
+  <data name="SwitchAutomodeButtonOffTitle" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="SwitchAutomodeButtonOnTitle" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="SwitchAutomodeButtonTitle" xml:space="preserve">
+    <value>Autoplay: {0}</value>
+  </data>
 </root>

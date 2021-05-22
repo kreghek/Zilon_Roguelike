@@ -23,7 +23,7 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         public Texture2D Texture { get; }
 
-        public string Title { get; }
+        public string Title { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {

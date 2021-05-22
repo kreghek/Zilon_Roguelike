@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 
+using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Zilon.Core.Client;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.Screens
@@ -18,6 +20,9 @@ namespace CDT.LAST.MonoGameClient.Screens
     {
         private readonly Camera _camera;
         private readonly PersonConditionsPanel _personEffectsPanel;
+        private readonly Texture2D _buttonTexture;
+        private readonly SpriteFont _buttonFont;
+        private readonly Button _autoplayModeButton;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -40,6 +45,28 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _camera = new Camera();
             _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
+
+            _buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
+            _buttonFont = game.Content.Load<SpriteFont>("Fonts/Main");
+
+            _autoplayModeButton = new Button(
+                "t",
+                _buttonTexture,
+                _buttonFont,
+                new Rectangle(game.GraphicsDevice.Viewport.Width / 2 - 16, game.GraphicsDevice.Viewport.Height - 16, 32, 32)
+                );
+            _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
+        }
+
+        private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
+        {
+            var serviceScope = ((LivGame)Game).ServiceProvider;
+
+            var humanTaskSource = serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            if (humanTaskSource is IActorTaskControlSwitcher controlSwitcher)
+            {
+                controlSwitcher.Switch(ActorTaskSourceControl.Bot);
+            }
         }
 
         public override void Draw(GameTime gameTime)
@@ -82,7 +109,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                     if (_currentSector == sectorNode.Sector)
                     {
                         _camera.Follow(_uiState.ActiveActor, Game);
+
                         _personEffectsPanel.Update();
+
+                        _autoplayModeButton.Update();
                     }
                     else if (!_isTransitionPerforming)
                     {
@@ -105,6 +135,9 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             _spriteBatch.Begin();
             _personEffectsPanel.Draw(_spriteBatch);
+
+            _autoplayModeButton.Draw(_spriteBatch);
+
             _spriteBatch.End();
         }
 
