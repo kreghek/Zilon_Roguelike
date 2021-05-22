@@ -19,7 +19,7 @@ namespace Zilon.Bot.Players.Triggers
             SurvivalStatType statType,
             ConsumeCommonRuleType ruleType)
         {
-            var hasHazardEffect = HasEffect(actor, statType);
+            var hasHazardEffect = HasCondition(actor, statType);
             if (!hasHazardEffect)
             {
                 return false;
@@ -37,20 +37,20 @@ namespace Zilon.Bot.Players.Triggers
             return true;
         }
 
-        private static bool HasEffect(IActor actor, SurvivalStatType survivalStatType)
+        private static bool HasCondition(IActor actor, SurvivalStatType survivalStatType)
         {
             if (actor is null)
             {
                 throw new ArgumentNullException(nameof(actor));
             }
 
-            var сonditionModule = actor.Person.GetModuleSafe<IConditionModule>();
-            if (сonditionModule is null)
+            var сonditionsModule = actor.Person.GetModuleSafe<IConditionsModule>();
+            if (сonditionsModule is null)
             {
                 return false;
             }
 
-            var hazardEffect = сonditionModule.Items.OfType<SurvivalStatHazardEffect>()
+            var hazardEffect = сonditionsModule.Items.OfType<SurvivalStatHazardCondition>()
                 .SingleOrDefault(x => x.Type == survivalStatType && x.Level == SurvivalStatHazardLevel.Strong);
             if (hazardEffect == null)
             {

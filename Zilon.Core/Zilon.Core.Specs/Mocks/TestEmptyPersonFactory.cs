@@ -41,7 +41,7 @@ namespace Zilon.Core.Specs.Mocks
             var equipmentModule = new EquipmentModule(personScheme.Slots);
             person.AddModule(equipmentModule);
 
-            var сonditionModule = new ConditionModule();
+            var сonditionModule = new ConditionsModule();
             person.AddModule(сonditionModule);
 
             var evolutionModule = new EvolutionModule(_schemeService);

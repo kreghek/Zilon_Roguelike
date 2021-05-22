@@ -27,7 +27,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly int _screenX;
         private readonly int _screenY;
         private readonly ISectorUiState _uiState;
-        private IPersonEffect? _selectedCondition;
+        private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
         public PersonConditionsPanel(Game game, ISectorUiState uiState, int screenX, int screenY)
@@ -74,7 +74,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
-            var conditionsModule = person.GetModule<IConditionModule>();
+            var conditionsModule = person.GetModule<IConditionsModule>();
 
             var effectIndex = 0;
             foreach (var effect in conditionsModule.Items)
@@ -99,7 +99,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
-            var conditionsModule = person.GetModule<IConditionModule>();
+            var conditionsModule = person.GetModule<IConditionsModule>();
 
             var mouseState = Mouse.GetState();
 
@@ -149,7 +149,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void DrawIcon(SpriteBatch spriteBatch, IPersonEffect effect, int iconX)
+        private void DrawIcon(SpriteBatch spriteBatch, IPersonCondition effect, int iconX)
         {
             var conditionIconSid = GetConditionSid(effect);
             var conditionIconTexture = _conditionIconTextureDict[conditionIconSid];
@@ -162,11 +162,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Color.Yellow);
         }
 
-        private static string GetConditionSid(IPersonEffect personCondition)
+        private static string GetConditionSid(IPersonCondition personCondition)
         {
             switch (personCondition)
             {
-                case SurvivalStatHazardEffect statCondition:
+                case SurvivalStatHazardCondition statCondition:
 
                     var typeString = GetStatHazardConditionIcon(statCondition.Type);
 
@@ -175,7 +175,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         : statCondition.Level.ToString();
                     return $"{typeString}{levelString}";
 
-                case DiseaseSymptomEffect:
+                case DiseaseSymptomCondition:
                     return "DiseaseSymptom";
 
                 default:
@@ -207,14 +207,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private static string GetConditionTitle(IPersonEffect personCondition)
+        private static string GetConditionTitle(IPersonCondition personCondition)
         {
             switch (personCondition)
             {
-                case SurvivalStatHazardEffect statEffect:
+                case SurvivalStatHazardCondition statEffect:
                     return GetSurvivalConditionTitle(statEffect);
 
-                case DiseaseSymptomEffect:
+                case DiseaseSymptomCondition:
                     return string.Empty;
 
                 default:
@@ -224,7 +224,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private static string GetSurvivalConditionTitle(SurvivalStatHazardEffect statEffect)
+        private static string GetSurvivalConditionTitle(SurvivalStatHazardCondition statEffect)
         {
             switch (statEffect.Type)
             {

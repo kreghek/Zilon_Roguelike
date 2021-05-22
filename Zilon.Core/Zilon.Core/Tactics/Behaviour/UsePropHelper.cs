@@ -63,10 +63,10 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             var isRestricted = false;
 
-            var сonditionModule = actor.Person.GetModuleSafe<IConditionModule>();
+            var сonditionModule = actor.Person.GetModuleSafe<IConditionsModule>();
             if (сonditionModule != null)
             {
-                var searchingСondition = сonditionModule.Items.OfType<SurvivalStatHazardEffect>()
+                var searchingСondition = сonditionModule.Items.OfType<SurvivalStatHazardCondition>()
                     .SingleOrDefault(x => x.Type == effectType && x.Level == SurvivalStatHazardLevel.Max);
 
                 if (searchingСondition != null)

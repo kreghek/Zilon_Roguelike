@@ -215,7 +215,7 @@ namespace Zilon.Core.PersonGeneration
             var equipmentModule = new EquipmentModule(notNullSlots);
             person.AddModule(equipmentModule);
 
-            var effectsModule = new ConditionModule();
+            var effectsModule = new ConditionsModule();
             person.AddModule(effectsModule);
 
             var evolutionModule = new EvolutionModule(SchemeService);
