@@ -80,13 +80,16 @@ namespace Zilon.Core.Client.Sector.Tests
 
             animationBlockerService.AddBlocker(blocker);
 
+            var isBlockerReallyReleased = false;
+            blocker.Released += (s, e) => { isBlockerReallyReleased = true; };
+
             using var semaphore = new SemaphoreSlim(0);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
             {
-                await Task.Delay(100).ConfigureAwait(true);
-                await semaphore.WaitAsync().ConfigureAwait(true);
+                await Task.Delay(100).ConfigureAwait(false);
+                await semaphore.WaitAsync().ConfigureAwait(false);
                 blockerMock.Raise(x => x.Released += null, EventArgs.Empty);
             });
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -102,7 +105,7 @@ namespace Zilon.Core.Client.Sector.Tests
             await serviceTask;
 
             // ASSERT
-            Assert.Pass();
+            isBlockerReallyReleased.Should().BeTrue();
         }
 
         /// <summary>
@@ -125,8 +128,8 @@ namespace Zilon.Core.Client.Sector.Tests
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
             {
-                await Task.Delay(100).ConfigureAwait(true);
-                await semaphore.WaitAsync().ConfigureAwait(true);
+                await Task.Delay(100).ConfigureAwait(false);
+                await semaphore.WaitAsync().ConfigureAwait(false);
                 animationBlockerService.DropBlockers();
             });
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -164,8 +167,8 @@ namespace Zilon.Core.Client.Sector.Tests
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
             {
-                await Task.Delay(100).ConfigureAwait(true);
-                await semaphore.WaitAsync().ConfigureAwait(true);
+                await Task.Delay(100).ConfigureAwait(false);
+                await semaphore.WaitAsync().ConfigureAwait(false);
 
                 animationBlockerService.AddBlocker(blocker2);
 
@@ -285,8 +288,8 @@ namespace Zilon.Core.Client.Sector.Tests
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
             {
-                await Task.Delay(100).ConfigureAwait(true);
-                await semaphore.WaitAsync().ConfigureAwait(true);
+                await Task.Delay(100).ConfigureAwait(false);
+                await semaphore.WaitAsync().ConfigureAwait(false);
                 isBlockerReleasedCheck = true;
                 blockerMock2.Raise(x => x.Released += null, EventArgs.Empty);
                 blockerMock3.Raise(x => x.Released += null, EventArgs.Empty);
@@ -321,8 +324,8 @@ namespace Zilon.Core.Client.Sector.Tests
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
             {
-                await Task.Delay(100).ConfigureAwait(true);
-                await semaphore.WaitAsync().ConfigureAwait(true);
+                await Task.Delay(100).ConfigureAwait(false);
+                await semaphore.WaitAsync().ConfigureAwait(false);
                 animationBlockerService.DropBlockers();
             });
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
