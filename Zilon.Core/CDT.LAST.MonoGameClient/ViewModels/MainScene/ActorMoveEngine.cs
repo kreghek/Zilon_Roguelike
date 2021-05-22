@@ -22,6 +22,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
+        public string? DebugName { get; set; }
+
         public ActorMoveEngine(SpriteContainer rootSprite, SpriteContainer graphicsRoot, Sprite shadowSprite,
             Vector2 targetPosition, IAnimationBlockerService animationBlockerService)
         {
@@ -35,7 +37,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _rootSprite.FlipX = (_startPosition - _targetPosition).X < 0;
 
             _moveBlocker = new AnimationCommonBlocker
-                { DebugName = "Move" };
+                { DebugName = $"Move {DebugName}" };
 
             _animationBlockerService.AddBlocker(_moveBlocker);
         }

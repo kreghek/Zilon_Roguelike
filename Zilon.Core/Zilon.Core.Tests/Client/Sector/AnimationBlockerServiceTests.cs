@@ -241,6 +241,81 @@ namespace Zilon.Core.Client.Sector.Tests
             Assert.Pass();
         }
 
+        [Test]
+        public async Task WaitBlockersAsynс_Real1()
+        {
+            var animationBlockerService = new AnimationBlockerService();
+
+            using var semaphore = new SemaphoreSlim(0);
+
+            await animationBlockerService.WaitBlockersAsync();
+            animationBlockerService.DropBlockers();
+
+            await animationBlockerService.WaitBlockersAsync();
+            animationBlockerService.DropBlockers();
+
+            await animationBlockerService.WaitBlockersAsync();
+            animationBlockerService.DropBlockers();
+
+            await animationBlockerService.WaitBlockersAsync();
+            animationBlockerService.DropBlockers();
+
+            var blockerMock = new Mock<ICommandBlocker>();
+            var blocker = blockerMock.Object;
+
+            animationBlockerService.AddBlocker(blocker);
+
+            await WaitAndReleaseBlocker(animationBlockerService, blockerMock, semaphore);
+
+            animationBlockerService.DropBlockers();
+
+            await animationBlockerService.WaitBlockersAsync();
+            animationBlockerService.DropBlockers();
+
+            var blockerMock2 = new Mock<ICommandBlocker>();
+            var blocker2 = blockerMock2.Object;
+
+            var blockerMock3 = new Mock<ICommandBlocker>();
+            var blocker3 = blockerMock3.Object;
+
+            animationBlockerService.AddBlocker(blocker2);
+            animationBlockerService.AddBlocker(blocker3);
+
+            var isBlockerReleasedCheck = false;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Task.Run(async () =>
+            {
+                await Task.Delay(100).ConfigureAwait(true);
+                await semaphore.WaitAsync().ConfigureAwait(true);
+                isBlockerReleasedCheck = true;
+                blockerMock2.Raise(x => x.Released += null, EventArgs.Empty);
+                blockerMock3.Raise(x => x.Released += null, EventArgs.Empty);
+            });
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+            var serviceTask = Task.Run(async () =>
+            {
+                await animationBlockerService.WaitBlockersAsync().ConfigureAwait(false);
+            });
+
+            isBlockerReleasedCheck.Should().BeFalse();
+
+            semaphore.Release(1);
+
+            await serviceTask;
+
+            animationBlockerService.DropBlockers();
+
+
+
+
+
+
+            // ASSERT
+            isBlockerReleasedCheck.Should().BeTrue();
+            Assert.Pass();
+        }
+
         private static async Task AddAndDropBlocker(AnimationBlockerService animationBlockerService, SemaphoreSlim semaphore)
         {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed

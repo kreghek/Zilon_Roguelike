@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +22,8 @@ namespace Zilon.Core.Client.Sector
 
         private void CommandBlocker_Release(object? sender, EventArgs e)
         {
+            Console.WriteLine($"Blocker {sender} released.");
+
             if (sender is null)
             {
                 throw new InvalidOperationException("Unexpectible event.");
@@ -46,6 +49,7 @@ namespace Zilon.Core.Client.Sector
         /// <inheritdoc />
         public void AddBlocker(ICommandBlocker commandBlocker)
         {
+            Console.WriteLine($"Add blocker {commandBlocker}.");
             lock (_lockObject)
             {
                 commandBlocker.Released += CommandBlocker_Release;
@@ -61,6 +65,7 @@ namespace Zilon.Core.Client.Sector
         /// <inheritdoc />
         public void DropBlockers()
         {
+            Console.WriteLine($"Drop blockers.");
             lock (_lockObject)
             {
                 foreach (var commandBlocker in _commandBlockers.Keys.ToArray())
@@ -84,9 +89,11 @@ namespace Zilon.Core.Client.Sector
             {
                 if (_tcs is null)
                 {
+                    Console.WriteLine($"Wait blockers (null).");
                     return Task.CompletedTask;
                 }
 
+                Console.WriteLine($"Wait blockers.");
                 return _tcs.Task;
             }
         }

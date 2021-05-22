@@ -21,6 +21,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
+        public string? DebugName { get; set; }
+
         public ActorMeleeAttackEngine(SpriteContainer rootContainer, Vector2 targetPosition,
             IAnimationBlockerService animationBlockerService)
         {
@@ -31,7 +33,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _targetPosition = Vector2.Lerp(_startPosition, targetPosition, 0.6f);
 
             _animationBlocker = new AnimationCommonBlocker
-                { DebugName = "Attack" };
+                { DebugName = $"Attack {DebugName}" };
 
             _animationBlockerService.AddBlocker(_animationBlocker);
 

@@ -19,5 +19,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             DoRelease();
         }
+
+        public override string? ToString()
+        {
+            return DebugName;
+        }
     }
 }
