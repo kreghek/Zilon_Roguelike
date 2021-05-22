@@ -89,7 +89,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     gameLoop.Start();
 
                     var commandLoop = serviceScope.GetRequiredService<ICommandLoopUpdater>();
-                    var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
+                    await commandLoop.StartAsync(CancellationToken.None);
                 });
 
                 await generateGlobeTask!;
