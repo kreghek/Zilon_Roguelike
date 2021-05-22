@@ -72,6 +72,7 @@ namespace Zilon.Core.Client.Sector
                 if (_tcs != null && _tcs.TrySetResult(true))
                 {
                 }
+
                 _tcs = null;
             }
         }

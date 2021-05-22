@@ -23,11 +23,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal class MapViewModel
     {
         private const float MAP_UPDATE_DELAY_SECONDS = 0.05f;
+        private readonly Game _game;
 
         private readonly Texture2D _hexSprite;
 
         private readonly ConcurrentDictionary<OffsetCoords, Sprite> _hexSprites;
-        private readonly Game _game;
         private readonly IPlayer _player;
         private readonly ISector _sector;
         private readonly SpriteBatch _spriteBatch;
@@ -50,16 +50,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             sector.TrasitionUsed += Sector_TrasitionUsed;
         }
 
-        private void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
-        {
-            if (e.Actor.Person == _player.MainPerson)
-            {
-                var blockerService = ((LivGame)_game).ServiceProvider.GetRequiredService<IAnimationBlockerService>();
-                blockerService.DropBlockers();
-                _sector.TrasitionUsed -= Sector_TrasitionUsed;
-            }
-        }
-
         public void Draw(Matrix transform)
         {
             _spriteBatch.Begin(transformMatrix: transform);
@@ -75,6 +65,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public void Update(GameTime gameTime)
         {
             UpdateSpriteMatrix(gameTime);
+        }
+
+        private void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
+        {
+            if (e.Actor.Person == _player.MainPerson)
+            {
+                var blockerService = ((LivGame)_game).ServiceProvider.GetRequiredService<IAnimationBlockerService>();
+                blockerService.DropBlockers();
+                _sector.TrasitionUsed -= Sector_TrasitionUsed;
+            }
         }
 
         private void UpdateSpriteMatrix(GameTime gameTime)
