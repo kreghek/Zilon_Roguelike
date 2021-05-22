@@ -8,7 +8,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Common;
 using Zilon.Core.Tactics.Spatial;
 
-namespace CDT.LAST.MonoGameClient.Scenes
+namespace CDT.LAST.MonoGameClient.Screens
 {
     public class Camera
     {

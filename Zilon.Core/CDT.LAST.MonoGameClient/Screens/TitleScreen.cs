@@ -9,20 +9,20 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace CDT.LAST.MonoGameClient.Scenes
+namespace CDT.LAST.MonoGameClient.Screens
 {
-    internal class TitleScene : GameSceneBase
+    internal class TitleScreen : GameSceneBase
     {
-        private readonly GlobeGenerationScene _globeGenerationScene;
+        private readonly GlobeSelectionScreen _globeGenerationScene;
         private readonly SpriteBatch _spriteBatch;
         private readonly Button _startButton;
         private readonly Button _switchLanguageButton;
 
-        public TitleScene(Game game, SpriteBatch spriteBatch) : base(game)
+        public TitleScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
             _spriteBatch = spriteBatch;
 
-            _globeGenerationScene = new GlobeGenerationScene(game, spriteBatch);
+            _globeGenerationScene = new GlobeSelectionScreen(game, spriteBatch);
 
             var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");

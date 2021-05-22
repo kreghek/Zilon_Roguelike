@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Zilon.Core.Players;
 using Zilon.Core.World;
 
-namespace CDT.LAST.MonoGameClient.Scenes
+namespace CDT.LAST.MonoGameClient.Screens
 {
-    internal class TransitionScene : GameSceneBase
+    internal class TransitionScreen : GameSceneBase
     {
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
@@ -18,7 +18,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
 
         private bool _targetSceneInitialized;
 
-        public TransitionScene(Game game, SpriteBatch spriteBatch) : base(game)
+        public TransitionScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
             var serviceScope = ((LivGame)Game).ServiceProvider;
 
@@ -40,7 +40,7 @@ namespace CDT.LAST.MonoGameClient.Scenes
 
                 if (playerPersonSectorNode != null)
                 {
-                    TargetScene = new MainScene(Game, _spriteBatch);
+                    TargetScene = new MainScreen(Game, _spriteBatch);
                     _targetSceneInitialized = true;
                 }
             }

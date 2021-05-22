@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-using CDT.LAST.MonoGameClient.Scenes;
+using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -66,9 +66,9 @@ namespace CDT.LAST.MonoGameClient
 
             _cursorTexture = Content.Load<Texture2D>("Sprites/ui/walk-cursor");
 
-            var sceneManager = new SceneManager(this);
-            var titleScene = new TitleScene(this, _spriteBatch);
-            sceneManager.ActiveScene = titleScene;
+            var sceneManager = new ScreenManager(this);
+            var titleScene = new TitleScreen(this, _spriteBatch);
+            sceneManager.ActiveScreen = titleScene;
 
             Components.Add(sceneManager);
         }
@@ -105,14 +105,6 @@ namespace CDT.LAST.MonoGameClient
         {
             var commandLoop = _serviceProvider.GetRequiredService<ICommandLoopUpdater>();
 
-            commandLoop.ErrorOccured += (s, e) =>
-            {
-                GlobeGenerationScene._lastError += e.Exception.ToString();
-            };
-            commandLoop.CommandAutoExecuted += (s, e) =>
-            {
-                GlobeGenerationScene._lastError += "Auto execute last command";
-            };
             var playerState = _serviceProvider.GetRequiredService<ISectorUiState>();
             var inventoryState = _serviceProvider.GetRequiredService<IInventoryState>();
             commandLoop.CommandProcessed += (s, e) =>
