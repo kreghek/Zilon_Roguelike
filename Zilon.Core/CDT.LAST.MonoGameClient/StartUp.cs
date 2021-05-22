@@ -38,7 +38,8 @@ namespace CDT.LAST.MonoGameClient
             serviceCollection.AddSingleton<IHumanActorTaskSource>(serviceProvider =>
             {
                 var humanTaskSource = new HumanActorTaskSource();
-                var botTaskSource = serviceProvider.GetRequiredService<IActorTaskSource>();
+                var treePatterns = serviceProvider.GetRequiredService<LogicStateTreePatterns>();
+                var botTaskSource = new HumanBotActorTaskSource<ISectorTaskSourceContext>(treePatterns);
 
                 var switchTaskSource =
                     new SwitchHumanActorTaskSource<ISectorTaskSourceContext>(humanTaskSource, botTaskSource);
