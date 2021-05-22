@@ -37,8 +37,9 @@ namespace Zilon.Core.Client.Sector
 
                 if (!HasBlockers && _tcs != null)
                 {
-                    _tcs.SetResult(true);
+                    var tempTcs = _tcs;
                     _tcs = null;
+                    tempTcs.SetResult(true);
                 }
             }
         }
