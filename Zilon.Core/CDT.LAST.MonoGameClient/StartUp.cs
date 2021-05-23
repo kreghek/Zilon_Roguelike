@@ -43,7 +43,7 @@ namespace CDT.LAST.MonoGameClient
         {
             container.AddSingleton((Func<IServiceProvider, ISchemeLocator>)(factory =>
             {
-                var gamePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                var gamePath = Assembly.GetExecutingAssembly().Location;
                 if (gamePath is null)
                 {
                     throw new InvalidOperationException("Error during current path calculation.");
