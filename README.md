@@ -46,7 +46,7 @@ GamePlay Video
 We strive to launch a project with one button. But now there are a few manual steps that must be performed before the game can be launched from the editor.
 
 1. **Copy scheme catalog from `/Zilon.Client/Assets/Resources/Schemes` into `bin/Content`**.
-The game required the scheme catalog in its `bin` directory. The easiest way to place the scheme catalog is executing `copy_scheme_catalog_to_game_bin.bat` from root of the repository.
+The game required the scheme catalog in its `bin` directory. The easiest way to place the scheme catalog is executing `copy_scheme_catalog_to_game_bin.ps` from root of the repository.
 
 2. *Optional*. **Set the `ZILON_LIV_SCHEME_CATALOG` environment variable to specify the full path to `\Zilon.Client\Assets\Resources\Schemes`**.
 This is needed to run tests in Zilon.Core. The path must be complete, that is, it must begin, for example, with `C:\MyProjects\Zilon_Roguelike` for Windows and `/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes` for Linux.
