@@ -168,11 +168,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 case SurvivalStatHazardCondition statCondition:
 
-                    var typeString = GetStatHazardConditionIcon(statCondition.Type);
-
-                    var levelString = statCondition.Level == SurvivalStatHazardLevel.Max
-                        ? "Critical"
-                        : statCondition.Level.ToString();
+                    var typeString = GetStatHazardConditionTypeClientString(statCondition.Type);
+                    var levelString = GetStatHazardConditionLevelClientString(statCondition);
                     return $"{typeString}{levelString}";
 
                 case DiseaseSymptomCondition:
@@ -182,6 +179,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     Debug.Fail("Every condition must have icon.");
                     return "HungerLesser";
             }
+        }
+
+        private static string GetStatHazardConditionLevelClientString(SurvivalStatHazardCondition statCondition)
+        {
+            return statCondition.Level == SurvivalStatHazardLevel.Max
+                ? "Critical"
+                : statCondition.Level.ToString();
         }
 
         private static string GetConditionTitle(IPersonCondition personCondition)
@@ -201,7 +205,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private static string GetStatHazardConditionIcon(SurvivalStatType type)
+        private static string GetStatHazardConditionTypeClientString(SurvivalStatType type)
         {
             switch (type)
             {
@@ -224,87 +228,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private static string GetSurvivalConditionTitle(SurvivalStatHazardCondition statEffect)
+        private static string GetSurvivalConditionTitle(SurvivalStatHazardCondition statCondition)
         {
-            switch (statEffect.Type)
+            var typeString = GetStatHazardConditionTypeClientString(statCondition.Type);
+            var levelString = GetStatHazardConditionLevelClientString(statCondition);
+            var conditionTitle = UiResources.ResourceManager.GetString($"{typeString}{levelString}ConditionTitle");
+            if (string.IsNullOrWhiteSpace(conditionTitle))
             {
-                case SurvivalStatType.Health:
-                    switch (statEffect.Level)
-                    {
-                        case SurvivalStatHazardLevel.Lesser:
-                            return UiResources.WoundLesserConditionTitle;
-
-                        case SurvivalStatHazardLevel.Strong:
-                            return UiResources.WoundStrongConditionTitle;
-
-                        case SurvivalStatHazardLevel.Max:
-                            return UiResources.WoundCriticalConditionTitle;
-
-                        default:
-                            Debug.Fail(
-                                $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
-                            return string.Empty;
-                    }
-
-                case SurvivalStatType.Satiety:
-                    switch (statEffect.Level)
-                    {
-                        case SurvivalStatHazardLevel.Lesser:
-                            return UiResources.HungerLesserConditionTitle;
-
-                        case SurvivalStatHazardLevel.Strong:
-                            return UiResources.HungerStrongConditionTitle;
-
-                        case SurvivalStatHazardLevel.Max:
-                            return UiResources.HungerCriticalConditionTitle;
-
-                        default:
-                            Debug.Fail(
-                                $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
-                            return string.Empty;
-                    }
-
-                case SurvivalStatType.Hydration:
-                    switch (statEffect.Level)
-                    {
-                        case SurvivalStatHazardLevel.Lesser:
-                            return UiResources.ThristLesserConditionTitle;
-
-                        case SurvivalStatHazardLevel.Strong:
-                            return UiResources.ThristStrongConditionTitle;
-
-                        case SurvivalStatHazardLevel.Max:
-                            return UiResources.ThristCriticalConditionTitle;
-
-                        default:
-                            Debug.Fail(
-                                $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
-                            return string.Empty;
-                    }
-
-                case SurvivalStatType.Intoxication:
-                    switch (statEffect.Level)
-                    {
-                        case SurvivalStatHazardLevel.Lesser:
-                            return UiResources.IntoxicationLesserConditionTitle;
-
-                        case SurvivalStatHazardLevel.Strong:
-                            return UiResources.IntoxicationStrongConditionTitle;
-
-                        case SurvivalStatHazardLevel.Max:
-                            return UiResources.IntoxicationCriticalConditionTitle;
-
-                        default:
-                            Debug.Fail(
-                                $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
-                            return string.Empty;
-                    }
-
-                default:
-                    Debug.Fail(
-                        $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
-                    return string.Empty;
+                Debug.Fail($"All person conditions must have localized titles."
+                    + $" Unknown person effect: {statCondition.Type} {statCondition.Level}.");
+                return $"{typeString}{levelString}";
             }
+
+            return conditionTitle;
         }
     }
 }
