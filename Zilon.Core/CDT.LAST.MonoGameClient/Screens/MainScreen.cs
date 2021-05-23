@@ -50,12 +50,13 @@ namespace CDT.LAST.MonoGameClient.Screens
             _buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
             _buttonFont = game.Content.Load<SpriteFont>("Fonts/Main");
 
+            var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
+            var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
             _autoplayModeButton = new Button(
-                "t",
+                string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOffTitle),
                 _buttonTexture,
                 _buttonFont,
-                new Rectangle(game.GraphicsDevice.Viewport.Width / 2 - 16, game.GraphicsDevice.Viewport.Height - 16, 32,
-                    32)
+                new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 32, 32)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
         }
