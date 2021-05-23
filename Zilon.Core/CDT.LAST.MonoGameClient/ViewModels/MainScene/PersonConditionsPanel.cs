@@ -181,13 +181,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private static string GetStatHazardConditionLevelClientString(SurvivalStatHazardCondition statCondition)
-        {
-            return statCondition.Level == SurvivalStatHazardLevel.Max
-                ? "Critical"
-                : statCondition.Level.ToString();
-        }
-
         private static string GetConditionTitle(IPersonCondition personCondition)
         {
             switch (personCondition)
@@ -203,6 +196,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         $"All person conditions must have localized titles. Unknown person effect: {personCondition}.");
                     return string.Empty;
             }
+        }
+
+        private static string GetStatHazardConditionLevelClientString(SurvivalStatHazardCondition statCondition)
+        {
+            return statCondition.Level == SurvivalStatHazardLevel.Max
+                ? "Critical"
+                : statCondition.Level.ToString();
         }
 
         private static string GetStatHazardConditionTypeClientString(SurvivalStatType type)
@@ -235,8 +235,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var conditionTitle = UiResources.ResourceManager.GetString($"{typeString}{levelString}ConditionTitle");
             if (string.IsNullOrWhiteSpace(conditionTitle))
             {
-                Debug.Fail($"All person conditions must have localized titles."
-                    + $" Unknown person effect: {statCondition.Type} {statCondition.Level}.");
+                Debug.Fail("All person conditions must have localized titles."
+                           + $" Unknown person effect: {statCondition.Type} {statCondition.Level}.");
                 return $"{typeString}{levelString}";
             }
 
