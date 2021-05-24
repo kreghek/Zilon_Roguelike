@@ -18,7 +18,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly SpriteBatch _spriteBatch;
         private readonly Button _startButton;
         private readonly Button _switchLanguageButton;
-        private HumanoidGraphics _test;
 
         public TitleScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -36,12 +35,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             _switchLanguageButton = new Button("Switch lang", buttonTexture, font, new Rectangle(150, 200, 100, 20));
 
             _switchLanguageButton.OnClick += SwitchLanguageButtonClickHandler;
-
-
-            _test = new HumanoidGraphics(game.Content)
-            {
-                Position = new Vector2(100, 100)
-            };
         }
 
         public override void Draw(GameTime gameTime)
@@ -59,8 +52,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch.DrawString(font, Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName,
                 new Vector2(150, 100), Color.White);
 
-            _test.Draw(_spriteBatch);
-
             _spriteBatch.End();
         }
 
@@ -75,11 +66,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (state.IsKeyDown(Keys.Escape))
             {
                 Game.Exit();
-            }
-
-            if (state.IsKeyDown(Keys.Right))
-            {
-                _test.FlipX = true;
             }
 
             _startButton.Update();

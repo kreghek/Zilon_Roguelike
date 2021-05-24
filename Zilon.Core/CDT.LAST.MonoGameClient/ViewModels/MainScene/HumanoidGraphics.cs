@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
 
@@ -6,43 +7,27 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using Zilon.Core.Common;
+using Zilon.Core.PersonModules;
+
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
     {
-        public HumanoidGraphics(ContentManager contentManager)
+        private readonly IEquipmentModule _equipmentModule;
+
+        public HumanoidGraphics(IEquipmentModule equipmentModule, ContentManager contentManager)
         {
+            _equipmentModule = equipmentModule;
+
             var headTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/head");
             var bodyTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/body");
             var legsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/legs-idle");
             var armLeftTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/arm-left-simple");
             var armRightTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/arm-right-simple");
 
-            var shortSwordBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/ShortSwordBase");
-
-            /*var bodySpriteContainer = new SpriteContainer();
-            AddChild(bodySpriteContainer);
-
-            var armLeftSprite = new Sprite(armLeftTexture)
-            {
-                Position = new Vector2(2, -29),
-                Origin = new Vector2(11f / 16, 4f / 24),
-            };
-            bodySpriteContainer.AddChild(armLeftSprite);
-
-            var bodySprite = new Sprite(bodyTexture)
-            {
-                Position = new Vector2(0, -12),
-                Origin = new Vector2(10f / 32, 24f / 32),
-            };
-            bodySpriteContainer.AddChild(bodySprite);
-
-            var headSprite = new Sprite(headTexture)
-            {
-                Position = new Vector2(2, -29),
-                Origin = new Vector2(15f / 32, 20f / 32),
-            };
-            bodySpriteContainer.AddChild(headSprite);*/
+            var weaponBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/ShortSwordBase");
+            var shieldBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/WoodenShieldBase");
 
             AddChild(new Sprite(armLeftTexture)
             {
@@ -50,7 +35,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Origin = new Vector2(0.5f, 0.5f)
             });
 
-            AddChild(new Sprite(shortSwordBaseTexture)
+            AddChild(new Sprite(weaponBaseTexture)
             {
                 Position = new Vector2(-14, -21),
                 Origin = new Vector2(0.5f, 0.5f)
@@ -74,18 +59,44 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Origin = new Vector2(0.5f, 1)
             });
 
-            AddChild(new Sprite2(shortSwordBaseTexture)
+            // Slot 2 according the person scheme is second/left hand.
+            var equipment2 = equipmentModule[2];
+            if (equipment2 != null)
             {
-                Position = new Vector2(11, -10),
-                Origin = new Vector2(0.5f, 0.5f),
-                Rotation = (float)(-Math.PI / 2)
-            });
+                if (equipment2.Scheme.Tags.Contains(PropTags.Equipment.Weapon))
+                {
+                    AddChild(new Sprite2(weaponBaseTexture)
+                    {
+                        Position = new Vector2(11, -10),
+                        Origin = new Vector2(0.5f, 0.5f),
+                        Rotation = (float)(-Math.PI / 2)
+                    });
 
-            AddChild(new Sprite(armRightTexture)
-            {
-                Position = new Vector2(13, -20),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
+                    AddChild(new Sprite(armRightTexture)
+                    {
+                        Position = new Vector2(13, -20),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
+                else if (equipment2.Scheme.Tags.Contains(PropTags.Equipment.Shield))
+                {
+                    // For shield draw arm first because the base of the sheild
+                    // should be cover the arm.
+
+                    AddChild(new Sprite(armRightTexture)
+                    {
+                        Position = new Vector2(13, -20),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+
+
+                    AddChild(new Sprite(shieldBaseTexture)
+                    {
+                        Position = new Vector2(11, -10),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
+            }
         }
 
         public SpriteContainer RootSprite => this;

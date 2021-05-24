@@ -122,7 +122,7 @@ namespace Zilon.Core.PersonGeneration
 
             var inventory = person.GetModule<IInventoryModule>();
             var dropedProps = DropResolver.Resolve(new[] { dropScheme });
-            var usedEquipment = dropedProps.OfType<Equipment>().FirstOrDefault();
+            var usedEquipment = _propFactory.CreateEquipment(SchemeService.GetScheme<IPropScheme>("wooden-shield"));// dropedProps.OfType<Equipment>().FirstOrDefault();
             if (usedEquipment != null)
             {
                 var equipmentModule = person.GetModule<IEquipmentModule>();
