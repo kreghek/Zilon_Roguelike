@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Persons
 {
-    public interface ISurvivalStatEffect
+    public interface ISurvivalStatCondition
     {
         void Apply(ISurvivalModule survivalData);
     }

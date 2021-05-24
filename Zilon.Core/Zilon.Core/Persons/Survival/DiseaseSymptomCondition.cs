@@ -6,14 +6,14 @@ using Zilon.Core.Diseases;
 
 namespace Zilon.Core.Persons.Survival
 {
-    public class DiseaseSymptomEffect : IPersonEffect
+    public class DiseaseSymptomCondition : IPersonCondition
     {
         /// <summary>
         /// Болезни, которые провоцируют этот симптом.
         /// </summary>
         private readonly List<IDisease> _diseases;
 
-        public DiseaseSymptomEffect(IDisease disease, DiseaseSymptom symptom)
+        public DiseaseSymptomCondition(IDisease disease, DiseaseSymptom symptom)
         {
             if (disease is null)
             {
@@ -48,9 +48,9 @@ namespace Zilon.Core.Persons.Survival
             Changed?.Invoke(this, EventArgs.Empty);
         }
 
-        public EffectRule[] GetRules()
+        public ConditionRule[] GetRules()
         {
-            return new[] { new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser) };
+            return new[] { new ConditionRule(RollEffectType.Efficient, PersonRuleLevel.Lesser) };
         }
 
         public event EventHandler? Changed;

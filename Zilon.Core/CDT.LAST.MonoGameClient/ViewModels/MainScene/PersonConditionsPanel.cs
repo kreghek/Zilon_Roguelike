@@ -27,7 +27,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly int _screenX;
         private readonly int _screenY;
         private readonly ISectorUiState _uiState;
-        private IPersonEffect? _selectedCondition;
+        private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
         public PersonConditionsPanel(Game game, ISectorUiState uiState, int screenX, int screenY)
@@ -52,9 +52,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 "IntoxicationStrong",
                 "IntoxicationCritical",
 
-                "HealthLesser",
-                "HealthStrong",
-                "HealthCritical",
+                "WoundLesser",
+                "WoundStrong",
+                "WoundCritical",
 
                 "DiseaseSymptom"
             };
@@ -74,7 +74,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
-            var conditionsModule = person.GetModule<IConditionModule>();
+            var conditionsModule = person.GetModule<IConditionsModule>();
 
             var effectIndex = 0;
             foreach (var effect in conditionsModule.Items)
@@ -99,7 +99,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
-            var conditionsModule = person.GetModule<IConditionModule>();
+            var conditionsModule = person.GetModule<IConditionsModule>();
 
             var mouseState = Mouse.GetState();
 
@@ -149,7 +149,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void DrawIcon(SpriteBatch spriteBatch, IPersonEffect effect, int iconX)
+        private void DrawIcon(SpriteBatch spriteBatch, IPersonCondition effect, int iconX)
         {
             var conditionIconSid = GetConditionSid(effect);
             var conditionIconTexture = _conditionIconTextureDict[conditionIconSid];
@@ -162,18 +162,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Color.Yellow);
         }
 
-        private static string GetConditionSid(IPersonEffect personCondition)
+        private static string GetConditionSid(IPersonCondition personCondition)
         {
             switch (personCondition)
             {
-                case SurvivalStatHazardEffect statEffect:
-                    // Code smell to adjust code to sprite names.
-                    var levelString = statEffect.Level == SurvivalStatHazardLevel.Max
-                        ? "Critical"
-                        : statEffect.Level.ToString();
-                    return $"{statEffect.Type}{levelString}";
+                case SurvivalStatHazardCondition statCondition:
 
-                case DiseaseSymptomEffect:
+                    var typeString = GetStatHazardConditionTypeClientString(statCondition.Type);
+                    var levelString = GetStatHazardConditionLevelClientString(statCondition);
+                    return $"{typeString}{levelString}";
+
+                case DiseaseSymptomCondition:
                     return "DiseaseSymptom";
 
                 default:
@@ -182,14 +181,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private static string GetConditionTitle(IPersonEffect personCondition)
+        private static string GetConditionTitle(IPersonCondition personCondition)
         {
             switch (personCondition)
             {
-                case SurvivalStatHazardEffect statEffect:
+                case SurvivalStatHazardCondition statEffect:
                     return GetSurvivalConditionTitle(statEffect);
 
-                case DiseaseSymptomEffect:
+                case DiseaseSymptomCondition:
                     return string.Empty;
 
                 default:
@@ -199,51 +198,52 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private static string GetSurvivalConditionTitle(SurvivalStatHazardEffect statEffect)
+        private static string GetStatHazardConditionLevelClientString(SurvivalStatHazardCondition statCondition)
         {
-            switch (statEffect.Type)
+            return statCondition.Level == SurvivalStatHazardLevel.Max
+                ? "Critical"
+                : statCondition.Level.ToString();
+        }
+
+        private static string GetStatHazardConditionTypeClientString(SurvivalStatType type)
+        {
+            switch (type)
             {
                 case SurvivalStatType.Health:
-                    switch (statEffect.Level)
-                    {
-                        case SurvivalStatHazardLevel.Lesser:
-                            return UiResources.WoundLesserConditionTitle;
-
-                        case SurvivalStatHazardLevel.Strong:
-                            return UiResources.WoundStrongConditionTitle;
-
-                        case SurvivalStatHazardLevel.Max:
-                            return UiResources.WoundCriticalConditionTitle;
-
-                        default:
-                            Debug.Fail(
-                                $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
-                            return string.Empty;
-                    }
+                    return "Wound";
 
                 case SurvivalStatType.Satiety:
-                    switch (statEffect.Level)
-                    {
-                        case SurvivalStatHazardLevel.Lesser:
-                            return UiResources.HungerLesserConditionTitle;
+                    return "Hunger";
 
-                        case SurvivalStatHazardLevel.Strong:
-                            return UiResources.HungerStrongConditionTitle;
+                case SurvivalStatType.Hydration:
+                    return "Thrist";
 
-                        case SurvivalStatHazardLevel.Max:
-                            return UiResources.HungerCriticalConditionTitle;
+                case SurvivalStatType.Intoxication:
+                    return "Intoxication";
 
-                        default:
-                            Debug.Fail(
-                                $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
-                            return string.Empty;
-                    }
+                case SurvivalStatType.Undefined:
+                    Debug.Fail("Undefined condition.");
+                    return "Empty";
 
                 default:
-                    Debug.Fail(
-                        $"All person conditions must have localized titles. Unknown person effect: {statEffect.Type} {statEffect.Level}.");
-                    return string.Empty;
+                    Debug.Fail($"Unknown condition type {type}.");
+                    return "Empty";
             }
+        }
+
+        private static string GetSurvivalConditionTitle(SurvivalStatHazardCondition statCondition)
+        {
+            var typeString = GetStatHazardConditionTypeClientString(statCondition.Type);
+            var levelString = GetStatHazardConditionLevelClientString(statCondition);
+            var conditionTitle = UiResources.ResourceManager.GetString($"{typeString}{levelString}ConditionTitle");
+            if (string.IsNullOrWhiteSpace(conditionTitle))
+            {
+                Debug.Fail("All person conditions must have localized titles."
+                           + $" Unknown person effect: {statCondition.Type} {statCondition.Level}.");
+                return $"{typeString}{levelString}";
+            }
+
+            return conditionTitle;
         }
     }
 }

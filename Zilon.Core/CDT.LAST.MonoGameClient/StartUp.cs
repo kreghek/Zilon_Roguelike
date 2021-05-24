@@ -10,6 +10,7 @@ using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Emulation.Common;
 
 using HumanActorTaskSource =
@@ -34,7 +35,16 @@ namespace CDT.LAST.MonoGameClient
             serviceCollection.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
             serviceCollection.AddSingleton<LogicStateTreePatterns>();
 
-            serviceCollection.AddSingleton<IHumanActorTaskSource, HumanActorTaskSource>();
+            serviceCollection.AddSingleton<IHumanActorTaskSource>(serviceProvider =>
+            {
+                var humanTaskSource = new HumanActorTaskSource();
+                var treePatterns = serviceProvider.GetRequiredService<LogicStateTreePatterns>();
+                var botTaskSource = new HumanBotActorTaskSource<ISectorTaskSourceContext>(treePatterns);
+
+                var switchTaskSource =
+                    new SwitchHumanActorTaskSource<ISectorTaskSourceContext>(humanTaskSource, botTaskSource);
+                return switchTaskSource;
+            });
             serviceCollection.AddSingleton<IActorTaskSource>(provider =>
                 provider.GetRequiredService<IHumanActorTaskSource>());
         }

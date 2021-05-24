@@ -1875,7 +1875,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/PersonConditions/DiseaseSymptomConditionIcon.png
 
-#begin Sprites/ui/PersonConditions/HealthCriticalConditionIcon.png
+#begin Sprites/ui/PersonConditions/WoundCriticalConditionIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1885,9 +1885,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/ui/PersonConditions/HealthCriticalConditionIcon.png
+/build:Sprites/ui/PersonConditions/WoundCriticalConditionIcon.png
 
-#begin Sprites/ui/PersonConditions/HealthLesserConditionIcon.png
+#begin Sprites/ui/PersonConditions/WoundLesserConditionIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1897,9 +1897,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/ui/PersonConditions/HealthLesserConditionIcon.png
+/build:Sprites/ui/PersonConditions/WoundLesserConditionIcon.png
 
-#begin Sprites/ui/PersonConditions/HealthStrongConditionIcon.png
+#begin Sprites/ui/PersonConditions/WoundStrongConditionIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1909,7 +1909,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/ui/PersonConditions/HealthStrongConditionIcon.png
+/build:Sprites/ui/PersonConditions/WoundStrongConditionIcon.png
 
 #begin Sprites/ui/PersonConditions/HungerCriticalConditionIcon.png
 /importer:TextureImporter

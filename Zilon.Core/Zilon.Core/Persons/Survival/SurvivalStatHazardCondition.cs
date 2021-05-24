@@ -7,13 +7,13 @@ using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Persons
 {
-    public class SurvivalStatHazardEffect : IPersonEffect, ISurvivalStatEffect
+    public class SurvivalStatHazardCondition : IPersonCondition, ISurvivalStatCondition
     {
         private readonly ISurvivalRandomSource _survivalRandomSource;
         private SurvivalStatHazardLevel _level;
-        private EffectRule[] _rules;
+        private ConditionRule[] _rules;
 
-        public SurvivalStatHazardEffect(SurvivalStatType type,
+        public SurvivalStatHazardCondition(SurvivalStatType type,
             SurvivalStatHazardLevel level,
             ISurvivalRandomSource survivalRandomSource)
         {
@@ -51,20 +51,20 @@ namespace Zilon.Core.Persons
             return $"{Level} {Type}";
         }
 
-        private EffectRule[] CalcRules()
+        private ConditionRule[] CalcRules()
         {
-            var rules = new List<EffectRule>();
+            var rules = new List<ConditionRule>();
 
             switch (Level)
             {
                 case SurvivalStatHazardLevel.Lesser:
-                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
+                    rules.Add(new ConditionRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
                     break;
 
                 case SurvivalStatHazardLevel.Strong:
                 case SurvivalStatHazardLevel.Max:
-                    rules.Add(new EffectRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
-                    rules.Add(new EffectRule(RollEffectType.ToHit, PersonRuleLevel.Lesser));
+                    rules.Add(new ConditionRule(RollEffectType.Efficient, PersonRuleLevel.Lesser));
+                    rules.Add(new ConditionRule(RollEffectType.ToHit, PersonRuleLevel.Lesser));
                     break;
 
                 case SurvivalStatHazardLevel.Undefined:
@@ -94,7 +94,7 @@ namespace Zilon.Core.Persons
             PlayerEventLogService.Log(playerEvent);
         }
 
-        public EffectRule[] GetRules()
+        public ConditionRule[] GetRules()
         {
             return _rules;
         }

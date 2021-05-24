@@ -12,9 +12,9 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public class DiseaseModule : DiseaseModuleBase
     {
-        private readonly IConditionModule _сonditionModule;
+        private readonly IConditionsModule _сonditionModule;
 
-        public DiseaseModule(IConditionModule сonditionModule)
+        public DiseaseModule(IConditionsModule сonditionModule)
         {
             _сonditionModule = сonditionModule ?? throw new ArgumentNullException(nameof(сonditionModule));
         }
@@ -67,17 +67,17 @@ namespace Zilon.Core.PersonModules
         }
 
         private static void AddDiseaseEffectForSymptom(
-            IConditionModule сonditionModule,
+            IConditionsModule сonditionModule,
             IDisease disease,
             DiseaseSymptom symptom)
         {
-            var currentSymptomEffect = сonditionModule.Items.OfType<DiseaseSymptomEffect>()
+            var currentSymptomEffect = сonditionModule.Items.OfType<DiseaseSymptomCondition>()
                 .SingleOrDefault(x => x.Symptom == symptom);
 
             if (currentSymptomEffect is null)
             {
                 // При создании эффекта уже фиксируется болезнь, которая его удерживает.
-                currentSymptomEffect = new DiseaseSymptomEffect(disease, symptom);
+                currentSymptomEffect = new DiseaseSymptomCondition(disease, symptom);
                 сonditionModule.Add(currentSymptomEffect);
             }
             else
@@ -87,11 +87,11 @@ namespace Zilon.Core.PersonModules
         }
 
         private static void RemoveDiseaseEffectForSimptom(
-            IConditionModule сonditionModule,
+            IConditionsModule сonditionModule,
             IDisease disease,
             DiseaseSymptom symptom)
         {
-            var currentSymptomEffect = сonditionModule.Items.OfType<DiseaseSymptomEffect>()
+            var currentSymptomEffect = сonditionModule.Items.OfType<DiseaseSymptomCondition>()
                 .SingleOrDefault(x => x.Symptom == symptom);
 
             if (currentSymptomEffect is null)
@@ -110,7 +110,7 @@ namespace Zilon.Core.PersonModules
         }
 
         private static void UpdatePowerDown(
-            IConditionModule сonditionModule,
+            IConditionsModule сonditionModule,
             IDisease disease,
             DiseaseSymptom[] symptoms,
             float currentPower,
@@ -129,7 +129,8 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void UpdatePowerUp(IConditionModule сonditionModule, IDisease disease, DiseaseSymptom[] symptoms,
+        private static void UpdatePowerUp(IConditionsModule сonditionModule, IDisease disease,
+            DiseaseSymptom[] symptoms,
             float currentPower, float symptomPowerSegment)
         {
             if (currentPower <= 0.25f)

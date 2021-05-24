@@ -37,6 +37,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _rootContainer.FlipX = (_startPosition - _targetPosition).X < 0;
         }
 
+        public string? DebugName { get; set; }
+
         public bool IsComplete { get; private set; }
 
         public void Update(GameTime gameTime)

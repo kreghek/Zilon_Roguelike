@@ -5,12 +5,12 @@ using Zilon.Core.Persons;
 
 namespace Zilon.Core.PersonModules
 {
-    public interface IConditionModule : IPersonModule
+    public interface IConditionsModule : IPersonModule
     {
-        IEnumerable<IPersonEffect> Items { get; }
+        IEnumerable<IPersonCondition> Items { get; }
 
-        void Add(IPersonEffect effect);
-        void Remove(IPersonEffect effect);
+        void Add(IPersonCondition condition);
+        void Remove(IPersonCondition condition);
 
         event EventHandler<EffectEventArgs>? Added;
         event EventHandler<EffectEventArgs>? Changed;

@@ -39,6 +39,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _animationBlockerService.AddBlocker(_moveBlocker);
         }
 
+        public string? DebugName { get; set; }
+
         public bool IsComplete => _animationCounterSeconds <= 0;
 
         public void Update(GameTime gameTime)

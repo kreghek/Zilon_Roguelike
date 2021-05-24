@@ -44,10 +44,24 @@ namespace Zilon.Core.Client.Sector
         {
             get
             {
+                if (_humanActorTaskSource is IActorTaskControlSwitcher controlSwitcher)
+                {
+                    var isPlayerActorControlledByBot = GetControlState(controlSwitcher);
+                    if (isPlayerActorControlledByBot)
+                    {
+                        return false;
+                    }
+                }
+
                 var canIndentoToTaskSource = _humanActorTaskSource.CanIntent();
                 var animationsAreComplete = !_animationBlockerService.HasBlockers;
                 return canIndentoToTaskSource && animationsAreComplete;
             }
+        }
+
+        private static bool GetControlState(IActorTaskControlSwitcher controlSwitcher)
+        {
+            return controlSwitcher.CurrentControl != ActorTaskSourceControl.Human;
         }
     }
 }

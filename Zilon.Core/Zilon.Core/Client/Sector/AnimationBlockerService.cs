@@ -23,7 +23,7 @@ namespace Zilon.Core.Client.Sector
         {
             if (sender is null)
             {
-                throw new InvalidOperationException("Unexpectible event.");
+                throw new InvalidOperationException("Unexpectible event sender. It must not be null.");
             }
 
             lock (_lockObject)
@@ -34,7 +34,9 @@ namespace Zilon.Core.Client.Sector
 
                 if (!HasBlockers && _tcs != null)
                 {
-                    _tcs.SetResult(true);
+                    var tempTcs = _tcs;
+                    _tcs = null;
+                    tempTcs.SetResult(true);
                 }
             }
         }
@@ -49,7 +51,11 @@ namespace Zilon.Core.Client.Sector
             {
                 commandBlocker.Released += CommandBlocker_Release;
                 _commandBlockers.TryAdd(commandBlocker, 0);
-                _tcs = new TaskCompletionSource<bool>();
+
+                if (_tcs is null)
+                {
+                    _tcs = new TaskCompletionSource<bool>();
+                }
             }
         }
 
@@ -64,6 +70,12 @@ namespace Zilon.Core.Client.Sector
                 }
 
                 _commandBlockers.Clear();
+                if (_tcs != null)
+                {
+                    _tcs.TrySetResult(true);
+                }
+
+                _tcs = null;
             }
         }
 

@@ -136,7 +136,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-                var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot.RootSprite, _shadowSprite, newPosition,
+                var moveEngine = new ActorMoveEngine(
+                    _rootSprite,
+                    _graphicsRoot.RootSprite,
+                    _shadowSprite,
+                    newPosition,
                     animationBlockerService);
                 _actorStateEngine = moveEngine;
             }
@@ -171,7 +175,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     var targetSpritePosition = newPosition;
                     _actorStateEngine =
-                        new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService);
+                        new ActorMeleeAttackEngine(
+                            _rootSprite,
+                            targetSpritePosition,
+                            animationBlockerService);
 
                     var targetGameObject =
                         _sectorViewModelContext.GameObjects.SingleOrDefault(x => x.Node == e.TargetNode);

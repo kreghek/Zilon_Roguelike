@@ -33,7 +33,7 @@ namespace Zilon.Core.World
                 globeTransitionHandler ?? throw new ArgumentNullException(nameof(globeTransitionHandler));
         }
 
-        private void ActorManager_Removed(object sender, ManagerItemsChangedEventArgs<IActor> e)
+        private void ActorManager_Removed(object? sender, ManagerItemsChangedEventArgs<IActor> e)
         {
             // Remove all current tasks
             foreach (var removedActor in e.Items)
@@ -243,14 +243,38 @@ namespace Zilon.Core.World
             {
                 if (actor.TaskSource is IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource)
                 {
-                    humanTaskSource.DropIntentionWaiting();
+                    var isPlayerActorControlledByHuman = IsPlayerActorControlledByHuman(actor.TaskSource);
+                    if (isPlayerActorControlledByHuman)
+                    {
+                        humanTaskSource.DropIntentionWaiting();
+                    }
+                    else
+                    {
+                        // Do nothing because only human can intent.
+                    }
                 }
             }
         }
 
-        private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)
+        private static bool IsPlayerActorControlledByHuman(IActorTaskSource<ISectorTaskSourceContext> taskSource)
         {
+            if (taskSource is IActorTaskControlSwitcher controlSwitcher)
+            {
+                return controlSwitcher.CurrentControl == ActorTaskSourceControl.Human;
+            }
+
+            return true;
+        }
+
+        private async void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
+        {
+            if (sender is null)
+            {
+                throw new InvalidOperationException("Invalid event sender. It must be not null.");
+            }
+
             var sector = (ISector)sender;
+
             await _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition)
                 .ConfigureAwait(false);
         }

@@ -20,12 +20,12 @@ namespace Zilon.Core.PersonModules
         private readonly IEvolutionModule? _evolutionModule;
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
-        private readonly IConditionModule? _сonditionModule;
+        private readonly IConditionsModule? _сonditionModule;
 
         public HumanSurvivalModule(IPersonScheme personScheme,
             ISurvivalRandomSource randomSource,
             IAttributesModule attributesModule,
-            IConditionModule? сonditionModule,
+            IConditionsModule? сonditionModule,
             IEvolutionModule? evolutionModule,
             IEquipmentModule? equipmentModule) : base(GetStats(personScheme, attributesModule))
         {
@@ -313,7 +313,7 @@ namespace Zilon.Core.PersonModules
             {
                 switch (сondition)
                 {
-                    case DiseaseSymptomEffect diseaseSymptomEffect:
+                    case DiseaseSymptomCondition diseaseSymptomEffect:
 
                         switch (diseaseSymptomEffect.Symptom.Rule)
                         {
@@ -349,7 +349,7 @@ namespace Zilon.Core.PersonModules
 
                         break;
 
-                    case SurvivalStatHazardEffect _:
+                    case SurvivalStatHazardCondition _:
                         // Эти эффекты пока не влияют на статы выживания.
                         // Но case- блок должен быть, иначе будет ошибка.
                         break;

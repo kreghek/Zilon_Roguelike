@@ -276,7 +276,7 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                var сonditions = actor.Person.GetModuleSafe<IConditionModule>();
+                var сonditions = actor.Person.GetModuleSafe<IConditionsModule>();
 
                 if (сonditions is null)
                 {
@@ -291,7 +291,7 @@ namespace Zilon.Core.Tactics
                 // Items изменяется. Они должны падать, если убрать ToArray и выполняться, если его вернуть.
                 foreach (var сondition in сonditions.Items.ToArray())
                 {
-                    if (сondition is ISurvivalStatEffect actorEffect &&
+                    if (сondition is ISurvivalStatCondition actorEffect &&
                         actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                     {
                         actorEffect.Apply(actor.Person.GetModule<ISurvivalModule>());
