@@ -182,6 +182,16 @@ namespace Zilon.Core.World
             return true;
         }
 
+        private static bool IsPlayerActorControlledByHuman(IActorTaskSource<ISectorTaskSourceContext> taskSource)
+        {
+            if (taskSource is IActorTaskControlSwitcher controlSwitcher)
+            {
+                return controlSwitcher.CurrentControl == ActorTaskSourceControl.Human;
+            }
+
+            return true;
+        }
+
         private static List<TaskState[]> MaterializeSectorStates(IGrouping<ISector, TaskState>[] statesGroupedBySector)
         {
             var materializedSectorList = new List<TaskState[]>();
@@ -248,22 +258,8 @@ namespace Zilon.Core.World
                     {
                         humanTaskSource.DropIntentionWaiting();
                     }
-                    else
-                    {
-                        // Do nothing because only human can intent.
-                    }
                 }
             }
-        }
-
-        private static bool IsPlayerActorControlledByHuman(IActorTaskSource<ISectorTaskSourceContext> taskSource)
-        {
-            if (taskSource is IActorTaskControlSwitcher controlSwitcher)
-            {
-                return controlSwitcher.CurrentControl == ActorTaskSourceControl.Human;
-            }
-
-            return true;
         }
 
         private async void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
