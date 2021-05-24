@@ -222,6 +222,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     return "Intoxication";
 
                 case SurvivalStatType.Undefined:
+                    Debug.Fail($"Undefined condition.");
+                    return "Empty";
+
                 default:
                     Debug.Fail($"Unknown condition type {type}.");
                     return "Empty";
