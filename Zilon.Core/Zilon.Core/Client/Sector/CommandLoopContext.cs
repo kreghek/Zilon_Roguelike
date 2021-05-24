@@ -22,6 +22,11 @@ namespace Zilon.Core.Client.Sector
             _animationBlockerService = animationBlockerService;
         }
 
+        private static bool GetControlState(IActorTaskControlSwitcher controlSwitcher)
+        {
+            return controlSwitcher.CurrentControl != ActorTaskSourceControl.Human;
+        }
+
         [ExcludeFromCodeCoverage]
         public bool HasNextIteration
         {
@@ -57,11 +62,6 @@ namespace Zilon.Core.Client.Sector
                 var animationsAreComplete = !_animationBlockerService.HasBlockers;
                 return canIndentoToTaskSource && animationsAreComplete;
             }
-        }
-
-        private static bool GetControlState(IActorTaskControlSwitcher controlSwitcher)
-        {
-            return controlSwitcher.CurrentControl != ActorTaskSourceControl.Human;
         }
     }
 }
