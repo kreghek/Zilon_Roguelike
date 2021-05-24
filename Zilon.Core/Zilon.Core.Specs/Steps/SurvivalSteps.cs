@@ -105,17 +105,18 @@ namespace Zilon.Core.Specs.Steps
 
             if (stat != SurvivalStatType.Undefined)
             {
-                var effect = actor.Person.GetModule<IEffectsModule>().Items
-                    .OfType<SurvivalStatHazardEffect>()
+                var сondition = actor.Person.GetModule<IConditionsModule>().Items
+                    .OfType<SurvivalStatHazardCondition>()
                     .SingleOrDefault(x => x.Type == stat);
 
-                effect.Should().NotBeNull();
-                effect.Level.Should().Be(level);
+                сondition.Should().NotBeNull();
+                сondition.Level.Should().Be(level);
             }
             else
             {
-                var effects = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>();
-                effects.Should().BeEmpty();
+                var сonditions = actor.Person.GetModule<IConditionsModule>().Items
+                    .OfType<SurvivalStatHazardCondition>();
+                сonditions.Should().BeEmpty();
             }
         }
 

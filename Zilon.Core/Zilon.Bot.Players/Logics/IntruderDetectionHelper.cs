@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -13,17 +14,17 @@ namespace Zilon.Bot.Players.Logics
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (map is null)
             {
-                throw new System.ArgumentNullException(nameof(map));
+                throw new ArgumentNullException(nameof(map));
             }
 
             if (actorManager is null)
             {
-                throw new System.ArgumentNullException(nameof(actorManager));
+                throw new ArgumentNullException(nameof(actorManager));
             }
 
             var intruders = CheckForIntruders(actor, map, actorManager);

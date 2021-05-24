@@ -24,7 +24,7 @@ namespace Zilon.Bot.Players.Logics.Tests
         {
             // ARRANGE
 
-            var acts = new ITacticalAct[]
+            var acts = new[]
             {
                 new TacticalAct(new TestTacticalActScheme
                     {
@@ -83,7 +83,7 @@ namespace Zilon.Bot.Players.Logics.Tests
         {
             // ARRANGE
 
-            var acts = new ITacticalAct[]
+            var acts = new[]
             {
                 new TacticalAct(new TestTacticalActScheme
                     {

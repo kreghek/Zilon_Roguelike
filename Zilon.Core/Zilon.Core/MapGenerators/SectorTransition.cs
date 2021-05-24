@@ -1,4 +1,6 @@
-﻿using Zilon.Core.World;
+﻿using System;
+
+using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
@@ -16,7 +18,7 @@ namespace Zilon.Core.MapGenerators
         /// <param name="sectorNode">The node of the globe graph with next sector.</param>
         public SectorTransition(ISectorNode sectorNode)
         {
-            SectorNode = sectorNode ?? throw new System.ArgumentNullException(nameof(sectorNode));
+            SectorNode = sectorNode ?? throw new ArgumentNullException(nameof(sectorNode));
         }
 
         /// <summary>

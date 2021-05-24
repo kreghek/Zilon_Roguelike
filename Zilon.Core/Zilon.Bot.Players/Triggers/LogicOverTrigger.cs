@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Triggers
@@ -18,7 +20,7 @@ namespace Zilon.Bot.Players.Triggers
         {
             if (currentState is null)
             {
-                throw new System.ArgumentNullException(nameof(currentState));
+                throw new ArgumentNullException(nameof(currentState));
             }
 
             return currentState.Complete;

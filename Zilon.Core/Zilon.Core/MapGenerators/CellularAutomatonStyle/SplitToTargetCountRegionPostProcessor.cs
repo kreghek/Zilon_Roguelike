@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.CommonServices.Dices;
 
 namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
@@ -32,7 +30,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// <param name="targetRegionCount"> Целевое число регионов. </param>
         /// <returns> Возвращает новый массив черновиков регионов. </returns>
         private RegionDraft[] SplitRegionsForTransitions(
-            [NotNull][ItemNotNull] RegionDraft[] draftRegions,
+            RegionDraft[] draftRegions,
             int targetRegionCount)
         {
             if (draftRegions == null)

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 namespace Zilon.Core.Props
 {
     /// <summary>
@@ -40,8 +38,8 @@ namespace Zilon.Core.Props
             DoEventInner(Changed, prop);
         }
 
-        private void DoEventInner([CanBeNull] EventHandler<PropStoreEventArgs>? @event,
-            [CanBeNull] IProp prop)
+        private void DoEventInner(EventHandler<PropStoreEventArgs>? @event,
+            IProp? prop)
         {
             if (prop == null)
             {

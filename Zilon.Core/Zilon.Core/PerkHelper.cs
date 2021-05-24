@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 
@@ -122,8 +120,7 @@ namespace Zilon.Core
             }
         }
 
-        [NotNull]
-        public static PerkLevel GetNextLevel([NotNull] IPerkScheme perkScheme, [NotNull] PerkLevel level)
+        public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
         {
             var currentTotal = ConvertLevelSubsToTotal(perkScheme, level.Primary, level.Sub);
             currentTotal++;

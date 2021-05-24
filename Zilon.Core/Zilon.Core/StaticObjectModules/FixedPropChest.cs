@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Props;
+﻿using System;
+
+using Zilon.Core.Props;
 
 namespace Zilon.Core.StaticObjectModules
 {
@@ -11,7 +13,7 @@ namespace Zilon.Core.StaticObjectModules
         {
             if (props is null)
             {
-                throw new System.ArgumentNullException(nameof(props));
+                throw new ArgumentNullException(nameof(props));
             }
 
             foreach (var prop in props)

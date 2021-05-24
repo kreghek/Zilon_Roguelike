@@ -26,11 +26,6 @@ namespace Zilon.Core.World
             _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
-        public void Dispose()
-        {
-            _semaphoreSlim.Dispose();
-        }
-
         private static bool FilterNodeToTransition(IGraphNode textNode, ISector nextSector)
         {
             var nodeIsBusyWithMonster = nextSector.ActorManager.Items.Any(x => x.Node == textNode);
@@ -122,6 +117,11 @@ namespace Zilon.Core.World
             var actorInNewSector =
                 new Actor(transitionItem.Person, transitionItem.TaskSource, availableNodeToTransition);
             nextSector.ActorManager.Add(actorInNewSector);
+        }
+
+        public void Dispose()
+        {
+            _semaphoreSlim.Dispose();
         }
 
         public Task InitActorTransitionAsync(IGlobe globe, ISector sector, IActor actor, SectorTransition transition)

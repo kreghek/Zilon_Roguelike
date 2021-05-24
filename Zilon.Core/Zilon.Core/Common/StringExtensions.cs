@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 
 namespace Zilon.Core.Common
 {
     public static class StringExtensions
     {
-        public static string FirstCharToUpper(this string input, System.Globalization.CultureInfo invariantCulture)
+        public static string FirstCharToUpper(this string input, CultureInfo invariantCulture)
         {
             if (input is null)
             {

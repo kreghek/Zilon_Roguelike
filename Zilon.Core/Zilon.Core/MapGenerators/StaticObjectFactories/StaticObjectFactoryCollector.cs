@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Tactics;
 
@@ -7,7 +8,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
     /// <summary>
     /// Base implementation of <see cref="IStaticObjectFactoryCollector" />.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public sealed class StaticObjectFactoryCollector : IStaticObjectFactoryCollector
     {
         private readonly IStaticObjectFactory[] _factories;

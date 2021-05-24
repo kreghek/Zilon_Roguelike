@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Components;
 using Zilon.Core.Diseases;
 using Zilon.Core.Persons;
@@ -18,23 +16,23 @@ namespace Zilon.Core.PersonModules
     public sealed class HumanSurvivalModule : SurvivalModuleBase
     {
         private readonly IAttributesModule _attributesModule;
-        private readonly IEffectsModule? _effectsModule;
         private readonly IEquipmentModule? _equipmentModule;
         private readonly IEvolutionModule? _evolutionModule;
         private readonly IPersonScheme _personScheme;
         private readonly ISurvivalRandomSource _randomSource;
+        private readonly IConditionsModule? _сonditionModule;
 
-        public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
-            [NotNull] ISurvivalRandomSource randomSource,
-            [NotNull] IAttributesModule attributesModule,
-            IEffectsModule? effectsModule,
+        public HumanSurvivalModule(IPersonScheme personScheme,
+            ISurvivalRandomSource randomSource,
+            IAttributesModule attributesModule,
+            IConditionsModule? сonditionModule,
             IEvolutionModule? evolutionModule,
             IEquipmentModule? equipmentModule) : base(GetStats(personScheme, attributesModule))
         {
             _personScheme = personScheme;
             _randomSource = randomSource;
             _attributesModule = attributesModule;
-            _effectsModule = effectsModule;
+            _сonditionModule = сonditionModule;
             _evolutionModule = evolutionModule;
             _equipmentModule = equipmentModule;
 
@@ -48,22 +46,22 @@ namespace Zilon.Core.PersonModules
             CalcSurvivalStats();
         }
 
-        public HumanSurvivalModule([NotNull] IPersonScheme personScheme,
-            [NotNull] ISurvivalRandomSource randomSource,
-            [NotNull] IAttributesModule attributesModule) : this(
+        public HumanSurvivalModule(IPersonScheme personScheme,
+            ISurvivalRandomSource randomSource,
+            IAttributesModule attributesModule) : this(
             personScheme,
             randomSource,
             attributesModule,
-            effectsModule: null,
+            сonditionModule: null,
             evolutionModule: null,
             equipmentModule: null)
         {
         }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public HumanSurvivalModule([NotNull] IEnumerable<SurvivalStat> personStats,
+        public HumanSurvivalModule(IEnumerable<SurvivalStat> personStats,
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-            [NotNull] ISurvivalRandomSource randomSource) : base(personStats)
+            ISurvivalRandomSource randomSource) : base(personStats)
         {
             _randomSource = randomSource;
         }
@@ -304,18 +302,18 @@ namespace Zilon.Core.PersonModules
             InvokeStatChangedEvent(this, args);
         }
 
-        private void FillSurvivalBonusesFromEffects([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEffects(ref List<SurvivalStatBonus> bonusList)
         {
-            if (_effectsModule is null)
+            if (_сonditionModule is null)
             {
                 return;
             }
 
-            foreach (var effect in _effectsModule.Items)
+            foreach (var сondition in _сonditionModule.Items)
             {
-                switch (effect)
+                switch (сondition)
                 {
-                    case DiseaseSymptomEffect diseaseSymptomEffect:
+                    case DiseaseSymptomCondition diseaseSymptomEffect:
 
                         switch (diseaseSymptomEffect.Symptom.Rule)
                         {
@@ -351,18 +349,18 @@ namespace Zilon.Core.PersonModules
 
                         break;
 
-                    case SurvivalStatHazardEffect _:
+                    case SurvivalStatHazardCondition _:
                         // Эти эффекты пока не влияют на статы выживания.
                         // Но case- блок должен быть, иначе будет ошибка.
                         break;
 
                     default:
-                        throw new InvalidOperationException($"Неизвестный тип эффекта {effect.GetType()}");
+                        throw new InvalidOperationException($"Неизвестный тип эффекта {сondition.GetType()}");
                 }
             }
         }
 
-        private void FillSurvivalBonusesFromEquipments([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromEquipments(ref List<SurvivalStatBonus> bonusList)
         {
             if (_equipmentModule is null)
             {
@@ -403,7 +401,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private void FillSurvivalBonusesFromPerks([NotNull][ItemNotNull] ref List<SurvivalStatBonus> bonusList)
+        private void FillSurvivalBonusesFromPerks(ref List<SurvivalStatBonus> bonusList)
         {
             if (_evolutionModule is null)
             {
@@ -518,13 +516,13 @@ namespace Zilon.Core.PersonModules
             return stat.DownPassRoll;
         }
 
-        private static IEnumerable<SurvivalStat> GetStats([NotNull] IPersonScheme personScheme,
-            [NotNull] IAttributesModule attributesModule)
+        private static IEnumerable<SurvivalStat> GetStats(IPersonScheme personScheme,
+            IAttributesModule attributesModule)
         {
-            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null).Cast<SurvivalStat>();
+            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null);
         }
 
-        private static IEnumerable<SurvivalStat?> GetStatsIterator([NotNull] IPersonScheme personScheme,
+        private static IEnumerable<SurvivalStat?> GetStatsIterator(IPersonScheme personScheme,
             IAttributesModule attributesModule)
         {
             // Устанавливаем характеристики выживания персонажа
@@ -673,11 +671,11 @@ namespace Zilon.Core.PersonModules
                 _equipmentModule.EquipmentChanged += OtherModule_StateChanged;
             }
 
-            if (_effectsModule != null)
+            if (_сonditionModule != null)
             {
-                _effectsModule.Added += OtherModule_StateChanged;
-                _effectsModule.Removed += OtherModule_StateChanged;
-                _effectsModule.Changed += OtherModule_StateChanged;
+                _сonditionModule.Added += OtherModule_StateChanged;
+                _сonditionModule.Removed += OtherModule_StateChanged;
+                _сonditionModule.Changed += OtherModule_StateChanged;
             }
 
             if (_evolutionModule != null)
@@ -702,7 +700,7 @@ namespace Zilon.Core.PersonModules
             return hpStat;
         }
 
-        private void Stat_Changed(object sender, EventArgs e)
+        private void Stat_Changed(object? sender, EventArgs e)
         {
             var stat = (SurvivalStat)sender;
 
@@ -713,10 +711,10 @@ namespace Zilon.Core.PersonModules
 
             var notNullKeySegments = stat.KeySegments.Where(x => x != null).Select(x => x!).ToArray();
 
-            if (_effectsModule != null)
+            if (_сonditionModule != null)
             {
-                PersonEffectHelper.UpdateSurvivalEffect(
-                    _effectsModule,
+                PersonConditionHelper.UpdateSurvivalСondition(
+                    _сonditionModule,
                     stat,
                     notNullKeySegments,
                     _randomSource,

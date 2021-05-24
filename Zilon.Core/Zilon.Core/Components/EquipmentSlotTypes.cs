@@ -1,10 +1,7 @@
 ﻿using System;
 
-using JetBrains.Annotations;
-
 namespace Zilon.Core.Components
 {
-    [PublicAPI]
     [Flags]
     public enum EquipmentSlotTypes
     {

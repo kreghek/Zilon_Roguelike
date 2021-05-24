@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
@@ -14,7 +16,7 @@ namespace Zilon.Core.Schemes
         /// <inheritdoc />
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<PersonSurvivalStatKeySegmentSubScheme[]>))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Реализация интерфейса")]
         public IPersonSurvivalStatKeySegmentSubScheme?[]? KeyPoints { get; private set; }
 

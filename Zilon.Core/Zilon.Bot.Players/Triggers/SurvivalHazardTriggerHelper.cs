@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -15,13 +13,13 @@ namespace Zilon.Bot.Players.Triggers
     public static class SurvivalHazardTriggerHelper
     {
         public static bool TestHazardAndResource(
-            [NotNull] IActor actor,
+            IActor actor,
             ActorTaskContext taskContext,
-            [NotNull] ILogicStrategyData strategyData,
+            ILogicStrategyData strategyData,
             SurvivalStatType statType,
             ConsumeCommonRuleType ruleType)
         {
-            var hasHazardEffect = HasEffect(actor, statType);
+            var hasHazardEffect = HasCondition(actor, statType);
             if (!hasHazardEffect)
             {
                 return false;
@@ -39,20 +37,20 @@ namespace Zilon.Bot.Players.Triggers
             return true;
         }
 
-        private static bool HasEffect(IActor actor, SurvivalStatType survivalStatType)
+        private static bool HasCondition(IActor actor, SurvivalStatType survivalStatType)
         {
             if (actor is null)
             {
                 throw new ArgumentNullException(nameof(actor));
             }
 
-            var effectsModule = actor.Person.GetModuleSafe<IEffectsModule>();
-            if (effectsModule is null)
+            var сonditionsModule = actor.Person.GetModuleSafe<IConditionsModule>();
+            if (сonditionsModule is null)
             {
                 return false;
             }
 
-            var hazardEffect = effectsModule.Items.OfType<SurvivalStatHazardEffect>()
+            var hazardEffect = сonditionsModule.Items.OfType<SurvivalStatHazardCondition>()
                 .SingleOrDefault(x => x.Type == survivalStatType && x.Level == SurvivalStatHazardLevel.Strong);
             if (hazardEffect == null)
             {
@@ -62,7 +60,6 @@ namespace Zilon.Bot.Players.Triggers
             return true;
         }
 
-        [CanBeNull]
         private static Resource ResourceToReduceHazard(IActor actor, ActorTaskContext taskContext,
             ConsumeCommonRuleType ruleType)
         {

@@ -39,9 +39,6 @@ namespace Zilon.Core.StaticObjectModules
         }
 
         /// <inheritdoc />
-        public event EventHandler? Mined;
-
-        /// <inheritdoc />
         public string[] GetToolTags()
         {
             return _toolTags;
@@ -78,5 +75,8 @@ namespace Zilon.Core.StaticObjectModules
 
             DoMined();
         }
+
+        /// <inheritdoc />
+        public event EventHandler? Mined;
     }
 }

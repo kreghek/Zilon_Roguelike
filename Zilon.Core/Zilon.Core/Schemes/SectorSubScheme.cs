@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
@@ -11,7 +13,7 @@ namespace Zilon.Core.Schemes
         /// Идентфиикаторы обычных монстров, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
         public string?[]? RegularMonsterSids { get; private set; }
 
@@ -19,7 +21,7 @@ namespace Zilon.Core.Schemes
         /// Идентификаторы редких монстров, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
         public string?[]? RareMonsterSids { get; private set; }
 
@@ -27,7 +29,7 @@ namespace Zilon.Core.Schemes
         /// Идентификаторы боссов, встречаемых в секторе.
         /// </summary>
         [JsonProperty]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
         public string?[]? ChampionMonsterSids { get; private set; }
 
@@ -50,7 +52,7 @@ namespace Zilon.Core.Schemes
         /// Таблицы дропа для сундуков.
         /// </summary>
         [JsonProperty]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
         public string?[]? ChestDropTableSids { get; private set; }
 
@@ -82,7 +84,7 @@ namespace Zilon.Core.Schemes
         /// <seealso cref="Sid" />
         [JsonProperty]
         [JsonConverter(typeof(ConcreteTypeConverter<SectorTransitionSubScheme[]>))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "Используется для десериализации")]
         public ISectorTransitionSubScheme?[]? TransSectorSids { get; private set; }
 

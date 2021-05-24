@@ -25,16 +25,16 @@ namespace Zilon.Core.Tactics.Behaviour.Tests
 
             var personMock = new Mock<IPerson>();
 
-            var effectsModuleMock = new Mock<IEffectsModule>();
-            var effects = new[]
+            var сonditionsModuleMock = new Mock<IConditionsModule>();
+            var сonditions = new[]
             {
-                new SurvivalStatHazardEffect(effectStatType, SurvivalStatHazardLevel.Max,
+                new SurvivalStatHazardCondition(effectStatType, SurvivalStatHazardLevel.Max,
                     Mock.Of<ISurvivalRandomSource>())
             };
-            effectsModuleMock.Setup(x => x.Items).Returns(effects);
-            personMock.Setup(x => x.GetModule<IEffectsModule>(nameof(IEffectsModule)))
-                .Returns(effectsModuleMock.Object);
-            personMock.Setup(x => x.HasModule(nameof(IEffectsModule))).Returns(true);
+            сonditionsModuleMock.Setup(x => x.Items).Returns(сonditions);
+            personMock.Setup(x => x.GetModule<IConditionsModule>(nameof(IConditionsModule)))
+                .Returns(сonditionsModuleMock.Object);
+            personMock.Setup(x => x.HasModule(nameof(IConditionsModule))).Returns(true);
 
             var actor = Mock.Of<IActor>(x => x.Person == personMock.Object);
 

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Persons
@@ -19,28 +21,28 @@ namespace Zilon.Core.Persons
         {
             if (act is null)
             {
-                throw new System.ArgumentNullException(nameof(act));
+                throw new ArgumentNullException(nameof(act));
             }
 
             if (currentNode is null)
             {
-                throw new System.ArgumentNullException(nameof(currentNode));
+                throw new ArgumentNullException(nameof(currentNode));
             }
 
             if (targetNode is null)
             {
-                throw new System.ArgumentNullException(nameof(targetNode));
+                throw new ArgumentNullException(nameof(targetNode));
             }
 
             if (map is null)
             {
-                throw new System.ArgumentNullException(nameof(map));
+                throw new ArgumentNullException(nameof(map));
             }
 
             var range = act.Stats.Range;
             if (range is null)
             {
-                throw new System.ArgumentNullException(nameof(act.Stats.Range));
+                throw new ArgumentNullException(nameof(act.Stats.Range));
             }
 
             var distance = map.DistanceBetween(currentNode, targetNode);

@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using Zilon.Core.Common;
+﻿using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 
 namespace Zilon.Core.Tactics.Spatial
@@ -29,7 +27,6 @@ namespace Zilon.Core.Tactics.Spatial
         /// <remarks>
         /// Нужен только для отладки.
         /// </remarks>
-        [PublicAPI]
         public int Id { get; set; }
 
         public OffsetCoords OffsetCoords { get; }

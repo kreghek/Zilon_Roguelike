@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Zilon.Core.PersonModules;
 
@@ -12,7 +13,7 @@ namespace Zilon.Core.Persons
         {
             _modules = new Dictionary<string, IPersonModule>();
 
-            Fraction = fraction ?? throw new System.ArgumentNullException(nameof(fraction));
+            Fraction = fraction ?? throw new ArgumentNullException(nameof(fraction));
         }
 
         /// <inheritdoc />

@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Players;
 
 namespace Zilon.Core.Scoring
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public class PlayerEventLogService : IPlayerEventLogService
     {
         private IPlayerEvent? _playerEvent;

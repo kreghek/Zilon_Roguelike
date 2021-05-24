@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics.Behaviour
