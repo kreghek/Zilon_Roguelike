@@ -19,7 +19,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Texture2D _personHeadSprite;
         private readonly SpriteContainer _rootSprite;
         private readonly SpriteBatch _spriteBatch;
-        private Sprite _grassSprite;
+        private readonly Sprite _grassSprite;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
         {

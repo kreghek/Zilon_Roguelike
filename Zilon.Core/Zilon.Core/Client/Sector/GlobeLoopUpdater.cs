@@ -22,15 +22,6 @@ namespace Zilon.Core.Client.Sector
             _animationBlockerService = animationBlockerService;
         }
 
-        [ExcludeFromCodeCoverage]
-        public void Dispose()
-        {
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Dispose();
-            }
-        }
-
         private async Task StartGameLoopUpdateAsync(CancellationToken cancelToken)
         {
             while (_gameLoopContext.HasNextIteration)
@@ -51,6 +42,15 @@ namespace Zilon.Core.Client.Sector
 
                 await Task.WhenAny(animationBlockerTask, fuseDelayTask).ConfigureAwait(false);
                 _animationBlockerService.DropBlockers();
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void Dispose()
+        {
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Dispose();
             }
         }
 
