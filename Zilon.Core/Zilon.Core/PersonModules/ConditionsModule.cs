@@ -62,16 +62,11 @@ namespace Zilon.Core.PersonModules
             DoAdd(condition);
         }
 
-        public void Remove(IPersonCondition effect)
+        public void Remove(IPersonCondition condition)
         {
-            if (effect is null)
-            {
-                throw new ArgumentNullException(nameof(effect));
-            }
-
-            _items.Remove(effect);
-            effect.Changed -= Сondition_Changed;
-            DoRemoved(effect);
+            _items.Remove(condition);
+            condition.Changed -= Сondition_Changed;
+            DoRemoved(condition);
         }
 
         public event EventHandler<EffectEventArgs>? Added;
