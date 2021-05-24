@@ -20,8 +20,6 @@ namespace CDT.LAST.MonoGameClient.Screens
     internal class MainScreen : GameSceneBase
     {
         private readonly Button _autoplayModeButton;
-        private readonly SpriteFont _buttonFont;
-        private readonly Texture2D _buttonTexture;
         private readonly Camera _camera;
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly IPlayer _player;
@@ -47,15 +45,15 @@ namespace CDT.LAST.MonoGameClient.Screens
             _camera = new Camera();
             _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
 
-            _buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
-            _buttonFont = game.Content.Load<SpriteFont>("Fonts/Main");
+            var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
+            var buttonFont = game.Content.Load<SpriteFont>("Fonts/Main");
 
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
             var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
             _autoplayModeButton = new Button(
                 string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOffTitle),
-                _buttonTexture,
-                _buttonFont,
+                buttonTexture,
+                buttonFont,
                 new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 32, 32)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
