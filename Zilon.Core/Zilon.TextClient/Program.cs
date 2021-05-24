@@ -61,9 +61,9 @@ namespace Zilon.TextClient
 
                 screenHandler = nextScreen switch
                 {
-                    GameScreen.GlobeSelection => (IScreenHandler) globeSelectionScreenHandler,
-                    GameScreen.Main => (IScreenHandler) mainScreenHandler,
-                    GameScreen.Scores => (IScreenHandler) scoresScreenHandler,
+                    GameScreen.GlobeSelection => globeSelectionScreenHandler,
+                    GameScreen.Main => mainScreenHandler,
+                    GameScreen.Scores => scoresScreenHandler,
                     _ => throw new InvalidOperationException($"Unsupported screen {nextScreen}.")
                 };
             } while (true);
