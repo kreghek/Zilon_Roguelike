@@ -93,7 +93,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {
-            _spriteBatch.Begin(transformMatrix: transform);
+            RasterizerState rasterStrate = new RasterizerState();
+            rasterStrate.CullMode = CullMode.None;
+
+            _spriteBatch.Begin(SpriteSortMode.FrontToBack, transformMatrix: transform, rasterizerState: rasterStrate);
 
             _rootSprite.Draw(_spriteBatch);
 
