@@ -249,7 +249,7 @@ namespace Zilon.Core.World
                         humanTaskSource.DropIntentionWaiting();
                     }
                     else
-                    { 
+                    {
                         // Do nothing because only human can intent.
                     }
                 }
