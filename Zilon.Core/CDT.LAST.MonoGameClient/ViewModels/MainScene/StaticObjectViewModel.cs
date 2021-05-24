@@ -19,6 +19,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Texture2D _personHeadSprite;
         private readonly SpriteContainer _rootSprite;
         private readonly SpriteBatch _spriteBatch;
+        private Sprite _grassSprite;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
         {
@@ -52,7 +53,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var graphicsRoot = new SpriteContainer();
             _rootSprite.AddChild(graphicsRoot);
 
-            graphicsRoot.AddChild(new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 0.75f), color: Color.White));
+            _grassSprite = new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 0.75f), color: Color.White);
+            graphicsRoot.AddChild(_grassSprite);
         }
 
         public override bool HiddenByFow => false;
@@ -63,6 +65,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public override void Draw(GameTime gameTime, Matrix transform)
         {
             _spriteBatch.Begin(transformMatrix: transform);
+            
+            _grassSprite.Color = Visible ? Color.White : new Color(255,255,255,0.5f);
 
             _rootSprite.Draw(_spriteBatch);
 
