@@ -76,11 +76,11 @@ namespace Zilon.Core.Client.Sector.Tests
 
             using var semaphore = new SemaphoreSlim(0);
 
-            await AddAndDropBlocker(animationBlockerService, semaphore);
+            await AddAndDropBlockerAsync(animationBlockerService, semaphore).ConfigureAwait(false);
 
             animationBlockerService.AddBlocker(blocker2);
 
-            await AddAndDropBlocker(animationBlockerService, semaphore);
+            await AddAndDropBlockerAsync(animationBlockerService, semaphore).ConfigureAwait(false);
 
             // ASSERT
             Assert.Pass();
@@ -100,10 +100,10 @@ namespace Zilon.Core.Client.Sector.Tests
 
             animationBlockerService.AddBlocker(blocker);
 
-            await WaitAndReleaseBlocker(animationBlockerService, blockerMock);
+            await WaitAndReleaseBlockerAsync(animationBlockerService, blockerMock).ConfigureAwait(false);
 
             animationBlockerService.AddBlocker(blocker2);
-            await WaitAndReleaseBlocker(animationBlockerService, blockerMock2);
+            await WaitAndReleaseBlockerAsync(animationBlockerService, blockerMock2).ConfigureAwait(false);
 
             // ASSERT
             Assert.Pass();
@@ -165,8 +165,8 @@ namespace Zilon.Core.Client.Sector.Tests
 
         /// <summary>
         /// The test checks DropBlockers() releases all blockers.
-        /// The plan is similar <see cref="WaitBlockersAsynс_BlockerReleasedAfterServiceStartsWaiting_WaitingContinuesExecution" />
-        /// .
+        /// The plan is similar
+        /// <see cref="WaitBlockersAsynс_BlockerReleasedAfterServiceStartsWaiting_WaitingContinuesExecution" />.
         /// </summary>
         [Test]
         public async Task WaitBlockersAsynс_DropBlockerCancelAwaitingOfBlockerRelease_WaitingContinuesExecution()
@@ -196,7 +196,7 @@ namespace Zilon.Core.Client.Sector.Tests
                 await animationBlockerService.WaitBlockersAsync().ConfigureAwait(false);
             });
 
-            semaphore.Release(1);
+            semaphore.Release();
 
             await serviceTask;
 
@@ -209,31 +209,14 @@ namespace Zilon.Core.Client.Sector.Tests
         {
             var animationBlockerService = new AnimationBlockerService();
 
-            using var semaphore2 = new SemaphoreSlim(0);
-
-            /*await animationBlockerService.WaitBlockersAsync();
-            animationBlockerService.DropBlockers();
-
-            await animationBlockerService.WaitBlockersAsync();
-            animationBlockerService.DropBlockers();
-
-            await animationBlockerService.WaitBlockersAsync();
-            animationBlockerService.DropBlockers();
-
-            await animationBlockerService.WaitBlockersAsync();
-            animationBlockerService.DropBlockers();*/
-
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
 
             animationBlockerService.AddBlocker(blocker);
 
-            await WaitAndReleaseBlocker(animationBlockerService, blockerMock);
+            await WaitAndReleaseBlockerAsync(animationBlockerService, blockerMock).ConfigureAwait(false);
 
             animationBlockerService.DropBlockers();
-
-            /*await animationBlockerService.WaitBlockersAsync();
-            animationBlockerService.DropBlockers();*/
 
             var blockerMock2 = new Mock<ICommandBlocker>();
             var blocker2 = blockerMock2.Object;
@@ -254,8 +237,6 @@ namespace Zilon.Core.Client.Sector.Tests
                 isBlockerReleasedCheck = true;
                 blockerMock2.Raise(x => x.Released += null, EventArgs.Empty);
                 blockerMock3.Raise(x => x.Released += null, EventArgs.Empty);
-
-                //semaphore2.Release();
             });
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
@@ -269,8 +250,6 @@ namespace Zilon.Core.Client.Sector.Tests
             semaphore.Release();
 
             await serviceTask;
-
-            //await semaphore2.WaitAsync();
 
             animationBlockerService.DropBlockers();
 
@@ -324,7 +303,7 @@ namespace Zilon.Core.Client.Sector.Tests
             Assert.Pass();
         }
 
-        private static async Task AddAndDropBlocker(AnimationBlockerService animationBlockerService,
+        private static async Task AddAndDropBlockerAsync(AnimationBlockerService animationBlockerService,
             SemaphoreSlim semaphore)
         {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -347,7 +326,7 @@ namespace Zilon.Core.Client.Sector.Tests
             await serviceTask;
         }
 
-        private static async Task WaitAndReleaseBlocker(AnimationBlockerService animationBlockerService,
+        private static async Task WaitAndReleaseBlockerAsync(AnimationBlockerService animationBlockerService,
             Mock<ICommandBlocker> blockerMock)
         {
             using var semaphore = new SemaphoreSlim(0, 1);
