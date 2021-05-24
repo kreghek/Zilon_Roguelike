@@ -155,9 +155,9 @@ namespace Zilon.Core.Client.Sector.Tests
 
             isBlockerReallyReleased.Should().BeFalse();
 
-            semaphore.Release(1);
+            semaphore.Release();
 
-            await serviceTask;
+            await serviceTask.ConfigureAwait(false);
 
             // ASSERT
             isBlockerReallyReleased.Should().BeTrue();
@@ -198,7 +198,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             semaphore.Release();
 
-            await serviceTask;
+            await serviceTask.ConfigureAwait(false);
 
             // ASSERT
             Assert.Pass();
@@ -249,7 +249,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             semaphore.Release();
 
-            await serviceTask;
+            await serviceTask.ConfigureAwait(false);
 
             animationBlockerService.DropBlockers();
 
@@ -295,9 +295,9 @@ namespace Zilon.Core.Client.Sector.Tests
                 await animationBlockerService.WaitBlockersAsync().ConfigureAwait(false);
             });
 
-            semaphore.Release(1);
+            semaphore.Release();
 
-            await serviceTask;
+            await serviceTask.ConfigureAwait(false);
 
             // ASSERT
             Assert.Pass();
@@ -321,9 +321,9 @@ namespace Zilon.Core.Client.Sector.Tests
                 await animationBlockerService.WaitBlockersAsync().ConfigureAwait(false);
             });
 
-            semaphore.Release(1);
+            semaphore.Release();
 
-            await serviceTask;
+            await serviceTask.ConfigureAwait(false);
         }
 
         private static async Task WaitAndReleaseBlockerAsync(AnimationBlockerService animationBlockerService,
