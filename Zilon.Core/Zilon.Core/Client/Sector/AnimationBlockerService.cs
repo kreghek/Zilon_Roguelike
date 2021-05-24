@@ -70,8 +70,9 @@ namespace Zilon.Core.Client.Sector
                 }
 
                 _commandBlockers.Clear();
-                if (_tcs != null && _tcs.TrySetResult(true))
+                if (_tcs != null)
                 {
+                    _tcs.TrySetResult(true);
                 }
 
                 _tcs = null;
