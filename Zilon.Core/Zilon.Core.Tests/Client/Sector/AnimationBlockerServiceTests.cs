@@ -216,8 +216,6 @@ namespace Zilon.Core.Client.Sector.Tests
 
             await WaitAndReleaseBlockerAsync(animationBlockerService, blockerMock).ConfigureAwait(false);
 
-            animationBlockerService.DropBlockers();
-
             var blockerMock2 = new Mock<ICommandBlocker>();
             var blocker2 = blockerMock2.Object;
 
@@ -250,8 +248,6 @@ namespace Zilon.Core.Client.Sector.Tests
             semaphore.Release();
 
             await serviceTask.ConfigureAwait(false);
-
-            animationBlockerService.DropBlockers();
 
             // ASSERT
             isBlockerReleasedCheck.Should().BeTrue();
