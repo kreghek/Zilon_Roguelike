@@ -65,8 +65,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public override void Draw(GameTime gameTime, Matrix transform)
         {
             _spriteBatch.Begin(transformMatrix: transform);
-            
-            _grassSprite.Color = Visible ? Color.White : new Color(255,255,255,0.5f);
+
+            _grassSprite.Color = Visible ? Color.White : new Color(255, 255, 255, 0.5f);
 
             _rootSprite.Draw(_spriteBatch);
 
