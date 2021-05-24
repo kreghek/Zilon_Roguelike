@@ -25,6 +25,18 @@ namespace Zilon.Core.World
 
         protected GCHandle BitsHandle { get; }
 
+        public void Dispose()
+        {
+            if (Disposed)
+            {
+                return;
+            }
+
+            Disposed = true;
+            Bitmap.Dispose();
+            BitsHandle.Free();
+        }
+
         public Color GetPixel(int x, int y)
         {
             var index = x + (y * Width);
@@ -40,18 +52,6 @@ namespace Zilon.Core.World
             var col = colour.ToArgb();
 
             Bits[index] = col;
-        }
-
-        public void Dispose()
-        {
-            if (Disposed)
-            {
-                return;
-            }
-
-            Disposed = true;
-            Bitmap.Dispose();
-            BitsHandle.Free();
         }
     }
 }

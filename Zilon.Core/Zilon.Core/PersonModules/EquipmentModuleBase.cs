@@ -61,6 +61,18 @@ namespace Zilon.Core.PersonModules
         }
 
         /// <summary>
+        /// Возвращает энумератор, который перебирает текущую экипировку.
+        /// </summary>
+        /// <returns>
+        /// Энумератор, который может быть использован для перебора текущей экипировки.
+        /// </returns>
+        public IEnumerator<Equipment?> GetEnumerator()
+        {
+            var enumerable = _equipment.AsEnumerable();
+            return enumerable.GetEnumerator();
+        }
+
+        /// <summary>
         /// Выбрасывает событие <see cref="EquipmentChanged" /> с указыннми данными в аргументах.
         /// </summary>
         /// <param name="slotIndex">Индекс слота, в котором произошли изменения.</param>
@@ -84,6 +96,11 @@ namespace Zilon.Core.PersonModules
         /// </remarks>
         protected abstract void ValidateSetEquipment(Equipment equipment, int slotIndex);
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _equipment.GetEnumerator();
+        }
+
         private void SetEquipment(Equipment? equipment, int slotIndex)
         {
             if (equipment != null)
@@ -100,23 +117,6 @@ namespace Zilon.Core.PersonModules
             var oldEquipment = _equipment[slotIndex];
 
             DoEquipmentChanged(slotIndex, oldEquipment, equipment);
-        }
-
-        /// <summary>
-        /// Возвращает энумератор, который перебирает текущую экипировку.
-        /// </summary>
-        /// <returns>
-        /// Энумератор, который может быть использован для перебора текущей экипировки.
-        /// </returns>
-        public IEnumerator<Equipment?> GetEnumerator()
-        {
-            var enumerable = _equipment.AsEnumerable();
-            return enumerable.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _equipment.GetEnumerator();
         }
 
         /// <summary>
