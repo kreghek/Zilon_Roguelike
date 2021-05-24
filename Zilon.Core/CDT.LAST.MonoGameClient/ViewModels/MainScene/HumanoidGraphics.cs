@@ -89,7 +89,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-
                     AddChild(new Sprite(shieldBaseTexture)
                     {
                         Position = new Vector2(11, -10),
