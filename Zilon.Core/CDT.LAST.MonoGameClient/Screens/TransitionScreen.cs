@@ -13,10 +13,10 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class TransitionScreen : GameSceneBase
     {
+        private readonly IAnimationBlockerService _animationBlockerService;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
-        private readonly IAnimationBlockerService _animationBlockerService;
 
         private bool _targetSceneInitialized;
 
