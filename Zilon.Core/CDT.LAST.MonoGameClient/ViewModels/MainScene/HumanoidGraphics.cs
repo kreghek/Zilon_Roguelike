@@ -17,42 +17,66 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly IEquipmentModule _equipmentModule;
 
+        private readonly Texture2D _headTexture;
+        private readonly Texture2D _bodyTexture;
+        private readonly Texture2D _legsTexture;
+        private readonly Texture2D _armLeftTexture;
+        private readonly Texture2D _armRightTexture;
+        private readonly Texture2D _weaponBaseTexture;
+        private readonly Texture2D _shieldBaseTexture;
+
         public HumanoidGraphics(IEquipmentModule equipmentModule, ContentManager contentManager)
         {
             _equipmentModule = equipmentModule;
 
-            var headTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/head");
-            var bodyTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/body");
-            var legsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/legs-idle");
-            var armLeftTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/arm-left-simple");
-            var armRightTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/arm-right-simple");
+            _headTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/head");
+            _bodyTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/body");
+            _legsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/legs-idle");
+            _armLeftTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/arm-left-simple");
+            _armRightTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/arm-right-simple");
 
-            var weaponBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/ShortSwordBase");
-            var shieldBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/WoodenShieldBase");
+            _weaponBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/ShortSwordBase");
+            _shieldBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/WoodenShieldBase");
 
-            //TODO Handle events of changing equipments.
+            CreateSpriteHierarchy(equipmentModule);
 
-            DrawLeftHand(equipmentModule, armLeftTexture, weaponBaseTexture, shieldBaseTexture);
+            equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
+        }
 
-            AddChild(new Sprite(legsTexture)
+        private void EquipmentModule_EquipmentChanged(object? sender, Zilon.Core.Persons.EquipmentChangedEventArgs e)
+        {
+            var childrenSprites = GetChildren().ToArray();
+            foreach (var child in childrenSprites)
+            {
+                RemoveChild(child);
+            }
+
+            CreateSpriteHierarchy(_equipmentModule);
+        }
+
+        private void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
+        {
+            DrawLeftHand(equipmentModule, _armLeftTexture, _weaponBaseTexture, _shieldBaseTexture);
+
+            AddChild(new Sprite(_legsTexture)
             {
                 Position = new Vector2(0, 0),
                 Origin = new Vector2(0.5f, 0.75f)
             });
 
-            AddChild(new Sprite(bodyTexture)
+            AddChild(new Sprite(_bodyTexture)
             {
                 Position = new Vector2(3, -22),
                 Origin = new Vector2(0.5f, 0.5f)
             });
 
-            AddChild(new Sprite(headTexture)
+            AddChild(new Sprite(_headTexture)
             {
                 Position = new Vector2(-0, -20),
                 Origin = new Vector2(0.5f, 1)
             });
 
-            DrawRightHand(equipmentModule, armRightTexture, weaponBaseTexture, shieldBaseTexture);
+            DrawRightHand(equipmentModule, _armRightTexture, _weaponBaseTexture, _shieldBaseTexture);
         }
 
         private void DrawLeftHand(IEquipmentModule equipmentModule, Texture2D armLeftTexture,
