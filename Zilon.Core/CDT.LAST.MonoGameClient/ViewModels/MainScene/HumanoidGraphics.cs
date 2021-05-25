@@ -55,7 +55,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             DrawRightHand(equipmentModule, armRightTexture, weaponBaseTexture, shieldBaseTexture);
         }
 
-        private void DrawLeftHand(IEquipmentModule equipmentModule, Texture2D armLeftTexture, Texture2D weaponBaseTexture, Texture2D shieldBackBaseTexture)
+        private void DrawLeftHand(IEquipmentModule equipmentModule, Texture2D armLeftTexture,
+            Texture2D weaponBaseTexture, Texture2D shieldBackBaseTexture)
         {
             // Slot 3 according the person scheme is second/left hand.
             var equipment = equipmentModule[2];
@@ -124,7 +125,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void DrawRightHand(IEquipmentModule equipmentModule, Texture2D armRightTexture, Texture2D weaponBaseTexture, Texture2D shieldBaseTexture)
+        private void DrawRightHand(IEquipmentModule equipmentModule, Texture2D armRightTexture,
+            Texture2D weaponBaseTexture, Texture2D shieldBaseTexture)
         {
             // Slot 3 according the person scheme is second/left hand.
             var equipment = equipmentModule[3];
