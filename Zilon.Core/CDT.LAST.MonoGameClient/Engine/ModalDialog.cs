@@ -10,12 +10,12 @@ namespace CDT.LAST.MonoGameClient.Engine
     {
         private const int CLOSE_BUTTON_SIZE = 16;
         private const int CLOSE_BUTTON_PADDING = 3;
+
+        private readonly Texture2D _backgroundTexture;
         private readonly Button _closeButton;
         private readonly Rectangle _dialogRect;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Texture2D _shadowTexture;
-
-        private readonly Texture2D _backgroundTexture;
 
         public ModalDialog(Texture2D backgroundTexture, Texture2D shadowTexture, Texture2D buttonTexture,
             SpriteFont font, GraphicsDevice graphicsDevice)
