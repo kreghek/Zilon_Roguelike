@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.PersonModules;
@@ -54,15 +55,21 @@ namespace Zilon.Core.PersonGeneration
             AddDefaultProps(inventory);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This event is very rare and we have no stable unit-tests for this." +
+                                                 " So exclude the method to clean actual code coverage up.")]
         private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "interventionists")
+            return schemeService.GetSchemes<IPersonTemplateScheme>()
+                .Where(x => x.FractionSid == "interventionists" && x.Sid == "tester")
                 .ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This event is very rare and we have no stable unit-tests for this." +
+                                                 " So exclude the method to clean actual code coverage up.")]
         private static IPersonTemplateScheme[] GetMilitiaPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "militia").ToArray();
+            return schemeService.GetSchemes<IPersonTemplateScheme>()
+                .Where(x => x.FractionSid == "militia" && x.Sid == "tester").ToArray();
         }
 
         private static IPersonTemplateScheme[] GetPersonTemplateByFraction(IFraction fraction,
@@ -88,12 +95,16 @@ namespace Zilon.Core.PersonGeneration
 
         private static IPersonTemplateScheme[] GetPlayerPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "player").ToArray();
+            return schemeService.GetSchemes<IPersonTemplateScheme>()
+                .Where(x => x.FractionSid == "player" && x.Sid == "tester").ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This event is very rare and we have no stable unit-tests for this." +
+                                                 " So exclude the method to clean actual code coverage up.")]
         private static IPersonTemplateScheme[] GetTroublemakerPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "troublemakers")
+            return schemeService.GetSchemes<IPersonTemplateScheme>()
+                .Where(x => x.FractionSid == "troublemakers" && x.Sid == "tester")
                 .ToArray();
         }
     }

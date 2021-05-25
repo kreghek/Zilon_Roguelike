@@ -38,8 +38,6 @@ namespace Zilon.Core.PersonGeneration
             Dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
-        public IPlayerEventLogService? PlayerEventLogService { get; set; }
-
         protected static int BodySlotIndex => 1;
 
         protected IDice Dice { get; }
@@ -196,6 +194,8 @@ namespace Zilon.Core.PersonGeneration
             var rolledTraits = _personPerkInitializator.Generate();
             evolutionData.AddBuildInPerks(rolledTraits);
         }
+
+        public IPlayerEventLogService? PlayerEventLogService { get; set; }
 
         public IPerson Create(string personSchemeSid, IFraction fraction)
         {

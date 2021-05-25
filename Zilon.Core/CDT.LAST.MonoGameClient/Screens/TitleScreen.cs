@@ -4,6 +4,7 @@ using System.Threading;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Resources;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
