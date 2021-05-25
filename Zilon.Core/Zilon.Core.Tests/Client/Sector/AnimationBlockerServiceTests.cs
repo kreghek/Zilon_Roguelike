@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Zilon.Core.Client.Sector.Tests
 {
     [TestFixture]
-    [Parallelizable(ParallelScope.All)]
+    //[Parallelizable(ParallelScope.All)]
     [Timeout(5000)]
     public class AnimationBlockerServiceTests
     {
