@@ -15,7 +15,10 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Texture2D _shadowTexture;
 
-        public ModalDialog(Texture2D backgroundTexture, Texture2D shadowTexture, Texture2D buttonTexture, SpriteFont font, GraphicsDevice graphicsDevice)
+        private readonly Texture2D _backgroundTexture;
+
+        public ModalDialog(Texture2D backgroundTexture, Texture2D shadowTexture, Texture2D buttonTexture,
+            SpriteFont font, GraphicsDevice graphicsDevice)
         {
             _shadowTexture = shadowTexture;
             _graphicsDevice = graphicsDevice;
@@ -31,11 +34,11 @@ namespace CDT.LAST.MonoGameClient.Engine
                 modalHeight);
 
             _closeButton = new Button("X", buttonTexture, font,
-                new Rectangle(_dialogRect.Right - CLOSE_BUTTON_SIZE - CLOSE_BUTTON_PADDING, _dialogRect.Top + CLOSE_BUTTON_PADDING, CLOSE_BUTTON_SIZE, CLOSE_BUTTON_SIZE));
+                new Rectangle(_dialogRect.Right - CLOSE_BUTTON_SIZE - CLOSE_BUTTON_PADDING,
+                    _dialogRect.Top + CLOSE_BUTTON_PADDING, CLOSE_BUTTON_SIZE, CLOSE_BUTTON_SIZE));
             _closeButton.OnClick += CloseButton_OnClick;
         }
 
-        private Texture2D _backgroundTexture;
         public bool IsVisible { get; private set; }
 
         public void Close()

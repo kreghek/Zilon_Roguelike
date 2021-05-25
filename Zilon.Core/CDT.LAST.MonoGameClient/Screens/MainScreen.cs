@@ -66,7 +66,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             var modalBackgroundTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackground");
             var modalShadowTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
-            _personModal = new ModalDialog(modalBackgroundTexture, modalShadowTexture, buttonTexture, buttonFont, game.GraphicsDevice);
+            _personModal = new ModalDialog(modalBackgroundTexture, modalShadowTexture, buttonTexture, buttonFont,
+                game.GraphicsDevice);
         }
 
         public override void Draw(GameTime gameTime)
