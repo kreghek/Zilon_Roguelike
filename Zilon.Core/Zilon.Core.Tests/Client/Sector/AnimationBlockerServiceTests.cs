@@ -25,7 +25,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsync_RepeatWithNoBlockers_NoWaitings(int iterationCount)
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             // ACT
             for (var iterationIndex = 0; iterationIndex < iterationCount; iterationIndex++)
@@ -41,7 +41,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsync_AddAndRelease2BlockersBeforeWaiting_NoWaiting()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock1 = new Mock<ICommandBlocker>();
             var blocker1 = blockerMock1.Object;
@@ -66,7 +66,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsync_AddAndReleaseBlockerBeforeWaiting_NoWaiting()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -86,7 +86,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsynс_AddAndDropBlocker2Times_WaitingContinuesExecution()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -112,7 +112,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsynс_AddAndReleaseBlocker2Times_WaitingContinuesExecution()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -145,7 +145,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsynс_BlockerReleasedAfterServiceStartsWaiting_WaitingContinuesExecution()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -194,7 +194,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsynс_DropBlockerCancelAwaitingOfBlockerRelease_WaitingContinuesExecution()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -229,7 +229,7 @@ namespace Zilon.Core.Client.Sector.Tests
         [Test]
         public async Task WaitBlockersAsynс_Real1()
         {
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -279,7 +279,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsynс_SecondBlockerWasAddedUntilFirstWasReleased_WaitingContinuesExecution()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock1 = new Mock<ICommandBlocker>();
             var blocker1 = blockerMock1.Object;
