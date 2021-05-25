@@ -8,20 +8,18 @@ namespace CDT.LAST.MonoGameClient.Engine
 {
     public class ModalDialog
     {
+        private const int CLOSE_BUTTON_SIZE = 16;
+        private const int CLOSE_BUTTON_PADDING = 3;
         private readonly Button _closeButton;
         private readonly Rectangle _dialogRect;
-        private readonly SpriteFont _font;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Texture2D _shadowTexture;
 
-        public ModalDialog(string title, Texture2D backgroundTexture, Texture2D shadowTexture, SpriteFont font,
-            GraphicsDevice graphicsDevice)
+        public ModalDialog(Texture2D backgroundTexture, Texture2D shadowTexture, Texture2D buttonTexture, SpriteFont font, GraphicsDevice graphicsDevice)
         {
             _shadowTexture = shadowTexture;
-            _font = font;
             _graphicsDevice = graphicsDevice;
-            Title = title;
-            BackgroundTexture = backgroundTexture;
+            _backgroundTexture = backgroundTexture;
 
             var modalWidth = 400;
             var modalHeight = 300;
@@ -32,14 +30,13 @@ namespace CDT.LAST.MonoGameClient.Engine
                 modalWidth,
                 modalHeight);
 
-            _closeButton = new Button("X", BackgroundTexture, font,
-                new Rectangle(_dialogRect.Right - 16, _dialogRect.Top, 16, 16));
+            _closeButton = new Button("X", buttonTexture, font,
+                new Rectangle(_dialogRect.Right - CLOSE_BUTTON_SIZE - CLOSE_BUTTON_PADDING, _dialogRect.Top + CLOSE_BUTTON_PADDING, CLOSE_BUTTON_SIZE, CLOSE_BUTTON_SIZE));
             _closeButton.OnClick += CloseButton_OnClick;
         }
 
-        public Texture2D BackgroundTexture { get; }
-        public bool IsVisible { get; set; }
-        public string Title { get; set; }
+        private Texture2D _backgroundTexture;
+        public bool IsVisible { get; private set; }
 
         public void Close()
         {
@@ -51,7 +48,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             spriteBatch.Draw(_shadowTexture,
                 new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height),
                 Color.White * 0.5f);
-            spriteBatch.Draw(BackgroundTexture, _dialogRect, Color.White);
+            spriteBatch.Draw(_backgroundTexture, _dialogRect, Color.White);
 
             _closeButton.Draw(spriteBatch);
         }
