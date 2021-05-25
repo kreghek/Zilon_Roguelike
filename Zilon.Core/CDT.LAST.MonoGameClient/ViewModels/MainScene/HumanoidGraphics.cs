@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -29,17 +30,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var weaponBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/ShortSwordBase");
             var shieldBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/WoodenShieldBase");
 
-            AddChild(new Sprite(armLeftTexture)
-            {
-                Position = new Vector2(-10, -20),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
+            //TODO Handle events of changing equipments.
 
-            AddChild(new Sprite(weaponBaseTexture)
-            {
-                Position = new Vector2(-14, -21),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
+            DrawLeftHand(equipmentModule, armLeftTexture, weaponBaseTexture, shieldBaseTexture);
 
             AddChild(new Sprite(legsTexture)
             {
@@ -59,11 +52,98 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Origin = new Vector2(0.5f, 1)
             });
 
+            DrawRightHand(equipmentModule, armRightTexture, weaponBaseTexture, shieldBaseTexture);
+        }
+
+        private void DrawLeftHand(IEquipmentModule equipmentModule, Texture2D armLeftTexture, Texture2D weaponBaseTexture, Texture2D shieldBackBaseTexture)
+        {
             // Slot 3 according the person scheme is second/left hand.
-            var equipment3 = equipmentModule[3];
-            if (equipment3 != null)
+            var equipment = equipmentModule[2];
+            if (equipment != null)
             {
-                if (equipment3.Scheme.Tags.Contains(PropTags.Equipment.Weapon))
+                var equipmentTags = equipment.Scheme.Tags;
+                if (equipmentTags is null)
+                {
+                    // Now a person can equiped only weapons or tools.
+                    // All weapons or tools has corresponding tags.
+                    Debug.Fail("There is no scenario then equipment has no tags.");
+
+                    AddChild(new Sprite(armLeftTexture)
+                    {
+                        Position = new Vector2(-10, -20),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
+                else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
+                {
+                    AddChild(new Sprite(armLeftTexture)
+                    {
+                        Position = new Vector2(-10, -20),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+
+                    AddChild(new Sprite(weaponBaseTexture)
+                    {
+                        Position = new Vector2(-14, -21),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
+                else if (equipmentTags.Contains(PropTags.Equipment.Shield))
+                {
+                    // For a shield in this hand draw shield back sprite first.
+                    // So it will looks like the person bear shield by inner side.
+
+                    AddChild(new Sprite(shieldBackBaseTexture)
+                    {
+                        Position = new Vector2(-14, -21),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+
+                    AddChild(new Sprite(armLeftTexture)
+                    {
+                        Position = new Vector2(-10, -20),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
+                else
+                {
+                    AddChild(new Sprite(armLeftTexture)
+                    {
+                        Position = new Vector2(13, -20),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
+            }
+            else
+            {
+                AddChild(new Sprite(armLeftTexture)
+                {
+                    Position = new Vector2(13, -20),
+                    Origin = new Vector2(0.5f, 0.5f)
+                });
+            }
+        }
+
+        private void DrawRightHand(IEquipmentModule equipmentModule, Texture2D armRightTexture, Texture2D weaponBaseTexture, Texture2D shieldBaseTexture)
+        {
+            // Slot 3 according the person scheme is second/left hand.
+            var equipment = equipmentModule[3];
+            if (equipment != null)
+            {
+                var equipmentTags = equipment.Scheme.Tags;
+                if (equipmentTags is null)
+                {
+                    // Now a person can equiped only weapons or tools.
+                    // All weapons or tools has corresponding tags.
+                    Debug.Fail("There is no scenario then equipment has no tags.");
+
+                    AddChild(new Sprite(armRightTexture)
+                    {
+                        Position = new Vector2(13, -20),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
+                else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
                 {
                     AddChild(new InvertedFlipXSprite(weaponBaseTexture)
                     {
@@ -78,7 +158,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
                 }
-                else if (equipment3.Scheme.Tags.Contains(PropTags.Equipment.Shield))
+                else if (equipmentTags.Contains(PropTags.Equipment.Shield))
                 {
                     // For shield draw arm first because the base of the sheild
                     // should be cover the arm.
@@ -103,6 +183,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
                 }
+            }
+            else
+            {
+                AddChild(new Sprite(armRightTexture)
+                {
+                    Position = new Vector2(13, -20),
+                    Origin = new Vector2(0.5f, 0.5f)
+                });
             }
         }
 

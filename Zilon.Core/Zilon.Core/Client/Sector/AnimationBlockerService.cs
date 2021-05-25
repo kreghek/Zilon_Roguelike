@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Zilon.Core.Client.Sector
 {
-    public class AnimationBlockerService : IAnimationBlockerService
+    public sealed class AnimationBlockerService : IAnimationBlockerService, IDisposable
     {
         private const int SEMAPHORE_WAIT_TIMEOUT_MILLISECONDS = 10000;
 
@@ -93,6 +93,7 @@ namespace Zilon.Core.Client.Sector
 
             if (_tcs is null)
             {
+                _semaphore.Release();
                 return;
             }
 
@@ -101,6 +102,11 @@ namespace Zilon.Core.Client.Sector
             _semaphore.Release();
 
             await waitTask.ConfigureAwait(false);
+        }
+
+        public void Dispose()
+        {
+            _semaphore.Dispose();
         }
     }
 }
