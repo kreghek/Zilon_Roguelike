@@ -10,8 +10,12 @@ using NUnit.Framework;
 
 namespace Zilon.Core.Client.Sector.Tests
 {
+    /// <remarks>
+    /// - If tests are parallel they fail in containers of CI/CD randomly. So we set NonParallelizableAttribute implicitly.
+    /// May be this situation occured because CI/CD has few CPU resources.
+    /// </remarks>
     [TestFixture]
-    [Parallelizable(ParallelScope.All)]
+    [NonParallelizable]
     [Timeout(5000)]
     public class AnimationBlockerServiceTests
     {
@@ -19,7 +23,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsync_AddAndRelease2BlockersBeforeWaiting_NoWaiting()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock1 = new Mock<ICommandBlocker>();
             var blocker1 = blockerMock1.Object;
@@ -44,7 +48,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsync_AddAndReleaseBlockerBeforeWaiting_NoWaiting()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -61,10 +65,28 @@ namespace Zilon.Core.Client.Sector.Tests
         }
 
         [Test]
+        [TestCase(1)]
+        [TestCase(2)]
+        public async Task WaitBlockersAsync_RepeatWithNoBlockers_NoWaitings(int iterationCount)
+        {
+            // ARRANGE
+            using var animationBlockerService = new AnimationBlockerService();
+
+            // ACT
+            for (var iterationIndex = 0; iterationIndex < iterationCount; iterationIndex++)
+            {
+                await animationBlockerService.WaitBlockersAsync().ConfigureAwait(false);
+            }
+
+            // ASSERT
+            Assert.Pass();
+        }
+
+        [Test]
         public async Task WaitBlockersAsynс_AddAndDropBlocker2Times_WaitingContinuesExecution()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -74,7 +96,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             animationBlockerService.AddBlocker(blocker);
 
-            using var semaphore = new SemaphoreSlim(0);
+            using var semaphore = new SemaphoreSlim(0, 1);
 
             await AddAndDropBlockerAsync(animationBlockerService, semaphore).ConfigureAwait(false);
 
@@ -90,7 +112,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsynс_AddAndReleaseBlocker2Times_WaitingContinuesExecution()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -123,7 +145,7 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsynс_BlockerReleasedAfterServiceStartsWaiting_WaitingContinuesExecution()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -136,7 +158,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             animationBlockerService.AddBlocker(blocker);
 
-            using var semaphore = new SemaphoreSlim(0);
+            using var semaphore = new SemaphoreSlim(0, 1);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
@@ -172,14 +194,14 @@ namespace Zilon.Core.Client.Sector.Tests
         public async Task WaitBlockersAsynс_DropBlockerCancelAwaitingOfBlockerRelease_WaitingContinuesExecution()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
 
             animationBlockerService.AddBlocker(blocker);
 
-            using var semaphore = new SemaphoreSlim(0);
+            using var semaphore = new SemaphoreSlim(0, 1);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
@@ -207,7 +229,7 @@ namespace Zilon.Core.Client.Sector.Tests
         [Test]
         public async Task WaitBlockersAsynс_Real1()
         {
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock = new Mock<ICommandBlocker>();
             var blocker = blockerMock.Object;
@@ -226,7 +248,7 @@ namespace Zilon.Core.Client.Sector.Tests
             animationBlockerService.AddBlocker(blocker3);
 
             var isBlockerReleasedCheck = false;
-            using var semaphore = new SemaphoreSlim(0);
+            using var semaphore = new SemaphoreSlim(0, 1);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
             {
@@ -251,14 +273,13 @@ namespace Zilon.Core.Client.Sector.Tests
 
             // ASSERT
             isBlockerReleasedCheck.Should().BeTrue();
-            Assert.Pass();
         }
 
         [Test]
         public async Task WaitBlockersAsynс_SecondBlockerWasAddedUntilFirstWasReleased_WaitingContinuesExecution()
         {
             // ARRANGE
-            var animationBlockerService = new AnimationBlockerService();
+            using var animationBlockerService = new AnimationBlockerService();
 
             var blockerMock1 = new Mock<ICommandBlocker>();
             var blocker1 = blockerMock1.Object;
@@ -268,7 +289,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             animationBlockerService.AddBlocker(blocker1);
 
-            using var semaphore = new SemaphoreSlim(0);
+            using var semaphore = new SemaphoreSlim(0, 1);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>

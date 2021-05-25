@@ -49,7 +49,7 @@ namespace Zilon.Core.Common
                 }
                 else
                 {
-                    source = new TaskCompletionSource<T>();
+                    source = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
                     _receivers.TryAdd(source);
                 }
             }
