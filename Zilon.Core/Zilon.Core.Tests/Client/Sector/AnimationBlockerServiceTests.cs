@@ -251,7 +251,6 @@ namespace Zilon.Core.Client.Sector.Tests
 
             // ASSERT
             isBlockerReleasedCheck.Should().BeTrue();
-            Assert.Pass();
         }
 
         [Test]
