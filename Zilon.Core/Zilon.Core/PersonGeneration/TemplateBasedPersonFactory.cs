@@ -54,6 +54,9 @@ namespace Zilon.Core.PersonGeneration
             AddDefaultProps(inventory);
         }
 
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This event is very rare and we have no stable unit-tests for this."+
+            " So exclude the method to clean actual code coverage up.")]
         private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
         {
             return schemeService.GetSchemes<IPersonTemplateScheme>()
@@ -61,6 +64,8 @@ namespace Zilon.Core.PersonGeneration
                 .ToArray();
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This event is very rare and we have no stable unit-tests for this." +
+            " So exclude the method to clean actual code coverage up.")]
         private static IPersonTemplateScheme[] GetMilitiaPersonTemplates(ISchemeService schemeService)
         {
             return schemeService.GetSchemes<IPersonTemplateScheme>()
@@ -94,6 +99,8 @@ namespace Zilon.Core.PersonGeneration
                 .Where(x => x.FractionSid == "player" && x.Sid == "tester").ToArray();
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This event is very rare and we have no stable unit-tests for this." +
+            " So exclude the method to clean actual code coverage up.")]
         private static IPersonTemplateScheme[] GetTroublemakerPersonTemplates(ISchemeService schemeService)
         {
             return schemeService.GetSchemes<IPersonTemplateScheme>()
