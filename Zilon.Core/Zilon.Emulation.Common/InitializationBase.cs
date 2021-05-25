@@ -98,7 +98,7 @@ namespace Zilon.Emulation.Common
             serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
         }
 
-        protected virtual void RegisterPersonFactory<TPersonfactory>(IServiceCollection container) where TPersonfactory: class, IPersonFactory
+        protected virtual void RegisterPersonFactory<TPersonfactory>(IServiceCollection container) where TPersonfactory : class, IPersonFactory
         {
             container.AddSingleton<TPersonfactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
             container.AddSingleton<IPersonFactory, TPersonfactory>(serviceProvider =>
