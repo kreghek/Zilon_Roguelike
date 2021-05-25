@@ -15,7 +15,9 @@ namespace CDT.LAST.MonoGameClient.Engine
         {
         }
 
-        public InvertedFlipXSprite(Texture2D texture, Point? size = null, Vector2? origin = null, Vector2? position = null, Color? color = null, float zindex = 0, Renderable? parent = null) : base(texture, size, origin, position, color, zindex, parent)
+        public InvertedFlipXSprite(Texture2D texture, Point? size = null, Vector2? origin = null,
+            Vector2? position = null, Color? color = null, float zindex = 0, Renderable? parent = null) : base(texture,
+            size, origin, position, color, zindex, parent)
         {
         }
 
