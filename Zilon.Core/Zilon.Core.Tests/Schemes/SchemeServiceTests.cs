@@ -56,10 +56,13 @@ namespace Zilon.Core.Tests.Schemes
         }
 
         /// <summary>
-        /// Тест проверяет получение схем всех типов.
+        /// The test checks if scheme is not found then the expected exception will be thrown.
         /// </summary>
+        /// <remarks>
+        /// Ensure you have no scheme named "test" in the scheme catalog.
+        /// </remarks>
         [Test]
-        public void GetScheme_OneScheme_NoExceptions()
+        public void GetScheme_OneInvalidScheme_ExpectedExceptionWasThrown()
         {
             //ARRANGE
             var schemeTypes = ExtractSchemeTypes();
@@ -76,10 +79,10 @@ namespace Zilon.Core.Tests.Schemes
                 Action act = () =>
                 {
                     var method = typeof(SchemeService).GetMethod(nameof(SchemeService.GetScheme));
-                    if (method == null)
+                    if (method is null)
                     {
                         throw new InvalidOperationException(
-                            $"Для класса {nameof(SchemeService)} не найден метод {nameof(ISchemeService.GetScheme)}.");
+                            $"No method {nameof(ISchemeService.GetScheme)} was found in the class {nameof(SchemeService)}.");
                     }
 
                     var generic = method.MakeGenericMethod(schemeType);

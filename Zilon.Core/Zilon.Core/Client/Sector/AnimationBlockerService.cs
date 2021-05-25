@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Zilon.Core.Client.Sector
 {
-    public class AnimationBlockerService : IAnimationBlockerService
+    public sealed class AnimationBlockerService : IAnimationBlockerService, IDisposable
     {
         private const int SEMAPHORE_WAIT_TIMEOUT_MILLISECONDS = 10000;
 
         private readonly ConcurrentDictionary<ICommandBlocker, byte> _commandBlockers;
         private readonly SemaphoreSlim _semaphore;
+        private volatile bool _isDisposed;
 
         private TaskCompletionSource<bool>? _tcs;
 
@@ -28,6 +29,11 @@ namespace Zilon.Core.Client.Sector
                 throw new InvalidOperationException("Unexpectible event sender. It must not be null.");
             }
 
+            if (_isDisposed)
+            {
+                return;
+            }
+
             await _semaphore.WaitAsync(SEMAPHORE_WAIT_TIMEOUT_MILLISECONDS).ConfigureAwait(false);
 
             var blocker = (ICommandBlocker)sender;
@@ -40,7 +46,10 @@ namespace Zilon.Core.Client.Sector
                 _tcs = null;
             }
 
-            _semaphore.Release();
+            if (!_isDisposed)
+            {
+                _semaphore.Release();
+            }
         }
 
         /// <inheritdoc />
@@ -93,6 +102,7 @@ namespace Zilon.Core.Client.Sector
 
             if (_tcs is null)
             {
+                _semaphore.Release();
                 return;
             }
 
@@ -101,6 +111,12 @@ namespace Zilon.Core.Client.Sector
             _semaphore.Release();
 
             await waitTask.ConfigureAwait(false);
+        }
+
+        public void Dispose()
+        {
+            _isDisposed = true;
+            _semaphore.Dispose();
         }
     }
 }
