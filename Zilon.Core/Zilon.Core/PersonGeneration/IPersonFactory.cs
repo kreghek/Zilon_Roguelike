@@ -5,7 +5,7 @@ namespace Zilon.Core.PersonGeneration
 {
     public interface IPersonFactory
     {
-        IPerson Create(string personSchemeSid, IFraction fraction);
         public IPlayerEventLogService? PlayerEventLogService { get; set; }
+        IPerson Create(string personSchemeSid, IFraction fraction);
     }
 }
