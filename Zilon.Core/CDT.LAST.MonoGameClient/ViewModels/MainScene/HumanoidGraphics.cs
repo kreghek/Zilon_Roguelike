@@ -95,6 +95,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
                 }
+                else
+                {
+                    AddChild(new Sprite(armRightTexture)
+                    {
+                        Position = new Vector2(13, -20),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
             }
         }
 
