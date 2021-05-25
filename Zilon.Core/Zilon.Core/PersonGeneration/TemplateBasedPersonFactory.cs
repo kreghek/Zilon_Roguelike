@@ -56,13 +56,13 @@ namespace Zilon.Core.PersonGeneration
 
         private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "interventionists")
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "interventionists" && x.Sid == "test")
                 .ToArray();
         }
 
         private static IPersonTemplateScheme[] GetMilitiaPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "militia").ToArray();
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "militia" && x.Sid == "test").ToArray();
         }
 
         private static IPersonTemplateScheme[] GetPersonTemplateByFraction(IFraction fraction,
@@ -88,12 +88,12 @@ namespace Zilon.Core.PersonGeneration
 
         private static IPersonTemplateScheme[] GetPlayerPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "player").ToArray();
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "player" && x.Sid == "test").ToArray();
         }
 
         private static IPersonTemplateScheme[] GetTroublemakerPersonTemplates(ISchemeService schemeService)
         {
-            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "troublemakers")
+            return schemeService.GetSchemes<IPersonTemplateScheme>().Where(x => x.FractionSid == "troublemakers" && x.Sid == "test")
                 .ToArray();
         }
     }

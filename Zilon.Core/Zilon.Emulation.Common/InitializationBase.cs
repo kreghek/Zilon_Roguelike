@@ -98,12 +98,12 @@ namespace Zilon.Emulation.Common
             serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
         }
 
-        protected virtual void RegisterPersonFactory(IServiceCollection container)
+        protected virtual void RegisterPersonFactory<TPersonfactory>(IServiceCollection container) where TPersonfactory: class, IPersonFactory
         {
-            container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
-            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
+            container.AddSingleton<TPersonfactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
+            container.AddSingleton<IPersonFactory, TPersonfactory>(serviceProvider =>
             {
-                var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
+                var factory = serviceProvider.GetRequiredService<TPersonfactory>();
                 factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
                 return factory;
             });
@@ -267,7 +267,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
-            RegisterPersonFactory(container);
+            RegisterPersonFactory<TemplateBasedPersonFactory>(container);
             container.AddSingleton<IPersonPerkInitializator, PersonPerkInitializator>();
 
             container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();

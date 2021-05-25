@@ -1,0 +1,69 @@
+{
+  "FractionSid": "player",
+  "Name": {
+    "Ru": "Тест",
+    "En": "Test"
+  },
+  "BodyEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "steel-armor",
+        "Weight": 2
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "short-sword",
+        "Weight": 1
+      }
+    ]
+  },
+  "OffHandEquipments": {
+    "Records": [
+      {
+        "SchemeSid": "wooden-shield",
+        "Weight": 2
+      },
+	  {
+        "SchemeSid": "short-sword",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 1
+      }
+    ]
+  },
+  "InventoryProps": {
+    "Records": [
+      {
+        "SchemeSid": "med-kit",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "packed-food",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "water-bottle",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 4
+      }
+    ]
+  }
+}

@@ -59,11 +59,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Origin = new Vector2(0.5f, 1)
             });
 
-            // Slot 2 according the person scheme is second/left hand.
-            var equipment2 = equipmentModule[2];
-            if (equipment2 != null)
+            // Slot 3 according the person scheme is second/left hand.
+            var equipment3 = equipmentModule[3];
+            if (equipment3 != null)
             {
-                if (equipment2.Scheme.Tags.Contains(PropTags.Equipment.Weapon))
+                if (equipment3.Scheme.Tags.Contains(PropTags.Equipment.Weapon))
                 {
                     AddChild(new InvertedFlipXSprite(weaponBaseTexture)
                     {
@@ -78,7 +78,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
                 }
-                else if (equipment2.Scheme.Tags.Contains(PropTags.Equipment.Shield))
+                else if (equipment3.Scheme.Tags.Contains(PropTags.Equipment.Shield))
                 {
                     // For shield draw arm first because the base of the sheild
                     // should be cover the arm.
