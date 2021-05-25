@@ -8,7 +8,8 @@ namespace CDT.LAST.MonoGameClient.Engine
     {
         private readonly SpriteFont _font;
         private readonly GraphicsDevice _graphicsDevice;
-        private readonly Rectangle _rect;
+        private readonly Rectangle _dialogRect;
+        private readonly Button _closeButton;
         private readonly Texture2D _shadowTexture;
 
         public ModalDialog(string title, Texture2D backgroundTexture, Texture2D shadowTexture, SpriteFont font,
@@ -23,11 +24,19 @@ namespace CDT.LAST.MonoGameClient.Engine
             var modalWidth = 400;
             var modalHeight = 300;
 
-            _rect = new Rectangle(
+            _dialogRect = new Rectangle(
                 graphicsDevice.Viewport.Width / 2 - modalWidth / 2,
                 graphicsDevice.Viewport.Height / 2 - modalHeight / 2,
                 modalWidth,
                 modalHeight);
+
+            _closeButton = new Button("X", BackgroundTexture, font, new Rectangle(_dialogRect.Right - 16, _dialogRect.Top, 16, 16));
+            _closeButton.OnClick += CloseButton_OnClick;
+        }
+
+        private void CloseButton_OnClick(object? sender, System.EventArgs e)
+        {
+            Close();
         }
 
         public Texture2D BackgroundTexture { get; }
@@ -44,7 +53,9 @@ namespace CDT.LAST.MonoGameClient.Engine
             spriteBatch.Draw(_shadowTexture,
                 new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height),
                 Color.White * 0.5f);
-            spriteBatch.Draw(BackgroundTexture, _rect, Color.White);
+            spriteBatch.Draw(BackgroundTexture, _dialogRect, Color.White);
+
+            _closeButton.Draw(spriteBatch);
         }
 
         public void Show()
@@ -62,6 +73,8 @@ namespace CDT.LAST.MonoGameClient.Engine
             {
                 Close();
             }
+
+            _closeButton.Update();
         }
     }
 }
