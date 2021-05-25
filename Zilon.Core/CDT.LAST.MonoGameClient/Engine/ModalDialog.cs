@@ -6,12 +6,13 @@ namespace CDT.LAST.MonoGameClient.Engine
 {
     public class ModalDialog
     {
-        private readonly Texture2D _shadowTexture;
         private readonly SpriteFont _font;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Rectangle _rect;
+        private readonly Texture2D _shadowTexture;
 
-        public ModalDialog(string title, Texture2D backgroundTexture, Texture2D shadowTexture, SpriteFont font, GraphicsDevice graphicsDevice)
+        public ModalDialog(string title, Texture2D backgroundTexture, Texture2D shadowTexture, SpriteFont font,
+            GraphicsDevice graphicsDevice)
         {
             _shadowTexture = shadowTexture;
             _font = font;
@@ -30,13 +31,8 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         public Texture2D BackgroundTexture { get; }
-        public string Title { get; set; }
         public bool IsVisible { get; set; }
-
-        public void Show()
-        {
-            IsVisible = true;
-        }
+        public string Title { get; set; }
 
         public void Close()
         {
@@ -45,8 +41,15 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_shadowTexture, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), new Color(1f, 1f, 1f, 0.5f));
+            spriteBatch.Draw(_shadowTexture,
+                new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height),
+                new Color(1f, 1f, 1f, 0.5f));
             spriteBatch.Draw(BackgroundTexture, _rect, Color.White);
+        }
+
+        public void Show()
+        {
+            IsVisible = true;
         }
 
         public void Update()
