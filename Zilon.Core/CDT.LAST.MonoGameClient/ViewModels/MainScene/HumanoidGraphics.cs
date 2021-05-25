@@ -65,7 +65,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 if (equipment2.Scheme.Tags.Contains(PropTags.Equipment.Weapon))
                 {
-                    AddChild(new Sprite2(weaponBaseTexture)
+                    AddChild(new InvertedFlipXSprite(weaponBaseTexture)
                     {
                         Position = new Vector2(11, -10),
                         Origin = new Vector2(0.5f, 0.5f),
