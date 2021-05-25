@@ -17,6 +17,9 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Texture2D _shadowTexture;
 
+        private const int MODAL_WIDTH = 400;
+        private const int MODAL_HEIGHT = 300;
+
         public ModalDialog(Texture2D backgroundTexture, Texture2D shadowTexture, Texture2D buttonTexture,
             SpriteFont font, GraphicsDevice graphicsDevice)
         {
@@ -24,14 +27,11 @@ namespace CDT.LAST.MonoGameClient.Engine
             _graphicsDevice = graphicsDevice;
             _backgroundTexture = backgroundTexture;
 
-            var modalWidth = 400;
-            var modalHeight = 300;
-
             _dialogRect = new Rectangle(
-                graphicsDevice.Viewport.Width / 2 - modalWidth / 2,
-                graphicsDevice.Viewport.Height / 2 - modalHeight / 2,
-                modalWidth,
-                modalHeight);
+                (graphicsDevice.Viewport.Width / 2) - (MODAL_WIDTH / 2),
+                (graphicsDevice.Viewport.Height / 2) - (MODAL_HEIGHT / 2),
+                MODAL_WIDTH,
+                MODAL_HEIGHT);
 
             _closeButton = new Button("X", buttonTexture, font,
                 new Rectangle(_dialogRect.Right - CLOSE_BUTTON_SIZE - CLOSE_BUTTON_PADDING,
