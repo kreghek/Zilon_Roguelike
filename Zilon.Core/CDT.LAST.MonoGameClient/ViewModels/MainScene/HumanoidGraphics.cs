@@ -10,20 +10,21 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
     {
+        private readonly Texture2D _armLeftTexture;
+        private readonly Texture2D _armRightTexture;
+        private readonly Texture2D _bodyTexture;
         private readonly IEquipmentModule _equipmentModule;
 
         private readonly Texture2D _headTexture;
-        private readonly Texture2D _bodyTexture;
         private readonly Texture2D _legsTexture;
-        private readonly Texture2D _armLeftTexture;
-        private readonly Texture2D _armRightTexture;
-        private readonly Texture2D _weaponBaseTexture;
         private readonly Texture2D _shieldBaseTexture;
+        private readonly Texture2D _weaponBaseTexture;
 
         public HumanoidGraphics(IEquipmentModule equipmentModule, ContentManager contentManager)
         {
@@ -41,17 +42,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             CreateSpriteHierarchy(equipmentModule);
 
             equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
-        }
-
-        private void EquipmentModule_EquipmentChanged(object? sender, Zilon.Core.Persons.EquipmentChangedEventArgs e)
-        {
-            var childrenSprites = GetChildren().ToArray();
-            foreach (var child in childrenSprites)
-            {
-                RemoveChild(child);
-            }
-
-            CreateSpriteHierarchy(_equipmentModule);
         }
 
         private void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
@@ -218,6 +208,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     Origin = new Vector2(0.5f, 0.5f)
                 });
             }
+        }
+
+        private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
+        {
+            var childrenSprites = GetChildren().ToArray();
+            foreach (var child in childrenSprites)
+            {
+                RemoveChild(child);
+            }
+
+            CreateSpriteHierarchy(_equipmentModule);
         }
 
         public SpriteContainer RootSprite => this;
