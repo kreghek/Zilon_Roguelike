@@ -12,8 +12,12 @@ using Zilon.Core.Commands;
 
 namespace Zilon.Core.Client.Sector.Tests
 {
+    /// <remarks>
+    /// - If tests are parallel they fail in containers of CI/CD randomly. So we set NonParallelizableAttribute implicitly.
+    /// May be this situation occured because CI/CD has few CPU resources.
+    /// </remarks>
     [TestFixture]
-    [Parallelizable(ParallelScope.All)]
+    [NonParallelizable]
     public class CommandLoopUpdaterTests
     {
         /// <summary>
