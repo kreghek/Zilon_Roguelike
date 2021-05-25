@@ -19,7 +19,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         {
         }
 
-        protected override SpriteEffects SetFlips(Vector2 scale, ref float rotation)
+        protected override FlipResult SetFlips(Vector2 scale, float rotation)
         {
             // set flips
             var effects = SpriteEffects.None;
@@ -47,7 +47,7 @@ namespace CDT.LAST.MonoGameClient.Engine
                 }
             }
 
-            return effects;
+            return new FlipResult { Effects = effects, Rotation = rotation };
         }
     }
 }

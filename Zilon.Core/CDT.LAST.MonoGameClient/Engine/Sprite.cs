@@ -149,7 +149,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             // get rotation
             var rotation = WorldTransformations.Rotation;
 
-            var effects = SetFlips(scale, ref rotation);
+            var flipResult = SetFlips(scale, rotation);
 
             // normalize z-index
             if (NormalizeZindex)
@@ -168,14 +168,14 @@ namespace CDT.LAST.MonoGameClient.Engine
                 position: WorldTransformations.Position,
                 sourceRectangle: _srcRect,
                 color: WorldTransformations.Color,
-                rotation: rotation,
+                rotation: flipResult.Rotation,
                 origin: origin,
                 scale: new Vector2(Math.Abs(scale.X), Math.Abs(scale.Y)),
-                effects: effects,
+                effects: flipResult.Effects,
                 layerDepth: zindex);
         }
 
-        protected virtual SpriteEffects SetFlips(Vector2 scale, ref float rotation)
+        protected virtual FlipResult SetFlips(Vector2 scale, float rotation)
         {
             // set flips
             var effects = SpriteEffects.None;
@@ -203,7 +203,13 @@ namespace CDT.LAST.MonoGameClient.Engine
                 }
             }
 
-            return effects;
+            return new FlipResult { Effects = effects, Rotation = rotation };
+        }
+
+        protected record FlipResult
+        {
+            public SpriteEffects Effects { get; init; }
+            public float Rotation { get; init; }
         }
     }
 }
