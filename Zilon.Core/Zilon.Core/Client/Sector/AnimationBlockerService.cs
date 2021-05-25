@@ -12,9 +12,9 @@ namespace Zilon.Core.Client.Sector
 
         private readonly ConcurrentDictionary<ICommandBlocker, byte> _commandBlockers;
         private readonly SemaphoreSlim _semaphore;
+        private volatile bool _isDisposed;
 
         private TaskCompletionSource<bool>? _tcs;
-        private volatile bool _isDisposed;
 
         public AnimationBlockerService()
         {
