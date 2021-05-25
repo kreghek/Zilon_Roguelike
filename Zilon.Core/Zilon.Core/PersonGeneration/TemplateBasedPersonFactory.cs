@@ -55,7 +55,7 @@ namespace Zilon.Core.PersonGeneration
         }
 
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This event is very rare and we have no stable unit-tests for this."+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This event is very rare and we have no stable unit-tests for this." +
             " So exclude the method to clean actual code coverage up.")]
         private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
         {
