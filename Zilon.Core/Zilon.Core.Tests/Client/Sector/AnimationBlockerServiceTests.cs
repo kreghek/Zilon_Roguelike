@@ -20,6 +20,24 @@ namespace Zilon.Core.Client.Sector.Tests
     public class AnimationBlockerServiceTests
     {
         [Test]
+        [TestCase(1)]
+        [TestCase(2)]
+        public async Task WaitBlockersAsync_RepeatWithNoBlockers_NoWaitings(int iterationCount)
+        {
+            // ARRANGE
+            var animationBlockerService = new AnimationBlockerService();
+
+            // ACT
+            for (var iterationIndex = 0; iterationIndex < iterationCount; iterationIndex++)
+            {
+                await animationBlockerService.WaitBlockersAsync().ConfigureAwait(false);
+            }
+
+            // ASSERT
+            Assert.Pass();
+        }
+
+        [Test]
         public async Task WaitBlockersAsync_AddAndRelease2BlockersBeforeWaiting_NoWaiting()
         {
             // ARRANGE
