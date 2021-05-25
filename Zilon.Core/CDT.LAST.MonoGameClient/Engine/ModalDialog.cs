@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -6,10 +8,10 @@ namespace CDT.LAST.MonoGameClient.Engine
 {
     public class ModalDialog
     {
+        private readonly Button _closeButton;
+        private readonly Rectangle _dialogRect;
         private readonly SpriteFont _font;
         private readonly GraphicsDevice _graphicsDevice;
-        private readonly Rectangle _dialogRect;
-        private readonly Button _closeButton;
         private readonly Texture2D _shadowTexture;
 
         public ModalDialog(string title, Texture2D backgroundTexture, Texture2D shadowTexture, SpriteFont font,
@@ -30,13 +32,9 @@ namespace CDT.LAST.MonoGameClient.Engine
                 modalWidth,
                 modalHeight);
 
-            _closeButton = new Button("X", BackgroundTexture, font, new Rectangle(_dialogRect.Right - 16, _dialogRect.Top, 16, 16));
+            _closeButton = new Button("X", BackgroundTexture, font,
+                new Rectangle(_dialogRect.Right - 16, _dialogRect.Top, 16, 16));
             _closeButton.OnClick += CloseButton_OnClick;
-        }
-
-        private void CloseButton_OnClick(object? sender, System.EventArgs e)
-        {
-            Close();
         }
 
         public Texture2D BackgroundTexture { get; }
@@ -75,6 +73,11 @@ namespace CDT.LAST.MonoGameClient.Engine
             }
 
             _closeButton.Update();
+        }
+
+        private void CloseButton_OnClick(object? sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
