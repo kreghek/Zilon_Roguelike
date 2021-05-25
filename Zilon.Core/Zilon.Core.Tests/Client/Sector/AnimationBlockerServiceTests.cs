@@ -74,7 +74,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             animationBlockerService.AddBlocker(blocker);
 
-            using var semaphore = new SemaphoreSlim(0);
+            using var semaphore = new SemaphoreSlim(0, 1);
 
             await AddAndDropBlockerAsync(animationBlockerService, semaphore).ConfigureAwait(false);
 
@@ -136,7 +136,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             animationBlockerService.AddBlocker(blocker);
 
-            using var semaphore = new SemaphoreSlim(0);
+            using var semaphore = new SemaphoreSlim(0, 1);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
@@ -179,7 +179,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             animationBlockerService.AddBlocker(blocker);
 
-            using var semaphore = new SemaphoreSlim(0);
+            using var semaphore = new SemaphoreSlim(0, 1);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
@@ -226,7 +226,7 @@ namespace Zilon.Core.Client.Sector.Tests
             animationBlockerService.AddBlocker(blocker3);
 
             var isBlockerReleasedCheck = false;
-            using var semaphore = new SemaphoreSlim(0);
+            using var semaphore = new SemaphoreSlim(0, 1);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
             {
@@ -267,7 +267,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             animationBlockerService.AddBlocker(blocker1);
 
-            using var semaphore = new SemaphoreSlim(0);
+            using var semaphore = new SemaphoreSlim(0, 1);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(async () =>
