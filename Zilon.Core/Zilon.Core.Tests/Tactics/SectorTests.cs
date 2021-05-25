@@ -25,6 +25,7 @@ namespace Zilon.Core.Tests.Tactics
         /// Тест проверяет, что если для сектора не заданы узлы выхода, то событие выхода не срабатывает.
         /// </summary>
         [Test]
+        [NonParallelizable] // Because test refers on class field shared with other tests.
         public void Update_NoExits_EventNotRaised()
         {
             // ARRANGE
@@ -71,6 +72,7 @@ namespace Zilon.Core.Tests.Tactics
         /// значения характеристик выживания.
         /// </summary>
         [Test]
+        [NonParallelizable]
         public void Update_PlayerActorWithSurvival_SurvivalStatsDecremented()
         {
             // ARRANGE

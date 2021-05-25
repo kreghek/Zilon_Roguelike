@@ -11,6 +11,7 @@ using Zilon.Core.Tests.Common.Schemes;
 namespace Zilon.Core.Tests.Props
 {
     [TestFixture]
+    [NonParallelizable] // Because has SetUp
     public class PropStoreBaseTests
     {
         private TestPropScheme _conceptScheme;
