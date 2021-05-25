@@ -26,6 +26,8 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
         private readonly ISectorUiState _uiState;
+        private readonly Button _personButton;
+        private readonly ModalDialog _personModal;
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
@@ -57,6 +59,16 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 32, 32)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
+
+            _personButton = new Button("p", buttonTexture, buttonFont, new Rectangle(halfOfScreenX - 16 + 32, bottomOfScreenY - 32, 32, 32));
+            _personButton.OnClick += PersonButton_OnClick;
+
+            _personModal = new ModalDialog("1", buttonTexture, buttonTexture, buttonFont, game.GraphicsDevice);
+        }
+
+        private void PersonButton_OnClick(object? sender, EventArgs e)
+        {
+            _personModal.Show();
         }
 
         public override void Draw(GameTime gameTime)
@@ -69,11 +81,32 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
 
             DrawHud();
+
+            DrawModals();
+        }
+
+        private void DrawModals()
+        {
+            _spriteBatch.Begin();
+
+            if (_personModal.IsVisible)
+            {
+                _personModal.Draw(_spriteBatch);
+            }
+
+            _spriteBatch.End();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            var visibleModal = CheckModalsIsVisible();
+            if (visibleModal != null)
+            {
+                visibleModal.Update();
+                return;
+            }
 
             if (_sectorViewModel is null)
             {
@@ -103,6 +136,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                         _personEffectsPanel.Update();
 
                         _autoplayModeButton.Update();
+
+                        _personButton.Update();
                     }
                     else if (!_isTransitionPerforming)
                     {
@@ -119,6 +154,16 @@ namespace CDT.LAST.MonoGameClient.Screens
                     TargetScene = new TransitionScreen(Game, _spriteBatch);
                 }
             }
+        }
+
+        private ModalDialog? CheckModalsIsVisible()
+        {
+            if (_personModal.IsVisible)
+            {
+                return _personModal;
+            }
+
+            return null;
         }
 
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
@@ -155,6 +200,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personEffectsPanel.Draw(_spriteBatch);
 
             _autoplayModeButton.Draw(_spriteBatch);
+            _personButton.Draw(_spriteBatch);
 
             _spriteBatch.End();
         }
