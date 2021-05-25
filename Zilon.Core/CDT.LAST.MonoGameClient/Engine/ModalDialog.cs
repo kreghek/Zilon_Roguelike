@@ -43,7 +43,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         {
             spriteBatch.Draw(_shadowTexture,
                 new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height),
-                new Color(1f, 1f, 1f, 0.5f));
+                Color.White * 0.5f);
             spriteBatch.Draw(BackgroundTexture, _rect, Color.White);
         }
 

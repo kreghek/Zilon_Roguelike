@@ -191,7 +191,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void DrawModals()
         {
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
             if (_personModal.IsVisible)
             {
