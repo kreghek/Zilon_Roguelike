@@ -6,7 +6,12 @@ namespace Zilon.Core.Benchmarks.CreateSector
     {
         private static void Main(string[] args)
         {
+#if DEBUG
+            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args,
+                config: new DebugInProcessConfig());
+#else
             BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
+#endif
         }
     }
 }
