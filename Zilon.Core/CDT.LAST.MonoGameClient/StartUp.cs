@@ -53,21 +53,19 @@ namespace CDT.LAST.MonoGameClient
         {
             container.AddSingleton((Func<IServiceProvider, ISchemeLocator>)(factory =>
             {
-                var mainModule = Process.GetCurrentProcess().MainModule;
-                if (mainModule is null)
+                var binPath = AppContext.BaseDirectory;
+
+                if (string.IsNullOrWhiteSpace(binPath))
                 {
-                    throw new InvalidOperationException("Error during main module calculation.");
+                    throw new InvalidOperationException("Path to bin directiory is null.");
                 }
 
-                var gamePath = mainModule.FileName;
-                if (gamePath is null)
-                {
-                    throw new InvalidOperationException("Error during current path calculation.");
-                }
+                var catalogPath = Path.Combine(binPath, "Content", "Schemes");
 
-                var gamePathFileInfo = new FileInfo(gamePath);
-                var contentDirectory = gamePathFileInfo.Directory?.FullName!;
-                var catalogPath = Path.Combine(contentDirectory, "Content", "Schemes");
+                if (!Directory.Exists(catalogPath))
+                {
+                    throw new InvalidOperationException($"Scheme catalog \"{catalogPath}\" was not found.");
+                }
 
                 var schemeLocator = new FileSchemeLocator(catalogPath);
 
