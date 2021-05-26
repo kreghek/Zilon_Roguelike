@@ -10,6 +10,7 @@ jobs:
     name: Run benchs
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         bench_project:
           - Zilon.Core.Benchmarks.Gameplay
