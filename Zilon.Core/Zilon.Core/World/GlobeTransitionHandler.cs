@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ namespace Zilon.Core.World
             //TODO Разобраться с этим кодом.
             // https://blog.cdemi.io/async-waiting-inside-c-sharp-locks/
             //Asynchronously wait to enter the Semaphore. If no-one has been granted access to the Semaphore, code execution will proceed, otherwise this thread waits here until the semaphore is released 
-            await _semaphoreSlim.WaitAsync();
+            await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
             try
             {
                 if (sectorNode.State != SectorNodeState.SectorMaterialized)
@@ -69,8 +70,8 @@ namespace Zilon.Core.World
                 catch (InvalidOperationException exception)
                 {
                     // Пока ничего не делаем
-                    Console.WriteLine(exception);
-                    Console.WriteLine(actor);
+                    Debug.WriteLine(exception);
+                    Debug.WriteLine(actor);
                 }
 
                 var nextSector = sectorNode.Sector;

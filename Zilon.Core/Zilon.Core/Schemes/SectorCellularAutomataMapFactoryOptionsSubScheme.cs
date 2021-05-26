@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Schemes
 {
-    public class SectorCellularAutomataMapFactoryOptionsSubScheme : SectorMapFactoryOptionsSubSchemeBase,
+    public sealed class SectorCellularAutomataMapFactoryOptionsSubScheme : SectorMapFactoryOptionsSubSchemeBase,
         ISectorCellularAutomataMapFactoryOptionsSubScheme
     {
         public override SchemeSectorMapGenerator MapGenerator => SchemeSectorMapGenerator.CellularAutomaton;
@@ -15,5 +15,13 @@ namespace Zilon.Core.Schemes
 
         [JsonProperty]
         public int ChanceToStartAlive { get; private set; }
+    }
+
+    public sealed class SectorOpenMapFactoryOptionsSubScheme : SectorMapFactoryOptionsSubSchemeBase, ISectorOpenMapFactoryOptionsSubScheme
+    {
+        public override SchemeSectorMapGenerator MapGenerator => SchemeSectorMapGenerator.Open;
+
+        [JsonProperty]
+        public int Size { get; private set; }
     }
 }

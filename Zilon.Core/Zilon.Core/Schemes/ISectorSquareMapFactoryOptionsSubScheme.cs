@@ -10,4 +10,15 @@
         /// </summary>
         int Size { get; }
     }
+
+    /// <summary>
+    /// The options scheme for open huge maps.
+    /// </summary>
+    public interface ISectorOpenMapFactoryOptionsSubScheme : ISectorMapFactoryOptionsSubScheme
+    {
+        /// <summary>
+        /// Size (radius) of the map in nodes.
+        /// </summary>
+        int Size { get; }
+    }
 }
