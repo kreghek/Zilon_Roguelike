@@ -149,18 +149,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
             foreach (var gameObject in gameObjectsFixedList)
             {
-                gameObject.Visible = true;
+                gameObject.CanDraw = true;
 
                 var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
 
                 if (fowNode is null)
                 {
-                    gameObject.Visible = false;
+                    gameObject.CanDraw = false;
                 }
 
                 if (fowNode != null && fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
                 {
-                    gameObject.Visible = false;
+                    gameObject.CanDraw = false;
+                }
+                else if (fowNode != null && !gameObject.HiddenByFow)
+                {
+                    gameObject.UnderFog = fowNode.State != SectorMapNodeFowState.Observing;
                 }
 
                 gameObject.Update(gameTime);

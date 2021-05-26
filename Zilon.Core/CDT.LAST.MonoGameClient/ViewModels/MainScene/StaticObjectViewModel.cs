@@ -13,13 +13,26 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
+    internal sealed class StaticObjectGraphics : SpriteContainer
+    {
+        public StaticObjectGraphics(Game game, IStaticObject staticObject)
+        {
+            var staticObjectTexture = game.Content.Load<Texture2D>("Sprites/game-objects/environment/Grass");
+            var staticObjectSprite = new Sprite(staticObjectTexture)
+            {
+                Origin = new Vector2(0.5f, 0.75f)
+            };
+
+            AddChild(staticObjectSprite);
+        }
+    }
+
     internal class StaticObjectViewModel : GameObjectBase, IContainerViewModel
     {
         private readonly Game _game;
-        private readonly Sprite _grassSprite;
-        private readonly Texture2D _personHeadSprite;
-        private readonly SpriteContainer _rootSprite;
         private readonly SpriteBatch _spriteBatch;
+        private readonly StaticObjectGraphics _graphics;
+        private readonly SpriteContainer _rootSprite;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
         {
@@ -27,7 +40,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             StaticObject = staticObject;
             _spriteBatch = spriteBatch;
 
-            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/game-objects/environment/Grass");
+            _graphics = new StaticObjectGraphics(game, staticObject);
 
             var worldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
 
@@ -50,11 +63,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Color = new Color(Color.White, 0.5f)
             });
 
-            var graphicsRoot = new SpriteContainer();
-            _rootSprite.AddChild(graphicsRoot);
-
-            _grassSprite = new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 0.75f), color: Color.White);
-            graphicsRoot.AddChild(_grassSprite);
+            _rootSprite.AddChild(_graphics);
         }
 
         public override bool HiddenByFow => false;
@@ -64,9 +73,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {
-            _spriteBatch.Begin(transformMatrix: transform);
-
-            _grassSprite.Color = Visible ? Color.White : new Color(255, 255, 255, 0.5f);
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transform);
 
             _rootSprite.Draw(_spriteBatch);
 
@@ -75,6 +82,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public override void Update(GameTime gameTime)
         {
+            _rootSprite.Color = UnderFog ? Color.White * 0.5f : Color.White;
         }
 
         public IStaticObject StaticObject { get; set; }

@@ -11,7 +11,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public abstract Vector2 HitEffectPosition { get; }
 
         public abstract IGraphNode Node { get; }
-        public bool Visible { get; internal set; }
+
+        public bool CanDraw { get; internal set; }
+
+        public bool UnderFog { get; internal set; }
 
         public abstract void Draw(GameTime gameTime, Matrix transform);
 

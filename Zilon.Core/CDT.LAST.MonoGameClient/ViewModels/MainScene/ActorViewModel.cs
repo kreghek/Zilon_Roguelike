@@ -130,7 +130,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 playerActorWorldCoords[1] * hexSize * 2 / 2
             );
 
-            if (Visible)
+            if (CanDraw)
             {
                 var serviceScope = ((LivGame)_game).ServiceProvider;
 
@@ -158,7 +158,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException("The act has no stats to select visualization.");
             }
 
-            if (Visible)
+            if (CanDraw)
             {
                 if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
                 {
