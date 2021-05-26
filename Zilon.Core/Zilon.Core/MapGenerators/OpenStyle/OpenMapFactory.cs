@@ -10,6 +10,24 @@ namespace Zilon.Core.MapGenerators.OpenStyle
 {
     public sealed class OpenMapFactory : IMapFactory
     {
+        private static void FillMap(ISectorMap map, int mapWidth, int mapHeight, int mapSize, HexNode centerNode)
+        {
+            for (var x = 0; x < mapWidth; x++)
+            {
+                for (var y = 0; y < mapHeight; y++)
+                {
+                    var testOffsetCoords = new OffsetCoords(x, y);
+                    var testCubeCoords = HexHelper.ConvertToCube(testOffsetCoords);
+                    var distanceToCenter = centerNode.CubeCoords.DistanceTo(testCubeCoords);
+                    if (distanceToCenter > 0 && distanceToCenter <= mapSize)
+                    {
+                        var node = new HexNode(testOffsetCoords);
+                        map.AddNode(node);
+                    }
+                }
+            }
+        }
+
         public async Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
             if (generationOptions is null)
@@ -41,24 +59,6 @@ namespace Zilon.Core.MapGenerators.OpenStyle
 
                 return map;
             });
-        }
-
-        private static void FillMap(ISectorMap map, int mapWidth, int mapHeight, int mapSize, HexNode centerNode)
-        {
-            for (var x = 0; x < mapWidth; x++)
-            {
-                for (var y = 0; y < mapHeight; y++)
-                {
-                    var testOffsetCoords = new OffsetCoords(x, y);
-                    var testCubeCoords = HexHelper.ConvertToCube(testOffsetCoords);
-                    var distanceToCenter = centerNode.CubeCoords.DistanceTo(testCubeCoords);
-                    if (distanceToCenter > 0 && distanceToCenter <= mapSize)
-                    {
-                        var node = new HexNode(testOffsetCoords);
-                        map.AddNode(node);
-                    }
-                }
-            }
         }
     }
 }

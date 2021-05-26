@@ -182,7 +182,8 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // декора перекрывает проход к какой-либо доступной ячейке).
                 for (var retryIndex = 0; retryIndex < RETRY_COUNT; retryIndex++)
                 {
-                    var isValid = TryRollInteriorCoord(openCoords.ToArray(), passableCoords, checkPass, out var rolledCoord);
+                    var isValid = TryRollInteriorCoord(openCoords.ToArray(), passableCoords, checkPass,
+                        out var rolledCoord);
 
                     // Вне зависимости от корректности rolledCoord
                     // убираем его из открытых координат.

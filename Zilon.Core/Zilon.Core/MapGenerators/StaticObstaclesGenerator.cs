@@ -95,7 +95,6 @@ namespace Zilon.Core.MapGenerators
                     sector.StaticObjectManager.Add(staticObject);
                 }
 
-
                 /*foreach (var region in sector.Map.Regions)
                 {
                     var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
