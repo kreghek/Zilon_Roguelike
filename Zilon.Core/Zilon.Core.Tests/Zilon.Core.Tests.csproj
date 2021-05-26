@@ -35,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="README.md" />
     <EmbeddedResource Include="Schemes\human-person.json" />
   </ItemGroup>
     
