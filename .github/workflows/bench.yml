@@ -1,20 +1,28 @@
 name: Benchmarks
 
 on:
-  schedule:
-    - cron:  '0 0 * * *'
+   push:
+    branches:
+      - benchs-netcore31
 
 jobs:
   buildCore:
     name: Run benchs
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         bench_project:
           - Zilon.Core.Benchmarks.Gameplay
+          - Zilon.Core.Benchmarks.Fow
+          - Zilon.Core.Benchmarks.CreateSector
         include:
           - bench_project: Zilon.Core.Benchmarks.Gameplay
-          - bench_filter: GamePlayBench
+            bench_filter: GamePlayBench
+          - bench_project: Zilon.Core.Benchmarks.Fow
+            bench_filter: FowDataBench
+          - bench_project: Zilon.Core.Benchmarks.CreateSector
+            bench_filter: CreateCellularAutomatonSectorBench
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
