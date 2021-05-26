@@ -17,7 +17,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Game _game;
         private readonly SpriteBatch _spriteBatch;
-        private readonly StaticObjectGraphics _graphics;
         private readonly SpriteContainer _rootSprite;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
@@ -26,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             StaticObject = staticObject;
             _spriteBatch = spriteBatch;
 
-            _graphics = new StaticObjectGraphics(game);
+            var graphics = new StaticObjectGraphics(game);
 
             var worldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
 
@@ -49,7 +48,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Color = new Color(Color.White, 0.5f)
             });
 
-            _rootSprite.AddChild(_graphics);
+            _rootSprite.AddChild(graphics);
         }
 
         public override bool HiddenByFow => false;
