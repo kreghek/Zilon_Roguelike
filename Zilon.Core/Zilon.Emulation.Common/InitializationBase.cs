@@ -11,6 +11,7 @@ using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
+using Zilon.Core.MapGenerators.OpenStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.PersonGeneration;
@@ -276,6 +277,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IRoomGenerator, RoomGenerator>();
             container.AddSingleton(CreateRoomGeneratorRandomSource);
             container.AddSingleton<CellularAutomatonMapFactory>();
+            container.AddSingleton<OpenMapFactory>();
             container.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
 
             container.AddSingleton<IUserTimeProvider, UserTimeProvider>();

@@ -77,7 +77,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 {
                     var serviceScope = ((LivGame)Game).ServiceProvider;
                     var globeInitializer = serviceScope.GetRequiredService<IGlobeInitializer>();
-                    var globe = await globeInitializer.CreateGlobeAsync("intro").ConfigureAwait(false);
+                    var globe = await globeInitializer.CreateGlobeAsync("globe-node").ConfigureAwait(false);
 
                     if (globe is null)
                     {

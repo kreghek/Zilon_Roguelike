@@ -20,13 +20,7 @@ namespace Zilon.Core.World
         {
             var locationSchemeSids = new[]
             {
-                "rat-hole",
-                "rat-kingdom",
-                "demon-dungeon",
-                "demon-lair",
-                "crypt",
-                "elder-place",
-                "genomass-cave"
+                "globe-node"
             };
 
             var rolledLocationSchemeSid = _dice.RollFromList(locationSchemeSids);
