@@ -1,8 +1,9 @@
 name: Benchmarks
 
 on:
-  schedule:
-    - cron:  '0 0 * * *'
+   push:
+    branches:
+      - benchs-net5
 
 jobs:
   buildCore:
@@ -12,15 +13,21 @@ jobs:
       matrix:
         bench_project:
           - Zilon.Core.Benchmarks.Gameplay
+          - Zilon.Core.Benchmarks.Fow
+          - Zilon.Core.Benchmarks.CreateSector
         include:
           - bench_project: Zilon.Core.Benchmarks.Gameplay
-          - bench_filter: GamePlayBench
+            bench_filter: GamePlayBench
+          - bench_project: Zilon.Core.Benchmarks.Fow
+            bench_filter: FowDataBench
+          - bench_project: Zilon.Core.Benchmarks.CreateSector
+            bench_filter: CreateCellularAutomatonSectorBench
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.x'
+          dotnet-version: '5.0.100'
       - name: Run DotNetBenchmark ${{ matrix.bench_project }}
         env:
           ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
