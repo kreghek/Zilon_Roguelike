@@ -27,12 +27,20 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         private static bool CheckMapPassable(IEnumerable<OffsetCoords> currentCoords, OffsetCoords targetCoords)
         {
-            var matrix = new Matrix<bool>(1000, 1000);
+            var matrix = new Matrix<bool>(2002, 2002);
             foreach (var coords in currentCoords)
             {
-                var x = coords.X;
-                var y = coords.Y;
-                matrix.Items[x, y] = true;
+                try
+                {
+                    var x = coords.X;
+                    var y = coords.Y;
+                    matrix.Items[x, y] = true;
+                }
+                catch (IndexOutOfRangeException)
+                { 
+                    // Do nothing. The solution by using matrix is code smell.
+                    // There is the catch block just for debug.
+                }
             }
 
             // Закрываем проверяемый узел
@@ -114,9 +122,16 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
 
         private bool TryRollInteriorCoord(OffsetCoords[] openCoords,
             IEnumerable<OffsetCoords> passableRegionCoords,
+            bool checkPass,
             out OffsetCoords rolledCoords)
         {
             var supposedRolledCoords = _dice.RollFromList(openCoords);
+
+            if (!checkPass)
+            {
+                rolledCoords = supposedRolledCoords;
+                return true;
+            }
 
             // Проверяем, что элемент декора не перекрывает проход.
             var isNotBlockPass = CheckMapPassable(passableRegionCoords, supposedRolledCoords);
@@ -135,7 +150,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
         /// </summary>
         /// <param name="regionDraftCoords"> Координаты региона, среди которых можно выбирать позиции элементов интерьера. </param>
         /// <returns> Возвращает набор метаданных об элементах интерьера. </returns>
-        public InteriorObjectMeta[] RollInteriorObjects(OffsetCoords[] regionDraftCoords)
+        public InteriorObjectMeta[] RollInteriorObjects(OffsetCoords[] regionDraftCoords, bool checkPass)
         {
             if (regionDraftCoords is null)
             {
@@ -157,7 +172,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 return Array.Empty<InteriorObjectMeta>();
             }
 
-            var count = openCoords.Count / 4;
+            var count = openCoords.Count > 10000 ? openCoords.Count/40000 : openCoords.Count / 4;
 
             var resultMetaList = new List<InteriorObjectMeta>();
             for (var i = 0; i < count; i++)
@@ -167,7 +182,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 // декора перекрывает проход к какой-либо доступной ячейке).
                 for (var retryIndex = 0; retryIndex < RETRY_COUNT; retryIndex++)
                 {
-                    var isValid = TryRollInteriorCoord(openCoords.ToArray(), passableCoords, out var rolledCoord);
+                    var isValid = TryRollInteriorCoord(openCoords.ToArray(), passableCoords, checkPass, out var rolledCoord);
 
                     // Вне зависимости от корректности rolledCoord
                     // убираем его из открытых координат.

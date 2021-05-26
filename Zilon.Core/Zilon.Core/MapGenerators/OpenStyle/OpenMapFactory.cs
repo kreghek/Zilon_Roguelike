@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Zilon.Core.Common;
@@ -33,23 +34,31 @@ namespace Zilon.Core.MapGenerators.OpenStyle
 
                 var centerNode = new HexNode(mapSize, mapSize);
                 map.AddNode(centerNode);
-                for (var x = 0; x < mapWidth; x++)
-                {
-                    for (var y = 0; y < mapHeight; y++)
-                    {
-                        var testOffsetCoords = new OffsetCoords(x, y);
-                        var testCubeCoords = HexHelper.ConvertToCube(testOffsetCoords);
-                        var distanceToCenter = centerNode.CubeCoords.DistanceTo(testCubeCoords);
-                        if (distanceToCenter > 0 && distanceToCenter <= mapSize)
-                        {
-                            var node = new HexNode(testOffsetCoords);
-                            map.AddNode(node);
-                        }
-                    }
-                }
+
+                FillMap(map, mapWidth, mapHeight, mapSize, centerNode);
+
+                map.Regions.Add(new MapRegion(1, map.Nodes.ToArray()));
 
                 return map;
             });
+        }
+
+        private static void FillMap(ISectorMap map, int mapWidth, int mapHeight, int mapSize, HexNode centerNode)
+        {
+            for (var x = 0; x < mapWidth; x++)
+            {
+                for (var y = 0; y < mapHeight; y++)
+                {
+                    var testOffsetCoords = new OffsetCoords(x, y);
+                    var testCubeCoords = HexHelper.ConvertToCube(testOffsetCoords);
+                    var distanceToCenter = centerNode.CubeCoords.DistanceTo(testCubeCoords);
+                    if (distanceToCenter > 0 && distanceToCenter <= mapSize)
+                    {
+                        var node = new HexNode(testOffsetCoords);
+                        map.AddNode(node);
+                    }
+                }
+            }
         }
     }
 }
