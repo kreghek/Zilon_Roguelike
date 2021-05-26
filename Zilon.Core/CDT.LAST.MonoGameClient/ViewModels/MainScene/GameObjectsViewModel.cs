@@ -17,21 +17,20 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    class GameObjectsViewModel
+    internal class GameObjectsViewModel
     {
-        private readonly SectorViewModelContext _viewModelContext;
-        private readonly IPlayer _player;
+        private const double UPDATE_DELAY_SECONDS = 1f;
         private readonly Camera _camera;
+        private readonly IPlayer _player;
+        private readonly SectorViewModelContext _viewModelContext;
         private double _updateCounter;
 
-        private const double UPDATE_DELAY_SECONDS = 1f;
-
-        public GameObjectsViewModel(SectorViewModelContext viewModelContext, IPlayer player, Camera camera, SpriteBatch spriteBatch, Game game, ISectorUiState _uiState)
+        public GameObjectsViewModel(SectorViewModelContext viewModelContext, IPlayer player, Camera camera,
+            SpriteBatch spriteBatch, Game game, ISectorUiState _uiState)
         {
             _viewModelContext = viewModelContext;
             _player = player;
             _camera = camera;
-
 
             foreach (var actor in viewModelContext.Sector.ActorManager.Items)
             {
@@ -55,10 +54,40 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             viewModelContext.Sector.ActorManager.Removed += ActorManager_Removed;
         }
 
-        private void ActorManager_Removed(object? sender, ManagerItemsChangedEventArgs<IActor> e)
+        public void Draw(GameTime gameTime)
         {
-            _viewModelContext.GameObjects.RemoveAll(x =>
-                x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor));
+            if (_player.MainPerson is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var fowData = _player.MainPerson.GetModule<IFowData>();
+            var visibleFowNodeData = fowData.GetSectorFowData(_viewModelContext.Sector);
+
+            if (visibleFowNodeData is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var gameObjectsMaterialized =
+                _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
+            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
+            foreach (var gameObject in gameObjectsMaterialized)
+            {
+                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
+
+                if (fowNode is null)
+                {
+                    continue;
+                }
+
+                if (fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
+                {
+                    continue;
+                }
+
+                gameObject.Draw(gameTime, _camera.Transform);
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -96,40 +125,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        public void Draw(GameTime gameTime)
+        private void ActorManager_Removed(object? sender, ManagerItemsChangedEventArgs<IActor> e)
         {
-            if (_player.MainPerson is null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            var fowData = _player.MainPerson.GetModule<IFowData>();
-            var visibleFowNodeData = fowData.GetSectorFowData(_viewModelContext.Sector);
-
-            if (visibleFowNodeData is null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            var gameObjectsMaterialized =
-                _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
-            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
-            foreach (var gameObject in gameObjectsMaterialized)
-            {
-                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
-
-                if (fowNode is null)
-                {
-                    continue;
-                }
-
-                if (fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
-                {
-                    continue;
-                }
-
-                gameObject.Draw(gameTime, _camera.Transform);
-            }
+            _viewModelContext.GameObjects.RemoveAll(x =>
+                x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor));
         }
     }
 }

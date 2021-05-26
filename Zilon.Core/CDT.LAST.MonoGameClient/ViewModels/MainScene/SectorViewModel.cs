@@ -19,6 +19,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;
+        private readonly GameObjectsViewModel _gameObjectsViewModel;
 
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
@@ -26,7 +27,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly ISectorUiState _uiState;
 
         private readonly SectorViewModelContext _viewModelContext;
-        private readonly GameObjectsViewModel _gameObjectsViewModel;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
@@ -55,7 +55,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _viewModelContext = new SectorViewModelContext(sector);
 
-            _gameObjectsViewModel = new GameObjectsViewModel(_viewModelContext, _player, _camera, _spriteBatch, game, _uiState);
+            _gameObjectsViewModel =
+                new GameObjectsViewModel(_viewModelContext, _player, _camera, _spriteBatch, game, _uiState);
 
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
