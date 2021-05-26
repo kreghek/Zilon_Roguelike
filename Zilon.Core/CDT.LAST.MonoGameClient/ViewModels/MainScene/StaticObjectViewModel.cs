@@ -16,10 +16,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal class StaticObjectViewModel : GameObjectBase, IContainerViewModel
     {
         private readonly Game _game;
+        private readonly Sprite _grassSprite;
         private readonly Texture2D _personHeadSprite;
         private readonly SpriteContainer _rootSprite;
         private readonly SpriteBatch _spriteBatch;
-        private readonly Sprite _grassSprite;
 
         public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
         {
