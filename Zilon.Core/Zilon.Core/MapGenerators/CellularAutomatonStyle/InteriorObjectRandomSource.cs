@@ -37,7 +37,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                     matrix.Items[x, y] = true;
                 }
                 catch (IndexOutOfRangeException)
-                { 
+                {
                     // Do nothing. The solution by using matrix is code smell.
                     // There is the catch block just for debug.
                 }
@@ -172,7 +172,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 return Array.Empty<InteriorObjectMeta>();
             }
 
-            var count = openCoords.Count > 10000 ? openCoords.Count/40000 : openCoords.Count / 4;
+            var count = openCoords.Count > 10000 ? openCoords.Count / 40000 : openCoords.Count / 4;
 
             var resultMetaList = new List<InteriorObjectMeta>();
             for (var i = 0; i < count; i++)

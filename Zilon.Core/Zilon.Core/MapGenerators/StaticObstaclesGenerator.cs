@@ -74,7 +74,8 @@ namespace Zilon.Core.MapGenerators
                 // Генерация препятсвий, как статических объектов.
                 var staticObjects = new ConcurrentBag<IStaticObject>();
                 var checkPass = sector.Scheme?.Sid != "globe-node";
-                Parallel.ForEach(sector.Map.Regions, region => {
+                Parallel.ForEach(sector.Map.Regions, region =>
+                {
                     var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
                     var regionCoords = regionNodes.Select(x => x.OffsetCoords).Except(exitNodes).ToArray();
                     var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords, checkPass);
