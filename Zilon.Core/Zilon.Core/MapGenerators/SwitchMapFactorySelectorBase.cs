@@ -15,12 +15,12 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         protected abstract IMapFactory CellularAutomatonMapFactory { get; }
 
+        protected abstract IMapFactory OpenMapFactory { get; }
+
         /// <summary>
         /// Экземпляр фабрики, генерирующий карты на основе прямоугольных комнат.
         /// </summary>
         protected abstract IMapFactory RoomMapFactory { get; }
-
-        protected abstract IMapFactory OpenMapFactory { get; }
 
         /// <summary>
         /// Возвращает генератор карты.

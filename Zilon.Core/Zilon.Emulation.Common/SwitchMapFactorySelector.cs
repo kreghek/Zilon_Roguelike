@@ -21,8 +21,8 @@ namespace Zilon.Emulation.Common
 
         protected override IMapFactory CellularAutomatonMapFactory { get; }
 
-        protected override IMapFactory RoomMapFactory { get; }
-
         protected override IMapFactory OpenMapFactory { get; }
+
+        protected override IMapFactory RoomMapFactory { get; }
     }
 }
