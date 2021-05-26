@@ -1,10 +1,12 @@
-﻿using NUnit.Framework;
-using Zilon.Core.MapGenerators.OpenStyle;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using NUnit.Framework;
+
+using Zilon.Core.MapGenerators.OpenStyle;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.MapGenerators.OpenStyle.Tests
