@@ -13,20 +13,6 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    internal sealed class StaticObjectGraphics : SpriteContainer
-    {
-        public StaticObjectGraphics(Game game, IStaticObject staticObject)
-        {
-            var staticObjectTexture = game.Content.Load<Texture2D>("Sprites/game-objects/environment/Grass");
-            var staticObjectSprite = new Sprite(staticObjectTexture)
-            {
-                Origin = new Vector2(0.5f, 0.75f)
-            };
-
-            AddChild(staticObjectSprite);
-        }
-    }
-
     internal class StaticObjectViewModel : GameObjectBase, IContainerViewModel
     {
         private readonly Game _game;
@@ -40,7 +26,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             StaticObject = staticObject;
             _spriteBatch = spriteBatch;
 
-            _graphics = new StaticObjectGraphics(game, staticObject);
+            _graphics = new StaticObjectGraphics(game);
 
             var worldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
 
