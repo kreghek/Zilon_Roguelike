@@ -9,10 +9,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
@@ -28,6 +26,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly ISectorUiState _uiState;
 
         private readonly SectorViewModelContext _viewModelContext;
+        private readonly GameObjectsViewModel _gameObjectsViewModel;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
@@ -53,29 +52,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                                select actor).SingleOrDefault();
 
             _mapViewModel = new MapViewModel(game, _player, _uiState, Sector, spriteBatch);
-
+            
             _viewModelContext = new SectorViewModelContext(sector);
 
-            foreach (var actor in Sector.ActorManager.Items)
-            {
-                var actorViewModel = new ActorViewModel(game, actor, _viewModelContext, _spriteBatch);
-
-                if (actor.Person == _player.MainPerson)
-                {
-                    _uiState.ActiveActor = actorViewModel;
-                }
-
-                _viewModelContext.GameObjects.Add(actorViewModel);
-            }
-
-            foreach (var staticObject in Sector.StaticObjectManager.Items)
-            {
-                var staticObjectModel = new StaticObjectViewModel(game, staticObject, _spriteBatch);
-
-                _viewModelContext.GameObjects.Add(staticObjectModel);
-            }
-
-            Sector.ActorManager.Removed += ActorManager_Removed;
+            _gameObjectsViewModel = new GameObjectsViewModel(_viewModelContext, _player, _camera, _spriteBatch, game, _uiState);
 
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
@@ -95,33 +75,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
-            var fowData = _player.MainPerson.GetModule<IFowData>();
-            var visibleFowNodeData = fowData.GetSectorFowData(Sector);
-
-            if (visibleFowNodeData is null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            var gameObjectsMaterialized =
-                _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
-            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
-            foreach (var gameObject in gameObjectsMaterialized)
-            {
-                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
-
-                if (fowNode is null)
-                {
-                    continue;
-                }
-
-                if (fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
-                {
-                    continue;
-                }
-
-                gameObject.Draw(gameTime, _camera.Transform);
-            }
+            _gameObjectsViewModel.Draw(gameTime);
 
             _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
@@ -140,31 +94,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
-            var fowData = _player.MainPerson.GetModule<IFowData>();
-            var visibleFowNodeData = fowData.GetSectorFowData(Sector);
-
-            _mapViewModel.Update(gameTime);
-
-            var gameObjectsFixedList = _viewModelContext.GameObjects.ToArray();
-            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
-            foreach (var gameObject in gameObjectsFixedList)
-            {
-                gameObject.Visible = true;
-
-                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
-
-                if (fowNode is null)
-                {
-                    gameObject.Visible = false;
-                }
-
-                if (fowNode != null && fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
-                {
-                    gameObject.Visible = false;
-                }
-
-                gameObject.Update(gameTime);
-            }
+            _gameObjectsViewModel.Update(gameTime);
 
             foreach (var hitEffect in _viewModelContext.EffectManager.HitEffects.ToArray())
             {

@@ -20,9 +20,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public List<GameObjectBase> GameObjects { get; }
 
+        public ISector Sector => _sector;
+
         public IEnumerable<IActor> GetActors()
         {
-            return _sector.ActorManager.Items;
+            return Sector.ActorManager.Items;
         }
     }
 }
