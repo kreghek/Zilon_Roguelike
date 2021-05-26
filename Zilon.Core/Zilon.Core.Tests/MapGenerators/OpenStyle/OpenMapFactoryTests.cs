@@ -28,7 +28,8 @@ namespace Zilon.Core.MapGenerators.OpenStyle.Tests
             Assert.Pass();
         }
 
-        public sealed class TestSectorOpenMapFactoryOptionsSubScheme : SectorMapFactoryOptionsSubSchemeBase, ISectorOpenMapFactoryOptionsSubScheme
+        public sealed class TestSectorOpenMapFactoryOptionsSubScheme : SectorMapFactoryOptionsSubSchemeBase,
+            ISectorOpenMapFactoryOptionsSubScheme
         {
             public override SchemeSectorMapGenerator MapGenerator => SchemeSectorMapGenerator.Open;
 
