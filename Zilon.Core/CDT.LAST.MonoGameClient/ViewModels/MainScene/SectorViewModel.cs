@@ -52,7 +52,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                                select actor).SingleOrDefault();
 
             _mapViewModel = new MapViewModel(game, _player, _uiState, Sector, spriteBatch);
-            
+
             _viewModelContext = new SectorViewModelContext(sector);
 
             _gameObjectsViewModel = new GameObjectsViewModel(_viewModelContext, _player, _camera, _spriteBatch, game, _uiState);
