@@ -73,7 +73,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transform);
+            _spriteBatch.Begin(transformMatrix: transform);
 
             _rootSprite.Draw(_spriteBatch);
 
