@@ -67,7 +67,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             var modalBackgroundTopTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundTop1");
             var modalBackgroundBottomTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundBottom1");
             var modalShadowTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
-            _personModal = new ModalDialog(modalBackgroundTopTexture, modalBackgroundBottomTexture, modalShadowTexture, buttonTexture, buttonFont,
+            _personModal = new ModalDialog(modalBackgroundTopTexture, modalBackgroundBottomTexture, modalShadowTexture,
+                buttonTexture, buttonFont,
                 game.GraphicsDevice);
         }
 

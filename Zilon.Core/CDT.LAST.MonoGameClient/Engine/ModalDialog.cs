@@ -13,15 +13,16 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         private const int MODAL_WIDTH = 400;
         private const int MODAL_HEIGHT = 300;
+        private readonly Texture2D _backgroundBottomTexture;
 
         private readonly Texture2D _backgroundTopTexture;
-        private readonly Texture2D _backgroundBottomTexture;
         private readonly Button _closeButton;
         private readonly Rectangle _dialogRect;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Texture2D _shadowTexture;
 
-        public ModalDialog(Texture2D backgroundTopTexture, Texture2D backgroundBottomTexture, Texture2D shadowTexture, Texture2D buttonTexture, SpriteFont font, GraphicsDevice graphicsDevice)
+        public ModalDialog(Texture2D backgroundTopTexture, Texture2D backgroundBottomTexture, Texture2D shadowTexture,
+            Texture2D buttonTexture, SpriteFont font, GraphicsDevice graphicsDevice)
         {
             _shadowTexture = shadowTexture;
             _graphicsDevice = graphicsDevice;
@@ -55,7 +56,8 @@ namespace CDT.LAST.MonoGameClient.Engine
 
             const int MODAL_HALF_HEIGHT = MODAL_HEIGHT / 2;
             var topRect = new Rectangle(_dialogRect.Location, new Point(MODAL_WIDTH, MODAL_HALF_HEIGHT));
-            var bottomRect = new Rectangle(new Point(_dialogRect.Left, _dialogRect.Top + MODAL_HALF_HEIGHT), new Point(MODAL_WIDTH, MODAL_HALF_HEIGHT));
+            var bottomRect = new Rectangle(new Point(_dialogRect.Left, _dialogRect.Top + MODAL_HALF_HEIGHT),
+                new Point(MODAL_WIDTH, MODAL_HALF_HEIGHT));
             spriteBatch.Draw(_backgroundTopTexture, topRect, Color.White);
             spriteBatch.Draw(_backgroundBottomTexture, bottomRect, Color.White);
 
