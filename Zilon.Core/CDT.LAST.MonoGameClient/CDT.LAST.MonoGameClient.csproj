@@ -60,6 +60,7 @@
         <ItemGroup>
             <SchemeCatalogFiles Include="$(ProjectDir)../../Zilon.Client/Assets/Resources/Schemes/**/*.json" />
         </ItemGroup>
+        <Message Text="Copy the Scheme Catalog from $(SchemeCatalogFiles) to $(TargetDir)." />
         <RemoveDir Directories="$(TargetDir)/Content/Schemes" />
         <Copy SourceFiles="@(SchemeCatalogFiles)"
               DestinationFiles="@(SchemeCatalogFiles->'$(TargetDir)/Content/Schemes/%(RecursiveDir)%(Filename)%(Extension)')"/>
