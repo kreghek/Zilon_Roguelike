@@ -16,6 +16,7 @@ jobs:
           - Zilon.Core.Benchmarks.Gameplay
           - Zilon.Core.Benchmarks.Fow
           - Zilon.Core.Benchmarks.CreateSector
+          - Zilon.Core.Benchmarks.MassGameplay
         include:
           - bench_project: Zilon.Core.Benchmarks.Gameplay
             bench_filter: GamePlayBench
@@ -23,6 +24,8 @@ jobs:
             bench_filter: FowDataBench
           - bench_project: Zilon.Core.Benchmarks.CreateSector
             bench_filter: CreateCellularAutomatonSectorBench
+          - bench_project: Zilon.Core.Benchmarks.MassGameplay
+            bench_filter: MassGamePlayBench
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core

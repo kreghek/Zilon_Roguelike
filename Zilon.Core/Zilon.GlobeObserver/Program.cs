@@ -52,7 +52,7 @@ namespace Zilon.GlobeObserver
 
                 for (var i = 0; i < iterationCount; i++)
                 {
-                    await RunGlobeIteration(globe).ConfigureAwait(false);
+                    await RunGlobeIterationAsync(globe).ConfigureAwait(false);
 
                     globeIterationCounter++;
 
@@ -87,7 +87,7 @@ namespace Zilon.GlobeObserver
             }
         }
 
-        private static async Task RunGlobeIteration(IGlobe globe)
+        private static async Task RunGlobeIterationAsync(IGlobe globe)
         {
             for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
             {
