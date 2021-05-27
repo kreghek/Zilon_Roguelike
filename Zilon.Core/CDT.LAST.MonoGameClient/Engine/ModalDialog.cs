@@ -53,8 +53,9 @@ namespace CDT.LAST.MonoGameClient.Engine
                 new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height),
                 Color.White * 0.5f);
 
-            var topRect = new Rectangle(_dialogRect.Location, new Point(MODAL_WIDTH, MODAL_HEIGHT / 2));
-            var bottomRect = new Rectangle(new Point(_dialogRect.Left, _dialogRect.Top + MODAL_HEIGHT / 2), new Point(MODAL_WIDTH, MODAL_HEIGHT / 2));
+            const int MODAL_HALF_HEIGHT = MODAL_HEIGHT / 2;
+            var topRect = new Rectangle(_dialogRect.Location, new Point(MODAL_WIDTH, MODAL_HALF_HEIGHT));
+            var bottomRect = new Rectangle(new Point(_dialogRect.Left, _dialogRect.Top + MODAL_HALF_HEIGHT), new Point(MODAL_WIDTH, MODAL_HALF_HEIGHT));
             spriteBatch.Draw(_backgroundTopTexture, topRect, Color.White);
             spriteBatch.Draw(_backgroundBottomTexture, bottomRect, Color.White);
 
