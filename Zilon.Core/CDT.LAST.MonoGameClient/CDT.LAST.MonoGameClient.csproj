@@ -56,4 +56,13 @@
       <LastGenOutput>UiResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+    <Target Name="CopySchemeCatalogToClientBin" AfterTargets="Build">
+        <ItemGroup>
+            <SchemeCatalogPath Include="$(ProjectDir)../../Zilon.Client/Assets/Resources/Schemes/" />
+            <SchemeCatalogFiles Include="$(ProjectDir)../../Zilon.Client/Assets/Resources/Schemes/**/*.json" />
+        </ItemGroup>
+        <RemoveDir Directories="$(TargetDir)/Content/Schemes" />
+        <Copy SourceFiles="@(SchemeCatalogFiles)"
+              DestinationFiles="@(SchemeCatalogFiles->'$(TargetDir)/Content/Schemes/%(RecursiveDir)%(Filename)%(Extension)')"/>
+    </Target>
 </Project>
