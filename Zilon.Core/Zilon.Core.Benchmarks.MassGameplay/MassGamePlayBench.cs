@@ -62,7 +62,8 @@ namespace Zilon.Core.Benchmarks.Move
 
         public async Task<bool> CheckNextIterationAsync()
         {
-            return await Task.Run(() => {
+            return await Task.Run(() =>
+            {
                 if (_currentFollowedPerson is null)
                 {
                     UpdateFollowedPerson(_globe);
