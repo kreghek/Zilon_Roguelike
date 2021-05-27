@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 using BenchmarkDotNet.Attributes;
 
@@ -15,7 +16,7 @@ namespace Zilon.Core.Benchmarks.Move
     public class GamePlayBench
     {
         [Benchmark(Description = "GamePlay")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
+        [SuppressMessage("Performance",
             "CA1822:Mark members as static",
             Justification = "Benchmarks MUST be instance methods, static methods are not supported.")]
         public async Task GamePlayBenchAsync()
