@@ -6,13 +6,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public abstract class GameObjectBase
     {
+        public bool CanDraw { get; internal set; }
         public abstract bool HiddenByFow { get; }
 
         public abstract Vector2 HitEffectPosition { get; }
 
         public abstract IGraphNode Node { get; }
-
-        public bool CanDraw { get; internal set; }
 
         public bool UnderFog { get; internal set; }
 
