@@ -9,6 +9,7 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmarks.CreateSector
 {
+    [MemoryDiagnoser]
     public class CreateCellularAutomatonSectorBench
     {
         private ServiceProvider _serviceProvider;
