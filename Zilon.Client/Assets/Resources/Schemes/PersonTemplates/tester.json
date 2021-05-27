@@ -5,7 +5,7 @@
     "En": "Test"
   },
   "BodyEquipments": {
-	  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "steel-armor",
@@ -18,7 +18,7 @@
     ]
   },
   "MainHandEquipments": {
-	  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "short-sword",
@@ -27,7 +27,7 @@
     ]
   },
   "OffHandEquipments": {
-	  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "wooden-shield",
@@ -44,7 +44,7 @@
     ]
   },
   "InventoryProps": {
-	  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "med-kit",
