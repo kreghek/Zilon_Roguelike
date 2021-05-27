@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Bot.Sdk;
 using Zilon.Core.Players;
 using Zilon.Core.World;
+using Zilon.Emulation.Common;
 
 namespace Zilon.Core.Benchmarks.Move
 {
@@ -14,6 +15,9 @@ namespace Zilon.Core.Benchmarks.Move
     public class GamePlayBench
     {
         [Benchmark(Description = "GamePlay")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
+            "CA1822:Mark members as static",
+            Justification = "Benchmarks MUST be instance methods, static methods are not supported.")]
         public async Task GamePlayBenchAsync()
         {
             var serviceContainer = new ServiceCollection();
@@ -34,7 +38,9 @@ namespace Zilon.Core.Benchmarks.Move
             var globe = await autoPlayEngine.CreateGlobeAsync().ConfigureAwait(false);
             var followedPerson = player.MainPerson;
 
-            await autoPlayEngine.StartAsync(globe, followedPerson).ConfigureAwait(false);
+            var autoplayContext = new AutoplayContext(followedPerson);
+
+            await autoPlayEngine.StartAsync(globe, autoplayContext).ConfigureAwait(false);
         }
     }
 }
