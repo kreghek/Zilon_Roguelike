@@ -16,7 +16,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal class StaticObjectViewModel : GameObjectBase, IContainerViewModel
     {
         private readonly Game _game;
-        private readonly Texture2D _personHeadSprite;
         private readonly SpriteContainer _rootSprite;
         private readonly SpriteBatch _spriteBatch;
 
@@ -26,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             StaticObject = staticObject;
             _spriteBatch = spriteBatch;
 
-            _personHeadSprite = _game.Content.Load<Texture2D>("Sprites/game-objects/environment/Grass");
+            var graphics = new StaticObjectGraphics(game);
 
             var worldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
 
@@ -49,10 +48,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Color = new Color(Color.White, 0.5f)
             });
 
-            var graphicsRoot = new SpriteContainer();
-            _rootSprite.AddChild(graphicsRoot);
-
-            graphicsRoot.AddChild(new Sprite(_personHeadSprite, origin: new Vector2(0.5f, 0.75f), color: Color.White));
+            _rootSprite.AddChild(graphics);
         }
 
         public override bool HiddenByFow => false;
@@ -71,6 +67,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public override void Update(GameTime gameTime)
         {
+            _rootSprite.Color = UnderFog ? Color.White * 0.5f : Color.White;
         }
 
         public IStaticObject StaticObject { get; set; }
