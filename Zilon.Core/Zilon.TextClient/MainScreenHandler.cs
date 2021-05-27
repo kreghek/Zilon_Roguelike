@@ -225,10 +225,10 @@ namespace Zilon.TextClient
         private static void PrintState(IActor actor)
         {
             Console.WriteLine(new string('=', 10));
-            if (actor.Person.GetModule<IConditionModule>().Items.Any())
+            if (actor.Person.GetModule<IConditionsModule>().Items.Any())
             {
                 Console.WriteLine($"{UiResource.EffectsLabel}:");
-                foreach (var сondition in actor.Person.GetModule<IConditionModule>().Items)
+                foreach (var сondition in actor.Person.GetModule<IConditionsModule>().Items)
                 {
                     Console.WriteLine(сondition);
                 }

@@ -34,7 +34,7 @@
                 public static string Pole => "pole";
                 public static string Staff => "staff";
                 public static string Sword => "sword";
-                public static string Wand => "Wand";
+                public static string Wand => "wand";
             }
         }
     }

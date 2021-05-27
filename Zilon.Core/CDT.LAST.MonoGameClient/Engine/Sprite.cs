@@ -149,6 +149,34 @@ namespace CDT.LAST.MonoGameClient.Engine
             // get rotation
             var rotation = WorldTransformations.Rotation;
 
+            var flipResult = SetFlips(scale, rotation);
+
+            // normalize z-index
+            if (NormalizeZindex)
+            {
+                if (zindex < 0f)
+                {
+                    zindex = 0f;
+                }
+
+                zindex /= float.MaxValue;
+            }
+
+            // draw the sprite
+            spriteBatch.Draw(
+                texture: Texture,
+                position: WorldTransformations.Position,
+                sourceRectangle: _srcRect,
+                color: WorldTransformations.Color,
+                rotation: flipResult.Rotation,
+                origin: origin,
+                scale: new Vector2(Math.Abs(scale.X), Math.Abs(scale.Y)),
+                effects: flipResult.Effects,
+                layerDepth: zindex);
+        }
+
+        protected virtual FlipResult SetFlips(Vector2 scale, float rotation)
+        {
             // set flips
             var effects = SpriteEffects.None;
             if (scale.X < 0 || scale.Y < 0)
@@ -175,28 +203,13 @@ namespace CDT.LAST.MonoGameClient.Engine
                 }
             }
 
-            // normalize z-index
-            if (NormalizeZindex)
-            {
-                if (zindex < 0f)
-                {
-                    zindex = 0f;
-                }
+            return new FlipResult { Effects = effects, Rotation = rotation };
+        }
 
-                zindex /= float.MaxValue;
-            }
-
-            // draw the sprite
-            spriteBatch.Draw(
-                texture: Texture,
-                position: WorldTransformations.Position,
-                sourceRectangle: _srcRect,
-                color: WorldTransformations.Color,
-                rotation: rotation,
-                origin: origin,
-                scale: new Vector2(Math.Abs(scale.X), Math.Abs(scale.Y)),
-                effects: effects,
-                layerDepth: zindex);
+        protected record FlipResult
+        {
+            public SpriteEffects Effects { get; init; }
+            public float Rotation { get; init; }
         }
     }
 }

@@ -56,7 +56,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var isHumanGraphics = Actor.Person is HumanPerson;
             if (isHumanGraphics)
             {
-                var graphicsRoot = new HumanoidGraphics(game.Content);
+                var graphicsRoot = new HumanoidGraphics(Actor.Person.GetModule<IEquipmentModule>(), game.Content);
 
                 _rootSprite.AddChild(graphicsRoot);
 
@@ -130,13 +130,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 playerActorWorldCoords[1] * hexSize * 2 / 2
             );
 
-            if (Visible)
+            if (CanDraw)
             {
                 var serviceScope = ((LivGame)_game).ServiceProvider;
 
                 var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-                var moveEngine = new ActorMoveEngine(_rootSprite, _graphicsRoot.RootSprite, _shadowSprite, newPosition,
+                var moveEngine = new ActorMoveEngine(
+                    _rootSprite,
+                    _graphicsRoot.RootSprite,
+                    _shadowSprite,
+                    newPosition,
                     animationBlockerService);
                 _actorStateEngine = moveEngine;
             }
@@ -154,7 +158,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException("The act has no stats to select visualization.");
             }
 
-            if (Visible)
+            if (CanDraw)
             {
                 if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
                 {
@@ -171,7 +175,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     var targetSpritePosition = newPosition;
                     _actorStateEngine =
-                        new ActorMeleeAttackEngine(_rootSprite, targetSpritePosition, animationBlockerService);
+                        new ActorMeleeAttackEngine(
+                            _rootSprite,
+                            targetSpritePosition,
+                            animationBlockerService);
 
                     var targetGameObject =
                         _sectorViewModelContext.GameObjects.SingleOrDefault(x => x.Node == e.TargetNode);

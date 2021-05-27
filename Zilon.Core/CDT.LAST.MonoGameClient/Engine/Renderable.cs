@@ -277,6 +277,15 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         /// <summary>
+        /// Returns all children to enumerate.
+        /// </summary>
+        /// <returns> Set of all children of the renderable object. </returns>
+        public IEnumerable<Renderable> GetChildren()
+        {
+            return _children.ToArray();
+        }
+
+        /// <summary>
         /// Remove a child entity from this renderable.
         /// </summary>
         /// <param name="child">Child entity to remove.</param>

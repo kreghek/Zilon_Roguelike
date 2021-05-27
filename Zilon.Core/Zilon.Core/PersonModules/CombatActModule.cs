@@ -22,25 +22,25 @@ namespace Zilon.Core.PersonModules
         private readonly ITacticalActScheme _defaultActScheme;
         private readonly IEquipmentModule _equipmentModule;
         private readonly IEvolutionModule _evolutionModule;
-        private readonly IConditionModule _сonditionModule;
+        private readonly IConditionsModule _сonditionsModule;
 
         public CombatActModule(
             ITacticalActScheme defaultActScheme,
             IEquipmentModule equipmentModule,
-            IConditionModule сonditionModule,
+            IConditionsModule сonditionsModule,
             IEvolutionModule evolutionModule)
         {
             IsActive = true;
 
             _defaultActScheme = defaultActScheme;
             _equipmentModule = equipmentModule;
-            _сonditionModule = сonditionModule;
+            _сonditionsModule = сonditionsModule;
             _evolutionModule = evolutionModule;
         }
 
         private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment?> equipments,
-            IConditionModule сonditionModule,
+            IConditionsModule сonditionModule,
             IEnumerable<IPerk> perks)
         {
             var defaultAct = CreateTacticalAct(defaultActScheme, null, сonditionModule, perks);
@@ -55,7 +55,7 @@ namespace Zilon.Core.PersonModules
 
         private static IEnumerable<ITacticalAct> CalcActsFromEquipments(
             IEnumerable<Equipment?> equipments,
-            IConditionModule сondition,
+            IConditionsModule сondition,
             IEnumerable<IPerk> perks)
         {
             if (equipments == null)
@@ -140,11 +140,11 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void CalcSurvivalHazardOnTacticalAct(IConditionModule сondition,
+        private static void CalcSurvivalHazardOnTacticalAct(IConditionsModule сondition,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
-            var greaterSurvivalEffect = сondition.Items.OfType<SurvivalStatHazardEffect>()
+            var greaterSurvivalEffect = сondition.Items.OfType<SurvivalStatHazardCondition>()
                 .OrderByDescending(x => x.Level).FirstOrDefault();
 
             if (greaterSurvivalEffect == null)
@@ -171,7 +171,7 @@ namespace Zilon.Core.PersonModules
 
         private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
             [MaybeNull] Equipment? equipment,
-            [NotNull] IConditionModule сonditionModule,
+            [NotNull] IConditionsModule сonditionModule,
             [NotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
@@ -221,6 +221,12 @@ namespace Zilon.Core.PersonModules
             else
             {
                 var damagePerkParams = JsonConvert.DeserializeObject<DamagePerkParams>(rule.Params);
+
+                if (damagePerkParams is null)
+                {
+                    throw new InvalidOperationException("Error n serialization of damagePerkParams.");
+                }
+
                 if (damagePerkParams.WeaponTags != null && equipment != null)
                 {
                     var hasAllTags = true;
@@ -292,7 +298,7 @@ namespace Zilon.Core.PersonModules
         public IEnumerable<ITacticalAct> CalcCombatActs()
         {
             var perks = GetPerksSafe();
-            return CalcActs(_defaultActScheme, _equipmentModule, _сonditionModule, perks);
+            return CalcActs(_defaultActScheme, _equipmentModule, _сonditionsModule, perks);
         }
     }
 }
