@@ -21,7 +21,9 @@ namespace CDT.LAST.MonoGameClient.Screens
     {
         private readonly Button _autoplayModeButton;
         private readonly Camera _camera;
+        private readonly Button _personButton;
         private readonly PersonConditionsPanel _personEffectsPanel;
+        private readonly ModalDialog _personModal;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -57,6 +59,17 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 32, 32)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
+
+            _personButton = new Button("p", buttonTexture, buttonFont,
+                new Rectangle(halfOfScreenX - 16 + 32, bottomOfScreenY - 32, 32, 32));
+            _personButton.OnClick += PersonButton_OnClick;
+
+            var modalBackgroundTopTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundTop1");
+            var modalBackgroundBottomTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundBottom1");
+            var modalShadowTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
+            _personModal = new ModalDialog(modalBackgroundTopTexture, modalBackgroundBottomTexture, modalShadowTexture,
+                buttonTexture, buttonFont,
+                game.GraphicsDevice);
         }
 
         public override void Draw(GameTime gameTime)
@@ -69,11 +82,20 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
 
             DrawHud();
+
+            DrawModals();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            var visibleModal = CheckModalsIsVisible();
+            if (visibleModal != null)
+            {
+                visibleModal.Update();
+                return;
+            }
 
             if (_sectorViewModel is null)
             {
@@ -103,6 +125,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                         _personEffectsPanel.Update();
 
                         _autoplayModeButton.Update();
+
+                        _personButton.Update();
                     }
                     else if (!_isTransitionPerforming)
                     {
@@ -149,12 +173,35 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
+        private ModalDialog? CheckModalsIsVisible()
+        {
+            if (_personModal.IsVisible)
+            {
+                return _personModal;
+            }
+
+            return null;
+        }
+
         private void DrawHud()
         {
             _spriteBatch.Begin();
             _personEffectsPanel.Draw(_spriteBatch);
 
             _autoplayModeButton.Draw(_spriteBatch);
+            _personButton.Draw(_spriteBatch);
+
+            _spriteBatch.End();
+        }
+
+        private void DrawModals()
+        {
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+
+            if (_personModal.IsVisible)
+            {
+                _personModal.Draw(_spriteBatch);
+            }
 
             _spriteBatch.End();
         }
@@ -172,6 +219,11 @@ namespace CDT.LAST.MonoGameClient.Screens
                     from actor in sector.ActorManager.Items
                     where actor.Person == player.MainPerson
                     select sectorNode).SingleOrDefault();
+        }
+
+        private void PersonButton_OnClick(object? sender, EventArgs e)
+        {
+            _personModal.Show();
         }
     }
 }
