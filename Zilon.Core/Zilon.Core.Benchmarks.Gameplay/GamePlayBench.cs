@@ -15,6 +15,9 @@ namespace Zilon.Core.Benchmarks.Move
     public class GamePlayBench
     {
         [Benchmark(Description = "GamePlay")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
+            "CA1822:Mark members as static",
+            Justification = "Benchmarks MUST be instance methods, static methods are not supported.")]
         public async Task GamePlayBenchAsync()
         {
             var serviceContainer = new ServiceCollection();
