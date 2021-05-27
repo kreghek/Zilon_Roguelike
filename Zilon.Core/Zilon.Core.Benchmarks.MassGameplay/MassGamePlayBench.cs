@@ -43,8 +43,8 @@ namespace Zilon.Core.Benchmarks.Move
 
     internal sealed class MassAutoplayContext : IAutoplayContext
     {
-        private IPerson _currentFollowedPerson;
         private readonly IGlobe _globe;
+        private IPerson _currentFollowedPerson;
 
         public MassAutoplayContext(IGlobe globe)
         {
@@ -55,9 +55,9 @@ namespace Zilon.Core.Benchmarks.Move
         private void UpdateFollowedPerson(IGlobe globe)
         {
             _currentFollowedPerson = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items)
-                            .Where(x => x.Person.Fraction == Fractions.Pilgrims)
-                            .Where(x => !x.Person.GetModule<ISurvivalModule>().IsDead)
-                            .FirstOrDefault()?.Person;
+                .Where(x => x.Person.Fraction == Fractions.Pilgrims)
+                .Where(x => !x.Person.GetModule<ISurvivalModule>().IsDead)
+                .FirstOrDefault()?.Person;
         }
 
         public async Task<bool> CheckNextIterationAsync()
