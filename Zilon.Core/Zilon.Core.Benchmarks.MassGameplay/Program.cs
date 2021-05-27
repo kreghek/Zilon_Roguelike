@@ -8,19 +8,24 @@ namespace Zilon.Core.Benchmarks.Move
     {
         private static void Main(string[] args)
         {
-#if DEBUG
             BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args,
-                config: new DebugInProcessConfig());
-#else
-            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
-#endif
+                config: GetSpecifiedConfig());
         }
 
-        static IConfig GetGlobalConfig()
-            => DefaultConfig.Instance
+        static IConfig GetSpecifiedConfig()
+            => GetConfigInstance()
             .AddJob(Job.Default
                 .WithWarmupCount(1)
                 .WithInvocationCount(10)
                 .AsDefault()); // the KEY to get it working
+
+        static IConfig GetConfigInstance()
+        {
+#if DEBUG
+            return new DebugInProcessConfig();
+#else
+            return DefaultConfig.Instance;
+#endif
+        }
     }
 }
