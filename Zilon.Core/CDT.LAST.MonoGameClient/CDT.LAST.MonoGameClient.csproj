@@ -56,7 +56,7 @@
       <LastGenOutput>UiResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-    <Target Name="CopySchemeCatalogToClientBin" AfterTargets="Build">
+    <Target Name="CopySchemeCatalogToClientBin" AfterTargets="Build;Publosh">
         <ItemGroup>
             <SchemeCatalogFiles Include="$(ProjectDir)../../Zilon.Client/Assets/Resources/Schemes/**/*.json" />
         </ItemGroup>
