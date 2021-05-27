@@ -16,8 +16,9 @@ namespace Zilon.Core.Benchmarks.Move
             => GetConfigInstance()
             .AddJob(Job.Default
                 .WithWarmupCount(1)
-                .WithInvocationCount(10)
+                .WithInvocationCount(1)
                 .WithUnrollFactor(1)
+                .WithIterationCount(10)
                 .AsDefault()); // the KEY to get it working
 
         static IConfig GetConfigInstance()
