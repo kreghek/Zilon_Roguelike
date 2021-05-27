@@ -19,7 +19,8 @@
         public static IFraction MilitiaFraction { get; }
 
         public static IFraction MonsterFraction { get; }
-        public static IFraction Pilgrims { get; set; }
+
+        public static IFraction Pilgrims { get; }
 
         public static IFraction TroublemakerFraction { get; }
     }

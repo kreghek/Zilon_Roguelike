@@ -11,12 +11,8 @@ namespace Zilon.Core.World
         private const string PERSON_SCHEME_SID = "human-person";
         private readonly IPersonFactory _personFactory;
 
-        private readonly IFraction _pilgrimFraction;
-
         public AutoPersonInitializer(IPersonFactory personFactory)
         {
-            _pilgrimFraction = Fractions.Pilgrims;
-
             _personFactory = personFactory;
         }
 
@@ -35,7 +31,7 @@ namespace Zilon.Core.World
         {
             for (var i = 0; i < 40; i++)
             {
-                yield return CreateStartPerson(PERSON_SCHEME_SID, _personFactory, _pilgrimFraction);
+                yield return CreateStartPerson(PERSON_SCHEME_SID, _personFactory, Fractions.Pilgrims);
             }
         }
 
