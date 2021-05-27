@@ -255,7 +255,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/button.png
 
-#begin Sprites/ui/ModalDialogBackground.png
+#begin Sprites/ui/ModalDialogBackgroundTop1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -265,7 +265,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/ui/ModalDialogBackground.png
+/build:Sprites/ui/ModalDialogBackgroundTop1.png
+
+#begin Sprites/ui/ModalDialogBackgroundBottom1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/ModalDialogBackgroundBottom1.png
 
 #begin Sprites/ui/ModalDialogShadow.png
 /importer:TextureImporter

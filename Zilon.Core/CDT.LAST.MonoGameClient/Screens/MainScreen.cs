@@ -64,9 +64,11 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new Rectangle(halfOfScreenX - 16 + 32, bottomOfScreenY - 32, 32, 32));
             _personButton.OnClick += PersonButton_OnClick;
 
-            var modalBackgroundTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackground");
+            var modalBackgroundTopTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundTop1");
+            var modalBackgroundBottomTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundBottom1");
             var modalShadowTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
-            _personModal = new ModalDialog(modalBackgroundTexture, modalShadowTexture, buttonTexture, buttonFont,
+            _personModal = new ModalDialog(modalBackgroundTopTexture, modalBackgroundBottomTexture, modalShadowTexture,
+                buttonTexture, buttonFont,
                 game.GraphicsDevice);
         }
 
