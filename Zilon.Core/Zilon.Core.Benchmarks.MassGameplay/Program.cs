@@ -19,10 +19,10 @@ namespace Zilon.Core.Benchmarks.Move
         {
             return GetConfigInstance()
                 .AddJob(Job.Default
-                    .WithWarmupCount(1)
+                    .WithWarmupCount(2)
                     .WithInvocationCount(1)
                     .WithUnrollFactor(1)
-                    .WithIterationCount(10)
+                    .WithIterationCount(20)
                     .AsDefault()); // the KEY to get it working
         }
 
