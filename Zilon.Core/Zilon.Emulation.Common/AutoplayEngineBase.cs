@@ -52,6 +52,19 @@ namespace Zilon.Emulation.Common
             return StartInternalAsync(globe, context);
         }
 
+        protected abstract void CatchActorTaskExecutionException(ActorTaskExecutionException exception);
+
+        protected virtual void CatchException(Exception exception)
+        {
+            Console.WriteLine(exception);
+        }
+
+        protected abstract void ConfigBotAux();
+
+        protected abstract void ProcessEnd();
+
+        protected abstract void ProcessSectorExit();
+
         private async Task StartInternalAsync(IGlobe globe, IAutoplayContext context)
         {
             var iterationCounter = 1;
@@ -88,18 +101,5 @@ namespace Zilon.Emulation.Common
 
             ProcessEnd();
         }
-
-        protected abstract void CatchActorTaskExecutionException(ActorTaskExecutionException exception);
-
-        protected virtual void CatchException(Exception exception)
-        {
-            Console.WriteLine(exception);
-        }
-
-        protected abstract void ConfigBotAux();
-
-        protected abstract void ProcessEnd();
-
-        protected abstract void ProcessSectorExit();
     }
 }
