@@ -184,16 +184,12 @@ namespace Zilon.Core.Tactics
                     var records = table.Records;
                     if (records is null || !records.Any())
                     {
+                        Debug.Fail("The drop tables must have not null or empty records.");
                         // Do not try to roll if drop table has no records.
 
                         // Don't forget to remove empty drop table from open to avoid endless loop.
                         openDropTables.RemoveAt(0);
                         continue;
-                    }
-
-                    if (records is null)
-                    {
-                        throw new InvalidOperationException();
                     }
 
                     var recMods = GetModRecords(records, modificators);
