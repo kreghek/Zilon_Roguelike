@@ -27,7 +27,7 @@ namespace Zilon.Core.Benchmarks.MassGameplay
         {
             var followedPerson = globe.SectorNodes
                 .Where(x => x.Sector != null)
-                //TODO Code smell. Because there are no ways to say that sector is not null.
+                //Code smell. Because there are no ways to say that sector is not null.
                 .Select(x => x.Sector!)
                 .SelectMany(x => x.ActorManager.Items)
                 .Select(x => x.Person)
