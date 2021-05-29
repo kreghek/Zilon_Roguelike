@@ -1,9 +1,8 @@
 name: Benchmarks
 
 on:
-   push:
-    branches:
-      - benchs-net5
+  schedule:
+    - cron:  '0 0 * * *'
 
 jobs:
   buildCore:

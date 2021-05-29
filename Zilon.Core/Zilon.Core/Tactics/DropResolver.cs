@@ -182,11 +182,11 @@ namespace Zilon.Core.Tactics
                     var table = openDropTables[0];
 
                     var records = table.Records;
-                    if (!records.Any())
+                    if (records is null || !records.Any())
                     {
                         // Do not try to roll if drop table has no records.
 
-                        // Dont forget to remove empty drop table from open to avoid endless loop.
+                        // Don't forget to remove empty drop table from open to avoid endless loop.
                         openDropTables.RemoveAt(0);
                         continue;
                     }
@@ -200,8 +200,8 @@ namespace Zilon.Core.Tactics
 
                     var totalWeight = recMods.Sum(x => x.ModifiedWeight);
 
-                    /*Debug.Assert(table.Rolls > 0,
-                        "There is no reason to have zero rolls in table. This is most likely a mistake.");*/
+                    Debug.Assert(table.Rolls > 0,
+                        "There is no reason to have zero rolls in table. This is most likely a mistake.");
                     var rolls = table.Rolls;
                     if (rolls == 0)
                     {
