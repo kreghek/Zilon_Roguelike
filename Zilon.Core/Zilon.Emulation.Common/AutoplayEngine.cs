@@ -10,7 +10,8 @@ namespace Zilon.Emulation.Common
     {
         private readonly InitializationBase _startup;
 
-        public AutoplayEngine(InitializationBase startup, BotSettings botSettings, IGlobeInitializer globeInitializer) : base(
+        public AutoplayEngine(InitializationBase startup, BotSettings botSettings,
+            IGlobeInitializer globeInitializer) : base(
             botSettings, globeInitializer)
         {
             _startup = startup;
