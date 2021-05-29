@@ -15,13 +15,13 @@ namespace Zilon.Core.Benchmarks.Move
 
         public MassAutoplayContext(IGlobe globe)
         {
-            UpdateFollowedPerson(globe);
+            _currentFollowedPerson = GetAvailableFollowedPerson(globe);
             _globe = globe;
         }
 
-        private void UpdateFollowedPerson(IGlobe globe)
+        private static IPerson GetAvailableFollowedPerson(IGlobe globe)
         {
-            _currentFollowedPerson = globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items)
+            return globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items)
                 .Where(x => x.Person.Fraction == Fractions.Pilgrims)
                 .Where(x => !x.Person.GetModule<ISurvivalModule>().IsDead)
                 .FirstOrDefault()?.Person;
@@ -31,17 +31,24 @@ namespace Zilon.Core.Benchmarks.Move
         {
             return await Task.Run(() =>
             {
-                if (_currentFollowedPerson is null)
+                if (_currentFollowedPerson is null || _currentFollowedPerson.CheckIsDead())
                 {
-                    UpdateFollowedPerson(_globe);
-                }
+                    var possibleFollowedPerson = GetAvailableFollowedPerson(_globe);
+                    if (possibleFollowedPerson is null)
+                    {
+                        return false;
+                    }
 
-                if (_currentFollowedPerson is null)
+                    _currentFollowedPerson = possibleFollowedPerson;
+
+                    // There is guaratee the selected person is alive.
+                    // See method GetAvailableFollowedPerson().
+                    return true;
+                }
+                else
                 {
-                    return false;
+                    return true;
                 }
-
-                return !_currentFollowedPerson.GetModule<ISurvivalModule>().IsDead;
             });
         }
     }
