@@ -19,6 +19,26 @@ namespace Zilon.Bot.Players.NetCore.DependencyInjectionExtensions
 {
     public static class IServiceCollectionExtensions
     {
+        public static void RegisterBot(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.RegisterLogicState();
+            serviceCollection.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
+            serviceCollection.AddSingleton<LogicStateTreePatterns>();
+
+            serviceCollection.AddSingleton<IHumanActorTaskSource>(serviceProvider =>
+            {
+                var humanTaskSource = new HumanActorTaskSource();
+                var treePatterns = serviceProvider.GetRequiredService<LogicStateTreePatterns>();
+                var botTaskSource = new HumanBotActorTaskSource<ISectorTaskSourceContext>(treePatterns);
+
+                var switchTaskSource =
+                    new SwitchHumanActorTaskSource<ISectorTaskSourceContext>(humanTaskSource, botTaskSource);
+                return switchTaskSource;
+            });
+            serviceCollection.AddSingleton<IActorTaskSource>(provider =>
+                provider.GetRequiredService<IHumanActorTaskSource>());
+        }
+
         public static void RegisterLogicState(this IServiceCollection serviceRegistry)
         {
             var logicTypes = GetTypes<ILogicState>();
@@ -41,26 +61,6 @@ namespace Zilon.Bot.Players.NetCore.DependencyInjectionExtensions
             var logicTypes = ImplementationGatheringHelper.GetImplementations<TInterface>(assembly);
 
             return logicTypes;
-        }
-
-        public static void RegisterBot(this IServiceCollection serviceCollection)
-        {
-            serviceCollection.RegisterLogicState();
-            serviceCollection.AddSingleton<ILogicStateFactory>(factory => new ContainerLogicStateFactory(factory));
-            serviceCollection.AddSingleton<LogicStateTreePatterns>();
-
-            serviceCollection.AddSingleton<IHumanActorTaskSource>(serviceProvider =>
-            {
-                var humanTaskSource = new HumanActorTaskSource();
-                var treePatterns = serviceProvider.GetRequiredService<LogicStateTreePatterns>();
-                var botTaskSource = new HumanBotActorTaskSource<ISectorTaskSourceContext>(treePatterns);
-
-                var switchTaskSource =
-                    new SwitchHumanActorTaskSource<ISectorTaskSourceContext>(humanTaskSource, botTaskSource);
-                return switchTaskSource;
-            });
-            serviceCollection.AddSingleton<IActorTaskSource>(provider =>
-                provider.GetRequiredService<IHumanActorTaskSource>());
         }
     }
 }
