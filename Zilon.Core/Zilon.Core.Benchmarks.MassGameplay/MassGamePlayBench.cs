@@ -21,7 +21,7 @@ namespace Zilon.Core.Benchmarks.MassGameplay
         public async Task GamePlayBenchAsync()
         {
             var serviceContainer = new ServiceCollection();
-            var startUp = new Startup();
+            var startUp = new AutoPersonStartup();
             startUp.RegisterServices(serviceContainer);
             var serviceProvider = serviceContainer.BuildServiceProvider();
 

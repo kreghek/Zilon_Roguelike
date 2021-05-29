@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core.Persons;
 using Zilon.Core.World;
+using Zilon.Emulation.Common;
 
 namespace Zilon.GlobeObserver
 {
@@ -25,7 +26,7 @@ namespace Zilon.GlobeObserver
         private static async Task Main()
         {
             var serviceContainer = new ServiceCollection();
-            var startUp = new StartUp();
+            var startUp = new AutoPersonStartup();
             startUp.RegisterServices(serviceContainer);
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();

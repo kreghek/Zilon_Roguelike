@@ -8,13 +8,12 @@ using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
-using Zilon.Emulation.Common;
 
-namespace Zilon.Core.Benchmarks.MassGameplay
+namespace Zilon.Emulation.Common
 {
-    internal class Startup : InitializationBase
+    public class AutoPersonStartup : InitializationBase
     {
-        public Startup() : base(1)
+        public AutoPersonStartup() : base(1)
         {
         }
 
