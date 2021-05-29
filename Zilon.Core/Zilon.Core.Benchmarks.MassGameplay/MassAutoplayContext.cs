@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
@@ -11,7 +12,7 @@ namespace Zilon.Core.Benchmarks.Move
     internal sealed class MassAutoplayContext : IAutoplayContext
     {
         private readonly IGlobe _globe;
-        private IPerson _currentFollowedPerson;
+        private IPerson? _currentFollowedPerson;
 
         public MassAutoplayContext(IGlobe globe)
         {
@@ -19,12 +20,22 @@ namespace Zilon.Core.Benchmarks.Move
             _globe = globe;
         }
 
-        private static IPerson GetAvailableFollowedPerson(IGlobe globe)
+        private static IPerson? GetAvailableFollowedPerson(IGlobe globe)
         {
-            return globe.SectorNodes.SelectMany(x => x.Sector.ActorManager.Items)
-                .Where(x => x.Person.Fraction == Fractions.Pilgrims)
-                .Where(x => !x.Person.GetModule<ISurvivalModule>().IsDead)
-                .FirstOrDefault()?.Person;
+            var followedPerson = globe.SectorNodes
+                .Where(x => x.Sector != null)
+                //TODO Code smell. Because there are no ways to say that sector is not null.
+                .Select(x => x.Sector!)
+                .SelectMany(x => x.ActorManager.Items)
+                .Select(x => x.Person)
+                .FirstOrDefault(x => CheckFollowedFraction(x) && !x.CheckIsDead());
+
+            return followedPerson;
+        }
+
+        private static bool CheckFollowedFraction(IPerson person)
+        {
+            return person.Fraction == Fractions.Pilgrims;
         }
 
         public async Task<bool> CheckNextIterationAsync()
