@@ -39,7 +39,7 @@ namespace Zilon.Core.Benchmarks.Move
             var globe = await autoPlayEngine.CreateGlobeAsync().ConfigureAwait(false);
             var followedPerson = player.MainPerson;
 
-            var autoplayContext = new AutoplayContext(followedPerson);
+            var autoplayContext = new FollowSinglePersonAutoplayContext(followedPerson);
 
             await autoPlayEngine.StartAsync(globe, autoplayContext).ConfigureAwait(false);
         }

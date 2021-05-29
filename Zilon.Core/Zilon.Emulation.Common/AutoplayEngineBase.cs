@@ -5,37 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Sdk;
-using Zilon.Core.PersonModules;
-using Zilon.Core.Persons;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace Zilon.Emulation.Common
 {
-    public interface IAutoplayContext
-    {
-        Task<bool> CheckNextIterationAsync();
-    }
-
-    public sealed class AutoplayContext : IAutoplayContext
-    {
-        private readonly IPerson _followedPerson;
-
-        public AutoplayContext(IPerson followedPerson)
-        {
-            _followedPerson = followedPerson;
-        }
-
-        public async Task<bool> CheckNextIterationAsync()
-        {
-            return await Task.Run(() =>
-            {
-                return !_followedPerson.GetModule<ISurvivalModule>().IsDead;
-            });
-        }
-    }
-
     public abstract class AutoplayEngineBase
     {
         private const int ITERATION_LIMIT = 4000;

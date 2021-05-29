@@ -52,7 +52,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             PrintPersonBacklog(followedPerson);
 
-            var autoPlayContext = new AutoplayContext(followedPerson);
+            var autoPlayContext = new FollowSinglePersonAutoplayContext(followedPerson);
 
             await autoPlayEngine.StartAsync(globe, autoPlayContext).ConfigureAwait(false);
 
