@@ -17,7 +17,7 @@ namespace Zilon.Emulation.Common
             _followedPerson = followedPerson;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<bool> CheckNextIterationAsync()
         {
             return await Task.Run(() =>
