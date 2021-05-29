@@ -133,7 +133,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 var transitionCommand = _commandFactory.GetCommand<SectorTransitionMoveCommand>();
 
-                _commandPool.Push(transitionCommand);
+                if (transitionCommand.CanExecute().IsSuccess)
+                {
+                    _commandPool.Push(transitionCommand);
+                }
 
                 return true;
             }
