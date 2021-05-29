@@ -45,10 +45,8 @@ namespace Zilon.Core.Benchmarks.Move
                     // See method GetAvailableFollowedPerson().
                     return true;
                 }
-                else
-                {
-                    return true;
-                }
+
+                return true;
             });
         }
     }
