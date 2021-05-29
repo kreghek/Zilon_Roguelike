@@ -2,7 +2,7 @@
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 
-namespace Zilon.Core.Benchmarks.Move
+namespace Zilon.Core.Benchmarks.MassGameplay
 {
     internal static class Program
     {

@@ -1,13 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
-using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Tactics;
 using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
-namespace Zilon.Core.Benchmarks.Move
+namespace Zilon.Core.Benchmarks.MassGameplay
 {
     internal sealed class MassAutoplayContext : IAutoplayContext
     {

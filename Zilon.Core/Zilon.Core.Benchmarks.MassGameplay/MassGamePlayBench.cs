@@ -7,8 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Sdk;
 using Zilon.Core.World;
+using Zilon.Emulation.Common;
 
-namespace Zilon.Core.Benchmarks.Move
+namespace Zilon.Core.Benchmarks.MassGameplay
 {
     [MemoryDiagnoser]
     public class MassGamePlayBench

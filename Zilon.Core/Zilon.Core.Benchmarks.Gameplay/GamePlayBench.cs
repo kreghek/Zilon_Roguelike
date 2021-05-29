@@ -10,7 +10,7 @@ using Zilon.Core.Players;
 using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
-namespace Zilon.Core.Benchmarks.Move
+namespace Zilon.Core.Benchmarks.Gameplay
 {
     [MemoryDiagnoser]
     public class GamePlayBench

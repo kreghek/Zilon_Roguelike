@@ -3,15 +3,14 @@
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
-using Zilon.Emulation.Common;
 
-namespace Zilon.Core.Benchmarks.Move
+namespace Zilon.Emulation.Common
 {
-    internal class AutoplayEngine : AutoplayEngineBase
+    public class AutoplayEngine : AutoplayEngineBase
     {
-        private readonly Startup _startup;
+        private readonly InitializationBase _startup;
 
-        public AutoplayEngine(Startup startup, BotSettings botSettings, IGlobeInitializer globeInitializer) : base(
+        public AutoplayEngine(InitializationBase startup, BotSettings botSettings, IGlobeInitializer globeInitializer) : base(
             botSettings, globeInitializer)
         {
             _startup = startup;

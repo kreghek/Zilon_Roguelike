@@ -6,13 +6,11 @@ using Zilon.Bot.Players;
 using Zilon.Bot.Players.NetCore;
 using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
-using Zilon.Core.Players;
-using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
-namespace Zilon.Core.Benchmarks.Move
+namespace Zilon.Core.Benchmarks.MassGameplay
 {
     internal class Startup : InitializationBase
     {
