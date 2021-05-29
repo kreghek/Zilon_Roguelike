@@ -37,7 +37,7 @@ namespace Zilon.Emulation.Common
             return globe;
         }
 
-        public async Task StartAsync(IGlobe globe, IAutoplayContext context)
+        public Task StartAsync(IGlobe globe, IAutoplayContext context)
         {
             if (globe is null)
             {
@@ -49,6 +49,11 @@ namespace Zilon.Emulation.Common
                 throw new ArgumentNullException(nameof(context));
             }
 
+            return StartInternalAsync(globe, context);
+        }
+
+        private async Task StartInternalAsync(IGlobe globe, IAutoplayContext context)
+        {
             var iterationCounter = 1;
             while (await context.CheckNextIterationAsync() && iterationCounter <= ITERATION_LIMIT)
             {
