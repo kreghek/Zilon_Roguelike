@@ -1,5 +1,4 @@
-﻿
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 using CDT.LAST.MonoGameClient.Engine;
 

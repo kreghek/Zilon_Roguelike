@@ -8,12 +8,15 @@ using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Bot.Players.Strategies;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
-using Zilon.Emulation.Common;
 
-namespace Zilon.GlobeObserver
+namespace Zilon.Emulation.Common
 {
-    internal sealed class StartUp : InitializationBase
+    public class AutoPersonStartup : InitializationBase
     {
+        public AutoPersonStartup() : base(1)
+        {
+        }
+
         public override void ConfigureAux(IServiceProvider serviceFactory)
         {
             throw new NotImplementedException();

@@ -11,7 +11,7 @@ using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Emulation.Common;
 
-namespace Zilon.Core.Benchmarks.Move
+namespace Zilon.Core.Benchmarks.Gameplay
 {
     internal class Startup : InitializationBase
     {

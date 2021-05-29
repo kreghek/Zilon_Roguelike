@@ -6,30 +6,28 @@ using BenchmarkDotNet.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Sdk;
-using Zilon.Core.Players;
 using Zilon.Core.World;
 using Zilon.Emulation.Common;
 
-namespace Zilon.Core.Benchmarks.Gameplay
+namespace Zilon.Core.Benchmarks.MassGameplay
 {
     [MemoryDiagnoser]
-    public class GamePlayBench
+    public class MassGamePlayBench
     {
-        [Benchmark(Description = "GamePlay")]
+        [Benchmark(Description = "Mass Game Play 40")]
         [SuppressMessage("Performance",
             "CA1822:Mark members as static",
             Justification = "Benchmarks MUST be instance methods, static methods are not supported.")]
         public async Task GamePlayBenchAsync()
         {
             var serviceContainer = new ServiceCollection();
-            var startUp = new Startup();
+            var startUp = new AutoPersonStartup();
             startUp.RegisterServices(serviceContainer);
             var serviceProvider = serviceContainer.BuildServiceProvider();
 
             var botSettings = new BotSettings { Mode = "duncan" };
 
             var globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
-            var player = serviceProvider.GetRequiredService<IPlayer>();
 
             var autoPlayEngine = new AutoplayEngine(
                 startUp,
@@ -37,11 +35,10 @@ namespace Zilon.Core.Benchmarks.Gameplay
                 globeInitializer);
 
             var globe = await autoPlayEngine.CreateGlobeAsync().ConfigureAwait(false);
-            var followedPerson = player.MainPerson;
 
-            var autoplayContext = new FollowSinglePersonAutoplayContext(followedPerson);
+            var context = new MassAutoplayContext(globe);
 
-            await autoPlayEngine.StartAsync(globe, autoplayContext).ConfigureAwait(false);
+            await autoPlayEngine.StartAsync(globe, context).ConfigureAwait(false);
         }
     }
 }

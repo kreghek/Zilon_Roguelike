@@ -37,7 +37,7 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 
             var testTask = tcs.Task;
 
@@ -82,7 +82,7 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             var waitCommandExecutedTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
@@ -121,7 +121,7 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             var eventTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
@@ -165,7 +165,7 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             var waitCommandExecutedTask = tcs.Task;
 
             var repeatIteration = 0;
@@ -215,7 +215,7 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             var eventWasInvokedTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
