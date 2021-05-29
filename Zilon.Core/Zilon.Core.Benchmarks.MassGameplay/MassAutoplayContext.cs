@@ -20,6 +20,11 @@ namespace Zilon.Core.Benchmarks.Move
             _globe = globe;
         }
 
+        private static bool CheckFollowedFraction(IPerson person)
+        {
+            return person.Fraction == Fractions.Pilgrims;
+        }
+
         private static IPerson? GetAvailableFollowedPerson(IGlobe globe)
         {
             var followedPerson = globe.SectorNodes
@@ -31,11 +36,6 @@ namespace Zilon.Core.Benchmarks.Move
                 .FirstOrDefault(x => CheckFollowedFraction(x) && !x.CheckIsDead());
 
             return followedPerson;
-        }
-
-        private static bool CheckFollowedFraction(IPerson person)
-        {
-            return person.Fraction == Fractions.Pilgrims;
         }
 
         public async Task<bool> CheckNextIterationAsync()
