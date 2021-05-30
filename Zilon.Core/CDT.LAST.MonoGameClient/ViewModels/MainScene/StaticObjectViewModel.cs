@@ -25,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             StaticObject = staticObject;
             _spriteBatch = spriteBatch;
 
-            var graphics = new StaticObjectGraphics(game);
+            var graphics = new StaticObjectGraphics(game, staticObject);
 
             var worldCoords = HexHelper.ConvertToWorld(((HexNode)StaticObject.Node).OffsetCoords);
 
