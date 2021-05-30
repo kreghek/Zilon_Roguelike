@@ -28,7 +28,7 @@ jobs:
           - Release
           - Debug
         test_suite:
-          - Zilon.Core.DevelopmentTests
+          - Zilon.Bot.Players.DevelopmentTests
         report_format:
           - Html
 
