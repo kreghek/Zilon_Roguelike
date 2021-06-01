@@ -135,7 +135,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Environment/TrashHeap.png
 
-#begin Sprites/game-objects/human/ArmLeftSimple.png
+#begin Sprites/game-objects/Human/ArmLeftSimple.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -145,9 +145,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/human/ArmLeftSimple.png
+/build:Sprites/game-objects/Human/ArmLeftSimple.png
 
-#begin Sprites/game-objects/human/ArmRightSimple.png
+#begin Sprites/game-objects/Human/ArmRightSimple.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -157,9 +157,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/human/ArmRightSimple.png
+/build:Sprites/game-objects/Human/ArmRightSimple.png
 
-#begin Sprites/game-objects/human/ArmRightDual.png
+#begin Sprites/game-objects/Human/ArmRightDual.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -169,9 +169,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/human/ArmRightDual.png
+/build:Sprites/game-objects/Human/ArmRightDual.png
 
-#begin Sprites/game-objects/human/ArmRightRifle.png
+#begin Sprites/game-objects/Human/ArmRightRifle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -181,9 +181,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/human/ArmRightRifle.png
+/build:Sprites/game-objects/Human/ArmRightRifle.png
 
-#begin Sprites/game-objects/human/Body.png
+#begin Sprites/game-objects/Human/Body.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -193,9 +193,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/human/Body.png
+/build:Sprites/game-objects/Human/Body.png
 
-#begin Sprites/game-objects/human/Head.png
+#begin Sprites/game-objects/Human/Head.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -205,9 +205,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/human/Head.png
+/build:Sprites/game-objects/Human/Head.png
 
-#begin Sprites/game-objects/human/LegsIdle.png
+#begin Sprites/game-objects/Human/LegsIdle.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -217,9 +217,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/human/LegsIdle.png
+/build:Sprites/game-objects/Human/LegsIdle.png
 
-#begin Sprites/game-objects/human/LegsCombat.png
+#begin Sprites/game-objects/Human/LegsCombat.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -229,7 +229,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/human/LegsCombat.png
+/build:Sprites/game-objects/Human/LegsCombat.png
+
+#begin Sprites/game-objects/Equipments/CasualCloths/Body.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/CasualCloths/Body.png
 
 #begin Sprites/game-objects/hunter/body.png
 /importer:TextureImporter

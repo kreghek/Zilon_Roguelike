@@ -19,6 +19,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Texture2D _armLeftTexture;
         private readonly Texture2D _armRightTexture;
         private readonly Texture2D _bodyTexture;
+        private readonly Texture2D _bodyClothsTexture;
         private readonly IEquipmentModule _equipmentModule;
 
         private readonly Texture2D _headTexture;
@@ -32,6 +33,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _headTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/Head");
             _bodyTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/Body");
+            _bodyClothsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/CasualCloths/Body");
             _legsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/LegsIdle");
             _armLeftTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/ArmLeftSimple");
             _armRightTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/ArmRightSimple");
@@ -57,6 +59,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             });
 
             AddChild(new Sprite(_bodyTexture)
+            {
+                Position = new Vector2(3, -22),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
+
+            AddChild(new Sprite(_bodyClothsTexture)
             {
                 Position = new Vector2(3, -22),
                 Origin = new Vector2(0.5f, 0.5f)
