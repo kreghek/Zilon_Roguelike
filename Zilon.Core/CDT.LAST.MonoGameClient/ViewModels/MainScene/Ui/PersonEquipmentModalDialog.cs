@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -44,9 +45,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var lastIndex = currentEquipmentItemList.Count;
                 var buttonRect = new Rectangle((lastIndex * ICON_SIZE + ICON_SPACING) + ContentRect.Left, ContentRect.Top, ICON_SIZE, ICON_SIZE);
 
+                var sid = equipment.Scheme.Sid;
+                if (string.IsNullOrEmpty(sid))
+                {
+                    Debug.Fail("All equipment must have symbolic identifier (SID).");
+                    sid = "EmptyPropIcon";
+                }
+
                 var equipmentButton = new EquipmentButton(
                     _uiContentStorage.GetButtonTexture(),
-                    new[] { _uiContentStorage.GetPropIcon("test") },
+                    _uiContentStorage.GetPropIconLayers(sid),
                     buttonRect,
                     new Rectangle(0, 14, 32, 32));
 
