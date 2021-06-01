@@ -23,30 +23,29 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            var color = Color.White;
-            if (_buttonState == UiButtonState.OutOfButton)
-            {
-            }
-            else if (_buttonState == UiButtonState.Hover)
-            {
-                color = Color.Lerp(color, Color.Wheat, 0.25f);
-            }
-            else if (_buttonState == UiButtonState.Pressed)
-            {
-                color = Color.Lerp(color, Color.Wheat, 0.75f);
-            }
-            else
-            {
-                color = Color.Red;
-            }
+            var color = SelectColorByState();
 
             spriteBatch.Draw(Texture, _rect, color);
+
             var contentRect = new Rectangle(
                 CONTENT_MARGIN + _rect.Left,
                 CONTENT_MARGIN + _rect.Top,
                 _rect.Width - (CONTENT_MARGIN * 2),
                 _rect.Height - (CONTENT_MARGIN * 2));
+
             DrawContent(spriteBatch, contentRect, color);
+        }
+
+        private Color SelectColorByState()
+        {
+            var color = Color.White;
+            return _buttonState switch
+            {
+                UiButtonState.OutOfButton => color,// Do not modify start color.
+                UiButtonState.Hover => Color.Lerp(color, Color.Wheat, 0.25f),
+                UiButtonState.Pressed => Color.Lerp(color, Color.Wheat, 0.75f),
+                _ => Color.Red,
+            };
         }
 
         public void Update()
