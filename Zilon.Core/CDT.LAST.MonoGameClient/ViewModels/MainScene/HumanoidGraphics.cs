@@ -36,8 +36,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _armLeftTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/ArmLeftSimple");
             _armRightTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/ArmRightSimple");
 
-            _weaponBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/ShortSwordBase");
-            _shieldBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/WoodenShieldBase");
+            _weaponBaseTexture =
+                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/ShortSwordBase");
+            _shieldBaseTexture =
+                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/WoodenShieldBase");
 
             CreateSpriteHierarchy(equipmentModule);
 
