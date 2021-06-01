@@ -30,11 +30,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             _equipmentModule = equipmentModule;
 
-            _headTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/Head");
-            _bodyTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/Body");
-            _legsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/LegsIdle");
-            _armLeftTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/ArmLeftSimple");
-            _armRightTexture = contentManager.Load<Texture2D>("Sprites/game-objects/human/ArmRightSimple");
+            _headTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/Head");
+            _bodyTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/Body");
+            _legsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/LegsIdle");
+            _armLeftTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/ArmLeftSimple");
+            _armRightTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/ArmRightSimple");
 
             _weaponBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/ShortSwordBase");
             _shieldBaseTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/WoodenShieldBase");
