@@ -18,8 +18,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class PersonEquipmentModalDialog : ModalDialog
     {
-        private const int ICON_SIZE = 32;
-        private const int ICON_SPACING = 2;
+        private const int EQUIPMENT_ITEM_SIZE = 32;
+        private const int EQUIPMENT_ITEM_SPACING = 2;
 
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
@@ -81,13 +81,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var equipmentTitle = GetEquipmentTitle(_selectedEquipmentItem.Equipment);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
             var titleTextSizeVector = hintTitleFont.MeasureString(equipmentTitle);
-            var selectedConditionIndex = _selectedEquipmentItem.UiIndex;
-            const int ITEM_SIZE = ICON_SIZE + ICON_SPACING;
-            var hintXPosition = (selectedConditionIndex * ITEM_SIZE) + ContentRect.Left;
 
-            const int Y_POSITION_UNDER_ICON_SEQUENCE = ICON_SIZE + ICON_SPACING;
             const int HINT_TEXT_SPACING = 8;
-            var hintRectangle = new Rectangle(hintXPosition, Y_POSITION_UNDER_ICON_SEQUENCE + ContentRect.Top,
+            var hintRectangle = new Rectangle(
+                _selectedEquipmentItem.UiRect.Left,
+                _selectedEquipmentItem.UiRect.Bottom + EQUIPMENT_ITEM_SPACING,
                 (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
                 (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
 
@@ -128,12 +126,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 }
 
                 var lastIndex = currentEquipmentItemList.Count;
-                var relativeX = (lastIndex * ICON_SIZE) + ICON_SPACING;
+                var relativeX = (lastIndex * EQUIPMENT_ITEM_SIZE) + EQUIPMENT_ITEM_SPACING;
                 var buttonRect = new Rectangle(
                     relativeX + ContentRect.Left,
                     ContentRect.Top,
-                    ICON_SIZE,
-                    ICON_SIZE);
+                    EQUIPMENT_ITEM_SIZE,
+                    EQUIPMENT_ITEM_SIZE);
 
                 var sid = equipment.Scheme.Sid;
                 if (string.IsNullOrEmpty(sid))
@@ -146,7 +144,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _uiContentStorage.GetButtonTexture(),
                     _uiContentStorage.GetPropIconLayers(sid),
                     buttonRect,
-                    new Rectangle(0, 14, 32, 32));
+                    new Rectangle(0, 14, EQUIPMENT_ITEM_SIZE, EQUIPMENT_ITEM_SIZE));
 
                 var uiItem = new EquipmentUiItem(equipmentButton, equipment, lastIndex, buttonRect);
 
