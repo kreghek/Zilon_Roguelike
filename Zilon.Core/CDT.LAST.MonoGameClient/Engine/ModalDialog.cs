@@ -25,8 +25,6 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Texture2D _shadowTexture;
 
-        protected Rectangle ContentRect { get; set; }
-
         public ModalDialog(IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice)
         {
             _shadowTexture = uiContentStorage.GetModalShadowTexture();
@@ -54,6 +52,8 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         public bool IsVisible { get; private set; }
 
+        protected Rectangle ContentRect { get; set; }
+
         public void Close()
         {
             IsVisible = false;
@@ -77,10 +77,6 @@ namespace CDT.LAST.MonoGameClient.Engine
             _closeButton.Draw(spriteBatch);
         }
 
-        protected virtual void DrawContent(SpriteBatch spriteBatch)
-        {
-        }
-
         public void Show()
         {
             IsVisible = true;
@@ -100,6 +96,10 @@ namespace CDT.LAST.MonoGameClient.Engine
             UpdateContent();
 
             _closeButton.Update();
+        }
+
+        protected virtual void DrawContent(SpriteBatch spriteBatch)
+        {
         }
 
         protected virtual void UpdateContent()

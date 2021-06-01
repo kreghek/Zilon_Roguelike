@@ -19,10 +19,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int ICON_SIZE = 32;
         private const int ICON_SPACING = 2;
 
-        private readonly IUiContentStorage _uiContentStorage;
+        private readonly EquipmentUiItem[] _currentEquipmentItems;
         private readonly IEquipmentModule _equipmentModule;
 
-        private readonly EquipmentUiItem[] _currentEquipmentItems;
+        private readonly IUiContentStorage _uiContentStorage;
 
         private EquipmentUiItem? _selectedEquipmentItem;
 
@@ -43,7 +43,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 }
 
                 var lastIndex = currentEquipmentItemList.Count;
-                var buttonRect = new Rectangle((lastIndex * ICON_SIZE + ICON_SPACING) + ContentRect.Left, ContentRect.Top, ICON_SIZE, ICON_SIZE);
+                var buttonRect = new Rectangle((lastIndex * ICON_SIZE + ICON_SPACING) + ContentRect.Left,
+                    ContentRect.Top, ICON_SIZE, ICON_SIZE);
 
                 var sid = equipment.Scheme.Sid;
                 if (string.IsNullOrEmpty(sid))
@@ -58,7 +59,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     buttonRect,
                     new Rectangle(0, 14, 32, 32));
 
-                var uiItem = new EquipmentUiItem() { Control = equipmentButton, Equipment = equipment, UiRect = buttonRect, UiIndex = lastIndex };
+                var uiItem = new EquipmentUiItem
+                    { Control = equipmentButton, Equipment = equipment, UiRect = buttonRect, UiIndex = lastIndex };
 
                 currentEquipmentItemList.Add(uiItem);
             }
@@ -74,6 +76,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             DrawHintIfSelected(spriteBatch);
+        }
+
+        protected override void UpdateContent()
+        {
+            foreach (var item in _currentEquipmentItems)
+            {
+                item.Control.Update();
+            }
+
+            var mouseState = Mouse.GetState();
+
+            var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+
+            var effectUnderMouse = _currentEquipmentItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
+
+            _selectedEquipmentItem = effectUnderMouse;
         }
 
         private void DrawHintIfSelected(SpriteBatch spriteBatch)
@@ -107,28 +125,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             return equipment.Scheme.Name?.En ?? "<Undef>";
         }
 
-        protected override void UpdateContent()
-        {
-            foreach (var item in _currentEquipmentItems)
-            {
-                item.Control.Update();
-            }
-
-            var mouseState = Mouse.GetState();
-
-            var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-
-            var effectUnderMouse = _currentEquipmentItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
-
-            _selectedEquipmentItem = effectUnderMouse;
-        }
-
         private record EquipmentUiItem
         {
             public EquipmentButton Control { get; init; }
-            public Rectangle UiRect { get; init; }
             public Equipment Equipment { get; init; }
             public int UiIndex { get; init; }
+            public Rectangle UiRect { get; init; }
         }
     }
 }
