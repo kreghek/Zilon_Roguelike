@@ -76,16 +76,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var conditionsModule = person.GetModule<IConditionsModule>();
 
-            var effectIndex = 0;
-            foreach (var effect in conditionsModule.Items)
+            var conditionIndex = 0;
+            foreach (var condition in conditionsModule.Items)
             {
-                var iconX = effectIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
+                var iconX = conditionIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
 
                 DrawIconBackground(spriteBatch, iconX);
 
-                DrawIcon(spriteBatch, effect, iconX);
+                DrawIcon(spriteBatch, condition, iconX);
 
-                effectIndex++;
+                conditionIndex++;
             }
 
             DrawHintIfSelected(spriteBatch);
@@ -130,10 +130,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             if (_selectedCondition != null && _selectedConditionIconIndex != null)
             {
-                var effectTitle = GetConditionTitle(_selectedCondition);
-                var titleTextSizeVector = _hintTitleFont.MeasureString(effectTitle);
-                var selectedEffectIndex = _selectedConditionIconIndex.Value;
-                var hintXPosition = selectedEffectIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
+                var personConditionTitle = GetConditionTitle(_selectedCondition);
+                var titleTextSizeVector = _hintTitleFont.MeasureString(personConditionTitle);
+                var selectedConditionIndex = _selectedConditionIconIndex.Value;
+                var hintXPosition = selectedConditionIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
 
                 const int Y_POSITION_UNDER_ICON_SEQUENCE = ICON_SIZE + ICON_SPACING;
                 const int HINT_TEXT_SPACING = 8;
@@ -143,7 +143,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 spriteBatch.Draw(_conditionHintBackgroundTexture, hintRectangle, Color.DarkSlateGray);
 
-                spriteBatch.DrawString(_hintTitleFont, effectTitle,
+                spriteBatch.DrawString(_hintTitleFont, personConditionTitle,
                     new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                     Color.Wheat);
             }

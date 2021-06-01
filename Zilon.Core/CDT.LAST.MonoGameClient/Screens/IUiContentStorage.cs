@@ -12,6 +12,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         SpriteFont GetButtonFont();
 
+        SpriteFont GetHintTitleFont();
+
         Texture2D[] GetModalTopTextures();
 
         Texture2D[] GetModalBottomTextures();
@@ -30,6 +32,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
         private SpriteFont? _buttonFont;
+        private SpriteFont? _hintTitleFont;
         private readonly Dictionary<string, Texture2D> _propIcons;
 
         public UiContentStorage()
@@ -55,6 +58,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         public void LoadContent(ContentManager contentManager)
         {
             _buttonFont = contentManager.Load<SpriteFont>("Fonts/Main");
+            _hintTitleFont = contentManager.Load<SpriteFont>("Fonts/HintTitle");
             _buttonTexture = contentManager.Load<Texture2D>("Sprites/ui/button");
             _modalShadowTexture = contentManager.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
             _modalTopTextures = new[] { contentManager.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundTop1") };
@@ -62,5 +66,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _propIcons.Add("test", contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/ShortSwordBase"));
         }
+
+        public SpriteFont GetHintTitleFont() => _hintTitleFont ?? throw new InvalidOperationException();
     }
 }

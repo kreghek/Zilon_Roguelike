@@ -12,9 +12,8 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly Rectangle _rect;
         private UiButtonState _buttonState;
 
-        public IconButton(string title, Texture2D texture, Texture2D icon, Rectangle rect)
+        public IconButton(Texture2D texture, Texture2D icon, Rectangle rect)
         {
-            Title = title;
             Texture = texture;
             _icon = icon;
             _rect = rect;
@@ -22,8 +21,6 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         public Texture2D Texture { get; }
-
-        public string Title { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {

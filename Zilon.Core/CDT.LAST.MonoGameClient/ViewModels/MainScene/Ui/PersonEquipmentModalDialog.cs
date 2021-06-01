@@ -1,21 +1,29 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.PersonModules;
+using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class PersonEquipmentModalDialog : ModalDialog
     {
+        private const int ICON_SIZE = 32;
+        private const int ICON_SPACING = 2;
+
         private readonly IUiContentStorage _uiContentStorage;
         private readonly IEquipmentModule _equipmentModule;
 
-        private readonly IconButton[] _currentEquipmentButtons;
+        private readonly EquipmentUiItem[] _currentEquipmentItems;
+
+        private EquipmentUiItem? _selectedEquipmentItem;
 
         public PersonEquipmentModalDialog(
             IUiContentStorage uiContentStorage,
@@ -25,7 +33,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _uiContentStorage = uiContentStorage;
             _equipmentModule = equipmentModule;
 
-            var currentEquipmentButtonList = new List<IconButton>();
+            var currentEquipmentItemList = new List<EquipmentUiItem>();
             foreach (var equipment in _equipmentModule)
             {
                 if (equipment is null)
@@ -33,32 +41,85 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     continue;
                 }
 
+                var lastIndex = currentEquipmentItemList.Count;
+                var buttonRect = new Rectangle((lastIndex * ICON_SIZE + ICON_SPACING) + ContentRect.Left, ContentRect.Top, ICON_SIZE, ICON_SIZE);
+
                 var equipmentButton = new IconButton(
-                    equipment.Scheme.Name?.En ?? "<Undef>",
                     _uiContentStorage.GetButtonTexture(),
                     _uiContentStorage.GetPropIcon("test"),
-                    new Rectangle(currentEquipmentButtonList.Count * 32 + ContentRect.Left, ContentRect.Top, 32, 32));
+                    buttonRect);
 
-                currentEquipmentButtonList.Add(equipmentButton);
+                var uiItem = new EquipmentUiItem() { Control = equipmentButton, Equipment = equipment, UiRect = buttonRect, UiIndex = lastIndex };
+
+                currentEquipmentItemList.Add(uiItem);
             }
 
-            _currentEquipmentButtons = currentEquipmentButtonList.ToArray();
+            _currentEquipmentItems = currentEquipmentItemList.ToArray();
         }
 
         protected override void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect)
         {
-            foreach (var button in _currentEquipmentButtons)
+            foreach (var item in _currentEquipmentItems)
             {
-                button.Draw(spriteBatch);
+                item.Control.Draw(spriteBatch);
             }
+
+            DrawHintIfSelected(spriteBatch);
+        }
+
+        private void DrawHintIfSelected(SpriteBatch spriteBatch)
+        {
+            if (_selectedEquipmentItem is null)
+            {
+                return;
+            }
+
+            var equipmentTitle = GetEquipmentTitle(_selectedEquipmentItem.Equipment);
+            var hintTitleFont = _uiContentStorage.GetHintTitleFont();
+            var titleTextSizeVector = hintTitleFont.MeasureString(equipmentTitle);
+            var selectedConditionIndex = _selectedEquipmentItem.UiIndex;
+            var hintXPosition = selectedConditionIndex * (ICON_SIZE + ICON_SPACING) + ContentRect.Left;
+
+            const int Y_POSITION_UNDER_ICON_SEQUENCE = ICON_SIZE + ICON_SPACING;
+            const int HINT_TEXT_SPACING = 8;
+            var hintRectangle = new Rectangle(hintXPosition, Y_POSITION_UNDER_ICON_SEQUENCE + ContentRect.Top,
+                (int)titleTextSizeVector.X + HINT_TEXT_SPACING * 2,
+                (int)titleTextSizeVector.Y + HINT_TEXT_SPACING * 2);
+
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
+
+            spriteBatch.DrawString(hintTitleFont, equipmentTitle,
+                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                Color.Wheat);
+        }
+
+        private static string? GetEquipmentTitle(Equipment equipment)
+        {
+            return equipment.Scheme.Name?.En ?? "<Undef>";
         }
 
         protected override void UpdateContent()
         {
-            foreach (var button in _currentEquipmentButtons)
+            foreach (var item in _currentEquipmentItems)
             {
-                button.Update();
+                item.Control.Update();
             }
+
+            var mouseState = Mouse.GetState();
+
+            var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+
+            var effectUnderMouse = _currentEquipmentItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
+
+            _selectedEquipmentItem = effectUnderMouse;
+        }
+
+        private record EquipmentUiItem
+        { 
+            public IconButton Control { get; init; }
+            public Rectangle UiRect { get; init; }
+            public Equipment Equipment { get; init; }
+            public int UiIndex { get; init; }
         }
     }
 }
