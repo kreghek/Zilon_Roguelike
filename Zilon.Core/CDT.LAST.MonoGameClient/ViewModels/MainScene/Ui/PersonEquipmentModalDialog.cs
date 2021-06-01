@@ -66,7 +66,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _currentEquipmentItems = currentEquipmentItemList.ToArray();
         }
 
-        protected override void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect)
+        protected override void DrawContent(SpriteBatch spriteBatch)
         {
             foreach (var item in _currentEquipmentItems)
             {

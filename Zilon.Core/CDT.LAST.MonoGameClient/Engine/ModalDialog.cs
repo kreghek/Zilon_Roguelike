@@ -15,6 +15,8 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         private const int MODAL_WIDTH = 400;
         private const int MODAL_HEIGHT = 300;
+        private const int MODAL_CONTENT_MARGIN = 7;
+        private const int MODAL_HEADER_HEIGHT = 16;
         private readonly Texture2D _backgroundBottomTexture;
 
         private readonly Texture2D _backgroundTopTexture;
@@ -43,7 +45,11 @@ namespace CDT.LAST.MonoGameClient.Engine
                     _dialogRect.Top + CLOSE_BUTTON_PADDING, CLOSE_BUTTON_SIZE, CLOSE_BUTTON_SIZE));
             _closeButton.OnClick += CloseButton_OnClick;
 
-            ContentRect = new Rectangle(_dialogRect.Left + 9, _dialogRect.Top + 24, _dialogRect.Right - 9, _dialogRect.Bottom - 9);
+            ContentRect = new Rectangle(
+                _dialogRect.Left + MODAL_CONTENT_MARGIN, 
+                _dialogRect.Top + MODAL_CONTENT_MARGIN + MODAL_HEADER_HEIGHT,
+                _dialogRect.Right - MODAL_CONTENT_MARGIN,
+                _dialogRect.Bottom - MODAL_CONTENT_MARGIN);
         }
 
         public bool IsVisible { get; private set; }
@@ -66,14 +72,12 @@ namespace CDT.LAST.MonoGameClient.Engine
             spriteBatch.Draw(_backgroundTopTexture, topRect, Color.White);
             spriteBatch.Draw(_backgroundBottomTexture, bottomRect, Color.White);
 
-            var contentRect = new Rectangle(_dialogRect.Left + 5, _dialogRect.Top + 25, _dialogRect.Right - 5, _dialogRect.Bottom - 5);
-
-            DrawContent(spriteBatch, contentRect);
+            DrawContent(spriteBatch);
 
             _closeButton.Draw(spriteBatch);
         }
 
-        protected virtual void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect)
+        protected virtual void DrawContent(SpriteBatch spriteBatch)
         {
         }
 
