@@ -21,6 +21,8 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Texture2D _shadowTexture;
 
+        protected Rectangle ContentRect { get; set; }
+
         public ModalDialog(Texture2D backgroundTopTexture, Texture2D backgroundBottomTexture, Texture2D shadowTexture,
             Texture2D buttonTexture, SpriteFont font, GraphicsDevice graphicsDevice)
         {
@@ -39,6 +41,8 @@ namespace CDT.LAST.MonoGameClient.Engine
                 new Rectangle(_dialogRect.Right - CLOSE_BUTTON_SIZE - CLOSE_BUTTON_PADDING,
                     _dialogRect.Top + CLOSE_BUTTON_PADDING, CLOSE_BUTTON_SIZE, CLOSE_BUTTON_SIZE));
             _closeButton.OnClick += CloseButton_OnClick;
+
+            ContentRect = new Rectangle(_dialogRect.Left + 5, _dialogRect.Top + 25, _dialogRect.Right - 5, _dialogRect.Bottom - 5);
         }
 
         public bool IsVisible { get; private set; }
@@ -61,7 +65,15 @@ namespace CDT.LAST.MonoGameClient.Engine
             spriteBatch.Draw(_backgroundTopTexture, topRect, Color.White);
             spriteBatch.Draw(_backgroundBottomTexture, bottomRect, Color.White);
 
+            var contentRect = new Rectangle(_dialogRect.Left + 5, _dialogRect.Top + 25, _dialogRect.Right - 5, _dialogRect.Bottom - 5);
+
+            DrawContent(spriteBatch, contentRect);
+
             _closeButton.Draw(spriteBatch);
+        }
+
+        protected virtual void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect)
+        {
         }
 
         public void Show()
@@ -80,7 +92,13 @@ namespace CDT.LAST.MonoGameClient.Engine
                 Close();
             }
 
+            UpdateContent();
+
             _closeButton.Update();
+        }
+
+        protected virtual void UpdateContent()
+        {
         }
 
         private void CloseButton_OnClick(object? sender, EventArgs e)

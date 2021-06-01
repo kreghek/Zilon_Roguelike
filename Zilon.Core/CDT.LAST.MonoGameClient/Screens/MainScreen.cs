@@ -4,12 +4,14 @@ using System.Linq;
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -67,9 +69,14 @@ namespace CDT.LAST.MonoGameClient.Screens
             var modalBackgroundTopTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundTop1");
             var modalBackgroundBottomTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundBottom1");
             var modalShadowTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
-            _personModal = new ModalDialog(modalBackgroundTopTexture, modalBackgroundBottomTexture, modalShadowTexture,
-                buttonTexture, buttonFont,
-                game.GraphicsDevice);
+            _personModal = new PersonEquipmentModalDialog(
+                modalBackgroundTopTexture,
+                modalBackgroundBottomTexture,
+                modalShadowTexture,
+                buttonTexture,
+                buttonFont,
+                game.GraphicsDevice,
+                _player.MainPerson.GetModule<IEquipmentModule>());
         }
 
         public override void Draw(GameTime gameTime)
