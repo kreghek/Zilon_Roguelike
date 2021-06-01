@@ -43,8 +43,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 }
 
                 var lastIndex = currentEquipmentItemList.Count;
-                var buttonRect = new Rectangle((lastIndex * ICON_SIZE + ICON_SPACING) + ContentRect.Left,
-                    ContentRect.Top, ICON_SIZE, ICON_SIZE);
+                var relativeX = (lastIndex * ICON_SIZE) + ICON_SPACING;
+                var buttonRect = new Rectangle(
+                    relativeX + ContentRect.Left,
+                    ContentRect.Top,
+                    ICON_SIZE,
+                    ICON_SIZE);
 
                 var sid = equipment.Scheme.Sid;
                 if (string.IsNullOrEmpty(sid))
@@ -59,8 +63,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     buttonRect,
                     new Rectangle(0, 14, 32, 32));
 
-                var uiItem = new EquipmentUiItem
-                    { Control = equipmentButton, Equipment = equipment, UiRect = buttonRect, UiIndex = lastIndex };
+                var uiItem = new EquipmentUiItem(equipmentButton, equipment, lastIndex, buttonRect);
 
                 currentEquipmentItemList.Add(uiItem);
             }
@@ -105,13 +108,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
             var titleTextSizeVector = hintTitleFont.MeasureString(equipmentTitle);
             var selectedConditionIndex = _selectedEquipmentItem.UiIndex;
-            var hintXPosition = selectedConditionIndex * (ICON_SIZE + ICON_SPACING) + ContentRect.Left;
+            const int ITEM_SIZE = ICON_SIZE + ICON_SPACING;
+            var hintXPosition = (selectedConditionIndex * ITEM_SIZE) + ContentRect.Left;
 
             const int Y_POSITION_UNDER_ICON_SEQUENCE = ICON_SIZE + ICON_SPACING;
             const int HINT_TEXT_SPACING = 8;
             var hintRectangle = new Rectangle(hintXPosition, Y_POSITION_UNDER_ICON_SEQUENCE + ContentRect.Top,
-                (int)titleTextSizeVector.X + HINT_TEXT_SPACING * 2,
-                (int)titleTextSizeVector.Y + HINT_TEXT_SPACING * 2);
+                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
 
             spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
 
@@ -127,10 +131,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private record EquipmentUiItem
         {
-            public EquipmentButton Control { get; init; }
-            public Equipment Equipment { get; init; }
-            public int UiIndex { get; init; }
-            public Rectangle UiRect { get; init; }
+            public EquipmentUiItem(EquipmentButton control, Equipment equipment, int uiIndex, Rectangle uiRect)
+            {
+                Control = control ?? throw new System.ArgumentNullException(nameof(control));
+                Equipment = equipment ?? throw new System.ArgumentNullException(nameof(equipment));
+                UiIndex = uiIndex;
+                UiRect = uiRect;
+            }
+
+            public EquipmentButton Control { get; }
+            public Equipment Equipment { get; }
+            public int UiIndex { get; }
+            public Rectangle UiRect { get; }
         }
     }
 }
