@@ -116,7 +116,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         }
 
         private record EquipmentUiItem
-        { 
+        {
             public EquipmentButton Control { get; init; }
             public Rectangle UiRect { get; init; }
             public Equipment Equipment { get; init; }
