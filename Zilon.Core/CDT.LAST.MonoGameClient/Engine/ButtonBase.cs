@@ -44,8 +44,6 @@ namespace CDT.LAST.MonoGameClient.Engine
             DrawContent(spriteBatch, contentRect, color);
         }
 
-        protected abstract void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color);
-
         public void Update()
         {
             var mouseState = Mouse.GetState();
@@ -70,6 +68,8 @@ namespace CDT.LAST.MonoGameClient.Engine
                 _buttonState = UiButtonState.OutOfButton;
             }
         }
+
+        protected abstract void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color);
 
         private bool CheckMouseOver()
         {

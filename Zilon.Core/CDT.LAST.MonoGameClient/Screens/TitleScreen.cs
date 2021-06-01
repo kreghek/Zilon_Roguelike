@@ -32,7 +32,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new Rectangle(150, 150, 100, 20));
             _startButton.OnClick += StartButtonClickHandler;
 
-            _switchLanguageButton = new TextButton("Switch lang", buttonTexture, font, new Rectangle(150, 200, 100, 20));
+            _switchLanguageButton =
+                new TextButton("Switch lang", buttonTexture, font, new Rectangle(150, 200, 100, 20));
 
             _switchLanguageButton.OnClick += SwitchLanguageButtonClickHandler;
         }

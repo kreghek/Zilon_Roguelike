@@ -11,6 +11,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         {
             _icon = icon;
         }
+
         protected override void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color)
         {
             spriteBatch.Draw(_icon, contentRect, color);
