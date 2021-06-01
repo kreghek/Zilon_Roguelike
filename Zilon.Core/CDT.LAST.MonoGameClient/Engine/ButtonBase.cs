@@ -12,7 +12,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly Rectangle _rect;
         private UiButtonState _buttonState;
 
-        public ButtonBase(Texture2D texture, Rectangle rect)
+        protected ButtonBase(Texture2D texture, Rectangle rect)
         {
             Texture = texture;
             _rect = rect;
