@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -133,8 +134,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             public EquipmentUiItem(EquipmentButton control, Equipment equipment, int uiIndex, Rectangle uiRect)
             {
-                Control = control ?? throw new System.ArgumentNullException(nameof(control));
-                Equipment = equipment ?? throw new System.ArgumentNullException(nameof(equipment));
+                Control = control ?? throw new ArgumentNullException(nameof(control));
+                Equipment = equipment ?? throw new ArgumentNullException(nameof(equipment));
                 UiIndex = uiIndex;
                 UiRect = uiRect;
             }
