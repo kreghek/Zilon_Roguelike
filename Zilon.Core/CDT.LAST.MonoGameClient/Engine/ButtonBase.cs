@@ -36,18 +36,6 @@ namespace CDT.LAST.MonoGameClient.Engine
             DrawContent(spriteBatch, contentRect, color);
         }
 
-        private Color SelectColorByState()
-        {
-            var color = Color.White;
-            return _buttonState switch
-            {
-                UiButtonState.OutOfButton => color,// Do not modify start color.
-                UiButtonState.Hover => Color.Lerp(color, Color.Wheat, 0.25f),
-                UiButtonState.Pressed => Color.Lerp(color, Color.Wheat, 0.75f),
-                _ => Color.Red,
-            };
-        }
-
         public void Update()
         {
             var mouseState = Mouse.GetState();
@@ -83,6 +71,18 @@ namespace CDT.LAST.MonoGameClient.Engine
             var mouseRect = new Rectangle(mousePosition.X, mousePosition.Y, 1, 1);
 
             return _rect.Intersects(mouseRect);
+        }
+
+        private Color SelectColorByState()
+        {
+            var color = Color.White;
+            return _buttonState switch
+            {
+                UiButtonState.OutOfButton => color, // Do not modify start color.
+                UiButtonState.Hover => Color.Lerp(color, Color.Wheat, 0.25f),
+                UiButtonState.Pressed => Color.Lerp(color, Color.Wheat, 0.75f),
+                _ => Color.Red
+            };
         }
 
         public event EventHandler? OnClick;
