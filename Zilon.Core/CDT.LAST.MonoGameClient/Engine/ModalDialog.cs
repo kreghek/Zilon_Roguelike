@@ -16,7 +16,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         private const int MODAL_WIDTH = 400;
         private const int MODAL_HEIGHT = 300;
         private const int MODAL_CONTENT_MARGIN = 7;
-        private const int MODAL_HEADER_HEIGHT = 16;
+        private const int MODAL_HEADER_HEIGHT = 17;
         private readonly Texture2D _backgroundBottomTexture;
 
         private readonly Texture2D _backgroundTopTexture;
@@ -79,7 +79,12 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         public void Show()
         {
+            InitContent();
             IsVisible = true;
+        }
+
+        protected virtual void InitContent()
+        {
         }
 
         public void Update()

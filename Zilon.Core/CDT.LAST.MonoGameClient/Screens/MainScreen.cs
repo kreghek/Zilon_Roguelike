@@ -70,7 +70,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personModal = new PersonEquipmentModalDialog(
                 uiContentStorage,
                 game.GraphicsDevice,
-                _player.MainPerson.GetModule<IEquipmentModule>());
+                _uiState);
         }
 
         public override void Draw(GameTime gameTime)
