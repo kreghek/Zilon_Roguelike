@@ -95,7 +95,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                 await generateGlobeTask!;
 
                 TargetScene = new MainScreen(Game, _spriteBatch);
-                ;
             }
         }
     }
