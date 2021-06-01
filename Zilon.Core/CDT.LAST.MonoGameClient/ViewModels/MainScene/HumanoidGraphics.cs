@@ -17,17 +17,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
     {
         private readonly Texture2D _armLeftTexture;
+        private readonly Texture2D _armLeftTravelerTexture;
         private readonly Texture2D _armRightTexture;
+        private readonly Texture2D _armRightTravelerTexture;
         private readonly Texture2D _bodyClothsTexture;
         private readonly Texture2D _bodyTexture;
         private readonly Texture2D _bodyTravelerTexture;
-        private readonly Texture2D _legsTravelerTexture;
-        private readonly Texture2D _armLeftTravelerTexture;
-        private readonly Texture2D _armRightTravelerTexture;
         private readonly IEquipmentModule _equipmentModule;
 
         private readonly Texture2D _headTexture;
         private readonly Texture2D _legsTexture;
+        private readonly Texture2D _legsTravelerTexture;
         private readonly Texture2D _shieldBaseTexture;
         private readonly Texture2D _weaponBaseTexture;
 
@@ -43,10 +43,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _bodyClothsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/CasualCloths/Body");
 
-            _bodyTravelerTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/Body");
-            _legsTravelerTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/LegsIdle");
-            _armLeftTravelerTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/ArmLeftSimple");
-            _armRightTravelerTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/ArmRightSimple");
+            _bodyTravelerTexture =
+                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/Body");
+            _legsTravelerTexture =
+                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/LegsIdle");
+            _armLeftTravelerTexture =
+                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/ArmLeftSimple");
+            _armRightTravelerTexture =
+                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/ArmRightSimple");
 
             _weaponBaseTexture =
                 contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/ShortSwordBase");
