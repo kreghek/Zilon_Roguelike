@@ -20,6 +20,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Texture2D _armRightTexture;
         private readonly Texture2D _bodyClothsTexture;
         private readonly Texture2D _bodyTexture;
+        private readonly Texture2D _bodyTravelerTexture;
+        private readonly Texture2D _legsTravelerTexture;
+        private readonly Texture2D _armLeftTravelerTexture;
+        private readonly Texture2D _armRightTravelerTexture;
         private readonly IEquipmentModule _equipmentModule;
 
         private readonly Texture2D _headTexture;
@@ -33,10 +37,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _headTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/Head");
             _bodyTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/Body");
-            _bodyClothsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/CasualCloths/Body");
             _legsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/LegsIdle");
             _armLeftTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/ArmLeftSimple");
             _armRightTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/ArmRightSimple");
+
+            _bodyClothsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/CasualCloths/Body");
+
+            _bodyTravelerTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/Body");
+            _legsTravelerTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/LegsIdle");
+            _armLeftTravelerTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/ArmLeftSimple");
+            _armRightTravelerTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/ArmRightSimple");
 
             _weaponBaseTexture =
                 contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/ShortSwordBase");
@@ -58,17 +68,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Origin = new Vector2(0.5f, 0.75f)
             });
 
-            AddChild(new Sprite(_bodyTexture)
-            {
-                Position = new Vector2(3, -22),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
-
-            AddChild(new Sprite(_bodyClothsTexture)
-            {
-                Position = new Vector2(3, -22),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
+            DrawBody(equipmentModule);
 
             AddChild(new Sprite(_headTexture)
             {
@@ -77,6 +77,37 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             });
 
             DrawRightHand(equipmentModule, _armRightTexture, _weaponBaseTexture, _shieldBaseTexture);
+        }
+
+        private void DrawBody(IEquipmentModule equipmentModule)
+        {
+            AddChild(new Sprite(_bodyTexture)
+            {
+                Position = new Vector2(3, -22),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
+
+            // This slot is body.
+            var equipment = equipmentModule[1];
+            if (equipment != null)
+            {
+                if (equipment.Scheme.Sid == "cloths")
+                {
+                    AddChild(new Sprite(_bodyClothsTexture)
+                    {
+                        Position = new Vector2(3, -22),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
+                else if (equipment.Scheme.Sid == "traveler")
+                {
+                    AddChild(new Sprite(_bodyTravelerTexture)
+                    {
+                        Position = new Vector2(3, -22),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
+            }
         }
 
         private void DrawLeftHand(IEquipmentModule equipmentModule, Texture2D armLeftTexture,

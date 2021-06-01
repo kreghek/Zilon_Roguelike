@@ -1,0 +1,17 @@
+{
+  "Tags": [ "armor" ],
+  "Equip": {
+    "SlotTypes": [ "Body" ],
+    "Armors": [
+      {
+        "Impact": "Psy",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 1
+      }
+    ]
+  },
+  "Name": {
+    "En": "Scholar robe",
+    "Ru": "Роба школяра"
+  }
+}

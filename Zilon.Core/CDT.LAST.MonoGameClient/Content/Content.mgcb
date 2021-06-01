@@ -243,6 +243,54 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/CasualCloths/Body.png
 
+#begin Sprites/game-objects/Equipments/TravellerCloths/Body.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/TravellerCloths/Body.png
+
+#begin Sprites/game-objects/Equipments/TravellerCloths/LegsIdle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/TravellerCloths/LegsIdle.png
+
+#begin Sprites/game-objects/Equipments/TravellerCloths/ArmLeftSimple.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/TravellerCloths/ArmLeftSimple.png
+
+#begin Sprites/game-objects/Equipments/TravellerCloths/ArmRightSimple.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/TravellerCloths/ArmRightSimple.png
+
 #begin Sprites/game-objects/hunter/body.png
 /importer:TextureImporter
 /processor:TextureProcessor
