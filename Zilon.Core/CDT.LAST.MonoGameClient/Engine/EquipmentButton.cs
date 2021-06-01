@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.Engine
 {
-    internal class EquipmentButton: ButtonBase
+    internal class EquipmentButton : ButtonBase
     {
         private readonly Texture2D[] _iconLayers;
         private readonly Rectangle _sourceRect;

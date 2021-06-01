@@ -7,7 +7,7 @@ namespace CDT.LAST.MonoGameClient.Engine
     {
         private readonly SpriteFont _font;
 
-        public TextButton(string title, Texture2D texture, SpriteFont font, Rectangle rect): base(texture, rect)
+        public TextButton(string title, Texture2D texture, SpriteFont font, Rectangle rect) : base(texture, rect)
         {
             Title = title;
             _font = font;

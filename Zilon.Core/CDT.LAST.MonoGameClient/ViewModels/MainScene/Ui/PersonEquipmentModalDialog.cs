@@ -60,7 +60,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     new Rectangle(0, 14, 32, 32));
 
                 var uiItem = new EquipmentUiItem
-                    { Control = equipmentButton, Equipment = equipment, UiRect = buttonRect, UiIndex = lastIndex };
+                { Control = equipmentButton, Equipment = equipment, UiRect = buttonRect, UiIndex = lastIndex };
 
                 currentEquipmentItemList.Add(uiItem);
             }
