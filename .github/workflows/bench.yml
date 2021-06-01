@@ -9,18 +9,28 @@ jobs:
     name: Run benchs
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         bench_project:
           - Zilon.Core.Benchmarks.Gameplay
+          - Zilon.Core.Benchmarks.Fow
+          - Zilon.Core.Benchmarks.CreateSector
+          - Zilon.Core.Benchmarks.MassGameplay
         include:
           - bench_project: Zilon.Core.Benchmarks.Gameplay
-          - bench_filter: GamePlayBench
+            bench_filter: GamePlayBench
+          - bench_project: Zilon.Core.Benchmarks.Fow
+            bench_filter: FowDataBench
+          - bench_project: Zilon.Core.Benchmarks.CreateSector
+            bench_filter: CreateCellularAutomatonSectorBench
+          - bench_project: Zilon.Core.Benchmarks.MassGameplay
+            bench_filter: MassGamePlayBench
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.x'
+          dotnet-version: '5.0.201'
       - name: Run DotNetBenchmark ${{ matrix.bench_project }}
         env:
           ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes

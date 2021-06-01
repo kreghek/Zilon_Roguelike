@@ -3,15 +3,15 @@
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
-using Zilon.Emulation.Common;
 
-namespace Zilon.GlobeObserver
+namespace Zilon.Emulation.Common
 {
-    internal class AutoplayEngine : AutoplayEngineBase
+    public class AutoplayEngine : AutoplayEngineBase
     {
-        private readonly StartUp _startup;
+        private readonly InitializationBase _startup;
 
-        public AutoplayEngine(StartUp startup, BotSettings botSettings, IGlobeInitializer globeInitializer) : base(
+        public AutoplayEngine(InitializationBase startup, BotSettings botSettings,
+            IGlobeInitializer globeInitializer) : base(
             botSettings, globeInitializer)
         {
             _startup = startup;
@@ -36,7 +36,7 @@ namespace Zilon.GlobeObserver
 
         protected override void ProcessSectorExit()
         {
-            Console.WriteLine("Exit");
+            // Do nothing in bench
         }
     }
 }

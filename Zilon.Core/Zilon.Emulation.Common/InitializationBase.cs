@@ -12,7 +12,6 @@ using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
-using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;

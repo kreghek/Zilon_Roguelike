@@ -4,12 +4,14 @@ using System.Linq;
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -19,9 +21,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class MainScreen : GameSceneBase
     {
-        private readonly Button _autoplayModeButton;
+        private readonly TextButton _autoplayModeButton;
         private readonly Camera _camera;
-        private readonly Button _personButton;
+        private readonly TextButton _personButton;
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly ModalDialog _personModal;
         private readonly IPlayer _player;
@@ -47,29 +49,28 @@ namespace CDT.LAST.MonoGameClient.Screens
             _camera = new Camera();
             _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
 
-            var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
-            var buttonFont = game.Content.Load<SpriteFont>("Fonts/Main");
+            var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
             var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
-            _autoplayModeButton = new Button(
+            _autoplayModeButton = new TextButton(
                 string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOffTitle),
-                buttonTexture,
-                buttonFont,
+                uiContentStorage.GetButtonTexture(),
+                uiContentStorage.GetButtonFont(),
                 new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 32, 32)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
 
-            _personButton = new Button("p", buttonTexture, buttonFont,
+            _personButton = new TextButton("p",
+                uiContentStorage.GetButtonTexture(),
+                uiContentStorage.GetButtonFont(),
                 new Rectangle(halfOfScreenX - 16 + 32, bottomOfScreenY - 32, 32, 32));
             _personButton.OnClick += PersonButton_OnClick;
 
-            var modalBackgroundTopTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundTop1");
-            var modalBackgroundBottomTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundBottom1");
-            var modalShadowTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
-            _personModal = new ModalDialog(modalBackgroundTopTexture, modalBackgroundBottomTexture, modalShadowTexture,
-                buttonTexture, buttonFont,
-                game.GraphicsDevice);
+            _personModal = new PersonEquipmentModalDialog(
+                uiContentStorage,
+                game.GraphicsDevice,
+                _uiState);
         }
 
         public override void Draw(GameTime gameTime)
