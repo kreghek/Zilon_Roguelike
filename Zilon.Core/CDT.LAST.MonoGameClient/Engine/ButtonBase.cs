@@ -8,6 +8,7 @@ namespace CDT.LAST.MonoGameClient.Engine
 {
     internal abstract class ButtonBase
     {
+        private const int CONTENT_MARGIN = 5;
         private readonly Rectangle _rect;
         private UiButtonState _buttonState;
 
@@ -40,7 +41,11 @@ namespace CDT.LAST.MonoGameClient.Engine
             }
 
             spriteBatch.Draw(Texture, _rect, color);
-            var contentRect = new Rectangle(5 + _rect.Left, 5 + _rect.Top, _rect.Width - 5 * 2, _rect.Height - 5 * 2);
+            var contentRect = new Rectangle(
+                CONTENT_MARGIN + _rect.Left,
+                CONTENT_MARGIN + _rect.Top,
+                _rect.Width - (CONTENT_MARGIN * 2),
+                _rect.Height - (CONTENT_MARGIN * 2));
             DrawContent(spriteBatch, contentRect, color);
         }
 
