@@ -21,7 +21,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int ICON_SPACING = 2;
 
         private readonly EquipmentUiItem[] _currentEquipmentItems;
-        private readonly IEquipmentModule _equipmentModule;
 
         private readonly IUiContentStorage _uiContentStorage;
 
@@ -33,10 +32,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             IEquipmentModule equipmentModule) : base(uiContentStorage, graphicsDevice)
         {
             _uiContentStorage = uiContentStorage;
-            _equipmentModule = equipmentModule;
 
             var currentEquipmentItemList = new List<EquipmentUiItem>();
-            foreach (var equipment in _equipmentModule)
+            foreach (var equipment in equipmentModule)
             {
                 if (equipment is null)
                 {
