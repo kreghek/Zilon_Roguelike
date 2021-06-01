@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Threading;
 
+using CDT.LAST.MonoGameClient.Screens;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core.Commands;
@@ -33,6 +35,8 @@ namespace CDT.LAST.MonoGameClient
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
 
             RegisterCommands(serviceContainer);
+
+            serviceContainer.AddSingleton<IUiContentStorage, UiContentStorage>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 

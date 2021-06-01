@@ -6,46 +6,34 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CDT.LAST.MonoGameClient.Engine
 {
-    internal class Button
+    internal abstract class ButtonBase
     {
-        private readonly SpriteFont _font;
+        private const int CONTENT_MARGIN = 5;
         private readonly Rectangle _rect;
         private UiButtonState _buttonState;
 
-        public Button(string title, Texture2D texture, SpriteFont font, Rectangle rect)
+        protected ButtonBase(Texture2D texture, Rectangle rect)
         {
-            Title = title;
             Texture = texture;
-            _font = font;
             _rect = rect;
             _buttonState = UiButtonState.OutOfButton;
         }
 
         public Texture2D Texture { get; }
 
-        public string Title { get; set; }
-
         public void Draw(SpriteBatch spriteBatch)
         {
-            var color = Color.White;
-            if (_buttonState == UiButtonState.OutOfButton)
-            {
-            }
-            else if (_buttonState == UiButtonState.Hover)
-            {
-                color = Color.Lerp(color, Color.Wheat, 0.25f);
-            }
-            else if (_buttonState == UiButtonState.Pressed)
-            {
-                color = Color.Lerp(color, Color.Wheat, 0.75f);
-            }
-            else
-            {
-                color = Color.Red;
-            }
+            var color = SelectColorByState();
 
             spriteBatch.Draw(Texture, _rect, color);
-            spriteBatch.DrawString(_font, Title, new Vector2(_rect.Left, _rect.Top), Color.Gray);
+
+            var contentRect = new Rectangle(
+                CONTENT_MARGIN + _rect.Left,
+                CONTENT_MARGIN + _rect.Top,
+                _rect.Width - (CONTENT_MARGIN * 2),
+                _rect.Height - (CONTENT_MARGIN * 2));
+
+            DrawContent(spriteBatch, contentRect, color);
         }
 
         public void Update()
@@ -73,6 +61,8 @@ namespace CDT.LAST.MonoGameClient.Engine
             }
         }
 
+        protected abstract void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color);
+
         private bool CheckMouseOver()
         {
             var mouseState = Mouse.GetState();
@@ -81,6 +71,18 @@ namespace CDT.LAST.MonoGameClient.Engine
             var mouseRect = new Rectangle(mousePosition.X, mousePosition.Y, 1, 1);
 
             return _rect.Intersects(mouseRect);
+        }
+
+        private Color SelectColorByState()
+        {
+            var color = Color.White;
+            return _buttonState switch
+            {
+                UiButtonState.OutOfButton => color, // Do not modify start color.
+                UiButtonState.Hover => Color.Lerp(color, Color.Wheat, 0.25f),
+                UiButtonState.Pressed => Color.Lerp(color, Color.Wheat, 0.75f),
+                _ => Color.Red
+            };
         }
 
         public event EventHandler? OnClick;
