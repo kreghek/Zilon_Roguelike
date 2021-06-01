@@ -44,10 +44,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var lastIndex = currentEquipmentItemList.Count;
                 var buttonRect = new Rectangle((lastIndex * ICON_SIZE + ICON_SPACING) + ContentRect.Left, ContentRect.Top, ICON_SIZE, ICON_SIZE);
 
-                var equipmentButton = new IconButton(
+                var equipmentButton = new EquipmentButton(
                     _uiContentStorage.GetButtonTexture(),
-                    _uiContentStorage.GetPropIcon("test"),
-                    buttonRect);
+                    new[] { _uiContentStorage.GetPropIcon("test") },
+                    buttonRect,
+                    new Rectangle(0, 14, 32, 32));
 
                 var uiItem = new EquipmentUiItem() { Control = equipmentButton, Equipment = equipment, UiRect = buttonRect, UiIndex = lastIndex };
 
@@ -116,7 +117,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private record EquipmentUiItem
         { 
-            public IconButton Control { get; init; }
+            public EquipmentButton Control { get; init; }
             public Rectangle UiRect { get; init; }
             public Equipment Equipment { get; init; }
             public int UiIndex { get; init; }

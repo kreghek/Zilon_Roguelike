@@ -83,6 +83,89 @@ namespace CDT.LAST.MonoGameClient.Engine
         public event EventHandler? OnClick;
     }
 
+    internal class EquipmentButton
+    {
+        private readonly Texture2D[] _iconLayers;
+        private readonly Rectangle _rect;
+        private readonly Rectangle _sourceRect;
+        private UiButtonState _buttonState;
+
+        public EquipmentButton(Texture2D texture, Texture2D[] iconLayers, Rectangle rect, Rectangle sourceRect)
+        {
+            Texture = texture;
+            _iconLayers = iconLayers;
+            _rect = rect;
+            _sourceRect = sourceRect;
+            _buttonState = UiButtonState.OutOfButton;
+        }
+
+        public Texture2D Texture { get; }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            var color = Color.White;
+            if (_buttonState == UiButtonState.OutOfButton)
+            {
+            }
+            else if (_buttonState == UiButtonState.Hover)
+            {
+                color = Color.Lerp(color, Color.Wheat, 0.25f);
+            }
+            else if (_buttonState == UiButtonState.Pressed)
+            {
+                color = Color.Lerp(color, Color.Wheat, 0.75f);
+            }
+            else
+            {
+                color = Color.Red;
+            }
+
+            spriteBatch.Draw(Texture, _rect, color);
+
+            foreach (var iconLayer in _iconLayers)
+            {
+                spriteBatch.Draw(iconLayer, _rect, _sourceRect, color);
+            }
+        }
+
+        public void Update()
+        {
+            var mouseState = Mouse.GetState();
+            if (CheckMouseOver())
+            {
+                if (_buttonState == UiButtonState.Hover && mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    _buttonState = UiButtonState.Pressed;
+                }
+                else if (mouseState.LeftButton == ButtonState.Released && _buttonState == UiButtonState.Pressed)
+                {
+                    _buttonState = UiButtonState.Hover;
+                    OnClick?.Invoke(this, EventArgs.Empty);
+                }
+                else if (mouseState.LeftButton == ButtonState.Released)
+                {
+                    _buttonState = UiButtonState.Hover;
+                }
+            }
+            else
+            {
+                _buttonState = UiButtonState.OutOfButton;
+            }
+        }
+
+        private bool CheckMouseOver()
+        {
+            var mouseState = Mouse.GetState();
+            var mousePosition = mouseState.Position;
+
+            var mouseRect = new Rectangle(mousePosition.X, mousePosition.Y, 1, 1);
+
+            return _rect.Intersects(mouseRect);
+        }
+
+        public event EventHandler? OnClick;
+    }
+
     internal class Button
     {
         private readonly SpriteFont _font;
