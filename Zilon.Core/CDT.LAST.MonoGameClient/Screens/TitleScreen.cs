@@ -16,8 +16,8 @@ namespace CDT.LAST.MonoGameClient.Screens
     {
         private readonly GlobeSelectionScreen _globeGenerationScene;
         private readonly SpriteBatch _spriteBatch;
-        private readonly Button _startButton;
-        private readonly Button _switchLanguageButton;
+        private readonly TextButton _startButton;
+        private readonly TextButton _switchLanguageButton;
 
         public TitleScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -28,11 +28,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
-            _startButton = new Button(UiResources.StartGameButtonTitle, buttonTexture, font,
+            _startButton = new TextButton(UiResources.StartGameButtonTitle, buttonTexture, font,
                 new Rectangle(150, 150, 100, 20));
             _startButton.OnClick += StartButtonClickHandler;
 
-            _switchLanguageButton = new Button("Switch lang", buttonTexture, font, new Rectangle(150, 200, 100, 20));
+            _switchLanguageButton = new TextButton("Switch lang", buttonTexture, font, new Rectangle(150, 200, 100, 20));
 
             _switchLanguageButton.OnClick += SwitchLanguageButtonClickHandler;
         }

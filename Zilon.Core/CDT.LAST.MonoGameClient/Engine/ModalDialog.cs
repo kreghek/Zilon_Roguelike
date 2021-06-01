@@ -20,7 +20,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly Texture2D _backgroundBottomTexture;
 
         private readonly Texture2D _backgroundTopTexture;
-        private readonly Button _closeButton;
+        private readonly TextButton _closeButton;
         private readonly Rectangle _dialogRect;
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Texture2D _shadowTexture;
@@ -38,7 +38,7 @@ namespace CDT.LAST.MonoGameClient.Engine
                 MODAL_WIDTH,
                 MODAL_HEIGHT);
 
-            _closeButton = new Button("X", uiContentStorage.GetButtonTexture(), uiContentStorage.GetButtonFont(),
+            _closeButton = new TextButton("X", uiContentStorage.GetButtonTexture(), uiContentStorage.GetButtonFont(),
                 new Rectangle(_dialogRect.Right - CLOSE_BUTTON_SIZE - CLOSE_BUTTON_PADDING,
                     _dialogRect.Top + CLOSE_BUTTON_PADDING, CLOSE_BUTTON_SIZE, CLOSE_BUTTON_SIZE));
             _closeButton.OnClick += CloseButton_OnClick;

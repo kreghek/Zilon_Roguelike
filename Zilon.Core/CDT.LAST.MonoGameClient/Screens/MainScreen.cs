@@ -21,9 +21,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class MainScreen : GameSceneBase
     {
-        private readonly Button _autoplayModeButton;
+        private readonly TextButton _autoplayModeButton;
         private readonly Camera _camera;
-        private readonly Button _personButton;
+        private readonly TextButton _personButton;
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly ModalDialog _personModal;
         private readonly IPlayer _player;
@@ -53,7 +53,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
             var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
-            _autoplayModeButton = new Button(
+            _autoplayModeButton = new TextButton(
                 string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOffTitle),
                 uiContentStorage.GetButtonTexture(),
                 uiContentStorage.GetButtonFont(),
@@ -61,7 +61,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
 
-            _personButton = new Button("p",
+            _personButton = new TextButton("p",
                 uiContentStorage.GetButtonTexture(),
                 uiContentStorage.GetButtonFont(),
                 new Rectangle(halfOfScreenX - 16 + 32, bottomOfScreenY - 32, 32, 32));
