@@ -46,7 +46,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             _closeButton.OnClick += CloseButton_OnClick;
 
             ContentRect = new Rectangle(
-                _dialogRect.Left + MODAL_CONTENT_MARGIN, 
+                _dialogRect.Left + MODAL_CONTENT_MARGIN,
                 _dialogRect.Top + MODAL_CONTENT_MARGIN + MODAL_HEADER_HEIGHT,
                 _dialogRect.Right - MODAL_CONTENT_MARGIN,
                 _dialogRect.Bottom - MODAL_CONTENT_MARGIN);
