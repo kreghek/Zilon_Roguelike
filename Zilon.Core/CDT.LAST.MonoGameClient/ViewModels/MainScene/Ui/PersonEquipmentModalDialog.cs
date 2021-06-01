@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,22 +12,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class PersonEquipmentModalDialog : ModalDialog
     {
+        private readonly IUiContentStorage _uiContentStorage;
         private readonly IEquipmentModule _equipmentModule;
 
-        private readonly Button[] _currentEquipmentButtons;
+        private readonly IconButton[] _currentEquipmentButtons;
 
         public PersonEquipmentModalDialog(
-            Texture2D backgroundTopTexture,
-            Texture2D backgroundBottomTexture,
-            Texture2D shadowTexture,
-            Texture2D buttonTexture,
-            SpriteFont font,
+            IUiContentStorage uiContentStorage,
             GraphicsDevice graphicsDevice,
-            IEquipmentModule equipmentModule) : base(backgroundTopTexture, backgroundBottomTexture, shadowTexture, buttonTexture, font, graphicsDevice)
+            IEquipmentModule equipmentModule) : base(uiContentStorage, graphicsDevice)
         {
+            _uiContentStorage = uiContentStorage;
             _equipmentModule = equipmentModule;
 
-            var currentEquipmentButtonList = new List<Button>();
+            var currentEquipmentButtonList = new List<IconButton>();
             foreach (var equipment in _equipmentModule)
             {
                 if (equipment is null)
@@ -34,10 +33,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     continue;
                 }
 
-                var equipmentButton = new Button(
+                var equipmentButton = new IconButton(
                     equipment.Scheme.Name?.En ?? "<Undef>",
-                    buttonTexture,
-                    font,
+                    _uiContentStorage.GetButtonTexture(),
+                    _uiContentStorage.GetPropIcon("test"),
                     new Rectangle(currentEquipmentButtonList.Count * 32 + ContentRect.Left, ContentRect.Top, 32, 32));
 
                 currentEquipmentButtonList.Add(equipmentButton);

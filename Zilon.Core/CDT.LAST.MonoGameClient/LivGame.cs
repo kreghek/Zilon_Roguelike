@@ -66,6 +66,9 @@ namespace CDT.LAST.MonoGameClient
 
             _cursorTexture = Content.Load<Texture2D>("Sprites/ui/walk-cursor");
 
+            var uiContentStorage = ServiceProvider.GetRequiredService<IUiContentStorage>();
+            uiContentStorage.LoadContent(Content);
+
             var sceneManager = new ScreenManager(this);
             var titleScene = new TitleScreen(this, _spriteBatch);
             sceneManager.ActiveScreen = titleScene;

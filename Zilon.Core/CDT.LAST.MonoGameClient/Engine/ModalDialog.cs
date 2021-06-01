@@ -1,5 +1,7 @@
 ﻿using System;
 
+using CDT.LAST.MonoGameClient.Screens;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -23,13 +25,12 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         protected Rectangle ContentRect { get; set; }
 
-        public ModalDialog(Texture2D backgroundTopTexture, Texture2D backgroundBottomTexture, Texture2D shadowTexture,
-            Texture2D buttonTexture, SpriteFont font, GraphicsDevice graphicsDevice)
+        public ModalDialog(IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice)
         {
-            _shadowTexture = shadowTexture;
+            _shadowTexture = uiContentStorage.GetModalShadowTexture();
             _graphicsDevice = graphicsDevice;
-            _backgroundTopTexture = backgroundTopTexture;
-            _backgroundBottomTexture = backgroundBottomTexture;
+            _backgroundTopTexture = uiContentStorage.GetModalTopTextures()[0];
+            _backgroundBottomTexture = uiContentStorage.GetModalBottomTextures()[0];
 
             _dialogRect = new Rectangle(
                 (graphicsDevice.Viewport.Width / 2) - (MODAL_WIDTH / 2),
@@ -37,12 +38,12 @@ namespace CDT.LAST.MonoGameClient.Engine
                 MODAL_WIDTH,
                 MODAL_HEIGHT);
 
-            _closeButton = new Button("X", buttonTexture, font,
+            _closeButton = new Button("X", uiContentStorage.GetButtonTexture(), uiContentStorage.GetButtonFont(),
                 new Rectangle(_dialogRect.Right - CLOSE_BUTTON_SIZE - CLOSE_BUTTON_PADDING,
                     _dialogRect.Top + CLOSE_BUTTON_PADDING, CLOSE_BUTTON_SIZE, CLOSE_BUTTON_SIZE));
             _closeButton.OnClick += CloseButton_OnClick;
 
-            ContentRect = new Rectangle(_dialogRect.Left + 5, _dialogRect.Top + 25, _dialogRect.Right - 5, _dialogRect.Bottom - 5);
+            ContentRect = new Rectangle(_dialogRect.Left + 9, _dialogRect.Top + 24, _dialogRect.Right - 9, _dialogRect.Bottom - 9);
         }
 
         public bool IsVisible { get; private set; }

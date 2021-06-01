@@ -49,32 +49,26 @@ namespace CDT.LAST.MonoGameClient.Screens
             _camera = new Camera();
             _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
 
-            var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
-            var buttonFont = game.Content.Load<SpriteFont>("Fonts/Main");
+            var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
             var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
             _autoplayModeButton = new Button(
                 string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOffTitle),
-                buttonTexture,
-                buttonFont,
+                uiContentStorage.GetButtonTexture(),
+                uiContentStorage.GetButtonFont(),
                 new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 32, 32)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
 
-            _personButton = new Button("p", buttonTexture, buttonFont,
+            _personButton = new Button("p",
+                uiContentStorage.GetButtonTexture(),
+                uiContentStorage.GetButtonFont(),
                 new Rectangle(halfOfScreenX - 16 + 32, bottomOfScreenY - 32, 32, 32));
             _personButton.OnClick += PersonButton_OnClick;
 
-            var modalBackgroundTopTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundTop1");
-            var modalBackgroundBottomTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundBottom1");
-            var modalShadowTexture = game.Content.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
             _personModal = new PersonEquipmentModalDialog(
-                modalBackgroundTopTexture,
-                modalBackgroundBottomTexture,
-                modalShadowTexture,
-                buttonTexture,
-                buttonFont,
+                uiContentStorage,
                 game.GraphicsDevice,
                 _player.MainPerson.GetModule<IEquipmentModule>());
         }
