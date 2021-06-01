@@ -83,10 +83,6 @@ namespace CDT.LAST.MonoGameClient.Engine
             IsVisible = true;
         }
 
-        protected virtual void InitContent()
-        {
-        }
-
         public void Update()
         {
             // Poll for current keyboard state
@@ -104,6 +100,10 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         protected virtual void DrawContent(SpriteBatch spriteBatch)
+        {
+        }
+
+        protected virtual void InitContent()
         {
         }
 

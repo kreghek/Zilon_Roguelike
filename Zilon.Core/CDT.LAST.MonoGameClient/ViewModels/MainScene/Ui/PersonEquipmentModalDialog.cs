@@ -50,6 +50,60 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawHintIfSelected(spriteBatch);
         }
 
+        protected override void InitContent()
+        {
+            base.InitContent();
+
+            var person = _uiState.ActiveActor?.Actor?.Person;
+            if (person is null)
+            {
+                throw new InvalidOperationException("Active person must be selected before this dialog was opened.");
+            }
+
+            var equipmentModule = person.GetModuleSafe<IEquipmentModule>();
+            if (equipmentModule is null)
+            {
+                throw new InvalidOperationException(
+                    "Active person must be aple to use equipment to shown in this dialog.");
+            }
+
+            var currentEquipmentItemList = new List<EquipmentUiItem>();
+            foreach (var equipment in equipmentModule)
+            {
+                if (equipment is null)
+                {
+                    continue;
+                }
+
+                var lastIndex = currentEquipmentItemList.Count;
+                var relativeX = (lastIndex * EQUIPMENT_ITEM_SIZE) + EQUIPMENT_ITEM_SPACING;
+                var buttonRect = new Rectangle(
+                    relativeX + ContentRect.Left,
+                    ContentRect.Top,
+                    EQUIPMENT_ITEM_SIZE,
+                    EQUIPMENT_ITEM_SIZE);
+
+                var sid = equipment.Scheme.Sid;
+                if (string.IsNullOrEmpty(sid))
+                {
+                    Debug.Fail("All equipment must have symbolic identifier (SID).");
+                    sid = "EmptyPropIcon";
+                }
+
+                var equipmentButton = new EquipmentButton(
+                    _uiContentStorage.GetButtonTexture(),
+                    _uiContentStorage.GetPropIconLayers(sid),
+                    buttonRect,
+                    new Rectangle(0, 14, EQUIPMENT_ITEM_SIZE, EQUIPMENT_ITEM_SIZE));
+
+                var uiItem = new EquipmentUiItem(equipmentButton, equipment, lastIndex, buttonRect);
+
+                currentEquipmentItemList.Add(uiItem);
+            }
+
+            _currentEquipmentItems = currentEquipmentItemList.ToArray();
+        }
+
         protected override void UpdateContent()
         {
             if (_currentEquipmentItems is null)
@@ -99,59 +153,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private static string? GetEquipmentTitle(Equipment equipment)
         {
             return equipment.Scheme.Name?.En ?? "<Undef>";
-        }
-
-        protected override void InitContent()
-        {
-            base.InitContent();
-
-            var person = _uiState.ActiveActor?.Actor?.Person;
-            if (person is null)
-            {
-                throw new InvalidOperationException("Active person must be selected before this dialog was opened.");
-            }
-
-            var equipmentModule = person.GetModuleSafe<IEquipmentModule>();
-            if (equipmentModule is null)
-            {
-                throw new InvalidOperationException("Active person must be aple to use equipment to shown in this dialog.");
-            }
-
-            var currentEquipmentItemList = new List<EquipmentUiItem>();
-            foreach (var equipment in equipmentModule)
-            {
-                if (equipment is null)
-                {
-                    continue;
-                }
-
-                var lastIndex = currentEquipmentItemList.Count;
-                var relativeX = (lastIndex * EQUIPMENT_ITEM_SIZE) + EQUIPMENT_ITEM_SPACING;
-                var buttonRect = new Rectangle(
-                    relativeX + ContentRect.Left,
-                    ContentRect.Top,
-                    EQUIPMENT_ITEM_SIZE,
-                    EQUIPMENT_ITEM_SIZE);
-
-                var sid = equipment.Scheme.Sid;
-                if (string.IsNullOrEmpty(sid))
-                {
-                    Debug.Fail("All equipment must have symbolic identifier (SID).");
-                    sid = "EmptyPropIcon";
-                }
-
-                var equipmentButton = new EquipmentButton(
-                    _uiContentStorage.GetButtonTexture(),
-                    _uiContentStorage.GetPropIconLayers(sid),
-                    buttonRect,
-                    new Rectangle(0, 14, EQUIPMENT_ITEM_SIZE, EQUIPMENT_ITEM_SIZE));
-
-                var uiItem = new EquipmentUiItem(equipmentButton, equipment, lastIndex, buttonRect);
-
-                currentEquipmentItemList.Add(uiItem);
-            }
-
-            _currentEquipmentItems = currentEquipmentItemList.ToArray();
         }
 
         private record EquipmentUiItem
