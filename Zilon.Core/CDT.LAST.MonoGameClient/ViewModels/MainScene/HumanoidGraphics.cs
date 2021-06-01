@@ -18,8 +18,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Texture2D _armLeftTexture;
         private readonly Texture2D _armRightTexture;
-        private readonly Texture2D _bodyTexture;
         private readonly Texture2D _bodyClothsTexture;
+        private readonly Texture2D _bodyTexture;
         private readonly IEquipmentModule _equipmentModule;
 
         private readonly Texture2D _headTexture;
