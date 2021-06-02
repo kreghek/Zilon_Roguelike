@@ -216,7 +216,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                             });
                         }
                     }
-
                 }
                 else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
                 {
