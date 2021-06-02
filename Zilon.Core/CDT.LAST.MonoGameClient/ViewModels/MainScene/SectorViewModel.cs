@@ -23,7 +23,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly CommandInput _commandInput;
 
         private readonly MapViewModel _mapViewModel;
-        private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
@@ -38,7 +37,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _player = serviceScope.GetRequiredService<IPlayer>();
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
-            _personVisualizationContentStorage = serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
+            var personVisualizationContentStorage = serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -63,7 +62,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     game,
                     actor,
                     _viewModelContext,
-                    _personVisualizationContentStorage,
+                    personVisualizationContentStorage,
                     _spriteBatch);
 
                 if (actor.Person == _player.MainPerson)
