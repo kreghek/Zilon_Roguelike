@@ -188,10 +188,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Texture2D weaponBaseTexture, Texture2D shieldBaseTexture)
         {
             // Slot 3 according the person scheme is second/left hand.
-            var equipment = equipmentModule[3];
-            if (equipment != null)
+            var weaponEquipment = equipmentModule[3];
+            var bodyEquipment = equipmentModule[1];
+            if (weaponEquipment != null)
             {
-                var equipmentTags = equipment.Scheme.Tags;
+                var equipmentTags = weaponEquipment.Scheme.Tags;
                 if (equipmentTags is null)
                 {
                     // Now a person can equiped only weapons or tools.
@@ -203,6 +204,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Position = new Vector2(13, -20),
                         Origin = new Vector2(0.5f, 0.5f)
                     });
+
+                    if (bodyEquipment != null)
+                    {
+                        if (bodyEquipment.Scheme.Sid == "traveler")
+                        {
+                            AddChild(new Sprite(_armRightTravelerTexture)
+                            {
+                                Position = new Vector2(13, -20),
+                                Origin = new Vector2(0.5f, 0.5f)
+                            });
+                        }
+                    }
+
                 }
                 else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
                 {
@@ -218,6 +232,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Position = new Vector2(13, -20),
                         Origin = new Vector2(0.5f, 0.5f)
                     });
+
+                    if (bodyEquipment != null)
+                    {
+                        if (bodyEquipment.Scheme.Sid == "traveler")
+                        {
+                            AddChild(new Sprite(_armRightTravelerTexture)
+                            {
+                                Position = new Vector2(13, -20),
+                                Origin = new Vector2(0.5f, 0.5f)
+                            });
+                        }
+                    }
                 }
                 else if (equipmentTags.Contains(PropTags.Equipment.Shield))
                 {
@@ -230,6 +256,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
+                    if (bodyEquipment != null)
+                    {
+                        if (bodyEquipment.Scheme.Sid == "traveler")
+                        {
+                            AddChild(new Sprite(_armRightTravelerTexture)
+                            {
+                                Position = new Vector2(13, -20),
+                                Origin = new Vector2(0.5f, 0.5f)
+                            });
+                        }
+                    }
+
                     AddChild(new Sprite(shieldBaseTexture)
                     {
                         Position = new Vector2(11, -10),
@@ -238,11 +276,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 }
                 else
                 {
+                    Debug.Fail("Unknown tag of thing in hand. Do not visualize it.");
+
                     AddChild(new Sprite(armRightTexture)
                     {
                         Position = new Vector2(13, -20),
                         Origin = new Vector2(0.5f, 0.5f)
                     });
+
+                    if (bodyEquipment != null)
+                    {
+                        if (bodyEquipment.Scheme.Sid == "traveler")
+                        {
+                            AddChild(new Sprite(_armRightTravelerTexture)
+                            {
+                                Position = new Vector2(13, -20),
+                                Origin = new Vector2(0.5f, 0.5f)
+                            });
+                        }
+                    }
                 }
             }
             else
@@ -252,6 +304,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     Position = new Vector2(13, -20),
                     Origin = new Vector2(0.5f, 0.5f)
                 });
+
+                if (bodyEquipment != null)
+                {
+                    if (bodyEquipment.Scheme.Sid == "traveler")
+                    {
+                        AddChild(new Sprite(_armRightTravelerTexture)
+                        {
+                            Position = new Vector2(13, -20),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
+                    }
+                }
             }
         }
 
