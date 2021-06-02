@@ -167,7 +167,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
             else
             {
-                Debug.Fail($"Unknown language {langName} is selected. All available language must be supported in the client.");
+                Debug.Fail(
+                    $"Unknown language {langName} is selected. All available language must be supported in the client.");
             }
 
             return text ?? "<Undef>";
