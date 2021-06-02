@@ -6,60 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public enum BodyPartType
-    {
-        Undefined = 0,
-        Head,
-        Chest,
-        ArmLeft,
-        ArmRightSimple,
-        ArmRightRifle,
-        ArmRightDual,
-        LegsIdle,
-        LegsCombat
-    }
-
-    public enum HandPartType
-    {
-        Undefined = 0,
-        Base,
-        BaseBack
-    }
-
-    public record BodyPart
-    {
-        public BodyPart(BodyPartType type, Texture2D texture)
-        {
-            Type = type;
-            Texture = texture;
-        }
-
-        public Texture2D Texture { get; }
-
-        public BodyPartType Type { get; }
-    }
-
-    public record HandPart
-    {
-        public HandPart(HandPartType type, Texture2D texture)
-        {
-            Type = type;
-            Texture = texture;
-        }
-
-        public Texture2D Texture { get; }
-
-        public HandPartType Type { get; }
-    }
-
-    public interface IPersonVisualizationContentStorage
-    {
-        IEnumerable<BodyPart> GetBodyParts(string sid);
-        IEnumerable<HandPart> GetHandParts(string sid);
-        IEnumerable<BodyPart> GetHumanParts();
-        void LoadContent(ContentManager content);
-    }
-
+    /// <summary>
+    /// Base implementation of content storage.
+    /// </summary>
     internal sealed class PersonVisualizationContentStorage : IPersonVisualizationContentStorage
     {
         private readonly Dictionary<string, BodyPart[]> _bodyParts;
