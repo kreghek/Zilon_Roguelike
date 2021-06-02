@@ -70,7 +70,8 @@ namespace CDT.LAST.MonoGameClient
             var uiContentStorage = ServiceProvider.GetRequiredService<IUiContentStorage>();
             uiContentStorage.LoadContent(Content);
 
-            var personVisualizationContentStorage = ServiceProvider.GetRequiredService<IPersonVisualizationContentStorage>();
+            var personVisualizationContentStorage =
+                ServiceProvider.GetRequiredService<IPersonVisualizationContentStorage>();
             personVisualizationContentStorage.LoadContent(Content);
 
             var sceneManager = new ScreenManager(this);

@@ -59,7 +59,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var isHumanGraphics = Actor.Person is HumanPerson;
             if (isHumanGraphics)
             {
-                var graphicsRoot = new HumanoidGraphics(Actor.Person.GetModule<IEquipmentModule>(), personVisualizationContentStorage);
+                var graphicsRoot = new HumanoidGraphics(Actor.Person.GetModule<IEquipmentModule>(),
+                    personVisualizationContentStorage);
 
                 _rootSprite.AddChild(graphicsRoot);
 

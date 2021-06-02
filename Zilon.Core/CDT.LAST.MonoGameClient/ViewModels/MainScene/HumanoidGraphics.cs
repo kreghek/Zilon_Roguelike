@@ -20,7 +20,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
 
-        public HumanoidGraphics(IEquipmentModule equipmentModule, IPersonVisualizationContentStorage personVisualizationContentStorage)
+        public HumanoidGraphics(IEquipmentModule equipmentModule,
+            IPersonVisualizationContentStorage personVisualizationContentStorage)
         {
             _equipmentModule = equipmentModule;
 

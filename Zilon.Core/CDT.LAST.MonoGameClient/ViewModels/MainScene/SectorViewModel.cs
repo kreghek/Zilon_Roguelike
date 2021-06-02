@@ -23,10 +23,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly CommandInput _commandInput;
 
         private readonly MapViewModel _mapViewModel;
+        private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
-        private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
         private readonly SectorViewModelContext _viewModelContext;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
