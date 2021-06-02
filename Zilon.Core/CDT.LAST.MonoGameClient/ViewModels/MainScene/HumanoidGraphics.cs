@@ -223,23 +223,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private BodyPart? GetDressedPartAccordingBodySlot(IEquipmentModule equipmentModule, BodyPartType partType)
         {
+            // Slot 1 according the person scheme is body.
             var bodyEquipment = equipmentModule[1];
-            BodyPart? equipedLeftHandPart = null;
-            if (bodyEquipment != null)
+            if (bodyEquipment == null)
             {
-                var bodyEquipmentSid = bodyEquipment.Scheme.Sid;
-                if (bodyEquipmentSid != null)
-                {
-                    var equipmentParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipmentSid);
-                    equipedLeftHandPart = equipmentParts.SingleOrDefault(x => x.Type == partType);
-                }
-                else
-                {
-                    Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
-                }
+                return null;
             }
 
-            return equipedLeftHandPart;
+            var bodyEquipmentSid = bodyEquipment.Scheme.Sid;
+            if (bodyEquipmentSid != null)
+            {
+                var equipmentParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipmentSid);
+                return equipmentParts.SingleOrDefault(x => x.Type == partType);
+            }
+            else
+            {
+                Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
+                return null;
+            }
         }
 
         private IEnumerable<BodyPart> DrawLegs()
@@ -282,149 +283,111 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawRightHand(IEquipmentModule equipmentModule)
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
-            var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightSimple).Texture;
-
             // Slot 3 according the person scheme is second/left hand.
             var weaponEquipment = equipmentModule[3];
-            // Slot 1 according the person scheme is body.
-            var bodyEquipment = equipmentModule[1];
-
-            var dressedRightHandPart = GetDressedPartAccordingBodySlot(equipmentModule, BodyPartType.ArmRightSimple);
-
-            if (weaponEquipment != null)
+            if (weaponEquipment == null)
             {
-                var equipmentTags = weaponEquipment.Scheme.Tags;
-                if (equipmentTags is null)
-                {
-                    // Now a person can equiped only weapons or tools.
-                    // All weapons or tools has corresponding tags.
-                    Debug.Fail("There is no scenario then equipment has no tags.");
+                // There is nothing in right hand.
+                // This is normal situation. So just draw arm unequiped.
 
-                    AddChild(new Sprite(armRightTexture)
-                    {
-                        Position = new Vector2(13, -20),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
+                AddRightArmHierarchy();
 
-                    if (dressedRightHandPart != null)
-                    {
-                        AddChild(new Sprite(dressedRightHandPart.Texture)
-                        {
-                            Position = new Vector2(13, -20),
-                            Origin = new Vector2(0.5f, 0.5f)
-                        });
-                    }
-                }
-                else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
-                {
-                    var weaponSid = weaponEquipment.Scheme.Sid;
-                    if (weaponSid != null)
-                    {
-                        var handParts = _personVisualizationContentStorage.GetHandParts(weaponSid);
-                        var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
+                return;
+            }
 
-                        AddChild(new InvertedFlipXSprite(weaponBaseTexture)
-                        {
-                            Position = new Vector2(11, -10),
-                            Origin = new Vector2(0.5f, 0.5f),
-                            Rotation = (float)(-Math.PI / 2)
-                        });
-                    }
-                    else
-                    {
-                        Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
-                    }
+            var equipmentTags = weaponEquipment.Scheme.Tags;
+            if (equipmentTags is null)
+            {
+                // Now a person can equiped only weapons or tools.
+                // All weapons or tools has corresponding tags.
+                Debug.Fail("There is no scenario then equipment has no tags.");
 
-                    AddChild(new Sprite(armRightTexture)
-                    {
-                        Position = new Vector2(13, -20),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
+                AddRightArmHierarchy();
+            }
+            else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
+            {
+                AddRightWeaponHierarchy(weaponEquipment);
 
-                    if (dressedRightHandPart != null)
-                    {
-                        AddChild(new Sprite(dressedRightHandPart.Texture)
-                        {
-                            Position = new Vector2(13, -20),
-                            Origin = new Vector2(0.5f, 0.5f)
-                        });
-                    }
-                }
-                else if (equipmentTags.Contains(PropTags.Equipment.Shield))
-                {
-                    // For shield draw arm first because the base of the sheild
-                    // should be cover the arm.
+                AddRightArmHierarchy();
+            }
+            else if (equipmentTags.Contains(PropTags.Equipment.Shield))
+            {
+                // For shield draw arm first because the base of the sheild
+                // should be cover the arm.
 
-                    AddChild(new Sprite(armRightTexture)
-                    {
-                        Position = new Vector2(13, -20),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
+                AddRightArmHierarchy();
 
-                    if (dressedRightHandPart != null)
-                    {
-                        AddChild(new Sprite(dressedRightHandPart.Texture)
-                        {
-                            Position = new Vector2(13, -20),
-                            Origin = new Vector2(0.5f, 0.5f)
-                        });
-                    }
-
-                    var shieldSid = weaponEquipment.Scheme.Sid;
-                    if (shieldSid != null)
-                    {
-                        var handParts = _personVisualizationContentStorage.GetHandParts(shieldSid);
-                        var shieldBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
-
-                        AddChild(new Sprite(shieldBaseTexture)
-                        {
-                            Position = new Vector2(11, -10),
-                            Origin = new Vector2(0.5f, 0.5f)
-                        });
-                    }
-                    else
-                    {
-                        Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
-                    }
-                }
-                else
-                {
-                    Debug.Fail("Unknown tag of thing in hand. Do not visualize it.");
-
-                    AddChild(new Sprite(armRightTexture)
-                    {
-                        Position = new Vector2(13, -20),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
-
-                    if (dressedRightHandPart != null)
-                    {
-                        AddChild(new Sprite(dressedRightHandPart.Texture)
-                        {
-                            Position = new Vector2(13, -20),
-                            Origin = new Vector2(0.5f, 0.5f)
-                        });
-                    }
-                }
+                AddRightShieldHierarchy(weaponEquipment);
             }
             else
             {
-                AddChild(new Sprite(armRightTexture)
-                {
-                    Position = new Vector2(13, -20),
-                    Origin = new Vector2(0.5f, 0.5f)
-                });
+                Debug.Fail("Unknown tag of thing in hand. Do not visualize it.");
 
-                if (dressedRightHandPart != null)
-                {
-                    AddChild(new Sprite(dressedRightHandPart.Texture)
-                    {
-                        Position = new Vector2(13, -20),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
-                }
+                AddRightArmHierarchy();
             }
+        }
+
+        private void AddRightShieldHierarchy(Zilon.Core.Props.Equipment equipment)
+        {
+            var shieldSid = equipment.Scheme.Sid;
+            if (shieldSid == null)
+            {
+                Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
+                return;
+            }
+
+            var handParts = _personVisualizationContentStorage.GetHandParts(shieldSid);
+            var shieldBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
+
+            AddChild(new Sprite(shieldBaseTexture)
+            {
+                Position = new Vector2(11, -10),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
+        }
+
+        private void AddRightWeaponHierarchy(Zilon.Core.Props.Equipment equipment)
+        {
+            var weaponSid = equipment.Scheme.Sid;
+            if (weaponSid == null)
+            {
+                Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
+                return;
+            }
+
+            var handParts = _personVisualizationContentStorage.GetHandParts(weaponSid);
+            var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
+
+            AddChild(new InvertedFlipXSprite(weaponBaseTexture)
+            {
+                Position = new Vector2(11, -10),
+                Origin = new Vector2(0.5f, 0.5f),
+                Rotation = (float)(-Math.PI / 2)
+            });
+        }
+
+        private void AddRightArmHierarchy()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightSimple).Texture;
+
+            var dressedRightHandPart = GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmRightSimple);
+
+            AddChild(CreateRightArmSprite(armRightTexture));
+
+            if (dressedRightHandPart != null)
+            {
+                AddChild(CreateRightArmSprite(dressedRightHandPart.Texture));
+            }
+        }
+
+        private static Sprite CreateRightArmSprite(Microsoft.Xna.Framework.Graphics.Texture2D armRightTexture)
+        {
+            return new Sprite(armRightTexture)
+            {
+                Position = new Vector2(13, -20),
+                Origin = new Vector2(0.5f, 0.5f)
+            };
         }
 
         private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
