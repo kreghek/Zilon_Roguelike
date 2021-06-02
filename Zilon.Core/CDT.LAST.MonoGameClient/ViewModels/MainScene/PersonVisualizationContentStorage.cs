@@ -26,7 +26,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Texture2D load(string equipmentName, string partName)
             {
                 return content.Load<Texture2D>($"Sprites/game-objects/Equipments/BodyParts/{equipmentName}/{partName}");
-            };
+            }
+
+            ;
 
             _bodyParts.Add("work-clothes", new[]
             {
@@ -38,10 +40,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _bodyParts.Add("traveler-camisole", new[]
             {
                 new BodyPart(BodyPartType.Chest, load("TravelerCamisole", "Body")),
-                new BodyPart(BodyPartType.LegsIdle,load("TravelerCamisole", "LegsIdle")),
-                new BodyPart(BodyPartType.LegsCombat,load("TravelerCamisole", "LegsCombat")),
-                new BodyPart(BodyPartType.ArmLeft,load("TravelerCamisole", "ArmLeftSimple")),
-                new BodyPart(BodyPartType.ArmRightSimple,load("TravelerCamisole", "ArmRightSimple"))
+                new BodyPart(BodyPartType.LegsIdle, load("TravelerCamisole", "LegsIdle")),
+                new BodyPart(BodyPartType.LegsCombat, load("TravelerCamisole", "LegsCombat")),
+                new BodyPart(BodyPartType.ArmLeft, load("TravelerCamisole", "ArmLeftSimple")),
+                new BodyPart(BodyPartType.ArmRightSimple, load("TravelerCamisole", "ArmRightSimple"))
             });
         }
 
@@ -65,7 +67,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/Human/";
 
-            Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + name); };
+            Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + name); }
+            ;
 
             _bodyParts.Add("Human", new[]
             {
@@ -74,11 +77,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 new BodyPart(BodyPartType.LegsIdle, load("LegsIdle")),
                 new BodyPart(BodyPartType.LegsCombat, load("LegsCombat")),
                 new BodyPart(BodyPartType.ArmLeft, load("ArmLeftSimple")),
-                new BodyPart(BodyPartType.ArmRightSimple,load("ArmRightSimple"))
+                new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple"))
             });
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IEnumerable<BodyPart> GetBodyParts(string sid)
         {
             if (!_bodyParts.TryGetValue(sid, out var bodyParts))
@@ -91,7 +94,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return bodyParts;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IEnumerable<HandPart> GetHandParts(string sid)
         {
             if (!_handParts.TryGetValue(sid, out var handParts))
@@ -104,13 +107,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return handParts;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IEnumerable<BodyPart> GetHumanParts()
         {
             return _bodyParts["Human"];
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void LoadContent(ContentManager content)
         {
             LoadHumanParts(content);
