@@ -28,8 +28,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return content.Load<Texture2D>($"Sprites/game-objects/Equipments/BodyParts/{equipmentName}/{partName}");
             }
 
-            ;
-
             _bodyParts.Add("work-clothes", new[]
             {
                 new BodyPart(BodyPartType.Chest, load("WorkClothes", "Body")),
@@ -68,7 +66,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/Human/";
 
             Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + name); }
-            ;
 
             _bodyParts.Add("Human", new[]
             {
