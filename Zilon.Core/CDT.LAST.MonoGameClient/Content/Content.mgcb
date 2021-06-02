@@ -243,6 +243,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/CasualCloths/Body.png
 
+#begin Sprites/game-objects/Equipments/CasualCloths/LegsIdle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/CasualCloths/LegsIdle.png
+
+#begin Sprites/game-objects/Equipments/CasualCloths/LegsCombat.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/CasualCloths/LegsCombat.png
+
 #begin Sprites/game-objects/Equipments/TravellerCloths/Body.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -266,6 +290,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/TravellerCloths/LegsIdle.png
+
+#begin Sprites/game-objects/Equipments/TravellerCloths/LegsCombat.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/TravellerCloths/LegsCombat.png
 
 #begin Sprites/game-objects/Equipments/TravellerCloths/ArmLeftSimple.png
 /importer:TextureImporter

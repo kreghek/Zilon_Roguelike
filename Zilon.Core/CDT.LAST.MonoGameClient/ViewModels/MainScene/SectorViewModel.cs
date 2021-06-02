@@ -26,7 +26,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
-
+        private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
         private readonly SectorViewModelContext _viewModelContext;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
@@ -38,6 +38,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _player = serviceScope.GetRequiredService<IPlayer>();
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
+            _personVisualizationContentStorage = serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -58,7 +59,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             foreach (var actor in Sector.ActorManager.Items)
             {
-                var actorViewModel = new ActorViewModel(game, actor, _viewModelContext, _spriteBatch);
+                var actorViewModel = new ActorViewModel(
+                    game,
+                    actor,
+                    _viewModelContext,
+                    _personVisualizationContentStorage,
+                    _spriteBatch);
 
                 if (actor.Person == _player.MainPerson)
                 {

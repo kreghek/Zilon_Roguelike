@@ -31,7 +31,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private IActorStateEngine _actorStateEngine;
 
-        public ActorViewModel(Game game, IActor actor, SectorViewModelContext sectorViewModelContext,
+        public ActorViewModel(Game game,
+            IActor actor,
+            SectorViewModelContext sectorViewModelContext,
+            IPersonVisualizationContentStorage personVisualizationContentStorage,
             SpriteBatch spriteBatch)
         {
             _game = game;
@@ -56,7 +59,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var isHumanGraphics = Actor.Person is HumanPerson;
             if (isHumanGraphics)
             {
-                var graphicsRoot = new HumanoidGraphics(Actor.Person.GetModule<IEquipmentModule>(), game.Content);
+                var graphicsRoot = new HumanoidGraphics(Actor.Person.GetModule<IEquipmentModule>(), personVisualizationContentStorage);
 
                 _rootSprite.AddChild(graphicsRoot);
 

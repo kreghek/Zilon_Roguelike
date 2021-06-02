@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading;
 
 using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,6 +38,7 @@ namespace CDT.LAST.MonoGameClient
             RegisterCommands(serviceContainer);
 
             serviceContainer.AddSingleton<IUiContentStorage, UiContentStorage>();
+            serviceContainer.AddSingleton<IPersonVisualizationContentStorage, PersonVisualizationContentStorage>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 

@@ -16,46 +16,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
     {
-        private readonly Texture2D _armLeftTexture;
-        private readonly Texture2D _armLeftTravelerTexture;
-        private readonly Texture2D _armRightTexture;
-        private readonly Texture2D _armRightTravelerTexture;
-        private readonly Texture2D _bodyClothsTexture;
-        private readonly Texture2D _bodyTexture;
-        private readonly Texture2D _bodyTravelerTexture;
         private readonly IEquipmentModule _equipmentModule;
 
-        private readonly Texture2D _headTexture;
-        private readonly Texture2D _legsTexture;
-        private readonly Texture2D _legsTravelerTexture;
-        private readonly Texture2D _shieldBaseTexture;
-        private readonly Texture2D _weaponBaseTexture;
+        private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
 
-        public HumanoidGraphics(IEquipmentModule equipmentModule, ContentManager contentManager)
+        public HumanoidGraphics(IEquipmentModule equipmentModule, IPersonVisualizationContentStorage personVisualizationContentStorage)
         {
             _equipmentModule = equipmentModule;
 
-            _headTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/Head");
-            _bodyTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/Body");
-            _legsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/LegsIdle");
-            _armLeftTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/ArmLeftSimple");
-            _armRightTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Human/ArmRightSimple");
-
-            _bodyClothsTexture = contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/CasualCloths/Body");
-
-            _bodyTravelerTexture =
-                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/Body");
-            _legsTravelerTexture =
-                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/LegsIdle");
-            _armLeftTravelerTexture =
-                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/ArmLeftSimple");
-            _armRightTravelerTexture =
-                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/ArmRightSimple");
-
-            _weaponBaseTexture =
-                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/ShortSwordBase");
-            _shieldBaseTexture =
-                contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/WoodenShieldBase");
+            _personVisualizationContentStorage = personVisualizationContentStorage;
 
             CreateSpriteHierarchy(equipmentModule);
 
@@ -64,28 +33,35 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
         {
-            DrawLeftHand(equipmentModule, _armLeftTexture, _weaponBaseTexture, _shieldBaseTexture);
+            DrawLeftHand(equipmentModule);
 
-            AddChild(new Sprite(_legsTexture)
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var legsTexture = humanParts.Single(x => x.Type == BodyPartType.LegsIdle).Texture;
+
+            AddChild(new Sprite(legsTexture)
             {
                 Position = new Vector2(0, 0),
                 Origin = new Vector2(0.5f, 0.75f)
             });
 
-            DrawBody(equipmentModule);
+            DrawChest(equipmentModule);
 
-            AddChild(new Sprite(_headTexture)
+            var headTexture = humanParts.Single(x => x.Type == BodyPartType.Head).Texture;
+            AddChild(new Sprite(headTexture)
             {
                 Position = new Vector2(-0, -20),
                 Origin = new Vector2(0.5f, 1)
             });
 
-            DrawRightHand(equipmentModule, _armRightTexture, _weaponBaseTexture, _shieldBaseTexture);
+            DrawRightHand(equipmentModule);
         }
 
-        private void DrawBody(IEquipmentModule equipmentModule)
+        private void DrawChest(IEquipmentModule equipmentModule)
         {
-            AddChild(new Sprite(_bodyTexture)
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var chestTexture = humanParts.Single(x => x.Type == BodyPartType.Chest).Texture;
+
+            AddChild(new Sprite(chestTexture)
             {
                 Position = new Vector2(3, -22),
                 Origin = new Vector2(0.5f, 0.5f)
@@ -95,28 +71,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var equipment = equipmentModule[1];
             if (equipment != null)
             {
-                if (equipment.Scheme.Sid == "cloths")
+                var equipmentChestParts = _personVisualizationContentStorage.GetBodyParts(equipment.Scheme.Sid);
+                var equipmentChestTexture = equipmentChestParts.Single(x => x.Type == BodyPartType.Chest).Texture;
+
+                AddChild(new Sprite(equipmentChestTexture)
                 {
-                    AddChild(new Sprite(_bodyClothsTexture)
-                    {
-                        Position = new Vector2(3, -22),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
-                }
-                else if (equipment.Scheme.Sid == "traveler")
-                {
-                    AddChild(new Sprite(_bodyTravelerTexture)
-                    {
-                        Position = new Vector2(3, -22),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
-                }
+                    Position = new Vector2(3, -22),
+                    Origin = new Vector2(0.5f, 0.5f)
+                });
             }
         }
 
-        private void DrawLeftHand(IEquipmentModule equipmentModule, Texture2D armLeftTexture,
-            Texture2D weaponBaseTexture, Texture2D shieldBackBaseTexture)
+        private void DrawLeftHand(IEquipmentModule equipmentModule)
         {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeft).Texture;
+
             // Slot 3 according the person scheme is second/left hand.
             var equipment = equipmentModule[2];
             if (equipment != null)
@@ -142,6 +112,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
+                    var handParts = _personVisualizationContentStorage.GetHandParts(equipment.Scheme.Sid);
+                    var weaponBaseTexture = handParts.Single(x=>x.Type == HandPartType.Base).Texture;
+
                     AddChild(new Sprite(weaponBaseTexture)
                     {
                         Position = new Vector2(-14, -21),
@@ -152,6 +125,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 {
                     // For a shield in this hand draw shield back sprite first.
                     // So it will looks like the person bear shield by inner side.
+
+                    var handParts = _personVisualizationContentStorage.GetHandParts(equipment.Scheme.Sid);
+                    var shieldBackBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
 
                     AddChild(new Sprite(shieldBackBaseTexture)
                     {
@@ -184,12 +160,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void DrawRightHand(IEquipmentModule equipmentModule, Texture2D armRightTexture,
-            Texture2D weaponBaseTexture, Texture2D shieldBaseTexture)
+        private void DrawRightHand(IEquipmentModule equipmentModule)
         {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightSimple).Texture;
+
             // Slot 3 according the person scheme is second/left hand.
             var weaponEquipment = equipmentModule[3];
+            // Slot 1 according the person scheme is body.
             var bodyEquipment = equipmentModule[1];
+
+            BodyPart? equipedRightHandPart = null;
+            if (bodyEquipment != null)
+            {
+                var equipmentParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipment.Scheme.Sid);
+                equipedRightHandPart = equipmentParts.SingleOrDefault(x => x.Type == BodyPartType.ArmRightSimple);
+            }
+
             if (weaponEquipment != null)
             {
                 var equipmentTags = weaponEquipment.Scheme.Tags;
@@ -205,20 +192,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (bodyEquipment != null)
+                    if (equipedRightHandPart != null)
                     {
-                        if (bodyEquipment.Scheme.Sid == "traveler")
+                        AddChild(new Sprite(equipedRightHandPart.Texture)
                         {
-                            AddChild(new Sprite(_armRightTravelerTexture)
-                            {
-                                Position = new Vector2(13, -20),
-                                Origin = new Vector2(0.5f, 0.5f)
-                            });
-                        }
+                            Position = new Vector2(13, -20),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
                     }
                 }
                 else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
                 {
+                    var handParts = _personVisualizationContentStorage.GetHandParts(weaponEquipment.Scheme.Sid);
+                    var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
+
                     AddChild(new InvertedFlipXSprite(weaponBaseTexture)
                     {
                         Position = new Vector2(11, -10),
@@ -232,16 +219,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (bodyEquipment != null)
+                    if (equipedRightHandPart != null)
                     {
-                        if (bodyEquipment.Scheme.Sid == "traveler")
+                        AddChild(new Sprite(equipedRightHandPart.Texture)
                         {
-                            AddChild(new Sprite(_armRightTravelerTexture)
-                            {
-                                Position = new Vector2(13, -20),
-                                Origin = new Vector2(0.5f, 0.5f)
-                            });
-                        }
+                            Position = new Vector2(13, -20),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
                     }
                 }
                 else if (equipmentTags.Contains(PropTags.Equipment.Shield))
@@ -255,17 +239,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (bodyEquipment != null)
+                    if (equipedRightHandPart != null)
                     {
-                        if (bodyEquipment.Scheme.Sid == "traveler")
+                        AddChild(new Sprite(equipedRightHandPart.Texture)
                         {
-                            AddChild(new Sprite(_armRightTravelerTexture)
-                            {
-                                Position = new Vector2(13, -20),
-                                Origin = new Vector2(0.5f, 0.5f)
-                            });
-                        }
+                            Position = new Vector2(13, -20),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
                     }
+
+                    var handParts = _personVisualizationContentStorage.GetHandParts(weaponEquipment.Scheme.Sid);
+                    var shieldBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
 
                     AddChild(new Sprite(shieldBaseTexture)
                     {
@@ -283,16 +267,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (bodyEquipment != null)
+                    if (equipedRightHandPart != null)
                     {
-                        if (bodyEquipment.Scheme.Sid == "traveler")
+                        AddChild(new Sprite(equipedRightHandPart.Texture)
                         {
-                            AddChild(new Sprite(_armRightTravelerTexture)
-                            {
-                                Position = new Vector2(13, -20),
-                                Origin = new Vector2(0.5f, 0.5f)
-                            });
-                        }
+                            Position = new Vector2(13, -20),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
                     }
                 }
             }
@@ -304,16 +285,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     Origin = new Vector2(0.5f, 0.5f)
                 });
 
-                if (bodyEquipment != null)
+                if (equipedRightHandPart != null)
                 {
-                    if (bodyEquipment.Scheme.Sid == "traveler")
+                    AddChild(new Sprite(equipedRightHandPart.Texture)
                     {
-                        AddChild(new Sprite(_armRightTravelerTexture)
-                        {
-                            Position = new Vector2(13, -20),
-                            Origin = new Vector2(0.5f, 0.5f)
-                        });
-                    }
+                        Position = new Vector2(13, -20),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
                 }
             }
         }
