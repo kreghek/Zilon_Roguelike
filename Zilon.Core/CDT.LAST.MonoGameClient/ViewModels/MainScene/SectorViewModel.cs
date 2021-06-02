@@ -37,7 +37,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _player = serviceScope.GetRequiredService<IPlayer>();
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
-            var personVisualizationContentStorage = serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
+            var personVisualizationContentStorage =
+                serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
