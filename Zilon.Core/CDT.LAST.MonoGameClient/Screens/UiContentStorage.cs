@@ -69,9 +69,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             // Place textures in order to display. Latest will display on the top.
             _propIcons.Add("short-sword",
-                new[] 
+                new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/ShortSwordBase") 
+                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/ShortSwordBase")
                 });
             _propIcons.Add("wooden-shield",
                 new[]
