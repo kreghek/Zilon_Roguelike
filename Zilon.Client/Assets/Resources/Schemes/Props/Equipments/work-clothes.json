@@ -4,14 +4,14 @@
     "SlotTypes": [ "Body" ],
     "Armors": [
       {
-        "Impact": "Psy",
+        "Impact": "Kinetic",
         "AbsorbtionLevel": "Lesser",
         "ArmorRank": 1
       }
     ]
   },
   "Name": {
-    "En": "Traveler",
-    "Ru": "Роба школяра"
+    "En": "Work clothes",
+    "Ru": "Рабочая одежда"
   }
 }

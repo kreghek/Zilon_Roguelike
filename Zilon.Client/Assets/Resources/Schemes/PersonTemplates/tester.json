@@ -8,11 +8,11 @@
     "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "cloths",
+        "SchemeSid": "work-clothes",
         "Weight": 1
       },
       {
-        "SchemeSid": "traveler",
+        "SchemeSid": "traveler-camisole",
         "Weight": 1
       },
       {

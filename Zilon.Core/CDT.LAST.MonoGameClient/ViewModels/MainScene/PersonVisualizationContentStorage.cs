@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,33 +23,31 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void LoadBodyParts(ContentManager content)
         {
-            const string PATH_TO_CASUAL_CLOTHS_PARTS = "Sprites/game-objects/Equipments/CasualCloths/";
-            _bodyParts.Add("cloths", new[]
+            Texture2D load(string equipmentName, string partName)
             {
-                new BodyPart(BodyPartType.Chest, content.Load<Texture2D>(PATH_TO_CASUAL_CLOTHS_PARTS + "Body")),
-                new BodyPart(BodyPartType.LegsIdle, content.Load<Texture2D>(PATH_TO_CASUAL_CLOTHS_PARTS + "LegsIdle")),
-                new BodyPart(BodyPartType.LegsCombat,
-                    content.Load<Texture2D>(PATH_TO_CASUAL_CLOTHS_PARTS + "LegsCombat"))
+                return content.Load<Texture2D>($"Sprites/game-objects/Equipments/BodyParts/{equipmentName}/{partName}");
+            };
+
+            _bodyParts.Add("work-clothes", new[]
+            {
+                new BodyPart(BodyPartType.Chest, load("WorkClothes", "Body")),
+                new BodyPart(BodyPartType.LegsIdle, load("WorkClothes", "LegsIdle")),
+                new BodyPart(BodyPartType.LegsCombat, load("WorkClothes", "LegsCombat"))
             });
 
-            const string PATH_TO_TRAVELER_CLOTHS_PARTS = "Sprites/game-objects/Equipments/TravellerCloths/";
-            _bodyParts.Add("traveler", new[]
+            _bodyParts.Add("traveler-camisole", new[]
             {
-                new BodyPart(BodyPartType.Chest, content.Load<Texture2D>(PATH_TO_TRAVELER_CLOTHS_PARTS + "Body")),
-                new BodyPart(BodyPartType.LegsIdle,
-                    content.Load<Texture2D>(PATH_TO_TRAVELER_CLOTHS_PARTS + "LegsIdle")),
-                new BodyPart(BodyPartType.LegsCombat,
-                    content.Load<Texture2D>(PATH_TO_TRAVELER_CLOTHS_PARTS + "LegsCombat")),
-                new BodyPart(BodyPartType.ArmLeft,
-                    content.Load<Texture2D>(PATH_TO_TRAVELER_CLOTHS_PARTS + "ArmLeftSimple")),
-                new BodyPart(BodyPartType.ArmRightSimple,
-                    content.Load<Texture2D>(PATH_TO_TRAVELER_CLOTHS_PARTS + "ArmRightSimple"))
+                new BodyPart(BodyPartType.Chest, load("TravelerCamisole", "Body")),
+                new BodyPart(BodyPartType.LegsIdle,load("TravelerCamisole", "LegsIdle")),
+                new BodyPart(BodyPartType.LegsCombat,load("TravelerCamisole", "LegsCombat")),
+                new BodyPart(BodyPartType.ArmLeft,load("TravelerCamisole", "ArmLeftSimple")),
+                new BodyPart(BodyPartType.ArmRightSimple,load("TravelerCamisole", "ArmRightSimple"))
             });
         }
 
         private void LoadHandParts(ContentManager content)
         {
-            const string PATH_TO_HAND_PARTS = "Sprites/game-objects/Equipments/HandEquiped/";
+            const string PATH_TO_HAND_PARTS = "Sprites/game-objects/Equipments/HandParts/";
 
             _handParts.Add("short-sword", new[]
             {
@@ -65,43 +64,53 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private void LoadHumanParts(ContentManager content)
         {
             const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/Human/";
+
+            Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + name); };
+
             _bodyParts.Add("Human", new[]
             {
-                new BodyPart(BodyPartType.Head, content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + "Head")),
-                new BodyPart(BodyPartType.Chest, content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + "Body")),
-                new BodyPart(BodyPartType.LegsIdle, content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + "LegsIdle")),
-                new BodyPart(BodyPartType.LegsCombat, content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + "LegsCombat")),
-                new BodyPart(BodyPartType.ArmLeft, content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + "ArmLeftSimple")),
-                new BodyPart(BodyPartType.ArmRightSimple,
-                    content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + "ArmRightSimple"))
+                new BodyPart(BodyPartType.Head, load("Head")),
+                new BodyPart(BodyPartType.Chest, load("Body")),
+                new BodyPart(BodyPartType.LegsIdle, load("LegsIdle")),
+                new BodyPart(BodyPartType.LegsCombat, load("LegsCombat")),
+                new BodyPart(BodyPartType.ArmLeft, load("ArmLeftSimple")),
+                new BodyPart(BodyPartType.ArmRightSimple,load("ArmRightSimple"))
             });
         }
 
+        /// <inheritdoc/>
         public IEnumerable<BodyPart> GetBodyParts(string sid)
         {
             if (!_bodyParts.TryGetValue(sid, out var bodyParts))
             {
+                Debug.Fail("All equipment must be in storage to visualize.");
+
                 return Array.Empty<BodyPart>();
             }
 
             return bodyParts;
         }
 
+        /// <inheritdoc/>
         public IEnumerable<HandPart> GetHandParts(string sid)
         {
             if (!_handParts.TryGetValue(sid, out var handParts))
             {
+                Debug.Fail("All equipment must be in storage to visualize.");
+
                 return Array.Empty<HandPart>();
             }
 
             return handParts;
         }
 
+        /// <inheritdoc/>
         public IEnumerable<BodyPart> GetHumanParts()
         {
             return _bodyParts["Human"];
         }
 
+        /// <inheritdoc/>
         public void LoadContent(ContentManager content)
         {
             LoadHumanParts(content);
