@@ -53,25 +53,34 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var humanParts = _personVisualizationContentStorage.GetHumanParts();
             var chestTexture = humanParts.Single(x => x.Type == BodyPartType.Chest).Texture;
 
-            AddChild(new Sprite(chestTexture)
+            AddChild(CreateChestSprite(chestTexture));
+
+            // This slot is body.
+            var bodyEquipment = equipmentModule[1];
+            if (bodyEquipment != null)
+            {
+                var bodyEquipmentSid = bodyEquipment.Scheme.Sid;
+                if (bodyEquipmentSid != null)
+                {
+                    var equipmentChestParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipmentSid);
+                    var equipmentChestTexture = equipmentChestParts.Single(x => x.Type == BodyPartType.Chest).Texture;
+
+                    AddChild(CreateChestSprite(equipmentChestTexture));
+                }
+                else
+                {
+                    Debug.Fail("There are no schemes without SID. Looks like some kind of error.");
+                }
+            }
+        }
+
+        private static Sprite CreateChestSprite(Microsoft.Xna.Framework.Graphics.Texture2D chestTexture)
+        {
+            return new Sprite(chestTexture)
             {
                 Position = new Vector2(3, -22),
                 Origin = new Vector2(0.5f, 0.5f)
-            });
-
-            // This slot is body.
-            var equipment = equipmentModule[1];
-            if (equipment != null)
-            {
-                var equipmentChestParts = _personVisualizationContentStorage.GetBodyParts(equipment.Scheme.Sid);
-                var equipmentChestTexture = equipmentChestParts.Single(x => x.Type == BodyPartType.Chest).Texture;
-
-                AddChild(new Sprite(equipmentChestTexture)
-                {
-                    Position = new Vector2(3, -22),
-                    Origin = new Vector2(0.5f, 0.5f)
-                });
-            }
+            };
         }
 
         private void DrawLeftHand(IEquipmentModule equipmentModule)
@@ -80,13 +89,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeft).Texture;
 
             // Slot 1 according the person scheme is body.
-            var bodyEquipment = equipmentModule[1];
-            BodyPart? equipedLeftHandPart = null;
-            if (bodyEquipment != null)
-            {
-                var equipmentParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipment.Scheme.Sid);
-                equipedLeftHandPart = equipmentParts.SingleOrDefault(x => x.Type == BodyPartType.ArmLeft);
-            }
+            var dressedLeftArmPart = GetDressedPartAccordingBodySlot(equipmentModule, BodyPartType.ArmLeft);
 
             // Slot 3 according the person scheme is second/left hand.
             var equipment = equipmentModule[2];
@@ -105,9 +108,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (equipedLeftHandPart != null)
+                    if (dressedLeftArmPart != null)
                     {
-                        AddChild(new Sprite(equipedLeftHandPart.Texture)
+                        AddChild(new Sprite(dressedLeftArmPart.Texture)
                         {
                             Position = new Vector2(-10, -20),
                             Origin = new Vector2(0.5f, 0.5f)
@@ -122,37 +125,49 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (equipedLeftHandPart != null)
+                    if (dressedLeftArmPart != null)
                     {
-                        AddChild(new Sprite(equipedLeftHandPart.Texture)
+                        AddChild(new Sprite(dressedLeftArmPart.Texture)
                         {
                             Position = new Vector2(-10, -20),
                             Origin = new Vector2(0.5f, 0.5f)
                         });
                     }
 
-                    var handParts = _personVisualizationContentStorage.GetHandParts(equipment.Scheme.Sid);
-                    var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
-
-                    AddChild(new Sprite(weaponBaseTexture)
+                    var weaponSid = equipment.Scheme.Sid;
+                    if (weaponSid != null)
                     {
-                        Position = new Vector2(-14, -21),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
+                        var handParts = _personVisualizationContentStorage.GetHandParts(weaponSid);
+                        var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
+
+                        AddChild(new Sprite(weaponBaseTexture)
+                        {
+                            Position = new Vector2(-14, -21),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
+                    }
+                    else
+                    {
+                        Debug.Fail("There are no schemes without SID. Looks like some kind of error.");
+                    }
                 }
                 else if (equipmentTags.Contains(PropTags.Equipment.Shield))
                 {
                     // For a shield in this hand draw shield back sprite first.
                     // So it will looks like the person bear shield by inner side.
 
-                    var handParts = _personVisualizationContentStorage.GetHandParts(equipment.Scheme.Sid);
-                    var shieldBackBaseTexture = handParts.Single(x => x.Type == HandPartType.BaseBack).Texture;
-
-                    AddChild(new Sprite(shieldBackBaseTexture)
+                    var shieldSid = equipment.Scheme.Sid;
+                    if (shieldSid != null)
                     {
-                        Position = new Vector2(-14, -21),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
+                        var handParts = _personVisualizationContentStorage.GetHandParts(shieldSid);
+                        var shieldBackBaseTexture = handParts.Single(x => x.Type == HandPartType.BaseBack).Texture;
+
+                        AddChild(new Sprite(shieldBackBaseTexture)
+                        {
+                            Position = new Vector2(-14, -21),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
+                    }
 
                     AddChild(new Sprite(armLeftTexture)
                     {
@@ -160,9 +175,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (equipedLeftHandPart != null)
+                    if (dressedLeftArmPart != null)
                     {
-                        AddChild(new Sprite(equipedLeftHandPart.Texture)
+                        AddChild(new Sprite(dressedLeftArmPart.Texture)
                         {
                             Position = new Vector2(-10, -20),
                             Origin = new Vector2(0.5f, 0.5f)
@@ -177,9 +192,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (equipedLeftHandPart != null)
+                    if (dressedLeftArmPart != null)
                     {
-                        AddChild(new Sprite(equipedLeftHandPart.Texture)
+                        AddChild(new Sprite(dressedLeftArmPart.Texture)
                         {
                             Position = new Vector2(-10, -20),
                             Origin = new Vector2(0.5f, 0.5f)
@@ -195,9 +210,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     Origin = new Vector2(0.5f, 0.5f)
                 });
 
-                if (equipedLeftHandPart != null)
+                if (dressedLeftArmPart != null)
                 {
-                    AddChild(new Sprite(equipedLeftHandPart.Texture)
+                    AddChild(new Sprite(dressedLeftArmPart.Texture)
                     {
                         Position = new Vector2(-10, -20),
                         Origin = new Vector2(0.5f, 0.5f)
@@ -206,33 +221,63 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private BodyPart? GetDressedPartAccordingBodySlot(IEquipmentModule equipmentModule, BodyPartType partType)
+        {
+            var bodyEquipment = equipmentModule[1];
+            BodyPart? equipedLeftHandPart = null;
+            if (bodyEquipment != null)
+            {
+                var bodyEquipmentSid = bodyEquipment.Scheme.Sid;
+                if (bodyEquipmentSid != null)
+                {
+                    var equipmentParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipmentSid);
+                    equipedLeftHandPart = equipmentParts.SingleOrDefault(x => x.Type == partType);
+                }
+                else
+                {
+                    Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
+                }
+            }
+
+            return equipedLeftHandPart;
+        }
+
         private IEnumerable<BodyPart> DrawLegs()
         {
             var humanParts = _personVisualizationContentStorage.GetHumanParts();
             var legsTexture = humanParts.Single(x => x.Type == BodyPartType.LegsIdle).Texture;
 
-            AddChild(new Sprite(legsTexture)
-            {
-                Position = new Vector2(0, 0),
-                Origin = new Vector2(0.5f, 0.75f)
-            });
+            AddChild(CreateLegsSprite(legsTexture));
 
             var equipmentBody = _equipmentModule[1];
             if (equipmentBody != null)
             {
-                var equipedBodyParts = _personVisualizationContentStorage.GetBodyParts(equipmentBody.Scheme.Sid);
-                var equipedLegPart = equipedBodyParts.SingleOrDefault(x => x.Type == BodyPartType.LegsIdle);
-                if (equipedLegPart != null)
+                var bodyEquipmentSid = equipmentBody.Scheme.Sid;
+                if (bodyEquipmentSid != null)
                 {
-                    AddChild(new Sprite(equipedLegPart.Texture)
+                    var dressedBodyParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipmentSid);
+                    var equipedLegPart = dressedBodyParts.SingleOrDefault(x => x.Type == BodyPartType.LegsIdle);
+                    if (equipedLegPart != null)
                     {
-                        Position = new Vector2(0, 0),
-                        Origin = new Vector2(0.5f, 0.75f)
-                    });
+                        AddChild(CreateLegsSprite(equipedLegPart.Texture));
+                    }
+                }
+                else
+                {
+                    Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
                 }
             }
 
             return humanParts;
+        }
+
+        private static Sprite CreateLegsSprite(Microsoft.Xna.Framework.Graphics.Texture2D legsTexture)
+        {
+            return new Sprite(legsTexture)
+            {
+                Position = new Vector2(0, 0),
+                Origin = new Vector2(0.5f, 0.75f)
+            };
         }
 
         private void DrawRightHand(IEquipmentModule equipmentModule)
@@ -245,12 +290,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             // Slot 1 according the person scheme is body.
             var bodyEquipment = equipmentModule[1];
 
-            BodyPart? equipedRightHandPart = null;
-            if (bodyEquipment != null)
-            {
-                var equipmentParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipment.Scheme.Sid);
-                equipedRightHandPart = equipmentParts.SingleOrDefault(x => x.Type == BodyPartType.ArmRightSimple);
-            }
+            var dressedRightHandPart = GetDressedPartAccordingBodySlot(equipmentModule, BodyPartType.ArmRightSimple);
 
             if (weaponEquipment != null)
             {
@@ -267,9 +307,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (equipedRightHandPart != null)
+                    if (dressedRightHandPart != null)
                     {
-                        AddChild(new Sprite(equipedRightHandPart.Texture)
+                        AddChild(new Sprite(dressedRightHandPart.Texture)
                         {
                             Position = new Vector2(13, -20),
                             Origin = new Vector2(0.5f, 0.5f)
@@ -278,15 +318,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 }
                 else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
                 {
-                    var handParts = _personVisualizationContentStorage.GetHandParts(weaponEquipment.Scheme.Sid);
-                    var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
-
-                    AddChild(new InvertedFlipXSprite(weaponBaseTexture)
+                    var weaponSid = weaponEquipment.Scheme.Sid;
+                    if (weaponSid != null)
                     {
-                        Position = new Vector2(11, -10),
-                        Origin = new Vector2(0.5f, 0.5f),
-                        Rotation = (float)(-Math.PI / 2)
-                    });
+                        var handParts = _personVisualizationContentStorage.GetHandParts(weaponSid);
+                        var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
+
+                        AddChild(new InvertedFlipXSprite(weaponBaseTexture)
+                        {
+                            Position = new Vector2(11, -10),
+                            Origin = new Vector2(0.5f, 0.5f),
+                            Rotation = (float)(-Math.PI / 2)
+                        });
+                    }
+                    else
+                    {
+                        Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
+                    }
 
                     AddChild(new Sprite(armRightTexture)
                     {
@@ -294,9 +342,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (equipedRightHandPart != null)
+                    if (dressedRightHandPart != null)
                     {
-                        AddChild(new Sprite(equipedRightHandPart.Texture)
+                        AddChild(new Sprite(dressedRightHandPart.Texture)
                         {
                             Position = new Vector2(13, -20),
                             Origin = new Vector2(0.5f, 0.5f)
@@ -314,23 +362,31 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (equipedRightHandPart != null)
+                    if (dressedRightHandPart != null)
                     {
-                        AddChild(new Sprite(equipedRightHandPart.Texture)
+                        AddChild(new Sprite(dressedRightHandPart.Texture)
                         {
                             Position = new Vector2(13, -20),
                             Origin = new Vector2(0.5f, 0.5f)
                         });
                     }
 
-                    var handParts = _personVisualizationContentStorage.GetHandParts(weaponEquipment.Scheme.Sid);
-                    var shieldBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
-
-                    AddChild(new Sprite(shieldBaseTexture)
+                    var shieldSid = weaponEquipment.Scheme.Sid;
+                    if (shieldSid != null)
                     {
-                        Position = new Vector2(11, -10),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
+                        var handParts = _personVisualizationContentStorage.GetHandParts(shieldSid);
+                        var shieldBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
+
+                        AddChild(new Sprite(shieldBaseTexture)
+                        {
+                            Position = new Vector2(11, -10),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
+                    }
+                    else
+                    {
+                        Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
+                    }
                 }
                 else
                 {
@@ -342,9 +398,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Origin = new Vector2(0.5f, 0.5f)
                     });
 
-                    if (equipedRightHandPart != null)
+                    if (dressedRightHandPart != null)
                     {
-                        AddChild(new Sprite(equipedRightHandPart.Texture)
+                        AddChild(new Sprite(dressedRightHandPart.Texture)
                         {
                             Position = new Vector2(13, -20),
                             Origin = new Vector2(0.5f, 0.5f)
@@ -360,9 +416,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     Origin = new Vector2(0.5f, 0.5f)
                 });
 
-                if (equipedRightHandPart != null)
+                if (dressedRightHandPart != null)
                 {
-                    AddChild(new Sprite(equipedRightHandPart.Texture)
+                    AddChild(new Sprite(dressedRightHandPart.Texture)
                     {
                         Position = new Vector2(13, -20),
                         Origin = new Vector2(0.5f, 0.5f)
