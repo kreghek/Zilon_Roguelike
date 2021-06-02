@@ -22,7 +22,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     public enum HandPartType
     {
         Undefined = 0,
-        Base
+        Base,
+        BaseBack
     }
 
     public record BodyPart
@@ -107,7 +108,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _handParts.Add("wooden-shield", new[]
             {
-                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "WoodenShieldBase"))
+                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "WoodenShieldBase")),
+                new HandPart(HandPartType.BaseBack, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "WoodenShieldBase"))
             });
         }
 

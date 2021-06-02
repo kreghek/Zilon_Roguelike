@@ -108,6 +108,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var humanParts = _personVisualizationContentStorage.GetHumanParts();
             var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeft).Texture;
 
+            // Slot 1 according the person scheme is body.
+            var bodyEquipment = equipmentModule[1];
+            BodyPart? equipedLeftHandPart = null;
+            if (bodyEquipment != null)
+            {
+                var equipmentParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipment.Scheme.Sid);
+                equipedLeftHandPart = equipmentParts.SingleOrDefault(x => x.Type == BodyPartType.ArmLeft);
+            }
+
             // Slot 3 according the person scheme is second/left hand.
             var equipment = equipmentModule[2];
             if (equipment != null)
@@ -124,6 +133,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Position = new Vector2(-10, -20),
                         Origin = new Vector2(0.5f, 0.5f)
                     });
+
+                    if (equipedLeftHandPart != null)
+                    {
+                        AddChild(new Sprite(equipedLeftHandPart.Texture)
+                        {
+                            Position = new Vector2(-10, -20),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
+                    }
                 }
                 else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
                 {
@@ -132,6 +150,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Position = new Vector2(-10, -20),
                         Origin = new Vector2(0.5f, 0.5f)
                     });
+
+                    if (equipedLeftHandPart != null)
+                    {
+                        AddChild(new Sprite(equipedLeftHandPart.Texture)
+                        {
+                            Position = new Vector2(-10, -20),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
+                    }
 
                     var handParts = _personVisualizationContentStorage.GetHandParts(equipment.Scheme.Sid);
                     var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
@@ -148,7 +175,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     // So it will looks like the person bear shield by inner side.
 
                     var handParts = _personVisualizationContentStorage.GetHandParts(equipment.Scheme.Sid);
-                    var shieldBackBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
+                    var shieldBackBaseTexture = handParts.Single(x => x.Type == HandPartType.BaseBack).Texture;
 
                     AddChild(new Sprite(shieldBackBaseTexture)
                     {
@@ -161,6 +188,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Position = new Vector2(-10, -20),
                         Origin = new Vector2(0.5f, 0.5f)
                     });
+
+                    if (equipedLeftHandPart != null)
+                    {
+                        AddChild(new Sprite(equipedLeftHandPart.Texture)
+                        {
+                            Position = new Vector2(-10, -20),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
+                    }
                 }
                 else
                 {
@@ -169,6 +205,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Position = new Vector2(13, -20),
                         Origin = new Vector2(0.5f, 0.5f)
                     });
+
+                    if (equipedLeftHandPart != null)
+                    {
+                        AddChild(new Sprite(equipedLeftHandPart.Texture)
+                        {
+                            Position = new Vector2(-10, -20),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
+                    }
                 }
             }
             else
@@ -178,6 +223,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     Position = new Vector2(13, -20),
                     Origin = new Vector2(0.5f, 0.5f)
                 });
+
+                if (equipedLeftHandPart != null)
+                {
+                    AddChild(new Sprite(equipedLeftHandPart.Texture)
+                    {
+                        Position = new Vector2(-10, -20),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                }
             }
         }
 
