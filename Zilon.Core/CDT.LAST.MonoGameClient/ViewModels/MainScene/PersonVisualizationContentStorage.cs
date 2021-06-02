@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public enum BodyPartType
-    { 
+    {
         Undefined = 0,
         Head,
         Chest,
@@ -20,7 +20,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     }
 
     public enum HandPartType
-    { 
+    {
         Undefined = 0,
         Base
     }

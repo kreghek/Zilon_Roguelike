@@ -113,7 +113,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     });
 
                     var handParts = _personVisualizationContentStorage.GetHandParts(equipment.Scheme.Sid);
-                    var weaponBaseTexture = handParts.Single(x=>x.Type == HandPartType.Base).Texture;
+                    var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
 
                     AddChild(new Sprite(weaponBaseTexture)
                     {
