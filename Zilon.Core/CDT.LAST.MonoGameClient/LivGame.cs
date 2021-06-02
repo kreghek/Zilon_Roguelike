@@ -2,6 +2,7 @@
 using System.Diagnostics;
 
 using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -68,6 +69,10 @@ namespace CDT.LAST.MonoGameClient
 
             var uiContentStorage = ServiceProvider.GetRequiredService<IUiContentStorage>();
             uiContentStorage.LoadContent(Content);
+
+            var personVisualizationContentStorage =
+                ServiceProvider.GetRequiredService<IPersonVisualizationContentStorage>();
+            personVisualizationContentStorage.LoadContent(Content);
 
             var sceneManager = new ScreenManager(this);
             var titleScene = new TitleScreen(this, _spriteBatch);

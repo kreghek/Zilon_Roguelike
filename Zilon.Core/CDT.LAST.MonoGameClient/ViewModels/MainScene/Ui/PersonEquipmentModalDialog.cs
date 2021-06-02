@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Screens;
@@ -18,7 +19,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class PersonEquipmentModalDialog : ModalDialog
     {
-        private const int EQUIPMENT_ITEM_SIZE = 32;
+        private const int EQUIPMENT_ITEM_SIZE = 32 + 5; // 5 is margin in button
         private const int EQUIPMENT_ITEM_SPACING = 2;
 
         private readonly IUiContentStorage _uiContentStorage;
@@ -94,7 +95,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _uiContentStorage.GetButtonTexture(),
                     _uiContentStorage.GetPropIconLayers(sid),
                     buttonRect,
-                    new Rectangle(0, 14, EQUIPMENT_ITEM_SIZE, EQUIPMENT_ITEM_SIZE));
+                    new Rectangle(0, 0, EQUIPMENT_ITEM_SIZE, EQUIPMENT_ITEM_SIZE));
 
                 var uiItem = new EquipmentUiItem(equipmentButton, equipment, lastIndex, buttonRect);
 
@@ -152,7 +153,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private static string? GetEquipmentTitle(Equipment equipment)
         {
-            return equipment.Scheme.Name?.En ?? "<Undef>";
+            var text = equipment.Scheme.Name?.En;
+
+            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
+            var langName = currentLanguage.TwoLetterISOLanguageName;
+            if (string.Equals(langName, "en", StringComparison.InvariantCultureIgnoreCase))
+            {
+                text = equipment.Scheme.Name?.En;
+            }
+            else if (string.Equals(langName, "ru", StringComparison.InvariantCultureIgnoreCase))
+            {
+                text = equipment.Scheme.Name?.Ru;
+            }
+            else
+            {
+                Debug.Fail(
+                    $"Unknown language {langName} is selected. All available language must be supported in the client.");
+            }
+
+            return text ?? "<Undef>";
         }
 
         private record EquipmentUiItem

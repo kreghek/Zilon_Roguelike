@@ -8,8 +8,12 @@
     "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "steel-armor",
-        "Weight": 2
+        "SchemeSid": "work-clothes",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "traveler-camisole",
+        "Weight": 1
       },
       {
         "SchemeSid": null,
