@@ -69,16 +69,19 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             // Place textures in order to display. Latest will display on the top.
             _propIcons.Add("short-sword",
-                new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/ShortSwordBase") });
+                new[] 
+                {
+                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/ShortSwordBase") 
+                });
             _propIcons.Add("wooden-shield",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandEquiped/WoodenShieldBase")
+                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/WoodenShieldBase")
                 });
-            _propIcons.Add("cloths",
-                new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/CasualCloths/Body") });
-            _propIcons.Add("traveler",
-                new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/TravellerCloths/Body") });
+            _propIcons.Add("work-clothes",
+                new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/BodyParts/WorkClothes/Body") });
+            _propIcons.Add("traveler-camisole",
+                new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Body") });
             _propIcons.Add("EmptyPropIcon", new[] { contentManager.Load<Texture2D>("Sprites/ui/EmptyPropIcon") });
         }
 
