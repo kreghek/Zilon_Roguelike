@@ -51,6 +51,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
 
+#begin Sprites/game-objects/Equipments/HandParts/ShortSwordIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/HandParts/ShortSwordIcon.png
+
 #begin Sprites/game-objects/Equipments/HandParts/WoodenShieldBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -62,6 +74,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/WoodenShieldBase.png
+
+#begin Sprites/game-objects/Equipments/HandParts/WoodenShieldIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/HandParts/WoodenShieldIcon.png
 
 #begin Sprites/game-objects/Environment/Grass.png
 /importer:TextureImporter
@@ -231,6 +255,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Human/LegsCombat.png
 
+#begin Sprites/game-objects/Equipments/BodyParts/WorkClothes/Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/BodyParts/WorkClothes/Icon.png
+
 #begin Sprites/game-objects/Equipments/BodyParts/WorkClothes/Body.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -266,6 +302,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/BodyParts/WorkClothes/LegsCombat.png
+
+#begin Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Icon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Icon.png
 
 #begin Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Body.png
 /importer:TextureImporter

@@ -71,19 +71,19 @@ namespace CDT.LAST.MonoGameClient.Screens
             _propIcons.Add("short-sword",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/ShortSwordBase")
+                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/ShortSwordIcon")
                 });
             _propIcons.Add("wooden-shield",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/WoodenShieldBase")
+                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/WoodenShieldIcon")
                 });
             _propIcons.Add("work-clothes",
-                new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/BodyParts/WorkClothes/Body") });
+                new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/BodyParts/WorkClothes/Icon") });
             _propIcons.Add("traveler-camisole",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Body")
+                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Icon")
                 });
             _propIcons.Add("EmptyPropIcon", new[] { contentManager.Load<Texture2D>("Sprites/ui/EmptyPropIcon") });
         }
