@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
@@ -35,15 +34,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
         {
             DrawLeftHand(equipmentModule);
-
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
-            var legsTexture = humanParts.Single(x => x.Type == BodyPartType.LegsIdle).Texture;
-
-            AddChild(new Sprite(legsTexture)
-            {
-                Position = new Vector2(0, 0),
-                Origin = new Vector2(0.5f, 0.75f)
-            });
+            var humanParts = DrawLegs();
 
             DrawChest(equipmentModule);
 
@@ -55,6 +46,35 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             });
 
             DrawRightHand(equipmentModule);
+        }
+
+        private IEnumerable<BodyPart> DrawLegs()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var legsTexture = humanParts.Single(x => x.Type == BodyPartType.LegsIdle).Texture;
+
+            AddChild(new Sprite(legsTexture)
+            {
+                Position = new Vector2(0, 0),
+                Origin = new Vector2(0.5f, 0.75f)
+            });
+
+            var equipmentBody = _equipmentModule[1];
+            if (equipmentBody != null)
+            {
+                var equipedBodyParts = _personVisualizationContentStorage.GetBodyParts(equipmentBody.Scheme.Sid);
+                var equipedLegPart = equipedBodyParts.SingleOrDefault(x => x.Type == BodyPartType.LegsIdle);
+                if (equipedLegPart != null)
+                {
+                    AddChild(new Sprite(equipedLegPart.Texture)
+                    {
+                        Position = new Vector2(0, 0),
+                        Origin = new Vector2(0.5f, 0.75f)
+                    });
+                }
+            }
+
+            return humanParts;
         }
 
         private void DrawChest(IEquipmentModule equipmentModule)
