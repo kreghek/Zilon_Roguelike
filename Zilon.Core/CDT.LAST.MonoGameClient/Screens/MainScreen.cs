@@ -9,6 +9,7 @@ using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
@@ -35,6 +36,8 @@ namespace CDT.LAST.MonoGameClient.Screens
         private bool _isTransitionPerforming;
 
         private SectorViewModel? _sectorViewModel;
+
+        private bool _backgroundTrackStarted;
 
         public MainScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -90,6 +93,14 @@ namespace CDT.LAST.MonoGameClient.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            if (!_backgroundTrackStarted)
+            {
+                _backgroundTrackStarted = true;
+                var song = Game.Content.Load<Song>("Audio/TitleBackgroundTrack");
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Play(song);
+            }
 
             var visibleModal = CheckModalsIsVisible();
             if (visibleModal != null)
