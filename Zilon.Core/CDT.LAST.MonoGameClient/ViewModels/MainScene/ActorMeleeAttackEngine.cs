@@ -14,7 +14,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;
         private readonly IAnimationBlockerService _animationBlockerService;
-        
+
         private readonly SoundEffectInstance _swordHitEffect;
         private bool _effectPlayed;
 
