@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
+using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Screens;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
@@ -73,6 +74,10 @@ namespace CDT.LAST.MonoGameClient
             var personVisualizationContentStorage =
                 ServiceProvider.GetRequiredService<IPersonVisualizationContentStorage>();
             personVisualizationContentStorage.LoadContent(Content);
+
+            var uiSoundStorage = ServiceProvider.GetRequiredService<IUiSoundStorage>();
+            uiSoundStorage.LoadContent(Content);
+            UiThemeManager.SoundStorage = uiSoundStorage;
 
             var sceneManager = new ScreenManager(this);
             var titleScene = new TitleScreen(this, _spriteBatch);

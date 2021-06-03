@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Threading;
 
+using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Screens;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
@@ -36,8 +37,8 @@ namespace CDT.LAST.MonoGameClient
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
 
             RegisterCommands(serviceContainer);
+            RegisterUiContentStorages(serviceContainer);
 
-            serviceContainer.AddSingleton<IUiContentStorage, UiContentStorage>();
             serviceContainer.AddSingleton<IPersonVisualizationContentStorage, PersonVisualizationContentStorage>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
@@ -45,6 +46,12 @@ namespace CDT.LAST.MonoGameClient
             using var game = new LivGame(serviceProvider);
 
             game.Run();
+        }
+
+        private static void RegisterUiContentStorages(ServiceCollection serviceContainer)
+        {
+            serviceContainer.AddSingleton<IUiContentStorage, UiContentStorage>();
+            serviceContainer.AddSingleton<IUiSoundStorage, UiSoundStorage>();
         }
 
         private static void RegisterCommands(ServiceCollection serviceContainer)

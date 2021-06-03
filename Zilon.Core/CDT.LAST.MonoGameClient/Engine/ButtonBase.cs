@@ -49,9 +49,15 @@ namespace CDT.LAST.MonoGameClient.Engine
                 {
                     _buttonState = UiButtonState.Hover;
                     OnClick?.Invoke(this, EventArgs.Empty);
+                    PlayClickSoundIfExists();
                 }
                 else if (mouseState.LeftButton == ButtonState.Released)
                 {
+                    if (_buttonState == UiButtonState.OutOfButton)
+                    {
+                        PlayHoverSoundIfExists();
+                    }
+
                     _buttonState = UiButtonState.Hover;
                 }
             }
@@ -59,6 +65,35 @@ namespace CDT.LAST.MonoGameClient.Engine
             {
                 _buttonState = UiButtonState.OutOfButton;
             }
+        }
+
+        private static void PlayClickSoundIfExists()
+        {
+            if (UiThemeManager.SoundStorage == null)
+            {
+                // See the description in PlayHoverSoundIfExists method.
+                return;
+            }
+
+            var soundEffect = UiThemeManager.SoundStorage.GetButtonClickEffect();
+            soundEffect.Play();
+        }
+
+        private static void PlayHoverSoundIfExists()
+        {
+            if (UiThemeManager.SoundStorage == null)
+            {
+                // Sound content was not loaded.
+                // This may occured by a few reasons:
+                // - Content was not loaded yet. This is not critical to skip effect playing once. May be next time sound effect will be ready to play.
+                // - There is test environment. So there is need no sounds to auto-tests.
+                // - Developer forget to load content and assign UiThemeManager.SoundStorage. This is error bu no way to differ is from two other reasons above.
+                // So just do nothing.
+                return;
+            }
+
+            var soundEffect = UiThemeManager.SoundStorage.GetButtonHoverEffect();
+            soundEffect.Play();
         }
 
         protected abstract void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color);
