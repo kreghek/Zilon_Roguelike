@@ -228,7 +228,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             //TODO Move act description creating in event owner. Place this structure into event args.
             var usedActDescription = new ActDescription(actStatScheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ?? Array.Empty<string>());
-            
+
             var attackSoundEffect = _personSoundStorage.GetActStartSound(usedActDescription);
 
             var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();

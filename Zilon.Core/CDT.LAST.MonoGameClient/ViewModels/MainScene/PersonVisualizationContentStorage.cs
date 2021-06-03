@@ -226,7 +226,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 // Return default audio if act is unknown.
                 return _punchStartHitEffect;
             }
-            
+
         }
 
         public SoundEffect GetDeathEffect(IPerson person)
