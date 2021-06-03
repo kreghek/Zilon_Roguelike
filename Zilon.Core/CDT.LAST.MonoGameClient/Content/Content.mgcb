@@ -25,6 +25,12 @@
 /processorParam:Quality=Best
 /build:Audio/ButtonHover.mp3
 
+#begin Audio/HunterDeath.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/HunterDeath.wav
+
 #begin Audio/SwordHitEffect.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor

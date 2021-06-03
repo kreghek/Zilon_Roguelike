@@ -32,6 +32,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private IActorStateEngine _actorStateEngine;
         private readonly SoundEffect _swordHitEffect;
+        private readonly SoundEffect _hunterDeathEffect;
         private readonly SoundEffect _swordMissEffect;
 
         public ActorViewModel(Game game,
@@ -89,11 +90,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             Actor.Moved += Actor_Moved;
             Actor.UsedAct += Actor_UsedAct;
+            Actor.DamageTaken += Actor_DamageTaken;
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
 
             _swordHitEffect = game.Content.Load<SoundEffect>("Audio/SwordHitEffect");
             //_swordMissEffect = game.Content.Load<SoundEffect>("Audio/SwordMissEffect");
+            _hunterDeathEffect = game.Content.Load<SoundEffect>("Audio/HunterDeath");
+        }
+
+        private void Actor_DamageTaken(object? sender, DamageTakenEventArgs e)
+        {
+            if (sender is Actor actor)
+            {
+                if (actor.Person is MonsterPerson monster && monster.CheckIsDead())
+                {
+                    _hunterDeathEffect.CreateInstance().Play();
+                }
+            }
         }
 
         public override bool HiddenByFow => true;
