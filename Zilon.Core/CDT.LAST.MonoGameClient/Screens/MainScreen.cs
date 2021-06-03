@@ -31,8 +31,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
         private readonly ISectorUiState _uiState;
-
-        private bool _backgroundTrackStarted;
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
