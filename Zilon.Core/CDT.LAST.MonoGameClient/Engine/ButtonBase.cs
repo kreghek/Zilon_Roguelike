@@ -67,7 +67,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             }
         }
 
-        private void PlayClickSoundIfExists()
+        private static void PlayClickSoundIfExists()
         {
             if (UiThemeManager.SoundStorage == null)
             {
