@@ -31,13 +31,13 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
         private readonly ISectorUiState _uiState;
+
+        private bool _backgroundTrackStarted;
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
 
         private SectorViewModel? _sectorViewModel;
-
-        private bool _backgroundTrackStarted;
 
         public MainScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
