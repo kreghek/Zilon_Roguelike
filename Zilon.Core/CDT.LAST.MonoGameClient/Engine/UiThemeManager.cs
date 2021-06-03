@@ -13,7 +13,8 @@ namespace CDT.LAST.MonoGameClient.Engine
             {
                 if (_soundStorage?.ContentWasLoaded == false)
                 {
-                    throw new InvalidOperationException("Sound Storage must load content before assigning in Ui theme manager.");
+                    throw new InvalidOperationException(
+                        "Sound Storage must load content before assigning in Ui theme manager.");
                 }
 
                 _soundStorage = value;

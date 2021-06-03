@@ -48,18 +48,18 @@ namespace CDT.LAST.MonoGameClient
             game.Run();
         }
 
-        private static void RegisterUiContentStorages(ServiceCollection serviceContainer)
-        {
-            serviceContainer.AddSingleton<IUiContentStorage, UiContentStorage>();
-            serviceContainer.AddSingleton<IUiSoundStorage, UiSoundStorage>();
-        }
-
         private static void RegisterCommands(ServiceCollection serviceContainer)
         {
             serviceContainer.AddScoped<MoveCommand>();
             serviceContainer.AddScoped<IdleCommand>();
             serviceContainer.AddScoped<AttackCommand>();
             serviceContainer.AddScoped<SectorTransitionMoveCommand>();
+        }
+
+        private static void RegisterUiContentStorages(ServiceCollection serviceContainer)
+        {
+            serviceContainer.AddSingleton<IUiContentStorage, UiContentStorage>();
+            serviceContainer.AddSingleton<IUiSoundStorage, UiSoundStorage>();
         }
     }
 }
