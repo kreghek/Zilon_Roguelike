@@ -56,6 +56,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "ShortSwordBase"))
             });
 
+            _handParts.Add("great-sword", new[]
+            {
+                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "GreatSwordBase"))
+            });
+
             _handParts.Add("wooden-shield", new[]
             {
                 new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "WoodenShieldBase")),
@@ -92,7 +97,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 new BodyPart(BodyPartType.LegsIdle, load("LegsIdle")),
                 new BodyPart(BodyPartType.LegsCombat, load("LegsCombat")),
                 new BodyPart(BodyPartType.ArmLeft, load("ArmLeftSimple")),
-                new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple"))
+                new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple")),
+                new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightTwoHanded"))
             });
         }
 

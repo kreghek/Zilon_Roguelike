@@ -369,7 +369,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Human/ArmLeftSimple.png
 
-#begin Sprites/game-objects/Human/ArmRightDual.png
+#begin Sprites/game-objects/Human/ArmRightTwoHanded.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -379,7 +379,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Human/ArmRightDual.png
+/build:Sprites/game-objects/Human/ArmRightTwoHanded.png
 
 #begin Sprites/game-objects/Human/ArmRightRifle.png
 /importer:TextureImporter

@@ -33,5 +33,16 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonProperty]
         public PersonRule?[]? Rules { get; private set; }
+
+        /// <inheritdoc/>
+        [JsonConverter(typeof(ConcreteTypeConverter<IPropEquipRestrictions>))]
+        [JsonProperty]
+        public IPropEquipRestrictions? EquipRestrictions { get; private set; }
+    }
+
+    public sealed class PropEquipRestrictions : IPropEquipRestrictions
+    {
+        [JsonProperty]
+        public PropHandUsage? PropHandUsage { get; private set; }
     }
 }

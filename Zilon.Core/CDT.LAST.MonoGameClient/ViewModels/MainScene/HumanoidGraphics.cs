@@ -117,11 +117,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var dressedRightHandPart = GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmRightTwoHanded);
 
-            AddChild(CreateRightArmSprite(armRightTexture));
+            AddChild(CreateRightTwoHandedArmSprite(armRightTexture));
 
             if (dressedRightHandPart != null)
             {
-                AddChild(CreateRightArmSprite(dressedRightHandPart.Texture));
+                AddChild(CreateRightTwoHandedArmSprite(dressedRightHandPart.Texture));
             }
         }
 
@@ -192,6 +192,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         }
 
         private static Sprite CreateRightArmSprite(Microsoft.Xna.Framework.Graphics.Texture2D armRightTexture)
+        {
+            return new Sprite(armRightTexture)
+            {
+                Position = new Vector2(13, -20),
+                Origin = new Vector2(0.5f, 0.5f)
+            };
+        }
+
+        private static Sprite CreateRightTwoHandedArmSprite(Microsoft.Xna.Framework.Graphics.Texture2D armRightTexture)
         {
             return new Sprite(armRightTexture)
             {
