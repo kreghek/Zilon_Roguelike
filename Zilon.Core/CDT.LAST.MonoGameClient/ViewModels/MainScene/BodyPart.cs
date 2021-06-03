@@ -3,7 +3,7 @@
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     /// <summary>
-    /// Helper structure to keep texture and metadata forbody visualization.
+    /// Helper structure to keep texture and metadata for body visualization.
     /// </summary>
     public record BodyPart
     {

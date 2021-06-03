@@ -158,6 +158,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             };
         }
 
+        private static Sprite CreateHeadSprite(Microsoft.Xna.Framework.Graphics.Texture2D headTexture)
+        {
+            return new Sprite(headTexture)
+            {
+                Position = new Vector2(-0, -20),
+                Origin = new Vector2(0.5f, 1)
+            };
+        }
+
         private static Sprite CreateLegsSprite(Microsoft.Xna.Framework.Graphics.Texture2D legsTexture)
         {
             return new Sprite(legsTexture)
@@ -179,16 +188,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
         {
             DrawLeftHand(equipmentModule);
-            var humanParts = DrawLegs();
+
+            DrawLegs();
 
             DrawChest(equipmentModule);
 
-            var headTexture = humanParts.Single(x => x.Type == BodyPartType.Head).Texture;
-            AddChild(new Sprite(headTexture)
-            {
-                Position = new Vector2(-0, -20),
-                Origin = new Vector2(0.5f, 1)
-            });
+            DrawHead();
 
             DrawRightHand(equipmentModule);
         }
@@ -215,6 +220,40 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 else
                 {
                     Debug.Fail("There are no schemes without SID. Looks like some kind of error.");
+                }
+            }
+        }
+
+        private void DrawHead()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+
+            var headTexture = humanParts.Single(x => x.Type == BodyPartType.Head).Texture;
+            AddChild(CreateHeadSprite(headTexture));
+
+            // 0 - see human-person.json scheme.
+            var headEquipment = _equipmentModule[0];
+            if (headEquipment != null)
+            {
+                var headSid = headEquipment.Scheme.Sid;
+                if (headSid != null)
+                {
+                    var headParts = _personVisualizationContentStorage.GetHeadParts(headSid);
+                    var insidePart = headParts.SingleOrDefault(x => x.Type == HeadPartType.Inside);
+                    if (insidePart != null)
+                    {
+                        AddChild(CreateHeadSprite(insidePart.Texture));
+                    }
+
+                    var basePart = headParts.SingleOrDefault(x => x.Type == HeadPartType.Base);
+                    if (basePart != null)
+                    {
+                        AddChild(CreateHeadSprite(basePart.Texture));
+                    }
+                }
+                else
+                {
+                    Debug.Fail("All equipment must have SID. Looks like error.");
                 }
             }
         }
@@ -262,7 +301,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private IEnumerable<BodyPart> DrawLegs()
+        private void DrawLegs()
         {
             var humanParts = _personVisualizationContentStorage.GetHumanParts();
             var legsTexture = humanParts.Single(x => x.Type == BodyPartType.LegsIdle).Texture;
@@ -287,8 +326,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
                 }
             }
-
-            return humanParts;
         }
 
         private void DrawRightHand(IEquipmentModule equipmentModule)

@@ -4,6 +4,23 @@
     "Ru": "Тест",
     "En": "Test"
   },
+  "HeadEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "knitted-hat",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "steel-helmet",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 1
+      }
+    ]
+  },
   "BodyEquipments": {
     "Rolls": 1,
     "Records": [

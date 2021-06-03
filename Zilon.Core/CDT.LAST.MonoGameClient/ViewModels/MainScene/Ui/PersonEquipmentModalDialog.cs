@@ -19,7 +19,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class PersonEquipmentModalDialog : ModalDialog
     {
-        private const int EQUIPMENT_ITEM_SIZE = 32 + 5; // 5 is margin in button
+        private const int EQUIPMENT_ITEM_SIZE = 32 + (5 * 2); // 5 is margin in button
         private const int EQUIPMENT_ITEM_SPACING = 2;
 
         private readonly IUiContentStorage _uiContentStorage;
