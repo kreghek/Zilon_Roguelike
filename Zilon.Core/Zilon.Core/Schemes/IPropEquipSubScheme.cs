@@ -26,5 +26,22 @@ namespace Zilon.Core.Schemes
         /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
         EquipmentSlotTypes[]? SlotTypes { get; }
+
+        IPropEquipRestrictions? EquipRestrictions { get; }
+    }
+
+    public interface IPropEquipRestrictions
+    {
+        /// <summary>
+        /// Determines rules to keep thing in hands.
+        /// By default, all equipment in hand slot is one-handed.
+        /// </summary>
+        PropHandUsage? PropHandUsage { get; }
+    }
+
+    public enum PropHandUsage
+    { 
+        Undefined = 0,
+        TwoHanded = 1
     }
 }

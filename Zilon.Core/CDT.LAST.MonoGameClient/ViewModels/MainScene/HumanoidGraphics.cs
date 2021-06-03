@@ -110,6 +110,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private void AddRightTwoHandedArmHierarchy()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightTwoHanded).Texture;
+
+            var dressedRightHandPart = GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmRightTwoHanded);
+
+            AddChild(CreateRightArmSprite(armRightTexture));
+
+            if (dressedRightHandPart != null)
+            {
+                AddChild(CreateRightArmSprite(dressedRightHandPart.Texture));
+            }
+        }
+
         private void AddRightShieldHierarchy(Equipment equipment)
         {
             var shieldSid = equipment.Scheme.Sid;
@@ -355,7 +370,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 AddRightWeaponHierarchy(weaponEquipment);
 
-                AddRightArmHierarchy();
+                var equipScheme = weaponEquipment.Scheme.Equip;
+                if (equipScheme is null)
+                {
+                    // A person can equip only a prop with assigned PropEquipScheme.
+                    Debug.Fail("This is not possible to draw weapon without equip scheme.");
+                }
+
+                var propHandUsage = equipScheme.EquipRestrictions?.PropHandUsage;
+                switch (propHandUsage)
+                {
+                    case null:
+                        // This means the prop has no hand restrictions.
+                        // Draw simple right hand.
+                        AddRightArmHierarchy();
+                        break;
+
+                    case Zilon.Core.Schemes.PropHandUsage.TwoHanded:
+                        AddRightTwoHandedArmHierarchy();
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Unknown hand usage: {propHandUsage}.");
+                }
             }
             else if (equipmentTags.Contains(PropTags.Equipment.Shield))
             {

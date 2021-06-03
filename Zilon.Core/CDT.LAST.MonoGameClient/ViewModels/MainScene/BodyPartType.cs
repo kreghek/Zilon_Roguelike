@@ -6,8 +6,11 @@
     public enum BodyPartType
     {
         Undefined = 0,
+
         Head,
+
         Chest,
+
         ArmLeft,
 
         /// <summary>
@@ -26,7 +29,8 @@
         /// <summary>
         /// Used to bear two-handed weapon like staffs, grate swords or war hammers.
         /// </summary>
-        ArmRightDual,
+        ArmRightTwoHanded,
+
         LegsIdle,
 
         /// <summary>
