@@ -15,11 +15,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly ICommandBlocker _animationBlocker;
         private readonly IAnimationBlockerService _animationBlockerService;
 
+        private readonly SoundEffectInstance? _meleeAttackSoundEffect;
+
         private readonly SpriteContainer _rootContainer;
 
         private readonly Vector2 _startPosition;
-
-        private readonly SoundEffectInstance? _meleeAttackSoundEffect;
         private readonly Vector2 _targetPosition;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
@@ -59,12 +59,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     if (_meleeAttackSoundEffect != null)
                     {
                         _meleeAttackSoundEffect.Play();
-                    }
-                    else
-                    {
-                        // Sound effect can be null because:
-                        // - Sound effect was not found in sound storage. It looks like error but this is catch in storage.
-                        // - This object created in test environment where sounds are not used.
                     }
                 }
 

@@ -26,10 +26,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Game _game;
         private readonly IActorGraphics _graphicsRoot;
+        private readonly IPersonSoundContentStorage _personSoundStorage;
 
         private readonly SpriteContainer _rootSprite;
         private readonly SectorViewModelContext _sectorViewModelContext;
-        private readonly IPersonSoundContentStorage _personSoundStorage;
         private readonly Sprite _shadowSprite;
         private readonly SpriteBatch _spriteBatch;
 
@@ -227,7 +227,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private SoundEffectInstance? GetSoundEffect(ITacticalActStatsSubScheme actStatScheme)
         {
             //TODO Move act description creating in event owner. Place this structure into event args.
-            var usedActDescription = new ActDescription(actStatScheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ?? Array.Empty<string>());
+            var usedActDescription =
+                new ActDescription(actStatScheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                                   Array.Empty<string>());
 
             var attackSoundEffect = _personSoundStorage.GetActStartSound(usedActDescription);
 

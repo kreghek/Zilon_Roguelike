@@ -52,7 +52,7 @@ namespace Zilon.Core.Schemes
         [JsonProperty]
         public TacticalActTargets Targets { get; private set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonProperty]
         public string?[]? Tags { get; private set; }
     }

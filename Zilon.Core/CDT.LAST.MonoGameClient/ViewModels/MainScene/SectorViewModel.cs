@@ -28,11 +28,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
+        private readonly IPersonSoundContentStorage _personSoundContentStorage;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
         private readonly SectorViewModelContext _viewModelContext;
-        private readonly IPersonSoundContentStorage _personSoundContentStorage;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {

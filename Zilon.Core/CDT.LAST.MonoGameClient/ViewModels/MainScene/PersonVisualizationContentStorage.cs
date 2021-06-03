@@ -184,22 +184,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
     internal interface IPersonSoundContentStorage
     {
-        void LoadContent(ContentManager contentManager);
+        SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson);
 
         SoundEffect GetActStartSound(ActDescription actDescription);
 
-        SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson);
-
         SoundEffect GetDeathEffect(IPerson person);
+        void LoadContent(ContentManager contentManager);
     }
 
     internal sealed class PersonSoundContentStorage : IPersonSoundContentStorage
     {
-        private SoundEffect? _swordStartHitEffect;
         private SoundEffect? _hunterDeathEffect;
-        private SoundEffect? _swordHitEffect;
         private SoundEffect? _hunterStartHitEffect;
         private SoundEffect _punchStartHitEffect;
+        private SoundEffect? _swordHitEffect;
+        private SoundEffect? _swordStartHitEffect;
 
         public SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson)
         {
@@ -212,21 +211,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 return _swordStartHitEffect;
             }
-            else if (actDescription.Tags.Contains("bite"))
+
+            if (actDescription.Tags.Contains("bite"))
             {
                 return _hunterStartHitEffect;
             }
-            else if (actDescription.Tags.Contains("punch"))
+
+            if (actDescription.Tags.Contains("punch"))
             {
-                return _punchStartHitEffect;
-            }
-            else
-            {
-                Debug.Fail("All acts must have audio effect.");
-                // Return default audio if act is unknown.
                 return _punchStartHitEffect;
             }
 
+            Debug.Fail("All acts must have audio effect.");
+            // Return default audio if act is unknown.
+            return _punchStartHitEffect;
         }
 
         public SoundEffect GetDeathEffect(IPerson person)
