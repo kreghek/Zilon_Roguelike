@@ -14,6 +14,14 @@
         ArmLeft,
 
         /// <summary>
+        /// Only fist used to render two-handed weapon where left fist cover weapon sprite
+        /// but remain parts pf left hand are hunder weapon
+        /// </summary>
+        ArmLeftFist,
+
+        ArmLeftTwoHanded,
+
+        /// <summary>
         /// Used when:
         /// - Idle mode.
         /// - No things in the left hand.
@@ -36,6 +44,6 @@
         /// <summary>
         /// Used to visualize combat agressive stance of a person.
         /// </summary>
-        LegsCombat
+        LegsCombat,
     }
 }

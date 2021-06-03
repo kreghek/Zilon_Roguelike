@@ -56,6 +56,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private void AddLeftTwoHandedArmHierarchy()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftTwoHanded).Texture;
+
+            // Slot 1 according the person scheme is body.
+            var dressedLeftArmPart = GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmLeftTwoHanded);
+
+            AddChild(new Sprite(armLeftTexture)
+            {
+                Position = new Vector2(-10, -20),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
+
+            if (dressedLeftArmPart != null)
+            {
+                AddChild(new Sprite(dressedLeftArmPart.Texture)
+                {
+                    Position = new Vector2(-10, -20),
+                    Origin = new Vector2(0.5f, 0.5f)
+                });
+            }
+        }
+
         private void AddLeftShieldHierarchy(Equipment equipment)
         {
             var shieldSid = equipment.Scheme.Sid;
@@ -310,44 +334,55 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawLeftHand(IEquipmentModule equipmentModule)
         {
-            // Slot 3 according the person scheme is second/left hand.
-            var equipment = equipmentModule[3];
-            if (equipment != null)
+            // Slot 2 is right hand
+            var rightEquipment = equipmentModule[2];
+            if (rightEquipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage == Zilon.Core.Schemes.PropHandUsage.TwoHanded)
             {
-                var equipmentTags = equipment.Scheme.Tags;
-                if (equipmentTags is null)
-                {
-                    // Now a person can equiped only weapons or tools.
-                    // All weapons or tools has corresponding tags.
-                    Debug.Fail("There is no scenario then equipment has no tags.");
+                // If the person has two handed weapon in right hand there is no reason draw left (second) hand as one handed.
 
-                    AddLeftArmHierarchy();
-                }
-                else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
-                {
-                    AddLeftArmHierarchy();
-
-                    AddLeftWeaponHierarchy(equipment);
-                }
-                else if (equipmentTags.Contains(PropTags.Equipment.Shield))
-                {
-                    // For a shield in this hand draw shield back sprite first.
-                    // So it will looks like the person bear shield by inner side.
-
-                    AddLeftShieldHierarchy(equipment);
-
-                    AddLeftArmHierarchy();
-                }
-                else
-                {
-                    Debug.Fail("Unknown tag in the equipment.");
-
-                    AddLeftArmHierarchy();
-                }
+                AddLeftTwoHandedArmHierarchy();
             }
             else
             {
-                AddLeftArmHierarchy();
+                // Slot 3 according the person scheme is second/left hand.
+                var equipment = equipmentModule[3];
+                if (equipment != null)
+                {
+                    var equipmentTags = equipment.Scheme.Tags;
+                    if (equipmentTags is null)
+                    {
+                        // Now a person can equiped only weapons or tools.
+                        // All weapons or tools has corresponding tags.
+                        Debug.Fail("There is no scenario then equipment has no tags.");
+
+                        AddLeftArmHierarchy();
+                    }
+                    else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
+                    {
+                        AddLeftArmHierarchy();
+
+                        AddLeftWeaponHierarchy(equipment);
+                    }
+                    else if (equipmentTags.Contains(PropTags.Equipment.Shield))
+                    {
+                        // For a shield in this hand draw shield back sprite first.
+                        // So it will looks like the person bear shield by inner side.
+
+                        AddLeftShieldHierarchy(equipment);
+
+                        AddLeftArmHierarchy();
+                    }
+                    else
+                    {
+                        Debug.Fail("Unknown tag in the equipment.");
+
+                        AddLeftArmHierarchy();
+                    }
+                }
+                else
+                {
+                    AddLeftArmHierarchy();
+                }
             }
         }
 
@@ -422,6 +457,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         break;
 
                     case Zilon.Core.Schemes.PropHandUsage.TwoHanded:
+
+                        AddLeftFistHierarchy();
+
                         AddRightTwoHandedArmHierarchy();
                         break;
 
@@ -444,6 +482,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 AddRightArmHierarchy();
             }
+        }
+
+        private void AddLeftFistHierarchy()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armLeftFistTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftFist).Texture;
+
+            AddChild(new Sprite(armLeftFistTexture)
+            {
+                Position = new Vector2(-5, -19),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
         }
 
         private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)

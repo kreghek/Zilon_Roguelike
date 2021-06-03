@@ -97,6 +97,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 new BodyPart(BodyPartType.LegsIdle, load("LegsIdle")),
                 new BodyPart(BodyPartType.LegsCombat, load("LegsCombat")),
                 new BodyPart(BodyPartType.ArmLeft, load("ArmLeftSimple")),
+                new BodyPart(BodyPartType.ArmLeftTwoHanded, load("ArmLeftTwoHanded")),
+                new BodyPart(BodyPartType.ArmLeftFist, load("ArmLeftFist")),
                 new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple")),
                 new BodyPart(BodyPartType.ArmRightTwoHanded, load("ArmRightTwoHanded"))
             });

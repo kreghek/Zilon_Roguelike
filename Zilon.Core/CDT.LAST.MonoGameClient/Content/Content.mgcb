@@ -381,6 +381,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Human/ArmLeftSimple.png
 
+#begin Sprites/game-objects/Human/ArmLeftTwoHanded.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Human/ArmLeftTwoHanded.png
+
+#begin Sprites/game-objects/Human/ArmLeftFist.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Human/ArmLeftFist.png
+
 #begin Sprites/game-objects/Human/ArmRightTwoHanded.png
 /importer:TextureImporter
 /processor:TextureProcessor
