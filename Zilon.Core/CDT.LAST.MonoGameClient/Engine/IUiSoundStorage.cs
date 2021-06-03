@@ -13,7 +13,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         SoundEffect GetButtonHoverEffect();
     }
 
-    internal sealed class UiSoundStorage: IUiSoundStorage
+    internal sealed class UiSoundStorage : IUiSoundStorage
     {
         private SoundEffect? _buttonClickSoundEffect;
         private SoundEffect? _buttonHoverSoundEffect;
