@@ -5,6 +5,7 @@ using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
@@ -30,6 +31,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly SpriteBatch _spriteBatch;
 
         private IActorStateEngine _actorStateEngine;
+        private readonly SoundEffect _swordHitEffect;
+        private readonly SoundEffect _swordMissEffect;
 
         public ActorViewModel(Game game,
             IActor actor,
@@ -88,6 +91,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.UsedAct += Actor_UsedAct;
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
+
+            _swordHitEffect = game.Content.Load<SoundEffect>("Audio/SwordHitEffect");
+            //_swordMissEffect = game.Content.Load<SoundEffect>("Audio/SwordMissEffect");
         }
 
         public override bool HiddenByFow => true;
@@ -182,7 +188,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         new ActorMeleeAttackEngine(
                             _rootSprite,
                             targetSpritePosition,
-                            animationBlockerService);
+                            animationBlockerService,
+                            _swordHitEffect.CreateInstance());
 
                     var targetGameObject =
                         _sectorViewModelContext.GameObjects.SingleOrDefault(x => x.Node == e.TargetNode);
