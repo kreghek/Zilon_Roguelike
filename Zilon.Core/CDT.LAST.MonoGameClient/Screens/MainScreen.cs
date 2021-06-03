@@ -94,14 +94,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             base.Update(gameTime);
 
-            if (!_backgroundTrackStarted)
-            {
-                _backgroundTrackStarted = true;
-                var song = Game.Content.Load<Song>("Audio/TitleBackgroundTrack");
-                MediaPlayer.IsRepeating = true;
-                MediaPlayer.Play(song);
-            }
-
             var visibleModal = CheckModalsIsVisible();
             if (visibleModal != null)
             {
