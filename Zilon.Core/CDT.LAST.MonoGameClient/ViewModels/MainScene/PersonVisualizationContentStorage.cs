@@ -53,30 +53,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             const string PATH_TO_HAND_PARTS = "Sprites/game-objects/Equipments/HandParts/";
 
+            Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HAND_PARTS + name); }
+
             _handParts.Add("short-sword", new[]
             {
-                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "ShortSwordBase"))
+                new HandPart(HandPartType.Base, load("ShortSwordBase"))
             });
 
             _handParts.Add("great-sword", new[]
             {
-                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "GreatSwordBase"))
+                new HandPart(HandPartType.Base, load("GreatSwordBase"))
             });
 
             _handParts.Add("combat-staff", new[]
             {
-                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "CombatStaffBase"))
+                new HandPart(HandPartType.Base, load("CombatStaffBase"))
             });
 
             _handParts.Add("tribal-spear", new[]
             {
-                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "TribalSpearBase"))
+                new HandPart(HandPartType.Base, load("TribalSpearBase"))
             });
 
             _handParts.Add("wooden-shield", new[]
             {
-                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "WoodenShieldBase")),
-                new HandPart(HandPartType.BaseBack, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "WoodenShieldBase"))
+                new HandPart(HandPartType.Base, load("WoodenShieldBase")),
+                new HandPart(HandPartType.BaseBack, load("WoodenShieldBase"))
             });
         }
 
