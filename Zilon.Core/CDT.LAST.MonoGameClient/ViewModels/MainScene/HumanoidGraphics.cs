@@ -200,31 +200,33 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 // A person can equip only a prop with assigned PropEquipScheme.
                 Debug.Fail("This is not possible to draw weapon without equip scheme.");
             }
-
-            var propHandUsage = equipScheme.EquipRestrictions?.PropHandUsage;
-            switch (propHandUsage)
+            else
             {
-                case null:
-                    // Draw one-handed weapon.
-                    AddChild(new InvertedFlipXSprite(weaponBaseTexture)
-                    {
-                        Position = new Vector2(11, -10),
-                        Origin = new Vector2(0.5f, 0.5f),
-                        Rotation = (float)(-Math.PI / 2)
-                    });
-                    break;
+                var propHandUsage = equipScheme.EquipRestrictions?.PropHandUsage;
+                switch (propHandUsage)
+                {
+                    case null:
+                        // Draw one-handed weapon.
+                        AddChild(new InvertedFlipXSprite(weaponBaseTexture)
+                        {
+                            Position = new Vector2(11, -10),
+                            Origin = new Vector2(0.5f, 0.5f),
+                            Rotation = (float)(-Math.PI / 2)
+                        });
+                        break;
 
-                case PropHandUsage.TwoHanded:
-                    // Draw two handed weapon
-                    AddChild(new Sprite(weaponBaseTexture)
-                    {
-                        Position = new Vector2(8, -24),
-                        Origin = new Vector2(0.5f, 0.5f)
-                    });
-                    break;
+                    case PropHandUsage.TwoHanded:
+                        // Draw two handed weapon
+                        AddChild(new Sprite(weaponBaseTexture)
+                        {
+                            Position = new Vector2(8, -24),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
+                        break;
 
-                default:
-                    throw new InvalidOperationException($"Unknown hand usage: {propHandUsage}.");
+                    default:
+                        throw new InvalidOperationException($"Unknown hand usage: {propHandUsage}.");
+                }
             }
         }
 
@@ -460,25 +462,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     // A person can equip only a prop with assigned PropEquipScheme.
                     Debug.Fail("This is not possible to draw weapon without equip scheme.");
                 }
-
-                var propHandUsage = equipScheme.EquipRestrictions?.PropHandUsage;
-                switch (propHandUsage)
+                else
                 {
-                    case null:
-                        // This means the prop has no hand restrictions.
-                        // Draw simple right hand.
-                        AddRightArmHierarchy();
-                        break;
+                    var propHandUsage = equipScheme.EquipRestrictions?.PropHandUsage;
+                    switch (propHandUsage)
+                    {
+                        case null:
+                            // This means the prop has no hand restrictions.
+                            // Draw simple right hand.
+                            AddRightArmHierarchy();
+                            break;
 
-                    case PropHandUsage.TwoHanded:
+                        case PropHandUsage.TwoHanded:
 
-                        AddLeftFistHierarchy();
+                            AddLeftFistHierarchy();
 
-                        AddRightTwoHandedArmHierarchy();
-                        break;
+                            AddRightTwoHandedArmHierarchy();
+                            break;
 
-                    default:
-                        throw new InvalidOperationException($"Unknown hand usage: {propHandUsage}.");
+                        default:
+                            throw new InvalidOperationException($"Unknown hand usage: {propHandUsage}.");
+                    }
                 }
             }
             else if (equipmentTags.Contains(PropTags.Equipment.Shield))
