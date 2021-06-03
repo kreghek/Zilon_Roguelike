@@ -12,5 +12,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public string[] ActSids { get; }
         public IPropArmorItemSubScheme[] Armors { get; set; }
         public PersonRule[] Rules { get; set; }
+        public IPropEquipRestrictions EquipRestrictions { get; }
     }
 }
