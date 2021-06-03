@@ -21,8 +21,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly TextButton _startButton;
         private readonly TextButton _switchLanguageButton;
         private bool _backgroundTrackStarted;
-        private SoundEffect _buttonClickSoundEffect;
-        private SoundEffect _buttonHoverSoundEffect;
 
         public TitleScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -32,14 +30,10 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
-            _buttonClickSoundEffect = Game.Content.Load<SoundEffect>("Audio/ButtonClick");
-            _buttonHoverSoundEffect = Game.Content.Load<SoundEffect>("Audio/ButtonHover");
 
             _startButton = new TextButton(UiResources.StartGameButtonTitle, buttonTexture, font,
                 new Rectangle(150, 150, 100, 20));
             _startButton.OnClick += StartButtonClickHandler;
-            _startButton.OnClick += Button_OnClick;
-            _startButton.OnMouseEnter += Button_OnMouseEnter;
 
             _switchLanguageButton = new TextButton("Switch lang",
                 buttonTexture,
@@ -47,18 +41,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new Rectangle(150, 200, 100, 20));
 
             _switchLanguageButton.OnClick += SwitchLanguageButtonClickHandler;
-            _switchLanguageButton.OnClick += Button_OnClick;
-            _switchLanguageButton.OnMouseEnter += Button_OnMouseEnter;
-        }
-
-        private void Button_OnClick(object? sender, EventArgs e)
-        {
-            _buttonClickSoundEffect.Play();
-        }
-
-        private void Button_OnMouseEnter(object? sender, EventArgs e)
-        {
-            _buttonHoverSoundEffect.Play();
         }
 
         public override void Draw(GameTime gameTime)
