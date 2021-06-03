@@ -204,7 +204,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             return new Sprite(armRightTexture)
             {
-                Position = new Vector2(13, -20),
+                Position = new Vector2(8, -17),
                 Origin = new Vector2(0.5f, 0.5f)
             };
         }
@@ -285,7 +285,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private void DrawLeftHand(IEquipmentModule equipmentModule)
         {
             // Slot 3 according the person scheme is second/left hand.
-            var equipment = equipmentModule[2];
+            var equipment = equipmentModule[3];
             if (equipment != null)
             {
                 var equipmentTags = equipment.Scheme.Tags;
@@ -354,8 +354,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawRightHand(IEquipmentModule equipmentModule)
         {
-            // Slot 3 according the person scheme is second/left hand.
-            var weaponEquipment = equipmentModule[3];
+            // Slot 2 according the person scheme is main hand.
+            var weaponEquipment = equipmentModule[2];
             if (weaponEquipment == null)
             {
                 // There is nothing in right hand.
