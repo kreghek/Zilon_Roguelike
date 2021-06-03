@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -24,14 +25,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Game _game;
         private readonly IActorGraphics _graphicsRoot;
-        private readonly SoundEffect _hunterDeathEffect;
 
         private readonly SpriteContainer _rootSprite;
         private readonly SectorViewModelContext _sectorViewModelContext;
+        private readonly IPersonSoundContentStorage _personSoundStorage;
         private readonly Sprite _shadowSprite;
         private readonly SpriteBatch _spriteBatch;
-        private readonly SoundEffect _swordHitEffect;
-        private readonly SoundEffect _swordMissEffect;
 
         private IActorStateEngine _actorStateEngine;
 
@@ -39,11 +38,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             IActor actor,
             SectorViewModelContext sectorViewModelContext,
             IPersonVisualizationContentStorage personVisualizationContentStorage,
+            IPersonSoundContentStorage personSoundStorage,
             SpriteBatch spriteBatch)
         {
             _game = game;
             Actor = actor;
             _sectorViewModelContext = sectorViewModelContext;
+            _personSoundStorage = personSoundStorage;
             _spriteBatch = spriteBatch;
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
@@ -94,10 +95,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.DamageTaken += Actor_DamageTaken;
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
-
-            _swordHitEffect = game.Content.Load<SoundEffect>("Audio/SwordStartHitEffect");
-            //_swordMissEffect = game.Content.Load<SoundEffect>("Audio/SwordMissEffect");
-            _hunterDeathEffect = game.Content.Load<SoundEffect>("Audio/HunterDeath");
         }
 
         public override bool HiddenByFow => true;
@@ -139,10 +136,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             if (sender is Actor actor)
             {
-                if (actor.Person is MonsterPerson monster && monster.CheckIsDead())
+                if (actor.Person.CheckIsDead())
                 {
-                    //TODO Select sfx according act using special SoundContentStorage service.
-                    _hunterDeathEffect.CreateInstance().Play();
+                    var deathSoundEffect = _personSoundStorage.GetDeathEffect(actor.Person);
+                    deathSoundEffect.CreateInstance().Play();
                 }
             }
         }
@@ -200,13 +197,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     );
 
                     var targetSpritePosition = newPosition;
+
+                    var attackSoundEffectInstance = GetSoundEffect(e.TacticalAct.Scheme);
                     _actorStateEngine =
                         new ActorMeleeAttackEngine(
                             _rootSprite,
                             targetSpritePosition,
                             animationBlockerService,
-                            //TODO Select sfx according act using special SoundContentStorage service.
-                            _swordHitEffect.CreateInstance());
+                            attackSoundEffectInstance);
 
                     var targetGameObject =
                         _sectorViewModelContext.GameObjects.SingleOrDefault(x => x.Node == e.TargetNode);
@@ -223,6 +221,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     }
                 }
             }
+        }
+
+        private SoundEffectInstance? GetSoundEffect(ITacticalActScheme? actScheme)
+        {
+            SoundEffect? attackSoundEffect = null;
+            if (actScheme != null && actScheme.Sid != null)
+            {
+                attackSoundEffect = _personSoundStorage.GetActStartSound(actScheme.Sid);
+            }
+            else
+            {
+                Debug.Fail("There are no act without schemes and no schemes without SID. Looks like error.");
+            }
+
+            var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
+            return attackSoundEffectInstance;
         }
 
         public IActor Actor { get; set; }

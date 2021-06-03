@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
+using Zilon.Core.Persons;
+using Zilon.Core.Tactics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
@@ -173,6 +177,46 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             LoadHandParts(content);
 
             LoadHeadParts(content);
+        }
+    }
+
+    internal interface IPersonSoundContentStorage
+    {
+        void LoadContent(ContentManager contentManager);
+
+        SoundEffect GetActStartSound(string actSid);
+
+        SoundEffect GetActHitSound(string actSid, IPerson targetPerson);
+
+        SoundEffect GetDeathEffect(IPerson person);
+    }
+
+    internal sealed class PersonSoundStorage : IPersonSoundContentStorage
+    {
+        private SoundEffect? _swordStartHitEffect;
+        private SoundEffect? _hunterDeathEffect;
+        private SoundEffect? _swordHitEffect;
+
+        public SoundEffect GetActHitSound(string actSid, IPerson targetPerson)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SoundEffect GetActStartSound(string actSid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SoundEffect GetDeathEffect(IPerson person)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadContent(ContentManager contentManager)
+        {
+            _swordStartHitEffect = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect");
+            _hunterDeathEffect = contentManager.Load<SoundEffect>("Audio/HunterDeath");
+            _swordHitEffect = contentManager.Load<SoundEffect>("Audio/SwordHitEffect");
         }
     }
 }

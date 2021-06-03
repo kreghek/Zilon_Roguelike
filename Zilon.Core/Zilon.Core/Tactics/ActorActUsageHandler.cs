@@ -504,14 +504,15 @@ namespace Zilon.Core.Tactics
             IActor targetActor,
             DamageEfficientCalc damageEfficientCalcResult,
             int successToHitRoll,
-            int factToHitRoll)
+            int factToHitRoll,
+            ITacticalAct usedAct)
         {
-            if (ActorInteractionBus == null)
+            if (ActorInteractionBus is null)
             {
                 return;
             }
 
-            var damageEvent = new DamageActorInteractionEvent(actor, targetActor, damageEfficientCalcResult)
+            var damageEvent = new DamageActorInteractionEvent(actor, targetActor, usedAct, damageEfficientCalcResult)
             {
                 SuccessToHitRoll = successToHitRoll,
                 FactToHitRoll = factToHitRoll
@@ -530,7 +531,8 @@ namespace Zilon.Core.Tactics
                 targetActor,
                 damageEfficientCalcResult,
                 successToHitRoll,
-                factToHitRoll);
+                factToHitRoll,
+                tacticalActRoll.TacticalAct);
 
             if (actEfficient > 0)
             {

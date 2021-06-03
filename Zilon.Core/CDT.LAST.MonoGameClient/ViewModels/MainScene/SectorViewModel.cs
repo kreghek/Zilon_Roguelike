@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Screens;
@@ -29,9 +30,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
-        private readonly SoundEffect _swordHitEffect;
         private readonly ISectorUiState _uiState;
         private readonly SectorViewModelContext _viewModelContext;
+        private readonly IPersonSoundContentStorage _personSoundContentStorage;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
@@ -44,13 +45,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
 
             _intarectionBus = serviceScope.GetRequiredService<IActorInteractionBus>();
-            _swordHitEffect = game.Content.Load<SoundEffect>("Audio/SwordHitEffect");
 
             //TODO Delete subscribtion after transition
             _intarectionBus.NewEvent += IntarectionBus_NewEvent;
 
             var personVisualizationContentStorage =
                 serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
+            _personSoundContentStorage = serviceScope.GetRequiredService<IPersonSoundContentStorage>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -76,6 +77,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     actor,
                     _viewModelContext,
                     personVisualizationContentStorage,
+                    _personSoundContentStorage,
                     _spriteBatch);
 
                 if (actor.Person == _player.MainPerson)
@@ -226,10 +228,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             if (e.ActorInteractionEvent is DamageActorInteractionEvent damageActorInteractionEvent)
             {
-                if (damageActorInteractionEvent.Actor.Person is HumanPerson)
+                var actScheme = damageActorInteractionEvent.UsedAct.Scheme;
+                var targetPerson = damageActorInteractionEvent.TargetActor.Person;
+                if (actScheme != null && actScheme.Sid != null)
                 {
-                    //TODO Select sfx according act using special SoundContentStorage service.
-                    _swordHitEffect.CreateInstance().Play();
+                    var soundEffect = _personSoundContentStorage.GetActHitSound(actScheme.Sid, targetPerson);
+                    soundEffect.CreateInstance().Play();
+                }
+                else
+                {
+                    Debug.Fail("Every act must have scheme and sid.");
                 }
             }
         }

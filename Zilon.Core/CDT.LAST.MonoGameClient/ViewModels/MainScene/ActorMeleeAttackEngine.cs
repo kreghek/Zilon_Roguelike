@@ -19,18 +19,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private readonly Vector2 _startPosition;
 
-        private readonly SoundEffectInstance _swordHitEffect;
+        private readonly SoundEffectInstance? _meleeAttackSoundEffect;
         private readonly Vector2 _targetPosition;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
         private bool _effectPlayed;
 
         public ActorMeleeAttackEngine(SpriteContainer rootContainer, Vector2 targetPosition,
-            IAnimationBlockerService animationBlockerService, SoundEffectInstance swordHitEffect)
+            IAnimationBlockerService animationBlockerService, SoundEffectInstance? meleeAttackSoundEffect)
         {
             _rootContainer = rootContainer;
             _animationBlockerService = animationBlockerService;
-            _swordHitEffect = swordHitEffect;
+            _meleeAttackSoundEffect = meleeAttackSoundEffect;
             _startPosition = rootContainer.Position;
             _targetPosition = Vector2.Lerp(_startPosition, targetPosition, 0.6f);
 
@@ -55,7 +55,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 if (!_effectPlayed)
                 {
                     _effectPlayed = true;
-                    _swordHitEffect.Play();
+
+                    if (_meleeAttackSoundEffect != null)
+                    {
+                        _meleeAttackSoundEffect.Play();
+                    }
+                    else
+                    {
+                        // Sound effect can be null because:
+                        // - Sound effect was not found in sound storage. It looks like error but this is catch in storage.
+                        // - This object created in test environment where sounds are not used.
+                    }
                 }
 
                 var t2 = Math.Sin(t * Math.PI);
