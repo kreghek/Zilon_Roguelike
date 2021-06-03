@@ -11,6 +11,7 @@ using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
+using Zilon.Core.Schemes;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
@@ -56,6 +57,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private void AddLeftFistHierarchy()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armLeftFistTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftFist).Texture;
+
+            AddChild(new Sprite(armLeftFistTexture)
+            {
+                Position = new Vector2(-5, -19),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
+        }
+
         private void AddLeftShieldHierarchy(Equipment equipment)
         {
             var shieldSid = equipment.Scheme.Sid;
@@ -74,6 +87,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Position = new Vector2(-14, -21),
                 Origin = new Vector2(0.5f, 0.5f)
             });
+        }
+
+        private void AddLeftTwoHandedArmHierarchy()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftTwoHanded).Texture;
+
+            // Slot 1 according the person scheme is body.
+            var dressedLeftArmPart = GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmLeftTwoHanded);
+
+            AddChild(new Sprite(armLeftTexture)
+            {
+                Position = new Vector2(-10, -20),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
+
+            if (dressedLeftArmPart != null)
+            {
+                AddChild(new Sprite(dressedLeftArmPart.Texture)
+                {
+                    Position = new Vector2(-10, -20),
+                    Origin = new Vector2(0.5f, 0.5f)
+                });
+            }
         }
 
         private void AddLeftWeaponHierarchy(Equipment equipment)
@@ -129,6 +166,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             });
         }
 
+        private void AddRightTwoHandedArmHierarchy()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightTwoHanded).Texture;
+
+            var dressedRightHandPart =
+                GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmRightTwoHanded);
+
+            AddChild(CreateRightTwoHandedArmSprite(armRightTexture));
+
+            if (dressedRightHandPart != null)
+            {
+                AddChild(CreateRightTwoHandedArmSprite(dressedRightHandPart.Texture));
+            }
+        }
+
         private void AddRightWeaponHierarchy(Equipment equipment)
         {
             var weaponSid = equipment.Scheme.Sid;
@@ -141,12 +194,40 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var handParts = _personVisualizationContentStorage.GetHandParts(weaponSid);
             var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
 
-            AddChild(new InvertedFlipXSprite(weaponBaseTexture)
+            var equipScheme = equipment.Scheme.Equip;
+            if (equipScheme is null)
             {
-                Position = new Vector2(11, -10),
-                Origin = new Vector2(0.5f, 0.5f),
-                Rotation = (float)(-Math.PI / 2)
-            });
+                // A person can equip only a prop with assigned PropEquipScheme.
+                Debug.Fail("This is not possible to draw weapon without equip scheme.");
+            }
+            else
+            {
+                var propHandUsage = equipScheme.EquipRestrictions?.PropHandUsage;
+                switch (propHandUsage)
+                {
+                    case null:
+                        // Draw one-handed weapon.
+                        AddChild(new InvertedFlipXSprite(weaponBaseTexture)
+                        {
+                            Position = new Vector2(11, -10),
+                            Origin = new Vector2(0.5f, 0.5f),
+                            Rotation = (float)(-Math.PI / 2)
+                        });
+                        break;
+
+                    case PropHandUsage.TwoHanded:
+                        // Draw two handed weapon
+                        AddChild(new Sprite(weaponBaseTexture)
+                        {
+                            Position = new Vector2(8, -24),
+                            Origin = new Vector2(0.5f, 0.5f)
+                        });
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Unknown hand usage: {propHandUsage}.");
+                }
+            }
         }
 
         private static Sprite CreateChestSprite(Microsoft.Xna.Framework.Graphics.Texture2D chestTexture)
@@ -181,6 +262,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return new Sprite(armRightTexture)
             {
                 Position = new Vector2(13, -20),
+                Origin = new Vector2(0.5f, 0.5f)
+            };
+        }
+
+        private static Sprite CreateRightTwoHandedArmSprite(Microsoft.Xna.Framework.Graphics.Texture2D armRightTexture)
+        {
+            return new Sprite(armRightTexture)
+            {
+                Position = new Vector2(8, -17),
                 Origin = new Vector2(0.5f, 0.5f)
             };
         }
@@ -260,44 +350,55 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawLeftHand(IEquipmentModule equipmentModule)
         {
-            // Slot 3 according the person scheme is second/left hand.
-            var equipment = equipmentModule[2];
-            if (equipment != null)
+            // Slot 2 is right hand
+            var rightEquipment = equipmentModule[2];
+            if (rightEquipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage == PropHandUsage.TwoHanded)
             {
-                var equipmentTags = equipment.Scheme.Tags;
-                if (equipmentTags is null)
-                {
-                    // Now a person can equiped only weapons or tools.
-                    // All weapons or tools has corresponding tags.
-                    Debug.Fail("There is no scenario then equipment has no tags.");
+                // If the person has two handed weapon in right hand there is no reason draw left (second) hand as one handed.
 
-                    AddLeftArmHierarchy();
-                }
-                else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
-                {
-                    AddLeftArmHierarchy();
-
-                    AddLeftWeaponHierarchy(equipment);
-                }
-                else if (equipmentTags.Contains(PropTags.Equipment.Shield))
-                {
-                    // For a shield in this hand draw shield back sprite first.
-                    // So it will looks like the person bear shield by inner side.
-
-                    AddLeftShieldHierarchy(equipment);
-
-                    AddLeftArmHierarchy();
-                }
-                else
-                {
-                    Debug.Fail("Unknown tag in the equipment.");
-
-                    AddLeftArmHierarchy();
-                }
+                AddLeftTwoHandedArmHierarchy();
             }
             else
             {
-                AddLeftArmHierarchy();
+                // Slot 3 according the person scheme is second/left hand.
+                var equipment = equipmentModule[3];
+                if (equipment != null)
+                {
+                    var equipmentTags = equipment.Scheme.Tags;
+                    if (equipmentTags is null)
+                    {
+                        // Now a person can equiped only weapons or tools.
+                        // All weapons or tools has corresponding tags.
+                        Debug.Fail("There is no scenario then equipment has no tags.");
+
+                        AddLeftArmHierarchy();
+                    }
+                    else if (equipmentTags.Contains(PropTags.Equipment.Weapon))
+                    {
+                        AddLeftArmHierarchy();
+
+                        AddLeftWeaponHierarchy(equipment);
+                    }
+                    else if (equipmentTags.Contains(PropTags.Equipment.Shield))
+                    {
+                        // For a shield in this hand draw shield back sprite first.
+                        // So it will looks like the person bear shield by inner side.
+
+                        AddLeftShieldHierarchy(equipment);
+
+                        AddLeftArmHierarchy();
+                    }
+                    else
+                    {
+                        Debug.Fail("Unknown tag in the equipment.");
+
+                        AddLeftArmHierarchy();
+                    }
+                }
+                else
+                {
+                    AddLeftArmHierarchy();
+                }
             }
         }
 
@@ -330,8 +431,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawRightHand(IEquipmentModule equipmentModule)
         {
-            // Slot 3 according the person scheme is second/left hand.
-            var weaponEquipment = equipmentModule[3];
+            // Slot 2 according the person scheme is main hand.
+            var weaponEquipment = equipmentModule[2];
             if (weaponEquipment == null)
             {
                 // There is nothing in right hand.
@@ -355,7 +456,34 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 AddRightWeaponHierarchy(weaponEquipment);
 
-                AddRightArmHierarchy();
+                var equipScheme = weaponEquipment.Scheme.Equip;
+                if (equipScheme is null)
+                {
+                    // A person can equip only a prop with assigned PropEquipScheme.
+                    Debug.Fail("This is not possible to draw weapon without equip scheme.");
+                }
+                else
+                {
+                    var propHandUsage = equipScheme.EquipRestrictions?.PropHandUsage;
+                    switch (propHandUsage)
+                    {
+                        case null:
+                            // This means the prop has no hand restrictions.
+                            // Draw simple right hand.
+                            AddRightArmHierarchy();
+                            break;
+
+                        case PropHandUsage.TwoHanded:
+
+                            AddLeftFistHierarchy();
+
+                            AddRightTwoHandedArmHierarchy();
+                            break;
+
+                        default:
+                            throw new InvalidOperationException($"Unknown hand usage: {propHandUsage}.");
+                    }
+                }
             }
             else if (equipmentTags.Contains(PropTags.Equipment.Shield))
             {

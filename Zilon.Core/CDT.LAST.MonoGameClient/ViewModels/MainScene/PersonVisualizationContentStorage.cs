@@ -43,7 +43,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 new BodyPart(BodyPartType.LegsIdle, load("TravelerCamisole", "LegsIdle")),
                 new BodyPart(BodyPartType.LegsCombat, load("TravelerCamisole", "LegsCombat")),
                 new BodyPart(BodyPartType.ArmLeft, load("TravelerCamisole", "ArmLeftSimple")),
-                new BodyPart(BodyPartType.ArmRightSimple, load("TravelerCamisole", "ArmRightSimple"))
+                new BodyPart(BodyPartType.ArmLeftTwoHanded, load("TravelerCamisole", "ArmLeftTwoHanded")),
+                new BodyPart(BodyPartType.ArmRightSimple, load("TravelerCamisole", "ArmRightSimple")),
+                new BodyPart(BodyPartType.ArmRightTwoHanded, load("TravelerCamisole", "ArmRightTwoHanded"))
             });
         }
 
@@ -51,15 +53,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             const string PATH_TO_HAND_PARTS = "Sprites/game-objects/Equipments/HandParts/";
 
+            Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HAND_PARTS + name); }
+
             _handParts.Add("short-sword", new[]
             {
-                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "ShortSwordBase"))
+                new HandPart(HandPartType.Base, load("ShortSwordBase"))
+            });
+
+            _handParts.Add("great-sword", new[]
+            {
+                new HandPart(HandPartType.Base, load("GreatSwordBase"))
+            });
+
+            _handParts.Add("combat-staff", new[]
+            {
+                new HandPart(HandPartType.Base, load("CombatStaffBase"))
+            });
+
+            _handParts.Add("tribal-spear", new[]
+            {
+                new HandPart(HandPartType.Base, load("TribalSpearBase"))
             });
 
             _handParts.Add("wooden-shield", new[]
             {
-                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "WoodenShieldBase")),
-                new HandPart(HandPartType.BaseBack, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "WoodenShieldBase"))
+                new HandPart(HandPartType.Base, load("WoodenShieldBase")),
+                new HandPart(HandPartType.BaseBack, load("WoodenShieldBase"))
             });
         }
 
@@ -92,7 +111,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 new BodyPart(BodyPartType.LegsIdle, load("LegsIdle")),
                 new BodyPart(BodyPartType.LegsCombat, load("LegsCombat")),
                 new BodyPart(BodyPartType.ArmLeft, load("ArmLeftSimple")),
-                new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple"))
+                new BodyPart(BodyPartType.ArmLeftTwoHanded, load("ArmLeftTwoHanded")),
+                new BodyPart(BodyPartType.ArmLeftFist, load("ArmLeftFist")),
+                new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple")),
+                new BodyPart(BodyPartType.ArmRightTwoHanded, load("ArmRightTwoHanded"))
             });
         }
 

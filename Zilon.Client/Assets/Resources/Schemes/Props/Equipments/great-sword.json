@@ -1,14 +1,14 @@
 {
-  "Tags": [ "weapon", "pole" ],
+  "Tags": [ "weapon", "sword" ],
   "Equip": {
     "ActSids": [
-      "pierce"
+      "slash"
     ],
     "SlotTypes": [ "Hand" ],
 	"EquipRestrictions": { "PropHandUsage": "TwoHanded" }
   },
   "Name": {
-    "Ru": "Племенное копьё",
-	"En": "Tribal spear"
+    "Ru": "Большой меч",
+	"En": "Great sword"
   }
 }

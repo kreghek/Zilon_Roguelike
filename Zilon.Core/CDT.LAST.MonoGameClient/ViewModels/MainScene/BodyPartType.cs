@@ -6,9 +6,20 @@
     public enum BodyPartType
     {
         Undefined = 0,
+
         Head,
+
         Chest,
+
         ArmLeft,
+
+        /// <summary>
+        /// Only fist used to render two-handed weapon where left fist cover weapon sprite
+        /// but remain parts pf left hand are hunder weapon
+        /// </summary>
+        ArmLeftFist,
+
+        ArmLeftTwoHanded,
 
         /// <summary>
         /// Used when:
@@ -26,7 +37,8 @@
         /// <summary>
         /// Used to bear two-handed weapon like staffs, grate swords or war hammers.
         /// </summary>
-        ArmRightDual,
+        ArmRightTwoHanded,
+
         LegsIdle,
 
         /// <summary>
