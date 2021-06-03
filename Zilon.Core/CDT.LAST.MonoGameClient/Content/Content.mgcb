@@ -141,6 +141,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/ArmLeftSimple.png
 
+#begin Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/ArmLeftTwoHanded.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/ArmLeftTwoHanded.png
+
 #begin Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/ArmRightSimple.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -152,6 +164,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/ArmRightSimple.png
+
+#begin Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/ArmRightTwoHanded.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/ArmRightTwoHanded.png
 
 #begin Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Body.png
 /importer:TextureImporter
@@ -249,7 +273,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/BodyParts/WorkClothes/LegsIdle.png
 
-#begin Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
+#begin Sprites/game-objects/Equipments/HandParts/CombatStaffBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -259,7 +283,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
+/build:Sprites/game-objects/Equipments/HandParts/CombatStaffBase.png
+
+#begin Sprites/game-objects/Equipments/HandParts/CombatStaffIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/HandParts/CombatStaffIcon.png
 
 #begin Sprites/game-objects/Equipments/HandParts/GreatSwordBase.png
 /importer:TextureImporter
@@ -285,7 +321,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/GreatSwordIcon.png
 
-#begin Sprites/game-objects/Equipments/HandParts/CombatStaffBase.png
+#begin Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -295,9 +331,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HandParts/CombatStaffBase.png
+/build:Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
 
-#begin Sprites/game-objects/Equipments/HandParts/CombatStaffIcon.png
+#begin Sprites/game-objects/Equipments/HandParts/ShortSwordIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -307,7 +343,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HandParts/CombatStaffIcon.png
+/build:Sprites/game-objects/Equipments/HandParts/ShortSwordIcon.png
 
 #begin Sprites/game-objects/Equipments/HandParts/TribalSpearBase.png
 /importer:TextureImporter
@@ -332,18 +368,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/TribalSpearIcon.png
-
-#begin Sprites/game-objects/Equipments/HandParts/ShortSwordIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HandParts/ShortSwordIcon.png
 
 #begin Sprites/game-objects/Equipments/HandParts/WoodenShieldBase.png
 /importer:TextureImporter
@@ -429,6 +453,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HeadParts/SteelHelmetInside.png
 
+#begin Sprites/game-objects/Human/ArmLeftFist.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Human/ArmLeftFist.png
+
 #begin Sprites/game-objects/Human/ArmLeftSimple.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -453,30 +489,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Human/ArmLeftTwoHanded.png
 
-#begin Sprites/game-objects/Human/ArmLeftFist.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Human/ArmLeftFist.png
-
-#begin Sprites/game-objects/Human/ArmRightTwoHanded.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Human/ArmRightTwoHanded.png
-
 #begin Sprites/game-objects/Human/ArmRightRifle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -500,6 +512,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Human/ArmRightSimple.png
+
+#begin Sprites/game-objects/Human/ArmRightTwoHanded.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Human/ArmRightTwoHanded.png
 
 #begin Sprites/game-objects/Human/Body.png
 /importer:TextureImporter

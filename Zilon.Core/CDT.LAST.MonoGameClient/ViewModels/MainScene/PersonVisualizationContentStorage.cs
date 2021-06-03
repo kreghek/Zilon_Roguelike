@@ -43,7 +43,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 new BodyPart(BodyPartType.LegsIdle, load("TravelerCamisole", "LegsIdle")),
                 new BodyPart(BodyPartType.LegsCombat, load("TravelerCamisole", "LegsCombat")),
                 new BodyPart(BodyPartType.ArmLeft, load("TravelerCamisole", "ArmLeftSimple")),
-                new BodyPart(BodyPartType.ArmRightSimple, load("TravelerCamisole", "ArmRightSimple"))
+                new BodyPart(BodyPartType.ArmLeftTwoHanded, load("TravelerCamisole", "ArmLeftTwoHanded")),
+                new BodyPart(BodyPartType.ArmRightSimple, load("TravelerCamisole", "ArmRightSimple")),
+                new BodyPart(BodyPartType.ArmRightTwoHanded, load("TravelerCamisole", "ArmRightTwoHanded"))
             });
         }
 
