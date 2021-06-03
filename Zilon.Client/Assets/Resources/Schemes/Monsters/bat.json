@@ -20,7 +20,9 @@
       "Impact": "Kinetic"
     },
     "IsMelee": true,
-	"Tags": ["bite"]
+    "Tags": [
+      "bite"
+    ]
   },
   "DropTableSids": [
     "survival",

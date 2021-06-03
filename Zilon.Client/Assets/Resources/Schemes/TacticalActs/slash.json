@@ -21,6 +21,8 @@
       "Impact": "Kinetic",
       "ApRank": 2
     },
-	"Tags": ["slash"]
+    "Tags": [
+      "slash"
+    ]
   }
 }

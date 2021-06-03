@@ -20,7 +20,9 @@
     "Effect": "Damage",
     "Targets": "Enemy",
     "IsMelee": true,
-	"Tags": ["bite"]
+    "Tags": [
+      "bite"
+    ]
   },
   "DropTableSids": [
     "survival",
