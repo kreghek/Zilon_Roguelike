@@ -11,8 +11,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
@@ -27,6 +29,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
+        private readonly IActorInteractionBus _intarectionBus;
+        private readonly SoundEffect _swordHitEffect;
         private readonly SectorViewModelContext _viewModelContext;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
@@ -38,6 +42,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _player = serviceScope.GetRequiredService<IPlayer>();
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
+
+            _intarectionBus = serviceScope.GetRequiredService<IActorInteractionBus>();
+            _swordHitEffect = game.Content.Load<SoundEffect>("Audio/SwordHitEffect");
+
+            _intarectionBus.NewEvent += IntarectionBus_NewEvent;
+
             var personVisualizationContentStorage =
                 serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
 
@@ -89,6 +99,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
             var commandInput = new CommandInput(_uiState, commandPool, _camera, Sector, commandFactory);
             _commandInput = commandInput;
+        }
+
+        private void IntarectionBus_NewEvent(object? sender, ActorInteractionEventArgs e)
+        {
+            if (e.ActorInteractionEvent is DamageActorInteractionEvent damageActorInteractionEvent)
+            {
+                if (damageActorInteractionEvent.Actor.Person is HumanPerson)
+                {
+                    _swordHitEffect.CreateInstance().Play();
+                }
+            }
         }
 
         public ISector Sector { get; }

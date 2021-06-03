@@ -94,7 +94,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
 
-            _swordHitEffect = game.Content.Load<SoundEffect>("Audio/SwordHitEffect");
+            _swordHitEffect = game.Content.Load<SoundEffect>("Audio/SwordStartHitEffect");
             //_swordMissEffect = game.Content.Load<SoundEffect>("Audio/SwordMissEffect");
             _hunterDeathEffect = game.Content.Load<SoundEffect>("Audio/HunterDeath");
         }

@@ -37,6 +37,12 @@
 /processorParam:Quality=Low
 /build:Audio/SwordHitEffect.mp3
 
+#begin Audio/SwordStartHitEffect.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/SwordStartHitEffect.wav
+
 #begin Audio/TitleBackgroundTrack.wav
 /importer:WavImporter
 /processor:SongProcessor

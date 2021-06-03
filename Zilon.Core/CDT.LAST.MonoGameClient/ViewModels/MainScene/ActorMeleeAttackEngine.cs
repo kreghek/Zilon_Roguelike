@@ -52,7 +52,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             if (_animationCounterSeconds > 0)
             {
-                if (t > 0.3 && !_effectPlayed)
+                if (!_effectPlayed)
                 {
                     _effectPlayed = true;
                     _swordHitEffect.Play();
