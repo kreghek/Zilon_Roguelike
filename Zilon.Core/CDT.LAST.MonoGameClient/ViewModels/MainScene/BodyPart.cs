@@ -34,7 +34,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     }
 
     public enum HeadPartType
-    { 
+    {
         Undefined,
         Base,
         Inside
