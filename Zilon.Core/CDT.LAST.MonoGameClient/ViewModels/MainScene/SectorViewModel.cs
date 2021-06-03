@@ -24,13 +24,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;
+        private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
-        private readonly ISectorUiState _uiState;
-        private readonly IActorInteractionBus _intarectionBus;
         private readonly SoundEffect _swordHitEffect;
+        private readonly ISectorUiState _uiState;
         private readonly SectorViewModelContext _viewModelContext;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
@@ -99,17 +99,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
             var commandInput = new CommandInput(_uiState, commandPool, _camera, Sector, commandFactory);
             _commandInput = commandInput;
-        }
-
-        private void IntarectionBus_NewEvent(object? sender, ActorInteractionEventArgs e)
-        {
-            if (e.ActorInteractionEvent is DamageActorInteractionEvent damageActorInteractionEvent)
-            {
-                if (damageActorInteractionEvent.Actor.Person is HumanPerson)
-                {
-                    _swordHitEffect.CreateInstance().Play();
-                }
-            }
         }
 
         public ISector Sector { get; }
@@ -230,6 +219,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     from actor in sector.ActorManager.Items
                     where actor.Person == player.MainPerson
                     select sectorNode).Single();
+        }
+
+        private void IntarectionBus_NewEvent(object? sender, ActorInteractionEventArgs e)
+        {
+            if (e.ActorInteractionEvent is DamageActorInteractionEvent damageActorInteractionEvent)
+            {
+                if (damageActorInteractionEvent.Actor.Person is HumanPerson)
+                {
+                    _swordHitEffect.CreateInstance().Play();
+                }
+            }
         }
     }
 }
