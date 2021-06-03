@@ -158,6 +158,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             };
         }
 
+        private static Sprite CreateHeadSprite(Microsoft.Xna.Framework.Graphics.Texture2D headTexture)
+        {
+            return new Sprite(headTexture)
+            {
+                Position = new Vector2(-0, -20),
+                Origin = new Vector2(0.5f, 1)
+            };
+        }
+
         private static Sprite CreateLegsSprite(Microsoft.Xna.Framework.Graphics.Texture2D legsTexture)
         {
             return new Sprite(legsTexture)
@@ -187,6 +196,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             DrawHead();
 
             DrawRightHand(equipmentModule);
+        }
+
+        private void DrawChest(IEquipmentModule equipmentModule)
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var chestTexture = humanParts.Single(x => x.Type == BodyPartType.Chest).Texture;
+
+            AddChild(CreateChestSprite(chestTexture));
+
+            // This slot is body.
+            var bodyEquipment = equipmentModule[1];
+            if (bodyEquipment != null)
+            {
+                var bodyEquipmentSid = bodyEquipment.Scheme.Sid;
+                if (bodyEquipmentSid != null)
+                {
+                    var equipmentChestParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipmentSid);
+                    var equipmentChestTexture = equipmentChestParts.Single(x => x.Type == BodyPartType.Chest).Texture;
+
+                    AddChild(CreateChestSprite(equipmentChestTexture));
+                }
+                else
+                {
+                    Debug.Fail("There are no schemes without SID. Looks like some kind of error.");
+                }
+            }
         }
 
         private void DrawHead()
@@ -219,46 +254,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 else
                 {
                     Debug.Fail("All equipment must have SID. Looks like error.");
-                }
-            }
-            else
-            {
-                // The person have no equipment on his head.
-                // Head itself was drawn above. So just do nothing.
-            }
-        }
-
-        private static Sprite CreateHeadSprite(Microsoft.Xna.Framework.Graphics.Texture2D headTexture)
-        {
-            return new Sprite(headTexture)
-            {
-                Position = new Vector2(-0, -20),
-                Origin = new Vector2(0.5f, 1)
-            };
-        }
-
-        private void DrawChest(IEquipmentModule equipmentModule)
-        {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
-            var chestTexture = humanParts.Single(x => x.Type == BodyPartType.Chest).Texture;
-
-            AddChild(CreateChestSprite(chestTexture));
-
-            // This slot is body.
-            var bodyEquipment = equipmentModule[1];
-            if (bodyEquipment != null)
-            {
-                var bodyEquipmentSid = bodyEquipment.Scheme.Sid;
-                if (bodyEquipmentSid != null)
-                {
-                    var equipmentChestParts = _personVisualizationContentStorage.GetBodyParts(bodyEquipmentSid);
-                    var equipmentChestTexture = equipmentChestParts.Single(x => x.Type == BodyPartType.Chest).Texture;
-
-                    AddChild(CreateChestSprite(equipmentChestTexture));
-                }
-                else
-                {
-                    Debug.Fail("There are no schemes without SID. Looks like some kind of error.");
                 }
             }
         }

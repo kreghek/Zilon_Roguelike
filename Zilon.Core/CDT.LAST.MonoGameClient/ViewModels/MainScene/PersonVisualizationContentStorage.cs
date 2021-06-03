@@ -63,6 +63,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             });
         }
 
+        private void LoadHeadParts(ContentManager content)
+        {
+            const string PATH_TO_HEAD_PARTS = "Sprites/game-objects/Equipments/HeadParts/";
+
+            _headParts.Add("knitted-hat", new[]
+            {
+                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "KnittedHatBase"))
+            });
+
+            _headParts.Add("steel-helmet", new[]
+            {
+                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetBase")),
+                new HeadPart(HeadPartType.Inside, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetInside"))
+            });
+        }
+
         private void LoadHumanParts(ContentManager content)
         {
             const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/Human/";
@@ -135,22 +151,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             LoadHandParts(content);
 
             LoadHeadParts(content);
-        }
-
-        private void LoadHeadParts(ContentManager content)
-        {
-            const string PATH_TO_HEAD_PARTS = "Sprites/game-objects/Equipments/HeadParts/";
-
-            _headParts.Add("knitted-hat", new[]
-            {
-                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "KnittedHatBase"))
-            });
-
-            _headParts.Add("steel-helmet", new[]
-            {
-                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetBase")),
-                new HeadPart(HeadPartType.Inside, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetInside"))
-            });
         }
     }
 }
