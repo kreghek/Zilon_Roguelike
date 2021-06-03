@@ -14,11 +14,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Dictionary<string, BodyPart[]> _bodyParts;
         private readonly Dictionary<string, HandPart[]> _handParts;
+        private readonly Dictionary<string, HeadPart[]> _headParts;
 
         public PersonVisualizationContentStorage()
         {
             _bodyParts = new Dictionary<string, BodyPart[]>();
             _handParts = new Dictionary<string, HandPart[]>();
+            _headParts = new Dictionary<string, HeadPart[]>();
         }
 
         private void LoadBodyParts(ContentManager content)
@@ -105,6 +107,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         }
 
         /// <inheritdoc />
+        public IEnumerable<HeadPart> GetHeadParts(string sid)
+        {
+            if (!_headParts.TryGetValue(sid, out var headParts))
+            {
+                Debug.Fail("All equipment must be in storage to visualize.");
+
+                return Array.Empty<HeadPart>();
+            }
+
+            return headParts;
+        }
+
+        /// <inheritdoc />
         public IEnumerable<BodyPart> GetHumanParts()
         {
             return _bodyParts["Human"];
@@ -118,6 +133,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             LoadBodyParts(content);
 
             LoadHandParts(content);
+
+            LoadHeadParts(content);
+        }
+
+        private void LoadHeadParts(ContentManager content)
+        {
+            const string PATH_TO_HEAD_PARTS = "Sprites/game-objects/Equipments/HeadParts/";
+
+            _headParts.Add("knitted-hat", new[]
+            {
+                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "KnittedHatBase"))
+            });
+
+            _headParts.Add("steel-helmet", new[]
+            {
+                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetBase")),
+                new HeadPart(HeadPartType.Inside, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetInside"))
+            });
         }
     }
 }

@@ -12,6 +12,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         IEnumerable<BodyPart> GetBodyParts(string sid);
         IEnumerable<HandPart> GetHandParts(string sid);
+        IEnumerable<HeadPart> GetHeadParts(string sid);
         IEnumerable<BodyPart> GetHumanParts();
         void LoadContent(ContentManager content);
     }
