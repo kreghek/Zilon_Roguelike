@@ -88,6 +88,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _rootSprite.Position = newPosition;
 
+            //TODO Delete subscribtions after transition
             Actor.Moved += Actor_Moved;
             Actor.UsedAct += Actor_UsedAct;
             Actor.DamageTaken += Actor_DamageTaken;
@@ -140,6 +141,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 if (actor.Person is MonsterPerson monster && monster.CheckIsDead())
                 {
+                    //TODO Select sfx according act using special SoundContentStorage service.
                     _hunterDeathEffect.CreateInstance().Play();
                 }
             }
@@ -203,6 +205,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                             _rootSprite,
                             targetSpritePosition,
                             animationBlockerService,
+                            //TODO Select sfx according act using special SoundContentStorage service.
                             _swordHitEffect.CreateInstance());
 
                     var targetGameObject =

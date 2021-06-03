@@ -46,6 +46,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _intarectionBus = serviceScope.GetRequiredService<IActorInteractionBus>();
             _swordHitEffect = game.Content.Load<SoundEffect>("Audio/SwordHitEffect");
 
+            //TODO Delete subscribtion after transition
             _intarectionBus.NewEvent += IntarectionBus_NewEvent;
 
             var personVisualizationContentStorage =
@@ -227,6 +228,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 if (damageActorInteractionEvent.Actor.Person is HumanPerson)
                 {
+                    //TODO Select sfx according act using special SoundContentStorage service.
                     _swordHitEffect.CreateInstance().Play();
                 }
             }
