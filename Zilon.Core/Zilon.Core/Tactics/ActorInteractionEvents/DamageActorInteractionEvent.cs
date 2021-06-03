@@ -1,17 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.ActorInteractionEvents
 {
+    public record ActDescription
+    {
+        public ActDescription(IEnumerable<string> tags)
+        {
+            Tags = tags ?? throw new ArgumentNullException(nameof(tags));
+        }
+
+        public IEnumerable<string> Tags { get; }
+    }
+
     [ExcludeFromCodeCoverage]
     public sealed class DamageActorInteractionEvent : ActorInteractionEventBase
     {
-        public DamageActorInteractionEvent(IActor actor, IActor targetActor, ITacticalAct usedAct, DamageEfficientCalc damageEfficientCalcResult) : base(actor)
+        public DamageActorInteractionEvent(IActor actor, IActor targetActor, ActDescription usedActDescription, DamageEfficientCalc damageEfficientCalcResult) : base(actor)
         {
             TargetActor = targetActor ?? throw new ArgumentNullException(nameof(targetActor));
-            UsedAct = usedAct;
+            UsedActDescription = usedActDescription;
             DamageEfficientCalcResult = damageEfficientCalcResult;
         }
 
@@ -20,6 +31,6 @@ namespace Zilon.Core.Tactics.ActorInteractionEvents
         public int SuccessToHitRoll { get; internal set; }
 
         public IActor TargetActor { get; }
-        public ITacticalAct UsedAct { get; }
+        public ActDescription UsedActDescription { get; }
     }
 }

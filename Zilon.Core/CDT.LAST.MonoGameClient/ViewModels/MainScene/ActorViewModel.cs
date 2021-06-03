@@ -17,6 +17,7 @@ using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
@@ -198,7 +199,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     var targetSpritePosition = newPosition;
 
-                    var attackSoundEffectInstance = GetSoundEffect(e.TacticalAct.Scheme);
+                    var attackSoundEffectInstance = GetSoundEffect(e.TacticalAct.Stats);
                     _actorStateEngine =
                         new ActorMeleeAttackEngine(
                             _rootSprite,
@@ -223,17 +224,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private SoundEffectInstance? GetSoundEffect(ITacticalActScheme? actScheme)
+        private SoundEffectInstance? GetSoundEffect(ITacticalActStatsSubScheme actStatScheme)
         {
-            SoundEffect? attackSoundEffect = null;
-            if (actScheme != null && actScheme.Sid != null)
-            {
-                attackSoundEffect = _personSoundStorage.GetActStartSound(actScheme.Sid);
-            }
-            else
-            {
-                Debug.Fail("There are no act without schemes and no schemes without SID. Looks like error.");
-            }
+            //TODO Move act description creating in event owner. Place this structure into event args.
+            var usedActDescription = new ActDescription(actStatScheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ?? Array.Empty<string>());
+            
+            var attackSoundEffect = _personSoundStorage.GetActStartSound(usedActDescription);
 
             var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
             return attackSoundEffectInstance;

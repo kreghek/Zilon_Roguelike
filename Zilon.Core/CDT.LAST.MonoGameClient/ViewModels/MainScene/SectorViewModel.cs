@@ -228,17 +228,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             if (e.ActorInteractionEvent is DamageActorInteractionEvent damageActorInteractionEvent)
             {
-                var actScheme = damageActorInteractionEvent.UsedAct.Scheme;
+                var actDescription = damageActorInteractionEvent.UsedActDescription;
                 var targetPerson = damageActorInteractionEvent.TargetActor.Person;
-                if (actScheme != null && actScheme.Sid != null)
-                {
-                    var soundEffect = _personSoundContentStorage.GetActHitSound(actScheme.Sid, targetPerson);
-                    soundEffect.CreateInstance().Play();
-                }
-                else
-                {
-                    Debug.Fail("Every act must have scheme and sid.");
-                }
+                var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
+                soundEffect.CreateInstance().Play();
             }
         }
     }

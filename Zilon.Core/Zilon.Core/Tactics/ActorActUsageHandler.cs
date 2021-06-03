@@ -512,7 +512,9 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var damageEvent = new DamageActorInteractionEvent(actor, targetActor, usedAct, damageEfficientCalcResult)
+            var usedActDescription = new ActDescription(usedAct.Stats.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ?? Array.Empty<string>());
+
+            var damageEvent = new DamageActorInteractionEvent(actor, targetActor, usedActDescription, damageEfficientCalcResult)
             {
                 SuccessToHitRoll = successToHitRoll,
                 FactToHitRoll = factToHitRoll

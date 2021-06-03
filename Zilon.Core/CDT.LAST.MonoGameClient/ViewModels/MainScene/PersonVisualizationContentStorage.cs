@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -8,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.ActorInteractionEvents;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
@@ -184,9 +186,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         void LoadContent(ContentManager contentManager);
 
-        SoundEffect GetActStartSound(string actSid);
+        SoundEffect GetActStartSound(ActDescription actDescription);
 
-        SoundEffect GetActHitSound(string actSid, IPerson targetPerson);
+        SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson);
 
         SoundEffect GetDeathEffect(IPerson person);
     }
@@ -196,16 +198,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private SoundEffect? _swordStartHitEffect;
         private SoundEffect? _hunterDeathEffect;
         private SoundEffect? _swordHitEffect;
-        private SoundEffect _hunterStartHitEffect;
+        private SoundEffect? _hunterStartHitEffect;
 
-        public SoundEffect GetActHitSound(string actSid, IPerson targetPerson)
+        public SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson)
         {
             return _swordHitEffect;
         }
 
-        public SoundEffect GetActStartSound(string actSid)
+        public SoundEffect GetActStartSound(ActDescription actDescription)
         {
-            return _swordStartHitEffect;
+            if (actDescription.Tags.Contains("slash"))
+            {
+                return _swordStartHitEffect;
+            }
+            else if (actDescription.Tags.Contains("bite"))
+            {
+                return _hunterStartHitEffect;
+            }
+            else
+            {
+                Debug.Fail("All acts must have audio effect.");
+                // Return default audio if act is unknown.
+                return _swordStartHitEffect;
+            }
+            
         }
 
         public SoundEffect GetDeathEffect(IPerson person)

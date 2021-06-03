@@ -51,5 +51,9 @@ namespace Zilon.Core.Schemes
         /// <summary>Доступные цели действия.</summary>
         [JsonProperty]
         public TacticalActTargets Targets { get; private set; }
+
+        /// <inheritdoc/>
+        [JsonProperty]
+        public string?[]? Tags { get; private set; }
     }
 }
