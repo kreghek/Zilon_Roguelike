@@ -156,12 +156,38 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var handParts = _personVisualizationContentStorage.GetHandParts(weaponSid);
             var weaponBaseTexture = handParts.Single(x => x.Type == HandPartType.Base).Texture;
 
-            AddChild(new InvertedFlipXSprite(weaponBaseTexture)
+            var equipScheme = equipment.Scheme.Equip;
+            if (equipScheme is null)
             {
-                Position = new Vector2(11, -10),
-                Origin = new Vector2(0.5f, 0.5f),
-                Rotation = (float)(-Math.PI / 2)
-            });
+                // A person can equip only a prop with assigned PropEquipScheme.
+                Debug.Fail("This is not possible to draw weapon without equip scheme.");
+            }
+
+            var propHandUsage = equipScheme.EquipRestrictions?.PropHandUsage;
+            switch (propHandUsage)
+            {
+                case null:
+                    // Draw one-handed weapon.
+                    AddChild(new InvertedFlipXSprite(weaponBaseTexture)
+                    {
+                        Position = new Vector2(11, -10),
+                        Origin = new Vector2(0.5f, 0.5f),
+                        Rotation = (float)(-Math.PI / 2)
+                    });
+                    break;
+
+                case Zilon.Core.Schemes.PropHandUsage.TwoHanded:
+                    // Draw two handed weapon
+                    AddChild(new Sprite(weaponBaseTexture)
+                    {
+                        Position = new Vector2(11, -10),
+                        Origin = new Vector2(0.5f, 0.5f)
+                    });
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Unknown hand usage: {propHandUsage}.");
+            }
         }
 
         private static Sprite CreateChestSprite(Microsoft.Xna.Framework.Graphics.Texture2D chestTexture)
