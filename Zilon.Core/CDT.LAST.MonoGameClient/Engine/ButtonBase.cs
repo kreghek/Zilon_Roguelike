@@ -52,6 +52,11 @@ namespace CDT.LAST.MonoGameClient.Engine
                 }
                 else if (mouseState.LeftButton == ButtonState.Released)
                 {
+                    if (_buttonState == UiButtonState.OutOfButton)
+                    {
+                        OnMouseEnter?.Invoke(this, EventArgs.Empty);
+                    }
+
                     _buttonState = UiButtonState.Hover;
                 }
             }
@@ -86,5 +91,6 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         public event EventHandler? OnClick;
+        public event EventHandler? OnMouseEnter;
     }
 }

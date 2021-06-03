@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Audio/ButtonClick.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/ButtonClick.mp3
+
+#begin Audio/ButtonHover.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/ButtonHover.mp3
+
 #begin Audio/TitleBackgroundTrack.wav
 /importer:WavImporter
 /processor:SongProcessor
