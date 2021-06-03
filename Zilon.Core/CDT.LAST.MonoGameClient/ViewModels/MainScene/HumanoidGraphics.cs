@@ -11,6 +11,7 @@ using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
+using Zilon.Core.Schemes;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
@@ -56,6 +57,38 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private void AddLeftFistHierarchy()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armLeftFistTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftFist).Texture;
+
+            AddChild(new Sprite(armLeftFistTexture)
+            {
+                Position = new Vector2(-5, -19),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
+        }
+
+        private void AddLeftShieldHierarchy(Equipment equipment)
+        {
+            var shieldSid = equipment.Scheme.Sid;
+            if (shieldSid == null)
+            {
+                Debug.Fail("There are no scheme without SID. This looks loke some kind of error.");
+                // Do nothing. We can't draw unknown shield.
+                return;
+            }
+
+            var handParts = _personVisualizationContentStorage.GetHandParts(shieldSid);
+            var shieldBackBaseTexture = handParts.Single(x => x.Type == HandPartType.BaseBack).Texture;
+
+            AddChild(new Sprite(shieldBackBaseTexture)
+            {
+                Position = new Vector2(-14, -21),
+                Origin = new Vector2(0.5f, 0.5f)
+            });
+        }
+
         private void AddLeftTwoHandedArmHierarchy()
         {
             var humanParts = _personVisualizationContentStorage.GetHumanParts();
@@ -78,26 +111,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     Origin = new Vector2(0.5f, 0.5f)
                 });
             }
-        }
-
-        private void AddLeftShieldHierarchy(Equipment equipment)
-        {
-            var shieldSid = equipment.Scheme.Sid;
-            if (shieldSid == null)
-            {
-                Debug.Fail("There are no scheme without SID. This looks loke some kind of error.");
-                // Do nothing. We can't draw unknown shield.
-                return;
-            }
-
-            var handParts = _personVisualizationContentStorage.GetHandParts(shieldSid);
-            var shieldBackBaseTexture = handParts.Single(x => x.Type == HandPartType.BaseBack).Texture;
-
-            AddChild(new Sprite(shieldBackBaseTexture)
-            {
-                Position = new Vector2(-14, -21),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
         }
 
         private void AddLeftWeaponHierarchy(Equipment equipment)
@@ -134,21 +147,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void AddRightTwoHandedArmHierarchy()
-        {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
-            var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightTwoHanded).Texture;
-
-            var dressedRightHandPart = GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmRightTwoHanded);
-
-            AddChild(CreateRightTwoHandedArmSprite(armRightTexture));
-
-            if (dressedRightHandPart != null)
-            {
-                AddChild(CreateRightTwoHandedArmSprite(dressedRightHandPart.Texture));
-            }
-        }
-
         private void AddRightShieldHierarchy(Equipment equipment)
         {
             var shieldSid = equipment.Scheme.Sid;
@@ -166,6 +164,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Position = new Vector2(11, -10),
                 Origin = new Vector2(0.5f, 0.5f)
             });
+        }
+
+        private void AddRightTwoHandedArmHierarchy()
+        {
+            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightTwoHanded).Texture;
+
+            var dressedRightHandPart =
+                GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmRightTwoHanded);
+
+            AddChild(CreateRightTwoHandedArmSprite(armRightTexture));
+
+            if (dressedRightHandPart != null)
+            {
+                AddChild(CreateRightTwoHandedArmSprite(dressedRightHandPart.Texture));
+            }
         }
 
         private void AddRightWeaponHierarchy(Equipment equipment)
@@ -200,7 +214,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     });
                     break;
 
-                case Zilon.Core.Schemes.PropHandUsage.TwoHanded:
+                case PropHandUsage.TwoHanded:
                     // Draw two handed weapon
                     AddChild(new Sprite(weaponBaseTexture)
                     {
@@ -336,7 +350,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             // Slot 2 is right hand
             var rightEquipment = equipmentModule[2];
-            if (rightEquipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage == Zilon.Core.Schemes.PropHandUsage.TwoHanded)
+            if (rightEquipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage == PropHandUsage.TwoHanded)
             {
                 // If the person has two handed weapon in right hand there is no reason draw left (second) hand as one handed.
 
@@ -456,7 +470,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         AddRightArmHierarchy();
                         break;
 
-                    case Zilon.Core.Schemes.PropHandUsage.TwoHanded:
+                    case PropHandUsage.TwoHanded:
 
                         AddLeftFistHierarchy();
 
@@ -482,18 +496,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 AddRightArmHierarchy();
             }
-        }
-
-        private void AddLeftFistHierarchy()
-        {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
-            var armLeftFistTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftFist).Texture;
-
-            AddChild(new Sprite(armLeftFistTexture)
-            {
-                Position = new Vector2(-5, -19),
-                Origin = new Vector2(0.5f, 0.5f)
-            });
         }
 
         private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)

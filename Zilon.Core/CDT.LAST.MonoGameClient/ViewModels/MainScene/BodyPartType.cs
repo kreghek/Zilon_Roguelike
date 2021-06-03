@@ -44,6 +44,6 @@
         /// <summary>
         /// Used to visualize combat agressive stance of a person.
         /// </summary>
-        LegsCombat,
+        LegsCombat
     }
 }

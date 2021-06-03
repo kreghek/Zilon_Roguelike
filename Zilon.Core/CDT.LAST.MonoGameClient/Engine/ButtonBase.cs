@@ -67,6 +67,18 @@ namespace CDT.LAST.MonoGameClient.Engine
             }
         }
 
+        protected abstract void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color);
+
+        private bool CheckMouseOver()
+        {
+            var mouseState = Mouse.GetState();
+            var mousePosition = mouseState.Position;
+
+            var mouseRect = new Rectangle(mousePosition.X, mousePosition.Y, 1, 1);
+
+            return _rect.Intersects(mouseRect);
+        }
+
         private static void PlayClickSoundIfExists()
         {
             if (UiThemeManager.SoundStorage == null)
@@ -94,18 +106,6 @@ namespace CDT.LAST.MonoGameClient.Engine
 
             var soundEffect = UiThemeManager.SoundStorage.GetButtonHoverEffect();
             soundEffect.Play();
-        }
-
-        protected abstract void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color);
-
-        private bool CheckMouseOver()
-        {
-            var mouseState = Mouse.GetState();
-            var mousePosition = mouseState.Position;
-
-            var mouseRect = new Rectangle(mousePosition.X, mousePosition.Y, 1, 1);
-
-            return _rect.Intersects(mouseRect);
         }
 
         private Color SelectColorByState()

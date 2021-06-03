@@ -17,6 +17,8 @@ namespace Zilon.Core.Schemes
         /// </summary>
         IPropArmorItemSubScheme?[]? Armors { get; }
 
+        IPropEquipRestrictions? EquipRestrictions { get; }
+
         /// <summary>
         /// Правила, которые будут срабатывать при экипировке предмета.
         /// </summary>
@@ -26,8 +28,6 @@ namespace Zilon.Core.Schemes
         /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
         EquipmentSlotTypes[]? SlotTypes { get; }
-
-        IPropEquipRestrictions? EquipRestrictions { get; }
     }
 
     public interface IPropEquipRestrictions
