@@ -40,7 +40,7 @@ namespace Zilon.Core.Schemes
     }
 
     public enum PropHandUsage
-    { 
+    {
         Undefined = 0,
         TwoHanded = 1
     }
