@@ -4,9 +4,8 @@
     "Ru": "Тест",
     "En": "Test"
   },
-  "HeadEquipments":
-  {
-	 "Rolls": 1,
+  "HeadEquipments": {
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "knitted-hat",
@@ -20,7 +19,7 @@
         "SchemeSid": null,
         "Weight": 1
       }
-    ] 
+    ]
   },
   "BodyEquipments": {
     "Rolls": 1,
