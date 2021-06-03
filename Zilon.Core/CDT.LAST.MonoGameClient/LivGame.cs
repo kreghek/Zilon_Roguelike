@@ -75,6 +75,9 @@ namespace CDT.LAST.MonoGameClient
                 ServiceProvider.GetRequiredService<IPersonVisualizationContentStorage>();
             personVisualizationContentStorage.LoadContent(Content);
 
+            var personSoundContentStorage = ServiceProvider.GetRequiredService<IPersonSoundContentStorage>();
+            personSoundContentStorage.LoadContent(Content);
+
             var uiSoundStorage = ServiceProvider.GetRequiredService<IUiSoundStorage>();
             uiSoundStorage.LoadContent(Content);
             UiThemeManager.SoundStorage = uiSoundStorage;

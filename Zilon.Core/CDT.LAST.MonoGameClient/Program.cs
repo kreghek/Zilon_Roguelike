@@ -42,6 +42,7 @@ namespace CDT.LAST.MonoGameClient
             RegisterUiContentStorages(serviceContainer);
 
             serviceContainer.AddSingleton<IPersonVisualizationContentStorage, PersonVisualizationContentStorage>();
+            serviceContainer.AddSingleton<IPersonSoundContentStorage, PersonSoundContentStorage>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 

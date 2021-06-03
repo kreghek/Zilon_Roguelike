@@ -191,25 +191,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         SoundEffect GetDeathEffect(IPerson person);
     }
 
-    internal sealed class PersonSoundStorage : IPersonSoundContentStorage
+    internal sealed class PersonSoundContentStorage : IPersonSoundContentStorage
     {
         private SoundEffect? _swordStartHitEffect;
         private SoundEffect? _hunterDeathEffect;
         private SoundEffect? _swordHitEffect;
+        private SoundEffect _hunterStartHitEffect;
 
         public SoundEffect GetActHitSound(string actSid, IPerson targetPerson)
         {
-            throw new NotImplementedException();
+            return _swordHitEffect;
         }
 
         public SoundEffect GetActStartSound(string actSid)
         {
-            throw new NotImplementedException();
+            return _swordStartHitEffect;
         }
 
         public SoundEffect GetDeathEffect(IPerson person)
         {
-            throw new NotImplementedException();
+            return _hunterDeathEffect;
         }
 
         public void LoadContent(ContentManager contentManager)
@@ -217,6 +218,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _swordStartHitEffect = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect");
             _hunterDeathEffect = contentManager.Load<SoundEffect>("Audio/HunterDeath");
             _swordHitEffect = contentManager.Load<SoundEffect>("Audio/SwordHitEffect");
+            _hunterStartHitEffect = contentManager.Load<SoundEffect>("Audio/HunterHitEffect");
         }
     }
 }
