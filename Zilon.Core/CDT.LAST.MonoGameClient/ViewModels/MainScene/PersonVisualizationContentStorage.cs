@@ -199,6 +199,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private SoundEffect? _hunterDeathEffect;
         private SoundEffect? _swordHitEffect;
         private SoundEffect? _hunterStartHitEffect;
+        private SoundEffect _punchStartHitEffect;
 
         public SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson)
         {
@@ -215,11 +216,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 return _hunterStartHitEffect;
             }
+            else if (actDescription.Tags.Contains("punch"))
+            {
+                return _punchStartHitEffect;
+            }
             else
             {
                 Debug.Fail("All acts must have audio effect.");
                 // Return default audio if act is unknown.
-                return _swordStartHitEffect;
+                return _punchStartHitEffect;
             }
             
         }
@@ -235,6 +240,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _hunterDeathEffect = contentManager.Load<SoundEffect>("Audio/HunterDeath");
             _swordHitEffect = contentManager.Load<SoundEffect>("Audio/SwordHitEffect");
             _hunterStartHitEffect = contentManager.Load<SoundEffect>("Audio/HunterHitEffect");
+            _punchStartHitEffect = contentManager.Load<SoundEffect>("Audio/PunchStartHitEffect");
         }
     }
 }
