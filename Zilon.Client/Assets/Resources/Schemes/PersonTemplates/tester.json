@@ -44,6 +44,14 @@
       {
         "SchemeSid": "great-sword",
         "Weight": 1
+      },
+	  {
+        "SchemeSid": "combat-staff",
+        "Weight": 1
+      },
+	  {
+        "SchemeSid": "tribal-spear",
+        "Weight": 1
       }
     ]
   },

@@ -1,14 +1,14 @@
 {
-  "Tags": [ "weapon", "pole" ],
+  "Tags": [ "weapon", "ranged", "wand" ],
   "Equip": {
     "ActSids": [
-      "pierce"
+      "slash"
     ],
     "SlotTypes": [ "Hand" ],
 	"EquipRestrictions": { "PropHandUsage": "TwoHanded" }
   },
   "Name": {
-    "Ru": "Племенное копьё",
-	"En": "Tribal spear"
+    "En": "Combat Staff",
+    "Ru": "Боевой посох"
   }
 }

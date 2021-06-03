@@ -61,6 +61,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "GreatSwordBase"))
             });
 
+            _handParts.Add("combat-staff", new[]
+            {
+                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "CombatStaffBase"))
+            });
+
+            _handParts.Add("tribal-spear", new[]
+            {
+                new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "TribalSpearBase"))
+            });
+
             _handParts.Add("wooden-shield", new[]
             {
                 new HandPart(HandPartType.Base, content.Load<Texture2D>(PATH_TO_HAND_PARTS + "WoodenShieldBase")),
