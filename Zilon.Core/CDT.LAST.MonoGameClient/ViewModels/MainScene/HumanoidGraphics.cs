@@ -180,7 +180,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     // Draw two handed weapon
                     AddChild(new Sprite(weaponBaseTexture)
                     {
-                        Position = new Vector2(11, -10),
+                        Position = new Vector2(8, -24),
                         Origin = new Vector2(0.5f, 0.5f)
                     });
                     break;
