@@ -24,16 +24,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Game _game;
         private readonly IActorGraphics _graphicsRoot;
+        private readonly SoundEffect _hunterDeathEffect;
 
         private readonly SpriteContainer _rootSprite;
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly Sprite _shadowSprite;
         private readonly SpriteBatch _spriteBatch;
+        private readonly SoundEffect _swordHitEffect;
+        private readonly SoundEffect _swordMissEffect;
 
         private IActorStateEngine _actorStateEngine;
-        private readonly SoundEffect _swordHitEffect;
-        private readonly SoundEffect _hunterDeathEffect;
-        private readonly SoundEffect _swordMissEffect;
 
         public ActorViewModel(Game game,
             IActor actor,
@@ -99,17 +99,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _hunterDeathEffect = game.Content.Load<SoundEffect>("Audio/HunterDeath");
         }
 
-        private void Actor_DamageTaken(object? sender, DamageTakenEventArgs e)
-        {
-            if (sender is Actor actor)
-            {
-                if (actor.Person is MonsterPerson monster && monster.CheckIsDead())
-                {
-                    _hunterDeathEffect.CreateInstance().Play();
-                }
-            }
-        }
-
         public override bool HiddenByFow => true;
 
         public override Vector2 HitEffectPosition => _graphicsRoot.HitEffectPosition;
@@ -141,6 +130,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     );
 
                     _rootSprite.Position = newPosition;
+                }
+            }
+        }
+
+        private void Actor_DamageTaken(object? sender, DamageTakenEventArgs e)
+        {
+            if (sender is Actor actor)
+            {
+                if (actor.Person is MonsterPerson monster && monster.CheckIsDead())
+                {
+                    _hunterDeathEffect.CreateInstance().Play();
                 }
             }
         }

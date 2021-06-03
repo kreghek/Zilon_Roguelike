@@ -15,15 +15,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly ICommandBlocker _animationBlocker;
         private readonly IAnimationBlockerService _animationBlockerService;
 
-        private readonly SoundEffectInstance _swordHitEffect;
-        private bool _effectPlayed;
-
         private readonly SpriteContainer _rootContainer;
 
         private readonly Vector2 _startPosition;
+
+        private readonly SoundEffectInstance _swordHitEffect;
         private readonly Vector2 _targetPosition;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
+        private bool _effectPlayed;
 
         public ActorMeleeAttackEngine(SpriteContainer rootContainer, Vector2 targetPosition,
             IAnimationBlockerService animationBlockerService, SoundEffectInstance swordHitEffect)
