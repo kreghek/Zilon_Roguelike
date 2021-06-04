@@ -80,7 +80,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 texture: uiContentStorage.GetButtonTexture(),
                 iconSpritesheet: uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                 iconRect: new Rectangle(0, 32, 16, 32),
-                rect: new Rectangle(halfOfScreenX - 16 + 16 * 2, bottomOfScreenY - 32, 16, 32));
+                rect: new Rectangle(halfOfScreenX - 16 + (16 * 2), bottomOfScreenY - 32, 16, 32));
             _personStatsButton.OnClick += PersonStatsButton_OnClick;
 
             _personEquipmentModal = new PersonEquipmentModalDialog(

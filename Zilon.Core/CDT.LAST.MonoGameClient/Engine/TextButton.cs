@@ -15,8 +15,11 @@ namespace CDT.LAST.MonoGameClient.Engine
             _font = font;
 
             var textSize = _font.MeasureString(Title);
-            _textPosition = new Vector2((rect.Width - textSize.X) / 2 + rect.Left,
-                (rect.Height - textSize.Y) / 2 + rect.Top);
+            var widthDiff = rect.Width - textSize.X;
+            var heightDiff = rect.Height - textSize.Y;
+            _textPosition = new Vector2(
+                (widthDiff / 2) + rect.Left,
+                (heightDiff / 2) + rect.Top);
         }
 
         public string Title { get; set; }
