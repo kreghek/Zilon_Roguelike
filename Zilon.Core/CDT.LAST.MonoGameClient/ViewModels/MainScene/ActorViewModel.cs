@@ -97,13 +97,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
 
-        public void UnsubscribeEventHandlers()
-        {
-            Actor.Moved -= Actor_Moved;
-            Actor.UsedAct -= Actor_UsedAct;
-            Actor.DamageTaken -= Actor_DamageTaken;
-        }
-
         public override bool HiddenByFow => true;
 
         public override Vector2 HitEffectPosition => _graphicsRoot.HitEffectPosition;
@@ -116,6 +109,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _rootSprite.Draw(_spriteBatch);
 
             _spriteBatch.End();
+        }
+
+        public void UnsubscribeEventHandlers()
+        {
+            Actor.Moved -= Actor_Moved;
+            Actor.UsedAct -= Actor_UsedAct;
+            Actor.DamageTaken -= Actor_DamageTaken;
         }
 
         public override void Update(GameTime gameTime)
