@@ -12,11 +12,13 @@ namespace CDT.LAST.MonoGameClient.Engine
         {
         }
 
-        public IconButton(Texture2D texture, Texture2D iconSpritesheet, Rectangle iconRect, Rectangle rect) : this(texture, iconSpritesheet, rect, iconRect: iconRect)
+        public IconButton(Texture2D texture, Texture2D iconSpritesheet, Rectangle iconRect, Rectangle rect) : this(
+            texture, iconSpritesheet, rect, iconRect: iconRect)
         {
         }
 
-        private IconButton(Texture2D texture, Texture2D iconSpritesheet, Rectangle rect, Rectangle? iconRect = null) : base(texture, rect)
+        private IconButton(Texture2D texture, Texture2D iconSpritesheet, Rectangle rect, Rectangle? iconRect = null) :
+            base(texture, rect)
         {
             _icon = iconSpritesheet;
             _iconRect = iconRect;

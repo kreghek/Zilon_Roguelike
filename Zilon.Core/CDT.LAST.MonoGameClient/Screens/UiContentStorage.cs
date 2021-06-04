@@ -12,13 +12,13 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly Dictionary<string, Texture2D[]> _propIcons;
         private Texture2D? _attributeIconsTexture;
         private Texture2D? _attributesBackgroundTexture;
-        private Texture2D? _smallVerticalButtonIconsTexture;
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
         private SpriteFont? _hintTitleFont;
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
         private Texture2D[]? _modalTopTextures;
+        private Texture2D? _smallVerticalButtonIconsTexture;
 
         public UiContentStorage()
         {
