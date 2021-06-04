@@ -8,20 +8,15 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly Texture2D _icon;
         private readonly Rectangle? _iconRect;
 
-        public IconButton(Texture2D texture, Texture2D icon, Rectangle rect) : this(texture, icon, rect, iconRect: null)
+        public IconButton(Texture2D texture, Texture2D icon, Rectangle rect) : base(texture, rect)
         {
+            _icon = icon;
         }
 
-        public IconButton(Texture2D texture, Texture2D iconSpritesheet, Rectangle iconRect, Rectangle rect) : this(
-            texture, iconSpritesheet, rect, iconRect: iconRect)
+        public IconButton(Texture2D texture, IconData iconData, Rectangle rect) : base(texture, rect)
         {
-        }
-
-        private IconButton(Texture2D texture, Texture2D iconSpritesheet, Rectangle rect, Rectangle? iconRect = null) :
-            base(texture, rect)
-        {
-            _icon = iconSpritesheet;
-            _iconRect = iconRect;
+            _icon = iconData.Spritesheet;
+            _iconRect = iconData.SourceRect;
         }
 
         protected override void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color)

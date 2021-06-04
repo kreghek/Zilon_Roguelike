@@ -61,8 +61,10 @@ namespace CDT.LAST.MonoGameClient.Screens
             var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
             _autoplayModeButton = new IconButton(
                 texture: uiContentStorage.GetButtonTexture(),
-                iconSpritesheet: uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                iconRect: new Rectangle(0, 0, 16, 32),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(0, 0, 16, 32)
+                ),
                 rect: new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
@@ -71,15 +73,19 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _personEquipmentButton = new IconButton(
                 texture: uiContentStorage.GetButtonTexture(),
-                iconSpritesheet: uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                iconRect: new Rectangle(16, 0, 16, 32),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(16, 0, 16, 32)
+                ),
                 rect: new Rectangle(halfOfScreenX - 16 + 16, bottomOfScreenY - 32, 16, 32));
             _personEquipmentButton.OnClick += PersonEquipmentButton_OnClick;
 
             _personStatsButton = new IconButton(
                 texture: uiContentStorage.GetButtonTexture(),
-                iconSpritesheet: uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                iconRect: new Rectangle(0, 32, 16, 32),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(0, 32, 16, 32)
+                ),
                 rect: new Rectangle(halfOfScreenX - 16 + (16 * 2), bottomOfScreenY - 32, 16, 32));
             _personStatsButton.OnClick += PersonStatsButton_OnClick;
 
