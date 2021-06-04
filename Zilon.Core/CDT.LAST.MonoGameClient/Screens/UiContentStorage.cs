@@ -10,22 +10,22 @@ namespace CDT.LAST.MonoGameClient.Screens
     internal sealed class UiContentStorage : IUiContentStorage
     {
         private readonly Dictionary<string, Texture2D[]> _propIcons;
+
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
         private SpriteFont? _hintTitleFont;
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
         private Texture2D[]? _modalTopTextures;
+        private Texture2D? _attributeIconsTexture;
+        private Texture2D? _attributesBackgroundTexture;
 
         public UiContentStorage()
         {
             _propIcons = new Dictionary<string, Texture2D[]>();
         }
 
-        public SpriteFont GetButtonFont()
-        {
-            return _buttonFont ?? throw new InvalidOperationException();
-        }
+        public SpriteFont GetButtonFont() => _buttonFont ?? throw new InvalidOperationException();
 
         public Texture2D GetButtonTexture()
         {
@@ -66,6 +66,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             _modalShadowTexture = contentManager.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
             _modalTopTextures = new[] { contentManager.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundTop1") };
             _modalBottomTextures = new[] { contentManager.Load<Texture2D>("Sprites/ui/ModalDialogBackgroundBottom1") };
+            _attributeIconsTexture = contentManager.Load<Texture2D>("Sprites/ui/AttributeIcons");
+            _attributesBackgroundTexture = contentManager.Load<Texture2D>("Sprites/ui/AttributesBackground");
 
             // Place textures in order to display. Latest will display on the top.
             _propIcons.Add("short-sword",
@@ -107,9 +109,10 @@ namespace CDT.LAST.MonoGameClient.Screens
             _propIcons.Add("EmptyPropIcon", new[] { contentManager.Load<Texture2D>("Sprites/ui/EmptyPropIcon") });
         }
 
-        public SpriteFont GetHintTitleFont()
-        {
-            return _hintTitleFont ?? throw new InvalidOperationException();
-        }
+        public SpriteFont GetHintTitleFont() => _hintTitleFont ?? throw new InvalidOperationException();
+
+        public Texture2D GetAttributeIconsTexture() => _attributeIconsTexture ?? throw new InvalidOperationException();
+
+        public Texture2D GetAttributeBackgroundTexture() => _attributesBackgroundTexture ?? throw new InvalidOperationException();
     }
 }

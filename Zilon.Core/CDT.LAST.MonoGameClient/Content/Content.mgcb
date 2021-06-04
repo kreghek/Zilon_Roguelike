@@ -723,6 +723,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/button.png
 
+#begin Sprites/ui/AttributeIcons.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/AttributeIcons.png
+
+#begin Sprites/ui/AttributesBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/AttributesBackground.png
+
 #begin Sprites/ui/EmptyPropIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
