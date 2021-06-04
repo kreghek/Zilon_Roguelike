@@ -43,7 +43,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _intarectionBus = serviceScope.GetRequiredService<IActorInteractionBus>();
 
-            //TODO Delete subscribtion after transition
             _intarectionBus.NewEvent += IntarectionBus_NewEvent;
 
             var personVisualizationContentStorage =
