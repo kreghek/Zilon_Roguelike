@@ -9,6 +9,7 @@ using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Players;
@@ -31,11 +32,14 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
         private readonly ISectorUiState _uiState;
+        private readonly IUiContentStorage _uiContentStorage;
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
 
         private SectorViewModel? _sectorViewModel;
+        private bool _autoplayHintIsShown;
+        private string _autoplayModeButtonTitle;
 
         public MainScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -51,6 +55,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
 
             var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+            _uiContentStorage = uiContentStorage;
 
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
             var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
@@ -61,6 +66,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 rect: new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
+            _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
+                            UiResources.SwitchAutomodeButtonOffTitle);
 
             _personEquipmentButton = new IconButton(
                 texture: uiContentStorage.GetButtonTexture(),
@@ -146,6 +153,22 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                         _personEquipmentButton.Update();
                         _personStatsButton.Update();
+
+                        var halfOfScreenX = Game.GraphicsDevice.Viewport.Width / 2;
+                        var bottomOfScreenY = Game.GraphicsDevice.Viewport.Height;
+
+                        var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
+
+                        var mouseState = Mouse.GetState();
+                        var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+                        if (autoplayButtonRect.Intersects(mouseRect))
+                        {
+                            _autoplayHintIsShown = true;
+                        }
+                        else
+                        {
+                            _autoplayHintIsShown = false;
+                        }
                     }
                     else if (!_isTransitionPerforming)
                     {
@@ -179,14 +202,14 @@ namespace CDT.LAST.MonoGameClient.Screens
                 {
                     case ActorTaskSourceControl.Human:
                         controlSwitcher.Switch(ActorTaskSourceControl.Bot);
-                        //_autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle,
-                        //    UiResources.SwitchAutomodeButtonOnTitle);
+                        _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
+                            UiResources.SwitchAutomodeButtonOnTitle);
                         break;
 
                     case ActorTaskSourceControl.Bot:
                         controlSwitcher.Switch(ActorTaskSourceControl.Human);
-                        //_autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle,
-                        //    UiResources.SwitchAutomodeButtonOffTitle);
+                        _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
+                            UiResources.SwitchAutomodeButtonOffTitle);
                         break;
 
                     default:
@@ -217,6 +240,30 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personEffectsPanel.Draw(_spriteBatch);
 
             _autoplayModeButton.Draw(_spriteBatch);
+            if (_autoplayHintIsShown)
+            {
+                var titleTextSizeVector = _uiContentStorage.GetHintTitleFont().MeasureString(_autoplayModeButtonTitle);
+
+                const int HINT_TEXT_SPACING = 8;
+
+                var halfOfScreenX = Game.GraphicsDevice.Viewport.Width / 2;
+                var bottomOfScreenY = Game.GraphicsDevice.Viewport.Height;
+                var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
+
+                var hintRectangle = new Rectangle(
+                    autoplayButtonRect.Left,
+                    autoplayButtonRect.Top - (int)titleTextSizeVector.Y - (HINT_TEXT_SPACING * 2),
+                    (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
+                    (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
+
+                _spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
+
+                _spriteBatch.DrawString(_uiContentStorage.GetHintTitleFont(),
+                    _autoplayModeButtonTitle,
+                    new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                    Color.Wheat);
+            }
+
             _personEquipmentButton.Draw(_spriteBatch);
             _personStatsButton.Draw(_spriteBatch);
 
