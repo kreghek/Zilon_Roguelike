@@ -183,19 +183,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
-        private void DetectAutoplayHint()
-        {
-            var halfOfScreenX = Game.GraphicsDevice.Viewport.Width / 2;
-            var bottomOfScreenY = Game.GraphicsDevice.Viewport.Height;
-
-            var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
-
-            var mouseState = Mouse.GetState();
-            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-
-            _autoplayHintIsShown = autoplayButtonRect.Intersects(mouseRect);
-        }
-
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
         {
             var serviceScope = ((LivGame)Game).ServiceProvider;
@@ -237,6 +224,19 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
 
             return null;
+        }
+
+        private void DetectAutoplayHint()
+        {
+            var halfOfScreenX = Game.GraphicsDevice.Viewport.Width / 2;
+            var bottomOfScreenY = Game.GraphicsDevice.Viewport.Height;
+
+            var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
+
+            var mouseState = Mouse.GetState();
+            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+
+            _autoplayHintIsShown = autoplayButtonRect.Intersects(mouseRect);
         }
 
         private void DrawHud()
