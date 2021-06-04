@@ -144,6 +144,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 Color.Wheat);
         }
 
+        private static string GetAttributeDescription(PersonAttribute attribute)
+        {
+            switch (attribute.Type)
+            {
+                case PersonAttributeType.PhysicalStrength:
+                    return UiResources.PhysicalStrengthAttributeDescription;
+
+                case PersonAttributeType.Dexterity:
+                    return UiResources.DexterityAttributeDescription;
+
+                case PersonAttributeType.Perception:
+                    return UiResources.PerceptionAttributeDescription;
+
+                case PersonAttributeType.Constitution:
+                    return UiResources.ConstitutionAttributeDescription;
+
+                default:
+                    Debug.Fail($"Unknown attribute {attribute.Type}.");
+                    return "<Undef>";
+            }
+        }
+
         private static Rectangle GetAttributeIcon(PersonAttributeType type)
         {
             switch (type)
@@ -180,7 +202,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 default:
                     Debug.Fail("The attribute value can't be out of defined range.");
                     return "<Unknown>";
-            };
+            }
+
+            ;
         }
 
         private static string GetAttributeTitle(PersonAttribute attribute)
@@ -198,28 +222,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 case PersonAttributeType.Constitution:
                     return UiResources.ConstitutionAttributeTitle;
-
-                default:
-                    Debug.Fail($"Unknown attribute {attribute.Type}.");
-                    return "<Undef>";
-            }
-        }
-
-        private static string GetAttributeDescription(PersonAttribute attribute)
-        {
-            switch (attribute.Type)
-            {
-                case PersonAttributeType.PhysicalStrength:
-                    return UiResources.PhysicalStrengthAttributeDescription;
-
-                case PersonAttributeType.Dexterity:
-                    return UiResources.DexterityAttributeDescription;
-
-                case PersonAttributeType.Perception:
-                    return UiResources.PerceptionAttributeDescription;
-
-                case PersonAttributeType.Constitution:
-                    return UiResources.ConstitutionAttributeDescription;
 
                 default:
                     Debug.Fail($"Unknown attribute {attribute.Type}.");
