@@ -10,6 +10,8 @@ namespace CDT.LAST.MonoGameClient.Screens
     internal sealed class UiContentStorage : IUiContentStorage
     {
         private readonly Dictionary<string, Texture2D[]> _propIcons;
+        private Texture2D? _attributeIconsTexture;
+        private Texture2D? _attributesBackgroundTexture;
 
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
@@ -17,15 +19,16 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
         private Texture2D[]? _modalTopTextures;
-        private Texture2D? _attributeIconsTexture;
-        private Texture2D? _attributesBackgroundTexture;
 
         public UiContentStorage()
         {
             _propIcons = new Dictionary<string, Texture2D[]>();
         }
 
-        public SpriteFont GetButtonFont() => _buttonFont ?? throw new InvalidOperationException();
+        public SpriteFont GetButtonFont()
+        {
+            return _buttonFont ?? throw new InvalidOperationException();
+        }
 
         public Texture2D GetButtonTexture()
         {
@@ -109,10 +112,19 @@ namespace CDT.LAST.MonoGameClient.Screens
             _propIcons.Add("EmptyPropIcon", new[] { contentManager.Load<Texture2D>("Sprites/ui/EmptyPropIcon") });
         }
 
-        public SpriteFont GetHintTitleFont() => _hintTitleFont ?? throw new InvalidOperationException();
+        public SpriteFont GetHintTitleFont()
+        {
+            return _hintTitleFont ?? throw new InvalidOperationException();
+        }
 
-        public Texture2D GetAttributeIconsTexture() => _attributeIconsTexture ?? throw new InvalidOperationException();
+        public Texture2D GetAttributeIconsTexture()
+        {
+            return _attributeIconsTexture ?? throw new InvalidOperationException();
+        }
 
-        public Texture2D GetAttributeBackgroundTexture() => _attributesBackgroundTexture ?? throw new InvalidOperationException();
+        public Texture2D GetAttributeBackgroundTexture()
+        {
+            return _attributesBackgroundTexture ?? throw new InvalidOperationException();
+        }
     }
 }

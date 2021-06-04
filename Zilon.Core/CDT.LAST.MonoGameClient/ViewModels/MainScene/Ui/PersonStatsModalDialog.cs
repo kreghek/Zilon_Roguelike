@@ -25,13 +25,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private PersonStatUiItem[]? _currentAttributesItems;
         private PersonStatUiItem? _selectedAttributeItem;
 
-        public PersonStatsModalDialog(IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice, ISectorUiState uiState) : base(uiContentStorage, graphicsDevice)
+        public PersonStatsModalDialog(IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice,
+            ISectorUiState uiState) : base(uiContentStorage, graphicsDevice)
         {
             _uiContentStorage = uiContentStorage;
             _uiState = uiState;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override void DrawContent(SpriteBatch spriteBatch)
         {
             if (_currentAttributesItems is null)
@@ -47,84 +48,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawHintIfSelected(spriteBatch);
         }
 
-        private void DrawAttribute(PersonStatUiItem item, SpriteBatch spriteBatch)
-        {
-            var sourceRect = GetAttributeIcon(item.Attribute.Type);
-            spriteBatch.Draw(_uiContentStorage.GetAttributeBackgroundTexture(), new Vector2(item.UiRect.Left, item.UiRect.Top), Color.White);
-            spriteBatch.Draw(_uiContentStorage.GetAttributeIconsTexture(), new Vector2(item.UiRect.Left, item.UiRect.Top), sourceRect, Color.White);
-
-            var attributeTitle = GetAttributeTitle(item.Attribute);
-            var attributeValue = GetAttributeTextValue(item.Attribute);
-            spriteBatch.DrawString(
-                _uiContentStorage.GetButtonFont(),
-                $"{attributeTitle}: {attributeValue}",
-                new Vector2(item.UiRect.Right + ATTRIBUTE_ITEM_SPACING, item.UiRect.Top),
-                new Color(195, 180, 155));
-        }
-
-        private static string GetAttributeTextValue(PersonAttribute attribute)
-        {
-            switch (attribute.Value)
-            {
-                case 8:
-                    return "Normal";
-
-                case 9:
-                    return "Higt";
-
-                case 10:
-                    return "High";
-
-                case 11:
-                    return "Super";
-
-                case 12:
-                    return "Super";
-
-                default:
-                    return "Default";
-            }
-        }
-
-        private static Rectangle GetAttributeIcon(PersonAttributeType type)
-        {
-            switch (type)
-            {
-                case PersonAttributeType.PhysicalStrength:
-                    return new Rectangle(0, 0, 32, 32);
-
-                case PersonAttributeType.Dexterity:
-                    return new Rectangle(32, 0, 32, 32);
-
-                case PersonAttributeType.Perception:
-                    return new Rectangle(0, 32, 32, 32);
-
-                case PersonAttributeType.Constitution:
-                    return new Rectangle(32, 32, 32, 32);
-
-                default:
-                    Debug.Fail($"Unknown attribute {type}.");
-                    return new Rectangle(0, 0, 1, 1);
-            }
-        }
-
-        protected override void UpdateContent()
-        {
-            if (_currentAttributesItems is null)
-            {
-                return;
-            }
-
-            var mouseState = Mouse.GetState();
-
-            var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-
-            var effectUnderMouse = _currentAttributesItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
-
-            _selectedAttributeItem = effectUnderMouse;
-        }
-
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override void InitContent()
         {
             base.InitContent();
@@ -161,6 +85,39 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _currentAttributesItems = currentAttributeItemList.ToArray();
         }
 
+        protected override void UpdateContent()
+        {
+            if (_currentAttributesItems is null)
+            {
+                return;
+            }
+
+            var mouseState = Mouse.GetState();
+
+            var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+
+            var effectUnderMouse = _currentAttributesItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
+
+            _selectedAttributeItem = effectUnderMouse;
+        }
+
+        private void DrawAttribute(PersonStatUiItem item, SpriteBatch spriteBatch)
+        {
+            var sourceRect = GetAttributeIcon(item.Attribute.Type);
+            spriteBatch.Draw(_uiContentStorage.GetAttributeBackgroundTexture(),
+                new Vector2(item.UiRect.Left, item.UiRect.Top), Color.White);
+            spriteBatch.Draw(_uiContentStorage.GetAttributeIconsTexture(),
+                new Vector2(item.UiRect.Left, item.UiRect.Top), sourceRect, Color.White);
+
+            var attributeTitle = GetAttributeTitle(item.Attribute);
+            var attributeValue = GetAttributeTextValue(item.Attribute);
+            spriteBatch.DrawString(
+                _uiContentStorage.GetButtonFont(),
+                $"{attributeTitle}: {attributeValue}",
+                new Vector2(item.UiRect.Right + ATTRIBUTE_ITEM_SPACING, item.UiRect.Top),
+                new Color(195, 180, 155));
+        }
+
         private void DrawHintIfSelected(SpriteBatch spriteBatch)
         {
             if (_selectedAttributeItem is null)
@@ -184,6 +141,52 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             spriteBatch.DrawString(hintTitleFont, equipmentTitle,
                 new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                 Color.Wheat);
+        }
+
+        private static Rectangle GetAttributeIcon(PersonAttributeType type)
+        {
+            switch (type)
+            {
+                case PersonAttributeType.PhysicalStrength:
+                    return new Rectangle(0, 0, 32, 32);
+
+                case PersonAttributeType.Dexterity:
+                    return new Rectangle(32, 0, 32, 32);
+
+                case PersonAttributeType.Perception:
+                    return new Rectangle(0, 32, 32, 32);
+
+                case PersonAttributeType.Constitution:
+                    return new Rectangle(32, 32, 32, 32);
+
+                default:
+                    Debug.Fail($"Unknown attribute {type}.");
+                    return new Rectangle(0, 0, 1, 1);
+            }
+        }
+
+        private static string GetAttributeTextValue(PersonAttribute attribute)
+        {
+            switch (attribute.Value)
+            {
+                case 8:
+                    return "Normal";
+
+                case 9:
+                    return "Higt";
+
+                case 10:
+                    return "High";
+
+                case 11:
+                    return "Super";
+
+                case 12:
+                    return "Super";
+
+                default:
+                    return "Default";
+            }
         }
 
         private static string GetAttributeTitle(PersonAttribute attribute)

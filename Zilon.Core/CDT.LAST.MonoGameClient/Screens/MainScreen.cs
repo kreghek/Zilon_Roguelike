@@ -24,10 +24,10 @@ namespace CDT.LAST.MonoGameClient.Screens
     {
         private readonly TextButton _autoplayModeButton;
         private readonly Camera _camera;
-        private readonly TextButton _personEquipmentButton;
         private readonly PersonConditionsPanel _personEffectsPanel;
-        private readonly TextButton _personStatsButton;
+        private readonly TextButton _personEquipmentButton;
         private readonly ModalDialog _personEquipmentModal;
+        private readonly TextButton _personStatsButton;
         private readonly PersonStatsModalDialog _personStatsModal;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
@@ -85,11 +85,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                 uiContentStorage,
                 game.GraphicsDevice,
                 _uiState);
-        }
-
-        private void PersonStatsButton_OnClick(object? sender, EventArgs e)
-        {
-            _personStatsModal.Show();
         }
 
         public override void Draw(GameTime gameTime)
@@ -263,6 +258,11 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)
         {
             _personEquipmentModal.Show();
+        }
+
+        private void PersonStatsButton_OnClick(object? sender, EventArgs e)
+        {
+            _personStatsModal.Show();
         }
     }
 }

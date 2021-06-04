@@ -5,6 +5,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     public interface IUiContentStorage
     {
+        Texture2D GetAttributeBackgroundTexture();
+
+        Texture2D GetAttributeIconsTexture();
         SpriteFont GetButtonFont();
         Texture2D GetButtonTexture();
 
@@ -17,9 +20,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D[] GetModalTopTextures();
 
         Texture2D[] GetPropIconLayers(string sid);
-
-        Texture2D GetAttributeIconsTexture();
-        Texture2D GetAttributeBackgroundTexture();
 
         void LoadContent(ContentManager contentManager);
     }
