@@ -192,13 +192,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             switch (attribute.Value)
             {
-                case float n when (0 <= n && n <= 1): return UiResources.UbnormalAttributeValueTitle;
-                case float n when (2 <= n && n <= 3): return UiResources.DefectiveAttributeValueTitle;
-                case float n when (4 <= n && n <= 5): return UiResources.LowAttributeValueTitle;
-                case float n when (6 <= n && n <= 8): return UiResources.BelowNormalAttributeValueTitle;
-                case float n when (9 <= n && n <= 11): return UiResources.NormalAttributeValueTitle;
-                case float n when (12 <= n && n <= 13): return UiResources.AboveNormalAttributeValueTitle;
-                case float n when (14 <= n && n <= 15): return UiResources.SuperAttributeValueTitle;
+                case float n when n is >= 0 and <= 1: return UiResources.UbnormalAttributeValueTitle;
+                case float n when n is >= 2 and <= 3: return UiResources.DefectiveAttributeValueTitle;
+                case float n when n is >= 4 and <= 5: return UiResources.LowAttributeValueTitle;
+                case float n when n is >= 6 and <= 8: return UiResources.BelowNormalAttributeValueTitle;
+                case float n when n is >= 9 and <= 11: return UiResources.NormalAttributeValueTitle;
+                case float n when n is >= 12 and <= 13: return UiResources.AboveNormalAttributeValueTitle;
+                case float n when n is >= 14 and <= 15: return UiResources.SuperAttributeValueTitle;
                 default:
                     Debug.Fail("The attribute value can't be out of defined range.");
                     return "<Unknown>";
