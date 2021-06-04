@@ -15,47 +15,47 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     /// </summary>
     internal sealed class PersonSoundContentStorage : IPersonSoundContentStorage
     {
-        private SoundEffect? _swordStartHitEffect;
         private SoundEffect? _hunterDeathEffect;
-        private SoundEffect? _swordHitEffect;
         private SoundEffect? _hunterStartHitEffect;
         private SoundEffect? _punchStartHitEffect;
+        private SoundEffect? _swordHitEffect;
+        private SoundEffect? _swordStartHitEffect;
 
         public SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson)
         {
             return _swordHitEffect;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public SoundEffect GetActStartSound(ActDescription actDescription)
         {
             if (actDescription.Tags.Contains("slash"))
             {
                 return _swordStartHitEffect;
             }
-            else if (actDescription.Tags.Contains("bite"))
+
+            if (actDescription.Tags.Contains("bite"))
             {
                 return _hunterStartHitEffect;
             }
-            else if (actDescription.Tags.Contains("punch"))
+
+            if (actDescription.Tags.Contains("punch"))
             {
                 return _punchStartHitEffect;
             }
-            else
-            {
-                Debug.Fail("All acts must have audio effect.");
-                // Return default audio if act is unknown.
-                return _punchStartHitEffect;
-            }
+
+            Debug.Fail("All acts must have audio effect.");
+            // Return default audio if act is unknown.
+            return _punchStartHitEffect;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public SoundEffect GetDeathEffect(IPerson person)
         {
             return _hunterDeathEffect;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void LoadContent(ContentManager contentManager)
         {
             _swordStartHitEffect = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect");

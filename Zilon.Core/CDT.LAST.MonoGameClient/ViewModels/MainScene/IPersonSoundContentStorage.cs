@@ -11,7 +11,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     /// </summary>
     internal interface IPersonSoundContentStorage
     {
-        void LoadContent(ContentManager contentManager);
+        /// <summary>
+        /// The sound played when person hit a target successfuly.
+        /// </summary>
+        SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson);
 
         /// <summary>
         /// The sound played when visualization of a act starts.
@@ -19,13 +22,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         SoundEffect GetActStartSound(ActDescription actDescription);
 
         /// <summary>
-        /// The sound played when person hit a target successfuly.
-        /// </summary>
-        SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson);
-
-        /// <summary>
         /// The sound of specified person death.
         /// </summary>
         SoundEffect GetDeathEffect(IPerson person);
+
+        void LoadContent(ContentManager contentManager);
     }
 }
