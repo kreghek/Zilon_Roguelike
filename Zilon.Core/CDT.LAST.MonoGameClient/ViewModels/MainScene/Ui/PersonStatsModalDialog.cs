@@ -203,8 +203,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     Debug.Fail("The attribute value can't be out of defined range.");
                     return "<Unknown>";
             }
-
-            ;
         }
 
         private static string GetAttributeTitle(PersonAttribute attribute)
