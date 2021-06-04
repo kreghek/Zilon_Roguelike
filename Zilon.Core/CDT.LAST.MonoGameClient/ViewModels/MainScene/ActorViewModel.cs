@@ -90,12 +90,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _rootSprite.Position = newPosition;
 
-            //TODO Delete subscribtions after transition
             Actor.Moved += Actor_Moved;
             Actor.UsedAct += Actor_UsedAct;
             Actor.DamageTaken += Actor_DamageTaken;
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
+        }
+
+        public void UnsubscribeEventHandlers()
+        {
+            Actor.Moved -= Actor_Moved;
+            Actor.UsedAct -= Actor_UsedAct;
+            Actor.DamageTaken -= Actor_DamageTaken;
         }
 
         public override bool HiddenByFow => true;

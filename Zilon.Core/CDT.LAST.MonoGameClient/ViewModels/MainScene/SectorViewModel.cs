@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
-using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
@@ -151,6 +148,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             _spriteBatch.End();
+        }
+
+        public void UnsubscribeEventHandlers()
+        {
+            _intarectionBus.NewEvent -= IntarectionBus_NewEvent;
+            Sector.ActorManager.Removed -= ActorManager_Removed;
+
+            foreach (var gameObject in _viewModelContext.GameObjects)
+            {
+                switch (gameObject)
+                {
+                    case ActorViewModel actorViewModel:
+                        actorViewModel.UnsubscribeEventHandlers();
+                        break;
+
+                    case StaticObjectViewModel staticObjectViewModel:
+                        // Currently do nothing since staticObjectViewModel have no subscribtions.
+                        break;
+                }
+            }
         }
 
         public void Update(GameTime gameTime)
