@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 
 using Zilon.Core.Persons;
-using Zilon.Core.Tactics.ActorInteractionEvents;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
@@ -16,10 +15,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal sealed class PersonSoundContentStorage : IPersonSoundContentStorage
     {
         private SoundEffect? _hunterDeathEffect;
-        private SoundEffect? _hunterStartHitEffect;
-        private SoundEffect? _punchStartHitEffect;
         private SoundEffect? _swordHitEffect;
-        private SoundEffect? _swordStartHitEffect;
+        private SoundEffect? _defaultStartHitEffect;
+
+        private IDictionary<string, SoundEffect>? _actStartDict;
 
         public SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson)
         {
@@ -29,25 +28,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// <inheritdoc />
         public SoundEffect GetActStartSound(ActDescription actDescription)
         {
-            if (actDescription.Tags.Contains("slash"))
+            if (_actStartDict is null)
             {
-                return _swordStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
+                throw new InvalidOperationException("Dictionary of act sound effect must be initialized in storage loading.");
             }
 
-            if (actDescription.Tags.Contains("bite"))
+            foreach (var tag in actDescription.Tags)
             {
-                return _hunterStartHitEffect ??
-                       throw new InvalidOperationException("All content must be loaded early.");
-            }
-
-            if (actDescription.Tags.Contains("punch"))
-            {
-                return _punchStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
+                if (_actStartDict.TryGetValue(tag, out var soundEffect))
+                {
+                    return soundEffect;
+                }
             }
 
             Debug.Fail("All acts must have audio effect.");
             // Return default audio if act is unknown.
-            return _punchStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
+            return _defaultStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
         }
 
         /// <inheritdoc />
@@ -59,11 +55,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// <inheritdoc />
         public void LoadContent(ContentManager contentManager)
         {
-            _swordStartHitEffect = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect");
             _hunterDeathEffect = contentManager.Load<SoundEffect>("Audio/HunterDeath");
             _swordHitEffect = contentManager.Load<SoundEffect>("Audio/SwordHitEffect");
-            _hunterStartHitEffect = contentManager.Load<SoundEffect>("Audio/HunterHitEffect");
-            _punchStartHitEffect = contentManager.Load<SoundEffect>("Audio/PunchStartHitEffect");
+
+            _actStartDict = new Dictionary<string, SoundEffect>
+            {
+                ["bite"] = contentManager.Load<SoundEffect>("Audio/HunterHitEffect"),
+                ["punch"] = contentManager.Load<SoundEffect>("Audio/PunchStartHitEffect"),
+                ["slash"] = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect")
+            };
+            _defaultStartHitEffect = _actStartDict["punch"];
         }
     }
 }
