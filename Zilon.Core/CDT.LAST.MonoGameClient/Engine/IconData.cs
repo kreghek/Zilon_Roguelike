@@ -16,7 +16,8 @@ namespace CDT.LAST.MonoGameClient.Engine
             SourceRect = sourceRect;
         }
 
-        public Texture2D Spritesheet { get; }
         public Rectangle SourceRect { get; }
+
+        public Texture2D Spritesheet { get; }
     }
 }
