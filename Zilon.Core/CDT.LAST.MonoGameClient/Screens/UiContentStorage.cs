@@ -18,12 +18,17 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
         private Texture2D[]? _modalTopTextures;
-        private Texture2D? _smallVerticalButtonIconsTexture;
         private Texture2D? _smallVerticalButtonBackgroundTexture;
+        private Texture2D? _smallVerticalButtonIconsTexture;
 
         public UiContentStorage()
         {
             _propIcons = new Dictionary<string, Texture2D[]>();
+        }
+
+        public Texture2D GetSmallVerticalButtonBackgroundTexture()
+        {
+            return _attributesBackgroundTexture ?? throw new InvalidOperationException();
         }
 
         public SpriteFont GetButtonFont()
@@ -73,7 +78,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             _attributeIconsTexture = contentManager.Load<Texture2D>("Sprites/ui/AttributeIcons");
             _attributesBackgroundTexture = contentManager.Load<Texture2D>("Sprites/ui/AttributesBackground");
             _smallVerticalButtonIconsTexture = contentManager.Load<Texture2D>("Sprites/ui/SmallVerticalButtonIcons");
-            _smallVerticalButtonBackgroundTexture = contentManager.Load<Texture2D>("Sprites/ui/SmallVerticalButtonBackground");
+            _smallVerticalButtonBackgroundTexture =
+                contentManager.Load<Texture2D>("Sprites/ui/SmallVerticalButtonBackground");
 
             // Place textures in order to display. Latest will display on the top.
             _propIcons.Add("short-sword",
@@ -131,11 +137,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         }
 
         public Texture2D GetAttributeBackgroundTexture()
-        {
-            return _attributesBackgroundTexture ?? throw new InvalidOperationException();
-        }
-
-        public Texture2D GetSmallVerticalButtonBackgroundTexture()
         {
             return _attributesBackgroundTexture ?? throw new InvalidOperationException();
         }
