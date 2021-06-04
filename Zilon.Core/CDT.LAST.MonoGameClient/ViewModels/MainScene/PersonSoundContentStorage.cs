@@ -33,20 +33,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 return _swordStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
             }
-            else if (actDescription.Tags.Contains("bite"))
+
+            if (actDescription.Tags.Contains("bite"))
             {
-                return _hunterStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
+                return _hunterStartHitEffect ??
+                       throw new InvalidOperationException("All content must be loaded early.");
             }
-            else if (actDescription.Tags.Contains("punch"))
+
+            if (actDescription.Tags.Contains("punch"))
             {
                 return _punchStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
             }
-            else
-            {
-                Debug.Fail("All acts must have audio effect.");
-                // Return default audio if act is unknown.
-                return _punchStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
-            }
+
+            Debug.Fail("All acts must have audio effect.");
+            // Return default audio if act is unknown.
+            return _punchStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
         }
 
         /// <inheritdoc />
