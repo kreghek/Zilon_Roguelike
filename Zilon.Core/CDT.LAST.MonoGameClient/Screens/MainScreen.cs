@@ -24,9 +24,11 @@ namespace CDT.LAST.MonoGameClient.Screens
     {
         private readonly TextButton _autoplayModeButton;
         private readonly Camera _camera;
-        private readonly TextButton _personButton;
+        private readonly TextButton _personEquipmentButton;
         private readonly PersonConditionsPanel _personEffectsPanel;
-        private readonly ModalDialog _personModal;
+        private readonly TextButton _personStatsButton;
+        private readonly ModalDialog _personEquipmentModal;
+        private readonly PersonStatsModalDialog _personStatsModal;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -62,16 +64,32 @@ namespace CDT.LAST.MonoGameClient.Screens
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
 
-            _personButton = new TextButton("p",
+            _personEquipmentButton = new TextButton("p",
                 uiContentStorage.GetButtonTexture(),
                 uiContentStorage.GetButtonFont(),
                 new Rectangle(halfOfScreenX - 16 + 32, bottomOfScreenY - 32, 32, 32));
-            _personButton.OnClick += PersonButton_OnClick;
+            _personEquipmentButton.OnClick += PersonEquipmentButton_OnClick;
 
-            _personModal = new PersonEquipmentModalDialog(
+            _personStatsButton = new TextButton("s",
+                uiContentStorage.GetButtonTexture(),
+                uiContentStorage.GetButtonFont(),
+                new Rectangle(halfOfScreenX - 16 + 32 * 2, bottomOfScreenY - 32, 32, 32));
+            _personStatsButton.OnClick += PersonStatsButton_OnClick;
+
+            _personEquipmentModal = new PersonEquipmentModalDialog(
                 uiContentStorage,
                 game.GraphicsDevice,
                 _uiState);
+
+            _personStatsModal = new PersonStatsModalDialog(
+                uiContentStorage,
+                game.GraphicsDevice,
+                _uiState);
+        }
+
+        private void PersonStatsButton_OnClick(object? sender, EventArgs e)
+        {
+            _personStatsModal.Show();
         }
 
         public override void Draw(GameTime gameTime)
@@ -131,7 +149,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                         _autoplayModeButton.Update();
 
-                        _personButton.Update();
+                        _personEquipmentButton.Update();
+                        _personStatsButton.Update();
                     }
                     else if (!_isTransitionPerforming)
                     {
@@ -184,9 +203,14 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private ModalDialog? CheckModalsIsVisible()
         {
-            if (_personModal.IsVisible)
+            if (_personEquipmentModal.IsVisible)
             {
-                return _personModal;
+                return _personEquipmentModal;
+            }
+
+            if (_personStatsModal.IsVisible)
+            {
+                return _personStatsModal;
             }
 
             return null;
@@ -198,7 +222,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personEffectsPanel.Draw(_spriteBatch);
 
             _autoplayModeButton.Draw(_spriteBatch);
-            _personButton.Draw(_spriteBatch);
+            _personEquipmentButton.Draw(_spriteBatch);
+            _personStatsButton.Draw(_spriteBatch);
 
             _spriteBatch.End();
         }
@@ -207,9 +232,14 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-            if (_personModal.IsVisible)
+            if (_personEquipmentModal.IsVisible)
             {
-                _personModal.Draw(_spriteBatch);
+                _personEquipmentModal.Draw(_spriteBatch);
+            }
+
+            if (_personStatsModal.IsVisible)
+            {
+                _personStatsModal.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
@@ -230,9 +260,9 @@ namespace CDT.LAST.MonoGameClient.Screens
                     select sectorNode).SingleOrDefault();
         }
 
-        private void PersonButton_OnClick(object? sender, EventArgs e)
+        private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)
         {
-            _personModal.Show();
+            _personEquipmentModal.Show();
         }
     }
 }
