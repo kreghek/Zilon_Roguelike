@@ -160,21 +160,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                         _personEquipmentButton.Update();
                         _personStatsButton.Update();
 
-                        var halfOfScreenX = Game.GraphicsDevice.Viewport.Width / 2;
-                        var bottomOfScreenY = Game.GraphicsDevice.Viewport.Height;
-
-                        var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
-
-                        var mouseState = Mouse.GetState();
-                        var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-                        if (autoplayButtonRect.Intersects(mouseRect))
-                        {
-                            _autoplayHintIsShown = true;
-                        }
-                        else
-                        {
-                            _autoplayHintIsShown = false;
-                        }
+                        DetectAutoplayHint();
                     }
                     else if (!_isTransitionPerforming)
                     {
@@ -195,6 +181,19 @@ namespace CDT.LAST.MonoGameClient.Screens
                     TargetScene = new TransitionScreen(Game, _spriteBatch);
                 }
             }
+        }
+
+        private void DetectAutoplayHint()
+        {
+            var halfOfScreenX = Game.GraphicsDevice.Viewport.Width / 2;
+            var bottomOfScreenY = Game.GraphicsDevice.Viewport.Height;
+
+            var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
+
+            var mouseState = Mouse.GetState();
+            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+
+            _autoplayHintIsShown = autoplayButtonRect.Intersects(mouseRect);
         }
 
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
