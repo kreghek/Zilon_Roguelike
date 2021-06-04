@@ -141,13 +141,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void Actor_DamageTaken(object? sender, DamageTakenEventArgs e)
         {
-            if (sender is Actor actor)
+            if (sender is Actor actor && actor.Person.CheckIsDead())
             {
-                if (actor.Person.CheckIsDead())
-                {
-                    var deathSoundEffect = _personSoundStorage.GetDeathEffect(actor.Person);
-                    deathSoundEffect.CreateInstance().Play();
-                }
+                var deathSoundEffect = _personSoundStorage.GetDeathEffect(actor.Person);
+                deathSoundEffect.CreateInstance().Play();
             }
         }
 
