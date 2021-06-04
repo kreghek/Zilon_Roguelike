@@ -23,7 +23,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson)
         {
-            return _swordHitEffect;
+            return _swordHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
         }
 
         /// <inheritdoc />
@@ -31,28 +31,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             if (actDescription.Tags.Contains("slash"))
             {
-                return _swordStartHitEffect;
+                return _swordStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
             }
-
-            if (actDescription.Tags.Contains("bite"))
+            else if (actDescription.Tags.Contains("bite"))
             {
-                return _hunterStartHitEffect;
+                return _hunterStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
             }
-
-            if (actDescription.Tags.Contains("punch"))
+            else if (actDescription.Tags.Contains("punch"))
             {
-                return _punchStartHitEffect;
+                return _punchStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
             }
-
-            Debug.Fail("All acts must have audio effect.");
-            // Return default audio if act is unknown.
-            return _punchStartHitEffect;
+            else
+            {
+                Debug.Fail("All acts must have audio effect.");
+                // Return default audio if act is unknown.
+                return _punchStartHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
+            }
         }
 
         /// <inheritdoc />
         public SoundEffect GetDeathEffect(IPerson person)
         {
-            return _hunterDeathEffect;
+            return _hunterDeathEffect ?? throw new InvalidOperationException("All content must be loaded early.");
         }
 
         /// <inheritdoc />
