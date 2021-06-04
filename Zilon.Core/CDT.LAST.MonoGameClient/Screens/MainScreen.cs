@@ -31,15 +31,15 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
-        private readonly ISectorUiState _uiState;
         private readonly IUiContentStorage _uiContentStorage;
+        private readonly ISectorUiState _uiState;
+        private bool _autoplayHintIsShown;
+        private string _autoplayModeButtonTitle;
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
 
         private SectorViewModel? _sectorViewModel;
-        private bool _autoplayHintIsShown;
-        private string _autoplayModeButtonTitle;
 
         public MainScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -67,7 +67,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
             _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
-                            UiResources.SwitchAutomodeButtonOffTitle);
+                UiResources.SwitchAutomodeButtonOffTitle);
 
             _personEquipmentButton = new IconButton(
                 texture: uiContentStorage.GetButtonTexture(),
