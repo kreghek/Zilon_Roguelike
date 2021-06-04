@@ -167,30 +167,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private static string GetAttributeTextValue(PersonAttribute attribute)
         {
-            switch (attribute.Value)
+            //TODO Localize
+            return attribute.Value switch
             {
-                case 8:
-                    return "Normal";
-
-                case 9:
-                    return "Higt";
-
-                case 10:
-                    return "High";
-
-                case 11:
-                    return "Super";
-
-                case 12:
-                    return "Super";
-
-                default:
-                    return "Default";
-            }
+                8 => "Normal",
+                9 => "Higt",
+                10 => "High",
+                11 => "Super",
+                12 => "Super",
+                _ => "Default",
+            };
         }
 
         private static string GetAttributeTitle(PersonAttribute attribute)
         {
+            //TODO Show description of the attribute.
             return attribute.Type.ToString();
         }
 
