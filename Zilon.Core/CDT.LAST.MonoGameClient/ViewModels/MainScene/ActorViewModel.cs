@@ -229,10 +229,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private SoundEffectInstance? GetSoundEffect(ITacticalActStatsSubScheme actStatScheme)
         {
-            //TODO Move act description creating in event owner. Place this structure into event args.
-            var usedActDescription =
-                new ActDescription(actStatScheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
-                                   Array.Empty<string>());
+            var usedActDescription = ActDescription.CreateFromActStats(actStatScheme);
 
             var attackSoundEffect = _personSoundStorage.GetActStartSound(usedActDescription);
 
