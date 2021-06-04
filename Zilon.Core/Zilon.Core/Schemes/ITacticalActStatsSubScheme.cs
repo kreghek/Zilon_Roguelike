@@ -40,6 +40,12 @@ namespace Zilon.Core.Schemes
         Range<int>? Range { get; }
 
         /// <summary>
+        /// Tags of the act.
+        /// Now used to determine video and audio effect.
+        /// </summary>
+        string?[]? Tags { get; }
+
+        /// <summary>
         /// Доступные цели действия.
         /// </summary>
         TacticalActTargets Targets { get; }

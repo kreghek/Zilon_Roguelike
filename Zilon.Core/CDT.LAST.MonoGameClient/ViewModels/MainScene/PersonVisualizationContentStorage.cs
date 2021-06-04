@@ -5,6 +5,8 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using Zilon.Core.Tactics;
+
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     /// <summary>

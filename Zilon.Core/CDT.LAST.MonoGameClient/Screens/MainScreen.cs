@@ -105,7 +105,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _currentSector = _sectorViewModel.Sector;
             }
 
-            _sectorViewModel.Update(gameTime);
+            if (!_isTransitionPerforming)
+            {
+                _sectorViewModel.Update(gameTime);
+            }
 
             if (_player.MainPerson is null)
             {
@@ -132,6 +135,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                     }
                     else if (!_isTransitionPerforming)
                     {
+                        _sectorViewModel.UnsubscribeEventHandlers();
+
                         _isTransitionPerforming = true;
                         TargetScene = new TransitionScreen(Game, _spriteBatch);
                     }
@@ -141,6 +146,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 if (!_isTransitionPerforming)
                 {
+                    _sectorViewModel.UnsubscribeEventHandlers();
+
                     _isTransitionPerforming = true;
                     TargetScene = new TransitionScreen(Game, _spriteBatch);
                 }

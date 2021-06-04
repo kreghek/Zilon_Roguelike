@@ -2,9 +2,9 @@
 
 namespace Zilon.Core.Tactics
 {
-    public sealed class NewActorInteractionEventArgs : EventArgs
+    public sealed class ActorInteractionEventArgs : EventArgs
     {
-        public NewActorInteractionEventArgs(IActorInteractionEvent actorInteractionEvent)
+        public ActorInteractionEventArgs(IActorInteractionEvent actorInteractionEvent)
         {
             ActorInteractionEvent =
                 actorInteractionEvent ?? throw new ArgumentNullException(nameof(actorInteractionEvent));

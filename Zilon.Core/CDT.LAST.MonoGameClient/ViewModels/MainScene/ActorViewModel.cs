@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
@@ -15,6 +17,7 @@ using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
@@ -23,6 +26,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Game _game;
         private readonly IActorGraphics _graphicsRoot;
+        private readonly IPersonSoundContentStorage _personSoundStorage;
 
         private readonly SpriteContainer _rootSprite;
         private readonly SectorViewModelContext _sectorViewModelContext;
@@ -35,11 +39,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             IActor actor,
             SectorViewModelContext sectorViewModelContext,
             IPersonVisualizationContentStorage personVisualizationContentStorage,
+            IPersonSoundContentStorage personSoundStorage,
             SpriteBatch spriteBatch)
         {
             _game = game;
             Actor = actor;
             _sectorViewModelContext = sectorViewModelContext;
+            _personSoundStorage = personSoundStorage;
             _spriteBatch = spriteBatch;
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
@@ -86,6 +92,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             Actor.Moved += Actor_Moved;
             Actor.UsedAct += Actor_UsedAct;
+            Actor.DamageTaken += Actor_DamageTaken;
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
@@ -102,6 +109,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _rootSprite.Draw(_spriteBatch);
 
             _spriteBatch.End();
+        }
+
+        public void UnsubscribeEventHandlers()
+        {
+            Actor.Moved -= Actor_Moved;
+            Actor.UsedAct -= Actor_UsedAct;
+            Actor.DamageTaken -= Actor_DamageTaken;
         }
 
         public override void Update(GameTime gameTime)
@@ -122,6 +136,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     _rootSprite.Position = newPosition;
                 }
+            }
+        }
+
+        private void Actor_DamageTaken(object? sender, DamageTakenEventArgs e)
+        {
+            if (sender is Actor actor && actor.Person.CheckIsDead())
+            {
+                var deathSoundEffect = _personSoundStorage.GetDeathEffect(actor.Person);
+                deathSoundEffect.CreateInstance().Play();
             }
         }
 
@@ -178,11 +201,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     );
 
                     var targetSpritePosition = newPosition;
+
+                    var attackSoundEffectInstance = GetSoundEffect(e.TacticalAct.Stats);
                     _actorStateEngine =
                         new ActorMeleeAttackEngine(
                             _rootSprite,
                             targetSpritePosition,
-                            animationBlockerService);
+                            animationBlockerService,
+                            attackSoundEffectInstance);
 
                     var targetGameObject =
                         _sectorViewModelContext.GameObjects.SingleOrDefault(x => x.Node == e.TargetNode);
@@ -199,6 +225,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     }
                 }
             }
+        }
+
+        private SoundEffectInstance? GetSoundEffect(ITacticalActStatsSubScheme actStatScheme)
+        {
+            var usedActDescription = ActDescription.CreateFromActStats(actStatScheme);
+
+            var attackSoundEffect = _personSoundStorage.GetActStartSound(usedActDescription);
+
+            var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
+            return attackSoundEffectInstance;
         }
 
         public IActor Actor { get; set; }

@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Players;
+using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient
@@ -35,11 +36,13 @@ namespace CDT.LAST.MonoGameClient
             serviceContainer.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
+            serviceContainer.AddSingleton<IActorInteractionBus, ActorInteractionBus>();
 
             RegisterCommands(serviceContainer);
             RegisterUiContentStorages(serviceContainer);
 
             serviceContainer.AddSingleton<IPersonVisualizationContentStorage, PersonVisualizationContentStorage>();
+            serviceContainer.AddSingleton<IPersonSoundContentStorage, PersonSoundContentStorage>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 
