@@ -47,7 +47,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 // Return default audio if act is unknown.
                 return _punchStartHitEffect;
             }
-
         }
 
         /// <inheritdoc/>
