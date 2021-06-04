@@ -77,7 +77,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 }
 
                 var lastIndex = currentEquipmentItemList.Count;
-                var relativeX = (lastIndex * EQUIPMENT_ITEM_SIZE) + EQUIPMENT_ITEM_SPACING;
+                var relativeX = lastIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
                     relativeX + ContentRect.Left,
                     ContentRect.Top,
