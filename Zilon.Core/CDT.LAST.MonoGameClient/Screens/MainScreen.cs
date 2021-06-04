@@ -60,7 +60,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
             var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
             _autoplayModeButton = new IconButton(
-                texture: uiContentStorage.GetButtonTexture(),
+                texture: uiContentStorage.GetAttributeBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                     new Rectangle(0, 0, 16, 32)
@@ -72,7 +72,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 UiResources.SwitchAutomodeButtonOffTitle);
 
             _personEquipmentButton = new IconButton(
-                texture: uiContentStorage.GetButtonTexture(),
+                texture: uiContentStorage.GetAttributeBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                     new Rectangle(16, 0, 16, 32)
@@ -81,7 +81,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personEquipmentButton.OnClick += PersonEquipmentButton_OnClick;
 
             _personStatsButton = new IconButton(
-                texture: uiContentStorage.GetButtonTexture(),
+                texture: uiContentStorage.GetAttributeBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                     new Rectangle(0, 32, 16, 32)

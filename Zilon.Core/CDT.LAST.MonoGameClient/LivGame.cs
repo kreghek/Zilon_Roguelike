@@ -113,6 +113,13 @@ namespace CDT.LAST.MonoGameClient
                 _graphics.PreferredBackBufferHeight = 480;
                 _graphics.ApplyChanges();
             }
+            else if (Keyboard.GetState().IsKeyDown(Keys.H))
+            {
+                _graphics.IsFullScreen = true;
+                _graphics.PreferredBackBufferWidth = 1280;
+                _graphics.PreferredBackBufferHeight = 720;
+                _graphics.ApplyChanges();
+            }
 
             base.Update(gameTime);
         }
