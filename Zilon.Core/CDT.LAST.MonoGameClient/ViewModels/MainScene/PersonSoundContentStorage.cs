@@ -14,11 +14,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     /// </summary>
     internal sealed class PersonSoundContentStorage : IPersonSoundContentStorage
     {
+        private IDictionary<string, SoundEffect>? _actStartDict;
+        private SoundEffect? _defaultStartHitEffect;
         private SoundEffect? _hunterDeathEffect;
         private SoundEffect? _swordHitEffect;
-        private SoundEffect? _defaultStartHitEffect;
-
-        private IDictionary<string, SoundEffect>? _actStartDict;
 
         public SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson)
         {
@@ -30,7 +29,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             if (_actStartDict is null)
             {
-                throw new InvalidOperationException("Dictionary of act sound effect must be initialized in storage loading.");
+                throw new InvalidOperationException(
+                    "Dictionary of act sound effect must be initialized in storage loading.");
             }
 
             foreach (var tag in actDescription.Tags)
