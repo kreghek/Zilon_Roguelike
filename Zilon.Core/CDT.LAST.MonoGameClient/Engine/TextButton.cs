@@ -26,7 +26,7 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         protected override void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color)
         {
-            spriteBatch.DrawString(_font, Title, _textPosition, Color.Gray);
+            spriteBatch.DrawString(_font, Title, _textPosition, Color.White);
         }
     }
 }
