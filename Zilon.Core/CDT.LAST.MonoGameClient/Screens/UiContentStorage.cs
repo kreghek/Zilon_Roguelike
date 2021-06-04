@@ -28,7 +28,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         public Texture2D GetSmallVerticalButtonBackgroundTexture()
         {
-            return _attributesBackgroundTexture ?? throw new InvalidOperationException();
+            return _smallVerticalButtonBackgroundTexture ?? throw new InvalidOperationException();
         }
 
         public SpriteFont GetButtonFont()
