@@ -9,10 +9,8 @@ using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 
 using Zilon.Core.Client;
-using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -22,12 +20,12 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class MainScreen : GameSceneBase
     {
-        private readonly TextButton _autoplayModeButton;
+        private readonly IconButton _autoplayModeButton;
         private readonly Camera _camera;
         private readonly PersonConditionsPanel _personEffectsPanel;
-        private readonly TextButton _personEquipmentButton;
+        private readonly IconButton _personEquipmentButton;
         private readonly ModalDialog _personEquipmentModal;
-        private readonly TextButton _personStatsButton;
+        private readonly IconButton _personStatsButton;
         private readonly PersonStatsModalDialog _personStatsModal;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
@@ -56,24 +54,26 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
             var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
-            _autoplayModeButton = new TextButton(
-                string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOffTitle),
-                uiContentStorage.GetButtonTexture(),
-                uiContentStorage.GetButtonFont(),
-                new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 32, 32)
+            _autoplayModeButton = new IconButton(
+                texture: uiContentStorage.GetButtonTexture(),
+                iconSpritesheet: uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                iconRect: new Rectangle(0, 0, 16, 32),
+                rect: new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
 
-            _personEquipmentButton = new TextButton("p",
-                uiContentStorage.GetButtonTexture(),
-                uiContentStorage.GetButtonFont(),
-                new Rectangle(halfOfScreenX - 16 + 32, bottomOfScreenY - 32, 32, 32));
+            _personEquipmentButton = new IconButton(
+                texture: uiContentStorage.GetButtonTexture(),
+                iconSpritesheet: uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                iconRect: new Rectangle(16, 0, 16, 32),
+                rect: new Rectangle(halfOfScreenX - 16 + 16, bottomOfScreenY - 32, 16, 32));
             _personEquipmentButton.OnClick += PersonEquipmentButton_OnClick;
 
-            _personStatsButton = new TextButton("s",
-                uiContentStorage.GetButtonTexture(),
-                uiContentStorage.GetButtonFont(),
-                new Rectangle(halfOfScreenX - 16 + 32 * 2, bottomOfScreenY - 32, 32, 32));
+            _personStatsButton = new IconButton(
+                texture: uiContentStorage.GetButtonTexture(),
+                iconSpritesheet: uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                iconRect: new Rectangle(0, 32, 16, 32),
+                rect: new Rectangle(halfOfScreenX - 16 + 16 * 2, bottomOfScreenY - 32, 16, 32));
             _personStatsButton.OnClick += PersonStatsButton_OnClick;
 
             _personEquipmentModal = new PersonEquipmentModalDialog(
@@ -179,14 +179,14 @@ namespace CDT.LAST.MonoGameClient.Screens
                 {
                     case ActorTaskSourceControl.Human:
                         controlSwitcher.Switch(ActorTaskSourceControl.Bot);
-                        _autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle,
-                            UiResources.SwitchAutomodeButtonOnTitle);
+                        //_autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle,
+                        //    UiResources.SwitchAutomodeButtonOnTitle);
                         break;
 
                     case ActorTaskSourceControl.Bot:
                         controlSwitcher.Switch(ActorTaskSourceControl.Human);
-                        _autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle,
-                            UiResources.SwitchAutomodeButtonOffTitle);
+                        //_autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle,
+                        //    UiResources.SwitchAutomodeButtonOffTitle);
                         break;
 
                     default:
