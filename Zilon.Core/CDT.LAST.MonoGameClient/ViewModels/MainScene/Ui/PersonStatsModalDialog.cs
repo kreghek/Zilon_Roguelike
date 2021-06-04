@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
@@ -125,9 +126,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var equipmentTitle = GetAttributeTitle(_selectedAttributeItem.Attribute);
+            var attributeDescription = GetAttributeDescription(_selectedAttributeItem.Attribute);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
-            var titleTextSizeVector = hintTitleFont.MeasureString(equipmentTitle);
+            var titleTextSizeVector = hintTitleFont.MeasureString(attributeDescription);
 
             const int HINT_TEXT_SPACING = 8;
             var hintRectangle = new Rectangle(
@@ -138,7 +139,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
 
-            spriteBatch.DrawString(hintTitleFont, equipmentTitle,
+            spriteBatch.DrawString(hintTitleFont, attributeDescription,
                 new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                 Color.Wheat);
         }
@@ -167,22 +168,63 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private static string GetAttributeTextValue(PersonAttribute attribute)
         {
-            //TODO Localize
-            return attribute.Value switch
+            switch (attribute.Value)
             {
-                8 => "Normal",
-                9 => "Higt",
-                10 => "High",
-                11 => "Super",
-                12 => "Super",
-                _ => "Default",
+                case float n when (0 <= n && n <= 1): return UiResources.UbnormalAttributeValueTitle;
+                case float n when (2 <= n && n <= 3): return UiResources.DefectiveAttributeValueTitle;
+                case float n when (4 <= n && n <= 5): return UiResources.LowAttributeValueTitle;
+                case float n when (6 <= n && n <= 7): return UiResources.BelowNormalAttributeValueTitle;
+                case float n when (8 <= n && n <= 9): return UiResources.NormalAttributeValueTitle;
+                case float n when (10 <= n && n <= 11): return UiResources.AboveNormalAttributeValueTitle;
+                case float n when (12 <= n && n <= 13): return UiResources.SuperAttributeValueTitle;
+                default:
+                    Debug.Fail("The attribute value can't be out of defined range.");
+                    return "<Unknown>";
             };
         }
 
         private static string GetAttributeTitle(PersonAttribute attribute)
         {
-            //TODO Show description of the attribute.
-            return attribute.Type.ToString();
+            switch (attribute.Type)
+            {
+                case PersonAttributeType.PhysicalStrength:
+                    return UiResources.PhysicalStrengthAttributeTitle;
+
+                case PersonAttributeType.Dexterity:
+                    return UiResources.DexterityAttributeTitle;
+
+                case PersonAttributeType.Perception:
+                    return UiResources.PerceptionAttributeTitle;
+
+                case PersonAttributeType.Constitution:
+                    return UiResources.ConstitutionAttributeTitle;
+
+                default:
+                    Debug.Fail($"Unknown attribute {attribute.Type}.");
+                    return "<Undef>";
+            }
+        }
+
+        private static string GetAttributeDescription(PersonAttribute attribute)
+        {
+            switch (attribute.Type)
+            {
+                case PersonAttributeType.PhysicalStrength:
+                    return UiResources.PhysicalStrengthAttributeDescription;
+
+                case PersonAttributeType.Dexterity:
+                    return UiResources.DexterityAttributeDescription;
+
+                case PersonAttributeType.Perception:
+                    return UiResources.PerceptionAttributeDescription;
+
+                case PersonAttributeType.Constitution:
+                    return UiResources.ConstitutionAttributeDescription;
+
+                default:
+                    Debug.Fail($"Unknown attribute {attribute.Type}.");
+                    return "<Undef>";
+            }
         }
 
         private record PersonStatUiItem
