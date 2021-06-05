@@ -131,8 +131,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     var worldCoords = HexHelper.ConvertToWorld(node.OffsetCoords);
                     var hexSize = MapMetrics.UnitSize / 2;
 
-                    var hexTextureIndexX = node.GetHashCode() % 4 / 2;
-                    var hexTextureIndexY = node.GetHashCode() % 4 % 2;
+                    var hexTextureIndex = node.GetHashCode() % 4;
+                    var hexTextureIndexX = hexTextureIndex / 2;
+                    var hexTextureIndexY = hexTextureIndex % 2;
 
                     // Remember. Hex width is less that size (radius).
                     // It equals R*Sqrt(3)/2. So sprite width is R*Sqrt(3)/2*2 or R*Sqrt(3). It's about 28 pixels.
