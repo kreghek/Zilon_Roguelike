@@ -65,7 +65,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             if (equipmentModule is null)
             {
                 throw new InvalidOperationException(
-                    "Active person must be aple to use equipment to shown in this dialog.");
+                    "Active person must be able to use equipment to shown in this dialog.");
             }
 
             var currentEquipmentItemList = new List<EquipmentUiItem>();
@@ -77,7 +77,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 }
 
                 var lastIndex = currentEquipmentItemList.Count;
-                var relativeX = (lastIndex * EQUIPMENT_ITEM_SIZE) + EQUIPMENT_ITEM_SPACING;
+                var relativeX = lastIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
                     relativeX + ContentRect.Left,
                     ContentRect.Top,

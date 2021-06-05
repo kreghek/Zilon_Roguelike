@@ -162,4 +162,64 @@
   <data name="GenerateGlobeButtonTitle" xml:space="preserve">
     <value>Генерировать</value>
   </data>
+  <data name="SwitchAutomodeButtonOffTitle" xml:space="preserve">
+    <value>Выкл</value>
+  </data>
+  <data name="SwitchAutomodeButtonOnTitle" xml:space="preserve">
+    <value>Вкл</value>
+  </data>
+  <data name="SwitchAutomodeButtonTitle" xml:space="preserve">
+    <value>Автоигра: {0}</value>
+  </data>
+  <data name="PhysicalStrengthAttributeTitle" xml:space="preserve">
+    <value>Физическая сила</value>
+  </data>
+  <data name="PhysicalStrengthAttributeDescription" xml:space="preserve">
+    <value>Физическая, грубая сила персонажа.
+Влияет на урон оружием ближнего боя.
+Выступает, как ограничение на ношение тяжелой экипировки.</value>
+  </data>
+  <data name="DexterityAttributeTitle" xml:space="preserve">
+    <value>Ловкость</value>
+  </data>
+  <data name="DexterityAttributeDescription" xml:space="preserve">
+    <value>Ловкость, физическая гибкость персонажа, растяжка.
+Выступает, как ограничение на экипировку, типа кинжалов, посохов.</value>
+  </data>
+  <data name="PerceptionAttributeTitle" xml:space="preserve">
+    <value>Восприятие</value>
+  </data>
+  <data name="PerceptionAttributeDescription" xml:space="preserve">
+    <value>Восприятие, зрение. Умение видеть, замечать.
+Выступает, как ограничение на использование оружие дальнего боя.
+Или оружия, основанного на точных ударах, а не на силе (кинжалы, копья).</value>
+  </data>
+  <data name="ConstitutionAttributeTitle" xml:space="preserve">
+    <value>Конституция</value>
+  </data>
+  <data name="ConstitutionAttributeDescription" xml:space="preserve">
+    <value>Влияет на то, какое количество ран может
+вынести персонаж,прежде чем он умрёт.</value>
+  </data>
+  <data name="UbnormalAttributeValueTitle" xml:space="preserve">
+    <value>Ненормальная</value>
+  </data>
+  <data name="SuperAttributeValueTitle" xml:space="preserve">
+    <value>Сверх</value>
+  </data>
+  <data name="NormalAttributeValueTitle" xml:space="preserve">
+    <value>Нормальное</value>
+  </data>
+  <data name="LowAttributeValueTitle" xml:space="preserve">
+    <value>Низкое</value>
+  </data>
+  <data name="BelowNormalAttributeValueTitle" xml:space="preserve">
+    <value>Ниже среднего</value>
+  </data>
+  <data name="AboveNormalAttributeValueTitle" xml:space="preserve">
+    <value>Выше среднего</value>
+  </data>
+  <data name="DefectiveAttributeValueTitle" xml:space="preserve">
+    <value>Дефектное</value>
+  </data>
 </root>

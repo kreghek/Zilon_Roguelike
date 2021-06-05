@@ -8,7 +8,7 @@ namespace CDT.LAST.MonoGameClient.Engine
 {
     internal abstract class ButtonBase
     {
-        private const int CONTENT_MARGIN = 5;
+        private const int CONTENT_MARGIN = 0;
         private readonly Rectangle _rect;
         private UiButtonState _buttonState;
 

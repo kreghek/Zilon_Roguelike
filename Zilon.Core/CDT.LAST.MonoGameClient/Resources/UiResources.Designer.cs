@@ -61,6 +61,71 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Above normal.
+        /// </summary>
+        internal static string AboveNormalAttributeValueTitle {
+            get {
+                return ResourceManager.GetString("AboveNormalAttributeValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Below normal.
+        /// </summary>
+        internal static string BelowNormalAttributeValueTitle {
+            get {
+                return ResourceManager.GetString("BelowNormalAttributeValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Affects how many wounds can
+        ///take out the character before he dies..
+        /// </summary>
+        internal static string ConstitutionAttributeDescription {
+            get {
+                return ResourceManager.GetString("ConstitutionAttributeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constitution.
+        /// </summary>
+        internal static string ConstitutionAttributeTitle {
+            get {
+                return ResourceManager.GetString("ConstitutionAttributeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defective.
+        /// </summary>
+        internal static string DefectiveAttributeValueTitle {
+            get {
+                return ResourceManager.GetString("DefectiveAttributeValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agility, physical flexibility of the character, stretching.
+        ///Acts as a restriction on equipment, such as daggers, staves..
+        /// </summary>
+        internal static string DexterityAttributeDescription {
+            get {
+                return ResourceManager.GetString("DexterityAttributeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dexterity.
+        /// </summary>
+        internal static string DexterityAttributeTitle {
+            get {
+                return ResourceManager.GetString("DexterityAttributeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disease.
         /// </summary>
         internal static string DiseaseSymptomConditionTitle {
@@ -133,11 +198,78 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Low.
+        /// </summary>
+        internal static string LowAttributeValueTitle {
+            get {
+                return ResourceManager.GetString("LowAttributeValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal.
+        /// </summary>
+        internal static string NormalAttributeValueTitle {
+            get {
+                return ResourceManager.GetString("NormalAttributeValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Perception, sight. Ability to see, notice.
+        ///Acts as a restriction on the use of ranged weapons.
+        ///Or weapons based on precise strikes rather than strength (daggers, spears)..
+        /// </summary>
+        internal static string PerceptionAttributeDescription {
+            get {
+                return ResourceManager.GetString("PerceptionAttributeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Perception.
+        /// </summary>
+        internal static string PerceptionAttributeTitle {
+            get {
+                return ResourceManager.GetString("PerceptionAttributeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Physical, brute strength of the character.
+        ///Affects melee weapon damage.
+        ///Acts as a restriction on the wearing of heavy equipment..
+        /// </summary>
+        internal static string PhysicalStrengthAttributeDescription {
+            get {
+                return ResourceManager.GetString("PhysicalStrengthAttributeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Physical Strength.
+        /// </summary>
+        internal static string PhysicalStrengthAttributeTitle {
+            get {
+                return ResourceManager.GetString("PhysicalStrengthAttributeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start.
         /// </summary>
         internal static string StartGameButtonTitle {
             get {
                 return ResourceManager.GetString("StartGameButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Super.
+        /// </summary>
+        internal static string SuperAttributeValueTitle {
+            get {
+                return ResourceManager.GetString("SuperAttributeValueTitle", resourceCulture);
             }
         }
         
@@ -192,6 +324,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         internal static string ThristStrongConditionTitle {
             get {
                 return ResourceManager.GetString("ThristStrongConditionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ubnormal.
+        /// </summary>
+        internal static string UbnormalAttributeValueTitle {
+            get {
+                return ResourceManager.GetString("UbnormalAttributeValueTitle", resourceCulture);
             }
         }
         
