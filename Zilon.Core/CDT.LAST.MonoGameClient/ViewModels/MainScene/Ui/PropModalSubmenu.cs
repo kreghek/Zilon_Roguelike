@@ -12,10 +12,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class PropModalSubmenu
     {
+        private readonly TextButton _equipButton;
         private readonly Point _position;
         private readonly IProp _prop;
         private readonly IUiContentStorage _uiContentStorage;
-        private readonly TextButton _equipButton;
 
         public PropModalSubmenu(Point position, IProp prop, IUiContentStorage uiContentStorage)
         {
@@ -23,18 +23,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _prop = prop;
             _uiContentStorage = uiContentStorage;
 
-            _equipButton = new TextButton("equip", _uiContentStorage.GetButtonTexture(), _uiContentStorage.GetButtonFont(), new Rectangle(_position.X, _position.Y + 16, 100, 32));
+            _equipButton = new TextButton("equip", _uiContentStorage.GetButtonTexture(),
+                _uiContentStorage.GetButtonFont(), new Rectangle(_position.X, _position.Y + 16, 100, 32));
             _equipButton.OnClick += EquipButton_OnClick;
         }
 
-        private void EquipButton_OnClick(object? sender, EventArgs e)
-        {
-            IsClosed = true;
-        }
+        public bool IsClosed { get; private set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), new Rectangle(_position, new Point(100, 64)), Color.White);
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), new Rectangle(_position, new Point(100, 64)),
+                Color.White);
             _equipButton.Draw(spriteBatch);
         }
 
@@ -43,6 +42,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _equipButton.Update();
         }
 
-        public bool IsClosed { get; private set; }
+        private void EquipButton_OnClick(object? sender, EventArgs e)
+        {
+            IsClosed = true;
+        }
     }
 }
