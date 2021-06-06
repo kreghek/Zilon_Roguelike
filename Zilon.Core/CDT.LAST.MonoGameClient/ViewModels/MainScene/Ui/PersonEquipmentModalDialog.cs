@@ -24,8 +24,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
+
         private EquipmentUiItem[]? _currentEquipmentItems;
-        private EquipmentUiItem? _selectedEquipmentItem;
+        private EquipmentUiItem? _hoverEquipmentItem;
+
+        private InventoryUiItem[]? _currentInventoryItems;
+        private InventoryUiItem? _hoverInventoryItem;
 
         public PersonEquipmentModalDialog(
             IUiContentStorage uiContentStorage,
@@ -36,7 +40,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _uiState = uiState;
         }
 
-        protected override void DrawContent(SpriteBatch spriteBatch)
+        private void DrawEquipments(SpriteBatch spriteBatch)
         {
             if (_currentEquipmentItems is null)
             {
@@ -47,8 +51,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 item.Control.Draw(spriteBatch);
             }
+        }
 
-            DrawHintIfSelected(spriteBatch);
+        private void DrawInventory(SpriteBatch spriteBatch)
+        {
+            if (_currentInventoryItems is null)
+            {
+                return;
+            }
+
+            foreach (var item in _currentInventoryItems)
+            {
+                item.Control.Draw(spriteBatch);
+            }
+        }
+
+        protected override void DrawContent(SpriteBatch spriteBatch)
+        {
+            DrawEquipments(spriteBatch);
+            DrawInventory(spriteBatch);
+
+            DrawEquipmentHintIfSelected(spriteBatch);
+            DrawInventoryHintIfSelected(spriteBatch);
         }
 
         protected override void InitContent()
@@ -61,6 +85,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 throw new InvalidOperationException("Active person must be selected before this dialog was opened.");
             }
 
+            InitEquipment(person);
+            InitInventory(person);
+        }
+
+        private void InitEquipment(Zilon.Core.Persons.IPerson person)
+        {
             var equipmentModule = person.GetModuleSafe<IEquipmentModule>();
             if (equipmentModule is null)
             {
@@ -105,7 +135,52 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _currentEquipmentItems = currentEquipmentItemList.ToArray();
         }
 
-        protected override void UpdateContent()
+        private void InitInventory(Zilon.Core.Persons.IPerson person)
+        {
+            var inventoryModule = person.GetModuleSafe<IInventoryModule>();
+            if (inventoryModule is null)
+            {
+                throw new InvalidOperationException(
+                    "Active person must be able to use equipment to shown in this dialog.");
+            }
+
+            var currentInventoryItemList = new List<InventoryUiItem>();
+            foreach (var prop in inventoryModule.CalcActualItems())
+            {
+                if (prop is null)
+                {
+                    continue;
+                }
+
+                var lastIndex = currentInventoryItemList.Count;
+                var relativeX = lastIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
+                var buttonRect = new Rectangle(
+                    relativeX + ContentRect.Left,
+                    ContentRect.Top + 32,
+                    EQUIPMENT_ITEM_SIZE,
+                    EQUIPMENT_ITEM_SIZE);
+
+                var sid = prop.Scheme.Sid;
+                if (string.IsNullOrEmpty(sid))
+                {
+                    Debug.Fail("All equipment must have symbolic identifier (SID).");
+                    sid = "EmptyPropIcon";
+                }
+
+                var equipmentButton = new IconButton(
+                    _uiContentStorage.GetButtonTexture(),
+                    _uiContentStorage.GetPropIconLayers(sid).First(),
+                    buttonRect);
+
+                var uiItem = new InventoryUiItem(equipmentButton, prop, lastIndex, buttonRect);
+
+                currentInventoryItemList.Add(uiItem);
+            }
+
+            _currentInventoryItems = currentInventoryItemList.ToArray();
+        }
+
+        private void UpdateEquipment()
         {
             if (_currentEquipmentItems is null)
             {
@@ -116,31 +191,73 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 item.Control.Update();
             }
+        }
+
+        private void UpdateInventory()
+        {
+            if (_currentInventoryItems is null)
+            {
+                return;
+            }
+
+            foreach (var item in _currentInventoryItems)
+            {
+                item.Control.Update();
+            }
+        }
+
+        protected override void UpdateContent()
+        {
+            UpdateEquipment();
+            UpdateInventory();
 
             var mouseState = Mouse.GetState();
 
             var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
 
-            var effectUnderMouse = _currentEquipmentItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
-
-            _selectedEquipmentItem = effectUnderMouse;
+            DetectHoverEquipment(mouseRectangle);
+            DetectHoverInventory(mouseRectangle);
         }
 
-        private void DrawHintIfSelected(SpriteBatch spriteBatch)
+        private void DetectHoverEquipment(Rectangle mouseRectangle)
         {
-            if (_selectedEquipmentItem is null)
+            if (_currentEquipmentItems is null)
             {
                 return;
             }
 
-            var equipmentTitle = GetEquipmentTitle(_selectedEquipmentItem.Equipment);
+            var effectUnderMouse = _currentEquipmentItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
+
+            _hoverEquipmentItem = effectUnderMouse;
+        }
+
+        private void DetectHoverInventory(Rectangle mouseRectangle)
+        {
+            if (_currentInventoryItems is null)
+            {
+                return;
+            }
+
+            var effectUnderMouse = _currentInventoryItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
+
+            _hoverInventoryItem = effectUnderMouse;
+        }
+
+        private void DrawEquipmentHintIfSelected(SpriteBatch spriteBatch)
+        {
+            if (_hoverEquipmentItem is null)
+            {
+                return;
+            }
+
+            var equipmentTitle = GetPropTitle(_hoverEquipmentItem.Equipment);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
             var titleTextSizeVector = hintTitleFont.MeasureString(equipmentTitle);
 
             const int HINT_TEXT_SPACING = 8;
             var hintRectangle = new Rectangle(
-                _selectedEquipmentItem.UiRect.Left,
-                _selectedEquipmentItem.UiRect.Bottom + EQUIPMENT_ITEM_SPACING,
+                _hoverEquipmentItem.UiRect.Left,
+                _hoverEquipmentItem.UiRect.Bottom + EQUIPMENT_ITEM_SPACING,
                 (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
                 (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
 
@@ -151,19 +268,44 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 Color.Wheat);
         }
 
-        private static string? GetEquipmentTitle(Equipment equipment)
+        private void DrawInventoryHintIfSelected(SpriteBatch spriteBatch)
         {
-            var text = equipment.Scheme.Name?.En;
+            if (_hoverInventoryItem is null)
+            {
+                return;
+            }
+
+            var InventoryTitle = GetPropTitle(_hoverInventoryItem.Prop);
+            var hintTitleFont = _uiContentStorage.GetHintTitleFont();
+            var titleTextSizeVector = hintTitleFont.MeasureString(InventoryTitle);
+
+            const int HINT_TEXT_SPACING = 8;
+            var hintRectangle = new Rectangle(
+                _hoverInventoryItem.UiRect.Left,
+                _hoverInventoryItem.UiRect.Bottom + EQUIPMENT_ITEM_SPACING,
+                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
+
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
+
+            spriteBatch.DrawString(hintTitleFont, InventoryTitle,
+                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                Color.Wheat);
+        }
+
+        private static string? GetPropTitle(IProp prop)
+        {
+            var text = prop.Scheme.Name?.En;
 
             var currentLanguage = Thread.CurrentThread.CurrentUICulture;
             var langName = currentLanguage.TwoLetterISOLanguageName;
             if (string.Equals(langName, "en", StringComparison.InvariantCultureIgnoreCase))
             {
-                text = equipment.Scheme.Name?.En;
+                text = prop.Scheme.Name?.En;
             }
             else if (string.Equals(langName, "ru", StringComparison.InvariantCultureIgnoreCase))
             {
-                text = equipment.Scheme.Name?.Ru;
+                text = prop.Scheme.Name?.Ru;
             }
             else
             {
@@ -188,6 +330,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             public Equipment Equipment { get; }
             public int UiIndex { get; }
             public Rectangle UiRect { get; }
+        }
+
+        private record InventoryUiItem
+        {
+            public InventoryUiItem(IconButton control, IProp prop, int uiIndex, Rectangle uiRect)
+            {
+                UiIndex = uiIndex;
+                UiRect = uiRect;
+                Prop = prop ?? throw new ArgumentNullException(nameof(prop));
+                Control = control ?? throw new ArgumentNullException(nameof(control));
+            }
+
+            public int UiIndex { get; }
+            public Rectangle UiRect { get; }
+            public IProp Prop { get; }
+            public IconButton Control { get; }
         }
     }
 }
