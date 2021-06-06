@@ -87,6 +87,9 @@ namespace CDT.LAST.MonoGameClient
             sceneManager.ActiveScreen = titleScene;
 
             Components.Add(sceneManager);
+
+            var fpsCounter = new FpsCounter(this, _spriteBatch, Content.Load<SpriteFont>("Fonts/Main"));
+            Components.Add(fpsCounter);
         }
 
         protected override void Update(GameTime gameTime)
