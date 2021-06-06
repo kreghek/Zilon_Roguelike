@@ -18,7 +18,7 @@ using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    public sealed class PersonEquipmentModalDialog : ModalDialog
+    public sealed class PersonEquipmentModalDialog : ModalDialogBase
     {
         private const int EQUIPMENT_ITEM_SIZE = 32 + (5 * 2); // 5 is margin in button
         private const int EQUIPMENT_ITEM_SPACING = 2;
@@ -31,6 +31,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private InventoryUiItem[]? _currentInventoryItems;
         private EquipmentUiItem? _hoverEquipmentItem;
         private InventoryUiItem? _hoverInventoryItem;
+        private PropModalSubmenu? _propSubmenu;
 
         public PersonEquipmentModalDialog(
             IUiContentStorage uiContentStorage,
@@ -48,6 +49,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             DrawEquipmentHintIfSelected(spriteBatch);
             DrawInventoryHintIfSelected(spriteBatch);
+
+            if (_propSubmenu != null)
+            {
+                _propSubmenu.Draw(spriteBatch);
+            }
         }
 
         protected override void InitContent()
@@ -75,6 +81,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             DetectHoverEquipment(mouseRectangle);
             DetectHoverInventory(mouseRectangle);
+
+            if (_propSubmenu != null)
+            {
+                _propSubmenu.Update();
+
+                if (_propSubmenu.IsClosed)
+                {
+                    _propSubmenu = null;
+                }
+            }
         }
 
         private void DetectHoverEquipment(Rectangle mouseRectangle)
@@ -267,7 +283,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var relativeX = lastIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
                     relativeX + ContentRect.Left,
-                    ContentRect.Top + 32,
+                    ContentRect.Top + EQUIPMENT_ITEM_SIZE,
                     EQUIPMENT_ITEM_SIZE,
                     EQUIPMENT_ITEM_SIZE);
 
@@ -278,17 +294,33 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     sid = "EmptyPropIcon";
                 }
 
-                var equipmentButton = new IconButton(
+                var propButton = new IconButton(
                     _uiContentStorage.GetButtonTexture(),
                     _uiContentStorage.GetPropIconLayers(sid).First(),
                     buttonRect);
+                propButton.OnClick += PropButton_OnClick;
 
-                var uiItem = new InventoryUiItem(equipmentButton, prop, lastIndex, buttonRect);
+                var uiItem = new InventoryUiItem(propButton, prop, lastIndex, buttonRect);
 
                 currentInventoryItemList.Add(uiItem);
             }
 
             _currentInventoryItems = currentInventoryItemList.ToArray();
+        }
+
+        private void PropButton_OnClick(object? sender, EventArgs e)
+        {
+            if (_currentInventoryItems is null)
+            {
+                throw new InvalidOperationException("Attempt to handle button click before InitInventory called.");
+            }
+
+            var clickedUiItem = _currentInventoryItems.Single(x => x.Control == sender);
+            var selectedProp = clickedUiItem.Prop;
+
+            var mouseState = Mouse.GetState();
+
+            _propSubmenu = new PropModalSubmenu(mouseState.Position, selectedProp, _uiContentStorage);
         }
 
         private void UpdateEquipment()

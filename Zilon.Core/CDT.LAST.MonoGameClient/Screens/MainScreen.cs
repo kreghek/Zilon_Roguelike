@@ -25,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly Camera _camera;
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly IconButton _personEquipmentButton;
-        private readonly ModalDialog _personEquipmentModal;
+        private readonly ModalDialogBase _personEquipmentModal;
         private readonly IconButton _personStatsButton;
         private readonly PersonStatsModalDialog _personStatsModal;
         private readonly IPlayer _player;
@@ -211,7 +211,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
-        private ModalDialog? CheckModalsIsVisible()
+        private ModalDialogBase? CheckModalsIsVisible()
         {
             if (_personEquipmentModal.IsVisible)
             {

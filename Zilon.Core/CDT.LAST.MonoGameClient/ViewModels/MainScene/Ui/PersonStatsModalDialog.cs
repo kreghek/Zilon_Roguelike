@@ -16,7 +16,7 @@ using Zilon.Core.PersonModules;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    internal sealed class PersonStatsModalDialog : ModalDialog
+    internal sealed class PersonStatsModalDialog : ModalDialogBase
     {
         private const int ATTRIBUTE_ITEM_SIZE = 32;
         private const int ATTRIBUTE_ITEM_SPACING = 2;
@@ -73,7 +73,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             foreach (var attribute in attributes)
             {
                 var lastIndex = currentAttributeItemList.Count;
-                var relativeY = (lastIndex * ATTRIBUTE_ITEM_SIZE) + ATTRIBUTE_ITEM_SPACING;
+                var relativeY = lastIndex * (ATTRIBUTE_ITEM_SIZE + ATTRIBUTE_ITEM_SPACING);
                 var uiRect = new Rectangle(
                     ContentRect.Left,
                     ContentRect.Top + relativeY,
