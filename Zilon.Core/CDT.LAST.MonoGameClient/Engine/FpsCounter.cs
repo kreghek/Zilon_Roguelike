@@ -8,21 +8,38 @@ namespace CDT.LAST.MonoGameClient.Engine
 {
     internal class FpsCounter : DrawableGameComponent
     {
+        public const int MAXIMUM_SAMPLES = 100;
+        private readonly SpriteFont _font;
+        private readonly Queue<double> _sampleBuffer = new Queue<double>();
+        private readonly SpriteBatch _spriteBatch;
+
         public FpsCounter(Game game, SpriteBatch spriteBatch, SpriteFont font) : base(game)
         {
             _spriteBatch = spriteBatch;
             _font = font;
         }
 
-        public long TotalFrames { get; private set; }
-        public double TotalSeconds { get; private set; }
         public double AverageFramesPerSecond { get; private set; }
         public double CurrentFramesPerSecond { get; private set; }
 
-        public const int MAXIMUM_SAMPLES = 100;
-        private readonly SpriteBatch _spriteBatch;
-        private readonly SpriteFont _font;
-        private readonly Queue<double> _sampleBuffer = new Queue<double>();
+        public long TotalFrames { get; private set; }
+        public double TotalSeconds { get; private set; }
+
+        public override void Draw(GameTime gameTime)
+        {
+            UpdateInner(gameTime);
+
+            var fps = $"FPS: {AverageFramesPerSecond:00.00}";
+            var size = _font.MeasureString(fps);
+
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(
+                _font,
+                fps,
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1, 1),
+                Color.Black);
+            _spriteBatch.End();
+        }
 
         public void UpdateInner(GameTime gameTime)
         {
@@ -44,22 +61,6 @@ namespace CDT.LAST.MonoGameClient.Engine
 
             TotalFrames++;
             TotalSeconds += gameTime.ElapsedGameTime.TotalSeconds;
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            UpdateInner(gameTime);
-
-            var fps = $"FPS: {AverageFramesPerSecond:00.00}";
-            var size = _font.MeasureString(fps);
-
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(
-                _font,
-                fps,
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1, 1),
-                Color.Black);
-            _spriteBatch.End();
         }
     }
 }
