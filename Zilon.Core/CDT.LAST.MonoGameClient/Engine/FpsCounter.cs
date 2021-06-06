@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.Engine
 {
-    internal class FpsCounter: DrawableGameComponent
+    internal class FpsCounter : DrawableGameComponent
     {
         public FpsCounter(Game game, SpriteBatch spriteBatch, SpriteFont font) : base(game)
         {
