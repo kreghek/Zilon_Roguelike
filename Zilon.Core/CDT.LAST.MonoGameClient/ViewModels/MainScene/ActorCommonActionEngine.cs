@@ -47,7 +47,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public void Update(GameTime gameTime)
         {
             _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3;
-            
+
             var progress = _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
 
             var t = 1 - progress;
