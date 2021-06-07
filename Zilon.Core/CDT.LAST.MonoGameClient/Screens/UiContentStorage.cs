@@ -85,27 +85,27 @@ namespace CDT.LAST.MonoGameClient.Screens
             _propIcons.Add("short-sword",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/ShortSwordIcon")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/ShortSword")
                 });
             _propIcons.Add("great-sword",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/GreatSwordIcon")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/GreatSword")
                 });
             _propIcons.Add("combat-staff",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/CombatStaffBase")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/CombatStaff")
                 });
             _propIcons.Add("tribal-spear",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/TribalSpearIcon")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/Spear")
                 });
             _propIcons.Add("wooden-shield",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/WoodenShieldIcon")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/WoodenShield")
                 });
             _propIcons.Add("work-clothes",
                 new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/BodyParts/WorkClothes/Icon") });

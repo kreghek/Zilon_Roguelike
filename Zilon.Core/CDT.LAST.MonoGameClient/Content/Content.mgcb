@@ -315,7 +315,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/CombatStaffBase.png
 
-#begin Sprites/game-objects/Equipments/HandParts/CombatStaffIcon.png
+#begin Sprites/ui/WeaponIcons/CombatStaff.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -325,7 +325,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HandParts/CombatStaffIcon.png
+/build:Sprites/ui/WeaponIcons/CombatStaff.png
 
 #begin Sprites/game-objects/Equipments/HandParts/GreatSwordBase.png
 /importer:TextureImporter
@@ -339,7 +339,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/GreatSwordBase.png
 
-#begin Sprites/game-objects/Equipments/HandParts/GreatSwordIcon.png
+#begin Sprites/ui/WeaponIcons/GreatSword.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -349,7 +349,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HandParts/GreatSwordIcon.png
+/build:Sprites/ui/WeaponIcons/GreatSword.png
 
 #begin Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
 /importer:TextureImporter
@@ -363,7 +363,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
 
-#begin Sprites/game-objects/Equipments/HandParts/ShortSwordIcon.png
+#begin Sprites/ui/WeaponIcons/ShortSword.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -373,7 +373,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HandParts/ShortSwordIcon.png
+/build:Sprites/ui/WeaponIcons/ShortSword.png
 
 #begin Sprites/game-objects/Equipments/HandParts/TribalSpearBase.png
 /importer:TextureImporter
@@ -387,7 +387,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/TribalSpearBase.png
 
-#begin Sprites/game-objects/Equipments/HandParts/TribalSpearIcon.png
+#begin Sprites/ui/WeaponIcons/Spear.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -397,7 +397,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HandParts/TribalSpearIcon.png
+/build:Sprites/ui/WeaponIcons/Spear.png
 
 #begin Sprites/game-objects/Equipments/HandParts/WoodenShieldBase.png
 /importer:TextureImporter
@@ -411,7 +411,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/WoodenShieldBase.png
 
-#begin Sprites/game-objects/Equipments/HandParts/WoodenShieldIcon.png
+#begin Sprites/ui/WeaponIcons/WoodenShield.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -421,7 +421,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HandParts/WoodenShieldIcon.png
+/build:Sprites/ui/WeaponIcons/WoodenShield.png
 
 #begin Sprites/game-objects/Equipments/HeadParts/KnittedHatBase.png
 /importer:TextureImporter
