@@ -101,7 +101,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
             SoundEffect? soundEffect;
-//TODO Select effect by tag of prop
+            //TODO Select effect by tag of prop
             switch (e.UsedProp.Scheme.Sid)
             {
                 case "med-kit":

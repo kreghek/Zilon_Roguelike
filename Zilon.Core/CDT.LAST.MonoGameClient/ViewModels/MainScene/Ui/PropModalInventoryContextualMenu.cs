@@ -119,7 +119,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                                 new Rectangle(
                                     MENU_MARGIN + _position.X,
                                     MENU_MARGIN + _position.Y + (slotIndex * MENU_ITEM_HEIGHT),
-                                    MENU_WIDTH - (MENU_MARGIN * 2), 
+                                    MENU_WIDTH - (MENU_MARGIN * 2),
                                     MENU_ITEM_HEIGHT));
                             equipButton.OnClick += (s, e) =>
                             {
