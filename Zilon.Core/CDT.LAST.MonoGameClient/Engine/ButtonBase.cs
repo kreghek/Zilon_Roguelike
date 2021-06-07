@@ -20,9 +20,9 @@ namespace CDT.LAST.MonoGameClient.Engine
             _buttonState = UiButtonState.OutOfButton;
         }
 
-        public Texture2D Texture { get; }
-
         public SoundEffect? ClickSound { get; set; }
+
+        public Texture2D Texture { get; }
 
         public void Draw(SpriteBatch spriteBatch)
         {

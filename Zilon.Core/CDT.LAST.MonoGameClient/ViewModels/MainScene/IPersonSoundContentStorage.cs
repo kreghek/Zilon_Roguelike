@@ -22,15 +22,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         SoundEffect GetActStartSound(ActDescription actDescription);
 
         /// <summary>
+        /// The sound played when visualization of a consuming things from inventory starts.
+        /// </summary>
+        SoundEffect? GetConsumePropSound(ConsumeEffectType consumeEffectType);
+
+        /// <summary>
         /// The sound of specified person death.
         /// </summary>
         SoundEffect GetDeathEffect(IPerson person);
 
         void LoadContent(ContentManager contentManager);
-
-        /// <summary>
-        /// The sound played when visualization of a consuming things from inventory starts.
-        /// </summary>
-        SoundEffect? GetConsumePropSound(ConsumeEffectType consumeEffectType);
     }
 }

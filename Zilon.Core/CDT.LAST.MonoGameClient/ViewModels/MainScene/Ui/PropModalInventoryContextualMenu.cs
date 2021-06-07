@@ -52,7 +52,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _size = new Point(
                 MENU_WIDTH + MENU_MARGIN * 2,
                 _menuItemButtons.Length * MENU_ITEM_HEIGHT + MENU_MARGIN * 2
-                );
+            );
         }
 
         public bool IsClosed { get; private set; }
@@ -93,6 +93,47 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             IsClosed = true;
         }
 
+        private static string GetInventoryMenuItemContent(IProp prop)
+        {
+            switch (prop.Scheme.Sid)
+            {
+                case "med-kit":
+                    return UiResources.HealCommandButtonTitle;
+
+                case "water-bottle":
+                    return UiResources.DrinkCommandButtonTitle;
+
+                case "packed-food":
+                    return UiResources.EatCommandButtonTitle;
+
+                default:
+                    Debug.Fail("Every consumable must have definative command title.");
+                    return UiResources.UseCommandButtonTitle;
+            }
+        }
+
+        private static string GetSlotTitle(EquipmentSlotTypes types)
+        {
+            switch (types)
+            {
+                case EquipmentSlotTypes.Hand:
+                    return UiResources.SlotHand;
+
+                case EquipmentSlotTypes.Head:
+                    return UiResources.SlotHead;
+
+                case EquipmentSlotTypes.Body:
+                    return UiResources.SlotBody;
+
+                case EquipmentSlotTypes.Aux:
+                    return UiResources.SlotAux;
+
+                default:
+                    Debug.Fail("All slot types must have name.");
+                    return "<Unknown>";
+            }
+        }
+
         private TextButton[] InitItems(IProp prop)
         {
             var list = new List<TextButton>();
@@ -112,7 +153,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                         if (equipCommand.CanExecute().IsSuccess)
                         {
                             var slotTitle = GetSlotTitle(slot.Types);
-                            var equipButtonTitle = string.Format(UiResources.EquipInSlotTemplateCommandButton, slotTitle);
+                            var equipButtonTitle =
+                                string.Format(UiResources.EquipInSlotTemplateCommandButton, slotTitle);
                             var equipButton = new TextButton(equipButtonTitle,
                                 _uiContentStorage.GetButtonTexture(),
                                 _uiContentStorage.GetButtonFont(),
@@ -170,47 +212,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             public SoundEffect ConsumeSoundEffect { get; }
             public string Title { get; }
-        }
-
-        private static string GetSlotTitle(EquipmentSlotTypes types)
-        {
-            switch (types)
-            {
-                case EquipmentSlotTypes.Hand:
-                    return UiResources.SlotHand;
-
-                case EquipmentSlotTypes.Head:
-                    return UiResources.SlotHead;
-
-                case EquipmentSlotTypes.Body:
-                    return UiResources.SlotBody;
-
-                case EquipmentSlotTypes.Aux:
-                    return UiResources.SlotAux;
-
-                default:
-                    Debug.Fail("All slot types must have name.");
-                    return "<Unknown>";
-            }
-        }
-
-        private static string GetInventoryMenuItemContent(IProp prop)
-        {
-            switch (prop.Scheme.Sid)
-            {
-                case "med-kit":
-                    return UiResources.HealCommandButtonTitle;
-
-                case "water-bottle":
-                    return UiResources.DrinkCommandButtonTitle;
-
-                case "packed-food":
-                    return UiResources.EatCommandButtonTitle;
-
-                default:
-                    Debug.Fail("Every consumable must have definative command title.");
-                    return UiResources.UseCommandButtonTitle;
-            }
         }
     }
 }

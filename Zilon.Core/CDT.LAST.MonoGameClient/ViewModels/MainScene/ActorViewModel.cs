@@ -96,34 +96,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
 
-        private void Actor_UsedProp(object? sender, UsedPropEventArgs e)
-        {
-            var serviceScope = ((LivGame)_game).ServiceProvider;
-            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-            SoundEffect? soundEffect;
-            //TODO Select effect by tag of prop
-            switch (e.UsedProp.Scheme.Sid)
-            {
-                case "med-kit":
-                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal);
-                    break;
-
-                case "water-bottle":
-                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Drink);
-                    break;
-
-                case "packed-food":
-                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat);
-                    break;
-
-                default:
-                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use);
-                    break;
-            }
-
-            _actorStateEngine = new ActorConsumeEngine(_graphicsRoot.RootSprite, animationBlockerService, soundEffect?.CreateInstance());
-        }
-
         public override bool HiddenByFow => true;
 
         public override Vector2 HitEffectPosition => _graphicsRoot.HitEffectPosition;
@@ -253,6 +225,35 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     }
                 }
             }
+        }
+
+        private void Actor_UsedProp(object? sender, UsedPropEventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            SoundEffect? soundEffect;
+            //TODO Select effect by tag of prop
+            switch (e.UsedProp.Scheme.Sid)
+            {
+                case "med-kit":
+                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal);
+                    break;
+
+                case "water-bottle":
+                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Drink);
+                    break;
+
+                case "packed-food":
+                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat);
+                    break;
+
+                default:
+                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use);
+                    break;
+            }
+
+            _actorStateEngine = new ActorConsumeEngine(_graphicsRoot.RootSprite, animationBlockerService,
+                soundEffect?.CreateInstance());
         }
 
         private SoundEffectInstance? GetSoundEffect(ITacticalActStatsSubScheme actStatScheme)

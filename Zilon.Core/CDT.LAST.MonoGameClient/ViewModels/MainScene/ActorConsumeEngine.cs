@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 using CDT.LAST.MonoGameClient.Engine;
 
@@ -12,20 +11,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class ActorConsumeEngine : IActorStateEngine
     {
-        private readonly SpriteContainer _rootContainer;
+        private const double ANIMATION_DURATION_SECONDS = 0.5;
+        private readonly ICommandBlocker _animationBlocker;
         private readonly IAnimationBlockerService _animationBlockerService;
         private readonly SoundEffectInstance? _consumeSoundEffect;
+        private readonly SpriteContainer _rootContainer;
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
-        private readonly ICommandBlocker _animationBlocker;
-
-        private const double ANIMATION_DURATION_SECONDS = 0.5;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
         private bool _effectPlayed;
 
-        public ActorConsumeEngine(SpriteContainer rootContainer, IAnimationBlockerService animationBlockerService, SoundEffectInstance? consumeSoundEffect)
+        public ActorConsumeEngine(SpriteContainer rootContainer, IAnimationBlockerService animationBlockerService,
+            SoundEffectInstance? consumeSoundEffect)
         {
             _rootContainer = rootContainer;
             _animationBlockerService = animationBlockerService;

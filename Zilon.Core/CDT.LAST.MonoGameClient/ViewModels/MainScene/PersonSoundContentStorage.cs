@@ -89,7 +89,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 [ConsumeEffectType.Use] = contentManager.Load<SoundEffect>("Audio/UseConsumable"),
                 [ConsumeEffectType.Eat] = contentManager.Load<SoundEffect>("Audio/EatConsumable"),
                 [ConsumeEffectType.Drink] = contentManager.Load<SoundEffect>("Audio/DrinkConsumable"),
-                [ConsumeEffectType.Heal] = contentManager.Load<SoundEffect>("Audio/HealConsumable"),
+                [ConsumeEffectType.Heal] = contentManager.Load<SoundEffect>("Audio/HealConsumable")
             };
         }
     }
