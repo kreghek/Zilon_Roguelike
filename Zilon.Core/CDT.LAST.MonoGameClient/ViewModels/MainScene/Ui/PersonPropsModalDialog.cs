@@ -49,12 +49,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawEquipments(spriteBatch);
             DrawInventory(spriteBatch);
 
-            DrawEquipmentHintIfSelected(spriteBatch);
-            DrawInventoryHintIfSelected(spriteBatch);
-
             if (_propSubmenu != null)
             {
                 _propSubmenu.Draw(spriteBatch);
+            }
+            else
+            {
+                DrawEquipmentHintIfSelected(spriteBatch);
+                DrawInventoryHintIfSelected(spriteBatch);
             }
         }
 

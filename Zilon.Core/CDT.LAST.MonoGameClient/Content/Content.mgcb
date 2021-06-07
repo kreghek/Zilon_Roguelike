@@ -109,6 +109,13 @@
 /processorParam:Quality=Low
 /build:Audio/UseConsumable.mp3
 
+#begin Fonts/ContextualMenu.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/ContextualMenu.spritefont
+
 #begin Fonts/HintTitle.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -734,6 +741,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/button.png
+
+#begin Sprites/ui/ContextualMenuBorder.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/ContextualMenuBorder.png
+
+#begin Sprites/ui/ContextualMenuItemBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/ContextualMenuItemBackground.png
 
 #begin Sprites/ui/EmptyPropIcon.png
 /importer:TextureImporter

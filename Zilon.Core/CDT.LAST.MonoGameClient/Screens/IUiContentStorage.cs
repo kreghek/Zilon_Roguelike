@@ -23,5 +23,8 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D GetSmallVerticalButtonBackgroundTexture();
         Texture2D GetSmallVerticalButtonIconsTexture();
         void LoadContent(ContentManager contentManager);
+        Texture2D GetContextualMenuBorderTexture();
+        SpriteFont GetMenuItemFont();
+        Texture2D GetMenuItemTexture();
     }
 }

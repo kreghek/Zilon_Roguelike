@@ -22,9 +22,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class PropModalInventoryContextualMenu
     {
-        private const int MENU_MARGIN = 2;
+        private const int MENU_MARGIN = 5;
         private const int MENU_WIDTH = 128;
-        private const int MENU_ITEM_HEIGHT = 32;
+        private const int MENU_ITEM_HEIGHT = 16;
 
         private readonly IEquipmentModule _equipmentModule;
 
@@ -62,13 +62,49 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), new Rectangle(_position, _size),
-                Color.White);
+            DrawBorder(spriteBatch);
 
             foreach (var button in _menuItemButtons)
             {
                 button.Draw(spriteBatch);
             }
+        }
+
+        private void DrawBorder(SpriteBatch spriteBatch)
+        {
+            // edges
+
+            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
+                new Rectangle(_position, new Point(5, 5)),
+                new Rectangle(0, 0, 5, 5),
+                Color.White);
+
+            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
+                new Rectangle(new Point(_position.X + _size.X - 5, _position.Y), new Point(5, 5)),
+                new Rectangle(7, 0, 5, 5),
+                Color.White);
+
+            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
+                new Rectangle(new Point(_position.X, _position.Y + _size.Y - 5), new Point(5, 5)),
+                new Rectangle(0, 7, 5, 5),
+                Color.White);
+
+            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
+                new Rectangle(new Point(_position.X + _size.X - 5, _position.Y + _size.Y - 5), new Point(5, 5)),
+                new Rectangle(7, 7, 5, 5),
+                Color.White);
+
+            // sides
+
+            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
+                new Rectangle(new Point(_position.X + 5, _position.Y), new Point(_size.X - 5 * 2, 6)),
+                new Rectangle(5, 0, 2, 6),
+                Color.White);
+
+            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
+                new Rectangle(new Point(_position.X + 5, _position.Y + _size.Y - 5), new Point(_size.X - 5 * 2, 6)),
+                new Rectangle(5, 7, 2, 6),
+                Color.White);
         }
 
         public void Update()
@@ -87,11 +123,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 IsClosed = true;
             }
-        }
-
-        private void EquipButton_OnClick(object? sender, EventArgs e)
-        {
-            IsClosed = true;
         }
 
         private static string GetInventoryMenuItemContent(IProp prop)
@@ -157,12 +188,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                             var equipButtonTitle =
                                 string.Format(UiResources.EquipInSlotTemplateCommandButton, slotTitle);
                             var equipButton = new TextButton(equipButtonTitle,
-                                _uiContentStorage.GetButtonTexture(),
-                                _uiContentStorage.GetButtonFont(),
+                                _uiContentStorage.GetMenuItemTexture(),
+                                _uiContentStorage.GetMenuItemFont(),
                                 new Rectangle(
                                     MENU_MARGIN + _position.X,
                                     MENU_MARGIN + _position.Y + (list.Count * MENU_ITEM_HEIGHT),
-                                    MENU_WIDTH - (MENU_MARGIN * 2),
+                                    MENU_WIDTH,
                                     MENU_ITEM_HEIGHT));
                             equipButton.OnClick += (s, e) =>
                             {
@@ -181,12 +212,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     {
                         var localizedCommandTitle = GetInventoryMenuItemContent(_prop);
                         var useButton = new TextButton(localizedCommandTitle,
-                            _uiContentStorage.GetButtonTexture(),
-                            _uiContentStorage.GetButtonFont(),
+                            _uiContentStorage.GetMenuItemTexture(),
+                            _uiContentStorage.GetMenuItemFont(),
                             new Rectangle(
                                 MENU_MARGIN + _position.X,
                                 MENU_MARGIN + _position.Y,
-                                MENU_WIDTH - (MENU_MARGIN * 2),
+                                MENU_WIDTH,
                                 MENU_ITEM_HEIGHT));
                         useButton.OnClick += (s, e) =>
                         {
