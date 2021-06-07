@@ -100,27 +100,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
 
-        private void Actor_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
-        {
-            var serviceScope = ((LivGame)_game).ServiceProvider;
-            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-
-            SoundEffect? soundEffect;
-
-            switch (e.Equipment)
-            {
-                case null:
-                    soundEffect = _personSoundStorage.GetEquipSound(e.Equipment.Scheme.Tags, false);
-                    break;
-                default:
-                    soundEffect = _personSoundStorage.GetEquipSound(e.Equipment.Scheme.Tags, true);
-                    break;
-            }
-
-            _actorStateEngine = new ActorConsumeEngine(_graphicsRoot.RootSprite, animationBlockerService,
-                soundEffect?.CreateInstance());
-        }
-
         public override bool HiddenByFow => true;
 
         public override Vector2 HitEffectPosition => _graphicsRoot.HitEffectPosition;
@@ -176,6 +155,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var deathSoundEffect = _personSoundStorage.GetDeathEffect(actor.Person);
                 deathSoundEffect.CreateInstance().Play();
             }
+        }
+
+        private void Actor_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+            SoundEffect? soundEffect;
+
+            switch (e.Equipment)
+            {
+                case null:
+                    soundEffect = _personSoundStorage.GetEquipSound(e.Equipment.Scheme.Tags, false);
+                    break;
+                default:
+                    soundEffect = _personSoundStorage.GetEquipSound(e.Equipment.Scheme.Tags, true);
+                    break;
+            }
+
+            _actorStateEngine = new ActorConsumeEngine(_graphicsRoot.RootSprite, animationBlockerService,
+                soundEffect?.CreateInstance());
         }
 
         private void Actor_Moved(object? sender, EventArgs e)
@@ -266,7 +266,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 "med-kit" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal),
                 "water-bottle" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Drink),
                 "packed-food" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat),
-                _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use),
+                _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use)
             };
             _actorStateEngine = new ActorConsumeEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundEffect?.CreateInstance());

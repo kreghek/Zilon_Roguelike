@@ -18,8 +18,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private IDictionary<string, SoundEffect>? _actStartDict;
         private IDictionary<ConsumeEffectType, SoundEffect>? _consumableDict;
         private SoundEffect? _defaultStartHitEffect;
+
+        private IDictionary<string, SoundEffect>? _equipDict;
         private SoundEffect? _hunterDeathEffect;
         private SoundEffect? _swordHitEffect;
+        private SoundEffect? _unequipSound;
 
         public SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson)
         {
@@ -81,7 +84,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             if (direction)
             {
-
                 foreach (var tag in tags)
                 {
                     if (_equipDict.TryGetValue(tag, out var soundEffect))
@@ -94,15 +96,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 // Return default audio if act is unknown.
                 return null;
             }
-            else
-            {
-                Debug.Assert(_unequipSound != null);
-                return _unequipSound;
-            }
-        }
 
-        private IDictionary<string, SoundEffect>? _equipDict;
-        private SoundEffect? _unequipSound;
+            Debug.Assert(_unequipSound != null);
+            return _unequipSound;
+        }
 
         /// <inheritdoc />
         public void LoadContent(ContentManager contentManager)

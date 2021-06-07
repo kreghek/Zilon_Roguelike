@@ -30,11 +30,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// </summary>
         SoundEffect GetDeathEffect(IPerson person);
 
-        void LoadContent(ContentManager contentManager);
-
         /// <summary>
         /// The sound played when visualization of some items are weared by a person.
         /// </summary>
         SoundEffect? GetEquipSound(string[] tags, bool direction);
+
+        void LoadContent(ContentManager contentManager);
     }
 }

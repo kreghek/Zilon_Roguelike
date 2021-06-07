@@ -10,6 +10,8 @@
         /// </summary>
         public static class Equipment
         {
+            public static string Armor => "armor";
+
             /// <summary>
             /// Экипировка может использоваться, как оружие дальнего боя.
             /// </summary>
@@ -24,8 +26,6 @@
             /// Экипировка может использоваться, как оружие.
             /// </summary>
             public static string Weapon => "weapon";
-
-            public static string Armor => "armor";
 
             public static class WeaponClass
             {
