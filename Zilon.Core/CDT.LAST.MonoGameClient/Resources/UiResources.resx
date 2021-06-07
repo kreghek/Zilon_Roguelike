@@ -222,4 +222,31 @@ take out the character before he dies.</value>
   <data name="SuperAttributeValueTitle" xml:space="preserve">
     <value>Super</value>
   </data>
+  <data name="HealCommandButtonTitle" xml:space="preserve">
+    <value>Heal</value>
+  </data>
+  <data name="EatCommandButtonTitle" xml:space="preserve">
+    <value>Eat</value>
+  </data>
+  <data name="DrinkCommandButtonTitle" xml:space="preserve">
+    <value>Drink</value>
+  </data>
+  <data name="UseCommandButtonTitle" xml:space="preserve">
+    <value>Use</value>
+  </data>
+  <data name="EquipInSlotTemplateCommandButton" xml:space="preserve">
+    <value>Equip in slot: {0}</value>
+  </data>
+  <data name="SlotHand" xml:space="preserve">
+    <value>Hand</value>
+  </data>
+  <data name="SlotHead" xml:space="preserve">
+    <value>Head</value>
+  </data>
+  <data name="SlotBody" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="SlotAux" xml:space="preserve">
+    <value>Aux</value>
+  </data>
 </root>

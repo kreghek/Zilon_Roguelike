@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 
@@ -102,8 +105,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
 
-            //TODO Localize
-
             switch (prop)
             {
                 case Equipment equipment:
@@ -114,7 +115,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                         equipCommand.SlotIndex = slotIndex;
                         if (equipCommand.CanExecute().IsSuccess)
                         {
-                            var equipButton = new TextButton($"Equip in {slot.Types}",
+                            var slotTitle = GetSlotTitle(slot.Types);
+                            var equipButtonTitle = string.Format(UiResources.EquipInSlotTemplateCommandButton, slotTitle);
+                            var equipButton = new TextButton(equipButtonTitle,
                                 _uiContentStorage.GetButtonTexture(),
                                 _uiContentStorage.GetButtonFont(),
                                 new Rectangle(MENU_MARGIN + _position.X, MENU_MARGIN + _position.Y + slotIndex * 32,
@@ -132,10 +135,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     break;
 
                 case Resource resource:
-                    //TODO Different words to different resources.
                     if (useCommand.CanExecute().IsSuccess)
                     {
-                        var useButton = new TextButton("Use", _uiContentStorage.GetButtonTexture(),
+                        var localizedCommandTitle = GetLocalizedCommandTitle(_prop);
+                        var useButton = new TextButton(localizedCommandTitle,
+                            _uiContentStorage.GetButtonTexture(),
                             _uiContentStorage.GetButtonFont(),
                             new Rectangle(MENU_MARGIN + _position.X, MENU_MARGIN + _position.Y,
                                 MENU_WIDTH - MENU_MARGIN * 2, 32));
@@ -152,6 +156,47 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             return list.ToArray();
+        }
+
+        private static string GetSlotTitle(EquipmentSlotTypes types)
+        {
+            switch (types)
+            {
+                case EquipmentSlotTypes.Hand:
+                    return UiResources.SlotHand;
+
+                case EquipmentSlotTypes.Head:
+                    return UiResources.SlotHead;
+
+                case EquipmentSlotTypes.Body:
+                    return UiResources.SlotBody;
+
+                case EquipmentSlotTypes.Aux:
+                    return UiResources.SlotAux;
+
+                default:
+                    Debug.Fail("All slot types must have name.");
+                    return "<Unknown>";
+            }
+        }
+
+        private static string GetLocalizedCommandTitle(IProp prop)
+        {
+            switch (prop.Scheme.Sid)
+            {
+                case "med-kit":
+                    return UiResources.HealCommandButtonTitle;
+
+                case "water-bottle":
+                    return UiResources.DrinkCommandButtonTitle;
+
+                case "packed-food":
+                    return UiResources.EatCommandButtonTitle;
+
+                default:
+                    Debug.Fail("Every consumable must have definative command title.");
+                    return UiResources.UseCommandButtonTitle;
+            }
         }
     }
 }
