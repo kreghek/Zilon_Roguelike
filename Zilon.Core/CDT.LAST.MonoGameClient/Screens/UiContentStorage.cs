@@ -118,6 +118,14 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HeadParts/KnittedHatIcon") });
             _propIcons.Add("steel-helmet",
                 new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HeadParts/SteelHelmetIcon") });
+
+            _propIcons.Add("med-kit",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/MedKit") });
+            _propIcons.Add("water-bottle",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/Waterskin") });
+            _propIcons.Add("packed-food",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/PackedFood") });
+
             _propIcons.Add("EmptyPropIcon", new[] { contentManager.Load<Texture2D>("Sprites/ui/EmptyPropIcon") });
         }
 

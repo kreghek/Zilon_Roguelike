@@ -25,12 +25,6 @@
 /processorParam:Quality=Best
 /build:Audio/ButtonHover.mp3
 
-#begin Audio/PunchStartHitEffect.mp3
-/importer:Mp3Importer
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Audio/PunchStartHitEffect.mp3
-
 #begin Audio/HunterDeath.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -42,6 +36,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/HunterHitEffect.mp3
+
+#begin Audio/PunchStartHitEffect.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/PunchStartHitEffect.mp3
 
 #begin Audio/SwordHitEffect.mp3
 /importer:Mp3Importer
@@ -315,18 +315,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/CombatStaffBase.png
 
-#begin Sprites/ui/WeaponIcons/CombatStaff.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/ui/WeaponIcons/CombatStaff.png
-
 #begin Sprites/game-objects/Equipments/HandParts/GreatSwordBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -338,18 +326,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/GreatSwordBase.png
-
-#begin Sprites/ui/WeaponIcons/GreatSword.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/ui/WeaponIcons/GreatSword.png
 
 #begin Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
 /importer:TextureImporter
@@ -363,18 +339,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
 
-#begin Sprites/ui/WeaponIcons/ShortSword.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/ui/WeaponIcons/ShortSword.png
-
 #begin Sprites/game-objects/Equipments/HandParts/TribalSpearBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -387,18 +351,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/TribalSpearBase.png
 
-#begin Sprites/ui/WeaponIcons/Spear.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/ui/WeaponIcons/Spear.png
-
 #begin Sprites/game-objects/Equipments/HandParts/WoodenShieldBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -410,18 +362,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/WoodenShieldBase.png
-
-#begin Sprites/ui/WeaponIcons/WoodenShield.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/ui/WeaponIcons/WoodenShield.png
 
 #begin Sprites/game-objects/Equipments/HeadParts/KnittedHatBase.png
 /importer:TextureImporter
@@ -711,18 +651,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/hex.png
 
-#begin Sprites/ui/button.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/ui/button.png
-
 #begin Sprites/ui/AttributeIcons.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -747,7 +675,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/AttributesBackground.png
 
-#begin Sprites/ui/SmallVerticalButtonIcons.png
+#begin Sprites/ui/button.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -757,19 +685,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/ui/SmallVerticalButtonIcons.png
-
-#begin Sprites/ui/SmallVerticalButtonBackground.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/ui/SmallVerticalButtonBackground.png
+/build:Sprites/ui/button.png
 
 #begin Sprites/ui/EmptyPropIcon.png
 /importer:TextureImporter
@@ -999,6 +915,66 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/PersonConditions/WoundStrongConditionIcon.png
 
+#begin Sprites/ui/PropIcons/MedKit.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PropIcons/MedKit.png
+
+#begin Sprites/ui/PropIcons/PackedFood.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PropIcons/PackedFood.png
+
+#begin Sprites/ui/PropIcons/Waterskin.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PropIcons/Waterskin.png
+
+#begin Sprites/ui/SmallVerticalButtonBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/SmallVerticalButtonBackground.png
+
+#begin Sprites/ui/SmallVerticalButtonIcons.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/SmallVerticalButtonIcons.png
+
 #begin Sprites/ui/walk-cursor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1010,4 +986,64 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/walk-cursor.png
+
+#begin Sprites/ui/WeaponIcons/CombatStaff.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/WeaponIcons/CombatStaff.png
+
+#begin Sprites/ui/WeaponIcons/GreatSword.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/WeaponIcons/GreatSword.png
+
+#begin Sprites/ui/WeaponIcons/ShortSword.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/WeaponIcons/ShortSword.png
+
+#begin Sprites/ui/WeaponIcons/Spear.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/WeaponIcons/Spear.png
+
+#begin Sprites/ui/WeaponIcons/WoodenShield.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/WeaponIcons/WoodenShield.png
 
