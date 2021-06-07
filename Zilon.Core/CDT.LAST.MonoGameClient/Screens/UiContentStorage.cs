@@ -14,15 +14,15 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _attributesBackgroundTexture;
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
+        private Texture2D? _contextualMenuBorderTexture;
+        private Texture2D? _contextualMenuItemBackgroundTexture;
+        private SpriteFont? _contextualMenuItemFont;
         private SpriteFont? _hintTitleFont;
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
         private Texture2D[]? _modalTopTextures;
         private Texture2D? _smallVerticalButtonBackgroundTexture;
         private Texture2D? _smallVerticalButtonIconsTexture;
-        private Texture2D? _contextualMenuBorderTexture;
-        private SpriteFont? _contextualMenuItemFont;
-        private Texture2D? _contextualMenuItemBackgroundTexture;
 
         public UiContentStorage()
         {
@@ -86,7 +86,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _contextualMenuItemFont = contentManager.Load<SpriteFont>("Fonts/ContextualMenu");
             _contextualMenuBorderTexture = contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuBorder");
-            _contextualMenuItemBackgroundTexture = contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuItemBackground");
+            _contextualMenuItemBackgroundTexture =
+                contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuItemBackground");
 
             // Place textures in order to display. Latest will display on the top.
             _propIcons.Add("short-sword",
