@@ -15,6 +15,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal sealed class PersonSoundContentStorage : IPersonSoundContentStorage
     {
         private IDictionary<string, SoundEffect>? _actStartDict;
+        private IDictionary<ConsumeEffectType, SoundEffect>? _consumableDict;
         private SoundEffect? _defaultStartHitEffect;
         private SoundEffect? _hunterDeathEffect;
         private SoundEffect? _swordHitEffect;
@@ -47,6 +48,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         }
 
         /// <inheritdoc />
+        public SoundEffect? GetConsumePropSound(ConsumeEffectType consumeEffectType)
+        {
+            if (_consumableDict is null)
+            {
+                throw new InvalidOperationException(
+                    "Dictionary of consumable sound effect must be initialized in storage loading.");
+            }
+
+            if (_consumableDict.TryGetValue(consumeEffectType, out var soundEffect))
+            {
+                return soundEffect;
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc />
         public SoundEffect GetDeathEffect(IPerson person)
         {
             return _hunterDeathEffect ?? throw new InvalidOperationException("All content must be loaded early.");
@@ -65,6 +83,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 ["slash"] = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect")
             };
             _defaultStartHitEffect = _actStartDict["punch"];
+
+            _consumableDict = new Dictionary<ConsumeEffectType, SoundEffect>
+            {
+                [ConsumeEffectType.Use] = contentManager.Load<SoundEffect>("Audio/UseConsumable"),
+                [ConsumeEffectType.Eat] = contentManager.Load<SoundEffect>("Audio/EatConsumable"),
+                [ConsumeEffectType.Drink] = contentManager.Load<SoundEffect>("Audio/DrinkConsumable"),
+                [ConsumeEffectType.Heal] = contentManager.Load<SoundEffect>("Audio/HealConsumable"),
+            };
         }
     }
 }

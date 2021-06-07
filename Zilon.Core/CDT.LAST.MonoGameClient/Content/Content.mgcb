@@ -25,6 +25,24 @@
 /processorParam:Quality=Best
 /build:Audio/ButtonHover.mp3
 
+#begin Audio/DrinkConsumable.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/DrinkConsumable.mp3
+
+#begin Audio/EatConsumable.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/EatConsumable.mp3
+
+#begin Audio/HealConsumable.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/HealConsumable.mp3
+
 #begin Audio/HunterDeath.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -60,6 +78,12 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Audio/TitleBackgroundTrack.wav
+
+#begin Audio/UseConsumable.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/UseConsumable.mp3
 
 #begin Fonts/HintTitle.spritefont
 /importer:FontDescriptionImporter

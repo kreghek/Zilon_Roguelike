@@ -8,6 +8,7 @@ using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -23,6 +24,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int MENU_MARGIN = 2;
         private const int MENU_WIDTH = 128;
+        private const int MENU_ITEM_HEIGHT = 32;
+
         private readonly IEquipmentModule _equipmentModule;
 
         private readonly TextButton[] _menuItemButtons;
@@ -46,7 +49,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             inventoryState.SelectedProp = new PropViewModel(_prop);
             _menuItemButtons = InitItems(prop);
 
-            _size = new Point(MENU_WIDTH + MENU_MARGIN * 2, _menuItemButtons.Length * 32 + MENU_MARGIN * 2);
+            _size = new Point(
+                MENU_WIDTH + MENU_MARGIN * 2,
+                _menuItemButtons.Length * MENU_ITEM_HEIGHT + MENU_MARGIN * 2
+                );
         }
 
         public bool IsClosed { get; private set; }
@@ -110,8 +116,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                             var equipButton = new TextButton(equipButtonTitle,
                                 _uiContentStorage.GetButtonTexture(),
                                 _uiContentStorage.GetButtonFont(),
-                                new Rectangle(MENU_MARGIN + _position.X, MENU_MARGIN + _position.Y + slotIndex * 32,
-                                    MENU_WIDTH - MENU_MARGIN * 2, 32));
+                                new Rectangle(
+                                    MENU_MARGIN + _position.X,
+                                    MENU_MARGIN + _position.Y + (slotIndex * MENU_ITEM_HEIGHT),
+                                    MENU_WIDTH - (MENU_MARGIN * 2), 
+                                    MENU_ITEM_HEIGHT));
                             equipButton.OnClick += (s, e) =>
                             {
                                 commandPool.Push(equipCommand);
@@ -127,12 +136,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 case Resource resource:
                     if (useCommand.CanExecute().IsSuccess)
                     {
-                        var localizedCommandTitle = GetLocalizedCommandTitle(_prop);
+                        var localizedCommandTitle = GetInventoryMenuItemContent(_prop);
                         var useButton = new TextButton(localizedCommandTitle,
                             _uiContentStorage.GetButtonTexture(),
                             _uiContentStorage.GetButtonFont(),
-                            new Rectangle(MENU_MARGIN + _position.X, MENU_MARGIN + _position.Y,
-                                MENU_WIDTH - MENU_MARGIN * 2, 32));
+                            new Rectangle(
+                                MENU_MARGIN + _position.X,
+                                MENU_MARGIN + _position.Y,
+                                MENU_WIDTH - (MENU_MARGIN * 2),
+                                MENU_ITEM_HEIGHT));
                         useButton.OnClick += (s, e) =>
                         {
                             commandPool.Push(useCommand);
@@ -146,6 +158,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             return list.ToArray();
+        }
+
+        private record IventoryMenuItemContent
+        {
+            public IventoryMenuItemContent(SoundEffect consumeSoundEffect, string title)
+            {
+                ConsumeSoundEffect = consumeSoundEffect ?? throw new ArgumentNullException(nameof(consumeSoundEffect));
+                Title = title ?? throw new ArgumentNullException(nameof(title));
+            }
+
+            public SoundEffect ConsumeSoundEffect { get; }
+            public string Title { get; }
         }
 
         private static string GetSlotTitle(EquipmentSlotTypes types)
@@ -170,7 +194,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
         }
 
-        private static string GetLocalizedCommandTitle(IProp prop)
+        private static string GetInventoryMenuItemContent(IProp prop)
         {
             switch (prop.Scheme.Sid)
             {

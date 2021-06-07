@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -20,6 +21,8 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         public Texture2D Texture { get; }
+
+        public SoundEffect? ClickSound { get; set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -79,21 +82,29 @@ namespace CDT.LAST.MonoGameClient.Engine
             return _rect.Intersects(mouseRect);
         }
 
-        private static void PlayClickSoundIfExists()
+        private void PlayClickSoundIfExists()
         {
-            if (UiThemeManager.SoundStorage == null)
+            if (ClickSound is null)
             {
-                // See the description in PlayHoverSoundIfExists method.
-                return;
-            }
+                if (UiThemeManager.SoundStorage is null)
+                {
+                    // See the description in PlayHoverSoundIfExists method.
+                    return;
+                }
 
-            var soundEffect = UiThemeManager.SoundStorage.GetButtonClickEffect();
-            soundEffect.Play();
+                var soundEffect = UiThemeManager.SoundStorage.GetButtonClickEffect();
+                soundEffect.Play();
+            }
+            else
+            {
+                var soundEffect = ClickSound;
+                soundEffect.Play();
+            }
         }
 
         private static void PlayHoverSoundIfExists()
         {
-            if (UiThemeManager.SoundStorage == null)
+            if (UiThemeManager.SoundStorage is null)
             {
                 // Sound content was not loaded.
                 // This may occured by a few reasons:
