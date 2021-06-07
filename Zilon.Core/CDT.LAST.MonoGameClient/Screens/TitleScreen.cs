@@ -7,8 +7,10 @@ using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
@@ -18,6 +20,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly SpriteBatch _spriteBatch;
         private readonly TextButton _startButton;
         private readonly TextButton _switchLanguageButton;
+        private bool _backgroundTrackStarted;
 
         public TitleScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -32,8 +35,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new Rectangle(150, 150, 100, 20));
             _startButton.OnClick += StartButtonClickHandler;
 
-            _switchLanguageButton =
-                new TextButton("Switch lang", buttonTexture, font, new Rectangle(150, 200, 100, 20));
+            _switchLanguageButton = new TextButton("Switch lang",
+                buttonTexture,
+                font,
+                new Rectangle(150, 200, 100, 20));
 
             _switchLanguageButton.OnClick += SwitchLanguageButtonClickHandler;
         }
@@ -59,6 +64,18 @@ namespace CDT.LAST.MonoGameClient.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            if (!_backgroundTrackStarted)
+            {
+                _backgroundTrackStarted = true;
+                if (MediaPlayer.State != MediaState.Playing)
+                {
+                    var song = Game.Content.Load<Song>("Audio/TitleBackgroundTrack");
+                    MediaPlayer.IsRepeating = true;
+                    MediaPlayer.Volume = 0.75f;
+                    MediaPlayer.Play(song);
+                }
+            }
 
             // Poll for current keyboard state
             var state = Keyboard.GetState();

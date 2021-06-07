@@ -27,5 +27,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public ITacticalActOffenceSubScheme Offence { get; set; }
         public Range<int> Range { get; set; }
         public TacticalActTargets Targets { get; set; }
+        public string[] Tags { get; }
     }
 }

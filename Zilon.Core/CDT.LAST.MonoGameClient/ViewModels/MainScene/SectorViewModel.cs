@@ -12,6 +12,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
@@ -21,12 +22,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;
+        private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
+        private readonly IPersonSoundContentStorage _personSoundContentStorage;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
-
         private readonly SectorViewModelContext _viewModelContext;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
@@ -38,6 +40,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _player = serviceScope.GetRequiredService<IPlayer>();
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
+
+            _intarectionBus = serviceScope.GetRequiredService<IActorInteractionBus>();
+
+            _intarectionBus.NewEvent += IntarectionBus_NewEvent;
+
+            var personVisualizationContentStorage =
+                serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
+            _personSoundContentStorage = serviceScope.GetRequiredService<IPersonSoundContentStorage>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -58,7 +68,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             foreach (var actor in Sector.ActorManager.Items)
             {
-                var actorViewModel = new ActorViewModel(game, actor, _viewModelContext, _spriteBatch);
+                var actorViewModel = new ActorViewModel(
+                    game,
+                    actor,
+                    _viewModelContext,
+                    personVisualizationContentStorage,
+                    _personSoundContentStorage,
+                    _spriteBatch);
 
                 if (actor.Person == _player.MainPerson)
                 {
@@ -133,6 +149,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _spriteBatch.End();
         }
 
+        public void UnsubscribeEventHandlers()
+        {
+            _intarectionBus.NewEvent -= IntarectionBus_NewEvent;
+            Sector.ActorManager.Removed -= ActorManager_Removed;
+
+            foreach (var gameObject in _viewModelContext.GameObjects)
+            {
+                switch (gameObject)
+                {
+                    case ActorViewModel actorViewModel:
+                        actorViewModel.UnsubscribeEventHandlers();
+                        break;
+
+                    case StaticObjectViewModel staticObjectViewModel:
+                        // Currently do nothing since staticObjectViewModel have no subscribtions.
+                        break;
+                }
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
             if (_player.MainPerson is null)
@@ -202,6 +238,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     from actor in sector.ActorManager.Items
                     where actor.Person == player.MainPerson
                     select sectorNode).Single();
+        }
+
+        private void IntarectionBus_NewEvent(object? sender, ActorInteractionEventArgs e)
+        {
+            if (e.ActorInteractionEvent is DamageActorInteractionEvent damageActorInteractionEvent)
+            {
+                var actDescription = damageActorInteractionEvent.UsedActDescription;
+                var targetPerson = damageActorInteractionEvent.TargetActor.Person;
+                var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
+                soundEffect.CreateInstance().Play();
+            }
         }
     }
 }

@@ -1,0 +1,14 @@
+{
+  "Tags": [ "weapon", "ranged", "wand" ],
+  "Equip": {
+    "ActSids": [
+      "slash"
+    ],
+    "SlotTypes": [ "Hand" ],
+	"EquipRestrictions": { "PropHandUsage": "TwoHanded" }
+  },
+  "Name": {
+    "En": "Combat Staff",
+    "Ru": "Боевой посох"
+  }
+}

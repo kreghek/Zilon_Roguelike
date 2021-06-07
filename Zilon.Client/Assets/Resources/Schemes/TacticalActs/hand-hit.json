@@ -1,6 +1,7 @@
 {
   "Name": {
-    "Ru": "Удар кулаком"
+    "Ru": "Удар кулаком",
+    "En": "Punch"
   },
   "Stats": {
     "Efficient": {
@@ -19,6 +20,9 @@
       "Type": "Tactical",
       "Impact": "Kinetic",
       "ApRank": 1
-    }
+    },
+    "Tags": [
+      "punch"
+    ]
   }
 }

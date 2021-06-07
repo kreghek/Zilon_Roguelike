@@ -31,8 +31,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var hexSize = MapMetrics.UnitSize / 2;
             var staticObjectPosition = new Vector2(
-                (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
-                worldCoords[1] * hexSize * 2 / 2
+                (int)Math.Round(worldCoords[0] * hexSize * Math.Sqrt(3), MidpointRounding.ToEven),
+                (int)Math.Round(worldCoords[1] * hexSize * 2 / 2, MidpointRounding.ToEven)
             );
 
             _rootSprite = new SpriteContainer
