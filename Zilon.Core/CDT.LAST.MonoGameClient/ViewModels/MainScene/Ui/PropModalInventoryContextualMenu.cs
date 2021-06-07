@@ -26,7 +26,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         public IProp Prop { get; }
     }
 
-    public sealed class PropModalInventorySubmenu
+    public sealed class PropModalInventoryContextualMenu
     {
         private const int MENU_MARGIN = 2;
         private const int MENU_WIDTH = 128;
@@ -39,7 +39,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly Point _size;
         private readonly IUiContentStorage _uiContentStorage;
 
-        public PropModalInventorySubmenu(Point position, IProp prop, IEquipmentModule equipmentModule, IUiContentStorage uiContentStorage,
+        public PropModalInventoryContextualMenu(Point position, IProp prop, IEquipmentModule equipmentModule, IUiContentStorage uiContentStorage,
             IServiceProvider serviceProvider)
         {
             _position = new Point(position.X - MENU_MARGIN, position.Y - MENU_MARGIN);
@@ -47,12 +47,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _equipmentModule = equipmentModule;
             _uiContentStorage = uiContentStorage;
             _serviceProvider = serviceProvider;
-            _menuItemButtons = InitItems(prop);
-
-            _size = new Point(MENU_WIDTH + MENU_MARGIN * 2, _menuItemButtons.Length * 32 + MENU_MARGIN * 2);
 
             var inventoryState = _serviceProvider.GetRequiredService<IInventoryState>();
             inventoryState.SelectedProp = new PropViewModel(_prop);
+            _menuItemButtons = InitItems(prop);
+
+            _size = new Point(MENU_WIDTH + MENU_MARGIN * 2, _menuItemButtons.Length * 32 + MENU_MARGIN * 2);
         }
 
         public bool IsClosed { get; private set; }
