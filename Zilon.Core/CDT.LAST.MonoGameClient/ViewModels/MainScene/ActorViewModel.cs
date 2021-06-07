@@ -174,7 +174,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     break;
             }
 
-            _actorStateEngine = new ActorConsumeEngine(_graphicsRoot.RootSprite, animationBlockerService,
+            _actorStateEngine = new ActorCommonActionEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundEffect?.CreateInstance());
         }
 
@@ -268,7 +268,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 "packed-food" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat),
                 _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use)
             };
-            _actorStateEngine = new ActorConsumeEngine(_graphicsRoot.RootSprite, animationBlockerService,
+            _actorStateEngine = new ActorCommonActionEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundEffect?.CreateInstance());
         }
 

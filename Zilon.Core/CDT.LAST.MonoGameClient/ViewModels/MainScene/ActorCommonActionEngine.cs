@@ -9,7 +9,11 @@ using Zilon.Core.Client.Sector;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class ActorConsumeEngine : IActorStateEngine
+    /// <summary>
+    /// Use for actions without any specific.
+    /// Or when it is too boring to create new engine :)
+    /// </summary>
+    public sealed class ActorCommonActionEngine : IActorStateEngine
     {
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;
@@ -23,7 +27,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private bool _effectPlayed;
 
-        public ActorConsumeEngine(SpriteContainer rootContainer, IAnimationBlockerService animationBlockerService,
+        public ActorCommonActionEngine(SpriteContainer rootContainer, IAnimationBlockerService animationBlockerService,
             SoundEffectInstance? consumeSoundEffect)
         {
             _rootContainer = rootContainer;
@@ -43,7 +47,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public void Update(GameTime gameTime)
         {
             _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3;
-            var t = 1 - _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
+            
+            var progress = _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
+
+            var t = 1 - progress;
 
             if (_animationCounterSeconds > 0)
             {
