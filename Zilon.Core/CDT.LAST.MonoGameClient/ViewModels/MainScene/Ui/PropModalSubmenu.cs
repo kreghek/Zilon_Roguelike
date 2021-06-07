@@ -55,7 +55,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var equipCommand = _serviceProvider.GetRequiredService<EquipCommand>();
             equipCommand.SlotIndex = 0;
 
-            var useCommand = _serviceProvider.GetRequiredService<EquipCommand>();
+            var useCommand = _serviceProvider.GetRequiredService<UseSelfCommand>();
+
+            var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
 
             //TODO Localize
 
@@ -69,9 +71,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                             new Rectangle(MENU_MARGIN, MENU_MARGIN, _size.X - MENU_MARGIN * 2, 32));
                         equipButton.OnClick += (s, e) =>
                         {
-                            var equipCommand = _serviceProvider.GetRequiredService<EquipCommand>();
-                            var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
-
                             commandPool.Push(equipCommand);
                         };
                         list.Add(equipButton);
@@ -80,9 +79,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 case Resource resource:
                     //TODO Different words to different resources.
-                    var useButton = new TextButton("Use", _uiContentStorage.GetButtonTexture(), _uiContentStorage.GetButtonFont(),
-                        new Rectangle(MENU_MARGIN, MENU_MARGIN, _size.X - MENU_MARGIN * 2, 32));
-                    list.Add(useButton);
+                    if (useCommand.CanExecute().IsSuccess)
+                    {
+                        var useButton = new TextButton("Use", _uiContentStorage.GetButtonTexture(), _uiContentStorage.GetButtonFont(),
+                            new Rectangle(MENU_MARGIN, MENU_MARGIN, _size.X - MENU_MARGIN * 2, 32));
+                        useButton.OnClick += (s, e) =>
+                        {
+                            commandPool.Push(useCommand);
+                        };
+                        list.Add(useButton);
+                    }
                     break;
             }
 
