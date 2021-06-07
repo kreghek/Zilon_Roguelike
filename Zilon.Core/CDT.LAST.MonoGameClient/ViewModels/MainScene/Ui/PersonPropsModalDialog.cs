@@ -331,7 +331,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     "Active person must be able to use equipment to shown in this dialog.");
             }
 
-            _propSubmenu = new PropModalInventoryContextualMenu(mouseState.Position, selectedProp, equipmentModule, _uiContentStorage, _serviceProvider);
+            _propSubmenu = new PropModalInventoryContextualMenu(mouseState.Position, selectedProp, equipmentModule,
+                _uiContentStorage, _serviceProvider);
         }
 
         private void UpdateEquipment()

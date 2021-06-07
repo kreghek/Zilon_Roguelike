@@ -30,16 +30,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int MENU_MARGIN = 2;
         private const int MENU_WIDTH = 128;
+        private readonly IEquipmentModule _equipmentModule;
 
         private readonly TextButton[] _menuItemButtons;
         private readonly Point _position;
         private readonly IProp _prop;
-        private readonly IEquipmentModule _equipmentModule;
         private readonly IServiceProvider _serviceProvider;
         private readonly Point _size;
         private readonly IUiContentStorage _uiContentStorage;
 
-        public PropModalInventoryContextualMenu(Point position, IProp prop, IEquipmentModule equipmentModule, IUiContentStorage uiContentStorage,
+        public PropModalInventoryContextualMenu(Point position, IProp prop, IEquipmentModule equipmentModule,
+            IUiContentStorage uiContentStorage,
             IServiceProvider serviceProvider)
         {
             _position = new Point(position.X - MENU_MARGIN, position.Y - MENU_MARGIN);
@@ -111,7 +112,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                         equipCommand.SlotIndex = slotIndex;
                         if (equipCommand.CanExecute().IsSuccess)
                         {
-                            var equipButton = new TextButton($"Equip in {slot.Types}", _uiContentStorage.GetButtonTexture(),
+                            var equipButton = new TextButton($"Equip in {slot.Types}",
+                                _uiContentStorage.GetButtonTexture(),
                                 _uiContentStorage.GetButtonFont(),
                                 new Rectangle(MENU_MARGIN + _position.X, MENU_MARGIN + _position.Y + slotIndex * 32,
                                     MENU_WIDTH - MENU_MARGIN * 2, 32));
