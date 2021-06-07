@@ -92,7 +92,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personEquipmentModal = new PersonEquipmentModalDialog(
                 uiContentStorage,
                 game.GraphicsDevice,
-                _uiState);
+                _uiState,
+                ((LivGame)game).ServiceProvider);
 
             _personStatsModal = new PersonStatsModalDialog(
                 uiContentStorage,

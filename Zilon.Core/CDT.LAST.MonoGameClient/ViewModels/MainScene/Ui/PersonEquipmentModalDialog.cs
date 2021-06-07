@@ -25,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
-
+        private readonly IServiceProvider _serviceProvider;
         private EquipmentUiItem[]? _currentEquipmentItems;
 
         private InventoryUiItem[]? _currentInventoryItems;
@@ -36,10 +36,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         public PersonEquipmentModalDialog(
             IUiContentStorage uiContentStorage,
             GraphicsDevice graphicsDevice,
-            ISectorUiState uiState) : base(uiContentStorage, graphicsDevice)
+            ISectorUiState uiState,
+            IServiceProvider serviceProvider) : base(uiContentStorage, graphicsDevice)
         {
             _uiContentStorage = uiContentStorage;
             _uiState = uiState;
+            _serviceProvider = serviceProvider;
         }
 
         protected override void DrawContent(SpriteBatch spriteBatch)
@@ -320,7 +322,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var mouseState = Mouse.GetState();
 
-            _propSubmenu = new PropModalSubmenu(mouseState.Position, selectedProp, _uiContentStorage);
+            _propSubmenu = new PropModalSubmenu(mouseState.Position, selectedProp, _uiContentStorage, _serviceProvider);
         }
 
         private void UpdateEquipment()

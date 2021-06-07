@@ -106,10 +106,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     {
                         var equipButton = new TextButton("Equip", _uiContentStorage.GetButtonTexture(),
                             _uiContentStorage.GetButtonFont(),
-                            new Rectangle(MENU_MARGIN, MENU_MARGIN, _size.X - MENU_MARGIN * 2, 32));
+                            new Rectangle(MENU_MARGIN + _position.X, MENU_MARGIN + _position.Y, _size.X - MENU_MARGIN * 2, 32));
                         equipButton.OnClick += (s, e) =>
                         {
                             commandPool.Push(equipCommand);
+                            IsClosed = true;
                         };
                         list.Add(equipButton);
                     }
@@ -122,10 +123,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     {
                         var useButton = new TextButton("Use", _uiContentStorage.GetButtonTexture(),
                             _uiContentStorage.GetButtonFont(),
-                            new Rectangle(MENU_MARGIN, MENU_MARGIN, _size.X - MENU_MARGIN * 2, 32));
+                            new Rectangle(MENU_MARGIN + _position.X, MENU_MARGIN + _position.Y, _size.X - MENU_MARGIN * 2, 32));
                         useButton.OnClick += (s, e) =>
                         {
                             commandPool.Push(useCommand);
+                            IsClosed = true;
                         };
                         list.Add(useButton);
                     }
