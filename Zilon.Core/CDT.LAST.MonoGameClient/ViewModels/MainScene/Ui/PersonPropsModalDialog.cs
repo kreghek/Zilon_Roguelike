@@ -80,6 +80,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 if (_propSubmenu.IsClosed)
                 {
+                    if (_propSubmenu.IsCommandUsed)
+                    {
+                        Close();
+                    }
+
                     _propSubmenu = null;
                 }
             }

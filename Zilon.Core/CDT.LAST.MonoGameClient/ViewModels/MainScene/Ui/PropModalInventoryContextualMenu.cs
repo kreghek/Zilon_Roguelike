@@ -58,6 +58,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public bool IsClosed { get; private set; }
 
+        public bool IsCommandUsed { get; private set; }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), new Rectangle(_position, _size),
@@ -121,6 +123,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                             {
                                 commandPool.Push(equipCommand);
                                 IsClosed = true;
+                                IsCommandUsed = true;
                             };
                             list.Add(equipButton);
                         }
@@ -140,6 +143,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                         {
                             commandPool.Push(useCommand);
                             IsClosed = true;
+                            IsCommandUsed = true;
                         };
                         list.Add(useButton);
                     }
