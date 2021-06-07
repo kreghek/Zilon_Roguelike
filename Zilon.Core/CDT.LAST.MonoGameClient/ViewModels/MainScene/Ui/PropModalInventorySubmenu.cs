@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
@@ -25,25 +26,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         public IProp Prop { get; }
     }
 
-    public sealed class PropModalSubmenu
+    public sealed class PropModalInventorySubmenu
     {
-        private const int MENU_MARGIN = 5;
+        private const int MENU_MARGIN = 2;
+        private const int MENU_WIDTH = 128;
+
         private readonly TextButton[] _menuItemButtons;
         private readonly Point _position;
         private readonly IProp _prop;
+        private readonly IEquipmentModule _equipmentModule;
         private readonly IServiceProvider _serviceProvider;
         private readonly Point _size;
         private readonly IUiContentStorage _uiContentStorage;
 
-        public PropModalSubmenu(Point position, IProp prop, IUiContentStorage uiContentStorage,
+        public PropModalInventorySubmenu(Point position, IProp prop, IEquipmentModule equipmentModule, IUiContentStorage uiContentStorage,
             IServiceProvider serviceProvider)
         {
             _position = new Point(position.X - MENU_MARGIN, position.Y - MENU_MARGIN);
-            _size = new Point(100, 64);
             _prop = prop;
+            _equipmentModule = equipmentModule;
             _uiContentStorage = uiContentStorage;
             _serviceProvider = serviceProvider;
             _menuItemButtons = InitItems(prop);
+
+            _size = new Point(MENU_WIDTH + MENU_MARGIN * 2, _menuItemButtons.Length * 32 + MENU_MARGIN * 2);
 
             var inventoryState = _serviceProvider.GetRequiredService<IInventoryState>();
             inventoryState.SelectedProp = new PropViewModel(_prop);
@@ -89,9 +95,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             var list = new List<TextButton>();
 
-            var equipCommand = _serviceProvider.GetRequiredService<EquipCommand>();
-            equipCommand.SlotIndex = 0;
-
             var useCommand = _serviceProvider.GetRequiredService<UseSelfCommand>();
 
             var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
@@ -101,19 +104,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             switch (prop)
             {
                 case Equipment equipment:
-
-                    if (equipCommand.CanExecute().IsSuccess)
+                    for (var slotIndex = 0; slotIndex < _equipmentModule.Slots.Length; slotIndex++)
                     {
-                        var equipButton = new TextButton("Equip", _uiContentStorage.GetButtonTexture(),
-                            _uiContentStorage.GetButtonFont(),
-                            new Rectangle(MENU_MARGIN + _position.X, MENU_MARGIN + _position.Y,
-                                _size.X - MENU_MARGIN * 2, 32));
-                        equipButton.OnClick += (s, e) =>
+                        var slot = _equipmentModule.Slots[slotIndex];
+                        var equipCommand = _serviceProvider.GetRequiredService<EquipCommand>();
+                        equipCommand.SlotIndex = slotIndex;
+                        if (equipCommand.CanExecute().IsSuccess)
                         {
-                            commandPool.Push(equipCommand);
-                            IsClosed = true;
-                        };
-                        list.Add(equipButton);
+                            var equipButton = new TextButton($"Equip in {slot.Types}", _uiContentStorage.GetButtonTexture(),
+                                _uiContentStorage.GetButtonFont(),
+                                new Rectangle(MENU_MARGIN + _position.X, MENU_MARGIN + _position.Y + slotIndex * 32,
+                                    MENU_WIDTH - MENU_MARGIN * 2, 32));
+                            equipButton.OnClick += (s, e) =>
+                            {
+                                commandPool.Push(equipCommand);
+                                IsClosed = true;
+                            };
+                            list.Add(equipButton);
+                        }
                     }
 
                     break;
@@ -125,7 +133,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                         var useButton = new TextButton("Use", _uiContentStorage.GetButtonTexture(),
                             _uiContentStorage.GetButtonFont(),
                             new Rectangle(MENU_MARGIN + _position.X, MENU_MARGIN + _position.Y,
-                                _size.X - MENU_MARGIN * 2, 32));
+                                MENU_WIDTH - MENU_MARGIN * 2, 32));
                         useButton.OnClick += (s, e) =>
                         {
                             commandPool.Push(useCommand);

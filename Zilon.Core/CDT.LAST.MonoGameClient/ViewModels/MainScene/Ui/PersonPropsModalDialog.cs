@@ -18,7 +18,7 @@ using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    public sealed class PersonEquipmentModalDialog : ModalDialogBase
+    public sealed class PersonPropsModalDialog : ModalDialogBase
     {
         private const int EQUIPMENT_ITEM_SIZE = 32 + (5 * 2); // 5 is margin in button
         private const int EQUIPMENT_ITEM_SPACING = 2;
@@ -31,9 +31,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private InventoryUiItem[]? _currentInventoryItems;
         private EquipmentUiItem? _hoverEquipmentItem;
         private InventoryUiItem? _hoverInventoryItem;
-        private PropModalSubmenu? _propSubmenu;
+        private PropModalInventorySubmenu? _propSubmenu;
 
-        public PersonEquipmentModalDialog(
+        public PersonPropsModalDialog(
             IUiContentStorage uiContentStorage,
             GraphicsDevice graphicsDevice,
             ISectorUiState uiState,
@@ -322,7 +322,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var mouseState = Mouse.GetState();
 
-            _propSubmenu = new PropModalSubmenu(mouseState.Position, selectedProp, _uiContentStorage, _serviceProvider);
+            var person = _uiState.ActiveActor?.Actor?.Person;
+
+            var equipmentModule = person.GetModuleSafe<IEquipmentModule>();
+            if (equipmentModule is null)
+            {
+                throw new InvalidOperationException(
+                    "Active person must be able to use equipment to shown in this dialog.");
+            }
+
+            _propSubmenu = new PropModalInventorySubmenu(mouseState.Position, selectedProp, equipmentModule, _uiContentStorage, _serviceProvider);
         }
 
         private void UpdateEquipment()

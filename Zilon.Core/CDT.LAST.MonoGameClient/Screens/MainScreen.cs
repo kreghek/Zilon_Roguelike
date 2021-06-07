@@ -89,7 +89,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 rect: new Rectangle(halfOfScreenX - 16 + (16 * 2), bottomOfScreenY - 32, 16, 32));
             _personStatsButton.OnClick += PersonStatsButton_OnClick;
 
-            _personEquipmentModal = new PersonEquipmentModalDialog(
+            _personEquipmentModal = new PersonPropsModalDialog(
                 uiContentStorage,
                 game.GraphicsDevice,
                 _uiState,
