@@ -74,16 +74,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         protected override void UpdateContent()
         {
-            UpdateEquipment();
-            UpdateInventory();
-
-            var mouseState = Mouse.GetState();
-
-            var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-
-            DetectHoverEquipment(mouseRectangle);
-            DetectHoverInventory(mouseRectangle);
-
             if (_propSubmenu != null)
             {
                 _propSubmenu.Update();
@@ -92,6 +82,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 {
                     _propSubmenu = null;
                 }
+            }
+            else
+            {
+                UpdateEquipment();
+                UpdateInventory();
+
+                var mouseState = Mouse.GetState();
+
+                var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+
+                DetectHoverEquipment(mouseRectangle);
+                DetectHoverInventory(mouseRectangle);
             }
         }
 
