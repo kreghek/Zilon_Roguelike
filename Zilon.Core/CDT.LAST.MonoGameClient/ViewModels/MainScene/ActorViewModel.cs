@@ -116,7 +116,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     soundEffect = _personSoundStorage.GetEquipSound(e.Equipment.Scheme.Tags, true);
                     break;
             }
-            
+
             _actorStateEngine = new ActorConsumeEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundEffect?.CreateInstance());
         }
