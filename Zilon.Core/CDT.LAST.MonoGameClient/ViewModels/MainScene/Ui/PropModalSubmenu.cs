@@ -28,14 +28,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     public sealed class PropModalSubmenu
     {
         private const int MENU_MARGIN = 5;
-        private readonly Point _position;
-        private readonly Point _size;
-        private readonly IProp _prop;
-        private readonly IUiContentStorage _uiContentStorage;
-        private readonly IServiceProvider _serviceProvider;
         private readonly TextButton[] _menuItemButtons;
+        private readonly Point _position;
+        private readonly IProp _prop;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly Point _size;
+        private readonly IUiContentStorage _uiContentStorage;
 
-        public PropModalSubmenu(Point position, IProp prop, IUiContentStorage uiContentStorage, IServiceProvider serviceProvider)
+        public PropModalSubmenu(Point position, IProp prop, IUiContentStorage uiContentStorage,
+            IServiceProvider serviceProvider)
         {
             _position = new Point(position.X - MENU_MARGIN, position.Y - MENU_MARGIN);
             _size = new Point(100, 64);
@@ -46,53 +47,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var inventoryState = _serviceProvider.GetRequiredService<IInventoryState>();
             inventoryState.SelectedProp = new PropViewModel(_prop);
-        }
-
-        private TextButton[] InitItems(IProp prop)
-        {
-            var list = new List<TextButton>();
-
-            var equipCommand = _serviceProvider.GetRequiredService<EquipCommand>();
-            equipCommand.SlotIndex = 0;
-
-            var useCommand = _serviceProvider.GetRequiredService<UseSelfCommand>();
-
-            var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
-
-            //TODO Localize
-
-            switch (prop)
-            {
-                case Equipment equipment:
-
-                    if (equipCommand.CanExecute().IsSuccess)
-                    {
-                        var equipButton = new TextButton("Equip", _uiContentStorage.GetButtonTexture(), _uiContentStorage.GetButtonFont(),
-                            new Rectangle(MENU_MARGIN, MENU_MARGIN, _size.X - MENU_MARGIN * 2, 32));
-                        equipButton.OnClick += (s, e) =>
-                        {
-                            commandPool.Push(equipCommand);
-                        };
-                        list.Add(equipButton);
-                    }
-                    break;
-
-                case Resource resource:
-                    //TODO Different words to different resources.
-                    if (useCommand.CanExecute().IsSuccess)
-                    {
-                        var useButton = new TextButton("Use", _uiContentStorage.GetButtonTexture(), _uiContentStorage.GetButtonFont(),
-                            new Rectangle(MENU_MARGIN, MENU_MARGIN, _size.X - MENU_MARGIN * 2, 32));
-                        useButton.OnClick += (s, e) =>
-                        {
-                            commandPool.Push(useCommand);
-                        };
-                        list.Add(useButton);
-                    }
-                    break;
-            }
-
-            return list.ToArray();
         }
 
         public bool IsClosed { get; private set; }
@@ -129,6 +83,57 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private void EquipButton_OnClick(object? sender, EventArgs e)
         {
             IsClosed = true;
+        }
+
+        private TextButton[] InitItems(IProp prop)
+        {
+            var list = new List<TextButton>();
+
+            var equipCommand = _serviceProvider.GetRequiredService<EquipCommand>();
+            equipCommand.SlotIndex = 0;
+
+            var useCommand = _serviceProvider.GetRequiredService<UseSelfCommand>();
+
+            var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
+
+            //TODO Localize
+
+            switch (prop)
+            {
+                case Equipment equipment:
+
+                    if (equipCommand.CanExecute().IsSuccess)
+                    {
+                        var equipButton = new TextButton("Equip", _uiContentStorage.GetButtonTexture(),
+                            _uiContentStorage.GetButtonFont(),
+                            new Rectangle(MENU_MARGIN, MENU_MARGIN, _size.X - MENU_MARGIN * 2, 32));
+                        equipButton.OnClick += (s, e) =>
+                        {
+                            commandPool.Push(equipCommand);
+                        };
+                        list.Add(equipButton);
+                    }
+
+                    break;
+
+                case Resource resource:
+                    //TODO Different words to different resources.
+                    if (useCommand.CanExecute().IsSuccess)
+                    {
+                        var useButton = new TextButton("Use", _uiContentStorage.GetButtonTexture(),
+                            _uiContentStorage.GetButtonFont(),
+                            new Rectangle(MENU_MARGIN, MENU_MARGIN, _size.X - MENU_MARGIN * 2, 32));
+                        useButton.OnClick += (s, e) =>
+                        {
+                            commandPool.Push(useCommand);
+                        };
+                        list.Add(useButton);
+                    }
+
+                    break;
+            }
+
+            return list.ToArray();
         }
     }
 }
