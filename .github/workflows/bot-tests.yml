@@ -9,7 +9,6 @@ on:
   push:
     branches:
       - master
-      - fix-unstable-code-coverage
     tags:
       - 'v*.*.*'
 
