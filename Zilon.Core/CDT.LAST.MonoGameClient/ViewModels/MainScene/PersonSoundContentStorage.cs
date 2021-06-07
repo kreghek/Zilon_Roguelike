@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 
+using Zilon.Core.Common;
 using Zilon.Core.Persons;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
@@ -70,6 +71,39 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return _hunterDeathEffect ?? throw new InvalidOperationException("All content must be loaded early.");
         }
 
+        public SoundEffect? GetEquipSound(string[] tags, bool direction)
+        {
+            if (_equipDict is null)
+            {
+                throw new InvalidOperationException(
+                    "Dictionary of equip sound effect must be initialized in storage loading.");
+            }
+
+            if (direction)
+            {
+
+                foreach (var tag in tags)
+                {
+                    if (_equipDict.TryGetValue(tag, out var soundEffect))
+                    {
+                        return soundEffect;
+                    }
+                }
+
+                Debug.Fail("All types of equipment must have audio effect.");
+                // Return default audio if act is unknown.
+                return null;
+            }
+            else
+            {
+                Debug.Assert(_unequipSound != null);
+                return _unequipSound;
+            }
+        }
+
+        private IDictionary<string, SoundEffect>? _equipDict;
+        private SoundEffect? _unequipSound;
+
         /// <inheritdoc />
         public void LoadContent(ContentManager contentManager)
         {
@@ -91,6 +125,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 [ConsumeEffectType.Drink] = contentManager.Load<SoundEffect>("Audio/DrinkConsumable"),
                 [ConsumeEffectType.Heal] = contentManager.Load<SoundEffect>("Audio/HealConsumable")
             };
+
+            _equipDict = new Dictionary<string, SoundEffect>
+            {
+                [PropTags.Equipment.Weapon] = contentManager.Load<SoundEffect>("Audio/EquipWeapon"),
+                [PropTags.Equipment.Shield] = contentManager.Load<SoundEffect>("Audio/EquipWeapon"),
+                [PropTags.Equipment.Ranged] = contentManager.Load<SoundEffect>("Audio/EquipRifle"),
+                [PropTags.Equipment.Armor] = contentManager.Load<SoundEffect>("Audio/EquipClothes")
+            };
+
+            _unequipSound = contentManager.Load<SoundEffect>("Audio/Unequip");
         }
     }
 }

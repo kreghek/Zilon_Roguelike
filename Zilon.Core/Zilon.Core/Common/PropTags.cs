@@ -25,6 +25,8 @@
             /// </summary>
             public static string Weapon => "weapon";
 
+            public static string Armor => "armor";
+
             public static class WeaponClass
             {
                 public static string Axe => "axe";

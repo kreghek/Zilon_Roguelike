@@ -92,8 +92,33 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.UsedAct += Actor_UsedAct;
             Actor.DamageTaken += Actor_DamageTaken;
             Actor.UsedProp += Actor_UsedProp;
+            if (Actor.Person.HasModule<IEquipmentModule>())
+            {
+                Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += Actor_EquipmentChanged;
+            }
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
+        }
+
+        private void Actor_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+            SoundEffect? soundEffect;
+
+            switch (e.Equipment)
+            {
+                case null:
+                    soundEffect = _personSoundStorage.GetEquipSound(e.Equipment.Scheme.Tags, false);
+                    break;
+                default:
+                    soundEffect = _personSoundStorage.GetEquipSound(e.Equipment.Scheme.Tags, true);
+                    break;
+            }
+            
+            _actorStateEngine = new ActorConsumeEngine(_graphicsRoot.RootSprite, animationBlockerService,
+                soundEffect?.CreateInstance());
         }
 
         public override bool HiddenByFow => true;
@@ -116,6 +141,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.UsedAct -= Actor_UsedAct;
             Actor.DamageTaken -= Actor_DamageTaken;
             Actor.UsedProp -= Actor_UsedProp;
+
+            if (Actor.Person.HasModule<IEquipmentModule>())
+            {
+                Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= Actor_EquipmentChanged;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -231,27 +261,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-            SoundEffect? soundEffect;
-            //TODO Select effect by tag of prop
-            switch (e.UsedProp.Scheme.Sid)
+            var soundEffect = e.UsedProp.Scheme.Sid switch
             {
-                case "med-kit":
-                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal);
-                    break;
-
-                case "water-bottle":
-                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Drink);
-                    break;
-
-                case "packed-food":
-                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat);
-                    break;
-
-                default:
-                    soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use);
-                    break;
-            }
-
+                "med-kit" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal),
+                "water-bottle" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Drink),
+                "packed-food" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat),
+                _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use),
+            };
             _actorStateEngine = new ActorConsumeEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundEffect?.CreateInstance());
         }

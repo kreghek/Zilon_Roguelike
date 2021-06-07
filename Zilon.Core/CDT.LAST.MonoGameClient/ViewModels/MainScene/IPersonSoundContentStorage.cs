@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 
 using Zilon.Core.Persons;
-using Zilon.Core.Tactics.ActorInteractionEvents;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
@@ -32,5 +31,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         SoundEffect GetDeathEffect(IPerson person);
 
         void LoadContent(ContentManager contentManager);
+
+        /// <summary>
+        /// The sound played when visualization of some items are weared by a person.
+        /// </summary>
+        SoundEffect? GetEquipSound(string[] tags, bool direction);
     }
 }

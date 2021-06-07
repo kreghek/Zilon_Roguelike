@@ -57,6 +57,8 @@ namespace Zilon.Core.PersonGeneration
             AddResource(inventory, "packed-food", 1);
             AddResource(inventory, "water-bottle", 1);
             AddResource(inventory, "med-kit", 1);
+            AddEquipment(inventory, "short-sword");
+            AddEquipment(inventory, "traveler-camisole");
         }
 
         protected static void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
