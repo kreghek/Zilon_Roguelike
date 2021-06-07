@@ -22,10 +22,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int EQUIPMENT_ITEM_SIZE = 32 + (5 * 2); // 5 is margin in button
         private const int EQUIPMENT_ITEM_SPACING = 2;
+        private readonly IServiceProvider _serviceProvider;
 
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
-        private readonly IServiceProvider _serviceProvider;
         private EquipmentUiItem[]? _currentEquipmentItems;
 
         private InventoryUiItem[]? _currentInventoryItems;
