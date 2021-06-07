@@ -74,36 +74,37 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             // edges
 
+            const int EDGE_SIZE = 5;
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(_position, new Point(5, 5)),
-                new Rectangle(0, 0, 5, 5),
+                new Rectangle(_position, new Point(EDGE_SIZE, EDGE_SIZE)),
+                new Rectangle(0, 0, EDGE_SIZE, EDGE_SIZE),
                 Color.White);
 
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + _size.X - 5, _position.Y), new Point(5, 5)),
-                new Rectangle(7, 0, 5, 5),
+                new Rectangle(new Point(_position.X + _size.X - EDGE_SIZE, _position.Y), new Point(EDGE_SIZE, EDGE_SIZE)),
+                new Rectangle(7, 0, EDGE_SIZE, EDGE_SIZE),
                 Color.White);
 
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X, _position.Y + _size.Y - 5), new Point(5, 5)),
-                new Rectangle(0, 7, 5, 5),
+                new Rectangle(new Point(_position.X, _position.Y + _size.Y - EDGE_SIZE), new Point(EDGE_SIZE, EDGE_SIZE)),
+                new Rectangle(0, 7, EDGE_SIZE, EDGE_SIZE),
                 Color.White);
 
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + _size.X - 5, _position.Y + _size.Y - 5), new Point(5, 5)),
-                new Rectangle(7, 7, 5, 5),
+                new Rectangle(new Point(_position.X + _size.X - EDGE_SIZE, _position.Y + _size.Y - EDGE_SIZE), new Point(EDGE_SIZE, EDGE_SIZE)),
+                new Rectangle(7, 7, EDGE_SIZE, EDGE_SIZE),
                 Color.White);
 
             // sides
 
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + 5, _position.Y), new Point(_size.X - 5 * 2, 6)),
-                new Rectangle(5, 0, 2, 6),
+                new Rectangle(new Point(_position.X + EDGE_SIZE, _position.Y), new Point(_size.X - (EDGE_SIZE * 2), 6)),
+                new Rectangle(EDGE_SIZE, 0, 2, 6),
                 Color.White);
 
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + 5, _position.Y + _size.Y - 5), new Point(_size.X - 5 * 2, 6)),
-                new Rectangle(5, 7, 2, 6),
+                new Rectangle(new Point(_position.X + EDGE_SIZE, _position.Y + _size.Y - EDGE_SIZE), new Point(_size.X - (EDGE_SIZE * 2), 6)),
+                new Rectangle(EDGE_SIZE, 7, 2, 6),
                 Color.White);
         }
 
