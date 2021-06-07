@@ -331,6 +331,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var person = _uiState.ActiveActor?.Actor?.Person;
 
+            if (person is null)
+            {
+                throw new InvalidOperationException("ISectorUiState must have active person assigned.");
+            }
+
             var equipmentModule = person.GetModuleSafe<IEquipmentModule>();
             if (equipmentModule is null)
             {

@@ -19,16 +19,6 @@ using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    public class PropViewModel : IPropItemViewModel
-    {
-        public PropViewModel(IProp prop)
-        {
-            Prop = prop ?? throw new ArgumentNullException(nameof(prop));
-        }
-
-        public IProp Prop { get; }
-    }
-
     public sealed class PropModalInventoryContextualMenu
     {
         private const int MENU_MARGIN = 2;
