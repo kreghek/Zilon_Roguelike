@@ -49,9 +49,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             inventoryState.SelectedProp = new PropViewModel(_prop);
             _menuItemButtons = InitItems(prop);
 
+            var itemsHeight = _menuItemButtons.Length * MENU_ITEM_HEIGHT;
             _size = new Point(
-                MENU_WIDTH + MENU_MARGIN * 2,
-                _menuItemButtons.Length * MENU_ITEM_HEIGHT + MENU_MARGIN * 2
+                MENU_WIDTH + (MENU_MARGIN * 2),
+                itemsHeight + (MENU_MARGIN * 2)
             );
         }
 
