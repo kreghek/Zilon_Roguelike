@@ -1,7 +1,6 @@
 ﻿using System;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -19,8 +18,6 @@ namespace CDT.LAST.MonoGameClient.Engine
             _rect = rect;
             _buttonState = UiButtonState.OutOfButton;
         }
-
-        public SoundEffect? ClickSound { get; set; }
 
         public Texture2D Texture { get; }
 
@@ -82,29 +79,21 @@ namespace CDT.LAST.MonoGameClient.Engine
             return _rect.Intersects(mouseRect);
         }
 
-        private void PlayClickSoundIfExists()
+        private static void PlayClickSoundIfExists()
         {
-            if (ClickSound is null)
+            if (UiThemeManager.SoundStorage == null)
             {
-                if (UiThemeManager.SoundStorage is null)
-                {
-                    // See the description in PlayHoverSoundIfExists method.
-                    return;
-                }
+                // See the description in PlayHoverSoundIfExists method.
+                return;
+            }
 
-                var soundEffect = UiThemeManager.SoundStorage.GetButtonClickEffect();
-                soundEffect.Play();
-            }
-            else
-            {
-                var soundEffect = ClickSound;
-                soundEffect.Play();
-            }
+            var soundEffect = UiThemeManager.SoundStorage.GetButtonClickEffect();
+            soundEffect.Play();
         }
 
         private static void PlayHoverSoundIfExists()
         {
-            if (UiThemeManager.SoundStorage is null)
+            if (UiThemeManager.SoundStorage == null)
             {
                 // Sound content was not loaded.
                 // This may occured by a few reasons:
