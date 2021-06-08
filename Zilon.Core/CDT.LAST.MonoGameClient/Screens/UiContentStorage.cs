@@ -14,6 +14,9 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _attributesBackgroundTexture;
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
+        private Texture2D? _contextualMenuBorderTexture;
+        private Texture2D? _contextualMenuItemBackgroundTexture;
+        private SpriteFont? _contextualMenuItemFont;
         private SpriteFont? _hintTitleFont;
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
@@ -81,31 +84,36 @@ namespace CDT.LAST.MonoGameClient.Screens
             _smallVerticalButtonBackgroundTexture =
                 contentManager.Load<Texture2D>("Sprites/ui/SmallVerticalButtonBackground");
 
+            _contextualMenuItemFont = contentManager.Load<SpriteFont>("Fonts/ContextualMenu");
+            _contextualMenuBorderTexture = contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuBorder");
+            _contextualMenuItemBackgroundTexture =
+                contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuItemBackground");
+
             // Place textures in order to display. Latest will display on the top.
             _propIcons.Add("short-sword",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/ShortSwordIcon")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/ShortSword")
                 });
             _propIcons.Add("great-sword",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/GreatSwordIcon")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/GreatSword")
                 });
             _propIcons.Add("combat-staff",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/CombatStaffBase")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/CombatStaff")
                 });
             _propIcons.Add("tribal-spear",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/TribalSpearIcon")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/Spear")
                 });
             _propIcons.Add("wooden-shield",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HandParts/WoodenShieldIcon")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/WoodenShield")
                 });
             _propIcons.Add("work-clothes",
                 new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/BodyParts/WorkClothes/Icon") });
@@ -118,6 +126,14 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HeadParts/KnittedHatIcon") });
             _propIcons.Add("steel-helmet",
                 new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HeadParts/SteelHelmetIcon") });
+
+            _propIcons.Add("med-kit",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/MedKit") });
+            _propIcons.Add("water-bottle",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/Waterskin") });
+            _propIcons.Add("packed-food",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/PackedFood") });
+
             _propIcons.Add("EmptyPropIcon", new[] { contentManager.Load<Texture2D>("Sprites/ui/EmptyPropIcon") });
         }
 
@@ -139,6 +155,21 @@ namespace CDT.LAST.MonoGameClient.Screens
         public Texture2D GetAttributeBackgroundTexture()
         {
             return _attributesBackgroundTexture ?? throw new InvalidOperationException();
+        }
+
+        public Texture2D GetContextualMenuBorderTexture()
+        {
+            return _contextualMenuBorderTexture ?? throw new InvalidOperationException();
+        }
+
+        public SpriteFont GetMenuItemFont()
+        {
+            return _contextualMenuItemFont ?? throw new InvalidOperationException();
+        }
+
+        public Texture2D GetMenuItemTexture()
+        {
+            return _contextualMenuItemBackgroundTexture ?? throw new InvalidOperationException();
         }
     }
 }

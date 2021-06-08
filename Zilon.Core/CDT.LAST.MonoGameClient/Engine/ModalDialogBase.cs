@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CDT.LAST.MonoGameClient.Engine
 {
-    public abstract class ModalDialog
+    public abstract class ModalDialogBase
     {
         private const int CLOSE_BUTTON_SIZE = 16;
         private const int CLOSE_BUTTON_PADDING = 3;
@@ -16,7 +16,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         private const int MODAL_WIDTH = 400;
         private const int MODAL_HEIGHT = 300;
         private const int MODAL_CONTENT_MARGIN = 9;
-        private const int MODAL_HEADER_HEIGHT = 13;
+        private const int MODAL_HEADER_HEIGHT = 15;
         private readonly Texture2D _backgroundBottomTexture;
 
         private readonly Texture2D _backgroundTopTexture;
@@ -25,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly GraphicsDevice _graphicsDevice;
         private readonly Texture2D _shadowTexture;
 
-        protected ModalDialog(IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice)
+        protected ModalDialogBase(IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice)
         {
             _shadowTexture = uiContentStorage.GetModalShadowTexture();
             _graphicsDevice = graphicsDevice;

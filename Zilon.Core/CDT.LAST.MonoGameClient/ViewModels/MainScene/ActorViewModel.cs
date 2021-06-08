@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -15,9 +14,9 @@ using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
-using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
@@ -93,6 +92,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.Moved += Actor_Moved;
             Actor.UsedAct += Actor_UsedAct;
             Actor.DamageTaken += Actor_DamageTaken;
+            Actor.UsedProp += Actor_UsedProp;
+            if (Actor.Person.HasModule<IEquipmentModule>())
+            {
+                Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += Actor_EquipmentChanged;
+            }
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
@@ -116,6 +120,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.Moved -= Actor_Moved;
             Actor.UsedAct -= Actor_UsedAct;
             Actor.DamageTaken -= Actor_DamageTaken;
+            Actor.UsedProp -= Actor_UsedProp;
+
+            if (Actor.Person.HasModule<IEquipmentModule>())
+            {
+                Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= Actor_EquipmentChanged;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -146,6 +156,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var deathSoundEffect = _personSoundStorage.GetDeathEffect(actor.Person);
                 deathSoundEffect.CreateInstance().Play();
             }
+        }
+
+        private void Actor_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+            var equipment = e.Equipment;
+            var soundSoundEffect = SelectEquipEffect(equipment);
+
+            _actorStateEngine = new ActorCommonActionEngine(_graphicsRoot.RootSprite, animationBlockerService,
+                soundSoundEffect?.CreateInstance());
         }
 
         private void Actor_Moved(object? sender, EventArgs e)
@@ -227,6 +249,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private void Actor_UsedProp(object? sender, UsedPropEventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var soundEffect = e.UsedProp.Scheme.Sid switch
+            {
+                "med-kit" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal),
+                "water-bottle" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Drink),
+                "packed-food" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat),
+                _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use)
+            };
+            _actorStateEngine = new ActorCommonActionEngine(_graphicsRoot.RootSprite, animationBlockerService,
+                soundEffect?.CreateInstance());
+        }
+
+        private static string[] GetClearTags(Equipment? equipment)
+        {
+            return equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                   Array.Empty<string>();
+        }
+
         private SoundEffectInstance? GetSoundEffect(ITacticalActStatsSubScheme actStatScheme)
         {
             var usedActDescription = ActDescription.CreateFromActStats(actStatScheme);
@@ -235,6 +278,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
             return attackSoundEffectInstance;
+        }
+
+        private SoundEffect? SelectEquipEffect(Equipment? equipment)
+        {
+            var clearTags = GetClearTags(equipment);
+            return _personSoundStorage.GetEquipSound(clearTags, equipment != null);
         }
 
         public IActor Actor { get; set; }

@@ -135,11 +135,47 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Drink.
+        /// </summary>
+        internal static string DrinkCommandButtonTitle {
+            get {
+                return ResourceManager.GetString("DrinkCommandButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eat.
+        /// </summary>
+        internal static string EatCommandButtonTitle {
+            get {
+                return ResourceManager.GetString("EatCommandButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equip in slot: {0}.
+        /// </summary>
+        internal static string EquipInSlotTemplateCommandButton {
+            get {
+                return ResourceManager.GetString("EquipInSlotTemplateCommandButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generate.
         /// </summary>
         internal static string GenerateGlobeButtonTitle {
             get {
                 return ResourceManager.GetString("GenerateGlobeButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Heal.
+        /// </summary>
+        internal static string HealCommandButtonTitle {
+            get {
+                return ResourceManager.GetString("HealCommandButtonTitle", resourceCulture);
             }
         }
         
@@ -256,6 +292,42 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aux.
+        /// </summary>
+        internal static string SlotAux {
+            get {
+                return ResourceManager.GetString("SlotAux", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Body.
+        /// </summary>
+        internal static string SlotBody {
+            get {
+                return ResourceManager.GetString("SlotBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hand.
+        /// </summary>
+        internal static string SlotHand {
+            get {
+                return ResourceManager.GetString("SlotHand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Head.
+        /// </summary>
+        internal static string SlotHead {
+            get {
+                return ResourceManager.GetString("SlotHead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start.
         /// </summary>
         internal static string StartGameButtonTitle {
@@ -333,6 +405,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         internal static string UbnormalAttributeValueTitle {
             get {
                 return ResourceManager.GetString("UbnormalAttributeValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use.
+        /// </summary>
+        internal static string UseCommandButtonTitle {
+            get {
+                return ResourceManager.GetString("UseCommandButtonTitle", resourceCulture);
             }
         }
         

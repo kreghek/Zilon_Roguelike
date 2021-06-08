@@ -25,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly Camera _camera;
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly IconButton _personEquipmentButton;
-        private readonly ModalDialog _personEquipmentModal;
+        private readonly ModalDialogBase _personEquipmentModal;
         private readonly IconButton _personStatsButton;
         private readonly PersonStatsModalDialog _personStatsModal;
         private readonly IPlayer _player;
@@ -89,10 +89,11 @@ namespace CDT.LAST.MonoGameClient.Screens
                 rect: new Rectangle(halfOfScreenX - 16 + (16 * 2), bottomOfScreenY - 32, 16, 32));
             _personStatsButton.OnClick += PersonStatsButton_OnClick;
 
-            _personEquipmentModal = new PersonEquipmentModalDialog(
+            _personEquipmentModal = new PersonPropsModalDialog(
                 uiContentStorage,
                 game.GraphicsDevice,
-                _uiState);
+                _uiState,
+                ((LivGame)game).ServiceProvider);
 
             _personStatsModal = new PersonStatsModalDialog(
                 uiContentStorage,
@@ -211,7 +212,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
-        private ModalDialog? CheckModalsIsVisible()
+        private ModalDialogBase? CheckModalsIsVisible()
         {
             if (_personEquipmentModal.IsVisible)
             {

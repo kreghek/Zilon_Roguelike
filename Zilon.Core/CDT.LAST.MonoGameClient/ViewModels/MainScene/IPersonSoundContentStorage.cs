@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 
 using Zilon.Core.Persons;
-using Zilon.Core.Tactics.ActorInteractionEvents;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
@@ -22,9 +21,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         SoundEffect GetActStartSound(ActDescription actDescription);
 
         /// <summary>
+        /// The sound played when visualization of a consuming things from inventory starts.
+        /// </summary>
+        SoundEffect? GetConsumePropSound(ConsumeEffectType consumeEffectType);
+
+        /// <summary>
         /// The sound of specified person death.
         /// </summary>
         SoundEffect GetDeathEffect(IPerson person);
+
+        /// <summary>
+        /// The sound played when visualization of some items are weared by a person.
+        /// </summary>
+        SoundEffect? GetEquipSound(string[] tags, bool direction);
 
         void LoadContent(ContentManager contentManager);
     }
