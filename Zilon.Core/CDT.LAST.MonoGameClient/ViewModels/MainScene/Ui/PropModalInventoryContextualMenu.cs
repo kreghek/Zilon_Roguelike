@@ -202,31 +202,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             return list.ToArray();
         }
 
-        private void InitItemsForResource(List<TextButton> list, UseSelfCommand useCommand, ICommandPool commandPool)
-        {
-            if (!useCommand.CanExecute().IsSuccess)
-            {
-                return;
-            }
-
-            var localizedCommandTitle = GetInventoryMenuItemContent(_prop);
-            var useButton = new TextButton(localizedCommandTitle,
-                _uiContentStorage.GetMenuItemTexture(),
-                _uiContentStorage.GetMenuItemFont(),
-                new Rectangle(
-                    MENU_MARGIN + _position.X,
-                    MENU_MARGIN + _position.Y,
-                    MENU_WIDTH,
-                    MENU_ITEM_HEIGHT));
-            useButton.OnClick += (s, e) =>
-            {
-                commandPool.Push(useCommand);
-                CloseMenu();
-                IsCommandUsed = true;
-            };
-            list.Add(useButton);
-        }
-
         private void InitItemsForEquipment(List<TextButton> list, ICommandPool commandPool)
         {
             for (var slotIndex = 0; slotIndex < _equipmentModule.Slots.Length; slotIndex++)
@@ -256,6 +231,31 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     list.Add(equipButton);
                 }
             }
+        }
+
+        private void InitItemsForResource(List<TextButton> list, UseSelfCommand useCommand, ICommandPool commandPool)
+        {
+            if (!useCommand.CanExecute().IsSuccess)
+            {
+                return;
+            }
+
+            var localizedCommandTitle = GetInventoryMenuItemContent(_prop);
+            var useButton = new TextButton(localizedCommandTitle,
+                _uiContentStorage.GetMenuItemTexture(),
+                _uiContentStorage.GetMenuItemFont(),
+                new Rectangle(
+                    MENU_MARGIN + _position.X,
+                    MENU_MARGIN + _position.Y,
+                    MENU_WIDTH,
+                    MENU_ITEM_HEIGHT));
+            useButton.OnClick += (s, e) =>
+            {
+                commandPool.Push(useCommand);
+                CloseMenu();
+                IsCommandUsed = true;
+            };
+            list.Add(useButton);
         }
     }
 }
