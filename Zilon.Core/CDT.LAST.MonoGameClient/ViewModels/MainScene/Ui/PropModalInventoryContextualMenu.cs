@@ -91,8 +91,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private void CloseMenu()
         {
             IsClosed = true;
-            var inventoryState = _serviceProvider.GetRequiredService<IInventoryState>();
-            inventoryState.SelectedProp = null;
         }
 
         private void DrawBorder(SpriteBatch spriteBatch)
