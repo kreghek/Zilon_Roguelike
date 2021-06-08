@@ -162,23 +162,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-            SoundEffect? soundEffect;
-
             var equipment = e.Equipment;
-            switch (equipment)
-            {
-                case null:
-                    soundEffect = _personSoundStorage.GetEquipSound(Array.Empty<string>(), false);
-                    break;
-                default:
-                    var clearTags = equipment.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
-                                    Array.Empty<string>();
-                    soundEffect = _personSoundStorage.GetEquipSound(clearTags, true);
-                    break;
-            }
+            var soundSoundEffect = SelectEquipEffect(equipment);
 
             _actorStateEngine = new ActorCommonActionEngine(_graphicsRoot.RootSprite, animationBlockerService,
-                soundEffect?.CreateInstance());
+                soundSoundEffect?.CreateInstance());
+        }
+
+        private SoundEffect? SelectEquipEffect(Zilon.Core.Props.Equipment? equipment)
+        {
+            var clearTags = equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                                    Array.Empty<string>();
+
+            var soundEffect = equipment switch
+            {
+                null => _personSoundStorage.GetEquipSound(Array.Empty<string>(), false),
+                _ => _personSoundStorage.GetEquipSound(clearTags, true),
+            };
+            return soundEffect;
         }
 
         private void Actor_Moved(object? sender, EventArgs e)
