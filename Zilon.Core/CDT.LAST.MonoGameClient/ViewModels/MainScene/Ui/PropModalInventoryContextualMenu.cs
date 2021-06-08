@@ -186,62 +186,74 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             switch (prop)
             {
-                case Equipment equipment:
-                    for (var slotIndex = 0; slotIndex < _equipmentModule.Slots.Length; slotIndex++)
-                    {
-                        var slot = _equipmentModule.Slots[slotIndex];
-                        var equipCommand = _serviceProvider.GetRequiredService<EquipCommand>();
-                        equipCommand.SlotIndex = slotIndex;
-                        if (equipCommand.CanExecute().IsSuccess)
-                        {
-                            var slotTitle = GetSlotTitle(slot.Types);
-                            var equipButtonTitle =
-                                string.Format(UiResources.EquipInSlotTemplateCommandButton, slotTitle);
-                            var equipButton = new TextButton(equipButtonTitle,
-                                _uiContentStorage.GetMenuItemTexture(),
-                                _uiContentStorage.GetMenuItemFont(),
-                                new Rectangle(
-                                    MENU_MARGIN + _position.X,
-                                    MENU_MARGIN + _position.Y + (list.Count * MENU_ITEM_HEIGHT),
-                                    MENU_WIDTH,
-                                    MENU_ITEM_HEIGHT));
-                            equipButton.OnClick += (s, e) =>
-                            {
-                                commandPool.Push(equipCommand);
-                                CloseMenu();
-                                IsCommandUsed = true;
-                            };
-                            list.Add(equipButton);
-                        }
-                    }
+                case Equipment:
+                    InitItemsForEquipment(list, commandPool);
 
                     break;
 
-                case Resource resource:
-                    if (useCommand.CanExecute().IsSuccess)
-                    {
-                        var localizedCommandTitle = GetInventoryMenuItemContent(_prop);
-                        var useButton = new TextButton(localizedCommandTitle,
-                            _uiContentStorage.GetMenuItemTexture(),
-                            _uiContentStorage.GetMenuItemFont(),
-                            new Rectangle(
-                                MENU_MARGIN + _position.X,
-                                MENU_MARGIN + _position.Y,
-                                MENU_WIDTH,
-                                MENU_ITEM_HEIGHT));
-                        useButton.OnClick += (s, e) =>
-                        {
-                            commandPool.Push(useCommand);
-                            CloseMenu();
-                            IsCommandUsed = true;
-                        };
-                        list.Add(useButton);
-                    }
+                case Resource:
+                    InitItemsForResource(list, useCommand, commandPool);
 
                     break;
             }
 
             return list.ToArray();
+        }
+
+        private void InitItemsForResource(List<TextButton> list, UseSelfCommand useCommand, ICommandPool commandPool)
+        {
+            if (!useCommand.CanExecute().IsSuccess)
+            {
+                return;
+            }
+
+            var localizedCommandTitle = GetInventoryMenuItemContent(_prop);
+            var useButton = new TextButton(localizedCommandTitle,
+                _uiContentStorage.GetMenuItemTexture(),
+                _uiContentStorage.GetMenuItemFont(),
+                new Rectangle(
+                    MENU_MARGIN + _position.X,
+                    MENU_MARGIN + _position.Y,
+                    MENU_WIDTH,
+                    MENU_ITEM_HEIGHT));
+            useButton.OnClick += (s, e) =>
+            {
+                commandPool.Push(useCommand);
+                CloseMenu();
+                IsCommandUsed = true;
+            };
+            list.Add(useButton);
+        }
+
+        private void InitItemsForEquipment(List<TextButton> list, ICommandPool commandPool)
+        {
+            for (var slotIndex = 0; slotIndex < _equipmentModule.Slots.Length; slotIndex++)
+            {
+                var slot = _equipmentModule.Slots[slotIndex];
+                var equipCommand = _serviceProvider.GetRequiredService<EquipCommand>();
+                equipCommand.SlotIndex = slotIndex;
+                if (equipCommand.CanExecute().IsSuccess)
+                {
+                    var slotTitle = GetSlotTitle(slot.Types);
+                    var equipButtonTitle =
+                        string.Format(UiResources.EquipInSlotTemplateCommandButton, slotTitle);
+                    var equipButton = new TextButton(equipButtonTitle,
+                        _uiContentStorage.GetMenuItemTexture(),
+                        _uiContentStorage.GetMenuItemFont(),
+                        new Rectangle(
+                            MENU_MARGIN + _position.X,
+                            MENU_MARGIN + _position.Y + (list.Count * MENU_ITEM_HEIGHT),
+                            MENU_WIDTH,
+                            MENU_ITEM_HEIGHT));
+                    equipButton.OnClick += (s, e) =>
+                    {
+                        commandPool.Push(equipCommand);
+                        CloseMenu();
+                        IsCommandUsed = true;
+                    };
+                    list.Add(equipButton);
+                }
+            }
         }
     }
 }
