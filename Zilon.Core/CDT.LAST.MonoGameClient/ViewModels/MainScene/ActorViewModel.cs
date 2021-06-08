@@ -170,18 +170,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 soundSoundEffect?.CreateInstance());
         }
 
-        private SoundEffect? SelectEquipEffect(Zilon.Core.Props.Equipment? equipment)
-        {
-            var clearTags = GetClearTags(equipment);
-            return _personSoundStorage.GetEquipSound(clearTags, equipment != null);
-        }
-
-        private static string[] GetClearTags(Zilon.Core.Props.Equipment? equipment)
-        {
-            return equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
-                                            Array.Empty<string>();
-        }
-
         private void Actor_Moved(object? sender, EventArgs e)
         {
             var hexSize = MapMetrics.UnitSize / 2;
@@ -276,6 +264,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 soundEffect?.CreateInstance());
         }
 
+        private static string[] GetClearTags(Equipment? equipment)
+        {
+            return equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                   Array.Empty<string>();
+        }
+
         private SoundEffectInstance? GetSoundEffect(ITacticalActStatsSubScheme actStatScheme)
         {
             var usedActDescription = ActDescription.CreateFromActStats(actStatScheme);
@@ -284,6 +278,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
             return attackSoundEffectInstance;
+        }
+
+        private SoundEffect? SelectEquipEffect(Equipment? equipment)
+        {
+            var clearTags = GetClearTags(equipment);
+            return _personSoundStorage.GetEquipSound(clearTags, equipment != null);
         }
 
         public IActor Actor { get; set; }
