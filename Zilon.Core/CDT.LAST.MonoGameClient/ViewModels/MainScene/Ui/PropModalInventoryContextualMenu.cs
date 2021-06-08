@@ -188,12 +188,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 case Equipment:
                     InitItemsForEquipment(list, commandPool);
-
                     break;
 
                 case Resource:
                     InitItemsForResource(list, useCommand, commandPool);
+                    break;
 
+                default:
+                    Debug.Fail($"Unknown type {prop.GetType()} of the prop.");
                     break;
             }
 
