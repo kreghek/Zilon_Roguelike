@@ -417,65 +417,6 @@ namespace Zilon.Core.Tests.Persons
         }
 
         /// <summary>
-        /// Тест проверяет, что можно при экипировке двуручного меча можно его заменить в любую руку.
-        /// </summary>
-        [Test]
-        public void SetEquipment_ReplacedGreatSword_NoException()
-        {
-            // ARRANGE
-            var greatSwordScheme = new TestPropScheme
-            {
-                Tags = new[] { PropTags.Equipment.Weapon, PropTags.Equipment.WeaponClass.Sword },
-                Equip = new TestTwoHandPropEquipSubScheme
-                {
-                    SlotTypes = new[]
-                    {
-                        EquipmentSlotTypes.Hand
-                    },
-
-                }
-            };
-
-            var slotSchemes = new[]
-            {
-                new PersonSlotSubScheme
-                {
-                    Types = EquipmentSlotTypes.Hand
-                },
-                new PersonSlotSubScheme
-                {
-                    Types = EquipmentSlotTypes.Hand
-                }
-            };
-
-            var tacticalActScheme = new TestTacticalActScheme
-            {
-                Stats = new TestTacticalActStatsSubScheme
-                {
-                    Range = new Range<int>(1, 1)
-                }
-            };
-
-            var greatSwordEquipment1 = new Equipment(greatSwordScheme, new[] { tacticalActScheme });
-            var greatSwordEquipment2 = new Equipment(greatSwordScheme, new[] { tacticalActScheme });
-
-            const int swordSlot1 = 0;
-            const int swordSlot2 = 1;
-
-            var carrier = new EquipmentModule(slotSchemes);
-
-            // ACT
-            Action act = () =>
-            {
-                carrier[swordSlot1] = greatSwordEquipment1;
-                carrier[swordSlot2] = greatSwordEquipment2;
-            };
-
-            // ASSERT
-            act.Should().NotThrow<Exception>();
-        }
-
-        /// <summary>
         /// Тест проверяет, что при экипировке пистолета и щита не происходит исключений.
         /// </summary>
         [Test]
@@ -619,6 +560,64 @@ namespace Zilon.Core.Tests.Persons
                     act.Should().NotThrow<Exception>();
                 }
             }
+        }
+
+        /// <summary>
+        /// Тест проверяет, что можно при экипировке двуручного меча можно его заменить в любую руку.
+        /// </summary>
+        [Test]
+        public void SetEquipment_ReplacedGreatSword_NoException()
+        {
+            // ARRANGE
+            var greatSwordScheme = new TestPropScheme
+            {
+                Tags = new[] { PropTags.Equipment.Weapon, PropTags.Equipment.WeaponClass.Sword },
+                Equip = new TestTwoHandPropEquipSubScheme
+                {
+                    SlotTypes = new[]
+                    {
+                        EquipmentSlotTypes.Hand
+                    }
+                }
+            };
+
+            var slotSchemes = new[]
+            {
+                new PersonSlotSubScheme
+                {
+                    Types = EquipmentSlotTypes.Hand
+                },
+                new PersonSlotSubScheme
+                {
+                    Types = EquipmentSlotTypes.Hand
+                }
+            };
+
+            var tacticalActScheme = new TestTacticalActScheme
+            {
+                Stats = new TestTacticalActStatsSubScheme
+                {
+                    Range = new Range<int>(1, 1)
+                }
+            };
+
+            var greatSwordEquipment1 = new Equipment(greatSwordScheme, new[] { tacticalActScheme });
+            var greatSwordEquipment2 = new Equipment(greatSwordScheme, new[] { tacticalActScheme });
+
+            const int swordSlot1 = 0;
+            const int swordSlot2 = 1;
+
+            var carrier = new EquipmentModule(slotSchemes);
+
+            // ACT
+            Action act = () =>
+            {
+                carrier[swordSlot1] = greatSwordEquipment1;
+                carrier[swordSlot2] = greatSwordEquipment2;
+            };
+
+            // ASSERT
+            act.Should().NotThrow<Exception>();
         }
 
         /// <summary>

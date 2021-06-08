@@ -6,10 +6,13 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
-    using Zilon.Core.Components;
-    using Zilon.Core.Persons;
-    using Zilon.Core.Props;
-    using Zilon.Core.Schemes;
+    using Components;
+
+    using Persons;
+
+    using Props;
+
+    using Schemes;
 
     /// <summary>
     /// Базовая реализация моделя работы с экипировкой.
@@ -44,11 +47,15 @@
         protected EquipmentModuleBase([NotNull] IReadOnlyCollection<PersonSlotSubScheme> slots)
         {
             if (slots == null)
+            {
                 throw new ArgumentNullException(nameof(slots));
+            }
 
             var slotArray = slots as PersonSlotSubScheme[] ?? slots.ToArray();
             if (!slotArray.Any())
+            {
                 throw new ArgumentException("Коллекция слотов не может быть пустой.");
+            }
 
             Slots = slotArray;
 
@@ -69,7 +76,8 @@
         {
             EquipmentChanged?.Invoke(
                 sender: this,
-                e: new EquipmentChangedEventArgs(equipment: equipment, oldEquipment: oldEquipment, slotIndex: slotIndex));
+                e: new EquipmentChangedEventArgs(equipment: equipment, oldEquipment: oldEquipment,
+                    slotIndex: slotIndex));
         }
 
         /// <summary>
@@ -83,13 +91,48 @@
         /// </remarks>
         protected abstract void ValidateSetEquipment(Equipment equipment, int slotIndex);
 
+        private void DropHandsEquipment(IEnumerable<int> foundHandsIndexes)
+        {
+            foreach (var handIndex in foundHandsIndexes)
+            {
+                _equipment[handIndex] = null;
+            }
+        }
+
+        private IEnumerable<int> FoundHandsIndexes()
+        {
+            return Enumerable.Range(start: 0, count: _equipment.Length).Where(
+                i =>
+                {
+                    var equipmentByIndex = _equipment[i];
+                    var hasHand =
+                        equipmentByIndex?.Scheme.Equip.SlotTypes.FirstOrDefault(x => x == EquipmentSlotTypes.Hand) !=
+                        null;
+                    return hasHand;
+                });
+        }
+
+        private void ReplaceEquipmentInHandSlots(Equipment? equipment)
+        {
+            var foundHandsIndexes = FoundHandsIndexes();
+            if (!foundHandsIndexes.Any())
+            {
+                throw new ArgumentException($"Отсутствут слоты рук для экипировки {equipment} предмета");
+            }
+
+            DropHandsEquipment(foundHandsIndexes);
+            var firstHandIndex = foundHandsIndexes.First();
+            _equipment[firstHandIndex] = equipment;
+        }
+
         private void SetEquipment(Equipment? equipment, int slotIndex)
         {
             if (equipment != null)
             {
                 ValidateSetEquipment(equipment: equipment, slotIndex: slotIndex);
 
-                var isTwoHandedEquipment = equipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage == PropHandUsage.TwoHanded;
+                var isTwoHandedEquipment = equipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage ==
+                                           PropHandUsage.TwoHanded;
                 if (isTwoHandedEquipment)
                 {
                     ReplaceEquipmentInHandSlots(equipment);
@@ -107,38 +150,6 @@
             var oldEquipment = _equipment[slotIndex];
 
             DoEquipmentChanged(slotIndex: slotIndex, oldEquipment: oldEquipment, equipment: equipment);
-        }
-
-        private void ReplaceEquipmentInHandSlots(Equipment? equipment)
-        {
-            var foundHandsIndexes = FoundHandsIndexes();
-            if (!foundHandsIndexes.Any())
-                throw new ArgumentException($"Отсутствут слоты рук для экипировки {equipment} предмета");
-
-            DropHandsEquipment(foundHandsIndexes);
-            var firstHandIndex = foundHandsIndexes.First();
-            _equipment[firstHandIndex] = equipment;
-        }
-
-        private IEnumerable<int> FoundHandsIndexes()
-        {
-            return Enumerable.Range(start: 0, count: _equipment.Length).Where(
-                i =>
-                {
-                    var equipmentByIndex = _equipment[i];
-                    var hasHand =
-                        equipmentByIndex?.Scheme.Equip.SlotTypes.FirstOrDefault(x => x == EquipmentSlotTypes.Hand) !=
-                        null;
-                    return hasHand;
-                });
-        }
-
-        private void DropHandsEquipment(IEnumerable<int> foundHandsIndexes)
-        {
-            foreach (var handIndex in foundHandsIndexes)
-            {
-                _equipment[handIndex] = null;
-            }
         }
 
         /// <summary>

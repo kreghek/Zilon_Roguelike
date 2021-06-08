@@ -4,9 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Zilon.Core.Persons;
-    using Zilon.Core.Props;
-    using Zilon.Core.Schemes;
+    using Persons;
+
+    using Props;
+
+    using Schemes;
 
     public class EquipmentModule : EquipmentModuleBase
     {
@@ -25,18 +27,25 @@
             var slot = GetSlotForEquipByIndex(equipment: equipment, slotIndex: slotIndex);
 
             if (!EquipmentCarrierHelper.CheckSlotCompability(equipment: equipment, slot: slot))
+            {
                 throw new ArgumentException(
                     $"Для экипировки указан слот {slot}, не подходящий для данного типа предмета {equipment}.");
+            }
 
-            if (!EquipmentCarrierHelper.CheckDualCompability(equipmentModule: this, equipment: equipment, slotIndex: slotIndex))
+            if (!EquipmentCarrierHelper.CheckDualCompability(equipmentModule: this, equipment: equipment,
+                slotIndex: slotIndex))
+            {
                 throw new InvalidOperationException(
                     $"Попытка экипировать предмет {equipment}, несовместимый с текущий экипировкой.");
+            }
 
             if (!EquipmentCarrierHelper.CheckShieldCompability(
                 equipmentCarrier: this,
                 equipment: equipment,
                 slotIndex: slotIndex))
+            {
                 throw new InvalidOperationException("Попытка экипировать два щита.");
+            }
         }
 
         private PersonSlotSubScheme GetSlotForEquipByIndex(Equipment equipment, int slotIndex)

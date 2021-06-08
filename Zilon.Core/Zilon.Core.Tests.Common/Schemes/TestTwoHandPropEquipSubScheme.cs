@@ -4,8 +4,9 @@
 
     using Newtonsoft.Json;
 
-    using Zilon.Core.Components;
-    using Zilon.Core.Schemes;
+    using Components;
+
+    using Core.Schemes;
 
     [ExcludeFromCodeCoverage]
     public class TestTwoHandPropEquipSubScheme : IPropEquipSubScheme
