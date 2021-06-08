@@ -19,6 +19,49 @@ namespace Zilon.Core.Tests.Persons
     public class EquipmentModuleTests
     {
         /// <summary>
+        /// Тест проверяет, что при экипировке брони не происходит исключений.
+        /// </summary>
+        [Test]
+        public void SetEquipment_Armor_NoException()
+        {
+            // ARRANGE
+            var armorScheme = new TestPropScheme
+            {
+                Tags = new[] { PropTags.Equipment.Armor },
+                Equip = new TestPropEquipSubScheme
+                {
+                    SlotTypes = new[]
+                    {
+                        EquipmentSlotTypes.Body
+                    }
+                }
+            };
+
+            var slotSchemes = new[]
+            {
+                new PersonSlotSubScheme
+                {
+                    Types = EquipmentSlotTypes.Body
+                }
+            };
+
+            var armorEquipment = new Equipment(armorScheme, Array.Empty<ITacticalActScheme>());
+
+            const int ARMOR_SLOT = 0;
+
+            var carrier = new EquipmentModule(slotSchemes);
+
+            // ACT
+            Action act = () =>
+            {
+                carrier[ARMOR_SLOT] = armorEquipment;
+            };
+
+            // ASSERT
+            act.Should().NotThrow<Exception>();
+        }
+
+        /// <summary>
         /// Тест проверяет, что при установке экипировки выстреливает событие на изменение экипировки.
         /// </summary>
         [Test]
@@ -583,49 +626,6 @@ namespace Zilon.Core.Tests.Persons
             {
                 carrier[SWORD_SLOT1] = swordEquipment1;
                 carrier[SWORD_SLOT2] = sheildEquipment2;
-            };
-
-            // ASSERT
-            act.Should().NotThrow<Exception>();
-        }
-
-        /// <summary>
-        /// Тест проверяет, что при экипировке брони не происходит исключений.
-        /// </summary>
-        [Test]
-        public void SetEquipment_Armor_NoException()
-        {
-            // ARRANGE
-            var armorScheme = new TestPropScheme
-            {
-                Tags = new[] { PropTags.Equipment.Armor },
-                Equip = new TestPropEquipSubScheme
-                {
-                    SlotTypes = new[]
-                    {
-                        EquipmentSlotTypes.Body
-                    }
-                }
-            };
-
-            var slotSchemes = new[]
-            {
-                new PersonSlotSubScheme
-                {
-                    Types = EquipmentSlotTypes.Body
-                }
-            };
-
-            var armorEquipment = new Equipment(armorScheme, Array.Empty<ITacticalActScheme>());
-
-            const int ARMOR_SLOT = 0;
-
-            var carrier = new EquipmentModule(slotSchemes);
-
-            // ACT
-            Action act = () =>
-            {
-                carrier[ARMOR_SLOT] = armorEquipment;
             };
 
             // ASSERT
