@@ -243,17 +243,5 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             return list.ToArray();
         }
-
-        private record IventoryMenuItemContent
-        {
-            public IventoryMenuItemContent(SoundEffect consumeSoundEffect, string title)
-            {
-                ConsumeSoundEffect = consumeSoundEffect ?? throw new ArgumentNullException(nameof(consumeSoundEffect));
-                Title = title ?? throw new ArgumentNullException(nameof(title));
-            }
-
-            public SoundEffect ConsumeSoundEffect { get; }
-            public string Title { get; }
-        }
     }
 }
