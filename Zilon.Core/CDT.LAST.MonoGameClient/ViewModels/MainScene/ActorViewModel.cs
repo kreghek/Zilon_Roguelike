@@ -164,13 +164,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             SoundEffect? soundEffect;
 
-            switch (e.Equipment)
+            var equipment = e.Equipment;
+            switch (equipment)
             {
                 case null:
-                    soundEffect = _personSoundStorage.GetEquipSound(e.Equipment.Scheme.Tags, false);
+                    soundEffect = _personSoundStorage.GetEquipSound(Array.Empty<string>(), false);
                     break;
                 default:
-                    soundEffect = _personSoundStorage.GetEquipSound(e.Equipment.Scheme.Tags, true);
+                    var clearTags = equipment.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ?? Array.Empty<string>();
+                    soundEffect = _personSoundStorage.GetEquipSound(clearTags, true);
                     break;
             }
 
