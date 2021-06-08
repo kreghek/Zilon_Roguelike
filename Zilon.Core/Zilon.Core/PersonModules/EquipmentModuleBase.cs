@@ -96,7 +96,7 @@
                 }
                 else
                 {
-                    _equipment[slotIndex] = equipment; 
+                    _equipment[slotIndex] = equipment;
                 }
             }
             else
