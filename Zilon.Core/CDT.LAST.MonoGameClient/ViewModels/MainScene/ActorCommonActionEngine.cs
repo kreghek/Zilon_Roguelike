@@ -17,7 +17,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;
-        private readonly IAnimationBlockerService _animationBlockerService;
         private readonly SoundEffectInstance? _consumeSoundEffect;
         private readonly SpriteContainer _rootContainer;
         private readonly Vector2 _startPosition;
@@ -31,7 +30,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             SoundEffectInstance? consumeSoundEffect)
         {
             _rootContainer = rootContainer;
-            _animationBlockerService = animationBlockerService;
             _consumeSoundEffect = consumeSoundEffect;
 
             _startPosition = rootContainer.Position;
@@ -39,7 +37,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _animationBlocker = new AnimationCommonBlocker();
 
-            _animationBlockerService.AddBlocker(_animationBlocker);
+            animationBlockerService.AddBlocker(_animationBlocker);
         }
 
         public bool IsComplete { get; private set; }
