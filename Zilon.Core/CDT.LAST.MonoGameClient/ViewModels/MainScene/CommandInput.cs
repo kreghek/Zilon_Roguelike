@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Screens;
@@ -21,7 +22,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly ServiceProviderCommandFactory _commandFactory;
         private readonly ICommandPool _commandPool;
         private readonly ISector _sector;
-
+        private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly ISectorUiState _uiState;
 
         private bool _leftMousePressed;
@@ -31,66 +32,70 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             ICommandPool commandPool,
             Camera camera,
             ISector sector,
+            SectorViewModelContext sectorViewModelContext,
             ServiceProviderCommandFactory commandFactory)
         {
             _uiState = sectorUiState;
             _commandPool = commandPool;
             _camera = camera;
             _sector = sector;
+            _sectorViewModelContext = sectorViewModelContext;
             _commandFactory = commandFactory;
         }
 
         public void Update(SectorViewModelContext sectorViewModelContext)
         {
-            if (_uiState.CanPlayerGivesCommand)
+            if (!_uiState.CanPlayerGivesCommand)
             {
-                var wasHotKey = HandleHotKeys();
-                if (wasHotKey)
+                return;
+            }
+
+            var wasHotKey = HandleHotKeys();
+            if (wasHotKey)
+            {
+                return;
+            }
+
+            var mouseState = Mouse.GetState();
+
+            var inverseCameraTransform = Matrix.Invert(_camera.Transform);
+
+            var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
+
+            var offsetMouseInWorld =
+                HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2,
+                    (int)(MapMetrics.UnitSize / 2));
+
+            var map = _sector.Map;
+
+            var hoverNodes = map.Nodes.OfType<HexNode>().Where(node => node.OffsetCoords == offsetMouseInWorld);
+            var hoverNode = hoverNodes.FirstOrDefault();
+
+            _uiState.HoverViewModel =
+                GetViewModelByNode(sectorViewModelContext, _uiState.HoverViewModel, hoverNode);
+
+            if (!_leftMousePressed
+                && mouseState.LeftButton == ButtonState.Pressed
+                && _uiState.HoverViewModel != null
+                && _uiState.CanPlayerGivesCommand)
+            {
+                _leftMousePressed = true;
+
+                _uiState.SelectedViewModel = _uiState.HoverViewModel;
+                var command = SelectCommandBySelectedViewModel(
+                    _uiState.SelectedViewModel,
+                    _commandFactory,
+                    _uiState);
+
+                if (command.CanExecute().IsSuccess)
                 {
-                    return;
+                    _commandPool.Push(command);
                 }
+            }
 
-                var mouseState = Mouse.GetState();
-
-                var inverseCameraTransform = Matrix.Invert(_camera.Transform);
-
-                var mouseInWorld = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseCameraTransform);
-
-                var offsetMouseInWorld =
-                    HexHelper.ConvertWorldToOffset((int)mouseInWorld.X, (int)mouseInWorld.Y * 2,
-                        (int)(MapMetrics.UnitSize / 2));
-
-                var map = _sector.Map;
-
-                var hoverNodes = map.Nodes.OfType<HexNode>().Where(node => node.OffsetCoords == offsetMouseInWorld);
-                var hoverNode = hoverNodes.FirstOrDefault();
-
-                _uiState.HoverViewModel =
-                    GetViewModelByNode(sectorViewModelContext, _uiState.HoverViewModel, hoverNode);
-
-                if (!_leftMousePressed
-                    && mouseState.LeftButton == ButtonState.Pressed
-                    && _uiState.HoverViewModel != null
-                    && _uiState.CanPlayerGivesCommand)
-                {
-                    _leftMousePressed = true;
-
-                    _uiState.SelectedViewModel = _uiState.HoverViewModel;
-                    var command = SelectCommandBySelectedViewModel(
-                        _uiState.SelectedViewModel,
-                        _commandFactory,
-                        _uiState);
-
-                    if (command.CanExecute().IsSuccess)
-                    {
-                        _commandPool.Push(command);
-                    }
-                }
-
-                if (_leftMousePressed && mouseState.LeftButton == ButtonState.Released)
-                {
-                    _leftMousePressed = false;
-                }
+            if (_leftMousePressed && mouseState.LeftButton == ButtonState.Released)
+            {
+                _leftMousePressed = false;
             }
         }
 
@@ -141,7 +146,35 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return true;
             }
 
+            if (keyboardState.IsKeyDown(Keys.O))
+            { 
+                var openCommand = _commandFactory.GetCommand<OpenContainerCommand>();
+                _uiState.SelectedViewModel = GetStaticObjectUnderActor(_uiState.ActiveActor?.Actor);
+                if (openCommand.CanExecute().IsSuccess)
+                {
+                    _commandPool.Push(openCommand);
+                }
+
+                return true;
+            }
+
             return false;
+        }
+
+        private ISelectableViewModel? GetStaticObjectUnderActor(IActor? actor)
+        {
+            var staticObjectsUnderActor = _sector.StaticObjectManager.Items.Where(x => x.Node == actor.Node).ToArray();
+            Debug.Assert(staticObjectsUnderActor.Length < 2, "There is no way to put multiple passable objects in same node.");
+
+            var staticObjectUnderActor = staticObjectsUnderActor.First();
+
+            if (staticObjectUnderActor is null)
+            {
+                return null;
+            }
+
+            return _sectorViewModelContext.GameObjects.OfType<IContainerViewModel>().SingleOrDefault(x => x.StaticObject == staticObjectUnderActor);
+
         }
 
         private static ICommand SelectCommandBySelectedViewModel(ISelectableViewModel selectedViewModel,

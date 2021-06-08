@@ -20,6 +20,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class SectorViewModel
     {
+        private readonly Game _game;
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;
         private readonly IActorInteractionBus _intarectionBus;
@@ -33,6 +34,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
+            _game = game;
             _camera = camera;
             _spriteBatch = spriteBatch;
 
@@ -91,13 +93,40 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _viewModelContext.GameObjects.Add(staticObjectModel);
             }
 
+            Sector.StaticObjectManager.Added += StaticObjectManager_Added;
+            Sector.StaticObjectManager.Removed += StaticObjectManager_Removed;
             Sector.ActorManager.Removed += ActorManager_Removed;
+            _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
 
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
-            var commandInput = new CommandInput(_uiState, commandPool, _camera, Sector, commandFactory);
+            var commandInput = new CommandInput(_uiState, commandPool, _camera, Sector, _viewModelContext, commandFactory);
             _commandInput = commandInput;
+        }
+
+        private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
+        {
+            
+        }
+
+        private void StaticObjectManager_Removed(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+        {
+            foreach (var staticObject in e.Items)
+            {
+                var staticObjectViewModel = _viewModelContext.GameObjects.OfType<IContainerViewModel>().Single(x => x.StaticObject == staticObject);
+                _viewModelContext.GameObjects.Remove((GameObjectBase)staticObjectViewModel);
+            }
+        }
+
+        private void StaticObjectManager_Added(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+        {
+            foreach (var staticObject in e.Items)
+            {
+                var staticObjectModel = new StaticObjectViewModel(_game, staticObject, _spriteBatch);
+
+                _viewModelContext.GameObjects.Add(staticObjectModel);
+            }
         }
 
         public ISector Sector { get; }
@@ -153,6 +182,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             _intarectionBus.NewEvent -= IntarectionBus_NewEvent;
             Sector.ActorManager.Removed -= ActorManager_Removed;
+            Sector.StaticObjectManager.Added -= StaticObjectManager_Added;
+            Sector.StaticObjectManager.Removed -= StaticObjectManager_Removed;
+            _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
 
             foreach (var gameObject in _viewModelContext.GameObjects)
             {
