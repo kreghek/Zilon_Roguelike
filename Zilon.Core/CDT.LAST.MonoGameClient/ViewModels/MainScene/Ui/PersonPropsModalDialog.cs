@@ -20,7 +20,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class PersonPropsModalDialog : ModalDialogBase
     {
-        private const int EQUIPMENT_ITEM_SIZE = 32 + (5 * 2); // 5 is margin in button
+        private const int EQUIPMENT_ITEM_SIZE = 32;
         private const int EQUIPMENT_ITEM_SPACING = 2;
         private readonly IServiceProvider _serviceProvider;
 
@@ -283,7 +283,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             var currentInventoryItemList = new List<InventoryUiItem>();
-            foreach (var prop in inventoryModule.CalcActualItems())
+            var inventoryItems = inventoryModule.CalcActualItems();
+            foreach (var prop in inventoryItems)
             {
                 if (prop is null)
                 {
