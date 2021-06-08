@@ -170,6 +170,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 soundSoundEffect?.CreateInstance());
         }
 
+        private SoundEffect? SelectEquipEffect(Zilon.Core.Props.Equipment? equipment)
+        {
+            var clearTags = GetClearTags(equipment);
+            return _personSoundStorage.GetEquipSound(clearTags, equipment != null);
+        }
+
+        private static string[] GetClearTags(Zilon.Core.Props.Equipment? equipment)
+        {
+            return equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                                            Array.Empty<string>();
+        }
+
         private void Actor_Moved(object? sender, EventArgs e)
         {
             var hexSize = MapMetrics.UnitSize / 2;
@@ -272,19 +284,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
             return attackSoundEffectInstance;
-        }
-
-        private SoundEffect? SelectEquipEffect(Equipment? equipment)
-        {
-            var clearTags = equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
-                            Array.Empty<string>();
-
-            var soundEffect = equipment switch
-            {
-                null => _personSoundStorage.GetEquipSound(Array.Empty<string>(), false),
-                _ => _personSoundStorage.GetEquipSound(clearTags, true)
-            };
-            return soundEffect;
         }
 
         public IActor Actor { get; set; }
