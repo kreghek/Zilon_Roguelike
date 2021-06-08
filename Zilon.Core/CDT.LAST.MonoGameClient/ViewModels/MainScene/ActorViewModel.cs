@@ -14,6 +14,7 @@ using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -169,19 +170,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 soundSoundEffect?.CreateInstance());
         }
 
-        private SoundEffect? SelectEquipEffect(Zilon.Core.Props.Equipment? equipment)
-        {
-            var clearTags = equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
-                                    Array.Empty<string>();
-
-            var soundEffect = equipment switch
-            {
-                null => _personSoundStorage.GetEquipSound(Array.Empty<string>(), false),
-                _ => _personSoundStorage.GetEquipSound(clearTags, true),
-            };
-            return soundEffect;
-        }
-
         private void Actor_Moved(object? sender, EventArgs e)
         {
             var hexSize = MapMetrics.UnitSize / 2;
@@ -284,6 +272,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
             return attackSoundEffectInstance;
+        }
+
+        private SoundEffect? SelectEquipEffect(Equipment? equipment)
+        {
+            var clearTags = equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                            Array.Empty<string>();
+
+            var soundEffect = equipment switch
+            {
+                null => _personSoundStorage.GetEquipSound(Array.Empty<string>(), false),
+                _ => _personSoundStorage.GetEquipSound(clearTags, true)
+            };
+            return soundEffect;
         }
 
         public IActor Actor { get; set; }
