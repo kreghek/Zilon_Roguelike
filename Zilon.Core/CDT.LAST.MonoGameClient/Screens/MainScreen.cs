@@ -28,6 +28,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly ModalDialogBase _personEquipmentModal;
         private readonly IconButton _personStatsButton;
         private readonly PersonStatsModalDialog _personStatsModal;
+        private readonly ContainerModalDialog _containerModal;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -99,6 +100,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 uiContentStorage,
                 game.GraphicsDevice,
                 _uiState);
+
+            _containerModal = new ContainerModalDialog(uiContentStorage, Game.GraphicsDevice);
         }
 
         public override void Draw(GameTime gameTime)
@@ -113,6 +116,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             DrawHud();
 
             DrawModals();
+        }
+
+        private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
+        {
+            _containerModal.Show();
         }
 
         public override void Update(GameTime gameTime)
@@ -130,6 +138,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
                 _currentSector = _sectorViewModel.Sector;
+                _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
             }
 
             if (!_isTransitionPerforming)
@@ -165,7 +174,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     }
                     else if (!_isTransitionPerforming)
                     {
-                        _sectorViewModel.UnsubscribeEventHandlers();
+                        HandleScreenChanging();
 
                         _isTransitionPerforming = true;
                         TargetScene = new TransitionScreen(Game, _spriteBatch);
@@ -176,12 +185,18 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 if (!_isTransitionPerforming)
                 {
-                    _sectorViewModel.UnsubscribeEventHandlers();
+                    HandleScreenChanging();
 
                     _isTransitionPerforming = true;
                     TargetScene = new TransitionScreen(Game, _spriteBatch);
                 }
             }
+        }
+
+        private void HandleScreenChanging()
+        {
+            _sectorViewModel.UnsubscribeEventHandlers();
+            _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
         }
 
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
@@ -222,6 +237,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_personStatsModal.IsVisible)
             {
                 return _personStatsModal;
+            }
+
+            if (_containerModal.IsVisible)
+            {
+                return _containerModal;
             }
 
             return null;
@@ -288,6 +308,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_personStatsModal.IsVisible)
             {
                 _personStatsModal.Draw(_spriteBatch);
+            }
+
+            if (_containerModal.IsVisible)
+            {
+                _containerModal.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();

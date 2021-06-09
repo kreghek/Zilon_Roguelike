@@ -2,6 +2,7 @@
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -96,18 +97,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Sector.StaticObjectManager.Added += StaticObjectManager_Added;
             Sector.StaticObjectManager.Removed += StaticObjectManager_Removed;
             Sector.ActorManager.Removed += ActorManager_Removed;
-            _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
 
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
             var commandInput = new CommandInput(_uiState, commandPool, _camera, Sector, _viewModelContext, commandFactory);
             _commandInput = commandInput;
-        }
-
-        private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
-        {
-            
         }
 
         private void StaticObjectManager_Removed(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
@@ -184,7 +179,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Sector.ActorManager.Removed -= ActorManager_Removed;
             Sector.StaticObjectManager.Added -= StaticObjectManager_Added;
             Sector.StaticObjectManager.Removed -= StaticObjectManager_Removed;
-            _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
 
             foreach (var gameObject in _viewModelContext.GameObjects)
             {
