@@ -23,12 +23,12 @@ namespace CDT.LAST.MonoGameClient.Screens
     {
         private readonly IconButton _autoplayModeButton;
         private readonly Camera _camera;
+        private readonly ContainerModalDialog _containerModal;
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly IconButton _personEquipmentButton;
         private readonly ModalDialogBase _personEquipmentModal;
         private readonly IconButton _personStatsButton;
         private readonly PersonStatsModalDialog _personStatsModal;
-        private readonly ContainerModalDialog _containerModal;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -118,11 +118,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             DrawModals();
         }
 
-        private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
-        {
-            _containerModal.Show();
-        }
-
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -193,10 +188,9 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
-        private void HandleScreenChanging()
+        private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
         {
-            _sectorViewModel.UnsubscribeEventHandlers();
-            _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
+            _containerModal.Show();
         }
 
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
@@ -331,6 +325,12 @@ namespace CDT.LAST.MonoGameClient.Screens
                     from actor in sector.ActorManager.Items
                     where actor.Person == player.MainPerson
                     select sectorNode).SingleOrDefault();
+        }
+
+        private void HandleScreenChanging()
+        {
+            _sectorViewModel.UnsubscribeEventHandlers();
+            _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
         }
 
         private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)

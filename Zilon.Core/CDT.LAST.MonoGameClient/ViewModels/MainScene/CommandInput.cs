@@ -99,6 +99,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private ISelectableViewModel? GetStaticObjectUnderActor(IActor? actor)
+        {
+            var staticObjectsUnderActor = _sector.StaticObjectManager.Items.Where(x => x.Node == actor.Node).ToArray();
+            Debug.Assert(staticObjectsUnderActor.Length < 2,
+                "There is no way to put multiple passable objects in same node.");
+
+            var staticObjectUnderActor = staticObjectsUnderActor.First();
+
+            if (staticObjectUnderActor is null)
+            {
+                return null;
+            }
+
+            return _sectorViewModelContext.GameObjects.OfType<IContainerViewModel>()
+                .SingleOrDefault(x => x.StaticObject == staticObjectUnderActor);
+        }
+
         private static ISelectableViewModel? GetViewModelByNode(SectorViewModelContext sectorViewModelContext,
             ISelectableViewModel? currentSelectedViewModel,
             HexNode? hoverNode)
@@ -159,22 +176,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             return false;
-        }
-
-        private ISelectableViewModel? GetStaticObjectUnderActor(IActor? actor)
-        {
-            var staticObjectsUnderActor = _sector.StaticObjectManager.Items.Where(x => x.Node == actor.Node).ToArray();
-            Debug.Assert(staticObjectsUnderActor.Length < 2, "There is no way to put multiple passable objects in same node.");
-
-            var staticObjectUnderActor = staticObjectsUnderActor.First();
-
-            if (staticObjectUnderActor is null)
-            {
-                return null;
-            }
-
-            return _sectorViewModelContext.GameObjects.OfType<IContainerViewModel>().SingleOrDefault(x => x.StaticObject == staticObjectUnderActor);
-
         }
 
         private static ICommand SelectCommandBySelectedViewModel(ISelectableViewModel selectedViewModel,

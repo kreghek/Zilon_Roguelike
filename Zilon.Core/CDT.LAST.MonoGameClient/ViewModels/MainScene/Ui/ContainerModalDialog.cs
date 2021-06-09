@@ -7,7 +7,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal sealed class ContainerModalDialog : ModalDialogBase
     {
-        public ContainerModalDialog(IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice) : base(uiContentStorage, graphicsDevice)
+        public ContainerModalDialog(IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice) : base(
+            uiContentStorage, graphicsDevice)
         {
         }
     }

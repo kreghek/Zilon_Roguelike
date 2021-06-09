@@ -21,9 +21,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class SectorViewModel
     {
-        private readonly Game _game;
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;
+        private readonly Game _game;
         private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
@@ -101,27 +101,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
-            var commandInput = new CommandInput(_uiState, commandPool, _camera, Sector, _viewModelContext, commandFactory);
+            var commandInput =
+                new CommandInput(_uiState, commandPool, _camera, Sector, _viewModelContext, commandFactory);
             _commandInput = commandInput;
-        }
-
-        private void StaticObjectManager_Removed(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
-        {
-            foreach (var staticObject in e.Items)
-            {
-                var staticObjectViewModel = _viewModelContext.GameObjects.OfType<IContainerViewModel>().Single(x => x.StaticObject == staticObject);
-                _viewModelContext.GameObjects.Remove((GameObjectBase)staticObjectViewModel);
-            }
-        }
-
-        private void StaticObjectManager_Added(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
-        {
-            foreach (var staticObject in e.Items)
-            {
-                var staticObjectModel = new StaticObjectViewModel(_game, staticObject, _spriteBatch);
-
-                _viewModelContext.GameObjects.Add(staticObjectModel);
-            }
         }
 
         public ISector Sector { get; }
@@ -274,6 +256,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var targetPerson = damageActorInteractionEvent.TargetActor.Person;
                 var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
                 soundEffect.CreateInstance().Play();
+            }
+        }
+
+        private void StaticObjectManager_Added(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+        {
+            foreach (var staticObject in e.Items)
+            {
+                var staticObjectModel = new StaticObjectViewModel(_game, staticObject, _spriteBatch);
+
+                _viewModelContext.GameObjects.Add(staticObjectModel);
+            }
+        }
+
+        private void StaticObjectManager_Removed(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+        {
+            foreach (var staticObject in e.Items)
+            {
+                var staticObjectViewModel = _viewModelContext.GameObjects.OfType<IContainerViewModel>()
+                    .Single(x => x.StaticObject == staticObject);
+                _viewModelContext.GameObjects.Remove((GameObjectBase)staticObjectViewModel);
             }
         }
     }
