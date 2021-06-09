@@ -415,7 +415,7 @@ namespace Zilon.Core.Tests.Persons
             // ASSERT
             act.Should().NotThrow<Exception>();
         }
-        
+
         /// <summary>
         /// Тест проверяет, что можно при экипировке двуручного меча можно его заменить в любую руку.
         /// </summary>
@@ -432,7 +432,7 @@ namespace Zilon.Core.Tests.Persons
                     {
                         EquipmentSlotTypes.Hand
                     },
-                    
+
                 }
             };
 
