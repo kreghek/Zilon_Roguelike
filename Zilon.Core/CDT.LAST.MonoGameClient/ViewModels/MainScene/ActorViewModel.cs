@@ -102,17 +102,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
 
-        private void Actor_PropTransferPerformed(object? sender, EventArgs e)
-        {
-            var serviceScope = ((LivGame)_game).ServiceProvider;
-            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-            var soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use);
-            _actorStateEngine = new ActorCommonActionEngine(
-                _graphicsRoot.RootSprite,
-                animationBlockerService,
-                soundEffect?.CreateInstance());
-        }
-
         public override bool HiddenByFow => true;
 
         public override Vector2 HitEffectPosition => _graphicsRoot.HitEffectPosition;
@@ -210,6 +199,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 _rootSprite.Position = newPosition;
             }
+        }
+
+        private void Actor_PropTransferPerformed(object? sender, EventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use);
+            _actorStateEngine = new ActorCommonActionEngine(
+                _graphicsRoot.RootSprite,
+                animationBlockerService,
+                soundEffect?.CreateInstance());
         }
 
         private void Actor_UsedAct(object? sender, UsedActEventArgs e)

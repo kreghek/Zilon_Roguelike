@@ -38,12 +38,6 @@ namespace Zilon.Core.Tactics
         void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
 
         /// <summary>
-        /// Method-wrapper (mb temp) to raise event.
-        /// Event are nesessary to run animation and sound in clients.
-        /// </summary>
-        void PerformTransfer();
-
-        /// <summary>
         /// Перемещение актёра в указанный узел карты.
         /// </summary>
         /// <param name="targetNode"> Целевой узел карты. </param>
@@ -55,6 +49,12 @@ namespace Zilon.Core.Tactics
         /// <param name="container"> Целевой контейнер в секторе. </param>
         /// <param name="method"> Метод открытия контейнера. </param>
         void OpenContainer(IStaticObject container, IOpenContainerMethod method);
+
+        /// <summary>
+        /// Method-wrapper (mb temp) to raise event.
+        /// Event are nesessary to run animation and sound in clients.
+        /// </summary>
+        void PerformTransfer();
 
         void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
 
@@ -96,6 +96,7 @@ namespace Zilon.Core.Tactics
         /// Выстреливает, когда актёр использует предмет.
         /// </summary>
         event EventHandler<UsedPropEventArgs>? UsedProp;
+
         event EventHandler? PropTransferPerformed;
     }
 }

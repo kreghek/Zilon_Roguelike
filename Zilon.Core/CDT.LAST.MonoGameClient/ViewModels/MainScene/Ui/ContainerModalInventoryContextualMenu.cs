@@ -24,13 +24,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int MENU_MARGIN = 5;
         private const int MENU_WIDTH = 128;
         private const int MENU_ITEM_HEIGHT = 16;
+        private readonly IPropStore _containerStore;
+        private readonly IPropStore _inventoryStore;
 
         private readonly TextButton[] _menuItemButtons;
         private readonly Point _position;
-        private readonly IPropStore _inventoryStore;
-        private readonly IPropStore _containerStore;
-        private readonly IUiContentStorage _uiContentStorage;
         private readonly IServiceProvider _serviceProvider;
+
+        private readonly Point _size;
+        private readonly IUiContentStorage _uiContentStorage;
 
         public ContainerModalInventoryContextualMenu(
             Point position,
@@ -55,38 +57,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             );
         }
 
-        private TextButton[] InitItems(IProp prop)
-        {
-            var takeMenuButton = new TextButton("Take", _uiContentStorage.GetMenuItemTexture(), _uiContentStorage.GetMenuItemFont(),
-                new Rectangle(
-                            MENU_MARGIN + _position.X,
-                            MENU_MARGIN + _position.Y + (0 * MENU_ITEM_HEIGHT),
-                            MENU_WIDTH,
-                            MENU_ITEM_HEIGHT));
+        public bool IsClosed { get; private set; }
 
-            takeMenuButton.OnClick += (s, e) =>
-            {
-                var transferCommand = _serviceProvider.GetRequiredService<PropTransferCommand>();
-                var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
-
-                var transferMachine = new PropTransferMachine(_inventoryStore, _containerStore);
-                transferMachine.TransferProp(prop, PropTransferMachineStore.Container, PropTransferMachineStore.Inventory);
-                transferCommand.TransferMachine = transferMachine;
-
-                commandPool.Push(transferCommand);
-                IsCommandUsed = true;
-                CloseMenu();
-            };
-
-            return new[] { takeMenuButton };
-        }
-
-        private readonly Point _size;
-
-        private void CloseMenu()
-        {
-            IsClosed = true;
-        }
+        public bool IsCommandUsed { get; private set; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -96,6 +69,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 button.Draw(spriteBatch);
             }
+        }
+
+        public void Update()
+        {
+            foreach (var button in _menuItemButtons)
+            {
+                button.Update();
+            }
+
+            // Close menu if mouse is not on menu.
+
+            var mouseState = Mouse.GetState();
+            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+            var menuRect = new Rectangle(_position, _size);
+            if (!mouseRect.Intersects(menuRect))
+            {
+                CloseMenu();
+            }
+        }
+
+        private void CloseMenu()
+        {
+            IsClosed = true;
         }
 
         private void DrawBorder(SpriteBatch spriteBatch)
@@ -140,26 +136,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 Color.White);
         }
 
-        public void Update()
+        private TextButton[] InitItems(IProp prop)
         {
-            foreach (var button in _menuItemButtons)
-            {
-                button.Update();
-            }
+            var takeMenuButton = new TextButton("Take", _uiContentStorage.GetMenuItemTexture(),
+                _uiContentStorage.GetMenuItemFont(),
+                new Rectangle(
+                    MENU_MARGIN + _position.X,
+                    MENU_MARGIN + _position.Y + (0 * MENU_ITEM_HEIGHT),
+                    MENU_WIDTH,
+                    MENU_ITEM_HEIGHT));
 
-            // Close menu if mouse is not on menu.
-
-            var mouseState = Mouse.GetState();
-            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-            var menuRect = new Rectangle(_position, _size);
-            if (!mouseRect.Intersects(menuRect))
+            takeMenuButton.OnClick += (s, e) =>
             {
+                var transferCommand = _serviceProvider.GetRequiredService<PropTransferCommand>();
+                var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
+
+                var transferMachine = new PropTransferMachine(_inventoryStore, _containerStore);
+                transferMachine.TransferProp(prop, PropTransferMachineStore.Container,
+                    PropTransferMachineStore.Inventory);
+                transferCommand.TransferMachine = transferMachine;
+
+                commandPool.Push(transferCommand);
+                IsCommandUsed = true;
                 CloseMenu();
-            }
+            };
+
+            return new[] { takeMenuButton };
         }
-
-        public bool IsClosed { get; private set; }
-
-        public bool IsCommandUsed { get; private set; }
     }
 }
