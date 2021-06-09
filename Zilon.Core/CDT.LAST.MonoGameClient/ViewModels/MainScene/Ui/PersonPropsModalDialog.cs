@@ -308,7 +308,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var sid = prop.Scheme.Sid;
                 if (string.IsNullOrEmpty(sid))
                 {
-                    Debug.Fail("All equipment must have symbolic identifier (SID).");
+                    Debug.Fail("All prop must have symbolic identifier (SID).");
                     sid = "EmptyPropIcon";
                 }
 

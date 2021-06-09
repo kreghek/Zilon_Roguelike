@@ -15,6 +15,7 @@ using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
+using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
@@ -44,6 +45,43 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             InitInventory(person);
+
+            InitContainerContent(container);
+        }
+
+        private void InitContainerContent(IStaticObject container)
+        {
+            var currentContainerItemList = new List<InventoryUiItem>();
+
+            foreach (var prop in container.GetModule<IPropContainer>().Content.CalcActualItems())
+            {
+                var lastIndex = currentContainerItemList.Count;
+                var relativeX = lastIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
+                var buttonRect = new Rectangle(
+                    relativeX + ContentRect.Left,
+                    ContentRect.Top + EQUIPMENT_ITEM_SIZE + 100,
+                    EQUIPMENT_ITEM_SIZE,
+                    EQUIPMENT_ITEM_SIZE);
+
+                var sid = prop.Scheme.Sid;
+                if (string.IsNullOrEmpty(sid))
+                {
+                    Debug.Fail("All prop must have symbolic identifier (SID).");
+                    sid = "EmptyPropIcon";
+                }
+
+                var propButton = new IconButton(
+                    _uiContentStorage.GetButtonTexture(),
+                    _uiContentStorage.GetPropIconLayers(sid).First(),
+                    buttonRect);
+                //propButton.OnClick += PropButton_OnClick;
+
+                var uiItem = new InventoryUiItem(propButton, prop, lastIndex, buttonRect);
+
+                currentContainerItemList.Add(uiItem);
+            }
+
+            _currentContainerItems = currentContainerItemList.ToArray();
         }
 
         private void InitInventory(IPerson person)
@@ -58,11 +96,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var currentInventoryItemList = new List<InventoryUiItem>();
             foreach (var prop in inventoryModule.CalcActualItems())
             {
-                if (prop is null)
-                {
-                    continue;
-                }
-
                 var lastIndex = currentInventoryItemList.Count;
                 var relativeX = lastIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
@@ -74,7 +107,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var sid = prop.Scheme.Sid;
                 if (string.IsNullOrEmpty(sid))
                 {
-                    Debug.Fail("All equipment must have symbolic identifier (SID).");
+                    Debug.Fail("All prop must have symbolic identifier (SID).");
                     sid = "EmptyPropIcon";
                 }
 
@@ -95,6 +128,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         protected override void DrawContent(SpriteBatch spriteBatch)
         {
             DrawInventory(spriteBatch);
+            DrawContainer(spriteBatch);
 
             if (false)
             {
@@ -103,10 +137,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             else
             {
                 DrawInventoryHintIfSelected(spriteBatch);
+                DrawContainerHintIfSelected(spriteBatch);
+            }
+        }
+
+        private void DrawContainer(SpriteBatch spriteBatch)
+        {
+            if (_currentContainerItems is null)
+            {
+                return;
+            }
+
+            foreach (var item in _currentContainerItems)
+            {
+                item.Control.Draw(spriteBatch);
             }
         }
 
         private InventoryUiItem? _hoverInventoryItem;
+        private InventoryUiItem[] _currentContainerItems;
+        private InventoryUiItem? _hoverContainerItem;
 
         private void DrawInventoryHintIfSelected(SpriteBatch spriteBatch)
         {
@@ -123,6 +173,31 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var hintRectangle = new Rectangle(
                 _hoverInventoryItem.UiRect.Left,
                 _hoverInventoryItem.UiRect.Bottom + EQUIPMENT_ITEM_SPACING,
+                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
+
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
+
+            spriteBatch.DrawString(hintTitleFont, inventoryTitle,
+                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                Color.Wheat);
+        }
+
+        private void DrawContainerHintIfSelected(SpriteBatch spriteBatch)
+        {
+            if (_hoverContainerItem is null)
+            {
+                return;
+            }
+
+            var inventoryTitle = GetPropTitle(_hoverContainerItem.Prop);
+            var hintTitleFont = _uiContentStorage.GetHintTitleFont();
+            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
+
+            const int HINT_TEXT_SPACING = 8;
+            var hintRectangle = new Rectangle(
+                _hoverContainerItem.UiRect.Left,
+                _hoverContainerItem.UiRect.Bottom + EQUIPMENT_ITEM_SPACING,
                 (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
                 (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
 
@@ -152,12 +227,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             else
             {
                 UpdateInventory();
+                UpdateContainer();
 
                 var mouseState = Mouse.GetState();
 
                 var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
 
                 DetectHoverInventory(mouseRectangle);
+                DetectHoverContainer(mouseRectangle);
             }
         }
 
@@ -168,9 +245,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var effectUnderMouse = _currentInventoryItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
+            var propUnderMouse = _currentInventoryItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
 
-            _hoverInventoryItem = effectUnderMouse;
+            _hoverInventoryItem = propUnderMouse;
+        }
+
+        private void DetectHoverContainer(Rectangle mouseRectangle)
+        {
+            if (_currentContainerItems is null)
+            {
+                return;
+            }
+
+            var propUnderMouse = _currentContainerItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
+
+            _hoverContainerItem = propUnderMouse;
         }
 
         private void UpdateInventory()
@@ -181,6 +270,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             foreach (var item in _currentInventoryItems)
+            {
+                item.Control.Update();
+            }
+        }
+
+        private void UpdateContainer()
+        {
+            if (_currentContainerItems is null)
+            {
+                return;
+            }
+
+            foreach (var item in _currentContainerItems)
             {
                 item.Control.Update();
             }
