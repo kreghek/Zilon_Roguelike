@@ -24,16 +24,63 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int EQUIPMENT_ITEM_SIZE = 32;
         private const int EQUIPMENT_ITEM_SPACING = 2;
+        private readonly IUiContentStorage _uiContentStorage;
 
         private readonly ISectorUiState _uiState;
-        private readonly IUiContentStorage _uiContentStorage;
+        private InventoryUiItem[] _currentContainerItems;
         private InventoryUiItem[] _currentInventoryItems;
+        private InventoryUiItem? _hoverContainerItem;
 
-        public ContainerModalDialog(ISectorUiState uiState, IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice) : base(
+        private InventoryUiItem? _hoverInventoryItem;
+
+        public ContainerModalDialog(ISectorUiState uiState, IUiContentStorage uiContentStorage,
+            GraphicsDevice graphicsDevice) : base(
             uiContentStorage, graphicsDevice)
         {
             _uiState = uiState;
             _uiContentStorage = uiContentStorage;
+        }
+
+        protected override void DrawContent(SpriteBatch spriteBatch)
+        {
+            DrawInventory(spriteBatch);
+            DrawContainer(spriteBatch);
+
+            if (false)
+            {
+                //_propSubmenu.Draw(spriteBatch);
+            }
+
+            DrawInventoryHintIfSelected(spriteBatch);
+            DrawContainerHintIfSelected(spriteBatch);
+        }
+
+        protected override void UpdateContent()
+        {
+            if (false)
+            {
+                //_propSubmenu.Update();
+
+                //if (_propSubmenu.IsClosed)
+                //{
+                //    if (_propSubmenu.IsCommandUsed)
+                //    {
+                //        Close();
+                //    }
+
+                //    _propSubmenu = null;
+                //}
+            }
+
+            UpdateInventory();
+            UpdateContainer();
+
+            var mouseState = Mouse.GetState();
+
+            var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+
+            DetectHoverInventory(mouseRectangle);
+            DetectHoverContainer(mouseRectangle);
         }
 
         internal void Init(IStaticObject container)
@@ -47,6 +94,129 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             InitInventory(person);
 
             InitContainerContent(container);
+        }
+
+        private void DetectHoverContainer(Rectangle mouseRectangle)
+        {
+            if (_currentContainerItems is null)
+            {
+                return;
+            }
+
+            var propUnderMouse = _currentContainerItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
+
+            _hoverContainerItem = propUnderMouse;
+        }
+
+        private void DetectHoverInventory(Rectangle mouseRectangle)
+        {
+            if (_currentInventoryItems is null)
+            {
+                return;
+            }
+
+            var propUnderMouse = _currentInventoryItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
+
+            _hoverInventoryItem = propUnderMouse;
+        }
+
+        private void DrawContainer(SpriteBatch spriteBatch)
+        {
+            if (_currentContainerItems is null)
+            {
+                return;
+            }
+
+            foreach (var item in _currentContainerItems)
+            {
+                item.Control.Draw(spriteBatch);
+            }
+        }
+
+        private void DrawContainerHintIfSelected(SpriteBatch spriteBatch)
+        {
+            if (_hoverContainerItem is null)
+            {
+                return;
+            }
+
+            var inventoryTitle = GetPropTitle(_hoverContainerItem.Prop);
+            var hintTitleFont = _uiContentStorage.GetHintTitleFont();
+            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
+
+            const int HINT_TEXT_SPACING = 8;
+            var hintRectangle = new Rectangle(
+                _hoverContainerItem.UiRect.Left,
+                _hoverContainerItem.UiRect.Bottom + EQUIPMENT_ITEM_SPACING,
+                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
+
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
+
+            spriteBatch.DrawString(hintTitleFont, inventoryTitle,
+                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                Color.Wheat);
+        }
+
+        private void DrawInventory(SpriteBatch spriteBatch)
+        {
+            if (_currentInventoryItems is null)
+            {
+                return;
+            }
+
+            foreach (var item in _currentInventoryItems)
+            {
+                item.Control.Draw(spriteBatch);
+            }
+        }
+
+        private void DrawInventoryHintIfSelected(SpriteBatch spriteBatch)
+        {
+            if (_hoverInventoryItem is null)
+            {
+                return;
+            }
+
+            var inventoryTitle = GetPropTitle(_hoverInventoryItem.Prop);
+            var hintTitleFont = _uiContentStorage.GetHintTitleFont();
+            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
+
+            const int HINT_TEXT_SPACING = 8;
+            var hintRectangle = new Rectangle(
+                _hoverInventoryItem.UiRect.Left,
+                _hoverInventoryItem.UiRect.Bottom + EQUIPMENT_ITEM_SPACING,
+                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
+
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
+
+            spriteBatch.DrawString(hintTitleFont, inventoryTitle,
+                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                Color.Wheat);
+        }
+
+        private static string? GetPropTitle(IProp prop)
+        {
+            var text = prop.Scheme.Name?.En;
+
+            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
+            var langName = currentLanguage.TwoLetterISOLanguageName;
+            if (string.Equals(langName, "en", StringComparison.InvariantCultureIgnoreCase))
+            {
+                text = prop.Scheme.Name?.En;
+            }
+            else if (string.Equals(langName, "ru", StringComparison.InvariantCultureIgnoreCase))
+            {
+                text = prop.Scheme.Name?.Ru;
+            }
+            else
+            {
+                Debug.Fail(
+                    $"Unknown language {langName} is selected. All available language must be supported in the client.");
+            }
+
+            return text ?? "<Undef>";
         }
 
         private void InitContainerContent(IStaticObject container)
@@ -125,156 +295,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _currentInventoryItems = currentInventoryItemList.ToArray();
         }
 
-        protected override void DrawContent(SpriteBatch spriteBatch)
-        {
-            DrawInventory(spriteBatch);
-            DrawContainer(spriteBatch);
-
-            if (false)
-            {
-                //_propSubmenu.Draw(spriteBatch);
-            }
-            else
-            {
-                DrawInventoryHintIfSelected(spriteBatch);
-                DrawContainerHintIfSelected(spriteBatch);
-            }
-        }
-
-        private void DrawContainer(SpriteBatch spriteBatch)
-        {
-            if (_currentContainerItems is null)
-            {
-                return;
-            }
-
-            foreach (var item in _currentContainerItems)
-            {
-                item.Control.Draw(spriteBatch);
-            }
-        }
-
-        private InventoryUiItem? _hoverInventoryItem;
-        private InventoryUiItem[] _currentContainerItems;
-        private InventoryUiItem? _hoverContainerItem;
-
-        private void DrawInventoryHintIfSelected(SpriteBatch spriteBatch)
-        {
-            if (_hoverInventoryItem is null)
-            {
-                return;
-            }
-
-            var inventoryTitle = GetPropTitle(_hoverInventoryItem.Prop);
-            var hintTitleFont = _uiContentStorage.GetHintTitleFont();
-            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
-
-            const int HINT_TEXT_SPACING = 8;
-            var hintRectangle = new Rectangle(
-                _hoverInventoryItem.UiRect.Left,
-                _hoverInventoryItem.UiRect.Bottom + EQUIPMENT_ITEM_SPACING,
-                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
-                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
-
-            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
-
-            spriteBatch.DrawString(hintTitleFont, inventoryTitle,
-                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
-                Color.Wheat);
-        }
-
-        private void DrawContainerHintIfSelected(SpriteBatch spriteBatch)
-        {
-            if (_hoverContainerItem is null)
-            {
-                return;
-            }
-
-            var inventoryTitle = GetPropTitle(_hoverContainerItem.Prop);
-            var hintTitleFont = _uiContentStorage.GetHintTitleFont();
-            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
-
-            const int HINT_TEXT_SPACING = 8;
-            var hintRectangle = new Rectangle(
-                _hoverContainerItem.UiRect.Left,
-                _hoverContainerItem.UiRect.Bottom + EQUIPMENT_ITEM_SPACING,
-                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
-                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
-
-            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
-
-            spriteBatch.DrawString(hintTitleFont, inventoryTitle,
-                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
-                Color.Wheat);
-        }
-
-        protected override void UpdateContent()
-        {
-            if (false)
-            {
-                //_propSubmenu.Update();
-
-                //if (_propSubmenu.IsClosed)
-                //{
-                //    if (_propSubmenu.IsCommandUsed)
-                //    {
-                //        Close();
-                //    }
-
-                //    _propSubmenu = null;
-                //}
-            }
-            else
-            {
-                UpdateInventory();
-                UpdateContainer();
-
-                var mouseState = Mouse.GetState();
-
-                var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-
-                DetectHoverInventory(mouseRectangle);
-                DetectHoverContainer(mouseRectangle);
-            }
-        }
-
-        private void DetectHoverInventory(Rectangle mouseRectangle)
-        {
-            if (_currentInventoryItems is null)
-            {
-                return;
-            }
-
-            var propUnderMouse = _currentInventoryItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
-
-            _hoverInventoryItem = propUnderMouse;
-        }
-
-        private void DetectHoverContainer(Rectangle mouseRectangle)
-        {
-            if (_currentContainerItems is null)
-            {
-                return;
-            }
-
-            var propUnderMouse = _currentContainerItems.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
-
-            _hoverContainerItem = propUnderMouse;
-        }
-
-        private void UpdateInventory()
-        {
-            if (_currentInventoryItems is null)
-            {
-                return;
-            }
-
-            foreach (var item in _currentInventoryItems)
-            {
-                item.Control.Update();
-            }
-        }
-
         private void UpdateContainer()
         {
             if (_currentContainerItems is null)
@@ -288,30 +308,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
         }
 
-        private static string? GetPropTitle(IProp prop)
-        {
-            var text = prop.Scheme.Name?.En;
-
-            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
-            var langName = currentLanguage.TwoLetterISOLanguageName;
-            if (string.Equals(langName, "en", StringComparison.InvariantCultureIgnoreCase))
-            {
-                text = prop.Scheme.Name?.En;
-            }
-            else if (string.Equals(langName, "ru", StringComparison.InvariantCultureIgnoreCase))
-            {
-                text = prop.Scheme.Name?.Ru;
-            }
-            else
-            {
-                Debug.Fail(
-                    $"Unknown language {langName} is selected. All available language must be supported in the client.");
-            }
-
-            return text ?? "<Undef>";
-        }
-
-        private void DrawInventory(SpriteBatch spriteBatch)
+        private void UpdateInventory()
         {
             if (_currentInventoryItems is null)
             {
@@ -320,7 +317,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             foreach (var item in _currentInventoryItems)
             {
-                item.Control.Draw(spriteBatch);
+                item.Control.Update();
             }
         }
 
