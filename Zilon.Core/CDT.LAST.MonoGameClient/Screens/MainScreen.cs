@@ -107,7 +107,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _containerModal = new ContainerModalDialog(
                 _uiState,
                 uiContentStorage,
-                Game.GraphicsDevice, 
+                Game.GraphicsDevice,
                 ((LivGame)game).ServiceProvider);
         }
 
