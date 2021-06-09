@@ -125,11 +125,9 @@
             return Enumerable.Range(start: 0, count: _equipment.Length).Where(
                 i =>
                 {
-                    var equipmentByIndex = _equipment[i];
-                    var hasHand =
-                        equipmentByIndex?.Scheme.Equip.SlotTypes.FirstOrDefault(x => x == EquipmentSlotTypes.Hand) !=
-                        null;
-                    return hasHand;
+                    var slotByIndex = Slots[i];
+                    var isHand = slotByIndex?.Types == EquipmentSlotTypes.Hand;
+                    return isHand;
                 });
         }
 

@@ -420,7 +420,7 @@ namespace Zilon.Core.Tests.Persons
         /// Тест проверяет, что можно при экипировке двуручного меча можно его заменить в любую руку.
         /// </summary>
         [Test]
-        public void SetEquipment_ReplacedGreatSword_NoException()
+        public void SetEquipment_ReplacedGreatSword()
         {
             // ARRANGE
             var greatSwordScheme = new TestPropScheme
@@ -473,6 +473,8 @@ namespace Zilon.Core.Tests.Persons
 
             // ASSERT
             act.Should().NotThrow<Exception>();
+            carrier[swordSlot1].Should().Be(greatSwordEquipment2);
+            carrier[swordSlot2].Should().BeNull();
         }
 
         /// <summary>
