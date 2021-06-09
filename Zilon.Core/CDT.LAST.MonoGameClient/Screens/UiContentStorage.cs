@@ -116,16 +116,16 @@ namespace CDT.LAST.MonoGameClient.Screens
                     contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/WoodenShield")
                 });
             _propIcons.Add("work-clothes",
-                new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/BodyParts/WorkClothes/Icon") });
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/WorkClothes") });
             _propIcons.Add("traveler-camisole",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Icon")
+                    contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/TravelerCamisole")
                 });
             _propIcons.Add("knitted-hat",
-                new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HeadParts/KnittedHatIcon") });
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/KnittedHat") });
             _propIcons.Add("steel-helmet",
-                new[] { contentManager.Load<Texture2D>("Sprites/game-objects/Equipments/HeadParts/SteelHelmetIcon") });
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/SteelHelmet") });
 
             _propIcons.Add("med-kit",
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/MedKit") });
