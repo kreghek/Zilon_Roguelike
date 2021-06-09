@@ -8,10 +8,10 @@ namespace Zilon.Core.Tactics
 {
     public sealed class HumanSectorFowData : ISectorFowData
     {
+        private readonly object _lockObject;
         private readonly Dictionary<IGraphNode, SectorMapFowNode> _nodes;
 
         private readonly Dictionary<SectorMapNodeFowState, List<SectorMapFowNode>> _sectorNodeHash;
-        private readonly object _lockObject;
 
         public HumanSectorFowData()
         {

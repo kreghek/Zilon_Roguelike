@@ -22,6 +22,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class MainScreen : GameSceneBase
     {
+        private readonly IAnimationBlockerService _animationBlockerService;
         private readonly IconButton _autoplayModeButton;
         private readonly Camera _camera;
         private readonly ContainerModalDialog _containerModal;
@@ -33,7 +34,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
-        private readonly IAnimationBlockerService _animationBlockerService;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
         private bool _autoplayHintIsShown;
