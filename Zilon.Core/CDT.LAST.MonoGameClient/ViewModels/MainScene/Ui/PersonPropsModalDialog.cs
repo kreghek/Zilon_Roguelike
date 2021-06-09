@@ -20,8 +20,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class PersonPropsModalDialog : ModalDialogBase
     {
-        private const int EQUIPMENT_ITEM_SIZE = 32 + (5 * 2); // 5 is margin in button
+        private const int EQUIPMENT_ITEM_SIZE = 32;
         private const int EQUIPMENT_ITEM_SPACING = 2;
+        private const int MAX_INVENTORY_ROW_ITEMS = 8;
         private readonly IServiceProvider _serviceProvider;
 
         private readonly IUiContentStorage _uiContentStorage;
@@ -283,18 +284,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             var currentInventoryItemList = new List<InventoryUiItem>();
-            foreach (var prop in inventoryModule.CalcActualItems())
+            var inventoryItems = inventoryModule.CalcActualItems();
+            foreach (var prop in inventoryItems)
             {
                 if (prop is null)
                 {
                     continue;
                 }
 
+                const int EQUIPMENT_ROW_HEIGHT = EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING;
+
                 var lastIndex = currentInventoryItemList.Count;
-                var relativeX = lastIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
+                var columnIndex = lastIndex % MAX_INVENTORY_ROW_ITEMS;
+                var rowIndex = lastIndex / MAX_INVENTORY_ROW_ITEMS;
+                var relativeX = columnIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
+                var relativeY = rowIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
                     relativeX + ContentRect.Left,
-                    ContentRect.Top + EQUIPMENT_ITEM_SIZE,
+                    ContentRect.Top + relativeY + EQUIPMENT_ROW_HEIGHT,
                     EQUIPMENT_ITEM_SIZE,
                     EQUIPMENT_ITEM_SIZE);
 
