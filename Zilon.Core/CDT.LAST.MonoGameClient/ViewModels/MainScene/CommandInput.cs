@@ -147,7 +147,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             if (keyboardState.IsKeyDown(Keys.O))
-            { 
+            {
                 var openCommand = _commandFactory.GetCommand<OpenContainerCommand>();
                 _uiState.SelectedViewModel = GetStaticObjectUnderActor(_uiState.ActiveActor?.Actor);
                 if (openCommand.CanExecute().IsSuccess)
