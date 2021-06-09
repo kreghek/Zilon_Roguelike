@@ -8,7 +8,6 @@ using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -20,7 +19,7 @@ using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    public sealed class PropModalInventoryContextualMenu
+    internal sealed class PropModalInventoryContextualMenu
     {
         private const int MENU_MARGIN = 5;
         private const int MENU_WIDTH = 128;

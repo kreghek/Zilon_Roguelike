@@ -25,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int EQUIPMENT_ITEM_SIZE = 32;
         private const int EQUIPMENT_ITEM_SPACING = 2;
         private readonly IUiContentStorage _uiContentStorage;
-
+        private readonly IServiceProvider _serviceProvider;
         private readonly ISectorUiState _uiState;
         private InventoryUiItem[] _currentContainerItems;
         private InventoryUiItem[] _currentInventoryItems;
@@ -33,12 +33,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private InventoryUiItem? _hoverInventoryItem;
 
+        private ContainerModalInventoryContextualMenu? _propSubmenu;
+        private IStaticObject _container;
+
         public ContainerModalDialog(ISectorUiState uiState, IUiContentStorage uiContentStorage,
-            GraphicsDevice graphicsDevice) : base(
+            GraphicsDevice graphicsDevice,
+            IServiceProvider serviceProvider) : base(
             uiContentStorage, graphicsDevice)
         {
             _uiState = uiState;
             _uiContentStorage = uiContentStorage;
+            _serviceProvider = serviceProvider;
         }
 
         protected override void DrawContent(SpriteBatch spriteBatch)
@@ -46,9 +51,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawInventory(spriteBatch);
             DrawContainer(spriteBatch);
 
-            if (false)
+            if (_propSubmenu != null)
             {
-                //_propSubmenu.Draw(spriteBatch);
+                _propSubmenu.Draw(spriteBatch);
             }
 
             DrawInventoryHintIfSelected(spriteBatch);
@@ -57,19 +62,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         protected override void UpdateContent()
         {
-            if (false)
+            if (_propSubmenu != null)
             {
-                //_propSubmenu.Update();
+                _propSubmenu.Update();
 
-                //if (_propSubmenu.IsClosed)
-                //{
-                //    if (_propSubmenu.IsCommandUsed)
-                //    {
-                //        Close();
-                //    }
+                if (_propSubmenu.IsClosed)
+                {
+                    if (_propSubmenu.IsCommandUsed)
+                    {
+                        Close();
+                    }
 
-                //    _propSubmenu = null;
-                //}
+                    _propSubmenu = null;
+                }
             }
 
             UpdateInventory();
@@ -221,6 +226,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void InitContainerContent(IStaticObject container)
         {
+            _container = container;
+
             var currentContainerItemList = new List<InventoryUiItem>();
 
             foreach (var prop in container.GetModule<IPropContainer>().Content.CalcActualItems())
@@ -244,7 +251,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _uiContentStorage.GetButtonTexture(),
                     _uiContentStorage.GetPropIconLayers(sid).First(),
                     buttonRect);
-                //propButton.OnClick += PropButton_OnClick;
+                propButton.OnClick += PropButton_OnClick;
 
                 var uiItem = new InventoryUiItem(propButton, prop, lastIndex, buttonRect);
 
@@ -252,6 +259,40 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             _currentContainerItems = currentContainerItemList.ToArray();
+        }
+
+        private void PropButton_OnClick(object? sender, EventArgs e)
+        {
+            if (_currentContainerItems is null)
+            {
+                throw new InvalidOperationException("Attempt to handle button click before InitInventory called.");
+            }
+
+            var clickedUiItem = _currentContainerItems.Single(x => x.Control == sender);
+            var selectedProp = clickedUiItem.Prop;
+
+            var mouseState = Mouse.GetState();
+
+            var person = _uiState.ActiveActor?.Actor?.Person;
+
+            if (person is null)
+            {
+                throw new InvalidOperationException("ISectorUiState must have active person assigned.");
+            }
+
+            var equipmentModule = person.GetModuleSafe<IEquipmentModule>();
+            if (equipmentModule is null)
+            {
+                throw new InvalidOperationException(
+                    "Active person must be able to use equipment to shown in this dialog.");
+            }
+
+            _propSubmenu = new ContainerModalInventoryContextualMenu(mouseState.Position, 
+                selectedProp,
+                person.GetModule<IInventoryModule>(),
+                _container.GetModule<IPropContainer>().Content,
+                _uiContentStorage,
+                _serviceProvider);
         }
 
         private void InitInventory(IPerson person)

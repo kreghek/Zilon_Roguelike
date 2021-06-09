@@ -482,5 +482,12 @@ namespace Zilon.Core.Tactics
         {
             TaskSource = actorTaskSource;
         }
+
+        public void PerformTransfer()
+        {
+            PropTransferPerformed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler? PropTransferPerformed;
     }
 }

@@ -36,6 +36,12 @@ namespace Zilon.Core.Tactics
         /// <param name="deposit"> Целевые залежи. </param>
         /// <param name="method"> Метод добычи. </param>
         void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
+        
+        /// <summary>
+        /// Method-wrapper (mb temp) to raise event.
+        /// Event are nesessary to run animation and sound in clients.
+        /// </summary>
+        void PerformTransfer();
 
         /// <summary>
         /// Перемещение актёра в указанный узел карты.
@@ -90,5 +96,6 @@ namespace Zilon.Core.Tactics
         /// Выстреливает, когда актёр использует предмет.
         /// </summary>
         event EventHandler<UsedPropEventArgs>? UsedProp;
+        event EventHandler? PropTransferPerformed;
     }
 }

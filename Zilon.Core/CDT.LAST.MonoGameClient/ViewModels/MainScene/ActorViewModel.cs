@@ -93,12 +93,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.UsedAct += Actor_UsedAct;
             Actor.DamageTaken += Actor_DamageTaken;
             Actor.UsedProp += Actor_UsedProp;
+            Actor.PropTransferPerformed += Actor_PropTransferPerformed;
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
                 Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += Actor_EquipmentChanged;
             }
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
+        }
+
+        private void Actor_PropTransferPerformed(object? sender, EventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use);
+            _actorStateEngine = new ActorCommonActionEngine(
+                _graphicsRoot.RootSprite,
+                animationBlockerService,
+                soundEffect?.CreateInstance());
         }
 
         public override bool HiddenByFow => true;
@@ -121,6 +133,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.UsedAct -= Actor_UsedAct;
             Actor.DamageTaken -= Actor_DamageTaken;
             Actor.UsedProp -= Actor_UsedProp;
+            Actor.PropTransferPerformed -= Actor_PropTransferPerformed;
 
             if (Actor.Person.HasModule<IEquipmentModule>())
             {

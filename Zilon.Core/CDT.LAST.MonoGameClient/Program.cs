@@ -57,9 +57,11 @@ namespace CDT.LAST.MonoGameClient
             serviceContainer.AddScoped<IdleCommand>();
             serviceContainer.AddScoped<AttackCommand>();
             serviceContainer.AddScoped<SectorTransitionMoveCommand>();
-            serviceContainer.AddTransient<EquipCommand>();
             serviceContainer.AddScoped<UseSelfCommand>();
             serviceContainer.AddScoped<OpenContainerCommand>();
+
+            serviceContainer.AddTransient<EquipCommand>();
+            serviceContainer.AddTransient<PropTransferCommand>();
         }
 
         private static void RegisterUiContentStorages(ServiceCollection serviceContainer)

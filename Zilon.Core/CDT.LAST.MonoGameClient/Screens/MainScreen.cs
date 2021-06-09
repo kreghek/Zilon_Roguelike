@@ -104,7 +104,11 @@ namespace CDT.LAST.MonoGameClient.Screens
                 game.GraphicsDevice,
                 _uiState);
 
-            _containerModal = new ContainerModalDialog(_uiState, uiContentStorage, Game.GraphicsDevice);
+            _containerModal = new ContainerModalDialog(
+                _uiState,
+                uiContentStorage,
+                Game.GraphicsDevice, 
+                ((LivGame)game).ServiceProvider);
         }
 
         public override void Draw(GameTime gameTime)
