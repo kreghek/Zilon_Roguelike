@@ -17,7 +17,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class PersonConditionsPanel
     {
-        private const int ICON_SIZE = 16;
+        private const int ICON_SIZE = 32;
         private const int ICON_SPACING = 2;
 
         private readonly Texture2D _conditionBackgroundTexture;
@@ -149,17 +149,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void DrawIcon(SpriteBatch spriteBatch, IPersonCondition effect, int iconX)
+        private void DrawIcon(SpriteBatch spriteBatch, IPersonCondition personCondition, int iconX)
         {
-            var conditionIconSid = GetConditionSid(effect);
+            var conditionIconSid = GetConditionSid(personCondition);
             var conditionIconTexture = _conditionIconTextureDict[conditionIconSid];
-            spriteBatch.Draw(conditionIconTexture, new Vector2(iconX, _screenY), Color.DarkSlateGray);
+            spriteBatch.Draw(conditionIconTexture, new Vector2(iconX, _screenY), Color.White);
         }
 
         private void DrawIconBackground(SpriteBatch spriteBatch, int iconX)
         {
-            spriteBatch.Draw(_conditionBackgroundTexture, new Rectangle(iconX, _screenY, ICON_SIZE, ICON_SIZE),
-                Color.Yellow);
+            spriteBatch.Draw(_conditionBackgroundTexture,
+                new Vector2(iconX, _screenY),
+                Color.White);
         }
 
         private static string GetConditionSid(IPersonCondition personCondition)

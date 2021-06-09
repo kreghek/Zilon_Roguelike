@@ -52,7 +52,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
 
             _camera = new Camera();
-            _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
+            _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 8, screenY: 8);
 
             var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
             _uiContentStorage = uiContentStorage;
