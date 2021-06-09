@@ -83,41 +83,12 @@
         /// </remarks>
         protected abstract void ValidateSetEquipment(Equipment equipment, int slotIndex);
 
-        private void SetEquipment(Equipment? equipment, int slotIndex)
+        private void DropHandsEquipment(IEnumerable<int> foundHandsIndexes)
         {
-            if (equipment != null)
+            foreach (var handIndex in foundHandsIndexes)
             {
-                ValidateSetEquipment(equipment: equipment, slotIndex: slotIndex);
-
-                var isTwoHandedEquipment = equipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage == PropHandUsage.TwoHanded;
-                if (isTwoHandedEquipment)
-                {
-                    ReplaceEquipmentInHandSlots(equipment);
-                }
-                else
-                {
-                    _equipment[slotIndex] = equipment; 
-                }
+                _equipment[handIndex] = null;
             }
-            else
-            {
-                _equipment[slotIndex] = null;
-            }
-
-            var oldEquipment = _equipment[slotIndex];
-
-            DoEquipmentChanged(slotIndex: slotIndex, oldEquipment: oldEquipment, equipment: equipment);
-        }
-
-        private void ReplaceEquipmentInHandSlots(Equipment? equipment)
-        {
-            var foundHandsIndexes = FoundHandsIndexes();
-            if (!foundHandsIndexes.Any())
-                throw new ArgumentException($"Отсутствут слоты рук для экипировки {equipment} предмета");
-
-            DropHandsEquipment(foundHandsIndexes);
-            var firstHandIndex = foundHandsIndexes.First();
-            _equipment[firstHandIndex] = equipment;
         }
 
         private IEnumerable<int> FoundHandsIndexes()
@@ -131,12 +102,37 @@
                 });
         }
 
-        private void DropHandsEquipment(IEnumerable<int> foundHandsIndexes)
+        private void ReplaceEquipmentInHandSlots(Equipment? equipment)
         {
-            foreach (var handIndex in foundHandsIndexes)
+            var foundHandsIndexes = FoundHandsIndexes();
+            if (!foundHandsIndexes.Any())
+                throw new ArgumentException($"No hand slots to equipment the {equipment}");
+
+            DropHandsEquipment(foundHandsIndexes);
+            var firstHandIndex = foundHandsIndexes.First();
+            _equipment[firstHandIndex] = equipment;
+        }
+
+        private void SetEquipment(Equipment? equipment, int slotIndex)
+        {
+            if (equipment != null)
             {
-                _equipment[handIndex] = null;
+                ValidateSetEquipment(equipment: equipment, slotIndex: slotIndex);
+
+                var isTwoHandedEquipment = equipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage == PropHandUsage.TwoHanded;
+                if (isTwoHandedEquipment)
+                    ReplaceEquipmentInHandSlots(equipment);
+                else
+                    _equipment[slotIndex] = equipment;
             }
+            else
+            {
+                _equipment[slotIndex] = null;
+            }
+
+            var oldEquipment = _equipment[slotIndex];
+
+            DoEquipmentChanged(slotIndex: slotIndex, oldEquipment: oldEquipment, equipment: equipment);
         }
 
         /// <summary>

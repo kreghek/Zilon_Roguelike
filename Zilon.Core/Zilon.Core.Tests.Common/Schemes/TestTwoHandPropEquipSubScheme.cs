@@ -1,28 +1,25 @@
 ﻿namespace Zilon.Core.Tests.Common.Schemes
 {
-    using System.Diagnostics.CodeAnalysis;
-
-    using Newtonsoft.Json;
-
     using Zilon.Core.Components;
     using Zilon.Core.Schemes;
 
-    [ExcludeFromCodeCoverage]
-    public class TestTwoHandPropEquipSubScheme : IPropEquipSubScheme
+    public record TestTwoHandPropEquipSubScheme : IPropEquipSubScheme
     {
         public TestTwoHandPropEquipSubScheme()
         {
-            const string json = "{ \"PropHandUsage\": \"TwoHanded\" }";
-            EquipRestrictions = JsonConvert.DeserializeObject<PropEquipRestrictions>(json);
+            EquipRestrictions = new PropEquipRestrictions
+            {
+                PropHandUsage = PropHandUsage.TwoHanded
+            };
         }
 
-        public EquipmentSlotTypes[] SlotTypes { get; set; }
+        public EquipmentSlotTypes[] SlotTypes { get; init; }
 
         public string[] ActSids { get; }
 
-        public IPropArmorItemSubScheme[] Armors { get; set; }
+        public IPropArmorItemSubScheme[] Armors { get; init; }
 
-        public PersonRule[] Rules { get; set; }
+        public PersonRule[] Rules { get; init; }
 
         public IPropEquipRestrictions EquipRestrictions { get; }
     }
