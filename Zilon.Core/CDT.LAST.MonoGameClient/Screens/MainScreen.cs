@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -32,6 +33,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
+        private readonly IAnimationBlockerService _animationBlockerService;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
         private bool _autoplayHintIsShown;
@@ -51,6 +53,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
             _player = serviceScope.GetRequiredService<IPlayer>();
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
+            _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
             _camera = new Camera();
             _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
@@ -329,6 +332,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void HandleScreenChanging()
         {
+            _animationBlockerService.DropBlockers();
             _sectorViewModel.UnsubscribeEventHandlers();
             _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
         }

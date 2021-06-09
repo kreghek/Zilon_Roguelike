@@ -63,27 +63,37 @@ namespace Zilon.Core.World
                 // It was used as fallback later.
                 var oldActorNode = actor.Node;
 
+                var removingSuccessfull = true;
                 try
                 {
                     sector.ActorManager.Remove(actor);
+                    removingSuccessfull = true;
                 }
-                catch (InvalidOperationException exception)
+                catch (InvalidOperationException)
                 {
-                    // Пока ничего не делаем
-                    Console.WriteLine(exception);
-                    Console.WriteLine(actor);
+                    Debug.Fail("Actor was removed successfully after transition.");
+                    //throw;
                 }
 
-                var nextSector = sectorNode.Sector;
-
-                if (nextSector is null)
+                if (removingSuccessfull)
                 {
-                    throw new InvalidOperationException();
-                }
+                    var nextSector = sectorNode.Sector;
 
-                var transitionItem =
-                    new TransitionPoolItem(actor.Person, actor.TaskSource, nextSector, sector, oldActorNode);
-                _transitionPool.Push(transitionItem);
+                    if (nextSector is null)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    // Push in transition pool only if remove from previous sector is success.
+                    // Otherwise 2 actors of same person will live in 2 different places.
+                    var transitionItem =
+                        new TransitionPoolItem(actor.Person, actor.TaskSource, nextSector, sector, oldActorNode);
+                    _transitionPool.Push(transitionItem);
+                }
+                else
+                {
+                    throw new InvalidCastException("Actor was not correctly removed from previous sector.");
+                }
             }
             finally
             {
