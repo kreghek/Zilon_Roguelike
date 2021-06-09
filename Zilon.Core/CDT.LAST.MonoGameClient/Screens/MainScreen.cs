@@ -242,7 +242,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void DrawHud()
         {
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _personEffectsPanel.Draw(_spriteBatch);
 
             _autoplayModeButton.Draw(_spriteBatch);
