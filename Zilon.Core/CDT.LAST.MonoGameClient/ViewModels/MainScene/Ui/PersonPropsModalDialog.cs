@@ -186,9 +186,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var InventoryTitle = GetPropTitle(_hoverInventoryItem.Prop);
+            var inventoryTitle = GetPropTitle(_hoverInventoryItem.Prop);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
-            var titleTextSizeVector = hintTitleFont.MeasureString(InventoryTitle);
+            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
 
             const int HINT_TEXT_SPACING = 8;
             var hintRectangle = new Rectangle(
@@ -199,7 +199,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
 
-            spriteBatch.DrawString(hintTitleFont, InventoryTitle,
+            spriteBatch.DrawString(hintTitleFont, inventoryTitle,
                 new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                 Color.Wheat);
         }

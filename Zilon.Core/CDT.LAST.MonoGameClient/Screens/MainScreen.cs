@@ -104,7 +104,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 game.GraphicsDevice,
                 _uiState);
 
-            _containerModal = new ContainerModalDialog(uiContentStorage, Game.GraphicsDevice);
+            _containerModal = new ContainerModalDialog(_uiState, uiContentStorage, Game.GraphicsDevice);
         }
 
         public override void Draw(GameTime gameTime)
@@ -193,6 +193,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
         {
+            _containerModal.Init(e.Container);
             _containerModal.Show();
         }
 
