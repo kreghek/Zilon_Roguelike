@@ -3,7 +3,6 @@
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Screens;
 
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,7 +13,7 @@ using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    internal sealed class ContainerModalInventoryContextualMenu
+    internal sealed class ContainerModalContainerContextualMenu
     {
         private const int MENU_MARGIN = 5;
         private const int MENU_WIDTH = 128;
@@ -29,7 +28,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly Point _size;
         private readonly IUiContentStorage _uiContentStorage;
 
-        public ContainerModalInventoryContextualMenu(
+        public ContainerModalContainerContextualMenu(
             Point position,
             IProp prop,
             IPropStore inventoryStore,
@@ -133,7 +132,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private TextButton[] InitItems(IProp prop)
         {
-            var takeMenuButton = new TextButton("Store", _uiContentStorage.GetMenuItemTexture(),
+            var takeMenuButton = new TextButton("Take", _uiContentStorage.GetMenuItemTexture(),
                 _uiContentStorage.GetMenuItemFont(),
                 new Rectangle(
                     MENU_MARGIN + _position.X,
@@ -147,8 +146,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
 
                 var transferMachine = new PropTransferMachine(_inventoryStore, _containerStore);
-                transferMachine.TransferProp(prop, PropTransferMachineStore.Inventory,
-                    PropTransferMachineStore.Container);
+                transferMachine.TransferProp(prop, PropTransferMachineStore.Container,
+                    PropTransferMachineStore.Inventory);
                 transferCommand.TransferMachine = transferMachine;
 
                 commandPool.Push(transferCommand);
