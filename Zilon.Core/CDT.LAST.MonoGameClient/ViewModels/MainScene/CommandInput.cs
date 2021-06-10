@@ -148,11 +148,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return null;
         }
 
+        private KeyboardState? _lastKeyboardState;
+
         private bool HandleHotKeys()
         {
             var keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.T))
+            if (keyboardState.IsKeyUp(Keys.T) && _lastKeyboardState?.IsKeyDown(Keys.T) == true)
             {
+                _lastKeyboardState = keyboardState;
+
                 var transitionCommand = _commandFactory.GetCommand<SectorTransitionMoveCommand>();
 
                 if (transitionCommand.CanExecute().IsSuccess)
@@ -163,8 +167,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return true;
             }
 
-            if (keyboardState.IsKeyDown(Keys.O))
+            if (keyboardState.IsKeyUp(Keys.O) && _lastKeyboardState?.IsKeyDown(Keys.O) == true)
             {
+                _lastKeyboardState = keyboardState;
+
                 var openCommand = _commandFactory.GetCommand<OpenContainerCommand>();
                 _uiState.SelectedViewModel = GetStaticObjectUnderActor(_uiState.ActiveActor?.Actor);
                 if (openCommand.CanExecute().IsSuccess)
@@ -174,6 +180,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 return true;
             }
+
+            _lastKeyboardState = keyboardState;
 
             return false;
         }
