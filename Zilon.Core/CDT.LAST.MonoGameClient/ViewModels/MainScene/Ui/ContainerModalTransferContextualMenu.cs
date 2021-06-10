@@ -5,8 +5,6 @@ using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
@@ -14,7 +12,7 @@ using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    internal sealed class ContainerModalTransferContextualMenu
+    internal sealed class ContainerModalTransferContextualMenu: PropModalInventoryContextualMenuBase
     {
         private const int MENU_MARGIN = 5;
         private const int MENU_WIDTH = 128;
@@ -22,14 +20,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IPropStore _containerStore;
         private readonly IPropStore _inventoryStore;
 
-        private readonly TextButton[] _menuItemButtons;
-        private readonly Point _position;
         private readonly IServiceProvider _serviceProvider;
         private readonly PropTransferMachineStore _sourceStore;
         private readonly PropTransferMachineStore _targetStore;
         private readonly string _menuTitle;
-        private readonly Point _size;
-        private readonly IUiContentStorage _uiContentStorage;
 
         public ContainerModalTransferContextualMenu(
             Point position,
@@ -40,105 +34,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             IServiceProvider serviceProvider,
             PropTransferMachineStore sourceStore,
             PropTransferMachineStore targetStore,
-            string menuTitle)
+            string menuTitle): base(position, prop, uiContentStorage)
         {
-            _position = position;
             _inventoryStore = inventoryStore;
             _containerStore = containerStore;
-            _uiContentStorage = uiContentStorage;
             _serviceProvider = serviceProvider;
             _sourceStore = sourceStore;
             _targetStore = targetStore;
             _menuTitle = menuTitle;
-            _menuItemButtons = InitItems(prop);
-
-            var itemsHeight = _menuItemButtons.Length * MENU_ITEM_HEIGHT;
-            _size = new Point(
-                MENU_WIDTH + (MENU_MARGIN * 2),
-                itemsHeight + (MENU_MARGIN * 2)
-            );
         }
 
-        public bool IsClosed { get; private set; }
+        
 
-        public bool IsCommandUsed { get; private set; }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            DrawBorder(spriteBatch);
-
-            foreach (var button in _menuItemButtons)
-            {
-                button.Draw(spriteBatch);
-            }
-        }
-
-        public void Update()
-        {
-            foreach (var button in _menuItemButtons)
-            {
-                button.Update();
-            }
-
-            // Close menu if mouse is not on menu.
-
-            var mouseState = Mouse.GetState();
-            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-            var menuRect = new Rectangle(_position, _size);
-            if (!mouseRect.Intersects(menuRect))
-            {
-                CloseMenu();
-            }
-        }
-
-        private void CloseMenu()
-        {
-            IsClosed = true;
-        }
-
-        private void DrawBorder(SpriteBatch spriteBatch)
-        {
-            // edges
-
-            const int EDGE_SIZE = 5;
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(_position, new Point(EDGE_SIZE, EDGE_SIZE)),
-                new Rectangle(0, 0, EDGE_SIZE, EDGE_SIZE),
-                Color.White);
-
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + _size.X - EDGE_SIZE, _position.Y),
-                    new Point(EDGE_SIZE, EDGE_SIZE)),
-                new Rectangle(7, 0, EDGE_SIZE, EDGE_SIZE),
-                Color.White);
-
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X, _position.Y + _size.Y - EDGE_SIZE),
-                    new Point(EDGE_SIZE, EDGE_SIZE)),
-                new Rectangle(0, 7, EDGE_SIZE, EDGE_SIZE),
-                Color.White);
-
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + _size.X - EDGE_SIZE, _position.Y + _size.Y - EDGE_SIZE),
-                    new Point(EDGE_SIZE, EDGE_SIZE)),
-                new Rectangle(7, 7, EDGE_SIZE, EDGE_SIZE),
-                Color.White);
-
-            // sides
-
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + EDGE_SIZE, _position.Y), new Point(_size.X - (EDGE_SIZE * 2), 6)),
-                new Rectangle(EDGE_SIZE, 0, 2, 6),
-                Color.White);
-
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + EDGE_SIZE, _position.Y + _size.Y - EDGE_SIZE),
-                    new Point(_size.X - (EDGE_SIZE * 2), 6)),
-                new Rectangle(EDGE_SIZE, 7, 2, 6),
-                Color.White);
-        }
-
-        private TextButton[] InitItems(IProp prop)
+        protected override TextButton[] InitItems(IProp prop)
         {
             var menuButton = new TextButton(_menuTitle, _uiContentStorage.GetMenuItemTexture(),
                 _uiContentStorage.GetMenuItemFont(),
