@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -88,12 +89,13 @@ namespace Zilon.Core.Tactics
 
         private void ActorManager_Remove(object? sender, ManagerItemsChangedEventArgs<IActor> e)
         {
-            // Когда актёры удалены из сектора, мы перестаём мониторить события на них.
             foreach (var actor in e.Items)
             {
                 ReleaseNodes(actor, Map);
 
-                if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
+                // Stop to handle actors' events then they leaves the sector.
+                var survivalModule = actor.Person.GetModuleSafe<ISurvivalModule>();
+                if (survivalModule != null)
                 {
                     actor.Person.GetModule<ISurvivalModule>().Dead -= ActorState_Dead;
                 }

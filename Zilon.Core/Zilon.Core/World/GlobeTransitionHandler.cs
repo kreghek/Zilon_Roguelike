@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.World
@@ -23,7 +24,6 @@ namespace Zilon.Core.World
             _globeExpander = globeExpander ?? throw new ArgumentNullException(nameof(globeExpander));
             _transitionPool = transitionPool ?? throw new ArgumentNullException(nameof(transitionPool));
 
-            //Instantiate a Singleton of the Semaphore with a value of 1. This means that only 1 thread can be granted access at a time.
             _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
@@ -46,12 +46,19 @@ namespace Zilon.Core.World
 
         private async Task ProcessInnerAsync(IGlobe globe, ISector sector, IActor actor, SectorTransition transition)
         {
+            // To diagnistic #1094
+            var survivalmodule = actor.Person.GetModuleSafe<ISurvivalModule>();
+            if (survivalmodule != null)
+            {
+                if (survivalmodule.IsDead)
+                {
+                    Debug.Fail("Dead actors can't to leave sector.");
+                }
+            }
+
             var sectorNode = transition.SectorNode;
 
-            //TODO Разобраться с этим кодом.
-            // https://blog.cdemi.io/async-waiting-inside-c-sharp-locks/
-            //Asynchronously wait to enter the Semaphore. If no-one has been granted access to the Semaphore, code execution will proceed, otherwise this thread waits here until the semaphore is released 
-            await _semaphoreSlim.WaitAsync();
+            await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
             try
             {
                 if (sectorNode.State != SectorNodeState.SectorMaterialized)
