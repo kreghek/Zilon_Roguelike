@@ -27,14 +27,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IServiceProvider _serviceProvider;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
-        private IStaticObject _container;
-        private InventoryUiItem[] _currentContainerItems;
-        private InventoryUiItem[] _currentInventoryItems;
+        private IStaticObject? _container;
+        private InventoryUiItem[]? _currentContainerItems;
+        private InventoryUiItem[]? _currentInventoryItems;
         private InventoryUiItem? _hoverContainerItem;
 
         private InventoryUiItem? _hoverInventoryItem;
 
-        private ContainerModalInventoryContextualMenu? _propSubmenu;
+        private ContainerModalInventoryContextualMenu? _inventoryPropSubmenu;
+        private ContainerModalContainerContextualMenu? _containerPropSubmenu;
 
         public ContainerModalDialog(ISectorUiState uiState, IUiContentStorage uiContentStorage,
             GraphicsDevice graphicsDevice,
@@ -51,9 +52,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawInventory(spriteBatch);
             DrawContainer(spriteBatch);
 
-            if (_propSubmenu != null)
+            if (_inventoryPropSubmenu != null)
             {
-                _propSubmenu.Draw(spriteBatch);
+                _inventoryPropSubmenu.Draw(spriteBatch);
+            }
+            else if (_containerPropSubmenu != null)
+            {
+                _containerPropSubmenu.Draw(spriteBatch);
             }
 
             DrawInventoryHintIfSelected(spriteBatch);
@@ -62,18 +67,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         protected override void UpdateContent()
         {
-            if (_propSubmenu != null)
+            if (_inventoryPropSubmenu != null)
             {
-                _propSubmenu.Update();
+                _inventoryPropSubmenu.Update();
 
-                if (_propSubmenu.IsClosed)
+                if (_inventoryPropSubmenu.IsClosed)
                 {
-                    if (_propSubmenu.IsCommandUsed)
+                    if (_inventoryPropSubmenu.IsCommandUsed)
                     {
                         Close();
                     }
 
-                    _propSubmenu = null;
+                    _inventoryPropSubmenu = null;
+                }
+            }
+            else if (_containerPropSubmenu != null)
+            {
+                _containerPropSubmenu.Update();
+
+                if (_containerPropSubmenu.IsClosed)
+                {
+                    if (_containerPropSubmenu.IsCommandUsed)
+                    {
+                        Close();
+                    }
+
+                    _containerPropSubmenu = null;
                 }
             }
 
@@ -251,7 +270,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _uiContentStorage.GetButtonTexture(),
                     _uiContentStorage.GetPropIconLayers(sid).First(),
                     buttonRect);
-                propButton.OnClick += PropButton_OnClick;
+                propButton.OnClick += ContainerPropButton_OnClick;
 
                 var uiItem = new InventoryUiItem(propButton, prop, lastIndex, buttonRect);
 
@@ -292,7 +311,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _uiContentStorage.GetButtonTexture(),
                     _uiContentStorage.GetPropIconLayers(sid).First(),
                     buttonRect);
-                //propButton.OnClick += PropButton_OnClick;
+                propButton.OnClick += InventoryPropButton_OnClick;
 
                 var uiItem = new InventoryUiItem(propButton, prop, lastIndex, buttonRect);
 
@@ -302,7 +321,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _currentInventoryItems = currentInventoryItemList.ToArray();
         }
 
-        private void PropButton_OnClick(object? sender, EventArgs e)
+        private void ContainerPropButton_OnClick(object? sender, EventArgs e)
         {
             if (_currentContainerItems is null)
             {
@@ -328,7 +347,48 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     "Active person must be able to use equipment to shown in this dialog.");
             }
 
-            _propSubmenu = new ContainerModalInventoryContextualMenu(mouseState.Position,
+            _containerPropSubmenu = new ContainerModalContainerContextualMenu(mouseState.Position,
+                selectedProp,
+                person.GetModule<IInventoryModule>(),
+                _container.GetModule<IPropContainer>().Content,
+                _uiContentStorage,
+                _serviceProvider);
+        }
+
+        private void InventoryPropButton_OnClick(object? sender, EventArgs e)
+        {
+            if (_currentInventoryItems is null)
+            {
+                throw new InvalidOperationException("Attempt to handle button click before InitInventory called.");
+            }
+
+            var clickedUiItem = _currentInventoryItems.Single(x => x.Control == sender);
+            var selectedProp = clickedUiItem.Prop;
+
+            var mouseState = Mouse.GetState();
+
+            var person = _uiState.ActiveActor?.Actor?.Person;
+
+            if (person is null)
+            {
+                throw new InvalidOperationException("ISectorUiState must have active person assigned.");
+            }
+
+            var equipmentModule = person.GetModuleSafe<IEquipmentModule>();
+            if (equipmentModule is null)
+            {
+                throw new InvalidOperationException(
+                    "Active person must be able to use equipment to shown in this dialog.");
+            }
+
+            _inventoryPropSubmenu = new ContainerModalInventoryContextualMenu(mouseState.Position,
+                selectedProp,
+                person.GetModule<IInventoryModule>(),
+                _container.GetModule<IPropContainer>().Content,
+                _uiContentStorage,
+                _serviceProvider);
+
+            _containerPropSubmenu = new ContainerModalContainerContextualMenu(mouseState.Position,
                 selectedProp,
                 person.GetModule<IInventoryModule>(),
                 _container.GetModule<IPropContainer>().Content,
