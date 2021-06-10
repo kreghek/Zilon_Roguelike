@@ -44,7 +44,7 @@ namespace Zilon.Core.World
             return true;
         }
 
-        private async Task ProcessInnerAsync(IGlobe globe, ISector sector, IActor actor, SectorTransition transition)
+        private async Task ProcessInnerAsync(IGlobe globe, ISector sourceSector, IActor actor, SectorTransition transition)
         {
             // To diagnistic #1094
             var survivalmodule = actor.Person.GetModuleSafe<ISurvivalModule>();
@@ -70,37 +70,23 @@ namespace Zilon.Core.World
                 // It was used as fallback later.
                 var oldActorNode = actor.Node;
 
-                var removingSuccessfull = true;
-                try
+
+                sourceSector.ActorManager.Remove(actor);
+
+                var targetSector = sectorNode.Sector;
+
+                if (targetSector is null)
                 {
-                    sector.ActorManager.Remove(actor);
-                    removingSuccessfull = true;
-                }
-                catch (InvalidOperationException)
-                {
-                    Debug.Fail("Actor was removed successfully after transition.");
-                    //throw;
+                    throw new InvalidOperationException();
                 }
 
-                if (removingSuccessfull)
-                {
-                    var nextSector = sectorNode.Sector;
-
-                    if (nextSector is null)
-                    {
-                        throw new InvalidOperationException();
-                    }
-
-                    // Push in transition pool only if remove from previous sector is success.
-                    // Otherwise 2 actors of same person will live in 2 different places.
-                    var transitionItem =
-                        new TransitionPoolItem(actor.Person, actor.TaskSource, nextSector, sector, oldActorNode);
-                    _transitionPool.Push(transitionItem);
-                }
-                else
-                {
-                    throw new InvalidCastException("Actor was not correctly removed from previous sector.");
-                }
+                var transitionItem = new TransitionPoolItem(
+                    actor.Person,
+                    actor.TaskSource,
+                    targetSector,
+                    sourceSector,
+                    oldActorNode);
+                _transitionPool.Push(transitionItem);
             }
             finally
             {
