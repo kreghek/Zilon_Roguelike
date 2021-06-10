@@ -33,6 +33,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             inventoryState.SelectedProp = new PropViewModel(_prop);
         }
 
+        protected override TextButton[] InitItems(IProp prop)
+        {
+            var list = new List<TextButton>();
+
+            var useCommand = _serviceProvider.GetRequiredService<UseSelfCommand>();
+
+            var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
+
+            switch (prop)
+            {
+                case Equipment:
+                    InitItemsForEquipment(list, commandPool);
+                    break;
+
+                case Resource:
+                    InitItemsForResource(list, useCommand, commandPool);
+                    break;
+
+                default:
+                    Debug.Fail($"Unknown type {prop.GetType()} of the prop.");
+                    break;
+            }
+
+            return list.ToArray();
+        }
+
 
         private static string GetInventoryMenuItemContent(IProp prop)
         {
@@ -73,32 +99,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     Debug.Fail("All slot types must have name.");
                     return "<Unknown>";
             }
-        }
-
-        protected override TextButton[] InitItems(IProp prop)
-        {
-            var list = new List<TextButton>();
-
-            var useCommand = _serviceProvider.GetRequiredService<UseSelfCommand>();
-
-            var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
-
-            switch (prop)
-            {
-                case Equipment:
-                    InitItemsForEquipment(list, commandPool);
-                    break;
-
-                case Resource:
-                    InitItemsForResource(list, useCommand, commandPool);
-                    break;
-
-                default:
-                    Debug.Fail($"Unknown type {prop.GetType()} of the prop.");
-                    break;
-            }
-
-            return list.ToArray();
         }
 
         private void InitItemsForEquipment(List<TextButton> list, ICommandPool commandPool)

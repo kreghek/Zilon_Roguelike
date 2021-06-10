@@ -16,11 +16,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private readonly IPropStore _containerStore;
         private readonly IPropStore _inventoryStore;
+        private readonly string _menuTitle;
 
         private readonly IServiceProvider _serviceProvider;
         private readonly PropTransferMachineStore _sourceStore;
         private readonly PropTransferMachineStore _targetStore;
-        private readonly string _menuTitle;
 
         public ContainerModalTransferContextualMenu(
             Point position,

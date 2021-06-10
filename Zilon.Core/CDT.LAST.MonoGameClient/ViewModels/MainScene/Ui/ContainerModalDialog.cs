@@ -28,6 +28,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
         private IStaticObject? _container;
+        private ContainerModalTransferContextualMenu? _containerPropSubmenu;
         private InventoryUiItem[]? _currentContainerItems;
         private InventoryUiItem[]? _currentInventoryItems;
         private InventoryUiItem? _hoverContainerItem;
@@ -35,7 +36,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private InventoryUiItem? _hoverInventoryItem;
 
         private ContainerModalTransferContextualMenu? _inventoryPropSubmenu;
-        private ContainerModalTransferContextualMenu? _containerPropSubmenu;
 
         public ContainerModalDialog(ISectorUiState uiState, IUiContentStorage uiContentStorage,
             GraphicsDevice graphicsDevice,

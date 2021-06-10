@@ -28,17 +28,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _uiContentStorage = uiContentStorage;
         }
 
-        public void Init(IProp prop)
-        {
-            _menuItemButtons = InitItems(prop);
-
-            var itemsHeight = _menuItemButtons.Length * MENU_ITEM_HEIGHT;
-            _size = new Point(
-                MENU_WIDTH + (MENU_MARGIN * 2),
-                itemsHeight + (MENU_MARGIN * 2)
-            );
-        }
-
         public bool IsClosed { get; private set; }
 
         public bool IsCommandUsed { get; protected set; }
@@ -51,6 +40,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 button.Draw(spriteBatch);
             }
+        }
+
+        public void Init(IProp prop)
+        {
+            _menuItemButtons = InitItems(prop);
+
+            var itemsHeight = _menuItemButtons.Length * MENU_ITEM_HEIGHT;
+            _size = new Point(
+                MENU_WIDTH + (MENU_MARGIN * 2),
+                itemsHeight + (MENU_MARGIN * 2)
+            );
         }
 
         public void Update()
