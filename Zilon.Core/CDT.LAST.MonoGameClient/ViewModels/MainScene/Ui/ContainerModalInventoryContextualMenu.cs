@@ -133,6 +133,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private TextButton[] InitItems(IProp prop)
         {
+            //TODO Localize
             var takeMenuButton = new TextButton("Store", _uiContentStorage.GetMenuItemTexture(),
                 _uiContentStorage.GetMenuItemFont(),
                 new Rectangle(
