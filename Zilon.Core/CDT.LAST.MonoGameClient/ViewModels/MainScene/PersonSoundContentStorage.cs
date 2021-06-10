@@ -15,16 +15,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     /// </summary>
     internal sealed class PersonSoundContentStorage : IPersonSoundContentStorage
     {
+        private Dictionary<PersonActivityEffectType, SoundEffect>? _activityDict;
         private IDictionary<string, SoundEffect>? _actStartDict;
         private IDictionary<ConsumeEffectType, SoundEffect>? _consumableDict;
+        private Dictionary<string, SoundEffect>? _deathDict;
         private SoundEffect? _defaultStartHitEffect;
 
         private IDictionary<string, SoundEffect>? _equipDict;
-        private Dictionary<PersonActivityEffectType, SoundEffect>? _activityDict;
+        private Dictionary<string, SoundEffect>? _impactDict;
         private SoundEffect? _swordHitEffect;
         private SoundEffect? _unequipSound;
-        private Dictionary<string, SoundEffect>? _deathDict;
-        private Dictionary<string, SoundEffect>? _impactDict;
 
         public SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson)
         {

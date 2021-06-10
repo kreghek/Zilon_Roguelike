@@ -133,17 +133,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
-        {
-            var serviceScope = ((LivGame)_game).ServiceProvider;
-            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-            var soundEffect = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Transit);
-            _actorStateEngine = new ActorSectorTransitionEngine(
-                _graphicsRoot.RootSprite,
-                animationBlockerService,
-                soundEffect?.CreateInstance());
-        }
-
         public override void Update(GameTime gameTime)
         {
             if (_actorStateEngine != null)
@@ -163,6 +152,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _rootSprite.Position = newPosition;
                 }
             }
+        }
+
+        private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var soundEffect = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Transit);
+            _actorStateEngine = new ActorSectorTransitionEngine(
+                _graphicsRoot.RootSprite,
+                animationBlockerService,
+                soundEffect?.CreateInstance());
         }
 
         private void Actor_DamageTaken(object? sender, DamageTakenEventArgs e)

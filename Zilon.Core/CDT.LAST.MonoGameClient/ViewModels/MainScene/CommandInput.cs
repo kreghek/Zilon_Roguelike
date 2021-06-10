@@ -25,6 +25,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly ISectorUiState _uiState;
 
+        private KeyboardState? _lastKeyboardState;
+
         private bool _leftMousePressed;
 
         public CommandInput(
@@ -147,8 +149,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             return null;
         }
-
-        private KeyboardState? _lastKeyboardState;
 
         private bool HandleHotKeys()
         {

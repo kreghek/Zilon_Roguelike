@@ -44,7 +44,8 @@ namespace Zilon.Core.World
             return true;
         }
 
-        private async Task ProcessInnerAsync(IGlobe globe, ISector sourceSector, IActor actor, SectorTransition transition)
+        private async Task ProcessInnerAsync(IGlobe globe, ISector sourceSector, IActor actor,
+            SectorTransition transition)
         {
             // To diagnistic #1094
             var survivalmodule = actor.Person.GetModuleSafe<ISurvivalModule>();

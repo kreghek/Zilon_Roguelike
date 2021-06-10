@@ -15,6 +15,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// </summary>
         SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson);
 
+        //TODO Docs
+        SoundEffect? GetActivitySound(PersonActivityEffectType personActivityType);
+
         /// <summary>
         /// The sound played when visualization of a act starts.
         /// </summary>
@@ -24,9 +27,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// The sound played when visualization of a consuming things from inventory starts.
         /// </summary>
         SoundEffect? GetConsumePropSound(ConsumeEffectType consumeEffectType);
-
-        //TODO Docs
-        SoundEffect? GetActivitySound(PersonActivityEffectType personActivityType);
 
         /// <summary>
         /// The sound of specified person death.
@@ -38,7 +38,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// </summary>
         SoundEffect? GetEquipSound(string[] tags, bool direction);
 
-        void LoadContent(ContentManager contentManager);
         SoundEffect GetImpactEffect(IPerson person);
+
+        void LoadContent(ContentManager contentManager);
     }
 }
