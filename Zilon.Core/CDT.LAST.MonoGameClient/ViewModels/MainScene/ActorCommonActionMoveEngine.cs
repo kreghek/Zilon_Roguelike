@@ -13,7 +13,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     /// Use for actions without any specific.
     /// Or when it is too boring to create new engine :)
     /// </summary>
-    public sealed class ActorCommonActionEngine : IActorStateEngine
+    public sealed class ActorCommonActionMoveEngine : IActorStateEngine
     {
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;
@@ -26,7 +26,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private bool _effectPlayed;
 
-        public ActorCommonActionEngine(SpriteContainer rootContainer, IAnimationBlockerService animationBlockerService,
+        public ActorCommonActionMoveEngine(SpriteContainer rootContainer, IAnimationBlockerService animationBlockerService,
             SoundEffectInstance? soundEffect)
         {
             _rootContainer = rootContainer;
@@ -78,11 +78,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     /// Infinite animation of transition.
     /// It may be complete only througt DropBlocker in the blocker service.
     /// </summary>
-    public sealed class ActorSectorTransitionEngine : IActorStateEngine
+    public sealed class ActorSectorTransitionMoveEngine : IActorStateEngine
     {
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;
-        private readonly SoundEffectInstance? _consumeSoundEffect;
+        private readonly SoundEffectInstance? _soundEffect;
         private readonly SpriteContainer _rootContainer;
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
@@ -91,17 +91,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private bool _effectPlayed;
 
-        public ActorSectorTransitionEngine(SpriteContainer rootContainer,
+        public ActorSectorTransitionMoveEngine(SpriteContainer rootContainer,
             IAnimationBlockerService animationBlockerService,
             SoundEffectInstance? transitionSoundEffect)
         {
             _rootContainer = rootContainer;
-            _consumeSoundEffect = transitionSoundEffect;
+            _soundEffect = transitionSoundEffect;
 
             _startPosition = rootContainer.Position;
             _targetPosition = _startPosition + (Vector2.UnitY * -10);
 
-            _animationBlocker = new AnimationCommonBlocker();
+            if (transitionSoundEffect != null)
+            {
+                _animationBlocker = new SoundAnimationBlocker(transitionSoundEffect);
+            }
+            else
+            {
+                _animationBlocker = new AnimationCommonBlocker();
+            }
 
             animationBlockerService.AddBlocker(_animationBlocker);
         }
@@ -126,9 +133,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 {
                     _effectPlayed = true;
 
-                    if (_consumeSoundEffect != null)
+                    if (_soundEffect != null)
                     {
-                        _consumeSoundEffect.Play();
+                        _soundEffect.IsLooped = true;
+                        _soundEffect.Play();
                     }
                 }
 

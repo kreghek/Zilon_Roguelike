@@ -11,12 +11,4 @@
         Heal,
         UseCommon = 1000
     }
-
-    //TODO Documenting
-    internal enum PersonActivityEffectType
-    {
-        Undefined = 0,
-        TransferProp,
-        Transit
-    }
 }

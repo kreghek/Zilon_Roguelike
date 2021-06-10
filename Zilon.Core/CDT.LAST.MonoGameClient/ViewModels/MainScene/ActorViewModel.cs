@@ -159,7 +159,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
             var soundEffect = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Transit);
-            _actorStateEngine = new ActorSectorTransitionEngine(
+            _actorStateEngine = new ActorSectorTransitionMoveEngine(
                 _graphicsRoot.RootSprite,
                 animationBlockerService,
                 soundEffect?.CreateInstance());
@@ -194,7 +194,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var equipment = e.Equipment;
             var soundSoundEffect = SelectEquipEffect(equipment);
 
-            _actorStateEngine = new ActorCommonActionEngine(_graphicsRoot.RootSprite, animationBlockerService,
+            _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundSoundEffect?.CreateInstance());
         }
 
@@ -218,7 +218,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _graphicsRoot.RootSprite,
                     _shadowSprite,
                     newPosition,
-                    animationBlockerService);
+                    animationBlockerService,
+                    _personSoundStorage.GetActivitySound(PersonActivityEffectType.Move)?.CreateInstance());
                 _actorStateEngine = moveEngine;
             }
             else
@@ -232,7 +233,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
             var soundEffect = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Transit);
-            _actorStateEngine = new ActorCommonActionEngine(
+            _actorStateEngine = new ActorCommonActionMoveEngine(
                 _graphicsRoot.RootSprite,
                 animationBlockerService,
                 soundEffect?.CreateInstance());
@@ -299,7 +300,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 "packed-food" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat),
                 _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.UseCommon)
             };
-            _actorStateEngine = new ActorCommonActionEngine(_graphicsRoot.RootSprite, animationBlockerService,
+            _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundEffect?.CreateInstance());
         }
 

@@ -208,6 +208,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _activityDict = new Dictionary<PersonActivityEffectType, SoundEffect>
             {
+                [PersonActivityEffectType.Move] = contentManager.Load<SoundEffect>("Audio/Step"),
                 [PersonActivityEffectType.Transit] = contentManager.Load<SoundEffect>("Audio/Transition"),
                 [PersonActivityEffectType.TransferProp] = contentManager.Load<SoundEffect>("Audio/TransferProp")
             };

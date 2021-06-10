@@ -3,6 +3,7 @@
 using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 
 using Zilon.Core.Client.Sector;
 
@@ -12,6 +13,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private const float ANIMATION_DURATION_SECONDS = 1f;
         private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly SoundEffectInstance? _soundEffectInstance;
         private readonly SpriteContainer _graphicsRoot;
         private readonly ICommandBlocker _moveBlocker;
         private readonly SpriteContainer _rootSprite;
@@ -23,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
         public ActorMoveEngine(SpriteContainer rootSprite, SpriteContainer graphicsRoot, Sprite shadowSprite,
-            Vector2 targetPosition, IAnimationBlockerService animationBlockerService)
+            Vector2 targetPosition, IAnimationBlockerService animationBlockerService, SoundEffectInstance? soundEffectInstance)
         {
             _rootSprite = rootSprite;
             _graphicsRoot = graphicsRoot;
@@ -31,10 +33,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _startPosition = rootSprite.Position;
             _targetPosition = targetPosition;
             _animationBlockerService = animationBlockerService;
-
+            _soundEffectInstance = soundEffectInstance;
             _rootSprite.FlipX = (_startPosition - _targetPosition).X < 0;
 
-            _moveBlocker = new AnimationCommonBlocker();
+            if (soundEffectInstance != null)
+            {
+                _moveBlocker = new SoundAnimationBlocker(soundEffectInstance);
+            }
+            else
+            {
+                _moveBlocker = new AnimationCommonBlocker();
+            }
 
             _animationBlockerService.AddBlocker(_moveBlocker);
         }
@@ -45,6 +54,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public void Update(GameTime gameTime)
         {
+            if (_soundEffectInstance != null && _soundEffectInstance.State != SoundState.Playing)
+            {
+                _soundEffectInstance.Play();
+            }
+
             _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3;
             var t = 1 - _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
             var stepAmplitude = 4f;
