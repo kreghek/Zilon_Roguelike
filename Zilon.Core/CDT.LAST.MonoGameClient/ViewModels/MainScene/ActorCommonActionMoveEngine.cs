@@ -26,7 +26,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private bool _effectPlayed;
 
-        public ActorCommonActionMoveEngine(SpriteContainer rootContainer, IAnimationBlockerService animationBlockerService,
+        public ActorCommonActionMoveEngine(SpriteContainer rootContainer,
+            IAnimationBlockerService animationBlockerService,
             SoundEffectInstance? soundEffect)
         {
             _rootContainer = rootContainer;
@@ -82,8 +83,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;
-        private readonly SoundEffectInstance? _soundEffect;
         private readonly SpriteContainer _rootContainer;
+        private readonly SoundEffectInstance? _soundEffect;
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
 

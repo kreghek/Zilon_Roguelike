@@ -13,19 +13,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private const float ANIMATION_DURATION_SECONDS = 1f;
         private readonly IAnimationBlockerService _animationBlockerService;
-        private readonly SoundEffectInstance? _soundEffectInstance;
         private readonly SpriteContainer _graphicsRoot;
         private readonly ICommandBlocker _moveBlocker;
         private readonly SpriteContainer _rootSprite;
 
         private readonly Sprite _shadowSprite;
+        private readonly SoundEffectInstance? _soundEffectInstance;
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
         public ActorMoveEngine(SpriteContainer rootSprite, SpriteContainer graphicsRoot, Sprite shadowSprite,
-            Vector2 targetPosition, IAnimationBlockerService animationBlockerService, SoundEffectInstance? soundEffectInstance)
+            Vector2 targetPosition, IAnimationBlockerService animationBlockerService,
+            SoundEffectInstance? soundEffectInstance)
         {
             _rootSprite = rootSprite;
             _graphicsRoot = graphicsRoot;

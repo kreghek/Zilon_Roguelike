@@ -40,6 +40,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 _soundEffect.Dispose();
             }
+
             DoRelease();
         }
     }
