@@ -28,14 +28,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
         private IStaticObject? _container;
-        private ContainerModalContainerContextualMenu? _containerPropSubmenu;
         private InventoryUiItem[]? _currentContainerItems;
         private InventoryUiItem[]? _currentInventoryItems;
         private InventoryUiItem? _hoverContainerItem;
 
         private InventoryUiItem? _hoverInventoryItem;
 
-        private ContainerModalInventoryContextualMenu? _inventoryPropSubmenu;
+        private ContainerModalTransferContextualMenu? _inventoryPropSubmenu;
+        private ContainerModalTransferContextualMenu? _containerPropSubmenu;
 
         public ContainerModalDialog(ISectorUiState uiState, IUiContentStorage uiContentStorage,
             GraphicsDevice graphicsDevice,
@@ -146,12 +146,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     "Active person must be able to use equipment to shown in this dialog.");
             }
 
-            _containerPropSubmenu = new ContainerModalContainerContextualMenu(mouseState.Position,
+            _containerPropSubmenu = new ContainerModalTransferContextualMenu(mouseState.Position,
                 selectedProp,
                 person.GetModule<IInventoryModule>(),
                 _container.GetModule<IPropContainer>().Content,
                 _uiContentStorage,
-                _serviceProvider);
+                _serviceProvider,
+                PropTransferMachineStore.Container,
+                PropTransferMachineStore.Inventory,
+                //TODO Localize
+                "Take");
         }
 
         private void DetectHoverContainer(Rectangle mouseRectangle)
@@ -381,19 +385,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     "Active person must be able to use equipment to shown in this dialog.");
             }
 
-            _inventoryPropSubmenu = new ContainerModalInventoryContextualMenu(mouseState.Position,
+            _inventoryPropSubmenu = new ContainerModalTransferContextualMenu(mouseState.Position,
                 selectedProp,
                 person.GetModule<IInventoryModule>(),
                 _container.GetModule<IPropContainer>().Content,
                 _uiContentStorage,
-                _serviceProvider);
-
-            _containerPropSubmenu = new ContainerModalContainerContextualMenu(mouseState.Position,
-                selectedProp,
-                person.GetModule<IInventoryModule>(),
-                _container.GetModule<IPropContainer>().Content,
-                _uiContentStorage,
-                _serviceProvider);
+                _serviceProvider,
+                PropTransferMachineStore.Inventory,
+                PropTransferMachineStore.Container,
+                //TODO Localize
+                "Store");
         }
 
         private void UpdateContainer()

@@ -14,7 +14,7 @@ using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    internal sealed class ContainerModalContainerContextualMenu
+    internal sealed class ContainerModalTransferContextualMenu
     {
         private const int MENU_MARGIN = 5;
         private const int MENU_WIDTH = 128;
@@ -25,24 +25,31 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly TextButton[] _menuItemButtons;
         private readonly Point _position;
         private readonly IServiceProvider _serviceProvider;
-
+        private readonly PropTransferMachineStore _sourceStore;
+        private readonly PropTransferMachineStore _targetStore;
+        private readonly string _menuTitle;
         private readonly Point _size;
         private readonly IUiContentStorage _uiContentStorage;
 
-        public ContainerModalContainerContextualMenu(
+        public ContainerModalTransferContextualMenu(
             Point position,
             IProp prop,
             IPropStore inventoryStore,
             IPropStore containerStore,
             IUiContentStorage uiContentStorage,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            PropTransferMachineStore sourceStore,
+            PropTransferMachineStore targetStore,
+            string menuTitle)
         {
             _position = position;
             _inventoryStore = inventoryStore;
             _containerStore = containerStore;
             _uiContentStorage = uiContentStorage;
             _serviceProvider = serviceProvider;
-
+            _sourceStore = sourceStore;
+            _targetStore = targetStore;
+            _menuTitle = menuTitle;
             _menuItemButtons = InitItems(prop);
 
             var itemsHeight = _menuItemButtons.Length * MENU_ITEM_HEIGHT;
@@ -133,8 +140,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private TextButton[] InitItems(IProp prop)
         {
-            //TODO Localize
-            var takeMenuButton = new TextButton("Take", _uiContentStorage.GetMenuItemTexture(),
+            var menuButton = new TextButton(_menuTitle, _uiContentStorage.GetMenuItemTexture(),
                 _uiContentStorage.GetMenuItemFont(),
                 new Rectangle(
                     MENU_MARGIN + _position.X,
@@ -142,14 +148,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     MENU_WIDTH,
                     MENU_ITEM_HEIGHT));
 
-            takeMenuButton.OnClick += (s, e) =>
+            menuButton.OnClick += (s, e) =>
             {
                 var transferCommand = _serviceProvider.GetRequiredService<PropTransferCommand>();
                 var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
 
                 var transferMachine = new PropTransferMachine(_inventoryStore, _containerStore);
-                transferMachine.TransferProp(prop, PropTransferMachineStore.Container,
-                    PropTransferMachineStore.Inventory);
+                transferMachine.TransferProp(prop, _sourceStore, _targetStore);
                 transferCommand.TransferMachine = transferMachine;
 
                 commandPool.Push(transferCommand);
@@ -157,7 +162,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 CloseMenu();
             };
 
-            return new[] { takeMenuButton };
+            return new[] { menuButton };
         }
     }
 }
