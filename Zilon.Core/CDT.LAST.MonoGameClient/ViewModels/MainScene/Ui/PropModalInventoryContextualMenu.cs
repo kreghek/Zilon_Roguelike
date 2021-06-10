@@ -19,21 +19,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal sealed class PropModalInventoryContextualMenu : PropModalInventoryContextualMenuBase
     {
-        private const int MENU_MARGIN = 5;
-        private const int MENU_WIDTH = 128;
-        private const int MENU_ITEM_HEIGHT = 16;
-
         private readonly IEquipmentModule _equipmentModule;
-        private readonly Point _position;
-        private readonly IProp _prop;
         private readonly IServiceProvider _serviceProvider;
 
-        public PropModalInventoryContextualMenu(Point position, IProp prop, IEquipmentModule equipmentModule,
+        public PropModalInventoryContextualMenu(Point position, IEquipmentModule equipmentModule,
             IUiContentStorage uiContentStorage,
-            IServiceProvider serviceProvider): base(position, prop, uiContentStorage)
+            IServiceProvider serviceProvider): base(position, uiContentStorage)
         {
-            _position = new Point(position.X - MENU_MARGIN, position.Y - MENU_MARGIN);
-            _prop = prop;
             _equipmentModule = equipmentModule;
             _serviceProvider = serviceProvider;
 

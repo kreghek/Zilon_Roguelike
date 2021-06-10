@@ -18,15 +18,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         protected readonly Point _position;
         protected readonly IUiContentStorage _uiContentStorage;
 
-        protected readonly TextButton[] _menuItemButtons;
-        protected readonly Point _size;
+        protected TextButton[]? _menuItemButtons;
+        protected Point? _size;
 
-        public PropModalInventoryContextualMenuBase(Point position, IProp prop, IUiContentStorage uiContentStorage)
+        public PropModalInventoryContextualMenuBase(Point position, IUiContentStorage uiContentStorage)
         {
             _position = new Point(position.X - MENU_MARGIN, position.Y - MENU_MARGIN);
             _position = position;
             _uiContentStorage = uiContentStorage;
+        }
 
+        public void Init(IProp prop)
+        {
             _menuItemButtons = InitItems(prop);
 
             var itemsHeight = _menuItemButtons.Length * MENU_ITEM_HEIGHT;
@@ -35,7 +38,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 itemsHeight + (MENU_MARGIN * 2)
             );
         }
-
 
         public bool IsClosed { get; private set; }
 

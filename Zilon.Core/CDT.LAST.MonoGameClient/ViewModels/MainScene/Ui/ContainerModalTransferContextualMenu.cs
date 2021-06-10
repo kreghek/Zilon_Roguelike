@@ -14,9 +14,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal sealed class ContainerModalTransferContextualMenu: PropModalInventoryContextualMenuBase
     {
-        private const int MENU_MARGIN = 5;
-        private const int MENU_WIDTH = 128;
-        private const int MENU_ITEM_HEIGHT = 16;
         private readonly IPropStore _containerStore;
         private readonly IPropStore _inventoryStore;
 
@@ -27,14 +24,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public ContainerModalTransferContextualMenu(
             Point position,
-            IProp prop,
             IPropStore inventoryStore,
             IPropStore containerStore,
             IUiContentStorage uiContentStorage,
             IServiceProvider serviceProvider,
             PropTransferMachineStore sourceStore,
             PropTransferMachineStore targetStore,
-            string menuTitle): base(position, prop, uiContentStorage)
+            string menuTitle): base(position, uiContentStorage)
         {
             _inventoryStore = inventoryStore;
             _containerStore = containerStore;
@@ -43,8 +39,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _targetStore = targetStore;
             _menuTitle = menuTitle;
         }
-
-        
 
         protected override TextButton[] InitItems(IProp prop)
         {
