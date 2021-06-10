@@ -70,7 +70,6 @@ namespace Zilon.Core.World
                 // It was used as fallback later.
                 var oldActorNode = actor.Node;
 
-
                 sourceSector.ActorManager.Remove(actor);
 
                 var targetSector = sectorNode.Sector;

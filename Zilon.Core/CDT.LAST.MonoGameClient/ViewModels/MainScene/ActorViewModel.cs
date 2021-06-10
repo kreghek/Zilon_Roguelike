@@ -94,6 +94,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.DamageTaken += Actor_DamageTaken;
             Actor.UsedProp += Actor_UsedProp;
             Actor.PropTransferPerformed += Actor_PropTransferPerformed;
+            Actor.BeginTransitionToOtherSector += Actor_BeginTransitionToOtherSector;
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
                 Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += Actor_EquipmentChanged;
@@ -123,11 +124,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.DamageTaken -= Actor_DamageTaken;
             Actor.UsedProp -= Actor_UsedProp;
             Actor.PropTransferPerformed -= Actor_PropTransferPerformed;
+            Actor.BeginTransitionToOtherSector -= Actor_BeginTransitionToOtherSector;
 
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
                 Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= Actor_EquipmentChanged;
             }
+        }
+
+        private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var soundEffect = _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use);
+            _actorStateEngine = new ActorSectorTransitionEngine(
+                _graphicsRoot.RootSprite,
+                animationBlockerService,
+                soundEffect?.CreateInstance());
         }
 
         public override void Update(GameTime gameTime)

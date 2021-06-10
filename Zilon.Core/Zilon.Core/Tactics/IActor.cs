@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;
@@ -42,6 +43,8 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="targetNode"> Целевой узел карты. </param>
         void MoveToNode(IGraphNode targetNode);
+
+        void MoveToOtherSector(ISector sector, SectorTransition sectorTransition);
 
         /// <summary>
         /// Открытие контейнера актёром.
@@ -98,5 +101,6 @@ namespace Zilon.Core.Tactics
         event EventHandler<UsedPropEventArgs>? UsedProp;
 
         event EventHandler? PropTransferPerformed;
+        event EventHandler? BeginTransitionToOtherSector;
     }
 }
