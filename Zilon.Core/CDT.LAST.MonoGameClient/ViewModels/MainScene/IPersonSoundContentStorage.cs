@@ -25,6 +25,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// </summary>
         SoundEffect? GetConsumePropSound(ConsumeEffectType consumeEffectType);
 
+        //TODO Docs
+        SoundEffect? GetActivitySound(PersonActivityEffectType personActivityType);
+
         /// <summary>
         /// The sound of specified person death.
         /// </summary>
@@ -36,5 +39,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         SoundEffect? GetEquipSound(string[] tags, bool direction);
 
         void LoadContent(ContentManager contentManager);
+        SoundEffect GetImpactEffect(IPerson person);
     }
 }

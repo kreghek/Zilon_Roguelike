@@ -6,9 +6,17 @@
     internal enum ConsumeEffectType
     {
         Undefined = 0,
-        Use,
         Eat,
         Drink,
-        Heal
+        Heal,
+        UseCommon = 1000
+    }
+
+    //TODO Documenting
+    internal enum PersonActivityEffectType
+    {
+        Undefined = 0,
+        TransferProp,
+        Transit
     }
 }
