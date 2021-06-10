@@ -12,7 +12,7 @@ using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    internal sealed class ContainerModalTransferContextualMenu: PropModalInventoryContextualMenuBase
+    internal sealed class ContainerModalTransferContextualMenu : PropModalInventoryContextualMenuBase
     {
         private readonly IPropStore _containerStore;
         private readonly IPropStore _inventoryStore;
@@ -30,7 +30,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             IServiceProvider serviceProvider,
             PropTransferMachineStore sourceStore,
             PropTransferMachineStore targetStore,
-            string menuTitle): base(position, uiContentStorage)
+            string menuTitle) : base(position, uiContentStorage)
         {
             _inventoryStore = inventoryStore;
             _containerStore = containerStore;

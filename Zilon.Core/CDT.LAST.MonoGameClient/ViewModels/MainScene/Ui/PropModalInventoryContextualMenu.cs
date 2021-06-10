@@ -24,7 +24,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public PropModalInventoryContextualMenu(Point position, IEquipmentModule equipmentModule,
             IUiContentStorage uiContentStorage,
-            IServiceProvider serviceProvider): base(position, uiContentStorage)
+            IServiceProvider serviceProvider) : base(position, uiContentStorage)
         {
             _equipmentModule = equipmentModule;
             _serviceProvider = serviceProvider;
