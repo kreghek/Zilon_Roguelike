@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -141,11 +142,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
                 _currentSector = _sectorViewModel.Sector;
-
-                if (_uiState.ActiveActor is not null)
-                {
-                    _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
-                }
+                AddActiveActorEventHandling();
             }
 
             if (!_isTransitionPerforming)
@@ -162,41 +159,95 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (_uiState.ActiveActor != null && !isInTransition)
             {
-                var sectorNode = GetPlayerSectorNode(_player);
+                var sectorNodeWithPlayerPerson = GetPlayerSectorNode(_player);
 
-                if (sectorNode != null)
+                if (sectorNodeWithPlayerPerson != null)
                 {
-                    if (_currentSector == sectorNode.Sector)
+                    var sectorWithPlayerPerson = sectorNodeWithPlayerPerson.Sector;
+                    UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, _uiState.ActiveActor);
+                }
+                else
+                {
+                    // This means the player person is dead (don't exists in any sector).
+                    // Or some error occured.
+                    if (_uiState.ActiveActor.Actor.Person.CheckIsDead())
                     {
-                        _camera.Follow(_uiState.ActiveActor, Game);
-
-                        _personEffectsPanel.Update();
-
-                        _autoplayModeButton.Update();
-
-                        _personEquipmentButton.Update();
-                        _personStatsButton.Update();
-
-                        DetectAutoplayHint();
+                        // Do nothing.
+                        // In the near future there the scores screen will load.
                     }
-                    else if (!_isTransitionPerforming)
+                    else
                     {
-                        HandleScreenChanging();
-
-                        _isTransitionPerforming = true;
-                        TargetScene = new TransitionScreen(Game, _spriteBatch);
+                        Debug.Fail("Main screen must load only if the player person is in any sector node.");
                     }
                 }
             }
             else
             {
-                if (!_isTransitionPerforming)
+                if (isInTransition)
                 {
-                    HandleScreenChanging();
-
-                    _isTransitionPerforming = true;
-                    TargetScene = new TransitionScreen(Game, _spriteBatch);
+                    if (!_isTransitionPerforming)
+                    {
+                        LoadTransitionScreen();
+                    }
+                    else
+                    { 
+                        // The player person is in transition pool and
+                        // transition is performing.
+                        // So do nothing.
+                    }
                 }
+                else if (_uiState.ActiveActor is null)
+                {
+                    Debug.Fail("Main screen must load only after active actor was assigned.");
+                }
+                else
+                {
+                    Debug.Fail("Unknown state.");
+                }
+            }
+        }
+
+        private void LoadTransitionScreen()
+        {
+            HandleScreenChanging();
+
+            _isTransitionPerforming = true;
+            TargetScene = new TransitionScreen(Game, _spriteBatch);
+        }
+
+        private void UpdateCurrentSectorOrPerformTransition(ISector? sectorWithPlayerPerson, IActorViewModel activeActorViewModel)
+        {
+            if (_currentSector == sectorWithPlayerPerson)
+            {
+                _camera.Follow(activeActorViewModel, Game);
+
+                _personEffectsPanel.Update();
+
+                _autoplayModeButton.Update();
+
+                _personEquipmentButton.Update();
+                _personStatsButton.Update();
+
+                DetectAutoplayHint();
+            }
+            else if (!_isTransitionPerforming)
+            {
+                LoadTransitionScreen();
+            }
+            else
+            {
+                // The sector stored in main screen and the sector with the player person are not equals.
+                // This means the player person moved to new location yet.
+                // Next, game state is moving to transition screen (_isTransitionPerforming==true).
+                // So, do nothing. Just wait until transition screen was loaded. And tansition screen load main screen with correct sector.
+            }
+        }
+
+        private void AddActiveActorEventHandling()
+        {
+            if (_uiState.ActiveActor is not null)
+            {
+                _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
             }
         }
 
