@@ -189,11 +189,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                     {
                         LoadTransitionScreen();
                     }
-                    else
-                    {
-                        // The loading of the transition screen is executing.
-                        // Just wait until screen manager do it.
-                    }
                 }
                 else if (_uiState.ActiveActor is null)
                 {
