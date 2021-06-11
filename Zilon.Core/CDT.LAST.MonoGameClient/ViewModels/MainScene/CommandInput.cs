@@ -176,7 +176,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var actor = _uiState.ActiveActor?.Actor;
                 if (actor is null)
                 {
-                    Debug.Fail("Active actor must be assigned befor sector view model and command input starts processing of user input.");
+                    Debug.Fail(
+                        "Active actor must be assigned befor sector view model and command input starts processing of user input.");
                     return true;
                 }
 
