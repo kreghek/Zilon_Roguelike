@@ -385,7 +385,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 _serviceProvider,
                 PropTransferMachineStore.Inventory,
                 PropTransferMachineStore.Container,
-                string.Format(UiResources.PutPropInContainerButtonTitleTemplate, _container));
+                string.Format(UiResources.PutPropInContainerButtonTitleTemplate, _containerName));
 
             contextMenu.Init(selectedProp);
 
