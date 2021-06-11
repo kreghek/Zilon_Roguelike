@@ -101,7 +101,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private ISelectableViewModel? GetStaticObjectUnderActor(IActor? actor)
+        private ISelectableViewModel? GetStaticObjectUnderActor(IActor actor)
         {
             var staticObjectsUnderActor = _sector.StaticObjectManager.Items.Where(x => x.Node == actor.Node).ToArray();
             Debug.Assert(staticObjectsUnderActor.Length < 2,
@@ -172,7 +172,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _lastKeyboardState = keyboardState;
 
                 var openCommand = _commandFactory.GetCommand<OpenContainerCommand>();
-                _uiState.SelectedViewModel = GetStaticObjectUnderActor(_uiState.ActiveActor?.Actor);
+
+                var actor = _uiState.ActiveActor?.Actor;
+                if (actor is null)
+                {
+                    Debug.Fail("Active actor must be assigned befor sector view model and command input starts processing of user input.");
+                    return true;
+                }
+
+                _uiState.SelectedViewModel = GetStaticObjectUnderActor(actor);
                 if (openCommand.CanExecute().IsSuccess)
                 {
                     _commandPool.Push(openCommand);
