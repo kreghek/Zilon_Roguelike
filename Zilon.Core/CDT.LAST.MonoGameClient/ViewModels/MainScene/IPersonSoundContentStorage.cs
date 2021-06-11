@@ -16,6 +16,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson);
 
         /// <summary>
+        /// The sound played when person do something in the world (except fighting).
+        /// </summary>
+        /// <param name="personActivityType">The type of the activity that was done.</param>
+        SoundEffect? GetActivitySound(PersonActivityEffectType personActivityType);
+
+        /// <summary>
         /// The sound played when visualization of a act starts.
         /// </summary>
         SoundEffect GetActStartSound(ActDescription actDescription);
@@ -34,6 +40,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// The sound played when visualization of some items are weared by a person.
         /// </summary>
         SoundEffect? GetEquipSound(string[] tags, bool direction);
+
+        SoundEffect GetImpactEffect(IPerson person);
 
         void LoadContent(ContentManager contentManager);
     }

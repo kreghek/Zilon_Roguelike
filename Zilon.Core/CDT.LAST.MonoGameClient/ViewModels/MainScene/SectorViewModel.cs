@@ -2,6 +2,7 @@
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -22,6 +23,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;
+        private readonly Game _game;
         private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
@@ -33,6 +35,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
+            _game = game;
             _camera = camera;
             _spriteBatch = spriteBatch;
 
@@ -91,12 +94,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _viewModelContext.GameObjects.Add(staticObjectModel);
             }
 
+            Sector.StaticObjectManager.Added += StaticObjectManager_Added;
+            Sector.StaticObjectManager.Removed += StaticObjectManager_Removed;
             Sector.ActorManager.Removed += ActorManager_Removed;
 
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
-            var commandInput = new CommandInput(_uiState, commandPool, _camera, Sector, commandFactory);
+            var commandInput =
+                new CommandInput(_uiState, commandPool, _camera, Sector, _viewModelContext, commandFactory);
             _commandInput = commandInput;
         }
 
@@ -153,6 +159,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             _intarectionBus.NewEvent -= IntarectionBus_NewEvent;
             Sector.ActorManager.Removed -= ActorManager_Removed;
+            Sector.StaticObjectManager.Added -= StaticObjectManager_Added;
+            Sector.StaticObjectManager.Removed -= StaticObjectManager_Removed;
 
             foreach (var gameObject in _viewModelContext.GameObjects)
             {
@@ -248,6 +256,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var targetPerson = damageActorInteractionEvent.TargetActor.Person;
                 var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
                 soundEffect.CreateInstance().Play();
+            }
+        }
+
+        private void StaticObjectManager_Added(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+        {
+            foreach (var staticObject in e.Items)
+            {
+                var staticObjectModel = new StaticObjectViewModel(_game, staticObject, _spriteBatch);
+
+                _viewModelContext.GameObjects.Add(staticObjectModel);
+            }
+        }
+
+        private void StaticObjectManager_Removed(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+        {
+            foreach (var staticObject in e.Items)
+            {
+                var staticObjectViewModel = _viewModelContext.GameObjects.OfType<IContainerViewModel>()
+                    .Single(x => x.StaticObject == staticObject);
+                _viewModelContext.GameObjects.Remove((GameObjectBase)staticObjectViewModel);
             }
         }
     }

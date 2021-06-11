@@ -249,4 +249,13 @@ take out the character before he dies.</value>
   <data name="SlotAux" xml:space="preserve">
     <value>Aux</value>
   </data>
+  <data name="TakePropInInventoryButtonTitle" xml:space="preserve">
+    <value>Take in inventory</value>
+  </data>
+  <data name="PutPropInContainerButtonTitleTemplate" xml:space="preserve">
+    <value>Put into {0}</value>
+  </data>
+  <data name="FakeContainerName" xml:space="preserve">
+    <value>the loot bag</value>
+  </data>
 </root>

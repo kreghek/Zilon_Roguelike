@@ -13,12 +13,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     /// Use for actions without any specific.
     /// Or when it is too boring to create new engine :)
     /// </summary>
-    public sealed class ActorCommonActionEngine : IActorStateEngine
+    public sealed class ActorCommonActionMoveEngine : IActorStateEngine
     {
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;
-        private readonly SoundEffectInstance? _consumeSoundEffect;
         private readonly SpriteContainer _rootContainer;
+        private readonly SoundEffectInstance? _soundEffect;
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
 
@@ -26,11 +26,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private bool _effectPlayed;
 
-        public ActorCommonActionEngine(SpriteContainer rootContainer, IAnimationBlockerService animationBlockerService,
-            SoundEffectInstance? consumeSoundEffect)
+        public ActorCommonActionMoveEngine(SpriteContainer rootContainer,
+            IAnimationBlockerService animationBlockerService,
+            SoundEffectInstance? soundEffect)
         {
             _rootContainer = rootContainer;
-            _consumeSoundEffect = consumeSoundEffect;
+            _soundEffect = soundEffect;
 
             _startPosition = rootContainer.Position;
             _targetPosition = _startPosition + (Vector2.UnitY * -10);
@@ -56,9 +57,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 {
                     _effectPlayed = true;
 
-                    if (_consumeSoundEffect != null)
+                    if (_soundEffect != null)
                     {
-                        _consumeSoundEffect.Play();
+                        _soundEffect.Play();
                     }
                 }
 

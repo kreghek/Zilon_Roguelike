@@ -61,7 +61,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 return propTextureList;
             }
 
-            Debug.Fail("Each prop in the game must have your own icon.");
+            Debug.Fail($"Each prop in the game must have your own icon. {sid} hasn't it.");
             return _propIcons["EmptyPropIcon"];
         }
 

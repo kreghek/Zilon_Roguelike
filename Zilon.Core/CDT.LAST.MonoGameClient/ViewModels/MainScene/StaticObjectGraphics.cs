@@ -47,6 +47,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 case PropContainerPurpose.Pit:
                     return "Pit";
 
+                case PropContainerPurpose.Loot:
+                    return "LootBag";
+
                 default:
                     Debug.Fail($"Texture for specified purpose {purpose}.");
                     return "Grass";
