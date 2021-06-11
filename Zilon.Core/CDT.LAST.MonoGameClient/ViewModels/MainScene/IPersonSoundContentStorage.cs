@@ -15,7 +15,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// </summary>
         SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson);
 
-        //TODO Docs
+        /// <summary>
+        /// The sound played when person do something in the world (except fighting).
+        /// </summary>
+        /// <param name="personActivityType">The type of the activity that was done.</param>
         SoundEffect? GetActivitySound(PersonActivityEffectType personActivityType);
 
         /// <summary>
