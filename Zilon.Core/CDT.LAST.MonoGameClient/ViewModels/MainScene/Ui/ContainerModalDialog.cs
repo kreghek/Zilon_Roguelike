@@ -204,7 +204,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var inventoryTitle = GetPropTitle(_hoverContainerItem.Prop);
+            var inventoryTitle = PropHelper.GetPropTitle(_hoverContainerItem.Prop);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
             var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
 
@@ -242,7 +242,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var inventoryTitle = GetPropTitle(_hoverInventoryItem.Prop);
+            var inventoryTitle = PropHelper.GetPropTitle(_hoverInventoryItem.Prop);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
             var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
 
@@ -258,29 +258,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             spriteBatch.DrawString(hintTitleFont, inventoryTitle,
                 new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                 Color.Wheat);
-        }
-
-        private static string? GetPropTitle(IProp prop)
-        {
-            var text = prop.Scheme.Name?.En;
-
-            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
-            var langName = currentLanguage.TwoLetterISOLanguageName;
-            if (string.Equals(langName, "en", StringComparison.InvariantCultureIgnoreCase))
-            {
-                text = prop.Scheme.Name?.En;
-            }
-            else if (string.Equals(langName, "ru", StringComparison.InvariantCultureIgnoreCase))
-            {
-                text = prop.Scheme.Name?.Ru;
-            }
-            else
-            {
-                Debug.Fail(
-                    $"Unknown language {langName} is selected. All available language must be supported in the client.");
-            }
-
-            return text ?? "<Undef>";
         }
 
         private void InitContainerContent(IStaticObject container)
