@@ -190,7 +190,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                         LoadTransitionScreen();
                     }
                     else
-                    { 
+                    {
                         // The player person is in transition pool and
                         // transition is performing.
                         // So do nothing.
