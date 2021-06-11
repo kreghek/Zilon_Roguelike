@@ -189,12 +189,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                     {
                         LoadTransitionScreen();
                     }
-                    else
-                    {
-                        // The player person is in transition pool and
-                        // transition is performing.
-                        // So do nothing.
-                    }
                 }
                 else if (_uiState.ActiveActor is null)
                 {
@@ -207,40 +201,10 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
-        private void LoadTransitionScreen()
+        private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
         {
-            HandleScreenChanging();
-
-            _isTransitionPerforming = true;
-            TargetScene = new TransitionScreen(Game, _spriteBatch);
-        }
-
-        private void UpdateCurrentSectorOrPerformTransition(ISector? sectorWithPlayerPerson, IActorViewModel activeActorViewModel)
-        {
-            if (_currentSector == sectorWithPlayerPerson)
-            {
-                _camera.Follow(activeActorViewModel, Game);
-
-                _personEffectsPanel.Update();
-
-                _autoplayModeButton.Update();
-
-                _personEquipmentButton.Update();
-                _personStatsButton.Update();
-
-                DetectAutoplayHint();
-            }
-            else if (!_isTransitionPerforming)
-            {
-                LoadTransitionScreen();
-            }
-            else
-            {
-                // The sector stored in main screen and the sector with the player person are not equals.
-                // This means the player person moved to new location yet.
-                // Next, game state is moving to transition screen (_isTransitionPerforming==true).
-                // So, do nothing. Just wait until transition screen was loaded. And tansition screen load main screen with correct sector.
-            }
+            _containerModal.Init(e.Container);
+            _containerModal.Show();
         }
 
         private void AddActiveActorEventHandling()
@@ -249,12 +213,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
             }
-        }
-
-        private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
-        {
-            _containerModal.Init(e.Container);
-            _containerModal.Show();
         }
 
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
@@ -410,6 +368,14 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
+        private void LoadTransitionScreen()
+        {
+            HandleScreenChanging();
+
+            _isTransitionPerforming = true;
+            TargetScene = new TransitionScreen(Game, _spriteBatch);
+        }
+
         private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)
         {
             _personEquipmentModal.Show();
@@ -418,6 +384,28 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void PersonStatsButton_OnClick(object? sender, EventArgs e)
         {
             _personStatsModal.Show();
+        }
+
+        private void UpdateCurrentSectorOrPerformTransition(ISector? sectorWithPlayerPerson,
+            IActorViewModel activeActorViewModel)
+        {
+            if (_currentSector == sectorWithPlayerPerson)
+            {
+                _camera.Follow(activeActorViewModel, Game);
+
+                _personEffectsPanel.Update();
+
+                _autoplayModeButton.Update();
+
+                _personEquipmentButton.Update();
+                _personStatsButton.Update();
+
+                DetectAutoplayHint();
+            }
+            else if (!_isTransitionPerforming)
+            {
+                LoadTransitionScreen();
+            }
         }
     }
 }
