@@ -6,9 +6,9 @@
     internal enum ConsumeEffectType
     {
         Undefined = 0,
-        Use,
         Eat,
         Drink,
-        Heal
+        Heal,
+        UseCommon = 1000
     }
 }

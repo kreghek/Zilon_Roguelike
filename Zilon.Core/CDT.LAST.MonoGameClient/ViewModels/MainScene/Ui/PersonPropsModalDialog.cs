@@ -32,7 +32,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private InventoryUiItem[]? _currentInventoryItems;
         private EquipmentUiItem? _hoverEquipmentItem;
         private InventoryUiItem? _hoverInventoryItem;
-        private PropModalInventoryContextualMenu? _propSubmenu;
+        private PropModalInventoryContextualMenu? _propContextMenu;
 
         public PersonPropsModalDialog(
             IUiContentStorage uiContentStorage,
@@ -50,9 +50,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawEquipments(spriteBatch);
             DrawInventory(spriteBatch);
 
-            if (_propSubmenu != null)
+            if (_propContextMenu != null)
             {
-                _propSubmenu.Draw(spriteBatch);
+                _propContextMenu.Draw(spriteBatch);
             }
             else
             {
@@ -77,18 +77,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         protected override void UpdateContent()
         {
-            if (_propSubmenu != null)
+            if (_propContextMenu != null)
             {
-                _propSubmenu.Update();
+                _propContextMenu.Update();
 
-                if (_propSubmenu.IsClosed)
+                if (_propContextMenu.IsClosed)
                 {
-                    if (_propSubmenu.IsCommandUsed)
+                    if (_propContextMenu.IsCommandUsed)
                     {
                         Close();
                     }
 
-                    _propSubmenu = null;
+                    _propContextMenu = null;
                 }
             }
             else
@@ -136,7 +136,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var equipmentTitle = GetPropTitle(_hoverEquipmentItem.Equipment);
+            var equipmentTitle = PropHelper.GetPropTitle(_hoverEquipmentItem.Equipment);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
             var titleTextSizeVector = hintTitleFont.MeasureString(equipmentTitle);
 
@@ -187,9 +187,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var InventoryTitle = GetPropTitle(_hoverInventoryItem.Prop);
+            var inventoryTitle = PropHelper.GetPropTitle(_hoverInventoryItem.Prop);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
-            var titleTextSizeVector = hintTitleFont.MeasureString(InventoryTitle);
+            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
 
             const int HINT_TEXT_SPACING = 8;
             var hintRectangle = new Rectangle(
@@ -200,32 +200,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
 
-            spriteBatch.DrawString(hintTitleFont, InventoryTitle,
+            spriteBatch.DrawString(hintTitleFont, inventoryTitle,
                 new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                 Color.Wheat);
-        }
-
-        private static string? GetPropTitle(IProp prop)
-        {
-            var text = prop.Scheme.Name?.En;
-
-            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
-            var langName = currentLanguage.TwoLetterISOLanguageName;
-            if (string.Equals(langName, "en", StringComparison.InvariantCultureIgnoreCase))
-            {
-                text = prop.Scheme.Name?.En;
-            }
-            else if (string.Equals(langName, "ru", StringComparison.InvariantCultureIgnoreCase))
-            {
-                text = prop.Scheme.Name?.Ru;
-            }
-            else
-            {
-                Debug.Fail(
-                    $"Unknown language {langName} is selected. All available language must be supported in the client.");
-            }
-
-            return text ?? "<Undef>";
         }
 
         private void InitEquipment(IPerson person)
@@ -308,7 +285,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var sid = prop.Scheme.Sid;
                 if (string.IsNullOrEmpty(sid))
                 {
-                    Debug.Fail("All equipment must have symbolic identifier (SID).");
+                    Debug.Fail("All prop must have symbolic identifier (SID).");
                     sid = "EmptyPropIcon";
                 }
 
@@ -352,8 +329,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     "Active person must be able to use equipment to shown in this dialog.");
             }
 
-            _propSubmenu = new PropModalInventoryContextualMenu(mouseState.Position, selectedProp, equipmentModule,
-                _uiContentStorage, _serviceProvider);
+            var propContextMenu = new PropModalInventoryContextualMenu(
+                mouseState.Position,
+                equipmentModule,
+                _uiContentStorage,
+                _serviceProvider);
+            propContextMenu.Init(selectedProp);
+            _propContextMenu = propContextMenu;
         }
 
         private void UpdateEquipment()

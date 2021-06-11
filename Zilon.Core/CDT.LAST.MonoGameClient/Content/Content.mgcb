@@ -61,6 +61,18 @@
 /processorParam:Quality=Low
 /build:Audio/HealConsumable.mp3
 
+#begin Audio/HumanDeath.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/HumanDeath.mp3
+
+#begin Audio/HumanImpact.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/HumanImpact.mp3
+
 #begin Audio/HunterDeath.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -72,6 +84,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/HunterHitEffect.mp3
+
+#begin Audio/HunterImpact.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/HunterImpact.mp3
 
 #begin Audio/PunchStartHitEffect.mp3
 /importer:Mp3Importer
@@ -96,6 +114,24 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Audio/TitleBackgroundTrack.wav
+
+#begin Audio/TransferProp.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/TransferProp.mp3
+
+#begin Audio/Transition.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/Transition.mp3
+
+#begin Audio/Step.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/Step.mp3
 
 #begin Audio/Unequip.mp3
 /importer:Mp3Importer
@@ -151,8 +187,20 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
+/processorParam:TextureFormat=Color16Bit
 /build:Sprites/game-objects/Environment/Grass.png
+
+#begin Sprites/game-objects/Environment/LootBag.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/game-objects/Environment/LootBag.png
 
 #begin Sprites/game-objects/Environment/Pit.png
 /importer:TextureImporter
@@ -163,7 +211,7 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
+/processorParam:TextureFormat=Color16Bit
 /build:Sprites/game-objects/Environment/Pit.png
 
 #begin Sprites/game-objects/Environment/Puddle.png
@@ -175,7 +223,7 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
+/processorParam:TextureFormat=Color16Bit
 /build:Sprites/game-objects/Environment/Puddle.png
 
 #begin Sprites/game-objects/Environment/StoneBlue.png
@@ -187,7 +235,7 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
+/processorParam:TextureFormat=Color16Bit
 /build:Sprites/game-objects/Environment/StoneBlue.png
 
 #begin Sprites/game-objects/Environment/StoneBrown.png
@@ -199,7 +247,7 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
+/processorParam:TextureFormat=Color16Bit
 /build:Sprites/game-objects/Environment/StoneBrown.png
 
 #begin Sprites/game-objects/Environment/TrashHeap.png
@@ -211,7 +259,7 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
+/processorParam:TextureFormat=Color16Bit
 /build:Sprites/game-objects/Environment/TrashHeap.png
 
 #begin Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/ArmLeftSimple.png

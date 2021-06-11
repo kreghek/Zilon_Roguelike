@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -12,6 +13,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -21,8 +24,10 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class MainScreen : GameSceneBase
     {
+        private readonly IAnimationBlockerService _animationBlockerService;
         private readonly IconButton _autoplayModeButton;
         private readonly Camera _camera;
+        private readonly ContainerModalDialog _containerModal;
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly IconButton _personEquipmentButton;
         private readonly ModalDialogBase _personEquipmentModal;
@@ -50,6 +55,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
             _player = serviceScope.GetRequiredService<IPlayer>();
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
+            _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
             _camera = new Camera();
             _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 8, screenY: 8);
@@ -99,6 +105,12 @@ namespace CDT.LAST.MonoGameClient.Screens
                 uiContentStorage,
                 game.GraphicsDevice,
                 _uiState);
+
+            _containerModal = new ContainerModalDialog(
+                _uiState,
+                uiContentStorage,
+                Game.GraphicsDevice,
+                ((LivGame)game).ServiceProvider);
         }
 
         public override void Draw(GameTime gameTime)
@@ -130,6 +142,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
                 _currentSector = _sectorViewModel.Sector;
+                AddActiveActorEventHandling();
             }
 
             if (!_isTransitionPerforming)
@@ -146,41 +159,59 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (_uiState.ActiveActor != null && !isInTransition)
             {
-                var sectorNode = GetPlayerSectorNode(_player);
+                var sectorNodeWithPlayerPerson = GetPlayerSectorNode(_player);
 
-                if (sectorNode != null)
+                if (sectorNodeWithPlayerPerson != null)
                 {
-                    if (_currentSector == sectorNode.Sector)
+                    var sectorWithPlayerPerson = sectorNodeWithPlayerPerson.Sector;
+                    UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, _uiState.ActiveActor);
+                }
+                else
+                {
+                    // This means the player person is dead (don't exists in any sector).
+                    // Or some error occured.
+                    if (_uiState.ActiveActor.Actor.Person.CheckIsDead())
                     {
-                        _camera.Follow(_uiState.ActiveActor, Game);
-
-                        _personEffectsPanel.Update();
-
-                        _autoplayModeButton.Update();
-
-                        _personEquipmentButton.Update();
-                        _personStatsButton.Update();
-
-                        DetectAutoplayHint();
+                        // Do nothing.
+                        // In the near future there the scores screen will load.
                     }
-                    else if (!_isTransitionPerforming)
+                    else
                     {
-                        _sectorViewModel.UnsubscribeEventHandlers();
-
-                        _isTransitionPerforming = true;
-                        TargetScene = new TransitionScreen(Game, _spriteBatch);
+                        Debug.Fail("Main screen must load only if the player person is in any sector node.");
                     }
                 }
             }
             else
             {
-                if (!_isTransitionPerforming)
+                if (isInTransition)
                 {
-                    _sectorViewModel.UnsubscribeEventHandlers();
-
-                    _isTransitionPerforming = true;
-                    TargetScene = new TransitionScreen(Game, _spriteBatch);
+                    if (!_isTransitionPerforming)
+                    {
+                        LoadTransitionScreen();
+                    }
                 }
+                else if (_uiState.ActiveActor is null)
+                {
+                    Debug.Fail("Main screen must load only after active actor was assigned.");
+                }
+                else
+                {
+                    Debug.Fail("Unknown state.");
+                }
+            }
+        }
+
+        private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
+        {
+            _containerModal.Init(e.Container);
+            _containerModal.Show();
+        }
+
+        private void AddActiveActorEventHandling()
+        {
+            if (_uiState.ActiveActor is not null)
+            {
+                _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
             }
         }
 
@@ -222,6 +253,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_personStatsModal.IsVisible)
             {
                 return _personStatsModal;
+            }
+
+            if (_containerModal.IsVisible)
+            {
+                return _containerModal;
             }
 
             return null;
@@ -290,6 +326,11 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _personStatsModal.Draw(_spriteBatch);
             }
 
+            if (_containerModal.IsVisible)
+            {
+                _containerModal.Draw(_spriteBatch);
+            }
+
             _spriteBatch.End();
         }
 
@@ -308,6 +349,33 @@ namespace CDT.LAST.MonoGameClient.Screens
                     select sectorNode).SingleOrDefault();
         }
 
+        private void HandleScreenChanging()
+        {
+            _animationBlockerService.DropBlockers();
+
+            if (_sectorViewModel is not null)
+            {
+                _sectorViewModel.UnsubscribeEventHandlers();
+            }
+            else
+            {
+                Debug.Fail("Sector view model must initalized before user performs transition and change screen.");
+            }
+
+            if (_uiState.ActiveActor is not null)
+            {
+                _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
+            }
+        }
+
+        private void LoadTransitionScreen()
+        {
+            HandleScreenChanging();
+
+            _isTransitionPerforming = true;
+            TargetScene = new TransitionScreen(Game, _spriteBatch);
+        }
+
         private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)
         {
             _personEquipmentModal.Show();
@@ -316,6 +384,28 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void PersonStatsButton_OnClick(object? sender, EventArgs e)
         {
             _personStatsModal.Show();
+        }
+
+        private void UpdateCurrentSectorOrPerformTransition(ISector? sectorWithPlayerPerson,
+            IActorViewModel activeActorViewModel)
+        {
+            if (_currentSector == sectorWithPlayerPerson)
+            {
+                _camera.Follow(activeActorViewModel, Game);
+
+                _personEffectsPanel.Update();
+
+                _autoplayModeButton.Update();
+
+                _personEquipmentButton.Update();
+                _personStatsButton.Update();
+
+                DetectAutoplayHint();
+            }
+            else if (!_isTransitionPerforming)
+            {
+                LoadTransitionScreen();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -93,6 +94,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.UsedAct += Actor_UsedAct;
             Actor.DamageTaken += Actor_DamageTaken;
             Actor.UsedProp += Actor_UsedProp;
+            Actor.PropTransferPerformed += Actor_PropTransferPerformed;
+            Actor.BeginTransitionToOtherSector += Actor_BeginTransitionToOtherSector;
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
                 Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += Actor_EquipmentChanged;
@@ -121,6 +124,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.UsedAct -= Actor_UsedAct;
             Actor.DamageTaken -= Actor_DamageTaken;
             Actor.UsedProp -= Actor_UsedProp;
+            Actor.PropTransferPerformed -= Actor_PropTransferPerformed;
+            Actor.BeginTransitionToOtherSector -= Actor_BeginTransitionToOtherSector;
 
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
@@ -149,12 +154,35 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var soundEffect = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Transit);
+            _actorStateEngine = new ActorSectorTransitionMoveEngine(
+                _graphicsRoot.RootSprite,
+                animationBlockerService,
+                soundEffect?.CreateInstance());
+        }
+
         private void Actor_DamageTaken(object? sender, DamageTakenEventArgs e)
         {
-            if (sender is Actor actor && actor.Person.CheckIsDead())
+            if (sender is not Actor actor)
+            {
+                Debug.Fail("Sender must be IActor");
+                // Do nothing. Looks like error. But client must not down.
+                return;
+            }
+
+            if (actor.Person.CheckIsDead())
             {
                 var deathSoundEffect = _personSoundStorage.GetDeathEffect(actor.Person);
                 deathSoundEffect.CreateInstance().Play();
+            }
+            else
+            {
+                var impactSoundEffect = _personSoundStorage.GetImpactEffect(actor.Person);
+                impactSoundEffect.CreateInstance().Play();
             }
         }
 
@@ -166,7 +194,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var equipment = e.Equipment;
             var soundSoundEffect = SelectEquipEffect(equipment);
 
-            _actorStateEngine = new ActorCommonActionEngine(_graphicsRoot.RootSprite, animationBlockerService,
+            _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundSoundEffect?.CreateInstance());
         }
 
@@ -190,13 +218,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _graphicsRoot.RootSprite,
                     _shadowSprite,
                     newPosition,
-                    animationBlockerService);
+                    animationBlockerService,
+                    _personSoundStorage.GetActivitySound(PersonActivityEffectType.Move)?.CreateInstance());
                 _actorStateEngine = moveEngine;
             }
             else
             {
                 _rootSprite.Position = newPosition;
             }
+        }
+
+        private void Actor_PropTransferPerformed(object? sender, EventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var soundEffect = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Transit);
+            _actorStateEngine = new ActorCommonActionMoveEngine(
+                _graphicsRoot.RootSprite,
+                animationBlockerService,
+                soundEffect?.CreateInstance());
         }
 
         private void Actor_UsedAct(object? sender, UsedActEventArgs e)
@@ -258,9 +298,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 "med-kit" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal),
                 "water-bottle" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Drink),
                 "packed-food" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat),
-                _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Use)
+                _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.UseCommon)
             };
-            _actorStateEngine = new ActorCommonActionEngine(_graphicsRoot.RootSprite, animationBlockerService,
+            _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundEffect?.CreateInstance());
         }
 
