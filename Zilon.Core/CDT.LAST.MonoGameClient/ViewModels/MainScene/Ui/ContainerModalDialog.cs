@@ -38,7 +38,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private ContainerModalTransferContextualMenu? _inventoryPropContextMenu;
 
-        private string _containerName;
+        private readonly string _containerName;
 
         public ContainerModalDialog(ISectorUiState uiState, IUiContentStorage uiContentStorage,
             GraphicsDevice graphicsDevice,
@@ -149,6 +149,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 throw new InvalidOperationException(
                     "Active person must be able to use equipment to shown in this dialog.");
+            }
+
+            if (_container is null)
+            {
+                throw new InvalidOperationException("Container is not defined. Initialization in not called.");
             }
 
             var contextMenu = new ContainerModalTransferContextualMenu(mouseState.Position,
@@ -366,6 +371,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 throw new InvalidOperationException(
                     "Active person must be able to use equipment to shown in this dialog.");
+            }
+
+            if (_container is null)
+            {
+                throw new InvalidOperationException("Container is not defined. Initialization in not called.");
             }
 
             var contextMenu = new ContainerModalTransferContextualMenu(mouseState.Position,
