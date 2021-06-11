@@ -19,6 +19,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal sealed class PropModalInventoryContextualMenu : PropModalInventoryContextualMenuBase
     {
+        private const int MENU_MARGIN = 5;
+        private const int MENU_WIDTH = 128;
+        private const int MENU_ITEM_HEIGHT = 16;
         private readonly IEquipmentModule _equipmentModule;
         private readonly IServiceProvider _serviceProvider;
 
@@ -104,10 +107,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     return "<Unknown>";
             }
         }
-
-        private const int MENU_MARGIN = 5;
-        private const int MENU_WIDTH = 128;
-        private const int MENU_ITEM_HEIGHT = 16;
 
         private void InitItemsForEquipment(List<TextButton> list, ICommandPool commandPool)
         {
