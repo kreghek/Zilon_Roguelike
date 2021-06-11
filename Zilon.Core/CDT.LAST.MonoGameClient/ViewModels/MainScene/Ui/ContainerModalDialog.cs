@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
@@ -37,6 +38,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private ContainerModalTransferContextualMenu? _inventoryPropContextMenu;
 
+        private string _containerName;
+
         public ContainerModalDialog(ISectorUiState uiState, IUiContentStorage uiContentStorage,
             GraphicsDevice graphicsDevice,
             IServiceProvider serviceProvider) : base(
@@ -45,6 +48,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _uiState = uiState;
             _uiContentStorage = uiContentStorage;
             _serviceProvider = serviceProvider;
+
+            _containerName = UiResources.FakeContainerName;
         }
 
         protected override void DrawContent(SpriteBatch spriteBatch)
@@ -153,8 +158,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 _serviceProvider,
                 PropTransferMachineStore.Container,
                 PropTransferMachineStore.Inventory,
-                //TODO Localize
-                "Take");
+                UiResources.TakePropInInventoryButtonTitle);
 
             contextMenu.Init(selectedProp);
             _containerPropContextMenu = contextMenu;
@@ -371,8 +375,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 _serviceProvider,
                 PropTransferMachineStore.Inventory,
                 PropTransferMachineStore.Container,
-                //TODO Localize
-                "Store");
+                string.Format(UiResources.PutPropInContainerButtonTitleTemplate, _container));
 
             contextMenu.Init(selectedProp);
 

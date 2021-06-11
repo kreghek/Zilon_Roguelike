@@ -249,4 +249,13 @@
   <data name="EquipInSlotTemplateCommandButton" xml:space="preserve">
     <value>Надеть на: {0}</value>
   </data>
+  <data name="TakePropInInventoryButtonTitle" xml:space="preserve">
+    <value>Положить в инвентарь</value>
+  </data>
+  <data name="PutPropInContainerButtonTitleTemplate" xml:space="preserve">
+    <value>Положить в {0}</value>
+  </data>
+  <data name="FakeContainerName" xml:space="preserve">
+    <value>мешок</value>
+  </data>
 </root>
