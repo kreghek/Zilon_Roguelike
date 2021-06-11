@@ -32,7 +32,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private InventoryUiItem[]? _currentInventoryItems;
         private EquipmentUiItem? _hoverEquipmentItem;
         private InventoryUiItem? _hoverInventoryItem;
-        private PropModalInventoryContextualMenu? _propSubmenu;
+        private PropModalInventoryContextualMenu? _propContextMenu;
 
         public PersonPropsModalDialog(
             IUiContentStorage uiContentStorage,
@@ -50,9 +50,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawEquipments(spriteBatch);
             DrawInventory(spriteBatch);
 
-            if (_propSubmenu != null)
+            if (_propContextMenu != null)
             {
-                _propSubmenu.Draw(spriteBatch);
+                _propContextMenu.Draw(spriteBatch);
             }
             else
             {
@@ -77,18 +77,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         protected override void UpdateContent()
         {
-            if (_propSubmenu != null)
+            if (_propContextMenu != null)
             {
-                _propSubmenu.Update();
+                _propContextMenu.Update();
 
-                if (_propSubmenu.IsClosed)
+                if (_propContextMenu.IsClosed)
                 {
-                    if (_propSubmenu.IsCommandUsed)
+                    if (_propContextMenu.IsCommandUsed)
                     {
                         Close();
                     }
 
-                    _propSubmenu = null;
+                    _propContextMenu = null;
                 }
             }
             else
@@ -352,8 +352,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     "Active person must be able to use equipment to shown in this dialog.");
             }
 
-            _propSubmenu = new PropModalInventoryContextualMenu(mouseState.Position, selectedProp, equipmentModule,
-                _uiContentStorage, _serviceProvider);
+            var propContextMenu = new PropModalInventoryContextualMenu(
+                mouseState.Position,
+                equipmentModule,
+                _uiContentStorage,
+                _serviceProvider);
+            propContextMenu.Init(selectedProp);
+            _propContextMenu = propContextMenu;
         }
 
         private void UpdateEquipment()

@@ -28,14 +28,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
         private IStaticObject? _container;
-        private ContainerModalTransferContextualMenu? _containerPropSubmenu;
+        private ContainerModalTransferContextualMenu? _containerPropContextMenu;
         private InventoryUiItem[]? _currentContainerItems;
         private InventoryUiItem[]? _currentInventoryItems;
         private InventoryUiItem? _hoverContainerItem;
 
         private InventoryUiItem? _hoverInventoryItem;
 
-        private ContainerModalTransferContextualMenu? _inventoryPropSubmenu;
+        private ContainerModalTransferContextualMenu? _inventoryPropContextMenu;
 
         public ContainerModalDialog(ISectorUiState uiState, IUiContentStorage uiContentStorage,
             GraphicsDevice graphicsDevice,
@@ -52,13 +52,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawInventory(spriteBatch);
             DrawContainer(spriteBatch);
 
-            if (_inventoryPropSubmenu != null)
+            if (_inventoryPropContextMenu != null)
             {
-                _inventoryPropSubmenu.Draw(spriteBatch);
+                _inventoryPropContextMenu.Draw(spriteBatch);
             }
-            else if (_containerPropSubmenu != null)
+            else if (_containerPropContextMenu != null)
             {
-                _containerPropSubmenu.Draw(spriteBatch);
+                _containerPropContextMenu.Draw(spriteBatch);
             }
 
             DrawInventoryHintIfSelected(spriteBatch);
@@ -67,32 +67,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         protected override void UpdateContent()
         {
-            if (_inventoryPropSubmenu != null)
+            if (_inventoryPropContextMenu != null)
             {
-                _inventoryPropSubmenu.Update();
+                _inventoryPropContextMenu.Update();
 
-                if (_inventoryPropSubmenu.IsClosed)
+                if (_inventoryPropContextMenu.IsClosed)
                 {
-                    if (_inventoryPropSubmenu.IsCommandUsed)
+                    if (_inventoryPropContextMenu.IsCommandUsed)
                     {
                         Close();
                     }
 
-                    _inventoryPropSubmenu = null;
+                    _inventoryPropContextMenu = null;
                 }
             }
-            else if (_containerPropSubmenu != null)
+            else if (_containerPropContextMenu != null)
             {
-                _containerPropSubmenu.Update();
+                _containerPropContextMenu.Update();
 
-                if (_containerPropSubmenu.IsClosed)
+                if (_containerPropContextMenu.IsClosed)
                 {
-                    if (_containerPropSubmenu.IsCommandUsed)
+                    if (_containerPropContextMenu.IsCommandUsed)
                     {
                         Close();
                     }
 
-                    _containerPropSubmenu = null;
+                    _containerPropContextMenu = null;
                 }
             }
 
@@ -146,8 +146,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     "Active person must be able to use equipment to shown in this dialog.");
             }
 
-            _containerPropSubmenu = new ContainerModalTransferContextualMenu(mouseState.Position,
-                selectedProp,
+            var contextMenu = new ContainerModalTransferContextualMenu(mouseState.Position,
                 person.GetModule<IInventoryModule>(),
                 _container.GetModule<IPropContainer>().Content,
                 _uiContentStorage,
@@ -156,6 +155,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 PropTransferMachineStore.Inventory,
                 //TODO Localize
                 "Take");
+
+            contextMenu.Init(selectedProp);
+            _containerPropContextMenu = contextMenu;
         }
 
         private void DetectHoverContainer(Rectangle mouseRectangle)
@@ -385,8 +387,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     "Active person must be able to use equipment to shown in this dialog.");
             }
 
-            _inventoryPropSubmenu = new ContainerModalTransferContextualMenu(mouseState.Position,
-                selectedProp,
+            var contextMenu = new ContainerModalTransferContextualMenu(mouseState.Position,
                 person.GetModule<IInventoryModule>(),
                 _container.GetModule<IPropContainer>().Content,
                 _uiContentStorage,
@@ -395,6 +396,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 PropTransferMachineStore.Container,
                 //TODO Localize
                 "Store");
+
+            contextMenu.Init(selectedProp);
+
+            _inventoryPropContextMenu = contextMenu;
         }
 
         private void UpdateContainer()

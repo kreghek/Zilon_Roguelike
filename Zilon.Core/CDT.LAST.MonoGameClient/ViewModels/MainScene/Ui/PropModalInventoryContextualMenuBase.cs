@@ -11,9 +11,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal abstract class PropModalInventoryContextualMenuBase
     {
-        private const int MENU_MARGIN = 5;
-        private const int MENU_WIDTH = 128;
-        private const int MENU_ITEM_HEIGHT = 16;
+        protected const int MENU_MARGIN = 5;
+        protected const int MENU_WIDTH = 128;
+        protected const int MENU_ITEM_HEIGHT = 16;
 
         protected readonly Point _position;
         protected readonly IUiContentStorage _uiContentStorage;
@@ -34,7 +34,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            DrawBorder(spriteBatch);
+            if (_menuItemButtons is null)
+            {
+                return;
+            }
+
+            if (_size is null)
+            {
+                return;
+            }
+
+            DrawBorder(spriteBatch, _size.Value);
 
             foreach (var button in _menuItemButtons)
             {
@@ -55,19 +65,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Update()
         {
+            if (_menuItemButtons is null)
+            {
+                return;
+            }
+
             foreach (var button in _menuItemButtons)
             {
                 button.Update();
             }
 
             // Close menu if mouse is not on menu.
-
-            var mouseState = Mouse.GetState();
-            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-            var menuRect = new Rectangle(_position, _size);
-            if (!mouseRect.Intersects(menuRect))
+            if (_size != null)
             {
-                CloseMenu();
+                var mouseState = Mouse.GetState();
+                var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+                var menuRect = new Rectangle(_position, _size.Value);
+                if (!mouseRect.Intersects(menuRect))
+                {
+                    CloseMenu();
+                }
             }
         }
 
@@ -78,7 +95,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         protected abstract TextButton[] InitItems(IProp prop);
 
-        private void DrawBorder(SpriteBatch spriteBatch)
+        private void DrawBorder(SpriteBatch spriteBatch, Point size)
         {
             // edges
 
@@ -89,19 +106,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 Color.White);
 
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + _size.X - EDGE_SIZE, _position.Y),
+                new Rectangle(new Point(_position.X + size.X - EDGE_SIZE, _position.Y),
                     new Point(EDGE_SIZE, EDGE_SIZE)),
                 new Rectangle(7, 0, EDGE_SIZE, EDGE_SIZE),
                 Color.White);
 
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X, _position.Y + _size.Y - EDGE_SIZE),
+                new Rectangle(new Point(_position.X, _position.Y + size.Y - EDGE_SIZE),
                     new Point(EDGE_SIZE, EDGE_SIZE)),
                 new Rectangle(0, 7, EDGE_SIZE, EDGE_SIZE),
                 Color.White);
 
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + _size.X - EDGE_SIZE, _position.Y + _size.Y - EDGE_SIZE),
+                new Rectangle(new Point(_position.X + size.X - EDGE_SIZE, _position.Y + size.Y - EDGE_SIZE),
                     new Point(EDGE_SIZE, EDGE_SIZE)),
                 new Rectangle(7, 7, EDGE_SIZE, EDGE_SIZE),
                 Color.White);
@@ -109,13 +126,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             // sides
 
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + EDGE_SIZE, _position.Y), new Point(_size.X - (EDGE_SIZE * 2), 6)),
+                new Rectangle(new Point(_position.X + EDGE_SIZE, _position.Y), new Point(size.X - (EDGE_SIZE * 2), 6)),
                 new Rectangle(EDGE_SIZE, 0, 2, 6),
                 Color.White);
 
             spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + EDGE_SIZE, _position.Y + _size.Y - EDGE_SIZE),
-                    new Point(_size.X - (EDGE_SIZE * 2), 6)),
+                new Rectangle(new Point(_position.X + EDGE_SIZE, _position.Y + size.Y - EDGE_SIZE),
+                    new Point(size.X - (EDGE_SIZE * 2), 6)),
                 new Rectangle(EDGE_SIZE, 7, 2, 6),
                 Color.White);
         }

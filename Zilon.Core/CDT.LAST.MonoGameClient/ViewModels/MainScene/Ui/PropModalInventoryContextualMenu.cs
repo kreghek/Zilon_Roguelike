@@ -22,19 +22,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IEquipmentModule _equipmentModule;
         private readonly IServiceProvider _serviceProvider;
 
+        private IProp? _prop;
+
         public PropModalInventoryContextualMenu(Point position, IEquipmentModule equipmentModule,
             IUiContentStorage uiContentStorage,
             IServiceProvider serviceProvider) : base(position, uiContentStorage)
         {
             _equipmentModule = equipmentModule;
             _serviceProvider = serviceProvider;
-
-            var inventoryState = _serviceProvider.GetRequiredService<IInventoryState>();
-            inventoryState.SelectedProp = new PropViewModel(_prop);
         }
 
         protected override TextButton[] InitItems(IProp prop)
         {
+            _prop = prop;
+
+            var inventoryState = _serviceProvider.GetRequiredService<IInventoryState>();
+            inventoryState.SelectedProp = new PropViewModel(prop);
+
             var list = new List<TextButton>();
 
             var useCommand = _serviceProvider.GetRequiredService<UseSelfCommand>();
@@ -101,6 +105,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
         }
 
+        private const int MENU_MARGIN = 5;
+        private const int MENU_WIDTH = 128;
+        private const int MENU_ITEM_HEIGHT = 16;
+
         private void InitItemsForEquipment(List<TextButton> list, ICommandPool commandPool)
         {
             for (var slotIndex = 0; slotIndex < _equipmentModule.Slots.Length; slotIndex++)
@@ -134,6 +142,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void InitItemsForResource(List<TextButton> list, UseSelfCommand useCommand, ICommandPool commandPool)
         {
+            if (_prop is null)
+            {
+                return;
+            }
+
             if (!useCommand.CanExecute().IsSuccess)
             {
                 return;
