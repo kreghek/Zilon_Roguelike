@@ -25,6 +25,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int EQUIPMENT_ITEM_SIZE = 32;
         private const int EQUIPMENT_ITEM_SPACING = 2;
+
+        private readonly string _containerName;
         private readonly IServiceProvider _serviceProvider;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
@@ -37,8 +39,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private InventoryUiItem? _hoverInventoryItem;
 
         private ContainerModalTransferContextualMenu? _inventoryPropContextMenu;
-
-        private readonly string _containerName;
 
         public ContainerModalDialog(ISectorUiState uiState, IUiContentStorage uiContentStorage,
             GraphicsDevice graphicsDevice,
