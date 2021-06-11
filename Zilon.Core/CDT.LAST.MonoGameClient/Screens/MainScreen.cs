@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -140,7 +141,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
                 _currentSector = _sectorViewModel.Sector;
-                _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
+
+                if (_uiState.ActiveActor is not null)
+                {
+                    _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
+                }
             }
 
             if (!_isTransitionPerforming)
@@ -338,8 +343,20 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void HandleScreenChanging()
         {
             _animationBlockerService.DropBlockers();
-            _sectorViewModel.UnsubscribeEventHandlers();
-            _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
+
+            if (_sectorViewModel is not null)
+            {
+                _sectorViewModel.UnsubscribeEventHandlers();
+            }
+            else
+            {
+                Debug.Fail("Sector view model must initalized before user performs transition and change screen.");
+            }
+
+            if (_uiState.ActiveActor is not null)
+            {
+                _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
+            }
         }
 
         private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)
