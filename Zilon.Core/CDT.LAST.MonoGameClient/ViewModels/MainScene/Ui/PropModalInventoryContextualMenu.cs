@@ -63,7 +63,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             return list.ToArray();
         }
 
-
         private static string GetInventoryMenuItemContent(IProp prop)
         {
             switch (prop.Scheme.Sid)
