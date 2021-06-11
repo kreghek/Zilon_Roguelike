@@ -21,7 +21,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         protected TextButton[]? _menuItemButtons;
         protected Point? _size;
 
-        public PropModalInventoryContextualMenuBase(Point position, IUiContentStorage uiContentStorage)
+        protected PropModalInventoryContextualMenuBase(Point position, IUiContentStorage uiContentStorage)
         {
             _position = new Point(position.X - MENU_MARGIN, position.Y - MENU_MARGIN);
             _position = position;
