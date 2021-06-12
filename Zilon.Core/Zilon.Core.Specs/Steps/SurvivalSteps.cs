@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using FluentAssertions;
@@ -104,17 +105,18 @@ namespace Zilon.Core.Specs.Steps
 
             if (stat != SurvivalStatType.Undefined)
             {
-                var effect = actor.Person.GetModule<IEffectsModule>().Items
-                    .OfType<SurvivalStatHazardEffect>()
+                var сondition = actor.Person.GetModule<IConditionsModule>().Items
+                    .OfType<SurvivalStatHazardCondition>()
                     .SingleOrDefault(x => x.Type == stat);
 
-                effect.Should().NotBeNull();
-                effect.Level.Should().Be(level);
+                сondition.Should().NotBeNull();
+                сondition.Level.Should().Be(level);
             }
             else
             {
-                var effects = actor.Person.GetModule<IEffectsModule>().Items.OfType<SurvivalStatHazardEffect>();
-                effects.Should().BeEmpty();
+                var сonditions = actor.Person.GetModule<IConditionsModule>().Items
+                    .OfType<SurvivalStatHazardCondition>();
+                сonditions.Should().BeEmpty();
             }
         }
 
@@ -206,7 +208,7 @@ namespace Zilon.Core.Specs.Steps
                             idleCommand.Execute();
                         }
 
-                        await globe.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
+                        await globe.UpdateAsync(CancellationToken.None).TimeoutAfter(1000).ConfigureAwait(false);
                     }
 
                     counter--;
@@ -218,7 +220,7 @@ namespace Zilon.Core.Specs.Steps
                 {
                     for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
                     {
-                        await globe.UpdateAsync().TimeoutAfter(1000).ConfigureAwait(false);
+                        await globe.UpdateAsync(CancellationToken.None).TimeoutAfter(1000).ConfigureAwait(false);
                     }
 
                     counter--;

@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Common
+﻿using System;
+
+namespace Zilon.Core.Common
 {
     /// <summary>
     /// Вспомогательный класс для работы с матрицами.
@@ -18,12 +20,12 @@
         {
             if (matrix is null)
             {
-                throw new System.ArgumentNullException(nameof(matrix));
+                throw new ArgumentNullException(nameof(matrix));
             }
 
             if (factor < 1)
             {
-                throw new System.ArgumentException("Значение должно быть 1 или больше.", nameof(factor));
+                throw new ArgumentException("Значение должно быть 1 или больше.", nameof(factor));
             }
 
             var scaledMatrix = new Matrix<bool>(matrix.Width * factor, matrix.Height * factor);
@@ -75,7 +77,7 @@
         {
             if (sourceMatrix is null)
             {
-                throw new System.ArgumentNullException(nameof(sourceMatrix));
+                throw new ArgumentNullException(nameof(sourceMatrix));
             }
 
             var n = sourceMatrix.Width;

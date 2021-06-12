@@ -30,6 +30,8 @@ namespace Zilon.Core.PersonModules
                 new SkillStatItem { Stat = SkillStatType.Melee, Value = 10 }
             };
 
+            Perks = Array.Empty<IPerk>();
+
             UpdatePerks();
         }
 
@@ -49,6 +51,17 @@ namespace Zilon.Core.PersonModules
         {
             var eventArgs = new PerkEventArgs(perk);
             PerkLeveledUp?.Invoke(this, eventArgs);
+        }
+
+        private static PerkLevel GetFirstOrNextLevel(IPerk perk)
+        {
+            if (perk.CurrentLevel is null)
+            {
+                // Perk is not leveled yet
+                return new PerkLevel(1, 1);
+            }
+
+            return PerkHelper.GetNextLevel(perk.Scheme, perk.CurrentLevel);
         }
 
         private IList<IPerk> GetPerks()
@@ -78,11 +91,24 @@ namespace Zilon.Core.PersonModules
                 }
 
                 //TODO Сейчас можно качнуть только первый уровень перка. Должно быть полноценное развитие.
-                var perk = new Perk
+                var levels = perkScheme.Levels;
+                if (levels is null)
                 {
-                    Scheme = perkScheme,
+                    throw new InvalidOperationException();
+                }
+
+                var level0 = levels[0];
+                if (level0 is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                var perk = new Perk(perkScheme)
+                {
                     CurrentLevel = null,
-                    CurrentJobs = perkScheme.Levels[0].Jobs
+                    CurrentJobs = level0.Jobs
+                        .Where(x => x != null)
+                        .Select(x => x!)
                         .Select(x => (IJob)new PerkJob(x))
                         .ToArray()
                 };
@@ -111,12 +137,6 @@ namespace Zilon.Core.PersonModules
 
         /// <inheritdoc />
         public bool IsActive { get; set; }
-
-        /// <inheritdoc />
-        public event EventHandler<PerkEventArgs> PerkLeveledUp;
-
-        /// <inheritdoc />
-        public event EventHandler<PerkEventArgs> PerkAdded;
 
         /// <inheritdoc />
         public void AddBuildInPerks(IEnumerable<IPerk> perks)
@@ -150,7 +170,7 @@ namespace Zilon.Core.PersonModules
                 throw new InvalidOperationException("Указанный перк не является активным для текущего актёра.");
             }
 
-            var nextLevel = PerkHelper.GetNextLevel(perk.Scheme, perk.CurrentLevel);
+            var nextLevel = GetFirstOrNextLevel(perk);
 
             perk.CurrentLevel = nextLevel;
 
@@ -158,5 +178,11 @@ namespace Zilon.Core.PersonModules
 
             DoPerkArchieved(perk);
         }
+
+        /// <inheritdoc />
+        public event EventHandler<PerkEventArgs>? PerkLeveledUp;
+
+        /// <inheritdoc />
+        public event EventHandler<PerkEventArgs>? PerkAdded;
     }
 }

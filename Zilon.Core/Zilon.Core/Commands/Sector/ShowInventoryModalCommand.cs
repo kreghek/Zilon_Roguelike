@@ -1,6 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using JetBrains.Annotations;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
@@ -15,21 +14,26 @@ namespace Zilon.Core.Commands
     {
         private readonly ISectorUiState _playerState;
 
-        [PublicAPI]
         public ShowInventoryModalCommand(ISectorModalManager modalManager, ISectorUiState playerState) :
             base(modalManager)
         {
             _playerState = playerState;
         }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
-            return true;
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         public override void Execute()
         {
-            ModalManager.ShowInventoryModal(_playerState.ActiveActor.Actor);
+            var actor = _playerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            ModalManager.ShowInventoryModal(actor);
         }
     }
 }

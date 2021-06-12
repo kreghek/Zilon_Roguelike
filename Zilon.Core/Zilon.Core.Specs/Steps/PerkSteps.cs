@@ -26,10 +26,7 @@ namespace Zilon.Core.Specs.Steps
             var schemeService = Context.ServiceProvider.GetRequiredService<ISchemeService>();
 
             var perkScheme = schemeService.GetScheme<IPerkScheme>(perkSid);
-            var perk = new Perk
-            {
-                Scheme = perkScheme
-            };
+            var perk = new Perk(perkScheme);
 
             var actor = Context.GetActiveActor();
 
@@ -55,8 +52,8 @@ namespace Zilon.Core.Specs.Steps
 
             perk.CurrentLevel.Should()
                 .NotBeNull("Перк должен быть прокачен. null в уровне означает непрокаченный перк.");
-            perk.CurrentLevel.Primary.Should().Be(0);
-            perk.CurrentLevel.Sub.Should().Be(0);
+            perk.CurrentLevel.Primary.Should().Be(1);
+            perk.CurrentLevel.Sub.Should().Be(1);
         }
     }
 }

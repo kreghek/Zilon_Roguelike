@@ -9,6 +9,7 @@ namespace Zilon.Core
         public int Y { get; }
         public int Z { get; }
 
+        [ExcludeFromCodeCoverage]
         public CubeCoords(int x, int y, int z)
         {
             X = x;
@@ -22,29 +23,40 @@ namespace Zilon.Core
             return $"(X: {X}, Y: {Y}, Z: {Z})";
         }
 
+        [ExcludeFromCodeCoverage]
         public static CubeCoords operator *(CubeCoords v, int q)
         {
             return new CubeCoords(v.X * q, v.Y * q, v.Z * q);
         }
 
+        [ExcludeFromCodeCoverage]
         public static CubeCoords operator *(int q, CubeCoords v)
         {
             return new CubeCoords(v.X * q, v.Y * q, v.Z * q);
         }
 
+        [ExcludeFromCodeCoverage]
         public static bool operator ==(CubeCoords left, CubeCoords right)
         {
             return left.Equals(right);
         }
 
+        [ExcludeFromCodeCoverage]
         public static bool operator !=(CubeCoords left, CubeCoords right)
         {
             return !(left == right);
         }
 
+        [ExcludeFromCodeCoverage]
         public static CubeCoords operator +(CubeCoords v, CubeCoords v2)
         {
             return new CubeCoords(v.X + v2.X, v.Y + v2.Y, v.Z + v2.Z);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public static CubeCoords operator -(CubeCoords v, CubeCoords v2)
+        {
+            return new CubeCoords(v.X - v2.X, v.Y - v2.Y, v.Z - v2.Z);
         }
 
         public int DistanceTo(CubeCoords cubeCoords)
@@ -57,11 +69,18 @@ namespace Zilon.Core
             return distance;
         }
 
+        [ExcludeFromCodeCoverage]
         public override bool Equals(object obj)
         {
-            return obj is CubeCoords coords && Equals(coords);
+            if (obj is CubeCoords coords)
+            {
+                return Equals(coords);
+            }
+
+            return false;
         }
 
+        [ExcludeFromCodeCoverage]
         public bool Equals(CubeCoords other)
         {
             return X == other.X &&
@@ -69,6 +88,7 @@ namespace Zilon.Core
                    Z == other.Z;
         }
 
+        [ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {
             unchecked
@@ -79,16 +99,6 @@ namespace Zilon.Core
                 hashCode = (hashCode * -1521134295) + Z.GetHashCode();
                 return hashCode;
             }
-        }
-
-        public static CubeCoords Multiply(CubeCoords left, CubeCoords right)
-        {
-            return new CubeCoords(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
-        }
-
-        public static CubeCoords Add(CubeCoords left, CubeCoords right)
-        {
-            return left + right;
         }
     }
 }

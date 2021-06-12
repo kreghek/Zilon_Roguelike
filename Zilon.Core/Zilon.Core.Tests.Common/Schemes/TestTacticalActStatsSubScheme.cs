@@ -1,10 +1,12 @@
-﻿using Zilon.Core.Common;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public class TestTacticalActStatsSubScheme : SubSchemeBase, ITacticalActStatsSubScheme
     {
         public TestTacticalActStatsSubScheme()
@@ -25,5 +27,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public ITacticalActOffenceSubScheme Offence { get; set; }
         public Range<int> Range { get; set; }
         public TacticalActTargets Targets { get; set; }
+        public string[] Tags { get; }
     }
 }

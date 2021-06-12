@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -25,21 +27,24 @@ namespace Zilon.Core.World.NameGeneration
         {
             _dice = dice;
 
-            JsonSerializer serializer = new JsonSerializer();
+            var serializer = new JsonSerializer();
 
-            var assembly = this.GetType().Assembly;
+            var assembly = GetType().Assembly;
             var resourceName = "Zilon.Core.World.NameGeneration.names.json";
 
-            using (var stream = assembly.GetManifestResourceStream(resourceName))
-            using (var reader = new StreamReader(stream))
-            using (JsonReader jreader = new JsonTextReader(reader))
-            {
-                var nameList = serializer.Deserialize<NameList>(jreader);
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            using var reader = new StreamReader(stream);
+            using JsonReader jreader = new JsonTextReader(reader);
 
-                _male = new List<string>(nameList.Boys);
-                _female = new List<string>(nameList.Girls);
-                _last = new List<string>(nameList.Last);
+            var nameList = serializer.Deserialize<NameList>(jreader);
+            if (nameList is null)
+            {
+                throw new InvalidOperationException();
             }
+
+            _male = new List<string>(nameList.Boys);
+            _female = new List<string>(nameList.Girls);
+            _last = new List<string>(nameList.Last);
         }
 
         /// <summary>
@@ -93,12 +98,12 @@ namespace Zilon.Core.World.NameGeneration
 
             List<string> middles = new List<string>();
 
-            for (int i = 0; i < middle; i++)
+            for (var i = 0; i < middle; i++)
             {
                 if (isInital)
                 {
                     middles.Add("ABCDEFGHIJKLMNOPQRSTUVWXYZ"[_dice.Roll(0, 25 - 1)]
-                                    .ToString(System.Globalization.CultureInfo.InvariantCulture) +
+                                    .ToString(CultureInfo.InvariantCulture) +
                                 "."); // randomly selects an uppercase letter to use as the inital and appends a dot
                 }
                 else
@@ -170,11 +175,11 @@ namespace Zilon.Core.World.NameGeneration
         {
             List<string> names = new List<string>(number);
 
-            for (int i = 0; i < number; i++)
+            for (var i = 0; i < number; i++)
             {
                 var s = sex != null ? sex.Value : (Sex)_dice.Roll(0, 2 - 1);
-                bool init = initials != null ? (bool)initials : _dice.Roll(0, 2 - 1) != 0;
-                int middle = _dice.Roll(0, (maxMiddleNames + 1) - 1);
+                var init = initials != null ? (bool)initials : _dice.Roll(0, 2 - 1) != 0;
+                var middle = _dice.Roll(0, (maxMiddleNames + 1) - 1);
 
                 names.Add(Generate(s, middle, init));
             }
@@ -189,19 +194,19 @@ namespace Zilon.Core.World.NameGeneration
         {
             public NameList()
             {
-                Boys = System.Array.Empty<string>();
-                Girls = System.Array.Empty<string>();
-                Last = System.Array.Empty<string>();
+                Boys = Array.Empty<string>();
+                Girls = Array.Empty<string>();
+                Last = Array.Empty<string>();
             }
 
             [JsonProperty(PropertyName = "boys")]
-            public string[] Boys { get; set; }
+            public string[] Boys { get; }
 
             [JsonProperty(PropertyName = "girls")]
-            public string[] Girls { get; set; }
+            public string[] Girls { get; }
 
             [JsonProperty(PropertyName = "last")]
-            public string[] Last { get; set; }
+            public string[] Last { get; }
         }
     }
 }

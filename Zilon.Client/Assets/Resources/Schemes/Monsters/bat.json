@@ -18,7 +18,11 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
-    }
+    },
+    "IsMelee": true,
+    "Tags": [
+      "bite"
+    ]
   },
   "DropTableSids": [
     "survival",

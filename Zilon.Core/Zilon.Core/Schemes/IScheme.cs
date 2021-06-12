@@ -15,7 +15,7 @@
         /// <remarks>
         /// Абстрактное описание. Для конкретных схем используется по-разному.
         /// </remarks>
-        LocalizedStringSubScheme Description { get; }
+        LocalizedStringSubScheme? Description { get; }
 
         /// <summary>
         /// Признак отключенной схемы.
@@ -31,7 +31,7 @@
         /// <remarks>
         /// В конкретных реализациях схем используется по-разному.
         /// </remarks>
-        LocalizedStringSubScheme Name { get; }
+        LocalizedStringSubScheme? Name { get; }
 
         /// <summary>
         /// Символьный идентификатор схемы.
@@ -40,6 +40,6 @@
         /// Символьный идентификатор схемы используются для ссылок на схему.
         /// Например, в БД или из контента других схем.
         /// </remarks>
-        string Sid { get; set; }
+        string? Sid { get; set; }
     }
 }

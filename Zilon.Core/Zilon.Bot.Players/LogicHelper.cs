@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Graphs;
+﻿using System;
+
+using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players
@@ -14,7 +16,7 @@ namespace Zilon.Bot.Players
         {
             if (map is null)
             {
-                throw new System.ArgumentNullException(nameof(map));
+                throw new ArgumentNullException(nameof(map));
             }
 
             var distance = map.DistanceBetween(node, target);

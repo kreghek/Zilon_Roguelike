@@ -20,7 +20,7 @@ namespace Zilon.Core.Tests.PersonModules
     {
         [Test]
         [TestCaseSource(typeof(DiseaseDataTestCaseSource), nameof(DiseaseDataTestCaseSource.TestCases))]
-        public void Update_AllProcess_EffectAddedAndRemoved(DiseaseSymptom[] symptoms)
+        public void Update_AllProcess_ConditionAddedAndRemoved(DiseaseSymptom[] symptoms)
         {
             if (symptoms is null)
             {
@@ -28,15 +28,15 @@ namespace Zilon.Core.Tests.PersonModules
             }
 
             // ARRANGE
-            var effectList = new List<IPersonEffect>();
+            var effectList = new List<IPersonCondition>();
 
-            var effectModuleMock = new Mock<IEffectsModule>();
-            effectModuleMock.Setup(x => x.Add(It.IsAny<IPersonEffect>()))
-                .Callback<IPersonEffect>(x => effectList.Add(x));
-            effectModuleMock.Setup(x => x.Remove(It.IsAny<IPersonEffect>()))
-                .Callback<IPersonEffect>(x => effectList.Remove(x));
-            effectModuleMock.SetupGet(x => x.Items).Returns(effectList);
-            var effectModule = effectModuleMock.Object;
+            var сonditionModuleMock = new Mock<IConditionsModule>();
+            сonditionModuleMock.Setup(x => x.Add(It.IsAny<IPersonCondition>()))
+                .Callback<IPersonCondition>(x => effectList.Add(x));
+            сonditionModuleMock.Setup(x => x.Remove(It.IsAny<IPersonCondition>()))
+                .Callback<IPersonCondition>(x => effectList.Remove(x));
+            сonditionModuleMock.SetupGet(x => x.Items).Returns(effectList);
+            var сonditionModule = сonditionModuleMock.Object;
 
             var diseaseMock = new Mock<IDisease>();
             diseaseMock.Setup(x => x.GetSymptoms())
@@ -45,7 +45,7 @@ namespace Zilon.Core.Tests.PersonModules
                 .Returns(1f / GlobeMetrics.OneIterationLength);
             var disease = diseaseMock.Object;
 
-            var diseaseData = new DiseaseModule(effectModule);
+            var diseaseData = new DiseaseModule(сonditionModule);
 
             diseaseData.Infect(disease);
 
@@ -58,15 +58,15 @@ namespace Zilon.Core.Tests.PersonModules
 
             // ARRANGE
             var exceptedTimes = symptoms.Length;
-            effectModuleMock.Verify(x => x.Add(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))),
+            сonditionModuleMock.Verify(x => x.Add(It.Is<IPersonCondition>(effect => IsDeaseSymptom(effect))),
                 Times.Exactly(exceptedTimes));
-            effectModuleMock.Verify(x => x.Remove(It.Is<IPersonEffect>(effect => IsDeaseSymptom(effect))),
+            сonditionModuleMock.Verify(x => x.Remove(It.Is<IPersonCondition>(effect => IsDeaseSymptom(effect))),
                 Times.Exactly(exceptedTimes));
         }
 
-        private static bool IsDeaseSymptom(IPersonEffect x)
+        private static bool IsDeaseSymptom(IPersonCondition x)
         {
-            return x is DiseaseSymptomEffect;
+            return x is DiseaseSymptomCondition;
         }
     }
 }

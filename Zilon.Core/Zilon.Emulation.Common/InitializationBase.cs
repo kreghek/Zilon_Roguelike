@@ -5,12 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Players;
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
-using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -96,15 +97,30 @@ namespace Zilon.Emulation.Common
             serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
         }
 
-        protected virtual void RegisterPersonFactory(IServiceCollection container)
+        protected virtual void RegisterPersonFactory<TPersonfactory>(IServiceCollection container)
+            where TPersonfactory : class, IPersonFactory
         {
-            container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
-            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
+            container.AddSingleton<TPersonfactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
+            container.AddSingleton<IPersonFactory, TPersonfactory>(serviceProvider =>
             {
-                var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
+                var factory = serviceProvider.GetRequiredService<TPersonfactory>();
                 factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
                 return factory;
             });
+        }
+
+        protected virtual void RegisterSchemeService(IServiceCollection container)
+        {
+            container.AddSingleton<ISchemeLocator>(factory =>
+            {
+                var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
+
+                return schemeLocator;
+            });
+
+            container.AddSingleton<ISchemeService, SchemeService>();
+
+            container.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
         }
 
         private static void ConfigurateActorActUsageHandler(IServiceProvider serviceProvider,
@@ -251,7 +267,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
-            RegisterPersonFactory(container);
+            RegisterPersonFactory<TemplateBasedPersonFactory>(container);
             container.AddSingleton<IPersonPerkInitializator, PersonPerkInitializator>();
 
             container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();
@@ -268,8 +284,13 @@ namespace Zilon.Emulation.Common
 
         private static void RegisterClientServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<ISectorUiState, SectorUiState>();
-            serviceCollection.AddSingleton<IInventoryState, InventoryState>();
+            serviceCollection.AddScoped<ISectorUiState, SectorUiState>();
+            serviceCollection.AddScoped<IInventoryState, InventoryState>();
+            serviceCollection.AddScoped<IAnimationBlockerService, AnimationBlockerService>();
+
+            serviceCollection.AddScoped<ICommandLoopContext, CommandLoopContext>();
+            serviceCollection.AddScoped<ICommandLoopUpdater, CommandLoopUpdater>();
+            serviceCollection.AddScoped<ICommandPool, QueueCommandPool>();
         }
 
         private static void RegisterGlobeInitializationServices(IServiceCollection serviceCollection)
@@ -284,6 +305,9 @@ namespace Zilon.Emulation.Common
             {
                 return (BiomeInitializer)serviceProvider.GetRequiredService<IBiomeInitializer>();
             });
+
+            serviceCollection.AddSingleton<IGlobeLoopUpdater, GlobeLoopUpdater>();
+            serviceCollection.AddSingleton<IGlobeLoopContext, GlobeLoopContext>();
         }
 
         private static void RegisterPlayerServices(IServiceCollection serviceCollection)
@@ -292,25 +316,6 @@ namespace Zilon.Emulation.Common
             serviceCollection.AddSingleton<IPlayerEventLogService, PlayerEventLogService>();
             serviceCollection.AddSingleton<DeathReasonService>();
             serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
-        }
-
-        private static void RegisterSchemeService(IServiceCollection container)
-        {
-            container.AddSingleton<ISchemeLocator>(factory =>
-            {
-                //TODO Организовать отдельный общий метод/класс/фабрику для конструирования локатора схем.
-                // Подобные конструкции распределены по всему проекту: в тестах, бенчах, окружении ботов.
-                // Следует их объединить в одном месте.
-                var schemePath = Environment.GetEnvironmentVariable("ZILON_LIV_SCHEME_CATALOG");
-
-                var schemeLocator = new FileSchemeLocator(schemePath);
-
-                return schemeLocator;
-            });
-
-            container.AddSingleton<ISchemeService, SchemeService>();
-
-            container.AddSingleton<ISchemeServiceHandlerFactory, SchemeServiceHandlerFactory>();
         }
 
         private void RegisterScopedSectorService(IServiceCollection container)

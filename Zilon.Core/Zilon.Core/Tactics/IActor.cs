@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;
@@ -43,12 +44,20 @@ namespace Zilon.Core.Tactics
         /// <param name="targetNode"> Целевой узел карты. </param>
         void MoveToNode(IGraphNode targetNode);
 
+        void MoveToOtherSector(ISector sector, SectorTransition sectorTransition);
+
         /// <summary>
         /// Открытие контейнера актёром.
         /// </summary>
         /// <param name="container"> Целевой контейнер в секторе. </param>
         /// <param name="method"> Метод открытия контейнера. </param>
         void OpenContainer(IStaticObject container, IOpenContainerMethod method);
+
+        /// <summary>
+        /// Method-wrapper (mb temp) to raise event.
+        /// Event are nesessary to run animation and sound in clients.
+        /// </summary>
+        void PerformTransfer();
 
         void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
 
@@ -64,31 +73,34 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Происходит, когда актёр переместился.
         /// </summary>
-        event EventHandler Moved;
+        event EventHandler? Moved;
 
         /// <summary>
         /// Происходит, когда актёр открывает контейнер в секторе.
         /// </summary>
-        event EventHandler<OpenContainerEventArgs> OpenedContainer;
+        event EventHandler<OpenContainerEventArgs>? OpenedContainer;
 
         /// <summary>
         /// Происходит, когда актёр выполняет добычу ресурса в секторе.
         /// </summary>
-        event EventHandler<MineDepositEventArgs> DepositMined;
+        event EventHandler<MineDepositEventArgs>? DepositMined;
 
         /// <summary>
         /// Происходит, когда актёр выполняет действие.
         /// </summary>
-        event EventHandler<UsedActEventArgs> UsedAct;
+        event EventHandler<UsedActEventArgs>? UsedAct;
 
         /// <summary>
         /// Происходит, когда актёр получает урон.
         /// </summary>
-        event EventHandler<DamageTakenEventArgs> DamageTaken;
+        event EventHandler<DamageTakenEventArgs>? DamageTaken;
 
         /// <summary>
         /// Выстреливает, когда актёр использует предмет.
         /// </summary>
-        event EventHandler<UsedPropEventArgs> UsedProp;
+        event EventHandler<UsedPropEventArgs>? UsedProp;
+
+        event EventHandler? PropTransferPerformed;
+        event EventHandler? BeginTransitionToOtherSector;
     }
 }

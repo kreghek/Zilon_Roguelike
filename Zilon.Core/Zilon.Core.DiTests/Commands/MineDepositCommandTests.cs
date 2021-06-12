@@ -38,7 +38,7 @@ namespace Zilon.Core.DiTests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().BeTrue();
+            canExecute.IsSuccess.Should().BeTrue();
         }
 
         /// <summary>

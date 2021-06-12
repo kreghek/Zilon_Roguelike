@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.Tactics.Spatial;
 
@@ -10,7 +11,7 @@ namespace Zilon.Core.MapGenerators
         {
             if (map is null)
             {
-                throw new System.ArgumentNullException(nameof(map));
+                throw new ArgumentNullException(nameof(map));
             }
 
             CreateNodes(map, 0, 0, mapSize);
@@ -28,7 +29,7 @@ namespace Zilon.Core.MapGenerators
         {
             if (map is null)
             {
-                throw new System.ArgumentNullException(nameof(map));
+                throw new ArgumentNullException(nameof(map));
             }
 
             CreateNodes(map, startX, startY, mapSize);

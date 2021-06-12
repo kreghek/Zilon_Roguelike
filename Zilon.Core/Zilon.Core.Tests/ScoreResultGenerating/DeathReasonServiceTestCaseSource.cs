@@ -33,7 +33,7 @@ namespace Zilon.Core.ScoreResultGenerating.Tests
                 {
                     foreach (var effectType in effectTypes)
                     {
-                        var effect = new SurvivalStatHazardEffect(
+                        var effect = new SurvivalStatHazardCondition(
                             effectType,
                             SurvivalStatHazardLevel.Max,
                             Mock.Of<ISurvivalRandomSource>());

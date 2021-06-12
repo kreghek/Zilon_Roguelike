@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Common;
 using Zilon.Core.Schemes;
 
@@ -33,15 +31,13 @@ namespace Zilon.Core.Props
             IEnumerable<ITacticalActScheme> acts) :
             base(propScheme)
         {
-            if (propScheme is null)
+            if (propScheme.Equip is null)
             {
-                throw new ArgumentNullException(nameof(propScheme));
+                throw new ArgumentException(
+                    "The scheme is not valid for equipment. It must has not null Equip subscheme.", nameof(propScheme));
             }
 
-            if (propScheme.Equip == null)
-            {
-                throw new ArgumentException("Не корректная схема.", nameof(propScheme));
-            }
+            _name = string.Empty;
 
             if (acts != null)
             {
@@ -61,10 +57,10 @@ namespace Zilon.Core.Props
 
         public Equipment(IPropScheme propScheme,
             IEnumerable<ITacticalActScheme> acts,
-            [NotNull] string name) :
+            string name) :
             this(propScheme, acts)
         {
-            _name = name ?? throw new ArgumentNullException(nameof(name));
+            _name = name;
         }
 
         public IEnumerable<ITacticalActScheme> Acts { get; }

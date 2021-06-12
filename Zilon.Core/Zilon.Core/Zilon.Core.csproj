@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
       <Compile Remove="Tactics\StaticObjectModules\**" />
@@ -14,10 +15,6 @@
       <EmbeddedResource Include="World\NameGeneration\names.json" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations">
-            <Version>2020.3.0</Version>
-            <ExcludeAssets>runtime; build</ExcludeAssets>
-        </PackageReference>
         <PackageReference Include="JsonSubTypes">
             <Version>1.8.0</Version>
         </PackageReference>
@@ -26,10 +23,10 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Newtonsoft.Json">
-            <Version>12.0.3</Version>
+            <Version>13.0.1</Version>
         </PackageReference>
         <PackageReference Include="System.Drawing.Common">
-            <Version>5.0.1</Version>
+            <Version>5.0.2</Version>
         </PackageReference>
     </ItemGroup>
 </Project>

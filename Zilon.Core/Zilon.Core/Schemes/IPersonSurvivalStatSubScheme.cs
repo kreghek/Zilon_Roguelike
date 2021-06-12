@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Подсхема характеристики выживания персонажа.
@@ -19,9 +21,9 @@
         /// В результате прохождения ключевых точек обычно наступают или сбрасываются угрозы выживания.
         /// Например, добавляется эффект голода, снижающего характеристики.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+        [SuppressMessage("Performance", "CA1819:Properties should not return arrays",
             Justification = "используется для десериализации с внешнего источника.")]
-        IPersonSurvivalStatKeySegmentSubScheme[] KeyPoints { get; }
+        IPersonSurvivalStatKeySegmentSubScheme?[]? KeyPoints { get; }
 
         /// <summary>
         /// Максимальное значение характеристики.

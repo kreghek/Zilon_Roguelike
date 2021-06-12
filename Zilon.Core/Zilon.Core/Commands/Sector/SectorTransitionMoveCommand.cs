@@ -42,11 +42,11 @@ namespace Zilon.Core.Commands
         /// Определяем, может ли команда выполниться.
         /// </summary>
         /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
             if (CurrentActor is null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             if (_player.Globe is null || _player.MainPerson is null)
@@ -57,13 +57,24 @@ namespace Zilon.Core.Commands
             }
 
             var actorNode = CurrentActor.Node;
-            var map = _player.SectorNode.Sector.Map;
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var map = sector.Map;
 
             var detectedTransition = TransitionDetection.Detect(map.Transitions, new[] { actorNode });
 
             var actorOnTransition = detectedTransition != null;
 
-            return actorOnTransition;
+            if (!actorOnTransition)
+            {
+                return new CanExecuteCheckResult { IsSuccess = false };
+            }
+
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         /// <summary>
@@ -71,9 +82,30 @@ namespace Zilon.Core.Commands
         /// </summary>
         protected override void ExecuteTacticCommand()
         {
-            var taskContext = new ActorTaskContext(_player.SectorNode.Sector);
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
             var intention = new Intention<SectorTransitTask>(a => new SectorTransitTask(a, taskContext));
-            PlayerState.TaskSource.Intent(intention, PlayerState.ActiveActor.Actor);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intention, actor);
+
+            // Drop waiting because the globe must not wait the person which is not in a sector.
+            taskSource.DropIntentionWaiting();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -11,12 +12,12 @@ namespace Zilon.Core.Tactics.Behaviour
     /// </summary>
     public class EquipTask : OneTurnActorTaskBase
     {
-        private readonly Equipment _equipment;
+        private readonly Equipment? _equipment;
         private readonly int _slotIndex;
 
         public EquipTask(IActor actor,
             IActorTaskContext context,
-            Equipment equipment,
+            Equipment? equipment,
             int slotIndex) :
             base(actor, context)
         {
@@ -52,9 +53,16 @@ namespace Zilon.Core.Tactics.Behaviour
             var currentEquipment = equipmentCarrier[_slotIndex];
 
             // проверяем, из инвентаря или из слота экипируем (и)/(с)
+            if (_equipment is null)
+            {
+                // There is no reason to check equipemnt is null.
+                // But analyser can't understand condition in parent method ExecuteTask.
+                throw new InvalidOperationException();
+            }
+
             var currentEquipedSlotIndex = FindPropInEquiped(_equipment, equipmentCarrier);
 
-            if (currentEquipedSlotIndex == null)
+            if (currentEquipedSlotIndex is null)
             {
                 // (и)
 
@@ -74,7 +82,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (currentEquipment != null)
                 {
-                    // (1) Ставим существующий в данном слоте предмет предмет в слот, в котором был выбранный предмет
+                    // (1) Ставим существующий в данном слоте предмет в слот, в котором был выбранный предмет
                     equipmentCarrier[currentEquipedSlotIndex.Value] = currentEquipment;
                 }
                 else

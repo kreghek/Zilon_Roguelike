@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Zilon.Core.Schemes
 {
@@ -17,14 +15,12 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Действие персонажа по умолчанию.
         /// </summary>
-        [UsedImplicitly]
-        public string DefaultAct { get; set; }
+        public string? DefaultAct { get; set; }
 
         /// <summary>
         /// Слоты экипировки.
         /// </summary>
-        [UsedImplicitly]
-        public PersonSlotSubScheme[] Slots { get; set; }
+        public PersonSlotSubScheme?[]? Slots { get; set; }
 
         /// <summary>
         /// Характеристики выживания персонажа.
@@ -32,7 +28,6 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<PersonSurvivalStatSubScheme[]>))]
         [JsonProperty]
-        [UsedImplicitly]
-        public IPersonSurvivalStatSubScheme[] SurvivalStats { get; private set; }
+        public IPersonSurvivalStatSubScheme?[]? SurvivalStats { get; private set; }
     }
 }

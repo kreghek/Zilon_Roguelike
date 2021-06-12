@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+
+using FluentAssertions;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,8 +39,7 @@ namespace Zilon.Core.Tests.Commands
                     Consumable = true,
                     CommonRules = new[]
                     {
-                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser,
-                            PersonRuleDirection.Positive)
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser)
                     }
                 }
             };
@@ -57,7 +58,7 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().BeFalse();
+            canExecute.IsSuccess.Should().BeFalse();
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().BeTrue();
+            canExecute.IsSuccess.Should().BeTrue();
         }
 
         /// <summary>
@@ -109,7 +110,7 @@ namespace Zilon.Core.Tests.Commands
                     }
                 }
             };
-            var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
+            var equipment = new Equipment(propScheme, Array.Empty<TacticalActScheme>());
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();
             equipmentViewModelMock.SetupGet(x => x.Prop).Returns(equipment);

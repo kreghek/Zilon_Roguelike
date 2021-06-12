@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
@@ -26,17 +27,17 @@ namespace Zilon.Bot.Players.Triggers
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (currentState is null)
             {
-                throw new System.ArgumentNullException(nameof(currentState));
+                throw new ArgumentNullException(nameof(currentState));
             }
 
             if (strategyData is null)
             {
-                throw new System.ArgumentNullException(nameof(strategyData));
+                throw new ArgumentNullException(nameof(strategyData));
             }
 
             if (!actor.Person.HasModule<IInventoryModule>() || !actor.Person.HasModule<IEquipmentModule>())

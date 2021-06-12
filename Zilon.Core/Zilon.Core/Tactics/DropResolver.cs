@@ -79,6 +79,11 @@ namespace Zilon.Core.Tactics
         {
             try
             {
+                if (record.SchemeSid is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
                 var scheme = _schemeService.GetScheme<IPropScheme>(record.SchemeSid);
                 var propClass = GetPropClass(scheme);
 
@@ -177,11 +182,12 @@ namespace Zilon.Core.Tactics
                     var table = openDropTables[0];
 
                     var records = table.Records;
-                    if (!records.Any())
+                    if (records is null || !records.Any())
                     {
+                        Debug.Fail("The drop tables must have not null or empty records.");
                         // Do not try to roll if drop table has no records.
 
-                        // Dont forget to remove empty drop table from open to avoid endless loop.
+                        // Don't forget to remove empty drop table from open to avoid endless loop.
                         openDropTables.RemoveAt(0);
                         continue;
                     }
@@ -203,7 +209,7 @@ namespace Zilon.Core.Tactics
                         var rolledWeight = _randomSource.RollWeight(totalWeight);
                         var recMod = DropRoller.GetRecord(recMods, rolledWeight);
 
-                        if (recMod.Record.SchemeSid == null)
+                        if (recMod.Record?.SchemeSid == null)
                         {
                             continue;
                         }

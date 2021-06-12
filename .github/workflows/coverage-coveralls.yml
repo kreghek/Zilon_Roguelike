@@ -17,7 +17,7 @@ env:
 
 jobs:
 
-  test:
+  test_release:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -31,15 +31,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.x'
-    - name: Run ${{ matrix.test_suite }} in Debug
-      env:
-        ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-        DOTNET_CLI_TELEMETRY_OUTPUT: 1
-      run: |
-        cd ./Zilon.Core
-        dotnet test ${{ matrix.test_suite }}.sln --configuration Debug
+        dotnet-version: '5.0.100'
     - name: Run ${{ matrix.test_suite }} in Release and collect coverage
       env:
         ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
@@ -56,8 +48,32 @@ jobs:
         parallel: true
         flag-name: ${{ matrix.test_suite }}
 
+  test_debug:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test_suite:
+          - Zilon.Core.UnitTests
+          - Zilon.Core.FunctionalTests
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.100'
+    - name: Run ${{ matrix.test_suite }} in Debug
+      env:
+        ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+        DOTNET_CLI_TELEMETRY_OUTPUT: 1
+      run: |
+        cd ./Zilon.Core
+        dotnet test ${{ matrix.test_suite }}.sln --configuration Debug
+
   finish:
-    needs: test
+    needs: test_release
     runs-on: ubuntu-latest
     steps:
     - name: Coveralls Finished

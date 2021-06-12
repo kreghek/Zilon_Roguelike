@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Tactics.Spatial;
 
@@ -24,10 +22,10 @@ namespace Zilon.Core.MapGenerators
         /// Возможно, отфильтрованные от уже занятых узлов.
         /// </param>
         /// <returns> Возвращает узел, который не закрывает проход в регион карты. </returns>
-        public static IGraphNode FindNonBlockedNode(
-            [NotNull] IGraphNode node,
-            [NotNull] IMap map,
-            [NotNull][ItemNotNull] IEnumerable<IGraphNode> availableNodes)
+        public static IGraphNode? FindNonBlockedNode(
+            IGraphNode node,
+            IMap map,
+            IEnumerable<IGraphNode> availableNodes)
         {
             var availableNodesArray = availableNodes as IGraphNode[] ?? availableNodes.ToArray();
             CheckArguments(node, map, availableNodesArray);

@@ -37,7 +37,7 @@ namespace Zilon.Core.Scoring
         void CountMonsterDefeat(MonsterPerson monster);
 
         /// <summary> Засчитать один прожитый шаг. </summary>
-        void CountTurn(ILocationScheme locationScheme);
+        void CountTurn(ILocationScheme? locationScheme);
 
         /// <summary> Обнуление текущих очков. </summary>
         void ResetScores();

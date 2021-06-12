@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Zilon.Core.Tactics;
@@ -19,6 +20,7 @@ namespace Zilon.Core.World
         private readonly IList<ISectorNode> _sectorNodes;
 
         private readonly ConcurrentDictionary<IActor, TaskState> _taskDict;
+
         private int _turnCounter;
 
         public Globe(IGlobeTransitionHandler globeTransitionHandler)
@@ -31,7 +33,7 @@ namespace Zilon.Core.World
                 globeTransitionHandler ?? throw new ArgumentNullException(nameof(globeTransitionHandler));
         }
 
-        private void ActorManager_Removed(object sender, ManagerItemsChangedEventArgs<IActor> e)
+        private void ActorManager_Removed(object? sender, ManagerItemsChangedEventArgs<IActor> e)
         {
             // Remove all current tasks
             foreach (var removedActor in e.Items)
@@ -43,18 +45,18 @@ namespace Zilon.Core.World
         private static void ClearUpTasks(IDictionary<IActor, TaskState> taskDict)
         {
             // удаляем выполненные задачи.
-            foreach (var taskStatePair in taskDict.ToArray())
+            var allStateCopyList = taskDict.Values.ToArray();
+            foreach (var state in allStateCopyList)
             {
-                var state = taskStatePair.Value;
+                var actor = state.Actor;
 
                 if (state.TaskComplete)
                 {
-                    taskDict.Remove(taskStatePair.Key);
+                    taskDict.Remove(actor);
                     state.TaskSource.ProcessTaskComplete(state.Task);
-                    return;
+                    continue;
                 }
 
-                var actor = taskStatePair.Key;
                 if (!actor.CanExecuteTasks)
                 {
                     // Песонаж может перестать выполнять задачи по следующим причинам:
@@ -63,12 +65,13 @@ namespace Zilon.Core.World
                     // Их задачи можно прервать, потому что:
                     //   * Возможна ситуация, когда мертвый персонаж все еще выполнить действие.
                     //   * Экономит ресурсы.
-                    taskDict.Remove(taskStatePair.Key);
+                    taskDict.Remove(actor);
                 }
             }
         }
 
-        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList)
+        private async Task GenerateActorTasksAndPutInDictAsync(IEnumerable<ActorInSector> actorDataList,
+            CancellationToken cancelToken)
         {
             var actorDataListMaterialized = actorDataList.ToArray();
 
@@ -83,19 +86,21 @@ namespace Zilon.Core.World
 
                     var taskSource = actor.TaskSource;
 
-                    var context = new SectorTaskSourceContext(sector);
+                    var context = new SectorTaskSourceContext(sector, cancelToken);
 
                     try
                     {
-                        var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
-                        var state = new TaskState(actor, sector, actorTask, taskSource);
-                        if (!_taskDict.TryAdd(actor, state))
+                        if (taskSource is IHumanActorTaskSource<SectorTaskSourceContext> humanTaskSource)
                         {
-                            // Это происходит, когда игрок пытается присвоить новую команду,
-                            // когда старая еще не закончена и не может быть заменена.
-                            throw new InvalidOperationException(
-                                "Попытка назначить задачу, когда старая еще не удалена.");
+                            // Drop intention for human controlled task source.
+                            cancelToken.Register(() => { humanTaskSource.DropIntentionWaiting(); });
                         }
+
+                        var actorTask = await taskSource.GetActorTaskAsync(actor, context).ConfigureAwait(false);
+
+                        var state = new TaskState(actor, sector, actorTask, taskSource);
+
+                        _taskDict.AddOrUpdate(actor, state, (a, t) => state);
                     }
                     catch (TaskCanceledException)
                     {
@@ -119,7 +124,22 @@ namespace Zilon.Core.World
             var sectorNodes = _sectorNodes.ToArray();
             foreach (var sectorNode in sectorNodes)
             {
+                if (sectorNode.State != SectorNodeState.SectorMaterialized)
+                {
+                    continue;
+                }
+
                 var sector = sectorNode.Sector;
+                if (sector is null)
+                {
+                    if (sectorNode.State == SectorNodeState.SectorMaterialized)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    continue;
+                }
+
                 var actors = sector.ActorManager.Items.ToArray();
                 foreach (var actor in actors)
                 {
@@ -127,11 +147,7 @@ namespace Zilon.Core.World
 
                     if (needCreateTask)
                     {
-                        yield return new ActorInSector
-                        {
-                            Actor = actor,
-                            Sector = sector
-                        };
+                        yield return new ActorInSector(actor, sector);
                     }
                 }
             }
@@ -161,6 +177,16 @@ namespace Zilon.Core.World
                 // Actor has task yet.
 
                 return false;
+            }
+
+            return true;
+        }
+
+        private static bool IsPlayerActorControlledByHuman(IActorTaskSource<ISectorTaskSourceContext> taskSource)
+        {
+            if (taskSource is IActorTaskControlSwitcher controlSwitcher)
+            {
+                return controlSwitcher.CurrentControl == ActorTaskSourceControl.Human;
             }
 
             return true;
@@ -227,14 +253,24 @@ namespace Zilon.Core.World
             {
                 if (actor.TaskSource is IHumanActorTaskSource<ISectorTaskSourceContext> humanTaskSource)
                 {
-                    humanTaskSource.DropIntentionWaiting();
+                    var isPlayerActorControlledByHuman = IsPlayerActorControlledByHuman(actor.TaskSource);
+                    if (isPlayerActorControlledByHuman)
+                    {
+                        humanTaskSource.DropIntentionWaiting();
+                    }
                 }
             }
         }
 
-        private async void Sector_TrasitionUsed(object sender, TransitionUsedEventArgs e)
+        private async void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
         {
+            if (sender is null)
+            {
+                throw new InvalidOperationException("Invalid event sender. It must be not null.");
+            }
+
             var sector = (ISector)sender;
+
             await _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition)
                 .ConfigureAwait(false);
         }
@@ -261,25 +297,44 @@ namespace Zilon.Core.World
             }
 
             _sectorNodes.Add(sectorNode);
-            sectorNode.Sector.TrasitionUsed += Sector_TrasitionUsed;
-            sectorNode.Sector.ActorManager.Removed += ActorManager_Removed;
+            var sector = sectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            sector.TrasitionUsed += Sector_TrasitionUsed;
+            sector.ActorManager.Removed += ActorManager_Removed;
         }
 
-        public async Task UpdateAsync()
+        public async Task UpdateAsync(CancellationToken cancelToken)
         {
             var actorsWithoutTasks = GetActorsWithoutTasks();
 
-            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks).ConfigureAwait(false);
+            await GenerateActorTasksAndPutInDictAsync(actorsWithoutTasks, cancelToken).ConfigureAwait(false);
 
             ProcessTasks(_taskDict);
+
             _turnCounter++;
+
             if (_turnCounter >= GlobeMetrics.OneIterationLength)
             {
                 _turnCounter = GlobeMetrics.OneIterationLength - _turnCounter;
 
                 foreach (var sectorNode in _sectorNodes)
                 {
-                    sectorNode.Sector.Update();
+                    var sector = sectorNode.Sector;
+                    if (sector is null)
+                    {
+                        if (sectorNode.State == SectorNodeState.SectorMaterialized)
+                        {
+                            throw new InvalidOperationException();
+                        }
+
+                        continue;
+                    }
+
+                    sector.Update();
                 }
 
                 _globeTransitionHandler.UpdateTransitions();
@@ -288,8 +343,14 @@ namespace Zilon.Core.World
 
         private sealed class ActorInSector
         {
-            public IActor Actor { get; set; }
-            public ISector Sector { get; set; }
+            public ActorInSector(IActor actor, ISector sector)
+            {
+                Actor = actor;
+                Sector = sector;
+            }
+
+            public IActor Actor { get; }
+            public ISector Sector { get; }
         }
     }
 }

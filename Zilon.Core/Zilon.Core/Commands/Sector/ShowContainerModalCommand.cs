@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
 using Zilon.Core.PersonModules;
@@ -13,7 +11,6 @@ namespace Zilon.Core.Commands
     /// <summary>
     /// Команда на отображение модального окна для отображения контента контейнера.
     /// </summary>
-    [PublicAPI]
     public class ShowContainerModalCommand : ShowModalCommandBase
     {
         private readonly ISectorUiState _playerState;
@@ -25,22 +22,26 @@ namespace Zilon.Core.Commands
             _playerState = playerState;
         }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
-            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
+            var activeActor = _playerState.ActiveActor!;
+
+            var inventory = activeActor.Actor.Person.GetModule<IInventoryModule>();
 
             var targetContainerViewModel = _playerState.HoverViewModel as IContainerViewModel;
             var container = targetContainerViewModel?.StaticObject;
             var containerContent = container?.GetModule<IPropContainer>().Content;
 
-            return inventory != null && containerContent != null;
+            return new CanExecuteCheckResult { IsSuccess = inventory != null && containerContent != null };
         }
 
         public override void Execute()
         {
-            var inventory = _playerState.ActiveActor.Actor.Person.GetModule<IInventoryModule>();
-            var targetContainerViewModel = (IContainerViewModel)_playerState.HoverViewModel;
-            var container = targetContainerViewModel.StaticObject;
+            var activeActor = _playerState.ActiveActor!;
+
+            var inventory = activeActor.Actor.Person.GetModule<IInventoryModule>();
+            var targetContainerViewModel = (IContainerViewModel?)_playerState.HoverViewModel;
+            var container = targetContainerViewModel!.StaticObject;
             var containerContent = container.GetModule<IPropContainer>().Content;
             var transferMachine = new PropTransferMachine(inventory, containerContent);
 

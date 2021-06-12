@@ -1,9 +1,11 @@
-﻿namespace Zilon.Core.PersonGeneration
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.PersonGeneration
 {
     /// <summary>
     /// Base implementation of identifier provider.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public sealed class MonsterIdentifierGenerator : IMonsterIdentifierGenerator
     {
         private int _currentIdCounter;

@@ -1,6 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using JetBrains.Annotations;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Windows;
@@ -16,21 +15,26 @@ namespace Zilon.Core.Commands
     {
         private readonly ISectorUiState _playerState;
 
-        [PublicAPI]
         public ShowPerksModalCommand(ISectorModalManager sectorManager, ISectorUiState playerState) :
             base(sectorManager)
         {
             _playerState = playerState;
         }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
-            return true;
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         public override void Execute()
         {
-            ModalManager.ShowPerksModal(_playerState.ActiveActor.Actor);
+            var actor = _playerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            ModalManager.ShowPerksModal(actor);
         }
     }
 }

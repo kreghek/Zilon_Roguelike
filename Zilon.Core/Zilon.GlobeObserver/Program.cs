@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core.Persons;
 using Zilon.Core.World;
+using Zilon.Emulation.Common;
 
 namespace Zilon.GlobeObserver
 {
@@ -24,7 +26,7 @@ namespace Zilon.GlobeObserver
         private static async Task Main()
         {
             var serviceContainer = new ServiceCollection();
-            var startUp = new StartUp();
+            var startUp = new AutoPersonStartup();
             startUp.RegisterServices(serviceContainer);
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
@@ -51,7 +53,7 @@ namespace Zilon.GlobeObserver
 
                 for (var i = 0; i < iterationCount; i++)
                 {
-                    await RunGlobeIteration(globe).ConfigureAwait(false);
+                    await RunGlobeIterationAsync(globe).ConfigureAwait(false);
 
                     globeIterationCounter++;
 
@@ -86,11 +88,11 @@ namespace Zilon.GlobeObserver
             }
         }
 
-        private static async Task RunGlobeIteration(IGlobe globe)
+        private static async Task RunGlobeIterationAsync(IGlobe globe)
         {
             for (var i = 0; i < GlobeMetrics.OneIterationLength; i++)
             {
-                await globe.UpdateAsync().ConfigureAwait(false);
+                await globe.UpdateAsync(CancellationToken.None).ConfigureAwait(false);
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
@@ -30,7 +32,7 @@ namespace Zilon.Core.MapGenerators
         {
             if (sectorNode is null)
             {
-                throw new System.ArgumentNullException(nameof(sectorNode));
+                throw new ArgumentNullException(nameof(sectorNode));
             }
 
             var sectorScheme = sectorNode.SectorScheme;

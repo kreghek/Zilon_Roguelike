@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 using Zilon.Core.Tactics.Behaviour;
 
@@ -37,11 +38,11 @@ namespace Zilon.Core.Tactics
         }
 
         protected ActorTaskExecutionException(
-            System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext context) : base(info, context)
+            SerializationInfo info,
+            StreamingContext context) : base(info, context)
         {
         }
 
-        public IActorTaskSource<ISectorTaskSourceContext> ActorTaskSource { get; }
+        public IActorTaskSource<ISectorTaskSourceContext>? ActorTaskSource { get; }
     }
 }

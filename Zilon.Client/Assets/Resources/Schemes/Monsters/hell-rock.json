@@ -4,6 +4,7 @@
     "En": "Hell rock"
   },
   "Hp": 50,
+  "MoveSpeedFactor": 0.3,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,

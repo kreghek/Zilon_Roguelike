@@ -18,11 +18,11 @@ namespace Zilon.Core.Schemes
         /// <summary>
         /// Английский вариант.
         /// </summary>
-        public string En { get; set; }
+        public string? En { get; set; }
 
         /// <summary>
         /// Русский вариант.
         /// </summary>
-        public string Ru { get; set; }
+        public string? Ru { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <returns>Returns true if usage allowed. Otherwise - false.</returns>
         public static bool CheckPropAllowedByRestrictions(IProp usedProp, IActor actor, IActorTaskContext context)
         {
-            var restrictions = usedProp.Scheme.Use.Restrictions;
+            var restrictions = usedProp.Scheme.Use?.Restrictions;
             if (restrictions is null)
             {
                 // Prop without restrictions automaticcaly allowed.
@@ -42,6 +42,11 @@ namespace Zilon.Core.Tactics.Behaviour
 
             foreach (var restriction in restrictions.Items)
             {
+                if (restriction is null)
+                {
+                    continue;
+                }
+
                 var isAllowed = CheckPropAllowedByRestriction(restriction.Type, actor, context);
 
                 if (!isAllowed)
@@ -54,17 +59,17 @@ namespace Zilon.Core.Tactics.Behaviour
             return true;
         }
 
-        private static bool CheckEffectWithMaxLevel(IActor actor, SurvivalStatType effectType)
+        private static bool CheckConditionWithMaxLevel(IActor actor, SurvivalStatType effectType)
         {
             var isRestricted = false;
 
-            var effectModule = actor.Person.GetModuleSafe<IEffectsModule>();
-            if (effectModule != null)
+            var сonditionModule = actor.Person.GetModuleSafe<IConditionsModule>();
+            if (сonditionModule != null)
             {
-                var searchingEffect = effectModule.Items.OfType<SurvivalStatHazardEffect>()
+                var searchingСondition = сonditionModule.Items.OfType<SurvivalStatHazardCondition>()
                     .SingleOrDefault(x => x.Type == effectType && x.Level == SurvivalStatHazardLevel.Max);
 
-                if (searchingEffect != null)
+                if (searchingСondition != null)
                 {
                     isRestricted = true;
                 }
@@ -83,64 +88,40 @@ namespace Zilon.Core.Tactics.Behaviour
                         $"Restriction type is {nameof(UsageRestrictionRule.Undefined)}.");
 
                 case UsageRestrictionRule.NoStarvation:
-
-                    if (IsRestrictedByStarvation(actor))
-                    {
-                        return false;
-                    }
-
-                    break;
+                    return !IsRestrictedByStarvation(actor);
 
                 case UsageRestrictionRule.NoDehydration:
-
-                    if (IsRestrictedByDehydration(actor))
-                    {
-                        return false;
-                    }
-
-                    break;
+                    return !IsRestrictedByDehydration(actor);
 
                 case UsageRestrictionRule.NoOverdose:
-
-                    if (IsRestrictedByOverdose(actor))
-                    {
-                        return false;
-                    }
-
-                    break;
+                    return !IsRestrictedByOverdose(actor);
 
                 case UsageRestrictionRule.OnlySafeEnvironment:
 
                     var hostilesinSector = context.Sector.ActorManager.Items
                         .Where(x => x != actor && actor.Person.Fraction.GetRelation(x.Person.Fraction) ==
                             FractionRelation.Enmity);
-                    if (hostilesinSector.Any())
-                    {
-                        return false;
-                    }
 
-                    break;
+                    return !hostilesinSector.Any();
 
                 default:
                     throw new NotSupportedException($"Restriction {restrictionType} is unknown.");
             }
-
-            return true;
         }
 
         private static bool IsRestrictedByDehydration(IActor actor)
         {
-            return CheckEffectWithMaxLevel(actor, SurvivalStatType.Hydration);
+            return CheckConditionWithMaxLevel(actor, SurvivalStatType.Hydration);
         }
 
         private static bool IsRestrictedByOverdose(IActor actor)
         {
-            return CheckEffectWithMaxLevel(actor, SurvivalStatType.Intoxication);
+            return CheckConditionWithMaxLevel(actor, SurvivalStatType.Intoxication);
         }
 
         private static bool IsRestrictedByStarvation(IActor actor)
         {
-            return CheckEffectWithMaxLevel(actor, SurvivalStatType.Satiety);
+            return CheckConditionWithMaxLevel(actor, SurvivalStatType.Satiety);
         }
     }
 }

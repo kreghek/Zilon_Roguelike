@@ -23,28 +23,27 @@ namespace Zilon.Core.Tactics
 
         public ActorActUsageHandler(IPerkResolver perkResolver, ITacticalActUsageRandomSource actUsageRandomSource)
         {
-            _perkResolver = perkResolver ?? throw new ArgumentNullException(nameof(perkResolver));
-            _actUsageRandomSource =
-                actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
+            _perkResolver = perkResolver;
+            _actUsageRandomSource = actUsageRandomSource;
         }
 
         /// <summary>
         /// Шина событий возаимодействия актёров.
         /// </summary>
-        public IActorInteractionBus ActorInteractionBus { get; set; }
+        public IActorInteractionBus? ActorInteractionBus { get; set; }
 
         /// <summary>Сервис для работы с прочностью экипировки.</summary>
-        public IEquipmentDurableService EquipmentDurableService { get; set; }
+        public IEquipmentDurableService? EquipmentDurableService { get; set; }
 
         /// <summary>
         /// Сервис для логирования событий, связанных с персонажем игрока.
         /// </summary>
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
+        public IPlayerEventLogService? PlayerEventLogService { get; set; }
 
         /// <summary>
         /// Сервис для работы с достижениями персонажа.
         /// </summary>
-        public IScoreManager ScoreManager { get; set; }
+        public IScoreManager? ScoreManager { get; set; }
 
         /// <summary>
         /// Расчёт эффективности умения с учётом поглащения бронёй.
@@ -183,7 +182,13 @@ namespace Zilon.Core.Tactics
         {
             var targetIsDeadLast = targetActor.Person.CheckIsDead();
 
-            var offenceType = tacticalActRoll.TacticalAct.Stats.Offence.Type;
+            var offence = tacticalActRoll.TacticalAct.Stats.Offence;
+            if (offence is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var offenceType = offence.Type;
             var usedDefences = GetCurrentDefences(targetActor, offenceType);
 
             var prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
@@ -208,7 +213,7 @@ namespace Zilon.Core.Tactics
         /// <returns></returns>
         private static int GetActApRank(ITacticalAct tacticalAct)
         {
-            return tacticalAct.Stats.Offence.ApRank;
+            return (tacticalAct.Stats.Offence?.ApRank).GetValueOrDefault();
         }
 
         /// <summary>
@@ -221,7 +226,13 @@ namespace Zilon.Core.Tactics
         private static int GetArmorAbsorbtion(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            var offence = usedTacticalAct.Stats.Offence;
+            if (offence is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var actImpact = offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             if (preferredArmor == null)
@@ -229,27 +240,16 @@ namespace Zilon.Core.Tactics
                 return 0;
             }
 
-            switch (preferredArmor.AbsorbtionLevel)
+            return preferredArmor.AbsorbtionLevel switch
             {
-                case PersonRuleLevel.None:
-                    return 0;
-
-                case PersonRuleLevel.Lesser:
-                    return 1;
-
-                case PersonRuleLevel.Normal:
-                    return 2;
-
-                case PersonRuleLevel.Grand:
-                    return 5;
-
-                case PersonRuleLevel.Absolute:
-                    return 10;
-
-                default:
-                    throw new InvalidOperationException(
-                        $"Неизвестный уровень поглощения брони {preferredArmor.AbsorbtionLevel}.");
-            }
+                PersonRuleLevel.None => 0,
+                PersonRuleLevel.Lesser => 1,
+                PersonRuleLevel.Normal => 2,
+                PersonRuleLevel.Grand => 5,
+                PersonRuleLevel.Absolute => 10,
+                _ => throw new InvalidOperationException(
+                    $"Unknown armor absorbtion level: {preferredArmor.AbsorbtionLevel}.")
+            };
         }
 
         /// <summary>
@@ -261,7 +261,13 @@ namespace Zilon.Core.Tactics
         private static int? GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            var offence = usedTacticalAct.Stats.Offence;
+            if (offence is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var actImpact = offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             return preferredArmor?.ArmorRank;
@@ -282,7 +288,7 @@ namespace Zilon.Core.Tactics
                 .Where(x => x.Type == defenceType || x.Type == DefenceType.DivineDefence);
         }
 
-        private Equipment GetDamagedEquipment(IActor targetActor)
+        private Equipment? GetDamagedEquipment(IActor targetActor)
         {
             if (targetActor.Person.GetModuleSafe<IEquipmentModule>() is null)
             {
@@ -321,7 +327,13 @@ namespace Zilon.Core.Tactics
         private static int GetSuccessArmorSave(IActor targetActor, ITacticalAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
-            var actImpact = usedTacticalAct.Stats.Offence.Impact;
+            var offence = usedTacticalAct.Stats.Offence;
+            if (offence is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var actImpact = offence.Impact;
             var preferredArmor = actorArmors.FirstOrDefault(x => x.Impact == actImpact);
 
             if (preferredArmor == null)
@@ -329,7 +341,7 @@ namespace Zilon.Core.Tactics
                 throw new InvalidOperationException($"Не найдена защита {actImpact}.");
             }
 
-            var apRankDiff = usedTacticalAct.Stats.Offence.ApRank - preferredArmor.ArmorRank;
+            var apRankDiff = offence.ApRank - preferredArmor.ArmorRank;
 
             switch (apRankDiff)
             {
@@ -449,7 +461,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessFailedHit(IActor actor, IActor targetActor, PersonDefenceItem prefferedDefenceItem,
+        private void ProcessFailedHit(IActor actor, IActor targetActor, PersonDefenceItem? prefferedDefenceItem,
             int successToHitRoll, int factToHitRoll)
         {
             if (prefferedDefenceItem != null)
@@ -492,18 +504,24 @@ namespace Zilon.Core.Tactics
             IActor targetActor,
             DamageEfficientCalc damageEfficientCalcResult,
             int successToHitRoll,
-            int factToHitRoll)
+            int factToHitRoll,
+            ITacticalAct usedAct)
         {
-            if (ActorInteractionBus == null)
+            if (ActorInteractionBus is null)
             {
                 return;
             }
 
-            var damageEvent = new DamageActorInteractionEvent(actor, targetActor, damageEfficientCalcResult)
-            {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
-            };
+            var usedActDescription =
+                new ActDescription(usedAct.Stats.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                                   Array.Empty<string>());
+
+            var damageEvent =
+                new DamageActorInteractionEvent(actor, targetActor, usedActDescription, damageEfficientCalcResult)
+                {
+                    SuccessToHitRoll = successToHitRoll,
+                    FactToHitRoll = factToHitRoll
+                };
             ActorInteractionBus.PushEvent(damageEvent);
         }
 
@@ -518,7 +536,8 @@ namespace Zilon.Core.Tactics
                 targetActor,
                 damageEfficientCalcResult,
                 successToHitRoll,
-                factToHitRoll);
+                factToHitRoll,
+                tacticalActRoll.TacticalAct);
 
             if (actEfficient > 0)
             {
@@ -613,7 +632,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(tacticalActRoll));
             }
 
-            UseOnActor(actor, target as IActor, tacticalActRoll);
+            UseOnActor(actor, (IActor)target, tacticalActRoll);
         }
     }
 }

@@ -11,6 +11,6 @@
         /// <remarks>
         /// All items must be checked. If no item restrict usage then prop can be used.
         /// </remarks>
-        IUsageRestrictionItem[] Items { get; }
+        IUsageRestrictionItem?[]? Items { get; }
     }
 }
