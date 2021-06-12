@@ -29,20 +29,24 @@ namespace Zilon.Core
             return new OffsetCoords(coords.X - 1, coords.Y);
         }
 
-        public static OffsetCoords LeftUp(this OffsetCoords coords)
-        {
-            if (coords.OffsetIsRight())
-                return new OffsetCoords(coords.X, coords.Y - 1);
-
-            return new OffsetCoords(coords.X - 1, coords.Y - 1);
-        }
-
         public static OffsetCoords LeftDown(this OffsetCoords coords)
         {
             if (coords.OffsetIsRight())
+            {
                 return new OffsetCoords(coords.X, coords.Y + 1);
+            }
 
             return new OffsetCoords(coords.X - 1, coords.Y + 1);
+        }
+
+        public static OffsetCoords LeftUp(this OffsetCoords coords)
+        {
+            if (coords.OffsetIsRight())
+            {
+                return new OffsetCoords(coords.X, coords.Y - 1);
+            }
+
+            return new OffsetCoords(coords.X - 1, coords.Y - 1);
         }
 
         public static OffsetCoords Right(this OffsetCoords coords)
@@ -50,20 +54,24 @@ namespace Zilon.Core
             return new OffsetCoords(coords.X + 1, coords.Y);
         }
 
-        public static OffsetCoords RightUp(this OffsetCoords coords)
-        {
-            if (coords.OffsetIsRight())
-                return new OffsetCoords(coords.X + 1, coords.Y - 1);
-
-            return new OffsetCoords(coords.X, coords.Y - 1);
-        }
-
         public static OffsetCoords RightDown(this OffsetCoords coords)
         {
             if (coords.OffsetIsRight())
+            {
                 return new OffsetCoords(coords.X + 1, coords.Y + 1);
+            }
 
             return new OffsetCoords(coords.X, coords.Y + 1);
+        }
+
+        public static OffsetCoords RightUp(this OffsetCoords coords)
+        {
+            if (coords.OffsetIsRight())
+            {
+                return new OffsetCoords(coords.X + 1, coords.Y - 1);
+            }
+
+            return new OffsetCoords(coords.X, coords.Y - 1);
         }
 
         private static bool OffsetIsRight(this OffsetCoords coords)
