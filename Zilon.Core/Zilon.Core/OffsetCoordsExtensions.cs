@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Zilon.Core
 {
     public static class OffsetCoordsExtensions
     {
@@ -20,6 +22,53 @@
             }
 
             return true;
+        }
+
+        public static OffsetCoords Left(this OffsetCoords coords)
+        {
+            return new OffsetCoords(coords.X - 1, coords.Y);
+        }
+
+        public static OffsetCoords LeftUp(this OffsetCoords coords)
+        {
+            if (coords.OffsetIsRight())
+                return new OffsetCoords(coords.X, coords.Y - 1);
+
+            return new OffsetCoords(coords.X - 1, coords.Y - 1);
+        }
+
+        public static OffsetCoords LeftDown(this OffsetCoords coords)
+        {
+            if (coords.OffsetIsRight())
+                return new OffsetCoords(coords.X, coords.Y + 1);
+
+            return new OffsetCoords(coords.X - 1, coords.Y + 1);
+        }
+
+        public static OffsetCoords Right(this OffsetCoords coords)
+        {
+            return new OffsetCoords(coords.X + 1, coords.Y);
+        }
+
+        public static OffsetCoords RightUp(this OffsetCoords coords)
+        {
+            if (coords.OffsetIsRight())
+                return new OffsetCoords(coords.X + 1, coords.Y - 1);
+
+            return new OffsetCoords(coords.X, coords.Y - 1);
+        }
+
+        public static OffsetCoords RightDown(this OffsetCoords coords)
+        {
+            if (coords.OffsetIsRight())
+                return new OffsetCoords(coords.X + 1, coords.Y + 1);
+
+            return new OffsetCoords(coords.X, coords.Y + 1);
+        }
+
+        private static bool OffsetIsRight(this OffsetCoords coords)
+        {
+            return coords.Y % 2 != 0;
         }
     }
 }

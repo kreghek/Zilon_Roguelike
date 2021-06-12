@@ -7,6 +7,7 @@ using CDT.LAST.MonoGameClient.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
@@ -58,6 +59,74 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
+            ProcessMouseCommands(sectorViewModelContext);
+
+            ProcessKeyboardCommands(sectorViewModelContext);
+        }
+
+        private void ProcessKeyboardCommands(SectorViewModelContext sectorViewModelContext)
+        {
+            if (!_uiState.CanPlayerGivesCommand)
+                return;
+
+            var keyboardState = Keyboard.GetState();
+
+            var map = _sector.Map;
+
+            var actor = _uiState.ActiveActor?.Actor;
+
+            if (actor is null)
+                return;
+
+            var actorNode = (HexNode)actor.Node;
+
+            var currentCoords = actorNode.OffsetCoords;
+
+            OffsetCoords? moveCoords = default;
+
+            if (keyboardState.IsKeyDown(Keys.NumPad4))
+                moveCoords = currentCoords.Left();
+
+            if (keyboardState.IsKeyDown(Keys.NumPad1))
+                moveCoords = currentCoords.LeftDown();
+
+            if (keyboardState.IsKeyDown(Keys.NumPad7))
+                moveCoords = currentCoords.LeftUp();
+
+            if (keyboardState.IsKeyDown(Keys.NumPad6))
+                moveCoords = currentCoords.Right();
+
+            if (keyboardState.IsKeyDown(Keys.NumPad3))
+                moveCoords = currentCoords.RightDown();
+
+            if (keyboardState.IsKeyDown(Keys.NumPad9))
+                moveCoords = currentCoords.RightUp();
+
+            if (moveCoords == default)
+                return;
+
+            var moveNode = map.Nodes.OfType<HexNode>().FirstOrDefault(node => node.OffsetCoords == moveCoords);
+            var nodeVm = GetViewModelByNode(sectorViewModelContext, _uiState.HoverViewModel, moveNode);
+
+            if (nodeVm is null)
+                return;
+
+            _uiState.HoverViewModel = nodeVm;
+            _uiState.SelectedViewModel = nodeVm;
+
+            var command = SelectCommandBySelectedViewModel(
+                nodeVm,
+                _commandFactory,
+                _uiState);
+
+            if (command.CanExecute().IsSuccess)
+            {
+                _commandPool.Push(command);
+            }
+        }
+
+        private void ProcessMouseCommands(SectorViewModelContext sectorViewModelContext)
+        {
             var mouseState = Mouse.GetState();
 
             var inverseCameraTransform = Matrix.Invert(_camera.Transform);
