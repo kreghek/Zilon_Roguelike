@@ -1,7 +1,8 @@
 ﻿namespace Zilon.Core.Tests.Common.Schemes
 {
-    using Zilon.Core.Components;
-    using Zilon.Core.Schemes;
+    using Components;
+
+    using Core.Schemes;
 
     public record TestTwoHandPropEquipSubScheme : IPropEquipSubScheme
     {

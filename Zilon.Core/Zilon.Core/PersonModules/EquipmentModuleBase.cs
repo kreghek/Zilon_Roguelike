@@ -6,10 +6,13 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
-    using Zilon.Core.Components;
-    using Zilon.Core.Persons;
-    using Zilon.Core.Props;
-    using Zilon.Core.Schemes;
+    using Components;
+
+    using Persons;
+
+    using Props;
+
+    using Schemes;
 
     /// <summary>
     /// Базовая реализация моделя работы с экипировкой.
@@ -44,11 +47,15 @@
         protected EquipmentModuleBase([NotNull] IReadOnlyCollection<PersonSlotSubScheme> slots)
         {
             if (slots == null)
+            {
                 throw new ArgumentNullException(nameof(slots));
+            }
 
             var slotArray = slots as PersonSlotSubScheme[] ?? slots.ToArray();
             if (!slotArray.Any())
+            {
                 throw new ArgumentException("Коллекция слотов не может быть пустой.");
+            }
 
             Slots = slotArray;
 
@@ -69,7 +76,8 @@
         {
             EquipmentChanged?.Invoke(
                 sender: this,
-                e: new EquipmentChangedEventArgs(equipment: equipment, oldEquipment: oldEquipment, slotIndex: slotIndex));
+                e: new EquipmentChangedEventArgs(equipment: equipment, oldEquipment: oldEquipment,
+                    slotIndex: slotIndex));
         }
 
         /// <summary>
@@ -106,7 +114,9 @@
         {
             var foundHandsIndexes = FoundHandsIndexes();
             if (!foundHandsIndexes.Any())
+            {
                 throw new ArgumentException($"No hand slots to equipment the {equipment}");
+            }
 
             DropHandsEquipment(foundHandsIndexes);
             var firstHandIndex = foundHandsIndexes.First();
@@ -119,11 +129,16 @@
             {
                 ValidateSetEquipment(equipment: equipment, slotIndex: slotIndex);
 
-                var isTwoHandedEquipment = equipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage == PropHandUsage.TwoHanded;
+                var isTwoHandedEquipment = equipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage ==
+                                           PropHandUsage.TwoHanded;
                 if (isTwoHandedEquipment)
+                {
                     ReplaceEquipmentInHandSlots(equipment);
+                }
                 else
+                {
                     _equipment[slotIndex] = equipment;
+                }
             }
             else
             {
