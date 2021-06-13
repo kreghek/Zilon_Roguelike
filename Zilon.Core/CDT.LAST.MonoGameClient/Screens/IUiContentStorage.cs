@@ -14,7 +14,9 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D GetAttributeIconsTexture();
         SpriteFont GetButtonFont();
         Texture2D GetButtonTexture();
+        PersonConditionTextures GetConditionIconTextures(IPersonCondition personCondition);
         Texture2D GetContextualMenuBorderTexture();
+        Texture2D GetHintBackgroundTexture();
 
         SpriteFont GetHintTitleFont();
         SpriteFont GetMenuItemFont();
@@ -30,8 +32,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D GetSmallVerticalButtonBackgroundTexture();
         Texture2D GetSmallVerticalButtonIconsTexture();
         void LoadContent(ContentManager contentManager);
-        Texture2D GetHintBackgroundTexture();
-        PersonConditionTextures GetConditionIconTextures(IPersonCondition personCondition);
     }
 
     public record PersonConditionTextures
@@ -42,7 +42,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             Background = background ?? throw new ArgumentNullException(nameof(background));
         }
 
-        public Texture2D Icon { get; }
         public Texture2D Background { get; }
+
+        public Texture2D Icon { get; }
     }
 }

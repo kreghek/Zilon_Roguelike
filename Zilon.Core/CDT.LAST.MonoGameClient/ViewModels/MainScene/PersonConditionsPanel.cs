@@ -28,7 +28,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
-        public PersonConditionsPanel(Game game, ISectorUiState uiState, int screenX, int screenY, IUiContentStorage uiContentStorage)
+        public PersonConditionsPanel(Game game, ISectorUiState uiState, int screenX, int screenY,
+            IUiContentStorage uiContentStorage)
         {
             _uiState = uiState;
             _screenX = screenX;
