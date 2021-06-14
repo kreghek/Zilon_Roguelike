@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -41,7 +42,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             foreach (var act in actsOrdered)
             {
                 const int BUTTON_SIZE = 32;
-                var button = new IconButton(_uiContentStorage.GetButtonTexture(), _uiContentStorage.GetPropIconLayers("short-sword")[0],
+                var tags = act.Scheme?.Stats?.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ?? Array.Empty<string>();
+                var button = new IconButton(_uiContentStorage.GetButtonTexture(), _uiContentStorage.GetCombatActIconTexture(act.Scheme.Sid, tags),
                     new Rectangle(0, 0, BUTTON_SIZE, BUTTON_SIZE));
                 button.OnClick += (s, e) =>
                 {

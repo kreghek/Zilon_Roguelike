@@ -223,7 +223,28 @@ namespace CDT.LAST.MonoGameClient.Screens
                 contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuItemBackground");
 
             InitPropIcons(contentManager);
+            InitCombatActIcons(contentManager);
             InitConditionIconsAndBackgrounds(contentManager);
+        }
+
+        private IDictionary<string, Texture2D> _combatActDict;
+
+        private void InitCombatActIcons(ContentManager contentManager)
+        {
+            _combatActDict = new Dictionary<string, Texture2D>
+            { 
+                ["default"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
+
+                ["tag-punch"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/Punch"),
+
+                ["clumsy-cut"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
+                ["evasion-slash"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/EvasionSlash"),
+                ["lunging-stab"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/LungingStab"),
+                ["penetrating-thrust"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/PenetratingThrust"),
+                ["weak-block"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakBlock"),
+                ["weak-parry"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakParry"),
+                ["weak-swing"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakSwing"),
+            };
         }
 
         public SpriteFont GetHintTitleFont()
@@ -296,6 +317,26 @@ namespace CDT.LAST.MonoGameClient.Screens
         public Texture2D GetHintBackgroundTexture()
         {
             return _hintBackgorundTexture ?? throw new InvalidOperationException("Background texture is not loaded.");
+        }
+
+        public Texture2D GetCombatActIconTexture(string sid, string[] tags)
+        {
+            if (_combatActDict.TryGetValue(sid, out var texture))
+            {
+                return texture;
+            }
+
+            foreach (var tag in tags)
+            {
+                if (_combatActDict.TryGetValue($"tag-{tag}", out texture))
+                {
+                    return texture;
+                }
+            }
+
+            Debug.Fail("Every ombat act must has own icon.");
+
+            return _combatActDict["default"];
         }
     }
 }

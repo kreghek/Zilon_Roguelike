@@ -30,5 +30,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D GetSmallVerticalButtonBackgroundTexture();
         Texture2D GetSmallVerticalButtonIconsTexture();
         void LoadContent(ContentManager contentManager);
+        Texture2D GetCombatActIconTexture(string sid, string[] tags);
     }
 }
