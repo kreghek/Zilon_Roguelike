@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Persons;
@@ -32,18 +30,5 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D GetSmallVerticalButtonBackgroundTexture();
         Texture2D GetSmallVerticalButtonIconsTexture();
         void LoadContent(ContentManager contentManager);
-    }
-
-    public record PersonConditionTextures
-    {
-        public PersonConditionTextures(Texture2D icon, Texture2D background)
-        {
-            Icon = icon ?? throw new ArgumentNullException(nameof(icon));
-            Background = background ?? throw new ArgumentNullException(nameof(background));
-        }
-
-        public Texture2D Background { get; }
-
-        public Texture2D Icon { get; }
     }
 }
