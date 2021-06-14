@@ -19,6 +19,10 @@
       "Type": "Tactical",
       "Impact":  "Kinetic",
 	  "ApRank": 2
-    }
+    },
+	"IsMelee": true,
+	"Tags": [
+      "slash"
+    ]
   }
 }
