@@ -228,7 +228,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 if (sender is IActor actor && actor.Person == player.MainPerson)
                 {
                     // Sound steps of main person only to prevent infinite steps loop.
-                    moveSoundEffectInstance = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Move)?.CreateInstance();
+                    moveSoundEffectInstance = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Move)
+                        ?.CreateInstance();
                 }
 
                 var moveEngine = new ActorMoveEngine(
