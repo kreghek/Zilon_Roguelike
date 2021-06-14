@@ -189,8 +189,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 ["bite"] = contentManager.Load<SoundEffect>("Audio/HunterHitEffect"),
                 ["punch"] = contentManager.Load<SoundEffect>("Audio/PunchStartHitEffect"),
                 ["slash"] = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect"),
-                ["pierce"] = contentManager.Load<SoundEffect>("Audio/SpearPierceEffect")
-                    ["swing"] = contentManager.Load<SoundEffect>("Audio/CombatStaffSwing")
+                ["pierce"] = contentManager.Load<SoundEffect>("Audio/SpearPierceEffect"),
+                ["swing"] = contentManager.Load<SoundEffect>("Audio/CombatStaffSwing")
             };
             _defaultStartHitEffect = _actStartDict["punch"];
 
