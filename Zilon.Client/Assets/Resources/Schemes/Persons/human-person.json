@@ -32,7 +32,7 @@
       "Type": "Satiety",
       "MinValue": -3000,
       "MaxValue": 500,
-      "StartValue": -2999,
+      "StartValue": 250,
       "KeyPoints": [
         {
           "Level": "Max",
@@ -55,7 +55,7 @@
       "Type": "Hydration",
       "MinValue": -1200,
       "MaxValue": 130,
-      "StartValue": -1199,
+      "StartValue": 100,
       "KeyPoints": [
         {
           "Level": "Max",
@@ -78,7 +78,7 @@
       "Type": "Intoxication",
       "MinValue": 0,
       "MaxValue": 130,
-      "StartValue": 129,
+      "StartValue": 0,
       "KeyPoints": [
         {
           "Level": "Lesser",
