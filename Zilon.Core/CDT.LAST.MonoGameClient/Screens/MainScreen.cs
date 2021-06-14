@@ -160,45 +160,61 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (_uiState.ActiveActor != null && !isInTransition)
             {
-                var sectorNodeWithPlayerPerson = GetPlayerSectorNode(_player);
-
-                if (sectorNodeWithPlayerPerson != null)
-                {
-                    var sectorWithPlayerPerson = sectorNodeWithPlayerPerson.Sector;
-                    UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, _uiState.ActiveActor);
-                }
-                else
-                {
-                    // This means the player person is dead (don't exists in any sector).
-                    // Or some error occured.
-                    if (_uiState.ActiveActor.Actor.Person.CheckIsDead())
-                    {
-                        // Do nothing.
-                        // In the near future there the scores screen will load.
-                    }
-                    else
-                    {
-                        Debug.Fail("Main screen must load only if the player person is in any sector node.");
-                    }
-                }
+                HandleMainUpdate(_uiState.ActiveActor);
             }
             else
             {
-                if (isInTransition)
+                HandleTransition(isInTransition);
+            }
+        }
+
+        private void HandleMainUpdate(IActorViewModel activeActor)
+        {
+            var sectorNodeWithPlayerPerson = GetPlayerSectorNode(_player);
+
+            if (sectorNodeWithPlayerPerson != null)
+            {
+                var sectorWithPlayerPerson = sectorNodeWithPlayerPerson.Sector;
+                UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, activeActor);
+            }
+            else
+            {
+                // This means the player person is dead (don't exists in any sector).
+                // Or some error occured.
+                if (activeActor.Actor.Person.CheckIsDead())
                 {
-                    if (!_isTransitionPerforming)
-                    {
-                        LoadTransitionScreen();
-                    }
-                }
-                else if (_uiState.ActiveActor is null)
-                {
-                    Debug.Fail("Main screen must load only after active actor was assigned.");
+                    // Do nothing.
+                    // In the near future there the scores screen will load.
                 }
                 else
                 {
-                    Debug.Fail("Unknown state.");
+                    Debug.Fail("Main screen must load only if the player person is in any sector node.");
                 }
+            }
+        }
+
+        private void HandleTransition(bool isInTransition)
+        {
+            if (isInTransition)
+            {
+                if (!_isTransitionPerforming)
+                {
+                    LoadTransitionScreen();
+                }
+                else
+                {
+                    // The player person is in transition pool.
+                    // And transition is performing.
+                    // So just wait.
+                }
+            }
+            else if (_uiState.ActiveActor is null)
+            {
+                Debug.Fail("Main screen must load only after active actor was assigned.");
+            }
+            else
+            {
+                Debug.Fail("Unknown state.");
             }
         }
 
@@ -406,6 +422,10 @@ namespace CDT.LAST.MonoGameClient.Screens
             else if (!_isTransitionPerforming)
             {
                 LoadTransitionScreen();
+            }
+            else
+            {
+                Debug.Fail("Unkown situation.");
             }
         }
     }
