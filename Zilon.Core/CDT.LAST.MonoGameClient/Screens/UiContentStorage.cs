@@ -122,7 +122,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             };
 
             _conditionDeseaseSymptomIcon = contentManager.Load<Texture2D>("Sprites/ui/PersonConditions/DiseaseSymptomConditionIcon");
-            _conditionDefaultIcon= contentManager.Load<Texture2D>("Sprites/ui/PersonConditions/DefaultIcon");
+            _conditionDefaultIcon = contentManager.Load<Texture2D>("Sprites/ui/PersonConditions/DefaultIcon");
         }
 
         private void InitPropIcons(ContentManager contentManager)

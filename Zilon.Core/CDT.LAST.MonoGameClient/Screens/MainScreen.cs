@@ -61,7 +61,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _camera = new Camera();
             _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 8, screenY: 8, uiContentStorage);
-            
+
             _uiContentStorage = uiContentStorage;
 
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
