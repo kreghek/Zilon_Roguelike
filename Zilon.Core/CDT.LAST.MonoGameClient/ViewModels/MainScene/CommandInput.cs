@@ -70,7 +70,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Debug.Assert(staticObjectsUnderActor.Length < 2,
                 "There is no way to put multiple passable objects in same node.");
 
-            var staticObjectUnderActor = staticObjectsUnderActor.First();
+            var staticObjectUnderActor = staticObjectsUnderActor.FirstOrDefault();
 
             if (staticObjectUnderActor is null)
             {
