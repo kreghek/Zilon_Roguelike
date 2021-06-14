@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -14,27 +15,46 @@ namespace Zilon.Core
         /// <param name="level">Уровень перка.</param>
         /// <param name="subLevel">Подуровень перка.</param>
         /// <returns></returns>
-        public static int? ConvertLevel(IPerkScheme perkScheme, int? level, int subLevel)
+        public static int ConvertLevelSubsToTotal(IPerkScheme perkScheme, int level, int subLevel)
         {
             if (perkScheme is null)
             {
                 throw new ArgumentNullException(nameof(perkScheme));
             }
 
-            if (level == null)
+            if (perkScheme.Levels?.Length < level)
             {
-                return null;
+                throw new ArgumentException(
+                    $"Specified level: {level} is less that levels in scheme: {perkScheme.Levels?.Length}.");
+            }
+
+            var levels = perkScheme.Levels;
+            if (levels is null)
+            {
+                throw new ArgumentException("The scheme's levels is null.", nameof(perkScheme));
             }
 
             var sum = 0;
-            for (var i = 0; i <= level; i++)
+            for (var i = 1; i <= level; i++)
             {
+                var perkLevelSubScheme = levels[i - 1];
+                if (perkLevelSubScheme is null)
+                {
+                    throw new InvalidOperationException();
+                }
+
                 if (i < level)
                 {
-                    sum += perkScheme.Levels[i].MaxValue + 1;
+                    sum += perkLevelSubScheme.MaxValue;
                 }
                 else
                 {
+                    if (perkLevelSubScheme.MaxValue < subLevel)
+                    {
+                        throw new ArgumentException(
+                            $"Specified sub: {subLevel} is less that sub in scheme: {perkLevelSubScheme.MaxValue}.");
+                    }
+
                     sum += subLevel;
                 }
             }
@@ -49,62 +69,101 @@ namespace Zilon.Core
         /// <param name="totalLevel">Суммарный уровень.</param>
         /// <param name="level">Уровень перка.</param>
         /// <param name="subLevel">Подуровень перка.</param>
-        public static void ConvertTotalLevel(IPerkScheme perkScheme, int totalLevel, out int? level, out int? subLevel)
+        public static PerkLevel ConvertTotalLevelToLevelSubs(IPerkScheme perkScheme, int totalLevel)
         {
             if (perkScheme is null)
             {
                 throw new ArgumentNullException(nameof(perkScheme));
             }
 
-            var levelRemains = totalLevel;
-            var currentLevelPointer = 0;
-            do
+            if (totalLevel == 0)
             {
-                if (currentLevelPointer >= perkScheme.Levels.Length)
+                throw new ArgumentException("Total must be more that zero.", nameof(totalLevel));
+            }
+
+            if (perkScheme.Levels is null)
+            {
+                throw new ArgumentException("Scheme's levels must not be null.", nameof(perkScheme));
+            }
+
+            if (perkScheme.Levels.Length == 0)
+            {
+                throw new ArgumentException("Scheme's levels must notbe empty.", nameof(perkScheme));
+            }
+
+            foreach (var schemeLevel in perkScheme.Levels)
+            {
+                if (schemeLevel?.MaxValue <= 0)
                 {
-                    level = null;
-                    subLevel = null;
-                    return;
+                    throw new ArgumentException("Scheme must contains no zeros.", nameof(perkScheme));
+                }
+            }
+
+            var schemeLevels = perkScheme.Levels.Select(x => x!.MaxValue).ToArray();
+
+            try
+            {
+                ConvertTotalIntoLevelSubsInner(schemeLevels, totalLevel, out var levelInner, out var subInner);
+
+                var perkLevel = new PerkLevel(levelInner, subInner);
+
+                return perkLevel;
+            }
+            catch (ArgumentException exception)
+            {
+                if (exception.ParamName == "total")
+                {
+                    throw new ArgumentException($"Total {totalLevel} is too big", nameof(totalLevel), exception);
                 }
 
-                var levelScheme = perkScheme.Levels[currentLevelPointer];
-                level = currentLevelPointer + 1;
-                subLevel = Math.Min(levelRemains, levelScheme.MaxValue);
-                currentLevelPointer++;
-
-                var currentLevelCapability = levelScheme.MaxValue;
-                levelRemains -= currentLevelCapability;
-            } while (levelRemains >= 0);
+                throw;
+            }
         }
 
         public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
         {
-            if (perkScheme is null)
+            var currentTotal = ConvertLevelSubsToTotal(perkScheme, level.Primary, level.Sub);
+            currentTotal++;
+
+            var nextLevel = ConvertTotalLevelToLevelSubs(perkScheme, currentTotal);
+            return nextLevel;
+        }
+
+        public static bool HasNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        {
+            try
             {
-                throw new ArgumentNullException(nameof(perkScheme));
+                GetNextLevel(perkScheme, level);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static void ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
+        {
+            var levelMax = 1;
+            var currentTotal = total;
+
+            for (var i = 0; i < scheme.Length; i++)
+            {
+                if (scheme[i] >= currentTotal)
+                {
+                    lvl = levelMax;
+                    sub = currentTotal;
+                    return;
+                }
+
+                currentTotal -= scheme[i];
+                levelMax++;
             }
 
-            if (level == null)
-            {
-                return new PerkLevel(0, 0);
-            }
+            // This means `total` was be more that sum of levels.
 
-            var currentLevel = level.Primary;
-            var currentSubLevel = level.Sub;
-
-            var currentLevelScheme = perkScheme.Levels[currentLevel];
-
-            if (currentSubLevel + 1 > currentLevelScheme.MaxValue)
-            {
-                currentSubLevel = 0;
-                currentLevel++;
-            }
-            else
-            {
-                currentSubLevel++;
-            }
-
-            return new PerkLevel(currentLevel, currentSubLevel);
+            throw new ArgumentException($"Total {total} is too big for that schemes: ${string.Join(", ", scheme)}.",
+                nameof(total));
         }
     }
 }

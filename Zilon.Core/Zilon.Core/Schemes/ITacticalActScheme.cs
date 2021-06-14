@@ -8,11 +8,11 @@
         /// <summary>
         /// Ограничения на использование действия.
         /// </summary>
-        ITacticalActConstrainsSubScheme Constrains { get; }
+        ITacticalActConstrainsSubScheme? Constrains { get; }
 
         /// <summary>
         /// Основные характеристики действия.
         /// </summary>
-        ITacticalActStatsSubScheme Stats { get; }
+        ITacticalActStatsSubScheme? Stats { get; }
     }
 }

@@ -21,7 +21,7 @@ namespace Zilon.Core.PathFinding
         /// <summary>
         /// Родительский узел.
         /// </summary>
-        public IGraphNode Parent { get; set; }
+        public IGraphNode? Parent { get; set; }
 
         /// <summary>
         /// Суммарная стоимость.

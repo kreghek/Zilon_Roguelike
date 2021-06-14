@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Bot.Players.Triggers;
 using Zilon.Core.PersonModules;
@@ -17,12 +18,12 @@ namespace Zilon.Bot.Players.Logics
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (context is null)
             {
-                throw new System.ArgumentNullException(nameof(context));
+                throw new ArgumentNullException(nameof(context));
             }
 
             var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats
@@ -43,7 +44,8 @@ namespace Zilon.Bot.Players.Logics
 
             var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
-            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
+            var taskContext = new ActorTaskContext(context.Sector);
+            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(actor, taskContext, resources,
                 ConsumeCommonRuleType.Health);
 
             if (bestResource == null)
@@ -52,7 +54,6 @@ namespace Zilon.Bot.Players.Logics
                 return null;
             }
 
-            var taskContext = new ActorTaskContext(context.Sector);
             return new UsePropTask(actor, taskContext, bestResource);
         }
 

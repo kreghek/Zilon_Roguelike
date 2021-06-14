@@ -12,7 +12,7 @@
         /// Проверяет, возможно ли выполнение команды.
         /// </summary>
         /// <returns> Возвращает true, если команду можно выполнить. Иначе возвращает false. </returns>
-        bool CanExecute();
+        CanExecuteCheckResult CanExecute();
 
         /// <summary>
         /// Выполнение команды.

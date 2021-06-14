@@ -17,9 +17,11 @@ namespace Zilon.Core.Client
         /// <summary>
         /// Активный актёр.
         /// </summary>
-        IActorViewModel ActiveActor { get; set; }
+        IActorViewModel? ActiveActor { get; set; }
 
-        ITacticalAct TacticalAct { get; set; }
+        bool CanPlayerGivesCommand { get; }
+
+        ITacticalAct? TacticalAct { get; set; }
 
         /// <summary>
         /// Пользовательский источник задач для актёров.
@@ -27,13 +29,13 @@ namespace Zilon.Core.Client
         /// </summary>
         [Obsolete("Because we can gen TaskSource from ActiveActor")]
         [ExcludeFromCodeCoverage]
-        IHumanActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
+        IHumanActorTaskSource<ISectorTaskSourceContext>? TaskSource { get; }
 
         /// <summary>
         /// Выстреливает, когда изменяется активный персонаж игрока.
         /// В первую очередь введено для того, чтобы инициировать визуализацию
         /// UI-элементов, отображающих статус персонажа игрока.
         /// </summary>
-        event EventHandler ActiveActorChanged;
+        event EventHandler? ActiveActorChanged;
     }
 }

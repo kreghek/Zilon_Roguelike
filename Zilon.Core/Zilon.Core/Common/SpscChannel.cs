@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,13 +26,13 @@ namespace Zilon.Core.Common
 
         public void CancelReceiving()
         {
-            foreach (var receiver in _receivers)
+            var receiverListCopy = _receivers.ToArray();
+            foreach (var receiver in receiverListCopy)
             {
+                // Call the receiver to stop.
                 receiver.SetCanceled();
-            }
 
-            for (var i = 0; i < _receivers.ToArray().Length; i++)
-            {
+                // Remove the receiver from inner list beacuse it will not await anymore.
                 _receivers.TryTake(out var _);
             }
         }
@@ -48,7 +49,7 @@ namespace Zilon.Core.Common
                 }
                 else
                 {
-                    source = new TaskCompletionSource<T>();
+                    source = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
                     _receivers.TryAdd(source);
                 }
             }
@@ -68,7 +69,10 @@ namespace Zilon.Core.Common
             {
                 if (_receivers.TryTake(out var receiver))
                 {
-                    receiver.SetResult(obj);
+                    if (!receiver.TrySetResult(obj))
+                    {
+                        Debug.Fail("Error in concurrency.");
+                    }
                 }
                 else
                 {

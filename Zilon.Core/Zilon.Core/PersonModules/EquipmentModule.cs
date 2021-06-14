@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
@@ -11,7 +9,10 @@ namespace Zilon.Core.PersonModules
 {
     public class EquipmentModule : EquipmentModuleBase
     {
-        public EquipmentModule([NotNull][ItemNotNull] IEnumerable<PersonSlotSubScheme> slots) : base(slots)
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        // This value was assigned in base class.
+        public EquipmentModule(IReadOnlyCollection<PersonSlotSubScheme> slots) : base(slots)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
         }
 

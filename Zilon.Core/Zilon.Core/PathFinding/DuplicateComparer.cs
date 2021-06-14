@@ -17,7 +17,7 @@ namespace Zilon.Core.PathFinding
         {
         }
 
-        public static DuplicateComparer Instance { get; private set; }
+        public static DuplicateComparer Instance { get; }
 
         public int Compare(int x, int y)
         {

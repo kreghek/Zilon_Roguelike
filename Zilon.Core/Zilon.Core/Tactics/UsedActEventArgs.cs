@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 
@@ -23,13 +21,11 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Совершённое над целью действие.
         /// </summary>
-        [PublicAPI]
         public ITacticalAct TacticalAct { get; }
 
         /// <summary>
         /// Цель действия.
         /// </summary>
-        [PublicAPI]
         public IGraphNode TargetNode { get; }
     }
 }

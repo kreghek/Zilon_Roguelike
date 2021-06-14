@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -18,25 +16,23 @@ namespace Zilon.Core.Tactics
 {
     public sealed class Actor : IActor
     {
-        private readonly IPerkResolver _perkResolver;
+        private readonly IPerkResolver? _perkResolver;
 
         [ExcludeFromCodeCoverage]
         public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
             [NotNull] IGraphNode node)
         {
-            Person = person ?? throw new ArgumentNullException(nameof(person));
-            TaskSource = taskSource ?? throw new ArgumentNullException(nameof(taskSource));
-            Node = node ?? throw new ArgumentNullException(nameof(node));
+            Person = person;
+            TaskSource = taskSource;
+            Node = node;
         }
 
         public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
             [NotNull] IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
+            IPerkResolver? perkResolver) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
         }
-
-        public IPlayer Owner { get; }
 
         [ExcludeFromCodeCoverage]
         public override string ToString()
@@ -327,22 +323,28 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc />
-        public event EventHandler Moved;
+        public event EventHandler? Moved;
 
         /// <inheritdoc />
-        public event EventHandler<OpenContainerEventArgs> OpenedContainer;
+        public event EventHandler<OpenContainerEventArgs>? OpenedContainer;
 
         /// <inheritdoc />
-        public event EventHandler<MineDepositEventArgs> DepositMined;
+        public event EventHandler<MineDepositEventArgs>? DepositMined;
 
         /// <inheritdoc />
-        public event EventHandler<UsedActEventArgs> UsedAct;
+        public event EventHandler<UsedActEventArgs>? UsedAct;
 
         /// <inheritdoc />
-        public event EventHandler<DamageTakenEventArgs> DamageTaken;
+        public event EventHandler<DamageTakenEventArgs>? DamageTaken;
 
         /// <inheritdoc />
-        public event EventHandler<UsedPropEventArgs> UsedProp;
+        public event EventHandler<UsedPropEventArgs>? UsedProp;
+
+        /// <inheritdoc />
+        public event EventHandler? PropTransferPerformed;
+
+        /// <inheritdoc />
+        public event EventHandler? BeginTransitionToOtherSector;
 
         /// <inheritdoc />
         /// <summary>
@@ -410,8 +412,18 @@ namespace Zilon.Core.Tactics
 
             var useData = usedProp.Scheme.Use;
 
+            if (useData?.CommonRules is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             foreach (var rule in useData.CommonRules)
             {
+                if (rule is null)
+                {
+                    continue;
+                }
+
                 switch (rule.Direction)
                 {
                     // Если направление не указано, то будет считаться положительное значение
@@ -476,6 +488,17 @@ namespace Zilon.Core.Tactics
         public void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             TaskSource = actorTaskSource;
+        }
+
+        public void PerformTransfer()
+        {
+            PropTransferPerformed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void MoveToOtherSector(ISector sector, SectorTransition sectorTransition)
+        {
+            BeginTransitionToOtherSector?.Invoke(this, EventArgs.Empty);
+            sector.UseTransition(this, sectorTransition);
         }
     }
 }

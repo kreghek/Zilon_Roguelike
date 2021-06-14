@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 
 using Zilon.Core.Common;
@@ -188,40 +190,39 @@ namespace Zilon.Core.Tactics.Spatial
 
         public void SaveToFile(string fileName)
         {
-            const int cellWidth = 4;
+            const int CELLWIDTH = 4;
 
             var matrix = _segmentDict.First().Value;
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))
+            using StreamWriter file = new StreamWriter(fileName);
+
+            file.Write(" ".PadLeft(CELLWIDTH, ' '));
+            for (var x = 0; x < _segmentSize; x++)
             {
-                file.Write(" ".PadLeft(cellWidth, ' '));
+                file.Write($"{x,3}".PadRight(CELLWIDTH, ' '));
+            }
+
+            file.WriteLine();
+
+            for (var y = 0; y < _segmentSize; y++)
+            {
+                file.Write($"{y,3}".PadLeft(CELLWIDTH, ' '));
                 for (var x = 0; x < _segmentSize; x++)
                 {
-                    file.Write($"{x,3}".PadRight(cellWidth, ' '));
+                    if (matrix[x, y] != null)
+                    {
+                        file.Write(" ".PadLeft(CELLWIDTH, ' '));
+                    }
+                    else
+                    {
+                        file.Write("x".PadLeft(CELLWIDTH, ' '));
+                    }
                 }
 
                 file.WriteLine();
-
-                for (var y = 0; y < _segmentSize; y++)
-                {
-                    file.Write($"{y,3}".PadLeft(cellWidth, ' '));
-                    for (var x = 0; x < _segmentSize; x++)
-                    {
-                        if (matrix[x, y] != null)
-                        {
-                            file.Write(" ".PadLeft(cellWidth, ' '));
-                        }
-                        else
-                        {
-                            file.Write("x".PadLeft(cellWidth, ' '));
-                        }
-                    }
-
-                    file.WriteLine();
-                }
             }
         }
 
-        protected HexNode GetByCoords(int x, int y)
+        protected HexNode? GetByCoords(int x, int y)
         {
             var segmentKey = new SegmentKey(0, 0);
             var segment = _segmentDict[segmentKey];
@@ -319,23 +320,27 @@ namespace Zilon.Core.Tactics.Spatial
             // ReSharper disable once MemberCanBePrivate.Local
             public readonly int Y;
 
+            [ExcludeFromCodeCoverage]
             public SegmentKey(int x, int y)
             {
                 X = x;
                 Y = y;
             }
 
+            [ExcludeFromCodeCoverage]
             public override bool Equals(object obj)
             {
                 return obj is SegmentKey key && Equals(key);
             }
 
+            [ExcludeFromCodeCoverage]
             public bool Equals(SegmentKey other)
             {
                 return X == other.X &&
                        Y == other.Y;
             }
 
+            [ExcludeFromCodeCoverage]
             public override int GetHashCode()
             {
                 unchecked
@@ -347,11 +352,13 @@ namespace Zilon.Core.Tactics.Spatial
                 }
             }
 
+            [ExcludeFromCodeCoverage]
             public static bool operator ==(SegmentKey left, SegmentKey right)
             {
                 return left.Equals(right);
             }
 
+            [ExcludeFromCodeCoverage]
             public static bool operator !=(SegmentKey left, SegmentKey right)
             {
                 return !(left == right);

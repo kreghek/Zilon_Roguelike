@@ -85,6 +85,11 @@ namespace Zilon.Core.MapGenerators
             var transitions = MapFactoryHelper.CreateTransitions(sectorNode);
 
             var mapGeneratorOptions = sectorNode.SectorScheme.MapGeneratorOptions;
+            if (mapGeneratorOptions is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var sectorFactoryOptions = new SectorMapFactoryOptions(mapGeneratorOptions, transitions);
 
             var map = await mapFactory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);

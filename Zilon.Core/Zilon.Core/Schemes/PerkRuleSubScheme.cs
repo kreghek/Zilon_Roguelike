@@ -25,7 +25,7 @@ namespace Zilon.Core.Schemes
         /// Например, на тип правила Увеличение урона указывает теги предметов, действия которых
         /// будут с увеличением урона.
         /// </remarks>
-        public string Params { get; set; }
+        public string? Params { get; set; }
 
         /// <summary>
         /// Тип правила.

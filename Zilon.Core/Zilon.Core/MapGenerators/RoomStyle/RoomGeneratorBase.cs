@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Common;
@@ -22,12 +23,12 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             if (room is null)
             {
-                throw new System.ArgumentNullException(nameof(room));
+                throw new ArgumentNullException(nameof(room));
             }
 
             if (selectedRoom is null)
             {
-                throw new System.ArgumentNullException(nameof(selectedRoom));
+                throw new ArgumentNullException(nameof(selectedRoom));
             }
 
             var currentNode = GetRoomCenterNode(room);

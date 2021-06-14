@@ -37,10 +37,8 @@ namespace Zilon.Core.Tactics
             ITacticalActUsageRandomSource actUsageRandomSource,
             IActUsageHandlerSelector actUsageHandlerSelector)
         {
-            _actUsageRandomSource =
-                actUsageRandomSource ?? throw new ArgumentNullException(nameof(actUsageRandomSource));
-            _actUsageHandlerSelector = actUsageHandlerSelector ??
-                                       throw new ArgumentNullException(nameof(actUsageHandlerSelector));
+            _actUsageRandomSource = actUsageRandomSource;
+            _actUsageHandlerSelector = actUsageHandlerSelector;
         }
 
         public TacticalActUsageService(
@@ -48,12 +46,11 @@ namespace Zilon.Core.Tactics
             IActUsageHandlerSelector actUsageHandlerSelector,
             IEquipmentDurableService equipmentDurableService) : this(actUsageRandomSource, actUsageHandlerSelector)
         {
-            EquipmentDurableService = equipmentDurableService ??
-                                      throw new ArgumentNullException(nameof(equipmentDurableService));
+            EquipmentDurableService = equipmentDurableService;
         }
 
         /// <summary>Сервис для работы с прочностью экипировки.</summary>
-        public IEquipmentDurableService EquipmentDurableService { get; set; }
+        public IEquipmentDurableService? EquipmentDurableService { get; set; }
 
         /// <summary>
         /// Возвращает случайное значение эффективность действия.
@@ -118,12 +115,12 @@ namespace Zilon.Core.Tactics
         {
             var propResources = from prop in actor.Person.GetModule<IInventoryModule>().CalcActualItems()
                                 where prop is Resource
-                                where prop.Scheme.Bullet?.Caliber == act.Constrains.PropResourceType
+                                where prop.Scheme.Bullet?.Caliber == act.Constrains?.PropResourceType
                                 select prop;
 
             if (propResources.FirstOrDefault() is Resource propResource)
             {
-                if (propResource.Count >= act.Constrains.PropResourceCount)
+                if (propResource.Count >= act.Constrains?.PropResourceCount)
                 {
                     var usedResource = new Resource(propResource.Scheme, act.Constrains.PropResourceCount.Value);
                     actor.Person.GetModule<IInventoryModule>().Remove(usedResource);

@@ -17,7 +17,7 @@ namespace Zilon.Core.World
         /// <summary>
         /// Материализованный сектор, если он есть.
         /// </summary>
-        ISector Sector { get; }
+        ISector? Sector { get; }
 
         /// <summary>
         /// Схема, по которой был материализован сектор.

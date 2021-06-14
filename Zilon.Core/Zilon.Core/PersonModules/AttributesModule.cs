@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Zilon.Core.PersonModules
@@ -14,7 +15,7 @@ namespace Zilon.Core.PersonModules
         {
             if (attributes is null)
             {
-                throw new System.ArgumentNullException(nameof(attributes));
+                throw new ArgumentNullException(nameof(attributes));
             }
 
             IsActive = true;

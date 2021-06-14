@@ -14,16 +14,12 @@ namespace Zilon.Core.World
             State = SectorNodeState.SchemeKnown;
         }
 
-        public SectorNode()
-        {
-        }
-
         public override string ToString()
         {
             return $"[{Biome.LocationScheme}] {SectorScheme}";
         }
 
-        public ISector Sector { get; private set; }
+        public ISector? Sector { get; private set; }
 
         public IBiome Biome { get; private set; }
 

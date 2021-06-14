@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -10,8 +11,8 @@ namespace Zilon.Core.Tactics.Behaviour
         public ActorTaskSourceException(string message, Exception inner) : base(message, inner) { }
 
         protected ActorTaskSourceException(
-            System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext context) : base(info, context)
+            SerializationInfo info,
+            StreamingContext context) : base(info, context)
         {
         }
     }

@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-using JetBrains.Annotations;
-
 namespace Zilon.Core.Schemes
 {
     public class FileSchemeLocator : ISchemeLocator
     {
-        private const string schemeCatalogEnvVariable = "ZILON_LIV_SCHEME_CATALOG";
+        private const string SCHEME_CATALOG_ENV_VARIABLE = "ZILON_LIV_SCHEME_CATALOG";
         private readonly string _schemeCatalog;
 
         [ExcludeFromCodeCoverage]
-        public FileSchemeLocator([NotNull] string schemeCatalog)
+        public FileSchemeLocator(string schemeCatalog)
         {
             _schemeCatalog = schemeCatalog ?? throw new ArgumentNullException(nameof(schemeCatalog));
 
@@ -21,17 +19,17 @@ namespace Zilon.Core.Schemes
 
             if (!Directory.Exists(schemeLocatorFullPath))
             {
-                throw new System.ArgumentException($"Директория каталога {schemeLocatorFullPath} не найдена.");
+                throw new ArgumentException($"Директория каталога {schemeLocatorFullPath} не найдена.");
             }
         }
 
         [ExcludeFromCodeCoverage]
         public static FileSchemeLocator CreateFromEnvVariable()
         {
-            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(schemeCatalogEnvVariable);
+            var schemeCatalogFromEnvVariable = Environment.GetEnvironmentVariable(SCHEME_CATALOG_ENV_VARIABLE);
             if (string.IsNullOrWhiteSpace(schemeCatalogFromEnvVariable))
             {
-                throw new InvalidOperationException($"Переменная окружения {schemeCatalogEnvVariable} не задана.");
+                throw new InvalidOperationException($"Переменная окружения {SCHEME_CATALOG_ENV_VARIABLE} не задана.");
             }
 
             return new FileSchemeLocator(schemeCatalogFromEnvVariable);
@@ -53,7 +51,7 @@ namespace Zilon.Core.Schemes
             var path = Path.Combine(schemeLocatorFullPath, directory);
             if (!Directory.Exists(path))
             {
-                return System.Array.Empty<SchemeFile>();
+                return Array.Empty<SchemeFile>();
             }
 
             var files = Directory.GetFiles(path, "*.json", SearchOption.AllDirectories);
@@ -64,12 +62,7 @@ namespace Zilon.Core.Schemes
                 var serialized = File.ReadAllText(filePath);
                 string fileFolder = GetRelativePath(path, filePath, sid);
 
-                var schemeFile = new SchemeFile
-                {
-                    Sid = sid,
-                    Path = fileFolder,
-                    Content = serialized
-                };
+                var schemeFile = new SchemeFile(serialized, fileFolder, sid);
 
                 result.Add(schemeFile);
             }

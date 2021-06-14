@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using FluentAssertions;
 
@@ -34,7 +33,7 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().Be(true);
+            canExecute.IsSuccess.Should().BeTrue();
         }
 
         /// <summary>

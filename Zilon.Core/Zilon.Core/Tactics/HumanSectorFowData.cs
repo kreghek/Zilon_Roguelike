@@ -8,12 +8,14 @@ namespace Zilon.Core.Tactics
 {
     public sealed class HumanSectorFowData : ISectorFowData
     {
+        private readonly object _lockObject;
         private readonly Dictionary<IGraphNode, SectorMapFowNode> _nodes;
 
         private readonly Dictionary<SectorMapNodeFowState, List<SectorMapFowNode>> _sectorNodeHash;
 
         public HumanSectorFowData()
         {
+            _lockObject = new object();
             _nodes = new Dictionary<IGraphNode, SectorMapFowNode>();
             _sectorNodeHash = new Dictionary<SectorMapNodeFowState, List<SectorMapFowNode>>
             {
@@ -23,61 +25,79 @@ namespace Zilon.Core.Tactics
             };
         }
 
-        public IEnumerable<SectorMapFowNode> Nodes => _nodes.Values;
+        public IEnumerable<SectorMapFowNode> Nodes
+        {
+            get
+            {
+                lock (_lockObject) { return _nodes.Values; }
+            }
+        }
 
         public void AddNodes(IEnumerable<SectorMapFowNode> nodes)
         {
-            if (nodes is null)
+            lock (_lockObject)
             {
-                throw new ArgumentNullException(nameof(nodes));
-            }
+                if (nodes is null)
+                {
+                    throw new ArgumentNullException(nameof(nodes));
+                }
 
-            var overlapedNodes = nodes.Where(x => Nodes.Contains(x));
-            if (overlapedNodes.Any())
-            {
-                throw new InvalidOperationException(
-                    $"Добавляются узлы тумана войны, перекрывающие существующик узлы {string.Join(",", overlapedNodes.Select(x => x.Node))}.");
-            }
+                var overlapedNodes = nodes.Where(x => Nodes.Contains(x));
+                if (overlapedNodes.Any())
+                {
+                    throw new InvalidOperationException(
+                        $"Добавляются узлы тумана войны, перекрывающие существующик узлы {string.Join(",", overlapedNodes.Select(x => x.Node))}.");
+                }
 
-            foreach (var node in nodes)
-            {
-                _nodes[node.Node] = node;
+                foreach (var node in nodes)
+                {
+                    _nodes[node.Node] = node;
 
-                var targetList = _sectorNodeHash[node.State];
-                targetList.Add(node);
+                    var targetList = _sectorNodeHash[node.State];
+                    targetList.Add(node);
+                }
             }
         }
 
         public void ChangeNodeState(SectorMapFowNode node, SectorMapNodeFowState targetState)
         {
-            if (node is null)
+            lock (_lockObject)
             {
-                throw new ArgumentNullException(nameof(node));
+                if (node is null)
+                {
+                    throw new ArgumentNullException(nameof(node));
+                }
+
+                var sourceList = _sectorNodeHash[node.State];
+                sourceList.Remove(node);
+
+                var targetList = _sectorNodeHash[targetState];
+                targetList.Add(node);
+
+                node.ChangeState(targetState);
             }
-
-            var sourceList = _sectorNodeHash[node.State];
-            sourceList.Remove(node);
-
-            var targetList = _sectorNodeHash[targetState];
-            targetList.Add(node);
-
-            node.ChangeState(targetState);
         }
 
         public IEnumerable<SectorMapFowNode> GetFowNodeByState(SectorMapNodeFowState targetState)
         {
-            var targetList = _sectorNodeHash[targetState];
-            return targetList;
+            lock (_lockObject)
+            {
+                var targetList = _sectorNodeHash[targetState];
+                return targetList;
+            }
         }
 
-        public SectorMapFowNode GetNode(IGraphNode node)
+        public SectorMapFowNode? GetNode(IGraphNode node)
         {
-            if (_nodes.TryGetValue(node, out var sectorMapFowNode))
+            lock (_lockObject)
             {
-                return sectorMapFowNode;
-            }
+                if (_nodes.TryGetValue(node, out var sectorMapFowNode))
+                {
+                    return sectorMapFowNode;
+                }
 
-            return null;
+                return null;
+            }
         }
     }
 }

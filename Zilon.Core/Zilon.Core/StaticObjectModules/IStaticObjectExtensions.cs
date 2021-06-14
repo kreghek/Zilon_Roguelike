@@ -27,7 +27,9 @@ namespace Zilon.Core.StaticObjectModules
 
             if (!source.HasModule<TStaticObjectModule>())
             {
+#pragma warning disable CS8603 // Possible null reference return.
                 return default;
+#pragma warning restore CS8603 // Possible null reference return.
             }
 
             return source.GetModule<TStaticObjectModule>();

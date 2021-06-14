@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 namespace Zilon.Core.Props
 {
     /// <summary>
@@ -40,8 +38,8 @@ namespace Zilon.Core.Props
             DoEventInner(Changed, prop);
         }
 
-        private void DoEventInner([CanBeNull] EventHandler<PropStoreEventArgs> @event,
-            [CanBeNull] IProp prop)
+        private void DoEventInner(EventHandler<PropStoreEventArgs>? @event,
+            IProp? prop)
         {
             if (prop == null)
             {
@@ -128,9 +126,9 @@ namespace Zilon.Core.Props
             }
         }
 
-        public event EventHandler<PropStoreEventArgs> Added;
-        public event EventHandler<PropStoreEventArgs> Removed;
-        public event EventHandler<PropStoreEventArgs> Changed;
+        public event EventHandler<PropStoreEventArgs>? Added;
+        public event EventHandler<PropStoreEventArgs>? Removed;
+        public event EventHandler<PropStoreEventArgs>? Changed;
 
         public virtual IProp[] CalcActualItems()
         {
@@ -175,19 +173,13 @@ namespace Zilon.Core.Props
 
         public bool Has(IProp prop)
         {
-            switch (prop)
+            return prop switch
             {
-                case Equipment equipment:
-                    return HasEquipment(equipment);
-
-                case Resource resource:
-                    return HasResource(resource);
-
-                case Concept concept:
-                    return HasConcept(concept);
-                default:
-                    throw new InvalidOperationException();
-            }
+                Equipment equipment => HasEquipment(equipment),
+                Resource resource => HasResource(resource),
+                Concept concept => HasConcept(concept),
+                _ => throw new InvalidOperationException()
+            };
         }
     }
 }

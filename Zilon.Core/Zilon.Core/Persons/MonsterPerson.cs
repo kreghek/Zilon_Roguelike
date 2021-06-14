@@ -1,7 +1,5 @@
 ﻿using System;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Persons
@@ -11,7 +9,7 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class MonsterPerson : PersonBase
     {
-        public MonsterPerson([NotNull] IMonsterScheme scheme) : base(Fractions.MonsterFraction)
+        public MonsterPerson(IMonsterScheme scheme) : base(Fractions.MonsterFraction)
         {
             Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
         }

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
-using JetBrains.Annotations;
 
 using Newtonsoft.Json;
 
@@ -21,33 +20,33 @@ namespace Zilon.Core.PersonModules
     public sealed class CombatActModule : ICombatActModule
     {
         private readonly ITacticalActScheme _defaultActScheme;
-        private readonly IEffectsModule _effectsModule;
         private readonly IEquipmentModule _equipmentModule;
         private readonly IEvolutionModule _evolutionModule;
+        private readonly IConditionsModule _сonditionsModule;
 
         public CombatActModule(
             ITacticalActScheme defaultActScheme,
             IEquipmentModule equipmentModule,
-            IEffectsModule effectsModule,
+            IConditionsModule сonditionsModule,
             IEvolutionModule evolutionModule)
         {
             IsActive = true;
 
             _defaultActScheme = defaultActScheme;
             _equipmentModule = equipmentModule;
-            _effectsModule = effectsModule;
+            _сonditionsModule = сonditionsModule;
             _evolutionModule = evolutionModule;
         }
 
         private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
-            IEnumerable<Equipment> equipments,
-            IEffectsModule effects,
+            IEnumerable<Equipment?> equipments,
+            IConditionsModule сonditionModule,
             IEnumerable<IPerk> perks)
         {
-            var defaultAct = CreateTacticalAct(defaultActScheme, null, effects, perks);
+            var defaultAct = CreateTacticalAct(defaultActScheme, null, сonditionModule, perks);
             yield return defaultAct;
 
-            var equipmentActs = CalcActsFromEquipments(equipments, effects, perks);
+            var equipmentActs = CalcActsFromEquipments(equipments, сonditionModule, perks);
             foreach (var act in equipmentActs)
             {
                 yield return act;
@@ -55,8 +54,8 @@ namespace Zilon.Core.PersonModules
         }
 
         private static IEnumerable<ITacticalAct> CalcActsFromEquipments(
-            IEnumerable<Equipment> equipments,
-            IEffectsModule effects,
+            IEnumerable<Equipment?> equipments,
+            IConditionsModule сondition,
             IEnumerable<IPerk> perks)
         {
             if (equipments == null)
@@ -73,15 +72,15 @@ namespace Zilon.Core.PersonModules
 
                 foreach (var actScheme in equipment.Acts)
                 {
-                    var act = CreateTacticalAct(actScheme, equipment, effects, perks);
+                    var act = CreateTacticalAct(actScheme, equipment, сondition, perks);
 
                     yield return act;
                 }
             }
         }
 
-        private static void CalcPerksBonusesOnTacticalAct([NotNull][ItemNotNull] IEnumerable<IPerk> archievedPerks,
-            [NotNull] Equipment equipment,
+        private static void CalcPerksBonusesOnTacticalAct([NotNull] IEnumerable<IPerk> archievedPerks,
+            [MaybeNull] Equipment? equipment,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
@@ -91,16 +90,43 @@ namespace Zilon.Core.PersonModules
                 {
                     if (perk.Scheme.Levels != null)
                     {
-                        var rules = perk.Scheme.Levels[0].Rules;
+                        var perkLevelSubScheme0 = perk.Scheme.Levels[0];
+                        if (perkLevelSubScheme0 is null)
+                        {
+                            continue;
+                        }
+
+                        var rules = perkLevelSubScheme0.Rules;
+
+                        if (rules is null)
+                        {
+                            continue;
+                        }
+
                         ProcessRulesBonuses(equipment, ref toHitModifierValue, ref efficientModifierValue, rules);
                     }
                 }
                 else
                 {
                     var currentLevel = perk.CurrentLevel;
-                    var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary];
+                    if (currentLevel is null)
+                    {
+                        continue;
+                    }
 
-                    if (currentLevelScheme.Rules == null)
+                    if (perk.Scheme.Levels is null)
+                    {
+                        continue;
+                    }
+
+                    var currentLevelScheme = perk.Scheme.Levels[currentLevel.Primary - 1];
+
+                    if (currentLevelScheme is null)
+                    {
+                        continue;
+                    }
+
+                    if (currentLevelScheme.Rules is null)
                     {
                         continue;
                     }
@@ -114,11 +140,11 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void CalcSurvivalHazardOnTacticalAct(IEffectsModule effects,
+        private static void CalcSurvivalHazardOnTacticalAct(IConditionsModule сondition,
             ref int toHitModifierValue,
             ref int efficientModifierValue)
         {
-            var greaterSurvivalEffect = effects.Items.OfType<SurvivalStatHazardEffect>()
+            var greaterSurvivalEffect = сondition.Items.OfType<SurvivalStatHazardCondition>()
                 .OrderByDescending(x => x.Level).FirstOrDefault();
 
             if (greaterSurvivalEffect == null)
@@ -144,17 +170,18 @@ namespace Zilon.Core.PersonModules
         }
 
         private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
-            [NotNull] Equipment equipment,
-            [NotNull] IEffectsModule effects,
-            [NotNull][ItemNotNull] IEnumerable<IPerk> perks)
+            [MaybeNull] Equipment? equipment,
+            [NotNull] IConditionsModule сonditionModule,
+            [NotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
             var efficientModifierValue = 0;
-            var efficientRollUnmodified = scheme.Stats.Efficient;
-            CalcSurvivalHazardOnTacticalAct(effects, ref toHitModifierValue, ref efficientModifierValue);
+            var efficientRollUnmodified = scheme.Stats?.Efficient ?? new Roll(1, 1);
+            CalcSurvivalHazardOnTacticalAct(сonditionModule, ref toHitModifierValue, ref efficientModifierValue);
             CalcPerksBonusesOnTacticalAct(perks, equipment, ref toHitModifierValue, ref efficientModifierValue);
 
             var toHitRoll = CreateTacticalActRoll(6, 1, toHitModifierValue);
+
             var efficientRoll = CreateTacticalActRoll(efficientRollUnmodified.Dice,
                 efficientRollUnmodified.Count,
                 efficientModifierValue);
@@ -184,16 +211,22 @@ namespace Zilon.Core.PersonModules
             return perks;
         }
 
-        private static int GetRollModifierByPerkRule(Equipment equipment, int efficientModifierValue,
+        private static int GetRollModifierByPerkRule(Equipment? equipment, int efficientModifierValue,
             PerkRuleSubScheme rule)
         {
-            if (string.IsNullOrWhiteSpace(rule.Params))
+            if (rule.Params is null || string.IsNullOrWhiteSpace(rule.Params))
             {
                 efficientModifierValue = RuleCalculations.CalcEfficientByRuleLevel(efficientModifierValue, rule.Level);
             }
             else
             {
                 var damagePerkParams = JsonConvert.DeserializeObject<DamagePerkParams>(rule.Params);
+
+                if (damagePerkParams is null)
+                {
+                    throw new InvalidOperationException("Error n serialization of damagePerkParams.");
+                }
+
                 if (damagePerkParams.WeaponTags != null && equipment != null)
                 {
                     var hasAllTags = true;
@@ -217,7 +250,7 @@ namespace Zilon.Core.PersonModules
             return efficientModifierValue;
         }
 
-        private static void GetRuleModifierValue(PerkRuleSubScheme rule, Equipment equipment,
+        private static void GetRuleModifierValue(PerkRuleSubScheme rule, Equipment? equipment,
             ref int toHitModifierValue, ref int efficientModifierValue)
         {
             switch (rule.Type)
@@ -245,11 +278,16 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void ProcessRulesBonuses(Equipment equipment, ref int toHitModifierValue,
-            ref int efficientModifierValue, PerkRuleSubScheme[] rules)
+        private static void ProcessRulesBonuses(Equipment? equipment, ref int toHitModifierValue,
+            ref int efficientModifierValue, PerkRuleSubScheme?[] rules)
         {
             foreach (var rule in rules)
             {
+                if (rule is null)
+                {
+                    continue;
+                }
+
                 GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
             }
         }
@@ -260,7 +298,7 @@ namespace Zilon.Core.PersonModules
         public IEnumerable<ITacticalAct> CalcCombatActs()
         {
             var perks = GetPerksSafe();
-            return CalcActs(_defaultActScheme, _equipmentModule, _effectsModule, perks);
+            return CalcActs(_defaultActScheme, _equipmentModule, _сonditionsModule, perks);
         }
     }
 }

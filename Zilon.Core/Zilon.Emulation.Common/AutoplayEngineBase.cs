@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Bot.Sdk;
-using Zilon.Core.PersonModules;
-using Zilon.Core.Persons;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -38,26 +37,44 @@ namespace Zilon.Emulation.Common
             return globe;
         }
 
-        public async Task StartAsync(IGlobe globe, IPerson followedPerson)
+        public Task StartAsync(IGlobe globe, IAutoplayContext context)
         {
             if (globe is null)
             {
                 throw new ArgumentNullException(nameof(globe));
             }
 
-            if (followedPerson is null)
+            if (context is null)
             {
-                throw new ArgumentNullException(nameof(followedPerson));
+                throw new ArgumentNullException(nameof(context));
             }
 
+            return StartInternalAsync(globe, context);
+        }
+
+        protected abstract void CatchActorTaskExecutionException(ActorTaskExecutionException exception);
+
+        protected virtual void CatchException(Exception exception)
+        {
+            Console.WriteLine(exception);
+        }
+
+        protected abstract void ConfigBotAux();
+
+        protected abstract void ProcessEnd();
+
+        protected abstract void ProcessSectorExit();
+
+        private async Task StartInternalAsync(IGlobe globe, IAutoplayContext context)
+        {
             var iterationCounter = 1;
-            while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
+            while (await context.CheckNextIterationAsync() && iterationCounter <= ITERATION_LIMIT)
             {
                 for (var updateCounter = 0; updateCounter < GlobeMetrics.OneIterationLength; updateCounter++)
                 {
                     try
                     {
-                        await globe.UpdateAsync().ConfigureAwait(false);
+                        await globe.UpdateAsync(CancellationToken.None).ConfigureAwait(false);
                     }
                     catch (ActorTaskExecutionException exception)
                     {
@@ -84,18 +101,5 @@ namespace Zilon.Emulation.Common
 
             ProcessEnd();
         }
-
-        protected abstract void CatchActorTaskExecutionException(ActorTaskExecutionException exception);
-
-        protected virtual void CatchException(Exception exception)
-        {
-            Console.WriteLine(exception);
-        }
-
-        protected abstract void ConfigBotAux();
-
-        protected abstract void ProcessEnd();
-
-        protected abstract void ProcessSectorExit();
     }
 }

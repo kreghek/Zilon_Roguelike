@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Graphs;
@@ -15,7 +16,7 @@ namespace Zilon.Bot.Players
         {
             if (containers is null)
             {
-                throw new System.ArgumentNullException(nameof(containers));
+                throw new ArgumentNullException(nameof(containers));
             }
 
             foreach (var container in containers)

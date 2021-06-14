@@ -10,6 +10,11 @@ namespace Zilon.Core.Specs.Mocks
     {
         private Func<ISectorMapFactoryOptions, Task<ISectorMap>> _factoryFuncAsync;
 
+        public void SetFunc(Func<ISectorMapFactoryOptions, Task<ISectorMap>> factoryFunc)
+        {
+            _factoryFuncAsync = factoryFunc;
+        }
+
         public async Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
             if (_factoryFuncAsync == null)
@@ -26,11 +31,6 @@ namespace Zilon.Core.Specs.Mocks
             var map = await _factoryFuncAsync(generationOptions).ConfigureAwait(false);
 
             return map;
-        }
-
-        public void SetFunc(Func<ISectorMapFactoryOptions, Task<ISectorMap>> factoryFunc)
-        {
-            _factoryFuncAsync = factoryFunc;
         }
     }
 }

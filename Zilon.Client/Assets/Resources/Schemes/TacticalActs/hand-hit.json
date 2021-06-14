@@ -1,6 +1,7 @@
 {
   "Name": {
-    "Ru": "Удар кулаком"
+    "Ru": "Удар кулаком",
+    "En": "Punch"
   },
   "Stats": {
     "Efficient": {
@@ -14,10 +15,14 @@
     "Effect": "Damage",
     "Targets": "Enemy",
     "HitCount": 1,
+    "IsMelee": true,
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic",
       "ApRank": 1
-    }
+    },
+    "Tags": [
+      "punch"
+    ]
   }
 }

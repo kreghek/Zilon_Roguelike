@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Zilon.Core.Diseases
@@ -14,12 +15,12 @@ namespace Zilon.Core.Diseases
         {
             if (symptoms is null)
             {
-                throw new System.ArgumentNullException(nameof(symptoms));
+                throw new ArgumentNullException(nameof(symptoms));
             }
 
             if (progressSpeed <= 0)
             {
-                throw new System.ArgumentException("Скорость протекания болезни должна быть больше 0",
+                throw new ArgumentException("Скорость протекания болезни должна быть больше 0",
                     nameof(progressSpeed));
             }
 
