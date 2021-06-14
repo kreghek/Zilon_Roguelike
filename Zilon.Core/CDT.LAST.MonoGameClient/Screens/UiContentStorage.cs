@@ -18,6 +18,8 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _attributesBackgroundTexture;
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
+
+        private IDictionary<string, Texture2D> _combatActDict;
         private Texture2D? _conditionDefaultIcon;
         private Texture2D? _conditionDeseaseSymptomIcon;
         private Texture2D[]? _conditionIconBackgroundTextures;
@@ -75,6 +77,24 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
 
             return iconTexture;
+        }
+
+        private void InitCombatActIcons(ContentManager contentManager)
+        {
+            _combatActDict = new Dictionary<string, Texture2D>
+            {
+                ["default"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
+
+                ["tag-punch"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/Punch"),
+
+                ["clumsy-cut"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
+                ["evasion-slash"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/EvasionSlash"),
+                ["lunging-stab"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/LungingStab"),
+                ["penetrating-thrust"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/PenetratingThrust"),
+                ["weak-block"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakBlock"),
+                ["weak-parry"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakParry"),
+                ["weak-swing"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakSwing")
+            };
         }
 
         private void InitConditionIconsAndBackgrounds(ContentManager contentManager)
@@ -225,26 +245,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             InitPropIcons(contentManager);
             InitCombatActIcons(contentManager);
             InitConditionIconsAndBackgrounds(contentManager);
-        }
-
-        private IDictionary<string, Texture2D> _combatActDict;
-
-        private void InitCombatActIcons(ContentManager contentManager)
-        {
-            _combatActDict = new Dictionary<string, Texture2D>
-            {
-                ["default"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
-
-                ["tag-punch"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/Punch"),
-
-                ["clumsy-cut"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
-                ["evasion-slash"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/EvasionSlash"),
-                ["lunging-stab"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/LungingStab"),
-                ["penetrating-thrust"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/PenetratingThrust"),
-                ["weak-block"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakBlock"),
-                ["weak-parry"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakParry"),
-                ["weak-swing"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakSwing"),
-            };
         }
 
         public SpriteFont GetHintTitleFont()

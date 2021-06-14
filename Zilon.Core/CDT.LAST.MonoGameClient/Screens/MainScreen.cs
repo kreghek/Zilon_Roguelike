@@ -42,8 +42,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private bool _autoplayHintIsShown;
         private string _autoplayModeButtonTitle;
-        private ISector? _currentSector;
         private CombatActPanel? _combatActPanel;
+        private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
 
@@ -171,22 +171,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             else
             {
                 HandleTransition(isInTransition);
-            }
-        }
-
-        private void HandleCombatActPanel()
-        {
-            if (_combatActPanel is null)
-            {
-                _combatActPanel = new CombatActPanel(
-                    _uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>(),
-                    _uiState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>(),
-                    _uiContentStorage,
-                    _uiState);
-            }
-            else
-            {
-                _combatActPanel.Update();
             }
         }
 
@@ -341,6 +325,22 @@ namespace CDT.LAST.MonoGameClient.Screens
                     from actor in sector.ActorManager.Items
                     where actor.Person == player.MainPerson
                     select sectorNode).SingleOrDefault();
+        }
+
+        private void HandleCombatActPanel()
+        {
+            if (_combatActPanel is null)
+            {
+                _combatActPanel = new CombatActPanel(
+                    _uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>(),
+                    _uiState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>(),
+                    _uiContentStorage,
+                    _uiState);
+            }
+            else
+            {
+                _combatActPanel.Update();
+            }
         }
 
         private void HandleMainUpdate(IActorViewModel activeActor)
