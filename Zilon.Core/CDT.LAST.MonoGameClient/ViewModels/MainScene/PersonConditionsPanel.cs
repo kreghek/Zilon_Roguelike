@@ -53,9 +53,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 var iconX = conditionIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
 
-                DrawIconBackground(spriteBatch, iconX);
+                var iconTextures = _uiContentStorage.GetConditionIconTextures(condition);
 
-                DrawIcon(spriteBatch, condition, iconX);
+                DrawIconBackground(spriteBatch, iconX, iconTextures.Background);
+
+                DrawIcon(spriteBatch, iconX, iconTextures.Icon);
 
                 conditionIndex++;
             }
@@ -123,19 +125,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void DrawIcon(SpriteBatch spriteBatch, IPersonCondition personCondition, int iconX)
+        private void DrawIcon(SpriteBatch spriteBatch, int iconX, Texture2D iconTexture)
         {
-            var conditionIconSid = GetConditionSid(personCondition);
-            var conditionIconTexture = _uiContentStorage.GetConditionIconTexture(personCondition);
-            spriteBatch.Draw(conditionIconTexture, new Vector2(iconX, _screenY), Color.White);
+            spriteBatch.Draw(iconTexture, new Vector2(iconX, _screenY), Color.White);
         }
 
-        private void DrawIconBackground(SpriteBatch spriteBatch, int iconX)
+        private void DrawIconBackground(SpriteBatch spriteBatch, int iconX, Texture2D backgroundTexture)
         {
-            var conditionIconTexture = _uiContentStorage.GetConditionIconBackgroundTexture(personCondition);
-            spriteBatch.Draw(_conditionBackgroundTexture,
-                new Vector2(iconX, _screenY),
-                Color.White);
+            spriteBatch.Draw(backgroundTexture, new Vector2(iconX, _screenY), Color.White);
         }
 
         private static string GetConditionSid(IPersonCondition personCondition)

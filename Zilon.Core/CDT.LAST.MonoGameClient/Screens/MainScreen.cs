@@ -57,10 +57,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
             _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-            _camera = new Camera();
-            _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 8, screenY: 8);
-
             var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+
+            _camera = new Camera();
+            _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 8, screenY: 8, uiContentStorage);
+            
             _uiContentStorage = uiContentStorage;
 
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
