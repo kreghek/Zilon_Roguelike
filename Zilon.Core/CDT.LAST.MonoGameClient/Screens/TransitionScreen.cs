@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Zilon.Core.Client.Sector;
 using Zilon.Core.Players;
 using Zilon.Core.World;
 
@@ -13,7 +12,6 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class TransitionScreen : GameSceneBase
     {
-        private readonly IAnimationBlockerService _animationBlockerService;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -26,7 +24,6 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _player = serviceScope.GetRequiredService<IPlayer>();
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
-            _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
             _spriteBatch = spriteBatch;
         }
 
@@ -35,11 +32,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_player.MainPerson is null)
             {
                 throw new InvalidOperationException();
-            }
-
-            if (_animationBlockerService.HasBlockers)
-            {
-                _animationBlockerService.DropBlockers();
             }
 
             if (!_transitionPool.CheckPersonInTransition(_player.MainPerson) && !_targetSceneInitialized)
