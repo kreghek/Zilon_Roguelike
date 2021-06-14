@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Resources;
@@ -28,8 +27,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
-        public PersonConditionsPanel(Game game, ISectorUiState uiState, int screenX, int screenY,
-            IUiContentStorage uiContentStorage)
+        public PersonConditionsPanel(ISectorUiState uiState, int screenX, int screenY, IUiContentStorage uiContentStorage)
         {
             _uiState = uiState;
             _screenX = screenX;
@@ -133,25 +131,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private void DrawIconBackground(SpriteBatch spriteBatch, int iconX, Texture2D backgroundTexture)
         {
             spriteBatch.Draw(backgroundTexture, new Vector2(iconX, _screenY), Color.White);
-        }
-
-        private static string GetConditionSid(IPersonCondition personCondition)
-        {
-            switch (personCondition)
-            {
-                case SurvivalStatHazardCondition statCondition:
-
-                    var typeString = GetStatHazardConditionTypeClientString(statCondition.Type);
-                    var levelString = GetStatHazardConditionLevelClientString(statCondition);
-                    return $"{typeString}{levelString}";
-
-                case DiseaseSymptomCondition:
-                    return "DiseaseSymptom";
-
-                default:
-                    Debug.Fail("Every condition must have icon.");
-                    return "HungerLesser";
-            }
         }
 
         private static string GetConditionTitle(IPersonCondition personCondition)

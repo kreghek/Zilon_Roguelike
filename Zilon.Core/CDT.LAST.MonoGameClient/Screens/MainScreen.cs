@@ -60,7 +60,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
             _camera = new Camera();
-            _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 8, screenY: 8, uiContentStorage);
+            _personEffectsPanel = new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: uiContentStorage);
 
             _uiContentStorage = uiContentStorage;
 
