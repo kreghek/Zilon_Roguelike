@@ -504,18 +504,24 @@ namespace Zilon.Core.Tactics
             IActor targetActor,
             DamageEfficientCalc damageEfficientCalcResult,
             int successToHitRoll,
-            int factToHitRoll)
+            int factToHitRoll,
+            ITacticalAct usedAct)
         {
-            if (ActorInteractionBus == null)
+            if (ActorInteractionBus is null)
             {
                 return;
             }
 
-            var damageEvent = new DamageActorInteractionEvent(actor, targetActor, damageEfficientCalcResult)
-            {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
-            };
+            var usedActDescription =
+                new ActDescription(usedAct.Stats.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                                   Array.Empty<string>());
+
+            var damageEvent =
+                new DamageActorInteractionEvent(actor, targetActor, usedActDescription, damageEfficientCalcResult)
+                {
+                    SuccessToHitRoll = successToHitRoll,
+                    FactToHitRoll = factToHitRoll
+                };
             ActorInteractionBus.PushEvent(damageEvent);
         }
 
@@ -530,7 +536,8 @@ namespace Zilon.Core.Tactics
                 targetActor,
                 damageEfficientCalcResult,
                 successToHitRoll,
-                factToHitRoll);
+                factToHitRoll,
+                tacticalActRoll.TacticalAct);
 
             if (actEfficient > 0)
             {

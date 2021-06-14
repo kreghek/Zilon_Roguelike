@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
@@ -13,6 +15,8 @@ using Zilon.Core.Common;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Players;
+using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
@@ -23,6 +27,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Game _game;
         private readonly IActorGraphics _graphicsRoot;
+        private readonly IPersonSoundContentStorage _personSoundStorage;
 
         private readonly SpriteContainer _rootSprite;
         private readonly SectorViewModelContext _sectorViewModelContext;
@@ -31,12 +36,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private IActorStateEngine _actorStateEngine;
 
-        public ActorViewModel(Game game, IActor actor, SectorViewModelContext sectorViewModelContext,
+        public ActorViewModel(Game game,
+            IActor actor,
+            SectorViewModelContext sectorViewModelContext,
+            IPersonVisualizationContentStorage personVisualizationContentStorage,
+            IPersonSoundContentStorage personSoundStorage,
             SpriteBatch spriteBatch)
         {
             _game = game;
             Actor = actor;
             _sectorViewModelContext = sectorViewModelContext;
+            _personSoundStorage = personSoundStorage;
             _spriteBatch = spriteBatch;
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
@@ -56,7 +66,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var isHumanGraphics = Actor.Person is HumanPerson;
             if (isHumanGraphics)
             {
-                var graphicsRoot = new HumanoidGraphics(Actor.Person.GetModule<IEquipmentModule>(), game.Content);
+                var graphicsRoot = new HumanoidGraphics(Actor.Person.GetModule<IEquipmentModule>(),
+                    personVisualizationContentStorage);
 
                 _rootSprite.AddChild(graphicsRoot);
 
@@ -82,6 +93,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             Actor.Moved += Actor_Moved;
             Actor.UsedAct += Actor_UsedAct;
+            Actor.DamageTaken += Actor_DamageTaken;
+            Actor.UsedProp += Actor_UsedProp;
+            Actor.PropTransferPerformed += Actor_PropTransferPerformed;
+            Actor.BeginTransitionToOtherSector += Actor_BeginTransitionToOtherSector;
+            if (Actor.Person.HasModule<IEquipmentModule>())
+            {
+                Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += Actor_EquipmentChanged;
+            }
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
@@ -98,6 +117,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _rootSprite.Draw(_spriteBatch);
 
             _spriteBatch.End();
+        }
+
+        public void UnsubscribeEventHandlers()
+        {
+            Actor.Moved -= Actor_Moved;
+            Actor.UsedAct -= Actor_UsedAct;
+            Actor.DamageTaken -= Actor_DamageTaken;
+            Actor.UsedProp -= Actor_UsedProp;
+            Actor.PropTransferPerformed -= Actor_PropTransferPerformed;
+            Actor.BeginTransitionToOtherSector -= Actor_BeginTransitionToOtherSector;
+
+            if (Actor.Person.HasModule<IEquipmentModule>())
+            {
+                Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= Actor_EquipmentChanged;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -121,6 +155,58 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
+        private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var player = serviceScope.GetRequiredService<IPlayer>();
+            if (sender is IActor actor && actor.Person != player.MainPerson)
+            {
+                // Do not sound transition of monsters or npc now.
+                // In the client are no sounds to this.
+                return;
+            }
+
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var soundEffect = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Transit);
+            _actorStateEngine = new ActorSectorTransitionMoveEngine(
+                _graphicsRoot.RootSprite,
+                animationBlockerService,
+                soundEffect?.CreateInstance());
+        }
+
+        private void Actor_DamageTaken(object? sender, DamageTakenEventArgs e)
+        {
+            if (sender is not Actor actor)
+            {
+                Debug.Fail("Sender must be IActor");
+                // Do nothing. Looks like error. But client must not down.
+                return;
+            }
+
+            if (actor.Person.CheckIsDead())
+            {
+                var deathSoundEffect = _personSoundStorage.GetDeathEffect(actor.Person);
+                deathSoundEffect.CreateInstance().Play();
+            }
+            else
+            {
+                var impactSoundEffect = _personSoundStorage.GetImpactEffect(actor.Person);
+                impactSoundEffect.CreateInstance().Play();
+            }
+        }
+
+        private void Actor_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+            var equipment = e.Equipment;
+            var soundSoundEffect = SelectEquipEffect(equipment);
+
+            _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
+                soundSoundEffect?.CreateInstance());
+        }
+
         private void Actor_Moved(object? sender, EventArgs e)
         {
             var hexSize = MapMetrics.UnitSize / 2;
@@ -136,18 +222,39 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
+                SoundEffectInstance? moveSoundEffectInstance = null;
+
+                var player = serviceScope.GetRequiredService<IPlayer>();
+                if (sender is IActor actor && actor.Person == player.MainPerson)
+                {
+                    // Sound steps of main person only to prevent infinite steps loop.
+                    moveSoundEffectInstance = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Move)?.CreateInstance();
+                }
+
                 var moveEngine = new ActorMoveEngine(
                     _rootSprite,
                     _graphicsRoot.RootSprite,
                     _shadowSprite,
                     newPosition,
-                    animationBlockerService);
+                    animationBlockerService,
+                    moveSoundEffectInstance);
                 _actorStateEngine = moveEngine;
             }
             else
             {
                 _rootSprite.Position = newPosition;
             }
+        }
+
+        private void Actor_PropTransferPerformed(object? sender, EventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var soundEffect = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Transit);
+            _actorStateEngine = new ActorCommonActionMoveEngine(
+                _graphicsRoot.RootSprite,
+                animationBlockerService,
+                soundEffect?.CreateInstance());
         }
 
         private void Actor_UsedAct(object? sender, UsedActEventArgs e)
@@ -174,11 +281,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     );
 
                     var targetSpritePosition = newPosition;
+
+                    var attackSoundEffectInstance = GetSoundEffect(e.TacticalAct.Stats);
                     _actorStateEngine =
                         new ActorMeleeAttackEngine(
                             _rootSprite,
                             targetSpritePosition,
-                            animationBlockerService);
+                            animationBlockerService,
+                            attackSoundEffectInstance);
 
                     var targetGameObject =
                         _sectorViewModelContext.GameObjects.SingleOrDefault(x => x.Node == e.TargetNode);
@@ -195,6 +305,43 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     }
                 }
             }
+        }
+
+        private void Actor_UsedProp(object? sender, UsedPropEventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var soundEffect = e.UsedProp.Scheme.Sid switch
+            {
+                "med-kit" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal),
+                "water-bottle" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Drink),
+                "packed-food" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat),
+                _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.UseCommon)
+            };
+            _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
+                soundEffect?.CreateInstance());
+        }
+
+        private static string[] GetClearTags(Equipment? equipment)
+        {
+            return equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                   Array.Empty<string>();
+        }
+
+        private SoundEffectInstance? GetSoundEffect(ITacticalActStatsSubScheme actStatScheme)
+        {
+            var usedActDescription = ActDescription.CreateFromActStats(actStatScheme);
+
+            var attackSoundEffect = _personSoundStorage.GetActStartSound(usedActDescription);
+
+            var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
+            return attackSoundEffectInstance;
+        }
+
+        private SoundEffect? SelectEquipEffect(Equipment? equipment)
+        {
+            var clearTags = GetClearTags(equipment);
+            return _personSoundStorage.GetEquipSound(clearTags, equipment != null);
         }
 
         public IActor Actor { get; set; }

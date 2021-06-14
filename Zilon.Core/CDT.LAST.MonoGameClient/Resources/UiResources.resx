@@ -171,4 +171,91 @@
   <data name="SwitchAutomodeButtonTitle" xml:space="preserve">
     <value>Autoplay: {0}</value>
   </data>
+  <data name="PhysicalStrengthAttributeTitle" xml:space="preserve">
+    <value>Physical Strength</value>
+  </data>
+  <data name="DexterityAttributeTitle" xml:space="preserve">
+    <value>Dexterity</value>
+  </data>
+  <data name="PerceptionAttributeTitle" xml:space="preserve">
+    <value>Perception</value>
+  </data>
+  <data name="ConstitutionAttributeTitle" xml:space="preserve">
+    <value>Constitution</value>
+  </data>
+  <data name="PhysicalStrengthAttributeDescription" xml:space="preserve">
+    <value>Physical, brute strength of the character.
+Affects melee weapon damage.
+Acts as a restriction on the wearing of heavy equipment.</value>
+  </data>
+  <data name="DexterityAttributeDescription" xml:space="preserve">
+    <value>Agility, physical flexibility of the character, stretching.
+Acts as a restriction on equipment, such as daggers, staves.</value>
+  </data>
+  <data name="PerceptionAttributeDescription" xml:space="preserve">
+    <value>Perception, sight. Ability to see, notice.
+Acts as a restriction on the use of ranged weapons.
+Or weapons based on precise strikes rather than strength (daggers, spears).</value>
+  </data>
+  <data name="ConstitutionAttributeDescription" xml:space="preserve">
+    <value>Affects how many wounds can
+take out the character before he dies.</value>
+  </data>
+  <data name="UbnormalAttributeValueTitle" xml:space="preserve">
+    <value>Ubnormal</value>
+  </data>
+  <data name="DefectiveAttributeValueTitle" xml:space="preserve">
+    <value>Defective</value>
+  </data>
+  <data name="LowAttributeValueTitle" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="NormalAttributeValueTitle" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="BelowNormalAttributeValueTitle" xml:space="preserve">
+    <value>Below normal</value>
+  </data>
+  <data name="AboveNormalAttributeValueTitle" xml:space="preserve">
+    <value>Above normal</value>
+  </data>
+  <data name="SuperAttributeValueTitle" xml:space="preserve">
+    <value>Super</value>
+  </data>
+  <data name="HealCommandButtonTitle" xml:space="preserve">
+    <value>Heal</value>
+  </data>
+  <data name="EatCommandButtonTitle" xml:space="preserve">
+    <value>Eat</value>
+  </data>
+  <data name="DrinkCommandButtonTitle" xml:space="preserve">
+    <value>Drink</value>
+  </data>
+  <data name="UseCommandButtonTitle" xml:space="preserve">
+    <value>Use</value>
+  </data>
+  <data name="EquipInSlotTemplateCommandButton" xml:space="preserve">
+    <value>Equip in slot: {0}</value>
+  </data>
+  <data name="SlotHand" xml:space="preserve">
+    <value>Hand</value>
+  </data>
+  <data name="SlotHead" xml:space="preserve">
+    <value>Head</value>
+  </data>
+  <data name="SlotBody" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="SlotAux" xml:space="preserve">
+    <value>Aux</value>
+  </data>
+  <data name="TakePropInInventoryButtonTitle" xml:space="preserve">
+    <value>Take in inventory</value>
+  </data>
+  <data name="PutPropInContainerButtonTitleTemplate" xml:space="preserve">
+    <value>Put into {0}</value>
+  </data>
+  <data name="FakeContainerName" xml:space="preserve">
+    <value>the loot bag</value>
+  </data>
 </root>

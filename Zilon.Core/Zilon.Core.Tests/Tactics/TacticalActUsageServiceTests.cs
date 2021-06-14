@@ -67,7 +67,7 @@ namespace Zilon.Core.Tests.Tactics
         }
 
         /// <summary>
-        /// Тест проверяет, что при атаке вызывается событие использования действия у актёра..
+        /// Тест проверяет, что при атаке вызывается событие использования действия у актёра.
         /// </summary>
         [Test]
         public void UseOn_Attack_RaiseUsedAct()

@@ -19,7 +19,10 @@
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-    "IsMelee": true
+    "IsMelee": true,
+    "Tags": [
+      "bite"
+    ]
   },
   "DropTableSids": [
     "survival",

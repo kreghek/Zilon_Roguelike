@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -9,9 +10,11 @@ using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
-using Zilon.Core.PersonModules;
+using Zilon.Core.Client.Sector;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
@@ -21,15 +24,22 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class MainScreen : GameSceneBase
     {
-        private readonly TextButton _autoplayModeButton;
+        private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly IconButton _autoplayModeButton;
         private readonly Camera _camera;
-        private readonly TextButton _personButton;
+        private readonly ContainerModalDialog _containerModal;
         private readonly PersonConditionsPanel _personEffectsPanel;
-        private readonly ModalDialog _personModal;
+        private readonly IconButton _personEquipmentButton;
+        private readonly ModalDialogBase _personEquipmentModal;
+        private readonly IconButton _personStatsButton;
+        private readonly PersonStatsModalDialog _personStatsModal;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
+        private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
+        private bool _autoplayHintIsShown;
+        private string _autoplayModeButtonTitle;
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
@@ -45,32 +55,64 @@ namespace CDT.LAST.MonoGameClient.Screens
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
             _player = serviceScope.GetRequiredService<IPlayer>();
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
-
-            _camera = new Camera();
-            _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
+            _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
             var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
+            _camera = new Camera();
+            _personEffectsPanel =
+                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: uiContentStorage);
+
+            _uiContentStorage = uiContentStorage;
+
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
             var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
-            _autoplayModeButton = new TextButton(
-                string.Format(UiResources.SwitchAutomodeButtonTitle, UiResources.SwitchAutomodeButtonOffTitle),
-                uiContentStorage.GetButtonTexture(),
-                uiContentStorage.GetButtonFont(),
-                new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 32, 32)
+            _autoplayModeButton = new IconButton(
+                texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(0, 0, 16, 32)
+                ),
+                rect: new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
+            _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
+                UiResources.SwitchAutomodeButtonOffTitle);
 
-            _personButton = new TextButton("p",
-                uiContentStorage.GetButtonTexture(),
-                uiContentStorage.GetButtonFont(),
-                new Rectangle(halfOfScreenX - 16 + 32, bottomOfScreenY - 32, 32, 32));
-            _personButton.OnClick += PersonButton_OnClick;
+            _personEquipmentButton = new IconButton(
+                texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(16, 0, 16, 32)
+                ),
+                rect: new Rectangle(halfOfScreenX - 16 + 16, bottomOfScreenY - 32, 16, 32));
+            _personEquipmentButton.OnClick += PersonEquipmentButton_OnClick;
 
-            _personModal = new PersonEquipmentModalDialog(
+            _personStatsButton = new IconButton(
+                texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(0, 32, 16, 32)
+                ),
+                rect: new Rectangle(halfOfScreenX - 16 + (16 * 2), bottomOfScreenY - 32, 16, 32));
+            _personStatsButton.OnClick += PersonStatsButton_OnClick;
+
+            _personEquipmentModal = new PersonPropsModalDialog(
+                uiContentStorage,
+                game.GraphicsDevice,
+                _uiState,
+                ((LivGame)game).ServiceProvider);
+
+            _personStatsModal = new PersonStatsModalDialog(
                 uiContentStorage,
                 game.GraphicsDevice,
                 _uiState);
+
+            _containerModal = new ContainerModalDialog(
+                _uiState,
+                uiContentStorage,
+                Game.GraphicsDevice,
+                ((LivGame)game).ServiceProvider);
         }
 
         public override void Draw(GameTime gameTime)
@@ -102,9 +144,13 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
                 _currentSector = _sectorViewModel.Sector;
+                AddActiveActorEventHandling();
             }
 
-            _sectorViewModel.Update(gameTime);
+            if (!_isTransitionPerforming)
+            {
+                _sectorViewModel.Update(gameTime);
+            }
 
             if (_player.MainPerson is null)
             {
@@ -115,34 +161,25 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (_uiState.ActiveActor != null && !isInTransition)
             {
-                var sectorNode = GetPlayerSectorNode(_player);
-
-                if (sectorNode != null)
-                {
-                    if (_currentSector == sectorNode.Sector)
-                    {
-                        _camera.Follow(_uiState.ActiveActor, Game);
-
-                        _personEffectsPanel.Update();
-
-                        _autoplayModeButton.Update();
-
-                        _personButton.Update();
-                    }
-                    else if (!_isTransitionPerforming)
-                    {
-                        _isTransitionPerforming = true;
-                        TargetScene = new TransitionScreen(Game, _spriteBatch);
-                    }
-                }
+                HandleMainUpdate(_uiState.ActiveActor);
             }
             else
             {
-                if (!_isTransitionPerforming)
-                {
-                    _isTransitionPerforming = true;
-                    TargetScene = new TransitionScreen(Game, _spriteBatch);
-                }
+                HandleTransition(isInTransition);
+            }
+        }
+
+        private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
+        {
+            _containerModal.Init(e.Container);
+            _containerModal.Show();
+        }
+
+        private void AddActiveActorEventHandling()
+        {
+            if (_uiState.ActiveActor is not null)
+            {
+                _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
             }
         }
 
@@ -157,13 +194,13 @@ namespace CDT.LAST.MonoGameClient.Screens
                 {
                     case ActorTaskSourceControl.Human:
                         controlSwitcher.Switch(ActorTaskSourceControl.Bot);
-                        _autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle,
+                        _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
                             UiResources.SwitchAutomodeButtonOnTitle);
                         break;
 
                     case ActorTaskSourceControl.Bot:
                         controlSwitcher.Switch(ActorTaskSourceControl.Human);
-                        _autoplayModeButton.Title = string.Format(UiResources.SwitchAutomodeButtonTitle,
+                        _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
                             UiResources.SwitchAutomodeButtonOffTitle);
                         break;
 
@@ -174,23 +211,71 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
-        private ModalDialog? CheckModalsIsVisible()
+        private ModalDialogBase? CheckModalsIsVisible()
         {
-            if (_personModal.IsVisible)
+            if (_personEquipmentModal.IsVisible)
             {
-                return _personModal;
+                return _personEquipmentModal;
+            }
+
+            if (_personStatsModal.IsVisible)
+            {
+                return _personStatsModal;
+            }
+
+            if (_containerModal.IsVisible)
+            {
+                return _containerModal;
             }
 
             return null;
         }
 
+        private void DetectAutoplayHint()
+        {
+            var halfOfScreenX = Game.GraphicsDevice.Viewport.Width / 2;
+            var bottomOfScreenY = Game.GraphicsDevice.Viewport.Height;
+
+            var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
+
+            var mouseState = Mouse.GetState();
+            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+
+            _autoplayHintIsShown = autoplayButtonRect.Intersects(mouseRect);
+        }
+
         private void DrawHud()
         {
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _personEffectsPanel.Draw(_spriteBatch);
 
             _autoplayModeButton.Draw(_spriteBatch);
-            _personButton.Draw(_spriteBatch);
+            if (_autoplayHintIsShown)
+            {
+                var titleTextSizeVector = _uiContentStorage.GetHintTitleFont().MeasureString(_autoplayModeButtonTitle);
+
+                const int HINT_TEXT_SPACING = 8;
+
+                var halfOfScreenX = Game.GraphicsDevice.Viewport.Width / 2;
+                var bottomOfScreenY = Game.GraphicsDevice.Viewport.Height;
+                var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
+
+                var hintRectangle = new Rectangle(
+                    autoplayButtonRect.Left,
+                    autoplayButtonRect.Top - (int)titleTextSizeVector.Y - (HINT_TEXT_SPACING * 2),
+                    (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
+                    (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
+
+                _spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
+
+                _spriteBatch.DrawString(_uiContentStorage.GetHintTitleFont(),
+                    _autoplayModeButtonTitle,
+                    new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                    Color.Wheat);
+            }
+
+            _personEquipmentButton.Draw(_spriteBatch);
+            _personStatsButton.Draw(_spriteBatch);
 
             _spriteBatch.End();
         }
@@ -199,9 +284,19 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-            if (_personModal.IsVisible)
+            if (_personEquipmentModal.IsVisible)
             {
-                _personModal.Draw(_spriteBatch);
+                _personEquipmentModal.Draw(_spriteBatch);
+            }
+
+            if (_personStatsModal.IsVisible)
+            {
+                _personStatsModal.Draw(_spriteBatch);
+            }
+
+            if (_containerModal.IsVisible)
+            {
+                _containerModal.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
@@ -222,9 +317,111 @@ namespace CDT.LAST.MonoGameClient.Screens
                     select sectorNode).SingleOrDefault();
         }
 
-        private void PersonButton_OnClick(object? sender, EventArgs e)
+        private void HandleMainUpdate(IActorViewModel activeActor)
         {
-            _personModal.Show();
+            var sectorNodeWithPlayerPerson = GetPlayerSectorNode(_player);
+
+            if (sectorNodeWithPlayerPerson != null)
+            {
+                var sectorWithPlayerPerson = sectorNodeWithPlayerPerson.Sector;
+                UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, activeActor);
+            }
+            else
+            {
+                // This means the player person is dead (don't exists in any sector).
+                // Or some error occured.
+                if (activeActor.Actor.Person.CheckIsDead())
+                {
+                    // Do nothing.
+                    // In the near future there the scores screen will load.
+                }
+                else
+                {
+                    Debug.Fail("Main screen must load only if the player person is in any sector node.");
+                }
+            }
+        }
+
+        private void HandleScreenChanging()
+        {
+            _animationBlockerService.DropBlockers();
+
+            if (_sectorViewModel is not null)
+            {
+                _sectorViewModel.UnsubscribeEventHandlers();
+            }
+            else
+            {
+                Debug.Fail("Sector view model must initalized before user performs transition and change screen.");
+            }
+
+            if (_uiState.ActiveActor is not null)
+            {
+                _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
+            }
+        }
+
+        private void HandleTransition(bool isInTransition)
+        {
+            if (isInTransition)
+            {
+                if (!_isTransitionPerforming)
+                {
+                    LoadTransitionScreen();
+                }
+            }
+            else if (_uiState.ActiveActor is null)
+            {
+                Debug.Fail("Main screen must load only after active actor was assigned.");
+            }
+            else
+            {
+                Debug.Fail("Unknown state.");
+            }
+        }
+
+        private void LoadTransitionScreen()
+        {
+            HandleScreenChanging();
+
+            _isTransitionPerforming = true;
+            TargetScene = new TransitionScreen(Game, _spriteBatch);
+        }
+
+        private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)
+        {
+            _personEquipmentModal.Show();
+        }
+
+        private void PersonStatsButton_OnClick(object? sender, EventArgs e)
+        {
+            _personStatsModal.Show();
+        }
+
+        private void UpdateCurrentSectorOrPerformTransition(ISector? sectorWithPlayerPerson,
+            IActorViewModel activeActorViewModel)
+        {
+            if (_currentSector == sectorWithPlayerPerson)
+            {
+                _camera.Follow(activeActorViewModel, Game);
+
+                _personEffectsPanel.Update();
+
+                _autoplayModeButton.Update();
+
+                _personEquipmentButton.Update();
+                _personStatsButton.Update();
+
+                DetectAutoplayHint();
+            }
+            else if (!_isTransitionPerforming)
+            {
+                LoadTransitionScreen();
+            }
+            else
+            {
+                Debug.Fail("Unkown situation.");
+            }
         }
     }
 }
