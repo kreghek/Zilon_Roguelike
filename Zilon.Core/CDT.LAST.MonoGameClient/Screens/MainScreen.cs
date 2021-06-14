@@ -178,7 +178,11 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             if (_combatActPanel is null)
             {
-                _combatActPanel = new CombatActPanel(_uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>(), _uiContentStorage);
+                _combatActPanel = new CombatActPanel(
+                    _uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>(),
+                    _uiState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>(),
+                    _uiContentStorage,
+                    _uiState);
             }
             else
             {
@@ -380,6 +384,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_uiState.ActiveActor is not null)
             {
                 _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
+            }
+
+            if (_combatActPanel != null)
+            {
+                _combatActPanel.UnsubscribeEvents();
             }
         }
 
