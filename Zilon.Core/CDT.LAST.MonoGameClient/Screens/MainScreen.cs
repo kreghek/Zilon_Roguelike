@@ -57,10 +57,12 @@ namespace CDT.LAST.MonoGameClient.Screens
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
             _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-            _camera = new Camera();
-            _personEffectsPanel = new PersonConditionsPanel(game, _uiState, screenX: 0, screenY: 0);
-
             var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+
+            _camera = new Camera();
+            _personEffectsPanel =
+                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: uiContentStorage);
+
             _uiContentStorage = uiContentStorage;
 
             var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
@@ -159,45 +161,11 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (_uiState.ActiveActor != null && !isInTransition)
             {
-                var sectorNodeWithPlayerPerson = GetPlayerSectorNode(_player);
-
-                if (sectorNodeWithPlayerPerson != null)
-                {
-                    var sectorWithPlayerPerson = sectorNodeWithPlayerPerson.Sector;
-                    UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, _uiState.ActiveActor);
-                }
-                else
-                {
-                    // This means the player person is dead (don't exists in any sector).
-                    // Or some error occured.
-                    if (_uiState.ActiveActor.Actor.Person.CheckIsDead())
-                    {
-                        // Do nothing.
-                        // In the near future there the scores screen will load.
-                    }
-                    else
-                    {
-                        Debug.Fail("Main screen must load only if the player person is in any sector node.");
-                    }
-                }
+                HandleMainUpdate(_uiState.ActiveActor);
             }
             else
             {
-                if (isInTransition)
-                {
-                    if (!_isTransitionPerforming)
-                    {
-                        LoadTransitionScreen();
-                    }
-                }
-                else if (_uiState.ActiveActor is null)
-                {
-                    Debug.Fail("Main screen must load only after active actor was assigned.");
-                }
-                else
-                {
-                    Debug.Fail("Unknown state.");
-                }
+                HandleTransition(isInTransition);
             }
         }
 
@@ -278,7 +246,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void DrawHud()
         {
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _personEffectsPanel.Draw(_spriteBatch);
 
             _autoplayModeButton.Draw(_spriteBatch);
@@ -349,6 +317,31 @@ namespace CDT.LAST.MonoGameClient.Screens
                     select sectorNode).SingleOrDefault();
         }
 
+        private void HandleMainUpdate(IActorViewModel activeActor)
+        {
+            var sectorNodeWithPlayerPerson = GetPlayerSectorNode(_player);
+
+            if (sectorNodeWithPlayerPerson != null)
+            {
+                var sectorWithPlayerPerson = sectorNodeWithPlayerPerson.Sector;
+                UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, activeActor);
+            }
+            else
+            {
+                // This means the player person is dead (don't exists in any sector).
+                // Or some error occured.
+                if (activeActor.Actor.Person.CheckIsDead())
+                {
+                    // Do nothing.
+                    // In the near future there the scores screen will load.
+                }
+                else
+                {
+                    Debug.Fail("Main screen must load only if the player person is in any sector node.");
+                }
+            }
+        }
+
         private void HandleScreenChanging()
         {
             _animationBlockerService.DropBlockers();
@@ -365,6 +358,25 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_uiState.ActiveActor is not null)
             {
                 _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
+            }
+        }
+
+        private void HandleTransition(bool isInTransition)
+        {
+            if (isInTransition)
+            {
+                if (!_isTransitionPerforming)
+                {
+                    LoadTransitionScreen();
+                }
+            }
+            else if (_uiState.ActiveActor is null)
+            {
+                Debug.Fail("Main screen must load only after active actor was assigned.");
+            }
+            else
+            {
+                Debug.Fail("Unknown state.");
             }
         }
 
@@ -405,6 +417,10 @@ namespace CDT.LAST.MonoGameClient.Screens
             else if (!_isTransitionPerforming)
             {
                 LoadTransitionScreen();
+            }
+            else
+            {
+                Debug.Fail("Unkown situation.");
             }
         }
     }
