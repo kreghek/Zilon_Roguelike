@@ -230,7 +230,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     // Sound steps of main person only to prevent infinite steps loop.
                     moveSoundEffectInstance = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Move)?.CreateInstance();
                 }
-                
+
                 var moveEngine = new ActorMoveEngine(
                     _rootSprite,
                     _graphicsRoot.RootSprite,
