@@ -232,7 +232,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void InitCombatActIcons(ContentManager contentManager)
         {
             _combatActDict = new Dictionary<string, Texture2D>
-            { 
+            {
                 ["default"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
 
                 ["tag-punch"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/Punch"),
