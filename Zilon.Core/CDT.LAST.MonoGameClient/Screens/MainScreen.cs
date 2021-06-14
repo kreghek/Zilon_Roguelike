@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
@@ -38,9 +39,11 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly ITransitionPool _transitionPool;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
+
         private bool _autoplayHintIsShown;
         private string _autoplayModeButtonTitle;
         private ISector? _currentSector;
+        private CombatActPanel? _combatActPanel;
 
         private bool _isTransitionPerforming;
 
@@ -161,11 +164,25 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (_uiState.ActiveActor != null && !isInTransition)
             {
+                HandleCombatActPanel();
+
                 HandleMainUpdate(_uiState.ActiveActor);
             }
             else
             {
                 HandleTransition(isInTransition);
+            }
+        }
+
+        private void HandleCombatActPanel()
+        {
+            if (_combatActPanel is null)
+            {
+                _combatActPanel = new CombatActPanel(_uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>(), _uiContentStorage);
+            }
+            else
+            {
+                _combatActPanel.Update();
             }
         }
 
@@ -276,6 +293,11 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _personEquipmentButton.Draw(_spriteBatch);
             _personStatsButton.Draw(_spriteBatch);
+
+            if (_combatActPanel != null)
+            {
+                _combatActPanel.Draw(_spriteBatch, GraphicsDevice);
+            }
 
             _spriteBatch.End();
         }
