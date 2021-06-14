@@ -25,6 +25,12 @@
 /processorParam:Quality=Best
 /build:Audio/ButtonHover.mp3
 
+#begin Audio/CombatStaffSwing.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/CombatStaffSwing.mp3
+
 #begin Audio/DrinkConsumable.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
