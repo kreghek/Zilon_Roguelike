@@ -4,11 +4,11 @@ namespace Zilon.Core.Persons
 {
     public sealed class EffectEventArgs : EventArgs
     {
-        public IPersonEffect Effect { get; }
-
-        public EffectEventArgs(IPersonEffect effect)
+        public EffectEventArgs(IPersonCondition effect)
         {
             Effect = effect;
         }
+
+        public IPersonCondition Effect { get; }
     }
 }

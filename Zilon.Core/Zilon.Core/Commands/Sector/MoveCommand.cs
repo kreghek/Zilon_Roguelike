@@ -6,7 +6,7 @@ using System.Linq;
 using Zilon.Core.Client;
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
-using Zilon.Core.Tactics;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
@@ -17,57 +17,48 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class MoveCommand : ActorCommandBase, IRepeatableCommand
     {
-        /// <summary>
-        /// Текущий путь, по которому будет перемещаться персонаж.
-        /// </summary>
-        public IList<IGraphNode> Path { get; }
+        private readonly IPlayer _player;
 
         /// <summary>
         /// Конструктор на создание команды перемещения.
         /// </summary>
-        /// <param name="gameLoop"> Игровой цикл.
+        /// <param name="gameLoop">
+        /// Игровой цикл.
         /// Нужен для того, чтобы команда выполнила обновление игрового цикла
-        /// после завершения перемещения персонажа. </param>
-        /// <param name="sectorManager"> Менеджер сектора.
-        /// Нужен для получения информации о секторе. </param>
-        /// <param name="playerState"> Состояние игрока.
-        /// Нужен для получения информации о текущем состоянии игрока. </param>
-        /// <param name="actorManager"> Менеджер актёров.
-        /// Нужен для отслеживания противников при автоперемещении. </param>
+        /// после завершения перемещения персонажа.
+        /// </param>
+        /// <param name="sectorManager">
+        /// Менеджер сектора.
+        /// Нужен для получения информации о секторе.
+        /// </param>
+        /// <param name="playerState">
+        /// Состояние игрока.
+        /// Нужен для получения информации о текущем состоянии игрока.
+        /// </param>
+        /// <param name="actorManager">
+        /// Менеджер актёров.
+        /// Нужен для отслеживания противников при автоперемещении.
+        /// </param>
         [ExcludeFromCodeCoverage]
         public MoveCommand(
-            ISectorManager sectorManager,
+            IPlayer player,
             ISectorUiState playerState) :
-            base(sectorManager, playerState)
+            base(playerState)
         {
-            Path = new List<IGraphNode>();
-        }
-
-        /// <summary>
-        /// Определяем, может ли команда выполниться.
-        /// </summary>
-        /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
-        public override bool CanExecute()
-        {
-            var nodeViewModel = GetHoverNodeViewModel();
-            if (nodeViewModel == null)
+            if (playerState is null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(playerState));
             }
 
-            CreatePath(nodeViewModel);
-            return Path.Any();
+            Path = new List<IGraphNode>();
+
+            _player = player ?? throw new ArgumentNullException(nameof(player));
         }
 
         /// <summary>
-        /// Проверяет, может ли команда совершить очередное перемещение по уже найденному пути.
+        /// Текущий путь, по которому будет перемещаться персонаж.
         /// </summary>
-        /// <returns> Возвращает true, если команду можно повторить. </returns>
-        public bool CanRepeat()
-        {
-            var canRepeat = CanExecuteForSelected() && CheckEnemies();
-            return canRepeat;
-        }
+        public IList<IGraphNode> Path { get; }
 
         /// <summary>
         /// Выполнение команды на перемещение и обновление игрового цикла.
@@ -75,48 +66,103 @@ namespace Zilon.Core.Commands
         protected override void ExecuteTacticCommand()
         {
             var selectedNodeVm = GetSelectedNodeViewModel();
-            if (selectedNodeVm == null)
+            if (selectedNodeVm is null)
             {
-                throw new InvalidOperationException("Невозможно выполнить команду на перемещение, если не указан целевой узел.");
+                throw new InvalidOperationException(
+                    "Невозможно выполнить команду на перемещение, если не указан целевой узел.");
             }
 
             CreatePath(selectedNodeVm);
 
             var targetNode = selectedNodeVm.Node;
-            var targetMap = SectorManager.CurrentSector.Map;
 
-            var moveIntetion = new MoveIntention(targetNode, targetMap);
-            PlayerState.TaskSource.Intent(moveIntetion);
-        }
-
-        private IMapNodeViewModel GetHoverNodeViewModel()
-        {
-            return PlayerState.HoverViewModel as IMapNodeViewModel;
-        }
-
-        private IMapNodeViewModel GetSelectedNodeViewModel()
-        {
-            return PlayerState.SelectedViewModel as IMapNodeViewModel;
-        }
-
-        private bool CanExecuteForSelected()
-        {
-            var nodeViewModel = GetSelectedNodeViewModel();
-            if (nodeViewModel == null)
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
             {
-                return false;
+                throw new InvalidOperationException();
             }
 
-            CreatePath(nodeViewModel);
-            return Path.Any();
+            var currentSector = sector;
+
+            var moveIntetion = new MoveIntention(targetNode, currentSector);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState?.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(moveIntetion, actor);
+        }
+
+        private bool CheckEnemies()
+        {
+            var actor = PlayerState?.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var enemies = sector.ActorManager.Items
+                .Where(x => x != actor && x.Person.Fraction != actor.Person.Fraction).ToArray();
+
+            foreach (var enemyActor in enemies)
+            {
+                var distance = ((HexNode)actor.Node).CubeCoords.DistanceTo(((HexNode)enemyActor.Node).CubeCoords);
+
+                if (distance > 5)
+                {
+                    continue;
+                }
+
+                var isAvailable = sector.Map.TargetIsOnLine(
+                    actor.Node,
+                    enemyActor.Node);
+
+                if (isAvailable)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void CreatePath(IMapNodeViewModel targetNode)
         {
-            var actor = PlayerState.ActiveActor.Actor;
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var startNode = actor.Node;
             var finishNode = targetNode.Node;
-            var map = SectorManager.CurrentSector.Map;
+
+            if (startNode == finishNode)
+            {
+                Path.Clear();
+                return;
+            }
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var map = sector.Map;
 
             Path.Clear();
 
@@ -137,6 +183,16 @@ namespace Zilon.Core.Commands
             RememberFoundPath(astar);
         }
 
+        private IMapNodeViewModel? GetHoverNodeViewModel()
+        {
+            return PlayerState.HoverViewModel as IMapNodeViewModel;
+        }
+
+        private IMapNodeViewModel? GetSelectedNodeViewModel()
+        {
+            return PlayerState.SelectedViewModel as IMapNodeViewModel;
+        }
+
         private void RememberFoundPath(AStar astar)
         {
             var foundPath = astar.GetPath().Skip(1).ToArray();
@@ -146,32 +202,52 @@ namespace Zilon.Core.Commands
             }
         }
 
-        private bool CheckEnemies()
+        /// <inheritdoc />
+        public int RepeatIteration { get; private set; }
+
+        /// <summary>
+        /// Определяем, может ли команда выполниться.
+        /// </summary>
+        /// <returns> Возвращает true, если перемещение возможно. Иначе, false. </returns>
+        public override CanExecuteCheckResult CanExecute()
         {
-            var actor = PlayerState.ActiveActor.Actor;
-            var enemies = SectorManager.CurrentSector.ActorManager.Items
-                .Where(x => x != actor && x.Owner != actor.Owner).ToArray();
-
-            foreach (var enemyActor in enemies)
+            var nodeViewModel = GetHoverNodeViewModel();
+            if (nodeViewModel is null)
             {
-                var distance = ((HexNode)actor.Node).CubeCoords.DistanceTo(((HexNode)enemyActor.Node).CubeCoords);
-
-                if (distance > 5)
-                {
-                    continue;
-                }
-
-                var isAvailable = SectorManager.CurrentSector.Map.TargetIsOnLine(
-                    actor.Node,
-                    enemyActor.Node);
-
-                if (isAvailable)
-                {
-                    return false;
-                }
+                return CanExecuteCheckResult.CreateFailed("No hover node.");
             }
 
-            return true;
+            if (PlayerState.ActiveActor?.Actor is null)
+            {
+                return CanExecuteCheckResult.CreateFailed("Active actor is not assigned.");
+            }
+
+            CreatePath(nodeViewModel);
+
+            var pathIsNotEmpty = Path.Any();
+
+            if (!pathIsNotEmpty)
+            {
+                return CanExecuteCheckResult.CreateFailed("Found path is not correct or empty.");
+            }
+
+            return CanExecuteCheckResult.CreateSuccessful();
+        }
+
+        /// <summary>
+        /// Проверяет, может ли команда совершить очередное перемещение по уже найденному пути.
+        /// </summary>
+        /// <returns> Возвращает true, если команду можно повторить. </returns>
+        public bool CanRepeat()
+        {
+            var canRepeat = CheckEnemies();
+            return canRepeat;
+        }
+
+        /// <inheritdoc />
+        public void IncreaceIteration()
+        {
+            RepeatIteration++;
         }
     }
 }

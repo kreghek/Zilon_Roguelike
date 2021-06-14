@@ -1,21 +1,28 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Threading.Tasks;
+
+using BenchmarkDotNet.Attributes;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using Zilon.Core.Tactics;
+using Zilon.Core.Schemes;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Benchmarks.CreateSector
 {
+    [MemoryDiagnoser]
     public class CreateCellularAutomatonSectorBench
     {
         private ServiceProvider _serviceProvider;
 
         [Benchmark(Description = "Create CA Sector")]
-        public async System.Threading.Tasks.Task CreateSectorAsync()
+        public async Task CreateSectorAsync()
         {
-            var sectorManager = _serviceProvider.GetRequiredService<ISectorManager>();
+            var biomInitializer = _serviceProvider.GetRequiredService<IBiomeInitializer>();
+            var schemeService = _serviceProvider.GetRequiredService<ISchemeService>();
 
-            await sectorManager.CreateSectorAsync().ConfigureAwait(false);
+            var testScheme = schemeService.GetScheme<ILocationScheme>("intro");
+
+            await biomInitializer.InitBiomeAsync(testScheme).ConfigureAwait(false);
         }
 
 

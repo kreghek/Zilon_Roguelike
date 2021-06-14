@@ -13,27 +13,27 @@ namespace Zilon.Core.Schemes
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<PropEquipSubScheme>))]
         [JsonProperty]
-        public IPropEquipSubScheme Equip { get; private set; }
+        public IPropEquipSubScheme? Equip { get; private set; }
 
         /// <summary>
         /// Информация об использовании предмета.
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<PropUseSubScheme>))]
         [JsonProperty]
-        public IPropUseSubScheme Use { get; private set; }
+        public IPropUseSubScheme? Use { get; private set; }
 
         /// <summary>
-        /// Информация предмете, как .
+        /// Информация предмете, как о снаряде для оружия.
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<PropBulletSubScheme>))]
         [JsonProperty]
-        public IPropBulletSubScheme Bullet { get; private set; }
+        public IPropBulletSubScheme? Bullet { get; private set; }
 
         /// <summary>
         /// Информации о создании/разборе предмета.
         /// </summary>
         [JsonProperty]
-        public CraftSubScheme Craft { get; private set; }
+        public CraftSubScheme? Craft { get; private set; }
 
         /// <summary>
         /// Теги предмета.
@@ -43,9 +43,7 @@ namespace Zilon.Core.Schemes
         /// возможность парного оружия.
         /// </remarks>
         [JsonProperty]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
-            Justification = "Используется массив в свойстве для десериализации.")]
-        public string[] Tags { get; private set; }
+        public string?[]? Tags { get; private set; }
 
         /// <summary>
         /// Идентфиикаторы схем других предметов,
@@ -53,6 +51,6 @@ namespace Zilon.Core.Schemes
         /// Используется лже-предметами.
         /// </summary>
         [JsonProperty]
-        public string IsMimicFor { get; private set; }
+        public string? IsMimicFor { get; private set; }
     }
 }

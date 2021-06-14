@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using FluentAssertions;
 
@@ -21,23 +20,28 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
     [Parallelizable(ParallelScope.All)]
     public class AStarSectorGraphMapTests
     {
+        public static void AddWall(ISectorMap map, int x1, int y1, int x2, int y2)
+        {
+            map.RemoveEdge(x1, y1, x2, y2);
+        }
+
         /// <summary>
         /// Тест из спеки:
         /// Перемещение актёра по узла каждый ход. На карте есть монстры и источник команд для них.
         /// Даёт уверенность, что в изоляции поиск пути выполняется. Была ошибка, что не находил путь.
         /// </summary>
         [Test]
-        public async Task Run_FromSpec()
+        public void Run_FromSpec()
         {
             // ARRANGE
 
             // Шаг "Есть карта размером"
 
-            const int mapSize = 3;
+            const int MAPSIZE = 3;
 
             ISectorMap map = new SectorGraphMap<HexNode, HexMapNodeDistanceCalculator>();
 
-            MapFiller.FillSquareMap(map, mapSize);
+            MapFiller.FillSquareMap(map, MAPSIZE);
 
             var mapRegion = new MapRegion(1, map.Nodes.ToArray())
             {
@@ -71,11 +75,6 @@ namespace Zilon.Core.Tests.Tactics.Spatial.PathFinding
             // ASSERT
 
             path.Should().NotBeEmpty();
-        }
-
-        public static void AddWall(ISectorMap map, int x1, int y1, int x2, int y2)
-        {
-            map.RemoveEdge(x1, y1, x2, y2);
         }
     }
 }

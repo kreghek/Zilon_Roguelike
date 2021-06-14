@@ -15,6 +15,6 @@
         /// <returns>
         /// Возвращает true, если команду можно выполнить. Иначе возвращает false.
         /// </returns>
-        public abstract bool CanExecute();
+        public abstract CanExecuteCheckResult CanExecute();
     }
 }

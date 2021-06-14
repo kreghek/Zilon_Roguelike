@@ -5,7 +5,7 @@ namespace Zilon.Core.Schemes
     /// <summary>
     /// Схема слота экипировки у персонажа.
     /// </summary>
-    public class PersonSlotSubScheme: SubSchemeBase
+    public class PersonSlotSubScheme : SubSchemeBase
     {
         /// <summary>
         /// Типы слота.

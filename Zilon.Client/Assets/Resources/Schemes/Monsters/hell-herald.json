@@ -22,9 +22,9 @@
   },
   "DropTableSids": [
     "survival",
-	"demon",
-	"default",
-	"default-evil-hour"
+    "demon",
+    "default",
+    "default-evil-hour"
   ],
   "BaseScore": 30,
   "Tags": [

@@ -5,9 +5,8 @@ namespace Zilon.Bot.Players
 {
     public interface ILogicState
     {
-        IActorTask GetTask(IActor actor, ILogicStrategyData strategyData);
-
         bool Complete { get; }
+        IActorTask GetTask(IActor actor, ISectorTaskSourceContext context, ILogicStrategyData strategyData);
 
         void Reset();
     }

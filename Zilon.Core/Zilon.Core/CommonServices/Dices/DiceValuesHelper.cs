@@ -15,14 +15,5 @@ namespace Zilon.Core.CommonServices.Dices
         {
             return (int)(n * rawValue) + 1;
         }
-
-        /// <summary>
-        /// Возвращает случайное число в диапазоне [0..1).
-        /// </summary>
-        public static double GetNextDouble(Random random)
-        {
-            var next = random.NextDouble();
-            return next;
-        }
     }
 }

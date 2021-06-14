@@ -1,16 +1,2 @@
-/Zilon.Client/Assets/Plugins
-/Zilon.Client/Assets/db.bytes
-/Zilon.Client/Assets/db.bytes.meta
-/Zilon.Client/Packages
 /Zilon.Core/*.leu
-/Builds/x64
-/Builds/x86
-
-/Zilon.AnimaTest/Assets/Anima2D
-/Zilon.AnimaTest/Assets/Anima2D.meta
-/Zilon.AnimaTest/Plugins
-/Zilon.AnimaTest/Library
-/Zilon.AnimaTest/Packages
-/Zilon.AnimaTest/ProjectSettings
-/Zilon.AnimaTest/Temp
-/Zilon.AnimaTest/obj/Debug
+/BenchmarkDotNet.Artifacts

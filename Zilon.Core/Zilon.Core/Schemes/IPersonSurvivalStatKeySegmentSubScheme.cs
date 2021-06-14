@@ -12,6 +12,11 @@
     public interface IPersonSurvivalStatKeySegmentSubScheme
     {
         /// <summary>
+        /// Конечное значение ключевого сегмента характеристики выживания.
+        /// </summary>
+        float End { get; }
+
+        /// <summary>
         /// Уровень ключевой точки.
         /// </summary>
         PersonSurvivalStatKeypointLevel Level { get; }
@@ -20,10 +25,5 @@
         /// Начальное значение ключевого сегмента характеристики выживания.
         /// </summary>
         float Start { get; }
-
-        /// <summary>
-        /// Конечное значение ключевого сегмента характеристики выживания.
-        /// </summary>
-        float End { get; }
     }
 }

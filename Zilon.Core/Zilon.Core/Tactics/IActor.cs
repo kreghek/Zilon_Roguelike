@@ -1,8 +1,8 @@
 ﻿using System;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
@@ -17,36 +17,19 @@ namespace Zilon.Core.Tactics
     /// персонажа, которого этот актёр отыгрывает. Состояниеи характеристики актёра могут меняться.
     /// Актёр может умереть.
     /// </remarks>
-    public interface IActor : IAttackTarget, IPassMapBlocker
+    public interface IActor : IAttackTarget, IPassMapBlocker, IIdentifiableMapObject
     {
+        /// <summary>
+        /// Указывает, может ли актёр выполнять задачи.
+        /// </summary>
+        bool CanExecuteTasks { get; }
+
         /// <summary>
         /// Песонаж, который лежит в основе актёра.
         /// </summary>
         IPerson Person { get; }
 
-        /// <summary>
-        /// Владелец актёра.
-        /// </summary>
-        /// <remarks>
-        /// 1. Опредляет возможность управлять актёром.
-        /// 2. Боты по этому полю определяют противников.
-        /// Может быть человек или бот.
-        /// Персонажи игрока могут быть под прямым и не прямым управлением.
-        /// </remarks>
-        IPlayer Owner { get; }
-
-        /// <summary>
-        /// Перемещение актёра в указанный узел карты.
-        /// </summary>
-        /// <param name="targetNode"> Целевой узел карты. </param>
-        void MoveToNode(IGraphNode targetNode);
-
-        /// <summary>
-        /// Открытие контейнера актёром.
-        /// </summary>
-        /// <param name="container"> Целевой контейнер в секторе. </param>
-        /// <param name="method"> Метод открытия контейнера. </param>
-        void OpenContainer(IStaticObject container, IOpenContainerMethod method);
+        IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
 
         /// <summary>
         /// Добыча ресурса из залежей.
@@ -56,57 +39,68 @@ namespace Zilon.Core.Tactics
         void MineDeposit(IStaticObject deposit, IMineDepositMethod method);
 
         /// <summary>
-        /// Происходит, когда актёр переместился.
+        /// Перемещение актёра в указанный узел карты.
         /// </summary>
-        event EventHandler Moved;
+        /// <param name="targetNode"> Целевой узел карты. </param>
+        void MoveToNode(IGraphNode targetNode);
+
+        void MoveToOtherSector(ISector sector, SectorTransition sectorTransition);
 
         /// <summary>
-        /// Происходит, когда актёр открывает контейнер в секторе.
+        /// Открытие контейнера актёром.
         /// </summary>
-        event EventHandler<OpenContainerEventArgs> OpenedContainer;
+        /// <param name="container"> Целевой контейнер в секторе. </param>
+        /// <param name="method"> Метод открытия контейнера. </param>
+        void OpenContainer(IStaticObject container, IOpenContainerMethod method);
 
         /// <summary>
-        /// Происходит, когда актёр выполняет добычу ресурса в секторе.
+        /// Method-wrapper (mb temp) to raise event.
+        /// Event are nesessary to run animation and sound in clients.
         /// </summary>
-        event EventHandler<MineDepositEventArgs> DepositMined;
+        void PerformTransfer();
 
-        /// <summary>
-        /// Происходит, когда актёр выполняет действие.
-        /// </summary>
-        event EventHandler<UsedActEventArgs> UsedAct;
-
-        /// <summary>
-        /// Происходит, когда актёр получает урон.
-        /// </summary>
-        event EventHandler<DamageTakenEventArgs> DamageTaken;
-
-        /// <summary>
-        /// Выстреливает, когда актёр использует предмет.
-        /// </summary>
-        event EventHandler<UsedPropEventArgs> UsedProp;
+        void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
 
         /// <summary>
         /// Приенение действия к указанной цели.
         /// </summary>
-        /// <param name="target"> Цель действия. </param>
+        /// <param name="targetNode"> Узел карты, в которую прозошло действие. </param>
         /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
-        void UseAct(IAttackTarget target, ITacticalAct tacticalAct);
+        void UseAct(IGraphNode targetNode, ITacticalAct tacticalAct);
 
         void UseProp(IProp usedProp);
 
         /// <summary>
-        /// Данные о тумане войны актёра.
+        /// Происходит, когда актёр переместился.
         /// </summary>
-        /// <remarks>
-        /// Актёр живёт только в рамках сектора. Если сектор уничтожается,
-        /// будет потеряна ссылка на актёра, а следовательно и на информацию о тумане войны.
-        /// Таким образом ненужные данные о тумане войны не будут оставать в памяти при смене секторов.
-        /// Но будут специфичны для каждого актёра. Например, для ботов.
-        /// </remarks>
-        ISectorFowData SectorFowData { get; }
+        event EventHandler? Moved;
 
-        int GameLoopCounter { get; }
+        /// <summary>
+        /// Происходит, когда актёр открывает контейнер в секторе.
+        /// </summary>
+        event EventHandler<OpenContainerEventArgs>? OpenedContainer;
 
-        void IncreaseGameLoopCounter(int value);
+        /// <summary>
+        /// Происходит, когда актёр выполняет добычу ресурса в секторе.
+        /// </summary>
+        event EventHandler<MineDepositEventArgs>? DepositMined;
+
+        /// <summary>
+        /// Происходит, когда актёр выполняет действие.
+        /// </summary>
+        event EventHandler<UsedActEventArgs>? UsedAct;
+
+        /// <summary>
+        /// Происходит, когда актёр получает урон.
+        /// </summary>
+        event EventHandler<DamageTakenEventArgs>? DamageTaken;
+
+        /// <summary>
+        /// Выстреливает, когда актёр использует предмет.
+        /// </summary>
+        event EventHandler<UsedPropEventArgs>? UsedProp;
+
+        event EventHandler? PropTransferPerformed;
+        event EventHandler? BeginTransitionToOtherSector;
     }
 }

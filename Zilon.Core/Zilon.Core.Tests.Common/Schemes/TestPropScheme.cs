@@ -1,7 +1,10 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
+    [ExcludeFromCodeCoverage]
     public class TestPropScheme : SchemeBase, IPropScheme
     {
         // ReSharper disable once UnassignedGetOnlyAutoProperty

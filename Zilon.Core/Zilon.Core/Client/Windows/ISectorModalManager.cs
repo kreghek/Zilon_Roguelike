@@ -6,14 +6,14 @@ namespace Zilon.Core.Client.Windows
     /// Менеджер модальных окон.
     /// Реализация на клиенте.
     /// </summary>
-    public interface ISectorModalManager: ICommonModalManager
+    public interface ISectorModalManager : ICommonModalManager
     {
         void ShowContainerModal(PropTransferMachine transferMachine);
-        
+
+        void ShowInstructionModal();
+
         void ShowInventoryModal(IActor actor);
 
         void ShowPerksModal(IActor actor);
-
-        void ShowInstructionModal();
     }
 }

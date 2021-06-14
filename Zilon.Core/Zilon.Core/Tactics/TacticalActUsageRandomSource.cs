@@ -18,21 +18,11 @@ namespace Zilon.Core.Tactics
             _dice = dice;
         }
 
-        /// <summary>Бросок проверки на попадание действием.</summary>
-        /// <returns>Возвращает результат броска D6.</returns>
-        public int RollToHit(Roll roll)
-        {
-            return RollWithModifiers(roll);
-        }
 
-        /// <summary>
-        /// Выбирает значение эффективности действия по указанным характеристикам броска.
-        /// </summary>
-        /// <param name="roll">Характеристики броска.</param>
-        /// <returns>Возвращает случайное значение эффективности использования.</returns>
-        public int RollEfficient(Roll roll)
+        private int RollD6()
         {
-            return RollWithModifiers(roll);
+            var roll = _dice.Roll(6);
+            return roll;
         }
 
         private int RollWithModifiers(Roll roll)
@@ -58,6 +48,23 @@ namespace Zilon.Core.Tactics
             return sum;
         }
 
+        /// <summary>Бросок проверки на попадание действием.</summary>
+        /// <returns>Возвращает результат броска D6.</returns>
+        public int RollToHit(Roll roll)
+        {
+            return RollWithModifiers(roll);
+        }
+
+        /// <summary>
+        /// Выбирает значение эффективности действия по указанным характеристикам броска.
+        /// </summary>
+        /// <param name="roll">Характеристики броска.</param>
+        /// <returns>Возвращает случайное значение эффективности использования.</returns>
+        public int RollEfficient(Roll roll)
+        {
+            return RollWithModifiers(roll);
+        }
+
         /// <summary>Бросок проверки на защиту бронёй.</summary>
         /// <returns>Возвращает результат броска D6.</returns>
         public int RollArmorSave()
@@ -79,7 +86,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="armorEquipments">Доступные предметы экипировки.</param>
         /// <returns>Случайный экипированный предмет, который был повреждён.</returns>
-        public Equipment RollDamagedEquipment(IEnumerable<Equipment> armorEquipments)
+        public Equipment? RollDamagedEquipment(IEnumerable<Equipment> armorEquipments)
         {
             var count = armorEquipments.Count();
             if (count == 0)
@@ -89,13 +96,6 @@ namespace Zilon.Core.Tactics
 
             var rollIndex = _dice.Roll(0, count - 1);
             return armorEquipments.ElementAt(rollIndex);
-        }
-
-
-        private int RollD6()
-        {
-            var roll = _dice.Roll(6);
-            return roll;
         }
     }
 }

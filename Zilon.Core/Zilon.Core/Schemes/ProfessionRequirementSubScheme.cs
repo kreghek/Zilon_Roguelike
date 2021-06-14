@@ -3,12 +3,12 @@
     /// <summary>
     /// Требуемые профессиональные компетенции.
     /// </summary>
-    public sealed class ProfessionRequirementSubScheme: SubSchemeBase
+    public sealed class ProfessionRequirementSubScheme : SubSchemeBase
     {
         /// <summary>
-        /// Тип компетенции.
+        /// Максимальный уровень владения.
         /// </summary>
-        public ProfessionTypes Profession { get; set; }
+        public int MaxLevel { get; set; }
 
         /// <summary>
         /// Минимальный уровень владения.
@@ -16,8 +16,8 @@
         public int MinLevel { get; set; }
 
         /// <summary>
-        /// Максимальный уровень владения.
+        /// Тип компетенции.
         /// </summary>
-        public int MaxLevel { get; set; }
+        public ProfessionType Profession { get; set; }
     }
 }

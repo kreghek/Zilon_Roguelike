@@ -11,20 +11,17 @@ namespace Zilon.Core.PersonModules
     /// <remarks>
     /// Здесь будут сведения о питании, отдыхе, ранах, эмоциональном состоянии персонажа.
     /// </remarks>
-    public interface ISurvivalModule: IPersonModule
+    public interface ISurvivalModule : IPersonModule
     {
+        /// <summary>
+        /// Признак того, что персонаж мёртв.
+        /// </summary>
+        bool IsDead { get; }
+
         /// <summary>
         /// Текущие характеристики.
         /// </summary>
         SurvivalStat[] Stats { get; }
-
-        /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
-        void ResetStats();
-
-        /// <summary>
-        /// Обновление состояния данных о выживании.
-        /// </summary>
-        void Update();
 
         /// <summary>
         /// Снижение характеристики.
@@ -32,6 +29,9 @@ namespace Zilon.Core.PersonModules
         /// <param name="type"> Тип характеритсики, которая будет произведено влияние. </param>
         /// <param name="value"> Значение, на которое снижается текущий запас. </param>
         void DecreaseStat(SurvivalStatType type, int value);
+
+        /// <summary>Сброс всех характеристик к первоначальному состоянию.</summary>
+        void ResetStats();
 
         /// <summary>
         /// Пополнение запаса характеристики.
@@ -48,19 +48,19 @@ namespace Zilon.Core.PersonModules
         void SetStatForce(SurvivalStatType type, int value);
 
         /// <summary>
-        /// Признак того, что персонаж мёртв.
+        /// Обновление состояния данных о выживании.
         /// </summary>
-        bool IsDead { get; }
+        void Update();
 
         /// <summary>
         /// Происходит, если персонаж умирает.
         /// </summary>
-        event EventHandler Dead;
+        event EventHandler? Dead;
 
         /// <summary>
         /// Событие, которое происходит, если значение характеристики
         /// изменяется.
         /// </summary>
-        event EventHandler<SurvivalStatChangedEventArgs> StatChanged;
+        event EventHandler<SurvivalStatChangedEventArgs>? StatChanged;
     }
 }

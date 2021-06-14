@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Client
 {
-    public interface IContainerViewModel: ISelectableViewModel
+    public interface IContainerViewModel : ISelectableViewModel
     {
         IStaticObject StaticObject { get; set; }
     }

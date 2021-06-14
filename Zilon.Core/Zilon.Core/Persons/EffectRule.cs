@@ -2,16 +2,16 @@
 
 namespace Zilon.Core.Persons
 {
-    public sealed class EffectRule
+    public sealed class ConditionRule
     {
-        public EffectRule(RollEffectType? rollType, PersonRuleLevel level)
+        public ConditionRule(RollEffectType? rollType, PersonRuleLevel level)
         {
             RollType = rollType;
             Level = level;
         }
 
-        public RollEffectType? RollType { get; }
-
         public PersonRuleLevel Level { get; }
+
+        public RollEffectType? RollType { get; }
     }
 }

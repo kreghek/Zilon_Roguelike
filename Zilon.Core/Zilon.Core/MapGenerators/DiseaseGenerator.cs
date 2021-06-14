@@ -21,7 +21,35 @@ namespace Zilon.Core.MapGenerators
             _usedDiseases = new List<DiseaseName>();
         }
 
-        public IDisease Create()
+        private bool CheckDuplicates(DiseaseName checkingDisease)
+        {
+            var nameFound = _usedDiseases.Any(x => x == checkingDisease);
+
+            return nameFound;
+        }
+
+        private float RollDiseaseProgressSpeed()
+        {
+            const int BASE_DURABLE = 20_000;
+            const float DIFF_DURABLE_PERCENTAGE = 0.1f;
+            const int DIFF_DURABLE = (int)(BASE_DURABLE * DIFF_DURABLE_PERCENTAGE);
+
+            var rolledDiff = _dice.Roll(-DIFF_DURABLE, DIFF_DURABLE);
+            var factDurable = BASE_DURABLE + rolledDiff;
+
+            return 1f / factDurable;
+        }
+
+        private IEnumerable<DiseaseSymptom> RolledSymptoms()
+        {
+            var symptomCount = _dice.Roll(3, 5);
+
+            var rolledSymptoms = _dice.RollFromList(DiseaseSymptoms.Symptoms, symptomCount);
+
+            return rolledSymptoms;
+        }
+
+        public IDisease? Create()
         {
             var roll = _dice.RollD6();
             if (roll <= 1)
@@ -31,7 +59,7 @@ namespace Zilon.Core.MapGenerators
                 {
                     var primaryName = _dice.RollFromList(DiseaseNames.Primary);
 
-                    ILocalizedString prefix = null;
+                    ILocalizedString? prefix = null;
 
                     var rollPrefix = _dice.RollD6();
                     if (rollPrefix >= 4)
@@ -39,14 +67,14 @@ namespace Zilon.Core.MapGenerators
                         prefix = _dice.RollFromList(DiseaseNames.PrimaryPreffix);
                     }
 
-                    ILocalizedString secondary = null;
+                    ILocalizedString? secondary = null;
                     var rollSecondary = _dice.RollD6();
                     if (rollSecondary >= 4)
                     {
                         secondary = _dice.RollFromList(DiseaseNames.Secondary);
                     }
 
-                    ILocalizedString subject = null;
+                    ILocalizedString? subject = null;
                     var rollSubject = _dice.RollD6();
                     if (rollSubject >= 6)
                     {
@@ -78,38 +106,8 @@ namespace Zilon.Core.MapGenerators
                 // Не удалось сгенерировать уникальное имя. Значит вообще не генерируем болезнь.
                 return null;
             }
-            else
-            {
-                return null;
-            }
-        }
 
-        private IEnumerable<DiseaseSymptom> RolledSymptoms()
-        {
-            var symptomCount = _dice.Roll(3, 5);
-
-            var rolledSymptoms = _dice.RollFromList(DiseaseSymptoms.Symptoms, symptomCount);
-
-            return rolledSymptoms;
-        }
-
-        private float RollDiseaseProgressSpeed()
-        {
-            const int BASE_DURABLE = 20_000;
-            const float DIFF_DURABLE_PERCENTAGE = 0.1f;
-            const int DIFF_DURABLE = (int)(BASE_DURABLE * DIFF_DURABLE_PERCENTAGE);
-
-            var rolledDiff = _dice.Roll(-DIFF_DURABLE, DIFF_DURABLE);
-            var factDurable = BASE_DURABLE + rolledDiff;
-
-            return 1f / factDurable;
-        }
-
-        private bool CheckDuplicates(DiseaseName checkingDisease)
-        {
-            var nameFound = _usedDiseases.Any(x => x == checkingDisease);
-
-            return nameFound;
+            return null;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Zilon.Core.StaticObjectModules;
+﻿using System;
+
+using Zilon.Core.StaticObjectModules;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -11,7 +13,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (container is null)
             {
-                throw new System.ArgumentNullException(nameof(container));
+                throw new ArgumentNullException(nameof(container));
             }
 
             container.Open();

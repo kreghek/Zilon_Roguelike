@@ -33,10 +33,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 return new SuccessMineDepositResult();
             }
-            else
-            {
-                return new FailureMineDepositResult();
-            }
+
+            return new FailureMineDepositResult();
         }
     }
 }

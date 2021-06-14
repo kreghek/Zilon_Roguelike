@@ -1,0 +1,19 @@
+{
+  "Name": {
+    "Ru": "Неуязвимость к жажде",
+	"En": "Thrist immunity"
+  },
+  
+  "IsBuildIn": true,
+  
+  "Levels": [
+    {
+      "Rules": [
+        {
+          "Type": "ThristResistance",
+          "Level": "Absolute"
+        }
+      ]
+    }
+  ]
+}

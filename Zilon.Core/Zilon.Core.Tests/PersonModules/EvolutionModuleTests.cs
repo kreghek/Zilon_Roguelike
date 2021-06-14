@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+
+using FluentAssertions;
 
 using Moq;
 
@@ -15,6 +17,7 @@ namespace Zilon.Core.Tests.PersonModules
     {
         /// <summary>
         /// Тест проверяет, что при получении следующего уровня перка, текущий уровень не сбрасывается.
+        /// То есть сначала из нулевого уровня получает 1.1. Затем 1.2.
         /// </summary>
         [Test]
         public void PerkLevelUpTest()
@@ -22,12 +25,16 @@ namespace Zilon.Core.Tests.PersonModules
             // ARRANGE
             var schemeServiceMock = new Mock<ISchemeService>();
             schemeServiceMock.Setup(x => x.GetSchemes<IPerkScheme>())
-                .Returns(new IPerkScheme[] {
-                    new PerkScheme{
-                        Levels = new[]{
-                            new PerkLevelSubScheme{
+                .Returns(new IPerkScheme[]
+                {
+                    new PerkScheme
+                    {
+                        Levels = new[]
+                        {
+                            new PerkLevelSubScheme
+                            {
                                 MaxValue = 2,
-                                Jobs = System.Array.Empty<IJobSubScheme>()
+                                Jobs = Array.Empty<IJobSubScheme>()
                             }
                         }
                     }
@@ -45,7 +52,7 @@ namespace Zilon.Core.Tests.PersonModules
 
             // ASSERT
             evolutionData.Perks.Length.Should().Be(1);
-            evolutionData.Perks[0].CurrentLevel.Sub.Should().Be(1);
+            evolutionData.Perks[0].CurrentLevel.Sub.Should().Be(2);
         }
     }
 }

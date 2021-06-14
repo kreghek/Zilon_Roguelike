@@ -1,4 +1,7 @@
-﻿using Zilon.Core.Tactics.Behaviour.Bots;
+﻿using System;
+
+using Zilon.Core.Tactics.Behaviour.Bots;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -7,42 +10,44 @@ namespace Zilon.Core.Tactics.Behaviour
         /// <summary>
         /// Минимальное время простоя.
         /// </summary>
-        private const int _idleMin = 2;
+        private const int IDLE_MIN = 2;
 
         /// <summary>
         /// Максимальное время простоя.
         /// </summary>
-        private const int _idleMax = 5;
+        private const int IDLE_MAX = 5;
 
         /// <summary>
         /// Текущий счётчик простоя.
         /// </summary>
         private int _counter;
 
-        public IdleTask(IActor actor, IDecisionSource decisionSource) : base(actor)
+        public IdleTask(IActor actor, IActorTaskContext context, IDecisionSource decisionSource) : base(actor, context)
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (decisionSource is null)
             {
-                throw new System.ArgumentNullException(nameof(decisionSource));
+                throw new ArgumentNullException(nameof(decisionSource));
             }
 
-            _counter = decisionSource.SelectIdleDuration(_idleMin, _idleMax);
+            _counter = decisionSource.SelectIdleDuration(IDLE_MIN, IDLE_MAX);
         }
 
-        public IdleTask(IActor actor, int duration) : base(actor)
+        public IdleTask(IActor actor, IActorTaskContext context, int duration) : base(actor, context)
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             _counter = duration;
         }
+
+        public override int Cost => GlobeMetrics.IdleDuration;
 
         public override void Execute()
         {

@@ -3,13 +3,15 @@
 using Moq;
 
 using NUnit.Framework;
+
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics;
 
 namespace Zilon.Core.Tests.Tactics
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class ActUsageRandomSourceTests
     {
         /// <summary>
@@ -22,7 +24,7 @@ namespace Zilon.Core.Tests.Tactics
             // ARRANGE
             const int diceEdges = 3;
             const int diceCount = 1;
-            const int expectedRoll = 1 * diceCount;  // потому что один бросок кости. Минимальное значение броска - 1.
+            const int expectedRoll = 1 * diceCount; // потому что один бросок кости. Минимальное значение броска - 1.
 
             var roll = new Roll(diceEdges, diceCount);
 
@@ -32,12 +34,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var service = new TacticalActUsageRandomSource(dice);
 
-
-
             // ACT
             var factRoll = service.RollEfficient(roll);
-
-
 
             // ASSERT
             factRoll.Should().Be(expectedRoll);
@@ -52,7 +50,9 @@ namespace Zilon.Core.Tests.Tactics
             // ARRANGE
             const int diceEdges = 3;
             const int diceCount = 1;
-            const int expectedRoll = diceEdges * diceCount;  // потому что один бросок кости. Максимальное значение броска - diceEdges.
+            const int
+                expectedRoll =
+                    diceEdges * diceCount; // потому что один бросок кости. Максимальное значение броска - diceEdges.
 
             var roll = new Roll(diceEdges, diceCount);
 
@@ -62,12 +62,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var service = new TacticalActUsageRandomSource(dice);
 
-
-
             // ACT
             var factRoll = service.RollEfficient(roll);
-
-
 
             // ASSERT
             factRoll.Should().Be(expectedRoll);

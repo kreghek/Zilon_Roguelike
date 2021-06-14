@@ -4,7 +4,8 @@
     "ActSids": [
       "pierce"
     ],
-    "SlotTypes": [ "Hand" ]
+    "SlotTypes": [ "Hand" ],
+	"EquipRestrictions": { "PropHandUsage": "TwoHanded" }
   },
   "Name": {
     "Ru": "Племенное копьё",

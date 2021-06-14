@@ -17,7 +17,7 @@
         /// Карта на основе комнат.
         /// </summary>
         /// <remarks>
-        /// Текущий генератор, который строит подземелья <see cref="MapGenerators.RoomStyle.RoomMapFactory"/>.
+        /// Текущий генератор, который строит подземелья <see cref="MapGenerators.RoomStyle.RoomMapFactory" />.
         /// </remarks>
         Rooms
     }

@@ -21,7 +21,7 @@ namespace Zilon.Core.Persons
             _schemeService = schemeService;
         }
 
-        public IPerk[] Get()
+        public IPerk[] Generate()
         {
             var allBuildInPerks = _schemeService.GetSchemes<IPerkScheme>().Where(x => x.IsBuildIn).ToArray();
 
@@ -38,10 +38,7 @@ namespace Zilon.Core.Persons
                 var rolledTraitScheme = _dice.RollFromList(openTraitSchemeList);
                 openTraitSchemeList.Remove(rolledTraitScheme);
 
-                var traitPerk = new Perk
-                {
-                    Scheme = rolledTraitScheme
-                };
+                var traitPerk = new Perk(rolledTraitScheme);
 
                 traitList.Add(traitPerk);
             }

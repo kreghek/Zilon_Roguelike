@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -20,20 +22,24 @@ namespace Zilon.Core.Scoring
             Scores = new Scores();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public int BaseScores { get => Scores.BaseScores; private set => Scores.BaseScores = value; }
 
-        /// <inheritdoc/>
-        public IDictionary<IMonsterScheme, int> Frags { get => Scores.Frags; }
+        /// <inheritdoc />
+        public IDictionary<IMonsterScheme, int> Frags => Scores.Frags;
 
-        /// <inheritdoc/>
-        public IDictionary<ILocationScheme, int> PlaceTypes { get => Scores.PlaceTypes; }
+        /// <inheritdoc />
+        public IDictionary<ILocationScheme, int> PlaceTypes => Scores.PlaceTypes;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public int Turns { get => Scores.Turns; set => Scores.Turns = value; }
 
-        /// <inheritdoc/>
-        public ScoreAchievements Achievements { get => Scores.Achievements; private set => Scores.Achievements = value; }
+        /// <inheritdoc />
+        public ScoreAchievements Achievements
+        {
+            get => Scores.Achievements;
+            private set => Scores.Achievements = value;
+        }
 
         public void CountHome()
         {
@@ -47,7 +53,7 @@ namespace Zilon.Core.Scoring
         {
             if (monster is null)
             {
-                throw new System.ArgumentNullException(nameof(monster));
+                throw new ArgumentNullException(nameof(monster));
             }
 
             var monsterScheme = monster.Scheme;
@@ -69,7 +75,7 @@ namespace Zilon.Core.Scoring
         }
 
         /// <summary>Засчитать один прожитый шаг.</summary>
-        public void CountTurn(ILocationScheme sectorScheme)
+        public void CountTurn(ILocationScheme? sectorScheme)
         {
             Scores.TurnCounter += TURN_INC;
             if (Scores.TurnCounter >= 1)
@@ -80,15 +86,19 @@ namespace Zilon.Core.Scoring
 
             Turns++;
 
-            if (!PlaceTypes.ContainsKey(sectorScheme))
+            if (sectorScheme != null)
             {
-                PlaceTypes.Add(sectorScheme, 0);
-            }
+                if (!PlaceTypes.ContainsKey(sectorScheme))
+                {
+                    PlaceTypes.Add(sectorScheme, 0);
+                }
 
-            PlaceTypes[sectorScheme]++;
+                PlaceTypes[sectorScheme]++;
+            }
         }
 
         /// <summary>Обнуление текущих очков.</summary>
+        [ExcludeFromCodeCoverage]
         public void ResetScores()
         {
             BaseScores = 0;
@@ -97,6 +107,7 @@ namespace Zilon.Core.Scoring
             Turns = 0;
         }
 
+        [ExcludeFromCodeCoverage]
         public Scores Scores { get; set; }
     }
 }

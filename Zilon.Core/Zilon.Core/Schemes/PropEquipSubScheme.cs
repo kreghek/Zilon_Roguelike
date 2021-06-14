@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+
 using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
@@ -12,25 +13,30 @@ namespace Zilon.Core.Schemes
         /// Идентификаторы действий, которые позволяет совершать предмет.
         /// </summary>
         [JsonProperty]
-        public string[] ActSids { get; private set; }
+        public string?[]? ActSids { get; private set; }
 
         /// <summary>
         /// Типы слотов, в которые возможна экипировка предмета.
         /// </summary>
         [JsonProperty]
-        public EquipmentSlotTypes[] SlotTypes { get; private set; }
+        public EquipmentSlotTypes[]? SlotTypes { get; private set; }
 
         /// <summary>
         /// Характеристики брони, которую даёт предмет при экипировке.
         /// </summary>
         [JsonConverter(typeof(ConcreteTypeConverter<PropArmorItemSubScheme[]>))]
         [JsonProperty]
-        public IPropArmorItemSubScheme[] Armors { get; private set; }
+        public IPropArmorItemSubScheme?[]? Armors { get; private set; }
 
         /// <summary>
         /// Правила, которые будут срабатывать при экипировке предмета.
         /// </summary>
         [JsonProperty]
-        public PersonRule[] Rules { get; private set; }
+        public PersonRule?[]? Rules { get; private set; }
+
+        /// <inheritdoc />
+        [JsonConverter(typeof(ConcreteTypeConverter<PropEquipRestrictions>))]
+        [JsonProperty]
+        public IPropEquipRestrictions? EquipRestrictions { get; private set; }
     }
 }

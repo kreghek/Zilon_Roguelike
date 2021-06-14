@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Common;
+using Zilon.Core.Graphs;
 using Zilon.Core.MapGenerators.PrimitiveStyle;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
@@ -23,8 +24,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     [Parallelizable(ParallelScope.All)]
     public class AttackTaskTests
     {
-        private AttackTask _attackTask;
         private IActor _actor;
+        private AttackTask _attackTask;
         private IMap _testMap;
 
         /// <summary>
@@ -56,10 +57,10 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var actorNode = _testMap.Nodes.SelectByHexCoords(0, 0);
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             actorMock.SetupGet(x => x.Person).Returns(person);
-            actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
-                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
+            actorMock.Setup(x => x.UseAct(It.IsAny<IGraphNode>(), It.IsAny<ITacticalAct>()))
+                .Raises<IGraphNode, ITacticalAct>(x => x.UsedAct += null,
+                    (target1, act1) => new UsedActEventArgs(target1, act1));
             _actor = actorMock.Object;
-
 
             var targetMock = new Mock<IActor>();
             var targetNode = _testMap.Nodes.SelectByHexCoords(2, 0);
@@ -70,17 +71,17 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var actServiceMock = new Mock<ITacticalActUsageService>();
             var actService = actServiceMock.Object;
 
+            var taskContextMock = new Mock<IActorTaskContext>();
+            var taskContext = taskContextMock.Object;
 
             // Создаём саму команду
-            _attackTask = new AttackTask(_actor, target, tacticalAct, actService);
+            _attackTask = new AttackTask(_actor, taskContext, target, tacticalAct, actService);
 
             Action act = () =>
             {
                 // ACT
                 _attackTask.Execute();
             };
-
-
 
             // ASSERT
             act.Should().NotThrow<InvalidOperationException>();

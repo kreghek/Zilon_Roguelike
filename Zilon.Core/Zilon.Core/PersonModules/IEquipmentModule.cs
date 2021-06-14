@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using JetBrains.Annotations;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -9,18 +8,8 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.PersonModules
 {
-    public interface IEquipmentModule: IPersonModule, IEnumerable<Equipment>
+    public interface IEquipmentModule : IPersonModule, IEnumerable<Equipment?>
     {
-        /// <summary>
-        /// Текущие слоты экипировки.
-        /// </summary>
-        [NotNull] [ItemNotNull] PersonSlotSubScheme[] Slots { get; }
-
-        /// <summary>
-        /// Выстреливает, когда экипировка изменяется.
-        /// </summary>
-        event EventHandler<EquipmentChangedEventArgs> EquipmentChanged;
-
         /// <summary>
         /// Экипировка персонажа.
         /// </summary>
@@ -31,7 +20,18 @@ namespace Zilon.Core.PersonModules
         /// могут изыматся из слотов в инвентарь или уничтожаться.
         /// Если указано null, то экипировка изымается из указанного слота.
         /// </remarks>
-        [CanBeNull]
-        Equipment this[int index] { get; set; }
+        [MaybeNull]
+        Equipment? this[int index] { get; set; }
+
+        /// <summary>
+        /// Текущие слоты экипировки.
+        /// </summary>
+        [NotNull]
+        PersonSlotSubScheme[] Slots { get; }
+
+        /// <summary>
+        /// Выстреливает, когда экипировка изменяется.
+        /// </summary>
+        event EventHandler<EquipmentChangedEventArgs>? EquipmentChanged;
     }
 }

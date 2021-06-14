@@ -4,6 +4,7 @@
     "En": "Rat Mutant"
   },
   "Hp": 8,
+  "MoveSpeedFactor": 0.8,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -35,8 +36,8 @@
   "DropTableSids": [
     "survival",
     "champion-loot",
-	"default",
-	"default-evil-hour"
+    "default",
+    "default-evil-hour"
   ],
   "BaseScore": 100,
   "Tags": [

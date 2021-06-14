@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+
+using FluentAssertions;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +13,7 @@ using Zilon.Core.Commands;
 using Zilon.Core.Components;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
+using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.Tests.Common.Schemes;
@@ -21,23 +24,6 @@ namespace Zilon.Core.Tests.Commands
     public class EquipCommandTests : CommandTestBase
     {
         private Mock<IInventoryState> _inventoryStateMock;
-
-        /// <summary>
-        /// Тест проверяет, что можно использовать экипировку.
-        /// </summary>
-        [Test]
-        public void CanExecute_SelectEquipment_ReturnsTrue()
-        {
-            // ARRANGE
-            var command = ServiceProvider.GetRequiredService<EquipCommand>();
-            command.SlotIndex = 0;
-
-            // ACT
-            var canExecute = command.CanExecute();
-
-            // ASSERT
-            canExecute.Should().BeTrue();
-        }
 
         /// <summary>
         /// Тест проверяет, что нельзя экипировать ресурс.
@@ -51,8 +37,9 @@ namespace Zilon.Core.Tests.Commands
                 Use = new TestPropUseSubScheme
                 {
                     Consumable = true,
-                    CommonRules = new ConsumeCommonRule[] {
-                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser, PersonRuleDirection.Positive)
+                    CommonRules = new[]
+                    {
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser)
                     }
                 }
             };
@@ -71,7 +58,24 @@ namespace Zilon.Core.Tests.Commands
             var canExecute = command.CanExecute();
 
             // ASSERT
-            canExecute.Should().BeFalse();
+            canExecute.IsSuccess.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что можно использовать экипировку.
+        /// </summary>
+        [Test]
+        public void CanExecute_SelectEquipment_ReturnsTrue()
+        {
+            // ARRANGE
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
+            command.SlotIndex = 0;
+
+            // ACT
+            var canExecute = command.CanExecute();
+
+            // ASSERT
+            canExecute.IsSuccess.Should().BeTrue();
         }
 
         /// <summary>
@@ -84,13 +88,14 @@ namespace Zilon.Core.Tests.Commands
             var command = ServiceProvider.GetRequiredService<EquipCommand>();
             command.SlotIndex = 0;
 
-            var humanTaskSourceMock = ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource>>();
+            var humanTaskSourceMock =
+                ServiceProvider.GetRequiredService<Mock<IHumanActorTaskSource<ISectorTaskSourceContext>>>();
 
             // ACT
             command.Execute();
 
             // ASSERT
-            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>()), Times.Once);
+            humanTaskSourceMock.Verify(x => x.Intent(It.IsAny<IIntention>(), It.IsAny<IActor>()), Times.Once);
         }
 
         protected override void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock)
@@ -99,12 +104,13 @@ namespace Zilon.Core.Tests.Commands
             {
                 Equip = new TestPropEquipSubScheme
                 {
-                    SlotTypes = new[] {
+                    SlotTypes = new[]
+                    {
                         EquipmentSlotTypes.Hand
                     }
                 }
             };
-            var equipment = new Equipment(propScheme, new TacticalActScheme[0]);
+            var equipment = new Equipment(propScheme, Array.Empty<TacticalActScheme>());
 
             var equipmentViewModelMock = new Mock<IPropItemViewModel>();
             equipmentViewModelMock.SetupGet(x => x.Prop).Returns(equipment);

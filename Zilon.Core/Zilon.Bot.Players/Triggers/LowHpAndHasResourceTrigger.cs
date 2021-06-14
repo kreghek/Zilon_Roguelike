@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players.Triggers
 {
@@ -15,26 +17,28 @@ namespace Zilon.Bot.Players.Triggers
             // Нет состояния
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+            ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (currentState is null)
             {
-                throw new System.ArgumentNullException(nameof(currentState));
+                throw new ArgumentNullException(nameof(currentState));
             }
 
             if (strategyData is null)
             {
-                throw new System.ArgumentNullException(nameof(strategyData));
+                throw new ArgumentNullException(nameof(strategyData));
             }
 
-            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Health);
-            var hpStatCoeff = (float)hpStat.Value / (hpStat.Range.Max - hpStat.Range.Min);
-            var isLowHp = hpStatCoeff <= 0.5f;
+            //TODO Здесь лучше проверять на наличие эффекта раны
+            var hpStat = actor.Person.GetModule<ISurvivalModule>().Stats
+                .SingleOrDefault(x => x.Type == SurvivalStatType.Health);
+            var isLowHp = hpStat.ValueShare <= 0.5f;
             if (!isLowHp)
             {
                 return false;
@@ -44,7 +48,13 @@ namespace Zilon.Bot.Players.Triggers
 
             var props = actor.Person.GetModule<IInventoryModule>().CalcActualItems();
             var resources = props.OfType<Resource>();
-            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(resources,
+
+            var taskContext = new ActorTaskContext(context.Sector);
+
+            var bestResource = ResourceFinder.FindBestConsumableResourceByRule(
+                actor,
+                taskContext,
+                resources,
                 ConsumeCommonRuleType.Health);
 
             if (bestResource == null)

@@ -6,7 +6,7 @@
   "Hp": 2,
   "PrimaryAct": {
     "Efficient": {
-      "Dice": 3,
+      "Dice": 1,
       "Count": 1
     },
     "Range": {
@@ -18,12 +18,16 @@
       "Impact": "Kinetic"
     },
     "Effect": "Damage",
-    "Targets": "Enemy"
+    "Targets": "Enemy",
+    "IsMelee": true,
+    "Tags": [
+      "bite"
+    ]
   },
   "DropTableSids": [
     "survival",
-	"default",
-	"default-evil-hour"
+    "default",
+    "default-evil-hour"
   ],
   "BaseScore": 25,
   "Tags": [

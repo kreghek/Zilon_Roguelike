@@ -21,11 +21,5 @@ namespace Zilon.Core.Client.Windows
         /// Показывает окно с игровым счётом.
         /// </summary>
         void ShowScoreModal();
-
-        /// <summary>
-        /// Показать окно создания персонажа.
-        /// Используется на старте игры, чтобы показать начальные перки и экипировку персонажа.
-        /// </summary>
-        void ShowCreatePersonModal(IPerson playerPerson);
     }
 }

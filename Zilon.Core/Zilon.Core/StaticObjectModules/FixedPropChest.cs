@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Props;
+﻿using System;
+
+using Zilon.Core.Props;
 
 namespace Zilon.Core.StaticObjectModules
 {
@@ -7,13 +9,11 @@ namespace Zilon.Core.StaticObjectModules
     /// </summary>
     public class FixedPropChest : ChestBase
     {
-        public override bool IsMapBlock => true;
-
         public FixedPropChest(IProp[] props) : base(new ChestStore())
         {
             if (props is null)
             {
-                throw new System.ArgumentNullException(nameof(props));
+                throw new ArgumentNullException(nameof(props));
             }
 
             foreach (var prop in props)
@@ -21,5 +21,7 @@ namespace Zilon.Core.StaticObjectModules
                 Content.Add(prop);
             }
         }
+
+        public override bool IsMapBlock => true;
     }
 }

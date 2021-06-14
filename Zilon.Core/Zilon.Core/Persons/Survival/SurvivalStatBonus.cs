@@ -7,10 +7,10 @@
             SurvivalStatType = survivalStatType;
         }
 
+        public float DownPassBonus { get; set; }
+
         public SurvivalStatType SurvivalStatType { get; }
 
         public float ValueBonus { get; set; }
-
-        public float DownPassBonus { get; set; }
     }
 }

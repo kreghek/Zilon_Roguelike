@@ -1,8 +1,11 @@
-﻿using Zilon.Core.Schemes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
-    public sealed class TestPersonSurvivalStatKeySegmentSubScheme: IPersonSurvivalStatKeySegmentSubScheme
+    [ExcludeFromCodeCoverage]
+    public sealed class TestPersonSurvivalStatKeySegmentSubScheme : IPersonSurvivalStatKeySegmentSubScheme
     {
         public PersonSurvivalStatKeypointLevel Level { get; set; }
 

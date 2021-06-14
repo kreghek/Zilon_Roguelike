@@ -8,7 +8,12 @@ namespace Zilon.Core.Specs.Mocks
 {
     public class FuncMapFactory : IMapFactory
     {
-        private Func<Task<ISectorMap>> _factoryFuncAsync;
+        private Func<ISectorMapFactoryOptions, Task<ISectorMap>> _factoryFuncAsync;
+
+        public void SetFunc(Func<ISectorMapFactoryOptions, Task<ISectorMap>> factoryFunc)
+        {
+            _factoryFuncAsync = factoryFunc;
+        }
 
         public async Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
@@ -23,14 +28,9 @@ namespace Zilon.Core.Specs.Mocks
             // в которой объясняется, что не всё так просто.
             // Нужно чёткое понимание, зачем здесь ConfigureAwait(false) и
             // к какому результату это приводит по сравнению с простым await.
-            var map = await _factoryFuncAsync().ConfigureAwait(false);
+            var map = await _factoryFuncAsync(generationOptions).ConfigureAwait(false);
 
             return map;
-        }
-
-        public void SetFunc(Func<Task<ISectorMap>> factoryFunc)
-        {
-            _factoryFuncAsync = factoryFunc;
         }
     }
 }

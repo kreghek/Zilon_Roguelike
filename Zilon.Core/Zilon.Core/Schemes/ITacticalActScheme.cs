@@ -3,16 +3,16 @@
     /// <summary>
     /// Схема действия.
     /// </summary>
-    public interface ITacticalActScheme: IScheme, IMimicScheme
+    public interface ITacticalActScheme : IScheme, IMimicScheme
     {
         /// <summary>
         /// Ограничения на использование действия.
         /// </summary>
-        ITacticalActConstrainsSubScheme Constrains { get; }
+        ITacticalActConstrainsSubScheme? Constrains { get; }
 
         /// <summary>
         /// Основные характеристики действия.
         /// </summary>
-        ITacticalActStatsSubScheme Stats { get; }
+        ITacticalActStatsSubScheme? Stats { get; }
     }
 }

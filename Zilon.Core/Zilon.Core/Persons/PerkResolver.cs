@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.PersonModules;
 
@@ -6,8 +7,24 @@ namespace Zilon.Core.Persons
 {
     public class PerkResolver : IPerkResolver
     {
+        private static bool CheckLevelCap(IPerk perk)
+        {
+            var currentLevel = perk.CurrentLevel;
+            if (currentLevel == null)
+            {
+                return false;
+            }
+
+            return !PerkHelper.HasNextLevel(perk.Scheme, currentLevel);
+        }
+
         public void ApplyProgress(IJobProgress progress, IEvolutionModule evolutionData)
         {
+            if (progress is null)
+            {
+                throw new ArgumentNullException(nameof(progress));
+            }
+
             if (evolutionData == null)
             {
                 return;
@@ -50,30 +67,6 @@ namespace Zilon.Core.Persons
                     evolutionData.PerkLevelUp(perk);
                 }
             }
-        }
-
-        private bool CheckLevelCap(IPerk perk)
-        {
-            var currentLevel = perk.CurrentLevel;
-            if (currentLevel == null)
-            {
-                return false;
-            }
-
-            var nextLevel = PerkHelper.GetNextLevel(perk.Scheme, currentLevel);
-
-            var perkLevels = perk.Scheme.Levels;
-            var maxLevel = perkLevels.Length - 1;
-            var nextLevelOutOfRange = nextLevel.Primary > maxLevel;
-
-            if (nextLevelOutOfRange)
-            {
-                return true;
-            }
-
-            var maxSubLevel = perkLevels[currentLevel.Primary].MaxValue;
-            var currentSubLevelIsMax = currentLevel.Sub >= maxSubLevel;
-            return currentSubLevelIsMax;
         }
     }
 }

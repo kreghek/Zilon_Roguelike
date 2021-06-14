@@ -7,7 +7,7 @@ namespace Zilon.Core.Common
 {
     public static class ListHelper
     {
-        public static T RollRandom<T>(List<T> list, IDice dice, Predicate<T> predicate) where T: class
+        public static T RollRandom<T>(List<T> list, IDice dice, Predicate<T> predicate)
         {
             if (list is null)
             {
@@ -38,10 +38,10 @@ namespace Zilon.Core.Common
                 foundIndex = list.FindIndex(0, currentIndex, predicate);
                 return list[foundIndex];
             }
-            else
-            {
-                return null;
-            }
+
+#pragma warning disable CS8603 // Possible null reference return.
+            return default;
+#pragma warning restore CS8603 // Possible null reference return.
         }
     }
 }

@@ -7,15 +7,15 @@ namespace Zilon.Core.Tactics.Behaviour
     /// </summary>
     public sealed class ActorTaskSourceCollector : IActorTaskSourceCollector
     {
-        private readonly IActorTaskSource[] _actorTaskSources;
+        private readonly IActorTaskSource<ISectorTaskSourceContext>[] _actorTaskSources;
 
-        public ActorTaskSourceCollector(params IActorTaskSource[] actorTaskSources)
+        public ActorTaskSourceCollector(params IActorTaskSource<ISectorTaskSourceContext>[] actorTaskSources)
         {
             _actorTaskSources = actorTaskSources ?? throw new ArgumentNullException(nameof(actorTaskSources));
         }
 
-        /// <inheritdoc/>
-        public IActorTaskSource[] GetCurrentTaskSources()
+        /// <inheritdoc />
+        public IActorTaskSource<ISectorTaskSourceContext>[] GetCurrentTaskSources()
         {
             return _actorTaskSources;
         }

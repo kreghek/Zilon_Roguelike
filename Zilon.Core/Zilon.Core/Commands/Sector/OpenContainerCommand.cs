@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
+using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -12,24 +13,39 @@ namespace Zilon.Core.Commands
     /// </summary>
     public class OpenContainerCommand : ActorCommandBase
     {
+        private readonly IPlayer _player;
+
         [ExcludeFromCodeCoverage]
         public OpenContainerCommand(
-            ISectorManager sectorManager,
+            IPlayer player,
             ISectorUiState playerState) :
-            base(sectorManager, playerState)
+            base(playerState)
         {
+            _player = player;
         }
 
-        public override bool CanExecute()
+        public override CanExecuteCheckResult CanExecute()
         {
-            var map = SectorManager.CurrentSector.Map;
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
 
-            var currentNode = PlayerState.ActiveActor.Actor.Node;
+            var map = sector.Map;
+
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                return new CanExecuteCheckResult { IsSuccess = false };
+            }
+
+            var currentNode = actor.Node;
 
             var targetContainerViewModel = GetSelectedNodeViewModel();
             if (targetContainerViewModel == null)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var container = targetContainerViewModel.StaticObject;
@@ -40,22 +56,22 @@ namespace Zilon.Core.Commands
             var distance = map.DistanceBetween(currentNode, targetNode);
             if (distance > requiredDistance)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
             var containerIsOnLine = map.TargetIsOnLine(currentNode, targetNode);
             if (!containerIsOnLine)
             {
-                return false;
+                return new CanExecuteCheckResult { IsSuccess = false };
             }
 
-            return true;
+            return new CanExecuteCheckResult { IsSuccess = true };
         }
 
         protected override void ExecuteTacticCommand()
         {
             var targetContainerViewModel = GetSelectedNodeViewModel();
-            if (targetContainerViewModel == null)
+            if (targetContainerViewModel is null)
             {
                 throw new InvalidOperationException("Невозможно выполнить команду. Целевой контейнер не выбран.");
             }
@@ -63,20 +79,42 @@ namespace Zilon.Core.Commands
             var staticObject = targetContainerViewModel.StaticObject;
             if (staticObject == null)
             {
-                throw new InvalidOperationException("Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
+                throw new InvalidOperationException(
+                    "Невозможно выполнить команду. Целевая модель представления не содержит ссылки на контейнер.");
             }
 
             var intetion = new Intention<OpenContainerTask>(actor => CreateTask(actor, staticObject));
-            PlayerState.TaskSource.Intent(intetion);
+            var actor = PlayerState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskSource = PlayerState?.TaskSource;
+            if (taskSource is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            taskSource.Intent(intetion, actor);
         }
 
         private OpenContainerTask CreateTask(IActor actor, IStaticObject staticObject)
         {
             var openMethod = new HandOpenContainerMethod();
-            return new OpenContainerTask(actor, staticObject, openMethod, SectorManager.CurrentSector.Map);
+
+            var sector = _player.SectorNode.Sector;
+            if (sector is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var taskContext = new ActorTaskContext(sector);
+
+            return new OpenContainerTask(actor, taskContext, staticObject, openMethod);
         }
 
-        private IContainerViewModel GetSelectedNodeViewModel()
+        private IContainerViewModel? GetSelectedNodeViewModel()
         {
             return PlayerState.HoverViewModel as IContainerViewModel;
         }

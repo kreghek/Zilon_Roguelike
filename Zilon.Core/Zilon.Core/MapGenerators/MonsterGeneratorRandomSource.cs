@@ -40,8 +40,10 @@ namespace Zilon.Core.MapGenerators
         }
 
         /// <summary>Выбирает случайную схему монстра среди доступных.</summary>
-        /// <param name="availableMonsterSchemes">Доступные схемы монстров.
-        /// Расчитываются исходя из схемы сектора и выбранной редкости.</param>
+        /// <param name="availableMonsterSchemes">
+        /// Доступные схемы монстров.
+        /// Расчитываются исходя из схемы сектора и выбранной редкости.
+        /// </param>
         /// <returns>Возвращает схему монстра.</returns>
         public IMonsterScheme RollMonsterScheme(IEnumerable<IMonsterScheme> availableMonsterSchemes)
         {

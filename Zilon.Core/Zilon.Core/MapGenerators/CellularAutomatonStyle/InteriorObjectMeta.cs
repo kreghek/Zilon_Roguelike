@@ -11,7 +11,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
     public sealed class InteriorObjectMeta
     {
         /// <summary>
-        /// Конструирует объект <see cref="InteriorObjectMeta"/>.
+        /// Конструирует объект <see cref="InteriorObjectMeta" />.
         /// </summary>
         /// <param name="coords">Локальные координаты элемента интерьера внутри комнаты.</param>
         /// <exception cref="ArgumentNullException">coords</exception>

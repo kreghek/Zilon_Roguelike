@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 namespace Zilon.Core.Tactics
 {
-    public sealed class DamageTakenEventArgs: EventArgs
+    public sealed class DamageTakenEventArgs : EventArgs
     {
         [ExcludeFromCodeCoverage]
         public DamageTakenEventArgs(int value)
@@ -21,7 +19,6 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Значение урона, который был нанесён.
         /// </summary>
-        [PublicAPI]
         public int Value { get; }
     }
 }

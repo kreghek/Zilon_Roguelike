@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
+using Zilon.Core.Graphs;
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
@@ -10,25 +9,23 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Аргументы события при использовании действия на цель.
     /// </summary>
-    public sealed class UsedActEventArgs: EventArgs
+    public sealed class UsedActEventArgs : EventArgs
     {
-        /// <summary>
-        /// Цель действия.
-        /// </summary>
-        [PublicAPI]
-        public IAttackTarget Target { get; }
+        [ExcludeFromCodeCoverage]
+        public UsedActEventArgs([NotNull] IGraphNode targetNode, [NotNull] ITacticalAct tacticalAct)
+        {
+            TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
+            TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
+        }
 
         /// <summary>
         /// Совершённое над целью действие.
         /// </summary>
-        [PublicAPI]
         public ITacticalAct TacticalAct { get; }
 
-        [ExcludeFromCodeCoverage]
-        public UsedActEventArgs([NotNull] IAttackTarget target, [NotNull] ITacticalAct tacticalAct)
-        {
-            Target = target ?? throw new ArgumentNullException(nameof(target));
-            TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
-        }
+        /// <summary>
+        /// Цель действия.
+        /// </summary>
+        public IGraphNode TargetNode { get; }
     }
 }

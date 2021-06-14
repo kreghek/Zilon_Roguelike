@@ -3,49 +3,46 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Zilon.Bot.Sdk;
-using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace Zilon.Bot.Players
 {
-    public abstract class BotActorTaskSourceBase : ISectorActorTaskSource
+    public abstract class BotActorTaskSourceBase<TContext> : ISectorActorTaskSource<TContext>
+        where TContext : class, ISectorTaskSourceContext
     {
-        private readonly IPlayer _player;
-
+        //TODO Есть риск утечки.
+        // Актёры могут быть удалены, но информация о них будет храниться здесь, предотвращая чистку.
+        // Рассмотреть варианты:
+        // 1. Периодическая чистка внутри самого источника команд. Тогда нужна зависимость от менеджера актёров.
+        // 2. В интерфейс добавить метод для обработки удаления актёра.
         private readonly Dictionary<IActor, ILogicStrategy> _actorStrategies;
 
-        public BotActorTaskSourceBase(IPlayer player)
+        protected BotActorTaskSourceBase()
         {
-            _player = player;
-
             _actorStrategies = new Dictionary<IActor, ILogicStrategy>();
         }
 
-        public bool CanGetTask(IActor actor)
-        {
-            if (actor is null)
-            {
-                throw new ArgumentNullException(nameof(actor));
-            }
+        protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
 
-            return actor.Owner == _player;
+        public void CancelTask(IActorTask cencelledActorTask)
+        {
+            // Этот метод был введен для HumanActorTaskSource.
+            // В этой реализации источника команд не используется.
         }
 
         public abstract void Configure(IBotSettings botSettings);
 
-        public Task<IActorTask> GetActorTaskAsync(IActor actor)
+        public Task<IActorTask> GetActorTaskAsync(IActor actor, TContext context)
         {
             if (actor is null)
             {
                 throw new ArgumentNullException(nameof(actor));
             }
 
-            if (!CanGetTask(actor))
+            if (context is null)
             {
-                // Это может случиться, если попытаться вызвать этот метод без предварительной проверки.
-                throw new InvalidOperationException("Произведена попытка получить задачу для актёра, которого не может обработать данных источник задач.");
+                throw new ArgumentNullException(nameof(context));
             }
 
             // Основные компоненты:
@@ -72,7 +69,7 @@ namespace Zilon.Bot.Players
             // Если логика закончена, её нужно сменить. Если нет селектора, который указывает на следующую логику,
             // то выполнять переход на стартовую логику.
 
-            if (!actor.Person.CheckIsDead())
+            if (actor.CanExecuteTasks)
             {
                 if (!_actorStrategies.TryGetValue(actor, out var logicStrategy))
                 {
@@ -82,19 +79,18 @@ namespace Zilon.Bot.Players
                     _actorStrategies[actor] = logicStrategy;
                 }
 
-                var actorTask = logicStrategy.GetActorTask();
+                var actorTask = logicStrategy.GetActorTask(context);
 
                 if (actorTask == null)
                 {
-                    return Task.FromResult<IActorTask>(new IdleTask(actor, 1));
+                    var taskContext = new ActorTaskContext(context.Sector);
+                    return Task.FromResult<IActorTask>(new IdleTask(actor, taskContext, 1));
                 }
 
                 return Task.FromResult(actorTask);
             }
-            else
-            {
-                _actorStrategies.Remove(actor);
-            }
+
+            _actorStrategies.Remove(actor);
 
             // Сюда попадаем в случае смерти персонажа.
             // Когда мы пытаемся выполнить какую-то задачу, а персонаж при это был/стал мертв.
@@ -114,7 +110,5 @@ namespace Zilon.Bot.Players
             // Например, при использовании парного оружия.
             // Механика пока не реализована.
         }
-
-        protected abstract ILogicStrategy GetLogicStrategy(IActor actor);
     }
 }

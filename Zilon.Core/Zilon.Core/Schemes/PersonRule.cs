@@ -15,8 +15,9 @@ namespace Zilon.Core.Schemes
             Direction = direction;
         }
 
-        public EquipCommonRuleType Type { get; }
-        public PersonRuleLevel Level { get; }
         public PersonRuleDirection Direction { get; }
+        public PersonRuleLevel Level { get; }
+
+        public EquipCommonRuleType Type { get; }
     }
 }
