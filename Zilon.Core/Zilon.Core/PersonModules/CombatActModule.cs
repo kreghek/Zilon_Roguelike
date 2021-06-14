@@ -58,14 +58,14 @@ namespace Zilon.Core.PersonModules
             IConditionsModule сondition,
             IEnumerable<IPerk> perks)
         {
-            if (equipments == null)
+            if (equipments is null)
             {
                 yield break;
             }
 
             foreach (var equipment in equipments)
             {
-                if (equipment == null)
+                if (equipment is null)
                 {
                     continue;
                 }

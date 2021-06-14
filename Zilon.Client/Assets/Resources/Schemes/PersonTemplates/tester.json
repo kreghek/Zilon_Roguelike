@@ -42,22 +42,6 @@
     "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "great-sword",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "combat-staff",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "tribal-spear",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "wooden-shield",
-        "Weight": 2
-      },
-      {
         "SchemeSid": "short-sword",
         "Weight": 1
       }
@@ -66,14 +50,6 @@
   "OffHandEquipments": {
     "Rolls": 1,
     "Records": [
-      {
-        "SchemeSid": "wooden-shield",
-        "Weight": 2
-      },
-      {
-        "SchemeSid": "short-sword",
-        "Weight": 1
-      },
       {
         "SchemeSid": null,
         "Weight": 1

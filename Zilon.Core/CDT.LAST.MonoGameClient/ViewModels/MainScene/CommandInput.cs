@@ -296,8 +296,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         throw new InvalidOperationException();
                     }
 
-                    _uiState.TacticalAct = activeActor.Actor.Person.GetModule<ICombatActModule>()
-                        .CalcCombatActs().First();
+                    if (_uiState.TacticalAct is null)
+                    {
+                        throw new InvalidOperationException("Combat act is nos selected.");
+                    }
 
                     return commandFactory.GetCommand<AttackCommand>();
 
