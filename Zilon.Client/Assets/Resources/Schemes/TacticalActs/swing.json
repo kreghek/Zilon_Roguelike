@@ -1,7 +1,7 @@
 {
   "Name": {
-    "Ru": "Укол",
-    "En": "Pierce"
+    "Ru": "Свинг",
+    "En": "Swing"
   },
   "Stats": {
     "Efficient": {
@@ -17,12 +17,12 @@
     "HitCount": 1,
     "IsMelee": true,
     "Offence": {
-      "Type": "Fury",
+      "Type": "Tactical",
       "Impact": "Kinetic",
-      "ApRank": 3
+      "ApRank": 2
     },
     "Tags": [
-      "pierce"
+      "swing"
     ]
   }
 }
