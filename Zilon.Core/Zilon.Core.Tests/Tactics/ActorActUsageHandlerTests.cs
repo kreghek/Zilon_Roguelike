@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.Components;
+using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -21,100 +22,6 @@ namespace Zilon.Core.Tests.Tactics
     [Parallelizable(ParallelScope.All)]
     public class ActorActUsageHandlerTests
     {
-        /// <summary>
-        /// Тест проверяет, что сервис использования действий если монстр стал мёртв,
-        /// то засчитывается прогресс по перкам.
-        /// </summary>
-        [Test]
-        public void ProcessActUsage_MonsterHitByActAndKill_SetPerkProgress()
-        {
-            // ARRANGE
-
-            var perkResolverMock = new Mock<IPerkResolver>();
-            var perkResolver = perkResolverMock.Object;
-
-            var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
-            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(6);
-            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
-            var actUsageRandomSource = actUsageRandomSourceMock.Object;
-
-            var actUsageService = new ActorActUsageHandler(perkResolver, actUsageRandomSource);
-
-            var personMock = new Mock<IPerson>();
-            var person = personMock.Object;
-
-            var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
-            actorMock.SetupGet(x => x.Person).Returns(person);
-            var actor = actorMock.Object;
-
-            var monsterMock = CreateOnHitMonsterMock();
-            var monster = monsterMock.Object;
-            var act = CreateTestAct();
-
-            // ACT
-            var usedActs = new TacticalActRoll(act, 1);
-            actUsageService.ProcessActUsage(actor, monster, usedActs);
-
-            // ASSERT
-            perkResolverMock.Verify(x => x.ApplyProgress(
-                It.Is<IJobProgress>(progress => CheckDefeateProgress(progress, monster)),
-                It.IsAny<IEvolutionModule>()
-                ), Times.Once);
-        }
-
-        /// <summary>
-        /// Тест проверяет, что действие с определённым типом наступления
-        /// успешно пробивает различные типы обороны.
-        /// </summary>
-        [Test]
-        public void ProcessActUsage_OffenceTypeVsDefenceType_Success()
-        {
-            // ARRANGE
-            var offenceType = OffenseType.Tactical;
-            var defenceType = DefenceType.TacticalDefence;
-            var defenceLevel = PersonRuleLevel.Normal;
-            var fakeToHitDiceRoll = 5; // 5+ - успех при нормальном уровне обороны
-
-            var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
-            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(fakeToHitDiceRoll);
-            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
-            var actUsageRandomSource = actUsageRandomSourceMock.Object;
-
-            var perkResolverMock = new Mock<IPerkResolver>();
-            var perkResolver = perkResolverMock.Object;
-
-            var actUsageService = new ActorActUsageHandler(perkResolver, actUsageRandomSource);
-
-            var actorMock = new Mock<IActor>();
-            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
-            var actor = actorMock.Object;
-
-            var defences = new[] { new PersonDefenceItem(defenceType, defenceLevel) };
-            var monsterMock = CreateMonsterMock(defences);
-            var monster = monsterMock.Object;
-
-            // Настройка дествия
-            var actScheme = new TestTacticalActStatsSubScheme
-            {
-                Offence = new TestTacticalActOffenceSubScheme
-                {
-                    Type = offenceType
-                }
-            };
-
-            var actMock = new Mock<ITacticalAct>();
-            actMock.SetupGet(x => x.Stats).Returns(actScheme);
-            var act = actMock.Object;
-
-            // ACT
-            var usedActs = new TacticalActRoll(act, 1);
-            actUsageService.ProcessActUsage(actor, monster, usedActs);
-
-            // ASSERT
-            monsterMock.Verify(x => x.TakeDamage(It.IsAny<int>()), Times.Once);
-        }
-
         /// <summary>
         /// Тест проверяет, что если действие имеет больший ранг пробития,
         /// то броня игнорируется.
@@ -191,14 +98,15 @@ namespace Zilon.Core.Tests.Tactics
 
             var personMock = new Mock<IPerson>();
             personMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(survivalModule);
-            personMock.Setup(x => x.HasModule(It.Is<string>(x=>x == nameof(ISurvivalModule)))).Returns(true);
+            personMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule)))).Returns(true);
             var person = personMock.Object;
 
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             actorMock.SetupGet(x => x.Person).Returns(person);
-            actorMock.Setup(x => x.UseAct(It.IsAny<IAttackTarget>(), It.IsAny<ITacticalAct>()))
-                .Raises<IAttackTarget, ITacticalAct>(x => x.UsedAct += null, (target1, act1) => new UsedActEventArgs(target1, act1));
+            actorMock.Setup(x => x.UseAct(It.IsAny<IGraphNode>(), It.IsAny<ITacticalAct>()))
+                .Raises<IGraphNode, ITacticalAct>(x => x.UsedAct += null,
+                    (target1, act1) => new UsedActEventArgs(target1, act1));
             var actor = actorMock.Object;
 
             var actStatScheme = new TestTacticalActStatsSubScheme
@@ -218,8 +126,103 @@ namespace Zilon.Core.Tests.Tactics
             actUsageService.ProcessActUsage(actor, actor, usedActs);
 
             // ASSERT
-            survivalModuleMock.Verify(x => x.RestoreStat(It.Is<SurvivalStatType>(type => type == SurvivalStatType.Health),
-                It.Is<int>(v => v == HEAL_EFFICIENT)));
+            survivalModuleMock.Verify(x =>
+                x.RestoreStat(It.Is<SurvivalStatType>(type => type == SurvivalStatType.Health),
+                    It.Is<int>(v => v == HEAL_EFFICIENT)));
+        }
+
+        /// <summary>
+        /// Тест проверяет, что сервис использования действий если монстр стал мёртв,
+        /// то засчитывается прогресс по перкам.
+        /// </summary>
+        [Test]
+        public void ProcessActUsage_MonsterHitByActAndKill_SetPerkProgress()
+        {
+            // ARRANGE
+
+            var perkResolverMock = new Mock<IPerkResolver>();
+            var perkResolver = perkResolverMock.Object;
+
+            var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
+            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(6);
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
+            var actUsageRandomSource = actUsageRandomSourceMock.Object;
+
+            var actUsageService = new ActorActUsageHandler(perkResolver, actUsageRandomSource);
+
+            var personMock = new Mock<IPerson>();
+            var person = personMock.Object;
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
+            actorMock.SetupGet(x => x.Person).Returns(person);
+            var actor = actorMock.Object;
+
+            var monsterMock = CreateOnHitMonsterMock();
+            var monster = monsterMock.Object;
+            var act = CreateTestAct();
+
+            // ACT
+            var usedActs = new TacticalActRoll(act, 1);
+            actUsageService.ProcessActUsage(actor, monster, usedActs);
+
+            // ASSERT
+            perkResolverMock.Verify(x => x.ApplyProgress(
+                It.Is<IJobProgress>(progress => CheckDefeateProgress(progress, monster)),
+                It.IsAny<IEvolutionModule>()
+            ), Times.Once);
+        }
+
+        /// <summary>
+        /// Тест проверяет, что действие с определённым типом наступления
+        /// успешно пробивает различные типы обороны.
+        /// </summary>
+        [Test]
+        public void ProcessActUsage_OffenceTypeVsDefenceType_Success()
+        {
+            // ARRANGE
+            var offenceType = OffenseType.Tactical;
+            var defenceType = DefenceType.TacticalDefence;
+            var defenceLevel = PersonRuleLevel.Normal;
+            var fakeToHitDiceRoll = 5; // 5+ - успех при нормальном уровне обороны
+
+            var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
+            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(fakeToHitDiceRoll);
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(1);
+            var actUsageRandomSource = actUsageRandomSourceMock.Object;
+
+            var perkResolverMock = new Mock<IPerkResolver>();
+            var perkResolver = perkResolverMock.Object;
+
+            var actUsageService = new ActorActUsageHandler(perkResolver, actUsageRandomSource);
+
+            var actorMock = new Mock<IActor>();
+            actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
+            var actor = actorMock.Object;
+
+            var defences = new[] { new PersonDefenceItem(defenceType, defenceLevel) };
+            var monsterMock = CreateMonsterMock(defences);
+            var monster = monsterMock.Object;
+
+            // Настройка дествия
+            var actScheme = new TestTacticalActStatsSubScheme
+            {
+                Offence = new TestTacticalActOffenceSubScheme
+                {
+                    Type = offenceType
+                }
+            };
+
+            var actMock = new Mock<ITacticalAct>();
+            actMock.SetupGet(x => x.Stats).Returns(actScheme);
+            var act = actMock.Object;
+
+            // ACT
+            var usedActs = new TacticalActRoll(act, 1);
+            actUsageService.ProcessActUsage(actor, monster, usedActs);
+
+            // ASSERT
+            monsterMock.Verify(x => x.TakeDamage(It.IsAny<int>()), Times.Once);
         }
 
         /// <summary>
@@ -229,16 +232,16 @@ namespace Zilon.Core.Tests.Tactics
         public void UseOn_ArmorSavePassed_ActEfficientDecrease()
         {
             // ARRANGE
-            const OffenseType offenceType = OffenseType.Tactical;
-            const int fakeToHitDiceRoll = 2; // успех в ToHit 2+
-            const int fakeArmorSaveDiceRoll = 6; // успех в ArmorSave 4+ при раных рангах
-            const int fakeActEfficientRoll = 3;  // эффективность пробрасывается D3, максимальный бросок
-            const int expectedActEfficient = fakeActEfficientRoll - 1;  // -1 даёт текущая броня
+            const OffenseType OFFENCETYPE = OffenseType.Tactical;
+            const int FAKE_TOHIT_DICE_ROLL = 2; // успех в ToHit 2+
+            const int FAKE_ARMORSAVE_DICE_ROLL = 6; // успех в ArmorSave 4+ при раных рангах
+            const int FAKE_ACTEFFICIENT_ROLL = 3; // эффективность пробрасывается D3, максимальный бросок
+            const int EXPECTED_ACTEFFICIENT = FAKE_ACTEFFICIENT_ROLL - 1; // -1 даёт текущая броня
 
             var actUsageRandomSourceMock = new Mock<ITacticalActUsageRandomSource>();
-            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(fakeToHitDiceRoll);
-            actUsageRandomSourceMock.Setup(x => x.RollArmorSave()).Returns(fakeArmorSaveDiceRoll);
-            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(fakeActEfficientRoll);
+            actUsageRandomSourceMock.Setup(x => x.RollToHit(It.IsAny<Roll>())).Returns(FAKE_TOHIT_DICE_ROLL);
+            actUsageRandomSourceMock.Setup(x => x.RollArmorSave()).Returns(FAKE_ARMORSAVE_DICE_ROLL);
+            actUsageRandomSourceMock.Setup(x => x.RollEfficient(It.IsAny<Roll>())).Returns(FAKE_ACTEFFICIENT_ROLL);
             var actUsageRandomSource = actUsageRandomSourceMock.Object;
 
             var perkResolverMock = new Mock<IPerkResolver>();
@@ -259,7 +262,7 @@ namespace Zilon.Core.Tests.Tactics
             {
                 Offence = new TestTacticalActOffenceSubScheme
                 {
-                    Type = offenceType,
+                    Type = OFFENCETYPE,
                     ApRank = 10,
                     Impact = ImpactType.Kinetic
                 }
@@ -270,53 +273,22 @@ namespace Zilon.Core.Tests.Tactics
             var act = actMock.Object;
 
             // ACT
-            var usedActs = new TacticalActRoll(act, fakeActEfficientRoll);
+            var usedActs = new TacticalActRoll(act, FAKE_ACTEFFICIENT_ROLL);
             actUsageService.ProcessActUsage(actor, monster, usedActs);
 
             // ASSERT
             actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Once);
-            monsterMock.Verify(x => x.TakeDamage(It.Is<int>(damage => damage == expectedActEfficient)), Times.Once);
+            monsterMock.Verify(x => x.TakeDamage(It.Is<int>(damage => damage == EXPECTED_ACTEFFICIENT)), Times.Once);
         }
 
-        private static Mock<IActor> CreateOnHitMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,
-            [CanBeNull] PersonArmorItem[] armors = null)
+        private static bool CheckDefeateProgress(IJobProgress progress, IAttackTarget expectedTarget)
         {
-            var monsterMock = new Mock<IActor>();
-            monsterMock.SetupGet(x => x.Node).Returns(new HexNode(1, 0));
+            if (progress is DefeatActorJobProgress defeatProgress)
+            {
+                return defeatProgress.Target == expectedTarget;
+            }
 
-            var monsterPersonMock = new Mock<IPerson>();
-
-            var monsterIsDead = false;
-            var monsterSurvivalDataMock = new Mock<ISurvivalModule>();
-            monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(() => monsterIsDead);
-            monsterSurvivalDataMock
-                .Setup(x => x.DecreaseStat(
-                    It.Is<SurvivalStatType>(s => s == SurvivalStatType.Health),
-                    It.IsAny<int>())
-                    )
-                .Callback(() => monsterIsDead = true);
-            var monsterSurvival = monsterSurvivalDataMock.Object;
-            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
-            monsterPersonMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule)))).Returns(true);
-
-            var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
-            var monsterCombatStats = monsterCombatStatsMock.Object;
-            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>())).Returns(monsterCombatStats);
-
-            var monsterPerson = monsterPersonMock.Object;
-            monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
-
-            var monsterDefenceStatsMock = new Mock<IPersonDefenceStats>();
-            monsterDefenceStatsMock.SetupGet(x => x.Defences).Returns(defences ?? Array.Empty<PersonDefenceItem>());
-            monsterDefenceStatsMock.SetupGet(x => x.Armors).Returns(armors ?? Array.Empty<PersonArmorItem>());
-            var monsterDefenceStats = monsterDefenceStatsMock.Object;
-            monsterCombatStatsMock.SetupGet(x => x.DefenceStats).Returns(monsterDefenceStats);
-
-            monsterMock.Setup(x => x.TakeDamage(It.IsAny<int>()))
-                .Callback<int>(damage => monsterSurvival.DecreaseStat(SurvivalStatType.Health, damage))
-                .Verifiable();
-
-            return monsterMock;
+            return false;
         }
 
         private static Mock<IActor> CreateMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,
@@ -334,7 +306,8 @@ namespace Zilon.Core.Tests.Tactics
 
             var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
             var monsterCombatStats = monsterCombatStatsMock.Object;
-            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>())).Returns(monsterCombatStats);
+            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>()))
+                .Returns(monsterCombatStats);
 
             var monsterPerson = monsterPersonMock.Object;
             monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
@@ -350,14 +323,46 @@ namespace Zilon.Core.Tests.Tactics
             return monsterMock;
         }
 
-        private static bool CheckDefeateProgress(IJobProgress progress, IAttackTarget expectedTarget)
+        private static Mock<IActor> CreateOnHitMonsterMock([CanBeNull] PersonDefenceItem[] defences = null,
+            [CanBeNull] PersonArmorItem[] armors = null)
         {
-            if (progress is DefeatActorJobProgress defeatProgress)
-            {
-                return defeatProgress.Target == expectedTarget;
-            }
+            var monsterMock = new Mock<IActor>();
+            monsterMock.SetupGet(x => x.Node).Returns(new HexNode(1, 0));
 
-            return false;
+            var monsterPersonMock = new Mock<IPerson>();
+
+            var monsterIsDead = false;
+            var monsterSurvivalDataMock = new Mock<ISurvivalModule>();
+            monsterSurvivalDataMock.SetupGet(x => x.IsDead).Returns(() => monsterIsDead);
+            monsterSurvivalDataMock
+                .Setup(x => x.DecreaseStat(
+                    It.Is<SurvivalStatType>(s => s == SurvivalStatType.Health),
+                    It.IsAny<int>())
+                )
+                .Callback(() => monsterIsDead = true);
+            var monsterSurvival = monsterSurvivalDataMock.Object;
+            monsterPersonMock.Setup(x => x.GetModule<ISurvivalModule>(It.IsAny<string>())).Returns(monsterSurvival);
+            monsterPersonMock.Setup(x => x.HasModule(It.Is<string>(x => x == nameof(ISurvivalModule)))).Returns(true);
+
+            var monsterCombatStatsMock = new Mock<ICombatStatsModule>();
+            var monsterCombatStats = monsterCombatStatsMock.Object;
+            monsterPersonMock.Setup(x => x.GetModule<ICombatStatsModule>(It.IsAny<string>()))
+                .Returns(monsterCombatStats);
+
+            var monsterPerson = monsterPersonMock.Object;
+            monsterMock.SetupGet(x => x.Person).Returns(monsterPerson);
+
+            var monsterDefenceStatsMock = new Mock<IPersonDefenceStats>();
+            monsterDefenceStatsMock.SetupGet(x => x.Defences).Returns(defences ?? Array.Empty<PersonDefenceItem>());
+            monsterDefenceStatsMock.SetupGet(x => x.Armors).Returns(armors ?? Array.Empty<PersonArmorItem>());
+            var monsterDefenceStats = monsterDefenceStatsMock.Object;
+            monsterCombatStatsMock.SetupGet(x => x.DefenceStats).Returns(monsterDefenceStats);
+
+            monsterMock.Setup(x => x.TakeDamage(It.IsAny<int>()))
+                .Callback<int>(damage => monsterSurvival.DecreaseStat(SurvivalStatType.Health, damage))
+                .Verifiable();
+
+            return monsterMock;
         }
 
         private static ITacticalAct CreateTestAct()

@@ -34,8 +34,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var roomGenerator = new TestSnakeRoomGenerator();
             var mapFactory = new RoomMapFactory(roomGenerator);
 
-            var botPlayer = CreateBotPlayer();
-            var generator = CreateGenerator(botPlayer, mapFactory);
+            var generator = CreateGenerator(mapFactory);
             var sectorScheme = CreateSectorScheme();
             var sectorNode = CreateSectorNode(sectorScheme);
 
@@ -58,7 +57,6 @@ namespace Zilon.Core.Tests.MapGenerators
         [TestCase(3257)]
         [TestCase(636)]
         [TestCase(100000)]
-
         public async Task Create_DifferentMapsRealDice_NoExceptions(int diceSeed)
         {
             // ARRANGE
@@ -68,8 +66,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var roomGenerator = new RoomGenerator(randomSource);
             var mapFactory = new RoomMapFactory(roomGenerator);
 
-            var botPlayer = CreateBotPlayer();
-            var generator = CreateGenerator(botPlayer, mapFactory);
+            var generator = CreateGenerator(mapFactory);
             var sectorScheme = CreateSectorScheme();
 
             var sectorNode = CreateSectorNode(sectorScheme);
@@ -78,7 +75,7 @@ namespace Zilon.Core.Tests.MapGenerators
             await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
         }
 
-        private static ISectorGenerator CreateGenerator(IBotPlayer botPlayer,
+        private static ISectorGenerator CreateGenerator(
             IMapFactory mapFactory)
         {
             var staticObstaclesGeneratorMock = new Mock<IStaticObstaclesGenerator>();
@@ -113,28 +110,7 @@ namespace Zilon.Core.Tests.MapGenerators
                 monsterGenerator,
                 staticObstaclesGenerator,
                 diseaseGenerator,
-                botPlayer,
                 sectorMaterializationService);
-        }
-
-        private static IBotPlayer CreateBotPlayer()
-        {
-            var botPlayerMock = new Mock<IBotPlayer>();
-            var botPlayer = botPlayerMock.Object;
-            return botPlayer;
-        }
-
-        private static ISectorSubScheme CreateSectorScheme()
-        {
-            return new TestSectorSubScheme
-            {
-                RegularMonsterSids = new[] { "rat" },
-                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
-                {
-                    RegionCount = 20,
-                    RegionSize = 20,
-                }
-            };
         }
 
         private static ISectorNode CreateSectorNode(ISectorSubScheme sectorScheme)
@@ -149,6 +125,19 @@ namespace Zilon.Core.Tests.MapGenerators
             sectorNodeMock.SetupGet(x => x.State).Returns(SectorNodeState.SchemeKnown);
             var sectorNode = sectorNodeMock.Object;
             return sectorNode;
+        }
+
+        private static ISectorSubScheme CreateSectorScheme()
+        {
+            return new TestSectorSubScheme
+            {
+                RegularMonsterSids = new[] { "rat" },
+                MapGeneratorOptions = new TestSectorRoomMapFactoryOptionsSubScheme
+                {
+                    RegionCount = 20,
+                    RegionSize = 20
+                }
+            };
         }
     }
 }

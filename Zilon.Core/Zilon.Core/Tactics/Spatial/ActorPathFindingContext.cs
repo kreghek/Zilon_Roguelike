@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.PathFinding;
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.Spatial
 {
@@ -24,14 +25,19 @@ namespace Zilon.Core.Tactics.Spatial
 
         public IGraphNode TargetNode { get; }
 
-        public int GetDistanceBetween(IGraphNode current, IGraphNode target)
+        private static bool BorderIsAvailabe(IGraphNode testedNeighbor, IActor actor, IMap map)
         {
-            return _map.DistanceBetween(current, target);
-        }
+            var borders = map.GetNext(testedNeighbor);
+            foreach (var node in borders)
+            {
+                var isNodeAvailable = map.IsPositionAvailableFor(node, actor);
+                if (!isNodeAvailable)
+                {
+                    return false;
+                }
+            }
 
-        public IEnumerable<IGraphNode> GetNext(IGraphNode current)
-        {
-            return GetAvailableNeighbors(current, _map);
+            return true;
         }
 
         /// <summary>
@@ -59,33 +65,17 @@ namespace Zilon.Core.Tactics.Spatial
         private bool IsNodeAvailableForActor(IMap map, IGraphNode testedNeighbor)
         {
             var actorSize = Actor.Person.PhysicalSize;
-            if (actorSize == Persons.PhysicalSize.Size1)
+            if (actorSize == PhysicalSizePattern.Size1)
             {
                 return IsNodeAvailableForSmallActor(map, testedNeighbor);
             }
-            else if (actorSize == Persons.PhysicalSize.Size7)
+
+            if (actorSize == PhysicalSizePattern.Size7)
             {
                 return IsNodeAvailableForNormalActor(map, testedNeighbor);
             }
-            else
-            {
-                throw new InvalidOperationException($"Размер {actorSize} не обрабатывается.");
-            }
-        }
 
-        private bool IsNodeAvailableForSmallActor(IMap map, IGraphNode testedNeighbor)
-        {
-            if (TargetNode == testedNeighbor)
-            {
-                return true;
-            }
-
-            if (map.IsPositionAvailableFor(testedNeighbor, Actor))
-            {
-                return true;
-            }
-
-            return false;
+            throw new InvalidOperationException($"Размер {actorSize} не обрабатывается.");
         }
 
         private bool IsNodeAvailableForNormalActor(IMap map, IGraphNode testedNeighbor)
@@ -106,19 +96,29 @@ namespace Zilon.Core.Tactics.Spatial
             return false;
         }
 
-        private static bool BorderIsAvailabe(IGraphNode testedNeighbor, IActor actor, IMap map)
+        private bool IsNodeAvailableForSmallActor(IMap map, IGraphNode testedNeighbor)
         {
-            var borders = map.GetNext(testedNeighbor);
-            foreach (var node in borders)
+            if (TargetNode == testedNeighbor)
             {
-                var isNodeAvailable = map.IsPositionAvailableFor(node, actor);
-                if (!isNodeAvailable)
-                {
-                    return false;
-                }
+                return true;
             }
 
-            return true;
+            if (map.IsPositionAvailableFor(testedNeighbor, Actor))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public int GetDistanceBetween(IGraphNode current, IGraphNode target)
+        {
+            return _map.DistanceBetween(current, target);
+        }
+
+        public IEnumerable<IGraphNode> GetNext(IGraphNode current)
+        {
+            return GetAvailableNeighbors(current, _map);
         }
     }
 }

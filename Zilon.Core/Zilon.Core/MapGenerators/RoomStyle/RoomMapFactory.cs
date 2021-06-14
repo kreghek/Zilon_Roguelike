@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-
-using JetBrains.Annotations;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.Schemes;
@@ -17,13 +16,18 @@ namespace Zilon.Core.MapGenerators.RoomStyle
     /// <seealso cref="IMapFactory" />
     public class RoomMapFactory : IMapFactory
     {
-        private const int RoomMinSize = 2;
+        private const int ROOM_MIN_SIZE = 2;
         private readonly IRoomGenerator _roomGenerator;
 
         [ExcludeFromCodeCoverage]
         public RoomMapFactory([NotNull] IRoomGenerator roomGenerator)
         {
-            _roomGenerator = roomGenerator ?? throw new System.ArgumentNullException(nameof(roomGenerator));
+            _roomGenerator = roomGenerator ?? throw new ArgumentNullException(nameof(roomGenerator));
+        }
+
+        private static ISectorMap CreateMapInstance()
+        {
+            return new SectorHexMap();
         }
 
         /// <summary>
@@ -36,14 +40,14 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             if (generationOptions is null)
             {
-                throw new System.ArgumentNullException(nameof(generationOptions));
+                throw new ArgumentNullException(nameof(generationOptions));
             }
 
             var roomFactoryOptions = generationOptions.OptionsSubScheme as ISectorRoomMapFactoryOptionsSubScheme;
 
             if (roomFactoryOptions is null)
             {
-                throw new System.ArgumentException("Не задана схема генерации в настройках", nameof(generationOptions));
+                throw new ArgumentException("Не задана схема генерации в настройках", nameof(generationOptions));
             }
 
             var map = CreateMapInstance();
@@ -54,7 +58,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             var transitions = generationOptions.Transitions;
 
             var rooms = _roomGenerator.GenerateRoomsInGrid(roomFactoryOptions.RegionCount,
-                RoomMinSize,
+                ROOM_MIN_SIZE,
                 roomFactoryOptions.RegionSize,
                 transitions);
 
@@ -84,17 +88,10 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                     region.ExitNodes = (from regionNode in region.Nodes
                                         where map.Transitions.Keys.Contains(regionNode)
                                         select regionNode).ToArray();
-
-                    continue;
                 }
             }
 
             return Task.FromResult(map);
-        }
-
-        private static ISectorMap CreateMapInstance()
-        {
-            return new SectorHexMap();
         }
     }
 }

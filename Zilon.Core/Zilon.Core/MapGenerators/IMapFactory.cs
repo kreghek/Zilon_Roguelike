@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.MapGenerators
@@ -21,7 +19,6 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="generationOptions"> Настройки генерации карты. </param>
         /// <returns> Возвращает экземпляр карты. </returns>
-        [NotNull]
         Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions);
     }
 }

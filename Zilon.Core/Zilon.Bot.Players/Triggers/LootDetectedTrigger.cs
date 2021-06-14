@@ -1,49 +1,50 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
+using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Bot.Players.Triggers
 {
     public sealed class LootDetectedTrigger : ILogicStateTrigger
     {
-        private readonly ISectorMap _map;
-        private readonly ISectorManager _sectorManager;
-
-        public LootDetectedTrigger(ISectorManager sectorManager)
-        {
-            _sectorManager = sectorManager ?? throw new System.ArgumentNullException(nameof(sectorManager));
-
-            _map = sectorManager.CurrentSector.Map;
-        }
-
         public void Reset()
         {
             // Нет состояния.
         }
 
-        public bool Test(IActor actor, ILogicState currentState, ILogicStrategyData strategyData)
+        public bool Test(IActor actor, ISectorTaskSourceContext context, ILogicState currentState,
+            ILogicStrategyData strategyData)
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
+            }
+
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (currentState is null)
             {
-                throw new System.ArgumentNullException(nameof(currentState));
+                throw new ArgumentNullException(nameof(currentState));
             }
 
             if (strategyData is null)
             {
-                throw new System.ArgumentNullException(nameof(strategyData));
+                throw new ArgumentNullException(nameof(strategyData));
             }
 
-            var containers = _sectorManager.CurrentSector.StaticObjectManager.Items.Where(x => x.HasModule<IPropContainer>());
+            var staticObjectManager = context.Sector.StaticObjectManager;
+            var map = context.Sector.Map;
+
+            var containers = staticObjectManager.Items.Where(x => x.HasModule<IPropContainer>());
             var foundContainers = LootHelper.FindAvailableContainers(containers,
                 actor.Node,
-                _map);
+                map);
 
             return foundContainers.Any();
         }

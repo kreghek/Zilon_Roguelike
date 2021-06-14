@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Bot.Players
 {
@@ -10,9 +11,11 @@ namespace Zilon.Bot.Players
             NextState = nextState ?? throw new ArgumentNullException(nameof(nextState));
         }
 
-        public ILogicStateTrigger Trigger { get; }
         public ILogicState NextState { get; }
 
+        public ILogicStateTrigger Trigger { get; }
+
+        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
             return $"{Trigger}: {NextState}";

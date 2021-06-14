@@ -12,10 +12,96 @@ using Zilon.Core.Tests.Common;
 
 namespace Zilon.Core.Tests.Schemes
 {
-    [TestFixture][Parallelizable(ParallelScope.All)]
+    [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     [Category(TestCategories.REAL_RESOURCE)]
     public class SchemeServiceTests
     {
+        /// <summary>
+        /// 1. В системе есть каталог схем.
+        /// 2. Создаём службу.
+        /// 3. При загрузке схем не происходит ошибок.
+        /// </summary>
+        [Test]
+        public void Constructor_CorrectSchemes_NoExceptions()
+        {
+            // ARRANGE
+
+            // ACT
+            Action createService = () =>
+            {
+                CreateSchemeService();
+            };
+
+            // ASSERT
+            createService.Should().NotThrow();
+        }
+
+        /// <summary>
+        /// Тест проверяем схемы дропа.
+        /// 1. Sid предметов должен быть корректным. Эти предметы должны существовать.
+        /// </summary>
+        [Test]
+        public void DropTables_CheckPropSids_AllPropsExist()
+        {
+            // ARRANGE
+            var schemeService = CreateSchemeService();
+            var dropTables = schemeService.GetSchemes<IDropTableScheme>();
+
+            // ASSERT
+            foreach (var dropTable in dropTables)
+            {
+                CheckDropTableScheme(dropTable, schemeService);
+            }
+        }
+
+        /// <summary>
+        /// The test checks if scheme is not found then the expected exception will be thrown.
+        /// </summary>
+        /// <remarks>
+        /// Ensure you have no scheme named "test" in the scheme catalog.
+        /// </remarks>
+        [Test]
+        public void GetScheme_OneInvalidScheme_ExpectedExceptionWasThrown()
+        {
+            //ARRANGE
+            var schemeTypes = ExtractSchemeTypes();
+
+            var schemeService = CreateSchemeService();
+
+            var actList = new List<Action>();
+
+            // ACT
+
+            foreach (var schemeType in schemeTypes)
+            {
+                // ReSharper disable once ConvertToLocalFunction
+                Action act = () =>
+                {
+                    var method = typeof(SchemeService).GetMethod(nameof(SchemeService.GetScheme));
+                    if (method is null)
+                    {
+                        throw new InvalidOperationException(
+                            $"No method {nameof(ISchemeService.GetScheme)} was found in the class {nameof(SchemeService)}.");
+                    }
+
+                    var generic = method.MakeGenericMethod(schemeType);
+                    var scheme = generic.Invoke(schemeService, new object[] { "test" });
+                    Console.WriteLine(scheme);
+                };
+
+                actList.Add(act);
+            }
+
+            // ASSERT
+            foreach (var act in actList)
+            {
+                act.Should().Throw<TargetInvocationException>()
+                    .WithInnerException<InvalidOperationException>()
+                    .WithInnerException<KeyNotFoundException>();
+            }
+        }
+
         /// <summary>
         /// Тест проверяет получение схем всех типов.
         /// </summary>
@@ -39,7 +125,8 @@ namespace Zilon.Core.Tests.Schemes
                     var method = typeof(SchemeService).GetMethod(nameof(ISchemeService.GetSchemes));
                     if (method == null)
                     {
-                        throw new InvalidOperationException($"Для класса {nameof(SchemeService)} не найден метод {nameof(ISchemeService.GetSchemes)}.");
+                        throw new InvalidOperationException(
+                            $"Для класса {nameof(SchemeService)} не найден метод {nameof(ISchemeService.GetSchemes)}.");
                     }
 
                     var generic = method.MakeGenericMethod(schemeType);
@@ -50,8 +137,6 @@ namespace Zilon.Core.Tests.Schemes
                 actList.Add(act);
             }
 
-
-
             // ASSERT
             foreach (var act in actList)
             {
@@ -60,79 +145,13 @@ namespace Zilon.Core.Tests.Schemes
         }
 
         /// <summary>
-        /// Тест проверяет получение схем всех типов.
-        /// </summary>
-        [Test]
-        public void GetScheme_OneScheme_NoExceptions()
-        {
-            //ARRANGE
-            var schemeTypes = ExtractSchemeTypes();
-
-            var schemeService = CreateSchemeService();
-
-            var actList = new List<Action>();
-
-            // ACT
-
-            foreach (var schemeType in schemeTypes)
-            {
-                // ReSharper disable once ConvertToLocalFunction
-                Action act = () =>
-                {
-                    var method = typeof(SchemeService).GetMethod(nameof(SchemeService.GetScheme));
-                    if (method == null)
-                    {
-                        throw new InvalidOperationException($"Для класса {nameof(SchemeService)} не найден метод {nameof(ISchemeService.GetScheme)}.");
-                    }
-                    var generic = method.MakeGenericMethod(schemeType);
-                    var scheme = generic.Invoke(schemeService, new object[] { "test" });
-                    Console.WriteLine(scheme);
-                };
-
-                actList.Add(act);
-            }
-
-
-            // ASSERT
-            foreach (var act in actList)
-            {
-                act.Should().Throw<TargetInvocationException>()
-                    .WithInnerException<InvalidOperationException>()
-                    .WithInnerException<KeyNotFoundException>();
-            }
-        }
-
-        /// <summary>
-        /// 1. В системе есть каталог схем.
-        /// 2. Создаём службу.
-        /// 3. При загрузке схем не происходит ошибок.
-        /// </summary>
-        [Test]
-        public void Constructor_CorrectSchemes_NoExceptions()
-        {
-            // ARRANGE
-
-
-
-            // ACT
-            Action createService = () =>
-            {
-                CreateSchemeService();
-            };
-
-
-
-            // ASSERT
-            createService.Should().NotThrow();
-        }
-
-        /// <summary>
         /// Тест проверяет, что все схемы согласованы.
         /// </summary>
         //TODO Лучше сделать отдельное консольное приложение для валидации всех схем.
         [Test]
         [Category("validation")]
-        public void SchemeValidator() {
+        public void SchemeValidator()
+        {
             // ARRANGE
             var schemeService = CreateSchemeService();
 
@@ -150,27 +169,26 @@ namespace Zilon.Core.Tests.Schemes
             }
         }
 
-        /// <summary>
-        /// Тест проверяем схемы дропа.
-        /// 1. Sid предметов должен быть корректным. Эти предметы должны существовать.
-        /// </summary>
-        [Test]
-        public void DropTables_CheckPropSids_AllPropsExist()
+        private static void CheckDropTableScheme(IDropTableScheme dropTableScheme, ISchemeService schemeService)
         {
-            // ARRANGE
-            var schemeService = CreateSchemeService();
-            var dropTables = schemeService.GetSchemes<IDropTableScheme>();
-
-
-
-            // ASSERT
-            foreach (var dropTable in dropTables)
+            Action act = () =>
             {
-                CheckDropTableScheme(dropTable, schemeService);
-            }
+                foreach (var record in dropTableScheme.Records)
+                {
+                    var propSid = record.SchemeSid;
+                    if (propSid == null)
+                    {
+                        continue;
+                    }
+
+                    schemeService.GetScheme<IPropScheme>(propSid);
+                }
+            };
+
+            act.Should().NotThrow();
         }
 
-        private ISchemeService CreateSchemeService()
+        private static ISchemeService CreateSchemeService()
         {
             var schemeLocator = FileSchemeLocator.CreateFromEnvVariable();
 
@@ -189,27 +207,8 @@ namespace Zilon.Core.Tests.Schemes
             var allTypes = assembly.GetTypes();
             var schemeTypes = allTypes
                 .Where(x => typeof(IScheme).IsAssignableFrom(x) &&
-                x.IsInterface && x != typeof(IScheme)).ToArray();
+                            x.IsInterface && x != typeof(IScheme)).ToArray();
             return schemeTypes;
-        }
-
-        private void CheckDropTableScheme(IDropTableScheme dropTableScheme, ISchemeService schemeService)
-        {
-            Action act = () =>
-            {
-                foreach (var record in dropTableScheme.Records)
-                {
-                    var propSid = record.SchemeSid;
-                    if (propSid == null)
-                    {
-                        continue;
-                    }
-
-                    schemeService.GetScheme<IPropScheme>(propSid);
-                }
-            };
-
-            act.Should().NotThrow();
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
 using Zilon.Core.Persons;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -7,10 +9,21 @@ namespace Zilon.Core.Client
 {
     public class SectorUiState : UiStateBase, ISectorUiState
     {
-        private IActorViewModel _activeActor;
+        private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly ICommandLoopUpdater _commandLoopUpdater;
+        private readonly ICommandPool _commandPool;
+        private IActorViewModel? _activeActor;
 
-        /// <summary>Активный актёр.</summary>
-        public IActorViewModel ActiveActor
+        public SectorUiState(ICommandPool commandPool, IAnimationBlockerService animationBlockerService,
+            ICommandLoopUpdater commandLoopUpdater)
+        {
+            _commandPool = commandPool;
+            _animationBlockerService = animationBlockerService;
+            _commandLoopUpdater = commandLoopUpdater;
+        }
+
+        /// <inheritdoc />
+        public IActorViewModel? ActiveActor
         {
             get => _activeActor;
             set
@@ -20,12 +33,17 @@ namespace Zilon.Core.Client
             }
         }
 
-        /// <summary>Пользовательский источник задач для актёров.</summary>
-        public IHumanActorTaskSource TaskSource { get; set; }
+        /// <inheritdoc />
+        public IHumanActorTaskSource<ISectorTaskSourceContext>? TaskSource =>
+            ActiveActor?.Actor?.TaskSource as IHumanActorTaskSource<ISectorTaskSourceContext>;
 
-        public event EventHandler ActiveActorChanged;
+        public event EventHandler? ActiveActorChanged;
 
-        /// <inheritdoc/>
-        public ITacticalAct TacticalAct { get; set; }
+        /// <inheritdoc />
+        public ITacticalAct? TacticalAct { get; set; }
+
+        /// <inheritdoc />
+        public bool CanPlayerGivesCommand => _commandPool.IsEmpty && !_animationBlockerService.HasBlockers &&
+                                             !_commandLoopUpdater.HasPendingCommands();
     }
 }

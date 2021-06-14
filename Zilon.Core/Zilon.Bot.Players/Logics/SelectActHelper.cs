@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
-using JetBrains.Annotations;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -16,12 +15,11 @@ namespace Zilon.Bot.Players.Logics
         /// <param name="acts"> Все возможные действия. </param>
         /// <param name="propStore"> Хранилище, в котором искать ресурсы. </param>
         /// <returns> Лучшее дейсвие среди указанных. </returns>
-        [NotNull]
-        public static ITacticalAct SelectBestAct(IEnumerable<ITacticalAct> acts, [CanBeNull] IPropStore propStore)
+        public static ITacticalAct SelectBestAct(IEnumerable<ITacticalAct> acts, IPropStore propStore)
         {
             if (acts is null)
             {
-                throw new System.ArgumentNullException(nameof(acts));
+                throw new ArgumentNullException(nameof(acts));
             }
 
             var availableActs = acts
@@ -32,7 +30,33 @@ namespace Zilon.Bot.Players.Logics
             return availableActs.First();
         }
 
-        private static bool TacticalActIsAvailableByConstrains(ITacticalAct tacticalAct, [CanBeNull] IPropStore propStore)
+        private static bool CheckPropResource(IPropStore inventory,
+            string usedPropResourceType,
+            int usedPropResourceCount)
+        {
+            var props = inventory.CalcActualItems();
+            var propResources = new List<Resource>();
+            foreach (var prop in props)
+            {
+                var propResource = prop as Resource;
+                if (propResource == null)
+                {
+                    continue;
+                }
+
+                if (propResource.Scheme.Bullet?.Caliber == usedPropResourceType)
+                {
+                    propResources.Add(propResource);
+                }
+            }
+
+            var preferredPropResource = propResources.FirstOrDefault();
+
+            return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
+        }
+
+        private static bool TacticalActIsAvailableByConstrains(ITacticalAct tacticalAct,
+            IPropStore propStore)
         {
             if (tacticalAct.Constrains is null)
             {
@@ -64,31 +88,6 @@ namespace Zilon.Bot.Players.Logics
             }
 
             return false;
-        }
-
-        private static bool CheckPropResource(IPropStore inventory,
-            string usedPropResourceType,
-            int usedPropResourceCount)
-        {
-            var props = inventory.CalcActualItems();
-            var propResources = new List<Resource>();
-            foreach (var prop in props)
-            {
-                var propResource = prop as Resource;
-                if (propResource == null)
-                {
-                    continue;
-                }
-
-                if (propResource.Scheme.Bullet?.Caliber == usedPropResourceType)
-                {
-                    propResources.Add(propResource);
-                }
-            }
-
-            var preferredPropResource = propResources.FirstOrDefault();
-
-            return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
         }
     }
 }

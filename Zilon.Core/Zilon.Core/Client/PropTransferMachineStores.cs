@@ -3,7 +3,7 @@
     /// <summary>
     /// Перечисление источников при трансфере предметов.
     /// </summary>
-    public enum PropTransferMachineStores
+    public enum PropTransferMachineStore
     {
         /// <summary>
         /// Инвентарь персонажа.

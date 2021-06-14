@@ -1,7 +1,7 @@
 {
   "Name": {
     "Ru": "Внутреннее пламя",
-	"En": "Inner flame"
+    "En": "Inner flame"
   },
   "Stats": {
     "Efficient": {
@@ -12,13 +12,13 @@
       "Min": 1,
       "Max": 8
     },
-	"Effect": "Damage",
-	"Targets": "Enemy",
+    "Effect": "Damage",
+    "Targets": "Enemy",
     "HitCount": 1,
     "Offence": {
       "Type": "Shadow",
-      "Impact":  "Psy",
-	  "ApRank": 1
+      "Impact": "Psy",
+      "ApRank": 1
     }
   },
   "Constrains": {

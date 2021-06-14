@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-using JetBrains.Annotations;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics.Spatial;
 
@@ -31,7 +31,6 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         /// <returns>
         /// Возвращает целевые комнаты для соединения.
         /// </returns>
-        [NotNull, ItemNotNull]
         public Room[] RollConnectedRooms(Room currentRoom, int maxNeighbors, IList<Room> availableRooms)
         {
             var openRooms = new List<Room>(availableRooms);
@@ -61,7 +60,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             if (roomWidth <= 2 || roomHeight <= 2)
             {
-                return new RoomInteriorObjectMeta[0];
+                return Array.Empty<RoomInteriorObjectMeta>();
             }
 
             const int PASS_PADDING = 1;
@@ -206,8 +205,8 @@ namespace Zilon.Core.MapGenerators.RoomStyle
                 var rollDiffWidth = _roomSizeDice.Roll(diffSize);
                 var rollDiffHeight = _roomSizeDice.Roll(diffSize);
 
-                var rollWidth = (int)rollDiffWidth + minSize;
-                var rollHeight = (int)rollDiffHeight + minSize;
+                var rollWidth = rollDiffWidth + minSize;
+                var rollHeight = rollDiffHeight + minSize;
 
                 var size = new Size(rollWidth, rollHeight);
 
@@ -223,7 +222,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
             return openRoomNodes.ElementAt(index);
         }
 
-        public IEnumerable<RoomTransition> RollTransitions(IEnumerable<RoomTransition> openTransitions)
+        public IEnumerable<SectorTransition> RollTransitions(IEnumerable<SectorTransition> openTransitions)
         {
             var index = _dice.Roll(0, openTransitions.Count() - 1);
             return new[] { openTransitions.ElementAt(index) };

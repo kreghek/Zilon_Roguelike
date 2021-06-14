@@ -13,13 +13,13 @@ namespace Zilon.Core.PersonModules
             DefenceStats = defenceStats;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IPersonDefenceStats DefenceStats { get; }
 
-        /// <inheritdoc/>
-        public string Key { get => nameof(ICombatStatsModule); }
+        /// <inheritdoc />
+        public string Key => nameof(ICombatStatsModule);
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool IsActive { get; set; }
     }
 }

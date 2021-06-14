@@ -3,7 +3,7 @@
     /// <summary>
     /// Модуль перемещения персонажа.
     /// </summary>
-    public interface IMovingModule: IPersonModule
+    public interface IMovingModule : IPersonModule
     {
         /// <summary>
         /// Рассчитать стоимость перемещения на один шаг.

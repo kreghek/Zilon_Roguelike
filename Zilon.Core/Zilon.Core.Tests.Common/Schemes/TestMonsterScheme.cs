@@ -1,7 +1,10 @@
-﻿namespace Zilon.Core.Tests.Common.Schemes
-{
-    using Zilon.Core.Schemes;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Zilon.Core.Tests.Common.Schemes
+{
+    using Core.Schemes;
+
+    [ExcludeFromCodeCoverage]
     public class TestMonsterScheme : SchemeBase, IMonsterScheme
     {
         public int BaseScore { get; set; }
@@ -16,7 +19,10 @@
 
         public ITacticalActStatsSubScheme PrimaryAct { get; set; }
 
-        /// <inheritdoc cref="IMonsterScheme"/>
+        /// <inheritdoc cref="IMonsterScheme" />
         public string[] Tags { get; set; }
+
+        /// <inheritdoc />
+        public float? MoveSpeedFactor { get; }
     }
 }

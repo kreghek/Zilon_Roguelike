@@ -13,7 +13,7 @@
       "SchemeSid": "steel-helmet",
       "Weight": 10
     },
-	{
+    {
       "SchemeSid": "gold-armor",
       "Weight": 5
     },
@@ -24,210 +24,190 @@
     {
       "SchemeSid": "pistol",
       "Weight": 5,
-	  "Extra":[
-		{
-			"Rolls": 1,
-			"Records":[
-				{
-				  "SchemeSid": "bullet-45",
-				  "MinCount": 3,
-				  "MaxCount": 5,
-				  "Weight": 5
-				},
-				{
-				  "SchemeSid": "bullet-45",
-				  "MinCount": 6,
-				  "MaxCount": 10,
-				  "Weight": 2
-				}
-			]
-		}
-	  ]
+      "Extra": [
+        {
+          "Rolls": 1,
+          "Records": [
+            {
+              "SchemeSid": "bullet-45",
+              "MinCount": 3,
+              "MaxCount": 5,
+              "Weight": 5
+            },
+            {
+              "SchemeSid": "bullet-45",
+              "MinCount": 6,
+              "MaxCount": 10,
+              "Weight": 2
+            }
+          ]
+        }
+      ]
     },
     {
       "SchemeSid": "short-sword",
-
       "Weight": 10
     },
     {
       "SchemeSid": "anger-axe",
-
       "Weight": 10
     },
-	{
+    {
       "SchemeSid": "suprime-anger-axe",
-
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "bow",
       "Weight": 10,
-	  "Extra":[
-		{
-			"Rolls": 1,
-			"Records":[
-				{
-				  "SchemeSid": "arrow",
-				  "MinCount": 3,
-				  "MaxCount": 5,
-				  "Weight": 5
-				},
-				{
-				  "SchemeSid": "arrow",
-				  "MinCount": 6,
-				  "MaxCount": 10,
-				  "Weight": 2
-				}
-			]
-		}
-	  ]
+      "Extra": [
+        {
+          "Rolls": 1,
+          "Records": [
+            {
+              "SchemeSid": "arrow",
+              "MinCount": 3,
+              "MaxCount": 5,
+              "Weight": 5
+            },
+            {
+              "SchemeSid": "arrow",
+              "MinCount": 6,
+              "MaxCount": 10,
+              "Weight": 2
+            }
+          ]
+        }
+      ]
     },
-	{
+    {
       "SchemeSid": "composite-bow",
       "Weight": 5,
-	  "Extra":[
-		{
-			"Rolls": 1,
-			"Records":[
-				{
-				  "SchemeSid": "arrow",
-				  "MinCount": 3,
-				  "MaxCount": 5,
-				  "Weight": 5
-				},
-				{
-				  "SchemeSid": "arrow",
-				  "MinCount": 6,
-				  "MaxCount": 10,
-				  "Weight": 2
-				}
-			]
-		}
-	  ]
+      "Extra": [
+        {
+          "Rolls": 1,
+          "Records": [
+            {
+              "SchemeSid": "arrow",
+              "MinCount": 3,
+              "MaxCount": 5,
+              "Weight": 5
+            },
+            {
+              "SchemeSid": "arrow",
+              "MinCount": 6,
+              "MaxCount": 10,
+              "Weight": 2
+            }
+          ]
+        }
+      ]
     },
-	{
+    {
       "SchemeSid": "knitted-hat",
-
       "Weight": 10
     },
-	{
+    {
       "SchemeSid": "leather-helmet",
-
       "Weight": 10
     },
-	{
+    {
       "SchemeSid": "closed-leather-helmet",
-
       "Weight": 5
     },
-	{
+    {
       "SchemeSid": "elder-hat",
-
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "wizard-hat",
       "Weight": 10
     },
-	{
+    {
       "SchemeSid": "fireball-staff",
       "Weight": 5,
-	  "Extra":[
-		{
-			"Rolls": 1,
-			"Records":[
-				{
-				  "SchemeSid": "mana",
-				  "MinCount": 3,
-				  "MaxCount": 5,
-				  "Weight": 5
-				},
-				{
-				  "SchemeSid": "mana",
-				  "MinCount": 6,
-				  "MaxCount": 10,
-				  "Weight": 2
-				}
-			]
-		}
-	  ]
+      "Extra": [
+        {
+          "Rolls": 1,
+          "Records": [
+            {
+              "SchemeSid": "mana",
+              "MinCount": 3,
+              "MaxCount": 5,
+              "Weight": 5
+            },
+            {
+              "SchemeSid": "mana",
+              "MinCount": 6,
+              "MaxCount": 10,
+              "Weight": 2
+            }
+          ]
+        }
+      ]
     },
-	{
+    {
       "SchemeSid": "shadow-staff",
       "Weight": 5,
-	  "Extra":[
-		{
-			"Rolls": 1,
-			"Records":[
-				{
-				  "SchemeSid": "mana",
-				  "MinCount": 3,
-				  "MaxCount": 5,
-				  "Weight": 5
-				},
-				{
-				  "SchemeSid": "mana",
-				  "MinCount": 6,
-				  "MaxCount": 10,
-				  "Weight": 2
-				}
-			]
-		}
-	  ]
+      "Extra": [
+        {
+          "Rolls": 1,
+          "Records": [
+            {
+              "SchemeSid": "mana",
+              "MinCount": 3,
+              "MaxCount": 5,
+              "Weight": 5
+            },
+            {
+              "SchemeSid": "mana",
+              "MinCount": 6,
+              "MaxCount": 10,
+              "Weight": 2
+            }
+          ]
+        }
+      ]
     },
-	{
+    {
       "SchemeSid": "flail",
-
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "mace",
-
       "Weight": 10
     },
-	{
+    {
       "SchemeSid": "knobstick",
-
       "Weight": 5
     },
-	{
+    {
       "SchemeSid": "leather-jacket",
-
       "Weight": 10
     },
-	{
+    {
       "SchemeSid": "master-robe",
-
       "Weight": 5
     },
-	{
+    {
       "SchemeSid": "quilted-coat",
-
       "Weight": 5
     },
-	{
+    {
       "SchemeSid": "scholar-robe",
-
       "Weight": 10
     },
-	{
+    {
       "SchemeSid": "tribal-spear",
-
       "Weight": 10
     },
-	{
+    {
       "SchemeSid": "rush-sword",
-
       "Weight": 5
     },
-	{
+    {
       "SchemeSid": "tactical-helmet",
-
       "Weight": 5
     },
-	
-	
-
     {
       "SchemeSid": "bullet-45",
       "MinCount": 3,
@@ -240,8 +220,7 @@
       "MaxCount": 10,
       "Weight": 2
     },
-	
-	{
+    {
       "SchemeSid": "arrow",
       "MinCount": 3,
       "MaxCount": 5,
@@ -253,8 +232,7 @@
       "MaxCount": 10,
       "Weight": 2
     },
-	
-	{
+    {
       "SchemeSid": "mana",
       "MinCount": 3,
       "MaxCount": 5,
@@ -266,93 +244,91 @@
       "MaxCount": 10,
       "Weight": 2
     },
-	
-	{
+    {
       "SchemeSid": "gold-armor-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "gold-helmet-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "pistol-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "anger-axe-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "battle-axe-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "bow-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "composite-bow-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "fireball-staff-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "flail-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "iron-ring-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "law-codex-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "mace-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "master-robe-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "short-sword-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "taurus-stim-mimic",
       "Weight": 3
     },
-	{
+    {
       "SchemeSid": "wooden-shield-mimic",
       "Weight": 3
     },
-	
-	{
+    {
       "SchemeSid": "iron-ring",
       "Weight": 2
     },
-	{
+    {
       "SchemeSid": "higea-ring",
       "Weight": 2
     },
-	{
+    {
       "SchemeSid": "hunger-moderator",
       "Weight": 1
     },
-	{
+    {
       "SchemeSid": "thrist-moderator",
       "Weight": 1
     },
-	{
+    {
       "SchemeSid": "taurus-stim",
       "Weight": 2
     },
-	{
+    {
       "SchemeSid": "power-shield-generator",
       "Weight": 1
     }

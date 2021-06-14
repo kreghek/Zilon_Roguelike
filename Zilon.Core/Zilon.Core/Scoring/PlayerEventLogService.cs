@@ -1,15 +1,29 @@
-﻿using Zilon.Core.Tactics;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Players;
 
 namespace Zilon.Core.Scoring
 {
+    [ExcludeFromCodeCoverage]
     public class PlayerEventLogService : IPlayerEventLogService
     {
-        private IPlayerEvent _playerEvent;
+        private IPlayerEvent? _playerEvent;
 
-        public IActor Actor { get; set; }
+        public PlayerEventLogService(IPlayer player)
+        {
+            Player = player;
+        }
 
-        public IPlayerEvent GetPlayerEvent()
-        { 
+        public IPlayer Player { get; }
+
+        public IPlayerEvent? GetPlayerEvent()
+        {
+            if (_playerEvent is null)
+            {
+                return null;
+            }
+
             return _playerEvent;
         }
 

@@ -1,7 +1,2 @@
-/Zilon.Client/Assets/Plugins
-/Zilon.Client/Assets/db.bytes
-/Zilon.Client/Assets/db.bytes.meta
-/Zilon.Client/Packages
 /Zilon.Core/*.leu
-/Builds/x64
-/Builds/x86
+/BenchmarkDotNet.Artifacts

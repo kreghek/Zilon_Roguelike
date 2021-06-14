@@ -2,11 +2,12 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Zilon.Bot.Players.NetCore.DependencyInjectionExtensions;
 using Zilon.Emulation.Common;
 
 namespace Zilon.Core.Benchmarks.CreateSector
 {
-    class Startup : InitializationBase
+    internal class Startup : InitializationBase
     {
         public Startup() : base(123)
         {
@@ -19,7 +20,7 @@ namespace Zilon.Core.Benchmarks.CreateSector
 
         protected override void RegisterBot(IServiceCollection serviceCollection)
         {
-            // Регистрация в Program.
+            serviceCollection.RegisterBot();
         }
     }
 }

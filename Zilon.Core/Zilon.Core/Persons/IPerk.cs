@@ -3,18 +3,18 @@
 namespace Zilon.Core.Persons
 {
     /// <summary>
-    /// Информация о перке.
+    /// Information about perk - archieved or potentially.
     /// </summary>
-    public interface IPerk: IJobExecutable
+    public interface IPerk : IJobExecutable
     {
         /// <summary>
-        /// Схема перка.
+        /// Current perk level. Null current level means perk is not archieved.
         /// </summary>
-        IPerkScheme Scheme { get; }
+        PerkLevel? CurrentLevel { get; set; }
 
         /// <summary>
-        /// Текущий уровень перка. Иначе - индекс схемы уровня.
+        /// Perk scheme.
         /// </summary>
-        PerkLevel CurrentLevel { get; set; }
+        IPerkScheme Scheme { get; }
     }
 }

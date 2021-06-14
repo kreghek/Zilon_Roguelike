@@ -16,14 +16,14 @@ namespace Zilon.Core.Props
             Scheme = scheme;
         }
 
-        /// <summary>
-        /// Схема предмета.
-        /// </summary>
-        public IPropScheme Scheme { get; }
-
         public override string ToString()
         {
             return $"{Scheme}";
         }
+
+        /// <summary>
+        /// Схема предмета.
+        /// </summary>
+        public IPropScheme Scheme { get; }
     }
 }

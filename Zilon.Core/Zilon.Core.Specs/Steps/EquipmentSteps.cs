@@ -26,17 +26,6 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [Given(@"В инвентаре у актёра игрока есть предмет: (.*)")]
-        public void GivenВИнвентареУАктёраИгрокаЕстьПредметPropSid(string propSid)
-        {
-            var actor = Context.GetActiveActor();
-
-            var equipment = Context.CreateEquipment(propSid);
-
-            actor.Person.GetModule<IInventoryModule>().Add(equipment);
-        }
-
-        [UsedImplicitly]
         [Given(@"Актёр игрока экипирован предметом (.*) в слот Index: (.*)")]
         public void GivenАктёрИгрокаЭкипированНет(string propSid, int slotIndex)
         {
@@ -52,39 +41,14 @@ namespace Zilon.Core.Specs.Steps
         }
 
         [UsedImplicitly]
-        [When(@"Экипирую предмет (.+) в слот Index: (\d+)")]
-        public void WhenЭкипируюПредметPropSidВСлотIndexSlotIndex(string propSid, int slotIndex)
+        [Given(@"В инвентаре у актёра игрока есть предмет: (.*)")]
+        public void GivenВИнвентареУАктёраИгрокаЕстьПредметPropSid(string propSid)
         {
-            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
-            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
-
-            equipCommand.SlotIndex = slotIndex;
-
             var actor = Context.GetActiveActor();
 
-            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
+            var equipment = Context.CreateEquipment(propSid);
 
-            var targetEquipmentVeiwModel = new TestPropItemViewModel
-            {
-                Prop = targetEquipment
-            };
-
-            inventoryState.SelectedProp = targetEquipmentVeiwModel;
-
-            equipCommand.Execute();
-        }
-
-        [When(@"Снимаю экипировку из слота (\d+)")]
-        public void WhenСнимаюЭкипировкуИзСлота(int slotIndex)
-        {
-            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
-            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
-
-            equipCommand.SlotIndex = slotIndex;
-
-            inventoryState.SelectedProp = null;
-
-            equipCommand.Execute();
+            actor.Person.GetModule<IInventoryModule>().Add(equipment);
         }
 
         [Then(@"В слоте Index: (\d+) актёра игрока есть (.+)")]
@@ -103,34 +67,13 @@ namespace Zilon.Core.Specs.Steps
             actor.Person.GetModule<IEquipmentModule>()[slotIndex].Should().BeNull();
         }
 
-        [Then(@"Невозможна экипировка предмета (.+) в слот Index: (.+)")]
-        public void ThenНевозможнаЭкипировкаПредметаPistolВСлотIndex(string propSid, int slotIndex)
-        {
-            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
-            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
-
-            equipCommand.SlotIndex = slotIndex;
-
-            var actor = Context.GetActiveActor();
-
-            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems().First(x => x.Scheme.Sid == propSid);
-
-            var targetEquipmentVeiwModel = new TestPropItemViewModel
-            {
-                Prop = targetEquipment
-            };
-
-            inventoryState.SelectedProp = targetEquipmentVeiwModel;
-
-            equipCommand.CanExecute().Should().BeFalse();
-        }
-
         [Then(@"Текущий запас здоровья персонажа игрока равен (\d+)")]
         public void ThenЗдоровьеПерсонажаИгрокаРавно(int expectedHp)
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value.Should().Be(expectedHp);
+            actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health).Value
+                .Should().Be(expectedHp);
         }
 
         [Then(@"Максимальный запас здоровья персонажа игрока равен (\d+)")]
@@ -141,6 +84,66 @@ namespace Zilon.Core.Specs.Steps
             actor.Person.GetModule<ISurvivalModule>().Stats.Single(x => x.Type == SurvivalStatType.Health)
                 .Range.Max
                 .Should().Be(expectedMaxHp);
+        }
+
+        [Then(@"Невозможна экипировка предмета (.+) в слот Index: (.+)")]
+        public void ThenНевозможнаЭкипировкаПредметаPistolВСлотIndex(string propSid, int slotIndex)
+        {
+            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
+            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
+
+            equipCommand.SlotIndex = slotIndex;
+
+            var actor = Context.GetActiveActor();
+
+            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
+                .First(x => x.Scheme.Sid == propSid);
+
+            var targetEquipmentVeiwModel = new TestPropItemViewModel
+            {
+                Prop = targetEquipment
+            };
+
+            inventoryState.SelectedProp = targetEquipmentVeiwModel;
+
+            equipCommand.CanExecute().IsSuccess.Should().BeFalse();
+        }
+
+        [When(@"Снимаю экипировку из слота (\d+)")]
+        public void WhenСнимаюЭкипировкуИзСлота(int slotIndex)
+        {
+            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
+            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
+
+            equipCommand.SlotIndex = slotIndex;
+
+            inventoryState.SelectedProp = null;
+
+            equipCommand.Execute();
+        }
+
+        [UsedImplicitly]
+        [When(@"Экипирую предмет (.+) в слот Index: (\d+)")]
+        public void WhenЭкипируюПредметPropSidВСлотIndexSlotIndex(string propSid, int slotIndex)
+        {
+            var equipCommand = Context.ServiceProvider.GetRequiredService<EquipCommand>();
+            var inventoryState = Context.ServiceProvider.GetRequiredService<IInventoryState>();
+
+            equipCommand.SlotIndex = slotIndex;
+
+            var actor = Context.GetActiveActor();
+
+            var targetEquipment = actor.Person.GetModule<IInventoryModule>().CalcActualItems()
+                .First(x => x.Scheme.Sid == propSid);
+
+            var targetEquipmentVeiwModel = new TestPropItemViewModel
+            {
+                Prop = targetEquipment
+            };
+
+            inventoryState.SelectedProp = targetEquipmentVeiwModel;
+
+            equipCommand.Execute();
         }
     }
 }

@@ -4,8 +4,8 @@ namespace Zilon.Core.Client
 {
     public interface IInventoryState
     {
-        IPropItemViewModel SelectedProp { get; set; }
+        IPropItemViewModel? SelectedProp { get; set; }
 
-        event EventHandler SelectedPropChanged;
+        event EventHandler? SelectedPropChanged;
     }
 }

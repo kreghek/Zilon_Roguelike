@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Zilon.Core.MassSectorGenerator
 {
@@ -11,8 +12,11 @@ namespace Zilon.Core.MassSectorGenerator
         public SectorGeneratorException() { }
         public SectorGeneratorException(string message) : base(message) { }
         public SectorGeneratorException(string message, Exception inner) : base(message, inner) { }
+
         protected SectorGeneratorException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+            SerializationInfo info,
+            StreamingContext context) : base(info, context)
+        {
+        }
     }
 }

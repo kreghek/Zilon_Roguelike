@@ -1,7 +1,6 @@
 ﻿using System;
 
-using JetBrains.Annotations;
-
+using Zilon.Core.Localization;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 
@@ -12,27 +11,32 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class HumanPerson : PersonBase
     {
-        /// <inheritdoc/>
-        public override int Id { get; set; }
-
-        /// <inheritdoc/>
-        public string Name { get; }
-
-        /// <inheritdoc/>
-        public IPersonScheme Scheme { get; }
-
-        public IPlayerEventLogService PlayerEventLogService { get; set; }
-
-        public override PhysicalSize PhysicalSize { get => PhysicalSize.Size1; }
-
-        public HumanPerson([NotNull] IPersonScheme scheme)
+        public HumanPerson(IPersonScheme scheme, IFraction fraction) : base(fraction)
         {
-            Scheme = scheme ?? throw new ArgumentNullException(nameof(scheme));
+            Scheme = scheme;
 
-            Name = scheme.Sid;
+            Name = scheme.Sid ?? throw new InvalidOperationException();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
+        public override int Id { get; set; }
+
+        /// <inheritdoc />
+        public string Name { get; }
+
+        /// <summary>
+        /// Temporary property to show template name.
+        /// </summary>
+        public ILocalizedString? PersonEquipmentTemplate { get; set; }
+
+        public override PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
+
+        public IPlayerEventLogService? PlayerEventLogService { get; set; }
+
+        /// <inheritdoc />
+        public IPersonScheme Scheme { get; }
+
+        /// <inheritdoc />
         public override string ToString()
         {
             return $"{Name}";

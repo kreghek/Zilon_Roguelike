@@ -1,8 +1,8 @@
 ﻿namespace Zilon.Core.Schemes
 {
-    public interface IDropTableModificatorScheme: IScheme
+    public interface IDropTableModificatorScheme : IScheme
     {
-        string[] PropSids { get; set; }
+        string[]? PropSids { get; set; }
         float WeightBonus { get; set; }
     }
 }

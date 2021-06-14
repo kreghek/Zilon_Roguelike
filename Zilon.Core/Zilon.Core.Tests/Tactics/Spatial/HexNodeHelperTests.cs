@@ -33,7 +33,8 @@ namespace Zilon.Core.Tests.Tactics.Spatial
 
             var testedNode = nodes.SelectBy(3, 3);
 
-            var expectedNeighbors = new[] {
+            var expectedNeighbors = new[]
+            {
                 nodes.SelectBy(2, 3),
 
                 nodes.SelectBy(3, 4),

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
@@ -19,6 +20,11 @@ namespace Zilon.Core.Persons
 
         public IJob[] ApplyToJobs(IEnumerable<IJob> currentJobs)
         {
+            if (currentJobs is null)
+            {
+                throw new ArgumentNullException(nameof(currentJobs));
+            }
+
             var modifiedJobs = new List<IJob>();
             foreach (var job in currentJobs)
             {
@@ -26,7 +32,7 @@ namespace Zilon.Core.Persons
                 {
                     continue;
                 }
-                
+
                 job.Progress++;
                 modifiedJobs.Add(job);
             }

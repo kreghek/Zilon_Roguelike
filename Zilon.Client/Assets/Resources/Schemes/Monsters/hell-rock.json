@@ -4,6 +4,7 @@
     "En": "Hell rock"
   },
   "Hp": 50,
+  "MoveSpeedFactor": 0.3,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -38,11 +39,11 @@
   },
   "DropTableSids": [
     "survival",
-	"champion-loot",
-	"hellrock-loot",
-	"demon",
-	"default",
-	"default-evil-hour"
+    "champion-loot",
+    "hellrock-loot",
+    "demon",
+    "default",
+    "default-evil-hour"
   ],
   "BaseScore": 100,
   "Tags": [

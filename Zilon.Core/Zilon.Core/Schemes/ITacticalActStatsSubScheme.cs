@@ -3,32 +3,17 @@ using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
 {
-    public interface ITacticalActStatsSubScheme: ISubScheme
+    public interface ITacticalActStatsSubScheme : ISubScheme
     {
-        /// <summary>
-        /// Характеристики атакующей способности действия.
-        /// </summary>
-        ITacticalActOffenceSubScheme Offence { get; }
-
         /// <summary>
         /// Эффект, который оказывает действие.
         /// </summary>
         TacticalActEffectType Effect { get; }
 
         /// <summary>
-        /// Доступные цели действия.
-        /// </summary>
-        TacticalActTargets Targets { get; }
-
-        /// <summary>
         /// Эффективность действия.
         /// </summary>
-        Roll Efficient { get; }
-
-        /// <summary>
-        /// Дистанция, в котором возможно использования действия.
-        /// </summary>
-        Range<int> Range { get; }
+        Roll? Efficient { get; }
 
         /// <summary>
         /// Количество ударов при совершении действия.
@@ -43,5 +28,26 @@ namespace Zilon.Core.Schemes
         /// Во время рукопашного режима можно использовать только рукопашные действия.
         /// </remarks>
         bool IsMelee { get; }
+
+        /// <summary>
+        /// Характеристики атакующей способности действия.
+        /// </summary>
+        ITacticalActOffenceSubScheme? Offence { get; }
+
+        /// <summary>
+        /// Дистанция, в котором возможно использования действия.
+        /// </summary>
+        Range<int>? Range { get; }
+
+        /// <summary>
+        /// Tags of the act.
+        /// Now used to determine video and audio effect.
+        /// </summary>
+        string?[]? Tags { get; }
+
+        /// <summary>
+        /// Доступные цели действия.
+        /// </summary>
+        TacticalActTargets Targets { get; }
     }
 }

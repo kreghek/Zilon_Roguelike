@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Core.Tactics
 {
+    [ExcludeFromCodeCoverage]
     public abstract class ActorInteractionEventBase : IActorInteractionEvent
     {
         protected ActorInteractionEventBase(IActor actor)

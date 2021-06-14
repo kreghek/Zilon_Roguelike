@@ -1,10 +1,20 @@
-﻿using Zilon.Core.Components;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Components;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common.Schemes
 {
+    [ExcludeFromCodeCoverage]
     public sealed class TestPerkScheme : SchemeBase, IPerkScheme
     {
+        public string SystemDescription { get; set; }
+
+        public override string ToString()
+        {
+            return SystemDescription;
+        }
+
         public PerkConditionSubScheme[] BaseConditions { get; set; }
         public string IconSid { get; set; }
         public bool IsBuildIn { get; set; }

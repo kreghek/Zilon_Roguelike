@@ -7,7 +7,7 @@ namespace Zilon.Core.Tactics
     /// <summary>
     /// Класс для события.
     /// </summary>
-    public class UsedPropEventArgs: EventArgs
+    public class UsedPropEventArgs : EventArgs
     {
         public UsedPropEventArgs(IProp usedProp)
         {

@@ -11,7 +11,7 @@ namespace Zilon.Core.Schemes
         /// Наименование.
         /// </summary>
         [ExcludeFromCodeCoverage]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Приоритет апдейта.
@@ -24,15 +24,15 @@ namespace Zilon.Core.Schemes
         public int Priority { get; set; }
 
         /// <summary>
-        /// Символьные идентфиикаторы перков, требуемые для открытия апдейта.
-        /// </summary>
-        [ExcludeFromCodeCoverage]
-        public string[] RequiredPerkSids { get; set; }
-
-        /// <summary>
         /// Требуемый уровень для открытия апдейта.
         /// </summary>
         [ExcludeFromCodeCoverage]
         public int? RequiredLevel { get; set; }
+
+        /// <summary>
+        /// Символьные идентфиикаторы перков, требуемые для открытия апдейта.
+        /// </summary>
+        [ExcludeFromCodeCoverage]
+        public string?[]? RequiredPerkSids { get; set; }
     }
 }

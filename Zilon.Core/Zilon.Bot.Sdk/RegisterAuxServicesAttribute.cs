@@ -2,9 +2,8 @@
 
 namespace Zilon.Bot.Sdk
 {
-    [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
     public sealed class RegisterAuxServicesAttribute : Attribute
     {
-
     }
 }

@@ -6,7 +6,7 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tests.Common
 {
-    public class StrictSchemeServiceHandlerFactory : ISchemeServiceHandlerFactory
+    public sealed class StrictSchemeServiceHandlerFactory : ISchemeServiceHandlerFactory
     {
         private readonly ISchemeLocator _schemeLocator;
 
@@ -16,7 +16,7 @@ namespace Zilon.Core.Tests.Common
             _schemeLocator = schemeLocator;
         }
 
-        ISchemeServiceHandler<TScheme> ISchemeServiceHandlerFactory.Create<TScheme>()
+        public ISchemeServiceHandler<TScheme> Create<TScheme>() where TScheme : class, IScheme
         {
             var handler = new SchemeServiceHandler<TScheme>(_schemeLocator);
 

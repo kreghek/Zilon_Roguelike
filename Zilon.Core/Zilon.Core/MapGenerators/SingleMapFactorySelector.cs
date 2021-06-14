@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
@@ -16,10 +18,10 @@ namespace Zilon.Core.MapGenerators
         /// <param name="mapFactory"> Фабрика карт, которая всегда будет возвращена при запросе. </param>
         public SingleMapFactorySelector(IMapFactory mapFactory)
         {
-            _mapFactory = mapFactory ?? throw new System.ArgumentNullException(nameof(mapFactory));
+            _mapFactory = mapFactory ?? throw new ArgumentNullException(nameof(mapFactory));
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IMapFactory GetMapFactory(ISectorNode sectorNode)
         {
             return _mapFactory;

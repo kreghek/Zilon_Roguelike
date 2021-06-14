@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
@@ -9,16 +11,28 @@ namespace Zilon.Core.MapGenerators
     public abstract class SwitchMapFactorySelectorBase : IMapFactorySelector
     {
         /// <summary>
+        /// Экземпляр фабрики, генерирующей карты на основе клеточного автомата.
+        /// </summary>
+        protected abstract IMapFactory CellularAutomatonMapFactory { get; }
+
+        /// <summary>
+        /// Экземпляр фабрики, генерирующий карты на основе прямоугольных комнат.
+        /// </summary>
+        protected abstract IMapFactory RoomMapFactory { get; }
+
+        /// <summary>
         /// Возвращает генератор карты.
         /// </summary>
-        /// <param name="sectorNode">Схема сектора, на основе которой будет принято решение,
-        /// какой генератор карты использовать.</param>
+        /// <param name="sectorNode">
+        /// Схема сектора, на основе которой будет принято решение,
+        /// какой генератор карты использовать.
+        /// </param>
         /// <returns> Возвращает фабрику карт для сектора. </returns>
         public IMapFactory GetMapFactory(ISectorNode sectorNode)
         {
             if (sectorNode is null)
             {
-                throw new System.ArgumentNullException(nameof(sectorNode));
+                throw new ArgumentNullException(nameof(sectorNode));
             }
 
             var sectorScheme = sectorNode.SectorScheme;
@@ -44,15 +58,5 @@ namespace Zilon.Core.MapGenerators
                     return RoomMapFactory;
             }
         }
-
-        /// <summary>
-        /// Экземпляр фабрики, генерирующей карты на основе клеточного автомата.
-        /// </summary>
-        protected abstract IMapFactory CellularAutomatonMapFactory { get; }
-
-        /// <summary>
-        /// Экземпляр фабрики, генерирующий карты на основе прямоугольных комнат.
-        /// </summary>
-        protected abstract IMapFactory RoomMapFactory { get; }
     }
 }

@@ -18,61 +18,7 @@ namespace Zilon.Core.Common
         /// <returns> Возвращает точки, которые были залиты. </returns>
         public static IEnumerable<OffsetCoords> FloodFill(Matrix<bool> matrix, OffsetCoords point)
         {
-            if (matrix is null)
-            {
-                throw new ArgumentNullException(nameof(matrix));
-            }
-
-            var snapshotCellmap = (bool[,])matrix.Items.Clone();
-
-            var regionPoints = new List<OffsetCoords>();
-
-            var openPoints = new HashSet<OffsetCoords>
-            {
-                point
-            };
-
-            while (openPoints.Count > 0)
-            {
-                var currentCell = openPoints.First();
-                openPoints.Remove(currentCell);
-
-                var isInBound = IsInBounds(currentCell, matrix.Width, matrix.Height);
-
-                if (!isInBound)
-                {
-                    // Если текущая точка указывает за край карты, то не пытаемся её заливать.
-                    // Пропускаем.
-                    continue;
-                }
-
-                if (!snapshotCellmap[currentCell.X, currentCell.Y])
-                {
-                    // Заливаем только живые клетки.
-                    // Мертвые клетки являются границей, они не попадают в заливку.
-                    continue;
-                }
-
-                regionPoints.Add(currentCell);
-                snapshotCellmap[currentCell.X, currentCell.Y] = false;
-
-                var cubeCoords = HexHelper.ConvertToCube(currentCell);
-                var clockwiseOffsets = HexHelper.GetOffsetClockwise();
-
-                foreach (var offset in clockwiseOffsets)
-                {
-                    var neighbourCubeCoords = cubeCoords + offset;
-
-                    var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
-
-                    if (!openPoints.Contains(neighbourCoords))
-                    {
-                        openPoints.Add(neighbourCoords);
-                    }
-                }
-            }
-
-            return regionPoints;
+            return FloodFillInner(matrix, point, nextNeighbour => true);
         }
 
         /// <summary>
@@ -83,12 +29,28 @@ namespace Zilon.Core.Common
         /// <returns> Возвращает точки, которые были залиты. </returns>
         public static IEnumerable<OffsetCoords> FloodFill7(Matrix<bool> matrix, OffsetCoords point)
         {
+            return FloodFillInner(
+                matrix,
+                point,
+                nextCoords => CheckAvailableFor7(nextCoords, matrix));
+        }
+
+        /// <param name="availabilityDelegate"> In - coords on next, neightbor nodes to check if it next fron current node. </param>
+        /// <returns></returns>
+        public static IEnumerable<OffsetCoords> FloodFillInner(Matrix<bool> matrix, OffsetCoords point,
+            Func<OffsetCoords, bool> availabilityDelegate)
+        {
             if (matrix is null)
             {
                 throw new ArgumentNullException(nameof(matrix));
             }
 
-            var snapshotCellmap = (bool[,])matrix.Items.Clone();
+            if (availabilityDelegate is null)
+            {
+                throw new ArgumentNullException(nameof(availabilityDelegate));
+            }
+
+            var snapshotCellMap = (bool[,])matrix.Items.Clone();
 
             var regionPoints = new List<OffsetCoords>();
 
@@ -111,7 +73,7 @@ namespace Zilon.Core.Common
                     continue;
                 }
 
-                if (!snapshotCellmap[currentCell.X, currentCell.Y])
+                if (!snapshotCellMap[currentCell.X, currentCell.Y])
                 {
                     // Заливаем только живые клетки.
                     // Мертвые клетки являются границей, они не попадают в заливку.
@@ -119,29 +81,42 @@ namespace Zilon.Core.Common
                 }
 
                 regionPoints.Add(currentCell);
-                snapshotCellmap[currentCell.X, currentCell.Y] = false;
-
-                var cubeCoords = HexHelper.ConvertToCube(currentCell);
-                var clockwiseOffsets = HexHelper.GetOffsetClockwise();
-
-                foreach (var offset in clockwiseOffsets)
-                {
-                    var neighbourCubeCoords = cubeCoords + offset;
-
-                    var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
-
-                    if (!openPoints.Contains(neighbourCoords))
-                    {
-                        var isAvailbleFor7 = CheckAvailableFor7(neighbourCoords, matrix);
-                        if (isAvailbleFor7)
-                        {
-                            openPoints.Add(neighbourCoords);
-                        }
-                    }
-                }
+                snapshotCellMap[currentCell.X, currentCell.Y] = false;
+                var nextPoints = AddNextOpenNodes(currentCell, availabilityDelegate);
+                AddAllInOpenPoints(openPoints, nextPoints);
             }
 
             return regionPoints;
+        }
+
+        private static void AddAllInOpenPoints(HashSet<OffsetCoords> openPoints, IEnumerable<OffsetCoords> nextPoints)
+        {
+            foreach (var nextPoint in nextPoints)
+            {
+                // Hashset garantee unique points. Do not check occurrence of an item in a hashset.
+                openPoints.Add(nextPoint);
+            }
+        }
+
+        private static IEnumerable<OffsetCoords> AddNextOpenNodes(
+            OffsetCoords currentCell,
+            Func<OffsetCoords, bool> availabilityDelegate)
+        {
+            var cubeCoords = HexHelper.ConvertToCube(currentCell);
+            var clockwiseOffsets = HexHelper.GetOffsetClockwise();
+
+            foreach (var offset in clockwiseOffsets)
+            {
+                var neighbourCubeCoords = cubeCoords + offset;
+
+                var neighbourCoords = HexHelper.ConvertToOffset(neighbourCubeCoords);
+
+                var isAvailable = availabilityDelegate(neighbourCoords);
+                if (isAvailable)
+                {
+                    yield return neighbourCoords;
+                }
+            }
         }
 
         private static bool CheckAvailableFor7(OffsetCoords testCoords, Matrix<bool> matrix)
@@ -170,11 +145,19 @@ namespace Zilon.Core.Common
 
         private static bool IsInBounds(OffsetCoords coords, int width, int height)
         {
+            // ReSharper disable once ArgumentsStyleNamedExpression
+            // ReSharper disable once ArgumentsStyleLiteral
+            // ReSharper disable once ArgumentsStyleOther
+            // There used named argument to improve readable of code.
             if (!ValueInRange(value: coords.X, min: 0, max: width - 1))
             {
                 return false;
             }
 
+            // ReSharper disable once ArgumentsStyleNamedExpression
+            // ReSharper disable once ArgumentsStyleLiteral
+            // ReSharper disable once ArgumentsStyleOther
+            // There used named argument to improve readable of code.
             if (!ValueInRange(value: coords.Y, min: 0, max: height - 1))
             {
                 return false;

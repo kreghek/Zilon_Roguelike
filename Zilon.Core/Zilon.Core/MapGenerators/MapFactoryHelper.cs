@@ -17,7 +17,7 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         /// <param name="sectorNode"> Схема сектора. </param>
         /// <returns> Набор объектов переходов. </returns>
-        public static IEnumerable<RoomTransition> CreateTransitions(ISectorNode sectorNode)
+        public static IEnumerable<SectorTransition> CreateTransitions(ISectorNode sectorNode)
         {
             if (sectorNode is null)
             {
@@ -26,40 +26,28 @@ namespace Zilon.Core.MapGenerators
 
             if (sectorNode.State != SectorNodeState.SchemeKnown)
             {
-                throw new ArgumentException("Узел сектора должен быть материализован", nameof(sectorNode));
+                throw new ArgumentException($"Sector node {sectorNode} is not materialized.", nameof(sectorNode));
             }
 
-            var next = sectorNode.Biome.GetNext(sectorNode);
+            var nextSectorNodes = sectorNode.Biome.GetNext(sectorNode);
 
-            return next.Select(node => new RoomTransition(node as ISectorNode));
+            return nextSectorNodes.Where(x => x != null).Select(x => x!)
+                .Select(node => new SectorTransition((ISectorNode)node));
         }
 
-        public static Matrix<bool> ResizeMatrixTo7(Matrix<bool> matrix)
+        public static bool IsAvailableFor(Matrix<bool> matrix, OffsetCoords coords)
         {
             if (matrix is null)
             {
                 throw new ArgumentNullException(nameof(matrix));
             }
 
-            var resizedMatrix = matrix.CreateMatrixWithMargins(1, 1);
-            for (var x = 0; x < matrix.Width; x++)
+            if (!matrix[coords.X, coords.Y])
             {
-                for (var y = 0; y < matrix.Height; y++)
-                {
-                    if (matrix[x, y])
-                    {
-                         var neighbors = HexHelper.GetNeighbors(x + 1, y + 1);
-                        foreach (var neightbor in neighbors)
-                        {
-                            var resizedX = neightbor.X;
-                            var resizedY = neightbor.Y;
-                            resizedMatrix[resizedX, resizedY] = true;
-                        }
-                    }
-                }
+                return false;
             }
 
-            return resizedMatrix;
+            return true;
         }
 
         public static bool IsAvailableFor7(Matrix<bool> matrix, OffsetCoords coords)
@@ -91,19 +79,32 @@ namespace Zilon.Core.MapGenerators
             return true;
         }
 
-        public static bool IsAvailableFor(Matrix<bool> matrix, OffsetCoords coords)
+        public static Matrix<bool> ResizeMatrixTo7(Matrix<bool> matrix)
         {
             if (matrix is null)
             {
                 throw new ArgumentNullException(nameof(matrix));
             }
 
-            if (!matrix[coords.X, coords.Y])
+            var resizedMatrix = matrix.CreateMatrixWithMargins(1, 1);
+            for (var x = 0; x < matrix.Width; x++)
             {
-                return false;
+                for (var y = 0; y < matrix.Height; y++)
+                {
+                    if (matrix[x, y])
+                    {
+                        var neighbors = HexHelper.GetNeighbors(x + 1, y + 1);
+                        foreach (var neightbor in neighbors)
+                        {
+                            var resizedX = neightbor.X;
+                            var resizedY = neightbor.Y;
+                            resizedMatrix[resizedX, resizedY] = true;
+                        }
+                    }
+                }
             }
 
-            return true;
+            return resizedMatrix;
         }
     }
 }

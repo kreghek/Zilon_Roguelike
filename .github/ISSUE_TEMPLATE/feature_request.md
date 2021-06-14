@@ -1,19 +1,20 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
+title: '[FEATRUE]'
+labels: 'enhancement'
+assignees: 'kreghek'
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+**Problem**
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+Is your feature request related to a problem? A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
-**Describe alternatives you've considered**
+**Solution**
+Describe the solution you'd like. A clear and concise description of what you want to happen.
+
+**Alternatives**
 A clear and concise description of any alternative solutions or features you've considered.
 
 **Additional context**

@@ -2,8 +2,8 @@
 {
     public interface ILogicStateFactory
     {
-        ILogicState CreateLogic<T>() where T: ILogicState;
+        ILogicState CreateLogic<T>() where T : ILogicState;
 
-        ILogicStateTrigger CreateTrigger<T>() where T: ILogicStateTrigger;
+        ILogicStateTrigger CreateTrigger<T>() where T : ILogicStateTrigger;
     }
 }

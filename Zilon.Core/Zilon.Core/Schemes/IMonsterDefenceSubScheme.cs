@@ -5,6 +5,6 @@
     /// </summary>
     public interface IMonsterDefenseSubScheme
     {
-        IMonsterDefenceItemSubScheme[] Defenses { get; }
+        IMonsterDefenceItemSubScheme?[]? Defenses { get; }
     }
 }

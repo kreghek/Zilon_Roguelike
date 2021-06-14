@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Zilon.Core.Components
@@ -9,7 +7,6 @@ namespace Zilon.Core.Components
     /// Тип правила персонажа.
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    [PublicAPI]
     public enum PersonRuleType
     {
         Undefined,
@@ -41,6 +38,21 @@ namespace Zilon.Core.Components
         /// Если указаны теги экипировки, то повышает бросок на попадание дейставий, выполняемых с использованием
         /// экипировки/предетов, имеющих все указанные теги.
         /// </remarks>
-        ToHit
+        ToHit,
+
+        /// <summary>
+        /// Влияет на здоровье, если нет доспеха на тело.
+        /// </summary>
+        HealthIfNoBody,
+
+        /// <summary>
+        /// Влияет на шанс снижения характеристики - сытость.
+        /// </summary>
+        HungerResistance,
+
+        /// <summary>
+        /// Влияет на шанс снижения характеристики - вода.
+        /// </summary>
+        ThristResistance
     }
 }

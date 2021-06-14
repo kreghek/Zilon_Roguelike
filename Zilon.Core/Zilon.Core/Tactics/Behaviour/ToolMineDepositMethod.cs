@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Zilon.Core.Common;
 using Zilon.Core.Props;
@@ -8,8 +9,8 @@ namespace Zilon.Core.Tactics.Behaviour
 {
     public sealed class ToolMineDepositMethod : IMineDepositMethod
     {
-        private readonly Equipment _tool;
         private readonly IMineDepositMethodRandomSource _mineDepositMethodRandomSource;
+        private readonly Equipment _tool;
 
         public ToolMineDepositMethod(Equipment tool, IMineDepositMethodRandomSource mineDepositMethodRandomSource)
         {
@@ -25,7 +26,11 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             var requiredToolTags = deposit.GetToolTags();
-            var hasAllTags = EquipmentHelper.HasAllTags(_tool.Scheme.Tags, requiredToolTags);
+
+            var toolTags = _tool.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                           Array.Empty<string>();
+
+            var hasAllTags = EquipmentHelper.HasAllTags(toolTags, requiredToolTags);
             if (!hasAllTags)
             {
                 throw new InvalidOperationException("Попытка выполнить добычу ресурса не подходящим инструментом.");
@@ -38,10 +43,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 return new SuccessMineDepositResult();
             }
-            else
-            {
-                return new FailureMineDepositResult();
-            }
+
+            return new FailureMineDepositResult();
         }
     }
 }

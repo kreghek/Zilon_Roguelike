@@ -1,6 +1,9 @@
-﻿namespace Zilon.Core.MapGenerators
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.MapGenerators
 {
-    public struct MapFillerHexNodeOptions : System.IEquatable<MapFillerHexNodeOptions>
+    public struct MapFillerHexNodeOptions : IEquatable<MapFillerHexNodeOptions>
     {
         public bool IsObstacle { get; set; }
 
@@ -15,6 +18,7 @@
             return IsObstacle == other.IsObstacle;
         }
 
+        [ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {
             return -1199661580 + IsObstacle.GetHashCode();

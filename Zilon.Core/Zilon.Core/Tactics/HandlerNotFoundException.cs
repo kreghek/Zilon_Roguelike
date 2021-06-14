@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Zilon.Core.Tactics
 {
@@ -8,8 +9,11 @@ namespace Zilon.Core.Tactics
         public HandlerNotFoundException() { }
         public HandlerNotFoundException(string message) : base(message) { }
         public HandlerNotFoundException(string message, Exception inner) : base(message, inner) { }
+
         protected HandlerNotFoundException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+            SerializationInfo info,
+            StreamingContext context) : base(info, context)
+        {
+        }
     }
 }

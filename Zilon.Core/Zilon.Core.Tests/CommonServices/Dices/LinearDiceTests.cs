@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Tests.CommonServices.Dices
 {
-    public class LinearDiceTests: DiceTestsBase
+    public class LinearDiceTests : DiceTestsBase
     {
         protected override IDice CreateDice(int seed)
         {

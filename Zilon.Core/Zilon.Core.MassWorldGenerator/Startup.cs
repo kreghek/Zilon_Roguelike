@@ -49,7 +49,7 @@ namespace Zilon.Core.MassWorldGenerator
         {
             var dice = new LinearDice();
             container.Register<IDice>(factory => dice, LightInjectWrapper.CreateSingleton());
-            
+
         }
     }
 }

@@ -7,23 +7,24 @@ namespace Zilon.Core.Commands
     /// </summary>
     public abstract class TacticCommandBase : ICommand
     {
-        public abstract bool CanExecute();
-
-        public void Execute()
-        {
-            var canExecute = CanExecute();
-            if (!canExecute)
-            {
-                throw new InvalidOperationException("Попытка выполнить команду, которую нельзя выполнять в данный момент.");
-            }
-
-            ExecuteTacticCommand();
-        }
-
         /// <summary>
         /// Выполнение тактических изменений.
         /// </summary>
         /// <returns>Возвращает реакцию на изменения.</returns>
         protected abstract void ExecuteTacticCommand();
+
+        public abstract CanExecuteCheckResult CanExecute();
+
+        public void Execute()
+        {
+            var canExecuteCheckResult = CanExecute();
+            if (!canExecuteCheckResult.IsSuccess)
+            {
+                throw new InvalidOperationException(
+                    $"Attempt to execute the inapplicable command. Reason: {canExecuteCheckResult.FailureReason}.");
+            }
+
+            ExecuteTacticCommand();
+        }
     }
 }

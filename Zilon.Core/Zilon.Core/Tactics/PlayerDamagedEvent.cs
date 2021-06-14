@@ -13,9 +13,9 @@ namespace Zilon.Core.Tactics
             Damager = damager ?? throw new ArgumentNullException(nameof(damager));
         }
 
-        public ITacticalAct TacticalAct { get; }
-
         public IActor Damager { get; }
+
+        public ITacticalAct TacticalAct { get; }
 
         public string Key => $"{Damager.Person}-{TacticalAct}";
 

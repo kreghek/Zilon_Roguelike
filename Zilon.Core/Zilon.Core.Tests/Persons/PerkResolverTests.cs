@@ -24,17 +24,21 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var perkScheme = new PerkScheme
             {
-                Levels = new[] {
-                    new PerkLevelSubScheme{
-                        Jobs = new IJobSubScheme[]{
-                            new TestJobSubScheme{
+                Levels = new[]
+                {
+                    new PerkLevelSubScheme
+                    {
+                        Jobs = new IJobSubScheme[]
+                        {
+                            new TestJobSubScheme
+                            {
                                 Type = JobType.Defeats,
                                 Value = 1
                             }
                         },
                         // Указываем минимальный подуровень.
                         // Чтобы при попытке прокачки не наткнуться на левелкап.
-                        MaxValue = 1
+                        MaxValue = 2
                     }
                 }
             };
@@ -46,7 +50,6 @@ namespace Zilon.Core.Tests.Persons
             perkJobMock.SetupProperty(x => x.IsComplete);
             var perkJob = perkJobMock.Object;
 
-
             var progressMock = new Mock<IJobProgress>();
             progressMock.Setup(x => x.ApplyToJobs(It.IsAny<IEnumerable<IJob>>()))
                 .Returns(new[] { perkJob });
@@ -57,11 +60,12 @@ namespace Zilon.Core.Tests.Persons
                 .Returns(perkScheme);
             perkMock.SetupGet(x => x.CurrentLevel)
                 // Перки, которые могут прокачиваться, должны обладать уровнем.
-                // (0, 0) это минимальный уровень.
-                .Returns(new PerkLevel(0, 0));
+                // (1, 1) это минимальный уровень.
+                .Returns(new PerkLevel(1, 1));
             var perk = perkMock.Object;
 
-            var perks = new[] {
+            var perks = new[]
+            {
                 perk
             };
             var evolutionModuleMock = new Mock<IEvolutionModule>();
@@ -87,11 +91,15 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var perkScheme = new PerkScheme
             {
-                Levels = new[] {
-                    new PerkLevelSubScheme{
-                        MaxValue = 0,
-                        Jobs = new IJobSubScheme[]{
-                            new TestJobSubScheme{
+                Levels = new[]
+                {
+                    new PerkLevelSubScheme
+                    {
+                        MaxValue = 1,
+                        Jobs = new IJobSubScheme[]
+                        {
+                            new TestJobSubScheme
+                            {
                                 Type = JobType.Defeats,
                                 Value = 1
                             }
@@ -107,7 +115,6 @@ namespace Zilon.Core.Tests.Persons
             perkJobMock.SetupProperty(x => x.IsComplete);
             var perkJob = perkJobMock.Object;
 
-
             var progressMock = new Mock<IJobProgress>();
             progressMock.Setup(x => x.ApplyToJobs(It.IsAny<IEnumerable<IJob>>()))
                 .Returns(new[] { perkJob });
@@ -117,10 +124,11 @@ namespace Zilon.Core.Tests.Persons
             perkMock.SetupGet(x => x.Scheme)
                 .Returns(perkScheme);
             perkMock.SetupGet(x => x.CurrentLevel)
-                .Returns(new PerkLevel(0, 0));
+                .Returns(new PerkLevel(1, 1));
             var perk = perkMock.Object;
 
-            var perks = new[] {
+            var perks = new[]
+            {
                 perk
             };
             var evolutionModuleMock = new Mock<IEvolutionModule>();

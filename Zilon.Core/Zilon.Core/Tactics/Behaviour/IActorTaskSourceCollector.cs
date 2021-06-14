@@ -5,6 +5,6 @@
     /// </summary>
     public interface IActorTaskSourceCollector
     {
-        IActorTaskSource[] GetCurrentTaskSources();
+        IActorTaskSource<ISectorTaskSourceContext>[] GetCurrentTaskSources();
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Persons.Survival;
 
 namespace Zilon.Core.PersonModules
@@ -17,7 +15,7 @@ namespace Zilon.Core.PersonModules
         /// </summary>
         /// <param name="stat">Характеристика, которая была изменена.</param>
         [ExcludeFromCodeCoverage]
-        public SurvivalStatChangedEventArgs([NotNull] SurvivalStat stat)
+        public SurvivalStatChangedEventArgs(SurvivalStat stat)
         {
             Stat = stat ?? throw new ArgumentNullException(nameof(stat));
         }
