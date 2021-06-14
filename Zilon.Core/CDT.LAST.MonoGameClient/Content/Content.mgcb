@@ -97,6 +97,12 @@
 /processorParam:Quality=Best
 /build:Audio/PunchStartHitEffect.mp3
 
+#begin Audio/SpearPierceEffect.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/SpearPierceEffect.mp3
+
 #begin Audio/Step.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor

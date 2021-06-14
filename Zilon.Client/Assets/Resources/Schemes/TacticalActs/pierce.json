@@ -20,6 +20,9 @@
       "Type": "Fury",
       "Impact": "Kinetic",
       "ApRank": 3
-    }
+    },
+	"Tags": [
+      "pierce"
+    ]
   }
 }

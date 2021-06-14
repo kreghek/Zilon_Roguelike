@@ -26,11 +26,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private SoundEffect? _swordHitEffect;
         private SoundEffect? _unequipSound;
 
+        /// <inheritdoc/>
         public SoundEffect GetActHitSound(ActDescription actDescription, IPerson targetPerson)
         {
             return _swordHitEffect ?? throw new InvalidOperationException("All content must be loaded early.");
         }
 
+        /// <inheritdoc/>
         public SoundEffect? GetActivitySound(PersonActivityEffectType personActivityType)
         {
             if (_activityDict is null)
@@ -186,7 +188,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 ["bite"] = contentManager.Load<SoundEffect>("Audio/HunterHitEffect"),
                 ["punch"] = contentManager.Load<SoundEffect>("Audio/PunchStartHitEffect"),
-                ["slash"] = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect")
+                ["slash"] = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect"),
+                ["pierce"] = contentManager.Load<SoundEffect>("Audio/SpearPierceEffect"),
             };
             _defaultStartHitEffect = _actStartDict["punch"];
 
