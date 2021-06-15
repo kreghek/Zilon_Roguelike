@@ -26,13 +26,10 @@ namespace CDT.LAST.MonoGameClient.Screens
     internal class MainScreen : GameSceneBase
     {
         private readonly IAnimationBlockerService _animationBlockerService;
-        private readonly IconButton _autoplayModeButton;
         private readonly Camera _camera;
         private readonly ContainerModalDialog _containerModal;
         private readonly PersonConditionsPanel _personEffectsPanel;
-        private readonly IconButton _personEquipmentButton;
         private readonly ModalDialogBase _personEquipmentModal;
-        private readonly IconButton _personStatsButton;
         private readonly PersonStatsModalDialog _personStatsModal;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
@@ -40,8 +37,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
 
-        private bool _autoplayHintIsShown;
-        private string _autoplayModeButtonTitle;
         private CombatActPanel? _combatActPanel;
         private ISector? _currentSector;
 
@@ -68,38 +63,6 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _uiContentStorage = uiContentStorage;
 
-            var halfOfScreenX = game.GraphicsDevice.Viewport.Width / 2;
-            var bottomOfScreenY = game.GraphicsDevice.Viewport.Height;
-            _autoplayModeButton = new IconButton(
-                texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
-                iconData: new IconData(
-                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(0, 0, 16, 32)
-                ),
-                rect: new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32)
-            );
-            _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
-            _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
-                UiResources.SwitchAutomodeButtonOffTitle);
-
-            _personEquipmentButton = new IconButton(
-                texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
-                iconData: new IconData(
-                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(16, 0, 16, 32)
-                ),
-                rect: new Rectangle(halfOfScreenX - 16 + 16, bottomOfScreenY - 32, 16, 32));
-            _personEquipmentButton.OnClick += PersonEquipmentButton_OnClick;
-
-            _personStatsButton = new IconButton(
-                texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
-                iconData: new IconData(
-                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(0, 32, 16, 32)
-                ),
-                rect: new Rectangle(halfOfScreenX - 16 + (16 * 2), bottomOfScreenY - 32, 16, 32));
-            _personStatsButton.OnClick += PersonStatsButton_OnClick;
-
             _personEquipmentModal = new PersonPropsModalDialog(
                 uiContentStorage,
                 game.GraphicsDevice,
@@ -116,6 +79,21 @@ namespace CDT.LAST.MonoGameClient.Screens
                 uiContentStorage,
                 Game.GraphicsDevice,
                 ((LivGame)game).ServiceProvider);
+
+            var humanActorTaskSource = serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            _bottomMenu = new BottomMenuPanel(humanActorTaskSource, uiContentStorage);
+            _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
+            _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
+        }
+
+        private void BottomMenu_StatButtonClicked(object? sender, EventArgs e)
+        {
+            _personStatsModal.Show();
+        }
+
+        private void BottomMenu_PropButtonClicked(object? sender, EventArgs e)
+        {
+            _personEquipmentModal.Show();
         }
 
         public override void Draw(GameTime gameTime)
@@ -188,34 +166,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
-        private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
-        {
-            var serviceScope = ((LivGame)Game).ServiceProvider;
-
-            var humanTaskSource = serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-            if (humanTaskSource is IActorTaskControlSwitcher controlSwitcher)
-            {
-                switch (controlSwitcher.CurrentControl)
-                {
-                    case ActorTaskSourceControl.Human:
-                        controlSwitcher.Switch(ActorTaskSourceControl.Bot);
-                        _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
-                            UiResources.SwitchAutomodeButtonOnTitle);
-                        break;
-
-                    case ActorTaskSourceControl.Bot:
-                        controlSwitcher.Switch(ActorTaskSourceControl.Human);
-                        _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
-                            UiResources.SwitchAutomodeButtonOffTitle);
-                        break;
-
-                    default:
-                        throw new InvalidOperationException(
-                            "Unknown actor task control {controlSwitcher.CurrentControl}.");
-                }
-            }
-        }
-
         private ModalDialogBase? CheckModalsIsVisible()
         {
             if (_personEquipmentModal.IsVisible)
@@ -236,51 +186,14 @@ namespace CDT.LAST.MonoGameClient.Screens
             return null;
         }
 
-        private void DetectAutoplayHint()
-        {
-            var halfOfScreenX = Game.GraphicsDevice.Viewport.Width / 2;
-            var bottomOfScreenY = Game.GraphicsDevice.Viewport.Height;
-
-            var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
-
-            var mouseState = Mouse.GetState();
-            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-
-            _autoplayHintIsShown = autoplayButtonRect.Intersects(mouseRect);
-        }
+        private BottomMenuPanel _bottomMenu;
 
         private void DrawHud()
         {
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _personEffectsPanel.Draw(_spriteBatch);
 
-            _autoplayModeButton.Draw(_spriteBatch);
-            if (_autoplayHintIsShown)
-            {
-                var titleTextSizeVector = _uiContentStorage.GetHintTitleFont().MeasureString(_autoplayModeButtonTitle);
-
-                const int HINT_TEXT_SPACING = 8;
-
-                var halfOfScreenX = Game.GraphicsDevice.Viewport.Width / 2;
-                var bottomOfScreenY = Game.GraphicsDevice.Viewport.Height;
-                var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
-
-                var hintRectangle = new Rectangle(
-                    autoplayButtonRect.Left,
-                    autoplayButtonRect.Top - (int)titleTextSizeVector.Y - (HINT_TEXT_SPACING * 2),
-                    (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
-                    (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
-
-                _spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
-
-                _spriteBatch.DrawString(_uiContentStorage.GetHintTitleFont(),
-                    _autoplayModeButtonTitle,
-                    new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
-                    Color.Wheat);
-            }
-
-            _personEquipmentButton.Draw(_spriteBatch);
-            _personStatsButton.Draw(_spriteBatch);
+            _bottomMenu.Draw(_spriteBatch, Game.GraphicsDevice);
 
             if (_combatActPanel != null)
             {
@@ -419,16 +332,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             TargetScene = new TransitionScreen(Game, _spriteBatch);
         }
 
-        private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)
-        {
-            _personEquipmentModal.Show();
-        }
-
-        private void PersonStatsButton_OnClick(object? sender, EventArgs e)
-        {
-            _personStatsModal.Show();
-        }
-
         private void UpdateCurrentSectorOrPerformTransition(ISector? sectorWithPlayerPerson,
             IActorViewModel activeActorViewModel)
         {
@@ -438,12 +341,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 _personEffectsPanel.Update();
 
-                _autoplayModeButton.Update();
-
-                _personEquipmentButton.Update();
-                _personStatsButton.Update();
-
-                DetectAutoplayHint();
+                _bottomMenu.Update(Game.GraphicsDevice);
             }
             else if (!_isTransitionPerforming)
             {
