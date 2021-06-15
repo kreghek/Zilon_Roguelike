@@ -187,12 +187,13 @@ namespace CDT.LAST.MonoGameClient.GameComponents
                     case Keys.OemMinus: if (shift) { key = '_'; } else { key = '-'; } return true;
                     case Keys.OemComma: if (shift) { key = '<'; } else { key = ','; } return true;
                     case Keys.Space: key = ' '; return true;
+                    default:
+                        // Ignore all other keys.
+                        key = (char)0;
+                        return false;
                 }
                 // @formatter:on — enable formatter after this line
             }
-
-            key = (char)0;
-            return false;
         }
 
         private bool TryParseCommand(string currentText)
