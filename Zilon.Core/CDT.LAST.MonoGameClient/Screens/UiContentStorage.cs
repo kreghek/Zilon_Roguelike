@@ -319,9 +319,9 @@ namespace CDT.LAST.MonoGameClient.Screens
             return _hintBackgorundTexture ?? throw new InvalidOperationException("Background texture is not loaded.");
         }
 
-        public Texture2D GetCombatActIconTexture(string sid, string[] tags)
+        public Texture2D GetCombatActIconTexture(string? sid, string[] tags)
         {
-            if (_combatActDict.TryGetValue(sid, out var texture))
+            if (sid is not null && _combatActDict.TryGetValue(sid, out var texture))
             {
                 return texture;
             }

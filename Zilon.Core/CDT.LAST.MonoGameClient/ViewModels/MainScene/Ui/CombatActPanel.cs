@@ -87,7 +87,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var tags = act.Scheme?.Stats?.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
                            Array.Empty<string>();
                 var button = new IconButton(_uiContentStorage.GetButtonTexture(),
-                    _uiContentStorage.GetCombatActIconTexture(act.Scheme.Sid, tags),
+                    _uiContentStorage.GetCombatActIconTexture(act.Scheme?.Sid, tags),
                     new Rectangle(0, 0, BUTTON_SIZE, BUTTON_SIZE));
                 button.OnClick += (s, e) =>
                 {

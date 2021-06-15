@@ -12,7 +12,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D GetAttributeIconsTexture();
         SpriteFont GetButtonFont();
         Texture2D GetButtonTexture();
-        Texture2D GetCombatActIconTexture(string sid, string[] tags);
+        Texture2D GetCombatActIconTexture(string? sid, string[] tags);
         PersonConditionTextures GetConditionIconTextures(IPersonCondition personCondition);
         Texture2D GetContextualMenuBorderTexture();
         Texture2D GetHintBackgroundTexture();
