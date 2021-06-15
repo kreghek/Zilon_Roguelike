@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 
+using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -39,6 +40,18 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 Actor.Person.UnequipProp(_slotIndex);
             }
+        }
+
+        private void EquipOneSlotEquipmentFromInventory(IEquipmentModule equipmentCarrier, Equipment targetEquipment,
+            Equipment? currentEquipment)
+        {
+            if (currentEquipment != null)
+            {
+                Actor.Person.GetModule<IInventoryModule>().Add(currentEquipment);
+            }
+
+            Actor.Person.GetModule<IInventoryModule>().Remove(targetEquipment);
+            equipmentCarrier[_slotIndex] = targetEquipment;
         }
 
         private void EquipPropToSlot()
@@ -137,7 +150,6 @@ namespace Zilon.Core.Tactics.Behaviour
                         // (1) Ставим существующий в данном слоте предмет в слот, в котором был выбранный предмет
                         equipmentCarrier[currentEquipedSlotIndex.Value] = currentEquipment;
                     }
-
                 }
                 else
                 {
@@ -173,23 +185,8 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
-        private static bool IsTargetSlotBeHand(IEquipmentModule equipmentCarrier, int slotIndex)
-        {
-            return equipmentCarrier.Slots[slotIndex].Types.HasFlag(Components.EquipmentSlotTypes.Hand);
-        }
-
-        private void EquipOneSlotEquipmentFromInventory(IEquipmentModule equipmentCarrier, Equipment targetEquipment, Equipment? currentEquipment)
-        {
-            if (currentEquipment != null)
-            {
-                Actor.Person.GetModule<IInventoryModule>().Add(currentEquipment);
-            }
-
-            Actor.Person.GetModule<IInventoryModule>().Remove(targetEquipment);
-            equipmentCarrier[_slotIndex] = targetEquipment;
-        }
-
-        private void EquipTwoSlotEquipmentFromInventory(IEquipmentModule equipmentCarrier, Equipment targetEquipment, Equipment? currentEquipment)
+        private void EquipTwoSlotEquipmentFromInventory(IEquipmentModule equipmentCarrier, Equipment targetEquipment,
+            Equipment? currentEquipment)
         {
             if (currentEquipment != null)
             {
@@ -217,6 +214,11 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             return null;
+        }
+
+        private static bool IsTargetSlotBeHand(IEquipmentModule equipmentCarrier, int slotIndex)
+        {
+            return equipmentCarrier.Slots[slotIndex].Types.HasFlag(EquipmentSlotTypes.Hand);
         }
     }
 }
