@@ -4,19 +4,21 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CDT.LAST.MonoGameClient.Engine
+namespace CDT.LAST.MonoGameClient.GameComponents
 {
     internal class FpsCounter : DrawableGameComponent
     {
         public const int MAXIMUM_SAMPLES = 100;
         private readonly SpriteFont _font;
-        private readonly Queue<double> _sampleBuffer = new Queue<double>();
+        private readonly Queue<double> _sampleBuffer;
         private readonly SpriteBatch _spriteBatch;
 
         public FpsCounter(Game game, SpriteBatch spriteBatch, SpriteFont font) : base(game)
         {
             _spriteBatch = spriteBatch;
             _font = font;
+
+            _sampleBuffer = new Queue<double>();
         }
 
         public double AverageFramesPerSecond { get; private set; }
