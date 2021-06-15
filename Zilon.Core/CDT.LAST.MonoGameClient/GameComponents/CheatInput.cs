@@ -16,11 +16,11 @@ namespace CDT.LAST.MonoGameClient.GameComponents
     internal sealed class CheatInput : DrawableGameComponent
     {
         private readonly StringBuilder _currentText;
-        private string? _errorText;
         private readonly SpriteBatch _spriteBatch;
         private readonly SpriteFont _spriteFont;
-        private bool _isCheating;
         private double? _errorCounter;
+        private string? _errorText;
+        private bool _isCheating;
         private KeyboardState _lastState;
 
         public CheatInput(Game game, SpriteBatch spriteBatch, SpriteFont spriteFont) : base(game)
