@@ -1,19 +1,16 @@
-﻿namespace Zilon.Core.PersonModules
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+using Zilon.Core.Components;
+using Zilon.Core.Persons;
+using Zilon.Core.Props;
+using Zilon.Core.Schemes;
+
+namespace Zilon.Core.PersonModules
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-
-    using Components;
-
-    using Persons;
-
-    using Props;
-
-    using Schemes;
-
     /// <summary>
     /// Базовая реализация моделя работы с экипировкой.
     /// </summary>

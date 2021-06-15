@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
+using Zilon.Core.Schemes;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -62,19 +64,48 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var currentEquipedSlotIndex = FindPropInEquiped(_equipment, equipmentCarrier);
 
+            var equipScheme = _equipment.Scheme.Equip;
+            if (equipScheme is null)
+            {
+                throw new InvalidOperationException($"{_equipment.Scheme.Sid} is not equipment.");
+            }
+
             if (currentEquipedSlotIndex is null)
             {
                 // (и)
 
                 // текущий предмет возвращаем в инвентарь (1)
                 // при (0) ничего не делаем
-                if (currentEquipment != null)
-                {
-                    Actor.Person.GetModule<IInventoryModule>().Add(currentEquipment);
-                }
 
-                Actor.Person.GetModule<IInventoryModule>().Remove(_equipment);
-                equipmentCarrier[_slotIndex] = _equipment;
+                if (IsTargetSlotBeHand(equipmentCarrier, _slotIndex))
+                {
+                    // Follow to logic of one/two hand equipment
+                    var equipRestrictions = equipScheme.EquipRestrictions;
+                    if (equipRestrictions is null || equipRestrictions.PropHandUsage is null)
+                    {
+                        // Equip one-handed item in a specified hand.
+
+                        EquipOneSlotEquipment(equipmentCarrier, _equipment, currentEquipment);
+                    }
+                    else if (equipRestrictions.PropHandUsage.GetValueOrDefault().HasFlag(PropHandUsage.TwoHanded))
+                    {
+                        // Equip two handed weapon/tool in 2 of all slots.
+
+                        //TODO this must be rewriten to meet issue requirements.
+                        EquipOneSlotEquipment(equipmentCarrier, _equipment, currentEquipment);
+                    }
+                    else
+                    {
+                        //Do nothings beacause this state is unknown.
+                        Debug.Fail("Unknown state");
+                    }
+                }
+                else
+                {
+                    // Follow to logic of other slots.
+
+                    EquipOneSlotEquipment(equipmentCarrier, _equipment, currentEquipment);
+                }
             }
             else
             {
@@ -82,18 +113,79 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (currentEquipment != null)
                 {
-                    // (1) Ставим существующий в данном слоте предмет в слот, в котором был выбранный предмет
-                    equipmentCarrier[currentEquipedSlotIndex.Value] = currentEquipment;
+                    if (IsTargetSlotBeHand(equipmentCarrier, _slotIndex))
+                    {
+                        var equipRestrictions = equipScheme.EquipRestrictions;
+                        if (equipRestrictions is null || equipRestrictions.PropHandUsage is null)
+                        {
+                            // (1) Ставим существующий в данном слоте предмет в слот, в котором был выбранный предмет
+                            equipmentCarrier[currentEquipedSlotIndex.Value] = currentEquipment;
+                        }
+                        else if (equipRestrictions.PropHandUsage.GetValueOrDefault().HasFlag(PropHandUsage.TwoHanded))
+                        {
+                            //TODO this must be rewriten to meet issue requirements.
+                            // Considering a two-handed item must takes 2 hand slots.
+                            // So target item can take 2 slots, no hand slots will be free, current equipment must be place in inventory.
+
+                            // (1) Ставим существующий в данном слоте предмет в слот, в котором был выбранный предмет
+                            equipmentCarrier[currentEquipedSlotIndex.Value] = currentEquipment;
+                        }
+                    }
+                    else
+                    {
+                        // (1) Ставим существующий в данном слоте предмет в слот, в котором был выбранный предмет
+                        equipmentCarrier[currentEquipedSlotIndex.Value] = currentEquipment;
+                    }
+                    
                 }
                 else
                 {
-                    // В старый слот выбранного предмета записываем пустоту.
-                    // Потому что предмет перенесён из этого слота в другой.
-                    equipmentCarrier[currentEquipedSlotIndex.Value] = null;
+                    if (IsTargetSlotBeHand(equipmentCarrier, _slotIndex))
+                    {
+                        var equipRestrictions = equipScheme.EquipRestrictions;
+                        if (equipRestrictions is null || equipRestrictions.PropHandUsage is null)
+                        {
+                            // В старый слот выбранного предмета записываем пустоту.
+                            // Потому что предмет перенесён из этого слота в другой.
+                            equipmentCarrier[currentEquipedSlotIndex.Value] = null;
+                        }
+                        else if (equipRestrictions.PropHandUsage.GetValueOrDefault().HasFlag(PropHandUsage.TwoHanded))
+                        {
+                            //TODO this must be rewriten to meet issue requirements.
+                            // Considering a two-handed item must takes 2 hand slots.
+                            // So target item can take 2 slots, no hand slots will be free, current equipment must be place in inventory.
+
+                            // В старый слот выбранного предмета записываем пустоту.
+                            // Потому что предмет перенесён из этого слота в другой.
+                            equipmentCarrier[currentEquipedSlotIndex.Value] = null;
+                        }
+                    }
+                    else
+                    {
+                        // В старый слот выбранного предмета записываем пустоту.
+                        // Потому что предмет перенесён из этого слота в другой.
+                        equipmentCarrier[currentEquipedSlotIndex.Value] = null;
+                    }
                 }
 
                 equipmentCarrier[_slotIndex] = _equipment;
             }
+        }
+
+        private static bool IsTargetSlotBeHand(IEquipmentModule equipmentCarrier, int slotIndex)
+        {
+            return equipmentCarrier.Slots[slotIndex].Types.HasFlag(Components.EquipmentSlotTypes.Hand);
+        }
+
+        private void EquipOneSlotEquipment(IEquipmentModule equipmentCarrier, Equipment targetEquipment, Equipment? currentEquipment)
+        {
+            if (currentEquipment != null)
+            {
+                Actor.Person.GetModule<IInventoryModule>().Add(currentEquipment);
+            }
+
+            Actor.Person.GetModule<IInventoryModule>().Remove(targetEquipment);
+            equipmentCarrier[_slotIndex] = targetEquipment;
         }
 
         /// <summary>
