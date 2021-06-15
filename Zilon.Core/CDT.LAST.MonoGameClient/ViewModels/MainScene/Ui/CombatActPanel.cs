@@ -49,10 +49,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             foreach (var button in _buttons)
             {
                 const int BUTTON_SIZE = 32;
-                const int BOTTOM_PANEL_HEIGHT = 32;
+                const int BOTTOM_MARGIN = 0;
                 var buttonRect = new Rectangle(
                     actIndex * BUTTON_SIZE + graphicsDevice.Viewport.Width / 2 - BUTTON_SIZE * MAX_COMBAT_ACT_COUNT / 2,
-                    graphicsDevice.Viewport.Bounds.Bottom - BUTTON_SIZE - BOTTOM_PANEL_HEIGHT, BUTTON_SIZE,
+                    graphicsDevice.Viewport.Bounds.Bottom - BUTTON_SIZE - BOTTOM_MARGIN, BUTTON_SIZE,
                     BUTTON_SIZE);
 
                 button.Rect = buttonRect;

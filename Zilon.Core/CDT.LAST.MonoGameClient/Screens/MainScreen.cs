@@ -258,7 +258,10 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
             else
             {
-                _combatActPanel.Update();
+                if (_player.MainPerson.GetModule<ICombatActModule>().IsCombatMode)
+                {
+                    _combatActPanel.Update();
+                }
             }
         }
 
@@ -347,7 +350,10 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 _personEffectsPanel.Update();
 
-                _bottomMenu.Update();
+                if (!_player.MainPerson.GetModule<ICombatActModule>().IsCombatMode)
+                {
+                    _bottomMenu.Update();
+                }
             }
             else if (!_isTransitionPerforming)
             {
