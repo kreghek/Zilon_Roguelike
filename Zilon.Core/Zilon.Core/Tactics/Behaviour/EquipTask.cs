@@ -136,7 +136,7 @@ namespace Zilon.Core.Tactics.Behaviour
                         // (1) Ставим существующий в данном слоте предмет в слот, в котором был выбранный предмет
                         equipmentCarrier[currentEquipedSlotIndex.Value] = currentEquipment;
                     }
-                    
+
                 }
                 else
                 {
