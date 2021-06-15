@@ -21,9 +21,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IList<CombatActButton> _buttons;
         private readonly ICombatActModule _combatActModule;
         private readonly IEquipmentModule _equipmentModule;
+        private readonly IconButton _idleModeSwitcherButton;
         private readonly ISectorUiState _sectorUiState;
         private readonly IUiContentStorage _uiContentStorage;
-        private readonly IconButton _idleModeSwitcherButton;
 
         public CombatActPanel(ICombatActModule combatActModule, IEquipmentModule equipmentModule,
             IUiContentStorage uiContentStorage, ISectorUiState sectorUiState)
@@ -45,11 +45,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _idleModeSwitcherButton.OnClick += IdleModeSwitcherButton_OnClick;
 
             _equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
-        }
-
-        private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)
-        {
-            _combatActModule.IsCombatMode = !_combatActModule.IsCombatMode;
         }
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
@@ -75,9 +70,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             _idleModeSwitcherButton.Rect = new Rectangle(
-                    actIndex * BUTTON_SIZE + graphicsDevice.Viewport.Width / 2 - BUTTON_SIZE * MAX_COMBAT_ACT_COUNT / 2,
-                    graphicsDevice.Viewport.Bounds.Bottom - BUTTON_SIZE - BOTTOM_MARGIN, 16,
-                    BUTTON_SIZE);
+                actIndex * BUTTON_SIZE + graphicsDevice.Viewport.Width / 2 - BUTTON_SIZE * MAX_COMBAT_ACT_COUNT / 2,
+                graphicsDevice.Viewport.Bounds.Bottom - BUTTON_SIZE - BOTTOM_MARGIN, 16,
+                BUTTON_SIZE);
             _idleModeSwitcherButton.Draw(spriteBatch);
         }
 
@@ -100,6 +95,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             _buttons.Clear();
             Initialize(_buttons);
+        }
+
+        private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)
+        {
+            _combatActModule.IsCombatMode = !_combatActModule.IsCombatMode;
         }
 
         private void Initialize(IList<CombatActButton> _buttons)

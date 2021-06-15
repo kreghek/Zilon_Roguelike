@@ -26,6 +26,8 @@ namespace CDT.LAST.MonoGameClient.Screens
     internal class MainScreen : GameSceneBase
     {
         private readonly IAnimationBlockerService _animationBlockerService;
+
+        private readonly BottomMenuPanel _bottomMenu;
         private readonly Camera _camera;
         private readonly ContainerModalDialog _containerModal;
         private readonly PersonConditionsPanel _personEffectsPanel;
@@ -36,8 +38,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly ITransitionPool _transitionPool;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
-
-        private readonly BottomMenuPanel _bottomMenu;
 
         private CombatActPanel? _combatActPanel;
         private ISector? _currentSector;
@@ -84,7 +84,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             var humanActorTaskSource =
                 serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-            _bottomMenu = new BottomMenuPanel(humanActorTaskSource, _player.MainPerson.GetModule<ICombatActModule>(), uiContentStorage);
+            _bottomMenu = new BottomMenuPanel(humanActorTaskSource, _player.MainPerson.GetModule<ICombatActModule>(),
+                uiContentStorage);
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
             _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
         }

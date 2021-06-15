@@ -18,17 +18,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int BUTTON_WIDTH = 16;
         private const int BUTTON_HEIGHT = 32;
         private readonly IconButton _autoplayModeButton;
+        private readonly IconButton[] _buttons;
+        private readonly ICombatActModule _combatActModule;
         private readonly IconButton _combatModeSwitcherButton;
 
         private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
-        private readonly ICombatActModule _combatActModule;
         private readonly IconButton _personPropButton;
         private readonly IconButton _personStatsButton;
         private readonly IUiContentStorage _uiContentStorage;
 
         private bool _autoplayHintIsShown;
         private string _autoplayModeButtonTitle;
-        private readonly IconButton[] _buttons;
 
         public BottomMenuPanel(IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
             ICombatActModule combatActModule,

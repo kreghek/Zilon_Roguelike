@@ -24,6 +24,7 @@ namespace Zilon.Core.PersonModules
 
         /// <inheritdoc />
         public bool IsActive { get; set; }
+
         public bool IsCombatMode { get; set; }
 
         /// <inheritdoc />
