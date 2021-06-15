@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Resources;
+using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,53 +17,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class PersonConditionsPanel
     {
-        private const int ICON_SIZE = 16;
+        private const int ICON_SIZE = 32;
         private const int ICON_SPACING = 2;
 
-        private readonly Texture2D _conditionBackgroundTexture;
-        private readonly Texture2D _conditionHintBackgroundTexture;
-        private readonly Dictionary<string, Texture2D> _conditionIconTextureDict;
-        private readonly SpriteFont _hintTitleFont;
         private readonly int _screenX;
         private readonly int _screenY;
+        private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
-        public PersonConditionsPanel(Game game, ISectorUiState uiState, int screenX, int screenY)
+        public PersonConditionsPanel(ISectorUiState uiState, int screenX, int screenY,
+            IUiContentStorage uiContentStorage)
         {
             _uiState = uiState;
             _screenX = screenX;
             _screenY = screenY;
-            _conditionBackgroundTexture =
-                game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/ConditionIconBackground");
-
-            var conditionIconTextureSids = new[]
-            {
-                "HungerLesser",
-                "HungerStrong",
-                "HungerCritical",
-
-                "ThristLesser",
-                "ThristStrong",
-                "ThristCritical",
-
-                "IntoxicationLesser",
-                "IntoxicationStrong",
-                "IntoxicationCritical",
-
-                "WoundLesser",
-                "WoundStrong",
-                "WoundCritical",
-
-                "DiseaseSymptom"
-            };
-            _conditionIconTextureDict = conditionIconTextureSids.ToDictionary(
-                sid => sid,
-                sid => game.Content.Load<Texture2D>($"Sprites/ui/PersonConditions/{sid}ConditionIcon"));
-            _conditionHintBackgroundTexture =
-                game.Content.Load<Texture2D>("Sprites/ui/PersonConditions/ConditionHintBackground");
-            _hintTitleFont = game.Content.Load<SpriteFont>("Fonts/HintTitle");
+            _uiContentStorage = uiContentStorage;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -77,13 +47,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var conditionsModule = person.GetModule<IConditionsModule>();
 
             var conditionIndex = 0;
-            foreach (var condition in conditionsModule.Items)
+            var items = conditionsModule.Items;
+            foreach (var condition in items)
             {
                 var iconX = conditionIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
 
-                DrawIconBackground(spriteBatch, iconX);
+                var iconTextures = _uiContentStorage.GetConditionIconTextures(condition);
 
-                DrawIcon(spriteBatch, condition, iconX);
+                DrawIconBackground(spriteBatch, iconX, iconTextures.Background);
+
+                DrawIcon(spriteBatch, iconX, iconTextures.Icon);
 
                 conditionIndex++;
             }
@@ -131,7 +104,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (_selectedCondition != null && _selectedConditionIconIndex != null)
             {
                 var personConditionTitle = GetConditionTitle(_selectedCondition);
-                var titleTextSizeVector = _hintTitleFont.MeasureString(personConditionTitle);
+                var hintFont = _uiContentStorage.GetHintTitleFont();
+                var titleTextSizeVector = hintFont.MeasureString(personConditionTitle);
                 var selectedConditionIndex = _selectedConditionIconIndex.Value;
                 var hintXPosition = selectedConditionIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
 
@@ -141,44 +115,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     (int)titleTextSizeVector.X + HINT_TEXT_SPACING * 2,
                     (int)titleTextSizeVector.Y + HINT_TEXT_SPACING * 2);
 
-                spriteBatch.Draw(_conditionHintBackgroundTexture, hintRectangle, Color.DarkSlateGray);
+                var conditionHintBackgroundTexture = _uiContentStorage.GetHintBackgroundTexture();
+                spriteBatch.Draw(conditionHintBackgroundTexture, hintRectangle, Color.DarkSlateGray);
 
-                spriteBatch.DrawString(_hintTitleFont, personConditionTitle,
+                spriteBatch.DrawString(hintFont, personConditionTitle,
                     new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                     Color.Wheat);
             }
         }
 
-        private void DrawIcon(SpriteBatch spriteBatch, IPersonCondition effect, int iconX)
+        private void DrawIcon(SpriteBatch spriteBatch, int iconX, Texture2D iconTexture)
         {
-            var conditionIconSid = GetConditionSid(effect);
-            var conditionIconTexture = _conditionIconTextureDict[conditionIconSid];
-            spriteBatch.Draw(conditionIconTexture, new Vector2(iconX, _screenY), Color.DarkSlateGray);
+            spriteBatch.Draw(iconTexture, new Vector2(iconX, _screenY), Color.White);
         }
 
-        private void DrawIconBackground(SpriteBatch spriteBatch, int iconX)
+        private void DrawIconBackground(SpriteBatch spriteBatch, int iconX, Texture2D backgroundTexture)
         {
-            spriteBatch.Draw(_conditionBackgroundTexture, new Rectangle(iconX, _screenY, ICON_SIZE, ICON_SIZE),
-                Color.Yellow);
-        }
-
-        private static string GetConditionSid(IPersonCondition personCondition)
-        {
-            switch (personCondition)
-            {
-                case SurvivalStatHazardCondition statCondition:
-
-                    var typeString = GetStatHazardConditionTypeClientString(statCondition.Type);
-                    var levelString = GetStatHazardConditionLevelClientString(statCondition);
-                    return $"{typeString}{levelString}";
-
-                case DiseaseSymptomCondition:
-                    return "DiseaseSymptom";
-
-                default:
-                    Debug.Fail("Every condition must have icon.");
-                    return "HungerLesser";
-            }
+            spriteBatch.Draw(backgroundTexture, new Vector2(iconX, _screenY), Color.White);
         }
 
         private static string GetConditionTitle(IPersonCondition personCondition)

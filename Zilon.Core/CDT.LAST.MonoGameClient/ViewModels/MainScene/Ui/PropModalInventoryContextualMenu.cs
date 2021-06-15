@@ -8,9 +8,6 @@ using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
@@ -20,119 +17,50 @@ using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    public sealed class PropModalInventoryContextualMenu
+    internal sealed class PropModalInventoryContextualMenu : PropModalInventoryContextualMenuBase
     {
-        private const int MENU_MARGIN = 5;
-        private const int MENU_WIDTH = 128;
-        private const int MENU_ITEM_HEIGHT = 16;
-
         private readonly IEquipmentModule _equipmentModule;
-
-        private readonly TextButton[] _menuItemButtons;
-        private readonly Point _position;
-        private readonly IProp _prop;
         private readonly IServiceProvider _serviceProvider;
-        private readonly Point _size;
-        private readonly IUiContentStorage _uiContentStorage;
 
-        public PropModalInventoryContextualMenu(Point position, IProp prop, IEquipmentModule equipmentModule,
+        private IProp? _prop;
+
+        public PropModalInventoryContextualMenu(Point position, IEquipmentModule equipmentModule,
             IUiContentStorage uiContentStorage,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider) : base(position, uiContentStorage)
         {
-            _position = new Point(position.X - MENU_MARGIN, position.Y - MENU_MARGIN);
-            _prop = prop;
             _equipmentModule = equipmentModule;
-            _uiContentStorage = uiContentStorage;
             _serviceProvider = serviceProvider;
+        }
+
+        protected override TextButton[] InitItems(IProp prop)
+        {
+            _prop = prop;
 
             var inventoryState = _serviceProvider.GetRequiredService<IInventoryState>();
-            inventoryState.SelectedProp = new PropViewModel(_prop);
-            _menuItemButtons = InitItems(prop);
+            inventoryState.SelectedProp = new PropViewModel(prop);
 
-            var itemsHeight = _menuItemButtons.Length * MENU_ITEM_HEIGHT;
-            _size = new Point(
-                MENU_WIDTH + (MENU_MARGIN * 2),
-                itemsHeight + (MENU_MARGIN * 2)
-            );
-        }
+            var list = new List<TextButton>();
 
-        public bool IsClosed { get; private set; }
+            var useCommand = _serviceProvider.GetRequiredService<UseSelfCommand>();
 
-        public bool IsCommandUsed { get; private set; }
+            var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            DrawBorder(spriteBatch);
-
-            foreach (var button in _menuItemButtons)
+            switch (prop)
             {
-                button.Draw(spriteBatch);
-            }
-        }
+                case Equipment:
+                    InitItemsForEquipment(list, commandPool);
+                    break;
 
-        public void Update()
-        {
-            foreach (var button in _menuItemButtons)
-            {
-                button.Update();
+                case Resource:
+                    InitItemsForResource(list, useCommand, commandPool);
+                    break;
+
+                default:
+                    Debug.Fail($"Unknown type {prop.GetType()} of the prop.");
+                    break;
             }
 
-            // Close menu if mouse is not on menu.
-
-            var mouseState = Mouse.GetState();
-            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-            var menuRect = new Rectangle(_position, _size);
-            if (!mouseRect.Intersects(menuRect))
-            {
-                CloseMenu();
-            }
-        }
-
-        private void CloseMenu()
-        {
-            IsClosed = true;
-        }
-
-        private void DrawBorder(SpriteBatch spriteBatch)
-        {
-            // edges
-
-            const int EDGE_SIZE = 5;
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(_position, new Point(EDGE_SIZE, EDGE_SIZE)),
-                new Rectangle(0, 0, EDGE_SIZE, EDGE_SIZE),
-                Color.White);
-
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + _size.X - EDGE_SIZE, _position.Y),
-                    new Point(EDGE_SIZE, EDGE_SIZE)),
-                new Rectangle(7, 0, EDGE_SIZE, EDGE_SIZE),
-                Color.White);
-
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X, _position.Y + _size.Y - EDGE_SIZE),
-                    new Point(EDGE_SIZE, EDGE_SIZE)),
-                new Rectangle(0, 7, EDGE_SIZE, EDGE_SIZE),
-                Color.White);
-
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + _size.X - EDGE_SIZE, _position.Y + _size.Y - EDGE_SIZE),
-                    new Point(EDGE_SIZE, EDGE_SIZE)),
-                new Rectangle(7, 7, EDGE_SIZE, EDGE_SIZE),
-                Color.White);
-
-            // sides
-
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + EDGE_SIZE, _position.Y), new Point(_size.X - (EDGE_SIZE * 2), 6)),
-                new Rectangle(EDGE_SIZE, 0, 2, 6),
-                Color.White);
-
-            spriteBatch.Draw(_uiContentStorage.GetContextualMenuBorderTexture(),
-                new Rectangle(new Point(_position.X + EDGE_SIZE, _position.Y + _size.Y - EDGE_SIZE),
-                    new Point(_size.X - (EDGE_SIZE * 2), 6)),
-                new Rectangle(EDGE_SIZE, 7, 2, 6),
-                Color.White);
+            return list.ToArray();
         }
 
         private static string GetInventoryMenuItemContent(IProp prop)
@@ -176,32 +104,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
         }
 
-        private TextButton[] InitItems(IProp prop)
-        {
-            var list = new List<TextButton>();
-
-            var useCommand = _serviceProvider.GetRequiredService<UseSelfCommand>();
-
-            var commandPool = _serviceProvider.GetRequiredService<ICommandPool>();
-
-            switch (prop)
-            {
-                case Equipment:
-                    InitItemsForEquipment(list, commandPool);
-                    break;
-
-                case Resource:
-                    InitItemsForResource(list, useCommand, commandPool);
-                    break;
-
-                default:
-                    Debug.Fail($"Unknown type {prop.GetType()} of the prop.");
-                    break;
-            }
-
-            return list.ToArray();
-        }
-
         private void InitItemsForEquipment(List<TextButton> list, ICommandPool commandPool)
         {
             for (var slotIndex = 0; slotIndex < _equipmentModule.Slots.Length; slotIndex++)
@@ -235,6 +137,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void InitItemsForResource(List<TextButton> list, UseSelfCommand useCommand, ICommandPool commandPool)
         {
+            if (_prop is null)
+            {
+                return;
+            }
+
             if (!useCommand.CanExecute().IsSuccess)
             {
                 return;

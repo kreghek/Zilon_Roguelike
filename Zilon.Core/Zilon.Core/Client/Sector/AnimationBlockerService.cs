@@ -81,6 +81,7 @@ namespace Zilon.Core.Client.Sector
 
             foreach (var commandBlocker in _commandBlockers.Keys.ToArray())
             {
+                commandBlocker.Release();
                 commandBlocker.Released -= CommandBlocker_Release;
             }
 

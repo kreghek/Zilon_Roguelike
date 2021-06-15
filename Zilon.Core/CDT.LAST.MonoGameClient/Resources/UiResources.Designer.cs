@@ -162,6 +162,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to the loot bag.
+        /// </summary>
+        internal static string FakeContainerName {
+            get {
+                return ResourceManager.GetString("FakeContainerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generate.
         /// </summary>
         internal static string GenerateGlobeButtonTitle {
@@ -292,6 +301,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Put into {0}.
+        /// </summary>
+        internal static string PutPropInContainerButtonTitleTemplate {
+            get {
+                return ResourceManager.GetString("PutPropInContainerButtonTitleTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aux.
         /// </summary>
         internal static string SlotAux {
@@ -369,6 +387,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         internal static string SwitchAutomodeButtonTitle {
             get {
                 return ResourceManager.GetString("SwitchAutomodeButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Take in inventory.
+        /// </summary>
+        internal static string TakePropInInventoryButtonTitle {
+            get {
+                return ResourceManager.GetString("TakePropInInventoryButtonTitle", resourceCulture);
             }
         }
         
