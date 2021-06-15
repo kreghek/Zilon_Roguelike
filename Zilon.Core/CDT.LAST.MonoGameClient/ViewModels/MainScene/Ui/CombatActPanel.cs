@@ -95,7 +95,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _uiContentStorage.GetHintBackgroundTexture(),
                     _buttonGroup,
                     new Rectangle(0, 0, BUTTON_SIZE, BUTTON_SIZE));
-                
+
                 button.OnClick += (s, e) =>
                 {
                     _sectorUiState.TacticalAct = act;
