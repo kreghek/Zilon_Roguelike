@@ -50,6 +50,7 @@ namespace Zilon.Core.Tactics.Behaviour
             //    (и)                                           (с)
             // (0) изымаем предмет из инвентаря                 меняем предметы в слотах местами
             // (1) изымаем из инвентаря, а текущий в инвентярь  меняем предметы в слотах местами
+            //TODO Ещё в этой схеме учитывает однослотовые и двуслотовые предметы.
 
             // проверяем, есть ли в текущем слоте предмет (0)/(1).
             var currentEquipment = equipmentCarrier[_slotIndex];
@@ -85,14 +86,14 @@ namespace Zilon.Core.Tactics.Behaviour
                     {
                         // Equip one-handed item in a specified hand.
 
-                        EquipOneSlotEquipment(equipmentCarrier, _equipment, currentEquipment);
+                        EquipOneSlotEquipmentFromInventory(equipmentCarrier, _equipment, currentEquipment);
                     }
                     else if (equipRestrictions.PropHandUsage.GetValueOrDefault().HasFlag(PropHandUsage.TwoHanded))
                     {
                         // Equip two handed weapon/tool in 2 of all slots.
 
                         //TODO this must be rewriten to meet issue requirements.
-                        EquipOneSlotEquipment(equipmentCarrier, _equipment, currentEquipment);
+                        EquipOneSlotEquipmentFromInventory(equipmentCarrier, _equipment, currentEquipment);
                     }
                     else
                     {
@@ -104,7 +105,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 {
                     // Follow to logic of other slots.
 
-                    EquipOneSlotEquipment(equipmentCarrier, _equipment, currentEquipment);
+                    EquipOneSlotEquipmentFromInventory(equipmentCarrier, _equipment, currentEquipment);
                 }
             }
             else
@@ -177,7 +178,18 @@ namespace Zilon.Core.Tactics.Behaviour
             return equipmentCarrier.Slots[slotIndex].Types.HasFlag(Components.EquipmentSlotTypes.Hand);
         }
 
-        private void EquipOneSlotEquipment(IEquipmentModule equipmentCarrier, Equipment targetEquipment, Equipment? currentEquipment)
+        private void EquipOneSlotEquipmentFromInventory(IEquipmentModule equipmentCarrier, Equipment targetEquipment, Equipment? currentEquipment)
+        {
+            if (currentEquipment != null)
+            {
+                Actor.Person.GetModule<IInventoryModule>().Add(currentEquipment);
+            }
+
+            Actor.Person.GetModule<IInventoryModule>().Remove(targetEquipment);
+            equipmentCarrier[_slotIndex] = targetEquipment;
+        }
+
+        private void EquipTwoSlotEquipmentFromInventory(IEquipmentModule equipmentCarrier, Equipment targetEquipment, Equipment? currentEquipment)
         {
             if (currentEquipment != null)
             {
