@@ -27,11 +27,12 @@ namespace CDT.LAST.MonoGameClient.Engine
 
     internal sealed class CombatActButton : ButtonBase
     {
+        private readonly CombatActButtonGroup _buttonGroup;
         private readonly Texture2D _icon;
         private readonly Texture2D _selectedMarker;
-        private readonly CombatActButtonGroup _buttonGroup;
 
-        public CombatActButton(Texture2D texture, Texture2D icon, Texture2D selectedMarker, CombatActButtonGroup buttonGroup, Rectangle rect) : base(texture, rect)
+        public CombatActButton(Texture2D texture, Texture2D icon, Texture2D selectedMarker,
+            CombatActButtonGroup buttonGroup, Rectangle rect) : base(texture, rect)
         {
             _icon = icon;
             _selectedMarker = selectedMarker;

@@ -16,13 +16,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class CombatActPanel
     {
+        private readonly CombatActButtonGroup _buttonGroup;
         private readonly IList<CombatActButton> _buttons;
         private readonly ICombatActModule _combatActModule;
         private readonly IEquipmentModule _equipmentModule;
         private readonly ISectorUiState _sectorUiState;
         private readonly IUiContentStorage _uiContentStorage;
-
-        private readonly CombatActButtonGroup _buttonGroup;
 
         public CombatActPanel(ICombatActModule combatActModule, IEquipmentModule equipmentModule,
             IUiContentStorage uiContentStorage, ISectorUiState sectorUiState)
