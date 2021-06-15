@@ -194,6 +194,9 @@ namespace CDT.LAST.MonoGameClient.GameComponents
                 }
                 // @formatter:on — enable formatter after this line
             }
+
+            key = (char)0;
+            return false;
         }
 
         private bool TryParseCommand(string currentText)
