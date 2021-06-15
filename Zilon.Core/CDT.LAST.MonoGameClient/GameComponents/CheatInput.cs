@@ -16,9 +16,11 @@ namespace CDT.LAST.MonoGameClient.GameComponents
     internal sealed class CheatInput : DrawableGameComponent
     {
         private readonly StringBuilder _currentText;
+        private string? _errorText;
         private readonly SpriteBatch _spriteBatch;
         private readonly SpriteFont _spriteFont;
         private bool _isCheating;
+        private double? _errorCounter;
         private KeyboardState _lastState;
 
         public CheatInput(Game game, SpriteBatch spriteBatch, SpriteFont spriteFont) : base(game)
@@ -36,6 +38,21 @@ namespace CDT.LAST.MonoGameClient.GameComponents
             {
                 _spriteBatch.Begin();
                 _spriteBatch.DrawString(_spriteFont, _currentText, new Vector2(0, 0), Color.White);
+                _spriteBatch.End();
+            }
+
+            if (!_isCheating && _errorCounter != null)
+            {
+                _errorCounter -= gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (_errorCounter <= 0)
+                {
+                    _errorCounter = null;
+                    _errorText = null;
+                }
+
+                _spriteBatch.Begin();
+                _spriteBatch.DrawString(_spriteFont, _errorText, new Vector2(0, 0), Color.White);
                 _spriteBatch.End();
             }
         }
@@ -60,11 +77,15 @@ namespace CDT.LAST.MonoGameClient.GameComponents
                 }
                 else if (CheckIsKeyPressed(keyboardState, _lastState, Keys.Enter))
                 {
-                    if (!TryParseCommand(_currentText.ToString()))
+                    var currentText = _currentText.ToString();
+                    if (!TryParseCommand(currentText))
                     {
                         // Show error
+                        _errorText = $"[ERROR]: {currentText}";
+                        _errorCounter = 10;
                     }
 
+                    _isCheating = false;
                     _currentText.Clear();
                 }
             }
@@ -187,7 +208,14 @@ namespace CDT.LAST.MonoGameClient.GameComponents
                 var propFactory = ((LivGame)Game).ServiceProvider.GetRequiredService<IPropFactory>();
                 var equipment = propFactory.CreateEquipment(equipmentScheme);
                 var player = ((LivGame)Game).ServiceProvider.GetRequiredService<IPlayer>();
-                var inventory = player.MainPerson.GetModule<IInventoryModule>();
+
+                var currentPerson = player.MainPerson;
+                if (currentPerson is null)
+                {
+                    return false;
+                }
+
+                var inventory = currentPerson.GetModule<IInventoryModule>();
                 inventory.Add(equipment);
 
                 return true;
