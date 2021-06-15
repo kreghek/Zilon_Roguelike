@@ -10,5 +10,7 @@ namespace Zilon.Core.PersonModules
         /// Рассчёт всех действий, используемых в бою.
         /// </summary>
         IEnumerable<ITacticalAct> CalcCombatActs();
+
+        bool IsCombatMode { get; set; }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Resources;
@@ -12,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
@@ -24,6 +21,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IconButton _combatModeSwitcherButton;
 
         private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
+        private readonly ICombatActModule _combatActModule;
         private readonly IconButton _personPropButton;
         private readonly IconButton _personStatsButton;
         private readonly IUiContentStorage _uiContentStorage;
@@ -33,9 +31,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IconButton[] _buttons;
 
         public BottomMenuPanel(IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
+            ICombatActModule combatActModule,
             IUiContentStorage uiContentStorage)
         {
             _humanActorTaskSource = humanActorTaskSource;
+            _combatActModule = combatActModule;
             _uiContentStorage = uiContentStorage;
             _autoplayModeButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
@@ -95,16 +95,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var button = _buttons[i];
                 button.Rect = new Rectangle(halfOfScreenX + BUTTON_WIDTH * i, bottomOfScreenY - BUTTON_HEIGHT,
                     BUTTON_WIDTH, BUTTON_HEIGHT);
+
+                button.Draw(spriteBatch);
             }
 
-            _autoplayModeButton.Draw(spriteBatch);
             if (_autoplayHintIsShown)
             {
                 var titleTextSizeVector = _uiContentStorage.GetHintTitleFont().MeasureString(_autoplayModeButtonTitle);
 
                 const int HINT_TEXT_SPACING = 8;
 
-                var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
+                var autoplayButtonRect = _autoplayModeButton.Rect;
 
                 var hintRectangle = new Rectangle(
                     autoplayButtonRect.Left,
@@ -119,19 +120,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                     Color.Wheat);
             }
-
-            _personPropButton.Draw(spriteBatch);
-            _personStatsButton.Draw(spriteBatch);
         }
 
-        public void Update(GraphicsDevice graphicsDevice)
+        public void Update()
         {
-            _autoplayModeButton.Update();
+            foreach (var button in _buttons)
+            {
+                button.Update();
+            }
 
-            _personPropButton.Update();
-            _personStatsButton.Update();
-
-            DetectAutoplayHint(graphicsDevice);
+            DetectAutoplayHint();
         }
 
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
@@ -162,15 +160,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            _combatActModule.IsCombatMode = !_combatActModule.IsCombatMode;
         }
 
-        private void DetectAutoplayHint(GraphicsDevice graphicsDevice)
+        private void DetectAutoplayHint()
         {
-            var halfOfScreenX = graphicsDevice.Viewport.Width / 2;
-            var bottomOfScreenY = graphicsDevice.Viewport.Height;
-
-            var autoplayButtonRect = new Rectangle(halfOfScreenX - 16, bottomOfScreenY - 32, 16, 32);
+            var autoplayButtonRect = _autoplayModeButton.Rect;
 
             var mouseState = Mouse.GetState();
             var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);

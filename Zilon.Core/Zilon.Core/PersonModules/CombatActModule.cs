@@ -294,6 +294,7 @@ namespace Zilon.Core.PersonModules
 
         public string Key => nameof(ICombatActModule);
         public bool IsActive { get; set; }
+        public bool IsCombatMode { get; set; }
 
         public IEnumerable<ITacticalAct> CalcCombatActs()
         {

@@ -84,7 +84,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             var humanActorTaskSource =
                 serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-            _bottomMenu = new BottomMenuPanel(humanActorTaskSource, uiContentStorage);
+            _bottomMenu = new BottomMenuPanel(humanActorTaskSource, _player.MainPerson.GetModule<ICombatActModule>(), uiContentStorage);
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
             _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
         }
@@ -194,11 +194,16 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _personEffectsPanel.Draw(_spriteBatch);
 
-            _bottomMenu.Draw(_spriteBatch, Game.GraphicsDevice);
-
-            if (_combatActPanel != null)
+            if (_player.MainPerson.GetModule<ICombatActModule>().IsCombatMode)
             {
-                _combatActPanel.Draw(_spriteBatch, GraphicsDevice);
+                if (_combatActPanel != null)
+                {
+                    _combatActPanel.Draw(_spriteBatch, GraphicsDevice);
+                }
+            }
+            else
+            {
+                _bottomMenu.Draw(_spriteBatch, Game.GraphicsDevice);
             }
 
             _spriteBatch.End();
@@ -342,7 +347,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 _personEffectsPanel.Update();
 
-                _bottomMenu.Update(Game.GraphicsDevice);
+                _bottomMenu.Update();
             }
             else if (!_isTransitionPerforming)
             {
