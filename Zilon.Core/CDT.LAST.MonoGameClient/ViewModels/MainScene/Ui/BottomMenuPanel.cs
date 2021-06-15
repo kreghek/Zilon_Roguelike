@@ -18,19 +18,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class BottomMenuPanel
     {
+        private const int BUTTON_WIDTH = 16;
+        private const int BUTTON_HEIGHT = 32;
         private readonly IconButton _autoplayModeButton;
-        private readonly IconButton _personPropButton;
-        private readonly IconButton _personStatsButton;
         private readonly IconButton _combatModeSwitcherButton;
-        private IconButton[] _buttons;
 
         private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
+        private readonly IconButton _personPropButton;
+        private readonly IconButton _personStatsButton;
         private readonly IUiContentStorage _uiContentStorage;
 
         private bool _autoplayHintIsShown;
         private string _autoplayModeButtonTitle;
+        private readonly IconButton[] _buttons;
 
-        public BottomMenuPanel(IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource, IUiContentStorage uiContentStorage)
+        public BottomMenuPanel(IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
+            IUiContentStorage uiContentStorage)
         {
             _humanActorTaskSource = humanActorTaskSource;
             _uiContentStorage = uiContentStorage;
@@ -73,31 +76,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 rect: new Rectangle(0, 0, 16, 32));
             _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
 
-            _buttons = new[] {
+            _buttons = new[]
+            {
                 _autoplayModeButton,
                 _personPropButton,
                 _personStatsButton,
                 _combatModeSwitcherButton
             };
         }
-
-        private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(GraphicsDevice graphicsDevice)
-        {
-            _autoplayModeButton.Update();
-
-            _personPropButton.Update();
-            _personStatsButton.Update();
-
-            DetectAutoplayHint(graphicsDevice);
-        }
-
-        private const int BUTTON_WIDTH = 16;
-        private const int BUTTON_HEIGHT = 32;
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
@@ -107,7 +93,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             for (var i = 0; i < _buttons.Length; i++)
             {
                 var button = _buttons[i];
-                button.Rect = new Rectangle(halfOfScreenX + BUTTON_WIDTH * i, bottomOfScreenY - BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
+                button.Rect = new Rectangle(halfOfScreenX + BUTTON_WIDTH * i, bottomOfScreenY - BUTTON_HEIGHT,
+                    BUTTON_WIDTH, BUTTON_HEIGHT);
             }
 
             _autoplayModeButton.Draw(spriteBatch);
@@ -137,6 +124,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _personStatsButton.Draw(spriteBatch);
         }
 
+        public void Update(GraphicsDevice graphicsDevice)
+        {
+            _autoplayModeButton.Update();
+
+            _personPropButton.Update();
+            _personStatsButton.Update();
+
+            DetectAutoplayHint(graphicsDevice);
+        }
+
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
         {
             var humanTaskSource = _humanActorTaskSource;
@@ -161,6 +158,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                             "Unknown actor task control {controlSwitcher.CurrentControl}.");
                 }
             }
+        }
+
+        private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void DetectAutoplayHint(GraphicsDevice graphicsDevice)

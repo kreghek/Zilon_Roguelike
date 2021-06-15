@@ -37,6 +37,8 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
 
+        private readonly BottomMenuPanel _bottomMenu;
+
         private CombatActPanel? _combatActPanel;
         private ISector? _currentSector;
 
@@ -80,20 +82,11 @@ namespace CDT.LAST.MonoGameClient.Screens
                 Game.GraphicsDevice,
                 ((LivGame)game).ServiceProvider);
 
-            var humanActorTaskSource = serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
+            var humanActorTaskSource =
+                serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
             _bottomMenu = new BottomMenuPanel(humanActorTaskSource, uiContentStorage);
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
             _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
-        }
-
-        private void BottomMenu_StatButtonClicked(object? sender, EventArgs e)
-        {
-            _personStatsModal.Show();
-        }
-
-        private void BottomMenu_PropButtonClicked(object? sender, EventArgs e)
-        {
-            _personEquipmentModal.Show();
         }
 
         public override void Draw(GameTime gameTime)
@@ -166,6 +159,16 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
+        private void BottomMenu_PropButtonClicked(object? sender, EventArgs e)
+        {
+            _personEquipmentModal.Show();
+        }
+
+        private void BottomMenu_StatButtonClicked(object? sender, EventArgs e)
+        {
+            _personStatsModal.Show();
+        }
+
         private ModalDialogBase? CheckModalsIsVisible()
         {
             if (_personEquipmentModal.IsVisible)
@@ -185,8 +188,6 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             return null;
         }
-
-        private BottomMenuPanel _bottomMenu;
 
         private void DrawHud()
         {
