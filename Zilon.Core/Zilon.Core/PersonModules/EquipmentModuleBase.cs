@@ -1,15 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Zilon.Core.Persons;
-using Zilon.Core.Props;
-using Zilon.Core.Schemes;
-
-namespace Zilon.Core.PersonModules
+﻿namespace Zilon.Core.PersonModules
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+
+    using Components;
+
+    using Persons;
+
+    using Props;
+
+    using Schemes;
+
     /// <summary>
     /// Базовая реализация моделя работы с экипировкой.
     /// </summary>
@@ -70,7 +74,10 @@ namespace Zilon.Core.PersonModules
             Equipment? oldEquipment,
             Equipment? equipment)
         {
-            EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
+            EquipmentChanged?.Invoke(
+                sender: this,
+                e: new EquipmentChangedEventArgs(equipment: equipment, oldEquipment: oldEquipment,
+                    slotIndex: slotIndex));
         }
 
         /// <summary>
@@ -84,13 +91,54 @@ namespace Zilon.Core.PersonModules
         /// </remarks>
         protected abstract void ValidateSetEquipment(Equipment equipment, int slotIndex);
 
+        private void DropHandsEquipment(IEnumerable<int> foundHandsIndexes)
+        {
+            foreach (var handIndex in foundHandsIndexes)
+            {
+                _equipment[handIndex] = null;
+            }
+        }
+
+        private IEnumerable<int> FoundHandsIndexes()
+        {
+            return Enumerable.Range(start: 0, count: _equipment.Length).Where(
+                i =>
+                {
+                    var slotByIndex = Slots[i];
+                    var isHand = slotByIndex?.Types == EquipmentSlotTypes.Hand;
+                    return isHand;
+                });
+        }
+
+        private void ReplaceEquipmentInHandSlots(Equipment? equipment)
+        {
+            var foundHandsIndexes = FoundHandsIndexes();
+            if (!foundHandsIndexes.Any())
+            {
+                throw new ArgumentException($"No hand slots to equipment the {equipment}");
+            }
+
+            DropHandsEquipment(foundHandsIndexes);
+            var firstHandIndex = foundHandsIndexes.First();
+            _equipment[firstHandIndex] = equipment;
+        }
+
         private void SetEquipment(Equipment? equipment, int slotIndex)
         {
             if (equipment != null)
             {
-                ValidateSetEquipment(equipment, slotIndex);
+                ValidateSetEquipment(equipment: equipment, slotIndex: slotIndex);
 
-                _equipment[slotIndex] = equipment;
+                var isTwoHandedEquipment = equipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage ==
+                                           PropHandUsage.TwoHanded;
+                if (isTwoHandedEquipment)
+                {
+                    ReplaceEquipmentInHandSlots(equipment);
+                }
+                else
+                {
+                    _equipment[slotIndex] = equipment;
+                }
             }
             else
             {
@@ -99,7 +147,7 @@ namespace Zilon.Core.PersonModules
 
             var oldEquipment = _equipment[slotIndex];
 
-            DoEquipmentChanged(slotIndex, oldEquipment, equipment);
+            DoEquipmentChanged(slotIndex: slotIndex, oldEquipment: oldEquipment, equipment: equipment);
         }
 
         /// <summary>
@@ -133,7 +181,7 @@ namespace Zilon.Core.PersonModules
         public virtual Equipment? this[int index]
         {
             get => _equipment[index];
-            set => SetEquipment(value, index);
+            set => SetEquipment(equipment: value, slotIndex: index);
         }
 
         /// <summary>
