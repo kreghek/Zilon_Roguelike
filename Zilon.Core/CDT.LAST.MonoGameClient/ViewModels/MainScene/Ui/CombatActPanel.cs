@@ -16,11 +16,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class CombatActPanel
     {
-        private readonly IList<IconButton> _buttons;
+        private readonly IList<CombatActButton> _buttons;
         private readonly ICombatActModule _combatActModule;
         private readonly IEquipmentModule _equipmentModule;
         private readonly ISectorUiState _sectorUiState;
         private readonly IUiContentStorage _uiContentStorage;
+
+        private readonly CombatActButtonGroup _buttonGroup;
 
         public CombatActPanel(ICombatActModule combatActModule, IEquipmentModule equipmentModule,
             IUiContentStorage uiContentStorage, ISectorUiState sectorUiState)
@@ -30,7 +32,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _uiContentStorage = uiContentStorage;
             _sectorUiState = sectorUiState;
 
-            _buttons = new List<IconButton>();
+            _buttons = new List<CombatActButton>();
+
+            _buttonGroup = new CombatActButtonGroup();
 
             Initialize(_buttons);
 
@@ -77,7 +81,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             Initialize(_buttons);
         }
 
-        private void Initialize(IList<IconButton> _buttons)
+        private void Initialize(IList<CombatActButton> _buttons)
         {
             var acts = _combatActModule.CalcCombatActs();
             var actsOrdered = acts.OrderBy(x => x.Scheme?.Sid).ToArray();
@@ -86,13 +90,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 const int BUTTON_SIZE = 32;
                 var tags = act.Scheme?.Stats?.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
                            Array.Empty<string>();
-                var button = new IconButton(_uiContentStorage.GetButtonTexture(),
+                var button = new CombatActButton(_uiContentStorage.GetButtonTexture(),
                     _uiContentStorage.GetCombatActIconTexture(act.Scheme?.Sid, tags),
+                    _uiContentStorage.GetHintBackgroundTexture(),
+                    _buttonGroup,
                     new Rectangle(0, 0, BUTTON_SIZE, BUTTON_SIZE));
+                
                 button.OnClick += (s, e) =>
                 {
                     _sectorUiState.TacticalAct = act;
+                    _buttonGroup.Selected = (CombatActButton?)s;
                 };
+
+                if (act == _sectorUiState.TacticalAct)
+                {
+                    _buttonGroup.Selected = button;
+                }
+
                 _buttons.Add(button);
             }
         }
