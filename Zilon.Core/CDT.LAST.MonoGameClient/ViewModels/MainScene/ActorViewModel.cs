@@ -295,7 +295,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     // Selection actors only prevent error when monster stays on loot bag.
                     var targetGameObject =
-                        _sectorViewModelContext.GameObjects.SingleOrDefault(x => x is IActorViewModel && x.Node == e.TargetNode);
+                        _sectorViewModelContext.GameObjects.SingleOrDefault(x =>
+                            x is IActorViewModel && x.Node == e.TargetNode);
                     if (targetGameObject is null)
                     {
                         // This means the attacker is miss.
