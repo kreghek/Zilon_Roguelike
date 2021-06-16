@@ -7,27 +7,27 @@
 	Мне нужно, чтобы при употреблении провинта разного типа (еда/вода)
 	сбрасывались соответствующие угрозы выживания при насыщении персонажа
 
-@survival @dev1 @dev2 @dev17
-Scenario Outline: Снятие угроз выживания
+Background:
 	Given Есть карта размером 2
 	And Есть актёр игрока класса human-person в ячейке (0, 0)
-	And Актёр имеет эффект <startEffect>
+
+@survival @dev1 @dev2 @dev17
+Scenario Outline: Снятие угроз выживания
+	Given Актёр имеет эффект <startEffect>
 	And В инвентаре у актёра есть еда: <propSid> количество: 100
 	When Актёр использует предмет <propSid> на себя 1 раз
 	Then Актёр под эффектом <effect>
 
 Examples: 
-| startEffect  | propSid      | effect       |
-| Слабый голод | packed-food  | нет          |
-| Слабая жажда | water-bottle | нет          |
-| Голод        | packed-food  | Слабый голод |
-| Жажда        | water-bottle | нет          |
+    | startEffect  | propSid      | effect       |
+    | Слабый голод | packed-food  | нет          |
+    | Слабая жажда | water-bottle | нет          |
+    | Голод        | packed-food  | Слабый голод |
+    | Жажда        | water-bottle | нет          |
 
 @survival @dev1 @dev17
 Scenario Outline: Употребление медикаментов для восстановления Hp.
-	Given Есть карта размером 2
-	And Есть актёр игрока класса captain в ячейке (0, 0)
-	And Актёр имеет эффект <startEffect>
+	Given Актёр имеет эффект <startEffect>
 	And В инвентаре у актёра есть еда: <propSid> количество: 100
 	When Актёр использует предмет <propSid> на себя <propCount> раз
 	Then Актёр под эффектом <effect>
@@ -38,9 +38,7 @@ Examples:
 
 @survival @dev2 @dev17
 Scenario Outline: Употребление медикаментов снижает сытость и воду.
-	Given Есть карта размером 2
-	And Есть актёр игрока класса human-person в ячейке (0, 0)
-	And В инвентаре у актёра есть еда: <propSid> количество: 100
+	Given В инвентаре у актёра есть еда: <propSid> количество: 100
 	When Актёр использует предмет <propSid> на себя <iterations> раз
 	Then Актёр под эффектом <effect>
 
@@ -52,10 +50,8 @@ Scenario Outline: Употребление медикаментов снижае
 
 @survival @dev1 @dev17
 Scenario Outline: Наступление выживальных состояний (жажда/голод/утомление)
-	Given Есть карта размером 2
-	And Есть актёр игрока класса human-person в ячейке (0, 0)
 	# special perk to exclude other hazard influence
-	And Актёр игрока получает перк <testPerk>
+	Given Актёр игрока получает перк <testPerk>
 	When Я жду <iterations> итераций
 	Then Актёр под эффектом <effect>
 
@@ -70,9 +66,7 @@ Scenario Outline: Наступление выживальных состояни
 
 @survival @dev1 @dev17
 Scenario Outline: Эффекты угроз выживания наносят урон актёру.
-	Given Есть карта размером 2
-	And Есть актёр игрока класса human-person в ячейке (0, 0)
-	And Актёр имеет эффект <startEffect>
+	Given Актёр имеет эффект <startEffect>
 	When Я жду <waitIterations> итераций
 	Then Актёр под эффектом <effect>
 
@@ -83,9 +77,7 @@ Scenario Outline: Эффекты угроз выживания наносят у
 
 @survival @dev1 @dev17
 Scenario Outline: Угрозы выживания (имеются изначально) снижают эффективность тактических действий у актёра игрока.
-	Given Есть карта размером 2
-	And Есть актёр игрока класса human-person в ячейке (0, 0)
-	And В инвентаре у актёра игрока есть предмет: <equipmentSid>
+	Given В инвентаре у актёра игрока есть предмет: <equipmentSid>
 	And Актёр имеет эффект <startEffect>
 	When Экипирую предмет <equipmentSid> в слот Index: <slotIndex>
 	And Жду 1000 единиц времени
@@ -93,9 +85,9 @@ Scenario Outline: Угрозы выживания (имеются изначал
 
 Examples: 
 | startEffect   | equipmentSid | slotIndex | tacticalActSid |
-| Слабый голод  | short-sword  | 2         | slash          |
-| Голод         | short-sword  | 2         | slash          |
-| Голодание     | short-sword  | 2         | slash          |
-| Слабая жажда  | short-sword  | 2         | slash          |
-| Жажда         | short-sword  | 2         | slash          |
-| Обезвоживание | short-sword  | 2         | slash          |
+| Слабый голод  | short-sword  | 2         | weak-swing     |
+| Голод         | short-sword  | 2         | weak-swing     |
+| Голодание     | short-sword  | 2         | weak-swing     |
+| Слабая жажда  | short-sword  | 2         | weak-swing     |
+| Жажда         | short-sword  | 2         | weak-swing     |
+| Обезвоживание | short-sword  | 2         | weak-swing     |

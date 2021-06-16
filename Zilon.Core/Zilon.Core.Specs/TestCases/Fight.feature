@@ -10,13 +10,16 @@ Scenario Outline: Провальный удар двумя оружиями.
 	And Задаём броски для использования действий
 	When Актёр игрока атакует монстра Id:<monsterId>
 	And Жду 1000 единиц времени
-	# При нанесении урона будет взято среднее значение между максимальной и
-	# минимальной эффективностью действия. Для 1D6 это будет 3 (int от 3.5)
 	Then Монстр Id:<monsterId> имеет Hp <expectedMonsterHp>
 
 Examples: 
 | personSid    | monsterSid | monsterId | monsterNodeX | monsterNodeY | propSid1    | slotIndex1 | propSid2    | slotIndex2 | expectedMonsterHp |
-| human-person | skorolon   | 1000      | 0            | 1            | short-sword | 2          | short-sword | 3          | 7                 |
+# При атаке будет взято первое действие оружия.
+# Для короткого меча это, например, неуклюжий рубящий удар с эффективностью 1D2
+# При нанесении урона будет взято среднее значение между максимальной и
+# минимальной эффективностью действия. Для 1D2 это будет 1.
+# Скоролон изначально имеет 10 ХП. Но урон наносит только одно оружие. Соответственно, итоговое ХП будет 9.
+| human-person | skorolon   | 1000      | 0            | 1            | short-sword | 2          | short-sword | 3          | 9                 |
 
 @fight @dev1
 Scenario Outline: Успешный удар двумя оружиями.
@@ -28,13 +31,16 @@ Scenario Outline: Успешный удар двумя оружиями.
 	And Задаём броски для использования действий
 	When Актёр игрока атакует монстра Id:<monsterId>
 	And В мире проходит <timeUnitCount> итераций
-	# При нанесении урона будет взято среднее значение между максимальной и
-	# минимальной эффективностью действия. Для 1D6 это будет 3 (int от 3.5)
 	Then Монстр Id:<monsterId> имеет Hp <expectedMonsterHp>
 
 Examples: 
 | personSid    | monsterSid | monsterId | monsterNodeX | monsterNodeY | propSid1    | slotIndex1 | propSid2    | slotIndex2 | expectedMonsterHp | timeUnitCount |
-| human-person | skorolon   | 1000      | 0            | 1            | short-sword | 2          | short-sword | 3          | 4                 | 1             |
+# При атаке будет взято первое действие оружия.
+# Для короткого меча это, например, неуклюжий рубящий удар с эффективностью 1D2
+# При нанесении урона будет взято среднее значение между максимальной и
+# минимальной эффективностью действия. Для 1D2 это будет 1.
+# Скоролон изначально имеет 10 ХП. То есть после урона двумя короткими мечами будет 8.
+| human-person | skorolon   | 1000      | 0            | 1            | short-sword | 2          | short-sword | 3          | 8                 | 1             |
 
 @fight @dev1
 Scenario Outline: Удары "руками".
