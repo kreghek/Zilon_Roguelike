@@ -139,6 +139,7 @@ namespace CDT.LAST.MonoGameClient
             {
                 inventoryState.SelectedProp = null;
                 playerState.SelectedViewModel = null;
+                playerState.TacticalAct = null;
             };
         }
 

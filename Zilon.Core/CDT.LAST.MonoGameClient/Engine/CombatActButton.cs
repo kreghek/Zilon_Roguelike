@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Zilon.Core.Persons;
+
 namespace CDT.LAST.MonoGameClient.Engine
 {
     internal sealed class CombatActButton : ButtonBase
@@ -9,13 +11,20 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly Texture2D _icon;
         private readonly Texture2D _selectedMarker;
 
-        public CombatActButton(Texture2D texture, Texture2D icon, Texture2D selectedMarkerTexture,
-            CombatActButtonGroup buttonGroup, Rectangle rect) : base(texture, rect)
+        public CombatActButton(Texture2D texture,
+            Texture2D icon,
+            Texture2D selectedMarkerTexture,
+            CombatActButtonGroup buttonGroup,
+            ITacticalAct tacticalAct,
+            Rectangle rect) : base(texture, rect)
         {
             _icon = icon;
             _selectedMarker = selectedMarkerTexture;
             _buttonGroup = buttonGroup;
+            TacticalAct = tacticalAct;
         }
+
+        public ITacticalAct TacticalAct { get; }
 
         protected override void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color)
         {

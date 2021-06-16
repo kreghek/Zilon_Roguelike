@@ -93,9 +93,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Update()
         {
+            _buttonGroup.Selected = null;
             foreach (var button in _buttons)
             {
                 button.Update();
+
+                if (button.TacticalAct == _sectorUiState.TacticalAct)
+                {
+                    _buttonGroup.Selected = button;
+                }
             }
 
             _idleModeSwitcherButton.Update();
@@ -138,6 +144,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _uiContentStorage.GetCombatActIconTexture(act.Scheme?.Sid, tags),
                     selectedMarkerTexture: _uiContentStorage.GetSelectedButtonMarkerTexture(),
                     _buttonGroup,
+                    act,
                     new Rectangle(0, 0, BUTTON_SIZE, BUTTON_SIZE));
 
                 button.OnClick += (s, e) =>
