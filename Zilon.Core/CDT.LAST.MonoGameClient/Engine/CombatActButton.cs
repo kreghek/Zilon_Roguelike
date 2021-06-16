@@ -9,11 +9,11 @@ namespace CDT.LAST.MonoGameClient.Engine
         private readonly Texture2D _icon;
         private readonly Texture2D _selectedMarker;
 
-        public CombatActButton(Texture2D texture, Texture2D icon, Texture2D selectedMarker,
+        public CombatActButton(Texture2D texture, Texture2D icon, Texture2D selectedMarkerTexture,
             CombatActButtonGroup buttonGroup, Rectangle rect) : base(texture, rect)
         {
             _icon = icon;
-            _selectedMarker = selectedMarker;
+            _selectedMarker = selectedMarkerTexture;
             _buttonGroup = buttonGroup;
         }
 

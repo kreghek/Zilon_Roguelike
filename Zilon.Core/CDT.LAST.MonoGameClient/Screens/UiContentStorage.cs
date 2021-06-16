@@ -35,6 +35,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _smallVerticalButtonBackgroundTexture;
         private Texture2D? _smallVerticalButtonIconsTexture;
         private Texture2D? _bottomPanelBackground;
+        private Texture2D? _selectedButtonMarker;
 
         private IDictionary<SurvivalStatType, Texture2D>? _survivalStatConditionIcons;
 
@@ -228,6 +229,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             return _modalShadowTexture ?? throw new InvalidOperationException();
         }
 
+        public Texture2D GetSelectedButtonMarkerTexture()
+        {
+            return _selectedButtonMarker ?? throw new InvalidOperationException("Button markers is not loaded.");
+        }
+
         public void LoadContent(ContentManager contentManager)
         {
             _buttonFont = contentManager.Load<SpriteFont>("Fonts/Main");
@@ -243,6 +249,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _smallVerticalButtonBackgroundTexture =
                 contentManager.Load<Texture2D>("Sprites/ui/SmallVerticalButtonBackground");
             _bottomPanelBackground = contentManager.Load<Texture2D>("Sprites/ui/BottomPanelBackground");
+            _selectedButtonMarker = contentManager.Load<Texture2D>("Sprites/ui/SelectedButtonMarker");
 
             _contextualMenuItemFont = contentManager.Load<SpriteFont>("Fonts/ContextualMenu");
             _contextualMenuBorderTexture = contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuBorder");

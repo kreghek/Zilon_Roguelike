@@ -136,7 +136,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                            Array.Empty<string>();
                 var button = new CombatActButton(_uiContentStorage.GetButtonTexture(),
                     _uiContentStorage.GetCombatActIconTexture(act.Scheme?.Sid, tags),
-                    _uiContentStorage.GetHintBackgroundTexture(),
+                    selectedMarkerTexture: _uiContentStorage.GetSelectedButtonMarkerTexture(),
                     _buttonGroup,
                     new Rectangle(0, 0, BUTTON_SIZE, BUTTON_SIZE));
 
