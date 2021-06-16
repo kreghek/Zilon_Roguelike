@@ -54,9 +54,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var acts = _combatActModule.CalcCombatActs().Take(MAX_COMBAT_ACT_COUNT);
             var actsOrdered = acts.OrderBy(x => x.Scheme?.Sid).ToArray();
-            var actIndex = 0;
-            foreach (var button in _buttons)
+            for (var actIndex = 0; actIndex < _buttons.Count; actIndex++)
             {
+                var button = _buttons[actIndex];
                 var buttonRect = new Rectangle(
                     actIndex * BUTTON_SIZE + graphicsDevice.Viewport.Width / 2 - BUTTON_SIZE * MAX_COMBAT_ACT_COUNT / 2,
                     graphicsDevice.Viewport.Bounds.Bottom - BUTTON_SIZE - BOTTOM_MARGIN, BUTTON_SIZE,
@@ -70,7 +70,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             _idleModeSwitcherButton.Rect = new Rectangle(
-                actIndex * BUTTON_SIZE + graphicsDevice.Viewport.Width / 2 - BUTTON_SIZE * MAX_COMBAT_ACT_COUNT / 2,
+                MAX_COMBAT_ACT_COUNT * BUTTON_SIZE + graphicsDevice.Viewport.Width / 2 - BUTTON_SIZE * MAX_COMBAT_ACT_COUNT / 2,
                 graphicsDevice.Viewport.Bounds.Bottom - BUTTON_SIZE - BOTTOM_MARGIN, 16,
                 BUTTON_SIZE);
             _idleModeSwitcherButton.Draw(spriteBatch);
