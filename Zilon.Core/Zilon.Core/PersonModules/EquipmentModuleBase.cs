@@ -124,18 +124,9 @@ namespace Zilon.Core.PersonModules
         {
             if (equipment != null)
             {
-                ValidateSetEquipment(equipment: equipment, slotIndex: slotIndex);
+                ValidateSetEquipment(equipment, slotIndex);
 
-                var isTwoHandedEquipment = equipment?.Scheme?.Equip?.EquipRestrictions?.PropHandUsage ==
-                                           PropHandUsage.TwoHanded;
-                if (isTwoHandedEquipment)
-                {
-                    ReplaceEquipmentInHandSlots(equipment);
-                }
-                else
-                {
-                    _equipment[slotIndex] = equipment;
-                }
+                _equipment[slotIndex] = equipment;
             }
             else
             {
