@@ -88,11 +88,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var halfOfScreenX = graphicsDevice.Viewport.Width / 2;
             var bottomOfScreenY = graphicsDevice.Viewport.Height;
 
-            for (var i = 0; i < _buttons.Length; i++)
+            for (var buttonIndex = 0; buttonIndex < _buttons.Length; buttonIndex++)
             {
-                var button = _buttons[i];
-                button.Rect = new Rectangle(halfOfScreenX + BUTTON_WIDTH * i, bottomOfScreenY - BUTTON_HEIGHT,
-                    BUTTON_WIDTH, BUTTON_HEIGHT);
+                var button = _buttons[buttonIndex];
+                var buttonOffsetX = BUTTON_WIDTH * buttonIndex;
+                button.Rect = new Rectangle(
+                    halfOfScreenX + buttonOffsetX,
+                    bottomOfScreenY - BUTTON_HEIGHT,
+                    BUTTON_WIDTH,
+                    BUTTON_HEIGHT);
 
                 button.Draw(spriteBatch);
             }
