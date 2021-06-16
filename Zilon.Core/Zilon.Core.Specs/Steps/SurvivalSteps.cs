@@ -120,6 +120,20 @@ namespace Zilon.Core.Specs.Steps
             }
         }
 
+        [Then(@"Актёр под эффектами (.*)")]
+        [Then(@"actor is under effects (.*)")]
+        public void ThenActorIsunderEffects(string effectNames)
+        {
+            var effectNameList = effectNames
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim()).ToArray();
+
+            foreach (var effectName in effectNameList)
+            {
+                ThenАктёрПодЭффектом(effectName);
+            }
+        }
+
         [Then(@"Значение (сытость|вода) стало (.*)")]
         public void ThenЗначениеStatСтало(string stat, int expectedValue)
         {
