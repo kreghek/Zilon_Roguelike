@@ -298,7 +298,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     if (_uiState.TacticalAct is null)
                     {
-                        Debug.Fail("Combat act is nos selected.");
+                        Debug.Fail("Combat act is not selected.");
                     }
 
                     return commandFactory.GetCommand<AttackCommand>();
