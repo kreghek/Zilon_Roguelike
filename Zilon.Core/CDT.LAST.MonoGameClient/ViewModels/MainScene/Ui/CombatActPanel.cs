@@ -70,7 +70,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             _idleModeSwitcherButton.Rect = new Rectangle(
-                MAX_COMBAT_ACT_COUNT * BUTTON_SIZE + graphicsDevice.Viewport.Width / 2 - BUTTON_SIZE * MAX_COMBAT_ACT_COUNT / 2,
+                MAX_COMBAT_ACT_COUNT * BUTTON_SIZE + graphicsDevice.Viewport.Width / 2 -
+                BUTTON_SIZE * MAX_COMBAT_ACT_COUNT / 2,
                 graphicsDevice.Viewport.Bounds.Bottom - BUTTON_SIZE - BOTTOM_MARGIN, 16,
                 BUTTON_SIZE);
             _idleModeSwitcherButton.Draw(spriteBatch);
