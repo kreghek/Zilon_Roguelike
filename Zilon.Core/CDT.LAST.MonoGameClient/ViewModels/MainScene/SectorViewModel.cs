@@ -22,8 +22,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;
-        private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly Game _game;
+        private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
