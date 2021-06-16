@@ -89,8 +89,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var bottomOfScreenY = graphicsDevice.Viewport.Height;
 
             const int PANEL_MARGIN = 4;
-            const int PANEL_WIDTH = 32 * 8 + 16 + PANEL_MARGIN;
-            const int PANEL_HEIGHT = 32 + 4 * 2;
+            const int PANEL_WIDTH = (32 * 8) + 16 + PANEL_MARGIN;
+            const int PANEL_HEIGHT = 32 + (4 * 2);
 
             var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
 
