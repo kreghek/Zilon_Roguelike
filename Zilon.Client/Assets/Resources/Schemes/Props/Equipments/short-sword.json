@@ -3,13 +3,12 @@
   "Equip": {
     "ActSids": [
       "clumsy-cut",
-"evasion-slash",
-"lunging-stab",
-"penetrating-thrust",
-"weak-block",
-"weak-parry",
-"weak-swing"
-
+      "evasion-slash",
+      "lunging-stab",
+      "penetrating-thrust",
+      "weak-block",
+      "weak-parry",
+      "weak-swing"
     ],
     "SlotTypes": [ "Hand" ]
   },
