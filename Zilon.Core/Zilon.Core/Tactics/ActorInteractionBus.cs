@@ -6,10 +6,10 @@ namespace Zilon.Core.Tactics
     {
         public void PushEvent(IActorInteractionEvent interactionEvent)
         {
-            var eventArgs = new NewActorInteractionEventArgs(interactionEvent);
+            var eventArgs = new ActorInteractionEventArgs(interactionEvent);
             NewEvent?.Invoke(this, eventArgs);
         }
 
-        public event EventHandler<NewActorInteractionEventArgs>? NewEvent;
+        public event EventHandler<ActorInteractionEventArgs>? NewEvent;
     }
 }

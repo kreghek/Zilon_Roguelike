@@ -58,14 +58,14 @@ namespace Zilon.Core.PersonModules
             IConditionsModule сondition,
             IEnumerable<IPerk> perks)
         {
-            if (equipments == null)
+            if (equipments is null)
             {
                 yield break;
             }
 
             foreach (var equipment in equipments)
             {
-                if (equipment == null)
+                if (equipment is null)
                 {
                     continue;
                 }
@@ -294,6 +294,7 @@ namespace Zilon.Core.PersonModules
 
         public string Key => nameof(ICombatActModule);
         public bool IsActive { get; set; }
+        public bool IsCombatMode { get; set; }
 
         public IEnumerable<ITacticalAct> CalcCombatActs()
         {

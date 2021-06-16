@@ -17,20 +17,18 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class GlobeSelectionScreen : GameSceneBase
     {
-        private readonly Button _generateButton;
-        private readonly MainScreen _mainScene;
+        private readonly TextButton _generateButton;
         private readonly SpriteBatch _spriteBatch;
         private bool _generationWasStarted;
 
         public GlobeSelectionScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
             _spriteBatch = spriteBatch;
-            _mainScene = new MainScreen(game, spriteBatch);
 
             var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
-            _generateButton = new Button(UiResources.GenerateGlobeButtonTitle, buttonTexture, font,
+            _generateButton = new TextButton(UiResources.GenerateGlobeButtonTitle, buttonTexture, font,
                 new Rectangle(150, 150, 100, 20));
 
             _generateButton.OnClick += GenerateButtonClickHandlerAsync;
@@ -96,7 +94,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 await generateGlobeTask!;
 
-                TargetScene = _mainScene;
+                TargetScene = new MainScreen(Game, _spriteBatch);
             }
         }
     }

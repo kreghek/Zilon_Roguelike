@@ -301,7 +301,7 @@ namespace Zilon.Core.Specs.Contexts
             return actor;
         }
 
-        private void EventMessageBus_NewEvent(object sender, NewActorInteractionEventArgs e)
+        private void EventMessageBus_NewEvent(object sender, ActorInteractionEventArgs e)
         {
             RaisedActorInteractionEvents.Add(e.ActorInteractionEvent);
         }

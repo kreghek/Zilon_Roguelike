@@ -14,7 +14,7 @@ namespace Zilon.Core.Tactics.Behaviour
             var transition = TransitionDetection.Detect(Context.Sector.Map.Transitions, new[] { actorNode });
             if (transition != null)
             {
-                Context.Sector.UseTransition(Actor, transition);
+                Actor.MoveToOtherSector(Context.Sector, transition);
             }
             else
             {

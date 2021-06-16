@@ -66,12 +66,12 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        private async Task SetHasPendingCommandsAsync(bool v)
+        private async Task SetHasPendingCommandsAsync(bool value)
         {
             await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
             try
             {
-                _hasPendingCommand = v;
+                _hasPendingCommand = value;
             }
             finally
             {

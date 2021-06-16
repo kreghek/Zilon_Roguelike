@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 
+using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.GameComponents;
 using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -66,36 +69,61 @@ namespace CDT.LAST.MonoGameClient
 
             _cursorTexture = Content.Load<Texture2D>("Sprites/ui/walk-cursor");
 
+            var uiContentStorage = ServiceProvider.GetRequiredService<IUiContentStorage>();
+            uiContentStorage.LoadContent(Content);
+
+            var personVisualizationContentStorage =
+                ServiceProvider.GetRequiredService<IPersonVisualizationContentStorage>();
+            personVisualizationContentStorage.LoadContent(Content);
+
+            var personSoundContentStorage = ServiceProvider.GetRequiredService<IPersonSoundContentStorage>();
+            personSoundContentStorage.LoadContent(Content);
+
+            var uiSoundStorage = ServiceProvider.GetRequiredService<IUiSoundStorage>();
+            uiSoundStorage.LoadContent(Content);
+            UiThemeManager.SoundStorage = uiSoundStorage;
+
             var sceneManager = new ScreenManager(this);
             var titleScene = new TitleScreen(this, _spriteBatch);
             sceneManager.ActiveScreen = titleScene;
 
             Components.Add(sceneManager);
+
+#if DEBUG
+
+            var fpsCounter = new FpsCounter(this, _spriteBatch, Content.Load<SpriteFont>("Fonts/Main"));
+            Components.Add(fpsCounter);
+
+            var cheatInput = new CheatInput(this, _spriteBatch, Content.Load<SpriteFont>("Fonts/Main"));
+            Components.Add(cheatInput);
+#endif
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (!CheatInput.IsCheating)
             {
-                Exit();
-            }
-
-            // TODO: Add your update logic here
-
-            if (Keyboard.GetState().IsKeyDown(Keys.F))
-            {
-                _graphics.IsFullScreen = true;
-                _graphics.PreferredBackBufferWidth = 1920;
-                _graphics.PreferredBackBufferHeight = 1080;
-                _graphics.ApplyChanges();
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.G))
-            {
-                _graphics.IsFullScreen = false;
-                _graphics.PreferredBackBufferWidth = 800;
-                _graphics.PreferredBackBufferHeight = 480;
-                _graphics.ApplyChanges();
+                if (Keyboard.GetState().IsKeyDown(Keys.F))
+                {
+                    _graphics.IsFullScreen = true;
+                    _graphics.PreferredBackBufferWidth = 1920;
+                    _graphics.PreferredBackBufferHeight = 1080;
+                    _graphics.ApplyChanges();
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.G))
+                {
+                    _graphics.IsFullScreen = false;
+                    _graphics.PreferredBackBufferWidth = 800;
+                    _graphics.PreferredBackBufferHeight = 480;
+                    _graphics.ApplyChanges();
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.H))
+                {
+                    _graphics.IsFullScreen = true;
+                    _graphics.PreferredBackBufferWidth = 1280;
+                    _graphics.PreferredBackBufferHeight = 720;
+                    _graphics.ApplyChanges();
+                }
             }
 
             base.Update(gameTime);
@@ -111,6 +139,7 @@ namespace CDT.LAST.MonoGameClient
             {
                 inventoryState.SelectedProp = null;
                 playerState.SelectedViewModel = null;
+                playerState.TacticalAct = null;
             };
         }
 

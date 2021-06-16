@@ -39,6 +39,8 @@ namespace Zilon.Core.Tactics.Behaviour
                     }
                 }
             }
+
+            Actor.PerformTransfer();
         }
     }
 }

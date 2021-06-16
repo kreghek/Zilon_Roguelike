@@ -4,11 +4,33 @@
     "Ru": "Тест",
     "En": "Test"
   },
-  "BodyEquipments": {
+  "HeadEquipments": {
+    "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "steel-armor",
-        "Weight": 2
+        "SchemeSid": "knitted-hat",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "steel-helmet",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 1
+      }
+    ]
+  },
+  "BodyEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "work-clothes",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "traveler-camisole",
+        "Weight": 1
       },
       {
         "SchemeSid": null,
@@ -17,7 +39,24 @@
     ]
   },
   "MainHandEquipments": {
+    "Rolls": 1,
     "Records": [
+      {
+        "SchemeSid": "great-sword",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "combat-staff",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "tribal-spear",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "wooden-shield",
+        "Weight": 2
+      },
       {
         "SchemeSid": "short-sword",
         "Weight": 1
@@ -25,6 +64,7 @@
     ]
   },
   "OffHandEquipments": {
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "wooden-shield",
@@ -41,6 +81,7 @@
     ]
   },
   "InventoryProps": {
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "med-kit",

@@ -94,6 +94,20 @@ namespace Zilon.Core.Specs.Steps
             FeatureContextBase.AddResourceToActor(propScheme, 1, actor);
         }
 
+        [Then(@"Актёр под эффектами (.*)")]
+        [Then(@"actor is under effects (.*)")]
+        public void ThenActorIsunderEffects(string effectNames)
+        {
+            var effectNameList = effectNames
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim()).ToArray();
+
+            foreach (var effectName in effectNameList)
+            {
+                ThenАктёрПодЭффектом(effectName);
+            }
+        }
+
         [Then(@"Актёр под эффектом (.*)")]
         public void ThenАктёрПодЭффектом(string effectName)
         {

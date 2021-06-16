@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -340,6 +341,12 @@ namespace Zilon.Core.Tactics
         public event EventHandler<UsedPropEventArgs>? UsedProp;
 
         /// <inheritdoc />
+        public event EventHandler? PropTransferPerformed;
+
+        /// <inheritdoc />
+        public event EventHandler? BeginTransitionToOtherSector;
+
+        /// <inheritdoc />
         /// <summary>
         /// Песонаж, который лежит в основе актёра.
         /// </summary>
@@ -481,6 +488,17 @@ namespace Zilon.Core.Tactics
         public void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource)
         {
             TaskSource = actorTaskSource;
+        }
+
+        public void PerformTransfer()
+        {
+            PropTransferPerformed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void MoveToOtherSector(ISector sector, SectorTransition sectorTransition)
+        {
+            BeginTransitionToOtherSector?.Invoke(this, EventArgs.Empty);
+            sector.UseTransition(this, sectorTransition);
         }
     }
 }

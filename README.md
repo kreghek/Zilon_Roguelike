@@ -45,22 +45,19 @@ GamePlay Video
 
 We strive to launch a project with one button. But now there are a few manual steps that must be performed before the game can be launched from the editor.
 
-1. **Copy scheme catalog from `/Zilon.Client/Assets/Resources/Schemes` into `bin/Content`**.
-The game required the scheme catalog in its `bin` directory. The easiest way to place the scheme catalog is executing `copy_scheme_catalog_to_game_bin.bat` from root of the repository.
-
-2. *Optional*. **Set the `ZILON_LIV_SCHEME_CATALOG` environment variable to specify the full path to `\Zilon.Client\Assets\Resources\Schemes`**.
+1. *Optional*. **Set the `ZILON_LIV_SCHEME_CATALOG` environment variable to specify the full path to `\Zilon.Client\Assets\Resources\Schemes`**.
 This is needed to run tests in Zilon.Core. The path must be complete, that is, it must begin, for example, with `C:\MyProjects\Zilon_Roguelike` for Windows and `/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes` for Linux.
 
-3. *Optional*. **Install the Test Generator NUnit extension for Visual Studio 2019**.
+2. *Optional*. **Install the Test Generator NUnit extension for Visual Studio 2019**.
 It will help to create NUnit tests from contextual menu in visual studio.
 
-4. *Optional*. **Install the Specflow for Visual Studio 2019 extension**.
+3. *Optional*. **Install the Specflow for Visual Studio 2019 extension**.
 It is necessary for convenient editing of specifications, written in *Gherkin*. Unfortunately, we do not see a way to install this tool within the project yet. Easiest way to find it in `Visual Studio / Extensions / Manage Extensions`
 
-5. *Optional*. **Install the ResX extension for Visual Studio 2019**.
+4. *Optional*. **Install the ResX extension for Visual Studio 2019**.
 The easies way to add or change localized string and other resources in the game. See https://github.com/dotnet/ResXResourceManager.
 
-6. **Now you can launch the game from Visual Studio or `bin` directory after build**.
+5. **Now you can launch the game from Visual Studio or `bin` directory after build**.
 You are awesome!
 
 ## Contributing

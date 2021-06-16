@@ -15,6 +15,7 @@ using Zilon.Core.Props;
 using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Scoring;
 using Zilon.Core.World;
+using Zilon.Emulation.Common;
 
 namespace Zilon.Bot.Players.DevelopmentTests
 {
@@ -51,7 +52,9 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
             PrintPersonBacklog(followedPerson);
 
-            await autoPlayEngine.StartAsync(globe, followedPerson).ConfigureAwait(false);
+            var autoPlayContext = new FollowSinglePersonAutoplayContext(followedPerson);
+
+            await autoPlayEngine.StartAsync(globe, autoPlayContext).ConfigureAwait(false);
 
             PrintResult(serviceProvider);
         }
