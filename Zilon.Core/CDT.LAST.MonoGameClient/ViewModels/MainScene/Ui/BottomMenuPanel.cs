@@ -17,14 +17,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int BUTTON_WIDTH = 16;
         private const int BUTTON_HEIGHT = 32;
+
         private readonly IconButton _autoplayModeButton;
         private readonly IconButton[] _buttons;
         private readonly ICombatActModule _combatActModule;
-        private readonly IconButton _combatModeSwitcherButton;
 
         private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
-        private readonly IconButton _personPropButton;
-        private readonly IconButton _personStatsButton;
         private readonly IUiContentStorage _uiContentStorage;
 
         private bool _autoplayHintIsShown;
@@ -49,39 +47,39 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
                 UiResources.SwitchAutomodeButtonOffTitle);
 
-            _personPropButton = new IconButton(
+            var personPropButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                     new Rectangle(16, 0, 16, 32)
                 ),
                 rect: new Rectangle(0, 0, 16, 32));
-            _personPropButton.OnClick += PersonEquipmentButton_OnClick;
+            personPropButton.OnClick += PersonEquipmentButton_OnClick;
 
-            _personStatsButton = new IconButton(
+            var personStatsButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                     new Rectangle(0, 32, 16, 32)
                 ),
                 rect: new Rectangle(0, 0, 16, 32));
-            _personStatsButton.OnClick += PersonStatsButton_OnClick;
+            personStatsButton.OnClick += PersonStatsButton_OnClick;
 
-            _combatModeSwitcherButton = new IconButton(
+            var combatModeSwitcherButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                     new Rectangle(0, 32, 16, 32)
                 ),
                 rect: new Rectangle(0, 0, 16, 32));
-            _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
+            combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
 
             _buttons = new[]
             {
                 _autoplayModeButton,
-                _personPropButton,
-                _personStatsButton,
-                _combatModeSwitcherButton
+                personPropButton,
+                personStatsButton,
+                combatModeSwitcherButton
             };
         }
 
