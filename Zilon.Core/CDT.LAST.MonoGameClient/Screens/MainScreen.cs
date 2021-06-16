@@ -80,11 +80,17 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _uiState,
                 uiContentStorage,
                 Game.GraphicsDevice,
-                ((LivGame)game).ServiceProvider);
+                serviceScope);
 
             var humanActorTaskSource =
                 serviceScope.GetRequiredService<IHumanActorTaskSource<ISectorTaskSourceContext>>();
-            _bottomMenu = new BottomMenuPanel(humanActorTaskSource, _player.MainPerson.GetModule<ICombatActModule>(),
+            var mainPerson = _player.MainPerson;
+            if (mainPerson is null)
+            {
+                throw new InvalidOperationException("Main person is not initalized. Generate globe first.");
+            }
+
+            _bottomMenu = new BottomMenuPanel(humanActorTaskSource, mainPerson.GetModule<ICombatActModule>(),
                 uiContentStorage);
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
             _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
@@ -136,7 +142,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (_uiState.ActiveActor != null && !isInTransition)
             {
-                HandleCombatActPanel();
+                HandleCombatActPanel(_uiState.ActiveActor.Actor.Person);
 
                 HandleMainUpdate(_uiState.ActiveActor);
             }
@@ -195,19 +201,36 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _personEffectsPanel.Draw(_spriteBatch);
 
-            if (_player.MainPerson.GetModule<ICombatActModule>().IsCombatMode)
+            DrawPersonModePanel();
+
+            _spriteBatch.End();
+        }
+
+        private void DrawPersonModePanel()
+        {
+            var mainPerson = _player.MainPerson;
+            if (mainPerson is null)
             {
-                if (_combatActPanel != null)
+                // Do not draw anything if main person is not initialized.
+                Debug.Fail("This screen can't be constructed before globe generation screen.");
+                return;
+            }
+
+            if (mainPerson.GetModule<ICombatActModule>().IsCombatMode)
+            {
+                if (_combatActPanel is not null)
                 {
                     _combatActPanel.Draw(_spriteBatch, GraphicsDevice);
+                }
+                else
+                { 
+                    // This case can be if the screen draw called before the screen update create panel.
                 }
             }
             else
             {
                 _bottomMenu.Draw(_spriteBatch, Game.GraphicsDevice);
             }
-
-            _spriteBatch.End();
         }
 
         private void DrawModals()
@@ -247,21 +270,25 @@ namespace CDT.LAST.MonoGameClient.Screens
                     select sectorNode).SingleOrDefault();
         }
 
-        private void HandleCombatActPanel()
+        private void HandleCombatActPanel(IPerson mainPerson)
         {
             if (_combatActPanel is null)
             {
                 _combatActPanel = new CombatActPanel(
-                    _uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>(),
-                    _uiState.ActiveActor.Actor.Person.GetModule<IEquipmentModule>(),
+                    mainPerson.GetModule<ICombatActModule>(),
+                    mainPerson.GetModule<IEquipmentModule>(),
                     _uiContentStorage,
                     _uiState);
             }
             else
             {
-                if (_player.MainPerson.GetModule<ICombatActModule>().IsCombatMode)
+                if (mainPerson.GetModule<ICombatActModule>().IsCombatMode)
                 {
                     _combatActPanel.Update();
+                }
+                else
+                { 
+                    // Do not execute the update method because in idle mode only idle bottom panel updates.
                 }
             }
         }
@@ -351,9 +378,15 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 _personEffectsPanel.Update();
 
-                if (!_player.MainPerson.GetModule<ICombatActModule>().IsCombatMode)
+                var activePerson = activeActorViewModel.Actor.Person;
+                var activePersonCombatActModule = activePerson.GetModule<ICombatActModule>();
+                if (!activePersonCombatActModule.IsCombatMode)
                 {
                     _bottomMenu.Update();
+                }
+                else
+                { 
+                    // Ignore the bottom panel's update here because in cobat mode only the combat panel updates.
                 }
             }
             else if (!_isTransitionPerforming)
