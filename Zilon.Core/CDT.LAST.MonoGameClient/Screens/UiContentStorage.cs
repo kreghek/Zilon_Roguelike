@@ -19,7 +19,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
 
-        private IDictionary<string, Texture2D> _combatActDict;
+        private IDictionary<string, Texture2D>? _combatActDict;
         private Texture2D? _conditionDefaultIcon;
         private Texture2D? _conditionDeseaseSymptomIcon;
         private Texture2D[]? _conditionIconBackgroundTextures;
