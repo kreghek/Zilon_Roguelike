@@ -101,34 +101,29 @@ namespace CDT.LAST.MonoGameClient
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-                Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (!CheatInput.IsCheating)
             {
-                Exit();
-            }
-
-            // TODO: Add your update logic here
-
-            if (Keyboard.GetState().IsKeyDown(Keys.F))
-            {
-                _graphics.IsFullScreen = true;
-                _graphics.PreferredBackBufferWidth = 1920;
-                _graphics.PreferredBackBufferHeight = 1080;
-                _graphics.ApplyChanges();
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.G))
-            {
-                _graphics.IsFullScreen = false;
-                _graphics.PreferredBackBufferWidth = 800;
-                _graphics.PreferredBackBufferHeight = 480;
-                _graphics.ApplyChanges();
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.H))
-            {
-                _graphics.IsFullScreen = true;
-                _graphics.PreferredBackBufferWidth = 1280;
-                _graphics.PreferredBackBufferHeight = 720;
-                _graphics.ApplyChanges();
+                if (Keyboard.GetState().IsKeyDown(Keys.F))
+                {
+                    _graphics.IsFullScreen = true;
+                    _graphics.PreferredBackBufferWidth = 1920;
+                    _graphics.PreferredBackBufferHeight = 1080;
+                    _graphics.ApplyChanges();
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.G))
+                {
+                    _graphics.IsFullScreen = false;
+                    _graphics.PreferredBackBufferWidth = 800;
+                    _graphics.PreferredBackBufferHeight = 480;
+                    _graphics.ApplyChanges();
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.H))
+                {
+                    _graphics.IsFullScreen = true;
+                    _graphics.PreferredBackBufferWidth = 1280;
+                    _graphics.PreferredBackBufferHeight = 720;
+                    _graphics.ApplyChanges();
+                }
             }
 
             base.Update(gameTime);

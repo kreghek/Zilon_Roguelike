@@ -20,7 +20,7 @@ namespace CDT.LAST.MonoGameClient.GameComponents
         private readonly SpriteFont _spriteFont;
         private double? _errorCounter;
         private string? _errorText;
-        private bool _isCheating;
+        private static bool _isCheating;
         private KeyboardState _lastState;
 
         public CheatInput(Game game, SpriteBatch spriteBatch, SpriteFont spriteFont) : base(game)
@@ -29,6 +29,8 @@ namespace CDT.LAST.MonoGameClient.GameComponents
             _spriteFont = spriteFont;
             _spriteBatch = spriteBatch;
         }
+
+        public static bool IsCheating => _isCheating;
 
         public override void Draw(GameTime gameTime)
         {

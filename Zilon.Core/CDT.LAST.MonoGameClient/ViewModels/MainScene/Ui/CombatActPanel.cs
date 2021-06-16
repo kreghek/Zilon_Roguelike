@@ -76,7 +76,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             _idleModeSwitcherButton.Rect = new Rectangle(
-                panelX + PANEL_WIDTH + (COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT),
+                panelX + (COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT),
                 panelY,
                 SWITCHER_MODE_BUTTON_WIDTH,
                 SWITCHER_MODE_BUTTON_HEIGHT);

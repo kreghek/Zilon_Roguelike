@@ -339,7 +339,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 }
             }
 
-            Debug.Fail("Every ombat act must has own icon.");
+            Debug.Fail("Every combat act must has own icon.");
 
             return _combatActDict["default"];
         }
