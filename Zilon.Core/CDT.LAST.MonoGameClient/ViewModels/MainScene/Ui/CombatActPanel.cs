@@ -49,18 +49,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            const int BUTTON_SIZE = 32;
+            const int COMBAT_ACT_BUTTON_SIZE = 32;
+            const int SWITCHER_MODE_BUTTON_WIDTH = 16;
+            const int SWITCHER_MODE_BUTTON_HEIGHT = 32;
             const int BOTTOM_MARGIN = 0;
 
-            var acts = _combatActModule.CalcCombatActs().Take(MAX_COMBAT_ACT_COUNT);
-            var actsOrdered = acts.OrderBy(x => x.Scheme?.Sid).ToArray();
+            const int PANEL_WIDTH = COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT;
+
+            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
+            var panelY = graphicsDevice.Viewport.Bounds.Bottom - COMBAT_ACT_BUTTON_SIZE - BOTTOM_MARGIN;
+
             for (var actIndex = 0; actIndex < _buttons.Count; actIndex++)
             {
                 var button = _buttons[actIndex];
+
+                var buttonStackOffsetX = actIndex * COMBAT_ACT_BUTTON_SIZE;
                 var buttonRect = new Rectangle(
-                    actIndex * BUTTON_SIZE + graphicsDevice.Viewport.Width / 2 - BUTTON_SIZE * MAX_COMBAT_ACT_COUNT / 2,
-                    graphicsDevice.Viewport.Bounds.Bottom - BUTTON_SIZE - BOTTOM_MARGIN, BUTTON_SIZE,
-                    BUTTON_SIZE);
+                    buttonStackOffsetX + panelX,
+                    panelY,
+                    COMBAT_ACT_BUTTON_SIZE,
+                    COMBAT_ACT_BUTTON_SIZE);
 
                 button.Rect = buttonRect;
 
@@ -70,10 +78,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             _idleModeSwitcherButton.Rect = new Rectangle(
-                MAX_COMBAT_ACT_COUNT * BUTTON_SIZE + graphicsDevice.Viewport.Width / 2 -
-                BUTTON_SIZE * MAX_COMBAT_ACT_COUNT / 2,
-                graphicsDevice.Viewport.Bounds.Bottom - BUTTON_SIZE - BOTTOM_MARGIN, 16,
-                BUTTON_SIZE);
+                panelX + PANEL_WIDTH + (COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT),
+                panelY,
+                SWITCHER_MODE_BUTTON_WIDTH,
+                SWITCHER_MODE_BUTTON_HEIGHT);
             _idleModeSwitcherButton.Draw(spriteBatch);
         }
 
