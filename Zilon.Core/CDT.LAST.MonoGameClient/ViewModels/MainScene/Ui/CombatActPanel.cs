@@ -73,8 +73,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 button.Rect = buttonRect;
 
                 button.Draw(spriteBatch);
-
-                actIndex++;
             }
 
             _idleModeSwitcherButton.Rect = new Rectangle(
