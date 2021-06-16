@@ -228,8 +228,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 if (sender is IActor actor && actor.Person == player.MainPerson)
                 {
                     // Sound steps of main person only to prevent infinite steps loop.
-                    moveSoundEffectInstance = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Move)
-                        ?.CreateInstance();
+                    var moveSoundEffect = _personSoundStorage.GetActivitySound(PersonActivityEffectType.Move);
+                    moveSoundEffectInstance = moveSoundEffect?.CreateInstance();
                 }
 
                 var moveEngine = new ActorMoveEngine(
@@ -266,6 +266,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException("The act has no stats to select visualization.");
             }
 
+            Debug.WriteLine(e.TacticalAct);
+
             if (CanDraw)
             {
                 if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
@@ -291,8 +293,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                             animationBlockerService,
                             attackSoundEffectInstance);
 
+                    // Selection actors only prevent error when monster stays on loot bag.
                     var targetGameObject =
-                        _sectorViewModelContext.GameObjects.SingleOrDefault(x => x.Node == e.TargetNode);
+                        _sectorViewModelContext.GameObjects.SingleOrDefault(x =>
+                            x is IActorViewModel && x.Node == e.TargetNode);
                     if (targetGameObject is null)
                     {
                         // This means the attacker is miss.

@@ -9,15 +9,16 @@ namespace CDT.LAST.MonoGameClient.Engine
     internal abstract class ButtonBase
     {
         private const int CONTENT_MARGIN = 0;
-        private readonly Rectangle _rect;
         private UiButtonState _buttonState;
 
         protected ButtonBase(Texture2D texture, Rectangle rect)
         {
             Texture = texture;
-            _rect = rect;
+            Rect = rect;
             _buttonState = UiButtonState.OutOfButton;
         }
+
+        public Rectangle Rect { get; set; }
 
         public Texture2D Texture { get; }
 
@@ -25,13 +26,13 @@ namespace CDT.LAST.MonoGameClient.Engine
         {
             var color = SelectColorByState();
 
-            spriteBatch.Draw(Texture, _rect, color);
+            spriteBatch.Draw(Texture, Rect, color);
 
             var contentRect = new Rectangle(
-                CONTENT_MARGIN + _rect.Left,
-                CONTENT_MARGIN + _rect.Top,
-                _rect.Width - (CONTENT_MARGIN * 2),
-                _rect.Height - (CONTENT_MARGIN * 2));
+                CONTENT_MARGIN + Rect.Left,
+                CONTENT_MARGIN + Rect.Top,
+                Rect.Width - (CONTENT_MARGIN * 2),
+                Rect.Height - (CONTENT_MARGIN * 2));
 
             DrawContent(spriteBatch, contentRect, color);
         }
@@ -76,7 +77,7 @@ namespace CDT.LAST.MonoGameClient.Engine
 
             var mouseRect = new Rectangle(mousePosition.X, mousePosition.Y, 1, 1);
 
-            return _rect.Intersects(mouseRect);
+            return Rect.Intersects(mouseRect);
         }
 
         private static void PlayClickSoundIfExists()

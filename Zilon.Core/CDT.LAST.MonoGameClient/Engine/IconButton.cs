@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.Engine
 {
-    internal class IconButton : ButtonBase
+    internal sealed class IconButton : ButtonBase
     {
         private readonly Texture2D _icon;
         private readonly Rectangle? _iconRect;
