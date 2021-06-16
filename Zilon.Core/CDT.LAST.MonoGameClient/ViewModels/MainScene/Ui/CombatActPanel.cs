@@ -49,12 +49,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
+            DrawBackground(spriteBatch, graphicsDevice);
+
             const int COMBAT_ACT_BUTTON_SIZE = 32;
             const int SWITCHER_MODE_BUTTON_WIDTH = 16;
             const int SWITCHER_MODE_BUTTON_HEIGHT = 32;
             const int BOTTOM_MARGIN = 0;
 
             const int PANEL_WIDTH = COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT;
+            const int PANEL_MARGIN = 4;
 
             var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
             var panelY = graphicsDevice.Viewport.Bounds.Bottom - COMBAT_ACT_BUTTON_SIZE - BOTTOM_MARGIN;
@@ -65,8 +68,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 var buttonStackOffsetX = actIndex * COMBAT_ACT_BUTTON_SIZE;
                 var buttonRect = new Rectangle(
-                    buttonStackOffsetX + panelX,
-                    panelY,
+                    buttonStackOffsetX + panelX - PANEL_MARGIN,
+                    panelY - PANEL_MARGIN,
                     COMBAT_ACT_BUTTON_SIZE,
                     COMBAT_ACT_BUTTON_SIZE);
 
@@ -76,11 +79,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             _idleModeSwitcherButton.Rect = new Rectangle(
-                panelX + (COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT),
-                panelY,
+                panelX + (COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT) - PANEL_MARGIN,
+                panelY - PANEL_MARGIN,
                 SWITCHER_MODE_BUTTON_WIDTH,
                 SWITCHER_MODE_BUTTON_HEIGHT);
             _idleModeSwitcherButton.Draw(spriteBatch);
+        }
+
+        private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            const int PANEL_MARGIN = 4;
+            const int PANEL_WIDTH = 32 * 8 + 16 + PANEL_MARGIN;
+            const int PANEL_HEIGHT = 32 + 4 * 2;
+
+            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
+
+            spriteBatch.Draw(_uiContentStorage.GetBottomPanelBackground(),
+                new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT),
+                Color.White);
         }
 
         public void UnsubscribeEvents()
