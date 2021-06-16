@@ -321,6 +321,11 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         public Texture2D GetCombatActIconTexture(string? sid, string[] tags)
         {
+            if (_combatActDict is null)
+            {
+                throw new InvalidOperationException("Combat act textures are not loaded.");
+            }
+
             if (sid is not null && _combatActDict.TryGetValue(sid, out var texture))
             {
                 return texture;
