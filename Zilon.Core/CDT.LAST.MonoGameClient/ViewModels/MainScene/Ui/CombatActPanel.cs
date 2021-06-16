@@ -86,19 +86,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _idleModeSwitcherButton.Draw(spriteBatch);
         }
 
-        private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
-        {
-            const int PANEL_MARGIN = 4;
-            const int PANEL_WIDTH = 32 * 8 + 16 + PANEL_MARGIN;
-            const int PANEL_HEIGHT = 32 + 4 * 2;
-
-            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
-
-            spriteBatch.Draw(_uiContentStorage.GetBottomPanelBackground(),
-                new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT),
-                Color.White);
-        }
-
         public void UnsubscribeEvents()
         {
             _equipmentModule.EquipmentChanged -= EquipmentModule_EquipmentChanged;
@@ -112,6 +99,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             _idleModeSwitcherButton.Update();
+        }
+
+        private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            const int PANEL_MARGIN = 4;
+            const int PANEL_WIDTH = 32 * 8 + 16 + PANEL_MARGIN;
+            const int PANEL_HEIGHT = 32 + 4 * 2;
+
+            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
+
+            spriteBatch.Draw(_uiContentStorage.GetBottomPanelBackground(),
+                new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT),
+                Color.White);
         }
 
         private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)

@@ -16,6 +16,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private Texture2D? _attributeIconsTexture;
         private Texture2D? _attributesBackgroundTexture;
+        private Texture2D? _bottomPanelBackground;
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
 
@@ -32,21 +33,15 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
         private Texture2D[]? _modalTopTextures;
+        private Texture2D? _selectedButtonMarker;
         private Texture2D? _smallVerticalButtonBackgroundTexture;
         private Texture2D? _smallVerticalButtonIconsTexture;
-        private Texture2D? _bottomPanelBackground;
-        private Texture2D? _selectedButtonMarker;
 
         private IDictionary<SurvivalStatType, Texture2D>? _survivalStatConditionIcons;
 
         public UiContentStorage()
         {
             _propIcons = new Dictionary<string, Texture2D[]>();
-        }
-
-        public Texture2D GetBottomPanelBackground()
-        {
-            return _bottomPanelBackground ?? throw new InvalidOperationException("Bottom panel background texture is not loaded.");
         }
 
         private static Texture2D GetStatHazardConditionLevelClient(SurvivalStatHazardLevel level,
@@ -186,6 +181,12 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/PackedFood") });
 
             _propIcons.Add("EmptyPropIcon", new[] { contentManager.Load<Texture2D>("Sprites/ui/EmptyPropIcon") });
+        }
+
+        public Texture2D GetBottomPanelBackground()
+        {
+            return _bottomPanelBackground ??
+                   throw new InvalidOperationException("Bottom panel background texture is not loaded.");
         }
 
         public Texture2D GetSmallVerticalButtonBackgroundTexture()
