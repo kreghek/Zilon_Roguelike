@@ -20,7 +20,6 @@ namespace CDT.LAST.MonoGameClient.GameComponents
         private readonly SpriteFont _spriteFont;
         private double? _errorCounter;
         private string? _errorText;
-        private bool _isCheating;
         private KeyboardState _lastState;
 
         public CheatInput(Game game, SpriteBatch spriteBatch, SpriteFont spriteFont) : base(game)
@@ -30,18 +29,20 @@ namespace CDT.LAST.MonoGameClient.GameComponents
             _spriteBatch = spriteBatch;
         }
 
+        public static bool IsCheating { get; private set; }
+
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
-            if (_isCheating)
+            if (IsCheating)
             {
                 _spriteBatch.Begin();
                 _spriteBatch.DrawString(_spriteFont, _currentText, new Vector2(0, 0), Color.White);
                 _spriteBatch.End();
             }
 
-            if (!_isCheating && _errorCounter != null)
+            if (!IsCheating && _errorCounter != null)
             {
                 _errorCounter -= gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -62,10 +63,10 @@ namespace CDT.LAST.MonoGameClient.GameComponents
             var keyboardState = Keyboard.GetState();
             if (CheckIsKeyPressed(keyboardState, _lastState, Keys.OemTilde))
             {
-                _isCheating = true;
+                IsCheating = true;
             }
 
-            if (_isCheating)
+            if (IsCheating)
             {
                 if (TryConvertKeyboardInput(keyboardState, _lastState, out var key))
                 {
@@ -85,7 +86,7 @@ namespace CDT.LAST.MonoGameClient.GameComponents
                         _errorCounter = 10;
                     }
 
-                    _isCheating = false;
+                    IsCheating = false;
                     _currentText.Clear();
                 }
             }

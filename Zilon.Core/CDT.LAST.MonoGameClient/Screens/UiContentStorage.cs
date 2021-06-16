@@ -16,8 +16,11 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private Texture2D? _attributeIconsTexture;
         private Texture2D? _attributesBackgroundTexture;
+        private Texture2D? _bottomPanelBackground;
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
+
+        private IDictionary<string, Texture2D>? _combatActDict;
         private Texture2D? _conditionDefaultIcon;
         private Texture2D? _conditionDeseaseSymptomIcon;
         private Texture2D[]? _conditionIconBackgroundTextures;
@@ -30,6 +33,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
         private Texture2D[]? _modalTopTextures;
+        private Texture2D? _selectedButtonMarker;
         private Texture2D? _smallVerticalButtonBackgroundTexture;
         private Texture2D? _smallVerticalButtonIconsTexture;
 
@@ -75,6 +79,24 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
 
             return iconTexture;
+        }
+
+        private void InitCombatActIcons(ContentManager contentManager)
+        {
+            _combatActDict = new Dictionary<string, Texture2D>
+            {
+                ["default"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
+
+                ["tag-punch"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/Punch"),
+
+                ["clumsy-cut"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
+                ["evasion-slash"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/EvasionSlash"),
+                ["lunging-stab"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/LungingStab"),
+                ["penetrating-thrust"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/PenetratingThrust"),
+                ["weak-block"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakBlock"),
+                ["weak-parry"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakParry"),
+                ["weak-swing"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakSwing")
+            };
         }
 
         private void InitConditionIconsAndBackgrounds(ContentManager contentManager)
@@ -161,6 +183,12 @@ namespace CDT.LAST.MonoGameClient.Screens
             _propIcons.Add("EmptyPropIcon", new[] { contentManager.Load<Texture2D>("Sprites/ui/EmptyPropIcon") });
         }
 
+        public Texture2D GetBottomPanelBackground()
+        {
+            return _bottomPanelBackground ??
+                   throw new InvalidOperationException("Bottom panel background texture is not loaded.");
+        }
+
         public Texture2D GetSmallVerticalButtonBackgroundTexture()
         {
             return _smallVerticalButtonBackgroundTexture ?? throw new InvalidOperationException();
@@ -202,6 +230,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             return _modalShadowTexture ?? throw new InvalidOperationException();
         }
 
+        public Texture2D GetSelectedButtonMarkerTexture()
+        {
+            return _selectedButtonMarker ?? throw new InvalidOperationException("Button markers is not loaded.");
+        }
+
         public void LoadContent(ContentManager contentManager)
         {
             _buttonFont = contentManager.Load<SpriteFont>("Fonts/Main");
@@ -216,6 +249,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             _smallVerticalButtonIconsTexture = contentManager.Load<Texture2D>("Sprites/ui/SmallVerticalButtonIcons");
             _smallVerticalButtonBackgroundTexture =
                 contentManager.Load<Texture2D>("Sprites/ui/SmallVerticalButtonBackground");
+            _bottomPanelBackground = contentManager.Load<Texture2D>("Sprites/ui/BottomPanelBackground");
+            _selectedButtonMarker = contentManager.Load<Texture2D>("Sprites/ui/SelectedButtonMarker");
 
             _contextualMenuItemFont = contentManager.Load<SpriteFont>("Fonts/ContextualMenu");
             _contextualMenuBorderTexture = contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuBorder");
@@ -223,6 +258,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuItemBackground");
 
             InitPropIcons(contentManager);
+            InitCombatActIcons(contentManager);
             InitConditionIconsAndBackgrounds(contentManager);
         }
 
@@ -296,6 +332,31 @@ namespace CDT.LAST.MonoGameClient.Screens
         public Texture2D GetHintBackgroundTexture()
         {
             return _hintBackgorundTexture ?? throw new InvalidOperationException("Background texture is not loaded.");
+        }
+
+        public Texture2D GetCombatActIconTexture(string? sid, string[] tags)
+        {
+            if (_combatActDict is null)
+            {
+                throw new InvalidOperationException("Combat act textures are not loaded.");
+            }
+
+            if (sid is not null && _combatActDict.TryGetValue(sid, out var texture))
+            {
+                return texture;
+            }
+
+            foreach (var tag in tags)
+            {
+                if (_combatActDict.TryGetValue($"tag-{tag}", out texture))
+                {
+                    return texture;
+                }
+            }
+
+            Debug.Fail("Every combat act must has own icon.");
+
+            return _combatActDict["default"];
         }
     }
 }
