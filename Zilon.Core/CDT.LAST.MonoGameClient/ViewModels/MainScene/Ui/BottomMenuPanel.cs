@@ -60,7 +60,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(0, 32, 16, 32)
+                    new Rectangle(32, 0, 16, 32)
                 ),
                 rect: new Rectangle(0, 0, 16, 32));
             personStatsButton.OnClick += PersonStatsButton_OnClick;
@@ -69,7 +69,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(0, 32, 16, 32)
+                    new Rectangle(48, 0, 16, 32)
                 ),
                 rect: new Rectangle(0, 0, 16, 32));
             combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;

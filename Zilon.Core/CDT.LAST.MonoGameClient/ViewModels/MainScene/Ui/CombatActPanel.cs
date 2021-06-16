@@ -40,7 +40,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             Initialize(_buttons);
 
             _idleModeSwitcherButton = new IconButton(uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
-                new IconData(uiContentStorage.GetSmallVerticalButtonIconsTexture(), new Rectangle(0, 0, 16, 32)),
+                new IconData(uiContentStorage.GetSmallVerticalButtonIconsTexture(), new Rectangle(0, 32, 16, 32)),
                 new Rectangle(0, 0, 16, 32));
             _idleModeSwitcherButton.OnClick += IdleModeSwitcherButton_OnClick;
 
