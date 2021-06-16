@@ -223,7 +223,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     _combatActPanel.Draw(_spriteBatch, GraphicsDevice);
                 }
                 else
-                { 
+                {
                     // This case can be if the screen draw called before the screen update create panel.
                 }
             }
@@ -287,7 +287,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     _combatActPanel.Update();
                 }
                 else
-                { 
+                {
                     // Do not execute the update method because in idle mode only idle bottom panel updates.
                 }
             }
@@ -385,7 +385,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     _bottomMenu.Update();
                 }
                 else
-                { 
+                {
                     // Ignore the bottom panel's update here because in cobat mode only the combat panel updates.
                 }
             }
