@@ -48,6 +48,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             animationBlockerService.AddBlocker(_animationBlocker);
         }
 
+        private bool IsAnimationContoniues()
+        {
+            return _animationCounterSeconds > 0;
+        }
+
         /// <inheritdoc />
         /// <remarks>
         /// The propperty has no setter because it is infinite.
@@ -82,11 +87,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 _rootContainer.Position = _startPosition;
             }
-        }
-
-        private bool IsAnimationContoniues()
-        {
-            return _animationCounterSeconds > 0;
         }
     }
 }

@@ -55,7 +55,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public void Update(GameTime gameTime)
         {
-            if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed && _soundEffectInstance.State != SoundState.Playing)
+            if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed &&
+                _soundEffectInstance.State != SoundState.Playing)
             {
                 _soundEffectInstance.Play();
             }
