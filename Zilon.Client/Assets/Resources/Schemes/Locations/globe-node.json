@@ -25,7 +25,7 @@
       ],
       "MapGeneratorOptions": {
         "MapGenerator": "Open",
-        "Size": 100
+        "Size": 30
       }
     }
   ]
