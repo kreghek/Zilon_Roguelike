@@ -117,23 +117,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public void UnsubscribeEventHandlers()
         {
             _intarectionBus.NewEvent -= IntarectionBus_NewEvent;
-            Sector.ActorManager.Removed -= ActorManager_Removed;
-            Sector.StaticObjectManager.Added -= StaticObjectManager_Added;
-            Sector.StaticObjectManager.Removed -= StaticObjectManager_Removed;
-
-            foreach (var gameObject in _viewModelContext.GameObjects)
-            {
-                switch (gameObject)
-                {
-                    case ActorViewModel actorViewModel:
-                        actorViewModel.UnsubscribeEventHandlers();
-                        break;
-
-                    case StaticObjectViewModel staticObjectViewModel:
-                        // Currently do nothing since staticObjectViewModel have no subscribtions.
-                        break;
-                }
-            }
+            _gameObjectsViewModel.UnsubscribeEventHandlers();
         }
 
         public void Update(GameTime gameTime)
@@ -161,12 +145,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _commandInput.Update(_viewModelContext);
         }
 
-        private void ActorManager_Removed(object? sender, ManagerItemsChangedEventArgs<IActor> e)
-        {
-            _viewModelContext.GameObjects.RemoveAll(x =>
-                x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor));
-        }
-
         private static ISectorNode GetPlayerSectorNode(IPlayer player)
         {
             if (player.Globe is null)
@@ -190,26 +168,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var targetPerson = damageActorInteractionEvent.TargetActor.Person;
                 var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
                 soundEffect.CreateInstance().Play();
-            }
-        }
-
-        private void StaticObjectManager_Added(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
-        {
-            foreach (var staticObject in e.Items)
-            {
-                var staticObjectModel = new StaticObjectViewModel(_game, staticObject, _spriteBatch);
-
-                _viewModelContext.GameObjects.Add(staticObjectModel);
-            }
-        }
-
-        private void StaticObjectManager_Removed(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
-        {
-            foreach (var staticObject in e.Items)
-            {
-                var staticObjectViewModel = _viewModelContext.GameObjects.OfType<IContainerViewModel>()
-                    .Single(x => x.StaticObject == staticObject);
-                _viewModelContext.GameObjects.Remove((GameObjectBase)staticObjectViewModel);
             }
         }
     }

@@ -33,6 +33,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private const double UPDATE_DELAY_SECONDS = 0f;
         private readonly Camera _camera;
+        private readonly Game _game;
+        private readonly SpriteBatch _spriteBatch;
         private readonly IPlayer _player;
         private readonly SectorViewModelContext _viewModelContext;
         private double _updateCounter;
@@ -42,6 +44,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _viewModelContext = gameObjectParams.SectorViewModelContext;
             _player = gameObjectParams.Player;
             _camera = gameObjectParams.Camera;
+            _game = gameObjectParams.Game;
+            _spriteBatch = gameObjectParams.SpriteBatch;
 
             foreach (var actor in _viewModelContext.Sector.ActorManager.Items)
             {
@@ -63,7 +67,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _viewModelContext.GameObjects.Add(staticObjectModel);
             }
 
-            gameObjectParams.SectorViewModelContext.Sector.ActorManager.Removed += ActorManager_Removed;
+            var sector = _viewModelContext.Sector;
+            sector.ActorManager.Removed += ActorManager_Removed;
+            sector.StaticObjectManager.Added += StaticObjectManager_Added;
+            sector.StaticObjectManager.Removed += StaticObjectManager_Removed;
+        }
+
+        public void UnsubscribeEventHandlers()
+        {
+            var sector = _viewModelContext.Sector;
+            sector.ActorManager.Removed -= ActorManager_Removed;
+            sector.StaticObjectManager.Added -= StaticObjectManager_Added;
+            sector.StaticObjectManager.Removed -= StaticObjectManager_Removed;
+
+            foreach (var gameObject in _viewModelContext.GameObjects)
+            {
+                switch (gameObject)
+                {
+                    case ActorViewModel actorViewModel:
+                        actorViewModel.UnsubscribeEventHandlers();
+                        break;
+
+                    case StaticObjectViewModel staticObjectViewModel:
+                        // Currently do nothing since staticObjectViewModel have no subscribtions.
+                        break;
+                }
+            }
         }
 
         public void Draw(GameTime gameTime)
@@ -140,6 +169,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             _viewModelContext.GameObjects.RemoveAll(x =>
                 x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor));
+        }
+
+        private void StaticObjectManager_Added(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+        {
+            foreach (var staticObject in e.Items)
+            {
+                var staticObjectModel = new StaticObjectViewModel(_game, staticObject, _spriteBatch);
+
+                _viewModelContext.GameObjects.Add(staticObjectModel);
+            }
+        }
+
+        private void StaticObjectManager_Removed(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+        {
+            foreach (var staticObject in e.Items)
+            {
+                var staticObjectViewModel = _viewModelContext.GameObjects.OfType<IContainerViewModel>()
+                    .Single(x => x.StaticObject == staticObject);
+                _viewModelContext.GameObjects.Remove((GameObjectBase)staticObjectViewModel);
+            }
         }
     }
 }
