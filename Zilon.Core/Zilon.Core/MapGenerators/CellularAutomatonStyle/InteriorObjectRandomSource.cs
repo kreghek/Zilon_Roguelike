@@ -145,7 +145,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return true;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public InteriorObjectMeta[] RollInteriorObjects(OffsetCoords[] regionDraftCoords, bool checkPass)
         {
             if (regionDraftCoords is null)
