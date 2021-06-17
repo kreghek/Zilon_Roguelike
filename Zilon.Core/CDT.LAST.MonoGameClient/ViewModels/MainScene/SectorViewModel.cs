@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
@@ -137,10 +138,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public void Update(GameTime gameTime)
         {
-            if (_player.MainPerson is null)
+            var mainPerson = _player.MainPerson;
+            if (mainPerson is null)
             {
                 throw new InvalidOperationException();
             }
+
+            _mapViewModel.Update(gameTime);
 
             _gameObjectsViewModel.Update(gameTime);
 

@@ -31,7 +31,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
     internal class GameObjectsViewModel
     {
-        private const double UPDATE_DELAY_SECONDS = 1f;
+        private const double UPDATE_DELAY_SECONDS = 0f;
         private readonly Camera _camera;
         private readonly IPlayer _player;
         private readonly SectorViewModelContext _viewModelContext;
@@ -116,12 +116,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var visibleFowNodeData = fowData.GetSectorFowData(_viewModelContext.Sector);
 
             var gameObjectsFixedList = _viewModelContext.GameObjects.ToArray();
-            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
             foreach (var gameObject in gameObjectsFixedList)
             {
                 gameObject.CanDraw = true;
 
-                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
+                var fowNode = visibleFowNodeData.GetFowByNode(gameObject.Node);
 
                 if (fowNode is null)
                 {

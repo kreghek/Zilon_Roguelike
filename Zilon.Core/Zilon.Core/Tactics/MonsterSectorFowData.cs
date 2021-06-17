@@ -21,6 +21,12 @@ namespace Zilon.Core.Tactics
             // Ничего не делаем. Просто метод для соблюдения интерфейса.
         }
 
+        public SectorMapFowNode? GetFowByNode(IGraphNode node)
+        {
+            // Ничего не делаем. Просто метод для соблюдения интерфейса.
+            return null;
+        }
+
         public IEnumerable<SectorMapFowNode> GetFowNodeByState(SectorMapNodeFowState targetState)
         {
             // Ничего не делаем. Просто метод для соблюдения интерфейса.
