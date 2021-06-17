@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+
+using Moq;
 
 using NUnit.Framework;
 
-using Zilon.Core.MapGenerators.OpenStyle;
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
 
 namespace Zilon.Core.MapGenerators.OpenStyle.Tests
@@ -18,7 +16,8 @@ namespace Zilon.Core.MapGenerators.OpenStyle.Tests
         public async Task CreateAsyncTestAsync()
         {
             // ARRANGE
-            var mapFactory = new OpenMapFactory();
+            var dice = Mock.Of<IDice>(x => x.Roll(It.IsAny<int>()) == 1);
+            var mapFactory = new OpenMapFactory(dice);
             var options = new SectorMapFactoryOptions(new TestSectorOpenMapFactoryOptionsSubScheme { Size = 1001 });
 
             // ACT

@@ -145,11 +145,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
             return true;
         }
 
-        /// <summary>
-        /// Случайный выбор координат для размещения элемента интерьера.
-        /// </summary>
-        /// <param name="regionDraftCoords"> Координаты региона, среди которых можно выбирать позиции элементов интерьера. </param>
-        /// <returns> Возвращает набор метаданных об элементах интерьера. </returns>
+        /// <inheritdoc/>
         public InteriorObjectMeta[] RollInteriorObjects(OffsetCoords[] regionDraftCoords, bool checkPass)
         {
             if (regionDraftCoords is null)

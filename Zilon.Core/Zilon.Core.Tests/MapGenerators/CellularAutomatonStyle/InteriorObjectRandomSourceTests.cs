@@ -40,7 +40,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
             }
 
             // ACT
-            var factMetas = interiorRandomSource.RollInteriorObjects(coords);
+            var factMetas = interiorRandomSource.RollInteriorObjects(coords, true);
 
             // ASSERT
             factMetas.Should().NotBeEmpty();
