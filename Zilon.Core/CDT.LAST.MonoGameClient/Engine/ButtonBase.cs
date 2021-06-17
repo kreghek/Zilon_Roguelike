@@ -22,6 +22,12 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         public Texture2D Texture { get; }
 
+        public void Click()
+        {
+            OnClick?.Invoke(this, EventArgs.Empty);
+            PlayClickSoundIfExists();
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             var color = SelectColorByState();
@@ -121,11 +127,5 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         public event EventHandler? OnClick;
-
-        public void Click()
-        {
-            OnClick?.Invoke(this, EventArgs.Empty);
-            PlayClickSoundIfExists();
-        }
     }
 }

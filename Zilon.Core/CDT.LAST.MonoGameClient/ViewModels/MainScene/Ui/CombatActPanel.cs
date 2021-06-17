@@ -110,17 +110,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _idleModeSwitcherButton.Update();
         }
 
-        private void HandleHotkeys()
+        private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            var keyboardState = Keyboard.GetState();
-            int? buttonNumber = GetNumberByKeyboardState(keyboardState);
+            const int PANEL_MARGIN = 4;
+            const int PANEL_WIDTH = (32 * 8) + 16 + PANEL_MARGIN;
+            const int PANEL_HEIGHT = 32 + (4 * 2);
 
-            if (buttonNumber is not null && buttonNumber <= _buttons.Count)
-            {
-                var buttonIndex = buttonNumber.Value - 1;
-                var pressedButton = _buttons[buttonIndex];
-                pressedButton.Click();
-            }
+            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
+
+            spriteBatch.Draw(_uiContentStorage.GetBottomPanelBackground(),
+                new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT),
+                Color.White);
+        }
+
+        private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
+        {
+            _buttons.Clear();
+            Initialize(_buttons);
         }
 
         private static int? GetNumberByKeyboardState(KeyboardState keyboardState)
@@ -139,29 +145,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 return (firstPressedKeyCode - FIRST_CODE) + 1;
             }
-            else
+
+            return null;
+        }
+
+        private void HandleHotkeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            var buttonNumber = GetNumberByKeyboardState(keyboardState);
+
+            if (buttonNumber is not null && buttonNumber <= _buttons.Count)
             {
-                return null;
+                var buttonIndex = buttonNumber.Value - 1;
+                var pressedButton = _buttons[buttonIndex];
+                pressedButton.Click();
             }
-        }
-
-        private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
-        {
-            const int PANEL_MARGIN = 4;
-            const int PANEL_WIDTH = (32 * 8) + 16 + PANEL_MARGIN;
-            const int PANEL_HEIGHT = 32 + (4 * 2);
-
-            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
-
-            spriteBatch.Draw(_uiContentStorage.GetBottomPanelBackground(),
-                new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT),
-                Color.White);
-        }
-
-        private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
-        {
-            _buttons.Clear();
-            Initialize(_buttons);
         }
 
         private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)
