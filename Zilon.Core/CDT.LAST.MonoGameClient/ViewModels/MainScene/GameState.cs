@@ -8,7 +8,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public static int GameSpeed
         {
-            get 
+            get
             {
                 return _gameSpeed;
             }
