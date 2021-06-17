@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Schemes;
@@ -18,12 +19,22 @@ namespace Zilon.Core.World
 
         public ILocationScheme Roll()
         {
-            var locationSchemeSids = new[]
+            var openSchemeSids = Enumerable.Range(1, 20).Select(x => "globe-node").ToArray();
+
+            var dungeonSchemeSids = new[]
             {
-                "globe-node"
+                "rat-hole",
+                "rat-kingdom",
+                "demon-dungeon",
+                "demon-lair",
+                "crypt",
+                "elder-place",
+                "genomass-cave"
             };
 
-            var rolledLocationSchemeSid = _dice.RollFromList(locationSchemeSids);
+            var totalLocationSchemeSids = openSchemeSids.Concat(dungeonSchemeSids).ToArray();
+
+            var rolledLocationSchemeSid = _dice.RollFromList(totalLocationSchemeSids);
             var rolledLocationScheme = _schemeService.GetScheme<ILocationScheme>(rolledLocationSchemeSid);
 
             return rolledLocationScheme;
