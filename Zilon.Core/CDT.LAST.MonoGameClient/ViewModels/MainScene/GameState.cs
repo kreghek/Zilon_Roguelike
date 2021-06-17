@@ -1,7 +1,26 @@
-﻿namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+﻿using System;
+
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public static class GameState
     {
-        public static int GameSpeed = 1;
+        private static int _gameSpeed;
+
+        public static int GameSpeed
+        {
+            get 
+            {
+                return _gameSpeed;
+            }
+            set
+            {
+                if (value <= 0)
+                {
+                    throw new InvalidOperationException("Game speed must be more that zero.");
+                }
+
+                _gameSpeed = value;
+            }
+        }
     }
 }
