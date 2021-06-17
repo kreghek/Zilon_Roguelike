@@ -77,11 +77,11 @@ namespace Zilon.Core.MapGenerators.OpenStyle
 
             // start region
 
-            var startX = _dice.Roll(mapSize/2) + centerNode.OffsetCoords.X;
-            var startY = _dice.Roll(mapSize/2) + centerNode.OffsetCoords.Y;
+            var startX = _dice.Roll(mapSize / 2) + centerNode.OffsetCoords.X;
+            var startY = _dice.Roll(mapSize / 2) + centerNode.OffsetCoords.Y;
 
-            var startRegion = new MapRegion(1, new[] { availableNodes.Single(x => x.OffsetCoords.CompsEqual(startX, startY)) }) 
-            { 
+            var startRegion = new MapRegion(1, new[] { availableNodes.Single(x => x.OffsetCoords.CompsEqual(startX, startY)) })
+            {
                 IsStart = true
             };
             map.Regions.Add(startRegion);
