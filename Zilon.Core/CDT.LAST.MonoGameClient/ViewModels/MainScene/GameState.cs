@@ -6,6 +6,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private static int _gameSpeed;
 
+        static GameState()
+        {
+            GameSpeed = 1;
+        }
+
         public static int GameSpeed
         {
             get => _gameSpeed;

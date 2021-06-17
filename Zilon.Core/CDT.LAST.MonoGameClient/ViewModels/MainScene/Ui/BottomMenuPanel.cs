@@ -79,7 +79,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(48, 0, 16, 32)
+                    new Rectangle(16, 32, 16, 32)
                 ),
                 rect: new Rectangle(0, 0, 16, 32));
             gameSpeedButton.OnClick += GameSpeedButton_OnClick;
