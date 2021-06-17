@@ -49,8 +49,7 @@ namespace CDT.LAST.MonoGameClient.Engine
                 else if (mouseState.LeftButton == ButtonState.Released && _buttonState == UiButtonState.Pressed)
                 {
                     _buttonState = UiButtonState.Hover;
-                    OnClick?.Invoke(this, EventArgs.Empty);
-                    PlayClickSoundIfExists();
+                    Click();
                 }
                 else if (mouseState.LeftButton == ButtonState.Released)
                 {
@@ -122,5 +121,11 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         public event EventHandler? OnClick;
+
+        public void Click()
+        {
+            OnClick?.Invoke(this, EventArgs.Empty);
+            PlayClickSoundIfExists();
+        }
     }
 }

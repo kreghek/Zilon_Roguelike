@@ -7,6 +7,7 @@ using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
@@ -93,6 +94,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Update()
         {
+            HandleHotkeys();
+
             _buttonGroup.Selected = null;
             foreach (var button in _buttons)
             {
@@ -105,6 +108,41 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             _idleModeSwitcherButton.Update();
+        }
+
+        private void HandleHotkeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            int? buttonNumber = GetNumberByKeyboardState(keyboardState);
+
+            if (buttonNumber is not null && buttonNumber <= _buttons.Count)
+            {
+                var buttonIndex = buttonNumber.Value - 1;
+                var pressedButton = _buttons[buttonIndex];
+                pressedButton.Click();
+            }
+        }
+
+        private static int? GetNumberByKeyboardState(KeyboardState keyboardState)
+        {
+            var pressedKeys = keyboardState.GetPressedKeys();
+            if (pressedKeys is null || !pressedKeys.Any())
+            {
+                return null;
+            }
+
+            var firstPressedKeyCode = (int)pressedKeys[0];
+            const int FIRST_CODE = 49;
+            const int LAST_CODE = 57;
+
+            if (firstPressedKeyCode >= FIRST_CODE && firstPressedKeyCode <= LAST_CODE)
+            {
+                return (firstPressedKeyCode - FIRST_CODE) + 1;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
