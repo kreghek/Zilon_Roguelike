@@ -17,6 +17,18 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
+    internal record GameObjectParams
+    {
+        public SectorViewModelContext SectorViewModelContext { get; init; }
+        public IPlayer Player { get; init; }
+        public Camera Camera { get; init; }
+        public SpriteBatch SpriteBatch { get; init; }
+        public Game Game { get; init; }
+        public ISectorUiState UiState { get; init; }
+        public IPersonSoundContentStorage? PersonSoundStorage { get; internal set; }
+        public IPersonVisualizationContentStorage PersonVisualizationContentStorage { get; internal set; }
+    }
+
     internal class GameObjectsViewModel
     {
         private const double UPDATE_DELAY_SECONDS = 1f;
@@ -25,33 +37,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly SectorViewModelContext _viewModelContext;
         private double _updateCounter;
 
-        public GameObjectsViewModel(SectorViewModelContext viewModelContext, IPlayer player, Camera camera,
-            SpriteBatch spriteBatch, Game game, ISectorUiState _uiState)
+        public GameObjectsViewModel(GameObjectParams gameObjectParams)
         {
-            _viewModelContext = viewModelContext;
-            _player = player;
-            _camera = camera;
+            _viewModelContext = gameObjectParams.SectorViewModelContext;
+            _player = gameObjectParams.Player;
+            _camera = gameObjectParams.Camera;
 
-            foreach (var actor in viewModelContext.Sector.ActorManager.Items)
+            foreach (var actor in _viewModelContext.Sector.ActorManager.Items)
             {
-                var actorViewModel = new ActorViewModel(game, actor, _viewModelContext, spriteBatch);
+                var actorViewModel = new ActorViewModel(actor, gameObjectParams);
 
                 if (actor.Person == _player.MainPerson)
                 {
-                    _uiState.ActiveActor = actorViewModel;
+                    gameObjectParams.UiState.ActiveActor = actorViewModel;
                 }
 
                 _viewModelContext.GameObjects.Add(actorViewModel);
             }
 
-            foreach (var staticObject in viewModelContext.Sector.StaticObjectManager.Items)
+            foreach (var staticObject in _viewModelContext.Sector.StaticObjectManager.Items)
             {
-                var staticObjectModel = new StaticObjectViewModel(game, staticObject, spriteBatch);
+                var staticObjectModel = new StaticObjectViewModel(gameObjectParams.Game, staticObject, gameObjectParams.SpriteBatch);
 
                 _viewModelContext.GameObjects.Add(staticObjectModel);
             }
 
-            viewModelContext.Sector.ActorManager.Removed += ActorManager_Removed;
+            gameObjectParams.SectorViewModelContext.Sector.ActorManager.Removed += ActorManager_Removed;
         }
 
         public void Draw(GameTime gameTime)
@@ -107,18 +118,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
             foreach (var gameObject in gameObjectsFixedList)
             {
-                gameObject.Visible = true;
+                gameObject.CanDraw = true;
 
                 var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
 
                 if (fowNode is null)
                 {
-                    gameObject.Visible = false;
+                    gameObject.CanDraw = false;
                 }
 
                 if (fowNode != null && fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
                 {
-                    gameObject.Visible = false;
+                    gameObject.CanDraw = false;
                 }
 
                 gameObject.Update(gameTime);

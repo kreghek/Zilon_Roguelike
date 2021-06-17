@@ -36,18 +36,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private IActorStateEngine _actorStateEngine;
 
-        public ActorViewModel(Game game,
+        public ActorViewModel(
             IActor actor,
-            SectorViewModelContext sectorViewModelContext,
-            IPersonVisualizationContentStorage personVisualizationContentStorage,
-            IPersonSoundContentStorage personSoundStorage,
-            SpriteBatch spriteBatch)
+            GameObjectParams gameObjectParams)
         {
-            _game = game;
+            _game = gameObjectParams.Game;
             Actor = actor;
-            _sectorViewModelContext = sectorViewModelContext;
-            _personSoundStorage = personSoundStorage;
-            _spriteBatch = spriteBatch;
+            _sectorViewModelContext = gameObjectParams.SectorViewModelContext;
+            _personSoundStorage = gameObjectParams.PersonSoundStorage;
+            _spriteBatch = gameObjectParams.SpriteBatch;
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
 
@@ -67,7 +64,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (isHumanGraphics)
             {
                 var graphicsRoot = new HumanoidGraphics(Actor.Person.GetModule<IEquipmentModule>(),
-                    personVisualizationContentStorage);
+                    gameObjectParams.PersonVisualizationContentStorage);
 
                 _rootSprite.AddChild(graphicsRoot);
 
@@ -75,7 +72,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
             else
             {
-                var graphicsRoot = new AnimalGraphics(game.Content);
+                var graphicsRoot = new AnimalGraphics(gameObjectParams.Game.Content);
 
                 _rootSprite.AddChild(graphicsRoot);
 

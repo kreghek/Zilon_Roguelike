@@ -69,8 +69,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _viewModelContext = new SectorViewModelContext(sector);
 
-            _gameObjectsViewModel =
-                new GameObjectsViewModel(_viewModelContext, _player, _camera, _spriteBatch, game, _uiState);
+            var gameObjectParams = new GameObjectParams() { 
+                Game= game,
+                Camera = camera,
+                UiState = _uiState,
+                Player = _player,
+                SpriteBatch = _spriteBatch,
+                SectorViewModelContext = _viewModelContext,
+                PersonSoundStorage = _personSoundContentStorage,
+                PersonVisualizationContentStorage = personVisualizationContentStorage
+            };
+            _gameObjectsViewModel = new GameObjectsViewModel(gameObjectParams);
 
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
