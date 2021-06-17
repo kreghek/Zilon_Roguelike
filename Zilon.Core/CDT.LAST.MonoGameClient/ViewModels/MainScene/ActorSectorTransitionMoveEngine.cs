@@ -62,13 +62,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var t = 1 - progress;
 
-            if (_animationCounterSeconds > 0)
+            if (IsAnimationContoniues())
             {
                 if (!_effectPlayed)
                 {
                     _effectPlayed = true;
 
-                    if (_soundEffect != null)
+                    if (_soundEffect != null && !_soundEffect.IsDisposed)
                     {
                         _soundEffect.IsLooped = true;
                         _soundEffect.Play();
@@ -82,6 +82,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 _rootContainer.Position = _startPosition;
             }
+        }
+
+        private bool IsAnimationContoniues()
+        {
+            return _animationCounterSeconds > 0;
         }
     }
 }
