@@ -94,27 +94,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             };
         }
 
-        private void GameSpeedButton_OnClick(object? sender, EventArgs e)
-        {
-            if (GameState.GameSpeed == 1)
-            {
-                GameState.GameSpeed = 2;
-            }
-            else if (GameState.GameSpeed == 2)
-            {
-                GameState.GameSpeed = 4;
-            }
-            else if (GameState.GameSpeed == 4)
-            {
-                GameState.GameSpeed = 1;
-            }
-            else
-            {
-                Debug.Fail("Unknown game state.");
-                GameState.GameSpeed = 1;
-            }
-        }
-
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
             var halfOfScreenX = graphicsDevice.Viewport.Width / 2;
@@ -215,6 +194,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
 
             _autoplayHintIsShown = autoplayButtonRect.Intersects(mouseRect);
+        }
+
+        private void GameSpeedButton_OnClick(object? sender, EventArgs e)
+        {
+            if (GameState.GameSpeed == 1)
+            {
+                GameState.GameSpeed = 2;
+            }
+            else if (GameState.GameSpeed == 2)
+            {
+                GameState.GameSpeed = 4;
+            }
+            else if (GameState.GameSpeed == 4)
+            {
+                GameState.GameSpeed = 1;
+            }
+            else
+            {
+                Debug.Fail("Unknown game state.");
+                GameState.GameSpeed = 1;
+            }
         }
 
         private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)
