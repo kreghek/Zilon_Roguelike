@@ -60,7 +60,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _soundEffectInstance.Play();
             }
 
-            _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3;
+            _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3 * GameState.GameSpeed;
             var t = 1 - _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
             var stepAmplitude = 4f;
             var stepFrequncy = 2f;
