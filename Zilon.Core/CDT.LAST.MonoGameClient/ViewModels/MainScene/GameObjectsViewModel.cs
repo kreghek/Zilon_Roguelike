@@ -34,8 +34,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private const double UPDATE_DELAY_SECONDS = 0f;
         private readonly Camera _camera;
         private readonly Game _game;
-        private readonly SpriteBatch _spriteBatch;
         private readonly IPlayer _player;
+        private readonly SpriteBatch _spriteBatch;
         private readonly SectorViewModelContext _viewModelContext;
         private double _updateCounter;
 
@@ -73,28 +73,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             sector.StaticObjectManager.Removed += StaticObjectManager_Removed;
         }
 
-        public void UnsubscribeEventHandlers()
-        {
-            var sector = _viewModelContext.Sector;
-            sector.ActorManager.Removed -= ActorManager_Removed;
-            sector.StaticObjectManager.Added -= StaticObjectManager_Added;
-            sector.StaticObjectManager.Removed -= StaticObjectManager_Removed;
-
-            foreach (var gameObject in _viewModelContext.GameObjects)
-            {
-                switch (gameObject)
-                {
-                    case ActorViewModel actorViewModel:
-                        actorViewModel.UnsubscribeEventHandlers();
-                        break;
-
-                    case StaticObjectViewModel staticObjectViewModel:
-                        // Currently do nothing since staticObjectViewModel have no subscribtions.
-                        break;
-                }
-            }
-        }
-
         public void Draw(GameTime gameTime)
         {
             if (_player.MainPerson is null)
@@ -128,6 +106,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 }
 
                 gameObject.Draw(gameTime, _camera.Transform);
+            }
+        }
+
+        public void UnsubscribeEventHandlers()
+        {
+            var sector = _viewModelContext.Sector;
+            sector.ActorManager.Removed -= ActorManager_Removed;
+            sector.StaticObjectManager.Added -= StaticObjectManager_Added;
+            sector.StaticObjectManager.Removed -= StaticObjectManager_Removed;
+
+            foreach (var gameObject in _viewModelContext.GameObjects)
+            {
+                switch (gameObject)
+                {
+                    case ActorViewModel actorViewModel:
+                        actorViewModel.UnsubscribeEventHandlers();
+                        break;
+
+                    case StaticObjectViewModel staticObjectViewModel:
+                        // Currently do nothing since staticObjectViewModel have no subscribtions.
+                        break;
+                }
             }
         }
 
