@@ -19,14 +19,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal record GameObjectParams
     {
-        public SectorViewModelContext SectorViewModelContext { get; init; }
-        public IPlayer Player { get; init; }
         public Camera Camera { get; init; }
-        public SpriteBatch SpriteBatch { get; init; }
         public Game Game { get; init; }
-        public ISectorUiState UiState { get; init; }
         public IPersonSoundContentStorage? PersonSoundStorage { get; internal set; }
         public IPersonVisualizationContentStorage PersonVisualizationContentStorage { get; internal set; }
+        public IPlayer Player { get; init; }
+        public SectorViewModelContext SectorViewModelContext { get; init; }
+        public SpriteBatch SpriteBatch { get; init; }
+        public ISectorUiState UiState { get; init; }
     }
 
     internal class GameObjectsViewModel
@@ -57,7 +57,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             foreach (var staticObject in _viewModelContext.Sector.StaticObjectManager.Items)
             {
-                var staticObjectModel = new StaticObjectViewModel(gameObjectParams.Game, staticObject, gameObjectParams.SpriteBatch);
+                var staticObjectModel =
+                    new StaticObjectViewModel(gameObjectParams.Game, staticObject, gameObjectParams.SpriteBatch);
 
                 _viewModelContext.GameObjects.Add(staticObjectModel);
             }

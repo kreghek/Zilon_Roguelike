@@ -69,7 +69,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _viewModelContext = new SectorViewModelContext(sector);
 
-            var gameObjectParams = new GameObjectParams()
+            var gameObjectParams = new GameObjectParams
             {
                 Game = game,
                 Camera = camera,
