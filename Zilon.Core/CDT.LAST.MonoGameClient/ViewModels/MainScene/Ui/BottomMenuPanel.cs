@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Resources;
@@ -74,12 +75,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 rect: new Rectangle(0, 0, 16, 32));
             combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
 
+            var gameSpeedButton = new IconButton(
+                texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(16, 32, 16, 32)
+                ),
+                rect: new Rectangle(0, 0, 16, 32));
+            gameSpeedButton.OnClick += GameSpeedButton_OnClick;
+
             _buttons = new[]
             {
                 _autoplayModeButton,
                 personPropButton,
                 personStatsButton,
-                combatModeSwitcherButton
+                combatModeSwitcherButton,
+                gameSpeedButton
             };
         }
 
@@ -183,6 +194,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
 
             _autoplayHintIsShown = autoplayButtonRect.Intersects(mouseRect);
+        }
+
+        private void GameSpeedButton_OnClick(object? sender, EventArgs e)
+        {
+            if (GameState.GameSpeed == 1)
+            {
+                GameState.GameSpeed = 2;
+            }
+            else if (GameState.GameSpeed == 2)
+            {
+                GameState.GameSpeed = 4;
+            }
+            else if (GameState.GameSpeed == 4)
+            {
+                GameState.GameSpeed = 1;
+            }
+            else
+            {
+                Debug.Fail("Unknown game state.");
+                GameState.GameSpeed = 1;
+            }
         }
 
         private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)
