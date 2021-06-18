@@ -22,7 +22,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
             Vector2 targetObjectPosition, ConsumeEffectType effectType)
         {
             _startEffectPosition = targetObjectPosition;
-            _targetEffectPosition = targetObjectPosition - Vector2.UnitY * EFFECT_FLIGHT_DISTANCE;
+            _targetEffectPosition = targetObjectPosition - (Vector2.UnitY * EFFECT_FLIGHT_DISTANCE);
 
             var spriteSourceRect = GetSpriteSourceRect(effectType);
 
