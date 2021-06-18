@@ -77,6 +77,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 button.Rect = buttonRect;
 
                 button.Draw(spriteBatch);
+
+                DrawButtonHotkey(actIndex, button, spriteBatch);
             }
 
             _idleModeSwitcherButton.Rect = new Rectangle(
@@ -85,6 +87,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 SWITCHER_MODE_BUTTON_WIDTH,
                 SWITCHER_MODE_BUTTON_HEIGHT);
             _idleModeSwitcherButton.Draw(spriteBatch);
+        }
+
+        private void DrawButtonHotkey(int actIndex, ButtonBase button, SpriteBatch spriteBatch)
+        {
+            var spriteFont = _uiContentStorage.GetAuxTextFont();
+            var text = (actIndex + 1).ToString();
+            var stringSize = spriteFont.MeasureString(text);
+            spriteBatch.DrawString(spriteFont,
+                text,
+                new Vector2(button.Rect.Left + button.Rect.Width / 2, button.Rect.Top - stringSize.Y),
+                Color.White);
         }
 
         public void UnsubscribeEvents()
@@ -167,7 +180,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _combatActModule.IsCombatMode = !_combatActModule.IsCombatMode;
         }
 
-        private void Initialize(IList<CombatActButton> _buttons)
+        private void Initialize(IList<CombatActButton> buttons)
         {
             var acts = _combatActModule.CalcCombatActs();
             var actsOrdered = acts.OrderBy(x => x.Scheme?.Sid).ToArray();
@@ -194,7 +207,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _buttonGroup.Selected = button;
                 }
 
-                _buttons.Add(button);
+                buttons.Add(button);
             }
         }
     }

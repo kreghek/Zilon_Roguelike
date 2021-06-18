@@ -18,6 +18,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _attributesBackgroundTexture;
         private Texture2D? _bottomPanelBackground;
         private SpriteFont? _buttonFont;
+        private SpriteFont? _auxFont;
         private Texture2D? _buttonTexture;
 
         private IDictionary<string, Texture2D>? _combatActDict;
@@ -239,6 +240,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             _buttonFont = contentManager.Load<SpriteFont>("Fonts/Main");
             _hintTitleFont = contentManager.Load<SpriteFont>("Fonts/HintTitle");
+            _auxFont = contentManager.Load<SpriteFont>("Fonts/UiAux");
             _hintBackgorundTexture = contentManager.Load<Texture2D>("Sprites/ui/HintBackground");
             _buttonTexture = contentManager.Load<Texture2D>("Sprites/ui/button");
             _modalShadowTexture = contentManager.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
@@ -357,6 +359,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             Debug.Fail("Every combat act must has own icon.");
 
             return _combatActDict["default"];
+        }
+
+        public SpriteFont GetAuxTextFont()
+        {
+            return _auxFont ?? throw new InvalidOperationException("Aux font was not loaded.");
         }
     }
 }

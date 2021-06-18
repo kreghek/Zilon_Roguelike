@@ -20,6 +20,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         SpriteFont GetHintTitleFont();
         SpriteFont GetMenuItemFont();
+        SpriteFont GetAuxTextFont();
         Texture2D GetMenuItemTexture();
 
         Texture2D[] GetModalBottomTextures();
