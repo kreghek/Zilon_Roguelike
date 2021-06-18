@@ -43,7 +43,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 ConsumeEffectType.Eat => new Rectangle(0, 0, SPRITE_SIZE, SPRITE_SIZE),
                 ConsumeEffectType.Drink => new Rectangle(SPRITE_SIZE, 0, SPRITE_SIZE, SPRITE_SIZE),
                 ConsumeEffectType.Heal => new Rectangle(0, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE),
-                _ => new Rectangle(SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE),
+                _ => new Rectangle(SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE)
             };
         }
 
