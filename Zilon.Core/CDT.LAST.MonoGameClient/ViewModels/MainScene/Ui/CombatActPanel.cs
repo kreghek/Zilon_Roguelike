@@ -92,12 +92,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private void DrawButtonHotkey(int actIndex, ButtonBase button, SpriteBatch spriteBatch)
         {
             var spriteFont = _uiContentStorage.GetAuxTextFont();
+
             var text = (actIndex + 1).ToString();
             var stringSize = spriteFont.MeasureString(text);
-            spriteBatch.DrawString(spriteFont,
-                text,
-                new Vector2(button.Rect.Left + button.Rect.Width / 2, button.Rect.Top - stringSize.Y),
-                Color.White);
+
+            var textX = button.Rect.Left + button.Rect.Center.X;
+            var textY = button.Rect.Top - stringSize.Y;
+
+            spriteBatch.DrawString(spriteFont, text, new Vector2(textX, textY), Color.White);
         }
 
         public void UnsubscribeEvents()
