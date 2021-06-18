@@ -28,6 +28,8 @@
         /// <summary>
         /// Генерация квадратной монолитной карты.
         /// </summary>
-        SquarePlane
+        SquarePlane,
+
+        Open
     }
 }

@@ -10,13 +10,16 @@ namespace Zilon.Emulation.Common
     public sealed class SwitchMapFactorySelector : SwitchMapFactorySelectorBase
     {
         public SwitchMapFactorySelector(RoomMapFactory roomMapFactory,
-            CellularAutomatonMapFactory cellularAutomatonMapFactory)
+            CellularAutomatonMapFactory cellularAutomatonMapFactory
+            )
         {
             RoomMapFactory = roomMapFactory;
             CellularAutomatonMapFactory = cellularAutomatonMapFactory;
         }
 
         protected override IMapFactory CellularAutomatonMapFactory { get; }
+
+
         protected override IMapFactory RoomMapFactory { get; }
     }
 }
