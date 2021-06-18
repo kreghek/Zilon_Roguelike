@@ -304,7 +304,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     }
                     else
                     {
-                        _sectorViewModelContext.EffectManager.HitEffects.Add(new HitEffect((LivGame)_game,
+                        _sectorViewModelContext.EffectManager.VisualEffects.Add(new HitEffect((LivGame)_game,
                             targetSpritePosition + targetGameObject.HitEffectPosition,
                             targetSpritePosition - _rootSprite.Position));
                     }

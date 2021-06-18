@@ -5,7 +5,39 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class HitEffect
+    internal interface IVisualEffect
+    {
+        bool IsComplete { get; }
+        void Draw(SpriteBatch spriteBatch);
+        void Update(GameTime gameTime);
+    }
+
+    internal sealed class ConsumingEffect : IVisualEffect
+    {
+        private const double EFFECT_DISPLAY_DURATION_SECONDS = 1f;
+        private readonly IGameObjectVisualizationContentStorage _visualizationContentStorage;
+        private readonly Vector2 _targetObjectPosition;
+
+        public ConsumingEffect(IGameObjectVisualizationContentStorage visualizationContentStorage, Vector2 targetObjectPosition)
+        {
+            _visualizationContentStorage = visualizationContentStorage;
+            _targetObjectPosition = targetObjectPosition;
+        }
+
+        public bool IsComplete { get; }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    internal sealed class HitEffect: IVisualEffect
     {
         private const double EFFECT_DISPLAY_DURATION_SECONDS = 0.3f;
         private readonly Vector2 _direction;
@@ -13,13 +45,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Sprite _hitSprite;
         private double _counter;
 
-        public HitEffect(LivGame game, Vector2 targetSpritePosition, Vector2 direction)
+        public HitEffect(LivGame game, Vector2 targetObjectPosition, Vector2 direction)
         {
             _game = game;
             _direction = direction;
             _hitSprite = new Sprite(_game.Content.Load<Texture2D>("Sprites/effects/hit"))
             {
-                Position = targetSpritePosition,
+                Position = targetObjectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
                 Color = new Color(255, 255, 255, 0.0f)
             };

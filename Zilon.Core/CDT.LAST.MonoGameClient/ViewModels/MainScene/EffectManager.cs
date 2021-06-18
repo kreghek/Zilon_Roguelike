@@ -2,13 +2,13 @@
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class EffectManager
+    internal sealed class EffectManager
     {
         public EffectManager()
         {
-            HitEffects = new List<HitEffect>();
+            VisualEffects = new List<IVisualEffect>();
         }
 
-        public List<HitEffect> HitEffects { get; }
+        public List<IVisualEffect> VisualEffects { get; }
     }
 }

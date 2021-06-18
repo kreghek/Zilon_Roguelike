@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
@@ -14,6 +15,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         IEnumerable<HandPart> GetHandParts(string sid);
         IEnumerable<HeadPart> GetHeadParts(string sid);
         IEnumerable<BodyPart> GetHumanParts();
+        void LoadContent(ContentManager content);
+    }
+
+    public interface IGameObjectVisualizationContentStorage
+    {
+        Texture2D GetConsumingEffectTexture(); 
         void LoadContent(ContentManager content);
     }
 }
