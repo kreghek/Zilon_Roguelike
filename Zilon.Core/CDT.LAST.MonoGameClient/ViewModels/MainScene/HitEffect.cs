@@ -63,7 +63,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         }
     }
 
-    public sealed class HitEffect: IVisualEffect
+    public sealed class HitEffect : IVisualEffect
     {
         private const double EFFECT_DISPLAY_DURATION_SECONDS = 0.3f;
         private readonly Vector2 _direction;

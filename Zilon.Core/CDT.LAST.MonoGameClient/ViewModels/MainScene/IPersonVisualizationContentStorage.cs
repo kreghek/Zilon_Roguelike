@@ -20,7 +20,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
     public interface IGameObjectVisualizationContentStorage
     {
-        Texture2D GetConsumingEffectTexture(); 
+        Texture2D GetConsumingEffectTexture();
         void LoadContent(ContentManager content);
     }
 
