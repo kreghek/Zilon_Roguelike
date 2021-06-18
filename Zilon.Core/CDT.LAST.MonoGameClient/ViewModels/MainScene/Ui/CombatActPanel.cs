@@ -7,6 +7,7 @@ using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
@@ -76,6 +77,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 button.Rect = buttonRect;
 
                 button.Draw(spriteBatch);
+
+                DrawButtonHotkey(actIndex, button, spriteBatch);
             }
 
             _idleModeSwitcherButton.Rect = new Rectangle(
@@ -93,6 +96,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Update()
         {
+            HandleHotkeys();
+
             _buttonGroup.Selected = null;
             foreach (var button in _buttons)
             {
@@ -120,10 +125,56 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 Color.White);
         }
 
+        private void DrawButtonHotkey(int actIndex, ButtonBase button, SpriteBatch spriteBatch)
+        {
+            var spriteFont = _uiContentStorage.GetAuxTextFont();
+
+            var text = (actIndex + 1).ToString();
+            var stringSize = spriteFont.MeasureString(text);
+
+            var textX = button.Rect.Left + button.Rect.Center.X;
+            var textY = button.Rect.Top - stringSize.Y;
+
+            spriteBatch.DrawString(spriteFont, text, new Vector2(textX, textY), Color.White);
+        }
+
         private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
         {
             _buttons.Clear();
             Initialize(_buttons);
+        }
+
+        private static int? GetNumberByKeyboardState(KeyboardState keyboardState)
+        {
+            var pressedKeys = keyboardState.GetPressedKeys();
+            if (pressedKeys is null || !pressedKeys.Any())
+            {
+                return null;
+            }
+
+            var firstPressedKeyCode = (int)pressedKeys[0];
+            const int FIRST_CODE = 49;
+            const int LAST_CODE = 57;
+
+            if (firstPressedKeyCode >= FIRST_CODE && firstPressedKeyCode <= LAST_CODE)
+            {
+                return (firstPressedKeyCode - FIRST_CODE) + 1;
+            }
+
+            return null;
+        }
+
+        private void HandleHotkeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            var buttonNumber = GetNumberByKeyboardState(keyboardState);
+
+            if (buttonNumber is not null && buttonNumber <= _buttons.Count)
+            {
+                var buttonIndex = buttonNumber.Value - 1;
+                var pressedButton = _buttons[buttonIndex];
+                pressedButton.Click();
+            }
         }
 
         private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)
@@ -131,7 +182,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _combatActModule.IsCombatMode = !_combatActModule.IsCombatMode;
         }
 
-        private void Initialize(IList<CombatActButton> _buttons)
+        private void Initialize(IList<CombatActButton> buttons)
         {
             var acts = _combatActModule.CalcCombatActs();
             var actsOrdered = acts.OrderBy(x => x.Scheme?.Sid).ToArray();
@@ -158,7 +209,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _buttonGroup.Selected = button;
                 }
 
-                _buttons.Add(button);
+                buttons.Add(button);
             }
         }
     }
