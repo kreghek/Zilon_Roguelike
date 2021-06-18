@@ -61,7 +61,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 default:
                     return new Rectangle(SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
-            };
+            }
+
+            ;
         }
 
         public bool IsComplete => _counter <= 0;
