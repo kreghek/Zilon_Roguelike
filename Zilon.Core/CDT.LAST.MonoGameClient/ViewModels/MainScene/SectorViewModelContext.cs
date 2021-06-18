@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects;
+
 using Zilon.Core.Tactics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene

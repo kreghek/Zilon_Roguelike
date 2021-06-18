@@ -106,9 +106,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
-            foreach (var hitEffect in _viewModelContext.EffectManager.HitEffects.ToArray())
+            foreach (var visualEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
             {
-                hitEffect.Draw(_spriteBatch);
+                visualEffect.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
@@ -132,13 +132,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _gameObjectsViewModel.Update(gameTime);
 
-            foreach (var hitEffect in _viewModelContext.EffectManager.HitEffects.ToArray())
+            foreach (var hitEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
             {
                 hitEffect.Update(gameTime);
 
                 if (hitEffect.IsComplete)
                 {
-                    _viewModelContext.EffectManager.HitEffects.Remove(hitEffect);
+                    _viewModelContext.EffectManager.VisualEffects.Remove(hitEffect);
                 }
             }
 
