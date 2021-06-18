@@ -11,6 +11,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
     {
         private const double EFFECT_DISPLAY_DURATION_SECONDS = 1f;
         private const int EFFECT_FLIGHT_DISTANCE = 40;
+        private const int OFFSET_FREQUENCY = 3;
         private readonly Sprite _effectSprite;
         private readonly Vector2 _startEffectPosition;
         private readonly Vector2 _targetEffectPosition;
@@ -62,9 +63,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
             _counter -= gameTime.ElapsedGameTime.TotalSeconds;
             if (!IsComplete)
             {
-                var t = 1 - _counter / EFFECT_DISPLAY_DURATION_SECONDS;
+                var t = 1 - (_counter / EFFECT_DISPLAY_DURATION_SECONDS);
                 var verticalPosition = Vector2.Lerp(_startEffectPosition, _targetEffectPosition, (float)t);
-                var horizontalOffset = new Vector2((float)Math.Sin(t * 3 * 2 * Math.PI), 0) * 3;
+                var horizontalOffset = new Vector2((float)Math.Sin(t * OFFSET_FREQUENCY * 2 * Math.PI), 0) * 3;
                 _effectSprite.Position = verticalPosition + horizontalOffset;
             }
         }
