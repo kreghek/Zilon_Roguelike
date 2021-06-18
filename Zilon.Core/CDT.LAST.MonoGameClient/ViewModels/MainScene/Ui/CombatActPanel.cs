@@ -132,7 +132,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var text = (actIndex + 1).ToString();
             var stringSize = spriteFont.MeasureString(text);
 
-            var textX = button.Rect.Left + button.Rect.Center.X;
+            var textX = button.Rect.Center.X;
             var textY = button.Rect.Top - stringSize.Y;
 
             spriteBatch.DrawString(spriteFont, text, new Vector2(textX, textY), Color.White);
