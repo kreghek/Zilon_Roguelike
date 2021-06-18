@@ -34,26 +34,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
             _counter = EFFECT_DISPLAY_DURATION_SECONDS;
         }
 
-        private Rectangle GetSpriteSourceRect(ConsumeEffectType effectType)
+        private static Rectangle GetSpriteSourceRect(ConsumeEffectType effectType)
         {
             const int SPRITE_SIZE = 16;
 
-            switch (effectType)
+            return effectType switch
             {
-                case ConsumeEffectType.Eat:
-                    return new Rectangle(0, 0, SPRITE_SIZE, SPRITE_SIZE);
-
-                case ConsumeEffectType.Drink:
-                    return new Rectangle(SPRITE_SIZE, 0, SPRITE_SIZE, SPRITE_SIZE);
-
-                case ConsumeEffectType.Heal:
-                    return new Rectangle(0, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
-
-                default:
-                    return new Rectangle(SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
-            }
-
-            ;
+                ConsumeEffectType.Eat => new Rectangle(0, 0, SPRITE_SIZE, SPRITE_SIZE),
+                ConsumeEffectType.Drink => new Rectangle(SPRITE_SIZE, 0, SPRITE_SIZE, SPRITE_SIZE),
+                ConsumeEffectType.Heal => new Rectangle(0, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE),
+                _ => new Rectangle(SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE),
+            };
         }
 
         public bool IsComplete => _counter <= 0;
