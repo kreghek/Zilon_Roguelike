@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 {
     public sealed class EffectManager
     {
