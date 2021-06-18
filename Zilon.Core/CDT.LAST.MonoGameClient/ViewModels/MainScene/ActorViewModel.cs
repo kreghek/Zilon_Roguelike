@@ -316,6 +316,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            var visualizationContentStorage = serviceScope.GetRequiredService<IGameObjectVisualizationContentStorage>();
+
             var soundEffect = e.UsedProp.Scheme.Sid switch
             {
                 "med-kit" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal),
@@ -323,8 +325,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 "packed-food" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat),
                 _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.UseCommon)
             };
+
             _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundEffect?.CreateInstance());
+
+            var hexSize = MapMetrics.UnitSize / 2;
+            var actorNode = (HexNode)(Actor.Node);
+            var playerActorWorldCoords = HexHelper.ConvertToWorld(actorNode.OffsetCoords.X, actorNode.OffsetCoords.Y);
+            var actorPosition = new Vector2(
+                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                playerActorWorldCoords[1] * hexSize * 2 / 2
+            );
+
+            _sectorViewModelContext.EffectManager.VisualEffects.Add(new ConsumingEffect(visualizationContentStorage, actorPosition - Vector2.UnitY * 24));
         }
 
         private static string[] GetClearTags(Equipment? equipment)

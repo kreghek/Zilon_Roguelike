@@ -1,43 +1,69 @@
-﻿using CDT.LAST.MonoGameClient.Engine;
+﻿using System;
+
+using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    internal interface IVisualEffect
+    public interface IVisualEffect
     {
         bool IsComplete { get; }
         void Draw(SpriteBatch spriteBatch);
         void Update(GameTime gameTime);
     }
 
-    internal sealed class ConsumingEffect : IVisualEffect
+    public sealed class ConsumingEffect : IVisualEffect
     {
         private const double EFFECT_DISPLAY_DURATION_SECONDS = 1f;
-        private readonly IGameObjectVisualizationContentStorage _visualizationContentStorage;
         private readonly Vector2 _targetObjectPosition;
+        private readonly Vector2 _targetEffectPosition;
+        private readonly Sprite _effectSprite;
+        private readonly Vector2 _startEffectPosition;
+
+        private double _counter;
 
         public ConsumingEffect(IGameObjectVisualizationContentStorage visualizationContentStorage, Vector2 targetObjectPosition)
         {
-            _visualizationContentStorage = visualizationContentStorage;
             _targetObjectPosition = targetObjectPosition;
+            _startEffectPosition = _targetObjectPosition;
+            _targetEffectPosition = _targetObjectPosition - Vector2.UnitY * 40;
+
+            _effectSprite = new Sprite(visualizationContentStorage.GetConsumingEffectTexture())
+            {
+                Position = targetObjectPosition,
+                Origin = new Vector2(0.5f, 0.5f),
+                Color = new Color(255, 255, 255, 0.0f)
+            };
+
+            _counter = EFFECT_DISPLAY_DURATION_SECONDS;
         }
 
-        public bool IsComplete { get; }
+        public bool IsComplete => _counter <= 0;
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            throw new System.NotImplementedException();
+            if (!IsComplete)
+            {
+                _effectSprite.Draw(spriteBatch);
+            }
         }
 
         public void Update(GameTime gameTime)
         {
-            throw new System.NotImplementedException();
+            _counter -= gameTime.ElapsedGameTime.TotalSeconds;
+            if (!IsComplete)
+            {
+                var t = 1 - _counter / EFFECT_DISPLAY_DURATION_SECONDS;
+                var verticalPosition = Vector2.Lerp(_startEffectPosition, _targetEffectPosition, (float)t);
+                var horizontalOffset = new Vector2((float)Math.Sin(t * 3 * 2 * Math.PI), 0) * 3;
+                _effectSprite.Position = verticalPosition + horizontalOffset;
+            }
         }
     }
 
-    internal sealed class HitEffect: IVisualEffect
+    public sealed class HitEffect: IVisualEffect
     {
         private const double EFFECT_DISPLAY_DURATION_SECONDS = 0.3f;
         private readonly Vector2 _direction;
@@ -79,7 +105,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _counter -= gameTime.ElapsedGameTime.TotalSeconds;
             if (!IsComplete)
             {
-                //_hitSprite.Color = new Color(Color.White, /*(float)(_counter / EFFECT_DISPLAY_DURATION_SECONDS) * 0.5f +*/ 0.25f);
                 _hitSprite.ScaleScalar = 1 - (float)(_counter / EFFECT_DISPLAY_DURATION_SECONDS);
             }
         }

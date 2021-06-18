@@ -2,7 +2,7 @@
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    internal sealed class EffectManager
+    public sealed class EffectManager
     {
         public EffectManager()
         {

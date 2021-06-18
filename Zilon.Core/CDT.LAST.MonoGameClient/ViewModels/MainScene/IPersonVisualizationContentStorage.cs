@@ -23,4 +23,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         Texture2D GetConsumingEffectTexture(); 
         void LoadContent(ContentManager content);
     }
+
+    public sealed class GameObjectVisualizationContentStorage : IGameObjectVisualizationContentStorage
+    {
+        private Texture2D? _cunsumingEffectTexture;
+
+        public Texture2D GetConsumingEffectTexture()
+        {
+            return _cunsumingEffectTexture;
+        }
+
+        public void LoadContent(ContentManager content)
+        {
+            _cunsumingEffectTexture = content.Load<Texture2D>("Sprites/effects/ConsumingEffects");
+        }
+    }
 }
