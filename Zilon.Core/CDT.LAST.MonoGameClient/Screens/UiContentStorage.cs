@@ -16,9 +16,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private Texture2D? _attributeIconsTexture;
         private Texture2D? _attributesBackgroundTexture;
+        private SpriteFont? _auxFont;
         private Texture2D? _bottomPanelBackground;
         private SpriteFont? _buttonFont;
-        private SpriteFont? _auxFont;
         private Texture2D? _buttonTexture;
 
         private IDictionary<string, Texture2D>? _combatActDict;

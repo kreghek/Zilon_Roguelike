@@ -89,19 +89,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _idleModeSwitcherButton.Draw(spriteBatch);
         }
 
-        private void DrawButtonHotkey(int actIndex, ButtonBase button, SpriteBatch spriteBatch)
-        {
-            var spriteFont = _uiContentStorage.GetAuxTextFont();
-
-            var text = (actIndex + 1).ToString();
-            var stringSize = spriteFont.MeasureString(text);
-
-            var textX = button.Rect.Left + button.Rect.Center.X;
-            var textY = button.Rect.Top - stringSize.Y;
-
-            spriteBatch.DrawString(spriteFont, text, new Vector2(textX, textY), Color.White);
-        }
-
         public void UnsubscribeEvents()
         {
             _equipmentModule.EquipmentChanged -= EquipmentModule_EquipmentChanged;
@@ -136,6 +123,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             spriteBatch.Draw(_uiContentStorage.GetBottomPanelBackground(),
                 new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT),
                 Color.White);
+        }
+
+        private void DrawButtonHotkey(int actIndex, ButtonBase button, SpriteBatch spriteBatch)
+        {
+            var spriteFont = _uiContentStorage.GetAuxTextFont();
+
+            var text = (actIndex + 1).ToString();
+            var stringSize = spriteFont.MeasureString(text);
+
+            var textX = button.Rect.Left + button.Rect.Center.X;
+            var textY = button.Rect.Top - stringSize.Y;
+
+            spriteBatch.DrawString(spriteFont, text, new Vector2(textX, textY), Color.White);
         }
 
         private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
