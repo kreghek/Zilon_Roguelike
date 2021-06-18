@@ -10,6 +10,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D GetAttributeBackgroundTexture();
 
         Texture2D GetAttributeIconsTexture();
+        SpriteFont GetAuxTextFont();
         Texture2D GetBottomPanelBackground();
         SpriteFont GetButtonFont();
         Texture2D GetButtonTexture();

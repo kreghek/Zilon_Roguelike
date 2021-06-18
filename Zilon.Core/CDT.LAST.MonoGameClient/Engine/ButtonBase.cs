@@ -22,6 +22,12 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         public Texture2D Texture { get; }
 
+        public void Click()
+        {
+            OnClick?.Invoke(this, EventArgs.Empty);
+            PlayClickSoundIfExists();
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             var color = SelectColorByState();
@@ -49,8 +55,7 @@ namespace CDT.LAST.MonoGameClient.Engine
                 else if (mouseState.LeftButton == ButtonState.Released && _buttonState == UiButtonState.Pressed)
                 {
                     _buttonState = UiButtonState.Hover;
-                    OnClick?.Invoke(this, EventArgs.Empty);
-                    PlayClickSoundIfExists();
+                    Click();
                 }
                 else if (mouseState.LeftButton == ButtonState.Released)
                 {
