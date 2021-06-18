@@ -35,7 +35,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 Position = targetObjectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
-                Color = new Color(255, 255, 255, 0.0f)
+                Color = new Color(255, 255, 255, 0.0f),
+                SourceRectangle = new Rectangle(0, 0, 16, 16)
             };
 
             _counter = EFFECT_DISPLAY_DURATION_SECONDS;

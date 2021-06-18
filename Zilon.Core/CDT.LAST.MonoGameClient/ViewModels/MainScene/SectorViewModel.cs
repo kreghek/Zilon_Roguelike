@@ -147,9 +147,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
-            foreach (var hitEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
+            foreach (var visualEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
             {
-                hitEffect.Draw(_spriteBatch);
+                visualEffect.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
