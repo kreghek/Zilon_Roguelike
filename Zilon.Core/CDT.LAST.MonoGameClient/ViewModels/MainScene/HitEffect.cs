@@ -25,21 +25,43 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private double _counter;
 
         public ConsumingEffect(IGameObjectVisualizationContentStorage visualizationContentStorage,
-            Vector2 targetObjectPosition)
+            Vector2 targetObjectPosition, ConsumeEffectType effectType)
         {
             _targetObjectPosition = targetObjectPosition;
             _startEffectPosition = _targetObjectPosition;
             _targetEffectPosition = _targetObjectPosition - Vector2.UnitY * 40;
+
+            var spriteSourceRect = GetSpriteSourceRect(effectType);
 
             _effectSprite = new Sprite(visualizationContentStorage.GetConsumingEffectTexture())
             {
                 Position = targetObjectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
                 Color = new Color(255, 255, 255, 0.0f),
-                SourceRectangle = new Rectangle(0, 0, 16, 16)
+                SourceRectangle = spriteSourceRect
             };
 
             _counter = EFFECT_DISPLAY_DURATION_SECONDS;
+        }
+
+        private Rectangle GetSpriteSourceRect(ConsumeEffectType effectType)
+        {
+            const int SPRITE_SIZE = 16;
+
+            switch (effectType)
+            {
+                case ConsumeEffectType.Eat:
+                    return new Rectangle(0, 0, SPRITE_SIZE, SPRITE_SIZE);
+
+                case ConsumeEffectType.Drink:
+                    return new Rectangle(SPRITE_SIZE, 0, SPRITE_SIZE, SPRITE_SIZE);
+
+                case ConsumeEffectType.Heal:
+                    return new Rectangle(0, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
+
+                default:
+                    return new Rectangle(SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
+            };
         }
 
         public bool IsComplete => _counter <= 0;

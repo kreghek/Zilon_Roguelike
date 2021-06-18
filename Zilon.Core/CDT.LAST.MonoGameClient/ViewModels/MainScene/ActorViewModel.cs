@@ -318,13 +318,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
             var visualizationContentStorage = serviceScope.GetRequiredService<IGameObjectVisualizationContentStorage>();
 
-            var soundEffect = e.UsedProp.Scheme.Sid switch
+            var consumableType = e.UsedProp.Scheme.Sid switch
             {
-                "med-kit" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal),
-                "water-bottle" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Drink),
-                "packed-food" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat),
-                _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.UseCommon)
+                "med-kit" => ConsumeEffectType.Heal,
+                "water-bottle" => ConsumeEffectType.Drink,
+                "packed-food" => ConsumeEffectType.Eat,
+                _ => ConsumeEffectType.UseCommon
             };
+
+            var soundEffect = _personSoundStorage.GetConsumePropSound(consumableType);
 
             _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundEffect?.CreateInstance());
@@ -338,7 +340,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             );
 
             _sectorViewModelContext.EffectManager.VisualEffects.Add(new ConsumingEffect(visualizationContentStorage,
-                actorPosition - Vector2.UnitY * 24));
+                actorPosition - Vector2.UnitY * 24,
+                consumableType
+                ));
         }
 
         private static string[] GetClearTags(Equipment? equipment)

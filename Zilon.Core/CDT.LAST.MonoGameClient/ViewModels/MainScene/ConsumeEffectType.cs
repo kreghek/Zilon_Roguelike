@@ -3,7 +3,7 @@
     /// <summary>
     /// Sound effects available on client.
     /// </summary>
-    internal enum ConsumeEffectType
+    public enum ConsumeEffectType
     {
         Undefined = 0,
         Eat,
