@@ -337,7 +337,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 playerActorWorldCoords[1] * hexSize * 2 / 2
             );
 
-            _sectorViewModelContext.EffectManager.VisualEffects.Add(new ConsumingEffect(visualizationContentStorage, actorPosition - Vector2.UnitY * 24));
+            _sectorViewModelContext.EffectManager.VisualEffects.Add(new ConsumingEffect(visualizationContentStorage,
+                actorPosition - Vector2.UnitY * 24));
         }
 
         private static string[] GetClearTags(Equipment? equipment)

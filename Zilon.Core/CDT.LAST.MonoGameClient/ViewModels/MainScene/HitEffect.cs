@@ -17,14 +17,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     public sealed class ConsumingEffect : IVisualEffect
     {
         private const double EFFECT_DISPLAY_DURATION_SECONDS = 1f;
-        private readonly Vector2 _targetObjectPosition;
-        private readonly Vector2 _targetEffectPosition;
         private readonly Sprite _effectSprite;
         private readonly Vector2 _startEffectPosition;
+        private readonly Vector2 _targetEffectPosition;
+        private readonly Vector2 _targetObjectPosition;
 
         private double _counter;
 
-        public ConsumingEffect(IGameObjectVisualizationContentStorage visualizationContentStorage, Vector2 targetObjectPosition)
+        public ConsumingEffect(IGameObjectVisualizationContentStorage visualizationContentStorage,
+            Vector2 targetObjectPosition)
         {
             _targetObjectPosition = targetObjectPosition;
             _startEffectPosition = _targetObjectPosition;
