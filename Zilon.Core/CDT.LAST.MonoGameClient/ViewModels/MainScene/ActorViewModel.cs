@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -304,9 +305,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     }
                     else
                     {
-                        _sectorViewModelContext.EffectManager.VisualEffects.Add(new HitEffect((LivGame)_game,
+                        var hitEffect = new HitEffect((LivGame)_game,
                             targetSpritePosition + targetGameObject.HitEffectPosition,
-                            targetSpritePosition - _rootSprite.Position));
+                            targetSpritePosition - _rootSprite.Position);
+                        _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
                     }
                 }
             }
@@ -339,10 +341,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 playerActorWorldCoords[1] * hexSize * 2 / 2
             );
 
-            _sectorViewModelContext.EffectManager.VisualEffects.Add(new ConsumingEffect(visualizationContentStorage,
-                actorPosition - Vector2.UnitY * 24,
+            const int START_EFFECT_Y = 24;
+            var consumeEffect = new ConsumingEffect(visualizationContentStorage,
+                actorPosition - (Vector2.UnitY * START_EFFECT_Y),
                 consumableType
-            ));
+            );
+            _sectorViewModelContext.EffectManager.VisualEffects.Add(consumeEffect);
         }
 
         private static string[] GetClearTags(Equipment? equipment)
