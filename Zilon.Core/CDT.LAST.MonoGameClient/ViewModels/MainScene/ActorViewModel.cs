@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -304,9 +305,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     }
                     else
                     {
-                        _sectorViewModelContext.EffectManager.HitEffects.Add(new HitEffect((LivGame)_game,
+                        var hitEffect = new HitEffect((LivGame)_game,
                             targetSpritePosition + targetGameObject.HitEffectPosition,
-                            targetSpritePosition - _rootSprite.Position));
+                            targetSpritePosition - _rootSprite.Position);
+                        _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
                     }
                 }
             }
@@ -316,15 +318,35 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-            var soundEffect = e.UsedProp.Scheme.Sid switch
+            var visualizationContentStorage = serviceScope.GetRequiredService<IGameObjectVisualizationContentStorage>();
+
+            var consumableType = e.UsedProp.Scheme.Sid switch
             {
-                "med-kit" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Heal),
-                "water-bottle" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Drink),
-                "packed-food" => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.Eat),
-                _ => _personSoundStorage.GetConsumePropSound(ConsumeEffectType.UseCommon)
+                "med-kit" => ConsumeEffectType.Heal,
+                "water-bottle" => ConsumeEffectType.Drink,
+                "packed-food" => ConsumeEffectType.Eat,
+                _ => ConsumeEffectType.UseCommon
             };
+
+            var soundEffect = _personSoundStorage.GetConsumePropSound(consumableType);
+
             _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundEffect?.CreateInstance());
+
+            var hexSize = MapMetrics.UnitSize / 2;
+            var actorNode = (HexNode)(Actor.Node);
+            var playerActorWorldCoords = HexHelper.ConvertToWorld(actorNode.OffsetCoords.X, actorNode.OffsetCoords.Y);
+            var actorPosition = new Vector2(
+                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                playerActorWorldCoords[1] * hexSize * 2 / 2
+            );
+
+            const int START_EFFECT_Y = 24;
+            var consumeEffect = new ConsumingEffect(visualizationContentStorage,
+                actorPosition - (Vector2.UnitY * START_EFFECT_Y),
+                consumableType
+            );
+            _sectorViewModelContext.EffectManager.VisualEffects.Add(consumeEffect);
         }
 
         private static string[] GetClearTags(Equipment? equipment)
