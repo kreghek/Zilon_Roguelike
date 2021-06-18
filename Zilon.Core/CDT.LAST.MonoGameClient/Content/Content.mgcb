@@ -178,6 +178,25 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Main.spritefont
 
+#begin Fonts/UiAux.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/UiAux.spritefont
+
+#begin Sprites/effects/ConsumingEffects.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/effects/ConsumingEffects.png
+
 #begin Sprites/effects/hit.png
 /importer:TextureImporter
 /processor:TextureProcessor
