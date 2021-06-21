@@ -100,7 +100,7 @@ namespace Zilon.Core.MapGenerators
                 {
                     var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
                     var regionCoords = regionNodes.Select(x => x.OffsetCoords).Except(exitNodes).ToArray();
-                    var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords, checkPass);
+                    var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords);
 
                     foreach (var interior in interiorMetas)
                     {
