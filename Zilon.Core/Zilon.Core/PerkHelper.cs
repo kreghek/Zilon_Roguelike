@@ -166,7 +166,22 @@ namespace Zilon.Core
             }
         }
 
-        public static bool TryConvertTotalLevelToLevelSubs(IPerkScheme perkScheme, int totalLevel, out PerkLevel? perkLevel)
+        public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        {
+            var currentTotal = ConvertLevelSubsToTotal(perkScheme, level.Primary, level.Sub);
+            currentTotal++;
+
+            var nextLevel = ConvertTotalLevelToLevelSubs(perkScheme, currentTotal);
+            return nextLevel;
+        }
+
+        public static bool HasNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        {
+            return GetNextLevelToCheckNext(perkScheme, level);
+        }
+
+        public static bool TryConvertTotalLevelToLevelSubs(IPerkScheme perkScheme, int totalLevel,
+            out PerkLevel? perkLevel)
         {
             if (perkScheme is null)
             {
@@ -200,21 +215,19 @@ namespace Zilon.Core
 
             try
             {
-                var b = TryConvertTotalIntoLevelSubsInner(schemeLevels, totalLevel, out var levelInner, out var subInner);
+                var b = TryConvertTotalIntoLevelSubsInner(schemeLevels, totalLevel, out var levelInner,
+                    out var subInner);
 
                 if (b)
                 {
-
                     perkLevel = new PerkLevel(levelInner, subInner);
 
                     return true;
                 }
-                else
-                {
-                    perkLevel = null;
 
-                    return false;
-                }
+                perkLevel = null;
+
+                return false;
             }
             catch (ArgumentException exception)
             {
@@ -225,28 +238,6 @@ namespace Zilon.Core
 
                 throw;
             }
-        }
-
-        public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
-        {
-            var currentTotal = ConvertLevelSubsToTotal(perkScheme, level.Primary, level.Sub);
-            currentTotal++;
-
-            var nextLevel = ConvertTotalLevelToLevelSubs(perkScheme, currentTotal);
-            return nextLevel;
-        }
-
-        private static bool GetNextLevelToCheckNext(IPerkScheme perkScheme, PerkLevel level)
-        {
-            var currentTotal = ConvertLevelSubsToTotal(perkScheme, level.Primary, level.Sub);
-            currentTotal++;
-
-            return TryConvertTotalLevelToLevelSubs(perkScheme, currentTotal, out var _);
-        }
-
-        public static bool HasNextLevel(IPerkScheme perkScheme, PerkLevel level)
-        {
-            return GetNextLevelToCheckNext(perkScheme, level);
         }
 
         private static void ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
@@ -271,6 +262,14 @@ namespace Zilon.Core
 
             throw new ArgumentException($"Total {total} is too big for that schemes: ${string.Join(", ", scheme)}.",
                 nameof(total));
+        }
+
+        private static bool GetNextLevelToCheckNext(IPerkScheme perkScheme, PerkLevel level)
+        {
+            var currentTotal = ConvertLevelSubsToTotal(perkScheme, level.Primary, level.Sub);
+            currentTotal++;
+
+            return TryConvertTotalLevelToLevelSubs(perkScheme, currentTotal, out var _);
         }
 
         private static bool TryConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
