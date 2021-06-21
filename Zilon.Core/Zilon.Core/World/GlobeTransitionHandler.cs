@@ -137,7 +137,7 @@ namespace Zilon.Core.World
             _semaphoreSlim.Dispose();
         }
 
-        public Task InitActorTransitionAsync(IGlobe globe, ISector sector, IActor actor, SectorTransition transition)
+        public async Task InitActorTransitionAsync(IGlobe globe, ISector sector, IActor actor, SectorTransition transition)
         {
             if (globe is null)
             {
@@ -159,7 +159,7 @@ namespace Zilon.Core.World
                 throw new ArgumentNullException(nameof(transition));
             }
 
-            return ProcessInnerAsync(globe, sector, actor, transition);
+            await ProcessInnerAsync(globe, sector, actor, transition).ConfigureAwait(false);
         }
 
         public void UpdateTransitions()

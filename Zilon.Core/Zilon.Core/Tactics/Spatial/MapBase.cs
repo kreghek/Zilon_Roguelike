@@ -114,15 +114,13 @@ namespace Zilon.Core.Tactics.Spatial
         {
             if (!_nodeBlockers.TryGetValue(node, out var blockers))
             {
-                //throw new InvalidOperationException($"Попытка освободить узел {node}, который не заблокирован.");
-                return;
+                throw new InvalidOperationException($"Попытка освободить узел {node}, который не заблокирован.");
             }
 
             if (!blockers.Contains(blocker))
             {
-                //throw new InvalidOperationException(
-                //    $"Попытка освободить узел {node}, который не заблокирован блокировщиком {blocker}.");
-                return;
+                throw new InvalidOperationException(
+                    $"Попытка освободить узел {node}, который не заблокирован блокировщиком {blocker}.");
             }
 
             blockers.Remove(blocker);

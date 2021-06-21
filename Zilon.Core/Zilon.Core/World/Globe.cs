@@ -262,7 +262,7 @@ namespace Zilon.Core.World
             }
         }
 
-        private async void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
+        private void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
         {
             if (sender is null)
             {
@@ -271,8 +271,7 @@ namespace Zilon.Core.World
 
             var sector = (ISector)sender;
 
-            await _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition)
-                .ConfigureAwait(false);
+            _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition).Wait(10_000);
         }
 
         private static TaskState[] SortActorStates(IEnumerable<TaskState> sectorStates)
