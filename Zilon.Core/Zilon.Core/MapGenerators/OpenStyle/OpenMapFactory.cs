@@ -12,6 +12,7 @@ namespace Zilon.Core.MapGenerators.OpenStyle
 {
     public sealed class OpenMapFactory : IMapFactory
     {
+        private const int START_REGION_ID = 1;
         private readonly IDice _dice;
 
         public OpenMapFactory(IDice dice)
@@ -29,13 +30,13 @@ namespace Zilon.Core.MapGenerators.OpenStyle
             var startX = _dice.Roll(mapSize / 2) + centerNode.OffsetCoords.X;
             var startY = _dice.Roll(mapSize / 2) + centerNode.OffsetCoords.Y;
 
-            var startRegion = new MapRegion(1,
-                new[] { availableNodes.Single(x => x.OffsetCoords.CompsEqual(startX, startY)) })
+            var startRegionNodes = new[] { availableNodes.Single(x => x.OffsetCoords.CompsEqual(startX, startY)) };
+            var startRegion = new MapRegion(START_REGION_ID, startRegionNodes)
             {
                 IsStart = true
             };
             map.Regions.Add(startRegion);
-            foreach (HexNode node in startRegion.Nodes)
+            foreach (var node in startRegionNodes)
             {
                 availableNodes.Remove(node);
             }
@@ -48,12 +49,13 @@ namespace Zilon.Core.MapGenerators.OpenStyle
                 var x = (int)(Math.Cos(Math.PI * 2 * i / transitions.Count()) * mapSize) + centerNode.OffsetCoords.X;
                 var y = (int)(Math.Sin(Math.PI * 2 * i / transitions.Count()) * mapSize) + centerNode.OffsetCoords.Y;
 
-                var transitionRegion = new MapRegion(1 + i + 1,
-                    new[] { availableNodes.Single(node => node.OffsetCoords.CompsEqual(x, y)) });
+                var transitionRegionNodes = new[] { availableNodes.Single(node => node.OffsetCoords.CompsEqual(x, y)) };
+                var transitionRegionId = START_REGION_ID + i + 1;
+                var transitionRegion = new MapRegion(transitionRegionId, transitionRegionNodes);
                 transitionRegion.ExitNodes = transitionRegion.Nodes;
                 map.Regions.Add(transitionRegion);
 
-                foreach (HexNode node in transitionRegion.Nodes)
+                foreach (var node in transitionRegionNodes)
                 {
                     availableNodes.Remove(node);
                     map.Transitions[node] = transitionsList[i];
