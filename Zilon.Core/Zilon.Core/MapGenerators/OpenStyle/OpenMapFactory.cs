@@ -44,10 +44,11 @@ namespace Zilon.Core.MapGenerators.OpenStyle
             // transition regions
 
             var transitionsList = transitions.ToArray();
-            for (var i = 0; i < transitions.Count(); i++)
+            for (var i = 0; i < transitionsList.Length; i++)
             {
-                var x = (int)(Math.Cos(Math.PI * 2 * i / transitions.Count()) * mapSize) + centerNode.OffsetCoords.X;
-                var y = (int)(Math.Sin(Math.PI * 2 * i / transitions.Count()) * mapSize) + centerNode.OffsetCoords.Y;
+                var roundPart = Math.PI * 2 * i / transitionsList.Length;
+                var x = (int)(Math.Cos(roundPart) * mapSize) + centerNode.OffsetCoords.X;
+                var y = (int)(Math.Sin(roundPart) * mapSize) + centerNode.OffsetCoords.Y;
 
                 var transitionRegionNodes = new[] { availableNodes.Single(node => node.OffsetCoords.CompsEqual(x, y)) };
                 var transitionRegionId = START_REGION_ID + i + 1;

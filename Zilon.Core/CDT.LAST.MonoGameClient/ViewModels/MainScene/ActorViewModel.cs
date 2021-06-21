@@ -58,6 +58,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                            throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.",
                                nameof(gameObjectParams));
 
+            if (gameObjectParams.PersonVisualizationContentStorage is null)
+            {
+                throw new ArgumentException($"{nameof(gameObjectParams.PersonVisualizationContentStorage)} is not defined.",
+                    nameof(gameObjectParams));
+            }
+
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
 
             var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
@@ -75,12 +81,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var isHumanGraphics = Actor.Person is HumanPerson;
             if (isHumanGraphics)
             {
-                var graphicsRoot = new HumanoidGraphics(Actor.Person.GetModule<IEquipmentModule>(),
-                    gameObjectParams.PersonVisualizationContentStorage);
+                if (equipmentModule is not null)
+                {
+                    var graphicsRoot = new HumanoidGraphics(equipmentModule,
+                        gameObjectParams.PersonVisualizationContentStorage);
 
-                _rootSprite.AddChild(graphicsRoot);
+                    _rootSprite.AddChild(graphicsRoot);
 
-                _graphicsRoot = graphicsRoot;
+                    _graphicsRoot = graphicsRoot;
+                }
+                else
+                {
+                    // There is no cases when human person hasn't equipment module.
+                    // It can be empty module to show "naked" person in the future.
+                    throw new InvalidOperationException("Person has no IEquipmentModule.");
+                }
             }
             else
             {
