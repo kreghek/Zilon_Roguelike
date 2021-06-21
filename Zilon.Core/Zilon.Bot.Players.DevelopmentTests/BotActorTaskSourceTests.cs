@@ -29,8 +29,11 @@ namespace Zilon.Bot.Players.DevelopmentTests
         [TestCase("monster")]
         public async Task GetActorTasksTestAsync(string mode)
         {
+            var diceSeed = (new Random()).Next(0, int.MaxValue);
+            Console.WriteLine($"Seed: {diceSeed}");
+
             var serviceContainer = new ServiceCollection();
-            var startUp = new Startup();
+            var startUp = new Startup(1204280315);
             startUp.RegisterServices(serviceContainer);
             var serviceProvider = serviceContainer.BuildServiceProvider();
 
