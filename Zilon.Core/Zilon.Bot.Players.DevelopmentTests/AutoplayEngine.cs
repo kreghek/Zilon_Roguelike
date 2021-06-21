@@ -1,5 +1,7 @@
 ﻿using System;
 
+using NUnit.Framework;
+
 using Zilon.Bot.Sdk;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
@@ -19,13 +21,13 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
         protected override void CatchActorTaskExecutionException(ActorTaskExecutionException exception)
         {
-            Console.WriteLine(exception);
+            TestContext.Out.WriteLine(exception);
             throw exception;
         }
 
         protected override void CatchException(Exception exception)
         {
-            Console.WriteLine(exception);
+            TestContext.Out.WriteLine(exception);
         }
 
         protected override void ConfigBotAux()
@@ -41,7 +43,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
         protected override void ProcessSectorExit()
         {
-            Console.WriteLine("Exit");
+            TestContext.Out.WriteLine("Exit");
         }
     }
 }
