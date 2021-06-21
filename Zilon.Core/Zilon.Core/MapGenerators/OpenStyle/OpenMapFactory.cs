@@ -86,7 +86,7 @@ namespace Zilon.Core.MapGenerators.OpenStyle
             }
         }
 
-        public async Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
+        public Task<ISectorMap> CreateAsync(ISectorMapFactoryOptions generationOptions)
         {
             if (generationOptions is null)
             {
@@ -101,6 +101,12 @@ namespace Zilon.Core.MapGenerators.OpenStyle
             }
 
             var mapSize = factoryOptions.Size;
+
+            return CreateInternalAsync(mapSize, generationOptions.Transitions);
+        }
+
+        public async Task<ISectorMap> CreateInternalAsync(int mapSize, IEnumerable<SectorTransition> transitions)
+        {
             var mapWidth = (mapSize * 2) + 2;
             var mapHeight = mapWidth;
 
@@ -113,7 +119,7 @@ namespace Zilon.Core.MapGenerators.OpenStyle
 
                 FillMap(map, mapWidth, mapHeight, mapSize, centerNode);
 
-                CreateRegionsAndTranstions(map, mapSize, centerNode, generationOptions.Transitions);
+                CreateRegionsAndTranstions(map, mapSize, centerNode, transitions);
 
                 map.Regions.Add(new MapRegion(1, map.Nodes.ToArray()));
 
