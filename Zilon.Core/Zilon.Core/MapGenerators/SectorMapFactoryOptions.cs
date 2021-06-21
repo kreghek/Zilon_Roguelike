@@ -20,7 +20,7 @@ namespace Zilon.Core.MapGenerators
             Transitions = Array.Empty<SectorTransition>();
         }
 
-        public ISectorMapFactoryOptionsSubScheme OptionsSubScheme { get; }
-        public IEnumerable<SectorTransition> Transitions { get; }
+        public ISectorMapFactoryOptionsSubScheme OptionsSubScheme { get; set; }
+        public IEnumerable<SectorTransition> Transitions { get; set; }
     }
 }
