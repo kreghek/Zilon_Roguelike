@@ -44,13 +44,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor = actor;
 
             _game = gameObjectParams.Game ??
-                throw new ArgumentException($"{nameof(gameObjectParams.Game)} is not defined.", nameof(gameObjectParams));
+                    throw new ArgumentException($"{nameof(gameObjectParams.Game)} is not defined.",
+                        nameof(gameObjectParams));
             _sectorViewModelContext = gameObjectParams.SectorViewModelContext ??
-                throw new ArgumentException($"{nameof(gameObjectParams.SectorViewModelContext)} is not defined.", nameof(gameObjectParams));
+                                      throw new ArgumentException(
+                                          $"{nameof(gameObjectParams.SectorViewModelContext)} is not defined.",
+                                          nameof(gameObjectParams));
             _personSoundStorage = gameObjectParams.PersonSoundStorage ??
-                throw new ArgumentException($"{nameof(gameObjectParams.PersonSoundStorage)} is not defined.", nameof(gameObjectParams));
+                                  throw new ArgumentException(
+                                      $"{nameof(gameObjectParams.PersonSoundStorage)} is not defined.",
+                                      nameof(gameObjectParams));
             _spriteBatch = gameObjectParams.SpriteBatch ??
-                throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.", nameof(gameObjectParams));
+                           throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.",
+                               nameof(gameObjectParams));
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
 
