@@ -19,7 +19,8 @@
           "Type": "ReceiveDamage",
           "Value": 50
         }
-      ]
+      ],
+      "MaxValue": 1
     },
     {
       "Rules": [
@@ -33,7 +34,8 @@
           "Type": "ReceiveDamage",
           "Value": 250
         }
-      ]
+      ],
+      "MaxValue": 1
     },
     {
       "Rules": [
@@ -47,7 +49,8 @@
           "Type": "ReceiveDamage",
           "Value": 1000
         }
-      ]
+      ],
+      "MaxValue": 1
     }
   ]
 }

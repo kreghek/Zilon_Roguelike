@@ -16,7 +16,8 @@
           "Type": "ConsumeProviant",
           "Value": 5
         }
-      ]
+      ],
+      "MaxValue": 1
     },
     {
       "Rules": [
@@ -30,7 +31,8 @@
           "Type": "ConsumeProviant",
           "Value": 5
         }
-      ]
+      ],
+      "MaxValue": 1
     },
     {
       "Rules": [
@@ -44,7 +46,8 @@
           "Type": "ConsumeProviant",
           "Value": 5
         }
-      ]
+      ],
+      "MaxValue": 1
     }
   ]
 }
