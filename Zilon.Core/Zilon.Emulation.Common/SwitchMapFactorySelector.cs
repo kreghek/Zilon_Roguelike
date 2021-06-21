@@ -11,7 +11,7 @@ namespace Zilon.Emulation.Common
     {
         public SwitchMapFactorySelector(RoomMapFactory roomMapFactory,
             CellularAutomatonMapFactory cellularAutomatonMapFactory
-            )
+        )
         {
             RoomMapFactory = roomMapFactory;
             CellularAutomatonMapFactory = cellularAutomatonMapFactory;
