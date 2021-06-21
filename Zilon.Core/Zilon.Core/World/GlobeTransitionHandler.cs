@@ -44,7 +44,7 @@ namespace Zilon.Core.World
             return true;
         }
 
-        private async Task ProcessInnerAsync(IGlobe globe, ISector sourceSector, IActor actor,
+        private async Task ProcessInternalAsync(IGlobe globe, ISector sourceSector, IActor actor,
             SectorTransition transition)
         {
             var sectorNode = transition.SectorNode;
@@ -137,7 +137,7 @@ namespace Zilon.Core.World
             _semaphoreSlim.Dispose();
         }
 
-        public async Task InitActorTransitionAsync(IGlobe globe, ISector sector, IActor actor,
+        public Task InitActorTransitionAsync(IGlobe globe, ISector sector, IActor actor,
             SectorTransition transition)
         {
             if (globe is null)
@@ -160,7 +160,7 @@ namespace Zilon.Core.World
                 throw new ArgumentNullException(nameof(transition));
             }
 
-            await ProcessInnerAsync(globe, sector, actor, transition).ConfigureAwait(false);
+            return ProcessInternalAsync(globe, sector, actor, transition);
         }
 
         public void UpdateTransitions()
