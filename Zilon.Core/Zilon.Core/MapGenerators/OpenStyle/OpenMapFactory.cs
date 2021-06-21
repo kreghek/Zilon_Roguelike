@@ -20,6 +20,28 @@ namespace Zilon.Core.MapGenerators.OpenStyle
             _dice = dice;
         }
 
+        public async Task<ISectorMap> CreateInternalAsync(int mapSize, IEnumerable<SectorTransition> transitions)
+        {
+            var mapWidth = (mapSize * 2) + 2;
+            var mapHeight = mapWidth;
+
+            return await Task.Run(() =>
+            {
+                ISectorMap map = new SectorHexMap(mapWidth);
+
+                var centerNode = new HexNode(mapSize, mapSize);
+                map.AddNode(centerNode);
+
+                FillMap(map, mapWidth, mapHeight, mapSize, centerNode);
+
+                CreateRegionsAndTranstions(map, mapSize, centerNode, transitions);
+
+                map.Regions.Add(new MapRegion(1, map.Nodes.ToArray()));
+
+                return map;
+            });
+        }
+
         private void CreateRegionsAndTranstions(ISectorMap map, int mapSize, HexNode centerNode,
             IEnumerable<SectorTransition> transitions)
         {
@@ -103,28 +125,6 @@ namespace Zilon.Core.MapGenerators.OpenStyle
             var mapSize = factoryOptions.Size;
 
             return CreateInternalAsync(mapSize, generationOptions.Transitions);
-        }
-
-        public async Task<ISectorMap> CreateInternalAsync(int mapSize, IEnumerable<SectorTransition> transitions)
-        {
-            var mapWidth = (mapSize * 2) + 2;
-            var mapHeight = mapWidth;
-
-            return await Task.Run(() =>
-            {
-                ISectorMap map = new SectorHexMap(mapWidth);
-
-                var centerNode = new HexNode(mapSize, mapSize);
-                map.AddNode(centerNode);
-
-                FillMap(map, mapWidth, mapHeight, mapSize, centerNode);
-
-                CreateRegionsAndTranstions(map, mapSize, centerNode, transitions);
-
-                map.Regions.Add(new MapRegion(1, map.Nodes.ToArray()));
-
-                return map;
-            });
         }
     }
 }
