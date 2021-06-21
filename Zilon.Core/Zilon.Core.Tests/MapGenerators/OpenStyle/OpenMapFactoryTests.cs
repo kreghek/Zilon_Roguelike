@@ -13,7 +13,8 @@ namespace Zilon.Core.MapGenerators.OpenStyle.Tests
     public class OpenMapFactoryTests
     {
         [Test]
-        public async Task CreateAsyncTestAsync()
+        [Timeout(10_000)]
+        public async Task CreateAsyncTest_HugeMapSize_NoExceptionsAndTimeout()
         {
             // ARRANGE
             var dice = Mock.Of<IDice>(x => x.Roll(It.IsAny<int>()) == 1);
@@ -21,7 +22,7 @@ namespace Zilon.Core.MapGenerators.OpenStyle.Tests
             var options = new SectorMapFactoryOptions(new TestSectorOpenMapFactoryOptionsSubScheme { Size = 1001 });
 
             // ACT
-            var map = await mapFactory.CreateAsync(options);
+            await mapFactory.CreateAsync(options);
 
             // ASSERT
             Assert.Pass();
