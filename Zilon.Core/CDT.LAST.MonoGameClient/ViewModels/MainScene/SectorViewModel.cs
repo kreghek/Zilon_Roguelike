@@ -2,7 +2,6 @@
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Screens;
-using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -10,11 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
-using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
@@ -23,7 +20,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;
-        private readonly Game _game;
         private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
 
@@ -36,7 +32,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
-            _game = game;
             _camera = camera;
             _spriteBatch = spriteBatch;
 
