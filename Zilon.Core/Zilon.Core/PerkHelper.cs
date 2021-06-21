@@ -62,52 +62,6 @@ namespace Zilon.Core
             return sum;
         }
 
-        public static int? ConvertLevelSubsToTotalOrNull(IPerkScheme perkScheme, int level, int subLevel)
-        {
-            if (perkScheme is null)
-            {
-                throw new ArgumentNullException(nameof(perkScheme));
-            }
-
-            if (perkScheme.Levels?.Length < level)
-            {
-                throw new ArgumentException(
-                    $"Specified level: {level} is less that levels in scheme: {perkScheme.Levels?.Length}.");
-            }
-
-            var levels = perkScheme.Levels;
-            if (levels is null)
-            {
-                throw new ArgumentException("The scheme's levels is null.", nameof(perkScheme));
-            }
-
-            var sum = 0;
-            for (var i = 1; i <= level; i++)
-            {
-                var perkLevelSubScheme = levels[i - 1];
-                if (perkLevelSubScheme is null)
-                {
-                    throw new InvalidOperationException();
-                }
-
-                if (i < level)
-                {
-                    sum += perkLevelSubScheme.MaxValue;
-                }
-                else
-                {
-                    if (perkLevelSubScheme.MaxValue < subLevel)
-                    {
-                        return null;
-                    }
-
-                    sum += subLevel;
-                }
-            }
-
-            return sum;
-        }
-
         public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
         {
             var currentTotal = ConvertLevelSubsToTotal(perkScheme, level.Primary, level.Sub);
