@@ -58,13 +58,18 @@ namespace Zilon.Core.MapGenerators
             return _staticObjectsGeneratorRandomSource.RollPurpose(resourceDepositData);
         }
 
-        public async Task CreateAsync(IStaticObjectGenerationContext generationContext)
+        public Task CreateAsync(IStaticObjectGenerationContext generationContext)
         {
             if (generationContext is null)
             {
                 throw new ArgumentNullException(nameof(generationContext));
             }
 
+            return CreateInternalAsync(generationContext);
+        }
+
+        private async Task CreateInternalAsync(IStaticObjectGenerationContext generationContext)
+        {
             var sector = generationContext.Sector;
 
             await Task.Run(() =>
