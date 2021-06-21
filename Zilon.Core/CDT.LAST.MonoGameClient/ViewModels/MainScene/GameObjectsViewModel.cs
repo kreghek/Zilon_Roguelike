@@ -19,33 +19,41 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal record GameObjectParams
     {
-        public Camera Camera { get; init; }
-        public Game Game { get; init; }
-        public IPersonSoundContentStorage? PersonSoundStorage { get; internal set; }
-        public IPersonVisualizationContentStorage PersonVisualizationContentStorage { get; internal set; }
-        public IPlayer Player { get; init; }
-        public SectorViewModelContext SectorViewModelContext { get; init; }
-        public SpriteBatch SpriteBatch { get; init; }
-        public ISectorUiState UiState { get; init; }
+        public Camera? Camera { get; init; }
+        public Game? Game { get; init; }
+        public IPersonSoundContentStorage? PersonSoundStorage { get; init; }
+        public IPersonVisualizationContentStorage? PersonVisualizationContentStorage { get; internal set; }
+        public IPlayer? Player { get; init; }
+        public SectorViewModelContext? SectorViewModelContext { get; init; }
+        public SpriteBatch? SpriteBatch { get; init; }
+        public ISectorUiState? UiState { get; init; }
     }
 
     internal class GameObjectsViewModel
     {
-        private const double UPDATE_DELAY_SECONDS = 0f;
         private readonly Camera _camera;
         private readonly Game _game;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly SectorViewModelContext _viewModelContext;
-        private double _updateCounter;
 
         public GameObjectsViewModel(GameObjectParams gameObjectParams)
         {
-            _viewModelContext = gameObjectParams.SectorViewModelContext;
-            _player = gameObjectParams.Player;
-            _camera = gameObjectParams.Camera;
-            _game = gameObjectParams.Game;
-            _spriteBatch = gameObjectParams.SpriteBatch;
+            _viewModelContext = gameObjectParams.SectorViewModelContext ??
+                throw new ArgumentException($"{nameof(gameObjectParams.SectorViewModelContext)} is not defined.", nameof(gameObjectParams));
+            _player = gameObjectParams.Player ??
+                throw new ArgumentException($"{nameof(gameObjectParams.Player)} is not defined.", nameof(gameObjectParams));
+            _camera = gameObjectParams.Camera ??
+                throw new ArgumentException($"{nameof(gameObjectParams.Camera)} is not defined.", nameof(gameObjectParams));
+            _game = gameObjectParams.Game ??
+                throw new ArgumentException($"{nameof(gameObjectParams.Game)} is not defined.", nameof(gameObjectParams));
+            _spriteBatch = gameObjectParams.SpriteBatch ??
+                throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.", nameof(gameObjectParams));
+
+            if (gameObjectParams.UiState is null)
+            {
+                throw new ArgumentException($"{nameof(gameObjectParams.UiState)} is not defined.", nameof(gameObjectParams));
+            }
 
             foreach (var actor in _viewModelContext.Sector.ActorManager.Items)
             {
@@ -133,15 +141,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public void Update(GameTime gameTime)
         {
-            _updateCounter += gameTime.ElapsedGameTime.TotalSeconds;
-            if (_updateCounter < UPDATE_DELAY_SECONDS)
+            var mainPerson = _player.MainPerson;
+            if (mainPerson is null)
             {
                 return;
             }
 
-            _updateCounter = 0;
-
-            var fowData = _player.MainPerson.GetModule<IFowData>();
+            var fowData = mainPerson.GetModule<IFowData>();
             var visibleFowNodeData = fowData.GetSectorFowData(_viewModelContext.Sector);
 
             var gameObjectsFixedList = _viewModelContext.GameObjects.ToArray();
