@@ -9,10 +9,10 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.MapGenerators.OpenStyle.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class OpenMapFactoryTests
     {
-        [Test()]
+        [Test]
         public async Task CreateAsyncTestAsync()
         {
             // ARRANGE
