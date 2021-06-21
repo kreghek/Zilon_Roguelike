@@ -58,42 +58,19 @@ namespace Zilon.Core.MapGenerators
             return _staticObjectsGeneratorRandomSource.RollPurpose(resourceDepositData);
         }
 
-        public async Task CreateAsync(IStaticObjectGenerationContext generationContext)
+        public Task CreateAsync(IStaticObjectGenerationContext generationContext)
         {
             if (generationContext is null)
             {
                 throw new ArgumentNullException(nameof(generationContext));
             }
 
-            await Task.Run(() =>
-            {
+
                 var sector = generationContext.Sector;
 
                 var exitNodes = sector.Map.Transitions.Keys.Cast<HexNode>().Select(x => x.OffsetCoords).ToArray();
 
                 // Генерация препятсвий, как статических объектов.
-                /*var staticObjects = new ConcurrentBag<IStaticObject>();
-                var checkPass = sector.Scheme?.Sid != "globe-node";
-                Parallel.ForEach(sector.Map.Regions, region =>
-                {
-                    var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
-                    var regionCoords = regionNodes.Select(x => x.OffsetCoords).Except(exitNodes).ToArray();
-                    var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords, checkPass);
-
-                    foreach (var interior in interiorMetas)
-                    {
-                        var node = regionNodes.Single(x => x.OffsetCoords == interior.Coords);
-                        var resourceDepositData = generationContext.ResourceDepositData;
-                        var staticObject = CreateStaticObject(sector, node, resourceDepositData);
-
-                        staticObjects.Add(staticObject);
-                    }
-                });
-
-                foreach (var staticObject in staticObjects)
-                {
-                    sector.StaticObjectManager.Add(staticObject);
-                }*/
 
                 var checkPass = sector.Scheme?.Sid != "globe-node";
                 foreach (var region in sector.Map.Regions)
@@ -118,7 +95,8 @@ namespace Zilon.Core.MapGenerators
                 {
                     _chestGenerator.CreateChests(sector, sectorSubScheme, sector.Map.Regions);
                 }
-            });
+
+            return Task.CompletedTask;
         }
     }
 }

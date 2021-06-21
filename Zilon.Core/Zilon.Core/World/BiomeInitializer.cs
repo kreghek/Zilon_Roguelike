@@ -20,7 +20,7 @@ namespace Zilon.Core.World
             _biomeSchemeRoller = biomeSchemeRoller ?? throw new ArgumentNullException(nameof(biomeSchemeRoller));
         }
 
-        private async Task CreateAndAddSectorByScheme(IBiome biome, ISectorSubScheme startSectorScheme)
+        private async Task CreateAndAddSectorBySchemeAsync(IBiome biome, ISectorSubScheme startSectorScheme)
         {
             var sectorNode = new SectorNode(biome, startSectorScheme);
 
@@ -76,7 +76,7 @@ namespace Zilon.Core.World
         private async Task CreateStartSectorAsync(IBiome biome)
         {
             var startSectorScheme = biome.LocationScheme.SectorLevels.Single(x => x.IsStart);
-            await CreateAndAddSectorByScheme(biome, startSectorScheme).ConfigureAwait(false);
+            await CreateAndAddSectorBySchemeAsync(biome, startSectorScheme).ConfigureAwait(false);
         }
 
         private static bool IsHasTransitionToNextLevel(ISectorNode sectorNode, ISectorSubScheme x)
