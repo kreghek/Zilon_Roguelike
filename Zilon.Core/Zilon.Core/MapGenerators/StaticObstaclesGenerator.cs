@@ -36,38 +36,6 @@ namespace Zilon.Core.MapGenerators
 
         public IMonsterIdentifierGenerator? MonsterIdentifierGenerator { get; set; }
 
-        private IStaticObject CreateStaticObject(ISector sector, HexNode node, IResourceDepositData resourceDepositData)
-        {
-            var staticObjectPurpose = RollPurpose(resourceDepositData);
-
-            var factory = _staticObjectfactoryCollector.SelectFactoryByStaticObjectPurpose(staticObjectPurpose);
-
-            var id = default(int);
-            if (MonsterIdentifierGenerator != null)
-            {
-                id = MonsterIdentifierGenerator.GetNewId();
-            }
-
-            var staticObject = factory.Create(sector, node, id);
-
-            return staticObject;
-        }
-
-        private PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
-        {
-            return _staticObjectsGeneratorRandomSource.RollPurpose(resourceDepositData);
-        }
-
-        public Task CreateAsync(IStaticObjectGenerationContext generationContext)
-        {
-            if (generationContext is null)
-            {
-                throw new ArgumentNullException(nameof(generationContext));
-            }
-
-            return CreateInternalAsync(generationContext);
-        }
-
         private async Task CreateInternalAsync(IStaticObjectGenerationContext generationContext)
         {
             var sector = generationContext.Sector;
@@ -102,6 +70,38 @@ namespace Zilon.Core.MapGenerators
                     _chestGenerator.CreateChests(sector, sectorSubScheme, sector.Map.Regions);
                 }
             });
+        }
+
+        private IStaticObject CreateStaticObject(ISector sector, HexNode node, IResourceDepositData resourceDepositData)
+        {
+            var staticObjectPurpose = RollPurpose(resourceDepositData);
+
+            var factory = _staticObjectfactoryCollector.SelectFactoryByStaticObjectPurpose(staticObjectPurpose);
+
+            var id = default(int);
+            if (MonsterIdentifierGenerator != null)
+            {
+                id = MonsterIdentifierGenerator.GetNewId();
+            }
+
+            var staticObject = factory.Create(sector, node, id);
+
+            return staticObject;
+        }
+
+        private PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
+        {
+            return _staticObjectsGeneratorRandomSource.RollPurpose(resourceDepositData);
+        }
+
+        public Task CreateAsync(IStaticObjectGenerationContext generationContext)
+        {
+            if (generationContext is null)
+            {
+                throw new ArgumentNullException(nameof(generationContext));
+            }
+
+            return CreateInternalAsync(generationContext);
         }
     }
 }
