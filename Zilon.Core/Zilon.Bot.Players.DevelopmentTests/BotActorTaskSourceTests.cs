@@ -23,17 +23,14 @@ namespace Zilon.Bot.Players.DevelopmentTests
     public class BotActorTaskSourceTests
     {
         [Test]
-        //[TestCase("joe")]
+        [TestCase("joe")]
         [TestCase("duncan")]
-        //[TestCase("")]
-        //[TestCase("monster")]
+        [TestCase("")]
+        [TestCase("monster")]
         public async Task GetActorTasksTestAsync(string mode)
         {
-            var diceSeed = (new Random()).Next(0, int.MaxValue);
-            Console.WriteLine($"Seed: {diceSeed}");
-
             var serviceContainer = new ServiceCollection();
-            var startUp = new Startup(1204280315);
+            var startUp = new Startup();
             startUp.RegisterServices(serviceContainer);
             var serviceProvider = serviceContainer.BuildServiceProvider();
 

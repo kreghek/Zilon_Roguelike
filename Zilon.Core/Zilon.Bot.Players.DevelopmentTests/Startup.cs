@@ -14,10 +14,6 @@ namespace Zilon.Bot.Players.DevelopmentTests
 {
     internal sealed class Startup : InitializationBase
     {
-        public Startup(int diceSeed) : base(diceSeed)
-        {
-        }
-
         public override void ConfigureAux(IServiceProvider serviceProvider)
         {
             // Конфигурация дополнительных сервисов для коробочного источника команд не требуется.
