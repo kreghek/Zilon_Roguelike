@@ -226,6 +226,13 @@ namespace Zilon.Core.Tactics.Spatial
         {
             var segmentKey = new SegmentKey(0, 0);
             var segment = _segmentDict[segmentKey];
+
+            if (x < 0 || y < 0)
+            {
+                //TODO Handle correctly.
+                return null;
+            }
+
             try
             {
                 var node = segment[x, y];
