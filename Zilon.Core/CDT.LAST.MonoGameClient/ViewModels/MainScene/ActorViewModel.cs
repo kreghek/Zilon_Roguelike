@@ -60,7 +60,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             if (gameObjectParams.PersonVisualizationContentStorage is null)
             {
-                throw new ArgumentException($"{nameof(gameObjectParams.PersonVisualizationContentStorage)} is not defined.",
+                throw new ArgumentException(
+                    $"{nameof(gameObjectParams.PersonVisualizationContentStorage)} is not defined.",
                     nameof(gameObjectParams));
             }
 
