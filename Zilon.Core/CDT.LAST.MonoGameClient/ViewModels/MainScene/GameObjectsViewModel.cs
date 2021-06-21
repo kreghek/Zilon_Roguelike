@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -141,6 +142,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     case StaticObjectViewModel staticObjectViewModel:
                         // Currently do nothing since staticObjectViewModel have no subscribtions.
+                        break;
+
+                    default:
+                        Debug.Fail("Unknown type of game object.");
                         break;
                 }
             }
