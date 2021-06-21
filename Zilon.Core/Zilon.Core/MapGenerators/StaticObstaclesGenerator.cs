@@ -64,7 +64,8 @@ namespace Zilon.Core.MapGenerators
                 throw new ArgumentNullException(nameof(generationContext));
             }
 
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
 
                 var sector = generationContext.Sector;
 
