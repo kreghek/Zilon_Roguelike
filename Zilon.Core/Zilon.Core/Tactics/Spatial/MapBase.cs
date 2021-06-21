@@ -112,18 +112,15 @@ namespace Zilon.Core.Tactics.Spatial
         /// </exception>
         public void ReleaseNode(IGraphNode node, IPassMapBlocker blocker)
         {
-            Console.WriteLine($"Release {node} by blocker {blocker}");
             if (!_nodeBlockers.TryGetValue(node, out var blockers))
             {
-                //throw new InvalidOperationException($"Попытка освободить узел {node}, который не заблокирован.");
-                return;
+                throw new InvalidOperationException($"Попытка освободить узел {node}, который не заблокирован.");
             }
 
             if (!blockers.Contains(blocker))
             {
-                //throw new InvalidOperationException(
-                //    $"Попытка освободить узел {node}, который не заблокирован блокировщиком {blocker}.");
-                return;
+                throw new InvalidOperationException(
+                    $"Попытка освободить узел {node}, который не заблокирован блокировщиком {blocker}.");
             }
 
             blockers.Remove(blocker);
