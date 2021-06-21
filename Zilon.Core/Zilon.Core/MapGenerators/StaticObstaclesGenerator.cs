@@ -64,8 +64,8 @@ namespace Zilon.Core.MapGenerators
                 throw new ArgumentNullException(nameof(generationContext));
             }
 
-            await Task.Run(() =>
-            {
+            await Task.Factory.StartNew(() => {
+
                 var sector = generationContext.Sector;
 
                 var exitNodes = sector.Map.Transitions.Keys.Cast<HexNode>().Select(x => x.OffsetCoords).ToArray();
@@ -89,7 +89,7 @@ namespace Zilon.Core.MapGenerators
 
                 var sectorSubScheme = generationContext.Scheme;
                 _chestGenerator.CreateChests(sector, sectorSubScheme, sector.Map.Regions);
-            }).ConfigureAwait(false);
+            }, TaskCreationOptions.RunContinuationsAsynchronously).ConfigureAwait(false);
         }
     }
 }
