@@ -33,6 +33,19 @@ namespace Zilon.Core.Tactics
             }
         }
 
+        public SectorMapFowNode? GetFowByNode(IGraphNode node)
+        {
+            lock (_lockObject)
+            {
+                if (!_nodes.TryGetValue(node, out var fowData))
+                {
+                    return null;
+                }
+
+                return fowData;
+            }
+        }
+
         public void AddNodes(IEnumerable<SectorMapFowNode> nodes)
         {
             lock (_lockObject)

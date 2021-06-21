@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -57,38 +58,67 @@ namespace Zilon.Core.MapGenerators
             return _staticObjectsGeneratorRandomSource.RollPurpose(resourceDepositData);
         }
 
-        public Task CreateAsync(IStaticObjectGenerationContext generationContext)
+        public async Task CreateAsync(IStaticObjectGenerationContext generationContext)
         {
             if (generationContext is null)
             {
                 throw new ArgumentNullException(nameof(generationContext));
             }
 
-            var sector = generationContext.Sector;
-
-            var exitNodes = sector.Map.Transitions.Keys.Cast<HexNode>().Select(x => x.OffsetCoords).ToArray();
-
-            // Генерация препятсвий, как статических объектов.
-            foreach (var region in sector.Map.Regions)
+            await Task.Run(() =>
             {
-                var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
-                var regionCoords = regionNodes.Select(x => x.OffsetCoords).Except(exitNodes).ToArray();
-                var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords);
+                var sector = generationContext.Sector;
 
-                foreach (var interior in interiorMetas)
+                var exitNodes = sector.Map.Transitions.Keys.Cast<HexNode>().Select(x => x.OffsetCoords).ToArray();
+
+                // Генерация препятсвий, как статических объектов.
+                /*var staticObjects = new ConcurrentBag<IStaticObject>();
+                var checkPass = sector.Scheme?.Sid != "globe-node";
+                Parallel.ForEach(sector.Map.Regions, region =>
                 {
-                    var node = regionNodes.Single(x => x.OffsetCoords == interior.Coords);
-                    var resourceDepositData = generationContext.ResourceDepositData;
-                    var staticObject = CreateStaticObject(sector, node, resourceDepositData);
+                    var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
+                    var regionCoords = regionNodes.Select(x => x.OffsetCoords).Except(exitNodes).ToArray();
+                    var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords, checkPass);
 
+                    foreach (var interior in interiorMetas)
+                    {
+                        var node = regionNodes.Single(x => x.OffsetCoords == interior.Coords);
+                        var resourceDepositData = generationContext.ResourceDepositData;
+                        var staticObject = CreateStaticObject(sector, node, resourceDepositData);
+
+                        staticObjects.Add(staticObject);
+                    }
+                });
+
+                foreach (var staticObject in staticObjects)
+                {
                     sector.StaticObjectManager.Add(staticObject);
+                }*/
+
+                var checkPass = sector.Scheme?.Sid != "globe-node";
+                foreach (var region in sector.Map.Regions)
+                {
+                    var regionNodes = region.Nodes.Cast<HexNode>().ToArray();
+                    var regionCoords = regionNodes.Select(x => x.OffsetCoords).Except(exitNodes).ToArray();
+                    var interiorMetas = _interiorObjectRandomSource.RollInteriorObjects(regionCoords, checkPass);
+
+                    foreach (var interior in interiorMetas)
+                    {
+                        var node = regionNodes.Single(x => x.OffsetCoords == interior.Coords);
+                        var resourceDepositData = generationContext.ResourceDepositData;
+                        var staticObject = CreateStaticObject(sector, node, resourceDepositData);
+
+                        sector.StaticObjectManager.Add(staticObject);
+                    }
                 }
-            }
 
-            var sectorSubScheme = generationContext.Scheme;
-            _chestGenerator.CreateChests(sector, sectorSubScheme, sector.Map.Regions);
+                var sectorSubScheme = generationContext.Scheme;
 
-            return Task.CompletedTask;
+                if (sectorSubScheme.TotalChestCount > 0)
+                {
+                    _chestGenerator.CreateChests(sector, sectorSubScheme, sector.Map.Regions);
+                }
+            });
         }
     }
 }
