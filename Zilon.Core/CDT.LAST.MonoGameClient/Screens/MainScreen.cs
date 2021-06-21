@@ -23,6 +23,8 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
+    using Zilon.Core.Scoring;
+
     internal class MainScreen : GameSceneBase
     {
         private readonly IAnimationBlockerService _animationBlockerService;
@@ -46,6 +48,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private SectorViewModel? _sectorViewModel;
 
+        private IScoreManager _scoreManager;
+
         public MainScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
             _spriteBatch = spriteBatch;
@@ -56,6 +60,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _player = serviceScope.GetRequiredService<IPlayer>();
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
             _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
 
             var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
@@ -300,8 +305,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 // Or some error occured.
                 if (activeActor.Actor.Person.CheckIsDead())
                 {
-                    // Do nothing.
-                    // In the near future there the scores screen will load.
+                    TargetScene = new ScoresScreen(Game, _spriteBatch, _scoreManager);
                 }
                 else
                 {
