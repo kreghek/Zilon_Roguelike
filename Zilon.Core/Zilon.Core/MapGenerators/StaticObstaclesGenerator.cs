@@ -65,7 +65,6 @@ namespace Zilon.Core.MapGenerators
                 throw new ArgumentNullException(nameof(generationContext));
             }
 
-
             var sector = generationContext.Sector;
 
             var exitNodes = sector.Map.Transitions.Keys.Cast<HexNode>().Select(x => x.OffsetCoords).ToArray();
