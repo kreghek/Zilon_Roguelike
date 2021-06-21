@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 
 using NUnit.Framework;
 
@@ -42,66 +41,6 @@ namespace Zilon.Core.Tests
                 yield return new TestCaseData(CreateTestPerkScheme523(), 1, 1).Returns(1);
                 yield return new TestCaseData(CreateTestPerkScheme523(), 3, 3).Returns(10);
                 yield return new TestCaseData(CreateTestPerkScheme111(), 3, 1).Returns(3);
-            }
-        }
-
-        /// <summary>
-        /// Test cases wich fails checks.
-        /// </summary>
-        public static IEnumerable ConvertTotalLevelArgumentExceptonTestCases
-        {
-            get
-            {
-                const string TOTAL_ARGUMENT_NAME = "totalLevel";
-                const string SCHEME_ARGUMENT_NAME = "perkScheme";
-
-                // IPerkScheme which used to convert level
-                // int testedTotalLevel - the level to convert level/sub in the perk scheme
-
-                yield return new TestCaseData(null, 0, SCHEME_ARGUMENT_NAME)
-                    .SetDescription("Fails because scheme is null");
-
-                yield return new TestCaseData(CreateTestPerkScheme523(), 0, TOTAL_ARGUMENT_NAME)
-                    .SetDescription("Fails because total is empty");
-
-                yield return new TestCaseData(
-                        new TestPerkScheme
-                        {
-                            SystemDescription = "Empty levels",
-                            Levels = Array.Empty<PerkLevelSubScheme>()
-                        },
-                        1,
-                        SCHEME_ARGUMENT_NAME)
-                    .SetDescription("Fails because scheme has no levels.");
-
-                yield return new TestCaseData(
-                        new TestPerkScheme
-                        {
-                            SystemDescription = "Subs is zero",
-                            Levels = new[] { new PerkLevelSubScheme { MaxValue = 0 } }
-                        },
-                        1,
-                        SCHEME_ARGUMENT_NAME)
-                    .SetDescription("Fails because subs sum is zero.");
-
-                yield return new TestCaseData(
-                        new TestPerkScheme
-                        {
-                            SystemDescription = "Subs is negative",
-                            Levels = new[] { new PerkLevelSubScheme { MaxValue = -1 } }
-                        },
-                        1,
-                        SCHEME_ARGUMENT_NAME)
-                    .SetDescription("Fails because one of the subs is negative.");
-
-                yield return new TestCaseData(
-                        new TestPerkScheme
-                        {
-                            SystemDescription = "Subs is 1", Levels = new[] { new PerkLevelSubScheme { MaxValue = 1 } }
-                        },
-                        2,
-                        TOTAL_ARGUMENT_NAME)
-                    .SetDescription("Fails because subs sum less that total.");
             }
         }
 

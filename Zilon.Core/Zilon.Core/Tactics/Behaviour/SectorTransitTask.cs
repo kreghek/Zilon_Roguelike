@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    internal class SectorTransitTask : ActorTaskBase
+    public class SectorTransitTask : ActorTaskBase
     {
         public SectorTransitTask(IActor actor, IActorTaskContext context) : base(actor, context)
         {

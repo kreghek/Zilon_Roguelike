@@ -37,18 +37,33 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private IActorStateEngine _actorStateEngine;
 
-        public ActorViewModel(Game game,
+        public ActorViewModel(
             IActor actor,
-            SectorViewModelContext sectorViewModelContext,
-            IPersonVisualizationContentStorage personVisualizationContentStorage,
-            IPersonSoundContentStorage personSoundStorage,
-            SpriteBatch spriteBatch)
+            GameObjectParams gameObjectParams)
         {
-            _game = game;
             Actor = actor;
-            _sectorViewModelContext = sectorViewModelContext;
-            _personSoundStorage = personSoundStorage;
-            _spriteBatch = spriteBatch;
+
+            _game = gameObjectParams.Game ??
+                    throw new ArgumentException($"{nameof(gameObjectParams.Game)} is not defined.",
+                        nameof(gameObjectParams));
+            _sectorViewModelContext = gameObjectParams.SectorViewModelContext ??
+                                      throw new ArgumentException(
+                                          $"{nameof(gameObjectParams.SectorViewModelContext)} is not defined.",
+                                          nameof(gameObjectParams));
+            _personSoundStorage = gameObjectParams.PersonSoundStorage ??
+                                  throw new ArgumentException(
+                                      $"{nameof(gameObjectParams.PersonSoundStorage)} is not defined.",
+                                      nameof(gameObjectParams));
+            _spriteBatch = gameObjectParams.SpriteBatch ??
+                           throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.",
+                               nameof(gameObjectParams));
+
+            if (gameObjectParams.PersonVisualizationContentStorage is null)
+            {
+                throw new ArgumentException(
+                    $"{nameof(gameObjectParams.PersonVisualizationContentStorage)} is not defined.",
+                    nameof(gameObjectParams));
+            }
 
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
 
@@ -67,16 +82,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var isHumanGraphics = Actor.Person is HumanPerson;
             if (isHumanGraphics)
             {
-                var graphicsRoot = new HumanoidGraphics(Actor.Person.GetModule<IEquipmentModule>(),
-                    personVisualizationContentStorage);
+                if (equipmentModule is not null)
+                {
+                    var graphicsRoot = new HumanoidGraphics(equipmentModule,
+                        gameObjectParams.PersonVisualizationContentStorage);
 
-                _rootSprite.AddChild(graphicsRoot);
+                    _rootSprite.AddChild(graphicsRoot);
 
-                _graphicsRoot = graphicsRoot;
+                    _graphicsRoot = graphicsRoot;
+                }
+                else
+                {
+                    // There is no cases when human person hasn't equipment module.
+                    // It can be empty module to show "naked" person in the future.
+                    throw new InvalidOperationException("Person has no IEquipmentModule.");
+                }
             }
             else
             {
-                var graphicsRoot = new AnimalGraphics(game.Content);
+                var graphicsRoot = new AnimalGraphics(gameObjectParams.Game.Content);
 
                 _rootSprite.AddChild(graphicsRoot);
 

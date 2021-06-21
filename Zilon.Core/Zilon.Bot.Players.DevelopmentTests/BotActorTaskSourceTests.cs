@@ -61,15 +61,15 @@ namespace Zilon.Bot.Players.DevelopmentTests
 
         private static void PrintPersonBacklog(IPerson humanPerson)
         {
-            Console.WriteLine("Build In Traits:");
+            TestContext.Out.WriteLine("Build In Traits:");
             var buildinTraits = humanPerson.GetModule<IEvolutionModule>().Perks.Where(x => x.Scheme.IsBuildIn)
                 .ToArray();
             foreach (var buildInTrait in buildinTraits)
             {
-                Console.WriteLine(buildInTrait.Scheme.Name.En);
+                TestContext.Out.WriteLine(buildInTrait.Scheme.Name.En);
             }
 
-            Console.WriteLine("Start Equipments:");
+            TestContext.Out.WriteLine("Start Equipments:");
             var equipments = humanPerson.GetModule<IEquipmentModule>().ToArray();
             foreach (var equipment in equipments)
             {
@@ -78,33 +78,33 @@ namespace Zilon.Bot.Players.DevelopmentTests
                     continue;
                 }
 
-                Console.WriteLine(equipment.Scheme.Name.En);
+                TestContext.Out.WriteLine(equipment.Scheme.Name.En);
             }
 
-            Console.WriteLine("Start Inventory:");
+            TestContext.Out.WriteLine("Start Inventory:");
             var inventoryProps = humanPerson.GetModule<IInventoryModule>().CalcActualItems().ToArray();
             foreach (var prop in inventoryProps)
             {
                 switch (prop)
                 {
                     case Equipment equipment:
-                        Console.WriteLine(equipment.Scheme.Name.En);
+                        TestContext.Out.WriteLine(equipment.Scheme.Name.En);
                         break;
 
                     case Resource resource:
-                        Console.WriteLine($"{resource.Scheme.Name.En} x {resource.Count}");
+                        TestContext.Out.WriteLine($"{resource.Scheme.Name.En} x {resource.Count}");
                         break;
 
                     default:
-                        Console.WriteLine(prop.Scheme.Name.En);
+                        TestContext.Out.WriteLine(prop.Scheme.Name.En);
                         break;
                 }
             }
 
-            Console.WriteLine("Start attributes:");
+            TestContext.Out.WriteLine("Start attributes:");
             foreach (var attr in humanPerson.GetModule<IAttributesModule>().GetAttributes())
             {
-                Console.WriteLine($"{attr.Type}: {attr.Value}");
+                TestContext.Out.WriteLine($"{attr.Type}: {attr.Value}");
             }
         }
 
@@ -112,10 +112,10 @@ namespace Zilon.Bot.Players.DevelopmentTests
         {
             var scoreManager = serviceProvider.GetRequiredService<IScoreManager>();
 
-            Console.WriteLine($"Scores: {scoreManager.BaseScores}");
+            TestContext.Out.WriteLine($"Scores: {scoreManager.BaseScores}");
 
             var scoreDetails = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
-            Console.WriteLine($"Details:  {scoreDetails}");
+            TestContext.Out.WriteLine($"Details:  {scoreDetails}");
 
             var playerEventLogService = serviceProvider.GetRequiredService<IPlayerEventLogService>();
             var deathReasonService = serviceProvider.GetRequiredService<DeathReasonService>();
@@ -127,7 +127,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
                     lastEvent,
                     Language.En);
 
-                Console.WriteLine($"Death Reason: {deathReason}");
+                TestContext.Out.WriteLine($"Death Reason: {deathReason}");
             }
             else
             {

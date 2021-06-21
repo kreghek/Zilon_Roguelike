@@ -8,11 +8,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class SectorViewModelContext
     {
-        private readonly ISector _sector;
-
         public SectorViewModelContext(ISector sector)
         {
-            _sector = sector;
+            Sector = sector;
 
             GameObjects = new List<GameObjectBase>();
             EffectManager = new EffectManager();
@@ -22,9 +20,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public List<GameObjectBase> GameObjects { get; }
 
+        public ISector Sector { get; }
+
         public IEnumerable<IActor> GetActors()
         {
-            return _sector.ActorManager.Items;
+            return Sector.ActorManager.Items;
         }
     }
 }

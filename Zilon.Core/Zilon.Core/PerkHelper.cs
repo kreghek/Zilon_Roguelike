@@ -62,14 +62,38 @@ namespace Zilon.Core
             return sum;
         }
 
+        public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        {
+            var currentTotal = ConvertLevelSubsToTotal(perkScheme, level.Primary, level.Sub);
+            currentTotal++;
+
+            if (!TryConvertTotalLevelToLevelSubs(perkScheme, currentTotal, out var nextLevel))
+            {
+                throw new InvalidOperationException("Perk has no next level.");
+            }
+
+            if (nextLevel is null)
+            {
+                // The inner method garantee nextLevel is not null if convertion is successful.
+                // So it is unknown error.
+                throw new InvalidOperationException("Unknown exception.");
+            }
+
+            return nextLevel;
+        }
+
+        public static bool HasNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        {
+            return GetNextLevelToCheckNext(perkScheme, level);
+        }
+
         /// <summary>
         /// Преобразование суммарного уровня в уровень/подуровень для конкретной схемы перка.
         /// </summary>
         /// <param name="perkScheme">Схема.</param>
         /// <param name="totalLevel">Суммарный уровень.</param>
-        /// <param name="level">Уровень перка.</param>
-        /// <param name="subLevel">Подуровень перка.</param>
-        public static PerkLevel ConvertTotalLevelToLevelSubs(IPerkScheme perkScheme, int totalLevel)
+        public static bool TryConvertTotalLevelToLevelSubs(IPerkScheme perkScheme, int totalLevel,
+            out PerkLevel? perkLevel)
         {
             if (perkScheme is null)
             {
@@ -103,11 +127,16 @@ namespace Zilon.Core
 
             try
             {
-                ConvertTotalIntoLevelSubsInner(schemeLevels, totalLevel, out var levelInner, out var subInner);
+                var isSuccess = TryConvertTotalIntoLevelSubsInner(schemeLevels, totalLevel, out var levelInner,
+                    out var subInner);
 
-                var perkLevel = new PerkLevel(levelInner, subInner);
+                perkLevel = null;
+                if (isSuccess)
+                {
+                    perkLevel = new PerkLevel(levelInner, subInner);
+                }
 
-                return perkLevel;
+                return isSuccess;
             }
             catch (ArgumentException exception)
             {
@@ -120,29 +149,15 @@ namespace Zilon.Core
             }
         }
 
-        public static PerkLevel GetNextLevel(IPerkScheme perkScheme, PerkLevel level)
+        private static bool GetNextLevelToCheckNext(IPerkScheme perkScheme, PerkLevel level)
         {
             var currentTotal = ConvertLevelSubsToTotal(perkScheme, level.Primary, level.Sub);
             currentTotal++;
 
-            var nextLevel = ConvertTotalLevelToLevelSubs(perkScheme, currentTotal);
-            return nextLevel;
+            return TryConvertTotalLevelToLevelSubs(perkScheme, currentTotal, out var _);
         }
 
-        public static bool HasNextLevel(IPerkScheme perkScheme, PerkLevel level)
-        {
-            try
-            {
-                GetNextLevel(perkScheme, level);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static void ConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
+        private static bool TryConvertTotalIntoLevelSubsInner(int[] scheme, int total, out int lvl, out int sub)
         {
             var levelMax = 1;
             var currentTotal = total;
@@ -153,7 +168,7 @@ namespace Zilon.Core
                 {
                     lvl = levelMax;
                     sub = currentTotal;
-                    return;
+                    return true;
                 }
 
                 currentTotal -= scheme[i];
@@ -162,8 +177,9 @@ namespace Zilon.Core
 
             // This means `total` was be more that sum of levels.
 
-            throw new ArgumentException($"Total {total} is too big for that schemes: ${string.Join(", ", scheme)}.",
-                nameof(total));
+            lvl = 0;
+            sub = 0;
+            return false;
         }
     }
 }

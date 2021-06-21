@@ -2,7 +2,6 @@
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Screens;
-using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -10,11 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
-using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
@@ -23,7 +20,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;
-        private readonly Game _game;
+        private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
@@ -35,7 +32,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
-            _game = game;
             _camera = camera;
             _spriteBatch = spriteBatch;
 
@@ -69,34 +65,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _viewModelContext = new SectorViewModelContext(sector);
 
-            foreach (var actor in Sector.ActorManager.Items)
+            var gameObjectParams = new GameObjectParams
             {
-                var actorViewModel = new ActorViewModel(
-                    game,
-                    actor,
-                    _viewModelContext,
-                    personVisualizationContentStorage,
-                    _personSoundContentStorage,
-                    _spriteBatch);
-
-                if (actor.Person == _player.MainPerson)
-                {
-                    _uiState.ActiveActor = actorViewModel;
-                }
-
-                _viewModelContext.GameObjects.Add(actorViewModel);
-            }
-
-            foreach (var staticObject in Sector.StaticObjectManager.Items)
-            {
-                var staticObjectModel = new StaticObjectViewModel(game, staticObject, _spriteBatch);
-
-                _viewModelContext.GameObjects.Add(staticObjectModel);
-            }
-
-            Sector.StaticObjectManager.Added += StaticObjectManager_Added;
-            Sector.StaticObjectManager.Removed += StaticObjectManager_Removed;
-            Sector.ActorManager.Removed += ActorManager_Removed;
+                Game = game,
+                Camera = camera,
+                UiState = _uiState,
+                Player = _player,
+                SpriteBatch = _spriteBatch,
+                SectorViewModelContext = _viewModelContext,
+                PersonSoundStorage = _personSoundContentStorage,
+                PersonVisualizationContentStorage = personVisualizationContentStorage
+            };
+            _gameObjectsViewModel = new GameObjectsViewModel(gameObjectParams);
 
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
@@ -117,33 +97,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
-            var fowData = _player.MainPerson.GetModule<IFowData>();
-            var visibleFowNodeData = fowData.GetSectorFowData(Sector);
-
-            if (visibleFowNodeData is null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            var gameObjectsMaterialized =
-                _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
-            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
-            foreach (var gameObject in gameObjectsMaterialized)
-            {
-                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
-
-                if (fowNode is null)
-                {
-                    continue;
-                }
-
-                if (fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
-                {
-                    continue;
-                }
-
-                gameObject.Draw(gameTime, _camera.Transform);
-            }
+            _gameObjectsViewModel.Draw(gameTime);
 
             _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
@@ -158,61 +112,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public void UnsubscribeEventHandlers()
         {
             _intarectionBus.NewEvent -= IntarectionBus_NewEvent;
-            Sector.ActorManager.Removed -= ActorManager_Removed;
-            Sector.StaticObjectManager.Added -= StaticObjectManager_Added;
-            Sector.StaticObjectManager.Removed -= StaticObjectManager_Removed;
-
-            foreach (var gameObject in _viewModelContext.GameObjects)
-            {
-                switch (gameObject)
-                {
-                    case ActorViewModel actorViewModel:
-                        actorViewModel.UnsubscribeEventHandlers();
-                        break;
-
-                    case StaticObjectViewModel staticObjectViewModel:
-                        // Currently do nothing since staticObjectViewModel have no subscribtions.
-                        break;
-                }
-            }
+            _gameObjectsViewModel.UnsubscribeEventHandlers();
         }
 
         public void Update(GameTime gameTime)
         {
-            if (_player.MainPerson is null)
+            var mainPerson = _player.MainPerson;
+            if (mainPerson is null)
             {
                 throw new InvalidOperationException();
             }
 
-            var fowData = _player.MainPerson.GetModule<IFowData>();
-            var visibleFowNodeData = fowData.GetSectorFowData(Sector);
-
             _mapViewModel.Update(gameTime);
 
-            var gameObjectsFixedList = _viewModelContext.GameObjects.ToArray();
-            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
-            foreach (var gameObject in gameObjectsFixedList)
-            {
-                gameObject.CanDraw = true;
-
-                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
-
-                if (fowNode is null)
-                {
-                    gameObject.CanDraw = false;
-                }
-
-                if (fowNode != null && fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
-                {
-                    gameObject.CanDraw = false;
-                }
-                else if (fowNode != null && !gameObject.HiddenByFow)
-                {
-                    gameObject.UnderFog = fowNode.State != SectorMapNodeFowState.Observing;
-                }
-
-                gameObject.Update(gameTime);
-            }
+            _gameObjectsViewModel.Update(gameTime);
 
             foreach (var hitEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
             {
@@ -225,12 +138,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             _commandInput.Update(_viewModelContext);
-        }
-
-        private void ActorManager_Removed(object? sender, ManagerItemsChangedEventArgs<IActor> e)
-        {
-            _viewModelContext.GameObjects.RemoveAll(x =>
-                x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor));
         }
 
         private static ISectorNode GetPlayerSectorNode(IPlayer player)
@@ -256,26 +163,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var targetPerson = damageActorInteractionEvent.TargetActor.Person;
                 var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
                 soundEffect.CreateInstance().Play();
-            }
-        }
-
-        private void StaticObjectManager_Added(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
-        {
-            foreach (var staticObject in e.Items)
-            {
-                var staticObjectModel = new StaticObjectViewModel(_game, staticObject, _spriteBatch);
-
-                _viewModelContext.GameObjects.Add(staticObjectModel);
-            }
-        }
-
-        private void StaticObjectManager_Removed(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
-        {
-            foreach (var staticObject in e.Items)
-            {
-                var staticObjectViewModel = _viewModelContext.GameObjects.OfType<IContainerViewModel>()
-                    .Single(x => x.StaticObject == staticObject);
-                _viewModelContext.GameObjects.Remove((GameObjectBase)staticObjectViewModel);
             }
         }
     }

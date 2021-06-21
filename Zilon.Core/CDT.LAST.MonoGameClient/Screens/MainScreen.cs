@@ -332,6 +332,9 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 _combatActPanel.UnsubscribeEvents();
             }
+
+            _uiState.ActiveActor = null;
+            _uiState.SelectedViewModel = null;
         }
 
         private void HandleTransition(bool isInTransition)

@@ -28,8 +28,6 @@ jobs:
           - Debug
         test_suite:
           - Zilon.Bot.Players.DevelopmentTests
-        report_format:
-          - Html
 
     steps:
     - uses: actions/checkout@v2
