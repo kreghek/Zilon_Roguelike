@@ -40,19 +40,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public GameObjectsViewModel(GameObjectParams gameObjectParams)
         {
             _viewModelContext = gameObjectParams.SectorViewModelContext ??
-                throw new ArgumentException($"{nameof(gameObjectParams.SectorViewModelContext)} is not defined.", nameof(gameObjectParams));
+                                throw new ArgumentException(
+                                    $"{nameof(gameObjectParams.SectorViewModelContext)} is not defined.",
+                                    nameof(gameObjectParams));
             _player = gameObjectParams.Player ??
-                throw new ArgumentException($"{nameof(gameObjectParams.Player)} is not defined.", nameof(gameObjectParams));
+                      throw new ArgumentException($"{nameof(gameObjectParams.Player)} is not defined.",
+                          nameof(gameObjectParams));
             _camera = gameObjectParams.Camera ??
-                throw new ArgumentException($"{nameof(gameObjectParams.Camera)} is not defined.", nameof(gameObjectParams));
+                      throw new ArgumentException($"{nameof(gameObjectParams.Camera)} is not defined.",
+                          nameof(gameObjectParams));
             _game = gameObjectParams.Game ??
-                throw new ArgumentException($"{nameof(gameObjectParams.Game)} is not defined.", nameof(gameObjectParams));
+                    throw new ArgumentException($"{nameof(gameObjectParams.Game)} is not defined.",
+                        nameof(gameObjectParams));
             _spriteBatch = gameObjectParams.SpriteBatch ??
-                throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.", nameof(gameObjectParams));
+                           throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.",
+                               nameof(gameObjectParams));
 
             if (gameObjectParams.UiState is null)
             {
-                throw new ArgumentException($"{nameof(gameObjectParams.UiState)} is not defined.", nameof(gameObjectParams));
+                throw new ArgumentException($"{nameof(gameObjectParams.UiState)} is not defined.",
+                    nameof(gameObjectParams));
             }
 
             foreach (var actor in _viewModelContext.Sector.ActorManager.Items)
