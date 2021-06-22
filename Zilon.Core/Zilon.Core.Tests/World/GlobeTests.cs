@@ -84,7 +84,7 @@ namespace Zilon.Core.World.Tests
 
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map)
-                .Returns(Mock.Of<ISectorMap>(map => 
+                .Returns(Mock.Of<ISectorMap>(map =>
                 map.Transitions == new System.Collections.Generic.Dictionary<Graphs.IGraphNode, SectorTransition> {
                     { transitionNode, new SectorTransition(Mock.Of<ISectorNode>()) }
                 }
