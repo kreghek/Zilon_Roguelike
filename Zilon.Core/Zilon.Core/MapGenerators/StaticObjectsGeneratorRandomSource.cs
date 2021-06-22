@@ -21,14 +21,14 @@ namespace Zilon.Core.MapGenerators
             return resourceType switch
             {
                 SectorResourceType.Aurihulk or
-                SectorResourceType.Copper or
-                SectorResourceType.Gold or
-                SectorResourceType.Iron or
-                SectorResourceType.Silver => PropContainerPurpose.OreDeposits,
+                    SectorResourceType.Copper or
+                    SectorResourceType.Gold or
+                    SectorResourceType.Iron or
+                    SectorResourceType.Silver => PropContainerPurpose.OreDeposits,
                 SectorResourceType.Stones => PropContainerPurpose.StoneDeposits,
                 SectorResourceType.CherryBrushes => PropContainerPurpose.CherryBrush,
                 SectorResourceType.WaterPuddles => PropContainerPurpose.Puddle,
-                _ => throw new InvalidOperationException(),
+                _ => throw new InvalidOperationException()
             };
         }
 
