@@ -45,6 +45,11 @@ namespace Zilon.Core.MapGenerators
 
                 // Генерация препятсвий, как статических объектов.
 
+                if (!generationContext.ResourceDepositData.Items.Any())
+                {
+                    return;
+                }
+
                 var checkPass = sector.Scheme?.Sid != "globe-node";
                 foreach (var region in sector.Map.Regions)
                 {

@@ -168,7 +168,7 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle
                 return Array.Empty<InteriorObjectMeta>();
             }
 
-            var count = openCoords.Count / 4;
+            var count = openCoords.Count / 12;
 
             var resultMetaList = new List<InteriorObjectMeta>();
             for (var i = 0; i < count; i++)
