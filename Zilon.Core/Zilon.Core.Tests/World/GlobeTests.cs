@@ -11,8 +11,9 @@ using Zilon.Core.Persons;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.Tactics.Spatial;
+using Zilon.Core.World;
 
-namespace Zilon.Core.World.Tests
+namespace Zilon.Core.Tests.World
 {
     [TestFixture]
     public class GlobeTests
@@ -85,7 +86,7 @@ namespace Zilon.Core.World.Tests
             var sectorMock = new Mock<ISector>();
             sectorMock.SetupGet(x => x.Map)
                 .Returns(Mock.Of<ISectorMap>(map =>
-                map.Transitions == new System.Collections.Generic.Dictionary<Graphs.IGraphNode, SectorTransition> {
+                map.Transitions == new System.Collections.Generic.Dictionary<IGraphNode, SectorTransition> {
                     { transitionNode, new SectorTransition(Mock.Of<ISectorNode>()) }
                 }
                 ));
