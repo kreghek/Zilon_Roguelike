@@ -11,10 +11,14 @@ namespace Zilon.Core.World.Tests
     public class GlobeTests
     {
         /// <summary>
-        /// The test checks invocation of globe transition handler. Every completed iteration the globe must call UpdateAsync of the globe transition handler.
+        /// The test checks invocation of globe transition handler. Every completed iteration the globe must call UpdateAsync of
+        /// the globe transition handler.
         /// </summary>
         /// <param name="globeUpdatesCount"> Count of the globe's update calls. </param>
-        /// <param name="expectedHandlersUpdateCount"> Expected count of update invocation of the globe transition handler's update. </param>
+        /// <param name="expectedHandlersUpdateCount">
+        /// Expected count of update invocation of the globe transition handler's
+        /// update.
+        /// </param>
         /// <returns></returns>
         [Test]
         [Timeout(5000)]
