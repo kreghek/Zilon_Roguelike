@@ -50,26 +50,26 @@ namespace Zilon.Core.MapGenerators
                 }
             }
 
-            //if (purposeList.Count < 100)
-            //{
-            //    var diff = 100 - purposeList.Count;
-            //    var everywherePurpose = new[]
-            //        { PropContainerPurpose.Puddle, PropContainerPurpose.Pit, PropContainerPurpose.TrashHeap };
-            //    var diffShare = (int)Math.Ceiling(diff / 2f);
-            //    foreach (var purpose in everywherePurpose)
-            //    {
-            //        for (var i = 0; i < diffShare; i++)
-            //        {
-            //            purposeList.Add(purpose);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    purposeList.Add(PropContainerPurpose.TrashHeap);
-            //    purposeList.Add(PropContainerPurpose.Puddle);
-            //    purposeList.Add(PropContainerPurpose.Pit);
-            //}
+            if (purposeList.Count < 100)
+            {
+                var diff = 100 - purposeList.Count;
+                var everywherePurpose = new[]
+                    { PropContainerPurpose.Puddle, PropContainerPurpose.Pit, PropContainerPurpose.TrashHeap };
+                var diffShare = (int)Math.Ceiling(diff / 2f);
+                foreach (var purpose in everywherePurpose)
+                {
+                    for (var i = 0; i < diffShare; i++)
+                    {
+                        purposeList.Add(purpose);
+                    }
+                }
+            }
+            else
+            {
+                purposeList.Add(PropContainerPurpose.TrashHeap);
+                purposeList.Add(PropContainerPurpose.Puddle);
+                purposeList.Add(PropContainerPurpose.Pit);
+            }
 
             return _dice.RollFromList(purposeList);
         }

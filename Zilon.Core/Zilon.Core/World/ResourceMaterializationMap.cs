@@ -9,7 +9,7 @@ namespace Zilon.Core.World
 {
     public sealed class ResourceMaterializationMap : IResourceMaterializationMap
     {
-        private const float START_RESOURCE_SHARE = 0.10f;
+        private const float START_RESOURCE_SHARE = 1f;
         private readonly IDice _dice;
 
         private readonly Dictionary<ISectorNode, IResourceDepositData> _map;
