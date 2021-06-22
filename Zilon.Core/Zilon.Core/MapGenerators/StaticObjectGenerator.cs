@@ -18,6 +18,8 @@ namespace Zilon.Core.MapGenerators
         private readonly IStaticObjectFactoryCollector _staticObjectfactoryCollector;
         private readonly IStaticObjectsGeneratorRandomSource _staticObjectsGeneratorRandomSource;
 
+
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public StaticObjectGenerator(IChestGenerator chestGenerator,
             IInteriorObjectRandomSource interiorObjectRandomSource,
             IStaticObjectFactoryCollector staticObjectfactoryCollector,
@@ -33,6 +35,7 @@ namespace Zilon.Core.MapGenerators
                                                       nameof(staticObjectsGeneratorRandomSource));
         }
 
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public IMonsterIdentifierGenerator? MonsterIdentifierGenerator { get; set; }
 
         private async Task CreateInternalAsync(IStaticObjectGenerationContext generationContext)
