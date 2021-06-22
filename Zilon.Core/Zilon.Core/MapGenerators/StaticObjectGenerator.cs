@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace Zilon.Core.MapGenerators
         private readonly IStaticObjectFactoryCollector _staticObjectfactoryCollector;
         private readonly IStaticObjectsGeneratorRandomSource _staticObjectsGeneratorRandomSource;
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public StaticObjectGenerator(IChestGenerator chestGenerator,
             IInteriorObjectRandomSource interiorObjectRandomSource,
             IStaticObjectFactoryCollector staticObjectfactoryCollector,
@@ -34,7 +35,7 @@ namespace Zilon.Core.MapGenerators
                                                       nameof(staticObjectsGeneratorRandomSource));
         }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public IMonsterIdentifierGenerator? MonsterIdentifierGenerator { get; set; }
 
         private async Task CreateInternalAsync(IStaticObjectGenerationContext generationContext)

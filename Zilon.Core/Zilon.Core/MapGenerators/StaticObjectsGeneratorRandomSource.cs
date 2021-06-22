@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics;
@@ -11,13 +12,13 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly IDice _dice;
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public StaticObjectsGeneratorRandomSource(IDice dice)
         {
             _dice = dice;
         }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
         {
             return resourceType switch
