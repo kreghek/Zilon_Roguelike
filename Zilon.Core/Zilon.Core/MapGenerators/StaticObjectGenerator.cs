@@ -11,7 +11,7 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
-    public sealed class StaticObjectGenerator : IStaticObstaclesGenerator
+    public sealed class StaticObjectGenerator : IStaticObjectsGenerator
     {
         private readonly IChestGenerator _chestGenerator;
         private readonly IInteriorObjectRandomSource _interiorObjectRandomSource;
