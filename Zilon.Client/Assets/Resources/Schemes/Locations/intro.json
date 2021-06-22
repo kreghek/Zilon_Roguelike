@@ -17,14 +17,14 @@
       ],
       "RareMonsterSids": null,
       "ChampionMonsterSids": null,
-      "RegionMonsterCount": 10,
+      "RegionMonsterCount": 0,
       "TransSectorSids": [
         {
           "SectorLevelSid": "boss-sector"
         }
       ],
-      "TotalChestCount": 20,
-      "RegionChestCountRatio": 9,
+      "TotalChestCount": 0,
+      "RegionChestCountRatio": 0,
       "ChestDropTableSids": [
         "survival",
         "default"
@@ -51,10 +51,10 @@
         "rat-mutant",
         "moon-rat"
       ],
-      "MinRegionMonsterCount": 5,
-      "RegionMonsterCount": 10,
-      "TotalChestCount": 20,
-      "RegionChestCountRatio": 9,
+      "MinRegionMonsterCount": 1,
+      "RegionMonsterCount": 2,
+      "TotalChestCount": 0,
+      "RegionChestCountRatio": 0,
       "ChestDropTableSids": [
         "survival",
         "default"

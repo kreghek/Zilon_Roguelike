@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,14 +12,15 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
-    public sealed class StaticObstaclesGenerator : IStaticObstaclesGenerator
+    public sealed class StaticObjectGenerator : IStaticObjectsGenerator
     {
         private readonly IChestGenerator _chestGenerator;
         private readonly IInteriorObjectRandomSource _interiorObjectRandomSource;
         private readonly IStaticObjectFactoryCollector _staticObjectfactoryCollector;
         private readonly IStaticObjectsGeneratorRandomSource _staticObjectsGeneratorRandomSource;
 
-        public StaticObstaclesGenerator(IChestGenerator chestGenerator,
+        [ExcludeFromCodeCoverage]
+        public StaticObjectGenerator(IChestGenerator chestGenerator,
             IInteriorObjectRandomSource interiorObjectRandomSource,
             IStaticObjectFactoryCollector staticObjectfactoryCollector,
             IStaticObjectsGeneratorRandomSource staticObjectsGeneratorRandomSource)
@@ -34,6 +35,7 @@ namespace Zilon.Core.MapGenerators
                                                       nameof(staticObjectsGeneratorRandomSource));
         }
 
+        [ExcludeFromCodeCoverage]
         public IMonsterIdentifierGenerator? MonsterIdentifierGenerator { get; set; }
 
         private async Task CreateInternalAsync(IStaticObjectGenerationContext generationContext)
@@ -45,6 +47,11 @@ namespace Zilon.Core.MapGenerators
                 var exitNodes = sector.Map.Transitions.Keys.Cast<HexNode>().Select(x => x.OffsetCoords).ToArray();
 
                 // Генерация препятсвий, как статических объектов.
+
+                if (!generationContext.ResourceDepositData.Items.Any())
+                {
+                    return;
+                }
 
                 var checkPass = sector.Scheme?.Sid != "globe-node";
                 foreach (var region in sector.Map.Regions)
