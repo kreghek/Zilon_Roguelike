@@ -25,7 +25,7 @@ namespace Zilon.Core.World.Tests
         [TestCase(11, 1)]
         [TestCase(21, 2)]
         public async Task UpdateAsyncTest_UpdateTransitionOnceOfGlobeIteration_GlobeTransitionHandlersUpdateCalled(
-            int globeUpdatesCount, 
+            int globeUpdatesCount,
             int expectedHandlersUpdateCount)
         {
             // ARRANGE
