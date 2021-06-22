@@ -17,7 +17,6 @@ namespace Zilon.Core.MapGenerators
             _dice = dice;
         }
 
-
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
         {

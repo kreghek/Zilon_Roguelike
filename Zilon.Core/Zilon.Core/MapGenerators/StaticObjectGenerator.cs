@@ -18,7 +18,6 @@ namespace Zilon.Core.MapGenerators
         private readonly IStaticObjectFactoryCollector _staticObjectfactoryCollector;
         private readonly IStaticObjectsGeneratorRandomSource _staticObjectsGeneratorRandomSource;
 
-
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         public StaticObjectGenerator(IChestGenerator chestGenerator,
             IInteriorObjectRandomSource interiorObjectRandomSource,
