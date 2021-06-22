@@ -97,7 +97,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 ["weak-block"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakBlock"),
                 ["weak-parry"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakParry"),
                 ["weak-swing"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakSwing"),
-                ["pierce"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/NormalPierce"),
+                ["pierce"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/NormalPierce")
             };
         }
 
