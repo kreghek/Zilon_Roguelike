@@ -15,12 +15,12 @@ namespace Zilon.Core.MapGenerators.CellularAutomatonStyle.Tests
         /// <summary>
         /// Тест проверяет, что если есть возможность поставить объекты интерьера,
         /// то они будут.
-        /// Размер квадрата 4х4, потому что генерится 1 объект интерьера на каждые 4 узла комнаты.
+        /// Размер квадрата 12х12, потому что генерится 1 объект интерьера на каждые 12 узла комнаты.
         /// </summary>
         [Test]
         public void RollInteriorObjectsTest()
         {
-            const int SQARE_SIZE = 4;
+            const int SQARE_SIZE = 12;
 
             // ARRANGE
 
