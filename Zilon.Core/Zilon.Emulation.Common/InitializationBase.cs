@@ -58,10 +58,10 @@ namespace Zilon.Emulation.Common
 
         protected virtual void RegisterChestGeneratorRandomSource(IServiceCollection serviceRegistry)
         {
-            serviceRegistry.AddScoped<StaticObstaclesGenerator>();
-            serviceRegistry.AddScoped<IStaticObstaclesGenerator, StaticObstaclesGenerator>(serviceProvider =>
+            serviceRegistry.AddScoped<StaticObjectGenerator>();
+            serviceRegistry.AddScoped<IStaticObstaclesGenerator, StaticObjectGenerator>(serviceProvider =>
             {
-                var service = serviceProvider.GetRequiredService<StaticObstaclesGenerator>();
+                var service = serviceProvider.GetRequiredService<StaticObjectGenerator>();
                 service.MonsterIdentifierGenerator = serviceProvider.GetService<IMonsterIdentifierGenerator>();
                 return service;
             });

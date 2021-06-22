@@ -18,24 +18,18 @@ namespace Zilon.Core.MapGenerators
 
         private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
         {
-            switch (resourceType)
+            return resourceType switch
             {
-                case SectorResourceType.Aurihulk:
-                case SectorResourceType.Copper:
-                case SectorResourceType.Gold:
-                case SectorResourceType.Iron:
-                case SectorResourceType.Silver:
-                    return PropContainerPurpose.OreDeposits;
-                case SectorResourceType.Stones:
-                    return PropContainerPurpose.StoneDeposits;
-                case SectorResourceType.CherryBrushes:
-                    return PropContainerPurpose.CherryBrush;
-                case SectorResourceType.WaterPuddles:
-                    return PropContainerPurpose.Puddle;
-
-                default:
-                    throw new InvalidOperationException();
-            }
+                SectorResourceType.Aurihulk or
+                SectorResourceType.Copper or
+                SectorResourceType.Gold or
+                SectorResourceType.Iron or
+                SectorResourceType.Silver => PropContainerPurpose.OreDeposits,
+                SectorResourceType.Stones => PropContainerPurpose.StoneDeposits,
+                SectorResourceType.CherryBrushes => PropContainerPurpose.CherryBrush,
+                SectorResourceType.WaterPuddles => PropContainerPurpose.Puddle,
+                _ => throw new InvalidOperationException(),
+            };
         }
 
         public PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)
@@ -56,26 +50,26 @@ namespace Zilon.Core.MapGenerators
                 }
             }
 
-            if (purposeList.Count < 100)
-            {
-                var diff = 100 - purposeList.Count;
-                var everywherePurpose = new[]
-                    { PropContainerPurpose.Puddle, PropContainerPurpose.Pit, PropContainerPurpose.TrashHeap };
-                var diffShare = (int)Math.Ceiling(diff / 2f);
-                foreach (var purpose in everywherePurpose)
-                {
-                    for (var i = 0; i < diffShare; i++)
-                    {
-                        purposeList.Add(purpose);
-                    }
-                }
-            }
-            else
-            {
-                purposeList.Add(PropContainerPurpose.TrashHeap);
-                purposeList.Add(PropContainerPurpose.Puddle);
-                purposeList.Add(PropContainerPurpose.Pit);
-            }
+            //if (purposeList.Count < 100)
+            //{
+            //    var diff = 100 - purposeList.Count;
+            //    var everywherePurpose = new[]
+            //        { PropContainerPurpose.Puddle, PropContainerPurpose.Pit, PropContainerPurpose.TrashHeap };
+            //    var diffShare = (int)Math.Ceiling(diff / 2f);
+            //    foreach (var purpose in everywherePurpose)
+            //    {
+            //        for (var i = 0; i < diffShare; i++)
+            //        {
+            //            purposeList.Add(purpose);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    purposeList.Add(PropContainerPurpose.TrashHeap);
+            //    purposeList.Add(PropContainerPurpose.Puddle);
+            //    purposeList.Add(PropContainerPurpose.Pit);
+            //}
 
             return _dice.RollFromList(purposeList);
         }

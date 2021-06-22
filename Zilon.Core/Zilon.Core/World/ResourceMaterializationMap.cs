@@ -25,7 +25,7 @@ namespace Zilon.Core.World
         {
             var newRoll = _dice.RollD6();
 
-            if (!items.Any() || newRoll > 3)
+            if (!items.Any() || newRoll > 5)
             {
                 var itemsNew = new List<ResourceDepositDataItem>(items);
                 var availableResources = new List<SectorResourceType>
@@ -116,9 +116,6 @@ namespace Zilon.Core.World
         {
             var items = new[]
             {
-                new ResourceDepositDataItem(SectorResourceType.Iron, START_RESOURCE_SHARE),
-                new ResourceDepositDataItem(SectorResourceType.Stones, START_RESOURCE_SHARE),
-                new ResourceDepositDataItem(SectorResourceType.WaterPuddles, START_RESOURCE_SHARE),
                 new ResourceDepositDataItem(SectorResourceType.CherryBrushes, START_RESOURCE_SHARE)
             };
             var data = new ResourceDepositData(items);

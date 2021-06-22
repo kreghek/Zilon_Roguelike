@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,14 +11,14 @@ using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
 {
-    public sealed class StaticObstaclesGenerator : IStaticObstaclesGenerator
+    public sealed class StaticObjectGenerator : IStaticObstaclesGenerator
     {
         private readonly IChestGenerator _chestGenerator;
         private readonly IInteriorObjectRandomSource _interiorObjectRandomSource;
         private readonly IStaticObjectFactoryCollector _staticObjectfactoryCollector;
         private readonly IStaticObjectsGeneratorRandomSource _staticObjectsGeneratorRandomSource;
 
-        public StaticObstaclesGenerator(IChestGenerator chestGenerator,
+        public StaticObjectGenerator(IChestGenerator chestGenerator,
             IInteriorObjectRandomSource interiorObjectRandomSource,
             IStaticObjectFactoryCollector staticObjectfactoryCollector,
             IStaticObjectsGeneratorRandomSource staticObjectsGeneratorRandomSource)
