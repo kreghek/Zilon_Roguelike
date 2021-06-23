@@ -99,7 +99,6 @@ namespace Zilon.Core.Tests.World
         /// Expected count of update invocation of the globe transition handler's
         /// update.
         /// </param>
-        /// <returns></returns>
         [Test]
         [Timeout(5000)]
         [TestCase(10 /*See GlobeMetrics.OneIterationLength*/, 1)]
