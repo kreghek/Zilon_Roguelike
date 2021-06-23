@@ -34,11 +34,12 @@ Scenario Outline: Замена одного примета другим.
 	And У актёра в инвентаре есть <propSid1>
 
 	Examples: 
-	| propSid1    | propSid2    | slotIndex |
-	| short-sword | short-sword | 2         |
-	| pistol      | short-sword | 2         |
-	| short-sword | pistol      | 2         |
-	| short-sword | great-sword | 2         |
+	| propSid1    | propSid2     | slotIndex |
+	| short-sword | short-sword  | 2         |
+	| pistol      | short-sword  | 2         |
+	| short-sword | pistol       | 2         |
+	| short-sword | great-sword  | 2         |
+	| great-sword | combat-staff | 2         |
 
 @equipment @dev1
 Scenario Outline: Замена одного примета другим. Работа с щитами.

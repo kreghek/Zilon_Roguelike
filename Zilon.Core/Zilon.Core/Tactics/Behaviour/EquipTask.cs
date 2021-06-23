@@ -63,10 +63,21 @@ namespace Zilon.Core.Tactics.Behaviour
 
             // Предмет может быть экипирован из инвентаря (и) или из другого слота (с).
             // Предмет может быть экипирован в пустой слот (0) и слот, в котором уже есть другой предмет (1).
-            //    (и)                                           (с)
-            // (0) изымаем предмет из инвентаря                 меняем предметы в слотах местами
-            // (1) изымаем из инвентаря, а текущий в инвентярь  меняем предметы в слотах местами
-            //TODO Ещё в этой схеме учитывает однослотовые и двуслотовые предметы.
+            // Ещё одно измерение - предмет одноручный (i) или двуручный (I)
+
+            // Для одноручных предметов (i)
+            //    (и)                                             (с)
+            // (0) изымаем предмет из инвентаря                   меняем предметы в слотах местами
+            // (1) изымаем из инвентаря, а текущий в инвентярь    меняем предметы в слотах местами
+
+            // Для двуручных предметов (I)                          
+            //    (и)                                             (с)
+            // (0) из ещё одного слота перемещаем предмет         просто изымаем предмет из старого слота
+            // в инвентарь. Меняем предметы в слотах местами.     и размещаем в новый.
+
+            // (1) из текущего слота и из ещё одного(следующего)  меняем предметы в слотах местами
+            // перемещаем предметы в инвентарь.                   меняем предметы в слотах местами
+
 
             // проверяем, есть ли в текущем слоте предмет (0)/(1).
             var currentEquipment = equipmentCarrier[_slotIndex];
@@ -91,21 +102,23 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 // (и)
 
-                // текущий предмет возвращаем в инвентарь (1)
-                // при (0) ничего не делаем
+                // при (1) текущий предмет возвращаем в инвентарь
+                // при (0) ничего такого не делаем
 
-                if (IsTargetSlotBeHand(equipmentCarrier, _slotIndex))
+                if (IsTargetSlotAHand(equipmentCarrier, _slotIndex))
                 {
                     // Follow to logic of one/two hand equipment
                     var equipRestrictions = equipScheme.EquipRestrictions;
                     if (equipRestrictions is null || equipRestrictions.PropHandUsage is null)
                     {
+                        // (i)
                         // Equip one-handed item in a specified hand.
 
                         EquipOneSlotEquipmentFromInventory(equipmentCarrier, _equipment, currentEquipment);
                     }
                     else if (equipRestrictions.PropHandUsage.GetValueOrDefault().HasFlag(PropHandUsage.TwoHanded))
                     {
+                        // (I)
                         // Equip two handed weapon/tool in 2 of all slots.
 
                         EquipTwoSlotEquipmentFromInventory(equipmentCarrier, _equipment, currentEquipment);
@@ -127,22 +140,20 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 // (с)
 
-                if (currentEquipment != null)
+                if (currentEquipment is not null)
                 {
-                    if (IsTargetSlotBeHand(equipmentCarrier, _slotIndex))
+                    if (IsTargetSlotAHand(equipmentCarrier, _slotIndex))
                     {
                         var equipRestrictions = equipScheme.EquipRestrictions;
                         if (equipRestrictions is null || equipRestrictions.PropHandUsage is null)
                         {
+                            // (i)
                             // (1) Ставим существующий в данном слоте предмет в слот, в котором был выбранный предмет
                             equipmentCarrier[currentEquipedSlotIndex.Value] = currentEquipment;
                         }
                         else if (equipRestrictions.PropHandUsage.GetValueOrDefault().HasFlag(PropHandUsage.TwoHanded))
                         {
-                            //TODO this must be rewriten to meet issue requirements.
-                            // Considering a two-handed item must takes 2 hand slots.
-                            // So target item can take 2 slots, no hand slots will be free, current equipment must be place in inventory.
-
+                            // (I)
                             // (1) Ставим существующий в данном слоте предмет в слот, в котором был выбранный предмет
                             equipmentCarrier[currentEquipedSlotIndex.Value] = currentEquipment;
                         }
@@ -155,7 +166,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 }
                 else
                 {
-                    if (IsTargetSlotBeHand(equipmentCarrier, _slotIndex))
+                    if (IsTargetSlotAHand(equipmentCarrier, _slotIndex))
                     {
                         var equipRestrictions = equipScheme.EquipRestrictions;
                         if (equipRestrictions is null || equipRestrictions.PropHandUsage is null)
@@ -166,10 +177,6 @@ namespace Zilon.Core.Tactics.Behaviour
                         }
                         else if (equipRestrictions.PropHandUsage.GetValueOrDefault().HasFlag(PropHandUsage.TwoHanded))
                         {
-                            //TODO this must be rewriten to meet issue requirements.
-                            // Considering a two-handed item must takes 2 hand slots.
-                            // So target item can take 2 slots, no hand slots will be free, current equipment must be place in inventory.
-
                             // В старый слот выбранного предмета записываем пустоту.
                             // Потому что предмет перенесён из этого слота в другой.
                             equipmentCarrier[currentEquipedSlotIndex.Value] = null;
@@ -250,7 +257,7 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
-        private static bool IsTargetSlotBeHand(IEquipmentModule equipmentModule, int slotIndex)
+        private static bool IsTargetSlotAHand(IEquipmentModule equipmentModule, int slotIndex)
         {
             var slots = equipmentModule.Slots;
             if (!slots.Any())
