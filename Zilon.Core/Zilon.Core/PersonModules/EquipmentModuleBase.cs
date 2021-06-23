@@ -100,7 +100,7 @@ namespace Zilon.Core.PersonModules
 
             var oldEquipment = _equipment[slotIndex];
 
-            DoEquipmentChanged(slotIndex: slotIndex, oldEquipment: oldEquipment, equipment: equipment);
+            DoEquipmentChanged(slotIndex, oldEquipment, equipment);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Zilon.Core.PersonModules
         public virtual Equipment? this[int index]
         {
             get => _equipment[index];
-            set => SetEquipment(equipment: value, slotIndex: index);
+            set => SetEquipment(value, index);
         }
 
         /// <summary>
