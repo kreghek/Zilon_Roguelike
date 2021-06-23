@@ -2,8 +2,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     using System;
 
-    using CDT.LAST.MonoGameClient.Engine;
-    using CDT.LAST.MonoGameClient.Resources;
+    using Engine;
+
+    using Resources;
 
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
@@ -69,7 +70,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             // If they hit esc, exit
             if (state.IsKeyDown(Keys.Escape))
+            {
                 Game.Exit();
+            }
 
             _goToMainMenu.Update();
         }

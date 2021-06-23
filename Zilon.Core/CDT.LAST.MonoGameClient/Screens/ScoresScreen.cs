@@ -2,8 +2,9 @@
 {
     using System;
 
-    using CDT.LAST.MonoGameClient.Engine;
-    using CDT.LAST.MonoGameClient.Resources;
+    using Engine;
+
+    using Resources;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
@@ -103,7 +104,9 @@
 
             // If they hit esc, exit
             if (state.IsKeyDown(Keys.Escape))
+            {
                 Game.Exit();
+            }
 
             _restartButton.Update();
             _goToMainMenu.Update();
