@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -42,7 +43,9 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
-        private void EquipOneSlotEquipmentFromInventory(IEquipmentModule equipmentCarrier, Equipment targetEquipment,
+        private void EquipOneSlotEquipmentFromInventory(
+            IEquipmentModule equipmentModule,
+            Equipment targetEquipment,
             Equipment? currentEquipment)
         {
             if (currentEquipment != null)
@@ -51,7 +54,54 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             Actor.Person.GetModule<IInventoryModule>().Remove(targetEquipment);
-            equipmentCarrier[_slotIndex] = targetEquipment;
+            equipmentModule[_slotIndex] = targetEquipment;
+        }
+
+        private void EquipTwoSlotEquipmentFromInventory(
+            IEquipmentModule equipmentModule,
+            Equipment targetEquipment,
+            Equipment? currentEquipment)
+        {
+            var handSlotIndexes = GetHandSlotIndexes(equipmentModule);
+            var otherHandSlotIndex = handSlotIndexes.First(x => x != _slotIndex);
+
+            var equipmentInHandSlots = new List<Equipment>();
+            var equipmentInTargetSlot = equipmentModule[_slotIndex];
+            Debug.Assert(equipmentInTargetSlot == currentEquipment, "This is same equipment.");
+            if (equipmentInTargetSlot is not null)
+            {
+                equipmentInHandSlots.Add(equipmentInTargetSlot);
+            }
+            else
+            {
+                Debug.Fail("Equipment in target slot must be assigned. This is checked in the outer method.");
+            }
+
+            var equipmentInOtherSlot = equipmentModule[otherHandSlotIndex];
+            if (equipmentInOtherSlot is not null)
+            {
+                equipmentInHandSlots.Add(equipmentInOtherSlot);
+            }
+
+            foreach (var equipment in equipmentInHandSlots)
+            {
+                Actor.Person.GetModule<IInventoryModule>().Add(equipment);
+            }
+
+            Actor.Person.GetModule<IInventoryModule>().Remove(targetEquipment);
+            equipmentModule[_slotIndex] = targetEquipment;
+            equipmentModule[otherHandSlotIndex] = null;
+        }
+
+        private static IEnumerable<int> GetHandSlotIndexes(IEquipmentModule equipmentModule)
+        {
+            for (var slotIndex = 0; slotIndex < equipmentModule.Slots.Length; slotIndex++)
+            {
+                if (equipmentModule.Slots[slotIndex].Types.HasFlag(EquipmentSlotTypes.Hand))
+                {
+                    yield return slotIndex;
+                }
+            }
         }
 
         private void EquipPropToSlot()
@@ -105,8 +155,7 @@ namespace Zilon.Core.Tactics.Behaviour
                     {
                         // Equip two handed weapon/tool in 2 of all slots.
 
-                        //TODO this must be rewriten to meet issue requirements.
-                        EquipOneSlotEquipmentFromInventory(equipmentCarrier, _equipment, currentEquipment);
+                        EquipTwoSlotEquipmentFromInventory(equipmentCarrier, _equipment, currentEquipment);
                     }
                     else
                     {
@@ -183,18 +232,6 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 equipmentCarrier[_slotIndex] = _equipment;
             }
-        }
-
-        private void EquipTwoSlotEquipmentFromInventory(IEquipmentModule equipmentCarrier, Equipment targetEquipment,
-            Equipment? currentEquipment)
-        {
-            if (currentEquipment != null)
-            {
-                Actor.Person.GetModule<IInventoryModule>().Add(currentEquipment);
-            }
-
-            Actor.Person.GetModule<IInventoryModule>().Remove(targetEquipment);
-            equipmentCarrier[_slotIndex] = targetEquipment;
         }
 
         /// <summary>
