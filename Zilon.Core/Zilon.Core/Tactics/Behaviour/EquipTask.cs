@@ -57,49 +57,6 @@ namespace Zilon.Core.Tactics.Behaviour
             equipmentModule[_slotIndex] = targetEquipment;
         }
 
-        private void EquipTwoSlotEquipmentFromInventory(
-            IEquipmentModule equipmentModule,
-            Equipment targetEquipment,
-            Equipment? currentEquipment)
-        {
-            var handSlotIndexes = GetHandSlotIndexes(equipmentModule);
-            var otherHandSlotIndex = handSlotIndexes.First(x => x != _slotIndex);
-
-            var equipmentInHandSlots = new List<Equipment>();
-            var equipmentInTargetSlot = equipmentModule[_slotIndex];
-            Debug.Assert(equipmentInTargetSlot == currentEquipment, "This is same equipment.");
-            if (equipmentInTargetSlot is not null)
-            {
-                equipmentInHandSlots.Add(equipmentInTargetSlot);
-            }
-
-            var equipmentInOtherSlot = equipmentModule[otherHandSlotIndex];
-            if (equipmentInOtherSlot is not null)
-            {
-                equipmentInHandSlots.Add(equipmentInOtherSlot);
-            }
-
-            foreach (var equipment in equipmentInHandSlots)
-            {
-                Actor.Person.GetModule<IInventoryModule>().Add(equipment);
-            }
-
-            Actor.Person.GetModule<IInventoryModule>().Remove(targetEquipment);
-            equipmentModule[_slotIndex] = targetEquipment;
-            equipmentModule[otherHandSlotIndex] = null;
-        }
-
-        private static IEnumerable<int> GetHandSlotIndexes(IEquipmentModule equipmentModule)
-        {
-            for (var slotIndex = 0; slotIndex < equipmentModule.Slots.Length; slotIndex++)
-            {
-                if (equipmentModule.Slots[slotIndex].Types.HasFlag(EquipmentSlotTypes.Hand))
-                {
-                    yield return slotIndex;
-                }
-            }
-        }
-
         private void EquipPropToSlot()
         {
             var equipmentCarrier = Actor.Person.GetModule<IEquipmentModule>();
@@ -230,6 +187,38 @@ namespace Zilon.Core.Tactics.Behaviour
             }
         }
 
+        private void EquipTwoSlotEquipmentFromInventory(
+            IEquipmentModule equipmentModule,
+            Equipment targetEquipment,
+            Equipment? currentEquipment)
+        {
+            var handSlotIndexes = GetHandSlotIndexes(equipmentModule);
+            var otherHandSlotIndex = handSlotIndexes.First(x => x != _slotIndex);
+
+            var equipmentInHandSlots = new List<Equipment>();
+            var equipmentInTargetSlot = equipmentModule[_slotIndex];
+            Debug.Assert(equipmentInTargetSlot == currentEquipment, "This is same equipment.");
+            if (equipmentInTargetSlot is not null)
+            {
+                equipmentInHandSlots.Add(equipmentInTargetSlot);
+            }
+
+            var equipmentInOtherSlot = equipmentModule[otherHandSlotIndex];
+            if (equipmentInOtherSlot is not null)
+            {
+                equipmentInHandSlots.Add(equipmentInOtherSlot);
+            }
+
+            foreach (var equipment in equipmentInHandSlots)
+            {
+                Actor.Person.GetModule<IInventoryModule>().Add(equipment);
+            }
+
+            Actor.Person.GetModule<IInventoryModule>().Remove(targetEquipment);
+            equipmentModule[_slotIndex] = targetEquipment;
+            equipmentModule[otherHandSlotIndex] = null;
+        }
+
         /// <summary>
         /// Ищем предмет в уже экипированных.
         /// </summary>
@@ -247,6 +236,17 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             return null;
+        }
+
+        private static IEnumerable<int> GetHandSlotIndexes(IEquipmentModule equipmentModule)
+        {
+            for (var slotIndex = 0; slotIndex < equipmentModule.Slots.Length; slotIndex++)
+            {
+                if (equipmentModule.Slots[slotIndex].Types.HasFlag(EquipmentSlotTypes.Hand))
+                {
+                    yield return slotIndex;
+                }
+            }
         }
 
         private static bool IsTargetSlotBeHand(IEquipmentModule equipmentModule, int slotIndex)
