@@ -258,4 +258,10 @@ take out the character before he dies.</value>
   <data name="FakeContainerName" xml:space="preserve">
     <value>the loot bag</value>
   </data>
+  <data name="MainMenuButtonTitle" xml:space="preserve">
+    <value>Main menu</value>
+  </data>
+  <data name="NextScreenButtonTitle" xml:space="preserve">
+    <value>Next</value>
+  </data>
 </root>
