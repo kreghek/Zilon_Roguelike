@@ -78,7 +78,7 @@ namespace Zilon.Core.Tests.MapGenerators
         private static ISectorGenerator CreateGenerator(
             IMapFactory mapFactory)
         {
-            var staticObstaclesGeneratorMock = new Mock<IStaticObstaclesGenerator>();
+            var staticObstaclesGeneratorMock = new Mock<IStaticObjectsGenerator>();
             var staticObstaclesGenerator = staticObstaclesGeneratorMock.Object;
 
             var monsterGeneratorMock = new Mock<IMonsterGenerator>();

@@ -13,6 +13,10 @@ namespace Zilon.Core.Schemes
         typeof(SectorRoomMapFactoryOptionsSubScheme),
         nameof(SchemeSectorMapGenerator.Room)
     )]
+    [JsonSubtypes.KnownSubType(
+        typeof(SectorOpenMapFactoryOptionsSubScheme),
+        nameof(SchemeSectorMapGenerator.Open)
+    )]
     public abstract class SectorMapFactoryOptionsSubSchemeBase : ISectorMapFactoryOptionsSubScheme
     {
         public abstract SchemeSectorMapGenerator MapGenerator { get; }

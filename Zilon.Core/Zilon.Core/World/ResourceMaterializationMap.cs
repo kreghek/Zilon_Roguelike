@@ -9,7 +9,7 @@ namespace Zilon.Core.World
 {
     public sealed class ResourceMaterializationMap : IResourceMaterializationMap
     {
-        private const float START_RESOURCE_SHARE = 0.10f;
+        private const float START_RESOURCE_SHARE = 1f;
         private readonly IDice _dice;
 
         private readonly Dictionary<ISectorNode, IResourceDepositData> _map;
@@ -25,7 +25,7 @@ namespace Zilon.Core.World
         {
             var newRoll = _dice.RollD6();
 
-            if (!items.Any() || newRoll > 3)
+            if (!items.Any() || newRoll > 5)
             {
                 var itemsNew = new List<ResourceDepositDataItem>(items);
                 var availableResources = new List<SectorResourceType>
@@ -75,7 +75,7 @@ namespace Zilon.Core.World
             foreach (var keyValue in dict)
             {
                 totalResources[keyValue.Key] = keyValue.Value.Average();
-                var diff = _dice.Roll(-25, 25) * 0.01f;
+                var diff = _dice.Roll(-5, 5) * 0.01f;
                 var totalValue = totalResources[keyValue.Key] + diff;
                 totalResources[keyValue.Key] = totalValue;
 
@@ -116,9 +116,6 @@ namespace Zilon.Core.World
         {
             var items = new[]
             {
-                new ResourceDepositDataItem(SectorResourceType.Iron, START_RESOURCE_SHARE),
-                new ResourceDepositDataItem(SectorResourceType.Stones, START_RESOURCE_SHARE),
-                new ResourceDepositDataItem(SectorResourceType.WaterPuddles, START_RESOURCE_SHARE),
                 new ResourceDepositDataItem(SectorResourceType.CherryBrushes, START_RESOURCE_SHARE)
             };
             var data = new ResourceDepositData(items);

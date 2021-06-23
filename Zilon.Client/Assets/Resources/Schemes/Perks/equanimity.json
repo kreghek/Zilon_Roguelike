@@ -16,7 +16,8 @@
           "Type": "AttacksActor",
           "Value": 600
         }
-      ]
+      ],
+      "MaxValue": 1
     }
   ]
 }

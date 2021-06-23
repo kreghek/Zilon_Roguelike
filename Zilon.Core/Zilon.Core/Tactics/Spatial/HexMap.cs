@@ -226,15 +226,14 @@ namespace Zilon.Core.Tactics.Spatial
         {
             var segmentKey = new SegmentKey(0, 0);
             var segment = _segmentDict[segmentKey];
-            try
-            {
-                var node = segment[x, y];
-                return (HexNode)node;
-            }
-            catch (IndexOutOfRangeException)
+
+            if (x < 0 || y < 0 || x >= _segmentSize || y >= _segmentSize)
             {
                 return null;
             }
+
+            var node = segment[x, y];
+            return (HexNode)node;
         }
 
         private void CreateSegment(int segmentX, int segmentY)
@@ -328,7 +327,7 @@ namespace Zilon.Core.Tactics.Spatial
             }
 
             [ExcludeFromCodeCoverage]
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 return obj is SegmentKey key && Equals(key);
             }

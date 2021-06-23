@@ -15,6 +15,8 @@ namespace Zilon.Core.MapGenerators
         /// </summary>
         protected abstract IMapFactory CellularAutomatonMapFactory { get; }
 
+        protected abstract IMapFactory OpenMapFactory { get; }
+
         /// <summary>
         /// Экземпляр фабрики, генерирующий карты на основе прямоугольных комнат.
         /// </summary>
@@ -51,6 +53,9 @@ namespace Zilon.Core.MapGenerators
 
                 case SchemeSectorMapGenerator.CellularAutomaton:
                     return CellularAutomatonMapFactory;
+
+                case SchemeSectorMapGenerator.Open:
+                    return OpenMapFactory;
 
                 //TODO Прописать для всех схем конкретный генератор.
                 // После явного прописывания здесь нужно будет выбрасывать исключение.

@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.MapGenerators
 {
-    public interface IStaticObstaclesGenerator
+    public interface IStaticObjectsGenerator
     {
         Task CreateAsync(IStaticObjectGenerationContext generationContext);
     }

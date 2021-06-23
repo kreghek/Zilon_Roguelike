@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Tactics;
@@ -11,31 +12,27 @@ namespace Zilon.Core.MapGenerators
     {
         private readonly IDice _dice;
 
+        [ExcludeFromCodeCoverage]
         public StaticObjectsGeneratorRandomSource(IDice dice)
         {
             _dice = dice;
         }
 
+        [ExcludeFromCodeCoverage]
         private static PropContainerPurpose GetPurposeByResourceType(SectorResourceType resourceType)
         {
-            switch (resourceType)
+            return resourceType switch
             {
-                case SectorResourceType.Aurihulk:
-                case SectorResourceType.Copper:
-                case SectorResourceType.Gold:
-                case SectorResourceType.Iron:
-                case SectorResourceType.Silver:
-                    return PropContainerPurpose.OreDeposits;
-                case SectorResourceType.Stones:
-                    return PropContainerPurpose.StoneDeposits;
-                case SectorResourceType.CherryBrushes:
-                    return PropContainerPurpose.CherryBrush;
-                case SectorResourceType.WaterPuddles:
-                    return PropContainerPurpose.Puddle;
-
-                default:
-                    throw new InvalidOperationException();
-            }
+                SectorResourceType.Aurihulk or
+                    SectorResourceType.Copper or
+                    SectorResourceType.Gold or
+                    SectorResourceType.Iron or
+                    SectorResourceType.Silver => PropContainerPurpose.OreDeposits,
+                SectorResourceType.Stones => PropContainerPurpose.StoneDeposits,
+                SectorResourceType.CherryBrushes => PropContainerPurpose.CherryBrush,
+                SectorResourceType.WaterPuddles => PropContainerPurpose.Puddle,
+                _ => throw new InvalidOperationException()
+            };
         }
 
         public PropContainerPurpose RollPurpose(IResourceDepositData resourceDepositData)

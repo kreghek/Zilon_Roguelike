@@ -11,6 +11,7 @@ using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
+using Zilon.Core.MapGenerators.OpenStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
@@ -57,10 +58,10 @@ namespace Zilon.Emulation.Common
 
         protected virtual void RegisterChestGeneratorRandomSource(IServiceCollection serviceRegistry)
         {
-            serviceRegistry.AddScoped<StaticObstaclesGenerator>();
-            serviceRegistry.AddScoped<IStaticObstaclesGenerator, StaticObstaclesGenerator>(serviceProvider =>
+            serviceRegistry.AddScoped<StaticObjectGenerator>();
+            serviceRegistry.AddScoped<IStaticObjectsGenerator, StaticObjectGenerator>(serviceProvider =>
             {
-                var service = serviceProvider.GetRequiredService<StaticObstaclesGenerator>();
+                var service = serviceProvider.GetRequiredService<StaticObjectGenerator>();
                 service.MonsterIdentifierGenerator = serviceProvider.GetService<IMonsterIdentifierGenerator>();
                 return service;
             });
@@ -275,6 +276,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IRoomGenerator, RoomGenerator>();
             container.AddSingleton(CreateRoomGeneratorRandomSource);
             container.AddSingleton<CellularAutomatonMapFactory>();
+            container.AddSingleton<OpenMapFactory>();
             container.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
 
             container.AddSingleton<IUserTimeProvider, UserTimeProvider>();

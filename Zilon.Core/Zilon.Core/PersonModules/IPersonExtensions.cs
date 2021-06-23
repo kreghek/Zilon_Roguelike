@@ -16,7 +16,7 @@ namespace Zilon.Core.PersonModules
             return person.GetModule<TPersonModule>(typeof(TPersonModule).Name);
         }
 
-        public static TPersonModule GetModuleSafe<TPersonModule>(this IPerson source)
+        public static TPersonModule? GetModuleSafe<TPersonModule>(this IPerson source)
             where TPersonModule : IPersonModule
         {
             if (source is null)
@@ -26,9 +26,7 @@ namespace Zilon.Core.PersonModules
 
             if (!source.HasModule<TPersonModule>())
             {
-#pragma warning disable CS8603 // Possible null reference return.
                 return default;
-#pragma warning restore CS8603 // Possible null reference return.
             }
 
             return source.GetModule<TPersonModule>();
