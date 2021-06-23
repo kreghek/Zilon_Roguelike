@@ -62,6 +62,23 @@ namespace Zilon.Core.Tests.Commands
         }
 
         /// <summary>
+        /// Тест проверяет, что можно использовать экипировку.
+        /// </summary>
+        [Test]
+        public void CanExecute_SelectEquipment_ReturnsTrue()
+        {
+            // ARRANGE
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
+            command.SlotIndex = 0;
+
+            // ACT
+            var canExecute = command.CanExecute();
+
+            // ASSERT
+            canExecute.IsSuccess.Should().BeTrue();
+        }
+
+        /// <summary>
         /// Тест проверяет, что можно экипировать двуручник в слот основной руки.
         /// </summary>
         [Test]
@@ -137,23 +154,6 @@ namespace Zilon.Core.Tests.Commands
 
             // ASSERT
             canExecute.IsSuccess.Should().BeFalse();
-        }
-
-        /// <summary>
-        /// Тест проверяет, что можно использовать экипировку.
-        /// </summary>
-        [Test]
-        public void CanExecute_SelectEquipment_ReturnsTrue()
-        {
-            // ARRANGE
-            var command = ServiceProvider.GetRequiredService<EquipCommand>();
-            command.SlotIndex = 0;
-
-            // ACT
-            var canExecute = command.CanExecute();
-
-            // ASSERT
-            canExecute.IsSuccess.Should().BeTrue();
         }
 
         /// <summary>

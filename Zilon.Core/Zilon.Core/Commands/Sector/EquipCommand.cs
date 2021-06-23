@@ -7,6 +7,7 @@ using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
+using Zilon.Core.Schemes;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -127,25 +128,6 @@ namespace Zilon.Core.Commands
             return new CanExecuteCheckResult { IsSuccess = true };
         }
 
-        private static bool? Check2hOnlyInMainHandSlot(IEquipmentModule equipmentModule, Equipment targetItemToEquip, int slotIndex)
-        {
-            var equipRestrictions = targetItemToEquip.Scheme?.Equip?.EquipRestrictions;
-            if (equipRestrictions is null || equipRestrictions.PropHandUsage is null)
-            {
-                // Equiped item is one-handed or not in hand slot.
-                // No special rules of can execute checking are need.
-                return true;
-            }
-            else if (equipRestrictions.PropHandUsage == Schemes.PropHandUsage.TwoHanded)
-            {
-                return equipmentModule.Slots[slotIndex].IsMain;
-            }
-            else
-            {
-                throw new InvalidOperationException("Unknown case.");
-            }
-        }
-
         protected override void ExecuteTacticCommand()
         {
             if (SlotIndex is null)
@@ -177,6 +159,25 @@ namespace Zilon.Core.Commands
             }
 
             taskSource.Intent(intention, activeActor);
+        }
+
+        private static bool? Check2hOnlyInMainHandSlot(IEquipmentModule equipmentModule, Equipment targetItemToEquip,
+            int slotIndex)
+        {
+            var equipRestrictions = targetItemToEquip.Scheme?.Equip?.EquipRestrictions;
+            if (equipRestrictions is null || equipRestrictions.PropHandUsage is null)
+            {
+                // Equiped item is one-handed or not in hand slot.
+                // No special rules of can execute checking are need.
+                return true;
+            }
+
+            if (equipRestrictions.PropHandUsage == PropHandUsage.TwoHanded)
+            {
+                return equipmentModule.Slots[slotIndex].IsMain;
+            }
+
+            throw new InvalidOperationException("Unknown case.");
         }
 
         private Equipment? GetSelectedEquipmentInInventory()

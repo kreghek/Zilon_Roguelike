@@ -86,12 +86,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                         // We need to close modal and show actor animation.
                         Close();
                     }
-                    else
-                    {
-                        // The context menu can be closed without command by follow reasons:
-                        // - Mouse cursor leaves menu origin.
-                        // Just do nothing because the user didn't change any modal state.
-                    }
 
                     _propContextMenu = null;
                 }

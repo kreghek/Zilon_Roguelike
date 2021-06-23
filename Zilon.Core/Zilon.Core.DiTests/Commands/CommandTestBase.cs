@@ -69,7 +69,7 @@ namespace Zilon.Core.Tests.Commands
                 },
                 new PersonSlotSubScheme
                 {
-                    Types = EquipmentSlotTypes.Hand,
+                    Types = EquipmentSlotTypes.Hand
                 }
             });
             var equipmentCarrier = equipmentCarrierMock.Object;

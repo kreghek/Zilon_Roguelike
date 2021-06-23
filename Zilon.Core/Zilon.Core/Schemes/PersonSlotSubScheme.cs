@@ -8,11 +8,6 @@ namespace Zilon.Core.Schemes
     public class PersonSlotSubScheme : SubSchemeBase
     {
         /// <summary>
-        /// Типы слота.
-        /// </summary>
-        public EquipmentSlotTypes Types { get; set; }
-
-        /// <summary>
         /// Specify main slot.
         /// Main slot used to equip two-handed weapon.
         /// </summary>
@@ -22,6 +17,11 @@ namespace Zilon.Core.Schemes
         /// The name of slot displayed in UI or logs.
         /// </summary>
         public LocalizedStringSubScheme? Name { get; set; }
+
+        /// <summary>
+        /// Типы слота.
+        /// </summary>
+        public EquipmentSlotTypes Types { get; set; }
 
         /// <summary>
         /// Строкове представление объекта.
