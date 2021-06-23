@@ -249,9 +249,17 @@ namespace Zilon.Core.Tactics.Behaviour
             return null;
         }
 
-        private static bool IsTargetSlotBeHand(IEquipmentModule equipmentCarrier, int slotIndex)
+        private static bool IsTargetSlotBeHand(IEquipmentModule equipmentModule, int slotIndex)
         {
-            return equipmentCarrier.Slots[slotIndex].Types.HasFlag(EquipmentSlotTypes.Hand);
+            if (!equipmentModule.Slots.Any())
+            {
+                // Module has no slots.
+                // So it is not hand slot.
+                // Used for tests.
+                return false;
+            }
+
+            return equipmentModule.Slots[slotIndex].Types.HasFlag(EquipmentSlotTypes.Hand);
         }
     }
 }
