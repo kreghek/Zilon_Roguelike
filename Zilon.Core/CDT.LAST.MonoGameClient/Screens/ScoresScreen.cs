@@ -5,12 +5,16 @@
     using CDT.LAST.MonoGameClient.Engine;
     using CDT.LAST.MonoGameClient.Resources;
 
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
 
     using Zilon.Core.Scoring;
 
+    /// <summary>
+    /// Scores screen to show a user's score when a character died.
+    /// </summary>
     internal class ScoresScreen : GameSceneBase
     {
         private readonly GlobeSelectionScreen _globeGenerationScene;
@@ -25,7 +29,8 @@
 
         private readonly SpriteBatch _spriteBatch;
 
-        public ScoresScreen(Game game, SpriteBatch spriteBatch, IScoreManager scoreManager)
+        /// <inheritdoc />
+        public ScoresScreen(Game game, SpriteBatch spriteBatch)
             : base(game)
         {
             _spriteBatch = spriteBatch;
@@ -43,22 +48,25 @@
             _restartButton.OnClick += RestartButtonClickHandler;
 
             _goToMainMenu = new TextButton(
-                title: UiResources.StartGameButtonTitle,
+                title: UiResources.MainMenuButtonTitle,
                 texture: buttonTexture,
                 font: font,
-                rect: new Rectangle(x: 150, y: 150, width: 100, height: 20));
+                rect: new Rectangle(x: 350, y: 150, width: 100, height: 20));
             _goToMainMenu.OnClick += GoToMainMenuButtonClickHandler;
 
             _goToNextScreen = new TextButton(
-                title: UiResources.StartGameButtonTitle,
+                title: UiResources.NextScreenButtonTitle,
                 texture: buttonTexture,
                 font: font,
-                rect: new Rectangle(x: 150, y: 150, width: 100, height: 20));
+                rect: new Rectangle(x: 550, y: 150, width: 100, height: 20));
             _goToNextScreen.OnClick += GoToNextScreenButtonClickHandler;
 
+            var serviceScope = ((LivGame)Game).ServiceProvider;
+            var scoreManager = serviceScope.GetRequiredService<IScoreManager>();
             _scoreSummary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
         }
 
+        /// <inheritdoc />
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
@@ -67,6 +75,7 @@
 
             _restartButton.Draw(_spriteBatch);
             _goToMainMenu.Draw(_spriteBatch);
+            _goToNextScreen.Draw(_spriteBatch);
 
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
 
@@ -84,6 +93,7 @@
             _spriteBatch.End();
         }
 
+        /// <inheritdoc />
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -102,17 +112,17 @@
 
         private void GoToMainMenuButtonClickHandler(object? sender, EventArgs e)
         {
-            //TODO:
+            TargetScene = new TitleScreen(game: Game, spriteBatch: _spriteBatch);
         }
 
         private void GoToNextScreenButtonClickHandler(object? sender, EventArgs e)
         {
-            //TODO:
+            TargetScene = new LeaderBoardScreen(game: Game, spriteBatch: _spriteBatch);
         }
 
         private void RestartButtonClickHandler(object? sender, EventArgs e)
         {
-            //TODO:
+            TargetScene = _globeGenerationScene;
         }
     }
 }

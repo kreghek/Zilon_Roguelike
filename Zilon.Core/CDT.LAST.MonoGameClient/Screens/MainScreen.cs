@@ -48,19 +48,16 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private SectorViewModel? _sectorViewModel;
 
-        private IScoreManager _scoreManager;
-
         public MainScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
             _spriteBatch = spriteBatch;
 
             var serviceScope = ((LivGame)Game).ServiceProvider;
-
+            
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
             _player = serviceScope.GetRequiredService<IPlayer>();
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
             _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-            _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
 
             var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
@@ -305,7 +302,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 // Or some error occured.
                 if (activeActor.Actor.Person.CheckIsDead())
                 {
-                    TargetScene = new ScoresScreen(Game, _spriteBatch, _scoreManager);
+                    TargetScene = new ScoresScreen(Game, _spriteBatch);
                 }
                 else
                 {
