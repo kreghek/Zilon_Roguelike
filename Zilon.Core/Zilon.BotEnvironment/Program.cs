@@ -119,9 +119,7 @@ namespace Zilon.BotEnvironment
 
             var globe = await autoPlayEngine.CreateGlobeAsync();
 
-            var autoplayContext = new AutoplayContext(startPerson);
-
-            await autoPlayEngine.StartAsync(globe, autoplayContext);
+            await autoPlayEngine.StartAsync(globe, startPerson);
 
             Console.WriteLine(autoPlayEngine.LogOutput);
 

@@ -8,7 +8,6 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Benchmarks.Fow
 {
-    [MemoryDiagnoser]
     public class FowDataBench
     {
         private HexNode _baseNode;

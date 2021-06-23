@@ -9,7 +9,6 @@
             InterventionistFraction = new Fraction("Interventionists");
             MilitiaFraction = new Fraction("Militia");
             TroublemakerFraction = new Fraction("Trublemakers");
-            Pilgrims = new Fraction("Pilgrims");
         }
 
         public static IFraction InterventionistFraction { get; private set; }
@@ -19,8 +18,6 @@
         public static IFraction MilitiaFraction { get; private set; }
 
         public static IFraction MonsterFraction { get; private set; }
-
-        public static IFraction Pilgrims { get; }
 
         public static IFraction TroublemakerFraction { get; private set; }
     }
