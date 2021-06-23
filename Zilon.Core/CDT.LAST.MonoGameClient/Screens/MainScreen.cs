@@ -53,7 +53,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch = spriteBatch;
 
             var serviceScope = ((LivGame)Game).ServiceProvider;
-            
+
             _uiState = serviceScope.GetRequiredService<ISectorUiState>();
             _player = serviceScope.GetRequiredService<IPlayer>();
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
