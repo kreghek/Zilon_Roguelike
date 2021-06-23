@@ -77,7 +77,7 @@ namespace Zilon.Core.Tests.Commands
                         EquipmentSlotTypes.Hand
                     },
                     EquipRestrictions = new TestPropEquipRestrictions
-                    { 
+                    {
                         PropHandUsage = PropHandUsage.TwoHanded
                     }
                 }

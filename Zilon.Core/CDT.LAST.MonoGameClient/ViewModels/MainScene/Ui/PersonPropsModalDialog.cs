@@ -87,7 +87,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                         Close();
                     }
                     else
-                    { 
+                    {
                         // The context menu can be closed without command by follow reasons:
                         // - Mouse cursor leaves menu origin.
                         // Just do nothing because the user didn't change any modal state.

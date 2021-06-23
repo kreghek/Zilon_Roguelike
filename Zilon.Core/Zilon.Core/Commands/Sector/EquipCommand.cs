@@ -49,7 +49,7 @@ namespace Zilon.Core.Commands
             if (_inventoryState.SelectedProp is null)
             {
                 return new CanExecuteCheckResult
-                { 
+                {
                     IsSuccess = false,
                     FailureReason = "Item to equip is not selected."
                 };
@@ -67,9 +67,9 @@ namespace Zilon.Core.Commands
             // Сломанную экипировку нельзя надевать
             if (equipmentFromInventory.Durable.Value <= 0)
             {
-                return new CanExecuteCheckResult 
+                return new CanExecuteCheckResult
                 {
-                    IsSuccess = false, 
+                    IsSuccess = false,
                     FailureReason = "The selected equipment is broken."
                 };
             }
@@ -80,8 +80,8 @@ namespace Zilon.Core.Commands
             var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipmentFromInventory!, slot);
             if (!canEquipInSlot)
             {
-                return new CanExecuteCheckResult 
-                { 
+                return new CanExecuteCheckResult
+                {
                     IsSuccess = false,
                     FailureReason = $"Incompatible slot {slot?.Types} to assign equipment."
                 };
@@ -93,7 +93,7 @@ namespace Zilon.Core.Commands
             if (!canEquipDual)
             {
                 return new CanExecuteCheckResult
-                { 
+                {
                     IsSuccess = false,
                     FailureReason = "Equipment is not compatible to dual."
                 };
@@ -117,9 +117,9 @@ namespace Zilon.Core.Commands
                 SlotIndex.Value);
             if (is1hTo2hSlot != null && is1hTo2hSlot == false)
             {
-                return new CanExecuteCheckResult 
+                return new CanExecuteCheckResult
                 {
-                    IsSuccess = false ,
+                    IsSuccess = false,
                     FailureReason = "It is attempt to equip two-handed in not main hand slot."
                 };
             }
