@@ -127,7 +127,7 @@ namespace Zilon.Core.Commands
             return new CanExecuteCheckResult { IsSuccess = true };
         }
 
-        private bool? Check2hOnlyInMainHandSlot(IEquipmentModule equipmentModule, Equipment targetItemToEquip, int slotIndex)
+        private static bool? Check2hOnlyInMainHandSlot(IEquipmentModule equipmentModule, Equipment targetItemToEquip, int slotIndex)
         {
             var equipRestrictions = targetItemToEquip.Scheme?.Equip?.EquipRestrictions;
             if (equipRestrictions is null || equipRestrictions.PropHandUsage is null)
