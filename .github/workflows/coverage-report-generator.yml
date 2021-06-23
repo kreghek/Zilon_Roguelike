@@ -1,16 +1,9 @@
 name: Test and ReportGenerator report
 
 on:
-  pull_request:
+   push:
     branches:
-      - master
-    tags:
-      - 'v*.*.*'
-  push:
-    branches:
-      - master
-    tags:
-      - 'v*.*.*'
+      - benchs-netcore31
 
 env:
   TEST_RESULT_PATH: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/TestResults/

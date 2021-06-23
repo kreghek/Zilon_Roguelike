@@ -13,6 +13,30 @@ using Zilon.Core.World;
 
 namespace Zilon.Emulation.Common
 {
+    public interface IAutoplayContext
+    {
+        Task<bool> CheckNextIterationAsync();
+    }
+
+    public sealed class AutoplayContext : IAutoplayContext
+    {
+        private readonly IPerson _followedPerson;
+
+        public AutoplayContext(IPerson followedPerson)
+        {
+            _followedPerson = followedPerson;
+        }
+
+        public async Task<bool> CheckNextIterationAsync()
+        {
+            return await Task.Run(() =>
+            {
+                return !_followedPerson.GetModule<ISurvivalModule>().IsDead;
+            });
+        }
+    }
+
+
     public abstract class AutoplayEngineBase
     {
         private const int ITERATION_LIMIT = 4000;
@@ -39,20 +63,20 @@ namespace Zilon.Emulation.Common
             return globe;
         }
 
-        public async Task StartAsync(IGlobe globe, IPerson followedPerson)
+        public async Task StartAsync(IGlobe globe, IAutoplayContext context)
         {
             if (globe is null)
             {
                 throw new ArgumentNullException(nameof(globe));
             }
 
-            if (followedPerson is null)
+            if (context is null)
             {
-                throw new ArgumentNullException(nameof(followedPerson));
+                throw new ArgumentNullException(nameof(context));
             }
 
             var iterationCounter = 1;
-            while (!followedPerson.GetModule<ISurvivalModule>().IsDead && iterationCounter <= ITERATION_LIMIT)
+            while (await context.CheckNextIterationAsync() && iterationCounter <= ITERATION_LIMIT)
             {
                 for (var updateCounter = 0; updateCounter < GlobeMetrics.OneIterationLength; updateCounter++)
                 {
