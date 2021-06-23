@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Client;
@@ -45,18 +46,32 @@ namespace Zilon.Core.Commands
                 throw new InvalidOperationException("Для команды не указан слот.");
             }
 
-            var equipmentFromInventory = GetSelectedEquipmentInInventory();
-            if (equipmentFromInventory is null && _inventoryState.SelectedProp != null)
+            if (_inventoryState.SelectedProp is null)
             {
-                return new CanExecuteCheckResult { IsSuccess = false };
+                return new CanExecuteCheckResult
+                { 
+                    IsSuccess = false,
+                    FailureReason = "Item to equip is not selected."
+                };
+            }
+
+            if (_inventoryState.SelectedProp.Prop is not Equipment equipmentFromInventory)
+            {
+                return new CanExecuteCheckResult
+                {
+                    IsSuccess = false,
+                    FailureReason = "It is attempt to equip non-equipment."
+                };
             }
 
             // Сломанную экипировку нельзя надевать
-            //TODO Тут есть замечание, что equipment не проверяется.
-            // Реорганизовать этот код в более понятный.
-            if (equipmentFromInventory != null && equipmentFromInventory.Durable.Value <= 0)
+            if (equipmentFromInventory.Durable.Value <= 0)
             {
-                return new CanExecuteCheckResult { IsSuccess = false };
+                return new CanExecuteCheckResult 
+                {
+                    IsSuccess = false, 
+                    FailureReason = "The selected equipment is broken."
+                };
             }
 
             var equipmentCarrier = PlayerState.ActiveActor!.Actor.Person.GetModule<IEquipmentModule>();
@@ -65,27 +80,71 @@ namespace Zilon.Core.Commands
             var canEquipInSlot = EquipmentCarrierHelper.CheckSlotCompability(equipmentFromInventory!, slot);
             if (!canEquipInSlot)
             {
-                return new CanExecuteCheckResult { IsSuccess = false };
+                return new CanExecuteCheckResult 
+                { 
+                    IsSuccess = false,
+                    FailureReason = $"Incompatible slot {slot?.Types} to assign equipment."
+                };
             }
 
             var canEquipDual = EquipmentCarrierHelper.CheckDualCompability(equipmentCarrier,
-                equipmentFromInventory!,
+                equipmentFromInventory,
                 SlotIndex.Value);
             if (!canEquipDual)
             {
-                return new CanExecuteCheckResult { IsSuccess = false };
+                return new CanExecuteCheckResult
+                { 
+                    IsSuccess = false,
+                    FailureReason = "Equipment is not compatible to dual."
+                };
             }
 
             var canEquipShield = EquipmentCarrierHelper.CheckShieldCompability(equipmentCarrier,
-                equipmentFromInventory!,
+                equipmentFromInventory,
                 SlotIndex.Value);
 
             if (!canEquipShield)
             {
-                return new CanExecuteCheckResult { IsSuccess = false };
+                return new CanExecuteCheckResult
+                {
+                    IsSuccess = false,
+                    FailureReason = "It is attempt to equip second shield."
+                };
+            }
+
+            var is1hTo2hSlot = Check2hOnlyInMainHandSlot(equipmentCarrier,
+                equipmentFromInventory,
+                SlotIndex.Value);
+            if (is1hTo2hSlot != null && is1hTo2hSlot == false)
+            {
+                return new CanExecuteCheckResult 
+                {
+                    IsSuccess = false ,
+                    FailureReason = "It is attempt to equip two-handed in not main hand slot."
+                };
             }
 
             return new CanExecuteCheckResult { IsSuccess = true };
+        }
+
+        private bool? Check2hOnlyInMainHandSlot(IEquipmentModule equipmentModule, Equipment targetItemToEquip, int slotIndex)
+        {
+            var equipRestrictions = targetItemToEquip.Scheme?.Equip?.EquipRestrictions;
+            if (equipRestrictions is null || equipRestrictions.PropHandUsage is null)
+            {
+                // Equiped item is one-handed or not in hand slot.
+                // No special rules of can execute checking are need.
+                return true;
+            }
+            else if (equipRestrictions.PropHandUsage == Schemes.PropHandUsage.TwoHanded)
+            {
+                return equipmentModule.Slots[slotIndex].IsMain;
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown case.");
+            }
+
         }
 
         protected override void ExecuteTacticCommand()
