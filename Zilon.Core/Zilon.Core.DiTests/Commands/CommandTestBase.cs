@@ -64,6 +64,11 @@ namespace Zilon.Core.Tests.Commands
             {
                 new PersonSlotSubScheme
                 {
+                    Types = EquipmentSlotTypes.Hand,
+                    IsMain = true
+                },
+                new PersonSlotSubScheme
+                {
                     Types = EquipmentSlotTypes.Hand
                 }
             });
