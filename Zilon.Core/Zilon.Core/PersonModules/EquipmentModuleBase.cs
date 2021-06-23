@@ -71,10 +71,7 @@ namespace Zilon.Core.PersonModules
             Equipment? oldEquipment,
             Equipment? equipment)
         {
-            EquipmentChanged?.Invoke(
-                sender: this,
-                e: new EquipmentChangedEventArgs(equipment: equipment, oldEquipment: oldEquipment,
-                    slotIndex: slotIndex));
+            EquipmentChanged?.Invoke(this, new EquipmentChangedEventArgs(equipment, oldEquipment, slotIndex));
         }
 
         /// <summary>
@@ -87,38 +84,6 @@ namespace Zilon.Core.PersonModules
         /// При нарушении условий будет выбрасывать исключение.
         /// </remarks>
         protected abstract void ValidateSetEquipment(Equipment equipment, int slotIndex);
-
-        private void DropHandsEquipment(IEnumerable<int> foundHandsIndexes)
-        {
-            foreach (var handIndex in foundHandsIndexes)
-            {
-                _equipment[handIndex] = null;
-            }
-        }
-
-        private IEnumerable<int> FoundHandsIndexes()
-        {
-            return Enumerable.Range(start: 0, count: _equipment.Length).Where(
-                i =>
-                {
-                    var slotByIndex = Slots[i];
-                    var isHand = slotByIndex?.Types == EquipmentSlotTypes.Hand;
-                    return isHand;
-                });
-        }
-
-        private void ReplaceEquipmentInHandSlots(Equipment? equipment)
-        {
-            var foundHandsIndexes = FoundHandsIndexes();
-            if (!foundHandsIndexes.Any())
-            {
-                throw new ArgumentException($"No hand slots to equipment the {equipment}");
-            }
-
-            DropHandsEquipment(foundHandsIndexes);
-            var firstHandIndex = foundHandsIndexes.First();
-            _equipment[firstHandIndex] = equipment;
-        }
 
         private void SetEquipment(Equipment? equipment, int slotIndex)
         {
