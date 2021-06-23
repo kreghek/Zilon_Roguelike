@@ -72,10 +72,6 @@ namespace Zilon.Core.Tactics.Behaviour
             {
                 equipmentInHandSlots.Add(equipmentInTargetSlot);
             }
-            else
-            {
-                Debug.Fail("Equipment in target slot must be assigned. This is checked in the outer method.");
-            }
 
             var equipmentInOtherSlot = equipmentModule[otherHandSlotIndex];
             if (equipmentInOtherSlot is not null)
