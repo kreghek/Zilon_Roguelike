@@ -144,7 +144,6 @@ namespace Zilon.Core.Commands
             {
                 throw new InvalidOperationException("Unknown case.");
             }
-
         }
 
         protected override void ExecuteTacticCommand()
