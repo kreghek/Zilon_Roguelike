@@ -240,9 +240,10 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private static IEnumerable<int> GetHandSlotIndexes(IEquipmentModule equipmentModule)
         {
-            for (var slotIndex = 0; slotIndex < equipmentModule.Slots.Length; slotIndex++)
+            var slots = equipmentModule.Slots;
+            for (var slotIndex = 0; slotIndex < slots.Length; slotIndex++)
             {
-                if (equipmentModule.Slots[slotIndex].Types.HasFlag(EquipmentSlotTypes.Hand))
+                if (slots[slotIndex].Types.HasFlag(EquipmentSlotTypes.Hand))
                 {
                     yield return slotIndex;
                 }
@@ -251,7 +252,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
         private static bool IsTargetSlotBeHand(IEquipmentModule equipmentModule, int slotIndex)
         {
-            if (!equipmentModule.Slots.Any())
+            var slots = equipmentModule.Slots;
+            if (!slots.Any())
             {
                 // Module has no slots.
                 // So it is not hand slot.
@@ -259,7 +261,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 return false;
             }
 
-            return equipmentModule.Slots[slotIndex].Types.HasFlag(EquipmentSlotTypes.Hand);
+            return slots[slotIndex].Types.HasFlag(EquipmentSlotTypes.Hand);
         }
     }
 }
