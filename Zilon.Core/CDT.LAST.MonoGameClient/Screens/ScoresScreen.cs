@@ -4,12 +4,12 @@
 
     using Engine;
 
-    using Resources;
-
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
+
+    using Resources;
 
     using Zilon.Core.Scoring;
 
@@ -37,7 +37,7 @@
             : base(game)
         {
             _spriteBatch = spriteBatch;
-            
+
             var serviceScope = ((LivGame)Game).ServiceProvider;
             var scoreManager = serviceScope.GetRequiredService<IScoreManager>();
             _scoreSummary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);

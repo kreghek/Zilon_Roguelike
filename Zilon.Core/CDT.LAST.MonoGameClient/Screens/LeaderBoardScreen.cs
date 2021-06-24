@@ -4,12 +4,12 @@ namespace CDT.LAST.MonoGameClient.Screens
 
     using Engine;
 
-    using Resources;
-
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
+
+    using Resources;
 
     /// <summary>
     /// The leaderboard screen displays all the results of all played users.
