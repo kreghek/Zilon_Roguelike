@@ -264,4 +264,10 @@
   <data name="NextScreenButtonTitle" xml:space="preserve">
     <value>Дальше</value>
   </data>
+  <data name="ScoreMenuTitle" xml:space="preserve">
+    <value>Меню очков</value>
+  </data>
+  <data name="LeaderboardMenuTitle" xml:space="preserve">
+    <value>Меню лидеров</value>
+  </data>
 </root>

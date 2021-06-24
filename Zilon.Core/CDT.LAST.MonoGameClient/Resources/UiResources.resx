@@ -264,4 +264,10 @@ take out the character before he dies.</value>
   <data name="NextScreenButtonTitle" xml:space="preserve">
     <value>Next</value>
   </data>
+  <data name="ScoreMenuTitle" xml:space="preserve">
+    <value>Score menu</value>
+  </data>
+  <data name="LeaderboardMenuTitle" xml:space="preserve">
+    <value>Leaderboard menu</value>
+  </data>
 </root>

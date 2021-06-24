@@ -29,16 +29,23 @@
 
         private readonly SpriteBatch _spriteBatch;
 
+        private readonly IUiContentStorage _uiContentStorage;
+
         /// <inheritdoc />
         public ScoresScreen(Game game, SpriteBatch spriteBatch)
             : base(game)
         {
             _spriteBatch = spriteBatch;
+            
+            var serviceScope = ((LivGame)Game).ServiceProvider;
+            var scoreManager = serviceScope.GetRequiredService<IScoreManager>();
+            _scoreSummary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
+            _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
             _globeGenerationScene = new GlobeSelectionScreen(game: game, spriteBatch: spriteBatch);
 
-            var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
-            var font = Game.Content.Load<SpriteFont>("Fonts/Main");
+            var buttonTexture = _uiContentStorage.GetButtonTexture();
+            var font = _uiContentStorage.GetButtonFont();
 
             _restartButton = new TextButton(
                 title: UiResources.StartGameButtonTitle,
@@ -60,10 +67,6 @@
                 font: font,
                 rect: new Rectangle(x: 550, y: 150, width: 100, height: 20));
             _goToNextScreen.OnClick += GoToNextScreenButtonClickHandler;
-
-            var serviceScope = ((LivGame)Game).ServiceProvider;
-            var scoreManager = serviceScope.GetRequiredService<IScoreManager>();
-            _scoreSummary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
         }
 
         /// <inheritdoc />
@@ -77,11 +80,11 @@
             _goToMainMenu.Draw(_spriteBatch);
             _goToNextScreen.Draw(_spriteBatch);
 
-            var font = Game.Content.Load<SpriteFont>("Fonts/Main");
+            var font = _uiContentStorage.GetButtonFont();
 
             _spriteBatch.DrawString(
                 spriteFont: font,
-                text: "Score menu",
+                text: UiResources.ScoreMenuTitle,
                 position: new Vector2(x: 50, y: 100),
                 color: Color.White);
             _spriteBatch.DrawString(

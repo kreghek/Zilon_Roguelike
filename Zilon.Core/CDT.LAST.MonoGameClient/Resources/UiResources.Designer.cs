@@ -326,5 +326,17 @@ namespace CDT.LAST.MonoGameClient.Resources {
                 return ResourceManager.GetString("NextScreenButtonTitle", resourceCulture);
             }
         }
+        
+        internal static string ScoreMenuTitle {
+            get {
+                return ResourceManager.GetString("ScoreMenuTitle", resourceCulture);
+            }
+        }
+        
+        internal static string LeaderboardMenuTitle {
+            get {
+                return ResourceManager.GetString("LeaderboardMenuTitle", resourceCulture);
+            }
+        }
     }
 }

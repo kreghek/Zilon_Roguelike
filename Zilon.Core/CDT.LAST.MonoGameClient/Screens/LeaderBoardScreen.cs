@@ -5,6 +5,7 @@ namespace CDT.LAST.MonoGameClient.Screens
     using CDT.LAST.MonoGameClient.Engine;
     using CDT.LAST.MonoGameClient.Resources;
 
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
@@ -18,19 +19,20 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private readonly SpriteBatch _spriteBatch;
 
+        private readonly IUiContentStorage _uiContentStorage;
+
         /// <inheritdoc />
         public LeaderBoardScreen(Game game, SpriteBatch spriteBatch)
             : base(game)
         {
             _spriteBatch = spriteBatch;
-
-            var buttonTexture = game.Content.Load<Texture2D>("Sprites/ui/button");
-            var font = Game.Content.Load<SpriteFont>("Fonts/Main");
+            var serviceScope = ((LivGame)Game).ServiceProvider;
+            _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
             _goToMainMenu = new TextButton(
                 title: UiResources.MainMenuButtonTitle,
-                texture: buttonTexture,
-                font: font,
+                texture: _uiContentStorage.GetButtonTexture(),
+                font: _uiContentStorage.GetButtonFont(),
                 rect: new Rectangle(x: 350, y: 150, width: 100, height: 20));
             _goToMainMenu.OnClick += GoToMainMenuButtonClickHandler;
 
@@ -46,11 +48,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _goToMainMenu.Draw(_spriteBatch);
 
-            var font = Game.Content.Load<SpriteFont>("Fonts/Main");
-
             _spriteBatch.DrawString(
-                spriteFont: font,
-                text: "Leaderboard menu",
+                spriteFont: _uiContentStorage.GetMenuItemFont(),
+                text: UiResources.LeaderboardMenuTitle,
                 position: new Vector2(x: 50, y: 100),
                 color: Color.White);
             //TODO: draw table leader board
