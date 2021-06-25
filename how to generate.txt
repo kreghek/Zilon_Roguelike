@@ -1,0 +1,1 @@
+Zilon_Roguelike\Zilon.Core>resgen CDT.LAST.MonoGameClient/Resources/UiResources.resx /str:cs,CDT.LAST.MonoGameClient.Resources,UiResources

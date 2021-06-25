@@ -44,13 +44,6 @@
     <ProjectReference Include="..\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Resources\UiResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>UiResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Update="Resources\UiResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>UiResources.Designer.cs</LastGenOutput>
