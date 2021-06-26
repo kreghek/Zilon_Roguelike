@@ -15,14 +15,13 @@ using Zilon.Core.Persons;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    public sealed class CombatActPanel
+    public sealed class CombatActPanel: IBottomSubPanel
     {
         private const int MAX_COMBAT_ACT_COUNT = 8;
         private readonly CombatActButtonGroup _buttonGroup;
         private readonly IList<CombatActButton> _buttons;
         private readonly ICombatActModule _combatActModule;
         private readonly IEquipmentModule _equipmentModule;
-        private readonly IconButton _idleModeSwitcherButton;
         private readonly ISectorUiState _sectorUiState;
         private readonly IUiContentStorage _uiContentStorage;
 
@@ -40,11 +39,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             Initialize(_buttons);
 
-            _idleModeSwitcherButton = new IconButton(uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
-                new IconData(uiContentStorage.GetSmallVerticalButtonIconsTexture(), new Rectangle(0, 32, 16, 32)),
-                new Rectangle(0, 0, 16, 32));
-            _idleModeSwitcherButton.OnClick += IdleModeSwitcherButton_OnClick;
-
             _equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
         }
 
@@ -53,8 +47,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawBackground(spriteBatch, graphicsDevice);
 
             const int COMBAT_ACT_BUTTON_SIZE = 32;
-            const int SWITCHER_MODE_BUTTON_WIDTH = 16;
-            const int SWITCHER_MODE_BUTTON_HEIGHT = 32;
             const int BOTTOM_MARGIN = 0;
 
             const int PANEL_WIDTH = COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT;
@@ -80,13 +72,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 DrawButtonHotkey(actIndex, button, spriteBatch);
             }
-
-            _idleModeSwitcherButton.Rect = new Rectangle(
-                panelX + (COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT) - PANEL_MARGIN,
-                panelY - PANEL_MARGIN,
-                SWITCHER_MODE_BUTTON_WIDTH,
-                SWITCHER_MODE_BUTTON_HEIGHT);
-            _idleModeSwitcherButton.Draw(spriteBatch);
         }
 
         public void UnsubscribeEvents()
@@ -108,8 +93,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _buttonGroup.Selected = button;
                 }
             }
-
-            _idleModeSwitcherButton.Update();
         }
 
         private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
@@ -175,11 +158,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var pressedButton = _buttons[buttonIndex];
                 pressedButton.Click();
             }
-        }
-
-        private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)
-        {
-            _combatActModule.IsCombatMode = !_combatActModule.IsCombatMode;
         }
 
         private void Initialize(IList<CombatActButton> buttons)
