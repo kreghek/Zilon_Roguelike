@@ -2,14 +2,12 @@
 {
     using System;
 
-    using Engine;
-
-    using Resources;
+    using CDT.LAST.MonoGameClient.Engine;
+    using CDT.LAST.MonoGameClient.Resources;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using Microsoft.Xna.Framework.Input;
 
     using Zilon.Core.Scoring;
 
@@ -18,6 +16,20 @@
     /// </summary>
     internal class ScoresScreen : GameSceneBase
     {
+        private const int RESTART_BUTTON_POSITION_X = 150;
+
+        private const int BUTTON_POSITION_Y = 150;
+
+        private const int BUTTON_WIDTH = 100;
+
+        private const int BUTTON_HEIGHT = 20;
+
+        private const int BUTTON_WIDTH_OFFSET = 100;
+
+        private const int SCORE_MENU_TITLE_POSITION_X = 50;
+
+        private const int SCORE_MENU_TITLE_POSITION_Y = 100;
+
         private readonly GlobeSelectionScreen _globeGenerationScene;
 
         private readonly TextButton _goToMainMenu;
@@ -37,7 +49,7 @@
             : base(game)
         {
             _spriteBatch = spriteBatch;
-            
+
             var serviceScope = ((LivGame)Game).ServiceProvider;
             var scoreManager = serviceScope.GetRequiredService<IScoreManager>();
             _scoreSummary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
@@ -52,21 +64,33 @@
                 title: UiResources.StartGameButtonTitle,
                 texture: buttonTexture,
                 font: font,
-                rect: new Rectangle(x: 150, y: 150, width: 100, height: 20));
+                rect: new Rectangle(
+                    x: RESTART_BUTTON_POSITION_X,
+                    y: BUTTON_POSITION_Y,
+                    width: BUTTON_WIDTH,
+                    height: BUTTON_HEIGHT));
             _restartButton.OnClick += RestartButtonClickHandler;
 
             _goToMainMenu = new TextButton(
                 title: UiResources.MainMenuButtonTitle,
                 texture: buttonTexture,
                 font: font,
-                rect: new Rectangle(x: 350, y: 150, width: 100, height: 20));
+                rect: new Rectangle(
+                    x: RESTART_BUTTON_POSITION_X + BUTTON_WIDTH_OFFSET * 2,
+                    y: BUTTON_POSITION_Y,
+                    width: BUTTON_WIDTH,
+                    height: BUTTON_HEIGHT));
             _goToMainMenu.OnClick += GoToMainMenuButtonClickHandler;
 
             _goToNextScreen = new TextButton(
                 title: UiResources.NextScreenButtonTitle,
                 texture: buttonTexture,
                 font: font,
-                rect: new Rectangle(x: 550, y: 150, width: 100, height: 20));
+                rect: new Rectangle(
+                    x: RESTART_BUTTON_POSITION_X + BUTTON_WIDTH_OFFSET * 4,
+                    y: BUTTON_POSITION_Y,
+                    width: BUTTON_WIDTH,
+                    height: BUTTON_HEIGHT));
             _goToNextScreen.OnClick += GoToNextScreenButtonClickHandler;
         }
 
@@ -86,12 +110,12 @@
             _spriteBatch.DrawString(
                 spriteFont: font,
                 text: UiResources.ScoreMenuTitle,
-                position: new Vector2(x: 50, y: 100),
+                position: new Vector2(x: SCORE_MENU_TITLE_POSITION_X, y: SCORE_MENU_TITLE_POSITION_Y),
                 color: Color.White);
             _spriteBatch.DrawString(
                 spriteFont: font,
                 text: _scoreSummary,
-                position: new Vector2(x: 150, y: 200),
+                position: new Vector2(x: SCORE_MENU_TITLE_POSITION_X * 3, y: SCORE_MENU_TITLE_POSITION_Y * 2),
                 color: Color.White);
 
             _spriteBatch.End();
@@ -101,15 +125,6 @@
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-            // Poll for current keyboard state
-            var state = Keyboard.GetState();
-
-            // If they hit esc, exit
-            if (state.IsKeyDown(Keys.Escape))
-            {
-                Game.Exit();
-            }
 
             _restartButton.Update();
             _goToMainMenu.Update();

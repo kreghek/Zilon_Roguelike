@@ -2,20 +2,30 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     using System;
 
-    using Engine;
-
-    using Resources;
+    using CDT.LAST.MonoGameClient.Engine;
+    using CDT.LAST.MonoGameClient.Resources;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using Microsoft.Xna.Framework.Input;
 
     /// <summary>
     /// The leaderboard screen displays all the results of all played users.
     /// </summary>
     public class LeaderBoardScreen : GameSceneBase
     {
+        private const int GO_TO_MAIN_MENU_BUTTON_POSITION_X = 350;
+
+        private const int GO_TO_MAIN_MENU_BUTTON_POSITION_Y = 150;
+
+        private const int BUTTON_WIDTH = 100;
+
+        private const int BUTTON_HEIGHT = 20;
+
+        private const int LEADERBOARD_MENU_TITLE_POSITION_X = 50;
+
+        private const int LEADERBOARD_MENU_TITLE_POSITION_Y = 100;
+
         private readonly TextButton _goToMainMenu;
 
         private readonly SpriteBatch _spriteBatch;
@@ -34,7 +44,11 @@ namespace CDT.LAST.MonoGameClient.Screens
                 title: UiResources.MainMenuButtonTitle,
                 texture: _uiContentStorage.GetButtonTexture(),
                 font: _uiContentStorage.GetButtonFont(),
-                rect: new Rectangle(x: 350, y: 150, width: 100, height: 20));
+                rect: new Rectangle(
+                    x: GO_TO_MAIN_MENU_BUTTON_POSITION_X,
+                    y: GO_TO_MAIN_MENU_BUTTON_POSITION_Y,
+                    width: BUTTON_WIDTH,
+                    height: BUTTON_HEIGHT));
             _goToMainMenu.OnClick += GoToMainMenuButtonClickHandler;
 
             //TODO: prepare leader's board table
@@ -50,9 +64,9 @@ namespace CDT.LAST.MonoGameClient.Screens
             _goToMainMenu.Draw(_spriteBatch);
 
             _spriteBatch.DrawString(
-                spriteFont: _uiContentStorage.GetMenuItemFont(),
+                spriteFont: _uiContentStorage.GetButtonFont(),
                 text: UiResources.LeaderboardMenuTitle,
-                position: new Vector2(x: 50, y: 100),
+                position: new Vector2(x: LEADERBOARD_MENU_TITLE_POSITION_X, y: LEADERBOARD_MENU_TITLE_POSITION_Y),
                 color: Color.White);
             //TODO: draw table leader board
             //TODO: draw menu to add record to leader board table 
@@ -64,15 +78,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-            // Poll for current keyboard state
-            var state = Keyboard.GetState();
-
-            // If they hit esc, exit
-            if (state.IsKeyDown(Keys.Escape))
-            {
-                Game.Exit();
-            }
 
             _goToMainMenu.Update();
         }
