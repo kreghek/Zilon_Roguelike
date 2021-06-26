@@ -1,7 +1,7 @@
 {
   "Name": {
-    "Ru": "Скелет-Бугай",
-    "En": "Skeleton Grunt"
+    "Ru": "Хищник",
+    "En": "Hunter"
   },
   "Hp": 10,
   "PrimaryAct": {
@@ -13,23 +13,15 @@
       "Min": 1,
       "Max": 1
     },
+    "Effect": "Damage",
+    "Targets": "Enemy",
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic"
     },
-    "Effect": "Damage",
-    "Targets": "Enemy"
-  },
-  "Defense": {
-    "Defenses": [
-      {
-        "Type": "TacticalDefence",
-        "Level": "Normal"
-      },
-      {
-        "Type": "TrickyDefence",
-        "Level": "Normal"
-      }
+    "IsMelee": true,
+    "Tags": [
+      "bite"
     ]
   },
   "DropTableSids": [
@@ -37,8 +29,8 @@
     "default",
     "default-evil-hour"
   ],
-  "BaseScore": 50,
+  "BaseScore": 25,
   "Tags": [
-    "undead"
+    "beast"
   ]
 }
