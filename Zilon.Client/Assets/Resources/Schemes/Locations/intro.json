@@ -38,7 +38,7 @@
       },
       "RegularMonsterSids": [
         "hunter"
-        ],
+      ],
       "MinRegionMonsterCount": 1,
       "RegionMonsterCount": 3,
       "TotalChestCount": 0,
