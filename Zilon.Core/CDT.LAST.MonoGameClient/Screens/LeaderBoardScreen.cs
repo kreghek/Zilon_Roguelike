@@ -5,9 +5,13 @@ namespace CDT.LAST.MonoGameClient.Screens
     using CDT.LAST.MonoGameClient.Engine;
     using CDT.LAST.MonoGameClient.Resources;
 
+    using Engine;
+
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
+
+    using Resources;
 
     /// <summary>
     /// The leaderboard screen displays all the results of all played users.
@@ -64,7 +68,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _goToMainMenu.Draw(_spriteBatch);
 
             _spriteBatch.DrawString(
-                spriteFont: _uiContentStorage.GetButtonFont(),
+                spriteFont: _uiContentStorage.GetMenuItemFont(),
                 text: UiResources.LeaderboardMenuTitle,
                 position: new Vector2(x: LEADERBOARD_MENU_TITLE_POSITION_X, y: LEADERBOARD_MENU_TITLE_POSITION_Y),
                 color: Color.White);

@@ -5,9 +5,13 @@
     using CDT.LAST.MonoGameClient.Engine;
     using CDT.LAST.MonoGameClient.Resources;
 
+    using Engine;
+
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
+
+    using Resources;
 
     using Zilon.Core.Scoring;
 
