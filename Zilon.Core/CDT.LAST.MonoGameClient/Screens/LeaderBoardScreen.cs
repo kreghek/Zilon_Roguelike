@@ -2,8 +2,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     using System;
 
-    using CDT.LAST.MonoGameClient.Engine;
-    using CDT.LAST.MonoGameClient.Resources;
+    using Engine;
+
+    using Resources;
 
     using Engine;
 
