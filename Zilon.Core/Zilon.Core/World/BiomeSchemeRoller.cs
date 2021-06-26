@@ -23,13 +23,8 @@ namespace Zilon.Core.World
 
             var dungeonSchemeSids = new[]
             {
-                "rat-hole",
-                "rat-kingdom",
-                "demon-dungeon",
-                "demon-lair",
-                "crypt",
-                "elder-place",
-                "genomass-cave"
+                "dungeon",
+                "elder-temple"
             };
 
             var totalLocationSchemeSids = openSchemeSids.Concat(dungeonSchemeSids).ToArray();
