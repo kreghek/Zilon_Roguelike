@@ -65,7 +65,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: idleButtonIcon,
                 rect: new Rectangle(0, 0, 16, 32));
-                        _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
+            _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
         }
 
         public event EventHandler? PropButtonClicked;

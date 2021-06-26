@@ -15,7 +15,7 @@ using Zilon.Core.Persons;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    public sealed class CombatActPanel: IBottomSubPanel
+    public sealed class CombatActPanel : IBottomSubPanel
     {
         private const int MAX_COMBAT_ACT_COUNT = 8;
         private readonly CombatActButtonGroup _buttonGroup;

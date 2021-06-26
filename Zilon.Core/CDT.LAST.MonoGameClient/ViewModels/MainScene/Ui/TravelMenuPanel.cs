@@ -14,7 +14,7 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    public sealed class TravelPanel: IBottomSubPanel
+    public sealed class TravelPanel : IBottomSubPanel
     {
         private const int BUTTON_WIDTH = 16;
         private const int BUTTON_HEIGHT = 32;
