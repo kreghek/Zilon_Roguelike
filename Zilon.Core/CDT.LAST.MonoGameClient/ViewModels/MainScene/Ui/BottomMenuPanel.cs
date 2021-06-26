@@ -14,21 +14,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     public sealed class BottomMenuPanel
     {
-        const int SWITCHER_MODE_BUTTON_WIDTH = 16;
-        const int SWITCHER_MODE_BUTTON_HEIGHT = 32;
+        private const int SWITCHER_MODE_BUTTON_WIDTH = 16;
+        private const int SWITCHER_MODE_BUTTON_HEIGHT = 32;
 
-        const int PANEL_WIDTH = 32 * 8;
-        const int PANEL_MARGIN = 4;
+        private const int PANEL_WIDTH = 32 * 8;
+        private const int PANEL_MARGIN = 4;
 
-        private readonly TravelPanel _travelPanel;
+        private readonly ICombatActModule _combatActModule;
         private readonly CombatActPanel _combatActPanel;
-
-        private IBottomSubPanel _currentModeMenu;
+        private readonly IconButton _combatModeSwitcherButton;
 
         private readonly IconButton _idleModeSwitcherButton;
 
-        private readonly ICombatActModule _combatActModule;
-        private readonly IconButton _combatModeSwitcherButton;
+        private readonly TravelPanel _travelPanel;
+
+        private IBottomSubPanel _currentModeMenu;
 
         public BottomMenuPanel(
             IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
@@ -48,12 +48,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var idleButtonIcon = new IconData(
                 uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                 new Rectangle(48, 0, 16, 32)
-                );
+            );
 
             var combatButtonIcon = new IconData(
                 uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                 new Rectangle(0, 32, 16, 32)
-                );
+            );
 
             _idleModeSwitcherButton = new IconButton(uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 combatButtonIcon,
@@ -66,33 +66,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 iconData: idleButtonIcon,
                 rect: new Rectangle(0, 0, 16, 32));
             _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
-        }
-
-        public event EventHandler? PropButtonClicked;
-        public event EventHandler? StatButtonClicked;
-
-        private void PersonPropButton_OnClick(object? sender, EventArgs e)
-        {
-            PropButtonClicked?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void PersonStatsButton_OnClick(object? sender, EventArgs e)
-        {
-            StatButtonClicked?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void Update()
-        {
-            _currentModeMenu.Update();
-
-            if (!_combatActModule.IsCombatMode)
-            {
-                _combatModeSwitcherButton.Update();
-            }
-            else
-            {
-                _idleModeSwitcherButton.Update();
-            }
         }
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
@@ -128,10 +101,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
         }
 
-        private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)
+        public void UnsubscribeEvents()
         {
-            _currentModeMenu = _travelPanel;
-            _combatActModule.IsCombatMode = false;
+            _combatActPanel.UnsubscribeEvents();
+        }
+
+        public void Update()
+        {
+            _currentModeMenu.Update();
+
+            if (!_combatActModule.IsCombatMode)
+            {
+                _combatModeSwitcherButton.Update();
+            }
+            else
+            {
+                _idleModeSwitcherButton.Update();
+            }
         }
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
@@ -140,9 +126,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _combatActModule.IsCombatMode = true;
         }
 
-        public void UnsubscribeEvents()
+        private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)
         {
-            _combatActPanel.UnsubscribeEvents();
+            _currentModeMenu = _travelPanel;
+            _combatActModule.IsCombatMode = false;
         }
+
+        private void PersonPropButton_OnClick(object? sender, EventArgs e)
+        {
+            PropButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void PersonStatsButton_OnClick(object? sender, EventArgs e)
+        {
+            StatButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler? PropButtonClicked;
+        public event EventHandler? StatButtonClicked;
     }
 }

@@ -42,57 +42,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
         }
 
-        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
-        {
-            DrawBackground(spriteBatch, graphicsDevice);
-
-            const int COMBAT_ACT_BUTTON_SIZE = 32;
-            const int BOTTOM_MARGIN = 0;
-
-            const int PANEL_WIDTH = COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT;
-            const int PANEL_MARGIN = 4;
-
-            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
-            var panelY = graphicsDevice.Viewport.Bounds.Bottom - COMBAT_ACT_BUTTON_SIZE - BOTTOM_MARGIN;
-
-            for (var actIndex = 0; actIndex < _buttons.Count; actIndex++)
-            {
-                var button = _buttons[actIndex];
-
-                var buttonStackOffsetX = actIndex * COMBAT_ACT_BUTTON_SIZE;
-                var buttonRect = new Rectangle(
-                    buttonStackOffsetX + panelX - PANEL_MARGIN,
-                    panelY - PANEL_MARGIN,
-                    COMBAT_ACT_BUTTON_SIZE,
-                    COMBAT_ACT_BUTTON_SIZE);
-
-                button.Rect = buttonRect;
-
-                button.Draw(spriteBatch);
-
-                DrawButtonHotkey(actIndex, button, spriteBatch);
-            }
-        }
-
         public void UnsubscribeEvents()
         {
             _equipmentModule.EquipmentChanged -= EquipmentModule_EquipmentChanged;
-        }
-
-        public void Update()
-        {
-            HandleHotkeys();
-
-            _buttonGroup.Selected = null;
-            foreach (var button in _buttons)
-            {
-                button.Update();
-
-                if (button.TacticalAct == _sectorUiState.TacticalAct)
-                {
-                    _buttonGroup.Selected = button;
-                }
-            }
         }
 
         private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
@@ -188,6 +140,54 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 }
 
                 buttons.Add(button);
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            DrawBackground(spriteBatch, graphicsDevice);
+
+            const int COMBAT_ACT_BUTTON_SIZE = 32;
+            const int BOTTOM_MARGIN = 0;
+
+            const int PANEL_WIDTH = COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT;
+            const int PANEL_MARGIN = 4;
+
+            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
+            var panelY = graphicsDevice.Viewport.Bounds.Bottom - COMBAT_ACT_BUTTON_SIZE - BOTTOM_MARGIN;
+
+            for (var actIndex = 0; actIndex < _buttons.Count; actIndex++)
+            {
+                var button = _buttons[actIndex];
+
+                var buttonStackOffsetX = actIndex * COMBAT_ACT_BUTTON_SIZE;
+                var buttonRect = new Rectangle(
+                    buttonStackOffsetX + panelX - PANEL_MARGIN,
+                    panelY - PANEL_MARGIN,
+                    COMBAT_ACT_BUTTON_SIZE,
+                    COMBAT_ACT_BUTTON_SIZE);
+
+                button.Rect = buttonRect;
+
+                button.Draw(spriteBatch);
+
+                DrawButtonHotkey(actIndex, button, spriteBatch);
+            }
+        }
+
+        public void Update()
+        {
+            HandleHotkeys();
+
+            _buttonGroup.Selected = null;
+            foreach (var button in _buttons)
+            {
+                button.Update();
+
+                if (button.TacticalAct == _sectorUiState.TacticalAct)
+                {
+                    _buttonGroup.Selected = button;
+                }
             }
         }
     }

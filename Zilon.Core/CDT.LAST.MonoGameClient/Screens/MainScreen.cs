@@ -297,7 +297,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
             }
 
-
             _bottomMenu.UnsubscribeEvents();
 
             _uiState.ActiveActor = null;
