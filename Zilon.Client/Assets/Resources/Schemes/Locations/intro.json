@@ -40,7 +40,7 @@
         "hunter"
       ],
       "MinRegionMonsterCount": 1,
-      "RegionMonsterCount": 3,
+      "RegionMonsterCount": 1,
       "TotalChestCount": 0,
       "RegionChestCountRatio": 0,
       "ChestDropTableSids": [
@@ -51,7 +51,7 @@
         "MapGenerator": "CellularAutomaton",
         "MapWidth": 35,
         "MapHeight": 35,
-        "ChanceToStartAlive": 65
+        "ChanceToStartAlive": 35
       },
       "TransSectorSids": [
         {
