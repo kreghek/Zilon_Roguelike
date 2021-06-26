@@ -54,7 +54,7 @@ namespace Zilon.Core.PersonModules
                 return;
             }
 
-            var hp = 0; //stat.Value;
+            var hp = stat.Value;
             if (hp <= 0)
             {
                 IsDead = true;
