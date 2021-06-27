@@ -18,9 +18,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int SWITCHER_MODE_BUTTON_WIDTH = 16;
         private const int SWITCHER_MODE_BUTTON_HEIGHT = 32;
 
+        private const int SLOT_SIZE = 32;
+        private const int SLOL_MAX_COUNT = 8;
+
         private const int PANEL_MARGIN = 4;
-        private const int PANEL_WIDTH = (32 * 8) + 16 + PANEL_MARGIN;
-        private const int PANEL_HEIGHT = 32 + (4 * 2);
+        private const int PANEL_WIDTH = (SLOT_SIZE * SLOL_MAX_COUNT) + SWITCHER_MODE_BUTTON_WIDTH + PANEL_MARGIN;
+        private const int PANEL_HEIGHT = SLOT_SIZE + (PANEL_MARGIN * 2);
 
         private readonly ICombatActModule _combatActModule;
         private readonly CombatActPanel _combatActPanel;
@@ -51,24 +54,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var idleButtonIcon = new IconData(
                 uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                new Rectangle(48, 0, 16, 32)
+                new Rectangle(48, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT)
             );
 
             var combatButtonIcon = new IconData(
                 uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                new Rectangle(0, 32, 16, 32)
+                new Rectangle(0, 32, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT)
             );
 
             _idleModeSwitcherButton = new IconButton(uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 combatButtonIcon,
-                new Rectangle(0, 0, 16, 32));
+                new Rectangle(0, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT));
             _idleModeSwitcherButton.OnClick += IdleModeSwitcherButton_OnClick;
             _combatActModule = combatActModule;
             _uiContentStorage = uiContentStorage;
             _combatModeSwitcherButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: idleButtonIcon,
-                rect: new Rectangle(0, 0, 16, 32));
+                rect: new Rectangle(0, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT));
             _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
         }
 
