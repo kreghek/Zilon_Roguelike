@@ -274,7 +274,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             };
         }
 
-        protected void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
+        private void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
         {
             DrawLeftHand(equipmentModule);
 
