@@ -32,6 +32,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
         }
 
+        public static Vector2 HitEffectPosition => Vector2.UnitY * -24;
+
+        public SpriteContainer RootSprite => this;
+
         private void AddLeftArmHierarchy()
         {
             var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
@@ -531,8 +535,5 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
             return null;
         }
-
-        public SpriteContainer RootSprite => this;
-        public static Vector2 HitEffectPosition => Vector2.UnitY * -24;
     }
 }

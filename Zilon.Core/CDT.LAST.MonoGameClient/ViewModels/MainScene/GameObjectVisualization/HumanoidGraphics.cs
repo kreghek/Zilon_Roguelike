@@ -17,9 +17,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
     public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
     {
         private readonly IEquipmentModule _equipmentModule;
+        private readonly SpriteContainer _outlined;
 
         private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
-        private readonly SpriteContainer _outlined;
 
         public HumanoidGraphics(IEquipmentModule equipmentModule,
             IPersonVisualizationContentStorage personVisualizationContentStorage)

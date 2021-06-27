@@ -7,9 +7,34 @@ using Zilon.CommonUtilities;
 
 namespace CDT.LAST.Outliner
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static bool CheckIsBound(Bitmap sourceBmp, int x, int y)
+        {
+            for (var x1 = -1; x1 <= 1; x1++)
+            {
+                for (var y1 = -1; y1 <= 1; y1++)
+                {
+                    var targetX = x + x1;
+                    var targetY = y + y1;
+
+                    if (targetX < 0 || targetY < 0 || targetX >= sourceBmp.Width || targetY >= sourceBmp.Height)
+                    {
+                        continue;
+                    }
+
+                    var pixel = sourceBmp.GetPixel(targetX, targetY);
+                    if (pixel.A > 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static void Main(string[] args)
         {
             var imagePath = ArgumentHelper.GetProgramArgument(args, "imagePath");
             var outputPath = ArgumentHelper.GetProgramArgument(args, "outputPath");
@@ -42,7 +67,8 @@ namespace CDT.LAST.Outliner
                                     var targetX = x + x1;
                                     var targetY = y + y1;
 
-                                    if (targetX < 0 || targetY < 0 || targetX >= sourceBmp.Width || targetY >= sourceBmp.Height)
+                                    if (targetX < 0 || targetY < 0 || targetX >= sourceBmp.Width ||
+                                        targetY >= sourceBmp.Height)
                                     {
                                         continue;
                                     }
@@ -57,31 +83,6 @@ namespace CDT.LAST.Outliner
                 var outFile = Path.GetFileNameWithoutExtension(file);
                 outputBmp.Save(Path.Combine(outputPath, outFile + ".png"), ImageFormat.Png);
             }
-        }
-
-        private static bool CheckIsBound(Bitmap sourceBmp, int x, int y)
-        {
-            for (var x1 = -1; x1 <= 1; x1++)
-            {
-                for (var y1 = -1; y1 <= 1; y1++)
-                {
-                    var targetX = x + x1;
-                    var targetY = y + y1;
-
-                    if (targetX < 0 || targetY < 0 || targetX >= sourceBmp.Width || targetY >= sourceBmp.Height)
-                    {
-                        continue;
-                    }
-
-                    var pixel = sourceBmp.GetPixel(targetX, targetY);
-                    if (pixel.A > 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
     }
 }

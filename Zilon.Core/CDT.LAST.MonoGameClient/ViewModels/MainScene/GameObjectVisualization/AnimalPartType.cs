@@ -16,6 +16,6 @@
 
         LegFarFront,
 
-        LegFarHind,
+        LegFarHind
     }
 }

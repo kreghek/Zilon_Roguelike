@@ -28,8 +28,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             Texture = texture ?? throw new ArgumentNullException(nameof(texture));
         }
 
-        public AnimalPartType Type { get; }
-
         public Texture2D Texture { get; }
+
+        public AnimalPartType Type { get; }
     }
 }

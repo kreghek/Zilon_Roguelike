@@ -9,7 +9,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     public sealed class AnimalGraphics : SpriteContainer, IActorGraphics
     {
-        private SpriteContainer _outline;
+        private readonly SpriteContainer _outline;
 
         public AnimalGraphics(IPersonVisualizationContentStorage personVisualizationContentStorage)
         {
