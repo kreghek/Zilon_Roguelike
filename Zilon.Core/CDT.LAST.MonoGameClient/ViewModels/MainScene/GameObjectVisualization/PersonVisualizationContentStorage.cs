@@ -120,24 +120,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             LoadSpecificHumanParts(content, PATH_TO_HUMAN_OUTLINED_PARTS, HUMAN_OUTLINED_PARTS_SID);
         }
 
-        private void LoadSpecificHumanParts(ContentManager content, string path, string sid)
-        {
-            Texture2D load(string name) { return content.Load<Texture2D>(path + name); }
-
-            _bodyParts.Add(sid, new[]
-            {
-                new BodyPart(BodyPartType.Head, load("Head")),
-                new BodyPart(BodyPartType.Chest, load("Body")),
-                new BodyPart(BodyPartType.LegsIdle, load("LegsIdle")),
-                new BodyPart(BodyPartType.LegsCombat, load("LegsCombat")),
-                new BodyPart(BodyPartType.ArmLeft, load("ArmLeftSimple")),
-                new BodyPart(BodyPartType.ArmLeftTwoHanded, load("ArmLeftTwoHanded")),
-                new BodyPart(BodyPartType.ArmLeftFist, load("ArmLeftFist")),
-                new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple")),
-                new BodyPart(BodyPartType.ArmRightTwoHanded, load("ArmRightTwoHanded"))
-            });
-        }
-
         private void LoadSpecificAnimalParts(ContentManager content, string animalSid)
         {
             const string PATH_TO_PARTS = "Sprites/game-objects/";
@@ -162,6 +144,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
                 new AnimalPart(AnimalPartType.LegCloseHind, load(path, animalSid, "leg-close-hind")),
                 new AnimalPart(AnimalPartType.LegFarFront, load(path, animalSid, "leg-far-front")),
                 new AnimalPart(AnimalPartType.LegFarHind, load(path, animalSid, "leg-far-hind"))
+            });
+        }
+
+        private void LoadSpecificHumanParts(ContentManager content, string path, string sid)
+        {
+            Texture2D load(string name) { return content.Load<Texture2D>(path + name); }
+
+            _bodyParts.Add(sid, new[]
+            {
+                new BodyPart(BodyPartType.Head, load("Head")),
+                new BodyPart(BodyPartType.Chest, load("Body")),
+                new BodyPart(BodyPartType.LegsIdle, load("LegsIdle")),
+                new BodyPart(BodyPartType.LegsCombat, load("LegsCombat")),
+                new BodyPart(BodyPartType.ArmLeft, load("ArmLeftSimple")),
+                new BodyPart(BodyPartType.ArmLeftTwoHanded, load("ArmLeftTwoHanded")),
+                new BodyPart(BodyPartType.ArmLeftFist, load("ArmLeftFist")),
+                new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple")),
+                new BodyPart(BodyPartType.ArmRightTwoHanded, load("ArmRightTwoHanded"))
             });
         }
 
