@@ -17,7 +17,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int BUTTON_WIDTH = 16;
         private const int BUTTON_HEIGHT = 32;
-        const int HINT_TEXT_SPACING = 8;
+        private const int HINT_TEXT_SPACING = 8;
 
         private readonly IconButton _autoplayModeButton;
         private readonly IconButton[] _buttons;
