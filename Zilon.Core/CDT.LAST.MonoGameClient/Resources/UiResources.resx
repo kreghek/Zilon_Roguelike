@@ -270,4 +270,13 @@ take out the character before he dies.</value>
   <data name="LeaderboardMenuTitle" xml:space="preserve">
     <value>Leaderboard menu</value>
   </data>
+  <data name="ScoreTableScoreColumnTitle" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="ScoreTableNumberColumnTitle" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="ScoreTableNickColumnTitle" xml:space="preserve">
+    <value>Nickname</value>
+  </data>
 </root>

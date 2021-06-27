@@ -338,5 +338,23 @@ namespace CDT.LAST.MonoGameClient.Resources {
                 return ResourceManager.GetString("LeaderboardMenuTitle", resourceCulture);
             }
         }
+        
+        internal static string ScoreTableScoreColumnTitle {
+            get {
+                return ResourceManager.GetString("ScoreTableScoreColumnTitle", resourceCulture);
+            }
+        }
+        
+        internal static string ScoreTableNumberColumnTitle {
+            get {
+                return ResourceManager.GetString("ScoreTableNumberColumnTitle", resourceCulture);
+            }
+        }
+        
+        internal static string ScoreTableNickColumnTitle {
+            get {
+                return ResourceManager.GetString("ScoreTableNickColumnTitle", resourceCulture);
+            }
+        }
     }
 }

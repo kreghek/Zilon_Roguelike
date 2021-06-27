@@ -270,4 +270,13 @@
   <data name="LeaderboardMenuTitle" xml:space="preserve">
     <value>Меню лидеров</value>
   </data>
+  <data name="ScoreTableScoreColumnTitle" xml:space="preserve">
+    <value>Очки</value>
+  </data>
+  <data name="ScoreTableNumberColumnTitle" xml:space="preserve">
+    <value>Номер</value>
+  </data>
+  <data name="ScoreTableNickColumnTitle" xml:space="preserve">
+    <value>Псевдоним</value>
+  </data>
 </root>
