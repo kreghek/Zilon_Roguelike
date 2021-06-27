@@ -10,7 +10,8 @@ namespace CDT.LAST.Outliner
     {
         private static bool CheckIsBound(Bitmap sourceBmp, int x, int y)
         {
-            var offsets = new[] {
+            var offsets = new[]
+            {
                 new { x = 1, y = 0 },
                 new { x = -1, y = 0 },
                 new { x = 0, y = 1 },
@@ -35,18 +36,6 @@ namespace CDT.LAST.Outliner
             }
 
             return false;
-        }
-
-        private static void Main(string[] args)
-        {
-            var imagePath = ArgumentHelper.GetProgramArgument(args, "imagePath");
-            var outputPath = ArgumentHelper.GetProgramArgument(args, "outputPath");
-
-            var files = Directory.GetFiles(imagePath, "*.png");
-            foreach (var file in files)
-            {
-                HandleFile(outputPath, file);
-            }
         }
 
         private static void HandleFile(string outputPath, string file)
@@ -75,6 +64,18 @@ namespace CDT.LAST.Outliner
 
             var outFile = Path.GetFileNameWithoutExtension(file);
             outputBmp.Save(Path.Combine(outputPath, outFile + ".png"), ImageFormat.Png);
+        }
+
+        private static void Main(string[] args)
+        {
+            var imagePath = ArgumentHelper.GetProgramArgument(args, "imagePath");
+            var outputPath = ArgumentHelper.GetProgramArgument(args, "outputPath");
+
+            var files = Directory.GetFiles(imagePath, "*.png");
+            foreach (var file in files)
+            {
+                HandleFile(outputPath, file);
+            }
         }
     }
 }
