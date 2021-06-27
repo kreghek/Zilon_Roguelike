@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -8,37 +9,32 @@ using Microsoft.Xna.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
-using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
-    public sealed class HumanoidOutlinedGraphics : SpriteContainer
+    public sealed class HumanoidSprite : SpriteContainer
     {
         private readonly IEquipmentModule _equipmentModule;
 
         private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
+        private readonly IEnumerable<BodyPart> _humanBodyParts;
 
-        public HumanoidOutlinedGraphics(IEquipmentModule equipmentModule,
-            IPersonVisualizationContentStorage personVisualizationContentStorage)
+        public HumanoidSprite(IEquipmentModule equipmentModule,
+            IPersonVisualizationContentStorage personVisualizationContentStorage,
+            IEnumerable<BodyPart> humanBodyParts)
         {
             _equipmentModule = equipmentModule;
 
             _personVisualizationContentStorage = personVisualizationContentStorage;
-
+            _humanBodyParts = humanBodyParts;
             CreateSpriteHierarchy(equipmentModule);
-
-            equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
         }
-
-        public static Vector2 HitEffectPosition => Vector2.UnitY * -24;
-
-        public SpriteContainer RootSprite => this;
 
         private void AddLeftArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
+            var humanParts = _humanBodyParts;
             var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeft).Texture;
 
             // Slot 1 according the person scheme is body.
@@ -62,7 +58,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
         private void AddLeftFistHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
+            var humanParts = _humanBodyParts;
             var armLeftFistTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftFist).Texture;
 
             AddChild(new Sprite(armLeftFistTexture)
@@ -94,7 +90,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
         private void AddLeftTwoHandedArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
+            var humanParts = _humanBodyParts;
             var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftTwoHanded).Texture;
 
             // Slot 1 according the person scheme is body.
@@ -137,7 +133,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
         private void AddRightArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
+            var humanParts = _humanBodyParts;
             var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightSimple).Texture;
 
             var dressedRightHandPart = GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmRightSimple);
@@ -171,7 +167,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
         private void AddRightTwoHandedArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
+            var humanParts = _humanBodyParts;
             var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightTwoHanded).Texture;
 
             var dressedRightHandPart =
@@ -278,7 +274,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             };
         }
 
-        private void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
+        protected void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
         {
             DrawLeftHand(equipmentModule);
 
@@ -293,7 +289,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
         private void DrawChest(IEquipmentModule equipmentModule)
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
+            var humanParts = _humanBodyParts;
             var chestTexture = humanParts.Single(x => x.Type == BodyPartType.Chest).Texture;
 
             AddChild(CreateChestSprite(chestTexture));
@@ -319,7 +315,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
         private void DrawHead()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
+            var humanParts = _humanBodyParts;
 
             var headTexture = humanParts.Single(x => x.Type == BodyPartType.Head).Texture;
             AddChild(CreateHeadSprite(headTexture));
@@ -407,7 +403,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
         private void DrawLegs()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
+            var humanParts = _humanBodyParts;
             var legsTexture = humanParts.Single(x => x.Type == BodyPartType.LegsIdle).Texture;
 
             AddChild(CreateLegsSprite(legsTexture));
@@ -503,17 +499,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
                 AddRightArmHierarchy();
             }
-        }
-
-        private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
-        {
-            var childrenSprites = GetChildren().ToArray();
-            foreach (var child in childrenSprites)
-            {
-                RemoveChild(child);
-            }
-
-            CreateSpriteHierarchy(_equipmentModule);
         }
 
         private BodyPart? GetDressedPartAccordingBodySlot(IEquipmentModule equipmentModule, BodyPartType partType)
