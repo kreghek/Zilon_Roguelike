@@ -28,7 +28,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
         protected override void DoDraw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, float zindex)
         {
             _outline.Visible = ShowOutlined;
-            
+
             base.DoDraw(spriteBatch, zindex);
         }
 
