@@ -32,7 +32,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             base.DoDraw(spriteBatch, zindex);
         }
 
-        private SpriteContainer CreateSpriteHierarchy(IEnumerable<AnimalPart> parts)
+        private static SpriteContainer CreateSpriteHierarchy(IEnumerable<AnimalPart> parts)
         {
             var bodySprite = parts.Single(x => x.Type == AnimalPartType.Body).Texture;
             var headSprite = parts.Single(x => x.Type == AnimalPartType.Head).Texture;
