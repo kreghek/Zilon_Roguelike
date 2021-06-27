@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

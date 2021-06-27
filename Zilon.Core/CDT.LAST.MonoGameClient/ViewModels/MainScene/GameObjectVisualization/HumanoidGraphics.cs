@@ -12,7 +12,7 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectGraphics
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
     {

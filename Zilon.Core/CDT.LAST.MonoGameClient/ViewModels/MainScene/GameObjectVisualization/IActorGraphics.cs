@@ -2,7 +2,7 @@
 
 using Microsoft.Xna.Framework;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectGraphics
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     public interface IActorGraphics
     {

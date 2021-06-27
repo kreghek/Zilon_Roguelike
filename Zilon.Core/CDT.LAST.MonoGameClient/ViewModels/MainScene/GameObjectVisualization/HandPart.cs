@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿
+using Microsoft.Xna.Framework.Graphics;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     /// <summary>
     /// Internal structure to store texture and metadata together.

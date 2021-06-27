@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Tactics;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     /// <summary>
     /// Base implementation of content storage.
@@ -23,6 +24,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _bodyParts = new Dictionary<string, BodyPart[]>();
             _handParts = new Dictionary<string, HandPart[]>();
             _headParts = new Dictionary<string, HeadPart[]>();
+
+            _animalParts = new Dictionary<string, AnimalPart[]>();
         }
 
         private void LoadBodyParts(ContentManager content)
@@ -118,15 +121,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple")),
                 new BodyPart(BodyPartType.ArmRightTwoHanded, load("ArmRightTwoHanded"))
             });
+
+            LoadHumanOutlinedParts(content);
         }
 
         private void LoadHumanOutlinedParts(ContentManager content)
         {
-            const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/Human-outlined/";
+            const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/Human/Outlined/";
 
             Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + name); }
 
-            _bodyParts.Add("HumanOutlined", new[]
+            _bodyParts.Add("Human/Outlined", new[]
             {
                 new BodyPart(BodyPartType.Head, load("Head")),
                 new BodyPart(BodyPartType.Chest, load("Body")),
@@ -188,21 +193,57 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// <inheritdoc />
         public IEnumerable<BodyPart> GetHumanOutlinedParts()
         {
-            return _bodyParts["HumanOutlined"];
+            return _bodyParts["Human/Outlined"];
         }
+
+        public IEnumerable<AnimalPart> GetAnimalParts(string sid)
+        {
+            return _animalParts[sid];
+        }
+
+        private readonly Dictionary<string, AnimalPart[]> _animalParts;
 
         /// <inheritdoc />
         public void LoadContent(ContentManager content)
         {
             LoadHumanParts(content);
 
-            LoadHumanOutlinedParts(content);
-
             LoadBodyParts(content);
 
             LoadHandParts(content);
 
             LoadHeadParts(content);
+
+            LoadAnimalParts(content);
+        }
+
+        private void LoadAnimalParts(ContentManager content)
+        {
+            LoadSpecificAnimalParts(content, "hunter");
+        }
+
+        private void LoadSpecificAnimalParts(ContentManager content, string animalSid)
+        {
+            const string PATH_TO_PARTS = "Sprites/game-objects/";
+
+            LoadSpecificAnimalPartsBySpecificPath(content, PATH_TO_PARTS, animalSid);
+            LoadSpecificAnimalPartsBySpecificPath(content, PATH_TO_PARTS, animalSid + "/Outlined");
+        }
+
+        private void LoadSpecificAnimalPartsBySpecificPath(ContentManager content, string path, string animalSid)
+        {
+            Texture2D load(string path, string animalSid, string name) { return content.Load<Texture2D>(Path.Combine(path, animalSid, name)); }
+
+            _animalParts.Add(animalSid, new[]
+            {
+                new AnimalPart(AnimalPartType.Head, load(path, animalSid, "head")),
+                new AnimalPart(AnimalPartType.Body, load(path, animalSid, "body")),
+                new AnimalPart(AnimalPartType.Tail, load(path, animalSid, "tail")),
+                new AnimalPart(AnimalPartType.LegCloseFront, load(path, animalSid, "leg-close-front")),
+                new AnimalPart(AnimalPartType.LegCloseHind, load(path, animalSid,"leg-close-hind")),
+                new AnimalPart(AnimalPartType.LegFarFront, load(path, animalSid,"leg-far-front")),
+                new AnimalPart(AnimalPartType.LegFarHind, load(path, animalSid,"leg-far-hind"))
+            });
         }
     }
 }

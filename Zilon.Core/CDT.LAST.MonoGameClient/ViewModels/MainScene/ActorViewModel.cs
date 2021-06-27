@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
-using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectGraphics;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -102,7 +102,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
             else
             {
-                var graphicsRoot = new AnimalGraphics(gameObjectParams.Game.Content);
+                var graphicsRoot = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
 
                 _rootSprite.AddChild(graphicsRoot);
 

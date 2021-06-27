@@ -2,7 +2,7 @@
 
 using Microsoft.Xna.Framework.Content;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     /// <summary>
     /// Storage of content to persons visualization.
@@ -10,6 +10,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     /// </summary>
     public interface IPersonVisualizationContentStorage
     {
+        IEnumerable<AnimalPart> GetAnimalParts(string sid);
         IEnumerable<BodyPart> GetBodyParts(string sid);
         IEnumerable<HandPart> GetHandParts(string sid);
         IEnumerable<HeadPart> GetHeadParts(string sid);
