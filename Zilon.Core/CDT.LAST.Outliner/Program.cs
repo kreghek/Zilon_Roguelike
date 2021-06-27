@@ -6,7 +6,7 @@ using Zilon.CommonUtilities;
 
 namespace CDT.LAST.Outliner
 {
-    internal class Program
+    internal static class Program
     {
         private static bool CheckIsBound(Bitmap sourceBmp, int x, int y)
         {
