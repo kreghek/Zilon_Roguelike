@@ -42,8 +42,8 @@ namespace CDT.LAST.Outliner
             var files = Directory.GetFiles(imagePath, "*.png");
             foreach (var file in files)
             {
-                var sourceBmp = new Bitmap(file);
-                var outputBmp = new Bitmap(sourceBmp.Width, sourceBmp.Height);
+                using var sourceBmp = new Bitmap(file);
+                using var outputBmp = new Bitmap(sourceBmp.Width, sourceBmp.Height);
 
                 for (var x = 0; x < sourceBmp.Width; x++)
                 {
