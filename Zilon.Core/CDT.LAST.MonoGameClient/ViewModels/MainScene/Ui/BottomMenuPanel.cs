@@ -114,13 +114,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             DetectMouseIsOver();
 
-            if (MouseIsOver)
-            {
-                _currentModeMenu.Update();
+            _currentModeMenu.Update();
 
-                var activeSwitcherButton = GetActiveSwitcherButton();
-                activeSwitcherButton.Update();
-            }
+            var activeSwitcherButton = GetActiveSwitcherButton();
+            activeSwitcherButton.Update();
         }
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)

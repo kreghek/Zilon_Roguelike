@@ -35,7 +35,7 @@ namespace CDT.LAST.MonoGameClient
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkGray);
+            GraphicsDevice.Clear(Color.Black);
 
             if (_spriteBatch is null)
             {
