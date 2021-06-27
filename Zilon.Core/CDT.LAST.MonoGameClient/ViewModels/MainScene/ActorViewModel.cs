@@ -3,12 +3,14 @@ using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectGraphics;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
@@ -178,6 +180,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _rootSprite.Position = newPosition;
                 }
             }
+
+            var keyboard = Keyboard.GetState();
+            _graphicsRoot.ShowOutlined = keyboard.IsKeyDown(Keys.LeftAlt);
         }
 
         private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)

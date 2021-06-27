@@ -1,6 +1,7 @@
 ﻿using System;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectGraphics;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

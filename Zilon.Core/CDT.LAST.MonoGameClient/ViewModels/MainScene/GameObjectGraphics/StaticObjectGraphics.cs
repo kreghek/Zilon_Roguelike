@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Tactics;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectGraphics
 {
     internal sealed class StaticObjectGraphics : SpriteContainer
     {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -13,15 +12,15 @@ using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectGraphics
 {
-    public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
+    public sealed class HumanoidOutlinedGraphics : SpriteContainer
     {
         private readonly IEquipmentModule _equipmentModule;
 
         private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
 
-        public HumanoidGraphics(IEquipmentModule equipmentModule,
+        public HumanoidOutlinedGraphics(IEquipmentModule equipmentModule,
             IPersonVisualizationContentStorage personVisualizationContentStorage)
         {
             _equipmentModule = equipmentModule;
@@ -35,7 +34,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void AddLeftArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
             var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeft).Texture;
 
             // Slot 1 according the person scheme is body.
@@ -59,7 +58,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void AddLeftFistHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
             var armLeftFistTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftFist).Texture;
 
             AddChild(new Sprite(armLeftFistTexture)
@@ -91,7 +90,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void AddLeftTwoHandedArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
             var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftTwoHanded).Texture;
 
             // Slot 1 according the person scheme is body.
@@ -134,7 +133,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void AddRightArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
             var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightSimple).Texture;
 
             var dressedRightHandPart = GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmRightSimple);
@@ -168,7 +167,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void AddRightTwoHandedArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
             var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightTwoHanded).Texture;
 
             var dressedRightHandPart =
@@ -290,7 +289,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawChest(IEquipmentModule equipmentModule)
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
             var chestTexture = humanParts.Single(x => x.Type == BodyPartType.Chest).Texture;
 
             AddChild(CreateChestSprite(chestTexture));
@@ -316,7 +315,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawHead()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
 
             var headTexture = humanParts.Single(x => x.Type == BodyPartType.Head).Texture;
             AddChild(CreateHeadSprite(headTexture));
@@ -404,7 +403,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawLegs()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _personVisualizationContentStorage.GetHumanOutlinedParts();
             var legsTexture = humanParts.Single(x => x.Type == BodyPartType.LegsIdle).Texture;
 
             AddChild(CreateLegsSprite(legsTexture));
@@ -534,6 +533,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         }
 
         public SpriteContainer RootSprite => this;
-        public Vector2 HitEffectPosition => Vector2.UnitY * -24;
+        public static Vector2 HitEffectPosition => Vector2.UnitY * -24;
     }
 }

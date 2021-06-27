@@ -120,6 +120,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             });
         }
 
+        private void LoadHumanOutlinedParts(ContentManager content)
+        {
+            const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/Human-outlined/";
+
+            Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + name); }
+
+            _bodyParts.Add("HumanOutlined", new[]
+            {
+                new BodyPart(BodyPartType.Head, load("Head")),
+                new BodyPart(BodyPartType.Chest, load("Body")),
+                new BodyPart(BodyPartType.LegsIdle, load("LegsIdle")),
+                new BodyPart(BodyPartType.LegsCombat, load("LegsCombat")),
+                new BodyPart(BodyPartType.ArmLeft, load("ArmLeftSimple")),
+                new BodyPart(BodyPartType.ArmLeftTwoHanded, load("ArmLeftTwoHanded")),
+                new BodyPart(BodyPartType.ArmLeftFist, load("ArmLeftFist")),
+                new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple")),
+                new BodyPart(BodyPartType.ArmRightTwoHanded, load("ArmRightTwoHanded"))
+            });
+        }
+
         /// <inheritdoc />
         public IEnumerable<BodyPart> GetBodyParts(string sid)
         {
@@ -166,9 +186,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         }
 
         /// <inheritdoc />
+        public IEnumerable<BodyPart> GetHumanOutlinedParts()
+        {
+            return _bodyParts["HumanOutlined"];
+        }
+
+        /// <inheritdoc />
         public void LoadContent(ContentManager content)
         {
             LoadHumanParts(content);
+
+            LoadHumanOutlinedParts(content);
 
             LoadBodyParts(content);
 

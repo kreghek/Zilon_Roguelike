@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectGraphics
 {
     public sealed class AnimalGraphics : SpriteContainer, IActorGraphics
     {
@@ -63,5 +63,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public SpriteContainer RootSprite => this;
         public Vector2 HitEffectPosition => Vector2.UnitY * -12;
+
+        public bool ShowOutlined { get; set; }
     }
 }
