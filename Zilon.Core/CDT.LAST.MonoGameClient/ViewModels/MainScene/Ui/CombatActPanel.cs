@@ -18,6 +18,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     public sealed class CombatActPanel : IBottomSubPanel
     {
         private const int MAX_COMBAT_ACT_COUNT = 8;
+        private const int COMBAT_ACT_BUTTON_SIZE = 32;
+
         private readonly CombatActButtonGroup _buttonGroup;
         private readonly IList<CombatActButton> _buttons;
         private readonly ICombatActModule _combatActModule;
@@ -102,10 +104,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private void Initialize(IList<CombatActButton> buttons)
         {
             var acts = _combatActModule.CalcCombatActs();
-            var actsOrdered = acts.OrderBy(x => x.Scheme?.Sid).ToArray();
+            var actsOrdered = acts.OrderBy(x => x.Scheme?.Sid).Take(MAX_COMBAT_ACT_COUNT).ToArray();
             foreach (var act in actsOrdered)
             {
-                const int BUTTON_SIZE = 32;
                 var tags = act.Scheme?.Stats?.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
                            Array.Empty<string>();
                 var button = new CombatActButton(_uiContentStorage.GetButtonTexture(),
@@ -113,7 +114,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     selectedMarkerTexture: _uiContentStorage.GetSelectedButtonMarkerTexture(),
                     _buttonGroup,
                     act,
-                    new Rectangle(0, 0, BUTTON_SIZE, BUTTON_SIZE));
+                    new Rectangle(0, 0, COMBAT_ACT_BUTTON_SIZE, COMBAT_ACT_BUTTON_SIZE));
 
                 button.OnClick += (s, e) =>
                 {
@@ -130,25 +131,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public void Draw(SpriteBatch spriteBatch, Rectangle contentRect)
         {
-            const int COMBAT_ACT_BUTTON_SIZE = 32;
-            const int BOTTOM_MARGIN = 0;
-
-            const int PANEL_WIDTH = COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT;
-            const int PANEL_MARGIN = 4;
-
-            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
-            var panelY = graphicsDevice.Viewport.Bounds.Bottom - COMBAT_ACT_BUTTON_SIZE - BOTTOM_MARGIN;
-
             for (var actIndex = 0; actIndex < _buttons.Count; actIndex++)
             {
                 var button = _buttons[actIndex];
 
                 var buttonStackOffsetX = actIndex * COMBAT_ACT_BUTTON_SIZE;
                 var buttonRect = new Rectangle(
-                    buttonStackOffsetX + panelX - PANEL_MARGIN,
-                    panelY - PANEL_MARGIN,
+                    buttonStackOffsetX + contentRect.Left,
+                    contentRect.Top,
                     COMBAT_ACT_BUTTON_SIZE,
                     COMBAT_ACT_BUTTON_SIZE);
 

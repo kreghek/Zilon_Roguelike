@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
@@ -18,6 +17,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int BUTTON_WIDTH = 16;
         private const int BUTTON_HEIGHT = 32;
+        const int HINT_TEXT_SPACING = 8;
 
         private readonly IconButton _autoplayModeButton;
         private readonly IconButton[] _buttons;
@@ -148,20 +148,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             StatButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public void Draw(SpriteBatch spriteBatch, Rectangle contentRect)
         {
-            var halfOfScreenX = graphicsDevice.Viewport.Width / 2;
-            var bottomOfScreenY = graphicsDevice.Viewport.Height;
-
-            const int PANEL_MARGIN = 4;
-
             for (var buttonIndex = 0; buttonIndex < _buttons.Length; buttonIndex++)
             {
                 var button = _buttons[buttonIndex];
                 var buttonOffsetX = BUTTON_WIDTH * buttonIndex;
                 button.Rect = new Rectangle(
-                    halfOfScreenX + buttonOffsetX + PANEL_MARGIN,
-                    bottomOfScreenY - BUTTON_HEIGHT - PANEL_MARGIN,
+                    contentRect.Left + buttonOffsetX,
+                    contentRect.Top,
                     BUTTON_WIDTH,
                     BUTTON_HEIGHT);
 
@@ -171,8 +166,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             if (_autoplayHintIsShown)
             {
                 var titleTextSizeVector = _uiContentStorage.GetHintTitleFont().MeasureString(_autoplayModeButtonTitle);
-
-                const int HINT_TEXT_SPACING = 8;
 
                 var autoplayButtonRect = _autoplayModeButton.Rect;
 

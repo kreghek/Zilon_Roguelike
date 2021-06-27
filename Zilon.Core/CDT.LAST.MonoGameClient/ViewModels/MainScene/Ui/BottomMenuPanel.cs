@@ -18,8 +18,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int SWITCHER_MODE_BUTTON_WIDTH = 16;
         private const int SWITCHER_MODE_BUTTON_HEIGHT = 32;
 
-        private const int PANEL_WIDTH = 32 * 8;
         private const int PANEL_MARGIN = 4;
+        private const int PANEL_WIDTH = (32 * 8) + 16 + PANEL_MARGIN;
+        private const int PANEL_HEIGHT = 32 + (4 * 2);
 
         private readonly ICombatActModule _combatActModule;
         private readonly CombatActPanel _combatActPanel;
@@ -75,20 +76,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            DrawBackground(spriteBatch, graphicsDevice);
+            var panelRect = GetPanelRectangle(graphicsDevice);
 
-            _currentModeMenu.Draw(spriteBatch, graphicsDevice);
+            _storedPanelRect = panelRect;
 
-            const int COMBAT_ACT_BUTTON_SIZE = 32;
-            const int BOTTOM_MARGIN = 0;
-            const int MAX_COMBAT_ACT_COUNT = 8;
+            DrawBackground(spriteBatch, panelRect);
 
-            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
-            var panelY = graphicsDevice.Viewport.Bounds.Bottom - COMBAT_ACT_BUTTON_SIZE - BOTTOM_MARGIN;
+            var contentRect = new Rectangle(
+                panelRect.Left + PANEL_MARGIN,
+                panelRect.Top + PANEL_MARGIN,
+                panelRect.Width - (PANEL_MARGIN * 2),
+                panelRect.Height - (PANEL_MARGIN * 2));
+
+            _currentModeMenu.Draw(spriteBatch, contentRect);
 
             var buttonRectangle = new Rectangle(
-                panelX + (COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT) - PANEL_MARGIN,
-                panelY - PANEL_MARGIN,
+                contentRect.Right,
+                contentRect.Top,
                 SWITCHER_MODE_BUTTON_WIDTH,
                 SWITCHER_MODE_BUTTON_HEIGHT);
 
@@ -129,12 +133,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             MouseIsOver = _storedPanelRect.Intersects(mouseRect);
         }
 
-        private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        private void DrawBackground(SpriteBatch spriteBatch, Rectangle panelRect)
         {
-            var panelRect = GetPanelRectangle(graphicsDevice);
-
-            _storedPanelRect = panelRect;
-
             spriteBatch.Draw(_uiContentStorage.GetBottomPanelBackground(),
                 panelRect,
                 Color.White);
@@ -147,10 +147,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private static Rectangle GetPanelRectangle(GraphicsDevice graphicsDevice)
         {
-            const int PANEL_MARGIN = 4;
-            const int PANEL_WIDTH = (32 * 8) + 16 + PANEL_MARGIN;
-            const int PANEL_HEIGHT = 32 + (4 * 2);
-
             var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
 
             return new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
