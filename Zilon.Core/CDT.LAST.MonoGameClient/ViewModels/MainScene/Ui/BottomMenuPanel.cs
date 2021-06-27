@@ -5,6 +5,7 @@ using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.PersonModules;
@@ -21,6 +22,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int PANEL_MARGIN = 4;
 
         private readonly ICombatActModule _combatActModule;
+        private readonly IUiContentStorage _uiContentStorage;
         private readonly CombatActPanel _combatActPanel;
         private readonly IconButton _combatModeSwitcherButton;
 
@@ -29,6 +31,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly TravelPanel _travelPanel;
 
         private IBottomSubPanel _currentModeMenu;
+        private Rectangle _storedPanelRect;
 
         public BottomMenuPanel(
             IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
@@ -60,7 +63,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 new Rectangle(0, 0, 16, 32));
             _idleModeSwitcherButton.OnClick += IdleModeSwitcherButton_OnClick;
             _combatActModule = combatActModule;
-
+            _uiContentStorage = uiContentStorage;
             _combatModeSwitcherButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: idleButtonIcon,
@@ -70,6 +73,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
+            DrawBackground(spriteBatch, graphicsDevice);
+
             _currentModeMenu.Draw(spriteBatch, graphicsDevice);
 
             const int COMBAT_ACT_BUTTON_SIZE = 32;
@@ -91,6 +96,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             activeButton.Draw(spriteBatch);
         }
 
+        private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            var panelRect = GetPanelRectangle(graphicsDevice);
+
+            _storedPanelRect = panelRect;
+
+            spriteBatch.Draw(_uiContentStorage.GetBottomPanelBackground(),
+                panelRect,
+                Color.White);
+        }
+
+        private static Rectangle GetPanelRectangle(GraphicsDevice graphicsDevice)
+        {
+            const int PANEL_MARGIN = 4;
+            const int PANEL_WIDTH = (32 * 8) + 16 + PANEL_MARGIN;
+            const int PANEL_HEIGHT = 32 + (4 * 2);
+
+            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
+
+            return new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
+        }
+
+        public static bool MouseIsOver { get; private set; }
+
         private IconButton GetActiveSwitcherButton()
         {
             return _combatActModule.IsCombatMode ? _idleModeSwitcherButton : _combatModeSwitcherButton;
@@ -103,10 +132,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Update()
         {
-            _currentModeMenu.Update();
+            DetectMouseIsOver();
 
-            var activeSwitcherButton = GetActiveSwitcherButton();
-            activeSwitcherButton.Update();
+            if (MouseIsOver)
+            {
+                _currentModeMenu.Update();
+
+                var activeSwitcherButton = GetActiveSwitcherButton();
+                activeSwitcherButton.Update();
+            }
+        }
+
+        private void DetectMouseIsOver()
+        {
+            var mouseState = Mouse.GetState();
+            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+            MouseIsOver = _storedPanelRect.Intersects(mouseRect);
         }
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
