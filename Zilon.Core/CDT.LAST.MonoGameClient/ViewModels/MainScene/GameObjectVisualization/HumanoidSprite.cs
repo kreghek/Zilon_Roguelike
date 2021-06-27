@@ -17,9 +17,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
     public sealed class HumanoidSprite : SpriteContainer
     {
         private readonly IEquipmentModule _equipmentModule;
+        private readonly IEnumerable<BodyPart> _humanBodyParts;
 
         private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
-        private readonly IEnumerable<BodyPart> _humanBodyParts;
 
         public HumanoidSprite(IEquipmentModule equipmentModule,
             IPersonVisualizationContentStorage personVisualizationContentStorage,

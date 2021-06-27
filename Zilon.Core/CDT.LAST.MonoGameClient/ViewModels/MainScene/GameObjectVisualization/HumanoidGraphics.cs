@@ -12,9 +12,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
     public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
     {
         private readonly IEquipmentModule _equipmentModule;
-        private SpriteContainer? _outlined;
 
         private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
+        private SpriteContainer? _outlined;
 
         public HumanoidGraphics(IEquipmentModule equipmentModule,
             IPersonVisualizationContentStorage personVisualizationContentStorage)
@@ -38,6 +38,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             base.DoDraw(spriteBatch, zindex);
         }
 
+        private void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
+        {
+            var outlinedHumanoidSprite = new HumanoidSprite(equipmentModule,
+                _personVisualizationContentStorage,
+                _personVisualizationContentStorage.GetHumanOutlinedParts());
+
+            _outlined = outlinedHumanoidSprite;
+            AddChild(_outlined);
+
+            var mainHumanoidSprite = new HumanoidSprite(equipmentModule,
+                _personVisualizationContentStorage,
+                _personVisualizationContentStorage.GetHumanParts());
+            AddChild(mainHumanoidSprite);
+        }
+
         private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
         {
             var childrenSprites = GetChildren().ToArray();
@@ -47,21 +62,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             }
 
             CreateSpriteHierarchy(_equipmentModule);
-        }
-
-        private void CreateSpriteHierarchy(IEquipmentModule equipmentModule)
-        {
-            var outlinedHumanoidSprite = new HumanoidSprite(equipmentModule,
-               _personVisualizationContentStorage,
-               _personVisualizationContentStorage.GetHumanOutlinedParts());
-
-            _outlined = outlinedHumanoidSprite;
-            AddChild(_outlined);
-
-            var mainHumanoidSprite = new HumanoidSprite(equipmentModule,
-                _personVisualizationContentStorage,
-                _personVisualizationContentStorage.GetHumanParts());
-            AddChild(mainHumanoidSprite);
         }
 
         public SpriteContainer RootSprite => this;
