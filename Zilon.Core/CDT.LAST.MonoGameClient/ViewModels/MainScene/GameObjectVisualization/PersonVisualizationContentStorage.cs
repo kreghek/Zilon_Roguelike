@@ -109,33 +109,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             });
         }
 
-        private void LoadHumanOutlinedParts(ContentManager content)
-        {
-            const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/Human/Outlined/";
-
-            Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + name); }
-
-            _bodyParts.Add("Human/Outlined", new[]
-            {
-                new BodyPart(BodyPartType.Head, load("Head")),
-                new BodyPart(BodyPartType.Chest, load("Body")),
-                new BodyPart(BodyPartType.LegsIdle, load("LegsIdle")),
-                new BodyPart(BodyPartType.LegsCombat, load("LegsCombat")),
-                new BodyPart(BodyPartType.ArmLeft, load("ArmLeftSimple")),
-                new BodyPart(BodyPartType.ArmLeftTwoHanded, load("ArmLeftTwoHanded")),
-                new BodyPart(BodyPartType.ArmLeftFist, load("ArmLeftFist")),
-                new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple")),
-                new BodyPart(BodyPartType.ArmRightTwoHanded, load("ArmRightTwoHanded"))
-            });
-        }
-
         private void LoadHumanParts(ContentManager content)
         {
-            const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/Human/";
+            const string HUMAN_PARTS_SID = "Human";
+            const string HUMAN_OUTLINED_PARTS_SID = "Human/Outlined";
+            const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/" + HUMAN_PARTS_SID + "/";
+            const string PATH_TO_HUMAN_OUTLINED_PARTS = "Sprites/game-objects/" + HUMAN_OUTLINED_PARTS_SID + "/";
 
-            Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + name); }
+            LoadSpecificHumanParts(content, PATH_TO_HUMAN_PARTS, HUMAN_PARTS_SID);
+            LoadSpecificHumanParts(content, PATH_TO_HUMAN_OUTLINED_PARTS, HUMAN_OUTLINED_PARTS_SID);
+        }
 
-            _bodyParts.Add("Human", new[]
+        private void LoadSpecificHumanParts(ContentManager content, string path, string sid)
+        {
+            Texture2D load(string name) { return content.Load<Texture2D>(path + name); }
+
+            _bodyParts.Add(sid, new[]
             {
                 new BodyPart(BodyPartType.Head, load("Head")),
                 new BodyPart(BodyPartType.Chest, load("Body")),
@@ -147,8 +136,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
                 new BodyPart(BodyPartType.ArmRightSimple, load("ArmRightSimple")),
                 new BodyPart(BodyPartType.ArmRightTwoHanded, load("ArmRightTwoHanded"))
             });
-
-            LoadHumanOutlinedParts(content);
         }
 
         private void LoadSpecificAnimalParts(ContentManager content, string animalSid)
