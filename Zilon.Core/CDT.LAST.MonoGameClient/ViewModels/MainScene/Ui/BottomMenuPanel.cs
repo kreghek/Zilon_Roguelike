@@ -22,13 +22,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int PANEL_MARGIN = 4;
 
         private readonly ICombatActModule _combatActModule;
-        private readonly IUiContentStorage _uiContentStorage;
         private readonly CombatActPanel _combatActPanel;
         private readonly IconButton _combatModeSwitcherButton;
 
         private readonly IconButton _idleModeSwitcherButton;
 
         private readonly TravelPanel _travelPanel;
+        private readonly IUiContentStorage _uiContentStorage;
 
         private IBottomSubPanel _currentModeMenu;
         private Rectangle _storedPanelRect;
@@ -71,6 +71,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
         }
 
+        public static bool MouseIsOver { get; private set; }
+
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
             DrawBackground(spriteBatch, graphicsDevice);
@@ -96,35 +98,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             activeButton.Draw(spriteBatch);
         }
 
-        private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
-        {
-            var panelRect = GetPanelRectangle(graphicsDevice);
-
-            _storedPanelRect = panelRect;
-
-            spriteBatch.Draw(_uiContentStorage.GetBottomPanelBackground(),
-                panelRect,
-                Color.White);
-        }
-
-        private static Rectangle GetPanelRectangle(GraphicsDevice graphicsDevice)
-        {
-            const int PANEL_MARGIN = 4;
-            const int PANEL_WIDTH = (32 * 8) + 16 + PANEL_MARGIN;
-            const int PANEL_HEIGHT = 32 + (4 * 2);
-
-            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
-
-            return new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
-        }
-
-        public static bool MouseIsOver { get; private set; }
-
-        private IconButton GetActiveSwitcherButton()
-        {
-            return _combatActModule.IsCombatMode ? _idleModeSwitcherButton : _combatModeSwitcherButton;
-        }
-
         public void UnsubscribeEvents()
         {
             _combatActPanel.UnsubscribeEvents();
@@ -143,6 +116,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
         }
 
+        private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
+        {
+            _currentModeMenu = _combatActPanel;
+            _combatActModule.IsCombatMode = true;
+        }
+
         private void DetectMouseIsOver()
         {
             var mouseState = Mouse.GetState();
@@ -150,10 +129,31 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             MouseIsOver = _storedPanelRect.Intersects(mouseRect);
         }
 
-        private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
+        private void DrawBackground(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            _currentModeMenu = _combatActPanel;
-            _combatActModule.IsCombatMode = true;
+            var panelRect = GetPanelRectangle(graphicsDevice);
+
+            _storedPanelRect = panelRect;
+
+            spriteBatch.Draw(_uiContentStorage.GetBottomPanelBackground(),
+                panelRect,
+                Color.White);
+        }
+
+        private IconButton GetActiveSwitcherButton()
+        {
+            return _combatActModule.IsCombatMode ? _idleModeSwitcherButton : _combatModeSwitcherButton;
+        }
+
+        private static Rectangle GetPanelRectangle(GraphicsDevice graphicsDevice)
+        {
+            const int PANEL_MARGIN = 4;
+            const int PANEL_WIDTH = (32 * 8) + 16 + PANEL_MARGIN;
+            const int PANEL_HEIGHT = 32 + (4 * 2);
+
+            var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
+
+            return new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
         }
 
         private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)
