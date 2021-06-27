@@ -79,26 +79,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
             var panelY = graphicsDevice.Viewport.Bounds.Bottom - COMBAT_ACT_BUTTON_SIZE - BOTTOM_MARGIN;
 
-            if (!_combatActModule.IsCombatMode)
-            {
-                _combatModeSwitcherButton.Rect = new Rectangle(
-                    panelX + (COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT) - PANEL_MARGIN,
-                    panelY - PANEL_MARGIN,
-                    SWITCHER_MODE_BUTTON_WIDTH,
-                    SWITCHER_MODE_BUTTON_HEIGHT);
+            var buttonRectangle = new Rectangle(
+                panelX + (COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT) - PANEL_MARGIN,
+                panelY - PANEL_MARGIN,
+                SWITCHER_MODE_BUTTON_WIDTH,
+                SWITCHER_MODE_BUTTON_HEIGHT);
 
-                _combatModeSwitcherButton.Draw(spriteBatch);
-            }
-            else
-            {
-                _idleModeSwitcherButton.Rect = new Rectangle(
-                    panelX + (COMBAT_ACT_BUTTON_SIZE * MAX_COMBAT_ACT_COUNT) - PANEL_MARGIN,
-                    panelY - PANEL_MARGIN,
-                    SWITCHER_MODE_BUTTON_WIDTH,
-                    SWITCHER_MODE_BUTTON_HEIGHT);
+            var activeButton = GetActiveSwitcherButton();
 
-                _idleModeSwitcherButton.Draw(spriteBatch);
-            }
+            activeButton.Rect = buttonRectangle;
+            activeButton.Draw(spriteBatch);
+        }
+
+        private IconButton GetActiveSwitcherButton()
+        {
+            return _combatActModule.IsCombatMode ? _idleModeSwitcherButton : _combatModeSwitcherButton;
         }
 
         public void UnsubscribeEvents()
@@ -110,14 +105,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             _currentModeMenu.Update();
 
-            if (!_combatActModule.IsCombatMode)
-            {
-                _combatModeSwitcherButton.Update();
-            }
-            else
-            {
-                _idleModeSwitcherButton.Update();
-            }
+            var activeSwitcherButton = GetActiveSwitcherButton();
+            activeSwitcherButton.Update();
         }
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
