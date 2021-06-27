@@ -32,7 +32,6 @@ namespace CDT.LAST.Outliner
                 {
                     return true;
                 }
-
             }
 
             return false;
