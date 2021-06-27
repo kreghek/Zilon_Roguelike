@@ -37,9 +37,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(0, 0, 16, 32)
+                    new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 ),
-                rect: new Rectangle(0, 0, 16, 32)
+                rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
             );
             _autoplayModeButton.OnClick += AutoplayModeButton_OnClick;
             _autoplayModeButtonTitle = string.Format(UiResources.SwitchAutomodeButtonTitle,
@@ -49,27 +49,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(16, 0, 16, 32)
+                    new Rectangle(16, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 ),
-                rect: new Rectangle(0, 0, 16, 32));
+                rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             personPropButton.OnClick += PersonEquipmentButton_OnClick;
 
             var personStatsButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(32, 0, 16, 32)
+                    new Rectangle(32, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 ),
-                rect: new Rectangle(0, 0, 16, 32));
+                rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             personStatsButton.OnClick += PersonStatsButton_OnClick;
 
             var gameSpeedButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(16, 32, 16, 32)
+                    new Rectangle(16, 32, BUTTON_WIDTH, BUTTON_HEIGHT)
                 ),
-                rect: new Rectangle(0, 0, 16, 32));
+                rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             gameSpeedButton.OnClick += GameSpeedButton_OnClick;
 
             _buttons = new[]
