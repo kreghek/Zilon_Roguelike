@@ -2,7 +2,7 @@
 
 using Microsoft.Xna.Framework.Graphics;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     /// <summary>
     /// Helper structure to keep texture and metadata for head visualization.

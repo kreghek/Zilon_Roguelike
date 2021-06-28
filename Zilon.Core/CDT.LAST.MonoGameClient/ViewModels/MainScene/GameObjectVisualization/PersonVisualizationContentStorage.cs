@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Tactics;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     /// <summary>
     /// Base implementation of content storage.
     /// </summary>
     internal sealed class PersonVisualizationContentStorage : IPersonVisualizationContentStorage
     {
+        private readonly Dictionary<string, AnimalPart[]> _animalParts;
         private readonly Dictionary<string, BodyPart[]> _bodyParts;
         private readonly Dictionary<string, HandPart[]> _handParts;
         private readonly Dictionary<string, HeadPart[]> _headParts;
@@ -23,6 +25,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _bodyParts = new Dictionary<string, BodyPart[]>();
             _handParts = new Dictionary<string, HandPart[]>();
             _headParts = new Dictionary<string, HeadPart[]>();
+
+            _animalParts = new Dictionary<string, AnimalPart[]>();
+        }
+
+        private void LoadAnimalParts(ContentManager content)
+        {
+            LoadSpecificAnimalParts(content, "hunter");
         }
 
         private void LoadBodyParts(ContentManager content)
@@ -102,11 +111,49 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void LoadHumanParts(ContentManager content)
         {
-            const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/Human/";
+            const string HUMAN_PARTS_SID = "Human";
+            const string HUMAN_OUTLINED_PARTS_SID = "Human/Outlined";
+            var pathToHumanParts = Path.Combine("Sprites", "game-objects", HUMAN_PARTS_SID);
+            var pathToOutlinedHumanParts = Path.Combine("Sprites", "game-objects", HUMAN_PARTS_SID, "Outlined");
 
-            Texture2D load(string name) { return content.Load<Texture2D>(PATH_TO_HUMAN_PARTS + name); }
+            LoadSpecificHumanParts(content, pathToHumanParts, HUMAN_PARTS_SID);
+            LoadSpecificHumanParts(content, pathToOutlinedHumanParts, HUMAN_OUTLINED_PARTS_SID);
+        }
 
-            _bodyParts.Add("Human", new[]
+        private void LoadSpecificAnimalParts(ContentManager content, string animalSid)
+        {
+            const string PATH_TO_PARTS = "Sprites/game-objects/";
+
+            var outlinedSid = animalSid + "/Outlined";
+
+            LoadSpecificAnimalPartsBySpecificPath(content, PATH_TO_PARTS, animalSid);
+            LoadSpecificAnimalPartsBySpecificPath(content, PATH_TO_PARTS, outlinedSid);
+        }
+
+        private void LoadSpecificAnimalPartsBySpecificPath(ContentManager content, string path, string animalSid)
+        {
+            Texture2D load(string path, string animalSid, string name)
+            {
+                return content.Load<Texture2D>(Path.Combine(path, animalSid, name));
+            }
+
+            _animalParts.Add(animalSid, new[]
+            {
+                new AnimalPart(AnimalPartType.Head, load(path, animalSid, "head")),
+                new AnimalPart(AnimalPartType.Body, load(path, animalSid, "body")),
+                new AnimalPart(AnimalPartType.Tail, load(path, animalSid, "tail")),
+                new AnimalPart(AnimalPartType.LegCloseFront, load(path, animalSid, "leg-close-front")),
+                new AnimalPart(AnimalPartType.LegCloseHind, load(path, animalSid, "leg-close-hind")),
+                new AnimalPart(AnimalPartType.LegFarFront, load(path, animalSid, "leg-far-front")),
+                new AnimalPart(AnimalPartType.LegFarHind, load(path, animalSid, "leg-far-hind"))
+            });
+        }
+
+        private void LoadSpecificHumanParts(ContentManager content, string path, string sid)
+        {
+            Texture2D load(string name) { return content.Load<Texture2D>(Path.Combine(path, name)); }
+
+            _bodyParts.Add(sid, new[]
             {
                 new BodyPart(BodyPartType.Head, load("Head")),
                 new BodyPart(BodyPartType.Chest, load("Body")),
@@ -166,6 +213,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         }
 
         /// <inheritdoc />
+        public IEnumerable<BodyPart> GetHumanOutlinedParts()
+        {
+            return _bodyParts["Human/Outlined"];
+        }
+
+        public IEnumerable<AnimalPart> GetAnimalParts(string sid)
+        {
+            return _animalParts[sid];
+        }
+
+        /// <inheritdoc />
         public void LoadContent(ContentManager content)
         {
             LoadHumanParts(content);
@@ -175,6 +233,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             LoadHandParts(content);
 
             LoadHeadParts(content);
+
+            LoadAnimalParts(content);
         }
     }
 }

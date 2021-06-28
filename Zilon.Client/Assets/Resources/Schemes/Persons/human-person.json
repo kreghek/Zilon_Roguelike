@@ -6,16 +6,29 @@
   "DefaultAct": "hand-hit",
   "Slots": [
     {
-      "Types": "Head"
+      "Types": "Head",
+      "Name": {
+        "En": "Head",
+        "Ru": "Голова"
+      }
     },
     {
       "Types": "Body"
     },
     {
-      "Types": "Hand"
+      "Types": "Hand",
+      "IsMain": true,
+      "Name": {
+        "En": "Main hand",
+        "Ru": "Основая рука"
+      }
     },
     {
-      "Types": "Hand"
+      "Types": "Hand",
+      "Name": {
+        "En": "Off hand",
+        "Ru": "Доп. рука"
+      }
     },
     {
       "Types": "Aux"

@@ -37,7 +37,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
         /// Тест проверяет сброс ожидания задачи.
         /// </summary>
         [Test]
-        public async Task DropIntention_WaitTask_InteroptsTaskWaiting()
+        public async Task DropIntention_WaitTask_InteruptsTaskWaiting()
         {
             // ARRANGE
 

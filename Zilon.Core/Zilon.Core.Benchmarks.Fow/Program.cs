@@ -1,6 +1,4 @@
-﻿using System;
-
-using BenchmarkDotNet.Configs;
+﻿using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 
 namespace Zilon.Core.Benchmarks.Fow

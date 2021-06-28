@@ -3,14 +3,12 @@ using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
-using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
@@ -36,10 +34,8 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
-        private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
 
-        private CombatActPanel? _combatActPanel;
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
@@ -62,8 +58,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             _camera = new Camera();
             _personEffectsPanel =
                 new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: uiContentStorage);
-
-            _uiContentStorage = uiContentStorage;
 
             _personEquipmentModal = new PersonPropsModalDialog(
                 uiContentStorage,
@@ -90,8 +84,12 @@ namespace CDT.LAST.MonoGameClient.Screens
                 throw new InvalidOperationException("Main person is not initalized. Generate globe first.");
             }
 
-            _bottomMenu = new BottomMenuPanel(humanActorTaskSource, mainPerson.GetModule<ICombatActModule>(),
-                uiContentStorage);
+            _bottomMenu = new BottomMenuPanel(
+                humanActorTaskSource,
+                mainPerson.GetModule<ICombatActModule>(),
+                uiContentStorage,
+                mainPerson.GetModule<IEquipmentModule>(),
+                _uiState);
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
             _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
         }
@@ -142,7 +140,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (_uiState.ActiveActor != null && !isInTransition)
             {
-                HandleCombatActPanel(_uiState.ActiveActor.Actor.Person);
+                _bottomMenu.Update();
 
                 HandleMainUpdate(_uiState.ActiveActor);
             }
@@ -238,17 +236,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 return;
             }
 
-            if (mainPerson.GetModule<ICombatActModule>().IsCombatMode)
-            {
-                if (_combatActPanel is not null)
-                {
-                    _combatActPanel.Draw(_spriteBatch, GraphicsDevice);
-                }
-            }
-            else
-            {
-                _bottomMenu.Draw(_spriteBatch, Game.GraphicsDevice);
-            }
+            _bottomMenu.Draw(_spriteBatch, Game.GraphicsDevice);
         }
 
         private static ISectorNode? GetPlayerSectorNode(IPlayer player)
@@ -264,25 +252,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                     from actor in sector.ActorManager.Items
                     where actor.Person == player.MainPerson
                     select sectorNode).SingleOrDefault();
-        }
-
-        private void HandleCombatActPanel(IPerson mainPerson)
-        {
-            if (_combatActPanel is null)
-            {
-                _combatActPanel = new CombatActPanel(
-                    mainPerson.GetModule<ICombatActModule>(),
-                    mainPerson.GetModule<IEquipmentModule>(),
-                    _uiContentStorage,
-                    _uiState);
-            }
-            else
-            {
-                if (mainPerson.GetModule<ICombatActModule>().IsCombatMode)
-                {
-                    _combatActPanel.Update();
-                }
-            }
         }
 
         private void HandleMainUpdate(IActorViewModel activeActor)
@@ -328,10 +297,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
             }
 
-            if (_combatActPanel != null)
-            {
-                _combatActPanel.UnsubscribeEvents();
-            }
+            _bottomMenu.UnsubscribeEvents();
 
             _uiState.ActiveActor = null;
             _uiState.SelectedViewModel = null;

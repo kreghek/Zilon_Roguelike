@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -262,7 +263,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (!_leftMousePressed
                 && mouseState.LeftButton == ButtonState.Pressed
                 && _uiState.HoverViewModel != null
-                && _uiState.CanPlayerGivesCommand)
+                && _uiState.CanPlayerGivesCommand
+                && !BottomMenuPanel.MouseIsOver)
             {
                 _leftMousePressed = true;
 

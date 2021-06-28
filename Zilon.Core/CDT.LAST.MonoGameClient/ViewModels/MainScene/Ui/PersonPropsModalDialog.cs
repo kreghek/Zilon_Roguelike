@@ -79,16 +79,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             if (_propContextMenu != null)
             {
-                _propContextMenu.Update();
-
                 if (_propContextMenu.IsClosed)
                 {
                     if (_propContextMenu.IsCommandUsed)
                     {
+                        // We need to close modal and show actor animation.
                         Close();
                     }
 
                     _propContextMenu = null;
+                }
+                else
+                {
+                    _propContextMenu.Update();
                 }
             }
             else
