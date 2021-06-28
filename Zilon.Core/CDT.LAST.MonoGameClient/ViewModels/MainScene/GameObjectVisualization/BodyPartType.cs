@@ -1,4 +1,4 @@
-﻿namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+﻿namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     /// <summary>
     /// The part of person body visualization available on the client.

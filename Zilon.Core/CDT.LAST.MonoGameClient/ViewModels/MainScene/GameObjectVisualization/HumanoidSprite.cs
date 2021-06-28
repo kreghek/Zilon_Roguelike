@@ -9,33 +9,32 @@ using Microsoft.Xna.Framework;
 
 using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
-using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
-    public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
+    public sealed class HumanoidSprite : SpriteContainer
     {
         private readonly IEquipmentModule _equipmentModule;
+        private readonly IEnumerable<BodyPart> _humanBodyParts;
 
         private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
 
-        public HumanoidGraphics(IEquipmentModule equipmentModule,
-            IPersonVisualizationContentStorage personVisualizationContentStorage)
+        public HumanoidSprite(IEquipmentModule equipmentModule,
+            IPersonVisualizationContentStorage personVisualizationContentStorage,
+            IEnumerable<BodyPart> humanBodyParts)
         {
             _equipmentModule = equipmentModule;
 
             _personVisualizationContentStorage = personVisualizationContentStorage;
-
+            _humanBodyParts = humanBodyParts;
             CreateSpriteHierarchy(equipmentModule);
-
-            equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
         }
 
         private void AddLeftArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _humanBodyParts;
             var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeft).Texture;
 
             // Slot 1 according the person scheme is body.
@@ -59,7 +58,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void AddLeftFistHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _humanBodyParts;
             var armLeftFistTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftFist).Texture;
 
             AddChild(new Sprite(armLeftFistTexture)
@@ -91,7 +90,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void AddLeftTwoHandedArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _humanBodyParts;
             var armLeftTexture = humanParts.Single(x => x.Type == BodyPartType.ArmLeftTwoHanded).Texture;
 
             // Slot 1 according the person scheme is body.
@@ -134,7 +133,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void AddRightArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _humanBodyParts;
             var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightSimple).Texture;
 
             var dressedRightHandPart = GetDressedPartAccordingBodySlot(_equipmentModule, BodyPartType.ArmRightSimple);
@@ -168,7 +167,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void AddRightTwoHandedArmHierarchy()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _humanBodyParts;
             var armRightTexture = humanParts.Single(x => x.Type == BodyPartType.ArmRightTwoHanded).Texture;
 
             var dressedRightHandPart =
@@ -290,7 +289,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawChest(IEquipmentModule equipmentModule)
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _humanBodyParts;
             var chestTexture = humanParts.Single(x => x.Type == BodyPartType.Chest).Texture;
 
             AddChild(CreateChestSprite(chestTexture));
@@ -316,7 +315,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawHead()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _humanBodyParts;
 
             var headTexture = humanParts.Single(x => x.Type == BodyPartType.Head).Texture;
             AddChild(CreateHeadSprite(headTexture));
@@ -404,7 +403,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void DrawLegs()
         {
-            var humanParts = _personVisualizationContentStorage.GetHumanParts();
+            var humanParts = _humanBodyParts;
             var legsTexture = humanParts.Single(x => x.Type == BodyPartType.LegsIdle).Texture;
 
             AddChild(CreateLegsSprite(legsTexture));
@@ -502,17 +501,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
-        {
-            var childrenSprites = GetChildren().ToArray();
-            foreach (var child in childrenSprites)
-            {
-                RemoveChild(child);
-            }
-
-            CreateSpriteHierarchy(_equipmentModule);
-        }
-
         private BodyPart? GetDressedPartAccordingBodySlot(IEquipmentModule equipmentModule, BodyPartType partType)
         {
             // Slot 1 according the person scheme is body.
@@ -532,8 +520,5 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Debug.Fail("There are no schemes without SID. So this looks like some kind of error.");
             return null;
         }
-
-        public SpriteContainer RootSprite => this;
-        public Vector2 HitEffectPosition => Vector2.UnitY * -24;
     }
 }

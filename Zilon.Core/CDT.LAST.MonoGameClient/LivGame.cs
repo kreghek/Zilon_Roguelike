@@ -5,6 +5,7 @@ using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.GameComponents;
 using CDT.LAST.MonoGameClient.Screens;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
