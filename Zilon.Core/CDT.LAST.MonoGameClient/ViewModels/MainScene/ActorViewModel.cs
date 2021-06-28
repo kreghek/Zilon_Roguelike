@@ -324,20 +324,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                             attackSoundEffectInstance);
 
                     // Selection actors only prevent error when monster stays on loot bag.
-                    var targetGameObject =
-                        _sectorViewModelContext.GameObjects.SingleOrDefault(x =>
-                            x is IActorViewModel && x.Node == e.TargetNode);
-                    if (targetGameObject is null)
+                    var actorViewModels = _sectorViewModelContext.GameObjects.Where(x => x is IActorViewModel);
+                    var targetGameObject = actorViewModels.SingleOrDefault(x => x.Node == e.TargetNode);
+
+                    if (targetGameObject is not null)
                     {
-                        // This means the attacker is miss.
-                        // This situation can be then the target actor moved before the attack reaches the target.
+                        var direction = targetSpritePosition - _rootSprite.Position;
+                        var effectPosition = targetSpritePosition + targetGameObject.HitEffectPosition;
+                        var hitEffect = new HitEffect((LivGame)_game, effectPosition, direction);
+                        _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
                     }
                     else
                     {
-                        var hitEffect = new HitEffect((LivGame)_game,
-                            targetSpritePosition + targetGameObject.HitEffectPosition,
-                            targetSpritePosition - _rootSprite.Position);
-                        _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
+                        // This means the attacker is miss.
+                        // This situation can be then the target actor moved before the attack reaches the target.
                     }
                 }
             }
