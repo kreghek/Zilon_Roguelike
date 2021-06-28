@@ -113,19 +113,21 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
         {
             const string HUMAN_PARTS_SID = "Human";
             const string HUMAN_OUTLINED_PARTS_SID = "Human/Outlined";
-            const string PATH_TO_HUMAN_PARTS = "Sprites/game-objects/" + HUMAN_PARTS_SID + "/";
-            const string PATH_TO_HUMAN_OUTLINED_PARTS = "Sprites/game-objects/" + HUMAN_OUTLINED_PARTS_SID + "/";
+            var pathToHumanParts = Path.Combine("Sprites", "game-objects", HUMAN_PARTS_SID);
+            var pathToOutlinedHumanParts = Path.Combine("Sprites", "game-objects", HUMAN_PARTS_SID, "Outlined");
 
-            LoadSpecificHumanParts(content, PATH_TO_HUMAN_PARTS, HUMAN_PARTS_SID);
-            LoadSpecificHumanParts(content, PATH_TO_HUMAN_OUTLINED_PARTS, HUMAN_OUTLINED_PARTS_SID);
+            LoadSpecificHumanParts(content, pathToHumanParts, HUMAN_PARTS_SID);
+            LoadSpecificHumanParts(content, pathToOutlinedHumanParts, HUMAN_OUTLINED_PARTS_SID);
         }
 
         private void LoadSpecificAnimalParts(ContentManager content, string animalSid)
         {
             const string PATH_TO_PARTS = "Sprites/game-objects/";
 
+            var outlinedSid = animalSid + "/Outlined";
+
             LoadSpecificAnimalPartsBySpecificPath(content, PATH_TO_PARTS, animalSid);
-            LoadSpecificAnimalPartsBySpecificPath(content, PATH_TO_PARTS, animalSid + "/Outlined");
+            LoadSpecificAnimalPartsBySpecificPath(content, PATH_TO_PARTS, outlinedSid);
         }
 
         private void LoadSpecificAnimalPartsBySpecificPath(ContentManager content, string path, string animalSid)
@@ -149,7 +151,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
         private void LoadSpecificHumanParts(ContentManager content, string path, string sid)
         {
-            Texture2D load(string name) { return content.Load<Texture2D>(path + name); }
+            Texture2D load(string name) { return content.Load<Texture2D>(Path.Combine(path, name)); }
 
             _bodyParts.Add(sid, new[]
             {
