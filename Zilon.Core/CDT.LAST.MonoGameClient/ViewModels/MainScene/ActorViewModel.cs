@@ -334,11 +334,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         var hitEffect = new HitEffect((LivGame)_game, effectPosition, direction);
                         _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
                     }
-                    else
-                    {
-                        // This means the attacker is miss.
-                        // This situation can be then the target actor moved before the attack reaches the target.
-                    }
                 }
             }
         }
