@@ -1,6 +1,7 @@
 namespace CDT.LAST.MonoGameClient.Screens
 {
     using System;
+    using System.Diagnostics;
 
     using CDT.LAST.MonoGameClient.Engine;
     using CDT.LAST.MonoGameClient.Resources;
@@ -52,10 +53,13 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private const int SCORE_TABLE_HEADERS_ROW_OFFSET_Y = 0;
 
+        private string _playerNickname = "";
+
         /// <inheritdoc />
         public LeaderBoardScreen(Game game, SpriteBatch spriteBatch)
             : base(game)
         {
+            game.Window.TextInput += TestInput;
             _spriteBatch = spriteBatch;
             var serviceScope = ((LivGame)Game).ServiceProvider;
             _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
@@ -75,13 +79,18 @@ namespace CDT.LAST.MonoGameClient.Screens
             _font = _uiContentStorage.GetButtonFont();
         }
 
+        private void TestInput(object? sender, TextInputEventArgs e)
+        {
+            var playerChar = e.Character;
+            _playerNickname = $"{_playerNickname}{playerChar}";
+        }
+
         /// <inheritdoc />
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
             _spriteBatch.Begin();
-
             _goToMainMenu.Draw(_spriteBatch);
             _spriteBatch.DrawString(
                 _font,
@@ -150,10 +159,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void DrawScoreTableNickInput()
         {
-            //TODO: throw new NotImplementedException();
             _spriteBatch.DrawString(
                 _font,
-                "TODO: PLAYER NICKNAME INPUT",
+                _playerNickname,
                 GetNickCellPosition(_playerRowOffsetY),
                 Color.White);
         }
