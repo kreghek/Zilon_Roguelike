@@ -328,25 +328,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void HandleAttackVisualEffect(UsedActEventArgs e, Vector2 targetSpritePosition)
-        {
-            // Selection actors only is prevention of a error when a monster stays on a loot bag.
-            var actorViewModels = _sectorViewModelContext.GameObjects.Where(x => x is IActorViewModel);
-            var targetGameObject = actorViewModels.SingleOrDefault(x => x.Node == e.TargetNode);
-
-            if (targetGameObject is null)
-            {
-                // This means the attacker missed.
-                // This situation can be then the target actor moved before the attack reaches the target.
-                return;
-            }
-
-            var direction = targetSpritePosition - _rootSprite.Position;
-            var effectPosition = targetSpritePosition + targetGameObject.HitEffectPosition;
-            var hitEffect = new HitEffect((LivGame)_game, effectPosition, direction);
-            _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
-        }
-
         private void Actor_UsedProp(object? sender, UsedPropEventArgs e)
         {
             var serviceScope = ((LivGame)_game).ServiceProvider;
@@ -396,6 +377,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
             return attackSoundEffectInstance;
+        }
+
+        private void HandleAttackVisualEffect(UsedActEventArgs e, Vector2 targetSpritePosition)
+        {
+            // Selection actors only is prevention of a error when a monster stays on a loot bag.
+            var actorViewModels = _sectorViewModelContext.GameObjects.Where(x => x is IActorViewModel);
+            var targetGameObject = actorViewModels.SingleOrDefault(x => x.Node == e.TargetNode);
+
+            if (targetGameObject is null)
+            {
+                // This means the attacker missed.
+                // This situation can be then the target actor moved before the attack reaches the target.
+                return;
+            }
+
+            var direction = targetSpritePosition - _rootSprite.Position;
+            var effectPosition = targetSpritePosition + targetGameObject.HitEffectPosition;
+            var hitEffect = new HitEffect((LivGame)_game, effectPosition, direction);
+            _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
         }
 
         private SoundEffect? SelectEquipEffect(Equipment? equipment)
