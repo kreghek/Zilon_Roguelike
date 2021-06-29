@@ -323,19 +323,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                             animationBlockerService,
                             attackSoundEffectInstance);
 
-                    // Selection actors only prevent error when monster stays on loot bag.
-                    var actorViewModels = _sectorViewModelContext.GameObjects.Where(x => x is IActorViewModel);
-                    var targetGameObject = actorViewModels.SingleOrDefault(x => x.Node == e.TargetNode);
-
-                    if (targetGameObject is not null)
-                    {
-                        var direction = targetSpritePosition - _rootSprite.Position;
-                        var effectPosition = targetSpritePosition + targetGameObject.HitEffectPosition;
-                        var hitEffect = new HitEffect((LivGame)_game, effectPosition, direction);
-                        _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
-                    }
+                    HandleAttackVisualEffect(e, targetSpritePosition);
                 }
             }
+        }
+
+        private void HandleAttackVisualEffect(UsedActEventArgs e, Vector2 targetSpritePosition)
+        {
+            // Selection actors only is prevention of a error when a monster stays on a loot bag.
+            var actorViewModels = _sectorViewModelContext.GameObjects.Where(x => x is IActorViewModel);
+            var targetGameObject = actorViewModels.SingleOrDefault(x => x.Node == e.TargetNode);
+
+            if (targetGameObject is null)
+            {
+                // This means the attacker missed.
+                // This situation can be then the target actor moved before the attack reaches the target.
+                return;
+            }
+
+            var direction = targetSpritePosition - _rootSprite.Position;
+            var effectPosition = targetSpritePosition + targetGameObject.HitEffectPosition;
+            var hitEffect = new HitEffect((LivGame)_game, effectPosition, direction);
+            _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
         }
 
         private void Actor_UsedProp(object? sender, UsedPropEventArgs e)
