@@ -20,8 +20,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class CommandAdaptor
     {
-        private readonly ICommandPool _commandPool;
         private readonly ServiceProviderCommandFactory _commandFactory;
+        private readonly ICommandPool _commandPool;
 
         public CommandAdaptor(ICommandPool commandPool, ServiceProviderCommandFactory commandFactory)
         {
@@ -44,7 +44,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     public sealed class SectorViewModel
     {
         private readonly Camera _camera;
-        private readonly SectorInterator _sectorInterator;
         private readonly CommandAdaptor _commandAdaptor;
         private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
@@ -52,6 +51,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly MapViewModel _mapViewModel;
         private readonly IPersonSoundContentStorage _personSoundContentStorage;
         private readonly IPlayer _player;
+        private readonly SectorInterator _sectorInterator;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
         private readonly SectorViewModelContext _viewModelContext;
@@ -137,11 +137,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _spriteBatch.End();
         }
 
-        internal void SwitchCurrentPersonIntoCombatMode()
-        {
-            _commandAdaptor.SwitchIntoCombatMode();
-        }
-
         public void UnsubscribeEventHandlers()
         {
             _intarectionBus.NewEvent -= IntarectionBus_NewEvent;
@@ -171,6 +166,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             _sectorInterator.Update(_viewModelContext);
+        }
+
+        internal void SwitchCurrentPersonIntoCombatMode()
+        {
+            _commandAdaptor.SwitchIntoCombatMode();
         }
 
         private static ISectorNode GetPlayerSectorNode(IPlayer player)

@@ -32,12 +32,10 @@ namespace Zilon.Core.PersonModules
 
         public void BeginCombat()
         {
-
         }
 
         public void EndCombat()
         {
-
         }
 
         /// <inheritdoc />
@@ -48,12 +46,10 @@ namespace Zilon.Core.PersonModules
 
         public void Update()
         {
-
         }
 
         public void UseAct(ICombatAct combatAct)
         {
-
         }
     }
 }

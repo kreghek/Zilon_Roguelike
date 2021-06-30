@@ -15,8 +15,8 @@ namespace Zilon.Core.PersonGeneration
 {
     public abstract class FullPersonFactoryBase : IPersonFactory
     {
-        private readonly IPersonPerkInitializator _personPerkInitializator;
         private readonly ICombatActRandomSource _combatActRandomSource;
+        private readonly IPersonPerkInitializator _personPerkInitializator;
         private readonly IPropFactory _propFactory;
         private readonly ISurvivalRandomSource _survivalRandomSource;
 

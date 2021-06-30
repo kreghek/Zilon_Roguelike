@@ -95,11 +95,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             _bottomMenu.CombatButtonClicked += BottomMenu_CombatButtonClicked;
         }
 
-        private void BottomMenu_CombatButtonClicked(object? sender, EventArgs e)
-        {
-            _sectorViewModel.SwitchCurrentPersonIntoCombatMode();
-        }
-
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
@@ -168,6 +163,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
             }
+        }
+
+        private void BottomMenu_CombatButtonClicked(object? sender, EventArgs e)
+        {
+            _sectorViewModel.SwitchCurrentPersonIntoCombatMode();
         }
 
         private void BottomMenu_PropButtonClicked(object? sender, EventArgs e)

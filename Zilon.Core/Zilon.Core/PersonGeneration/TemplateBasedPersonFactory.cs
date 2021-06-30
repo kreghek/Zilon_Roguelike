@@ -20,7 +20,7 @@ namespace Zilon.Core.PersonGeneration
             IPersonPerkInitializator personPerkInitializator,
             ICombatActRandomSource combatActRandomSource,
             IDice dice) : base(schemeService, survivalRandomSource, propFactory, dropResolver, personPerkInitializator,
-                combatActRandomSource,
+            combatActRandomSource,
             dice)
         {
         }

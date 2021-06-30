@@ -10,11 +10,12 @@ namespace Zilon.Core.Specs.Mocks
 {
     public sealed class TestEmptyPersonFactory : IPersonFactory
     {
+        private readonly ICombatActRandomSource _combatActRandomSource;
         private readonly ISchemeService _schemeService;
         private readonly ISurvivalRandomSource _survivalRandomSource;
-        private readonly ICombatActRandomSource _combatActRandomSource;
 
-        public TestEmptyPersonFactory(ISchemeService schemeService, ISurvivalRandomSource survivalRandomSource, ICombatActRandomSource combatActRandomSource)
+        public TestEmptyPersonFactory(ISchemeService schemeService, ISurvivalRandomSource survivalRandomSource,
+            ICombatActRandomSource combatActRandomSource)
         {
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _survivalRandomSource =
@@ -58,7 +59,8 @@ namespace Zilon.Core.Specs.Mocks
 
             var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
             var combatActModule =
-                new CombatActModule(defaultActScheme, equipmentModule, сonditionModule, evolutionModule, _combatActRandomSource);
+                new CombatActModule(defaultActScheme, equipmentModule, сonditionModule, evolutionModule,
+                    _combatActRandomSource);
             person.AddModule(combatActModule);
 
             var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);

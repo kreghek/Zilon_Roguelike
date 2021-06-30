@@ -77,11 +77,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _combatActModule.CombatBegan += CombatActModule_CombatBegan;
         }
 
-        private void CombatActModule_CombatBegan(object? sender, EventArgs e)
-        {
-            _currentModeMenu = _combatActPanel;
-        }
-
         public static bool MouseIsOver { get; private set; }
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
@@ -125,6 +120,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var activeSwitcherButton = GetActiveSwitcherButton();
             activeSwitcherButton.Update();
+        }
+
+        private void CombatActModule_CombatBegan(object? sender, EventArgs e)
+        {
+            _currentModeMenu = _combatActPanel;
         }
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)

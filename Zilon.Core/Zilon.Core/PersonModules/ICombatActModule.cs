@@ -9,8 +9,6 @@ namespace Zilon.Core.PersonModules
     {
         bool IsCombatMode { get; set; }
 
-        event EventHandler? CombatBegan;
-
         void BeginCombat();
         void EndCombat();
 
@@ -26,6 +24,9 @@ namespace Zilon.Core.PersonModules
         /// - Regenerate list of combat acts according the person adapt ability.
         /// </summary>
         void Update();
+
         void UseAct(ICombatAct combatAct);
+
+        event EventHandler? CombatBegan;
     }
 }
