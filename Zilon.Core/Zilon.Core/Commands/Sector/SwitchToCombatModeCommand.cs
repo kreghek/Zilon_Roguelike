@@ -66,7 +66,7 @@ namespace Zilon.Core.Commands.Sector
                 throw new InvalidOperationException();
             }
 
-            var activeCombats = sector.ActiveCombats.Where(x=>x.Participants.Contains(PlayerState.ActiveActor.Actor)).ToArray();
+            var activeCombats = sector.ActiveCombats.Where(x => x.Participants.Contains(PlayerState.ActiveActor.Actor)).ToArray();
             if (activeCombats.Any())
             {
                 return CanExecuteCheckResult.CreateFailed("There is combats with actor.");

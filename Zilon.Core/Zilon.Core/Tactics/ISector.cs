@@ -10,7 +10,7 @@ using Zilon.Core.Tactics.Spatial;
 namespace Zilon.Core.Tactics
 {
     public interface ICombat
-    { 
+    {
         IEnumerable<IActor> Participants { get; }
     }
 
