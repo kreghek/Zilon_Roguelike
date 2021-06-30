@@ -279,4 +279,10 @@ take out the character before he dies.</value>
   <data name="ScoreTableNickColumnTitle" xml:space="preserve">
     <value>Nickname</value>
   </data>
+  <data name="AddPlayerNicknameButton" xml:space="preserve">
+    <value>Add nickname</value>
+  </data>
+  <data name="ClearPlayerNicknameButton" xml:space="preserve">
+    <value>Clear</value>
+  </data>
 </root>

@@ -356,5 +356,17 @@ namespace CDT.LAST.MonoGameClient.Resources {
                 return ResourceManager.GetString("ScoreTableNickColumnTitle", resourceCulture);
             }
         }
+        
+        internal static string AddPlayerNicknameButton {
+            get {
+                return ResourceManager.GetString("AddPlayerNicknameButton", resourceCulture);
+            }
+        }
+        
+        internal static string ClearPlayerNicknameButton {
+            get {
+                return ResourceManager.GetString("ClearPlayerNicknameButton", resourceCulture);
+            }
+        }
     }
 }

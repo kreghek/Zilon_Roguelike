@@ -1,7 +1,7 @@
 namespace CDT.LAST.MonoGameClient.Screens
 {
     using System;
-    using System.Diagnostics;
+    using System.Collections.Generic;
 
     using CDT.LAST.MonoGameClient.Engine;
     using CDT.LAST.MonoGameClient.Resources;
@@ -17,7 +17,7 @@ namespace CDT.LAST.MonoGameClient.Screens
     /// </summary>
     public class LeaderBoardScreen : GameSceneBase
     {
-        private const int GO_TO_MAIN_MENU_BUTTON_POSITION_X = 350;
+        private const int GO_TO_MAIN_MENU_BUTTON_POSITION_X = LEADERBOARD_MENU_TITLE_POSITION_X;
 
         private const int GO_TO_MAIN_MENU_BUTTON_POSITION_Y = 150;
 
@@ -37,21 +37,54 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private const int ROW_STEP = 50;
 
-        private const int FIRST_TABLE_ROW_POSITION_Y = LEADERBOARD_MENU_TITLE_POSITION_Y + ROW_STEP * 2;
+        private const int FIRST_TABLE_ROW_POSITION_Y = GO_TO_MAIN_MENU_BUTTON_POSITION_Y + ROW_STEP;
 
         private const int PLAYER_ROW_OFFSET_Y = 1;
+
+        private const int SCORE_TABLE_HEADERS_ROW_OFFSET_Y = 2;
+
+        private const int ADD_PLAYER_SCORE_BUTTON_POSITION_X = PLAYER_SCORE_TITLE_POSITION_X + OFFSET_BETWEEN_BUTTON;
+
+        private const int OFFSET_BETWEEN_BUTTON = 100;
+
+        private const int CLEAR_PLAYER_SCORE_BUTTON_POSITION_X =
+            ADD_PLAYER_SCORE_BUTTON_POSITION_X + ADD_PLAYER_NICNKNAME_BUTTON_WIDTH + OFFSET_BETWEEN_BUTTON;
+
+        private const int NICKNAME_MAX_LENGTH = 50;
+
+        private const int ADD_PLAYER_NICNKNAME_BUTTON_WIDTH = BUTTON_WIDTH * 2;
+
+        private readonly TextButton _addPlayerNickname;
+
+        private readonly int _addPlayerScoreButtonOffsetY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
+
+        private readonly TextButton _clearPlayerNickname;
+
+        private readonly int _clearPlayerScoreButtonOffsetY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
+
+        private readonly DbContext _dbContext;
 
         private readonly SpriteFont _font;
 
         private readonly TextButton _goToMainMenu;
 
+        private readonly List<PlayerScore> _leaderBoardRecords;
+
+        private readonly Color _playerInfoColor = Color.Blue;
+
         private readonly int _playerRowOffsetY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
+
+        private readonly string _scoreSummary;
 
         private readonly SpriteBatch _spriteBatch;
 
+        private readonly Color _tableHeaderColor = Color.White;
+
+        private readonly Color _tableResultsColor = Color.White;
+
         private readonly IUiContentStorage _uiContentStorage;
 
-        private const int SCORE_TABLE_HEADERS_ROW_OFFSET_Y = 0;
+        private bool _isVisibleNickNamePromt;
 
         private string _playerNickname = "";
 
@@ -64,7 +97,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             var serviceScope = ((LivGame)Game).ServiceProvider;
             _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
             var scoreManager = serviceScope.GetRequiredService<IScoreManager>();
-            var totalPlayerScore = 1234;
+            _scoreSummary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
+            _dbContext = serviceScope.GetRequiredService<DbContext>();
 
             _goToMainMenu = new TextButton(
                 UiResources.MainMenuButtonTitle,
@@ -76,13 +110,32 @@ namespace CDT.LAST.MonoGameClient.Screens
                     BUTTON_WIDTH,
                     BUTTON_HEIGHT));
             _goToMainMenu.OnClick += GoToMainMenuButtonClickHandler;
-            _font = _uiContentStorage.GetButtonFont();
-        }
 
-        private void TestInput(object? sender, TextInputEventArgs e)
-        {
-            var playerChar = e.Character;
-            _playerNickname = $"{_playerNickname}{playerChar}";
+            _addPlayerNickname = new TextButton(
+                UiResources.AddPlayerNicknameButton,
+                _uiContentStorage.GetButtonTexture(),
+                _uiContentStorage.GetButtonFont(),
+                new Rectangle(
+                    ADD_PLAYER_SCORE_BUTTON_POSITION_X,
+                    _addPlayerScoreButtonOffsetY,
+                    ADD_PLAYER_NICNKNAME_BUTTON_WIDTH,
+                    BUTTON_HEIGHT));
+            _addPlayerNickname.OnClick += AddPlayerNickNameClickHandler;
+
+            _clearPlayerNickname = new TextButton(
+                UiResources.ClearPlayerNicknameButton,
+                _uiContentStorage.GetButtonTexture(),
+                _uiContentStorage.GetButtonFont(),
+                new Rectangle(
+                    CLEAR_PLAYER_SCORE_BUTTON_POSITION_X,
+                    _clearPlayerScoreButtonOffsetY,
+                    BUTTON_WIDTH,
+                    BUTTON_HEIGHT));
+            _clearPlayerNickname.OnClick += ClearPlayerNickNameClickHandler;
+
+            _leaderBoardRecords = _dbContext.GetLeaderBoard();
+
+            _font = _uiContentStorage.GetButtonFont();
         }
 
         /// <inheritdoc />
@@ -92,6 +145,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _spriteBatch.Begin();
             _goToMainMenu.Draw(_spriteBatch);
+            _addPlayerNickname.Draw(_spriteBatch);
+            _clearPlayerNickname.Draw(_spriteBatch);
             _spriteBatch.DrawString(
                 _font,
                 UiResources.LeaderboardMenuTitle,
@@ -108,6 +163,19 @@ namespace CDT.LAST.MonoGameClient.Screens
             base.Update(gameTime);
 
             _goToMainMenu.Update();
+        }
+
+        private void AddPlayerNickNameClickHandler(object? sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(_playerNickname))
+                _isVisibleNickNamePromt = true;
+            else
+                _dbContext.AppendScores("TODO:", _playerNickname, "TODO:", "TODO", _scoreSummary);
+        }
+
+        private void ClearPlayerNickNameClickHandler(object? sender, EventArgs e)
+        {
+            _playerNickname = "";
         }
 
         private void DrawAddPlayerRows()
@@ -133,18 +201,18 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _font,
                 UiResources.ScoreTableNumberColumnTitle,
                 new Vector2(PLAYER_NUMBER_TITLE_POSITION_X, offsetY),
-                Color.White);
+                _tableHeaderColor);
             _spriteBatch.DrawString(
                 _font,
                 UiResources.ScoreTableNickColumnTitle,
                 new Vector2(PLAYER_NICKNAME_TITLE_POSITION_X, offsetY),
-                Color.White);
-            var scoreCellPosition = GetScoreCellPosition(0);
+                _tableHeaderColor);
+            var scoreCellPosition = GetScoreCellPosition(SCORE_TABLE_HEADERS_ROW_OFFSET_Y);
             _spriteBatch.DrawString(
                 _font,
                 UiResources.ScoreTableScoreColumnTitle,
                 scoreCellPosition,
-                Color.White);
+                _tableHeaderColor);
         }
 
         private void DrawScoreTableNickCell(string nickName, int indexY)
@@ -154,7 +222,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _font,
                 nickName,
                 GetNickCellPosition(offsetY),
-                Color.White);
+                _tableResultsColor);
         }
 
         private void DrawScoreTableNickInput()
@@ -163,22 +231,22 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _font,
                 _playerNickname,
                 GetNickCellPosition(_playerRowOffsetY),
-                Color.White);
+                _playerInfoColor);
         }
 
-        private void DrawScoreTableNumberCell(uint index, int indexY)
+        private void DrawScoreTableNumberCell(uint index, int indexY, Color color)
         {
             var offsetY = GetRowVerticalPositionOffset(indexY);
             _spriteBatch.DrawString(
                 _font,
                 index.ToString(),
                 new Vector2(PLAYER_NUMBER_TITLE_POSITION_X, offsetY),
-                Color.White);
+                color);
         }
 
         private void DrawScoreTablePlayerNumberCell(uint index)
         {
-            DrawScoreTableNumberCell(index, PLAYER_ROW_OFFSET_Y);
+            DrawScoreTableNumberCell(index, PLAYER_ROW_OFFSET_Y, _playerInfoColor);
         }
 
         private void DrawScoreTablePlayerScoreCell(int playerScore)
@@ -187,30 +255,19 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _font,
                 playerScore.ToString(),
                 new Vector2(PLAYER_SCORE_TITLE_POSITION_X, _playerRowOffsetY),
-                Color.White);
+                _playerInfoColor);
         }
 
         private void DrawScoreTableResults()
         {
-            var testResults = new[]
+            var offsetY = 3;
+            for (var i = 0; i < _leaderBoardRecords.Count; i++)
             {
-                new
-                {
-                    Nickname = "warcru", Score = 555
-                },
-                new
-                {
-                    Nickname = "Solo", Score = 322
-                }
-            };
-            var offsetY = 2;
-            for (uint i = 0; i < testResults.Length; i++)
-            {
-                var indexY = (int)i + offsetY;
-                var number = i + 1;
-                DrawScoreTableNumberCell(number, indexY);
-                DrawScoreTableNickCell(testResults[i].Nickname, indexY);
-                DrawScoreTableScoreCell(testResults[i].Score, indexY);
+                var indexY = i + offsetY;
+                var record = _leaderBoardRecords[i];
+                DrawScoreTableNumberCell(record.RatingPosition, indexY, _tableResultsColor);
+                DrawScoreTableNickCell(record.NickName, indexY);
+                DrawScoreTableScoreCell(record.Score, indexY);
             }
         }
 
@@ -220,7 +277,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _font,
                 score.ToString(),
                 GetScoreCellPosition(offsetY),
-                Color.White);
+                _tableResultsColor);
         }
 
         private static Vector2 GetNickCellPosition(int offsetY)
@@ -242,6 +299,15 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void GoToMainMenuButtonClickHandler(object? sender, EventArgs e)
         {
             TargetScene = new MainScreen(Game, _spriteBatch);
+        }
+
+        private void TestInput(object? sender, TextInputEventArgs e)
+        {
+            var playerChar = e.Character;
+            if (_playerNickname.Length + 1 <= NICKNAME_MAX_LENGTH)
+                _playerNickname = $"{_playerNickname}{playerChar}";
+            if (!string.IsNullOrEmpty(_playerNickname))
+                _isVisibleNickNamePromt = false;
         }
     }
 }
