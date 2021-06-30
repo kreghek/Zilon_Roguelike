@@ -84,6 +84,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private readonly IUiContentStorage _uiContentStorage;
 
+        //TODO: add a nickname promt
         private bool _isVisibleNickNamePromt;
 
         private string _playerNickname = "";
@@ -92,7 +93,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         public LeaderBoardScreen(Game game, SpriteBatch spriteBatch)
             : base(game)
         {
-            game.Window.TextInput += TestInput;
+            game.Window.TextInput += InputNickName;
             _spriteBatch = spriteBatch;
             var serviceScope = ((LivGame)Game).ServiceProvider;
             _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
@@ -163,6 +164,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             base.Update(gameTime);
 
             _goToMainMenu.Update();
+            _addPlayerNickname.Update();
+            _clearPlayerNickname.Update();
         }
 
         private void AddPlayerNickNameClickHandler(object? sender, EventArgs e)
@@ -301,7 +304,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             TargetScene = new MainScreen(Game, _spriteBatch);
         }
 
-        private void TestInput(object? sender, TextInputEventArgs e)
+        private void InputNickName(object? sender, TextInputEventArgs e)
         {
             var playerChar = e.Character;
             if (_playerNickname.Length + 1 <= NICKNAME_MAX_LENGTH)
