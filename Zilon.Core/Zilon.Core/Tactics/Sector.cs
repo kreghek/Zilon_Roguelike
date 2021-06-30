@@ -276,7 +276,7 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                var combatActs = combatActModule.CalcCombatActs();
+                var combatActs = combatActModule.GetCurrentCombatActs();
 
                 foreach (var act in combatActs)
                 {

@@ -14,7 +14,7 @@ namespace Zilon.Core.Persons
         /// <param name="currentNode"> Узел, из которого совершается действие. </param>
         /// <param name="targetNode"> Целевой узел. </param>
         /// <returns>Возвращает true, если дистанция допустима.</returns>
-        public static bool CheckDistance(this ITacticalAct act,
+        public static bool CheckDistance(this ICombatAct act,
             IGraphNode currentNode,
             IGraphNode targetNode,
             ISectorMap map)

@@ -12,10 +12,10 @@ namespace Zilon.Core.Persons
 {
     public class AttackActorJobProgress : IJobProgress
     {
-        private readonly ITacticalAct _tacticalAct;
+        private readonly ICombatAct _tacticalAct;
         private readonly IActor _targetActor;
 
-        public AttackActorJobProgress(IActor targetActor, ITacticalAct tacticalAct)
+        public AttackActorJobProgress(IActor targetActor, ICombatAct tacticalAct)
         {
             _targetActor = targetActor;
             _tacticalAct = tacticalAct;
@@ -172,7 +172,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static bool WeaponHasTag(string tag, ITacticalAct tacticalAct)
+        private static bool WeaponHasTag(string tag, ICombatAct tacticalAct)
         {
             if (tacticalAct.Equipment is null)
             {

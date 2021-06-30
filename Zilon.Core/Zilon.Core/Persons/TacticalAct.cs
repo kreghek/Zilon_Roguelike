@@ -10,7 +10,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Тактическое действие актёров под управлением игрока.
     /// </summary>
-    public class TacticalAct : ITacticalAct
+    public class TacticalAct : ICombatAct
     {
         [ExcludeFromCodeCoverage]
         public TacticalAct([NotNull] ITacticalActScheme scheme,

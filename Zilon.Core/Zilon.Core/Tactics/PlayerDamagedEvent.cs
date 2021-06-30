@@ -7,7 +7,7 @@ namespace Zilon.Core.Tactics
 {
     public sealed class PlayerDamagedEvent : IPlayerEvent
     {
-        public PlayerDamagedEvent(ITacticalAct tacticalAct, IActor damager)
+        public PlayerDamagedEvent(ICombatAct tacticalAct, IActor damager)
         {
             TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
             Damager = damager ?? throw new ArgumentNullException(nameof(damager));
@@ -15,7 +15,7 @@ namespace Zilon.Core.Tactics
 
         public IActor Damager { get; }
 
-        public ITacticalAct TacticalAct { get; }
+        public ICombatAct TacticalAct { get; }
 
         public string Key => $"{Damager.Person}-{TacticalAct}";
 

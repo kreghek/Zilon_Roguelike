@@ -9,8 +9,16 @@ namespace Zilon.Core.PersonModules
         bool IsCombatMode { get; set; }
 
         /// <summary>
-        /// Рассчёт всех действий, используемых в бою.
+        /// Gets all available combat act.
         /// </summary>
-        IEnumerable<ITacticalAct> CalcCombatActs();
+        IEnumerable<ICombatAct> GetCurrentCombatActs();
+
+        /// <summary>
+        /// Update combat acts:
+        /// - Update inner counters like changing act list counter.
+        /// - Update state of all person combat acts.
+        /// - Regenerate list of combat acts according the person adapt ability.
+        /// </summary>
+        void Update();
     }
 }

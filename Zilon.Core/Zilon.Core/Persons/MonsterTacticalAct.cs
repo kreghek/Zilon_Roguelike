@@ -9,7 +9,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Тактическое действие для монстров.
     /// </summary>
-    public class MonsterTacticalAct : ITacticalAct
+    public class MonsterTacticalAct : ICombatAct
     {
         public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
         {

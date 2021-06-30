@@ -27,7 +27,7 @@ namespace Zilon.Core.Persons.Tests
 
             var actor = Mock.Of<IActor>();
 
-            var act = Mock.Of<ITacticalAct>(a => a.Equipment == new Equipment(new TestPropScheme
+            var act = Mock.Of<ICombatAct>(a => a.Equipment == new Equipment(new TestPropScheme
             {
                 Equip = Mock.Of<IPropEquipSubScheme>(),
                 Tags = equipmentTags

@@ -63,7 +63,7 @@ namespace Zilon.TextClient
                 SelectActor(uiState, playerActorSectorNode, targetId);
             }
 
-            var acts = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().CalcCombatActs();
+            var acts = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs();
             uiState.TacticalAct = acts
                 .OrderBy(x => x.Equipment is null)
                 .First(x => x.Constrains is null);

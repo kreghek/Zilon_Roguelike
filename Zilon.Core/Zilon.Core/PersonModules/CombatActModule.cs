@@ -19,10 +19,13 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public sealed class CombatActModule : ICombatActModule
     {
+        private const int ROUND_ACT_COUNT = 4;
         private readonly ITacticalActScheme _defaultActScheme;
         private readonly IEquipmentModule _equipmentModule;
         private readonly IEvolutionModule _evolutionModule;
         private readonly IConditionsModule _сonditionsModule;
+
+        private IList<ICombatAct>? _combatActs;
 
         public CombatActModule(
             ITacticalActScheme defaultActScheme,
@@ -38,7 +41,76 @@ namespace Zilon.Core.PersonModules
             _evolutionModule = evolutionModule;
         }
 
-        private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
+        public void Update()
+        {
+            if (!IsCombatMode)
+            {
+                throw new InvalidOperationException("Combat module can update only after person is in combat mode.");
+            }
+        }
+
+        public void BeginCombat()
+        {
+            IsCombatMode = true;
+
+            _combatActs = new List<ICombatAct>();
+
+            InitCombatActList(_combatActs);
+        }
+
+        private void InitCombatActList(IList<ICombatAct> combatActList)
+        {
+            ClearCombatActList(combatActList);
+
+            var perks = GetPerksSafe();
+            var allActs = CalcActs(_defaultActScheme, _equipmentModule, _сonditionsModule, perks);
+
+            var shuffledActs = allActs.OrderBy(x => x.GetHashCode()).ToArray();
+            var roundActs = shuffledActs.Take(ROUND_ACT_COUNT).ToArray();
+            foreach (var act in roundActs)
+            {
+                combatActList.Add(act);
+            }
+        }
+
+        public void EndCombat()
+        {
+            IsCombatMode = false;
+
+            ClearCombatState();
+        }
+
+        public void UseAct(ICombatAct combatAct)
+        {
+            if (_combatActs is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var itemIsInList = _combatActs.Remove(combatAct);
+            if (!itemIsInList)
+            {
+                throw new InvalidOperationException("Combat action is not in the available list.");
+            }
+        }
+
+        private void ClearCombatState()
+        {
+            if (_combatActs is null)
+            {
+                // Begin initialize combat mode list.
+                throw new InvalidOperationException("End combat must be called after begin.");
+            }
+
+            ClearCombatActList(_combatActs);
+        }
+
+        private static void ClearCombatActList(IList<ICombatAct> combatActList)
+        {
+            combatActList.Clear();
+        }
+
+        private static IEnumerable<ICombatAct> CalcActs(ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment?> equipments,
             IConditionsModule сonditionModule,
             IEnumerable<IPerk> perks)
@@ -53,7 +125,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static IEnumerable<ITacticalAct> CalcActsFromEquipments(
+        private static IEnumerable<ICombatAct> CalcActsFromEquipments(
             IEnumerable<Equipment?> equipments,
             IConditionsModule сondition,
             IEnumerable<IPerk> perks)
@@ -169,7 +241,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
+        private static ICombatAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
             [MaybeNull] Equipment? equipment,
             [NotNull] IConditionsModule сonditionModule,
             [NotNull] IEnumerable<IPerk> perks)
@@ -296,8 +368,15 @@ namespace Zilon.Core.PersonModules
         public bool IsActive { get; set; }
         public bool IsCombatMode { get; set; }
 
-        public IEnumerable<ITacticalAct> CalcCombatActs()
+        public IEnumerable<ICombatAct> GetCurrentCombatActs()
         {
+            if (!IsCombatMode)
+            {
+                // Combat acts are generated in Update circuit.
+                // Update called if person in combat mode (controlled by code above).
+                throw new InvalidOperationException("Person must be in combat mode.");
+            }
+
             var perks = GetPerksSafe();
             return CalcActs(_defaultActScheme, _equipmentModule, _сonditionsModule, perks);
         }

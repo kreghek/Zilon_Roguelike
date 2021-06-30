@@ -110,7 +110,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var act = actor.Person.GetModule<ICombatActModule>().CalcCombatActs().OfType<TacticalAct>()
+            var act = actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs().OfType<TacticalAct>()
                 .Single(x => x.Scheme.Sid == tacticalActSid);
 
             act.Efficient.Modifiers.ResultBuff.Should().Be(-1);
@@ -135,11 +135,11 @@ namespace Zilon.Core.Specs.Steps
             attackCommand.Execute();
         }
 
-        private static IEnumerable<ITacticalAct> GetUsedActs(IActor actor)
+        private static IEnumerable<ICombatAct> GetUsedActs(IActor actor)
         {
             if (actor.Person.GetModuleSafe<IEquipmentModule>() is null)
             {
-                yield return actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+                yield return actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs().First();
             }
             else
             {
@@ -158,7 +158,7 @@ namespace Zilon.Core.Specs.Steps
                         continue;
                     }
 
-                    var equipmentActs = from act in actor.Person.GetModule<ICombatActModule>().CalcCombatActs()
+                    var equipmentActs = from act in actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs()
                                         where act.Equipment == slotEquipment
                                         select act;
 
@@ -174,7 +174,7 @@ namespace Zilon.Core.Specs.Steps
 
                 if (!usedEquipmentActs)
                 {
-                    yield return actor.Person.GetModule<ICombatActModule>().CalcCombatActs().First();
+                    yield return actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs().First();
                 }
             }
         }
