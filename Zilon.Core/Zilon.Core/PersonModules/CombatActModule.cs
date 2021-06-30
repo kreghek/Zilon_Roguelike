@@ -6,6 +6,7 @@ using System.Linq;
 using Newtonsoft.Json;
 
 using Zilon.Core.Common;
+using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.Components;
 using Zilon.Core.LogicCalculations;
 using Zilon.Core.Persons;
@@ -14,15 +15,42 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.PersonModules
 {
+    public interface ICombatActRandomSource
+    {
+        IEnumerable<ICombatAct> Shuffle(IEnumerable<ICombatAct> combatActs);
+    }
+
+    public sealed class CombatActRandomSource : ICombatActRandomSource
+    {
+        private readonly IDice _dice;
+
+        public CombatActRandomSource(IDice dice)
+        {
+            _dice = dice;
+        }
+
+        public IEnumerable<ICombatAct> Shuffle(IEnumerable<ICombatAct> combatActs)
+        {
+            var openList = new List<ICombatAct>(combatActs);
+            while (openList.Any())
+            {
+                var act = _dice.RollFromList(openList);
+                yield return act;
+            }
+        }
+    }
+
     /// <summary>
     /// Базовая реализация объекта для хранения сведений о тактических действиях персонажа.
     /// </summary>
     public sealed class CombatActModule : ICombatActModule
     {
         private const int ROUND_ACT_COUNT = 4;
+        private const int REGENERATE_DURATION = 10;
         private readonly ITacticalActScheme _defaultActScheme;
         private readonly IEquipmentModule _equipmentModule;
         private readonly IEvolutionModule _evolutionModule;
+        private readonly ICombatActRandomSource _combatActrandomSource;
         private readonly IConditionsModule _сonditionsModule;
 
         private IList<ICombatAct>? _combatActs;
@@ -31,7 +59,8 @@ namespace Zilon.Core.PersonModules
             ITacticalActScheme defaultActScheme,
             IEquipmentModule equipmentModule,
             IConditionsModule сonditionsModule,
-            IEvolutionModule evolutionModule)
+            IEvolutionModule evolutionModule,
+            ICombatActRandomSource combatActrandomSource)
         {
             IsActive = true;
 
@@ -39,13 +68,27 @@ namespace Zilon.Core.PersonModules
             _equipmentModule = equipmentModule;
             _сonditionsModule = сonditionsModule;
             _evolutionModule = evolutionModule;
+            _combatActrandomSource = combatActrandomSource;
         }
+
+        private int _iterationCount;
+
+        public event EventHandler? CombatBegan;
 
         public void Update()
         {
-            if (!IsCombatMode)
+            if (_combatActs is null || !IsCombatMode)
             {
                 throw new InvalidOperationException("Combat module can update only after person is in combat mode.");
+            }
+
+            if (_iterationCount > 0)
+            {
+                _iterationCount--;
+            }
+            else
+            {
+                RegenerateCombatActList(_combatActs);
             }
         }
 
@@ -55,17 +98,21 @@ namespace Zilon.Core.PersonModules
 
             _combatActs = new List<ICombatAct>();
 
-            InitCombatActList(_combatActs);
+            RegenerateCombatActList(_combatActs);
+
+            CombatBegan?.Invoke(this, EventArgs.Empty);
         }
 
-        private void InitCombatActList(IList<ICombatAct> combatActList)
+        private void RegenerateCombatActList(IList<ICombatAct> combatActList)
         {
             ClearCombatActList(combatActList);
+
+            _iterationCount = REGENERATE_DURATION;
 
             var perks = GetPerksSafe();
             var allActs = CalcActs(_defaultActScheme, _equipmentModule, _сonditionsModule, perks);
 
-            var shuffledActs = allActs.OrderBy(x => x.GetHashCode()).ToArray();
+            var shuffledActs = _combatActrandomSource.Shuffle(allActs).ToArray();
             var roundActs = shuffledActs.Take(ROUND_ACT_COUNT).ToArray();
             foreach (var act in roundActs)
             {
@@ -78,6 +125,8 @@ namespace Zilon.Core.PersonModules
             IsCombatMode = false;
 
             ClearCombatState();
+
+            _combatActs = null;
         }
 
         public void UseAct(ICombatAct combatAct)
@@ -370,15 +419,14 @@ namespace Zilon.Core.PersonModules
 
         public IEnumerable<ICombatAct> GetCurrentCombatActs()
         {
-            if (!IsCombatMode)
+            if (_combatActs is null || !IsCombatMode)
             {
                 // Combat acts are generated in Update circuit.
                 // Update called if person in combat mode (controlled by code above).
                 throw new InvalidOperationException("Person must be in combat mode.");
             }
 
-            var perks = GetPerksSafe();
-            return CalcActs(_defaultActScheme, _equipmentModule, _сonditionsModule, perks);
+            return _combatActs;
         }
     }
 }

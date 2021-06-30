@@ -1,10 +1,8 @@
-﻿using System;
-
-using Zilon.Core.PersonModules;
+﻿using Zilon.Core.PersonModules;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
-    class SwitchToCombatModeTask : OneTurnActorTaskBase
+    public class SwitchToCombatModeTask : OneTurnActorTaskBase
     {
         public SwitchToCombatModeTask(IActor actor, IActorTaskContext context) : base(actor, context)
         {
@@ -12,7 +10,19 @@ namespace Zilon.Core.Tactics.Behaviour
 
         protected override void ExecuteTask()
         {
-            Actor.Person.GetModule<ICombatActModule>().IsCombatMode = true;
+            Actor.Person.GetModule<ICombatActModule>().BeginCombat();
+        }
+    }
+
+    public class SwitchToIdleModeTask : OneTurnActorTaskBase
+    {
+        public SwitchToIdleModeTask(IActor actor, IActorTaskContext context) : base(actor, context)
+        {
+        }
+
+        protected override void ExecuteTask()
+        {
+            Actor.Person.GetModule<ICombatActModule>().EndCombat();
         }
     }
 }

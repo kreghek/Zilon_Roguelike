@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Persons;
@@ -27,10 +28,32 @@ namespace Zilon.Core.PersonModules
 
         public bool IsCombatMode { get; set; }
 
+        public event EventHandler? CombatBegan;
+
+        public void BeginCombat()
+        {
+            
+        }
+
+        public void EndCombat()
+        {
+            
+        }
+
         /// <inheritdoc />
         public IEnumerable<ICombatAct> GetCurrentCombatActs()
         {
             return _acts;
+        }
+
+        public void Update()
+        {
+            
+        }
+
+        public void UseAct(ICombatAct combatAct)
+        {
+
         }
     }
 }

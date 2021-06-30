@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Zilon.Core.Persons;
 
@@ -7,6 +8,11 @@ namespace Zilon.Core.PersonModules
     public interface ICombatActModule : IPersonModule
     {
         bool IsCombatMode { get; set; }
+
+        event EventHandler? CombatBegan;
+
+        void BeginCombat();
+        void EndCombat();
 
         /// <summary>
         /// Gets all available combat act.
@@ -20,5 +26,6 @@ namespace Zilon.Core.PersonModules
         /// - Regenerate list of combat acts according the person adapt ability.
         /// </summary>
         void Update();
+        void UseAct(ICombatAct combatAct);
     }
 }

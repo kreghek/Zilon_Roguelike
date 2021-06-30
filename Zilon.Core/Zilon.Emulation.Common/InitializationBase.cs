@@ -14,6 +14,7 @@ using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.OpenStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.PersonGeneration;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;
@@ -270,6 +271,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
             RegisterPersonFactory<TemplateBasedPersonFactory>(container);
             container.AddSingleton<IPersonPerkInitializator, PersonPerkInitializator>();
+            container.AddSingleton<ICombatActRandomSource, CombatActRandomSource>();
 
             container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();
             container.AddSingleton<RoomMapFactory>();

@@ -73,6 +73,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 iconData: idleButtonIcon,
                 rect: new Rectangle(0, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT));
             _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
+
+            _combatActModule.CombatBegan += CombatActModule_CombatBegan;
+        }
+
+        private void CombatActModule_CombatBegan(object? sender, EventArgs e)
+        {
+            _currentModeMenu = _combatActPanel;
         }
 
         public static bool MouseIsOver { get; private set; }
@@ -122,8 +129,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
         {
-            _currentModeMenu = _combatActPanel;
-            _combatActModule.IsCombatMode = true;
+            CombatButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void DetectMouseIsOver()
@@ -154,8 +160,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)
         {
-            _currentModeMenu = _travelPanel;
-            _combatActModule.IsCombatMode = false;
+            //_currentModeMenu = _travelPanel;
+            //_combatActModule.IsCombatMode = false;
         }
 
         private void PersonPropButton_OnClick(object? sender, EventArgs e)
@@ -170,5 +176,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public event EventHandler? PropButtonClicked;
         public event EventHandler? StatButtonClicked;
+        public event EventHandler? CombatButtonClicked;
     }
 }

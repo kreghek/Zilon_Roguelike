@@ -92,6 +92,12 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _uiState);
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
             _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
+            _bottomMenu.CombatButtonClicked += BottomMenu_CombatButtonClicked;
+        }
+
+        private void BottomMenu_CombatButtonClicked(object? sender, EventArgs e)
+        {
+            _sectorViewModel.SwitchCurrentPersonIntoCombatMode();
         }
 
         public override void Draw(GameTime gameTime)

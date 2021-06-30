@@ -430,6 +430,8 @@ namespace Zilon.Core.Tactics
         public IStaticObjectManager StaticObjectManager { get; }
         public IEnumerable<IDisease> Diseases => _diseases;
 
+        public IEnumerable<ICombat> ActiveCombats => Array.Empty<ICombat>();
+
         public void AddDisease(IDisease disease)
         {
             _diseases.Add(disease);
