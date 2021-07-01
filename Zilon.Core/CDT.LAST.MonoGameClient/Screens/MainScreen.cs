@@ -23,6 +23,8 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
+    using Zilon.Core.Scoring;
+
     internal class MainScreen : GameSceneBase
     {
         private readonly IAnimationBlockerService _animationBlockerService;
@@ -300,8 +302,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 // Or some error occured.
                 if (activeActor.Actor.Person.CheckIsDead())
                 {
-                    // Do nothing.
-                    // In the near future there the scores screen will load.
+                    TargetScene = new ScoresScreen(Game, _spriteBatch);
                 }
                 else
                 {
