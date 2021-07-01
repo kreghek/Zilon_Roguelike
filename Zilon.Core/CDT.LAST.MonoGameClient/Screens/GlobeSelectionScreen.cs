@@ -18,13 +18,13 @@ namespace CDT.LAST.MonoGameClient.Screens
     internal class GlobeSelectionScreen : GameSceneBase
     {
         private const string START_LOCATION_SID = "intro";
+        private readonly ICommandLoopUpdater _commandLoop;
 
         private readonly TextButton _generateButton;
-        private readonly SpriteBatch _spriteBatch;
-        private readonly IUiContentStorage _uiContentStorage;
         private readonly IGlobeInitializer _globeInitializer;
         private readonly IGlobeLoopUpdater _globeLoop;
-        private readonly ICommandLoopUpdater _commandLoop;
+        private readonly SpriteBatch _spriteBatch;
+        private readonly IUiContentStorage _uiContentStorage;
 
         private bool _generationWasStarted;
 
@@ -70,6 +70,35 @@ namespace CDT.LAST.MonoGameClient.Screens
             _generateButton.Update();
         }
 
+        private void ClearPreviousState()
+        {
+            if (_globeLoop.IsStarted && _commandLoop.IsStarted)
+            {
+                // Means the game restarted.
+                // Ways to restart:
+                // - From the score screen.
+                // - From the leader screen.
+
+                _globeLoop.Stop();
+                _commandLoop.StopAsync().Wait(10_000);
+            }
+            else if (!_globeLoop.IsStarted && !_commandLoop.IsStarted)
+            {
+                // Means game started first time.
+                // Do nothing. The game state is clean yet.
+            }
+            else
+            {
+                Debug.Fail("Unknown state.");
+
+                // There are no cases to have one of loop been started and other been stoped.
+                // But try to clear loops anyway.
+
+                _globeLoop.Stop();
+                _commandLoop.StopAsync().Wait(10_000);
+            }
+        }
+
         private async void GenerateButtonClickHandlerAsync(object? sender, EventArgs e)
         {
             if (_generationWasStarted)
@@ -101,35 +130,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             await generateGlobeTask;
 
             TargetScene = new MainScreen(Game, _spriteBatch);
-        }
-
-        private void ClearPreviousState()
-        {
-            if (_globeLoop.IsStarted && _commandLoop.IsStarted)
-            {
-                // Means the game restarted.
-                // Ways to restart:
-                // - From the score screen.
-                // - From the leader screen.
-
-                _globeLoop.Stop();
-                _commandLoop.StopAsync().Wait(10_000);
-            }
-            else if (!_globeLoop.IsStarted && !_commandLoop.IsStarted)
-            {
-                // Means game started first time.
-                // Do nothing. The game state is clean yet.
-            }
-            else
-            {
-                Debug.Fail("Unknown state.");
-
-                // There are no cases to have one of loop been started and other been stoped.
-                // But try to clear loops anyway.
-
-                _globeLoop.Stop();
-                _commandLoop.StopAsync().Wait(10_000);
-            }
         }
     }
 }

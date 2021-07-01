@@ -14,8 +14,11 @@ namespace Zilon.Core.Client.Sector
         private readonly ICommandPool _commandPool;
 
         private readonly SemaphoreSlim _semaphoreSlim;
+        private CancellationTokenSource _cancellationTokebSourceInner;
 
         private bool _hasPendingCommand;
+
+        private CancellationTokenSource _linkedCts;
 
         [ExcludeFromCodeCoverage]
         public CommandLoopUpdater(ICommandLoopContext commandLoopContext, ICommandPool commandPool)
@@ -198,9 +201,6 @@ namespace Zilon.Core.Client.Sector
                 }
             }, _linkedCts.Token);
         }
-
-        private CancellationTokenSource _linkedCts;
-        private CancellationTokenSource _cancellationTokebSourceInner;
 
         public bool IsStarted { get; private set; }
 
