@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.World;
 
@@ -19,7 +20,8 @@ namespace CDT.LAST.MonoGameClient.Screens
     {
         private const string START_LOCATION_SID = "intro";
         private readonly ICommandLoopUpdater _commandLoop;
-
+        private readonly ISectorUiState _playerState;
+        private readonly IInventoryState _inventoryState;
         private readonly TextButton _generateButton;
         private readonly IGlobeInitializer _globeInitializer;
         private readonly IGlobeLoopUpdater _globeLoop;
@@ -38,6 +40,9 @@ namespace CDT.LAST.MonoGameClient.Screens
             _globeInitializer = serviceProvider.GetRequiredService<IGlobeInitializer>();
             _globeLoop = serviceProvider.GetRequiredService<IGlobeLoopUpdater>();
             _commandLoop = serviceProvider.GetRequiredService<ICommandLoopUpdater>();
+
+            _playerState = serviceProvider.GetRequiredService<ISectorUiState>();
+            _inventoryState = serviceProvider.GetRequiredService<IInventoryState>();
 
             var buttonTexture = _uiContentStorage.GetButtonTexture();
             var font = _uiContentStorage.GetButtonFont();
@@ -109,27 +114,36 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _generationWasStarted = true;
 
-            var generateGlobeTask = Task.Run(async () =>
-            {
-                ClearPreviousState();
-
-                var globe = await _globeInitializer.CreateGlobeAsync(START_LOCATION_SID).ConfigureAwait(false);
-
-                if (globe is null)
-                {
-                    throw new InvalidOperationException();
-                }
-
-                _globeLoop.Start();
-
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                _commandLoop.StartAsync(CancellationToken.None);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            });
-
-            await generateGlobeTask;
+            await RegenerateGlobeAsync().ConfigureAwait(false);
 
             TargetScene = new MainScreen(Game, _spriteBatch);
+        }
+
+        private async Task RegenerateGlobeAsync()
+        {
+            ClearPreviousState();
+
+            var globe = await _globeInitializer.CreateGlobeAsync(START_LOCATION_SID).ConfigureAwait(false);
+
+            if (globe is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            _globeLoop.Start();
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            _commandLoop.StartAsync(CancellationToken.None);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+            _commandLoop.CommandProcessed += CommandLoop_CommandProcessed;
+        }
+
+        private void CommandLoop_CommandProcessed(object? sender, EventArgs e)
+        {
+            _inventoryState.SelectedProp = null;
+            _playerState.SelectedViewModel = null;
+            _playerState.TacticalAct = null;
         }
     }
 }

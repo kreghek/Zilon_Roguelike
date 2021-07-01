@@ -41,7 +41,7 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        private async Task HandleRepeatableAsync(ICommand? command)
+        private async Task HandleRepeatableAsync(ICommand? command, CancellationToken cancellationToken)
         {
             if (command is IRepeatableCommand repeatableCommand)
             {
@@ -56,22 +56,22 @@ namespace Zilon.Core.Client.Sector
                 }
                 else
                 {
-                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(false, cancellationToken).ConfigureAwait(false);
 
                     CommandProcessed?.Invoke(this, EventArgs.Empty);
                 }
             }
             else
             {
-                await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+                await SetHasPendingCommandsAsync(false, cancellationToken).ConfigureAwait(false);
 
                 CommandProcessed?.Invoke(this, EventArgs.Empty);
             }
         }
 
-        private async Task SetHasPendingCommandsAsync(bool value)
+        private async Task SetHasPendingCommandsAsync(bool value, CancellationToken cancellationToken)
         {
-            await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
+            await _semaphoreSlim.WaitAsync(cancellationToken).ConfigureAwait(false);
             try
             {
                 _hasPendingCommand = value;
@@ -82,7 +82,7 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        private async Task<ICommand?> TryExecuteCommandAsync(ICommand? lastCommand)
+        private async Task<ICommand?> TryExecuteCommandAsync(ICommand? lastCommand, CancellationToken cancellationToken)
         {
             ICommand? commandWithError = null;
             ICommand? newLastCommand = null;
@@ -95,7 +95,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (command != null)
                 {
-                    await SetHasPendingCommandsAsync(true).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(true, cancellationToken).ConfigureAwait(false);
 
                     try
                     {
@@ -107,13 +107,13 @@ namespace Zilon.Core.Client.Sector
                         throw;
                     }
 
-                    await HandleRepeatableAsync(command).ConfigureAwait(false);
+                    await HandleRepeatableAsync(command, cancellationToken).ConfigureAwait(false);
 
                     newLastCommand = command;
                 }
                 else
                 {
-                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(false, cancellationToken).ConfigureAwait(false);
 
                     if (lastCommand != null)
                     {
@@ -133,7 +133,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (errorOccured)
                 {
-                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(false, cancellationToken).ConfigureAwait(false);
 
                     CommandProcessed?.Invoke(this, EventArgs.Empty);
                     newLastCommand = null;
@@ -171,6 +171,8 @@ namespace Zilon.Core.Client.Sector
 
             _linkedCts = CancellationTokenSource.CreateLinkedTokenSource(internalToken, cancellationToken);
 
+            var linkedCancellationToken = _linkedCts.Token;
+
             IsStarted = true;
             return Task.Run(async () =>
             {
@@ -178,6 +180,8 @@ namespace Zilon.Core.Client.Sector
 
                 while (_commandLoopContext.HasNextIteration)
                 {
+                    linkedCancellationToken.ThrowIfCancellationRequested();
+
                     if (!_commandLoopContext.CanPlayerGiveCommand)
                     {
                         // If player can't gives command right now the loop sleep some time (100ms).
@@ -189,7 +193,7 @@ namespace Zilon.Core.Client.Sector
 
                     try
                     {
-                        lastCommand = await TryExecuteCommandAsync(lastCommand: lastCommand).ConfigureAwait(false);
+                        lastCommand = await TryExecuteCommandAsync(lastCommand, linkedCancellationToken).ConfigureAwait(false);
                     }
                     catch (Exception exception)
                     {
@@ -199,7 +203,7 @@ namespace Zilon.Core.Client.Sector
                     await Task.Yield();
                     await Task.Delay(WAIT_FOR_CHANGES_MILLISECONDS).ConfigureAwait(false);
                 }
-            }, _linkedCts.Token);
+            }, linkedCancellationToken);
         }
 
         public bool IsStarted { get; private set; }
