@@ -368,5 +368,11 @@ namespace CDT.LAST.MonoGameClient.Resources {
                 return ResourceManager.GetString("ClearPlayerNicknameButton", resourceCulture);
             }
         }
+        
+        internal static string PlayerInputNicknamePrompt {
+            get {
+                return ResourceManager.GetString("PlayerInputNicknamePrompt", resourceCulture);
+            }
+        }
     }
 }

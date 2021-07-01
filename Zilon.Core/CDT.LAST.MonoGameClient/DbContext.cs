@@ -9,58 +9,91 @@ namespace CDT.LAST.MonoGameClient
 
     using Zilon.Core.Scoring;
 
-    internal record PlayerScore(string Id, string NickName, uint RatingPosition, int Score);
+    internal record PlayerScore(int Id, string NickName, uint RatingPosition, int Score);
 
     internal class DbContext
     {
-        private const string BaseName = "BotScores.db3";
+        private const string DB_FILE_NAME = "BotScores.db3";
+
+        private const string SCORE_PATH = "player-scores";
+
+        private const string SCORE_FILE_PREFFIX = "";
+
+        private const string MODE = "";
+
+        private const int SCORE_COLUMN_ORDINAL = 2;
+
+        private const int NICKNAME_COLUMN_ORDINAL = 1;
+
+        private const int ID_COLUMN_ORDINAL = 0;
+
+        private readonly string _connectionString = $"Data Source = {DB_FILE_NAME}";
 
         private readonly IScoreManager _scoreManager;
+
+        private readonly SQLiteFactory _dbInstance = SQLiteFactory.Instance;
 
         public DbContext(IScoreManager scoreManager)
         {
             _scoreManager = scoreManager;
-        }
+            if (!Directory.Exists(SCORE_PATH))
+                Directory.CreateDirectory(SCORE_PATH);
 
-        public void AppendScores(
-            string scorePath,
-            string botName,
-            string scoreFilePreffix,
-            string mode,
-            string textSummary)
-        {
-            if (!Directory.Exists(scorePath))
-                Directory.CreateDirectory(scorePath);
-
-            var dbPath = Path.Combine(scorePath, BaseName);
+            var dbPath = Path.Combine(SCORE_PATH, DB_FILE_NAME);
             if (!File.Exists(dbPath))
                 SQLiteConnection.CreateFile(dbPath);
 
-            var factory = SQLiteFactory.Instance;
-            using var connection = factory.CreateConnection();
-            connection.ConnectionString = "Data Source = " + dbPath;
+            CreateTablesIfNotExists();
+        }
+
+        public void AppendScores(string playerNickName,
+            string textSummary)
+        {
+            using var connection = _dbInstance.CreateConnection();
+            connection.ConnectionString = _connectionString;
             connection.Open();
-
-            CreateScoresTableIfNotExists(connection);
-
-            CreatMeasuresViewIfNotExists(connection);
 
             var fragSum = _scoreManager.Frags.Sum(x => x.Value);
 
             using var command = connection.CreateCommand();
             command.CommandText =
                 $@"INSERT INTO [Scores](Name, Preffix, Mode, Scores, Turns, Frags, TextSummary)
-                    VALUES ('{botName}', '{scoreFilePreffix}', '{mode}', {_scoreManager.BaseScores}, {_scoreManager.Turns}, {fragSum}, '{textSummary}')";
+                    VALUES ('{playerNickName}', '{SCORE_FILE_PREFFIX}', '{MODE}', {_scoreManager.BaseScores}, {_scoreManager.Turns}, {fragSum}, '{textSummary}')";
             command.CommandType = CommandType.Text;
             command.ExecuteNonQuery();
+            connection.Close();
         }
 
         public List<PlayerScore> GetLeaderBoard(int limit = 10)
         {
-            return new List<PlayerScore>
+            using var connection = _dbInstance.CreateConnection();
+            connection.ConnectionString = _connectionString;
+            connection.Open();
+
+            using var command = connection.CreateCommand();
+            command.CommandText =
+                $@"SELECT Id, Name, Scores FROM [Scores] ORDER BY Scores LIMIT {limit}";
+            command.CommandType = CommandType.Text;
+
+            using var sqlReader = command.ExecuteReader();
+            var scores = new List<PlayerScore>();
+            while (sqlReader.Read())
             {
-                new PlayerScore("333", "Warcru", 1, 9999), new PlayerScore("1234", "Solo", 2, 322)
-            };
+                var scoreId = sqlReader.GetInt32(ID_COLUMN_ORDINAL);
+                var nickName = sqlReader.GetString(NICKNAME_COLUMN_ORDINAL);
+                var score = sqlReader.GetInt32(SCORE_COLUMN_ORDINAL);
+                var playerScore = new PlayerScore(scoreId, nickName, 0, score);
+                scores.Add(playerScore);
+            }
+            connection.Close();
+
+            var ratedScores = scores.Select(
+                (score, rating) => score with
+                {
+                    RatingPosition = (uint)rating
+                }).ToList();
+
+            return ratedScores;
         }
 
         private static void CreateScoresTableIfNotExists(DbConnection connection)
@@ -79,6 +112,18 @@ namespace CDT.LAST.MonoGameClient
                     );";
             command.CommandType = CommandType.Text;
             command.ExecuteNonQuery();
+        }
+
+        private void CreateTablesIfNotExists()
+        {
+            using var connection = _dbInstance.CreateConnection();
+            connection.ConnectionString = _connectionString;
+            connection.Open();
+
+            CreateScoresTableIfNotExists(connection);
+
+            CreatMeasuresViewIfNotExists(connection);
+            connection.Close();
         }
 
         private static void CreatMeasuresViewIfNotExists(DbConnection connection)

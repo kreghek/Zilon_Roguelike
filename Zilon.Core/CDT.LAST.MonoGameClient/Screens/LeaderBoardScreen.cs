@@ -68,7 +68,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private readonly TextButton _goToMainMenu;
 
-        private readonly List<PlayerScore> _leaderBoardRecords;
+        private List<PlayerScore> _leaderBoardRecords;
 
         private readonly Color _playerInfoColor = Color.Blue;
 
@@ -84,10 +84,15 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private readonly IUiContentStorage _uiContentStorage;
 
-        //TODO: add a nickname promt
+        private bool _isNeedToAddedPlayerScore = true;
+
         private bool _isVisibleNickNamePromt;
 
         private string _playerNickname = "";
+
+        private const float PLAYER_INPUT_NICKNAME_PROMPT_POSITION_X = PLAYER_NICKNAME_TITLE_POSITION_X;
+
+        private readonly float _playerInputNicknamePromptPositionY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
 
         /// <inheritdoc />
         public LeaderBoardScreen(Game game, SpriteBatch spriteBatch)
@@ -146,8 +151,6 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _spriteBatch.Begin();
             _goToMainMenu.Draw(_spriteBatch);
-            _addPlayerNickname.Draw(_spriteBatch);
-            _clearPlayerNickname.Draw(_spriteBatch);
             _spriteBatch.DrawString(
                 _font,
                 UiResources.LeaderboardMenuTitle,
@@ -171,9 +174,15 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void AddPlayerNickNameClickHandler(object? sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(_playerNickname))
+            {
                 _isVisibleNickNamePromt = true;
+            }
             else
-                _dbContext.AppendScores("player-scores", _playerNickname, "", "TODO", _scoreSummary);
+            {
+                _dbContext.AppendScores(_playerNickname, _scoreSummary);
+                _leaderBoardRecords = _dbContext.GetLeaderBoard();
+                _isNeedToAddedPlayerScore = false;
+            }
         }
 
         private void ClearPlayerNickNameClickHandler(object? sender, EventArgs e)
@@ -185,9 +194,29 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             uint testPlayerNumberInScoreTable = 1;
             var playerScore = 322;
+            DrawPlayerInputNickNamePrompt();
             DrawScoreTablePlayerNumberCell(testPlayerNumberInScoreTable);
             DrawScoreTableNickInput();
             DrawScoreTablePlayerScoreCell(playerScore);
+            DrawPlayerScoreButtons();
+        }
+
+        private void DrawPlayerInputNickNamePrompt()
+        {
+            if (_isVisibleNickNamePromt)
+                _spriteBatch.DrawString(
+                    _font,
+                    UiResources.PlayerInputNicknamePrompt,
+                    new Vector2(PLAYER_INPUT_NICKNAME_PROMPT_POSITION_X, _playerInputNicknamePromptPositionY),
+                    Color.Red);
+        }
+
+        private void DrawPlayerScoreButtons()
+        {
+            if (!_isNeedToAddedPlayerScore)
+                return;
+            _addPlayerNickname.Draw(_spriteBatch);
+            _clearPlayerNickname.Draw(_spriteBatch);
         }
 
         private void DrawScoreTable()
