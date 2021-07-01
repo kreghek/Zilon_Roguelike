@@ -48,8 +48,12 @@ namespace Zilon.Core.Client.Sector
                 // It is necesary because CanRepeate and CanExecute can perform early that globe updates its state.
                 await WaitGlobeIterationPerformedAsync().ConfigureAwait(false);
 
-                if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
+                cancellationToken.ThrowIfCancellationRequested();
+
+                if (_commandLoopContext.HasNextIteration && repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     repeatableCommand.IncreaceIteration();
                     _commandPool.Push(repeatableCommand);
                     CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
