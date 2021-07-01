@@ -3,15 +3,13 @@
     using System;
 
     using Engine;
-
-    using Resources;
-
     using Engine;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
 
+    using Resources;
     using Resources;
 
     using Zilon.Core.Scoring;
