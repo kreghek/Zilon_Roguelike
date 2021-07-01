@@ -182,6 +182,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _dbContext.AppendScores(_playerNickname, _scoreSummary);
                 _leaderBoardRecords = _dbContext.GetLeaderBoard();
                 _isNeedToAddedPlayerScore = false;
+                _addPlayerNickname.OnClick -= AddPlayerNickNameClickHandler;
+                _clearPlayerNickname.OnClick -= ClearPlayerNickNameClickHandler;
             }
         }
 
