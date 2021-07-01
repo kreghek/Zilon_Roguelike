@@ -20,11 +20,11 @@ namespace CDT.LAST.MonoGameClient.Screens
     {
         private const string START_LOCATION_SID = "intro";
         private readonly ICommandLoopUpdater _commandLoop;
-        private readonly ISectorUiState _playerState;
-        private readonly IInventoryState _inventoryState;
         private readonly TextButton _generateButton;
         private readonly IGlobeInitializer _globeInitializer;
         private readonly IGlobeLoopUpdater _globeLoop;
+        private readonly IInventoryState _inventoryState;
+        private readonly ISectorUiState _playerState;
         private readonly SpriteBatch _spriteBatch;
         private readonly IUiContentStorage _uiContentStorage;
 
@@ -104,6 +104,13 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
         }
 
+        private void CommandLoop_CommandProcessed(object? sender, EventArgs e)
+        {
+            _inventoryState.SelectedProp = null;
+            _playerState.SelectedViewModel = null;
+            _playerState.TacticalAct = null;
+        }
+
         private async void GenerateButtonClickHandlerAsync(object? sender, EventArgs e)
         {
             if (_generationWasStarted)
@@ -137,13 +144,6 @@ namespace CDT.LAST.MonoGameClient.Screens
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             _commandLoop.CommandProcessed += CommandLoop_CommandProcessed;
-        }
-
-        private void CommandLoop_CommandProcessed(object? sender, EventArgs e)
-        {
-            _inventoryState.SelectedProp = null;
-            _playerState.SelectedViewModel = null;
-            _playerState.TacticalAct = null;
         }
     }
 }

@@ -50,7 +50,8 @@ namespace Zilon.Core.Client.Sector
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (_commandLoopContext.HasNextIteration && repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
+                if (_commandLoopContext.HasNextIteration && repeatableCommand.CanRepeat() &&
+                    repeatableCommand.CanExecute().IsSuccess)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
@@ -197,7 +198,8 @@ namespace Zilon.Core.Client.Sector
 
                     try
                     {
-                        lastCommand = await TryExecuteCommandAsync(lastCommand, linkedCancellationToken).ConfigureAwait(false);
+                        lastCommand = await TryExecuteCommandAsync(lastCommand, linkedCancellationToken)
+                            .ConfigureAwait(false);
                     }
                     catch (Exception exception)
                     {
