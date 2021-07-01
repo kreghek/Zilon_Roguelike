@@ -13,7 +13,7 @@ namespace Zilon.Core.PersonModules
     /// <summary>
     /// Базовая реализация моделя работы с экипировкой.
     /// </summary>
-    /// <seealso cref="Zilon.Core.Persons.IEquipmentCarrier" />
+    /// <seealso cref="Persons.IEquipmentCarrier" />
     public abstract class EquipmentModuleBase : IEquipmentModule
     {
         private readonly Equipment?[] _equipment;

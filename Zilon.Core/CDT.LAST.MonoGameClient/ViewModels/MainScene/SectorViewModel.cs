@@ -2,6 +2,7 @@
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;

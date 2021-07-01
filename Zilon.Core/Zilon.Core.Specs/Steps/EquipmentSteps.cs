@@ -56,7 +56,12 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            actor.Person.GetModule<IEquipmentModule>()[slotIndex].Scheme.Sid.Should().Be(propSid);
+            var equipmentModule = actor.Person.GetModule<IEquipmentModule>();
+
+            var testedEquipment = equipmentModule[slotIndex];
+
+            testedEquipment.Should().NotBeNull();
+            testedEquipment.Scheme.Sid.Should().Be(propSid);
         }
 
         [Then(@"В слоте Index: (\d+) актёра игрока ничего нет")]
