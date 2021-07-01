@@ -1,19 +1,16 @@
-﻿namespace CDT.LAST.MonoGameClient.Screens
+﻿using System;
+
+using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Resources;
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using Zilon.Core.Scoring;
+
+namespace CDT.LAST.MonoGameClient.Screens
 {
-    using System;
-
-    using Engine;
-    using Engine;
-
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
-
-    using Resources;
-    using Resources;
-
-    using Zilon.Core.Scoring;
-
     /// <summary>
     /// Scores screen to show a user's score when a character died.
     /// </summary>
