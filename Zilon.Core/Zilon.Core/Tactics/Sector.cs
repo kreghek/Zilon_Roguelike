@@ -276,11 +276,14 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                var combatActs = combatActModule.GetCurrentCombatActs();
-
-                foreach (var act in combatActs)
+                if (combatActModule.IsCombatMode)
                 {
-                    act.UpdateCooldown();
+                    var combatActs = combatActModule.GetCurrentCombatActs();
+
+                    foreach (var act in combatActs)
+                    {
+                        act.UpdateCooldown();
+                    }
                 }
             }
         }

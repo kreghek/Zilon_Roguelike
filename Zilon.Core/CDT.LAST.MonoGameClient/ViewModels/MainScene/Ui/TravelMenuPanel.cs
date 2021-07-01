@@ -194,6 +194,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DetectAutoplayHint();
         }
 
+        public void UnsubscribeEvents()
+        {
+        }
+
         public event EventHandler? PropButtonClicked;
         public event EventHandler? StatButtonClicked;
     }

@@ -35,6 +35,7 @@ namespace Zilon.Core.PersonModules
             while (openList.Any())
             {
                 var act = _dice.RollFromList(openList);
+                openList.Remove(act);
                 yield return act;
             }
         }

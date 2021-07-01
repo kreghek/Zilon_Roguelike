@@ -10,6 +10,7 @@ using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
 using Microsoft.Extensions.DependencyInjection;
 
 using Zilon.Core.Commands;
+using Zilon.Core.Commands.Sector;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
@@ -62,6 +63,8 @@ namespace CDT.LAST.MonoGameClient
             serviceContainer.AddScoped<SectorTransitionMoveCommand>();
             serviceContainer.AddScoped<UseSelfCommand>();
             serviceContainer.AddScoped<OpenContainerCommand>();
+            serviceContainer.AddScoped<SwitchToCombatModeCommand>();
+            serviceContainer.AddScoped<SwitchToIdleModeCommand>();
 
             serviceContainer.AddTransient<EquipCommand>();
             serviceContainer.AddTransient<PropTransferCommand>();

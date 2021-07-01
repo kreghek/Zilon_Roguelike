@@ -26,14 +26,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int PANEL_HEIGHT = SLOT_SIZE + (PANEL_MARGIN * 2);
 
         private readonly ICombatActModule _combatActModule;
-        private readonly CombatActPanel _combatActPanel;
         private readonly IconButton _combatModeSwitcherButton;
 
         private readonly IconButton _idleModeSwitcherButton;
 
         private readonly TravelPanel _travelPanel;
         private readonly IUiContentStorage _uiContentStorage;
-
+        private readonly IEquipmentModule _equipmentModule;
+        private readonly ISectorUiState _sectorUiState;
         private IBottomSubPanel _currentModeMenu;
         private Rectangle _storedPanelRect;
 
@@ -45,7 +45,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             ISectorUiState sectorUiState)
         {
             _travelPanel = new TravelPanel(humanActorTaskSource, uiContentStorage);
-            _combatActPanel = new CombatActPanel(combatActModule, equipmentModule, uiContentStorage, sectorUiState);
 
             _travelPanel.PropButtonClicked += PersonPropButton_OnClick;
             _travelPanel.StatButtonClicked += PersonStatsButton_OnClick;
@@ -68,6 +67,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _idleModeSwitcherButton.OnClick += IdleModeSwitcherButton_OnClick;
             _combatActModule = combatActModule;
             _uiContentStorage = uiContentStorage;
+            _equipmentModule = equipmentModule;
+            _sectorUiState = sectorUiState;
             _combatModeSwitcherButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: idleButtonIcon,
@@ -109,7 +110,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void UnsubscribeEvents()
         {
-            _combatActPanel.UnsubscribeEvents();
+            _currentModeMenu.UnsubscribeEvents();
         }
 
         public void Update()
@@ -124,7 +125,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void CombatActModule_CombatBegan(object? sender, EventArgs e)
         {
-            _currentModeMenu = _combatActPanel;
+            _currentModeMenu = new CombatActPanel(
+                _combatActModule,
+                _equipmentModule,
+                _uiContentStorage,
+                _sectorUiState);
         }
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
