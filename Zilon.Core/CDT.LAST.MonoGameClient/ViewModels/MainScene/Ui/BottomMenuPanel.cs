@@ -27,13 +27,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private readonly ICombatActModule _combatActModule;
         private readonly IconButton _combatModeSwitcherButton;
+        private readonly IEquipmentModule _equipmentModule;
 
         private readonly IconButton _idleModeSwitcherButton;
+        private readonly ISectorUiState _sectorUiState;
 
         private readonly TravelPanel _travelPanel;
         private readonly IUiContentStorage _uiContentStorage;
-        private readonly IEquipmentModule _equipmentModule;
-        private readonly ISectorUiState _sectorUiState;
         private IBottomSubPanel _currentModeMenu;
         private Rectangle _storedPanelRect;
 
