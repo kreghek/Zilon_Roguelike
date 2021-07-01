@@ -7,7 +7,7 @@ using Zilon.Core.Commands;
 
 namespace Zilon.Core.Client.Sector
 {
-    public sealed class CommandLoopUpdater : ICommandLoopUpdater
+    public sealed class CommandLoopUpdater : ICommandLoopUpdater, IDisposable
     {
         private const int WAIT_FOR_CHANGES_MILLISECONDS = 100;
         private readonly ICommandLoopContext _commandLoopContext;
@@ -163,6 +163,11 @@ namespace Zilon.Core.Client.Sector
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            _cancellationTokebSourceInner = new CancellationTokenSource();
+            var internalToken = _cancellationTokebSourceInner.Token;
+
+            _linkedCts = CancellationTokenSource.CreateLinkedTokenSource(internalToken, cancellationToken);
+
             IsStarted = true;
             return Task.Run(async () =>
             {
@@ -191,8 +196,11 @@ namespace Zilon.Core.Client.Sector
                     await Task.Yield();
                     await Task.Delay(WAIT_FOR_CHANGES_MILLISECONDS).ConfigureAwait(false);
                 }
-            }, cancellationToken);
+            }, _linkedCts.Token);
         }
+
+        private CancellationTokenSource _linkedCts;
+        private CancellationTokenSource _cancellationTokebSourceInner;
 
         public bool IsStarted { get; private set; }
 
@@ -206,6 +214,42 @@ namespace Zilon.Core.Client.Sector
             finally
             {
                 _semaphoreSlim.Release();
+            }
+        }
+
+        public Task StopAsync()
+        {
+            if (_cancellationTokebSourceInner is not null)
+            {
+                _cancellationTokebSourceInner.Cancel();
+                _cancellationTokebSourceInner.Dispose();
+            }
+
+            if (_linkedCts is not null)
+            {
+                _linkedCts.Dispose();
+            }
+
+            if (_semaphoreSlim.CurrentCount == 0)
+            {
+                _semaphoreSlim.Release();
+            }
+
+            IsStarted = false;
+
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            if (_cancellationTokebSourceInner is not null)
+            {
+                _cancellationTokebSourceInner.Dispose();
+            }
+
+            if (_linkedCts is not null)
+            {
+                _linkedCts.Dispose();
             }
         }
     }
