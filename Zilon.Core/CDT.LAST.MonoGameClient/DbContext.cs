@@ -29,7 +29,8 @@ namespace CDT.LAST.MonoGameClient
             string mode,
             string textSummary)
         {
-            var fragSum = _scoreManager.Frags.Sum(x => x.Value);
+            if (!Directory.Exists(scorePath))
+                Directory.CreateDirectory(scorePath);
 
             var dbPath = Path.Combine(scorePath, BaseName);
             if (!File.Exists(dbPath))
@@ -43,6 +44,8 @@ namespace CDT.LAST.MonoGameClient
             CreateScoresTableIfNotExists(connection);
 
             CreatMeasuresViewIfNotExists(connection);
+
+            var fragSum = _scoreManager.Frags.Sum(x => x.Value);
 
             using var command = connection.CreateCommand();
             command.CommandText =

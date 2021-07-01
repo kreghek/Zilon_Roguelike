@@ -173,7 +173,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (string.IsNullOrEmpty(_playerNickname))
                 _isVisibleNickNamePromt = true;
             else
-                _dbContext.AppendScores("TODO:", _playerNickname, "TODO:", "TODO", _scoreSummary);
+                _dbContext.AppendScores("player-scores", _playerNickname, "", "TODO", _scoreSummary);
         }
 
         private void ClearPlayerNickNameClickHandler(object? sender, EventArgs e)
