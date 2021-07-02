@@ -14,9 +14,9 @@ namespace Zilon.Core.Client.Sector
         private readonly ICommandPool _commandPool;
 
         private readonly SemaphoreSlim _semaphoreSlim;
-        private CancellationTokenSource? _internalCancellationTokenSource;
 
         private bool _hasPendingCommand;
+        private CancellationTokenSource? _internalCancellationTokenSource;
 
         private CancellationTokenSource? _linkedCancellationTokenSource;
 
@@ -174,7 +174,8 @@ namespace Zilon.Core.Client.Sector
             _internalCancellationTokenSource = new CancellationTokenSource();
             var internalToken = _internalCancellationTokenSource.Token;
 
-            _linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(internalToken, cancellationToken);
+            _linkedCancellationTokenSource =
+                CancellationTokenSource.CreateLinkedTokenSource(internalToken, cancellationToken);
 
             var linkedCancellationToken = _linkedCancellationTokenSource.Token;
 
