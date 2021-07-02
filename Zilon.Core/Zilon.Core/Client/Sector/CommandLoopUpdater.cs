@@ -14,11 +14,11 @@ namespace Zilon.Core.Client.Sector
         private readonly ICommandPool _commandPool;
 
         private readonly SemaphoreSlim _semaphoreSlim;
-        private CancellationTokenSource _cancellationTokebSourceInner;
+        private CancellationTokenSource? _internalCancellationTokenSource;
 
         private bool _hasPendingCommand;
 
-        private CancellationTokenSource _linkedCts;
+        private CancellationTokenSource? _linkedCancellationTokenSource;
 
         [ExcludeFromCodeCoverage]
         public CommandLoopUpdater(ICommandLoopContext commandLoopContext, ICommandPool commandPool)
@@ -171,12 +171,12 @@ namespace Zilon.Core.Client.Sector
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _cancellationTokebSourceInner = new CancellationTokenSource();
-            var internalToken = _cancellationTokebSourceInner.Token;
+            _internalCancellationTokenSource = new CancellationTokenSource();
+            var internalToken = _internalCancellationTokenSource.Token;
 
-            _linkedCts = CancellationTokenSource.CreateLinkedTokenSource(internalToken, cancellationToken);
+            _linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(internalToken, cancellationToken);
 
-            var linkedCancellationToken = _linkedCts.Token;
+            var linkedCancellationToken = _linkedCancellationTokenSource.Token;
 
             IsStarted = true;
             return Task.Run(async () =>
@@ -229,15 +229,15 @@ namespace Zilon.Core.Client.Sector
 
         public Task StopAsync()
         {
-            if (_cancellationTokebSourceInner is not null)
+            if (_internalCancellationTokenSource is not null)
             {
-                _cancellationTokebSourceInner.Cancel();
-                _cancellationTokebSourceInner.Dispose();
+                _internalCancellationTokenSource.Cancel();
+                _internalCancellationTokenSource.Dispose();
             }
 
-            if (_linkedCts is not null)
+            if (_linkedCancellationTokenSource is not null)
             {
-                _linkedCts.Dispose();
+                _linkedCancellationTokenSource.Dispose();
             }
 
             if (_semaphoreSlim.CurrentCount == 0)
@@ -252,14 +252,14 @@ namespace Zilon.Core.Client.Sector
 
         public void Dispose()
         {
-            if (_cancellationTokebSourceInner is not null)
+            if (_internalCancellationTokenSource is not null)
             {
-                _cancellationTokebSourceInner.Dispose();
+                _internalCancellationTokenSource.Dispose();
             }
 
-            if (_linkedCts is not null)
+            if (_linkedCancellationTokenSource is not null)
             {
-                _linkedCts.Dispose();
+                _linkedCancellationTokenSource.Dispose();
             }
         }
     }
