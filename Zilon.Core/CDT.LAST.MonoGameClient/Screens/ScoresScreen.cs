@@ -76,7 +76,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 texture: buttonTexture,
                 font: font,
                 rect: new Rectangle(
-                    x: RESTART_BUTTON_POSITION_X + BUTTON_WIDTH_OFFSET * 2,
+                    x: RESTART_BUTTON_POSITION_X + (BUTTON_WIDTH_OFFSET * 2),
                     y: BUTTON_POSITION_Y,
                     width: BUTTON_WIDTH,
                     height: BUTTON_HEIGHT));
@@ -87,7 +87,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 texture: buttonTexture,
                 font: font,
                 rect: new Rectangle(
-                    x: RESTART_BUTTON_POSITION_X + BUTTON_WIDTH_OFFSET * 4,
+                    x: RESTART_BUTTON_POSITION_X + (BUTTON_WIDTH_OFFSET * 4),
                     y: BUTTON_POSITION_Y,
                     width: BUTTON_WIDTH,
                     height: BUTTON_HEIGHT));
