@@ -1,5 +1,6 @@
 namespace CDT.LAST.MonoGameClient
 {
+    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
@@ -10,6 +11,25 @@ namespace CDT.LAST.MonoGameClient
     using Zilon.Core.Scoring;
 
     internal record PlayerScore(int Id, string NickName, uint RatingPosition, int Score);
+
+    internal record LeaderboardLimit
+    {
+        private const int DEFAULT_GET_LEADERBOARD_LIMIT = 10;
+
+        public LeaderboardLimit(bool areGettingAllRecords = false, int limit = DEFAULT_GET_LEADERBOARD_LIMIT)
+        {
+            if (areGettingAllRecords && limit != DEFAULT_GET_LEADERBOARD_LIMIT)
+                throw new ArgumentException(
+                    $"Cannot use options - {nameof(areGettingAllRecords)} = true AND {nameof(limit)} != default value together.");
+
+            AreGettingAllRecords = areGettingAllRecords;
+            Limit = limit;
+        }
+
+        public bool AreGettingAllRecords { get; init; }
+
+        public int Limit { get; init; }
+    }
 
     internal class DbContext
     {
@@ -29,9 +49,9 @@ namespace CDT.LAST.MonoGameClient
 
         private readonly string _connectionString = $"Data Source = {DB_FILE_NAME}";
 
-        private readonly IScoreManager _scoreManager;
-
         private readonly SQLiteFactory _dbInstance = SQLiteFactory.Instance;
+
+        private readonly IScoreManager _scoreManager;
 
         public DbContext(IScoreManager scoreManager)
         {
@@ -64,15 +84,22 @@ namespace CDT.LAST.MonoGameClient
             connection.Close();
         }
 
-        public List<PlayerScore> GetLeaderBoard(int limit = 10)
+        public List<PlayerScore> GetAllLeaderboardRecord()
         {
+            var wantToGetAllRecords = new LeaderboardLimit(true);
+            return GetLeaderBoard(wantToGetAllRecords);
+        }
+
+        public List<PlayerScore> GetLeaderBoard(LeaderboardLimit? limit = null)
+        {
+            limit ??= new LeaderboardLimit();
+
             using var connection = _dbInstance.CreateConnection();
             connection.ConnectionString = _connectionString;
             connection.Open();
 
             using var command = connection.CreateCommand();
-            command.CommandText =
-                $@"SELECT Id, Name, Scores FROM [Scores] ORDER BY Scores LIMIT {limit}";
+            command.CommandText = FormatGetLeaderboardQuery(limit);
             command.CommandType = CommandType.Text;
 
             using var sqlReader = command.ExecuteReader();
@@ -85,12 +112,13 @@ namespace CDT.LAST.MonoGameClient
                 var playerScore = new PlayerScore(scoreId, nickName, 0, score);
                 scores.Add(playerScore);
             }
+
             connection.Close();
 
             var ratedScores = scores.Select(
                 (score, rating) => score with
                 {
-                    RatingPosition = (uint)rating
+                    RatingPosition = (uint)rating + 1
                 }).ToList();
 
             return ratedScores;
@@ -162,6 +190,17 @@ namespace CDT.LAST.MonoGameClient
                         GROUP BY [Name] ,[Preffix] ,[Mode]";
             command.CommandType = CommandType.Text;
             command.ExecuteNonQuery();
+        }
+
+        private static string FormatGetLeaderboardQuery(LeaderboardLimit limit)
+        {
+            const string BaseQuery = "SELECT Id, Name, Scores FROM [Scores] ORDER BY Scores DESC";
+            if (limit.AreGettingAllRecords)
+                return BaseQuery;
+
+            var limitQuery = $"{BaseQuery} LIMIT {limit.Limit}";
+
+            return limitQuery;
         }
     }
 }

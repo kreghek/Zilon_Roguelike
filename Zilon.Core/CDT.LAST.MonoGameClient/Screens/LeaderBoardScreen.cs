@@ -2,6 +2,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CDT.LAST.MonoGameClient.Engine;
     using CDT.LAST.MonoGameClient.Resources;
@@ -56,6 +57,10 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private const float PLAYER_INPUT_NICKNAME_PROMPT_POSITION_X = PLAYER_NICKNAME_TITLE_POSITION_X;
 
+        private const int TABLE_RESULTS_OFFSET_Y = 3;
+
+        private const uint DEFAULT_PLAYER_RATING = 1;
+
         private readonly TextButton _addPlayerNickname;
 
         private readonly int _addPlayerScoreButtonOffsetY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
@@ -74,7 +79,11 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private readonly float _playerInputNicknamePromptPositionY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
 
+        private readonly uint _playerRatingInLeaderboard;
+
         private readonly int _playerRowOffsetY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
+
+        private readonly int _playerScore;
 
         private readonly string _scoreSummary;
 
@@ -142,6 +151,9 @@ namespace CDT.LAST.MonoGameClient.Screens
             _leaderBoardRecords = _dbContext.GetLeaderBoard();
 
             _font = _uiContentStorage.GetButtonFont();
+
+            _playerScore = scoreManager.BaseScores;
+            _playerRatingInLeaderboard = GetPlayerRating();
         }
 
         /// <inheritdoc />
@@ -193,12 +205,10 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void DrawAddPlayerRows()
         {
-            uint testPlayerNumberInScoreTable = 1;
-            var playerScore = 322;
             DrawPlayerInputNickNamePrompt();
-            DrawScoreTablePlayerNumberCell(testPlayerNumberInScoreTable);
+            DrawScoreTablePlayerNumberCell(_playerRatingInLeaderboard);
             DrawScoreTableNickInput();
-            DrawScoreTablePlayerScoreCell(playerScore);
+            DrawScoreTablePlayerScoreCell(_playerScore);
             DrawPlayerScoreButtons();
         }
 
@@ -293,10 +303,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void DrawScoreTableResults()
         {
-            var offsetY = 3;
             for (var i = 0; i < _leaderBoardRecords.Count; i++)
             {
-                var indexY = i + offsetY;
+                var indexY = i + TABLE_RESULTS_OFFSET_Y;
                 var record = _leaderBoardRecords[i];
                 DrawScoreTableNumberCell(record.RatingPosition, indexY, _tableResultsColor);
                 DrawScoreTableNickCell(record.NickName, indexY);
@@ -316,6 +325,14 @@ namespace CDT.LAST.MonoGameClient.Screens
         private static Vector2 GetNickCellPosition(int offsetY)
         {
             return new Vector2(PLAYER_NICKNAME_TITLE_POSITION_X, offsetY);
+        }
+
+        private uint GetPlayerRating()
+        {
+            var leaderboardRecords = _dbContext.GetAllLeaderboardRecord();
+            var playerRating = leaderboardRecords.FirstOrDefault(x => x.RatingPosition <= _playerScore);
+
+            return playerRating?.RatingPosition ?? DEFAULT_PLAYER_RATING;
         }
 
         private static int GetRowVerticalPositionOffset(int indexY)
