@@ -38,6 +38,7 @@ namespace CDT.LAST.MonoGameClient
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
             serviceContainer.AddSingleton<IActorInteractionBus, ActorInteractionBus>();
+            serviceContainer.AddSingleton<DbContext>();
 
             RegisterCommands(serviceContainer);
             RegisterUiContentStorages(serviceContainer);
