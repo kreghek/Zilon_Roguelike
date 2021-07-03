@@ -48,29 +48,12 @@ namespace Zilon.Core.Tests
             int testedTotalLevel, int expectedLevel, int expectedSubLevel)
         {
             // ACT
-            var perkLevel = PerkHelper.ConvertTotalLevelToLevelSubs(perkScheme, testedTotalLevel);
+            var isSuccess = PerkHelper.TryConvertTotalLevelToLevelSubs(perkScheme, testedTotalLevel, out var perkLevel);
 
             // ASSERT
+            isSuccess.Should().BeTrue();
             perkLevel.Primary.Should().Be(expectedLevel);
             perkLevel.Sub.Should().Be(expectedSubLevel);
-        }
-
-        [Test]
-        [TestCaseSource(typeof(PerkHelperTestCaseSource),
-            nameof(PerkHelperTestCaseSource.ConvertTotalLevelArgumentExceptonTestCases))]
-        public void ConvertTotalLevelToLevelSubs_FromTestCases_ThrowsArgumentExceptions(IPerkScheme perkScheme,
-            int testedTotalLevel,
-            string expectedArgumentName)
-        {
-            // ACT
-            Action act = () =>
-            {
-                PerkHelper.ConvertTotalLevelToLevelSubs(perkScheme, testedTotalLevel);
-            };
-
-            // ASSERT
-            act.Should().Throw<ArgumentException>().Where(exception => exception.ParamName == expectedArgumentName,
-                $"param name must be {expectedArgumentName}");
         }
 
         [Test]

@@ -19,7 +19,7 @@ namespace Zilon.Core.MapGenerators
         private readonly IMonsterGenerator _monsterGenerator;
         private readonly IResourceMaterializationMap _resourceMaterializationMap;
         private readonly ISectorFactory _sectorFactory;
-        private readonly IStaticObstaclesGenerator _staticObstaclesGenerator;
+        private readonly IStaticObjectsGenerator _staticObstaclesGenerator;
 
         /// <summary>
         /// Создаёт экземпляр <see cref="SectorGenerator" />.
@@ -31,7 +31,7 @@ namespace Zilon.Core.MapGenerators
             IMapFactorySelector mapFactorySelector,
             ISectorFactory sectorFactory,
             IMonsterGenerator monsterGenerator,
-            IStaticObstaclesGenerator staticObstaclesGenerator,
+            IStaticObjectsGenerator staticObstaclesGenerator,
             IDiseaseGenerator diseaseGenerator,
             IResourceMaterializationMap resourceMaterializationMap)
         {

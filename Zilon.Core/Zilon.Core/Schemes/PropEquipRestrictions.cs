@@ -5,6 +5,6 @@ namespace Zilon.Core.Schemes
     public sealed class PropEquipRestrictions : IPropEquipRestrictions
     {
         [JsonProperty]
-        public PropHandUsage? PropHandUsage { get; private set; }
+        public PropHandUsage? PropHandUsage { get; init; }
     }
 }

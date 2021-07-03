@@ -126,6 +126,8 @@ namespace Zilon.Core.World
             {
                 if (sectorNode.State != SectorNodeState.SectorMaterialized)
                 {
+                    // Do not process SectorNode before they are materialized.
+                    // Not materialized sector nodes can't contains any actors.
                     continue;
                 }
 
@@ -134,16 +136,17 @@ namespace Zilon.Core.World
                 {
                     if (sectorNode.State == SectorNodeState.SectorMaterialized)
                     {
+                        // Invalid case because sector node is materialized but sector is null.
                         throw new InvalidOperationException();
                     }
 
                     continue;
                 }
 
-                var actors = sector.ActorManager.Items.ToArray();
-                foreach (var actor in actors)
+                var actorList = sector.ActorManager.Items.ToArray();
+                foreach (var actor in actorList)
                 {
-                    var needCreateTask = IsActorNeedsInTask(sector, actor);
+                    var needCreateTask = IsActorNeedsInTask(actor);
 
                     if (needCreateTask)
                     {
@@ -160,19 +163,9 @@ namespace Zilon.Core.World
             return materializedSectorList;
         }
 
-        private bool IsActorNeedsInTask(ISector sector, IActor actor)
+        private bool IsActorNeedsInTask(IActor actorInSector)
         {
-            if (!sector.ActorManager.Items.Contains(actor))
-            {
-                // Это может произойти, когда в процессе исполнения задач,
-                // актёр вышел из сектора. Соответственно, его уже нет в списке актёров сектора.
-
-                RemoveActorTaskState(actor);
-
-                return false;
-            }
-
-            if (_taskDict.TryGetValue(actor, out _))
+            if (_taskDict.TryGetValue(actorInSector, out _))
             {
                 // Actor has task yet.
 
@@ -262,7 +255,7 @@ namespace Zilon.Core.World
             }
         }
 
-        private async void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
+        private void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
         {
             if (sender is null)
             {
@@ -271,8 +264,7 @@ namespace Zilon.Core.World
 
             var sector = (ISector)sender;
 
-            await _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition)
-                .ConfigureAwait(false);
+            _globeTransitionHandler.InitActorTransitionAsync(this, sector, e.Actor, e.Transition).Wait(10_000);
         }
 
         private static TaskState[] SortActorStates(IEnumerable<TaskState> sectorStates)

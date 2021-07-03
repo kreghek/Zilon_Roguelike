@@ -1,21 +1,22 @@
-﻿namespace CDT.LAST.MonoGameClient
+﻿using System;
+using System.Globalization;
+using System.Threading;
+
+using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Zilon.Core.Commands;
+using Zilon.Core.PersonGeneration;
+using Zilon.Core.Players;
+using Zilon.Core.Tactics;
+using Zilon.Core.World;
+
+namespace CDT.LAST.MonoGameClient
 {
-    using System;
-    using System.Globalization;
-    using System.Threading;
-
-    using CDT.LAST.MonoGameClient.Engine;
-    using CDT.LAST.MonoGameClient.Screens;
-    using CDT.LAST.MonoGameClient.ViewModels.MainScene;
-
-    using Microsoft.Extensions.DependencyInjection;
-
-    using Zilon.Core.Commands;
-    using Zilon.Core.PersonGeneration;
-    using Zilon.Core.Players;
-    using Zilon.Core.Tactics;
-    using Zilon.Core.World;
-
     public static class Program
     {
         [STAThread]
@@ -30,9 +31,8 @@
             startUp.RegisterServices(serviceContainer);
 
             serviceContainer.AddSingleton<IGlobeInitializer, GlobeInitializer>();
-            serviceContainer.AddSingleton<IGlobeExpander>(
-                provider =>
-                    (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
+            serviceContainer.AddSingleton<IGlobeExpander>(provider =>
+                (BiomeInitializer)provider.GetRequiredService<IBiomeInitializer>());
             serviceContainer.AddSingleton<IGlobeTransitionHandler, GlobeTransitionHandler>();
             serviceContainer.AddSingleton<IPersonInitializer, HumanPersonInitializer>();
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
@@ -44,8 +44,8 @@
 
             serviceContainer.AddSingleton<IPersonVisualizationContentStorage, PersonVisualizationContentStorage>();
             serviceContainer.AddSingleton<IPersonSoundContentStorage, PersonSoundContentStorage>();
-            serviceContainer.AddSingleton<IGameObjectVisualizationContentStorage, GameObjectVisualizationContentStorage>();
-            serviceContainer.AddSingleton<DbContext>();
+            serviceContainer
+                .AddSingleton<IGameObjectVisualizationContentStorage, GameObjectVisualizationContentStorage>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 

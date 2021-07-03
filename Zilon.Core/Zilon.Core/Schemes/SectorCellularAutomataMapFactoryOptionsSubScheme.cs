@@ -2,7 +2,7 @@
 
 namespace Zilon.Core.Schemes
 {
-    public class SectorCellularAutomataMapFactoryOptionsSubScheme : SectorMapFactoryOptionsSubSchemeBase,
+    public sealed class SectorCellularAutomataMapFactoryOptionsSubScheme : SectorMapFactoryOptionsSubSchemeBase,
         ISectorCellularAutomataMapFactoryOptionsSubScheme
     {
         public override SchemeSectorMapGenerator MapGenerator => SchemeSectorMapGenerator.CellularAutomaton;

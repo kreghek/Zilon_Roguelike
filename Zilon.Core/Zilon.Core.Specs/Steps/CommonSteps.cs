@@ -230,6 +230,11 @@ namespace Zilon.Core.Specs.Steps
         [Then(@"У актёра в инвентаре есть (.*)")]
         public void ThenУАктёраВИнвентареЕстьPistol(string equipmentSchemeSid)
         {
+            if (string.Equals(equipmentSchemeSid, "нет", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return;
+            }
+
             var actor = Context.GetActiveActor();
 
             var inventoryModule = actor.Person.GetModule<IInventoryModule>();
