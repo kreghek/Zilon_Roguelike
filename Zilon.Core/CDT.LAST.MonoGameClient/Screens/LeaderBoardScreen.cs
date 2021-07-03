@@ -54,6 +54,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private const int ADD_PLAYER_NICNKNAME_BUTTON_WIDTH = BUTTON_WIDTH * 2;
 
+        private const float PLAYER_INPUT_NICKNAME_PROMPT_POSITION_X = PLAYER_NICKNAME_TITLE_POSITION_X;
+
         private readonly TextButton _addPlayerNickname;
 
         private readonly int _addPlayerScoreButtonOffsetY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
@@ -68,9 +70,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private readonly TextButton _goToMainMenu;
 
-        private List<PlayerScore> _leaderBoardRecords;
-
         private readonly Color _playerInfoColor = Color.Blue;
+
+        private readonly float _playerInputNicknamePromptPositionY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
 
         private readonly int _playerRowOffsetY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
 
@@ -88,11 +90,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private bool _isVisibleNickNamePromt;
 
+        private List<PlayerScore> _leaderBoardRecords;
+
         private string _playerNickname = "";
-
-        private const float PLAYER_INPUT_NICKNAME_PROMPT_POSITION_X = PLAYER_NICKNAME_TITLE_POSITION_X;
-
-        private readonly float _playerInputNicknamePromptPositionY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
 
         /// <inheritdoc />
         public LeaderBoardScreen(Game game, SpriteBatch spriteBatch)
@@ -167,8 +167,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             base.Update(gameTime);
 
             _goToMainMenu.Update();
-            _addPlayerNickname.Update();
-            _clearPlayerNickname.Update();
+            UpdateAddNickNamePlayerButtons();
         }
 
         private void AddPlayerNickNameClickHandler(object? sender, EventArgs e)
@@ -342,6 +341,14 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _playerNickname = $"{_playerNickname}{playerChar}";
             if (!string.IsNullOrEmpty(_playerNickname))
                 _isVisibleNickNamePromt = false;
+        }
+
+        private void UpdateAddNickNamePlayerButtons()
+        {
+            if (!_isNeedToAddedPlayerScore)
+                return;
+            _addPlayerNickname.Update();
+            _clearPlayerNickname.Update();
         }
     }
 }
