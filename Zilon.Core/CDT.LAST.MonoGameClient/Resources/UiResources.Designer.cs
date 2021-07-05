@@ -243,11 +243,38 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leaderboard menu.
+        /// </summary>
+        internal static string LeaderboardMenuTitle {
+            get {
+                return ResourceManager.GetString("LeaderboardMenuTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Low.
         /// </summary>
         internal static string LowAttributeValueTitle {
             get {
                 return ResourceManager.GetString("LowAttributeValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main menu .
+        /// </summary>
+        internal static string MainMenuButtonTitle {
+            get {
+                return ResourceManager.GetString("MainMenuButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        internal static string NextScreenButtonTitle {
+            get {
+                return ResourceManager.GetString("NextScreenButtonTitle", resourceCulture);
             }
         }
         
@@ -306,6 +333,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         internal static string PutPropInContainerButtonTitleTemplate {
             get {
                 return ResourceManager.GetString("PutPropInContainerButtonTitleTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Score menu.
+        /// </summary>
+        internal static string ScoreMenuTitle {
+            get {
+                return ResourceManager.GetString("ScoreMenuTitle", resourceCulture);
             }
         }
         

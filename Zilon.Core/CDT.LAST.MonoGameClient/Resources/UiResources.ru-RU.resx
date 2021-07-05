@@ -258,4 +258,16 @@
   <data name="FakeContainerName" xml:space="preserve">
     <value>мешок</value>
   </data>
+  <data name="MainMenuButtonTitle" xml:space="preserve">
+    <value>Главное меню</value>
+  </data>
+  <data name="NextScreenButtonTitle" xml:space="preserve">
+    <value>Дальше</value>
+  </data>
+  <data name="ScoreMenuTitle" xml:space="preserve">
+    <value>Меню очков</value>
+  </data>
+  <data name="LeaderboardMenuTitle" xml:space="preserve">
+    <value>Меню лидеров</value>
+  </data>
 </root>

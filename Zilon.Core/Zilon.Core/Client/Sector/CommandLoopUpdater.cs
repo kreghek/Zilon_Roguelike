@@ -7,7 +7,7 @@ using Zilon.Core.Commands;
 
 namespace Zilon.Core.Client.Sector
 {
-    public sealed class CommandLoopUpdater : ICommandLoopUpdater
+    public sealed class CommandLoopUpdater : ICommandLoopUpdater, IDisposable
     {
         private const int WAIT_FOR_CHANGES_MILLISECONDS = 100;
         private readonly ICommandLoopContext _commandLoopContext;
@@ -16,6 +16,9 @@ namespace Zilon.Core.Client.Sector
         private readonly SemaphoreSlim _semaphoreSlim;
 
         private bool _hasPendingCommand;
+        private CancellationTokenSource? _internalCancellationTokenSource;
+
+        private CancellationTokenSource? _linkedCancellationTokenSource;
 
         [ExcludeFromCodeCoverage]
         public CommandLoopUpdater(ICommandLoopContext commandLoopContext, ICommandPool commandPool)
@@ -38,37 +41,42 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        private async Task HandleRepeatableAsync(ICommand? command)
+        private async Task HandleRepeatableAsync(ICommand? command, CancellationToken cancellationToken)
         {
             if (command is IRepeatableCommand repeatableCommand)
             {
                 // It is necesary because CanRepeate and CanExecute can perform early that globe updates its state.
                 await WaitGlobeIterationPerformedAsync().ConfigureAwait(false);
 
-                if (repeatableCommand.CanRepeat() && repeatableCommand.CanExecute().IsSuccess)
+                cancellationToken.ThrowIfCancellationRequested();
+
+                if (_commandLoopContext.HasNextIteration && repeatableCommand.CanRepeat() &&
+                    repeatableCommand.CanExecute().IsSuccess)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     repeatableCommand.IncreaceIteration();
                     _commandPool.Push(repeatableCommand);
                     CommandAutoExecuted?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
-                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(false, cancellationToken).ConfigureAwait(false);
 
                     CommandProcessed?.Invoke(this, EventArgs.Empty);
                 }
             }
             else
             {
-                await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+                await SetHasPendingCommandsAsync(false, cancellationToken).ConfigureAwait(false);
 
                 CommandProcessed?.Invoke(this, EventArgs.Empty);
             }
         }
 
-        private async Task SetHasPendingCommandsAsync(bool value)
+        private async Task SetHasPendingCommandsAsync(bool value, CancellationToken cancellationToken)
         {
-            await _semaphoreSlim.WaitAsync().ConfigureAwait(false);
+            await _semaphoreSlim.WaitAsync(cancellationToken).ConfigureAwait(false);
             try
             {
                 _hasPendingCommand = value;
@@ -79,7 +87,7 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        private async Task<ICommand?> TryExecuteCommandAsync(ICommand? lastCommand)
+        private async Task<ICommand?> TryExecuteCommandAsync(ICommand? lastCommand, CancellationToken cancellationToken)
         {
             ICommand? commandWithError = null;
             ICommand? newLastCommand = null;
@@ -92,7 +100,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (command != null)
                 {
-                    await SetHasPendingCommandsAsync(true).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(true, cancellationToken).ConfigureAwait(false);
 
                     try
                     {
@@ -104,13 +112,13 @@ namespace Zilon.Core.Client.Sector
                         throw;
                     }
 
-                    await HandleRepeatableAsync(command).ConfigureAwait(false);
+                    await HandleRepeatableAsync(command, cancellationToken).ConfigureAwait(false);
 
                     newLastCommand = command;
                 }
                 else
                 {
-                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(false, cancellationToken).ConfigureAwait(false);
 
                     if (lastCommand != null)
                     {
@@ -130,7 +138,7 @@ namespace Zilon.Core.Client.Sector
             {
                 if (errorOccured)
                 {
-                    await SetHasPendingCommandsAsync(false).ConfigureAwait(false);
+                    await SetHasPendingCommandsAsync(false, cancellationToken).ConfigureAwait(false);
 
                     CommandProcessed?.Invoke(this, EventArgs.Empty);
                     newLastCommand = null;
@@ -163,13 +171,22 @@ namespace Zilon.Core.Client.Sector
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            IsStarted = true;
-            return Task.Run(async () =>
+            _internalCancellationTokenSource = new CancellationTokenSource();
+            var internalToken = _internalCancellationTokenSource.Token;
+
+            _linkedCancellationTokenSource =
+                CancellationTokenSource.CreateLinkedTokenSource(internalToken, cancellationToken);
+
+            var linkedCancellationToken = _linkedCancellationTokenSource.Token;
+
+            var updateTask = Task.Run(async () =>
             {
                 ICommand? lastCommand = null;
 
                 while (_commandLoopContext.HasNextIteration)
                 {
+                    linkedCancellationToken.ThrowIfCancellationRequested();
+
                     if (!_commandLoopContext.CanPlayerGiveCommand)
                     {
                         // If player can't gives command right now the loop sleep some time (100ms).
@@ -181,7 +198,8 @@ namespace Zilon.Core.Client.Sector
 
                     try
                     {
-                        lastCommand = await TryExecuteCommandAsync(lastCommand: lastCommand).ConfigureAwait(false);
+                        lastCommand = await TryExecuteCommandAsync(lastCommand, linkedCancellationToken)
+                            .ConfigureAwait(false);
                     }
                     catch (Exception exception)
                     {
@@ -191,7 +209,15 @@ namespace Zilon.Core.Client.Sector
                     await Task.Yield();
                     await Task.Delay(WAIT_FOR_CHANGES_MILLISECONDS).ConfigureAwait(false);
                 }
-            }, cancellationToken);
+            }, linkedCancellationToken);
+
+            IsStarted = true;
+
+            updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnFaulted);
+            updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnCanceled);
+            updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnRanToCompletion);
+
+            return updateTask;
         }
 
         public bool IsStarted { get; private set; }
@@ -206,6 +232,46 @@ namespace Zilon.Core.Client.Sector
             finally
             {
                 _semaphoreSlim.Release();
+            }
+        }
+
+        public Task StopAsync()
+        {
+            if (_internalCancellationTokenSource is not null)
+            {
+                _internalCancellationTokenSource.Cancel();
+                _internalCancellationTokenSource.Dispose();
+                _internalCancellationTokenSource = null;
+            }
+
+            if (_linkedCancellationTokenSource is not null)
+            {
+                _linkedCancellationTokenSource.Dispose();
+                _linkedCancellationTokenSource = null;
+            }
+
+            if (_semaphoreSlim.CurrentCount == 0)
+            {
+                _semaphoreSlim.Release();
+            }
+
+            // Is started set to false if _cancellationTokenSource is null.
+            // In regular curciut IsStarted set to false in ContinueWith then update task are cancelled.
+            IsStarted = false;
+
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            if (_internalCancellationTokenSource is not null)
+            {
+                _internalCancellationTokenSource.Dispose();
+            }
+
+            if (_linkedCancellationTokenSource is not null)
+            {
+                _linkedCancellationTokenSource.Dispose();
             }
         }
     }
