@@ -275,14 +275,24 @@ namespace Zilon.Core.Client.Sector.Tests
             var commandLoop = new CommandLoopUpdater(context, commandPool);
 
             // ACT
-            commandLoop.StartAsync(CancellationToken.None);
+            var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
+            AggregateException? commandLoopTaskException = null;
 
             await semaphore.WaitAsync().ConfigureAwait(false);
 
             await commandLoop.StopAsync().ConfigureAwait(false);
 
+            Func<Task> act = async () =>
+            {
+                await commandLoopTask.ContinueWith(task => commandLoopTaskException = task.Exception,
+                    TaskContinuationOptions.OnlyOnFaulted).ConfigureAwait(false);
+            };
+
             // ASSERT
             commandPoolMock.Verify(x => x.Pop(), Times.AtMost(2));
+
+            act.Should().Throw<TaskCanceledException>();
+            commandLoopTaskException.Should().BeNull();
         }
 
         private sealed class TestCommandPool : ICommandPool
