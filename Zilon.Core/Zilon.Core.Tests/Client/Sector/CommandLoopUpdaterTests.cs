@@ -264,7 +264,7 @@ namespace Zilon.Core.Client.Sector.Tests
 
             var commandPoolMock = new Mock<ICommandPool>();
             var semaphore = new SemaphoreSlim(0, 1);
-            commandPoolMock.Setup(x => x.Pop()).Returns(() => 
+            commandPoolMock.Setup(x => x.Pop()).Returns(() =>
             {
                 Task.Delay(100).Wait();
                 semaphore.Release();
