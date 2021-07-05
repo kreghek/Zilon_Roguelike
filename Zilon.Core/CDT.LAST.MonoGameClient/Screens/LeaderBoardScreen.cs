@@ -4,8 +4,9 @@ namespace CDT.LAST.MonoGameClient.Screens
     using System.Collections.Generic;
     using System.Linq;
 
-    using CDT.LAST.MonoGameClient.Engine;
-    using CDT.LAST.MonoGameClient.Resources;
+    using Engine;
+
+    using Resources;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
@@ -215,17 +216,22 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void DrawPlayerInputNickNamePrompt()
         {
             if (_isVisibleNickNamePromt)
+            {
                 _spriteBatch.DrawString(
                     _font,
                     UiResources.PlayerInputNicknamePrompt,
                     new Vector2(PLAYER_INPUT_NICKNAME_PROMPT_POSITION_X, _playerInputNicknamePromptPositionY),
                     Color.Red);
+            }
         }
 
         private void DrawPlayerScoreButtons()
         {
             if (!_isNeedToAddedPlayerScore)
+            {
                 return;
+            }
+
             _addPlayerNickname.Draw(_spriteBatch);
             _clearPlayerNickname.Draw(_spriteBatch);
         }
@@ -355,15 +361,23 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             var playerChar = e.Character;
             if (_playerNickname.Length + 1 <= NICKNAME_MAX_LENGTH)
+            {
                 _playerNickname = $"{_playerNickname}{playerChar}";
+            }
+
             if (!string.IsNullOrEmpty(_playerNickname))
+            {
                 _isVisibleNickNamePromt = false;
+            }
         }
 
         private void UpdateAddNickNamePlayerButtons()
         {
             if (!_isNeedToAddedPlayerScore)
+            {
                 return;
+            }
+
             _addPlayerNickname.Update();
             _clearPlayerNickname.Update();
         }

@@ -19,8 +19,10 @@ namespace CDT.LAST.MonoGameClient
         public LeaderboardLimit(bool areGettingAllRecords = false, int limit = DEFAULT_GET_LEADERBOARD_LIMIT)
         {
             if (areGettingAllRecords && limit != DEFAULT_GET_LEADERBOARD_LIMIT)
+            {
                 throw new ArgumentException(
                     $"Cannot use options - {nameof(areGettingAllRecords)} = true AND {nameof(limit)} != default value together.");
+            }
 
             AreGettingAllRecords = areGettingAllRecords;
             Limit = limit;
@@ -57,11 +59,15 @@ namespace CDT.LAST.MonoGameClient
         {
             _scoreManager = scoreManager;
             if (!Directory.Exists(SCORE_PATH))
+            {
                 Directory.CreateDirectory(SCORE_PATH);
+            }
 
             var dbPath = Path.Combine(SCORE_PATH, DB_FILE_NAME);
             if (!File.Exists(dbPath))
+            {
                 SQLiteConnection.CreateFile(dbPath);
+            }
 
             CreateTablesIfNotExists();
         }
@@ -196,7 +202,9 @@ namespace CDT.LAST.MonoGameClient
         {
             const string BaseQuery = "SELECT Id, Name, Scores FROM [Scores] ORDER BY Scores DESC";
             if (limit.AreGettingAllRecords)
+            {
                 return BaseQuery;
+            }
 
             var limitQuery = $"{BaseQuery} LIMIT {limit.Limit}";
 
