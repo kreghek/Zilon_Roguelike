@@ -20,7 +20,7 @@
     },
     "Effect": "Damage",
     "Targets": "Enemy",
-	"IsMelee": true,
+    "IsMelee": true,
     "Tags": [
       "bite"
     ]
