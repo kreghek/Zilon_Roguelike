@@ -179,8 +179,7 @@ namespace Zilon.Core.Client.Sector
 
             var linkedCancellationToken = _linkedCancellationTokenSource.Token;
 
-            IsStarted = true;
-            return Task.Run(async () =>
+            var updateTask = Task.Run(async () =>
             {
                 ICommand? lastCommand = null;
 
@@ -211,6 +210,14 @@ namespace Zilon.Core.Client.Sector
                     await Task.Delay(WAIT_FOR_CHANGES_MILLISECONDS).ConfigureAwait(false);
                 }
             }, linkedCancellationToken);
+
+            IsStarted = true;
+
+            updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnFaulted);
+            updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnCanceled);
+            updateTask.ContinueWith(task => IsStarted = false, TaskContinuationOptions.OnlyOnRanToCompletion);
+
+            return updateTask;
         }
 
         public bool IsStarted { get; private set; }
@@ -248,6 +255,8 @@ namespace Zilon.Core.Client.Sector
                 _semaphoreSlim.Release();
             }
 
+            // Is started set to false if _cancellationTokenSource is null.
+            // In regular curciut IsStarted set to false in ContinueWith then update task are cancelled.
             IsStarted = false;
 
             return Task.CompletedTask;
