@@ -234,11 +234,13 @@ namespace Zilon.Core.Client.Sector
             {
                 _internalCancellationTokenSource.Cancel();
                 _internalCancellationTokenSource.Dispose();
+                _internalCancellationTokenSource = null;
             }
 
             if (_linkedCancellationTokenSource is not null)
             {
                 _linkedCancellationTokenSource.Dispose();
+                _linkedCancellationTokenSource = null;
             }
 
             if (_semaphoreSlim.CurrentCount == 0)
