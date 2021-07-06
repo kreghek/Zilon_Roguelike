@@ -398,9 +398,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
-            var direction = targetSpritePosition - _rootSprite.Position;
-            var effectPosition = targetSpritePosition + targetGameObject.HitEffectPosition;
-            var hitEffect = new HitEffect(_gameObjectVisualizationContentStorage, effectPosition, direction);
+            var difference = targetSpritePosition - _rootSprite.Position;
+            var hitEffectPosition = (difference / 2) + _rootSprite.Position + HitEffectPosition;
+            var direction = difference;
+            direction.Normalize();
+            
+            var hitEffect = new HitEffect(_gameObjectVisualizationContentStorage, hitEffectPosition, direction);
             _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
         }
 

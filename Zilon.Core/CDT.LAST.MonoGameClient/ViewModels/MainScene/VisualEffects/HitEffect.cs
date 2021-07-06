@@ -7,8 +7,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 {
     internal sealed class HitEffect : IVisualEffect
     {
-        private const double EFFECT_DISPLAY_DURATION_SECONDS = 0.3f;
-        private const int FRAME_COUNT = 6;
+        private const double FPS = 1 / 12.0;
+        private const double EFFECT_DISPLAY_DURATION_SECONDS = FPS * FRAME_COUNT;
+        private const int FRAME_COUNT = 5;
         private const int FRAME_COLUMN_COUNT = 3;
         private const int FRAME_ROW_COUNT = 2;
         private const int FRAME_SIZE = 64;
