@@ -32,7 +32,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 SourceRectangle = _sourceRect
             };
 
-            if (direction.X < 0)
+            if (direction.X > 0)
             {
                 _hitSprite.FlipX = true;
             }
