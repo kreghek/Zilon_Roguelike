@@ -29,9 +29,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal class ActorViewModel : GameObjectBase, IActorViewModel
     {
         private readonly Game _game;
+        private readonly IGameObjectVisualizationContentStorage _gameObjectVisualizationContentStorage;
         private readonly IActorGraphics _graphicsRoot;
         private readonly IPersonSoundContentStorage _personSoundStorage;
-        private readonly IGameObjectVisualizationContentStorage _gameObjectVisualizationContentStorage;
         private readonly SpriteContainer _rootSprite;
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly Sprite _shadowSprite;
@@ -58,9 +58,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                                       nameof(gameObjectParams));
 
             _gameObjectVisualizationContentStorage = gameObjectParams.GameObjectVisualizationContentStorage ??
-                                  throw new ArgumentException(
-                                      $"{nameof(gameObjectParams.GameObjectVisualizationContentStorage)} is not defined.",
-                                      nameof(gameObjectParams));
+                                                     throw new ArgumentException(
+                                                         $"{nameof(gameObjectParams.GameObjectVisualizationContentStorage)} is not defined.",
+                                                         nameof(gameObjectParams));
 
             _spriteBatch = gameObjectParams.SpriteBatch ??
                            throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.",

@@ -13,13 +13,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
         private const int FRAME_ROW_COUNT = 2;
         private const int FRAME_SIZE = 64;
 
+        private readonly Sprite _hitSprite;
+
         private readonly Texture2D _hitTexture;
         private readonly Rectangle _sourceRect;
-
-        private readonly Sprite _hitSprite;
         private double _counter;
 
-        public HitEffect(IGameObjectVisualizationContentStorage contentStorage, Vector2 targetObjectPosition, Vector2 direction)
+        public HitEffect(IGameObjectVisualizationContentStorage contentStorage, Vector2 targetObjectPosition,
+            Vector2 direction)
         {
             _hitTexture = contentStorage.GetHitEffectTexture(HitEffectType.ShortBlade, HitEffectDirection.Left);
             _sourceRect = new Rectangle(0, 0, 64, 64);

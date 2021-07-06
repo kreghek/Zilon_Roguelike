@@ -29,10 +29,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 return texture;
             }
-            else
-            {
-                return _hitEffectDictionary[new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.Left)];
-            }
+
+            return _hitEffectDictionary[new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.Left)];
         }
 
         public void LoadContent(ContentManager content)
@@ -80,8 +78,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Direction = direction;
             }
 
-            public HitEffectType Type { get; }
             public HitEffectDirection Direction { get; }
+
+            public HitEffectType Type { get; }
         }
     }
 }
