@@ -6,7 +6,7 @@ using Zilon.Core.Tactics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class SectorViewModelContext
+    internal sealed class SectorViewModelContext
     {
         public SectorViewModelContext(ISector sector)
         {

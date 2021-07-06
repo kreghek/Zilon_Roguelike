@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 {
-    public sealed class ConsumingEffect : IVisualEffect
+    internal sealed class ConsumingEffect : IVisualEffect
     {
         private const double EFFECT_DISPLAY_DURATION_SECONDS = 1f;
         private const int EFFECT_FLIGHT_DISTANCE = 40;

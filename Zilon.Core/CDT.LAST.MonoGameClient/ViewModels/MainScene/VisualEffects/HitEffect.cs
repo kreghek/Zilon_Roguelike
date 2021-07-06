@@ -5,20 +5,30 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 {
-    public sealed class HitEffect : IVisualEffect
+    internal sealed class HitEffect : IVisualEffect
     {
         private const double EFFECT_DISPLAY_DURATION_SECONDS = 0.3f;
+        private const int FRAME_COUNT = 6;
+        private const int FRAME_COLUMN_COUNT = 3;
+        private const int FRAME_ROW_COUNT = 2;
+        private const int FRAME_SIZE = 64;
+
+        private readonly Texture2D _hitTexture;
+        private readonly Rectangle _sourceRect;
 
         private readonly Sprite _hitSprite;
         private double _counter;
 
-        public HitEffect(LivGame game, Vector2 targetObjectPosition, Vector2 direction)
+        public HitEffect(IGameObjectVisualizationContentStorage contentStorage, Vector2 targetObjectPosition, Vector2 direction)
         {
-            _hitSprite = new Sprite(game.Content.Load<Texture2D>("Sprites/effects/hit"))
+            _hitTexture = contentStorage.GetHitEffectTexture(HitEffectType.ShortBlade, HitEffectDirection.Left);
+            _sourceRect = new Rectangle(0, 0, 64, 64);
+            _hitSprite = new Sprite(_hitTexture)
             {
                 Position = targetObjectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
-                Color = new Color(255, 255, 255, 0.0f)
+                Color = new Color(255, 255, 255, 0.0f),
+                SourceRectangle = _sourceRect
             };
 
             if (direction.X < 0)
@@ -44,7 +54,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
             _counter -= gameTime.ElapsedGameTime.TotalSeconds;
             if (!IsComplete)
             {
-                _hitSprite.ScaleScalar = 1 - (float)(_counter / EFFECT_DISPLAY_DURATION_SECONDS);
+                var t = _counter / EFFECT_DISPLAY_DURATION_SECONDS;
+
+                var frameIndex = (int)(FRAME_COUNT * t);
+                var frameColumn = frameIndex / FRAME_COUNT;
+                var frameRow = frameIndex % FRAME_COUNT;
+
+                _hitSprite.SourceRectangle = new Rectangle(
+                    frameColumn * FRAME_SIZE,
+                    frameRow * FRAME_SIZE,
+                    FRAME_SIZE,
+                    FRAME_SIZE);
+
+                //_hitSprite.ScaleScalar = 1 - (float)t;
             }
         }
     }

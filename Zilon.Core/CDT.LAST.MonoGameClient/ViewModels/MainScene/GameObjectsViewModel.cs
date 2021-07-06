@@ -24,7 +24,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public Camera? Camera { get; init; }
         public Game? Game { get; init; }
         public IPersonSoundContentStorage? PersonSoundStorage { get; init; }
-        public IPersonVisualizationContentStorage? PersonVisualizationContentStorage { get; internal set; }
+        public IPersonVisualizationContentStorage? PersonVisualizationContentStorage { get; init; }
+        public IGameObjectVisualizationContentStorage? GameObjectVisualizationContentStorage { get; init; }
         public IPlayer? Player { get; init; }
         public SectorViewModelContext? SectorViewModelContext { get; init; }
         public SpriteBatch? SpriteBatch { get; init; }

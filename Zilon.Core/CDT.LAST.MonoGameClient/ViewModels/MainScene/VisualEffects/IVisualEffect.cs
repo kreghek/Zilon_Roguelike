@@ -6,7 +6,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
     /// <summary>
     /// Visual effect of different actions of action aftermaths in game world.
     /// </summary>
-    public interface IVisualEffect
+    internal interface IVisualEffect
     {
         /// <summary>
         /// Determine effect is complete.

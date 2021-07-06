@@ -31,7 +31,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Game _game;
         private readonly IActorGraphics _graphicsRoot;
         private readonly IPersonSoundContentStorage _personSoundStorage;
-
+        private readonly IGameObjectVisualizationContentStorage _gameObjectVisualizationContentStorage;
         private readonly SpriteContainer _rootSprite;
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly Sprite _shadowSprite;
@@ -56,6 +56,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                                   throw new ArgumentException(
                                       $"{nameof(gameObjectParams.PersonSoundStorage)} is not defined.",
                                       nameof(gameObjectParams));
+
+            _gameObjectVisualizationContentStorage = gameObjectParams.GameObjectVisualizationContentStorage ??
+                                  throw new ArgumentException(
+                                      $"{nameof(gameObjectParams.GameObjectVisualizationContentStorage)} is not defined.",
+                                      nameof(gameObjectParams));
+
             _spriteBatch = gameObjectParams.SpriteBatch ??
                            throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.",
                                nameof(gameObjectParams));
@@ -394,7 +400,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var direction = targetSpritePosition - _rootSprite.Position;
             var effectPosition = targetSpritePosition + targetGameObject.HitEffectPosition;
-            var hitEffect = new HitEffect((LivGame)_game, effectPosition, direction);
+            var hitEffect = new HitEffect(_gameObjectVisualizationContentStorage, effectPosition, direction);
             _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
         }
 
