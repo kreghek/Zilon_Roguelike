@@ -40,7 +40,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _consumingEffectTexture = content.Load<Texture2D>("Sprites/VisualEffects/ConsumingEffects");
             _hitEffectDictionary = new Dictionary<HitEffectKey, Texture2D>
             {
-                { 
+                {
                     new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.Left),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
                 },
