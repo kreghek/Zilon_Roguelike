@@ -55,18 +55,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
             if (!IsComplete)
             {
                 var t = _counter / EFFECT_DISPLAY_DURATION_SECONDS;
+                var t2 = 1 - t;
 
-                var frameIndex = (int)(FRAME_COUNT * t);
-                var frameColumn = frameIndex / FRAME_COUNT;
-                var frameRow = frameIndex % FRAME_COUNT;
+                var frameIndex = (int)(FRAME_COUNT * t2);
+                var frameColumn = frameIndex % FRAME_COLUMN_COUNT;
+                var frameRow = frameIndex / FRAME_COLUMN_COUNT;
 
                 _hitSprite.SourceRectangle = new Rectangle(
                     frameColumn * FRAME_SIZE,
                     frameRow * FRAME_SIZE,
                     FRAME_SIZE,
                     FRAME_SIZE);
-
-                //_hitSprite.ScaleScalar = 1 - (float)t;
             }
         }
     }

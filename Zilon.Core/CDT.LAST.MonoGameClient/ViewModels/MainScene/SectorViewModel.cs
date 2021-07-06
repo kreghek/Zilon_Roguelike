@@ -48,6 +48,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var personVisualizationContentStorage =
                 serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
             _personSoundContentStorage = serviceScope.GetRequiredService<IPersonSoundContentStorage>();
+            var gameObjectVisualizationContentStorage = serviceScope.GetRequiredService<IGameObjectVisualizationContentStorage>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -75,7 +76,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 SpriteBatch = _spriteBatch,
                 SectorViewModelContext = _viewModelContext,
                 PersonSoundStorage = _personSoundContentStorage,
-                PersonVisualizationContentStorage = personVisualizationContentStorage
+                PersonVisualizationContentStorage = personVisualizationContentStorage,
+                GameObjectVisualizationContentStorage = gameObjectVisualizationContentStorage
             };
             _gameObjectsViewModel = new GameObjectsViewModel(gameObjectParams);
 
