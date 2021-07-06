@@ -402,7 +402,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var hitEffectPosition = (difference / 2) + _rootSprite.Position + HitEffectPosition;
             var direction = difference;
             direction.Normalize();
-            
+
             var hitEffect = new HitEffect(_gameObjectVisualizationContentStorage, hitEffectPosition, direction);
             _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
         }
