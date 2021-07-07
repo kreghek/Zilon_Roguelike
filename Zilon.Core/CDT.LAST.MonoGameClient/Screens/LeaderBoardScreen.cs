@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Engine;
+using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Resources;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
-using Resources;
 
 using Zilon.Core.Scoring;
 
