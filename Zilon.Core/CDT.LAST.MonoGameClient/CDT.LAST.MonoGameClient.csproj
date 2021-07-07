@@ -31,11 +31,10 @@
     <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.0-preview.1.21102.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
     <PackageReference Condition="'$(SONAR_TOKEN)' == ''" Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
-    <PackageReference Include="SQLite" Version="3.13.0" />
-    <PackageReference Include="Stub.System.Data.SQLite.Core.NetStandard" Version="1.0.114.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj" />

@@ -4,9 +4,10 @@ namespace CDT.LAST.MonoGameClient
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
-    using System.Data.SQLite;
     using System.IO;
     using System.Linq;
+
+    using Microsoft.Data.Sqlite;
 
     using Zilon.Core.Scoring;
 
@@ -51,7 +52,7 @@ namespace CDT.LAST.MonoGameClient
 
         private readonly string _connectionString = $"Data Source = {DB_FILE_NAME}";
 
-        private readonly SQLiteFactory _dbInstance = SQLiteFactory.Instance;
+        private readonly SqliteFactory _dbInstance = SqliteFactory.Instance;
 
         private readonly IScoreManager _scoreManager;
 
@@ -61,12 +62,6 @@ namespace CDT.LAST.MonoGameClient
             if (!Directory.Exists(SCORE_PATH))
             {
                 Directory.CreateDirectory(SCORE_PATH);
-            }
-
-            var dbPath = Path.Combine(SCORE_PATH, DB_FILE_NAME);
-            if (!File.Exists(dbPath))
-            {
-                SQLiteConnection.CreateFile(dbPath);
             }
 
             CreateTablesIfNotExists();
