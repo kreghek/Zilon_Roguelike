@@ -200,13 +200,13 @@ namespace CDT.LAST.MonoGameClient
 
         private static string FormatGetLeaderboardQuery(LeaderboardLimit limit)
         {
-            const string BaseQuery = "SELECT Id, Name, Scores FROM [Scores] ORDER BY Scores DESC";
+            const string BASE_QUERY = "SELECT Id, Name, Scores FROM [Scores] ORDER BY Scores DESC";
             if (limit.AreGettingAllRecords)
             {
-                return BaseQuery;
+                return BASE_QUERY;
             }
 
-            var limitQuery = $"{BaseQuery} LIMIT {limit.Limit}";
+            var limitQuery = $"{BASE_QUERY} LIMIT {limit.Limit}";
 
             return limitQuery;
         }
