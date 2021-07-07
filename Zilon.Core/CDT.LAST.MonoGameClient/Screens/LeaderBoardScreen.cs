@@ -20,7 +20,6 @@ namespace CDT.LAST.MonoGameClient.Screens
     /// </summary>
     public class LeaderBoardScreen : GameSceneBase
     {
-
         private const int GO_TO_MAIN_MENU_BUTTON_POSITION_X = LEADERBOARD_MENU_TITLE_POSITION_X;
 
         private const int GO_TO_MAIN_MENU_BUTTON_POSITION_Y = 150;
