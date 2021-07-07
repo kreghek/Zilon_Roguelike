@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Scoring;
 
-
 namespace CDT.LAST.MonoGameClient.Screens
 {
     /// <summary>
