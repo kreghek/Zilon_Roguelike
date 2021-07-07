@@ -94,8 +94,6 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private readonly Color _tableResultsColor = Color.White;
 
-        private readonly IUiContentStorage _uiContentStorage;
-
         private bool _isNeedToAddedPlayerScore = true;
 
         private bool _isVisibleNickNamePromt;
@@ -110,16 +108,19 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             game.Window.TextInput += InputNickName;
             _spriteBatch = spriteBatch;
+
             var serviceScope = ((LivGame)Game).ServiceProvider;
-            _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+
+            var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
             var scoreManager = serviceScope.GetRequiredService<IScoreManager>();
+
             _scoreSummary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
             _dbContext = serviceScope.GetRequiredService<DbContext>();
 
             _goToMainMenu = new TextButton(
                 UiResources.MainMenuButtonTitle,
-                _uiContentStorage.GetButtonTexture(),
-                _uiContentStorage.GetButtonFont(),
+                uiContentStorage.GetButtonTexture(),
+                uiContentStorage.GetButtonFont(),
                 new Rectangle(
                     GO_TO_MAIN_MENU_BUTTON_POSITION_X,
                     GO_TO_MAIN_MENU_BUTTON_POSITION_Y,
@@ -129,8 +130,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _addPlayerNickname = new TextButton(
                 UiResources.AddPlayerNicknameButton,
-                _uiContentStorage.GetButtonTexture(),
-                _uiContentStorage.GetButtonFont(),
+                uiContentStorage.GetButtonTexture(),
+                uiContentStorage.GetButtonFont(),
                 new Rectangle(
                     ADD_PLAYER_SCORE_BUTTON_POSITION_X,
                     _addPlayerScoreButtonOffsetY,
@@ -140,8 +141,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _clearPlayerNickname = new TextButton(
                 UiResources.ClearPlayerNicknameButton,
-                _uiContentStorage.GetButtonTexture(),
-                _uiContentStorage.GetButtonFont(),
+                uiContentStorage.GetButtonTexture(),
+                uiContentStorage.GetButtonFont(),
                 new Rectangle(
                     CLEAR_PLAYER_SCORE_BUTTON_POSITION_X,
                     _clearPlayerScoreButtonOffsetY,
@@ -151,7 +152,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _leaderBoardRecords = _dbContext.GetLeaderBoard();
 
-            _font = _uiContentStorage.GetButtonFont();
+            _font = uiContentStorage.GetButtonFont();
 
             _playerScore = scoreManager.BaseScores;
             _playerRatingInLeaderboard = GetPlayerRating();
