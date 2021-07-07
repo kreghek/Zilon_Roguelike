@@ -21,6 +21,8 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
+    using Zilon.Core.Scoring;
+
     internal class MainScreen : GameSceneBase
     {
         private readonly IAnimationBlockerService _animationBlockerService;
@@ -272,6 +274,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     _isTransitionPerforming = true;
 
                     HandleScreenChanging();
+
                     TargetScene = new ScoresScreen(Game, _spriteBatch);
                 }
                 else

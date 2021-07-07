@@ -270,4 +270,22 @@ take out the character before he dies.</value>
   <data name="LeaderboardMenuTitle" xml:space="preserve">
     <value>Leaderboard menu</value>
   </data>
+  <data name="ScoreTableScoreColumnTitle" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="ScoreTableNumberColumnTitle" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="ScoreTableNickColumnTitle" xml:space="preserve">
+    <value>Nickname</value>
+  </data>
+  <data name="AddPlayerNicknameButton" xml:space="preserve">
+    <value>Add nickname</value>
+  </data>
+  <data name="ClearPlayerNicknameButton" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="PlayerInputNicknamePrompt" xml:space="preserve">
+    <value>Please, enter your nickname</value>
+  </data>
 </root>
