@@ -1,16 +1,16 @@
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-    using Engine;
+using Engine;
 
-    using Resources;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
+using Resources;
 
-    using Zilon.Core.Scoring;
+using Zilon.Core.Scoring;
 
 
 namespace CDT.LAST.MonoGameClient.Screens
