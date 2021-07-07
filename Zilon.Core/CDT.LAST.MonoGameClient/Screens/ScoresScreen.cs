@@ -1,21 +1,16 @@
-﻿namespace CDT.LAST.MonoGameClient.Screens
+﻿using System;
+
+using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Resources;
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using Zilon.Core.Scoring;
+
+namespace CDT.LAST.MonoGameClient.Screens
 {
-    using System;
-
-    using Engine;
-
-    using Resources;
-
-    using Engine;
-
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
-
-    using Resources;
-
-    using Zilon.Core.Scoring;
-
     /// <summary>
     /// Scores screen to show a user's score when a character died.
     /// </summary>
@@ -81,7 +76,7 @@
                 texture: buttonTexture,
                 font: font,
                 rect: new Rectangle(
-                    x: RESTART_BUTTON_POSITION_X + BUTTON_WIDTH_OFFSET * 2,
+                    x: RESTART_BUTTON_POSITION_X + (BUTTON_WIDTH_OFFSET * 2),
                     y: BUTTON_POSITION_Y,
                     width: BUTTON_WIDTH,
                     height: BUTTON_HEIGHT));
@@ -92,7 +87,7 @@
                 texture: buttonTexture,
                 font: font,
                 rect: new Rectangle(
-                    x: RESTART_BUTTON_POSITION_X + BUTTON_WIDTH_OFFSET * 4,
+                    x: RESTART_BUTTON_POSITION_X + (BUTTON_WIDTH_OFFSET * 4),
                     y: BUTTON_POSITION_Y,
                     width: BUTTON_WIDTH,
                     height: BUTTON_HEIGHT));

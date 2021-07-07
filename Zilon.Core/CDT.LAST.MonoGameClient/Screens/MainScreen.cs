@@ -271,6 +271,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                 // Or some error occured.
                 if (activeActor.Actor.Person.CheckIsDead())
                 {
+                    _isTransitionPerforming = true;
+
+                    HandleScreenChanging();
+
                     TargetScene = new ScoresScreen(Game, _spriteBatch);
                 }
                 else

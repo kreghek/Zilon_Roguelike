@@ -213,18 +213,6 @@ namespace CDT.LAST.MonoGameClient.Resources {
             }
         }
         
-        internal static string LowAttributeValueTitle {
-            get {
-                return ResourceManager.GetString("LowAttributeValueTitle", resourceCulture);
-            }
-        }
-        
-        internal static string NormalAttributeValueTitle {
-            get {
-                return ResourceManager.GetString("NormalAttributeValueTitle", resourceCulture);
-            }
-        }
-        
         internal static string BelowNormalAttributeValueTitle {
             get {
                 return ResourceManager.GetString("BelowNormalAttributeValueTitle", resourceCulture);
@@ -252,12 +240,6 @@ namespace CDT.LAST.MonoGameClient.Resources {
         internal static string EatCommandButtonTitle {
             get {
                 return ResourceManager.GetString("EatCommandButtonTitle", resourceCulture);
-            }
-        }
-        
-        internal static string DrinkCommandButtonTitle {
-            get {
-                return ResourceManager.GetString("DrinkCommandButtonTitle", resourceCulture);
             }
         }
         

@@ -1,5 +1,3 @@
-namespace CDT.LAST.MonoGameClient.Screens
-{
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -14,11 +12,15 @@ namespace CDT.LAST.MonoGameClient.Screens
 
     using Zilon.Core.Scoring;
 
+
+namespace CDT.LAST.MonoGameClient.Screens
+{
     /// <summary>
     /// The leaderboard screen displays all the results of all played users.
     /// </summary>
     public class LeaderBoardScreen : GameSceneBase
     {
+
         private const int GO_TO_MAIN_MENU_BUTTON_POSITION_X = LEADERBOARD_MENU_TITLE_POSITION_X;
 
         private const int GO_TO_MAIN_MENU_BUTTON_POSITION_Y = 150;
@@ -163,6 +165,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             base.Draw(gameTime);
 
             _spriteBatch.Begin();
+
             _goToMainMenu.Draw(_spriteBatch);
             _spriteBatch.DrawString(
                 _font,
@@ -180,6 +183,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             base.Update(gameTime);
 
             _goToMainMenu.Update();
+
             UpdateAddNickNamePlayerButtons();
         }
 
