@@ -1,39 +1,15 @@
-namespace CDT.LAST.MonoGameClient
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.IO;
+using System.Linq;
+
+using Microsoft.Data.Sqlite;
+
+using Zilon.Core.Scoring;
+
+namespace CDT.LAST.MonoGameClient.Database
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.IO;
-    using System.Linq;
-
-    using Microsoft.Data.Sqlite;
-
-    using Zilon.Core.Scoring;
-
-    internal record PlayerScore(int Id, string NickName, uint RatingPosition, int Score);
-
-    internal record LeaderboardLimit
-    {
-        private const int DEFAULT_GET_LEADERBOARD_LIMIT = 10;
-
-        public LeaderboardLimit(bool areGettingAllRecords = false, int limit = DEFAULT_GET_LEADERBOARD_LIMIT)
-        {
-            if (areGettingAllRecords && limit != DEFAULT_GET_LEADERBOARD_LIMIT)
-            {
-                throw new ArgumentException(
-                    $"Cannot use options - {nameof(areGettingAllRecords)} = true AND {nameof(limit)} != default value together.");
-            }
-
-            AreGettingAllRecords = areGettingAllRecords;
-            Limit = limit;
-        }
-
-        public bool AreGettingAllRecords { get; init; }
-
-        public int Limit { get; init; }
-    }
-
     internal class DbContext
     {
         private const string DB_FILE_NAME = "BotScores.db3";
