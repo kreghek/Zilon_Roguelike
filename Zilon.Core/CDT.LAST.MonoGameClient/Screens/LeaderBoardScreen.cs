@@ -346,7 +346,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private static int GetRowVerticalPositionOffset(int indexY)
         {
-            return FIRST_TABLE_ROW_POSITION_Y + ROW_STEP * indexY;
+            return FIRST_TABLE_ROW_POSITION_Y + (ROW_STEP * indexY);
         }
 
         private static Vector2 GetScoreCellPosition(int indexY)
