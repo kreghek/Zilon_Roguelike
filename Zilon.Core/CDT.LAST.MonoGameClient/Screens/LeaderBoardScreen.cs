@@ -356,7 +356,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void GoToMainMenuButtonClickHandler(object? sender, EventArgs e)
         {
-            TargetScene = new MainScreen(Game, _spriteBatch);
+            TargetScene = new TitleScreen(Game, _spriteBatch);
         }
 
         private void InputNickName(object? sender, TextInputEventArgs e)
