@@ -18,7 +18,9 @@
       "Impact": "Kinetic"
     },
     "Effect": "Damage",
-    "Targets": "Enemy"
+    "Targets": "Enemy",
+	"IsMelee": true,
+	"Tags": ["bite"]
   },
   "Defense": {
     "Defenses": [

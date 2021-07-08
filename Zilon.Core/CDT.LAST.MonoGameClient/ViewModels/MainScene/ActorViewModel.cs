@@ -314,8 +314,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException("The act has no stats to select visualization.");
             }
 
-            Debug.WriteLine(e.TacticalAct);
-
             if (CanDraw)
             {
                 if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)

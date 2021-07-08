@@ -13,7 +13,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class ActorDamagedEngine : IActorStateEngine
     {
-        private const float ANIMATION_DURATION_SECONDS = 1f;
+        private const float ANIMATION_DURATION_SECONDS = 2f;
         private readonly IActorGraphics _actorGraphics;
         private readonly IAnimationBlockerService _animationBlockerService;
         private readonly SpriteContainer _graphicsRoot;
@@ -36,14 +36,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _soundEffectInstance = soundEffectInstance;
             _rootSprite.FlipX = (hitPosition - actorGraphics.RootSprite.Position).X < 0;
 
-            if (soundEffectInstance != null)
-            {
-                _moveBlocker = new SoundAnimationBlocker(soundEffectInstance);
-            }
-            else
-            {
+            //if (soundEffectInstance != null)
+            //{
+            //    _moveBlocker = new SoundAnimationBlocker(soundEffectInstance);
+            //}
+            //else
+            //{
                 _moveBlocker = new AnimationCommonBlocker();
-            }
+            //}
 
             _animationBlockerService.AddBlocker(_moveBlocker);
         }
