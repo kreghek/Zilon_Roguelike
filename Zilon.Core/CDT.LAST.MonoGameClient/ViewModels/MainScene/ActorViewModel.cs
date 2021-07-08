@@ -186,8 +186,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actorStateEngine = new ActorMeleeAttackEngine(
                 _rootSprite,
                 targetSpritePosition,
-                    animationBlockerService,
-                    attackSoundEffectInstance);
+                animationBlockerService,
+                attackSoundEffectInstance);
 
             HandleAttackVisualEffect(targetNode, targetSpritePosition);
         }
@@ -360,9 +360,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _sectorViewModelContext.EffectManager.VisualEffects.Add(consumeEffect);
         }
 
-        private void PersonSurvivalModule_Dead(object? sender, EventArgs e)
+        private SoundEffectInstance? GetAttackSoundEffect(ActDescription usedActDescription)
         {
-            RunDeathAnimation();
+            var attackSoundEffect = _personSoundStorage.GetActStartSound(usedActDescription);
+
+            var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
+            return attackSoundEffectInstance;
         }
 
         private static string[] GetClearTags(Equipment? equipment)
@@ -382,14 +385,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var impactSoundEffect = _personSoundStorage.GetImpactEffect(person);
             return impactSoundEffect.CreateInstance();
-        }
-
-        private SoundEffectInstance? GetAttackSoundEffect(ActDescription usedActDescription)
-        {
-            var attackSoundEffect = _personSoundStorage.GetActStartSound(usedActDescription);
-
-            var attackSoundEffectInstance = attackSoundEffect?.CreateInstance();
-            return attackSoundEffectInstance;
         }
 
         private void HandleAttackVisualEffect(IGraphNode targetNode, Vector2 targetSpritePosition)
@@ -424,6 +419,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundSoundEffect?.CreateInstance());
+        }
+
+        private void PersonSurvivalModule_Dead(object? sender, EventArgs e)
+        {
+            RunDeathAnimation();
         }
 
         private SoundEffect? SelectEquipEffect(Equipment? equipment)

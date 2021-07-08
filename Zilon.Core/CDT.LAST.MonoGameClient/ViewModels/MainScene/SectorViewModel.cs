@@ -200,15 +200,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     {
                         targetViewModel.RunHitAnimation();
                     }
-                    else
-                    {
-                        // Do not animate hit for dead persons.
-                        // Because if the person gets dead then the actor of the person removes.
-                        // It lead to some unexpected cases:
-                        // - You can't see animation of the actor that removed.
-                        // - It create a animation blocker that can't update beacause removed actor will not call update.
-                        // - The event is raised before the result of the hit is evaluated.
-                    }
                 }
             }
         }
