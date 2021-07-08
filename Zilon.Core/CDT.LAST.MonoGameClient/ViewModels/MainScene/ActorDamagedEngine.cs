@@ -24,9 +24,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly SoundEffectInstance? _soundEffectInstance;
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
-        private bool _soundPlayed;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
+        private bool _soundPlayed;
 
         public ActorDamagedEngine(IPerson person, IActorGraphics actorGraphics, SpriteContainer rootSprite,
             Vector2 hitPosition, IAnimationBlockerService animationBlockerService,
@@ -52,8 +52,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public string? DebugName { get; set; }
 
-        public bool IsComplete => _animationCounterSeconds <= 0 && _soundEffectInstance != null && !_soundEffectInstance.IsDisposed &&
-                _soundEffectInstance.State != SoundState.Stopped;
+        public bool IsComplete => _animationCounterSeconds <= 0 && _soundEffectInstance != null &&
+                                  !_soundEffectInstance.IsDisposed &&
+                                  _soundEffectInstance.State != SoundState.Stopped;
 
         public void Update(GameTime gameTime)
         {
@@ -66,7 +67,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             else if (t >= 0.3f && t < 0.6f)
             {
                 if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed &&
-                _soundEffectInstance.State != SoundState.Playing && !_soundPlayed)
+                    _soundEffectInstance.State != SoundState.Playing && !_soundPlayed)
                 {
                     _soundEffectInstance.Play();
                     _soundPlayed = true;
