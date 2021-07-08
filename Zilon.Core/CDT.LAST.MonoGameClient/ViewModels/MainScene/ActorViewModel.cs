@@ -132,12 +132,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             Actor.BeginTransitionToOtherSector += Actor_BeginTransitionToOtherSector;
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
-                Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += Actor_EquipmentChanged;
+                Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += PersonEquipmentModule_EquipmentChanged;
             }
 
             if (Actor.Person.HasModule<ISurvivalModule>())
             {
-                Actor.Person.GetModule<ISurvivalModule>().Dead += ActorViewModel_Dead;
+                Actor.Person.GetModule<ISurvivalModule>().Dead += PersonSurvivalModule_Dead;
             }
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
@@ -175,33 +175,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
-                Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= Actor_EquipmentChanged;
+                Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= PersonEquipmentModule_EquipmentChanged;
             }
 
             if (Actor.Person.HasModule<ISurvivalModule>())
             {
-                Actor.Person.GetModule<ISurvivalModule>().Dead -= ActorViewModel_Dead;
+                Actor.Person.GetModule<ISurvivalModule>().Dead -= PersonSurvivalModule_Dead;
             }
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (_actorStateEngine != null)
+            _actorStateEngine.Update(gameTime);
+            if (_actorStateEngine.IsComplete)
             {
-                _actorStateEngine.Update(gameTime);
-                if (_actorStateEngine.IsComplete)
-                {
-                    _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
+                _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
 
-                    var hexSize = MapMetrics.UnitSize / 2;
-                    var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
-                    var newPosition = new Vector2(
-                        (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                        playerActorWorldCoords[1] * hexSize * 2 / 2
-                    );
+                var hexSize = MapMetrics.UnitSize / 2;
+                var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
+                var newPosition = new Vector2(
+                    (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                    playerActorWorldCoords[1] * hexSize * 2 / 2
+                );
 
-                    _rootSprite.Position = newPosition;
-                }
+                _rootSprite.Position = newPosition;
             }
 
             var keyboard = Keyboard.GetState();
@@ -236,6 +233,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
+            if (actor.Person.CheckIsDead())
+            {
+                // Do not animate hit for dead persons.
+                // Because if the person is dead the actor of the person removes.
+                // It lead to some unexpected cases:
+                // - You can't see animation of the actor that removed.
+                // - It create a animation blocker that can't update beacause removed actor will not call update.
+                return;
+            }
+
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
@@ -247,7 +254,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actorStateEngine = engine;
         }
 
-        private void Actor_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
+        private void PersonEquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
         {
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
@@ -383,14 +390,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _sectorViewModelContext.EffectManager.VisualEffects.Add(consumeEffect);
         }
 
-        private void ActorViewModel_Dead(object? sender, EventArgs e)
+        private void PersonSurvivalModule_Dead(object? sender, EventArgs e)
         {
             var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
             var soundEffectInstance = deathSoundEffect.CreateInstance();
 
             _rootSprite.RemoveChild(_graphicsRoot.RootSprite);
 
-            var corpse = new CorpseViewModel(_game, _graphicsRoot, soundEffectInstance);
+            var corpse = new CorpseViewModel(_game, _graphicsRoot, _rootSprite.Position, soundEffectInstance);
             _sectorViewModelContext.CorpseManager.Add(corpse);
         }
 

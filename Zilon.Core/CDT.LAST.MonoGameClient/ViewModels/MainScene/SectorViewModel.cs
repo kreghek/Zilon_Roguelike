@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
-using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Screens;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
 
@@ -19,100 +17,6 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    internal sealed class CorpseViewModel
-    {
-        private const double CORPSE_DURATION_SECONDS = 5;
-        private readonly IActorGraphics _actorGraphics;
-        private readonly SpriteContainer _rootSprite;
-        private readonly Sprite _shadowSprite;
-        private readonly Microsoft.Xna.Framework.Audio.SoundEffectInstance _soundEffectInstance;
-
-        private double _counter;
-        private bool _soundPlayed;
-
-        public CorpseViewModel(Game game, IActorGraphics actorGraphics,
-            Microsoft.Xna.Framework.Audio.SoundEffectInstance soundEffectInstance)
-        {
-            _actorGraphics = actorGraphics ?? throw new ArgumentNullException(nameof(actorGraphics));
-            _soundEffectInstance = soundEffectInstance;
-            var shadowTexture = game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
-
-            _rootSprite = new SpriteContainer();
-            _shadowSprite = new Sprite(shadowTexture)
-            {
-                Position = new Vector2(0, 0),
-                Origin = new Vector2(0.5f, 0.5f),
-                Color = new Color(Color.White, 0.5f)
-            };
-
-            _rootSprite.AddChild(_shadowSprite);
-
-            _rootSprite.AddChild(_actorGraphics.RootSprite);
-        }
-
-        public bool IsComplete => _counter >= CORPSE_DURATION_SECONDS;
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            _rootSprite.Draw(spriteBatch);
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            if (!IsComplete)
-            {
-                _counter += gameTime.ElapsedGameTime.TotalSeconds;
-
-                var t = _counter / CORPSE_DURATION_SECONDS;
-
-                _actorGraphics.RootSprite.Rotation = (float)(2 * Math.PI * t);
-
-                if (!_soundPlayed && _soundEffectInstance != null &&
-                    _soundEffectInstance.State != Microsoft.Xna.Framework.Audio.SoundState.Playing)
-                {
-                    _soundPlayed = true;
-                    _soundEffectInstance.Play();
-                }
-            }
-        }
-    }
-
-    internal sealed class CorpseManager
-    {
-        private readonly IList<CorpseViewModel> _items;
-
-        public CorpseManager()
-        {
-            _items = new List<CorpseViewModel>();
-        }
-
-        public void Add(CorpseViewModel corpseViewModel)
-        {
-            _items.Add(corpseViewModel);
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (var item in _items.ToArray())
-            {
-                item.Draw(spriteBatch);
-            }
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            foreach (var item in _items.ToArray())
-            {
-                item.Update(gameTime);
-
-                if (item.IsComplete)
-                {
-                    _items.Remove(item);
-                }
-            }
-        }
-    }
-
     public sealed class SectorViewModel
     {
         private readonly Camera _camera;
