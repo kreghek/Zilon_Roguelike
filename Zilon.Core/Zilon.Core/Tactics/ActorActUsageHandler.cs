@@ -532,6 +532,14 @@ namespace Zilon.Core.Tactics
             var damageEfficientCalcResult = CalcEfficient(targetActor, tacticalActRoll);
             var actEfficient = damageEfficientCalcResult.ResultEfficient;
 
+            ProcessSuccessfulAttackEvent(
+                actor,
+                targetActor,
+                damageEfficientCalcResult,
+                successToHitRoll,
+                factToHitRoll,
+                tacticalActRoll.TacticalAct);
+
             if (actEfficient > 0)
             {
                 targetActor.TakeDamage(actEfficient);
@@ -548,14 +556,6 @@ namespace Zilon.Core.Tactics
                 {
                     CountTargetActorDefeat(actor, targetActor);
                 }
-
-                ProcessSuccessfulAttackEvent(
-                    actor,
-                    targetActor,
-                    damageEfficientCalcResult,
-                    successToHitRoll,
-                    factToHitRoll,
-                    tacticalActRoll.TacticalAct);
             }
         }
 

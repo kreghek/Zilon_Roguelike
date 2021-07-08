@@ -133,6 +133,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += PersonEquipmentModule_EquipmentChanged;
             }
 
+            if (Actor.Person.HasModule<ISurvivalModule>())
+            {
+                Actor.Person.GetModule<ISurvivalModule>().Dead += PersonSurvivalModule_Dead;
+            }
+
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
 
@@ -221,6 +226,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
                 Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= PersonEquipmentModule_EquipmentChanged;
+            }
+
+            if (Actor.Person.HasModule<ISurvivalModule>())
+            {
+                Actor.Person.GetModule<ISurvivalModule>().Dead -= PersonSurvivalModule_Dead;
             }
         }
 
@@ -348,6 +358,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 consumableType
             );
             _sectorViewModelContext.EffectManager.VisualEffects.Add(consumeEffect);
+        }
+
+        private void PersonSurvivalModule_Dead(object? sender, EventArgs e)
+        {
+            RunDeathAnimation();
         }
 
         private static string[] GetClearTags(Equipment? equipment)
