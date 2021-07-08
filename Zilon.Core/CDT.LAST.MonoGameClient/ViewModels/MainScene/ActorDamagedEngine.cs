@@ -27,7 +27,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
-        public ActorDamagedEngine(IPerson person, IActorGraphics actorGraphics, SpriteContainer rootSprite, Vector2 hitPosition, IAnimationBlockerService animationBlockerService,
+        public ActorDamagedEngine(IPerson person, IActorGraphics actorGraphics, SpriteContainer rootSprite,
+            Vector2 hitPosition, IAnimationBlockerService animationBlockerService,
             SoundEffectInstance? soundEffectInstance)
         {
             _actorGraphics = actorGraphics;
@@ -63,7 +64,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             else if (t >= 0.1f && t < 0.5f)
             {
                 if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed &&
-                _soundEffectInstance.State != SoundState.Playing)
+                    _soundEffectInstance.State != SoundState.Playing)
                 {
                     _soundEffectInstance.Play();
                 }

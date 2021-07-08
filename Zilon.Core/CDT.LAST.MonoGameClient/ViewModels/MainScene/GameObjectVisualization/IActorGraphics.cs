@@ -8,7 +8,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
     {
         Vector2 HitEffectPosition { get; }
         SpriteContainer RootSprite { get; }
-        bool ShowOutlined { get; set; }
         bool ShowHitlighted { get; set; }
+        bool ShowOutlined { get; set; }
     }
 }

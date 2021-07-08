@@ -14,8 +14,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
         private readonly IEquipmentModule _equipmentModule;
 
         private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
-        private SpriteContainer? _outlined;
         private SpriteContainer? _hitlighted;
+        private SpriteContainer? _outlined;
 
         public HumanoidGraphics(IEquipmentModule equipmentModule,
             IPersonVisualizationContentStorage personVisualizationContentStorage)
