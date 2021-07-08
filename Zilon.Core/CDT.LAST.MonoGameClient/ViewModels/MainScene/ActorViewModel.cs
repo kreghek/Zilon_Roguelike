@@ -219,16 +219,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
+            SoundEffectInstance? soundEffectInstance;
             if (actor.Person.CheckIsDead())
             {
                 var deathSoundEffect = _personSoundStorage.GetDeathEffect(actor.Person);
-                deathSoundEffect.CreateInstance().Play();
+                soundEffectInstance = deathSoundEffect.CreateInstance();
             }
             else
             {
                 var impactSoundEffect = _personSoundStorage.GetImpactEffect(actor.Person);
-                impactSoundEffect.CreateInstance().Play();
+                soundEffectInstance = impactSoundEffect.CreateInstance();
             }
+
+            soundEffectInstance.Play();
         }
 
         private void Actor_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
