@@ -20,7 +20,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private bool _soundPlayed;
         private bool _rotated;
 
-        public CorpseViewModel(Game game, 
+        public CorpseViewModel(Game game,
             IActorGraphics actorGraphics,
             Vector2 position,
             Microsoft.Xna.Framework.Audio.SoundEffectInstance soundEffectInstance)
