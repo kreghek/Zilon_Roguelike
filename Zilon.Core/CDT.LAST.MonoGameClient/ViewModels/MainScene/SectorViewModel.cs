@@ -181,7 +181,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var targetActor = damageActorInteractionEvent.TargetActor;
                 var targetPerson = targetActor.Person;
 
-                var attackerViewModel = _viewModelContext.GameObjects.OfType<ActorViewModel>().Single(x => x.Actor == damageActorInteractionEvent.Actor);
+                var attackerViewModel = _viewModelContext.GameObjects.OfType<ActorViewModel>()
+                    .Single(x => x.Actor == damageActorInteractionEvent.Actor);
                 if (attackerViewModel.CanDraw)
                 {
                     var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
@@ -190,7 +191,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     attackerViewModel.RunCombatActUsageAnimation()
                 }
 
-                var targetViewModel = _viewModelContext.GameObjects.OfType<ActorViewModel>().Single(x => x.Actor == targetActor);
+                var targetViewModel = _viewModelContext.GameObjects.OfType<ActorViewModel>()
+                    .Single(x => x.Actor == targetActor);
                 if (targetViewModel.CanDraw)
                 {
                     if (targetActor.Person.CheckIsDead())

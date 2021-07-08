@@ -158,6 +158,69 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actorStateEngine.Cancel();
         }
 
+        public void RunCombatActUsageAnimation(ITacticalActStatsSubScheme? stats, IGraphNode targetNode)
+        {
+            if (stats is null)
+            {
+                throw new InvalidOperationException("The act has no stats to select visualization.");
+            }
+
+            if (!CanDraw)
+            {
+                return;
+            }
+
+            if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
+            {
+                var serviceScope = ((LivGame)_game).ServiceProvider;
+
+                var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+                var hexSize = MapMetrics.UnitSize / 2;
+                var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)targetNode).OffsetCoords);
+                var newPosition = new Vector2(
+                    (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                    playerActorWorldCoords[1] * hexSize * 2 / 2
+                );
+
+                var targetSpritePosition = newPosition;
+
+                var attackSoundEffectInstance = GetSoundEffect(stats);
+                _actorStateEngine =
+                    new ActorMeleeAttackEngine(
+                        _rootSprite,
+                        targetSpritePosition,
+                        animationBlockerService,
+                        attackSoundEffectInstance);
+
+                HandleAttackVisualEffect(targetNode, targetSpritePosition);
+            }
+        }
+
+        public void RunDeathAnimation()
+        {
+            var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
+            var soundEffectInstance = deathSoundEffect.CreateInstance();
+
+            _rootSprite.RemoveChild(_graphicsRoot.RootSprite);
+
+            var corpse = new CorpseViewModel(_game, _graphicsRoot, _rootSprite.Position, soundEffectInstance);
+            _sectorViewModelContext.CorpseManager.Add(corpse);
+        }
+
+        public void RunHitAnimation()
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+            var soundEffectInstance = GetSoundEffect(Actor.Person);
+
+            var engine = new ActorDamagedEngine(Actor.Person, _graphicsRoot, _rootSprite, Vector2.Zero,
+                animationBlockerService, soundEffectInstance);
+
+            _actorStateEngine = engine;
+        }
+
         public void UnsubscribeEventHandlers()
         {
             Actor.Moved -= Actor_Moved;
@@ -212,19 +275,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 soundEffect?.CreateInstance());
         }
 
-        public void RunHitAnimation()
-        {
-            var serviceScope = ((LivGame)_game).ServiceProvider;
-            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-
-            var soundEffectInstance = GetSoundEffect(Actor.Person);
-
-            var engine = new ActorDamagedEngine(Actor.Person, _graphicsRoot, _rootSprite, Vector2.Zero,
-                animationBlockerService, soundEffectInstance);
-
-            _actorStateEngine = engine;
-        }
-
         private void Actor_Moved(object? sender, EventArgs e)
         {
             var hexSize = MapMetrics.UnitSize / 2;
@@ -274,45 +324,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _graphicsRoot.RootSprite,
                 animationBlockerService,
                 soundEffect?.CreateInstance());
-        }
-
-        public void RunCombatActUsageAnimation(ITacticalActStatsSubScheme? stats, IGraphNode targetNode)
-        {
-            if (stats is null)
-            {
-                throw new InvalidOperationException("The act has no stats to select visualization.");
-            }
-
-            if (!CanDraw)
-            {
-                return;
-            }
-
-            if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
-            {
-                var serviceScope = ((LivGame)_game).ServiceProvider;
-
-                var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-
-                var hexSize = MapMetrics.UnitSize / 2;
-                var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)targetNode).OffsetCoords);
-                var newPosition = new Vector2(
-                    (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                    playerActorWorldCoords[1] * hexSize * 2 / 2
-                );
-
-                var targetSpritePosition = newPosition;
-
-                var attackSoundEffectInstance = GetSoundEffect(stats);
-                _actorStateEngine =
-                    new ActorMeleeAttackEngine(
-                        _rootSprite,
-                        targetSpritePosition,
-                        animationBlockerService,
-                        attackSoundEffectInstance);
-
-                HandleAttackVisualEffect(targetNode, targetSpritePosition);
-            }
         }
 
         private void Actor_UsedProp(object? sender, UsedPropEventArgs e)
@@ -410,17 +421,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
                 soundSoundEffect?.CreateInstance());
-        }
-
-        public void RunDeathAnimation()
-        {
-            var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
-            var soundEffectInstance = deathSoundEffect.CreateInstance();
-
-            _rootSprite.RemoveChild(_graphicsRoot.RootSprite);
-
-            var corpse = new CorpseViewModel(_game, _graphicsRoot, _rootSprite.Position, soundEffectInstance);
-            _sectorViewModelContext.CorpseManager.Add(corpse);
         }
 
         private SoundEffect? SelectEquipEffect(Equipment? equipment)
