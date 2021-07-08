@@ -412,7 +412,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var direction = difference;
             direction.Normalize();
 
-            var hitEffect = new HitEffect(_gameObjectVisualizationContentStorage, hitEffectPosition, direction);
+            var hitEffect = new HitEffect(this, targetGameObject, _gameObjectVisualizationContentStorage, hitEffectPosition, direction);
             _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
         }
 

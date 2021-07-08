@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
@@ -18,11 +20,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
         /// Draws effect.
         /// </summary>
         /// <param name="spriteBatch"> The sprite batch began in code above. </param>
-        void Draw(SpriteBatch spriteBatch);
+        void Draw(SpriteBatch spriteBatch, bool backing);
 
         /// <summary>
         /// Update effect state. Usually it decrements counter of effect's life time and moves effect to complete state.
         /// </summary>
         void Update(GameTime gameTime);
+
+        IEnumerable<GameObjectBase> BoundGameObjects { get; }
     }
 }

@@ -105,15 +105,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             DrawCorpses();
 
             _gameObjectsViewModel.Draw(gameTime);
-
-            _spriteBatch.Begin(transformMatrix: _camera.Transform);
-
-            foreach (var visualEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
-            {
-                visualEffect.Draw(_spriteBatch);
-            }
-
-            _spriteBatch.End();
         }
 
         public void UnsubscribeEventHandlers()

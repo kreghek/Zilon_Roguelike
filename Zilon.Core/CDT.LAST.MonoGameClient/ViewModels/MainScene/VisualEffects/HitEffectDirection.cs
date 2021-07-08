@@ -1,10 +1,13 @@
-﻿namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+﻿using System;
+
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
+    [Flags]
     internal enum HitEffectDirection
     {
-        Undefined,
-        Left,
-        TopLeft,
-        TopRight
+        None,
+        Left = 1,
+        Top = 2,
+        Bottom = 4
     }
 }

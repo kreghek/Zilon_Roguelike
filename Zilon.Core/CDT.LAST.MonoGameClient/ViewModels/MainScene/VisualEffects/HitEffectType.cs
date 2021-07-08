@@ -1,8 +1,13 @@
-﻿namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+﻿using System;
+
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
+    [Flags]
     internal enum HitEffectType
     {
-        Undefined,
-        ShortBlade
+        None,
+        ShortBlade = 1,
+
+        Backing = 1024
     }
 }

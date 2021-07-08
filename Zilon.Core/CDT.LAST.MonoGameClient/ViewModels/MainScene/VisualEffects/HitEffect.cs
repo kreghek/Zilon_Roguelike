@@ -1,4 +1,6 @@
-﻿using CDT.LAST.MonoGameClient.Engine;
+﻿using System.Collections.Generic;
+
+using CDT.LAST.MonoGameClient.Engine;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,26 +13,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
         private const double EFFECT_DISPLAY_DURATION_SECONDS = FPS * FRAME_COUNT;
         private const int FRAME_COUNT = 5;
         private const int FRAME_COLUMN_COUNT = 3;
-        private const int FRAME_ROW_COUNT = 2;
         private const int FRAME_SIZE = 64;
 
         private readonly Sprite _hitSprite;
 
         private readonly Texture2D _hitTexture;
-        private readonly Rectangle _sourceRect;
+        private readonly Texture2D _hitBackingTexture;
+        private readonly Sprite _hitBackingSprite;
+
+        private readonly GameObjectBase[] _boundGameObjects;
+
         private double _counter;
 
-        public HitEffect(IGameObjectVisualizationContentStorage contentStorage, Vector2 targetObjectPosition,
+        public HitEffect(
+            GameObjectBase attacker,
+            GameObjectBase target,
+            IGameObjectVisualizationContentStorage contentStorage,
+            Vector2 targetObjectPosition,
             Vector2 direction)
         {
             _hitTexture = contentStorage.GetHitEffectTexture(HitEffectType.ShortBlade, HitEffectDirection.Left);
-            _sourceRect = new Rectangle(0, 0, 64, 64);
             _hitSprite = new Sprite(_hitTexture)
             {
                 Position = targetObjectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
                 Color = new Color(255, 255, 255, 0.0f),
-                SourceRectangle = _sourceRect
+                SourceRectangle = new Rectangle(0, 0, 64, 64)
             };
 
             if (direction.X > 0)
@@ -38,16 +46,43 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 _hitSprite.FlipX = true;
             }
 
+
+            _hitBackingTexture = contentStorage.GetHitEffectTexture(HitEffectType.ShortBlade | HitEffectType.Backing, HitEffectDirection.Left);
+            _hitBackingSprite = new Sprite(_hitBackingTexture)
+            {
+                Position = targetObjectPosition,
+                Origin = new Vector2(0.5f, 0.5f),
+                Color = new Color(255, 255, 255, 0.0f),
+                SourceRectangle = new Rectangle(0, 0, 64, 64)
+            };
+
+            if (direction.X > 0)
+            {
+                _hitSprite.FlipX = true;
+                _hitBackingSprite.FlipX = true;
+            }
+
             _counter = EFFECT_DISPLAY_DURATION_SECONDS;
+
+            _boundGameObjects = new[] { attacker, target };
         }
 
         public bool IsComplete => _counter <= 0;
 
-        public void Draw(SpriteBatch spriteBatch)
+        public IEnumerable<GameObjectBase> BoundGameObjects => _boundGameObjects;
+
+        public void Draw(SpriteBatch spriteBatch, bool backing)
         {
             if (!IsComplete)
             {
-                _hitSprite.Draw(spriteBatch);
+                if (!backing)
+                {
+                    _hitSprite.Draw(spriteBatch);
+                }
+                else
+                {
+                    _hitSprite.Draw(spriteBatch);
+                }
             }
         }
 

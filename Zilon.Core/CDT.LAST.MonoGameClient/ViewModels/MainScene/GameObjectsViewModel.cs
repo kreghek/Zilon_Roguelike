@@ -111,7 +111,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         continue;
                     }
 
+                    _spriteBatch.Begin(transformMatrix: _camera.Transform);
+
+                    var backVisualEffects = _viewModelContext.EffectManager.VisualEffects.Where(x => x.BoundGameObjects.Contains(gameObject)).ToArray();
+                    foreach (var visualEffect in backVisualEffects)
+                    {
+                        visualEffect.Draw(_spriteBatch, backing: true);
+                    }
+
+                    _spriteBatch.End();
+
                     gameObject.Draw(gameTime, _camera.Transform);
+
+                    _spriteBatch.Begin(transformMatrix: _camera.Transform);
+
+                    var frontVisualEffects = _viewModelContext.EffectManager.VisualEffects.Where(x => x.BoundGameObjects.Contains(gameObject)).ToArray();
+                    foreach (var visualEffect in frontVisualEffects)
+                    {
+                        visualEffect.Draw(_spriteBatch, backing: false);
+                    }
+
+                    _spriteBatch.End();
                 }
             }
             catch

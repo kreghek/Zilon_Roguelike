@@ -36,6 +36,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public void LoadContent(ContentManager content)
         {
             _consumingEffectTexture = content.Load<Texture2D>("Sprites/VisualEffects/ConsumingEffects");
+
             _hitEffectDictionary = new Dictionary<HitEffectKey, Texture2D>
             {
                 {
@@ -44,12 +45,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.TopLeft),
+                    new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.Left | HitEffectDirection.Top),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.TopRight),
+                    new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.Left | HitEffectDirection.Bottom),
+                    content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing, HitEffectDirection.Left),
+                    content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing, HitEffectDirection.Left | HitEffectDirection.Top),
+                    content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing, HitEffectDirection.Left | HitEffectDirection.Bottom),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
                 }
             };
