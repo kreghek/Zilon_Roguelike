@@ -11,21 +11,4 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         void LoadContent(ContentManager content);
     }
-
-    internal enum HitEffectType
-    {
-        Undefined,
-        ShortBlade
-    }
-
-    internal enum HitEffectDirection
-    {
-        Undefined,
-        Left,
-        TopLeft,
-        TopRight,
-        Right,
-        RightBottom,
-        LeftBottom
-    }
 }

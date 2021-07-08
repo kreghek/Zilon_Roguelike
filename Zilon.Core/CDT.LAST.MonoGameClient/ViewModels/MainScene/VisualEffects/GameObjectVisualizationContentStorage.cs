@@ -44,21 +44,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.LeftBottom),
-                    content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
-                },
-
-                {
-                    new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.Right),
-                    content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
-                },
-
-                {
-                    new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.RightBottom),
-                    content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
-                },
-
-                {
                     new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.TopLeft),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
                 },
