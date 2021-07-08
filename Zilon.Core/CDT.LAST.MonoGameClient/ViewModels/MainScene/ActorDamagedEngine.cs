@@ -42,7 +42,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             //}
             //else
             //{
-                _moveBlocker = new AnimationCommonBlocker();
+            _moveBlocker = new AnimationCommonBlocker();
             //}
 
             _animationBlockerService.AddBlocker(_moveBlocker);
