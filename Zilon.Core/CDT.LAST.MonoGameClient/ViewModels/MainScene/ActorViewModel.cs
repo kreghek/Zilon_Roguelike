@@ -254,18 +254,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actorStateEngine = engine;
         }
 
-        private void PersonEquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
-        {
-            var serviceScope = ((LivGame)_game).ServiceProvider;
-            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
-
-            var equipment = e.Equipment;
-            var soundSoundEffect = SelectEquipEffect(equipment);
-
-            _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
-                soundSoundEffect?.CreateInstance());
-        }
-
         private void Actor_Moved(object? sender, EventArgs e)
         {
             var hexSize = MapMetrics.UnitSize / 2;
@@ -390,17 +378,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _sectorViewModelContext.EffectManager.VisualEffects.Add(consumeEffect);
         }
 
-        private void PersonSurvivalModule_Dead(object? sender, EventArgs e)
-        {
-            var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
-            var soundEffectInstance = deathSoundEffect.CreateInstance();
-
-            _rootSprite.RemoveChild(_graphicsRoot.RootSprite);
-
-            var corpse = new CorpseViewModel(_game, _graphicsRoot, _rootSprite.Position, soundEffectInstance);
-            _sectorViewModelContext.CorpseManager.Add(corpse);
-        }
-
         private static string[] GetClearTags(Equipment? equipment)
         {
             return equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
@@ -449,6 +426,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var hitEffect = new HitEffect(_gameObjectVisualizationContentStorage, hitEffectPosition, direction);
             _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
+        }
+
+        private void PersonEquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
+        {
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+            var equipment = e.Equipment;
+            var soundSoundEffect = SelectEquipEffect(equipment);
+
+            _actorStateEngine = new ActorCommonActionMoveEngine(_graphicsRoot.RootSprite, animationBlockerService,
+                soundSoundEffect?.CreateInstance());
+        }
+
+        private void PersonSurvivalModule_Dead(object? sender, EventArgs e)
+        {
+            var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
+            var soundEffectInstance = deathSoundEffect.CreateInstance();
+
+            _rootSprite.RemoveChild(_graphicsRoot.RootSprite);
+
+            var corpse = new CorpseViewModel(_game, _graphicsRoot, _rootSprite.Position, soundEffectInstance);
+            _sectorViewModelContext.CorpseManager.Add(corpse);
         }
 
         private SoundEffect? SelectEquipEffect(Equipment? equipment)
