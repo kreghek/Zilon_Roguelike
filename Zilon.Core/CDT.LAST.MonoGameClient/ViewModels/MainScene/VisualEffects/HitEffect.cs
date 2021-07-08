@@ -41,12 +41,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 SourceRectangle = new Rectangle(0, 0, 64, 64)
             };
 
-            if (direction.X > 0)
-            {
-                _hitSprite.FlipX = true;
-            }
-
-
             _hitBackingTexture = contentStorage.GetHitEffectTexture(HitEffectType.ShortBlade | HitEffectType.Backing, HitEffectDirection.Left);
             _hitBackingSprite = new Sprite(_hitBackingTexture)
             {
@@ -75,9 +69,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
         {
             if (!IsComplete)
             {
-                if (!backing)
+                if (backing)
                 {
-                    _hitSprite.Draw(spriteBatch);
+                    _hitBackingSprite.Draw(spriteBatch);
                 }
                 else
                 {

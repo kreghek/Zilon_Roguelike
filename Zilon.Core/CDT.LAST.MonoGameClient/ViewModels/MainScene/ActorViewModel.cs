@@ -360,8 +360,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             );
 
             const int START_EFFECT_Y = 24;
-            var consumeEffect = new ConsumingEffect(visualizationContentStorage,
+            var consumeEffect = new ConsumingEffect(
+                visualizationContentStorage,
                 actorPosition - (Vector2.UnitY * START_EFFECT_Y),
+                this,
                 consumableType
             );
             _sectorViewModelContext.EffectManager.VisualEffects.Add(consumeEffect);
