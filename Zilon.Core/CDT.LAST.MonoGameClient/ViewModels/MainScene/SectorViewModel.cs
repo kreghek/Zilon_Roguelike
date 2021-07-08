@@ -185,17 +185,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     .Single(x => x.Actor == damageActorInteractionEvent.Actor);
                 if (attackerViewModel.CanDraw)
                 {
-                    var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
-                    soundEffect.CreateInstance().Play();
+                    /*var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
+                    soundEffect.CreateInstance().Play();*/
 
-                    attackerViewModel.RunCombatActUsageAnimation()
+                    attackerViewModel.RunCombatActUsageAnimation(actDescription, targetActor.Node);
                 }
 
                 var targetViewModel = _viewModelContext.GameObjects.OfType<ActorViewModel>()
                     .Single(x => x.Actor == targetActor);
                 if (targetViewModel.CanDraw)
                 {
-                    if (targetActor.Person.CheckIsDead())
+                    var targetPersonIsStillAlive = !targetActor.Person.CheckIsDead();
+                    if (targetPersonIsStillAlive)
                     {
                         targetViewModel.RunHitAnimation();
                     }

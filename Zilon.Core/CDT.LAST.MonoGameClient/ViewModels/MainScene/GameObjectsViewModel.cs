@@ -106,24 +106,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
-            var gameObjectsMaterialized =
-                _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
-            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
-            foreach (var gameObject in gameObjectsMaterialized)
+            try
             {
-                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
-
-                if (fowNode is null)
+                var gameObjectsMaterialized =
+                        _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
+                var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
+                foreach (var gameObject in gameObjectsMaterialized)
                 {
-                    continue;
-                }
+                    var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
 
-                if (fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
-                {
-                    continue;
-                }
+                    if (fowNode is null)
+                    {
+                        continue;
+                    }
 
-                gameObject.Draw(gameTime, _camera.Transform);
+                    if (fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
+                    {
+                        continue;
+                    }
+
+                    gameObject.Draw(gameTime, _camera.Transform);
+                }
+            }
+            catch
+            {
+                // Smell. Handle multithread access to fow data.
+                // Just ignore this frame and try to draw next correctly.
             }
         }
 

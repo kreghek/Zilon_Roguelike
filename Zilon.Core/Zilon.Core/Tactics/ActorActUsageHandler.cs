@@ -512,16 +512,17 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var usedActDescription =
-                new ActDescription(usedAct.Stats.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
-                                   Array.Empty<string>());
+            var usedActDescription = ActDescription.CreateFromActStats(usedAct.Stats);
 
-            var damageEvent =
-                new DamageActorInteractionEvent(actor, targetActor, usedActDescription, damageEfficientCalcResult)
-                {
-                    SuccessToHitRoll = successToHitRoll,
-                    FactToHitRoll = factToHitRoll
-                };
+            var damageEvent = new DamageActorInteractionEvent(
+                actor,
+                targetActor,
+                usedActDescription,
+                damageEfficientCalcResult)
+            {
+                SuccessToHitRoll = successToHitRoll,
+                FactToHitRoll = factToHitRoll
+            };
             ActorInteractionBus.PushEvent(damageEvent);
         }
 
@@ -530,14 +531,6 @@ namespace Zilon.Core.Tactics
         {
             var damageEfficientCalcResult = CalcEfficient(targetActor, tacticalActRoll);
             var actEfficient = damageEfficientCalcResult.ResultEfficient;
-
-            ProcessSuccessfulAttackEvent(
-                actor,
-                targetActor,
-                damageEfficientCalcResult,
-                successToHitRoll,
-                factToHitRoll,
-                tacticalActRoll.TacticalAct);
 
             if (actEfficient > 0)
             {
@@ -555,6 +548,14 @@ namespace Zilon.Core.Tactics
                 {
                     CountTargetActorDefeat(actor, targetActor);
                 }
+
+                ProcessSuccessfulAttackEvent(
+                    actor,
+                    targetActor,
+                    damageEfficientCalcResult,
+                    successToHitRoll,
+                    factToHitRoll,
+                    tacticalActRoll.TacticalAct);
             }
         }
 
