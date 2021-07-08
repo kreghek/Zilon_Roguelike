@@ -13,7 +13,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class ActorDamagedEngine : IActorStateEngine
     {
-        private const float ANIMATION_DURATION_SECONDS = 2f;
+        private const float ANIMATION_DURATION_SECONDS = 1f;
         private readonly IActorGraphics _actorGraphics;
         private readonly IAnimationBlockerService _animationBlockerService;
         private readonly SpriteContainer _graphicsRoot;
@@ -24,6 +24,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly SoundEffectInstance? _soundEffectInstance;
         private readonly Vector2 _startPosition;
         private readonly Vector2 _targetPosition;
+        private bool _soundPlayed;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
@@ -51,22 +52,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public string? DebugName { get; set; }
 
-        public bool IsComplete => _animationCounterSeconds <= 0;
+        public bool IsComplete => _animationCounterSeconds <= 0 && _soundEffectInstance != null && !_soundEffectInstance.IsDisposed &&
+                _soundEffectInstance.State != SoundState.Stopped;
 
         public void Update(GameTime gameTime)
         {
             _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3 * GameState.GameSpeed;
             var t = 1 - _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
 
-            if (t < 0.1f)
+            if (t < 0.3f)
             {
             }
-            else if (t >= 0.1f && t < 0.5f)
+            else if (t >= 0.3f && t < 0.6f)
             {
                 if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed &&
-                    _soundEffectInstance.State != SoundState.Playing)
+                _soundEffectInstance.State != SoundState.Playing && !_soundPlayed)
                 {
                     _soundEffectInstance.Play();
+                    _soundPlayed = true;
                 }
 
                 _actorGraphics.ShowHitlighted = true;
