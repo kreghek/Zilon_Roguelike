@@ -187,7 +187,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void ActorManager_Removed(object? sender, ManagerItemsChangedEventArgs<IActor> e)
         {
-            var gameObjects = _viewModelContext.GameObjects.Where(x => x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor)).ToArray();
+            var gameObjects = _viewModelContext.GameObjects
+                .Where(x => x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor)).ToArray();
 
             foreach (var gameObject in gameObjects)
             {

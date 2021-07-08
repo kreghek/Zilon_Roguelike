@@ -22,15 +22,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal sealed class CorpseViewModel
     {
         private const double CORPSE_DURATION_SECONDS = 5;
+        private readonly IActorGraphics _actorGraphics;
+        private readonly SpriteContainer _rootSprite;
+        private readonly Sprite _shadowSprite;
+        private readonly Microsoft.Xna.Framework.Audio.SoundEffectInstance _soundEffectInstance;
 
         private double _counter;
         private bool _soundPlayed;
-        private readonly IActorGraphics _actorGraphics;
-        private readonly Microsoft.Xna.Framework.Audio.SoundEffectInstance _soundEffectInstance;
-        private readonly SpriteContainer _rootSprite;
-        private readonly Sprite _shadowSprite;
 
-        public CorpseViewModel(Game game, IActorGraphics actorGraphics, Microsoft.Xna.Framework.Audio.SoundEffectInstance soundEffectInstance)
+        public CorpseViewModel(Game game, IActorGraphics actorGraphics,
+            Microsoft.Xna.Framework.Audio.SoundEffectInstance soundEffectInstance)
         {
             _actorGraphics = actorGraphics ?? throw new ArgumentNullException(nameof(actorGraphics));
             _soundEffectInstance = soundEffectInstance;
@@ -49,12 +50,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _rootSprite.AddChild(_actorGraphics.RootSprite);
         }
 
+        public bool IsComplete => _counter >= CORPSE_DURATION_SECONDS;
+
         public void Draw(SpriteBatch spriteBatch)
         {
             _rootSprite.Draw(spriteBatch);
         }
-
-        public bool IsComplete => _counter >= CORPSE_DURATION_SECONDS;
 
         public void Update(GameTime gameTime)
         {
@@ -66,7 +67,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 _actorGraphics.RootSprite.Rotation = (float)(2 * Math.PI * t);
 
-                if (!_soundPlayed && _soundEffectInstance != null && _soundEffectInstance.State != Microsoft.Xna.Framework.Audio.SoundState.Playing)
+                if (!_soundPlayed && _soundEffectInstance != null &&
+                    _soundEffectInstance.State != Microsoft.Xna.Framework.Audio.SoundState.Playing)
                 {
                     _soundPlayed = true;
                     _soundEffectInstance.Play();
@@ -89,6 +91,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _items.Add(corpseViewModel);
         }
 
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (var item in _items.ToArray())
+            {
+                item.Draw(spriteBatch);
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
             foreach (var item in _items.ToArray())
@@ -99,14 +109,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 {
                     _items.Remove(item);
                 }
-            }
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            foreach (var item in _items.ToArray())
-            {
-                item.Draw(spriteBatch);
             }
         }
     }
@@ -209,15 +211,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _spriteBatch.End();
         }
 
-        private void DrawCorpses()
-        {
-            _spriteBatch.Begin(transformMatrix: _camera.Transform);
-
-            _viewModelContext.CorpseManager.Draw(_spriteBatch);
-
-            _spriteBatch.End();
-        }
-
         public void UnsubscribeEventHandlers()
         {
             _intarectionBus.NewEvent -= IntarectionBus_NewEvent;
@@ -249,6 +242,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             _commandInput.Update(_viewModelContext);
+        }
+
+        private void DrawCorpses()
+        {
+            _spriteBatch.Begin(transformMatrix: _camera.Transform);
+
+            _viewModelContext.CorpseManager.Draw(_spriteBatch);
+
+            _spriteBatch.End();
         }
 
         private static ISectorNode GetPlayerSectorNode(IPlayer player)

@@ -143,17 +143,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
         }
 
-        private void ActorViewModel_Dead(object? sender, EventArgs e)
-        {
-            var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
-            var soundEffectInstance = deathSoundEffect.CreateInstance();
-
-            _rootSprite.RemoveChild(_graphicsRoot.RootSprite);
-
-            var corpse = new CorpseViewModel(_game, _graphicsRoot, soundEffectInstance);
-            _sectorViewModelContext.CorpseManager.Add(corpse);
-        }
-
         public override bool HiddenByFow => true;
 
         public override Vector2 HitEffectPosition => _graphicsRoot.HitEffectPosition;
@@ -166,6 +155,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _rootSprite.Draw(_spriteBatch);
 
             _spriteBatch.End();
+        }
+
+        public override void HandleRemove()
+        {
+            base.HandleRemove();
+
+            _actorStateEngine.Cancel();
         }
 
         public void UnsubscribeEventHandlers()
@@ -387,6 +383,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _sectorViewModelContext.EffectManager.VisualEffects.Add(consumeEffect);
         }
 
+        private void ActorViewModel_Dead(object? sender, EventArgs e)
+        {
+            var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
+            var soundEffectInstance = deathSoundEffect.CreateInstance();
+
+            _rootSprite.RemoveChild(_graphicsRoot.RootSprite);
+
+            var corpse = new CorpseViewModel(_game, _graphicsRoot, soundEffectInstance);
+            _sectorViewModelContext.CorpseManager.Add(corpse);
+        }
+
         private static string[] GetClearTags(Equipment? equipment)
         {
             return equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
@@ -441,13 +448,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             var clearTags = GetClearTags(equipment);
             return _personSoundStorage.GetEquipSound(clearTags, equipment != null);
-        }
-
-        public override void HandleRemove()
-        {
-            base.HandleRemove();
-
-            _actorStateEngine.Cancel();
         }
 
         public IActor Actor { get; set; }

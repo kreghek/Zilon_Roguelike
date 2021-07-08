@@ -17,8 +17,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             CorpseManager = new CorpseManager();
         }
 
-        public EffectManager EffectManager { get; }
         public CorpseManager CorpseManager { get; }
+
+        public EffectManager EffectManager { get; }
         public List<GameObjectBase> GameObjects { get; }
 
         public ISector Sector { get; }
