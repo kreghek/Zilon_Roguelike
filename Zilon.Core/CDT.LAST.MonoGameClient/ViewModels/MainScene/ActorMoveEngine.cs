@@ -53,6 +53,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public bool IsComplete => _animationCounterSeconds <= 0;
 
+        public void Cancel()
+        {
+            _moveBlocker.Release();
+        }
+
         public void Update(GameTime gameTime)
         {
             if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed &&

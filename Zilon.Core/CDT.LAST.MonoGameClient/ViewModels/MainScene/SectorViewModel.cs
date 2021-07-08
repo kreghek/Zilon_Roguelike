@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
+using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Screens;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
 
@@ -17,6 +19,98 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
+    internal sealed class CorpseViewModel
+    {
+        private const double CORPSE_DURATION_SECONDS = 5;
+
+        private double _counter;
+        private bool _soundPlayed;
+        private readonly IActorGraphics _actorGraphics;
+        private readonly Microsoft.Xna.Framework.Audio.SoundEffectInstance _soundEffectInstance;
+        private readonly SpriteContainer _rootSprite;
+        private readonly Sprite _shadowSprite;
+
+        public CorpseViewModel(Game game, IActorGraphics actorGraphics, Microsoft.Xna.Framework.Audio.SoundEffectInstance soundEffectInstance)
+        {
+            _actorGraphics = actorGraphics ?? throw new ArgumentNullException(nameof(actorGraphics));
+            _soundEffectInstance = soundEffectInstance;
+            var shadowTexture = game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
+
+            _rootSprite = new SpriteContainer();
+            _shadowSprite = new Sprite(shadowTexture)
+            {
+                Position = new Vector2(0, 0),
+                Origin = new Vector2(0.5f, 0.5f),
+                Color = new Color(Color.White, 0.5f)
+            };
+
+            _rootSprite.AddChild(_shadowSprite);
+
+            _rootSprite.AddChild(_actorGraphics.RootSprite);
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            _rootSprite.Draw(spriteBatch);
+        }
+
+        public bool IsComplete => _counter >= CORPSE_DURATION_SECONDS;
+
+        public void Update(GameTime gameTime)
+        {
+            if (!IsComplete)
+            {
+                _counter += gameTime.ElapsedGameTime.TotalSeconds;
+
+                var t = _counter / CORPSE_DURATION_SECONDS;
+
+                _actorGraphics.RootSprite.Rotation = (float)(2 * Math.PI * t);
+
+                if (!_soundPlayed && _soundEffectInstance != null && _soundEffectInstance.State != Microsoft.Xna.Framework.Audio.SoundState.Playing)
+                {
+                    _soundPlayed = true;
+                    _soundEffectInstance.Play();
+                }
+            }
+        }
+    }
+
+    internal sealed class CorpseManager
+    {
+        private readonly IList<CorpseViewModel> _items;
+
+        public CorpseManager()
+        {
+            _items = new List<CorpseViewModel>();
+        }
+
+        public void Add(CorpseViewModel corpseViewModel)
+        {
+            _items.Add(corpseViewModel);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            foreach (var item in _items.ToArray())
+            {
+                item.Update(gameTime);
+
+                if (item.IsComplete)
+                {
+                    _items.Remove(item);
+                }
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (var item in _items.ToArray())
+            {
+                item.Draw(spriteBatch);
+            }
+        }
+    }
+
     public sealed class SectorViewModel
     {
         private readonly Camera _camera;
@@ -101,6 +195,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
+            DrawCorpses();
+
             _gameObjectsViewModel.Draw(gameTime);
 
             _spriteBatch.Begin(transformMatrix: _camera.Transform);
@@ -109,6 +205,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 visualEffect.Draw(_spriteBatch);
             }
+
+            _spriteBatch.End();
+        }
+
+        private void DrawCorpses()
+        {
+            _spriteBatch.Begin(transformMatrix: _camera.Transform);
+
+            _viewModelContext.CorpseManager.Draw(_spriteBatch);
 
             _spriteBatch.End();
         }
@@ -130,6 +235,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _mapViewModel.Update(gameTime);
 
             _gameObjectsViewModel.Update(gameTime);
+
+            _viewModelContext.CorpseManager.Update(gameTime);
 
             foreach (var hitEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
             {

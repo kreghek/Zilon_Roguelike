@@ -135,7 +135,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += Actor_EquipmentChanged;
             }
 
+            if (Actor.Person.HasModule<ISurvivalModule>())
+            {
+                Actor.Person.GetModule<ISurvivalModule>().Dead += ActorViewModel_Dead;
+            }
+
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
+        }
+
+        private void ActorViewModel_Dead(object? sender, EventArgs e)
+        {
+            var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
+            var soundEffectInstance = deathSoundEffect.CreateInstance();
+
+            _rootSprite.RemoveChild(_graphicsRoot.RootSprite);
+
+            var corpse = new CorpseViewModel(_game, _graphicsRoot, soundEffectInstance);
+            _sectorViewModelContext.CorpseManager.Add(corpse);
         }
 
         public override bool HiddenByFow => true;
@@ -164,6 +180,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
                 Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= Actor_EquipmentChanged;
+            }
+
+            if (Actor.Person.HasModule<ISurvivalModule>())
+            {
+                Actor.Person.GetModule<ISurvivalModule>().Dead -= ActorViewModel_Dead;
             }
         }
 
@@ -420,6 +441,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             var clearTags = GetClearTags(equipment);
             return _personSoundStorage.GetEquipSound(clearTags, equipment != null);
+        }
+
+        public override void HandleRemove()
+        {
+            base.HandleRemove();
+
+            _actorStateEngine.Cancel();
         }
 
         public IActor Actor { get; set; }

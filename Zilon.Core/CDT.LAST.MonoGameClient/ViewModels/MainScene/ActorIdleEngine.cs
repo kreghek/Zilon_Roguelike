@@ -71,5 +71,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _graphicsRoot.Position = positionInt;
             }
         }
+
+        public void Cancel()
+        {
+            // There is no blockers. So do nothing.
+        }
     }
 }

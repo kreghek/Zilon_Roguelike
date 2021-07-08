@@ -88,5 +88,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _rootContainer.Position = _startPosition;
             }
         }
+
+        public void Cancel()
+        {
+            _animationBlocker.Release();
+        }
     }
 }

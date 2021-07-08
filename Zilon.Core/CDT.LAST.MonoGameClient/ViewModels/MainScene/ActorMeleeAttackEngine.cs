@@ -45,6 +45,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public bool IsComplete { get; private set; }
 
+        public void Cancel()
+        {
+            _animationBlocker.Release();
+        }
+
         public void Update(GameTime gameTime)
         {
             _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3;

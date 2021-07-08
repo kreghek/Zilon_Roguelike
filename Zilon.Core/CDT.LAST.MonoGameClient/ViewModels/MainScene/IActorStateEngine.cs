@@ -6,5 +6,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         public bool IsComplete { get; }
         public void Update(GameTime gameTime);
+        void Cancel();
     }
 }

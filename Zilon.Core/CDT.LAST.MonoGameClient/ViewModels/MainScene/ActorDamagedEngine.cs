@@ -56,6 +56,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                                   !_soundEffectInstance.IsDisposed &&
                                   _soundEffectInstance.State != SoundState.Stopped;
 
+        public void Cancel()
+        {
+            _moveBlocker.Release();
+        }
+
         public void Update(GameTime gameTime)
         {
             _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3 * GameState.GameSpeed;
