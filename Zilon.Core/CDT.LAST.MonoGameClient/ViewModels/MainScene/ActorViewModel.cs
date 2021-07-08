@@ -126,18 +126,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             Actor.Moved += Actor_Moved;
             Actor.UsedAct += Actor_UsedAct;
-            Actor.DamageTaken += Actor_DamageTaken;
             Actor.UsedProp += Actor_UsedProp;
             Actor.PropTransferPerformed += Actor_PropTransferPerformed;
             Actor.BeginTransitionToOtherSector += Actor_BeginTransitionToOtherSector;
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
                 Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged += PersonEquipmentModule_EquipmentChanged;
-            }
-
-            if (Actor.Person.HasModule<ISurvivalModule>())
-            {
-                Actor.Person.GetModule<ISurvivalModule>().Dead += PersonSurvivalModule_Dead;
             }
 
             _actorStateEngine = new ActorIdleEngine(_graphicsRoot.RootSprite);
@@ -168,7 +162,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             Actor.Moved -= Actor_Moved;
             Actor.UsedAct -= Actor_UsedAct;
-            Actor.DamageTaken -= Actor_DamageTaken;
             Actor.UsedProp -= Actor_UsedProp;
             Actor.PropTransferPerformed -= Actor_PropTransferPerformed;
             Actor.BeginTransitionToOtherSector -= Actor_BeginTransitionToOtherSector;
@@ -176,11 +169,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (Actor.Person.HasModule<IEquipmentModule>())
             {
                 Actor.Person.GetModule<IEquipmentModule>().EquipmentChanged -= PersonEquipmentModule_EquipmentChanged;
-            }
-
-            if (Actor.Person.HasModule<ISurvivalModule>())
-            {
-                Actor.Person.GetModule<ISurvivalModule>().Dead -= PersonSurvivalModule_Dead;
             }
         }
 
@@ -224,31 +212,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 soundEffect?.CreateInstance());
         }
 
-        private void Actor_DamageTaken(object? sender, DamageTakenEventArgs e)
+        public void RunHitAnimation()
         {
-            if (sender is not Actor actor)
-            {
-                Debug.Fail("Sender must be IActor");
-                // Do nothing. Looks like error. But client must not down.
-                return;
-            }
-
-            if (actor.Person.CheckIsDead())
-            {
-                // Do not animate hit for dead persons.
-                // Because if the person is dead the actor of the person removes.
-                // It lead to some unexpected cases:
-                // - You can't see animation of the actor that removed.
-                // - It create a animation blocker that can't update beacause removed actor will not call update.
-                return;
-            }
-
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-            var soundEffectInstance = GetSoundEffect(actor.Person);
+            var soundEffectInstance = GetSoundEffect(Actor.Person);
 
-            var engine = new ActorDamagedEngine(actor.Person, _graphicsRoot, _rootSprite, Vector2.Zero,
+            var engine = new ActorDamagedEngine(Actor.Person, _graphicsRoot, _rootSprite, Vector2.Zero,
                 animationBlockerService, soundEffectInstance);
 
             _actorStateEngine = engine;
@@ -305,41 +276,42 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 soundEffect?.CreateInstance());
         }
 
-        private void Actor_UsedAct(object? sender, UsedActEventArgs e)
+        public void RunCombatActUsageAnimation(ITacticalActStatsSubScheme? stats, IGraphNode targetNode)
         {
-            var stats = e.TacticalAct.Stats;
             if (stats is null)
             {
                 throw new InvalidOperationException("The act has no stats to select visualization.");
             }
 
-            if (CanDraw)
+            if (!CanDraw)
             {
-                if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
-                {
-                    var serviceScope = ((LivGame)_game).ServiceProvider;
+                return;
+            }
 
-                    var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            if (stats.Effect == TacticalActEffectType.Damage && stats.IsMelee)
+            {
+                var serviceScope = ((LivGame)_game).ServiceProvider;
 
-                    var hexSize = MapMetrics.UnitSize / 2;
-                    var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)e.TargetNode).OffsetCoords);
-                    var newPosition = new Vector2(
-                        (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                        playerActorWorldCoords[1] * hexSize * 2 / 2
-                    );
+                var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-                    var targetSpritePosition = newPosition;
+                var hexSize = MapMetrics.UnitSize / 2;
+                var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)targetNode).OffsetCoords);
+                var newPosition = new Vector2(
+                    (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                    playerActorWorldCoords[1] * hexSize * 2 / 2
+                );
 
-                    var attackSoundEffectInstance = GetSoundEffect(e.TacticalAct.Stats);
-                    _actorStateEngine =
-                        new ActorMeleeAttackEngine(
-                            _rootSprite,
-                            targetSpritePosition,
-                            animationBlockerService,
-                            attackSoundEffectInstance);
+                var targetSpritePosition = newPosition;
 
-                    HandleAttackVisualEffect(e, targetSpritePosition);
-                }
+                var attackSoundEffectInstance = GetSoundEffect(stats);
+                _actorStateEngine =
+                    new ActorMeleeAttackEngine(
+                        _rootSprite,
+                        targetSpritePosition,
+                        animationBlockerService,
+                        attackSoundEffectInstance);
+
+                HandleAttackVisualEffect(targetNode, targetSpritePosition);
             }
         }
 
@@ -406,11 +378,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return attackSoundEffectInstance;
         }
 
-        private void HandleAttackVisualEffect(UsedActEventArgs e, Vector2 targetSpritePosition)
+        private void HandleAttackVisualEffect(IGraphNode targetNode, Vector2 targetSpritePosition)
         {
             // Selection actors only is prevention of a error when a monster stays on a loot bag.
             var actorViewModels = _sectorViewModelContext.GameObjects.Where(x => x is IActorViewModel);
-            var targetGameObject = actorViewModels.SingleOrDefault(x => x.Node == e.TargetNode);
+            var targetGameObject = actorViewModels.SingleOrDefault(x => x.Node == targetNode);
 
             if (targetGameObject is null)
             {
@@ -440,7 +412,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 soundSoundEffect?.CreateInstance());
         }
 
-        private void PersonSurvivalModule_Dead(object? sender, EventArgs e)
+        public void RunDeathAnimation()
         {
             var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
             var soundEffectInstance = deathSoundEffect.CreateInstance();

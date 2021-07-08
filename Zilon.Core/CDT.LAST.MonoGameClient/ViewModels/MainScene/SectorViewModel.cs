@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
@@ -177,9 +178,36 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (e.ActorInteractionEvent is DamageActorInteractionEvent damageActorInteractionEvent)
             {
                 var actDescription = damageActorInteractionEvent.UsedActDescription;
-                var targetPerson = damageActorInteractionEvent.TargetActor.Person;
-                var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
-                soundEffect.CreateInstance().Play();
+                var targetActor = damageActorInteractionEvent.TargetActor;
+                var targetPerson = targetActor.Person;
+
+                var attackerViewModel = _viewModelContext.GameObjects.OfType<ActorViewModel>().Single(x => x.Actor == damageActorInteractionEvent.Actor);
+                if (attackerViewModel.CanDraw)
+                {
+                    var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
+                    soundEffect.CreateInstance().Play();
+
+                    attackerViewModel.RunCombatActUsageAnimation()
+                }
+
+                var targetViewModel = _viewModelContext.GameObjects.OfType<ActorViewModel>().Single(x => x.Actor == targetActor);
+                if (targetViewModel.CanDraw)
+                {
+                    if (targetActor.Person.CheckIsDead())
+                    {
+                        targetViewModel.RunHitAnimation();
+                    }
+                    else
+                    {
+                        // Do not animate hit for dead persons.
+                        // Because if the person is dead the actor of the person removes.
+                        // It lead to some unexpected cases:
+                        // - You can't see animation of the actor that removed.
+                        // - It create a animation blocker that can't update beacause removed actor will not call update.
+
+                        targetViewModel.RunDeathAnimation();
+                    }
+                }
             }
         }
     }
