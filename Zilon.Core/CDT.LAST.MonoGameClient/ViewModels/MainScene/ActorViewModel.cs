@@ -203,17 +203,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _sectorViewModelContext.CorpseManager.Add(corpse);
         }
 
-        public void RunHitAnimation()
+        public void RunDamageReceivedAnimation(IGraphNode attackerNode)
         {
             var serviceScope = ((LivGame)_game).ServiceProvider;
             var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
             var soundEffectInstance = GetPersonImpactSoundEffect(Actor.Person);
 
-            var engine = new ActorDamagedEngine(Actor.Person, _graphicsRoot, _rootSprite, Vector2.Zero,
-                animationBlockerService, soundEffectInstance);
+            var hexSize = MapMetrics.UnitSize / 2;
+            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)attackerNode).OffsetCoords);
+            var attackerPosition = new Vector2(
+                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                playerActorWorldCoords[1] * hexSize * 2 / 2
+            );
 
-            _actorStateEngine = engine;
+            var moveEngine = new ActorDamagedEngine(_graphicsRoot, _rootSprite, attackerPosition, animationBlockerService,
+                soundEffectInstance);
+
+            _actorStateEngine = moveEngine;
         }
 
         public void UnsubscribeEventHandlers()

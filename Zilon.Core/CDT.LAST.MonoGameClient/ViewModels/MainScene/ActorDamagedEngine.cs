@@ -14,38 +14,34 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     public sealed class ActorDamagedEngine : IActorStateEngine
     {
         private const float ANIMATION_DURATION_SECONDS = 1f;
+        private const int HIT_DISTANCE = 12;
         private readonly IActorGraphics _actorGraphics;
         private readonly IAnimationBlockerService _animationBlockerService;
-        private readonly SpriteContainer _graphicsRoot;
+        private readonly Vector2 _startPosition;
+        private readonly Vector2 _hitPosition;
         private readonly ICommandBlocker _moveBlocker;
         private readonly SpriteContainer _rootSprite;
 
-        private readonly Sprite _shadowSprite;
         private readonly SoundEffectInstance? _soundEffectInstance;
-        private readonly Vector2 _startPosition;
-        private readonly Vector2 _targetPosition;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
         private bool _soundPlayed;
 
-        public ActorDamagedEngine(IPerson person, IActorGraphics actorGraphics, SpriteContainer rootSprite,
-            Vector2 hitPosition, IAnimationBlockerService animationBlockerService,
-            SoundEffectInstance? soundEffectInstance)
+        public ActorDamagedEngine(IActorGraphics actorGraphics, SpriteContainer rootSprite, Vector2 attackerPosition,
+            IAnimationBlockerService animationBlockerService, SoundEffectInstance? soundEffectInstance)
         {
             _actorGraphics = actorGraphics;
             _rootSprite = rootSprite;
             _animationBlockerService = animationBlockerService;
             _soundEffectInstance = soundEffectInstance;
-            _rootSprite.FlipX = (hitPosition - actorGraphics.RootSprite.Position).X < 0;
+            var positionDifference = attackerPosition - actorGraphics.RootSprite.Position;
+            var hitDirection = positionDifference;
+            hitDirection.Normalize();
+            _rootSprite.FlipX = hitDirection.X > 0;
+            _startPosition = rootSprite.Position;
+            _hitPosition = hitDirection * -1 * HIT_DISTANCE + _startPosition;
 
-            //if (soundEffectInstance != null)
-            //{
-            //    _moveBlocker = new SoundAnimationBlocker(soundEffectInstance);
-            //}
-            //else
-            //{
             _moveBlocker = new AnimationCommonBlocker();
-            //}
 
             _animationBlockerService.AddBlocker(_moveBlocker);
         }
@@ -79,15 +75,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 }
 
                 _actorGraphics.ShowHitlighted = true;
+                _rootSprite.Position = _hitPosition;
             }
             else
             {
                 _actorGraphics.ShowHitlighted = false;
+                _rootSprite.Position = _startPosition;
             }
 
             if (IsComplete)
             {
                 _actorGraphics.ShowHitlighted = false;
+                _rootSprite.Position = _startPosition;
                 _moveBlocker.Release();
             }
         }

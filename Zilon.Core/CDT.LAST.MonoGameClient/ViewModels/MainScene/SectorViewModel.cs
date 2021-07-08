@@ -198,7 +198,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     var targetPersonIsStillAlive = !targetActor.Person.CheckIsDead();
                     if (targetPersonIsStillAlive)
                     {
-                        targetViewModel.RunHitAnimation();
+                        targetViewModel.RunDamageReceivedAnimation(attackerViewModel.Node);
                     }
                 }
             }
