@@ -219,19 +219,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return;
             }
 
-            SoundEffectInstance? soundEffectInstance;
-            if (actor.Person.CheckIsDead())
+            var serviceScope = ((LivGame)_game).ServiceProvider;
+            var animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+
+            var soundEffectInstance = GetSoundEffect(actor.Person);
+
+            var engine = new ActorDamagedEngine(actor.Person, _graphicsRoot, _rootSprite, Vector2.Zero, animationBlockerService, soundEffectInstance);
+
+            _actorStateEngine = engine;
+        }
+
+        private SoundEffectInstance GetSoundEffect(IPerson person)
+        {
+            if (person.CheckIsDead())
             {
-                var deathSoundEffect = _personSoundStorage.GetDeathEffect(actor.Person);
-                soundEffectInstance = deathSoundEffect.CreateInstance();
+                var deathSoundEffect = _personSoundStorage.GetDeathEffect(person);
+                return deathSoundEffect.CreateInstance();
             }
             else
             {
-                var impactSoundEffect = _personSoundStorage.GetImpactEffect(actor.Person);
-                soundEffectInstance = impactSoundEffect.CreateInstance();
+                var impactSoundEffect = _personSoundStorage.GetImpactEffect(person);
+                return impactSoundEffect.CreateInstance();
             }
-
-            soundEffectInstance.Play();
         }
 
         private void Actor_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)

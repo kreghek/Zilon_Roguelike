@@ -15,6 +15,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
         private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
         private SpriteContainer? _outlined;
+        private SpriteContainer? _hitlighted;
 
         public HumanoidGraphics(IEquipmentModule equipmentModule,
             IPersonVisualizationContentStorage personVisualizationContentStorage)
@@ -35,6 +36,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
                 _outlined.Visible = ShowOutlined;
             }
 
+            if (_hitlighted is not null)
+            {
+                _hitlighted.Visible = ShowHitlighted;
+            }
+
             base.DoDraw(spriteBatch, zindex);
         }
 
@@ -51,6 +57,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
                 _personVisualizationContentStorage,
                 _personVisualizationContentStorage.GetHumanParts());
             AddChild(mainHumanoidSprite);
+
+            var hitlightedHumanoidSprite = new HumanoidSprite(equipmentModule,
+                _personVisualizationContentStorage,
+                _personVisualizationContentStorage.GetHumanOutlinedParts());
+
+            _hitlighted = hitlightedHumanoidSprite;
+            AddChild(_hitlighted);
         }
 
         private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
@@ -69,5 +82,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
         public Vector2 HitEffectPosition => Vector2.UnitY * -24;
 
         public bool ShowOutlined { get; set; }
+
+        public bool ShowHitlighted { get; set; }
     }
 }
