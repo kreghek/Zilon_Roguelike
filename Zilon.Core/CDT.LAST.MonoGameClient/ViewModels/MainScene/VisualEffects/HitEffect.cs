@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 using CDT.LAST.MonoGameClient.Engine;
 
@@ -30,23 +32,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
             GameObjectBase attacker,
             GameObjectBase target,
             IGameObjectVisualizationContentStorage contentStorage,
-            Vector2 targetObjectPosition,
-            Vector2 direction)
+            Vector2 effectPosition,
+            Vector2 direction,
+            Zilon.Core.Persons.ActDescription usedActDescription)
         {
-            _hitTexture = contentStorage.GetHitEffectTexture(HitEffectType.ShortBlade, HitEffectDirection.Left);
+            var hitType = GetHitType(usedActDescription);
+            var hitDirection = GetHitDirection(direction);
+
+            _hitTexture = contentStorage.GetHitEffectTexture(hitType, hitDirection);
             _hitSprite = new Sprite(_hitTexture)
             {
-                Position = targetObjectPosition,
+                Position = effectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
                 Color = new Color(255, 255, 255, 0.0f),
                 SourceRectangle = new Rectangle(0, 0, FRAME_WIDTH, FRAME_HEIGHT)
             };
 
-            _hitBackingTexture = contentStorage.GetHitEffectTexture(HitEffectType.ShortBlade | HitEffectType.Backing,
+            _hitBackingTexture = contentStorage.GetHitEffectTexture(hitType | HitEffectType.Backing,
                 HitEffectDirection.Left);
             _hitBackingSprite = new Sprite(_hitBackingTexture)
             {
-                Position = targetObjectPosition,
+                Position = effectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
                 Color = new Color(255, 255, 255, 0.0f),
                 SourceRectangle = new Rectangle(0, 0, FRAME_WIDTH, FRAME_HEIGHT)
@@ -60,7 +66,41 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 
             _counter = EFFECT_DISPLAY_DURATION_SECONDS;
 
-            _boundGameObjects = new[] { attacker };
+            _boundGameObjects = new[] { attacker, target };
+        }
+
+        private static HitEffectDirection GetHitDirection(Vector2 direction)
+        {
+            var startDirection = HitEffectDirection.Left;
+
+            if (direction.Y < 0)
+            {
+                return HitEffectDirection.Top | startDirection;
+            }
+            else if (direction.Y > 0)
+            {
+                return HitEffectDirection.Bottom | startDirection;
+            }
+            else
+            {
+                return startDirection;
+            }
+        }
+
+        private static HitEffectType GetHitType(Zilon.Core.Persons.ActDescription usedActDescription)
+        {
+            foreach (var tag in usedActDescription.Tags)
+            {
+                switch (tag)
+                {
+                    case "slash": return HitEffectType.ShortBlade;
+                }
+            }
+
+            Debug.Fail("Hit effect was not found to visualize combat action.");
+
+            // Show default hit effect.
+            return HitEffectType.ShortBlade;
         }
 
         public bool IsComplete => _counter <= 0;

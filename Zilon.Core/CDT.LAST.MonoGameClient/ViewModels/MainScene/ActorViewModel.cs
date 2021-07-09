@@ -189,7 +189,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 animationBlockerService,
                 attackSoundEffectInstance);
 
-            HandleAttackVisualEffect(targetNode, targetSpritePosition);
+            HandleAttackVisualEffect(targetNode, targetSpritePosition, usedActDescription);
         }
 
         public void RunDamageReceivedAnimation(IGraphNode attackerNode)
@@ -397,7 +397,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return impactSoundEffect.CreateInstance();
         }
 
-        private void HandleAttackVisualEffect(IGraphNode targetNode, Vector2 targetSpritePosition)
+        private void HandleAttackVisualEffect(IGraphNode targetNode, Vector2 targetSpritePosition, ActDescription usedActDescription)
         {
             // Selection actors only is prevention of a error when a monster stays on a loot bag.
             var actorViewModels = _sectorViewModelContext.GameObjects.Where(x => x is IActorViewModel);
@@ -416,7 +416,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             direction.Normalize();
 
             var hitEffect = new HitEffect(this, targetGameObject, _gameObjectVisualizationContentStorage,
-                hitEffectPosition, direction);
+                hitEffectPosition, direction, usedActDescription);
             _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
         }
 
