@@ -7,6 +7,8 @@ using CDT.LAST.MonoGameClient.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Zilon.Core.Persons;
+
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 {
     internal sealed class HitEffect : IVisualEffect
@@ -34,7 +36,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
             IGameObjectVisualizationContentStorage contentStorage,
             Vector2 effectPosition,
             Vector2 direction,
-            Zilon.Core.Persons.ActDescription usedActDescription)
+            ActDescription usedActDescription)
         {
             var hitType = GetHitType(usedActDescription);
             var hitDirection = GetHitDirection(direction);
@@ -77,17 +79,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
             {
                 return HitEffectDirection.Top | startDirection;
             }
-            else if (direction.Y > 0)
+
+            if (direction.Y > 0)
             {
                 return HitEffectDirection.Bottom | startDirection;
             }
-            else
-            {
-                return startDirection;
-            }
+
+            return startDirection;
         }
 
-        private static HitEffectType GetHitType(Zilon.Core.Persons.ActDescription usedActDescription)
+        private static HitEffectType GetHitType(ActDescription usedActDescription)
         {
             foreach (var tag in usedActDescription.Tags)
             {

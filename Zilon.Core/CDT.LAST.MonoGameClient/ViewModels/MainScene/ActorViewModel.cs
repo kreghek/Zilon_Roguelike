@@ -397,7 +397,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return impactSoundEffect.CreateInstance();
         }
 
-        private void HandleAttackVisualEffect(IGraphNode targetNode, Vector2 targetSpritePosition, ActDescription usedActDescription)
+        private void HandleAttackVisualEffect(IGraphNode targetNode, Vector2 targetSpritePosition,
+            ActDescription usedActDescription)
         {
             // Selection actors only is prevention of a error when a monster stays on a loot bag.
             var actorViewModels = _sectorViewModelContext.GameObjects.Where(x => x is IActorViewModel);
