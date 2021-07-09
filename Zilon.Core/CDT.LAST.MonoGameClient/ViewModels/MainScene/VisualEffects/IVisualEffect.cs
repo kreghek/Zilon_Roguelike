@@ -10,6 +10,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
     /// </summary>
     internal interface IVisualEffect
     {
+        IEnumerable<GameObjectBase> BoundGameObjects { get; }
+
         /// <summary>
         /// Determine effect is complete.
         /// Complete effect is not draws youself and can be removed from effect store.
@@ -26,7 +28,5 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
         /// Update effect state. Usually it decrements counter of effect's life time and moves effect to complete state.
         /// </summary>
         void Update(GameTime gameTime);
-
-        IEnumerable<GameObjectBase> BoundGameObjects { get; }
     }
 }

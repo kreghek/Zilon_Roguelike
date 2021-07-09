@@ -14,12 +14,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private const int HIT_DISTANCE = 12;
         private readonly IActorGraphics _actorGraphics;
         private readonly IAnimationBlockerService _animationBlockerService;
-        private readonly Vector2 _startPosition;
         private readonly Vector2 _hitPosition;
         private readonly ICommandBlocker _moveBlocker;
         private readonly SpriteContainer _rootSprite;
 
         private readonly SoundEffectInstance? _soundEffectInstance;
+        private readonly Vector2 _startPosition;
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
         private bool _soundPlayed;

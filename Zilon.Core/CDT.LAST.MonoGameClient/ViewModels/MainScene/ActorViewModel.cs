@@ -192,17 +192,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             HandleAttackVisualEffect(targetNode, targetSpritePosition);
         }
 
-        public void RunDeathAnimation()
-        {
-            var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
-            var soundEffectInstance = deathSoundEffect.CreateInstance();
-
-            _rootSprite.RemoveChild(_graphicsRoot.RootSprite);
-
-            var corpse = new CorpseViewModel(_game, _graphicsRoot, _rootSprite.Position, soundEffectInstance);
-            _sectorViewModelContext.CorpseManager.Add(corpse);
-        }
-
         public void RunDamageReceivedAnimation(IGraphNode attackerNode)
         {
             var serviceScope = ((LivGame)_game).ServiceProvider;
@@ -217,10 +206,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 playerActorWorldCoords[1] * hexSize * 2 / 2
             );
 
-            var moveEngine = new ActorDamagedEngine(_graphicsRoot, _rootSprite, attackerPosition, animationBlockerService,
+            var moveEngine = new ActorDamagedEngine(_graphicsRoot, _rootSprite, attackerPosition,
+                animationBlockerService,
                 soundEffectInstance);
 
             _actorStateEngine = moveEngine;
+        }
+
+        public void RunDeathAnimation()
+        {
+            var deathSoundEffect = _personSoundStorage.GetDeathEffect(Actor.Person);
+            var soundEffectInstance = deathSoundEffect.CreateInstance();
+
+            _rootSprite.RemoveChild(_graphicsRoot.RootSprite);
+
+            var corpse = new CorpseViewModel(_game, _graphicsRoot, _rootSprite.Position, soundEffectInstance);
+            _sectorViewModelContext.CorpseManager.Add(corpse);
         }
 
         public void UnsubscribeEventHandlers()
@@ -414,7 +415,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var direction = difference;
             direction.Normalize();
 
-            var hitEffect = new HitEffect(this, targetGameObject, _gameObjectVisualizationContentStorage, hitEffectPosition, direction);
+            var hitEffect = new HitEffect(this, targetGameObject, _gameObjectVisualizationContentStorage,
+                hitEffectPosition, direction);
             _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
         }
 

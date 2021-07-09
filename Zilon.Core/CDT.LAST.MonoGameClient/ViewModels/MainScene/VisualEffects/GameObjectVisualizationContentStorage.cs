@@ -60,12 +60,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing, HitEffectDirection.Left | HitEffectDirection.Top),
+                    new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing,
+                        HitEffectDirection.Left | HitEffectDirection.Top),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing, HitEffectDirection.Left | HitEffectDirection.Bottom),
+                    new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing,
+                        HitEffectDirection.Left | HitEffectDirection.Bottom),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
                 }
             };

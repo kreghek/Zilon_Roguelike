@@ -114,7 +114,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         continue;
                     }
 
-                    var visualEffects = _viewModelContext.EffectManager.VisualEffects.Where(x => x.BoundGameObjects.Contains(gameObject)).ToArray();
+                    var visualEffects = _viewModelContext.EffectManager.VisualEffects
+                        .Where(x => x.BoundGameObjects.Contains(gameObject)).ToArray();
                     _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
                     foreach (var visualEffect in visualEffects)

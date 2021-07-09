@@ -16,13 +16,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
         private const int FRAME_WIDTH = 128;
         private const int FRAME_HEIGHT = 64;
 
+        private readonly GameObjectBase[] _boundGameObjects;
+        private readonly Sprite _hitBackingSprite;
+        private readonly Texture2D _hitBackingTexture;
+
         private readonly Sprite _hitSprite;
 
         private readonly Texture2D _hitTexture;
-        private readonly Texture2D _hitBackingTexture;
-        private readonly Sprite _hitBackingSprite;
-
-        private readonly GameObjectBase[] _boundGameObjects;
 
         private double _counter;
 
@@ -42,7 +42,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 SourceRectangle = new Rectangle(0, 0, FRAME_WIDTH, FRAME_HEIGHT)
             };
 
-            _hitBackingTexture = contentStorage.GetHitEffectTexture(HitEffectType.ShortBlade | HitEffectType.Backing, HitEffectDirection.Left);
+            _hitBackingTexture = contentStorage.GetHitEffectTexture(HitEffectType.ShortBlade | HitEffectType.Backing,
+                HitEffectDirection.Left);
             _hitBackingSprite = new Sprite(_hitBackingTexture)
             {
                 Position = targetObjectPosition,
