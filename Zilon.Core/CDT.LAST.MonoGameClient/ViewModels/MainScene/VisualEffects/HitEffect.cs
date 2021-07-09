@@ -11,9 +11,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
     {
         private const double FPS = 1 / 12.0;
         private const double EFFECT_DISPLAY_DURATION_SECONDS = FPS * FRAME_COUNT;
-        private const int FRAME_COUNT = 5;
+        private const int FRAME_COUNT = 6;
         private const int FRAME_COLUMN_COUNT = 3;
-        private const int FRAME_SIZE = 64;
+        private const int FRAME_WIDTH = 128;
+        private const int FRAME_HEIGHT = 64;
 
         private readonly Sprite _hitSprite;
 
@@ -38,7 +39,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 Position = targetObjectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
                 Color = new Color(255, 255, 255, 0.0f),
-                SourceRectangle = new Rectangle(0, 0, 64, 64)
+                SourceRectangle = new Rectangle(0, 0, FRAME_WIDTH, FRAME_HEIGHT)
             };
 
             _hitBackingTexture = contentStorage.GetHitEffectTexture(HitEffectType.ShortBlade | HitEffectType.Backing, HitEffectDirection.Left);
@@ -47,7 +48,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 Position = targetObjectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
                 Color = new Color(255, 255, 255, 0.0f),
-                SourceRectangle = new Rectangle(0, 0, 64, 64)
+                SourceRectangle = new Rectangle(0, 0, FRAME_WIDTH, FRAME_HEIGHT)
             };
 
             if (direction.X > 0)
@@ -58,7 +59,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 
             _counter = EFFECT_DISPLAY_DURATION_SECONDS;
 
-            _boundGameObjects = new[] { attacker, target };
+            _boundGameObjects = new[] { attacker };
         }
 
         public bool IsComplete => _counter <= 0;
@@ -93,10 +94,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 var frameRow = frameIndex / FRAME_COLUMN_COUNT;
 
                 _hitSprite.SourceRectangle = new Rectangle(
-                    frameColumn * FRAME_SIZE,
-                    frameRow * FRAME_SIZE,
-                    FRAME_SIZE,
-                    FRAME_SIZE);
+                    frameColumn * FRAME_WIDTH,
+                    frameRow * FRAME_HEIGHT,
+                    FRAME_WIDTH,
+                    FRAME_HEIGHT);
             }
         }
     }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -97,6 +98,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var gameObjectsMaterialized =
                     _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
                 var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
+                var drawnGameObjects = new List<GameObjectBase>();
+                var drawnEffects = new List<IVisualEffect>();
                 foreach (var gameObject in gameObjectsMaterialized)
                 {
                     var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
@@ -111,10 +114,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         continue;
                     }
 
+                    var visualEffects = _viewModelContext.EffectManager.VisualEffects.Where(x => x.BoundGameObjects.Contains(gameObject)).ToArray();
                     _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
-                    var backVisualEffects = _viewModelContext.EffectManager.VisualEffects.Where(x => x.BoundGameObjects.Contains(gameObject)).ToArray();
-                    foreach (var visualEffect in backVisualEffects)
+                    foreach (var visualEffect in visualEffects)
                     {
                         visualEffect.Draw(_spriteBatch, backing: true);
                     }
@@ -122,11 +125,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _spriteBatch.End();
 
                     gameObject.Draw(gameTime, _camera.Transform);
+                    drawnGameObjects.Add(gameObject);
 
                     _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
-                    var frontVisualEffects = _viewModelContext.EffectManager.VisualEffects.Where(x => x.BoundGameObjects.Contains(gameObject)).ToArray();
-                    foreach (var visualEffect in frontVisualEffects)
+                    foreach (var visualEffect in visualEffects)
                     {
                         visualEffect.Draw(_spriteBatch, backing: false);
                     }

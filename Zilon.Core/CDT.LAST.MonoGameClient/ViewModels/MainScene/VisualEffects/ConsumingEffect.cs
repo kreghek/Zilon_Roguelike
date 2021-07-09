@@ -55,14 +55,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 
         public IEnumerable<GameObjectBase> BoundGameObjects => new[] { _bindGameObject };
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            if (!IsComplete)
-            {
-                _effectSprite.Draw(spriteBatch);
-            }
-        }
-
         public void Update(GameTime gameTime)
         {
             _counter -= gameTime.ElapsedGameTime.TotalSeconds;
@@ -77,7 +69,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 
         public void Draw(SpriteBatch spriteBatch, bool backing)
         {
-            throw new NotImplementedException();
+            if (backing)
+            {
+                // Consuming effects has no backing.
+                return;
+            }
+
+            if (!IsComplete)
+            {
+                _effectSprite.Draw(spriteBatch);
+            }
         }
     }
 }
