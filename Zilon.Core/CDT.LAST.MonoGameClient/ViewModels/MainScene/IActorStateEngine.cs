@@ -7,5 +7,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public bool IsComplete { get; }
         void Cancel();
         public void Update(GameTime gameTime);
+
+        public bool CanBeReplaced { get; }
     }
 }

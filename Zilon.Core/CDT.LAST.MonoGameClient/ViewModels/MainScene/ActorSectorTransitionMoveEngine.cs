@@ -26,6 +26,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private bool _effectPlayed;
 
+        /// <inheritdoc/>
+        /// <remarks> The state engine has blocker. So we can't just replace it without blocker releasing. </remarks>
+        public bool CanBeReplaced => false;
+
         public ActorSectorTransitionMoveEngine(SpriteContainer rootContainer,
             IAnimationBlockerService animationBlockerService,
             SoundEffectInstance? transitionSoundEffect)

@@ -16,6 +16,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private Vector2 _targetVector;
         private bool _toCenter;
 
+        /// <inheritdoc/>
+        /// <remarks> The state engine has no blockers. So we can't remove it with no aftermaths. </remarks>
+        public bool CanBeReplaced => true;
+
         public ActorIdleEngine(SpriteContainer graphicsRoot)
         {
             _graphicsRoot = graphicsRoot;

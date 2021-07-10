@@ -24,6 +24,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
 
+        /// <inheritdoc/>
+        /// <remarks> The state engine has blocker. So we can't just replace it without blocker releasing. </remarks>
+        public bool CanBeReplaced => false;
+
         public ActorMoveEngine(SpriteContainer rootSprite, SpriteContainer graphicsRoot, Sprite shadowSprite,
             Vector2 targetPosition, IAnimationBlockerService animationBlockerService,
             SoundEffectInstance? soundEffectInstance)

@@ -26,6 +26,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private double _animationCounterSeconds = ANIMATION_DURATION_SECONDS;
         private bool _effectPlayed;
 
+        /// <inheritdoc/>
+        /// <remarks> The state engine has blocker. So we can't just replace it without blocker releasing. </remarks>
+        public bool CanBeReplaced => false;
+
         public ActorMeleeAttackEngine(SpriteContainer rootContainer, Vector2 targetPosition,
             IAnimationBlockerService animationBlockerService, SoundEffectInstance? meleeAttackSoundEffect,
             IVisualEffect? hitVisualEffect)

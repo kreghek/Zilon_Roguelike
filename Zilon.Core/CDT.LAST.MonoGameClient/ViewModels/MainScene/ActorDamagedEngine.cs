@@ -49,6 +49,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                                   !_soundEffectInstance.IsDisposed &&
                                   _soundEffectInstance.State != SoundState.Stopped;
 
+        /// <inheritdoc/>
+        /// <remarks> The state engine has blocker. So we can't just replace it without blocker releasing. </remarks>
+        public bool CanBeReplaced => false;
+
         public void Cancel()
         {
             _moveBlocker.Release();
