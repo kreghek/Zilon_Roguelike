@@ -12,6 +12,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private const float ANIMATION_DURATION_SECONDS = 1f;
         private const int HIT_DISTANCE = 12;
+        private const float LOW_DELAY_PERCENT = 0.3f;
+        private const float HI_DELAY_PERCENT = 0.6f;
         private readonly IActorGraphics _actorGraphics;
         private readonly IAnimationBlockerService _animationBlockerService;
         private readonly Vector2 _hitPosition;
@@ -62,12 +64,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public void Update(GameTime gameTime)
         {
             _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3 * GameState.GameSpeed;
-            var t = 1 - _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
+            var t = _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
+            var t2 = 1 - t;
 
-            if (t < 0.3f)
+            if (t2 < LOW_DELAY_PERCENT)
             {
+                // Do nothing. This is delay.
             }
-            else if (t >= 0.3f && t < 0.6f)
+            else if (t2 >= LOW_DELAY_PERCENT && t2 < HI_DELAY_PERCENT)
             {
                 if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed &&
                     _soundEffectInstance.State != SoundState.Playing && !_soundPlayed)
@@ -81,6 +85,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
             else
             {
+                // Restore state after damage receiving animation.
                 _actorGraphics.ShowHitlighted = false;
                 _rootSprite.Position = _startPosition;
             }
