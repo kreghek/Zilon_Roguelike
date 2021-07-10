@@ -72,7 +72,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     break;
 
                 case >= LOW_DELAY_PERCENT and < HI_DELAY_PERCENT:
-                    if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed 
+                    if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed
                         && _soundEffectInstance.State != SoundState.Playing
                         && !_soundPlayed)
                     {
