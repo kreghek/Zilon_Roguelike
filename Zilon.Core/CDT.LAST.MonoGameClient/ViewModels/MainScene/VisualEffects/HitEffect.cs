@@ -154,7 +154,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 _postAnimationCounter -= gameTime.ElapsedGameTime.TotalSeconds;
             }
             else
-            { 
+            {
                 // Effect processing complete.
                 // Do nothing. Just wait until effect was deleted.
                 // TODO Add delay to handlepossible error.

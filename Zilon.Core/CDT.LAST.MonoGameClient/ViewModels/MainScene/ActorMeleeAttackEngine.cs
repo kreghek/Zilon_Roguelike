@@ -84,7 +84,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         IsComplete = true;
                     }
                     else
-                    { 
+                    {
                         // effect is nt null. So wait until it completes.
                     }
                 }
