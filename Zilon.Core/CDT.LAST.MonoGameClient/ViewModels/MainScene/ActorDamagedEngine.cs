@@ -36,7 +36,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             hitDirection.Normalize();
             _rootSprite.FlipX = hitDirection.X > 0;
             _startPosition = rootSprite.Position;
-            _hitPosition = hitDirection * -1 * HIT_DISTANCE + _startPosition;
+            var oppositeDirection = hitDirection * -1;
+            _hitPosition = (oppositeDirection * HIT_DISTANCE) + _startPosition;
 
             _moveBlocker = new AnimationCommonBlocker();
 

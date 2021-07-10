@@ -71,13 +71,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3 * GameState.GameSpeed;
-            var t = 1 - _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
+            var t = _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
+            var t2 = 1 - t;
             var stepAmplitude = 4f;
             var stepFrequncy = 2f;
             var unitVector = Vector2.UnitY * -1f;
-            var stepCurrentValue = (float)Math.Abs(Math.Sin(t * Math.PI * stepFrequncy));
+            var stepCurrentValue = (float)Math.Abs(Math.Sin(t2 * Math.PI * stepFrequncy));
 
-            _rootSprite.Position = Vector2.Lerp(_startPosition, _targetPosition, (float)t);
+            _rootSprite.Position = Vector2.Lerp(_startPosition, _targetPosition, (float)t2);
             _graphicsRoot.Position = stepCurrentValue * unitVector * stepAmplitude;
             _shadowSprite.ScaleScalar = stepCurrentValue * 0.5f + 0.5f;
 
