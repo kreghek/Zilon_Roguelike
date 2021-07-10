@@ -65,27 +65,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var t = _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
             var t2 = 1 - t;
 
-            if (t2 < LOW_DELAY_PERCENT)
+            switch (t2)
             {
-                // Do nothing. This is delay.
-            }
-            else if (t2 >= LOW_DELAY_PERCENT && t2 < HI_DELAY_PERCENT)
-            {
-                if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed &&
-                    _soundEffectInstance.State != SoundState.Playing && !_soundPlayed)
-                {
-                    _soundEffectInstance.Play();
-                    _soundPlayed = true;
-                }
+                case < LOW_DELAY_PERCENT:
+                    // Do nothing. This is delay.
+                    break;
 
-                _actorGraphics.ShowHitlighted = true;
-                _rootSprite.Position = _hitPosition;
-            }
-            else
-            {
-                // Restore state after damage receiving animation.
-                _actorGraphics.ShowHitlighted = false;
-                _rootSprite.Position = _startPosition;
+                case >= LOW_DELAY_PERCENT and < HI_DELAY_PERCENT:
+                    if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed 
+                        && _soundEffectInstance.State != SoundState.Playing
+                        && !_soundPlayed)
+                    {
+                        _soundEffectInstance.Play();
+                        _soundPlayed = true;
+                    }
+
+                    _actorGraphics.ShowHitlighted = true;
+                    _rootSprite.Position = _hitPosition;
+                    break;
+
+                default:
+                    // Restore state after damage receiving animation.
+                    _actorGraphics.ShowHitlighted = false;
+                    _rootSprite.Position = _startPosition;
+                    break;
             }
 
             if (IsComplete)
