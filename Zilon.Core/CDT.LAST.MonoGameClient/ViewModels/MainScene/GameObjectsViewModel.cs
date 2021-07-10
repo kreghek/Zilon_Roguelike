@@ -98,7 +98,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var gameObjectsMaterialized =
                     _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
                 var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
-               
+
                 foreach (var gameObject in gameObjectsMaterialized)
                 {
                     var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
