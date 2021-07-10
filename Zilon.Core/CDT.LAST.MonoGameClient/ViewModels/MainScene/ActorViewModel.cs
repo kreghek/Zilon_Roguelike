@@ -29,6 +29,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class ActorViewModel : GameObjectBase, IActorViewModel
     {
+        private readonly IList<IActorStateEngine> _actorStateEngineList;
         private readonly Game _game;
         private readonly IGameObjectVisualizationContentStorage _gameObjectVisualizationContentStorage;
         private readonly IActorGraphics _graphicsRoot;
@@ -37,8 +38,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly Sprite _shadowSprite;
         private readonly SpriteBatch _spriteBatch;
-
-        private readonly IList<IActorStateEngine> _actorStateEngineList;
 
         public ActorViewModel(
             IActor actor,
@@ -166,19 +165,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
         }
 
-        private void AddStateEngine(IActorStateEngine actorStateEngine)
-        {
-            foreach (var state in _actorStateEngineList.ToArray())
-            {
-                if (state.CanBeReplaced)
-                {
-                    _actorStateEngineList.Remove(state);
-                }
-            }
-
-            _actorStateEngineList.Add(actorStateEngine);
-        }
-
         public void RunCombatActUsageAnimation(ActDescription usedActDescription, IGraphNode targetNode)
         {
             if (!CanDraw)
@@ -283,18 +269,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var keyboard = Keyboard.GetState();
             _graphicsRoot.ShowOutlined = keyboard.IsKeyDown(Keys.LeftAlt);
-        }
-
-        private void ResetActorRootSpritePosition()
-        {
-            var hexSize = MapMetrics.UnitSize / 2;
-            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
-            var newPosition = new Vector2(
-                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
-                playerActorWorldCoords[1] * hexSize * 2 / 2
-            );
-
-            _rootSprite.Position = newPosition;
         }
 
         private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
@@ -411,6 +385,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _sectorViewModelContext.EffectManager.VisualEffects.Add(consumeEffect);
         }
 
+        private void AddStateEngine(IActorStateEngine actorStateEngine)
+        {
+            foreach (var state in _actorStateEngineList.ToArray())
+            {
+                if (state.CanBeReplaced)
+                {
+                    _actorStateEngineList.Remove(state);
+                }
+            }
+
+            _actorStateEngineList.Add(actorStateEngine);
+        }
+
         private SoundEffectInstance? GetAttackSoundEffect(ActDescription usedActDescription)
         {
             var attackSoundEffect = _personSoundStorage.GetActStartSound(usedActDescription);
@@ -481,6 +468,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private void PersonSurvivalModule_Dead(object? sender, EventArgs e)
         {
             RunDeathAnimation();
+        }
+
+        private void ResetActorRootSpritePosition()
+        {
+            var hexSize = MapMetrics.UnitSize / 2;
+            var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
+            var newPosition = new Vector2(
+                (float)(playerActorWorldCoords[0] * hexSize * Math.Sqrt(3)),
+                playerActorWorldCoords[1] * hexSize * 2 / 2
+            );
+
+            _rootSprite.Position = newPosition;
         }
 
         private SoundEffect? SelectEquipEffect(Equipment? equipment)
