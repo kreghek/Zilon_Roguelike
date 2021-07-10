@@ -96,6 +96,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 {
                     case "slash": return HitEffectType.ShortBlade;
                     case "bite": return HitEffectType.Teeth;
+                    default:
+                        // Ignore other unknown tags. May be next tag gets more describtion about effect type.
+                        break;
                 }
             }
 
