@@ -2,8 +2,11 @@
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
+    /// <summary>
+    /// Possible types of hit effect sprites.
+    /// </summary>
     [Flags]
-    internal enum HitEffectType
+    internal enum HitEffectTypes
     {
         None,
         ShortBlade = 1,

@@ -49,8 +49,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 SourceRectangle = new Rectangle(0, 0, FRAME_WIDTH, FRAME_HEIGHT)
             };
 
-            var hitBackingTexture = contentStorage.GetHitEffectTexture(hitType | HitEffectType.Backing,
-                HitEffectDirection.Left);
+            var hitBackingTexture = contentStorage.GetHitEffectTexture(hitType | HitEffectTypes.Backing,
+                HitEffectDirections.Left);
             _hitBackingSprite = new Sprite(hitBackingTexture)
             {
                 Position = effectPosition,
@@ -71,38 +71,38 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
             _boundGameObjects = new[] { attacker, target };
         }
 
-        private static HitEffectDirection GetHitDirection(Vector2 direction)
+        private static HitEffectDirections GetHitDirection(Vector2 direction)
         {
-            var startDirection = HitEffectDirection.Left;
+            var startDirection = HitEffectDirections.Left;
 
             if (direction.Y < 0)
             {
-                return HitEffectDirection.Top | startDirection;
+                return HitEffectDirections.Top | startDirection;
             }
 
             if (direction.Y > 0)
             {
-                return HitEffectDirection.Bottom | startDirection;
+                return HitEffectDirections.Bottom | startDirection;
             }
 
             return startDirection;
         }
 
-        private static HitEffectType GetHitType(ActDescription usedActDescription)
+        private static HitEffectTypes GetHitType(ActDescription usedActDescription)
         {
             foreach (var tag in usedActDescription.Tags)
             {
                 switch (tag)
                 {
-                    case "slash": return HitEffectType.ShortBlade;
-                    case "bite": return HitEffectType.Teeth;
+                    case "slash": return HitEffectTypes.ShortBlade;
+                    case "bite": return HitEffectTypes.Teeth;
                 }
             }
 
             Debug.Fail("Hit effect was not found to visualize combat action.");
 
             // Show default hit effect.
-            return HitEffectType.ShortBlade;
+            return HitEffectTypes.ShortBlade;
         }
 
         public bool IsComplete => _animationCounter <= 0 && _postAnimationCounter <= 0;

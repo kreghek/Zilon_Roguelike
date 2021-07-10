@@ -16,7 +16,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return _consumingEffectTexture ?? throw new InvalidOperationException("Effect spritesheet is not loaded.");
         }
 
-        public Texture2D GetHitEffectTexture(HitEffectType effectType, HitEffectDirection effectDirection)
+        public Texture2D GetHitEffectTexture(HitEffectTypes effectType, HitEffectDirections effectDirection)
         {
             if (_hitEffectDictionary is null)
             {
@@ -30,7 +30,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 return texture;
             }
 
-            return _hitEffectDictionary[new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.Left)];
+            return _hitEffectDictionary[new HitEffectKey(HitEffectTypes.ShortBlade, HitEffectDirections.Left)];
         }
 
         public void LoadContent(ContentManager content)
@@ -40,66 +40,66 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _hitEffectDictionary = new Dictionary<HitEffectKey, Texture2D>
             {
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.Left),
+                    new HitEffectKey(HitEffectTypes.ShortBlade, HitEffectDirections.Left),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.Left | HitEffectDirection.Top),
+                    new HitEffectKey(HitEffectTypes.ShortBlade, HitEffectDirections.Left | HitEffectDirections.Top),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade, HitEffectDirection.Left | HitEffectDirection.Bottom),
+                    new HitEffectKey(HitEffectTypes.ShortBlade, HitEffectDirections.Left | HitEffectDirections.Bottom),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffect")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing, HitEffectDirection.Left),
+                    new HitEffectKey(HitEffectTypes.ShortBlade | HitEffectTypes.Backing, HitEffectDirections.Left),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffectBaking")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing,
-                        HitEffectDirection.Left | HitEffectDirection.Top),
+                    new HitEffectKey(HitEffectTypes.ShortBlade | HitEffectTypes.Backing,
+                        HitEffectDirections.Left | HitEffectDirections.Top),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffectBaking")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing,
-                        HitEffectDirection.Left | HitEffectDirection.Bottom),
+                    new HitEffectKey(HitEffectTypes.ShortBlade | HitEffectTypes.Backing,
+                        HitEffectDirections.Left | HitEffectDirections.Bottom),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffectBaking")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.Teeth, HitEffectDirection.Left),
+                    new HitEffectKey(HitEffectTypes.Teeth, HitEffectDirections.Left),
                     content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.Teeth, HitEffectDirection.Left | HitEffectDirection.Top),
+                    new HitEffectKey(HitEffectTypes.Teeth, HitEffectDirections.Left | HitEffectDirections.Top),
                     content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.Teeth, HitEffectDirection.Left | HitEffectDirection.Bottom),
+                    new HitEffectKey(HitEffectTypes.Teeth, HitEffectDirections.Left | HitEffectDirections.Bottom),
                     content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.Teeth | HitEffectType.Backing, HitEffectDirection.Left),
+                    new HitEffectKey(HitEffectTypes.Teeth | HitEffectTypes.Backing, HitEffectDirections.Left),
                     content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.Teeth | HitEffectType.Backing,
-                        HitEffectDirection.Left | HitEffectDirection.Top),
+                    new HitEffectKey(HitEffectTypes.Teeth | HitEffectTypes.Backing,
+                        HitEffectDirections.Left | HitEffectDirections.Top),
                     content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
                 },
 
                 {
-                    new HitEffectKey(HitEffectType.Teeth | HitEffectType.Backing,
-                        HitEffectDirection.Left | HitEffectDirection.Bottom),
+                    new HitEffectKey(HitEffectTypes.Teeth | HitEffectTypes.Backing,
+                        HitEffectDirections.Left | HitEffectDirections.Bottom),
                     content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
                 }
             };
@@ -107,15 +107,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private record HitEffectKey
         {
-            public HitEffectKey(HitEffectType type, HitEffectDirection direction)
+            public HitEffectKey(HitEffectTypes type, HitEffectDirections direction)
             {
                 Type = type;
                 Direction = direction;
             }
 
-            public HitEffectDirection Direction { get; }
+            public HitEffectDirections Direction { get; }
 
-            public HitEffectType Type { get; }
+            public HitEffectTypes Type { get; }
         }
     }
 }

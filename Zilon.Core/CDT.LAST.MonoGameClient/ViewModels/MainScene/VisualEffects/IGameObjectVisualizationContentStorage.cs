@@ -7,7 +7,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         Texture2D GetConsumingEffectTexture();
 
-        Texture2D GetHitEffectTexture(HitEffectType effectType, HitEffectDirection effectDirection);
+        Texture2D GetHitEffectTexture(HitEffectTypes effectType, HitEffectDirections effectDirection);
 
         void LoadContent(ContentManager content);
     }
