@@ -26,7 +26,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
-        private readonly IPersonSoundContentStorage _personSoundContentStorage;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
@@ -48,7 +47,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var personVisualizationContentStorage =
                 serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
-            _personSoundContentStorage = serviceScope.GetRequiredService<IPersonSoundContentStorage>();
+            var personSoundContentStorage = serviceScope.GetRequiredService<IPersonSoundContentStorage>();
             var gameObjectVisualizationContentStorage =
                 serviceScope.GetRequiredService<IGameObjectVisualizationContentStorage>();
 
@@ -77,7 +76,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Player = _player,
                 SpriteBatch = _spriteBatch,
                 SectorViewModelContext = _viewModelContext,
-                PersonSoundStorage = _personSoundContentStorage,
+                PersonSoundStorage = personSoundContentStorage,
                 PersonVisualizationContentStorage = personVisualizationContentStorage,
                 GameObjectVisualizationContentStorage = gameObjectVisualizationContentStorage
             };
