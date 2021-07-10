@@ -73,8 +73,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 case >= LOW_DELAY_PERCENT and < HI_DELAY_PERCENT:
                     if (_soundEffectInstance != null && !_soundEffectInstance.IsDisposed
-                        && _soundEffectInstance.State != SoundState.Playing
-                        && !_soundPlayed)
+                                                     && _soundEffectInstance.State != SoundState.Playing
+                                                     && !_soundPlayed)
                     {
                         _soundEffectInstance.Play();
                         _soundPlayed = true;
