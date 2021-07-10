@@ -15,7 +15,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private const float LOW_DELAY_PERCENT = 0.3f;
         private const float HI_DELAY_PERCENT = 0.6f;
         private readonly IActorGraphics _actorGraphics;
-        private readonly IAnimationBlockerService _animationBlockerService;
         private readonly Vector2 _hitPosition;
         private readonly ICommandBlocker _moveBlocker;
         private readonly SpriteContainer _rootSprite;
@@ -31,7 +30,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             _actorGraphics = actorGraphics;
             _rootSprite = rootSprite;
-            _animationBlockerService = animationBlockerService;
             _soundEffectInstance = soundEffectInstance;
             var positionDifference = attackerPosition - actorGraphics.RootSprite.Position;
             var hitDirection = positionDifference;
@@ -43,7 +41,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _moveBlocker = new AnimationCommonBlocker();
 
-            _animationBlockerService.AddBlocker(_moveBlocker);
+            animationBlockerService.AddBlocker(_moveBlocker);
         }
 
         public string? DebugName { get; set; }

@@ -23,11 +23,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 
         private readonly GameObjectBase[] _boundGameObjects;
         private readonly Sprite _hitBackingSprite;
-        private readonly Texture2D _hitBackingTexture;
 
         private readonly Sprite _hitSprite;
-
-        private readonly Texture2D _hitTexture;
 
         private double _animationCounter;
         private double _postAnimationCounter;
@@ -43,8 +40,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
             var hitType = GetHitType(usedActDescription);
             var hitDirection = GetHitDirection(direction);
 
-            _hitTexture = contentStorage.GetHitEffectTexture(hitType, hitDirection);
-            _hitSprite = new Sprite(_hitTexture)
+            var hitTexture = contentStorage.GetHitEffectTexture(hitType, hitDirection);
+            _hitSprite = new Sprite(hitTexture)
             {
                 Position = effectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
@@ -52,9 +49,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 SourceRectangle = new Rectangle(0, 0, FRAME_WIDTH, FRAME_HEIGHT)
             };
 
-            _hitBackingTexture = contentStorage.GetHitEffectTexture(hitType | HitEffectType.Backing,
+            var hitBackingTexture = contentStorage.GetHitEffectTexture(hitType | HitEffectType.Backing,
                 HitEffectDirection.Left);
-            _hitBackingSprite = new Sprite(_hitBackingTexture)
+            _hitBackingSprite = new Sprite(hitBackingTexture)
             {
                 Position = effectPosition,
                 Origin = new Vector2(0.5f, 0.5f),
@@ -102,7 +99,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 }
             }
 
-            //Debug.Fail("Hit effect was not found to visualize combat action.");
+            Debug.Fail("Hit effect was not found to visualize combat action.");
 
             // Show default hit effect.
             return HitEffectType.ShortBlade;
@@ -118,14 +115,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 
             if (!isAnimationComplete)
             {
-                if (backing)
-                {
-                    _hitBackingSprite.Draw(spriteBatch);
-                }
-                else
-                {
-                    _hitSprite.Draw(spriteBatch);
-                }
+                var spriteToDraw = backing ? _hitBackingSprite : _hitSprite;
+                spriteToDraw.Draw(spriteBatch);
             }
         }
 

@@ -13,7 +13,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private const double CORPSE_DURATION_SECONDS = 5;
         private readonly IActorGraphics _actorGraphics;
         private readonly SpriteContainer _rootSprite;
-        private readonly Sprite _shadowSprite;
         private readonly Microsoft.Xna.Framework.Audio.SoundEffectInstance _soundEffectInstance;
 
         private double _counter;
@@ -34,14 +33,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Position = position
             };
 
-            _shadowSprite = new Sprite(shadowTexture)
+            var shadowSprite = new Sprite(shadowTexture)
             {
                 Position = new Vector2(0, 0),
                 Origin = new Vector2(0.5f, 0.5f),
                 Color = new Color(Color.White, 0.5f)
             };
 
-            _rootSprite.AddChild(_shadowSprite);
+            _rootSprite.AddChild(shadowSprite);
 
             _rootSprite.AddChild(_actorGraphics.RootSprite);
         }
@@ -58,8 +57,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (!IsComplete)
             {
                 _counter += gameTime.ElapsedGameTime.TotalSeconds;
-
-                var t = _counter / CORPSE_DURATION_SECONDS;
 
                 if (!_rotated)
                 {
