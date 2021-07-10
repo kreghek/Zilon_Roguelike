@@ -170,15 +170,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 var actDescription = damageActorInteractionEvent.UsedActDescription;
                 var targetActor = damageActorInteractionEvent.TargetActor;
-                var targetPerson = targetActor.Person;
 
                 var attackerViewModel = _viewModelContext.GameObjects.OfType<ActorViewModel>()
                     .Single(x => x.Actor == damageActorInteractionEvent.Actor);
                 if (attackerViewModel.CanDraw)
                 {
-                    /*var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
-                    soundEffect.CreateInstance().Play();*/
-
                     attackerViewModel.RunCombatActUsageAnimation(actDescription, targetActor.Node);
                 }
 

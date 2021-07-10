@@ -98,8 +98,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var gameObjectsMaterialized =
                     _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
                 var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
-                var drawnGameObjects = new List<GameObjectBase>();
-                var drawnEffects = new List<IVisualEffect>();
+               
                 foreach (var gameObject in gameObjectsMaterialized)
                 {
                     var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
@@ -126,7 +125,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     _spriteBatch.End();
 
                     gameObject.Draw(gameTime, _camera.Transform);
-                    drawnGameObjects.Add(gameObject);
 
                     _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
