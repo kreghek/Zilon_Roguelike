@@ -1,6 +1,7 @@
 ﻿using System;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -9,14 +10,14 @@ using Zilon.Core.Client.Sector;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class ActorMeleeAttackEngine : IActorStateEngine
+    internal sealed class ActorMeleeAttackEngine : IActorStateEngine
     {
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;
         private readonly IAnimationBlockerService _animationBlockerService;
 
         private readonly SoundEffectInstance? _meleeAttackSoundEffect;
-
+        private readonly IVisualEffect? _hitVisualEffect;
         private readonly SpriteContainer _rootContainer;
 
         private readonly Vector2 _startPosition;
@@ -26,11 +27,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private bool _effectPlayed;
 
         public ActorMeleeAttackEngine(SpriteContainer rootContainer, Vector2 targetPosition,
-            IAnimationBlockerService animationBlockerService, SoundEffectInstance? meleeAttackSoundEffect)
+            IAnimationBlockerService animationBlockerService, SoundEffectInstance? meleeAttackSoundEffect, VisualEffects.IVisualEffect? hitVisualEffect)
         {
             _rootContainer = rootContainer;
             _animationBlockerService = animationBlockerService;
             _meleeAttackSoundEffect = meleeAttackSoundEffect;
+            _hitVisualEffect = hitVisualEffect;
             _startPosition = rootContainer.Position;
             _targetPosition = Vector2.Lerp(_startPosition, targetPosition, 0.6f);
 
@@ -52,11 +54,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public void Update(GameTime gameTime)
         {
-            _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3;
-            var t = 1 - _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
-
             if (_animationCounterSeconds > 0)
             {
+                _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3;
+                var t = 1 - _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
+
                 if (!_effectPlayed)
                 {
                     _effectPlayed = true;
@@ -73,8 +75,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             else
             {
                 _rootContainer.Position = _startPosition;
-                _animationBlocker.Release();
-                IsComplete = true;
+
+                if (_hitVisualEffect is not null)
+                {
+                    if (_hitVisualEffect.IsComplete)
+                    {
+                        _animationBlocker.Release();
+                        IsComplete = true;
+                    }
+                    else
+                    { 
+                        // effect is nt null. So wait until it completes.
+                    }
+                }
+                else
+                {
+                    // Nothing to wait.
+                    // Complete move engine.
+                    _animationBlocker.Release();
+                    IsComplete = true;
+                }
             }
         }
     }

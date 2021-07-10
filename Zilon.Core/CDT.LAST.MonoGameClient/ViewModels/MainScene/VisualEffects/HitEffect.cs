@@ -15,6 +15,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
     {
         private const double FPS = 1 / 12.0;
         private const double EFFECT_DISPLAY_DURATION_SECONDS = FPS * FRAME_COUNT;
+        private const double EFFECT_DELAY_DURATION_SECONDS = 0.3;
         private const int FRAME_COUNT = 6;
         private const int FRAME_COLUMN_COUNT = 3;
         private const int FRAME_WIDTH = 128;
@@ -28,7 +29,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 
         private readonly Texture2D _hitTexture;
 
-        private double _counter;
+        private double _animationCounter;
+        private double _postAnimationCounter;
 
         public HitEffect(
             GameObjectBase attacker,
@@ -66,7 +68,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 _hitBackingSprite.FlipX = true;
             }
 
-            _counter = EFFECT_DISPLAY_DURATION_SECONDS;
+            _animationCounter = EFFECT_DISPLAY_DURATION_SECONDS;
+            _postAnimationCounter = EFFECT_DELAY_DURATION_SECONDS;
 
             _boundGameObjects = new[] { attacker, target };
         }
@@ -95,22 +98,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 switch (tag)
                 {
                     case "slash": return HitEffectType.ShortBlade;
+                    case "bite": return HitEffectType.Teeth;
                 }
             }
 
-            Debug.Fail("Hit effect was not found to visualize combat action.");
+            //Debug.Fail("Hit effect was not found to visualize combat action.");
 
             // Show default hit effect.
             return HitEffectType.ShortBlade;
         }
 
-        public bool IsComplete => _counter <= 0;
+        public bool IsComplete => _animationCounter <= 0 && _postAnimationCounter <= 0;
 
         public IEnumerable<GameObjectBase> BoundGameObjects => _boundGameObjects;
 
         public void Draw(SpriteBatch spriteBatch, bool backing)
         {
-            if (!IsComplete)
+            var isAnimationComplete = _animationCounter <= 0;
+
+            if (!isAnimationComplete)
             {
                 if (backing)
                 {
@@ -125,10 +131,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 
         public void Update(GameTime gameTime)
         {
-            _counter -= gameTime.ElapsedGameTime.TotalSeconds;
-            if (!IsComplete)
+            var isAnimationComplete = _animationCounter <= 0;
+            if (!isAnimationComplete)
             {
-                var t = _counter / EFFECT_DISPLAY_DURATION_SECONDS;
+                _animationCounter -= gameTime.ElapsedGameTime.TotalSeconds;
+
+                var t = _animationCounter / EFFECT_DISPLAY_DURATION_SECONDS;
                 var t2 = 1 - t;
 
                 var frameIndex = (int)(FRAME_COUNT * t2);
@@ -140,6 +148,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                     frameRow * FRAME_HEIGHT,
                     FRAME_WIDTH,
                     FRAME_HEIGHT);
+            }
+            else if (!IsComplete)
+            {
+                _postAnimationCounter -= gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else
+            { 
+                // Effect processing complete.
+                // Do nothing. Just wait until effect was deleted.
+                // TODO Add delay to handlepossible error.
             }
         }
     }

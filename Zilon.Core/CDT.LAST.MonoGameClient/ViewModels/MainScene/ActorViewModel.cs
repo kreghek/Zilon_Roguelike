@@ -183,13 +183,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var targetSpritePosition = newPosition;
 
             var attackSoundEffectInstance = GetAttackSoundEffect(usedActDescription);
+            var hitVisualEffect = GetAttackVisualEffect(targetNode, targetSpritePosition, usedActDescription);
+
             _actorStateEngine = new ActorMeleeAttackEngine(
                 _rootSprite,
                 targetSpritePosition,
                 animationBlockerService,
-                attackSoundEffectInstance);
-
-            HandleAttackVisualEffect(targetNode, targetSpritePosition, usedActDescription);
+                attackSoundEffectInstance,
+                hitVisualEffect);
         }
 
         public void RunDamageReceivedAnimation(IGraphNode attackerNode)
@@ -397,7 +398,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return impactSoundEffect.CreateInstance();
         }
 
-        private void HandleAttackVisualEffect(IGraphNode targetNode, Vector2 targetSpritePosition,
+        private IVisualEffect? GetAttackVisualEffect(IGraphNode targetNode, Vector2 targetSpritePosition,
             ActDescription usedActDescription)
         {
             // Selection actors only is prevention of a error when a monster stays on a loot bag.
@@ -408,7 +409,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 // This means the attacker missed.
                 // This situation can be then the target actor moved before the attack reaches the target.
-                return;
+                return null;
             }
 
             var difference = targetSpritePosition - _rootSprite.Position;
@@ -419,6 +420,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var hitEffect = new HitEffect(this, targetGameObject, _gameObjectVisualizationContentStorage,
                 hitEffectPosition, direction, usedActDescription);
             _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
+
+            return hitEffect;
         }
 
         private void PersonEquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)

@@ -69,6 +69,38 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     new HitEffectKey(HitEffectType.ShortBlade | HitEffectType.Backing,
                         HitEffectDirection.Left | HitEffectDirection.Bottom),
                     content.Load<Texture2D>("Sprites/VisualEffects/BladeShortHorizontalHitEffectBaking")
+                },
+
+                {
+                    new HitEffectKey(HitEffectType.Teeth, HitEffectDirection.Left),
+                    content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectType.Teeth, HitEffectDirection.Left | HitEffectDirection.Top),
+                    content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectType.Teeth, HitEffectDirection.Left | HitEffectDirection.Bottom),
+                    content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectType.Teeth | HitEffectType.Backing, HitEffectDirection.Left),
+                    content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectType.Teeth | HitEffectType.Backing,
+                        HitEffectDirection.Left | HitEffectDirection.Top),
+                    content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectType.Teeth | HitEffectType.Backing,
+                        HitEffectDirection.Left | HitEffectDirection.Bottom),
+                    content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
                 }
             };
         }
