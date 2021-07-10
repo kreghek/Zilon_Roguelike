@@ -15,9 +15,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;
         private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly IVisualEffect? _hitVisualEffect;
 
         private readonly SoundEffectInstance? _meleeAttackSoundEffect;
-        private readonly IVisualEffect? _hitVisualEffect;
         private readonly SpriteContainer _rootContainer;
 
         private readonly Vector2 _startPosition;
@@ -27,7 +27,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private bool _effectPlayed;
 
         public ActorMeleeAttackEngine(SpriteContainer rootContainer, Vector2 targetPosition,
-            IAnimationBlockerService animationBlockerService, SoundEffectInstance? meleeAttackSoundEffect, VisualEffects.IVisualEffect? hitVisualEffect)
+            IAnimationBlockerService animationBlockerService, SoundEffectInstance? meleeAttackSoundEffect,
+            IVisualEffect? hitVisualEffect)
         {
             _rootContainer = rootContainer;
             _animationBlockerService = animationBlockerService;
@@ -82,10 +83,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     {
                         _animationBlocker.Release();
                         IsComplete = true;
-                    }
-                    else
-                    {
-                        // effect is nt null. So wait until it completes.
                     }
                 }
                 else

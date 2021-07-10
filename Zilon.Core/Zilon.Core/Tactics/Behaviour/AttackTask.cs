@@ -63,7 +63,8 @@ namespace Zilon.Core.Tactics.Behaviour
             var availableSlotAct = GetSecondaryUsedActs();
 
             var primary = new[] { TacticalAct };
-            var secondary = Array.Empty<ITacticalAct>();// availableSlotAct.Where(x => x != TacticalAct).Skip(1).ToArray();
+            var secondary =
+                Array.Empty<ITacticalAct>(); // availableSlotAct.Where(x => x != TacticalAct).Skip(1).ToArray();
 
             var usedActs = new UsedTacticalActs(primary, secondary);
 

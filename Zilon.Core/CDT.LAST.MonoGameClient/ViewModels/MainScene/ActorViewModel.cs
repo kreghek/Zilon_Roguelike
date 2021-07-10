@@ -379,25 +379,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return attackSoundEffectInstance;
         }
 
-        private static string[] GetClearTags(Equipment? equipment)
-        {
-            return equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
-                   Array.Empty<string>();
-        }
-
-        private SoundEffectInstance GetPersonImpactSoundEffect(IPerson person)
-        {
-            if (person.CheckIsDead())
-            {
-                // Dead person is not suffer pain.
-                // Looks like error.
-                Debug.Fail("");
-            }
-
-            var impactSoundEffect = _personSoundStorage.GetImpactEffect(person);
-            return impactSoundEffect.CreateInstance();
-        }
-
         private IVisualEffect? GetAttackVisualEffect(IGraphNode targetNode, Vector2 targetSpritePosition,
             ActDescription usedActDescription)
         {
@@ -422,6 +403,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _sectorViewModelContext.EffectManager.VisualEffects.Add(hitEffect);
 
             return hitEffect;
+        }
+
+        private static string[] GetClearTags(Equipment? equipment)
+        {
+            return equipment?.Scheme.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
+                   Array.Empty<string>();
+        }
+
+        private SoundEffectInstance GetPersonImpactSoundEffect(IPerson person)
+        {
+            if (person.CheckIsDead())
+            {
+                // Dead person is not suffer pain.
+                // Looks like error.
+                Debug.Fail("");
+            }
+
+            var impactSoundEffect = _personSoundStorage.GetImpactEffect(person);
+            return impactSoundEffect.CreateInstance();
         }
 
         private void PersonEquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
