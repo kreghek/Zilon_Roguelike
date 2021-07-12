@@ -92,7 +92,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void HandleMarker(Marker item)
         {
-            
+
         }
 
         private record Marker(Rectangle Rect, ActorViewModel ActorViewModel);
