@@ -268,8 +268,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             var keyboard = Keyboard.GetState();
-            _graphicsRoot.ShowOutlined = keyboard.IsKeyDown(Keys.LeftAlt);
+            _graphicsRoot.ShowOutlined = keyboard.IsKeyDown(Keys.LeftAlt) || IsGraphicsOutlined;
         }
+
+        public bool IsGraphicsOutlined { get; set; }
 
         private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
         {

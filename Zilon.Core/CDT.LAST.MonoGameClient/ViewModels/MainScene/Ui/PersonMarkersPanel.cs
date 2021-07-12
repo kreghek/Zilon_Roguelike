@@ -5,6 +5,7 @@ using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Players;
 
@@ -17,6 +18,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly IList<ActorViewModel> _visibleActors;
+        private readonly IList<Marker> _drawnItemList;
 
         public PersonMarkersPanel(int positionOffsetY, IUiContentStorage uiContentStorage,
             SectorViewModelContext sectorViewModelContext,
@@ -27,6 +29,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _sectorViewModelContext = sectorViewModelContext;
             _player = player;
             _visibleActors = new List<ActorViewModel>();
+            _drawnItemList = new List<Marker>();
         }
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
@@ -38,14 +41,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var viewPortHalfWidth = graphicsDevice.Viewport.Width / 2;
             var viewPortHeight = graphicsDevice.Viewport.Height;
 
+            _drawnItemList.Clear();
             foreach (var item in _visibleActors)
             {
-                spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), new Rectangle(
+                var rect = new Rectangle(
                     index * MARKER_WIDTH + viewPortHalfWidth,
                     viewPortHeight - _positionOffsetY - MARKER_HEGHT,
                     MARKER_WIDTH,
                     MARKER_HEGHT
-                ), Color.White);
+                );
+
+                spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), rect, Color.White);
+
+                _drawnItemList.Add(new Marker(rect, item));
+
                 index++;
             }
         }
@@ -63,6 +72,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _visibleActors.Add(actorViewModel);
                 }
             }
+
+            CheckActorUnderHover();
         }
+
+        private void CheckActorUnderHover()
+        {
+            const int MARKER_WIDTH = 32;
+            const int MARKER_HEGHT = 32;
+
+            var mouse = Mouse.GetState();
+            var mouseRect = new Rectangle(mouse.X, mouse.Y, 1, 1);
+
+            foreach (var item in _drawnItemList)
+            {
+                item.ActorViewModel.IsGraphicsOutlined = item.Rect.Intersects(mouseRect);
+            }
+        }
+
+        private void HandleMarker(Marker item)
+        {
+            
+        }
+
+        private record Marker(Rectangle Rect, ActorViewModel ActorViewModel);
     }
 }
