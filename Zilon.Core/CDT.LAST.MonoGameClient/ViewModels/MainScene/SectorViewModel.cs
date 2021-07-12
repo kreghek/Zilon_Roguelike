@@ -89,6 +89,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public ISector Sector { get; }
 
+        public SectorViewModelContext ViewModelContext => _viewModelContext;
+
         public void Draw(GameTime gameTime)
         {
             _mapViewModel.Draw(_camera.Transform);
@@ -102,7 +104,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _spriteBatch.Begin(transformMatrix: _camera.Transform);
 
-            foreach (var visualEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
+            foreach (var visualEffect in ViewModelContext.EffectManager.VisualEffects.ToArray())
             {
                 visualEffect.Draw(_spriteBatch);
             }
@@ -128,17 +130,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _gameObjectsViewModel.Update(gameTime);
 
-            foreach (var hitEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
+            foreach (var hitEffect in ViewModelContext.EffectManager.VisualEffects.ToArray())
             {
                 hitEffect.Update(gameTime);
 
                 if (hitEffect.IsComplete)
                 {
-                    _viewModelContext.EffectManager.VisualEffects.Remove(hitEffect);
+                    ViewModelContext.EffectManager.VisualEffects.Remove(hitEffect);
                 }
             }
 
-            _commandInput.Update(_viewModelContext);
+            _commandInput.Update(ViewModelContext);
         }
 
         private static ISectorNode GetPlayerSectorNode(IPlayer player)

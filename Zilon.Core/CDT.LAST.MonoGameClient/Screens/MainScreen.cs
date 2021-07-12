@@ -26,7 +26,7 @@ namespace CDT.LAST.MonoGameClient.Screens
     internal class MainScreen : GameSceneBase
     {
         private readonly IAnimationBlockerService _animationBlockerService;
-
+        private readonly IUiContentStorage _uiContentStorage;
         private readonly BottomMenuPanel _bottomMenu;
         private readonly Camera _camera;
         private readonly ContainerModalDialog _containerModal;
@@ -43,6 +43,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private bool _isTransitionPerforming;
 
         private SectorViewModel? _sectorViewModel;
+        private PersonMarkersPanel? _personMarkerPanel;
 
         public MainScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -55,26 +56,26 @@ namespace CDT.LAST.MonoGameClient.Screens
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
             _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
 
-            var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+            _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
             _camera = new Camera();
             _personEffectsPanel =
-                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: uiContentStorage);
+                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: _uiContentStorage);
 
             _personEquipmentModal = new PersonPropsModalDialog(
-                uiContentStorage,
+                _uiContentStorage,
                 game.GraphicsDevice,
                 _uiState,
                 ((LivGame)game).ServiceProvider);
 
             _personStatsModal = new PersonStatsModalDialog(
-                uiContentStorage,
+                _uiContentStorage,
                 game.GraphicsDevice,
                 _uiState);
 
             _containerModal = new ContainerModalDialog(
                 _uiState,
-                uiContentStorage,
+                _uiContentStorage,
                 Game.GraphicsDevice,
                 serviceScope);
 
@@ -89,7 +90,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _bottomMenu = new BottomMenuPanel(
                 humanActorTaskSource,
                 mainPerson.GetModule<ICombatActModule>(),
-                uiContentStorage,
+                _uiContentStorage,
                 mainPerson.GetModule<IEquipmentModule>(),
                 _uiState);
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
@@ -126,6 +127,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
                 _currentSector = _sectorViewModel.Sector;
                 AddActiveActorEventHandling();
+
+                _personMarkerPanel = new PersonMarkersPanel(0, 0, _uiContentStorage, _sectorViewModel.ViewModelContext, _player);
             }
 
             if (!_isTransitionPerforming)
@@ -143,6 +146,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_uiState.ActiveActor != null && !isInTransition)
             {
                 _bottomMenu.Update();
+
+                if (_personMarkerPanel is not null)
+                {
+                    _personMarkerPanel.Update();
+                }
 
                 HandleMainUpdate(_uiState.ActiveActor);
             }
@@ -202,6 +210,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personEffectsPanel.Draw(_spriteBatch);
 
             DrawPersonModePanel();
+
+            if (_personMarkerPanel is not null)
+            {
+                _personMarkerPanel.Draw(_spriteBatch, Game.GraphicsDevice);
+            }
 
             _spriteBatch.End();
         }
