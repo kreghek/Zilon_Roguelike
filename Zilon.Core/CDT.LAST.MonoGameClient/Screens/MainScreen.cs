@@ -26,7 +26,6 @@ namespace CDT.LAST.MonoGameClient.Screens
     internal class MainScreen : GameSceneBase
     {
         private readonly IAnimationBlockerService _animationBlockerService;
-        private readonly IUiContentStorage _uiContentStorage;
         private readonly BottomMenuPanel _bottomMenu;
         private readonly Camera _camera;
         private readonly ContainerModalDialog _containerModal;
@@ -36,14 +35,15 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
+        private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
 
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
+        private PersonMarkersPanel? _personMarkerPanel;
 
         private SectorViewModel? _sectorViewModel;
-        private PersonMarkersPanel? _personMarkerPanel;
 
         public MainScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -128,7 +128,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _currentSector = _sectorViewModel.Sector;
                 AddActiveActorEventHandling();
 
-                _personMarkerPanel = new PersonMarkersPanel(0, 0, _uiContentStorage, _sectorViewModel.ViewModelContext, _player);
+                _personMarkerPanel =
+                    new PersonMarkersPanel(0, 0, _uiContentStorage, _sectorViewModel.ViewModelContext, _player);
             }
 
             if (!_isTransitionPerforming)
