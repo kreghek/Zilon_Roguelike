@@ -13,12 +13,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal class PersonMarkersPanel
     {
+        private readonly IList<Marker> _drawnItemList;
         private readonly IPlayer _player;
         private readonly int _positionOffsetY;
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly IList<ActorViewModel> _visibleActors;
-        private readonly IList<Marker> _drawnItemList;
 
         public PersonMarkersPanel(int positionOffsetY, IUiContentStorage uiContentStorage,
             SectorViewModelContext sectorViewModelContext,
@@ -92,7 +92,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void HandleMarker(Marker item)
         {
-
         }
 
         private record Marker(Rectangle Rect, ActorViewModel ActorViewModel);
