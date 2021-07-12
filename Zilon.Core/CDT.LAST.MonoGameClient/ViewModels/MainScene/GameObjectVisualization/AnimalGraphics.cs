@@ -17,7 +17,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             var outlinedParts = personVisualizationContentStorage.GetAnimalParts("hunter/Outlined");
 
             _outline = CreateSpriteHierarchy(outlinedParts);
-            _outline.Color = Color.Red;
+            _outline.Color = LastColors.Red;
             AddChild(_outline);
 
             var parts = personVisualizationContentStorage.GetAnimalParts("hunter");
@@ -28,7 +28,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             var hitlightedParts = personVisualizationContentStorage.GetAnimalParts("hunter/Outlined");
 
             _hitlighted = CreateSpriteHierarchy(hitlightedParts);
-            _hitlighted.Color = Color.Red;
+            _hitlighted.Color = LastColors.Red;
             AddChild(_hitlighted);
         }
 
