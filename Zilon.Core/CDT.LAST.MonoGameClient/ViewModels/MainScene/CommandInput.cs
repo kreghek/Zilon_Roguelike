@@ -18,7 +18,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class CommandInput
+    internal sealed class CommandInput
     {
         private readonly Camera _camera;
         private readonly ServiceProviderCommandFactory _commandFactory;

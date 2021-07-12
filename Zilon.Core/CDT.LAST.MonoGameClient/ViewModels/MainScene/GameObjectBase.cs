@@ -17,6 +17,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public abstract void Draw(GameTime gameTime, Matrix transform);
 
+        public virtual void HandleRemove() { }
+
         public abstract void Update(GameTime gameTime);
     }
 }

@@ -54,6 +54,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         }
 
         /// <inheritdoc />
+        /// <remarks> The state engine has blocker. So we can't just replace it without blocker releasing. </remarks>
+        public bool CanBeReplaced => false;
+
+        /// <inheritdoc />
         /// <remarks>
         /// The propperty has no setter because it is infinite.
         /// </remarks>
@@ -87,6 +91,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 _rootContainer.Position = _startPosition;
             }
+        }
+
+        public void Cancel()
+        {
+            _animationBlocker.Release();
         }
     }
 }

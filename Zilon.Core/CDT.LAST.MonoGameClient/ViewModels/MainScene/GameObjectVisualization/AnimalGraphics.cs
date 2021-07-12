@@ -9,6 +9,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     public sealed class AnimalGraphics : SpriteContainer, IActorGraphics
     {
+        private readonly SpriteContainer _hitlighted;
         private readonly SpriteContainer _outline;
 
         public AnimalGraphics(IPersonVisualizationContentStorage personVisualizationContentStorage)
@@ -23,11 +24,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
             var main = CreateSpriteHierarchy(parts);
             AddChild(main);
+
+            var hitlightedParts = personVisualizationContentStorage.GetAnimalParts("hunter/Outlined");
+
+            _hitlighted = CreateSpriteHierarchy(hitlightedParts);
+            _hitlighted.Color = Color.Red;
+            AddChild(_hitlighted);
         }
 
         protected override void DoDraw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, float zindex)
         {
             _outline.Visible = ShowOutlined;
+            _hitlighted.Visible = ShowHitlighted;
 
             base.DoDraw(spriteBatch, zindex);
         }
@@ -93,5 +101,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
         public Vector2 HitEffectPosition => Vector2.UnitY * -12;
 
         public bool ShowOutlined { get; set; }
+        public bool ShowHitlighted { get; set; }
     }
 }
