@@ -57,7 +57,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var actorViewModels = _sectorViewModelContext.GameObjects.OfType<ActorViewModel>().ToArray();
             foreach (var actorViewModel in actorViewModels)
             {
-                if (actorViewModel.Actor.Person != _player.MainPerson)
+                if (actorViewModel.Actor.Person != _player.MainPerson
+                    && actorViewModel.CanDraw)
                 {
                     _visibleActors.Add(actorViewModel);
                 }
