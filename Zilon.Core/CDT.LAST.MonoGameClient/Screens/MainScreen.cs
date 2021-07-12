@@ -128,8 +128,9 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _currentSector = _sectorViewModel.Sector;
                 AddActiveActorEventHandling();
 
+                // 32 + 8 == BottomPanel.PANEL_HEIGHT
                 _personMarkerPanel =
-                    new PersonMarkersPanel(0, 0, _uiContentStorage, _sectorViewModel.ViewModelContext, _player);
+                    new PersonMarkersPanel(32+8, _uiContentStorage, _sectorViewModel.ViewModelContext, _player);
             }
 
             if (!_isTransitionPerforming)

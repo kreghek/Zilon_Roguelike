@@ -18,7 +18,7 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class SectorViewModel
+    internal sealed class SectorViewModel
     {
         private readonly Camera _camera;
         private readonly CommandInput _commandInput;

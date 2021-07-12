@@ -13,17 +13,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     internal class PersonMarkersPanel
     {
         private readonly IPlayer _player;
-        private readonly int _positionX;
-        private readonly int _positionY;
+        private readonly int _positionOffsetY;
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly IList<ActorViewModel> _visibleActors;
 
-        public PersonMarkersPanel(int positionX, int positionY, IUiContentStorage uiContentStorage,
-            SectorViewModelContext sectorViewModelContext, IPlayer player)
+        public PersonMarkersPanel(int positionOffsetY, IUiContentStorage uiContentStorage, SectorViewModelContext sectorViewModelContext,
+            IPlayer player)
         {
-            _positionX = positionX;
-            _positionY = positionY;
+            _positionOffsetY = positionOffsetY;
             _uiContentStorage = uiContentStorage;
             _sectorViewModelContext = sectorViewModelContext;
             _player = player;
@@ -36,13 +34,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             const int MARKER_HEGHT = 32;
             var index = 0;
 
+            var viewPortHalfWidth = graphicsDevice.Viewport.Width / 2;
             var viewPortHeight = graphicsDevice.Viewport.Height;
 
             foreach (var item in _visibleActors)
             {
                 spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), new Rectangle(
-                    _positionX + index * MARKER_WIDTH,
-                    viewPortHeight - _positionY - MARKER_HEGHT,
+                    index * MARKER_WIDTH + viewPortHalfWidth,
+                    viewPortHeight - _positionOffsetY - MARKER_HEGHT,
                     MARKER_WIDTH,
                     MARKER_HEGHT
                 ), Color.White);
