@@ -12,14 +12,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
-using Zilon.Core.Commands;
-using Zilon.Core.Scoring;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
