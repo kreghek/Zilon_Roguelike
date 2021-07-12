@@ -26,10 +26,10 @@ namespace CDT.LAST.MonoGameClient.Screens
     internal class MainScreen : GameSceneBase
     {
         private readonly IAnimationBlockerService _animationBlockerService;
-        private readonly ICommandPool _commandPool;
-        private readonly ServiceProviderCommandFactory _commandFactory;
         private readonly BottomMenuPanel _bottomMenu;
         private readonly Camera _camera;
+        private readonly ServiceProviderCommandFactory _commandFactory;
+        private readonly ICommandPool _commandPool;
         private readonly ContainerModalDialog _containerModal;
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly ModalDialogBase _personEquipmentModal;
@@ -134,7 +134,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 // 32 + 8 == BottomPanel.PANEL_HEIGHT
                 _personMarkerPanel =
-                    new PersonMarkersPanel(32 + 8, _uiContentStorage, _sectorViewModel.ViewModelContext, _player, _uiState, _commandPool, _commandFactory);
+                    new PersonMarkersPanel(32 + 8, _uiContentStorage, _sectorViewModel.ViewModelContext, _player,
+                        _uiState, _commandPool, _commandFactory);
             }
 
             if (!_isTransitionPerforming)

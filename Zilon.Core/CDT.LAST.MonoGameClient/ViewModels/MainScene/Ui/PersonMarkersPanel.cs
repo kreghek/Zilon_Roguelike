@@ -16,12 +16,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal class PersonMarkersPanel
     {
+        private readonly ServiceProviderCommandFactory _commandFactory;
+        private readonly ICommandPool _commandPool;
         private readonly IList<Marker> _drawnItemList;
         private readonly IPlayer _player;
-        private readonly ISectorUiState _sectorUiState;
-        private readonly ICommandPool _commandPool;
-        private readonly ServiceProviderCommandFactory _commandFactory;
         private readonly int _positionOffsetY;
+        private readonly ISectorUiState _sectorUiState;
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly IList<ActorViewModel> _visibleActors;
@@ -44,6 +44,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _visibleActors = new List<ActorViewModel>();
             _drawnItemList = new List<Marker>();
         }
+
+        public static bool MouseIsOver { get; set; }
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
@@ -115,8 +117,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             MouseIsOver = _drawnItemList.Any(x => x.ActorViewModel.IsGraphicsOutlined);
         }
-
-        public static bool MouseIsOver { get; set; }
 
         private record Marker(Rectangle Rect, ActorViewModel ActorViewModel);
     }
