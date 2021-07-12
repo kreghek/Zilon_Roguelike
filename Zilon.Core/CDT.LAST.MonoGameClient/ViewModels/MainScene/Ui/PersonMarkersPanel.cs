@@ -59,8 +59,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _drawnItemList.Clear();
             foreach (var item in _visibleActors)
             {
+                var itemOffsetX = index * MARKER_WIDTH;
                 var rect = new Rectangle(
-                    index * MARKER_WIDTH + viewPortHalfWidth,
+                    viewPortHalfWidth + itemOffsetX,
                     viewPortHeight - _positionOffsetY - MARKER_HEGHT,
                     MARKER_WIDTH,
                     MARKER_HEGHT
