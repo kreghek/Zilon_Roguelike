@@ -18,7 +18,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IUiContentStorage _uiContentStorage;
         private readonly IList<ActorViewModel> _visibleActors;
 
-        public PersonMarkersPanel(int positionOffsetY, IUiContentStorage uiContentStorage, SectorViewModelContext sectorViewModelContext,
+        public PersonMarkersPanel(int positionOffsetY, IUiContentStorage uiContentStorage,
+            SectorViewModelContext sectorViewModelContext,
             IPlayer player)
         {
             _positionOffsetY = positionOffsetY;
