@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
 using Zilon.Core.Players;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
@@ -15,19 +18,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private readonly IList<Marker> _drawnItemList;
         private readonly IPlayer _player;
+        private readonly ISectorUiState _sectorUiState;
+        private readonly ICommandPool _commandPool;
+        private readonly ServiceProviderCommandFactory _commandFactory;
         private readonly int _positionOffsetY;
         private readonly SectorViewModelContext _sectorViewModelContext;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly IList<ActorViewModel> _visibleActors;
 
-        public PersonMarkersPanel(int positionOffsetY, IUiContentStorage uiContentStorage,
+        public PersonMarkersPanel(int positionOffsetY,
+            IUiContentStorage uiContentStorage,
             SectorViewModelContext sectorViewModelContext,
-            IPlayer player)
+            IPlayer player,
+            ISectorUiState sectorUiState,
+            ICommandPool commandPool,
+            ServiceProviderCommandFactory commandFactory)
         {
             _positionOffsetY = positionOffsetY;
             _uiContentStorage = uiContentStorage;
             _sectorViewModelContext = sectorViewModelContext;
             _player = player;
+            _sectorUiState = sectorUiState;
+            _commandPool = commandPool;
+            _commandFactory = commandFactory;
             _visibleActors = new List<ActorViewModel>();
             _drawnItemList = new List<Marker>();
         }
@@ -78,21 +91,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void CheckActorUnderHover()
         {
-            const int MARKER_WIDTH = 32;
-            const int MARKER_HEGHT = 32;
-
             var mouse = Mouse.GetState();
             var mouseRect = new Rectangle(mouse.X, mouse.Y, 1, 1);
 
             foreach (var item in _drawnItemList)
             {
                 item.ActorViewModel.IsGraphicsOutlined = item.Rect.Intersects(mouseRect);
+
+                if (_sectorUiState.CanPlayerGivesCommand)
+                {
+                    if (mouse.LeftButton == ButtonState.Pressed && _sectorUiState.TacticalAct is not null)
+                    {
+                        var attackCommand = _commandFactory.GetCommand<AttackCommand>();
+                        _sectorUiState.HoverViewModel = item.ActorViewModel;
+                        if (attackCommand.CanExecute().IsSuccess)
+                        {
+                            _sectorUiState.SelectedViewModel = item.ActorViewModel;
+                            _commandPool.Push(attackCommand);
+                        }
+                    }
+                }
             }
+
+            MouseIsOver = _drawnItemList.Any(x => x.ActorViewModel.IsGraphicsOutlined);
         }
 
-        private void HandleMarker(Marker item)
-        {
-        }
+        public static bool MouseIsOver { get; set; }
 
         private record Marker(Rectangle Rect, ActorViewModel ActorViewModel);
     }

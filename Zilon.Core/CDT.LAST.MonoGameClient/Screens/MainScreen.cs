@@ -18,14 +18,16 @@ using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
+using Zilon.Core.Commands;
+using Zilon.Core.Scoring;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
-    using Zilon.Core.Scoring;
-
     internal class MainScreen : GameSceneBase
     {
         private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly ICommandPool _commandPool;
+        private readonly ServiceProviderCommandFactory _commandFactory;
         private readonly BottomMenuPanel _bottomMenu;
         private readonly Camera _camera;
         private readonly ContainerModalDialog _containerModal;
@@ -55,6 +57,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             _player = serviceScope.GetRequiredService<IPlayer>();
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
             _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            _commandPool = serviceScope.GetRequiredService<ICommandPool>();
+            _commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
             _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
@@ -130,7 +134,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 // 32 + 8 == BottomPanel.PANEL_HEIGHT
                 _personMarkerPanel =
-                    new PersonMarkersPanel(32 + 8, _uiContentStorage, _sectorViewModel.ViewModelContext, _player);
+                    new PersonMarkersPanel(32 + 8, _uiContentStorage, _sectorViewModel.ViewModelContext, _player, _uiState, _commandPool, _commandFactory);
             }
 
             if (!_isTransitionPerforming)

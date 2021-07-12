@@ -42,6 +42,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _rootSprite.AddChild(shadowSprite);
 
+            _actorGraphics.ShowOutlined = false;
+            _actorGraphics.ShowHitlighted = false;
             _rootSprite.AddChild(_actorGraphics.RootSprite);
         }
 
