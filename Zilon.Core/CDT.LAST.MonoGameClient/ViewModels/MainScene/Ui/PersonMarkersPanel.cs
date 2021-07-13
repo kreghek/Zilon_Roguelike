@@ -16,8 +16,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal class PersonMarkersPanel
     {
-        const int MARKER_WIDTH = 16;
-        const int MARKER_HEGHT = 32;
+        private const int MARKER_WIDTH = 16;
+        private const int MARKER_HEGHT = 32;
 
         private readonly ServiceProviderCommandFactory _commandFactory;
         private readonly ICommandPool _commandPool;

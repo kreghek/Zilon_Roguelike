@@ -20,7 +20,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _bottomPanelBackground;
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
-        private Texture2D? _personMarkerTextureSheet;
 
         private IDictionary<string, Texture2D>? _combatActDict;
         private Texture2D? _conditionDefaultIcon;
@@ -35,6 +34,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
         private Texture2D[]? _modalTopTextures;
+        private Texture2D? _personMarkerTextureSheet;
         private Texture2D? _selectedButtonMarker;
         private Texture2D? _smallVerticalButtonBackgroundTexture;
         private Texture2D? _smallVerticalButtonIconsTexture;
@@ -371,7 +371,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         public Texture2D GetPersonMarkerTextureSheet()
         {
-            return _personMarkerTextureSheet ?? throw new InvalidOperationException("Person marker texture was not loaded.");
+            return _personMarkerTextureSheet ??
+                   throw new InvalidOperationException("Person marker texture was not loaded.");
         }
     }
 }
