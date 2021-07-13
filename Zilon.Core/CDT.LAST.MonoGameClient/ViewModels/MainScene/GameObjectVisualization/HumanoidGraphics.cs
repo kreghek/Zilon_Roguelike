@@ -63,7 +63,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
                 _personVisualizationContentStorage.GetHumanOutlinedParts());
 
             _hitlighted = hitlightedHumanoidSprite;
-            _hitlighted.Color = Color.Red;
+            _hitlighted.Color = LastColors.Red;
             AddChild(_hitlighted);
         }
 

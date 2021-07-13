@@ -29,6 +29,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         Texture2D[] GetModalTopTextures();
 
+        Texture2D GetPersonMarkerTextureSheet();
+
         Texture2D[] GetPropIconLayers(string sid);
         Texture2D GetSelectedButtonMarkerTexture();
         Texture2D GetSmallVerticalButtonBackgroundTexture();

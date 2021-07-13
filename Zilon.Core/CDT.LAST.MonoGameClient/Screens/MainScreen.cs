@@ -12,23 +12,24 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
 using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
-    using Zilon.Core.Scoring;
-
     internal class MainScreen : GameSceneBase
     {
         private readonly IAnimationBlockerService _animationBlockerService;
-
         private readonly BottomMenuPanel _bottomMenu;
         private readonly Camera _camera;
+        private readonly ServiceProviderCommandFactory _commandFactory;
+        private readonly ICommandPool _commandPool;
         private readonly ContainerModalDialog _containerModal;
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly ModalDialogBase _personEquipmentModal;
@@ -36,11 +37,13 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
+        private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
 
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
+        private PersonMarkersPanel? _personMarkerPanel;
 
         private SectorViewModel? _sectorViewModel;
 
@@ -54,27 +57,29 @@ namespace CDT.LAST.MonoGameClient.Screens
             _player = serviceScope.GetRequiredService<IPlayer>();
             _transitionPool = serviceScope.GetRequiredService<ITransitionPool>();
             _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
+            _commandPool = serviceScope.GetRequiredService<ICommandPool>();
+            _commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
-            var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+            _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
             _camera = new Camera();
             _personEffectsPanel =
-                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: uiContentStorage);
+                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: _uiContentStorage);
 
             _personEquipmentModal = new PersonPropsModalDialog(
-                uiContentStorage,
+                _uiContentStorage,
                 game.GraphicsDevice,
                 _uiState,
                 ((LivGame)game).ServiceProvider);
 
             _personStatsModal = new PersonStatsModalDialog(
-                uiContentStorage,
+                _uiContentStorage,
                 game.GraphicsDevice,
                 _uiState);
 
             _containerModal = new ContainerModalDialog(
                 _uiState,
-                uiContentStorage,
+                _uiContentStorage,
                 Game.GraphicsDevice,
                 serviceScope);
 
@@ -89,7 +94,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _bottomMenu = new BottomMenuPanel(
                 humanActorTaskSource,
                 mainPerson.GetModule<ICombatActModule>(),
-                uiContentStorage,
+                _uiContentStorage,
                 mainPerson.GetModule<IEquipmentModule>(),
                 _uiState);
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
@@ -126,6 +131,11 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _sectorViewModel = new SectorViewModel(Game, _camera, _spriteBatch);
                 _currentSector = _sectorViewModel.Sector;
                 AddActiveActorEventHandling();
+
+                // 32 + 8 == BottomPanel.PANEL_HEIGHT
+                _personMarkerPanel =
+                    new PersonMarkersPanel(32 + 8, _uiContentStorage, _sectorViewModel.ViewModelContext, _player,
+                        _uiState, _commandPool, _commandFactory);
             }
 
             if (!_isTransitionPerforming)
@@ -143,6 +153,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_uiState.ActiveActor != null && !isInTransition)
             {
                 _bottomMenu.Update();
+
+                if (_personMarkerPanel is not null)
+                {
+                    _personMarkerPanel.Update();
+                }
 
                 HandleMainUpdate(_uiState.ActiveActor);
             }
@@ -202,6 +217,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personEffectsPanel.Draw(_spriteBatch);
 
             DrawPersonModePanel();
+
+            if (_personMarkerPanel is not null)
+            {
+                _personMarkerPanel.Draw(_spriteBatch, Game.GraphicsDevice);
+            }
 
             _spriteBatch.End();
         }
