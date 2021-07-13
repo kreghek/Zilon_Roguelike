@@ -16,7 +16,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal class PersonMarkersPanel
     {
-        const int MARKER_WIDTH = 32;
+        const int MARKER_WIDTH = 16;
         const int MARKER_HEGHT = 32;
 
         private readonly ServiceProviderCommandFactory _commandFactory;
@@ -68,7 +68,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     MARKER_HEGHT
                 );
 
-                spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), rect, Color.White);
+                spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, Color.White);
 
                 _drawnItemList.Add(new Marker(rect, item));
 

@@ -33,6 +33,8 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D GetSelectedButtonMarkerTexture();
         Texture2D GetSmallVerticalButtonBackgroundTexture();
         Texture2D GetSmallVerticalButtonIconsTexture();
+
+        Texture2D GetPersonMarkerTextureSheet();
         void LoadContent(ContentManager contentManager);
     }
 }

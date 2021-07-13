@@ -20,6 +20,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _bottomPanelBackground;
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
+        private Texture2D? _personMarkerTextureSheet;
 
         private IDictionary<string, Texture2D>? _combatActDict;
         private Texture2D? _conditionDefaultIcon;
@@ -254,6 +255,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 contentManager.Load<Texture2D>("Sprites/ui/SmallVerticalButtonBackground");
             _bottomPanelBackground = contentManager.Load<Texture2D>("Sprites/ui/BottomPanelBackground");
             _selectedButtonMarker = contentManager.Load<Texture2D>("Sprites/ui/SelectedButtonMarker");
+            _personMarkerTextureSheet = contentManager.Load<Texture2D>("Sprites/ui/PersonMarkers");
 
             _contextualMenuItemFont = contentManager.Load<SpriteFont>("Fonts/ContextualMenu");
             _contextualMenuBorderTexture = contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuBorder");
@@ -365,6 +367,11 @@ namespace CDT.LAST.MonoGameClient.Screens
         public SpriteFont GetAuxTextFont()
         {
             return _auxFont ?? throw new InvalidOperationException("Aux font was not loaded.");
+        }
+
+        public Texture2D GetPersonMarkerTextureSheet()
+        {
+            return _personMarkerTextureSheet ?? throw new InvalidOperationException("Person marker texture was not loaded.");
         }
     }
 }
