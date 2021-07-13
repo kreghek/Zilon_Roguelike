@@ -16,6 +16,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal class PersonMarkersPanel
     {
+        const int MARKER_WIDTH = 32;
+        const int MARKER_HEGHT = 32;
+
         private readonly ServiceProviderCommandFactory _commandFactory;
         private readonly ICommandPool _commandPool;
         private readonly IList<Marker> _drawnItemList;
@@ -49,8 +52,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            const int MARKER_WIDTH = 32;
-            const int MARKER_HEGHT = 32;
             var index = 0;
 
             var viewPortHalfWidth = graphicsDevice.Viewport.Width / 2;
@@ -100,23 +101,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             foreach (var item in _drawnItemList)
             {
                 item.ActorViewModel.IsGraphicsOutlined = item.Rect.Intersects(mouseRect);
-
-                if (_sectorUiState.CanPlayerGivesCommand)
-                {
-                    if (mouse.LeftButton == ButtonState.Pressed && _sectorUiState.TacticalAct is not null)
-                    {
-                        var attackCommand = _commandFactory.GetCommand<AttackCommand>();
-                        _sectorUiState.HoverViewModel = item.ActorViewModel;
-                        if (attackCommand.CanExecute().IsSuccess)
-                        {
-                            _sectorUiState.SelectedViewModel = item.ActorViewModel;
-                            _commandPool.Push(attackCommand);
-                        }
-                    }
-                }
+                HandleMarkerClick(mouse, item);
             }
 
             MouseIsOver = _drawnItemList.Any(x => x.ActorViewModel.IsGraphicsOutlined);
+        }
+
+        private void HandleMarkerClick(MouseState mouse, Marker item)
+        {
+            if (!_sectorUiState.CanPlayerGivesCommand)
+            {
+                return;
+            }
+
+            if (mouse.LeftButton == ButtonState.Pressed && _sectorUiState.TacticalAct is not null)
+            {
+                var attackCommand = _commandFactory.GetCommand<AttackCommand>();
+                _sectorUiState.HoverViewModel = item.ActorViewModel;
+                if (attackCommand.CanExecute().IsSuccess)
+                {
+                    _sectorUiState.SelectedViewModel = item.ActorViewModel;
+                    _commandPool.Push(attackCommand);
+                }
+            }
         }
 
         private record Marker(Rectangle Rect, ActorViewModel ActorViewModel);
