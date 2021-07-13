@@ -4,6 +4,8 @@ namespace CDT.LAST.MonoGameClient.Engine
 {
     public static class LastColors
     {
-        public static Color Red = new Color(0x3140bf);
+        private readonly static Color _red = new Color(0x3140bf);
+
+        public static Color Red { get => _red; }
     }
 }
