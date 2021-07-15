@@ -144,6 +144,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public override bool HiddenByFow => true;
 
         public override Vector2 HitEffectPosition => _graphicsRoot.HitEffectPosition;
+
+        public bool IsGraphicsOutlined { get; set; }
         public override IGraphNode Node => Actor.Node;
 
         public override void Draw(GameTime gameTime, Matrix transform)
@@ -268,7 +270,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             var keyboard = Keyboard.GetState();
-            _graphicsRoot.ShowOutlined = keyboard.IsKeyDown(Keys.LeftAlt);
+            _graphicsRoot.ShowOutlined = keyboard.IsKeyDown(Keys.LeftAlt) || IsGraphicsOutlined;
         }
 
         private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)

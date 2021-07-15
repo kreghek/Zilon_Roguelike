@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 using FluentAssertions;
 
@@ -11,7 +9,6 @@ using Moq;
 using NUnit.Framework;
 
 using Zilon.Core.Client;
-using Zilon.Core.Commands;
 using Zilon.Core.Commands.Sector;
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;

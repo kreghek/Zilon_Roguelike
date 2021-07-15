@@ -1361,6 +1361,18 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/PersonConditions/ThristConditionIcon.png
 
+#begin Sprites/ui/PersonMarkers.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/PersonMarkers.png
+
 #begin Sprites/ui/PropIcons/MedKit.png
 /importer:TextureImporter
 /processor:TextureProcessor
