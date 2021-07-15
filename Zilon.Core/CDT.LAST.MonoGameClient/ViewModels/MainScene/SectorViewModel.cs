@@ -110,7 +110,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
             var sectorInterator =
-                new SectorInterator(_uiState, commandPool, _camera, Sector, _viewModelContext, commandFactory);
+                new SectorInterator(_uiState, commandPool, _camera, Sector, ViewModelContext, commandFactory);
             _sectorInterator = sectorInterator;
 
             _commandAdaptor = new CommandAdaptor(commandPool, commandFactory);
@@ -164,7 +164,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 }
             }
 
-            _sectorInterator.Update(_viewModelContext);
+            _sectorInterator.Update(ViewModelContext);
         }
 
         internal void SwitchCurrentPersonIntoCombatMode()
