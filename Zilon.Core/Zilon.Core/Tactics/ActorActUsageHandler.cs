@@ -512,16 +512,17 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var usedActDescription =
-                new ActDescription(usedAct.Stats.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
-                                   Array.Empty<string>());
+            var usedActDescription = ActDescription.CreateFromActStats(usedAct.Stats);
 
-            var damageEvent =
-                new DamageActorInteractionEvent(actor, targetActor, usedActDescription, damageEfficientCalcResult)
-                {
-                    SuccessToHitRoll = successToHitRoll,
-                    FactToHitRoll = factToHitRoll
-                };
+            var damageEvent = new DamageActorInteractionEvent(
+                actor,
+                targetActor,
+                usedActDescription,
+                damageEfficientCalcResult)
+            {
+                SuccessToHitRoll = successToHitRoll,
+                FactToHitRoll = factToHitRoll
+            };
             ActorInteractionBus.PushEvent(damageEvent);
         }
 

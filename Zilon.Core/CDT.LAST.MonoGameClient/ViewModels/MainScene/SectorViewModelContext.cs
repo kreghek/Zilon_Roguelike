@@ -6,7 +6,7 @@ using Zilon.Core.Tactics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class SectorViewModelContext
+    internal sealed class SectorViewModelContext
     {
         public SectorViewModelContext(ISector sector)
         {
@@ -14,10 +14,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             GameObjects = new List<GameObjectBase>();
             EffectManager = new EffectManager();
+            CorpseManager = new CorpseManager();
         }
 
-        public EffectManager EffectManager { get; }
+        public CorpseManager CorpseManager { get; }
 
+        public EffectManager EffectManager { get; }
         public List<GameObjectBase> GameObjects { get; }
 
         public ISector Sector { get; }

@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Commands.Sector;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
@@ -41,7 +42,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         }
     }
 
-    public sealed class SectorViewModel
+    internal sealed class SectorViewModel
     {
         private readonly Camera _camera;
         private readonly CommandAdaptor _commandAdaptor;
@@ -49,12 +50,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
-        private readonly IPersonSoundContentStorage _personSoundContentStorage;
         private readonly IPlayer _player;
         private readonly SectorInterator _sectorInterator;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
-        private readonly SectorViewModelContext _viewModelContext;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
@@ -72,7 +71,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var personVisualizationContentStorage =
                 serviceScope.GetRequiredService<IPersonVisualizationContentStorage>();
-            _personSoundContentStorage = serviceScope.GetRequiredService<IPersonSoundContentStorage>();
+            var personSoundContentStorage = serviceScope.GetRequiredService<IPersonSoundContentStorage>();
+            var gameObjectVisualizationContentStorage =
+                serviceScope.GetRequiredService<IGameObjectVisualizationContentStorage>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -89,7 +90,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _mapViewModel = new MapViewModel(game, _player, _uiState, Sector, spriteBatch);
 
-            _viewModelContext = new SectorViewModelContext(sector);
+            ViewModelContext = new SectorViewModelContext(sector);
 
             var gameObjectParams = new GameObjectParams
             {
@@ -98,9 +99,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 UiState = _uiState,
                 Player = _player,
                 SpriteBatch = _spriteBatch,
-                SectorViewModelContext = _viewModelContext,
-                PersonSoundStorage = _personSoundContentStorage,
-                PersonVisualizationContentStorage = personVisualizationContentStorage
+                SectorViewModelContext = ViewModelContext,
+                PersonSoundStorage = personSoundContentStorage,
+                PersonVisualizationContentStorage = personVisualizationContentStorage,
+                GameObjectVisualizationContentStorage = gameObjectVisualizationContentStorage
             };
             _gameObjectsViewModel = new GameObjectsViewModel(gameObjectParams);
 
@@ -116,6 +118,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public ISector Sector { get; }
 
+        public SectorViewModelContext ViewModelContext { get; }
+
         public void Draw(GameTime gameTime)
         {
             _mapViewModel.Draw(_camera.Transform);
@@ -125,16 +129,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
+            DrawCorpses();
+
             _gameObjectsViewModel.Draw(gameTime);
-
-            _spriteBatch.Begin(transformMatrix: _camera.Transform);
-
-            foreach (var visualEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
-            {
-                visualEffect.Draw(_spriteBatch);
-            }
-
-            _spriteBatch.End();
         }
 
         public void UnsubscribeEventHandlers()
@@ -155,13 +152,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _gameObjectsViewModel.Update(gameTime);
 
-            foreach (var hitEffect in _viewModelContext.EffectManager.VisualEffects.ToArray())
+            ViewModelContext.CorpseManager.Update(gameTime);
+
+            foreach (var hitEffect in ViewModelContext.EffectManager.VisualEffects.ToArray())
             {
                 hitEffect.Update(gameTime);
 
                 if (hitEffect.IsComplete)
                 {
-                    _viewModelContext.EffectManager.VisualEffects.Remove(hitEffect);
+                    ViewModelContext.EffectManager.VisualEffects.Remove(hitEffect);
                 }
             }
 
@@ -171,6 +170,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         internal void SwitchCurrentPersonIntoCombatMode()
         {
             _commandAdaptor.SwitchIntoCombatMode();
+        }
+
+        private void DrawCorpses()
+        {
+            _spriteBatch.Begin(transformMatrix: _camera.Transform);
+
+            ViewModelContext.CorpseManager.Draw(_spriteBatch);
+
+            _spriteBatch.End();
         }
 
         private static ISectorNode GetPlayerSectorNode(IPlayer player)
@@ -193,9 +201,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (e.ActorInteractionEvent is DamageActorInteractionEvent damageActorInteractionEvent)
             {
                 var actDescription = damageActorInteractionEvent.UsedActDescription;
-                var targetPerson = damageActorInteractionEvent.TargetActor.Person;
-                var soundEffect = _personSoundContentStorage.GetActHitSound(actDescription, targetPerson);
-                soundEffect.CreateInstance().Play();
+                var targetActor = damageActorInteractionEvent.TargetActor;
+
+                var attackerViewModel = ViewModelContext.GameObjects.OfType<ActorViewModel>()
+                    .Single(x => x.Actor == damageActorInteractionEvent.Actor);
+                if (attackerViewModel.CanDraw)
+                {
+                    attackerViewModel.RunCombatActUsageAnimation(actDescription, targetActor.Node);
+                }
+
+                var targetViewModel = ViewModelContext.GameObjects.OfType<ActorViewModel>()
+                    .Single(x => x.Actor == targetActor);
+                if (targetViewModel.CanDraw)
+                {
+                    var targetPersonIsStillAlive = !targetActor.Person.CheckIsDead();
+                    if (targetPersonIsStillAlive)
+                    {
+                        targetViewModel.RunDamageReceivedAnimation(attackerViewModel.Node);
+                    }
+                }
             }
         }
     }

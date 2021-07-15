@@ -17,7 +17,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class SectorInterator
+    internal sealed class SectorInterator
     {
         private readonly Camera _camera;
         private readonly ServiceProviderCommandFactory _commandFactory;
@@ -263,7 +263,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 && mouseState.LeftButton == ButtonState.Pressed
                 && _uiState.HoverViewModel != null
                 && _uiState.CanPlayerGivesCommand
-                && !BottomMenuPanel.MouseIsOver)
+                && !BottomMenuPanel.MouseIsOver
+                && !PersonMarkersPanel.MouseIsOver)
             {
                 _leftMousePressed = true;
 

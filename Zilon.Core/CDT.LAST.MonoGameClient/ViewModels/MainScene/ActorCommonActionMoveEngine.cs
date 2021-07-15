@@ -41,7 +41,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             animationBlockerService.AddBlocker(_animationBlocker);
         }
 
+        /// <inheritdoc />
+        /// <remarks> The state engine has blocker. So we can't just replace it without blocker releasing. </remarks>
+        public bool CanBeReplaced => false;
+
         public bool IsComplete { get; private set; }
+
+        public void Cancel()
+        {
+            _animationBlocker.Release();
+        }
 
         public void Update(GameTime gameTime)
         {

@@ -80,6 +80,10 @@ namespace Zilon.Core.Client.Sector
             {
                 _cancellationTokenSource.Cancel();
             }
+
+            // Is started set to false if _cancellationTokenSource is null.
+            // In regular curciut IsStarted set to false in ContinueWith then update task are cancelled.
+            IsStarted = false;
         }
     }
 }

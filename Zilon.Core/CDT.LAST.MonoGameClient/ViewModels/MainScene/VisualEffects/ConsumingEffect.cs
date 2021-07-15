@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using CDT.LAST.MonoGameClient.Engine;
 
@@ -7,11 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 {
-    public sealed class ConsumingEffect : IVisualEffect
+    internal sealed class ConsumingEffect : IVisualEffect
     {
         private const double EFFECT_DISPLAY_DURATION_SECONDS = 1f;
         private const int EFFECT_FLIGHT_DISTANCE = 40;
         private const int OFFSET_FREQUENCY = 3;
+        private readonly GameObjectBase _bindGameObject;
         private readonly Sprite _effectSprite;
         private readonly Vector2 _startEffectPosition;
         private readonly Vector2 _targetEffectPosition;
@@ -19,9 +21,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
         private double _counter;
 
         public ConsumingEffect(IGameObjectVisualizationContentStorage visualizationContentStorage,
-            Vector2 targetObjectPosition, ConsumeEffectType effectType)
+            Vector2 targetObjectPosition, GameObjectBase bindGameObject, ConsumeEffectType effectType)
         {
             _startEffectPosition = targetObjectPosition;
+            _bindGameObject = bindGameObject;
             _targetEffectPosition = targetObjectPosition - (Vector2.UnitY * EFFECT_FLIGHT_DISTANCE);
 
             var spriteSourceRect = GetSpriteSourceRect(effectType);
@@ -50,13 +53,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
 
         public bool IsComplete => _counter <= 0;
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            if (!IsComplete)
-            {
-                _effectSprite.Draw(spriteBatch);
-            }
-        }
+        public IEnumerable<GameObjectBase> BoundGameObjects => new[] { _bindGameObject };
 
         public void Update(GameTime gameTime)
         {
@@ -67,6 +64,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 var verticalPosition = Vector2.Lerp(_startEffectPosition, _targetEffectPosition, (float)t);
                 var horizontalOffset = new Vector2((float)Math.Sin(t * OFFSET_FREQUENCY * 2 * Math.PI), 0) * 3;
                 _effectSprite.Position = verticalPosition + horizontalOffset;
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch, bool backing)
+        {
+            if (backing)
+            {
+                // Consuming effects has no backing.
+                return;
+            }
+
+            if (!IsComplete)
+            {
+                _effectSprite.Draw(spriteBatch);
             }
         }
     }

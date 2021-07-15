@@ -97,7 +97,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _currentModeMenu.Draw(spriteBatch, contentRect);
 
             var buttonRectangle = new Rectangle(
-                contentRect.Right,
+                contentRect.Right - SWITCHER_MODE_BUTTON_WIDTH,
                 contentRect.Top,
                 SWITCHER_MODE_BUTTON_WIDTH,
                 SWITCHER_MODE_BUTTON_HEIGHT);

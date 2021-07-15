@@ -20,6 +20,7 @@ using Zilon.Emulation.Common;
 namespace Zilon.Bot.Players.DevelopmentTests
 {
     [TestFixture]
+    [Parallelizable(ParallelScope.All)]
     public class BotActorTaskSourceTests
     {
         [Test]
