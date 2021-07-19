@@ -52,7 +52,7 @@ jobs:
         # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
     - if: matrix.language == 'csharp'
-      run: dotnet build /p:UseSharedCompilation=false
+      run: dotnet build Zilon.Core/Zilon.Core.sln /p:UseSharedCompilation=false
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
